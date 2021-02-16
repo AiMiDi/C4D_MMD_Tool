@@ -11,6 +11,8 @@
 #include "maxon/queue.h"
 #include "operatingsystem.h"
 #include "customgui_priority.h"
+#include "lib_ca.h"
+#include "tcaposemorph.h"
 #include "xcolor.h"
 #include "ocajoint.h"
 #include "tcaik.h"

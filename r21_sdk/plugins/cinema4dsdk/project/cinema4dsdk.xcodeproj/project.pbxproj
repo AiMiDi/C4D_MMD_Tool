@@ -1,0 +1,762 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A0A66833390DC00058010000 /* MMD_VMD_animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A66833390DC00058000000 /* MMD_VMD_animation.cpp */; };
+		A0A66833394287392B010000 /* libimage.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A66833394287392B000000 /* libimage.framework.a */; };
+		A0A66833394ADBC31B010000 /* libcommand.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A66833394ADBC31B000000 /* libcommand.framework.a */; };
+		A0A66833396542540E010000 /* libmesh_misc.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A66833396542540E000000 /* libmesh_misc.framework.a */; };
+		A0A66833398A3C2298010000 /* libmath.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A66833398A3C2298000000 /* libmath.framework.a */; };
+		A0A6683339BC4C136C010000 /* libpython.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A6683339BC4C136C000000 /* libpython.framework.a */; };
+		A0A6683339D80552BB010000 /* interface_registration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A6683339D80552BB000000 /* interface_registration.cpp */; };
+		A0A6683339D93CCD9F010000 /* register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A6683339D93CCD9F000000 /* register.cpp */; };
+		A0A6683339E921D362010000 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A6683339E921D362000000 /* main.cpp */; };
+		A0A6683339EBA5917E010000 /* libcrypt.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A6683339EBA5917E000000 /* libcrypt.framework.a */; };
+		A0A6683339F470FF41010000 /* libcinema.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A6683339F470FF41000000 /* libcinema.framework.a */; };
+		A0A6683339F4AB3A6F010000 /* libcore.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A6683339F4AB3A6F000000 /* libcore.framework.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A0A66833394287392B040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833394287392B020000 /* image.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA34287392B7B0000;
+			remoteInfo = image.framework;
+		};
+		A0A66833394287392B040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833394287392B020000 /* image.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA34287392B7B0100;
+			remoteInfo = "image.framework static library";
+		};
+		A0A66833394287392B050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833394287392B020000 /* image.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA34287392B000000;
+			remoteInfo = image.framework;
+		};
+		A0A66833394ADBC31B040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833394ADBC31B020000 /* command.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA34ADBC31B7B0000;
+			remoteInfo = command.framework;
+		};
+		A0A66833394ADBC31B040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833394ADBC31B020000 /* command.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA34ADBC31B7B0100;
+			remoteInfo = "command.framework static library";
+		};
+		A0A66833394ADBC31B050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833394ADBC31B020000 /* command.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA34ADBC31B000000;
+			remoteInfo = command.framework;
+		};
+		A0A66833396542540E040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833396542540E020000 /* mesh_misc.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA36542540E7B0000;
+			remoteInfo = mesh_misc.framework;
+		};
+		A0A66833396542540E040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833396542540E020000 /* mesh_misc.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA36542540E7B0100;
+			remoteInfo = "mesh_misc.framework static library";
+		};
+		A0A66833396542540E050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833396542540E020000 /* mesh_misc.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA36542540E000000;
+			remoteInfo = mesh_misc.framework;
+		};
+		A0A66833398A3C2298040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833398A3C2298020000 /* math.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA38A3C22987B0000;
+			remoteInfo = math.framework;
+		};
+		A0A66833398A3C2298040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833398A3C2298020000 /* math.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA38A3C22987B0100;
+			remoteInfo = "math.framework static library";
+		};
+		A0A66833398A3C2298050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A66833398A3C2298020000 /* math.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA38A3C2298000000;
+			remoteInfo = math.framework;
+		};
+		A0A6683339BC4C136C040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339BC4C136C020000 /* python.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3BC4C136C7B0000;
+			remoteInfo = python.framework;
+		};
+		A0A6683339BC4C136C040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339BC4C136C020000 /* python.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3BC4C136C7B0100;
+			remoteInfo = "python.framework static library";
+		};
+		A0A6683339BC4C136C050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339BC4C136C020000 /* python.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3BC4C136C000000;
+			remoteInfo = python.framework;
+		};
+		A0A6683339EBA5917E040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339EBA5917E020000 /* crypt.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3EBA5917E7B0000;
+			remoteInfo = crypt.framework;
+		};
+		A0A6683339EBA5917E040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339EBA5917E020000 /* crypt.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3EBA5917E7B0100;
+			remoteInfo = "crypt.framework static library";
+		};
+		A0A6683339EBA5917E050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339EBA5917E020000 /* crypt.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3EBA5917E000000;
+			remoteInfo = crypt.framework;
+		};
+		A0A6683339F470FF41040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339F470FF41020000 /* cinema.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F470FF417B0000;
+			remoteInfo = cinema.framework;
+		};
+		A0A6683339F470FF41040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339F470FF41020000 /* cinema.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F470FF417B0100;
+			remoteInfo = "cinema.framework static library";
+		};
+		A0A6683339F470FF41050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339F470FF41020000 /* cinema.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3F470FF41000000;
+			remoteInfo = cinema.framework;
+		};
+		A0A6683339F4AB3A6F040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339F4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0000;
+			remoteInfo = core.framework;
+		};
+		A0A6683339F4AB3A6F040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339F4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0100;
+			remoteInfo = "core.framework static library";
+		};
+		A0A6683339F4AB3A6F050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A6683339F4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F000000;
+			remoteInfo = core.framework;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A08C5CDEA3A66833397B0000 /* cinema4dsdk.xlib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = cinema4dsdk.xlib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A08C5CDEA3A66833397B0100 /* libcinema4dsdk_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcinema4dsdk_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0A668333900000000000000 /* debugbase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = debugbase.xcconfig; path = ../../../frameworks/settings/debugbase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A0A668333900000000050000 /* releasebase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = releasebase.xcconfig; path = ../../../frameworks/settings/releasebase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A0A66833390DC00058000000 /* MMD_VMD_animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMD_VMD_animation.cpp; path = ../source/MMD_VMD_animation.cpp; sourceTree = SOURCE_ROOT; };
+		A0A66833391837B5E7000000 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main.h; path = ../source/main.h; sourceTree = SOURCE_ROOT; };
+		A0A66833393D48A85D000000 /* MMD_VMD_animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMD_VMD_animation.h; path = ../source/MMD_VMD_animation.h; sourceTree = SOURCE_ROOT; };
+		A0A66833394287392B020000 /* image.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = image.framework.xcodeproj; path = ../../../frameworks/image.framework/project/image.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A0A6683339448F46FA000000 /* c4d_symbols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_symbols.h; path = ../res/c4d_symbols.h; sourceTree = SOURCE_ROOT; };
+		A0A66833394ADBC31B020000 /* command.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = command.framework.xcodeproj; path = ../../../frameworks/command.framework/project/command.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A0A66833396542540E020000 /* mesh_misc.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mesh_misc.framework.xcodeproj; path = ../../../frameworks/mesh_misc.framework/project/mesh_misc.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A0A66833398A3C2298020000 /* math.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = math.framework.xcodeproj; path = ../../../frameworks/math.framework/project/math.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A0A6683339BC4C136C020000 /* python.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = python.framework.xcodeproj; path = ../../../frameworks/python.framework/project/python.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A0A6683339D80552BB000000 /* interface_registration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interface_registration.cpp; path = ../generated/hxx/interface_registration.cpp; sourceTree = SOURCE_ROOT; };
+		A0A6683339D93CCD9F000000 /* register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = register.cpp; path = ../generated/hxx/register.cpp; sourceTree = SOURCE_ROOT; };
+		A0A6683339E921D362000000 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../source/main.cpp; sourceTree = SOURCE_ROOT; };
+		A0A6683339EBA5917E020000 /* crypt.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = crypt.framework.xcodeproj; path = ../../../frameworks/crypt.framework/project/crypt.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A0A6683339F470FF41020000 /* cinema.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cinema.framework.xcodeproj; path = ../../../frameworks/cinema.framework/project/cinema.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A0A6683339F4AB3A6F020000 /* core.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = core.framework.xcodeproj; path = ../../../frameworks/core.framework/project/core.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A0A6683339000000000F0000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0A66833394287392B010000 /* libimage.framework.a in Frameworks */,
+				A0A66833394ADBC31B010000 /* libcommand.framework.a in Frameworks */,
+				A0A66833396542540E010000 /* libmesh_misc.framework.a in Frameworks */,
+				A0A66833398A3C2298010000 /* libmath.framework.a in Frameworks */,
+				A0A6683339BC4C136C010000 /* libpython.framework.a in Frameworks */,
+				A0A6683339EBA5917E010000 /* libcrypt.framework.a in Frameworks */,
+				A0A6683339F470FF41010000 /* libcinema.framework.a in Frameworks */,
+				A0A6683339F4AB3A6F010000 /* libcore.framework.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A0A668333900000000140000 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				A0A6683339F470FF41020000 /* cinema.framework.xcodeproj */,
+				A0A66833394ADBC31B020000 /* command.framework.xcodeproj */,
+				A0A6683339F4AB3A6F020000 /* core.framework.xcodeproj */,
+				A0A6683339EBA5917E020000 /* crypt.framework.xcodeproj */,
+				A0A66833394287392B020000 /* image.framework.xcodeproj */,
+				A0A66833398A3C2298020000 /* math.framework.xcodeproj */,
+				A0A66833396542540E020000 /* mesh_misc.framework.xcodeproj */,
+				A0A6683339BC4C136C020000 /* python.framework.xcodeproj */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		A0A668333900000000190000 /* configurations */ = {
+			isa = PBXGroup;
+			children = (
+				A0A668333900000000000000 /* debugbase.xcconfig */,
+				A0A668333900000000050000 /* releasebase.xcconfig */,
+			);
+			name = configurations;
+			sourceTree = "<group>";
+		};
+		A0A6683339000000001E0000 = {
+			isa = PBXGroup;
+			children = (
+				A0A668333900000000190000 /* configurations */,
+				A0A6683339111A998F000000 /* generated */,
+				A0A668333900000000140000 /* libs */,
+				A0A668333900000000230000 /* products */,
+				A0A66833390001B8A0000000 /* res */,
+				A0A6683339CA90681B000000 /* source */,
+			);
+			sourceTree = "<group>";
+		};
+		A0A668333900000000230000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A08C5CDEA3A66833397B0000 /* cinema4dsdk.xlib */,
+				A08C5CDEA3A66833397B0100 /* libcinema4dsdk_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A0A66833390001B8A0000000 /* res */ = {
+			isa = PBXGroup;
+			children = (
+				A0A6683339448F46FA000000 /* c4d_symbols.h */,
+			);
+			name = res;
+			path = ../res;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0A6683339111A998F000000 /* generated */ = {
+			isa = PBXGroup;
+			children = (
+				A0A6683339681C2CE8000000 /* hxx */,
+			);
+			name = generated;
+			path = ../generated;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0A66833394287392B280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A0A66833394287392B000000 /* libimage.framework.a */,
+				A0A66833394287392B000100 /* libimage.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A0A66833394ADBC31B280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A0A66833394ADBC31B000000 /* libcommand.framework.a */,
+				A0A66833394ADBC31B000100 /* libcommand.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A0A66833396542540E280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A0A66833396542540E000000 /* libmesh_misc.framework.a */,
+				A0A66833396542540E000100 /* libmesh_misc.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A0A6683339681C2CE8000000 /* hxx */ = {
+			isa = PBXGroup;
+			children = (
+				A0A6683339D80552BB000000 /* interface_registration.cpp */,
+				A0A6683339D93CCD9F000000 /* register.cpp */,
+			);
+			name = hxx;
+			path = ../generated/hxx;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0A66833398A3C2298280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A0A66833398A3C2298000000 /* libmath.framework.a */,
+				A0A66833398A3C2298000100 /* libmath.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A0A6683339BC4C136C280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A0A6683339BC4C136C000000 /* libpython.framework.a */,
+				A0A6683339BC4C136C000100 /* libpython.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A0A6683339CA90681B000000 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				A0A6683339E921D362000000 /* main.cpp */,
+				A0A66833391837B5E7000000 /* main.h */,
+				A0A66833390DC00058000000 /* MMD_VMD_animation.cpp */,
+				A0A66833393D48A85D000000 /* MMD_VMD_animation.h */,
+			);
+			name = source;
+			path = ../source;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0A6683339EBA5917E280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A0A6683339EBA5917E000000 /* libcrypt.framework.a */,
+				A0A6683339EBA5917E000100 /* libcrypt.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A0A6683339F470FF41280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A0A6683339F470FF41000000 /* libcinema.framework.a */,
+				A0A6683339F470FF41000100 /* libcinema.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A0A6683339F4AB3A6F280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A0A6683339F4AB3A6F000000 /* libcore.framework.a */,
+				A0A6683339F4AB3A6F000100 /* libcore.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A0A6683339000000002D0000 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A08C5CDEA3A6683339000000 /* cinema4dsdk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0A668333900000000460000 /* Build configuration list for PBXNativeTarget "cinema4dsdk" */;
+			buildPhases = (
+				A0A668333900000000690000 /* Run Source Processor */,
+				A0A668333900000000320000 /* Sources */,
+				A0A6683339000000000F0000 /* Frameworks */,
+				A0A6683339000000002D0000 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A0A6683339F470FF41370000 /* PBXTargetDependency */,
+				A0A66833394ADBC31B370000 /* PBXTargetDependency */,
+				A0A6683339F4AB3A6F370000 /* PBXTargetDependency */,
+				A0A6683339EBA5917E370000 /* PBXTargetDependency */,
+				A0A66833394287392B370000 /* PBXTargetDependency */,
+				A0A66833398A3C2298370000 /* PBXTargetDependency */,
+				A0A66833396542540E370000 /* PBXTargetDependency */,
+				A0A6683339BC4C136C370000 /* PBXTargetDependency */,
+			);
+			name = cinema4dsdk;
+			productName = cinema4dsdk;
+			productReference = A08C5CDEA3A66833397B0000 /* cinema4dsdk.xlib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A0A6683339000000003C0000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1099;
+			};
+			buildConfigurationList = A0A668333900000000410000 /* Build configuration list for PBXProject "cinema4dsdk" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A0A6683339000000001E0000;
+			productRefGroup = A0A668333900000000230000 /* products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A0A6683339F470FF41280000 /* products */;
+					ProjectRef = A0A6683339F470FF41020000 /* cinema.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A0A66833394ADBC31B280000 /* products */;
+					ProjectRef = A0A66833394ADBC31B020000 /* command.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A0A6683339F4AB3A6F280000 /* products */;
+					ProjectRef = A0A6683339F4AB3A6F020000 /* core.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A0A6683339EBA5917E280000 /* products */;
+					ProjectRef = A0A6683339EBA5917E020000 /* crypt.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A0A66833394287392B280000 /* products */;
+					ProjectRef = A0A66833394287392B020000 /* image.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A0A66833398A3C2298280000 /* products */;
+					ProjectRef = A0A66833398A3C2298020000 /* math.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A0A66833396542540E280000 /* products */;
+					ProjectRef = A0A66833396542540E020000 /* mesh_misc.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A0A6683339BC4C136C280000 /* products */;
+					ProjectRef = A0A6683339BC4C136C020000 /* python.framework.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				A08C5CDEA3A6683339000000 /* cinema4dsdk */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A0A66833394287392B000000 /* libimage.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libimage.framework.a;
+			remoteRef = A0A66833394287392B040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A66833394287392B000100 /* libimage.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libimage.framework_static.a;
+			remoteRef = A0A66833394287392B040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A66833394ADBC31B000000 /* libcommand.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcommand.framework.a;
+			remoteRef = A0A66833394ADBC31B040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A66833394ADBC31B000100 /* libcommand.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcommand.framework_static.a;
+			remoteRef = A0A66833394ADBC31B040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A66833396542540E000000 /* libmesh_misc.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmesh_misc.framework.a;
+			remoteRef = A0A66833396542540E040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A66833396542540E000100 /* libmesh_misc.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmesh_misc.framework_static.a;
+			remoteRef = A0A66833396542540E040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A66833398A3C2298000000 /* libmath.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmath.framework.a;
+			remoteRef = A0A66833398A3C2298040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A66833398A3C2298000100 /* libmath.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmath.framework_static.a;
+			remoteRef = A0A66833398A3C2298040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A6683339BC4C136C000000 /* libpython.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libpython.framework.a;
+			remoteRef = A0A6683339BC4C136C040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A6683339BC4C136C000100 /* libpython.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libpython.framework_static.a;
+			remoteRef = A0A6683339BC4C136C040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A6683339EBA5917E000000 /* libcrypt.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcrypt.framework.a;
+			remoteRef = A0A6683339EBA5917E040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A6683339EBA5917E000100 /* libcrypt.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcrypt.framework_static.a;
+			remoteRef = A0A6683339EBA5917E040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A6683339F470FF41000000 /* libcinema.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcinema.framework.a;
+			remoteRef = A0A6683339F470FF41040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A6683339F470FF41000100 /* libcinema.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcinema.framework_static.a;
+			remoteRef = A0A6683339F470FF41040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A6683339F4AB3A6F000000 /* libcore.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework.a;
+			remoteRef = A0A6683339F4AB3A6F040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A0A6683339F4AB3A6F000100 /* libcore.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework_static.a;
+			remoteRef = A0A6683339F4AB3A6F040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A0A668333900000000690000 /* Run Source Processor */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Source Processor";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python ${MAXON_ROOTDIR}frameworks/settings/sourceprocessor/sourceprocessor.py \"$PROJECT_DIR/..\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A0A668333900000000320000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0A66833390DC00058010000 /* MMD_VMD_animation.cpp in Sources */,
+				A0A6683339D80552BB010000 /* interface_registration.cpp in Sources */,
+				A0A6683339D93CCD9F010000 /* register.cpp in Sources */,
+				A0A6683339E921D362010000 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A0A66833394287392B370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = image.framework;
+			targetProxy = A0A66833394287392B050000 /* PBXContainerItemProxy */;
+		};
+		A0A66833394ADBC31B370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = command.framework;
+			targetProxy = A0A66833394ADBC31B050000 /* PBXContainerItemProxy */;
+		};
+		A0A66833396542540E370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mesh_misc.framework;
+			targetProxy = A0A66833396542540E050000 /* PBXContainerItemProxy */;
+		};
+		A0A66833398A3C2298370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = math.framework;
+			targetProxy = A0A66833398A3C2298050000 /* PBXContainerItemProxy */;
+		};
+		A0A6683339BC4C136C370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = python.framework;
+			targetProxy = A0A6683339BC4C136C050000 /* PBXContainerItemProxy */;
+		};
+		A0A6683339EBA5917E370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = crypt.framework;
+			targetProxy = A0A6683339EBA5917E050000 /* PBXContainerItemProxy */;
+		};
+		A0A6683339F470FF41370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = cinema.framework;
+			targetProxy = A0A6683339F470FF41050000 /* PBXContainerItemProxy */;
+		};
+		A0A6683339F4AB3A6F370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = core.framework;
+			targetProxy = A0A6683339F4AB3A6F050000 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A0A6683339000000004B0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A0A668333900000000000000 /* debugbase.xcconfig */;
+			buildSettings = {
+				DEPLOYMENT_LOCATION = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					USE_API_MAXON,
+					PRIVATE_MODULE_net_maxonexample_cinema4dsdk,
+					"MAXON_MODULE_ID=\\\"net.maxonexample.cinema4dsdk\\\"",
+				);
+				INSTALL_PATH = /..;
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../res ../source $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/command.framework/source/** $(MAXON_ROOTDIR)frameworks/command.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/crypt.framework/source/** $(MAXON_ROOTDIR)frameworks/crypt.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/python.framework/source/** $(MAXON_ROOTDIR)frameworks/python.framework/generated/hxx $(inherited)";
+			};
+			name = Debug;
+		};
+		A0A668333900000000500000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A0A668333900000000050000 /* releasebase.xcconfig */;
+			buildSettings = {
+				DEPLOYMENT_LOCATION = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					USE_API_MAXON,
+					PRIVATE_MODULE_net_maxonexample_cinema4dsdk,
+					"MAXON_MODULE_ID=\\\"net.maxonexample.cinema4dsdk\\\"",
+				);
+				INSTALL_PATH = /..;
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../res ../source $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/command.framework/source/** $(MAXON_ROOTDIR)frameworks/command.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/crypt.framework/source/** $(MAXON_ROOTDIR)frameworks/crypt.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/python.framework/source/** $(MAXON_ROOTDIR)frameworks/python.framework/generated/hxx $(inherited)";
+			};
+			name = Release;
+		};
+		A0A6683339000000005A0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_EXTENSION = xlib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+			};
+			name = Debug;
+		};
+		A0A6683339000000005F0000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_EXTENSION = xlib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A0A668333900000000410000 /* Build configuration list for PBXProject "cinema4dsdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0A6683339000000004B0000 /* Debug */,
+				A0A668333900000000500000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A0A668333900000000460000 /* Build configuration list for PBXNativeTarget "cinema4dsdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0A6683339000000005A0000 /* Debug */,
+				A0A6683339000000005F0000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A0A6683339000000003C0000 /* Project object */;
+}

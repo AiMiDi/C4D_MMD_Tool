@@ -19,7 +19,7 @@ STRINGTABLE
 	IDS_MES_EXPORT_WRITE_ERR "Cannot write file";
 	IDS_MES_EXPORT_OK "Successfully exported # Frame(s)!";
 
-	IDS_VMD_TOOL_TITLE "VMD Tool";
+	IDS_VMD_TOOL_TITLE "MMD Tool";
 	IDS_VMD_CAM_TOOL_TITLE "Camera";
 	IDS_VMD_CAM_IMPORT_TITLE "Camera Import";
 	IDS_VMD_CAM_IMPORT_SIZE_NAME "Size";

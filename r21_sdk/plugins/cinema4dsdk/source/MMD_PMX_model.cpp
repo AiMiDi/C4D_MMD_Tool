@@ -1246,7 +1246,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 		}
 		bone_map.Reset();
-		AutoAlloc<Modeling> modeling;
+		Modeling* modeling= Modeling::Alloc();
 		modeling->InitObject(model);
 		Int32 vertex_data_count = pmx_model->model_data_count.vertex_data_count;
 		for (Int32 i = 0; i < vertex_data_count; i++)
@@ -1341,6 +1341,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		}
 		modeling->Commit();
 		modeling->Release();
+		Modeling::Free(modeling);
 		model->InsertTag(uvw_tag);
 		model->InsertTag(normal_tag); 
 		model->SetPhong(true, true, 0.7853982);
@@ -1348,6 +1349,56 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
 		doc->InsertObject(morphdeformer, model, nullptr);
 		EventAdd(EVENT::NONE);
+		CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
+		if (morph_tag == nullptr) 
+		{
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
+		model->InsertTag(morph_tag);
+		morph_tag->InitMorphs();
+		morph_tag->SetParameter(ID_CA_POSE_POINTS, TRUE, DESCFLAGS_SET::NONE);
+		morph_tag->ExitEdit(doc, true);
+		CAMorph* base_morph = morph_tag->AddMorph();
+		if (base_morph == nullptr)
+		{
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
+		base_morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
+		morph_tag->UpdateMorphs();
+		Int32 morph_data_count = pmx_model->model_data_count.morph_data_count;
+		for (Int32 i = 0; i < morph_data_count; i++)
+		{
+			StatusSetText("Import morphs..."_s);
+			StatusSetBar(i * 100 / morph_data_count);
+			PMX_Morph_Data* morph_data = pmx_model->morph_data[i];
+			if (morph_data->morph_type == 1) {
+				CAMorph* morph = morph_tag->AddMorph();
+				if (morph == nullptr)
+				{
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				AutoAlloc<Modeling> modeling_;
+				modeling_->InitObject(model);
+				maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data->offset_data;	
+				Int32 offset_count = morph_data->offset_count;
+				for (Int32 j = 0; j < offset_count; j++) {					
+					PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
+					modeling_->SetPoint(model, vertex_morph_data.vertex_index, (pmx_model->vertex_data[vertex_morph_data.vertex_index]->position + vertex_morph_data.translation) * PositionMultiple);
+				}
+				modeling_->Commit(model);		
+				morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
+				morph->SetName(morph_data->morph_name_local);				
+				morph->SetStrength(0);
+			}
+		}		
+		morph_tag->UpdateMorphs();
+		morph_tag->SetParameter(ID_CA_POSE_MODE, ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
 		doc->SetMode(Mpolygons);
 		BaseSelect* select = model->GetPolygonS();
 		Int32 select_end = 0;
