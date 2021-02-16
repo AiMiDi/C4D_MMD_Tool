@@ -13,6 +13,15 @@
     <Filter Include="source">
       <UniqueIdentifier>{21895B69-DE91-7035-0000-0000CA90681B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\en">
+      <UniqueIdentifier>{82fd0383-5b02-4e9d-a558-b866be7ab2a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\zh">
+      <UniqueIdentifier>{ef360631-589b-4759-8bc6-b91d7b390ed3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\jp">
+      <UniqueIdentifier>{ea7f75a6-8dc2-473f-8283-d2e3c3cf9860}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -55,9 +64,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\res\strings_en-US\c4d_strings.str">
-      <Filter>res</Filter>
-    </None>
     <None Include="cpp.hint" />
+    <None Include="..\res\strings_en-US\c4d_strings.str">
+      <Filter>res\en</Filter>
+    </None>
+    <None Include="..\res\strings_zh-CN\c4d_strings.str">
+      <Filter>res\zh</Filter>
+    </None>
+    <None Include="..\res\strings_ja-JP\c4d_strings.str">
+      <Filter>res\jp</Filter>
+    </None>
   </ItemGroup>
 </Project>

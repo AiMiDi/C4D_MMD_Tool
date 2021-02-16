@@ -190,6 +190,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\strings_en-US\c4d_strings.str" />
+    <None Include="..\res\strings_ja-JP\c4d_strings.str" />
+    <None Include="..\res\strings_zh-CN\c4d_strings.str" />
     <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
