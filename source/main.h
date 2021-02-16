@@ -10,6 +10,7 @@
 #include "maxon/pointerarray.h"
 #include "maxon/queue.h"
 #include "operatingsystem.h"
+#include "customgui_priority.h"
 #include "xcolor.h"
 #include "ocajoint.h"
 #include "tcaik.h"
