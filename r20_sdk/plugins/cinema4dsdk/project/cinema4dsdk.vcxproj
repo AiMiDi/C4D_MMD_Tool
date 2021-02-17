@@ -95,6 +95,9 @@
     <Manifest>
       <AdditionalManifestFiles />
     </Manifest>
+    <PostBuildEvent>
+      <Command>call ..\run.bat</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>

@@ -49,7 +49,7 @@ public:
 
 		BaseContainer settings;
 		settings.SetBool(BITMAPBUTTON_BUTTON, false);
-		void* const customGUI = AddCustomGui(999, CUSTOMGUI_BITMAPBUTTON, ""_s, BFH_SCALE, SizePix(300), SizePix(78), settings);
+		void* const customGUI = AddCustomGui(999, CUSTOMGUI_BITMAPBUTTON, ""_s, BFH_SCALE, SizePix(260), SizePix(90), settings);//R20
 		BitmapButtonCustomGui* const bitmapButtonGUI = static_cast<BitmapButtonCustomGui*>(customGUI);
 		if (bitmapButtonGUI)
 		{

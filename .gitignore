@@ -60,3 +60,5 @@ r21_sdk/plugins/cinema4dsdk/generated/
 r21_sdk/plugins/project/.vs/
 
 r20_sdk/plugins/project/.vs/
+
+*.bat
