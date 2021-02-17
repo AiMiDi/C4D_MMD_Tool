@@ -24,6 +24,7 @@ enum                                // Uniquely identify all your dialog element
 	DLG_VMD_MOT_IMPORT_OFFSET_NAME,
 	DLG_VMD_MOT_IMPORT_OFFSET,
 	DLG_VMD_MOT_IMPORT_QUAT,
+	DLG_VMD_MOT_IMPORT_DETAIL,
 	DLG_VMD_MOT_IMPORT_BUTTON,
 
 	DLG_PMX_MOD_IMPORT_SIZE_NAME,
@@ -43,9 +44,17 @@ public:
 
 	virtual Bool CreateLayout(void)
 	{
+
 		SetTitle(GeLoadString(IDS_VMD_TOOL_TITLE));
 
-		AddStaticText(DLG_VMD_CAM_IMPORT_TITLE, BFH_CENTER, 0, 15, "MMD Tool"_s, BORDER_NONE);
+		BaseContainer settings;
+		settings.SetBool(BITMAPBUTTON_BUTTON, false);
+		void* const customGUI = AddCustomGui(999, CUSTOMGUI_BITMAPBUTTON, ""_s, BFH_SCALE, SizePix(300), SizePix(78), settings);
+		BitmapButtonCustomGui* const bitmapButtonGUI = static_cast<BitmapButtonCustomGui*>(customGUI);
+		if (bitmapButtonGUI)
+		{
+			bitmapButtonGUI->SetImage(AutoBitmap("mmd_tool_title.png"_s), true, false);
+		}
 
 		TabGroupBegin(1000, BFH_SCALEFIT | BFV_SCALEFIT);
 		//CameraBegin
@@ -108,7 +117,10 @@ public:
 		AddEditNumberArrows(DLG_VMD_MOT_IMPORT_OFFSET, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		AddCheckbox(DLG_VMD_MOT_IMPORT_QUAT, BFH_LEFT, 0, 0, GeLoadString(IDS_VMD_MOT_IMPORT_QUAT_NAME));
+		GroupBegin(1004, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+		AddCheckbox(DLG_VMD_MOT_IMPORT_QUAT, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_QUAT_NAME));
+		AddCheckbox(DLG_VMD_MOT_IMPORT_DETAIL, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_DETAIL_NAME));
+		GroupEnd();
 
 		AddButton(DLG_VMD_MOT_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_MOT_IMPORT_BUTTON));
 		GroupEnd();
@@ -118,12 +130,12 @@ public:
 		//ModelBegin
 		GroupBegin(1300, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_TOOL_TITLE), 0, 350, 0);
 		//ImportModelBegin
-		GroupBegin(1004, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_IMPORT_TITLE), 0, 0, 0);
+		GroupBegin(1005, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_IMPORT_TITLE), 0, 0, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 
-		GroupBegin(1005, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+		GroupBegin(1006, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_PMX_MOD_IMPORT_SIZE_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_PMX_MOD_IMPORT_SIZE_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_PMX_MOD_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
@@ -151,6 +163,7 @@ public:
 		GeDialog::SetFloat(DLG_VMD_MOT_IMPORT_SIZE, 8.5, 0, 100);
 		GeDialog::SetFloat(DLG_VMD_MOT_IMPORT_OFFSET, 0);
 		GeDialog::SetBool(DLG_VMD_MOT_IMPORT_QUAT, 1);
+		GeDialog::SetBool(DLG_VMD_MOT_IMPORT_DETAIL, 0);
 		GeDialog::SetFloat(DLG_PMX_MOD_IMPORT_SIZE, 8.5, 0, 100);
 		GeDialog::SetBool(DLG_PMX_MOD_IMPORT_MULTIPART, 1);
 		return TRUE;
@@ -190,13 +203,13 @@ public:
 		}
 		case (DLG_VMD_MOT_IMPORT_BUTTON):
 		{
-			Float PositionMultiple_;
-			Float TimeOffset_;
-			Bool QuaternionRotationSW_;
+			Float PositionMultiple_,TimeOffset_;
+			Bool QuaternionRotationSW_, DetailReport_;
 			GeDialog::GetFloat(DLG_VMD_MOT_IMPORT_SIZE, PositionMultiple_);
 			GeDialog::GetFloat(DLG_VMD_MOT_IMPORT_OFFSET, TimeOffset_);
 			GeDialog::GetBool(DLG_VMD_MOT_IMPORT_QUAT, QuaternionRotationSW_);
-			iferr(mmd::VMDAnimation::FromFileImportMotions(PositionMultiple_, TimeOffset_, QuaternionRotationSW_))
+			GeDialog::GetBool(DLG_VMD_MOT_IMPORT_DETAIL, DetailReport_);
+			iferr(mmd::VMDAnimation::FromFileImportMotions(PositionMultiple_, TimeOffset_, QuaternionRotationSW_, DetailReport_))
 			{
 				return FALSE;
 			}

@@ -9,6 +9,7 @@
 #include "maxon/sortedarray.h"
 #include "maxon/pointerarray.h"
 #include "maxon/queue.h"
+#include "maxon/timevalue.h"
 #include "operatingsystem.h"
 #include "customgui_priority.h"
 #include "lib_ca.h"

@@ -122,39 +122,39 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 	PMX_Model_information model_info_;
 	PMX_Data_count model_data_count_;
 	Char signature[5]{ 0 };//签名,值为"PMX "
-	file->ReadBytes(signature, 4);//读取签名
+	if (!file->ReadBytes(signature, 4))return maxon::Error();//读取签名
 	if (strncmp(signature, "PMX", 3))
 	{
 		GePrint("Is not a PMX file!"_s);
 	}
-	file->ReadFloat32(&(model_info_.version));//读取版本号								  
+	if (!file->ReadFloat32(&(model_info_.version)))return maxon::Error();//读取版本号								  
 	Char globals_count;//全局信息数量,PMX2.0有8条全局信息
-	file->ReadChar(&globals_count);//读取全局信息数量
+	if (!file->ReadChar(&globals_count))return maxon::Error();//读取全局信息数量
 	if (globals_count != 8) {
 		GePrint("PMX file corruption!"_s);
 	}
-	file->ReadChar(&(model_info_.text_encoding));//读取字符串编码
-	file->ReadChar(&(model_info_.additional_vec4_count));
-	file->ReadChar(&(model_info_.vertex_index_size));
-	file->ReadChar(&(model_info_.texture_index_size));
-	file->ReadChar(&(model_info_.material_index_size));
-	file->ReadChar(&(model_info_.bone_index_size));
-	file->ReadChar(&(model_info_.morph_index_size));
-	file->ReadChar(&(model_info_.rigidbody_index_size));
+	if (!file->ReadChar(&(model_info_.text_encoding)))return maxon::Error();//读取字符串编码
+	if (!file->ReadChar(&(model_info_.additional_vec4_count)))return maxon::Error();
+	if (!file->ReadChar(&(model_info_.vertex_index_size)))return maxon::Error();
+	if (!file->ReadChar(&(model_info_.texture_index_size)))return maxon::Error();
+	if (!file->ReadChar(&(model_info_.material_index_size)))return maxon::Error();
+	if (!file->ReadChar(&(model_info_.bone_index_size)))return maxon::Error();
+	if (!file->ReadChar(&(model_info_.morph_index_size)))return maxon::Error();
+	if (!file->ReadChar(&(model_info_.rigidbody_index_size)))return maxon::Error();
 	model_info_.model_name_local = ReadText(file, model_info_.text_encoding);
 	model_info_.model_name_universal = ReadText(file, model_info_.text_encoding);
 	model_info_.comments_local = ReadText(file, model_info_.text_encoding);
 	model_info_.comments_universal = ReadText(file, model_info_.text_encoding);
 	this->model_info = model_info_;
-	file->ReadInt32(&(model_data_count_.vertex_data_count));
+	if (!file->ReadInt32(&(model_data_count_.vertex_data_count)))return maxon::Error();
 	for (Int32 i = 0; i < model_data_count_.vertex_data_count; i++)
 	{
 		PMX_Vertex_Data* vertex_data_ = new PMX_Vertex_Data;
-		file->ReadVector32(&(vertex_data_->position));
-		file->ReadVector32(&(vertex_data_->normal));
-		file->ReadBytes(&(vertex_data_->UV), sizeof(vec2));
-		file->Seek(16 * model_info_.additional_vec4_count);
-		file->ReadChar(&(vertex_data_->weight_deform_type));
+		if (!file->ReadVector32(&(vertex_data_->position)))return maxon::Error();
+		if (!file->ReadVector32(&(vertex_data_->normal)))return maxon::Error();
+		if (!file->ReadBytes(&(vertex_data_->UV), sizeof(vec2)))return maxon::Error();
+		if (!file->Seek(16 * model_info_.additional_vec4_count))return maxon::Error();
+		if (!file->ReadChar(&(vertex_data_->weight_deform_type)))return maxon::Error();
 		switch (vertex_data_->weight_deform_type)
 		{
 		case 0:
@@ -169,7 +169,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			BDEF2 weight;
 			weight.bone1 = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone2 = ReadIndex(file, model_info_.bone_index_size);
-			file->ReadFloat32(&(weight.weight1));
+			if (!file->ReadFloat32(&(weight.weight1)))return maxon::Error();
 			vertex_data_->weight_deform_B2 = weight;
 			break;
 		}
@@ -180,10 +180,10 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			weight.bone2 = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone3 = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone4 = ReadIndex(file, model_info_.bone_index_size);
-			file->ReadFloat32(&(weight.weight1));
-			file->ReadFloat32(&(weight.weight2));
-			file->ReadFloat32(&(weight.weight3));
-			file->ReadFloat32(&(weight.weight4));
+			if (!file->ReadFloat32(&(weight.weight1)))return maxon::Error();
+			if (!file->ReadFloat32(&(weight.weight2)))return maxon::Error();
+			if (!file->ReadFloat32(&(weight.weight3)))return maxon::Error();
+			if (!file->ReadFloat32(&(weight.weight4)))return maxon::Error();
 			vertex_data_->weight_deform_B4 = weight;
 			break;
 		}
@@ -192,10 +192,10 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			SDEF weight;
 			weight.bone1 = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone2 = ReadIndex(file, model_info_.bone_index_size);
-			file->ReadFloat32(&(weight.weight1));
-			file->ReadVector32(&(weight.R0));
-			file->ReadVector32(&(weight.R1));
-			file->ReadVector32(&(weight.C));
+			if (!file->ReadFloat32(&(weight.weight1)))return maxon::Error();
+			if (!file->ReadVector32(&(weight.R0)))return maxon::Error();
+			if (!file->ReadVector32(&(weight.R1)))return maxon::Error();
+			if (!file->ReadVector32(&(weight.C)))return maxon::Error();
 			vertex_data_->weight_deform_S = weight;
 			break;
 		}
@@ -206,71 +206,71 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			weight.bone2 = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone3 = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone4 = ReadIndex(file, model_info_.bone_index_size);
-			file->ReadFloat32(&(weight.weight1));
-			file->ReadFloat32(&(weight.weight2));
-			file->ReadFloat32(&(weight.weight3));
-			file->ReadFloat32(&(weight.weight4));
+			if (!file->ReadFloat32(&(weight.weight1)))return maxon::Error();
+			if (!file->ReadFloat32(&(weight.weight2)))return maxon::Error();
+			if (!file->ReadFloat32(&(weight.weight3)))return maxon::Error();
+			if (!file->ReadFloat32(&(weight.weight4)))return maxon::Error();
 			vertex_data_->weight_deform_Q = weight;
 			break;
 		}
 		}
-		file->ReadFloat32(&(vertex_data_->edge_scale));
+		if (!file->ReadFloat32(&(vertex_data_->edge_scale)))return maxon::Error();
 		this->vertex_data.Append(vertex_data_)iferr_return;
 	}
-	file->ReadInt32(&(model_data_count_.surface_data_count));
+	if (!file->ReadInt32(&(model_data_count_.surface_data_count)))return maxon::Error();
 	model_data_count_.surface_data_count /= 3;
 	for (Int32 i = 0; i < model_data_count_.surface_data_count; i++)
 	{
 		this->surface_data.Append(new CPolygon(ReadUIndex(file, model_info_.vertex_index_size), ReadUIndex(file, model_info_.vertex_index_size), ReadUIndex(file, model_info_.vertex_index_size)))iferr_return;
 	}
-	file->ReadInt32(&(model_data_count_.texture_data_count));
+	if (!file->ReadInt32(&(model_data_count_.texture_data_count)))return maxon::Error();
 	for (Int32 i = 0; i < model_data_count_.texture_data_count; i++)
 	{
 		this->texture_data.Append(ReadText(file, model_info_.text_encoding))iferr_return;
 	}
-	file->ReadInt32(&(model_data_count_.material_data_count));
+	if (!file->ReadInt32(&(model_data_count_.material_data_count)))return maxon::Error();
 	for (Int32 i = 0; i < model_data_count_.material_data_count; i++)
 	{
 		PMX_Material_Data* material_data_ = new PMX_Material_Data;
 		material_data_->material_name_local = ReadText(file, model_info_.text_encoding);
 		material_data_->material_name_universal = ReadText(file, model_info_.text_encoding);
-		file->ReadBytes(&(material_data_->diffuse_colour), sizeof(vec4));
-		file->ReadVector32(&(material_data_->specular_colour));
-		file->ReadFloat32(&(material_data_->specular_strength));
-		file->ReadVector32(&(material_data_->ambient_colour));
-		file->ReadBytes(&(material_data_->drawing_flags), sizeof(PMX_Material_Flags));
-		file->ReadBytes(&(material_data_->edge_colour), sizeof(vec4));
-		file->ReadFloat32(&(material_data_->edge_scale));
+		if (!file->ReadBytes(&(material_data_->diffuse_colour), sizeof(vec4)))return maxon::Error();
+		if (!file->ReadVector32(&(material_data_->specular_colour)))return maxon::Error();
+		if (!file->ReadFloat32(&(material_data_->specular_strength)))return maxon::Error();
+		if (!file->ReadVector32(&(material_data_->ambient_colour)))return maxon::Error();
+		if (!file->ReadBytes(&(material_data_->drawing_flags), sizeof(PMX_Material_Flags)))return maxon::Error();
+		if (!file->ReadBytes(&(material_data_->edge_colour), sizeof(vec4)))return maxon::Error();
+		if (!file->ReadFloat32(&(material_data_->edge_scale)))return maxon::Error();
 		material_data_->texture_index = ReadIndex(file, model_info_.texture_index_size);
 		material_data_->environment_index = ReadIndex(file, model_info_.texture_index_size);
-		file->ReadChar(&(material_data_->environment_blend_mode));
-		file->ReadChar(&(material_data_->toon_reference));
+		if (!file->ReadChar(&(material_data_->environment_blend_mode)))return maxon::Error();
+		if (!file->ReadChar(&(material_data_->toon_reference)))return maxon::Error();
 		if (material_data_->toon_reference == 0)
 		{
 			material_data_->toon_part = ReadIndex(file, model_info_.texture_index_size);
 		}
 		else if (material_data_->toon_reference == 1)
 		{
-			file->ReadChar(&(material_data_->toon_internal));
+			if (!file->ReadChar(&(material_data_->toon_internal)))return maxon::Error();
 		}
 		material_data_->meta_data = ReadText(file, model_info_.text_encoding);
-		file->ReadInt32(&(material_data_->surface_count));
+		if (!file->ReadInt32(&(material_data_->surface_count)))return maxon::Error();
 		material_data_->surface_count /= 3;
 		this->material_data.Append(material_data_)iferr_return;
 	}
-	file->ReadInt32(&(model_data_count_.bone_data_count));
+	if (!file->ReadInt32(&(model_data_count_.bone_data_count)))return maxon::Error();
 	for (Int32 i = 0; i < model_data_count_.bone_data_count; i++)
 	{
 		PMX_Bone_Data* bone_data_ = new PMX_Bone_Data;
 		bone_data_->bone_name_local = ReadText(file, model_info_.text_encoding);
 		bone_data_->bone_name_universal = ReadText(file, model_info_.text_encoding);
-		file->ReadVector32(&(bone_data_->position));
+		if (!file->ReadVector32(&(bone_data_->position)))return maxon::Error();
 		bone_data_->parent_bone_index = ReadIndex(file, model_info_.bone_index_size);
-		file->ReadInt32(&(bone_data_->layer));
-		file->ReadBytes(&(bone_data_->bone_flags), sizeof(PMX_Bone_Flags));
+		if (!file->ReadInt32(&(bone_data_->layer)))return maxon::Error();
+		if (!file->ReadBytes(&(bone_data_->bone_flags), sizeof(PMX_Bone_Flags)))return maxon::Error();
 		if (bone_data_->bone_flags.indexed_tail_position == 0)
 		{
-			file->ReadVector32(&(bone_data_->tail_position));
+			if (!file->ReadVector32(&(bone_data_->tail_position)))return maxon::Error();
 		}
 		else if (bone_data_->bone_flags.indexed_tail_position == 1)
 		{
@@ -279,49 +279,49 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 		if (bone_data_->bone_flags.Inherit_rotation || bone_data_->bone_flags.Inherit_translation)
 		{
 			bone_data_->inherit_bone_parent_index = ReadIndex(file, model_info_.bone_index_size);
-			file->ReadFloat32(&(bone_data_->inherit_bone_parent_influence));
+			if (!file->ReadFloat32(&(bone_data_->inherit_bone_parent_influence)))return maxon::Error();
 		}
 		if (bone_data_->bone_flags.Fixed_axis)
 		{
-			file->ReadVector32(&(bone_data_->bone_fixed_axis));
+			if (!file->ReadVector32(&(bone_data_->bone_fixed_axis)))return maxon::Error();
 		}
 		if (bone_data_->bone_flags.Local_co_ordinate)
 		{
-			file->ReadVector32(&(bone_data_->bone_local_X));
-			file->ReadVector32(&(bone_data_->bone_local_Z));
+			if (!file->ReadVector32(&(bone_data_->bone_local_X)))return maxon::Error();
+			if (!file->ReadVector32(&(bone_data_->bone_local_Z)))return maxon::Error();
 		}
 		if (bone_data_->bone_flags.External_parent_deform) {
-			file->Seek(model_info_.bone_index_size);
+			if (!file->Seek(model_info_.bone_index_size))return maxon::Error();
 		}
 		if (bone_data_->bone_flags.IK)
 		{
 			bone_data_->IK_target_index = ReadIndex(file, model_info_.bone_index_size);
-			file->ReadInt32(&(bone_data_->IK_loop_count));
-			file->ReadFloat32(&(bone_data_->IK_limit_radian));
-			file->ReadInt32(&(bone_data_->IK_link_count));
+			if (!file->ReadInt32(&(bone_data_->IK_loop_count)))return maxon::Error();
+			if (!file->ReadFloat32(&(bone_data_->IK_limit_radian)))return maxon::Error();
+			if (!file->ReadInt32(&(bone_data_->IK_link_count)))return maxon::Error();
 			for (Int32 j = 0; j < bone_data_->IK_link_count; j++)
 			{
 				PMX_IK_links* IK_link = new PMX_IK_links;
 				IK_link->bone_index = ReadIndex(file, model_info_.bone_index_size);
-				file->ReadBool(&(IK_link->has_limits));
+				if (!file->ReadBool(&(IK_link->has_limits)))return maxon::Error();
 				if (IK_link->has_limits)
 				{
-					file->ReadVector32(&(IK_link->limit_min));
-					file->ReadVector32(&(IK_link->limit_max));
+					if (!file->ReadVector32(&(IK_link->limit_min)))return maxon::Error();
+					if (!file->ReadVector32(&(IK_link->limit_max)))return maxon::Error();
 				}
 				bone_data_->IK_links.Append(IK_link)iferr_return;
 			}
 		}
 		this->bone_data.Append(bone_data_)iferr_return;
 	}
-	file->ReadInt32(&(model_data_count_.morph_data_count));
+	if (!file->ReadInt32(&(model_data_count_.morph_data_count)))return maxon::Error();
 	for (Int32 i = 0; i < model_data_count_.morph_data_count; i++)
 	{
 		PMX_Morph_Data* morph_data_ = new PMX_Morph_Data;
 		morph_data_->morph_name_local = ReadText(file, model_info_.text_encoding);
 		morph_data_->morph_name_universal = ReadText(file, model_info_.text_encoding);
-		file->ReadChar(&(morph_data_->panel_type));
-		file->ReadChar(&(morph_data_->morph_type));
+		if (!file->ReadChar(&(morph_data_->panel_type)))return maxon::Error();
+		if (!file->ReadChar(&(morph_data_->morph_type)))return maxon::Error();
 		void* offset_data_ = nullptr;
 		switch (morph_data_->morph_type)
 		{
@@ -368,7 +368,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			break;
 		}
 		}
-		file->ReadInt32(&(morph_data_->offset_count));
+		if (!file->ReadInt32(&(morph_data_->offset_count)))return maxon::Error();
 		for (Int32 j = 0; j < morph_data_->offset_count; j++)
 		{
 			switch (morph_data_->morph_type)
@@ -378,7 +378,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 				maxon::PointerArray<PMX_Morph_group>* offset_data_groups = (maxon::PointerArray<PMX_Morph_group>*)offset_data_;
 				PMX_Morph_group*  offset_data_group_ = new PMX_Morph_group;
 				offset_data_group_->morph_index = ReadIndex(file, model_info_.morph_index_size);
-				file->ReadFloat32(&(offset_data_group_->influence));
+				if (!file->ReadFloat32(&(offset_data_group_->influence)))return maxon::Error();
 				offset_data_groups->AppendPtr(offset_data_group_)iferr_return;
 				break;
 			}
@@ -387,7 +387,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 				maxon::PointerArray<PMX_Morph_vertex>* offset_data_vertexs = (maxon::PointerArray<PMX_Morph_vertex>*)offset_data_;
 				PMX_Morph_vertex*  offset_data_vertex_ = new PMX_Morph_vertex;
 				offset_data_vertex_->vertex_index = ReadIndex(file, model_info_.vertex_index_size);
-				file->ReadVector32(&(offset_data_vertex_->translation));
+				if (!file->ReadVector32(&(offset_data_vertex_->translation)))return maxon::Error();
 				offset_data_vertexs->AppendPtr(offset_data_vertex_)iferr_return;
 				break;
 			}
@@ -396,9 +396,9 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 				maxon::PointerArray<PMX_Morph_bone>* offset_data_bones = (maxon::PointerArray<PMX_Morph_bone>*)offset_data_;
 				PMX_Morph_bone* offset_data_bone_ = new PMX_Morph_bone;
 				offset_data_bone_->bone_index = ReadIndex(file, model_info_.bone_index_size);
-				file->ReadVector32(&(offset_data_bone_->translation));
+				if (!file->ReadVector32(&(offset_data_bone_->translation)))return maxon::Error();
 				vec4 q_rotation;
-				file->ReadBytes(&q_rotation, sizeof(vec4));
+				if (!file->ReadBytes(&q_rotation, sizeof(vec4)))return maxon::Error();
 				vec3 rotation;
 				rotation.x = -maxon::ATan2(2 * q_rotation.y * q_rotation.w + 2 * q_rotation.x * q_rotation.z, 1 - 2 * (q_rotation.x*q_rotation.x + q_rotation.y*q_rotation.y));
 				rotation.y = -maxon::ASin(2 * (q_rotation.x * q_rotation.w - q_rotation.y * q_rotation.z));
@@ -412,28 +412,28 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 				maxon::PointerArray<PMX_Morph_UV>* offset_data_UVs = (maxon::PointerArray<PMX_Morph_UV>*)offset_data_;
 				PMX_Morph_UV* offset_data_UV_ = new PMX_Morph_UV;
 				offset_data_UV_->vertex_index = ReadIndex(file, model_info_.vertex_index_size);
-				file->ReadBytes(&(offset_data_UV_->floats), sizeof(vec4));
+				if (!file->ReadBytes(&(offset_data_UV_->floats), sizeof(vec4)))return maxon::Error();
 				offset_data_UVs->AppendPtr(offset_data_UV_)iferr_return;
 				break;
 			}
 			case 4:
 			{
-				file->Seek(model_info_.vertex_index_size + sizeof(vec4));
+				if (!file->Seek(model_info_.vertex_index_size + sizeof(vec4)))return maxon::Error();
 				break;
 			}
 			case 5:
 			{
-				file->Seek(model_info_.vertex_index_size + sizeof(vec4));
+				if (!file->Seek(model_info_.vertex_index_size + sizeof(vec4)))return maxon::Error();
 				break;
 			}
 			case 6:
 			{
-				file->Seek(model_info_.vertex_index_size + sizeof(vec4));
+				if (!file->Seek(model_info_.vertex_index_size + sizeof(vec4)))return maxon::Error();
 				break;
 			}
 			case 7:
 			{
-				file->Seek(model_info_.vertex_index_size + sizeof(vec4));
+				if (!file->Seek(model_info_.vertex_index_size + sizeof(vec4)))return maxon::Error();
 				break;
 			}
 			case 8:
@@ -441,16 +441,16 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 				maxon::PointerArray<PMX_Morph_material>* offset_data_materials = (maxon::PointerArray<PMX_Morph_material>*)offset_data_;
 				PMX_Morph_material* offset_data_material_ = new PMX_Morph_material;
 				offset_data_material_->material_index = ReadIndex(file, model_info_.material_index_size);
-				file->ReadChar(&(offset_data_material_->blend_mode));
-				file->ReadBytes(&(offset_data_material_->diffuse), sizeof(vec4));
-				file->ReadVector32(&(offset_data_material_->specular));
-				file->ReadFloat32(&(offset_data_material_->specularity));
-				file->ReadVector32(&(offset_data_material_->ambient));
-				file->ReadBytes(&(offset_data_material_->edge_colour), sizeof(vec4));
-				file->ReadFloat32(&(offset_data_material_->edge_size));
-				file->ReadBytes(&(offset_data_material_->texture_tint), sizeof(vec4));
-				file->ReadBytes(&(offset_data_material_->environment_tint), sizeof(vec4));
-				file->ReadBytes(&(offset_data_material_->toon_tint), sizeof(vec4));
+				if (!file->ReadChar(&(offset_data_material_->blend_mode)))return maxon::Error();
+				if (!file->ReadBytes(&(offset_data_material_->diffuse), sizeof(vec4)))return maxon::Error();
+				if (!file->ReadVector32(&(offset_data_material_->specular)))return maxon::Error();
+				if (!file->ReadFloat32(&(offset_data_material_->specularity)))return maxon::Error();
+				if (!file->ReadVector32(&(offset_data_material_->ambient)))return maxon::Error();
+				if (!file->ReadBytes(&(offset_data_material_->edge_colour), sizeof(vec4)))return maxon::Error();
+				if (!file->ReadFloat32(&(offset_data_material_->edge_size)))return maxon::Error();
+				if (!file->ReadBytes(&(offset_data_material_->texture_tint), sizeof(vec4)))return maxon::Error();
+				if (!file->ReadBytes(&(offset_data_material_->environment_tint), sizeof(vec4)))return maxon::Error();
+				if (!file->ReadBytes(&(offset_data_material_->toon_tint), sizeof(vec4)))return maxon::Error();
 				offset_data_materials->AppendPtr(offset_data_material_)iferr_return;
 				break;
 			}
@@ -489,7 +489,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 		for (Int32 j = 0; j < display_data_->frame_count; j++)
 		{
 			PMX_Frame_data* Frame = new PMX_Frame_data;
-			file->ReadChar(&(Frame->frame_type));
+			if (!file->ReadChar(&(Frame->frame_type)))return maxon::Error();
 			if (Frame->frame_type == 1)//1:索引 - 变形
 			{
 				Frame->frame_data = ReadIndex(file, model_info_.morph_index_size);

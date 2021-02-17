@@ -93,7 +93,7 @@ class VMDAnimation
 
 		static maxon::Result<void> FromFileImportCamera(Float& PositionMultiple, Float& TimeOffset);
 		static maxon::Result<void> FromDocumentExportCamera(Float& PositionMultiple, Float& TimeOffset);
-		static maxon::Result<void> FromFileImportMotions(Float &PositionMultiple, Float &TimeOffset, Bool &QuaternionRotationSW);
+		static maxon::Result<void> FromFileImportMotions(Float &PositionMultiple, Float &TimeOffset, Bool &QuaternionRotationSW, Bool DetailReport);
 };
 
 } // namespace
