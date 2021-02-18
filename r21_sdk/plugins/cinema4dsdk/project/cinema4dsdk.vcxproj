@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
     <ClCompile Include="..\generated\hxx\register.cpp" />
+    <ClCompile Include="..\source\MMD_PMX_tag.cpp" />
     <ClCompile Include="..\source\MMD_VMD_animation.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\EncodingConversion.cpp" />
@@ -183,6 +184,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\res\c4d_symbols.h" />
+    <ClInclude Include="..\res\description\PMX_Model_Tag.h" />
+    <ClInclude Include="..\source\MMD_PMX_tag.h" />
     <ClInclude Include="..\source\MMD_VMD_animation.h" />
     <ClInclude Include="..\source\main.h" />
     <ClInclude Include="..\source\EncodingConversion.h" />
@@ -190,9 +193,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\strings_en-US\c4d_strings.str" />
+    <None Include="..\res\strings_en-US\description\PMX_Model_Tag.str" />
     <None Include="..\res\strings_ja-JP\c4d_strings.str" />
     <None Include="..\res\strings_zh-CN\c4d_strings.str" />
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\res\description\PMX_Model_Tag.res" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

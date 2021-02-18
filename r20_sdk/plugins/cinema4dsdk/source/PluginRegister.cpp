@@ -1,7 +1,7 @@
 #include "main.h"
 #include "MMD_PMX_model.h"
 #include "MMD_VMD_animation.h"
-
+#include "MMD_PMX_tag.h"
 
 enum                                // Uniquely identify all your dialog elements here.
 {
@@ -49,7 +49,7 @@ public:
 
 		BaseContainer settings;
 		settings.SetBool(BITMAPBUTTON_BUTTON, false);
-		void* const customGUI = AddCustomGui(999, CUSTOMGUI_BITMAPBUTTON, ""_s, BFH_SCALE, SizePix(260), SizePix(90), settings);//R20
+		void* const customGUI = AddCustomGui(999, CUSTOMGUI_BITMAPBUTTON, ""_s, BFH_SCALE, SizePix(300), SizePix(78), settings);
 		BitmapButtonCustomGui* const bitmapButtonGUI = static_cast<BitmapButtonCustomGui*>(customGUI);
 		if (bitmapButtonGUI)
 		{
@@ -203,7 +203,7 @@ public:
 		}
 		case (DLG_VMD_MOT_IMPORT_BUTTON):
 		{
-			Float PositionMultiple_, TimeOffset_;
+			Float PositionMultiple_,TimeOffset_;
 			Bool QuaternionRotationSW_, DetailReport_;
 			GeDialog::GetFloat(DLG_VMD_MOT_IMPORT_SIZE, PositionMultiple_);
 			GeDialog::GetFloat(DLG_VMD_MOT_IMPORT_OFFSET, TimeOffset_);
@@ -238,13 +238,44 @@ class MMDTool : public CommandData
 public:
 	virtual Bool Execute(BaseDocument* doc) {
 		if (mmd_tool_dialog.IsOpen() == false)
-			mmd_tool_dialog.Open(DLG_TYPE::ASYNC, 1056563, -1, -1, 0, 0);
+			mmd_tool_dialog.Open(DLG_TYPE::ASYNC, ID_MMD_TOOL);
 		else
 			mmd_tool_dialog.Close();
 		return TRUE;
 	}
 };
 
+Bool RegisterPMXModelTag()
+{
+	return RegisterTagPlugin(ID_PMX_MODEL_TAG, GeLoadString(IDS_PMX_MODEL_TAG), TAG_EXPRESSION | TAG_VISIBLE | TAG_ADDTOTAKEGROUP, mmd::PMX_Model_Tag::Alloc, "PMX_Model_Tag"_s, AutoBitmap("MMDIcon.tif"_s), 0);
+}
+/*
+Bool RegisterPMXMaterialTag()
+{
+	return RegisterTagPlugin(ID_PMX_MATERIAL_TAG, GeLoadString(IDS_PMX_MATERIAL_TAG), TAG_EXPRESSION | TAG_VISIBLE, mmd::PMX_Material_Tag::Alloc, "PMX_Material_Tag"_s, AutoBitmap("pmx_material.tif"_s), 0);
+}
+
+Bool RegisterPMXBoneTag()
+{
+	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_EXPRESSION | TAG_VISIBLE, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.tif"_s), 0);
+}
+
+Bool RegisterPMXDisplayTag()
+{
+	return RegisterTagPlugin(ID_PMX_DISPLAY_TAG, GeLoadString(IDS_PMX_DISPLAY_TAG), TAG_EXPRESSION | TAG_VISIBLE, mmd::PMX_Display_Tag::Alloc, "PMX_Display_Tag"_s, AutoBitmap("pmx_display.tif"_s), 0);
+}
+
+Bool RegisterPMXRigidTag()
+{
+	return RegisterTagPlugin(ID_PMX_RIGID_TAG, GeLoadString(IDS_PMX_RIGID_TAG), TAG_EXPRESSION | TAG_VISIBLE, mmd::PMX_Rigid_Tag::Alloc, "PMX_Rigid_Tag"_s, AutoBitmap("pmx_rigid.tif"_s), 0);
+}
+
+Bool RegisterPMXJointTag()
+{
+	return RegisterTagPlugin(ID_PMX_JOINT_TAG, GeLoadString(IDS_PMX_JOINT_TAG), TAG_EXPRESSION | TAG_VISIBLE, mmd::PMX_Joint_Tag::Alloc, "PMX_Joint_Tag"_s, AutoBitmap("pmx_joint.tif"_s), 0);
+}
+*/
+
 Bool RegisterMMDTool() {
-	return RegisterCommandPlugin(1056563, "MMDTool"_s, 0, AutoBitmap("MMDIcon.tif"_s), "MMD tool for C4D"_s, NewObjClear(MMDTool));
+	return RegisterCommandPlugin(ID_MMD_TOOL, "MMDTool"_s, 0, AutoBitmap("MMDIcon.tif"_s), "MMD tool for C4D"_s, NewObjClear(MMDTool));
 }

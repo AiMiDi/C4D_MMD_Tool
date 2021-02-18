@@ -22,6 +22,12 @@
     <Filter Include="res\jp">
       <UniqueIdentifier>{ea7f75a6-8dc2-473f-8283-d2e3c3cf9860}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\description">
+      <UniqueIdentifier>{0ebd64b4-b324-43c9-91aa-85661d1b172f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\en\description">
+      <UniqueIdentifier>{a08e4f6e-f6be-4d8a-9832-f6163f06d594}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -45,6 +51,9 @@
     <ClCompile Include="..\source\PluginRegister.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\MMD_PMX_tag.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\res\c4d_symbols.h">
@@ -62,6 +71,12 @@
     <ClInclude Include="..\source\MMD_PMX_model.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\MMD_PMX_tag.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\res\description\PMX_Model_Tag.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -74,5 +89,13 @@
     <None Include="..\res\strings_ja-JP\c4d_strings.str">
       <Filter>res\jp</Filter>
     </None>
+    <None Include="..\res\strings_en-US\description\PMX_Model_Tag.str">
+      <Filter>res\en\description</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\res\description\PMX_Model_Tag.res">
+      <Filter>res\description</Filter>
+    </Resource>
   </ItemGroup>
 </Project>

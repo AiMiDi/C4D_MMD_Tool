@@ -591,6 +591,13 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 	if (Separate) {
 		BaseObject* model_ = BaseObject::Alloc(Onull);
 		model_->SetName(pmx_model->model_info.model_name_local);
+		BaseTag* PMX_model_tag = model_->MakeTag(ID_PMX_MODEL_TAG);		
+		PMX_model_tag->SetParameter(DescLevel(ID_BASELIST_NAME), pmx_model->model_info.model_name_local, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(PMX_VERSION), pmx_model->model_info.version, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(MODEL_NAME_LOCAL), pmx_model->model_info.model_name_local, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(MODEL_NAME_UNIVERSAL), pmx_model->model_info.model_name_universal, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(COMMENTS_LOCAL), pmx_model->model_info.comments_local, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(COMMENTS_UNIVERSAL), pmx_model->model_info.comments_universal, DESCFLAGS_SET::NONE);
 		doc->InsertObject(model_, nullptr, nullptr);
 		maxon::HashMap<Int32, BaseObject*> bone_map;
 		for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
@@ -725,14 +732,13 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 			if (bone_data_->bone_flags.IK == 1)
 			{
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::DONTCHECKMINMAX);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::DONTCHECKMINMAX);
 				bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::DONTCHECKMINMAX);
 				bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_BALL, DESCFLAGS_SET::DONTCHECKMINMAX);
 				bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_SIZE_MODE), ID_CA_JOINT_OBJECT_JOINT_SIZE_MODE_CUSTOM, DESCFLAGS_SET::DONTCHECKMINMAX);
 				bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_SIZE), 5.0, DESCFLAGS_SET::DONTCHECKMINMAX);
-				BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561			
-				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT),1, DESCFLAGS_SET::NONE);
+				BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561	
+				IK_tag->SetName(bone_data_->bone_name_local);
+				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
 				BaseLink* target_link = BaseLink::Alloc();
 				if (target_link == nullptr) {
 					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -749,6 +755,24 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				}
 				tip_link->SetLink(bone_map.Find(bone_data_->IK_target_index)->GetValue());
 				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TIP), tip_link, DESCFLAGS_SET::NONE);
+				DynamicDescription* const ddesc = PMX_model_tag->GetDynamicDescription();
+				if (ddesc == nullptr)return maxon::UnexpectedError(MAXON_SOURCE_LOCATION);
+				DescID ik_link_id;
+				MAXON_SCOPE
+				{
+				BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
+				bc.SetString(DESC_NAME, bone_data_->bone_name_local);
+				bc.SetData(DESC_PARENTGROUP, GeData { CUSTOMDATATYPE_DESCID, DescID(MODEL_IK_GRP) });
+				ik_link_id = ddesc->Alloc(bc);
+				}
+				BaseLink* ik_link = BaseLink::Alloc();
+				if (ik_link == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				ik_link->SetLink(IK_tag);
+				PMX_model_tag->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
 			}
 		}
 		Int32 part_surface_end = 0;
@@ -1071,6 +1095,13 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 	}else{
 		BaseObject* model_ = BaseObject::Alloc(Onull);
 		model_->SetName(pmx_model->model_info.model_name_local);
+		BaseTag* PMX_model_tag = model_->MakeTag(ID_PMX_MODEL_TAG);
+		PMX_model_tag->SetParameter(DescLevel(ID_BASELIST_NAME), pmx_model->model_info.model_name_local, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(PMX_VERSION), pmx_model->model_info.version, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(MODEL_NAME_LOCAL), pmx_model->model_info.model_name_local, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(MODEL_NAME_UNIVERSAL), pmx_model->model_info.model_name_universal, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(COMMENTS_LOCAL), pmx_model->model_info.comments_local, DESCFLAGS_SET::NONE);
+		PMX_model_tag->SetParameter(DescLevel(COMMENTS_UNIVERSAL), pmx_model->model_info.comments_universal, DESCFLAGS_SET::NONE);
 		doc->InsertObject(model_, nullptr, nullptr);
 		PolygonObject* model = PolygonObject::Alloc(pmx_model->model_data_count.vertex_data_count, pmx_model->model_data_count.surface_data_count);
 		model->SetName("Mesh"_s);
@@ -1219,13 +1250,12 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 			if (bone_data_->bone_flags.IK == 1)
 			{
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::DONTCHECKMINMAX);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::DONTCHECKMINMAX);
 				bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::DONTCHECKMINMAX);
 				bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_BALL, DESCFLAGS_SET::DONTCHECKMINMAX);
 				bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_SIZE_MODE), ID_CA_JOINT_OBJECT_JOINT_SIZE_MODE_CUSTOM, DESCFLAGS_SET::DONTCHECKMINMAX);
 				bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_SIZE), 5.0, DESCFLAGS_SET::DONTCHECKMINMAX);
-				BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561			
+				BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561	
+				IK_tag->SetName(bone_data_->bone_name_local);
 				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
 				BaseLink* target_link = BaseLink::Alloc();
 				if (target_link == nullptr) {
@@ -1243,6 +1273,24 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				}
 				tip_link->SetLink(bone_map.Find(bone_data_->IK_target_index)->GetValue());
 				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TIP), tip_link, DESCFLAGS_SET::NONE);
+				DynamicDescription* const ddesc = PMX_model_tag->GetDynamicDescription();
+				if (ddesc == nullptr)return maxon::UnexpectedError(MAXON_SOURCE_LOCATION);
+				DescID ik_link_id;
+				MAXON_SCOPE
+				{
+				BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
+				bc.SetString(DESC_NAME, bone_data_->bone_name_local);
+				bc.SetData(DESC_PARENTGROUP, GeData { CUSTOMDATATYPE_DESCID, DescID(MODEL_IK_GRP) });
+				ik_link_id = ddesc->Alloc(bc);
+				}
+				BaseLink* ik_link = BaseLink::Alloc();
+				if (ik_link == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				ik_link->SetLink(IK_tag);
+				PMX_model_tag->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
 			}
 		}
 		bone_map.Reset();
@@ -1484,7 +1532,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			texture_tag->SetName(material_data->material_name_local);
 			texture_tag->SetParameter(DescID(TEXTURETAG_RESTRICTION), material_data->material_name_local, DESCFLAGS_SET::NONE);
 			texture_tag->SetParameter(DescID(TEXTURETAG_PROJECTION), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
-			model->InsertTag(texture_tag);
+			model->InsertTag(texture_tag, doc->GetActiveTag());
 		}
 		doc->SetSelection(nullptr);
 		doc->SetMode(Mmodel);

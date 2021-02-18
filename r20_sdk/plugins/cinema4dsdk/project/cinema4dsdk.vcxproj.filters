@@ -33,6 +33,9 @@
     <ClCompile Include="..\source\PluginRegister.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\MMD_PMX_tag.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\res\c4d_symbols.h">
@@ -50,5 +53,19 @@
     <ClInclude Include="..\source\MMD_PMX_model.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\MMD_PMX_tag.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\res\description\PMX_Model_Tag.h">
+      <Filter>res</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\res\description\PMX_Model_Tag.res">
+      <Filter>res</Filter>
+    </Resource>
   </ItemGroup>
 </Project>

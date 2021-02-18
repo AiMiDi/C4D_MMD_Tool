@@ -4,7 +4,8 @@ Bool PluginStart()
 {
 	if (!RegisterMMDTool())
 		return false;
-	// shader plugin examples
+	if (!RegisterPMXModelTag())
+		return false;
 	return true;
 }
 

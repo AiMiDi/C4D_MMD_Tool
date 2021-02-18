@@ -1,6 +1,14 @@
 ﻿#ifndef MAIN_H__
 #define MAIN_H__
 
+#define ID_PMX_MATERIAL_TAG 1056725
+#define ID_PMX_BONE_TAG 1056720
+#define ID_PMX_DISPLAY_TAG 	1056721
+#define ID_PMX_RIGID_TAG 1056722
+#define ID_PMX_JOINT_TAG 1056723
+#define ID_PMX_MODEL_TAG 1056724
+#define ID_MMD_TOOL 1056563
+
 #include <memory>
 #include "c4d.h"
 #include "c4d_plugin.h"
@@ -28,7 +36,14 @@
 #include "EncodingConversion.h"
 
 class MMDTool;
+class MMDToolDialog;
 
+Bool RegisterPMXModelTag();
+/*Bool RegisterPMXMaterialTag();
+Bool RegisterPMXBoneTag();
+Bool RegisterPMXDisplayTag();
+Bool RegisterPMXRigidTag();
+Bool RegisterPMXJointTag();*/
 Bool RegisterMMDTool();
 
 #endif // MAIN_H__

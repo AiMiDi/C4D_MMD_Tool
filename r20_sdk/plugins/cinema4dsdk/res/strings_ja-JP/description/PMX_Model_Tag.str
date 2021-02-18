@@ -1,0 +1,10 @@
+STRINGTABLE PMX_Model_Tag
+{
+	PMX_Model_Tag "PMX Model Tag";
+	MODEL_INFO_GRP "Model info";
+	MODEL_NAME_LOCAL "Local model name";
+	MODEL_NAME_UNIVERSAL "Universal model name";
+	COMMENTS_LOCAL "Local comments";
+	COMMENTS_UNIVERSAL "Universal comments";
+	PMX_VERSION "Version";
+}
