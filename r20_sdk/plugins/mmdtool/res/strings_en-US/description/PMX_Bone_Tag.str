@@ -1,0 +1,30 @@
+STRINGTABLE PMX_Bone_Tag
+{
+	PMX_Bone_Tag "PMX_Bone_Tag";
+	PMX_BONE_INFO_GRP "Bone info";
+	BONE_NAME_LOCAL "Bone local name";
+	BONE_NAME_UNIVERSAL "Bone universal name";
+	POSITION "Position";
+
+	PMX_BONE_PARENT_BONE_GRP "Parent bone";
+	PARENT_BONE_INDEX "Parent bone Index";
+	PARENT_BONE_LINK "";
+
+	PMX_BONE_FLAG_GRP "Bone features";
+	ROTATABLE "Is rotatable";
+	TRANSLATABLE "Is translatable";
+	VISIBLE "Is visible";
+	ENABLED "Is enable";
+	IS_IK "Is IK";
+
+	PMX_BONE_DEFORM_LAYER_GRP "Deformation";
+	LAYER "Deformation layer";
+	PHYSICS_AFTER_DEFORM "Physics after deform";
+
+	PMX_BONE_END_OF_BONE_GRP "Bone tail pointing";
+	INDEXED_TAIL_POSITION "Tail pointing";
+	TAIL_IS_INDEX "Index";
+	TAIL_IS_POSITION "Position";
+	TAIL_INDEX "Tail index";
+	TAIL_POSITION "Tail position";
+}
