@@ -1,0 +1,58 @@
+STRINGTABLE
+{
+	IDS_MES_OPENFILE "Open";
+	IDS_MES_SAVEFILE "Save";
+
+	IDS_MES_MEM_ERR "Out of memory error";
+	IDS_MES_OPEN_FILE_ERR "Open file error";
+	IDS_MES_SELECT_ERR "Please select an object";
+
+	IDS_MES_IMPORT_ERR "Import failed:";
+	IDS_MES_IMPORT_TYPE_ERR "File is not a vmd file";
+	IDS_MES_IMPORT_READ_ERR "Cannot read file";
+	IDS_MES_IMPORT_CAM_ERR "It's not a camera VMD file";
+	IDS_MES_IMPORT_OK "Successfully imported # Frame(s) at # ms!";
+
+	IDS_MES_EXPORT_ERR "Export failed:";
+	IDS_MES_EXPORT_TYPE_ERR "Please select a legal camera combination object";
+	IDS_MES_EXPORT_TRACK_ERR "Can't find # track";
+	IDS_MES_EXPORT_WRITE_ERR "Cannot write file";
+	IDS_MES_EXPORT_OK "Successfully exported # Frame(s) at # ms!";
+
+	IDS_MES_IMPORT_MOT_OK "Successfully imported # bone's and # morph's # Frame(s) at # ms!";
+	IDS_MES_IMPORT_MOT_CF_BONE "Can't find # bone(s)";
+	IDS_MES_IMPORT_MOT_CF_MORPH "Can't find # morph(s)";
+
+	IDS_VMD_TOOL_TITLE "MMD Tool";
+	IDS_VMD_CAM_TOOL_TITLE "Camera";
+	IDS_VMD_CAM_IMPORT_TITLE "Camera Import";
+	IDS_VMD_CAM_IMPORT_SIZE_NAME "Size";
+	IDS_VMD_CAM_IMPORT_OFFSET_NAME "Offset";
+	IDS_VMD_CAM_IMPORT_BUTTON "Import";
+
+	IDS_VMD_CAM_EXPORT_TITLE "Camera Export";
+	IDS_VMD_CAM_EXPORT_SIZE_NAME "Size";
+	IDS_VMD_CAM_EXPORT_OFFSET_NAME "Offset";
+	IDS_VMD_CAM_EXPORT_BUTTON "Export";
+
+	IDS_VMD_MOT_TOOL_TITLE "Motion";
+	IDS_VMD_MOT_IMPORT_TITLE "Motion Import";
+	IDS_VMD_MOT_IMPORT_SIZE_NAME "Size";
+	IDS_VMD_MOT_IMPORT_OFFSET_NAME "Offset";
+	IDS_VMD_MOT_IMPORT_QUAT_NAME "Quaternion rotation";
+	IDS_VMD_MOT_IMPORT_DETAIL_NAME "Detail report";
+	IDS_VMD_MOT_IMPORT_BUTTON "Import";
+
+	IDS_PMX_MOD_TOOL_TITLE "Model";
+	IDS_PMX_MOD_IMPORT_TITLE "Model Import";
+	IDS_PMX_MOD_IMPORT_SIZE_NAME "Size";
+	IDS_PMX_MOD_IMPORT_MULTIPART_NAME "Multipart";
+	IDS_PMX_MOD_IMPORT_BUTTON "Import";
+
+	IDS_PMX_MATERIAL_TAG "PMX_Material_Tag";
+	IDS_PMX_BONE_TAG "PMX_Bone_Tag";
+    IDS_PMX_DISPLAY_TAG "PMX_Display_Tag";
+	IDS_PMX_RIGID_TAG "PMX_Rigid_Tag";
+	IDS_PMX_JOINT_TAG "PMX_Joint_Tag";
+	IDS_PMX_MODEL_TAG "PMX_Model_Tag";
+}

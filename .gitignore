@@ -62,3 +62,7 @@ r21_sdk/plugins/project/.vs/
 r20_sdk/plugins/project/.vs/
 
 *.bat
+
+r20_sdk/plugins/mmdtool/generated/
+
+r21_sdk/plugins/mmdtool/generated/
