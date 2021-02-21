@@ -285,7 +285,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 		{
 			if (!file->ReadVector32(&(bone_data_->bone_fixed_axis)))return maxon::Error();
 		}
-		if (bone_data_->bone_flags.Local_co_ordinate)
+		if (bone_data_->bone_flags.Local_coordinate)
 		{
 			if (!file->ReadVector32(&(bone_data_->bone_local_X)))return maxon::Error();
 			if (!file->ReadVector32(&(bone_data_->bone_local_Z)))return maxon::Error();
@@ -625,12 +625,17 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			PMX_bone_tag->SetParameter(DescID(LAYER), bone_data_->layer, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(PHYSICS_AFTER_DEFORM), bone_data_->bone_flags.Physics_after_deform, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(INDEXED_TAIL_POSITION), bone_data_->bone_flags.indexed_tail_position, DESCFLAGS_SET::NONE);
-			if (bone_data_->bone_flags.indexed_tail_position == 1) {
-				PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
+			PMX_bone_tag->SetParameter(DescID(INHERIT_ROTATION), bone_data_->bone_flags.Inherit_rotation, DESCFLAGS_SET::NONE);
+			PMX_bone_tag->SetParameter(DescID(INHERIT_TRANSLATION), bone_data_->bone_flags.Inherit_translation, DESCFLAGS_SET::NONE);
+			PMX_bone_tag->SetParameter(DescID(FIXED_AXIS), bone_data_->bone_flags.Fixed_axis, DESCFLAGS_SET::NONE);
+			PMX_bone_tag->SetParameter(DescID(LOCAL_COORDINATE), bone_data_->bone_flags.Local_coordinate, DESCFLAGS_SET::NONE);
+			if (bone_data_->bone_flags.Local_coordinate) {
+				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_X), (Vector)bone_data_->bone_local_X, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_Z), (Vector)bone_data_->bone_local_Z, DESCFLAGS_SET::NONE);
 			}
-			else {
-				PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
-			}		
+			if (bone_data_->bone_flags.Fixed_axis == 1) {
+				PMX_bone_tag->SetParameter(DescID(BONE_FIXED_AXIS), (Vector)bone_data_->bone_fixed_axis, DESCFLAGS_SET::NONE);
+			}	
 			if (bone_data_->parent_bone_index == -1)
 			{
 				bone->SetFrozenPos(bone_data_->position * PositionMultiple);
@@ -641,6 +646,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
 			}
 			if (bone_data_->bone_flags.indexed_tail_position == 1) {
+				PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
 				if (bone_data_->tail_index == -1) {
 					bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 				}
@@ -648,9 +654,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 					bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 				}
 			}
-			else if (bone_data_->bone_flags.indexed_tail_position == 0)
+			else 
 			{
-
+				PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
 			}
 			BaseTag* protection_tag = bone->MakeTag(Tprotection);
 			if (bone_data_->bone_flags.Enabled == 1) {
@@ -695,6 +701,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 			if (bone_data_->bone_flags.Inherit_translation == 1)
 			{
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 				if (bone_data_->inherit_bone_parent_influence > 0.0) {
 					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
 					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
@@ -702,6 +710,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 			if (bone_data_->bone_flags.Inherit_rotation == 1)
 			{
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 				if (bone_data_->inherit_bone_parent_influence > 0.0) {
 					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
 					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
@@ -1265,6 +1275,17 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			PMX_bone_tag->SetParameter(DescID(LAYER), bone_data_->layer, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(PHYSICS_AFTER_DEFORM), bone_data_->bone_flags.Physics_after_deform, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(INDEXED_TAIL_POSITION), bone_data_->bone_flags.indexed_tail_position, DESCFLAGS_SET::NONE);
+			PMX_bone_tag->SetParameter(DescID(INHERIT_ROTATION), bone_data_->bone_flags.Inherit_rotation, DESCFLAGS_SET::NONE);
+			PMX_bone_tag->SetParameter(DescID(INHERIT_TRANSLATION), bone_data_->bone_flags.Inherit_translation, DESCFLAGS_SET::NONE);
+			PMX_bone_tag->SetParameter(DescID(FIXED_AXIS), bone_data_->bone_flags.Fixed_axis, DESCFLAGS_SET::NONE);
+			PMX_bone_tag->SetParameter(DescID(LOCAL_COORDINATE), bone_data_->bone_flags.Local_coordinate, DESCFLAGS_SET::NONE);
+			if (bone_data_->bone_flags.Local_coordinate) {
+				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_X), (Vector)bone_data_->bone_local_X, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_Z), (Vector)bone_data_->bone_local_Z, DESCFLAGS_SET::NONE);
+			}
+			if (bone_data_->bone_flags.Fixed_axis == 1) {
+				PMX_bone_tag->SetParameter(DescID(BONE_FIXED_AXIS), (Vector)bone_data_->bone_fixed_axis, DESCFLAGS_SET::NONE);
+			}
 			if (bone_data_->parent_bone_index == -1)
 			{
 				bone->SetFrozenPos(bone_data_->position * PositionMultiple);
@@ -1273,8 +1294,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			else {
 				bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position)* PositionMultiple);
 				doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
-			}			
+			}
 			if (bone_data_->bone_flags.indexed_tail_position == 1) {
+				PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
 				if (bone_data_->tail_index == -1) {
 					bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 				}
@@ -1282,9 +1304,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 					bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 				}
 			}
-			else if (bone_data_->bone_flags.indexed_tail_position == 0)
+			else
 			{
-
+				PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
 			}
 			BaseTag* protection_tag = bone->MakeTag(Tprotection);
 			if (bone_data_->bone_flags.Enabled == 1) {
@@ -1329,6 +1351,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 			if (bone_data_->bone_flags.Inherit_translation == 1)
 			{
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 				if (bone_data_->inherit_bone_parent_influence > 0.0) {
 					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
 					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
@@ -1336,6 +1360,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 			if (bone_data_->bone_flags.Inherit_rotation == 1)
 			{
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 				if (bone_data_->inherit_bone_parent_influence > 0.0) {
 					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
 					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);

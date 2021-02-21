@@ -68,6 +68,9 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
@@ -189,6 +192,15 @@
     <ClInclude Include="..\source\MMD_PMX_tag.h" />
     <ClInclude Include="..\source\MMD_VMD_animation.h" />
     <ClInclude Include="..\source\main.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\res\description\PMX_Bone_Tag.res" />
+    <Text Include="..\res\description\PMX_Model_Tag.res" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\strings_en-US\c4d_strings.str" />
+    <None Include="..\res\strings_en-US\description\PMX_Bone_Tag.str" />
+    <None Include="..\res\strings_en-US\description\PMX_Model_Tag.str" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

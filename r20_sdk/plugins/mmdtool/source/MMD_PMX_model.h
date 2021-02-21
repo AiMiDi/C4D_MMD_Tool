@@ -122,7 +122,7 @@ namespace mmd {
 		Bool Inherit_rotation : 1;//启用继承亲骨的旋转
 		Bool Inherit_translation : 1;//启用继承亲骨的移动
 		Bool Fixed_axis : 1;//启用轴限制
-		Bool Local_co_ordinate : 1;//启用Local轴
+		Bool Local_coordinate : 1;//启用Local轴
 		Bool Physics_after_deform : 1;//先变形，后算物理
 		Bool External_parent_deform : 1;//外部亲骨骼变形
 		Bool : 2;//占位

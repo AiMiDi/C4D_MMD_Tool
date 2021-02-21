@@ -36,73 +36,90 @@ Bool mmd::PMX_Bone_Tag::Init(GeListNode* node)
 	node->SetParameter(DescID(ID_BASELIST_NAME), GeLoadString(IDS_PMX_MODEL_TAG), DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(BONE_NAME_LOCAL), "bone"_s, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(BONE_NAME_UNIVERSAL), "bone"_s, DESCFLAGS_SET::NONE);
-	node->SetParameter(DescID(POSITION), Vector(0,0,0), DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(PARENT_BONE_INDEX), -1, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(ROTATABLE), 1, DESCFLAGS_SET::NONE);
-	node->SetParameter(DescID(TRANSLATABLE), 0, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(VISIBLE), 1, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(ENABLED), 1, DESCFLAGS_SET::NONE);
-	node->SetParameter(DescID(IS_IK), 0, DESCFLAGS_SET::NONE);
-	node->SetParameter(DescID(LAYER), 0, DESCFLAGS_SET::NONE);
-	node->SetParameter(DescID(PHYSICS_AFTER_DEFORM), 0, DESCFLAGS_SET::NONE);
-	node->SetParameter(DescID(INDEXED_TAIL_POSITION), 0, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(TAIL_INDEX),-1, DESCFLAGS_SET::NONE);
-	node->SetParameter(DescID(TAIL_POSITION), Vector(0, 0, 0), DESCFLAGS_SET::NONE);
+	node->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), -1, DESCFLAGS_SET::NONE);
+	node->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), 1, DESCFLAGS_SET::NONE);
+	node->SetParameter(DescID(BONE_LOCAL_X), Vector(1, 0, 0), DESCFLAGS_SET::NONE);
+	node->SetParameter(DescID(BONE_LOCAL_Z), Vector(0, 0, 1), DESCFLAGS_SET::NONE);
 	return TRUE;
 }
 
-Bool mmd::PMX_Bone_Tag::GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags)
+Bool mmd::PMX_Bone_Tag::GetDEnabling(GeListNode *node, const DescID &id, const GeData &t_data, DESCFLAGS_ENABLE flags, const BaseContainer *itemdesc)
 {
-	if (!description->LoadDescription("PMX_Bone_Tag"_s))
-		return false;
-	const DescID* singleid = description->GetSingleDescID();
-
-	GeData Ge_data;
-	node->GetParameter(DescID(INDEXED_TAIL_POSITION), Ge_data, DESCFLAGS_GET::NONE);
-	Int32 indexed_tail_position = Ge_data.GetInt32();
-	if (indexed_tail_position == 1) {
-		MAXON_SCOPE
-		{
-			DescID cid = DescID(TAIL_POSITION);
-			if (singleid == nullptr || cid.IsPartOf(*singleid, nullptr))
-			{
-				BaseContainer* settings = description->GetParameterI(cid, nullptr);
-				if (settings)settings->SetBool(DESC_EDITABLE, false);
-			}
-		}
-		MAXON_SCOPE
-		{
-			DescID cid = DescID(TAIL_INDEX);
-			if (singleid == nullptr || cid.IsPartOf(*singleid, nullptr))
-			{
-				BaseContainer* settings = description->GetParameterI(cid, nullptr);
-				if (settings)settings->SetBool(DESC_EDITABLE, true);
-			}
+	if (id == DescID(TAIL_INDEX)) {
+		GeData Ge_data;
+		node->GetParameter(DescID(INDEXED_TAIL_POSITION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool indexed_tail_position = Ge_data.GetBool();
+		if (indexed_tail_position == 0) {
+			return false;
 		}
 	}
-	else if(indexed_tail_position == 0){
-		MAXON_SCOPE
-		{
-			DescID cid = DescID(TAIL_POSITION);
-			if (singleid == nullptr || cid.IsPartOf(*singleid, nullptr))
-			{
-				BaseContainer* settings = description->GetParameterI(cid, nullptr);
-				if (settings)settings->SetBool(DESC_EDITABLE, true);
-			}
-		}
-		MAXON_SCOPE
-		{
-			DescID cid = DescID(TAIL_INDEX);
-			if (singleid == nullptr || cid.IsPartOf(*singleid, nullptr))
-			{
-				BaseContainer* settings = description->GetParameterI(cid, nullptr);
-				if (settings)settings->SetBool(DESC_EDITABLE, false);
-			}
+	if (id == DescID(TAIL_POSITION)) {
+		GeData Ge_data;
+		node->GetParameter(DescID(INDEXED_TAIL_POSITION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool indexed_tail_position = Ge_data.GetBool();
+		if (indexed_tail_position == 1) {
+			return false;
 		}
 	}
-	
-	flags |= DESCFLAGS_DESC::LOADED;
-
+	if (id == DescID(INHERIT_BONE_PARENT_INDEX)) {
+		GeData Ge_data;
+		node->GetParameter(DescID(INHERIT_ROTATION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool inherit_rotation = Ge_data.GetBool();
+		node->GetParameter(DescID(INHERIT_TRANSLATION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool inherit_translation = Ge_data.GetBool();
+		if (inherit_rotation == 0 && inherit_translation == 0) {
+			return false;
+		}
+	}
+	if (id == DescID(INHERIT_BONE_PARENT_INFLUENCE)) {
+		GeData Ge_data;
+		node->GetParameter(DescID(INHERIT_ROTATION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool inherit_rotation = Ge_data.GetBool();
+		node->GetParameter(DescID(INHERIT_TRANSLATION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool inherit_translation = Ge_data.GetBool();
+		if (inherit_rotation == 0 && inherit_translation == 0) {
+			return false;
+		}
+	}
+	if (id == DescID(INHERIT_BONE_PARENT_LINK)) {
+		GeData Ge_data;
+		node->GetParameter(DescID(INHERIT_ROTATION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool inherit_rotation = Ge_data.GetBool();
+		node->GetParameter(DescID(INHERIT_TRANSLATION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool inherit_translation = Ge_data.GetBool();
+		if (inherit_rotation == 0 && inherit_translation == 0) {
+			return false;
+		}
+	}
+	if (id == DescID(BONE_FIXED_AXIS)) {
+		GeData Ge_data;
+		node->GetParameter(DescID(FIXED_AXIS), Ge_data, DESCFLAGS_GET::NONE);
+		Bool fixed_axis = Ge_data.GetBool();
+		if (fixed_axis == 0) {
+			return false;
+		}
+	}
+	if (id == DescID(BONE_LOCAL_X)) {
+		GeData Ge_data;
+		node->GetParameter(DescID(LOCAL_COORDINATE), Ge_data, DESCFLAGS_GET::NONE);
+		Bool local_coordinate = Ge_data.GetBool();
+		if (local_coordinate == 0) {
+			return false;
+		}
+	}
+	if (id == DescID(BONE_LOCAL_Z)) {
+		GeData Ge_data;
+		node->GetParameter(DescID(LOCAL_COORDINATE), Ge_data, DESCFLAGS_GET::NONE);
+		Bool local_coordinate = Ge_data.GetBool();
+		if (local_coordinate == 0) {
+			return false;
+		}
+	}
 	return true;
 }
 

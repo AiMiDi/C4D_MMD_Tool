@@ -16,6 +16,9 @@
     <Filter Include="source">
       <UniqueIdentifier>{8800E4E7-0D26-2958-0000-0000CA90681B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\str">
+      <UniqueIdentifier>{a328e355-eba8-4a96-a811-e7449cd473f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -68,5 +71,24 @@
     <ClInclude Include="..\source\main.h">
       <Filter>source</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\res\description\PMX_Model_Tag.res">
+      <Filter>res\description</Filter>
+    </Text>
+    <Text Include="..\res\description\PMX_Bone_Tag.res">
+      <Filter>res\description</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\strings_en-US\c4d_strings.str">
+      <Filter>res\str</Filter>
+    </None>
+    <None Include="..\res\strings_en-US\description\PMX_Bone_Tag.str">
+      <Filter>res\str</Filter>
+    </None>
+    <None Include="..\res\strings_en-US\description\PMX_Model_Tag.str">
+      <Filter>res\str</Filter>
+    </None>
   </ItemGroup>
 </Project>

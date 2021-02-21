@@ -1278,6 +1278,13 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float &PositionMult
 		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
+	BaseObject* SelectObject = doc->GetActiveObject();
+	if (SelectObject == nullptr) {
+		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+		file.Free();
+		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+	}
 	if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE))) {
 		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
@@ -1312,13 +1319,6 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float &PositionMult
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		file.Free();
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
-	}
-	BaseObject* SelectObject = doc->GetActiveObject();
-	if (SelectObject == nullptr) {
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
-		file.Free();
-		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
 	struct morph_id_tag
 	{
@@ -1631,17 +1631,13 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float &PositionMult
 	doc->SetTime(BaseTime(1, 30));
 	doc->SetTime(BaseTime(0, 30));
 	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK, String::IntToString(bone_cnt), String::IntToString(morph_cnt), String::IntToString(motion_frame_bone_number + motion_frame_morph_number), String::FloatToString(timing.GetMilliseconds())) + "\n";
-	report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_S.GetCount()));
 	if (DetailReport == 1) {
-		report += ":\n";
+		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_S.GetCount())) + ":\n";
 		for (String i : not_find_bone_S)
 		{
 			report += "\"" + i + "\" ";
 		}
-	}
-	report += "\n" + GeLoadString(IDS_MES_IMPORT_MOT_CF_MORPH, String::IntToString(not_find_morph_S.GetCount()));
-	if (DetailReport == 1) {
-		report += ":\n";
+		report += "\n" + GeLoadString(IDS_MES_IMPORT_MOT_CF_MORPH, String::IntToString(not_find_morph_S.GetCount())) + ":\n";
 		for (String i : not_find_morph_S)
 		{
 			report += "\"" + i + "\" ";
