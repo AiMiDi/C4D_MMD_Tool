@@ -611,6 +611,22 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
 			BaseObject* bone = BaseObject::Alloc(Ojoint);
 			bone->SetName(bone_data_->bone_name_local);
+			if (bone_data_->parent_bone_index == -1)
+			{
+				bone->SetFrozenPos(bone_data_->position * PositionMultiple);
+				doc->InsertObject(bone, bones, nullptr);
+			}
+			else {
+				bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position)* PositionMultiple);
+				doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
+			}		
+			bone_map.Insert(i, bone)iferr_return;
+		}
+		EventAdd();
+		for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
+		{
+			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
+			BaseObject* bone = bone_map.Find(i)->GetValue();
 			BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
 			PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(BONE_NAME_LOCAL), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
@@ -629,176 +645,50 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			PMX_bone_tag->SetParameter(DescID(INHERIT_TRANSLATION), bone_data_->bone_flags.Inherit_translation, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(FIXED_AXIS), bone_data_->bone_flags.Fixed_axis, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(LOCAL_COORDINATE), bone_data_->bone_flags.Local_coordinate, DESCFLAGS_SET::NONE);
+			if (bone_data_->bone_flags.indexed_tail_position == 1) {
+				PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
+			}
+			else
+			{
+				PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
+			}
 			if (bone_data_->bone_flags.Local_coordinate) {
 				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_X), (Vector)bone_data_->bone_local_X, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_Z), (Vector)bone_data_->bone_local_Z, DESCFLAGS_SET::NONE);
 			}
 			if (bone_data_->bone_flags.Fixed_axis == 1) {
 				PMX_bone_tag->SetParameter(DescID(BONE_FIXED_AXIS), (Vector)bone_data_->bone_fixed_axis, DESCFLAGS_SET::NONE);
-			}	
-			if (bone_data_->parent_bone_index == -1)
-			{
-				bone->SetFrozenPos(bone_data_->position * PositionMultiple);
-				doc->InsertObject(bone, bones, nullptr);
-			}
-			else {
-				bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position)* PositionMultiple);
-				doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
-			}
-			if (bone_data_->bone_flags.indexed_tail_position == 1) {
-				PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
-				if (bone_data_->tail_index == -1) {
-					bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
-				}
-				else {
-					bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
-				}
-			}
-			else 
-			{
-				PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
-			}
-			BaseTag* protection_tag = bone->MakeTag(Tprotection);
-			if (bone_data_->bone_flags.Enabled == 1) {
-				if (bone_data_->bone_flags.Rotatable == 1)
-				{
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_R_X), FALSE, DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_R_Y), FALSE, DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_R_Z), FALSE, DESCFLAGS_SET::NONE);
-				}
-				if (bone_data_->bone_flags.Translatable == 1)
-				{
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_P_X), FALSE, DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_P_Y), FALSE, DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_P_Z), FALSE, DESCFLAGS_SET::NONE);
-				}
-			}
-			if (bone_data_->bone_flags.Fixed_axis == 1)
-			{
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.7265625, 0.328125, 1), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.7265625, 0.328125, 1), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.7265625, 0.328125, 1), DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Is_visible == 0)
-			{
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.5, 0.5, 0.5), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.5, 0.5, 0.5), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
 			}
 			if (bone_data_->bone_flags.Inherit_translation == 1)
 			{
 				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-				if (bone_data_->inherit_bone_parent_influence > 0.0) {
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
+				BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
+				if (inherit_bone_parent_link == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 				}
+				inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE),bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 			}
 			if (bone_data_->bone_flags.Inherit_rotation == 1)
 			{
 				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-				if (bone_data_->inherit_bone_parent_influence > 0.0) {
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
+				BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
+				if (inherit_bone_parent_link == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 				}
+				inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE),bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 			}
+			mmd::PMX_Bone_Tag::tagUpData(PMX_bone_tag, bone);
+
 			if (bone_data_->bone_flags.IK == 1)
 			{
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
-				
-			}
-			bone_map.Insert(i, bone)iferr_return;
-		}
-		EventAdd();
-		for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
-		{
-			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
-			BaseObject* bone = bone_map.Find(i)->GetValue();
-			if (bone_data_->bone_flags.Inherit_translation == 1)
-			{
-				if (bone_data_->inherit_bone_parent_influence > 0.0) {
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-					BaseTag* constraint_tag = bone->MakeTag(1019364);//Constraint Tag ID : 1019364				
-					GeData data;
-					constraint_tag->GetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_GET::NONE);
-					CustomDataType* customData = data.GetCustomDataType(CUSTOMGUI_PRIORITY_DATA);
-					PriorityData* priorityData = static_cast<PriorityData*>(customData);
-					priorityData->SetPriorityValue(PRIORITYVALUE_PRIORITY, 1);
-					constraint_tag->SetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR), TRUE, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_FRAMEUPDATE), TRUE, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR_TWEIGHT), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(10006), FALSE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_S
-					constraint_tag->SetParameter(DescID(10005), TRUE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_P
-					if (bone_data_->bone_flags.Inherit_rotation != 1) {
-						constraint_tag->SetParameter(DescID(10007), FALSE, DESCFLAGS_SET::NONE); //ID_CA_CONSTRAINT_TAG_PSR_R
-					}
-					BaseLink* psr_target_link = BaseLink::Alloc();
-					if (psr_target_link == nullptr) {
-						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-						MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-						return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					}
-					psr_target_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
-					constraint_tag->SetParameter(DescID(10001), psr_target_link, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_LINK
-				}
-			}
-			if (bone_data_->bone_flags.Inherit_rotation == 1)
-			{
-				if (bone_data_->inherit_bone_parent_influence > 0.0) {
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-					BaseTag* constraint_tag = bone->MakeTag(1019364);//Constraint Tag ID : 1019364				
-					GeData data;
-					constraint_tag->GetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_GET::NONE);
-					CustomDataType* customData = data.GetCustomDataType(CUSTOMGUI_PRIORITY_DATA);
-					PriorityData* priorityData = static_cast<PriorityData*>(customData);
-					priorityData->SetPriorityValue(PRIORITYVALUE_PRIORITY, 1);
-					constraint_tag->SetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR), TRUE, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_FRAMEUPDATE), TRUE, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR_TWEIGHT), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(10006), FALSE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_S
-					constraint_tag->SetParameter(DescID(10007), TRUE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_R
-					if (bone_data_->bone_flags.Inherit_translation != 1) {
-						constraint_tag->SetParameter(DescID(10005), FALSE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_P
-					}
-					BaseLink* psr_target_link = BaseLink::Alloc();
-					if (psr_target_link == nullptr) {
-						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-						MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-						return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					}
-					psr_target_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
-					constraint_tag->SetParameter(DescID(10001), psr_target_link, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_LINK
-				}
-			}
-			if (bone_data_->bone_flags.IK == 1)
-			{
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
 				BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561	
 				IK_tag->SetName(bone_data_->bone_name_local);
 				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
@@ -859,7 +749,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			maxon::BaseArray<Int32> vertex_index;
 			maxon::HashMap<Int32, Int32> vertex_index_map;
 			maxon::PointerArray<CPolygon> surfaces;
-			for (Int32 i = 0 ,c = 0; i < material_data->surface_count; i++ ,c += 3)
+			Int32 surface_count = material_data->surface_count;
+			for (Int32 i = 0 ,c = 0; i < surface_count; i++ ,c += 3)
 			{
 				CPolygon* surface = pmx_model->surface_data[i + part_surface_end];
 				vertex_index.Append(surface->a)iferr_return;
@@ -869,14 +760,14 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				vertex_index_map.Insert(surface->b, c+1)iferr_return;
 				vertex_index_map.Insert(surface->c, c+2)iferr_return;
 			}
-			Int32 vertex_data_count = vertex_index.GetCount();
+			Int32 vertex_data_count = surface_count * 3;
 			maxon::HashMap<Int32, Int32> bone_index_map;
 			for (Int32 i = 0, c = 0; i < vertex_data_count; i++, c += 3)
 			{
 				if (i % 3000 == 0) {
 					StatusSetText("Import vertex " + String::IntToString(i) + "of " + String::IntToString(vertex_data_count));
-				}
-				StatusSetBar(i * 100 / vertex_data_count);
+					StatusSetBar(i * 100 / vertex_data_count);
+				}				
 				CPolygon surface(c, c + 1, c + 2);
 				PMX_Vertex_Data*  vertex_data_ = pmx_model->vertex_data[vertex_index[i]];
 				part_points[i] = vertex_data_->position * PositionMultiple;
@@ -1061,22 +952,22 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 			NormalHandle normal_handle = normal_tag->GetDataAddressW();
 			UVWHandle uvw_handle = uvw_tag->GetDataAddressW();
-			for (Int32 i = 0; i < material_data->surface_count; i++)
+			for (Int32 i = 0; i < surface_count; i++)
 			{
 				CPolygon* surface = pmx_model->surface_data[i + part_surface_end];
 				PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->a];
 				PMX_Vertex_Data* vertex1 = pmx_model->vertex_data[surface->b];
 				PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->c];
 				part_polygon[i] = surfaces[i];
-				Vector normal0, normal1, normal2, normal3;
-				normal0 = (Vector)-vertex0->normal;
-				normal1 = (Vector)-vertex1->normal;
-				normal2 = (Vector)-vertex2->normal;
+				Vector normal0 = (Vector)vertex0->normal;
+				Vector normal1 = (Vector)vertex1->normal;
+				Vector normal2 = (Vector)vertex2->normal;
+				Vector normal3(0,0,0);
 				normal0.Normalize();
 				normal1.Normalize();
 				normal2.Normalize();
 				normal3.Normalize();
-				NormalTag::Set(normal_handle, i, NormalStruct(normal0, normal1, normal2, normal3));
+				NormalTag::Set(normal_handle, i, NormalStruct(-normal0, -normal1, -normal2, normal3));
 				UVWTag::Set(uvw_handle, i, UVWStruct(Vector(vertex0->UV.x, vertex0->UV.y, 0), Vector(vertex1->UV.x, vertex1->UV.y, 0), Vector(vertex2->UV.x, vertex2->UV.y, 0)));
 			}
 			surfaces.Reset();
@@ -1086,10 +977,19 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			part->InsertTag(uvw_tag);
 			part->SetPhong(true, true, 0.7853982);
 			doc->InsertObject(part, meshes, nullptr);
+			EventAdd();
+			doc->SetSelection(part);
+			doc->SetMode(Mpolygons);
+			BaseSelect* all_select = part->GetPolygonS();
+			all_select->SelectAll(0, material_data->surface_count - 1);
+			CallCommand(14039);
+			CallCommand(14041);
+			all_select->DeselectAll();	
+			doc->SetMode(Mmodel);
+			doc->SetSelection(nullptr);
 			BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
 			doc->InsertObject(morphdeformer, part, nullptr);
 			EventAdd();
-
 			/*CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
 			if (morph_tag == nullptr)
 			{
@@ -1099,7 +999,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 			part->InsertTag(morph_tag);
 			morph_tag->InitMorphs();
-			morph_tag->SetParameter(ID_CA_POSE_POINTS, TRUE, DESCFLAGS_SET::NONE);
+			morph_tag->SetParameter(ID_CA_POSE_POINTS, true, DESCFLAGS_SET::NONE);
 			morph_tag->ExitEdit(doc, true);
 			CAMorph* base_morph = morph_tag->AddMorph();
 			if (base_morph == nullptr)
@@ -1256,11 +1156,26 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		Int32 bone_data_count = pmx_model->model_data_count.bone_data_count;
 		for (Int32 i = 0; i < bone_data_count; i++)
 		{
-			StatusSetText("Import bones..."_s);
-			StatusSetBar(i*100/bone_data_count);
 			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
 			BaseObject* bone = BaseObject::Alloc(Ojoint);
 			bone->SetName(bone_data_->bone_name_local);
+			weight_tag->AddJoint(bone);
+			if (bone_data_->parent_bone_index == -1)
+			{
+				bone->SetFrozenPos(bone_data_->position * PositionMultiple);
+				doc->InsertObject(bone, bones, nullptr);
+			}
+			else {
+				bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position)* PositionMultiple);
+				doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
+			}
+			bone_map.Insert(i, bone)iferr_return;
+		}
+		EventAdd();
+		for (Int32 i = 0; i < bone_data_count; i++)
+		{
+			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
+			BaseObject* bone = bone_map.Find(i)->GetValue();
 			BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
 			PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(BONE_NAME_LOCAL), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
@@ -1279,6 +1194,13 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			PMX_bone_tag->SetParameter(DescID(INHERIT_TRANSLATION), bone_data_->bone_flags.Inherit_translation, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(FIXED_AXIS), bone_data_->bone_flags.Fixed_axis, DESCFLAGS_SET::NONE);
 			PMX_bone_tag->SetParameter(DescID(LOCAL_COORDINATE), bone_data_->bone_flags.Local_coordinate, DESCFLAGS_SET::NONE);
+			if (bone_data_->bone_flags.indexed_tail_position == 1) {
+				PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
+			}
+			else
+			{
+				PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
+			}
 			if (bone_data_->bone_flags.Local_coordinate) {
 				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_X), (Vector)bone_data_->bone_local_X, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_Z), (Vector)bone_data_->bone_local_Z, DESCFLAGS_SET::NONE);
@@ -1286,167 +1208,36 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			if (bone_data_->bone_flags.Fixed_axis == 1) {
 				PMX_bone_tag->SetParameter(DescID(BONE_FIXED_AXIS), (Vector)bone_data_->bone_fixed_axis, DESCFLAGS_SET::NONE);
 			}
-			if (bone_data_->parent_bone_index == -1)
-			{
-				bone->SetFrozenPos(bone_data_->position * PositionMultiple);
-				doc->InsertObject(bone, bones, nullptr);
-			}
-			else {
-				bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position)* PositionMultiple);
-				doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
-			}
-			if (bone_data_->bone_flags.indexed_tail_position == 1) {
-				PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
-				if (bone_data_->tail_index == -1) {
-					bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
-				}
-				else {
-					bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
-				}
-			}
-			else
-			{
-				PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
-			}
-			BaseTag* protection_tag = bone->MakeTag(Tprotection);
-			if (bone_data_->bone_flags.Enabled == 1) {
-				if (bone_data_->bone_flags.Rotatable == 1)
-				{
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_R_X), FALSE, DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_R_Y), FALSE, DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_R_Z), FALSE, DESCFLAGS_SET::NONE);
-				}
-				if (bone_data_->bone_flags.Translatable == 1)
-				{
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_P_X), FALSE, DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_P_Y), FALSE, DESCFLAGS_SET::NONE);
-					protection_tag->SetParameter(DescID(PROTECTION_P_Z), FALSE, DESCFLAGS_SET::NONE);
-				}
-			}
-			if (bone_data_->bone_flags.Fixed_axis == 1)
-			{
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.7265625, 0.328125, 1), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.7265625, 0.328125, 1), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.7265625, 0.328125, 1), DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Is_visible == 0)
-			{
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.5, 0.5, 0.5), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.5, 0.5, 0.5), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
-			}
 			if (bone_data_->bone_flags.Inherit_translation == 1)
 			{
 				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-				if (bone_data_->inherit_bone_parent_influence > 0.0) {
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
+				BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
+				if (inherit_bone_parent_link == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 				}
+				inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 			}
 			if (bone_data_->bone_flags.Inherit_rotation == 1)
 			{
 				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
+				BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
+				if (inherit_bone_parent_link == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
+				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-				if (bone_data_->inherit_bone_parent_influence > 0.0) {
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-				}
 			}
+			mmd::PMX_Bone_Tag::tagUpData(PMX_bone_tag, bone);
+
 			if (bone_data_->bone_flags.IK == 1)
 			{
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
-			}
-			bone_map.Insert(i, bone)iferr_return;
-		}
-		EventAdd();
-		for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
-		{
-			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
-			BaseObject* bone = bone_map.Find(i)->GetValue();
-			weight_tag->AddJoint(bone);
-			if (bone_data_->bone_flags.Inherit_translation == 1)
-			{
-				if (bone_data_->inherit_bone_parent_influence > 0.0) {
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-					BaseTag* constraint_tag = bone->MakeTag(1019364);//Constraint Tag ID : 1019364				
-					GeData data;
-					constraint_tag->GetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_GET::NONE);
-					CustomDataType* customData = data.GetCustomDataType(CUSTOMGUI_PRIORITY_DATA);
-					PriorityData* priorityData = static_cast<PriorityData*>(customData);
-					priorityData->SetPriorityValue(PRIORITYVALUE_PRIORITY, 1);
-					constraint_tag->SetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR), TRUE, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_FRAMEUPDATE), TRUE, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR_TWEIGHT), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(10006), FALSE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_S
-					constraint_tag->SetParameter(DescID(10005), TRUE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_P
-					if (bone_data_->bone_flags.Inherit_rotation != 1) {
-						constraint_tag->SetParameter(DescID(10007), FALSE, DESCFLAGS_SET::NONE); //ID_CA_CONSTRAINT_TAG_PSR_R
-					}
-					BaseLink* psr_target_link = BaseLink::Alloc();
-					if (psr_target_link == nullptr) {
-						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-						MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-						return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					}
-					psr_target_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
-					constraint_tag->SetParameter(DescID(10001), psr_target_link, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_LINK
-				}
-			}
-			if (bone_data_->bone_flags.Inherit_rotation == 1)
-			{				
-				if (bone_data_->inherit_bone_parent_influence > 0.0) {
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-					bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
-					BaseTag* constraint_tag = bone->MakeTag(1019364);//Constraint Tag ID : 1019364				
-					GeData data;
-					constraint_tag->GetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_GET::NONE);
-					CustomDataType* customData = data.GetCustomDataType(CUSTOMGUI_PRIORITY_DATA);
-					PriorityData* priorityData = static_cast<PriorityData*>(customData);
-					priorityData->SetPriorityValue(PRIORITYVALUE_PRIORITY, 1);
-					constraint_tag->SetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR), TRUE, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_FRAMEUPDATE), TRUE, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR_TWEIGHT), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-					constraint_tag->SetParameter(DescID(10006), FALSE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_S
-					constraint_tag->SetParameter(DescID(10007), TRUE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_R
-					if (bone_data_->bone_flags.Inherit_translation != 1) {
-						constraint_tag->SetParameter(DescID(10005), FALSE, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_P
-					}
-					BaseLink* psr_target_link = BaseLink::Alloc();
-					if (psr_target_link == nullptr) {
-						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-						MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-						return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					}
-					psr_target_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
-					constraint_tag->SetParameter(DescID(10001), psr_target_link, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_LINK
-				}
-			}
-			if (bone_data_->bone_flags.IK == 1)
-			{
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
-				bone->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
 				BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561	
 				IK_tag->SetName(bone_data_->bone_name_local);
 				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
@@ -1492,8 +1283,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		{
 			if (i % 3000 == 0) {
 				StatusSetText("Import vertex " + String::IntToString(i) + "of " + String::IntToString(vertex_data_count));
-			}
-			StatusSetBar(i * 100 / vertex_data_count);
+				StatusSetBar(i * 100 / vertex_data_count);
+			}			
 			PMX_Vertex_Data* vertex_data_ = pmx_model->vertex_data[i];
 			model_points[i] = vertex_data_->position * PositionMultiple;
 			switch (vertex_data_->weight_deform_type)
@@ -1559,17 +1350,17 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		{
 			if (i % 1000 == 0) {
 				StatusSetText("Import surface " + String::IntToString(i) + "of " + String::IntToString(surface_data_count));
+				StatusSetBar(i * 100 / surface_data_count);
 			}
-			StatusSetBar(i * 100 / surface_data_count);
 			CPolygon* surface = pmx_model->surface_data[i];
 			PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->a];
 			PMX_Vertex_Data* vertex1 = pmx_model->vertex_data[surface->b];
 			PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->c];
 			model_polygon[i] = *surface;
-			Vector normal0, normal1, normal2, normal3;
-			normal0 = (Vector)-vertex0->normal;
-			normal1 = (Vector)-vertex1->normal;
-			normal2 = (Vector)-vertex2->normal;
+			Vector normal0 = (Vector)vertex0->normal;
+			Vector normal1 = (Vector)vertex1->normal;
+			Vector normal2 = (Vector)vertex2->normal;
+			Vector normal3(0, 0, 0);
 			normal0.Normalize();
 			normal1.Normalize();
 			normal2.Normalize();
@@ -1584,7 +1375,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
 		doc->InsertObject(morphdeformer, model, nullptr);
 		EventAdd();
-		CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
+		/*CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
 		if (morph_tag == nullptr) 
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -1593,7 +1384,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		}
 		model->InsertTag(morph_tag);
 		morph_tag->InitMorphs();
-		morph_tag->SetParameter(ID_CA_POSE_POINTS, TRUE, DESCFLAGS_SET::NONE);
+		morph_tag->SetParameter(ID_CA_POSE_POINTS, true, DESCFLAGS_SET::NONE);
 		morph_tag->ExitEdit(doc, true);
 		CAMorph* base_morph = morph_tag->AddMorph();
 		if (base_morph == nullptr)
@@ -1641,7 +1432,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				model_point_obj->Message(MSG_UPDATE);		
 			}
 		}
-		morph_tag->SetParameter(DescID(ID_CA_POSE_MODE), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
+		morph_tag->SetParameter(DescID(ID_CA_POSE_MODE), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);*/
 		doc->SetMode(Mpolygons);
 		BaseSelect* select = model->GetPolygonS();
 		Int32 select_end = 0;
@@ -1711,10 +1502,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			doc->SetSelection(model);
 			select->SelectAll(select_end, select_end + material_data->surface_count - 1);
 			select_end += material_data->surface_count;
-			if (IsCommandEnabled(12552))
-			{
-				CallCommand(12552);
-			}
+			CallCommand(12552);
 			doc->GetActiveTag()->SetName(material_data->material_name_local);
 			TextureTag* texture_tag = TextureTag::Alloc();
 			if (texture_tag == nullptr)
@@ -1729,9 +1517,13 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			texture_tag->SetParameter(DescID(TEXTURETAG_PROJECTION), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
 			model->InsertTag(texture_tag, doc->GetActiveTag());
 		}
-		doc->SetSelection(nullptr);
-		doc->SetMode(Mmodel);
 		EventAdd();	
+		select->SelectAll(0, surface_data_count - 1);
+		CallCommand(14039);
+		CallCommand(14041);
+		select->DeselectAll();
+		doc->SetMode(Mmodel);
+		doc->SetSelection(nullptr);
 		weight_tag->SetBindPose(doc, false);
 		CAWeightMgr::NormalizeWeights(doc);
 	}

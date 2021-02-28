@@ -7,4 +7,5 @@ STRINGTABLE PMX_Model_Tag
 	COMMENTS_LOCAL "Local comments";
 	COMMENTS_UNIVERSAL "Universal comments";
 	PMX_VERSION "Version";
+	MODEL_IK_GRP "IK";
 }

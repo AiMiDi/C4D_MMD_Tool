@@ -1,9 +1,8 @@
 #ifndef __MMD_PMX_TAG_H__
 #define __MMD_PMX_TAG_H__
 
-
-
 #include "main.h"
+#include "c4d_nodedata.h"
 #include "description/PMX_Model_Tag.h"
 #include "description/PMX_Bone_Tag.h"
 
@@ -23,6 +22,7 @@ namespace mmd {
 		virtual Bool Init(GeListNode* node);
 		virtual Bool GetDEnabling(GeListNode *node, const DescID &id, const GeData &t_data, DESCFLAGS_ENABLE flags, const BaseContainer *itemdesc);
 		virtual Bool Message(GeListNode* node, Int32 type, void* data);
+		static Bool tagUpData(BaseTag* tag, BaseObject* obj);
 		static NodeData* Alloc() { return NewObjClear(PMX_Bone_Tag); }
 	};
 

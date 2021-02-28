@@ -5,4 +5,9 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommandArguments>g_additionalModulePath=$(ProjectDir)..\..</LocalDebuggerCommandArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerCommand>D:\Program Files\MAXON\Cinema 4D R21\CINEMA 4D.exe</LocalDebuggerCommand>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>g_additionalModulePath=$(ProjectDir)..\..</LocalDebuggerCommandArguments>
+  </PropertyGroup>
 </Project>
