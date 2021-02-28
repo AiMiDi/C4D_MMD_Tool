@@ -98,6 +98,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../res;../res/description;../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />

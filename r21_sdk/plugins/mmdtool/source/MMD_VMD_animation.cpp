@@ -320,7 +320,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 		VMDCamera->SetName(fn.GetFileString());
 		VMDCameraDistance->SetName("Camera"_s);
 		BaseTag* ProtectionTag = BaseTag::Alloc(Tprotection);
-		ProtectionTag->SetParameter(DescID(PROTECTION_P_Z), FALSE, DESCFLAGS_SET::NONE);
+		ProtectionTag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
 		VMDCameraDistance->InsertTag(ProtectionTag);
 		VMDCameraDistance->InsertUnder(VMDCamera);
 
@@ -356,7 +356,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 		Float TimeOfTwoFrames = 0.0, ValueOfTwoFrames = 0.0;
 		BaseTime TimeLeft[8] = { BaseTime(0.0, 30) };
 		Float ValueLeft[8] = { 0.0 };
-		Int32 camera_frame_number = mmd_animation->CameraFrameNumber;
+		UInt32 camera_frame_number = mmd_animation->CameraFrameNumber;
 		for (UInt32 i = 0; i < camera_frame_number; i++)
 		{
 			StatusSetText("Import camera..."_s);
@@ -749,13 +749,13 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float& PositionM
 	Int32 RKeyCount = maxon::Max(maxon::Max(RXKeyCount, RYKeyCount), RZKeyCount);
 
 	for (Int32 i = 0; i < RKeyCount; i++) {
-		CKey* RXKey;
-		CKey* RYKey;
-		CKey* RZKey;
+		CKey* RXKey = nullptr;
+		CKey* RYKey = nullptr;
+		CKey* RZKey = nullptr;
 
-		Int32 RXCameraFrame_;
-		Int32 RYCameraFrame_;
-		Int32 RZCameraFrame_;
+		Int32 RXCameraFrame_ = 0;
+		Int32 RYCameraFrame_ = 0;
+		Int32 RZCameraFrame_ = 0;
 
 		Bool ReadRX = 0, ReadRY = 0, ReadRZ = 0;
 

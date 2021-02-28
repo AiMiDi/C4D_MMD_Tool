@@ -9,7 +9,7 @@ Bool mmd::PMX_Model_Tag::Init(GeListNode* node)
 	node->SetParameter(DescID(MODEL_NAME_UNIVERSAL), "name"_s, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(COMMENTS_LOCAL), "description"_s, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(COMMENTS_UNIVERSAL), "description"_s, DESCFLAGS_SET::NONE);
-	return TRUE;
+	return true;
 }
 
 Bool mmd::PMX_Model_Tag::GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags) 
@@ -42,14 +42,22 @@ Bool mmd::PMX_Bone_Tag::Init(GeListNode* node)
 	node->SetParameter(DescID(ENABLED), 1, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(TAIL_INDEX),-1, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), -1, DESCFLAGS_SET::NONE);
-	node->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), 1, DESCFLAGS_SET::NONE);
+	node->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), 1.0 , DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(BONE_LOCAL_X), Vector(1, 0, 0), DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(BONE_LOCAL_Z), Vector(0, 0, 1), DESCFLAGS_SET::NONE);
-	return TRUE;
+	return true;
 }
 
 Bool mmd::PMX_Bone_Tag::GetDEnabling(GeListNode *node, const DescID &id, const GeData &t_data, DESCFLAGS_ENABLE flags, const BaseContainer *itemdesc)
 {
+	if (id == DescID(PARENT_BONE_LINK)) {
+		GeData Ge_data;
+		node->GetParameter(DescID(PARENT_BONE_INDEX), Ge_data, DESCFLAGS_GET::NONE);
+		Int32 parent_bone_index = Ge_data.GetInt32();
+		if (parent_bone_index == -1) {
+			return false;
+		}
+	}
 	if (id == DescID(TAIL_INDEX)) {
 		GeData Ge_data;
 		node->GetParameter(DescID(INDEXED_TAIL_POSITION), Ge_data, DESCFLAGS_GET::NONE);
@@ -130,94 +138,265 @@ Bool mmd::PMX_Bone_Tag::Message(GeListNode* node, Int32 type, void* data)
 		case(MSG_DESCRIPTION_CHECKUPDATE):
 		{
 			BaseTag* tag = (BaseTag*)node;
-			BaseObject* obj = tag->GetObject();
-			GeData Ge_data;
-
-			tag->GetParameter(DescID(ROTATABLE), Ge_data, DESCFLAGS_GET::NONE);
-			Bool Is_rotatable = Ge_data.GetBool();
-			if (Is_rotatable == 1) {
-				BaseTag* protection_tag = obj->GetTag(Tprotection);
-				if (protection_tag == nullptr) {
-					protection_tag = obj->MakeTag(Tprotection);
-				}
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASEOBJECT_USECOLOR), ID_BASEOBJECT_USECOLOR_ALWAYS, DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_R_X), FALSE, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_R_Y), FALSE, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_R_Z), FALSE, DESCFLAGS_SET::NONE);
-			}
-			else {
-				BaseTag* protection_tag = obj->GetTag(Tprotection);
-				if (protection_tag == nullptr) {
-					protection_tag = obj->MakeTag(Tprotection);
-				}
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASEOBJECT_USECOLOR), ID_BASEOBJECT_USECOLOR_ALWAYS, DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_R_X), TRUE, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_R_Y), TRUE, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_R_Z), TRUE, DESCFLAGS_SET::NONE);
-			}
-
-			tag->GetParameter(DescID(TRANSLATABLE), Ge_data, DESCFLAGS_GET::NONE);
-			Bool Is_translatable = Ge_data.GetBool();
-			if (Is_translatable == 1) {
-				BaseTag* protection_tag = obj->GetTag(Tprotection);
-				if (protection_tag == nullptr) {
-					protection_tag = obj->MakeTag(Tprotection);
-				}
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASEOBJECT_USECOLOR), ID_BASEOBJECT_USECOLOR_ALWAYS, DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_P_X), FALSE, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_P_Y), FALSE, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_P_Z), FALSE, DESCFLAGS_SET::NONE);
-			}
-			else {
-				BaseTag* protection_tag = obj->GetTag(Tprotection);
-				if (protection_tag == nullptr) {
-					protection_tag = obj->MakeTag(Tprotection);
-				}
-				protection_tag->SetParameter(DescID(PROTECTION_P_X), TRUE, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_P_Y), TRUE, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(DescID(PROTECTION_P_Z), TRUE, DESCFLAGS_SET::NONE);
-			}
-
-			tag->GetParameter(DescID(IS_IK), Ge_data, DESCFLAGS_GET::NONE);
-			Bool Is_IK = Ge_data.GetBool();
-			if (Is_IK == 1) {
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASEOBJECT_USECOLOR), ID_BASEOBJECT_USECOLOR_ALWAYS, DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
-			}
-
-			tag->GetParameter(DescID(VISIBLE), Ge_data, DESCFLAGS_GET::NONE);
-			Bool Is_visible = Ge_data.GetBool();
-			if (Is_visible == 0) {
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.5, 0.5, 0.5), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.5, 0.5, 0.5), DESCFLAGS_SET::NONE);
-				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
-			}
-			else {
-				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS, DESCFLAGS_SET::NONE);
-			}
+			tagUpData(tag, tag->GetObject()) ? true : false;
 			break;
 		}
 	}	
-	return TRUE;
+	return true;
+}
+
+Bool mmd::PMX_Bone_Tag::tagUpData(BaseTag* tag, BaseObject* obj)
+{		
+		if (tag == nullptr || obj == nullptr) {			
+			return false;
+		}
+		BaseObject* pred_obj = obj->GetUp();
+		if (pred_obj != nullptr) {
+			if (pred_obj->GetName() != "Bones"_s) {
+				BaseLink* parent_bone_link = BaseLink::Alloc();
+				if (parent_bone_link == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return false;
+				}
+				parent_bone_link->SetLink(pred_obj);
+				tag->SetParameter(DescID(PARENT_BONE_LINK), parent_bone_link, DESCFLAGS_SET::NONE);
+			}
+		}
+		GeData Ge_data;
+		tag->GetParameter(DescID(ROTATABLE), Ge_data, DESCFLAGS_GET::NONE);
+		Bool Is_rotatable = Ge_data.GetBool();
+		if (Is_rotatable == 1) {
+			BaseTag* protection_tag = obj->GetTag(Tprotection);
+			if (protection_tag == nullptr) {
+				protection_tag = obj->MakeTag(Tprotection);
+			}
+			if (protection_tag == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return false;
+			}
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_USECOLOR), ID_BASEOBJECT_USECOLOR_ALWAYS, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_R_X), false, DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_R_Y), false, DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_R_Z), false, DESCFLAGS_SET::NONE);
+		}
+		else {
+			BaseTag* protection_tag = obj->GetTag(Tprotection);
+			if (protection_tag == nullptr) {
+				protection_tag = obj->MakeTag(Tprotection);
+			}
+			if (protection_tag == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return false;
+			}
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_USECOLOR), ID_BASEOBJECT_USECOLOR_ALWAYS, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.56640625, 0.78125, 1), DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_R_X), true, DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_R_Y), true, DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_R_Z), true, DESCFLAGS_SET::NONE);
+		}
+
+		tag->GetParameter(DescID(TRANSLATABLE), Ge_data, DESCFLAGS_GET::NONE);
+		Bool Is_translatable = Ge_data.GetBool();
+		if (Is_translatable == 1) {
+			BaseTag* protection_tag = obj->GetTag(Tprotection);
+			if (protection_tag == nullptr) {
+				protection_tag = obj->MakeTag(Tprotection);
+			}
+			if (protection_tag == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return false;
+			}
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_USECOLOR), ID_BASEOBJECT_USECOLOR_ALWAYS, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.703125, 1, 0.546875), DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_P_X), false, DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_P_Y), false, DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
+		}
+		else {
+			BaseTag* protection_tag = obj->GetTag(Tprotection);
+			if (protection_tag == nullptr) {
+				protection_tag = obj->MakeTag(Tprotection);
+			}
+			if (protection_tag == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return false;
+			}
+			protection_tag->SetParameter(DescID(PROTECTION_P_X), true, DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_P_Y), true, DESCFLAGS_SET::NONE);
+			protection_tag->SetParameter(DescID(PROTECTION_P_Z), true, DESCFLAGS_SET::NONE);
+		}
+
+		tag->GetParameter(DescID(IS_IK), Ge_data, DESCFLAGS_GET::NONE);
+		Bool Is_IK = Ge_data.GetBool();
+		if (Is_IK == 1) {
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_USECOLOR), ID_BASEOBJECT_USECOLOR_ALWAYS, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.984375, 0.375, 0), DESCFLAGS_SET::NONE);
+		}
+
+		tag->GetParameter(DescID(VISIBLE), Ge_data, DESCFLAGS_GET::NONE);
+		Bool Is_visible = Ge_data.GetBool();
+		if (Is_visible == 0) {
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.4, 0.4, 0.4), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.4, 0.4, 0.4), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+		}
+		else {
+			obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS, DESCFLAGS_SET::NONE);
+		}
+
+		tag->GetParameter(DescID(FIXED_AXIS), Ge_data, DESCFLAGS_GET::NONE);
+		Bool Fixed_axis = Ge_data.GetBool();
+		if (Fixed_axis == 1) {
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.7265625, 0.328125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.7265625, 0.328125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.7265625, 0.328125, 1), DESCFLAGS_SET::NONE);
+		}
+
+		tag->GetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), Ge_data, DESCFLAGS_GET::NONE);
+		Float Inherit_bone_parent_influence = Ge_data.GetFloat();
+		tag->GetParameter(DescID(INHERIT_ROTATION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool Inherit_rotation = Ge_data.GetBool();
+		tag->GetParameter(DescID(INHERIT_TRANSLATION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool Inherit_translation = Ge_data.GetBool();
+		if (Inherit_rotation == 1) {
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
+			if (Inherit_bone_parent_influence > 0.0) {
+				BaseTag* constraint_tag = obj->GetTag(1019364);
+				if (constraint_tag == nullptr) {
+					constraint_tag = obj->MakeTag(1019364);//Constraint Tag ID : 1019364	
+					constraint_tag->SetName("Pmx bone inherit"_s);
+				}
+				if (constraint_tag != nullptr && constraint_tag->GetName() != "Pmx bone inherit"_s) {
+					constraint_tag = obj->MakeTag(1019364);//Constraint Tag ID : 1019364	
+					constraint_tag->SetName("Pmx bone inherit"_s);
+				}
+				if (constraint_tag == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return false;
+				}
+				GeData data;
+				constraint_tag->GetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_GET::NONE);
+				CustomDataType* customData = data.GetCustomDataType(CUSTOMGUI_PRIORITY_DATA);
+				PriorityData* priorityData = static_cast<PriorityData*>(customData);
+				priorityData->SetPriorityValue(PRIORITYVALUE_PRIORITY, 1);
+				constraint_tag->SetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_SET::NONE);
+				constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR), true, DESCFLAGS_SET::NONE);
+				constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_FRAMEUPDATE), true, DESCFLAGS_SET::NONE);
+				constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR_TWEIGHT), Inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
+				constraint_tag->SetParameter(DescID(10006), false, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_S
+				constraint_tag->SetParameter(DescID(10007), true, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_R
+				if (Inherit_rotation != 1) {
+					constraint_tag->SetParameter(DescID(10005), false, DESCFLAGS_SET::NONE); //ID_CA_CONSTRAINT_TAG_PSR_P
+				}
+				tag->GetParameter(DescID(INHERIT_BONE_PARENT_LINK), data, DESCFLAGS_GET::NONE);
+				BaseLink* inherit_bone_parent_link = data.GetBaseLink();
+				if (inherit_bone_parent_link != nullptr) {
+					constraint_tag->SetParameter(DescID(10001), inherit_bone_parent_link, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_LINK
+				}			
+			}
+		}
+		else if (Inherit_translation != 1) {
+			BaseTag* constraint_tag = obj->GetTag(1019364);
+			if (constraint_tag != nullptr) {
+				if (constraint_tag->GetName() == "Pmx bone inherit"_s) {
+					constraint_tag->Remove();
+					BaseTag::Free(constraint_tag);
+				}			
+			}
+		}
+		if (Inherit_translation == 1) {
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			tag->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_BASEOBJECT_COLOR), Vector(0.682353, 0.64453125, 1), DESCFLAGS_SET::NONE);
+			if (Inherit_bone_parent_influence > 0.0) {
+				BaseTag* constraint_tag = obj->GetTag(1019364);
+				if (constraint_tag == nullptr) {
+					constraint_tag = obj->MakeTag(1019364);//Constraint Tag ID : 1019364	
+					constraint_tag->SetName("Pmx bone inherit"_s);
+				}
+				if (constraint_tag != nullptr && constraint_tag->GetName() != "Pmx bone inherit"_s) {
+					constraint_tag = obj->MakeTag(1019364);//Constraint Tag ID : 1019364	
+					constraint_tag->SetName("Pmx bone inherit"_s);
+				}
+				if (constraint_tag == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return false;
+				}
+				GeData data;
+				constraint_tag->GetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_GET::NONE);
+				CustomDataType* customData = data.GetCustomDataType(CUSTOMGUI_PRIORITY_DATA);
+				PriorityData* priorityData = static_cast<PriorityData*>(customData);
+				priorityData->SetPriorityValue(PRIORITYVALUE_PRIORITY, 1);
+				constraint_tag->SetParameter(DescID(EXPRESSION_PRIORITY), data, DESCFLAGS_SET::NONE);
+				constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR), true, DESCFLAGS_SET::NONE);
+				constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_FRAMEUPDATE), true, DESCFLAGS_SET::NONE);
+				constraint_tag->SetParameter(DescID(ID_CA_CONSTRAINT_TAG_PSR_TWEIGHT), Inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
+				constraint_tag->SetParameter(DescID(10006), false, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_S
+				constraint_tag->SetParameter(DescID(10005), true, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_P
+				if (Inherit_rotation != 1) {
+					constraint_tag->SetParameter(DescID(10007), false, DESCFLAGS_SET::NONE); //ID_CA_CONSTRAINT_TAG_PSR_R
+				}
+				tag->GetParameter(DescID(INHERIT_BONE_PARENT_LINK), data, DESCFLAGS_GET::NONE);
+				BaseLink* inherit_bone_parent_link = data.GetBaseLink();
+				if (inherit_bone_parent_link != nullptr) {
+					constraint_tag->SetParameter(DescID(10001), inherit_bone_parent_link, DESCFLAGS_SET::NONE);//ID_CA_CONSTRAINT_TAG_PSR_LINK
+				}
+			}
+		}else if (Inherit_rotation != 1) {
+			BaseTag* constraint_tag = obj->GetTag(1019364);
+			if (constraint_tag != nullptr) {
+				if (constraint_tag->GetName() == "Pmx bone inherit"_s) {
+					constraint_tag->Remove();
+					BaseTag::Free(constraint_tag);
+				}
+			}
+		}
+
+		tag->GetParameter(DescID(TAIL_INDEX), Ge_data, DESCFLAGS_GET::NONE);
+		Int32 Tail_index = Ge_data.GetInt32();
+		tag->GetParameter(DescID(INDEXED_TAIL_POSITION), Ge_data, DESCFLAGS_GET::NONE);
+		Bool Indexed_tail_position = Ge_data.GetBool();
+		if (Indexed_tail_position == 1) {
+			if (Tail_index == -1) {
+				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+			}
+			else {
+				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+			}
+		}
+	return true;
 }

@@ -2,8 +2,7 @@
 #define __MMD_VMD_MODEl_H__
 
 #include "main.h"
-#include "description/PMX_Model_Tag.h"
-#include "description/PMX_Bone_Tag.h"
+#include "MMD_PMX_tag.h"
 
 namespace mmd {
 
@@ -355,7 +354,7 @@ namespace mmd {
 		///BaseFile* const file				文件指针
 		///Char& text_encoding			文本编码
 		///String* text						读取文本地址
-		///@return Bool						成功为TRUE
+		///@return Bool						成功为true
 		//---------------------------------------------
 		String ReadText(BaseFile* const file, Char& text_encoding);
 

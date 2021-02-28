@@ -148,7 +148,7 @@ public:
 		GroupEnd();
 		//ModelEnd
 		GroupEnd();
-		return TRUE;
+		return true;
 	}
 
 	//----------
@@ -166,7 +166,7 @@ public:
 		GeDialog::SetBool(DLG_VMD_MOT_IMPORT_DETAIL, 0);
 		GeDialog::SetFloat(DLG_PMX_MOD_IMPORT_SIZE, 8.5, 0, 100);
 		GeDialog::SetBool(DLG_PMX_MOD_IMPORT_MULTIPART, 1);
-		return TRUE;
+		return true;
 	}
 
 	//----------
@@ -185,9 +185,9 @@ public:
 			GeDialog::GetFloat(DLG_VMD_CAM_IMPORT_OFFSET, TimeOffset_);
 			iferr(mmd::VMDAnimation::FromFileImportCamera(PositionMultiple_, TimeOffset_))
 			{
-				return FALSE;
+				return false;
 			}
-			return TRUE;
+			return true;
 		}
 		case (DLG_VMD_CAM_EXPORT_BUTTON):
 		{
@@ -197,9 +197,9 @@ public:
 			GeDialog::GetFloat(DLG_VMD_CAM_EXPORT_OFFSET, TimeOffset_);
 			iferr(mmd::VMDAnimation::FromDocumentExportCamera(PositionMultiple_, TimeOffset_))
 			{
-				return FALSE;
+				return false;
 			}
-			return TRUE;
+			return true;
 		}
 		case (DLG_VMD_MOT_IMPORT_BUTTON):
 		{
@@ -211,9 +211,9 @@ public:
 			GeDialog::GetBool(DLG_VMD_MOT_IMPORT_DETAIL, DetailReport_);
 			iferr(mmd::VMDAnimation::FromFileImportMotions(PositionMultiple_, TimeOffset_, QuaternionRotationSW_, DetailReport_))
 			{
-				return FALSE;
+				return false;
 			}
-			return TRUE;
+			return true;
 		}
 		case (DLG_PMX_MOD_IMPORT_BUTTON):
 		{
@@ -223,12 +223,12 @@ public:
 			GeDialog::GetBool(DLG_PMX_MOD_IMPORT_MULTIPART, Separate_);
 			iferr(mmd::PMXModel::FromFileImportModel(PositionMultiple_, Separate_))
 			{
-				return FALSE;
+				return false;
 			}
-			return TRUE;
+			return true;
 		}
 		}
-		return TRUE;
+		return true;
 	}
 };
 
@@ -241,7 +241,7 @@ public:
 			mmd_tool_dialog.Open(DLG_TYPE::ASYNC, ID_MMD_TOOL);
 		else
 			mmd_tool_dialog.Close();
-		return TRUE;
+		return true;
 	}
 };
 
