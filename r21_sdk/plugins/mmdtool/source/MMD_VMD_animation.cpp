@@ -1351,7 +1351,12 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float &PositionMult
 				}
 			}
 			nodes.Push(node->GetDown())iferr_return;
-			node = node->GetNext();
+			if (node != SelectObject) {
+				node = node->GetNext();
+			}
+			else {
+				break;
+			}				
 		}
 	}
 	nodes.Reset();
