@@ -734,10 +734,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			PMX_Material_Data* material_data = pmx_model->material_data[j];
 			PolygonObject* part = PolygonObject::Alloc(material_data->surface_count * 3, material_data->surface_count);
 			part->SetName(material_data->material_name_local);
-			PointObject* part_point_obj = ToPoint(part);
-			Vector* part_points = part_point_obj->GetPointW();
-			PolygonObject* part_polygon_obj = ToPoly(part);
-			CPolygon* part_polygon = part_polygon_obj->GetPolygonW();
+			Vector* part_points = part->GetPointW();
+			CPolygon* part_polygon = part->GetPolygonW();
 			CAWeightTag* weight_tag = CAWeightTag::Alloc();
 			if (weight_tag == nullptr)
 			{
@@ -747,7 +745,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}
 			part->InsertTag(weight_tag);
 			maxon::BaseArray<Int32> vertex_index;
-			maxon::HashMap<Int32, Int32> vertex_index_map;
+			maxon::HashMap<Int32, mmd::pointO_point> vertex_index_map;
 			maxon::PointerArray<CPolygon> surfaces;
 			Int32 surface_count = material_data->surface_count;
 			for (Int32 i = 0 ,c = 0; i < surface_count; i++ ,c += 3)
@@ -756,9 +754,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				vertex_index.Append(surface->a)iferr_return;
 				vertex_index.Append(surface->b)iferr_return;
 				vertex_index.Append(surface->c)iferr_return;
-				vertex_index_map.Insert(surface->a, c)iferr_return;
-				vertex_index_map.Insert(surface->b, c+1)iferr_return;
-				vertex_index_map.Insert(surface->c, c+2)iferr_return;
+				vertex_index_map.Insert(surface->a, pointO_point(part, c))iferr_return;
+				vertex_index_map.Insert(surface->b, pointO_point(part, c+1))iferr_return;
+				vertex_index_map.Insert(surface->c, pointO_point(part, c+2))iferr_return;
 			}
 			Int32 vertex_data_count = surface_count * 3;
 			maxon::HashMap<Int32, Int32> bone_index_map;
@@ -768,7 +766,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 					StatusSetText("Import vertex " + String::IntToString(i) + "of " + String::IntToString(vertex_data_count));
 					StatusSetBar(i * 100 / vertex_data_count);
 				}				
-				CPolygon surface(c, c + 1, c + 2);
+				CPolygon surface(c + 2, c + 1, c);
 				PMX_Vertex_Data*  vertex_data_ = pmx_model->vertex_data[vertex_index[i]];
 				part_points[i] = vertex_data_->position * PositionMultiple;
 				switch (vertex_data_->weight_deform_type)
@@ -935,7 +933,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				surfaces.Append(surface)iferr_return;
 			}	
 			vertex_index.Reset();
-			part_point_obj->Message(MSG_UPDATE);
+			part->Message(MSG_UPDATE);
 			NormalTag* normal_tag = NormalTag::Alloc(material_data->surface_count);
 			if (normal_tag == nullptr)
 			{
@@ -955,9 +953,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			for (Int32 i = 0; i < surface_count; i++)
 			{
 				CPolygon* surface = pmx_model->surface_data[i + part_surface_end];
-				PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->a];
+				PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->c];
 				PMX_Vertex_Data* vertex1 = pmx_model->vertex_data[surface->b];
-				PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->c];
+				PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->a];
 				part_polygon[i] = surfaces[i];
 				Vector normal0 = (Vector)vertex0->normal;
 				Vector normal1 = (Vector)vertex1->normal;
@@ -967,11 +965,11 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				normal1.Normalize();
 				normal2.Normalize();
 				normal3.Normalize();
-				NormalTag::Set(normal_handle, i, NormalStruct(-normal0, -normal1, -normal2, normal3));
+				NormalTag::Set(normal_handle, i, NormalStruct(normal0, normal1, normal2, normal3));
 				UVWTag::Set(uvw_handle, i, UVWStruct(Vector(vertex0->UV.x, vertex0->UV.y, 0), Vector(vertex1->UV.x, vertex1->UV.y, 0), Vector(vertex2->UV.x, vertex2->UV.y, 0)));
 			}
 			surfaces.Reset();
-			part_polygon_obj->Message(MSG_UPDATE);
+			part->Message(MSG_UPDATE);
 			part_surface_end += material_data->surface_count;
 			part->InsertTag(normal_tag);
 			part->InsertTag(uvw_tag);
@@ -983,13 +981,13 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			BaseSelect* all_select = part->GetPolygonS();
 			all_select->SelectAll(0, material_data->surface_count - 1);
 			CallCommand(14039);
-			CallCommand(14041);
 			all_select->DeselectAll();	
 			doc->SetMode(Mmodel);
 			doc->SetSelection(nullptr);
 			BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
 			doc->InsertObject(morphdeformer, part, nullptr);
 			EventAdd();
+
 			/*CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
 			if (morph_tag == nullptr)
 			{
@@ -1035,7 +1033,13 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 					{
 						PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
 						auto vertex_index_ptr = vertex_index_map.Find(vertex_morph_data.vertex_index);
-						if (vertex_index_ptr != nullptr)part_points[vertex_index_ptr->GetValue()] += vertex_morph_data.translation * PositionMultiple;
+						if (vertex_index_ptr != nullptr) {
+							mmd::pointW_point part_point_ = vertex_index_ptr->GetValue();
+							if (part_point_.pointO == part_point_obj) {
+								Vector* part_points_ = part_point_.pointO->GetPointW();
+								part_points_[part_point_.point] += vertex_morph_data.translation * PositionMultiple;
+							}							
+						}
 					}
 					part_point_obj->Message(MSG_UPDATE);
 					morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
@@ -1045,7 +1049,14 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 					{
 						PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
 						auto vertex_index_ptr = vertex_index_map.Find(vertex_morph_data.vertex_index);
-						if (vertex_index_ptr != nullptr)part_points[vertex_index_ptr->GetValue()] = pmx_model->vertex_data[vertex_morph_data.vertex_index]->position * PositionMultiple;
+						if (vertex_index_ptr != nullptr)
+						{
+							mmd::pointW_point part_point_ = vertex_index_ptr->GetValue();
+							if (part_point_.pointO == part_point_obj) {
+								Vector* part_points_ = part_point_.pointO->GetPointW();
+								part_points_[part_point_.point] = pmx_model->vertex_data[vertex_morph_data.vertex_index]->position * PositionMultiple;
+							}
+						}
 					}
 					part_point_obj->Message(MSG_UPDATE);
 				}
@@ -1353,10 +1364,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				StatusSetBar(i * 100 / surface_data_count);
 			}
 			CPolygon* surface = pmx_model->surface_data[i];
-			PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->a];
+			PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->c];
 			PMX_Vertex_Data* vertex1 = pmx_model->vertex_data[surface->b];
-			PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->c];
-			model_polygon[i] = *surface;
+			PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->a];
+			model_polygon[i] = CPolygon(surface->c, surface->b,surface->a);
 			Vector normal0 = (Vector)vertex0->normal;
 			Vector normal1 = (Vector)vertex1->normal;
 			Vector normal2 = (Vector)vertex2->normal;
@@ -1520,7 +1531,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		EventAdd();	
 		select->SelectAll(0, surface_data_count - 1);
 		CallCommand(14039);
-		CallCommand(14041);
 		select->DeselectAll();
 		doc->SetMode(Mmodel);
 		doc->SetSelection(nullptr);

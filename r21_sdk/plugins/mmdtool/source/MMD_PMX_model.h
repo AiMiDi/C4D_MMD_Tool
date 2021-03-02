@@ -334,6 +334,13 @@ namespace mmd {
 		~PMX_Joint_Data() {};
 	};
 
+	struct pointO_point
+	{
+		PolygonObject* pointO;
+		Int32 point;
+		pointO_point(PolygonObject*& pointO_, Int32  point_) :pointO(pointO_), point(point_) {}
+	};
+
 	class PMXModel
 	{
 	private:
