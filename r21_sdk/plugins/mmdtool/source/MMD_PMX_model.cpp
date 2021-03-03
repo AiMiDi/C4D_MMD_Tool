@@ -550,7 +550,7 @@ maxon::Result<void> mmd::PMXModel::WriteToFile(BaseFile* const file) {
 	return maxon::OK;
 }
 
-maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, Bool& Separate) {
+maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, PMX_Model_import_settings& settings) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc<BaseFile> file;
@@ -588,16 +588,22 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 	path.Delete(path.GetLength() - fn.GetFileString().GetLength(), fn.GetFileString().GetLength());
 	file->Close();
 	file.Free();
-	if (Separate) {
+	if (settings.Import_multipart) {
 		BaseObject* model_ = BaseObject::Alloc(Onull);
 		model_->SetName(pmx_model->model_info.model_name_local);
-		BaseObject* meshes = BaseObject::Alloc(Onull);
-		meshes->SetName("Meshes"_s);
-		BaseObject* bones = BaseObject::Alloc(Onull);
-		bones->SetName("Bones"_s);
 		doc->InsertObject(model_, nullptr, nullptr);
-		doc->InsertObject(meshes, model_, nullptr);
-		doc->InsertObject(bones, model_, nullptr);
+		BaseObject* meshes = nullptr;
+		if (settings.Import_polygon) {
+			meshes = BaseObject::Alloc(Onull);
+			meshes->SetName("Meshes"_s);
+			doc->InsertObject(meshes, model_, nullptr);
+		}
+		BaseObject* bones = nullptr;
+		if (settings.Import_bone) {
+			bones = BaseObject::Alloc(Onull);
+			bones->SetName("Bones"_s);
+			doc->InsertObject(bones, model_, nullptr);
+		}
 		BaseTag* PMX_model_tag = model_->MakeTag(ID_PMX_MODEL_TAG);		
 		PMX_model_tag->SetParameter(DescID(ID_BASELIST_NAME), pmx_model->model_info.model_name_local, DESCFLAGS_SET::NONE);
 		PMX_model_tag->SetParameter(DescID(PMX_VERSION), pmx_model->model_info.version, DESCFLAGS_SET::NONE);
@@ -606,542 +612,572 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		PMX_model_tag->SetParameter(DescID(COMMENTS_LOCAL), pmx_model->model_info.comments_local, DESCFLAGS_SET::NONE);
 		PMX_model_tag->SetParameter(DescID(COMMENTS_UNIVERSAL), pmx_model->model_info.comments_universal, DESCFLAGS_SET::NONE);
 		maxon::HashMap<Int32, BaseObject*> bone_map;
-		for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
-		{
-			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
-			BaseObject* bone = BaseObject::Alloc(Ojoint);
-			bone->SetName(bone_data_->bone_name_local);
-			if (bone_data_->parent_bone_index == -1)
+		if (settings.Import_bone) {
+			for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
 			{
-				bone->SetFrozenPos(bone_data_->position * PositionMultiple);
-				doc->InsertObject(bone, bones, nullptr);
-			}
-			else {
-				bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position)* PositionMultiple);
-				doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
-			}		
-			bone_map.Insert(i, bone)iferr_return;
-		}
-		EventAdd();
-		for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
-		{
-			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
-			BaseObject* bone = bone_map.Find(i)->GetValue();
-			BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
-			PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(BONE_NAME_LOCAL), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(BONE_NAME_UNIVERSAL), bone_data_->bone_name_universal, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(PARENT_BONE_INDEX), bone_data_->parent_bone_index, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(ROTATABLE), bone_data_->bone_flags.Rotatable, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(TRANSLATABLE), bone_data_->bone_flags.Translatable, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(VISIBLE), bone_data_->bone_flags.Is_visible, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(ENABLED), bone_data_->bone_flags.Enabled, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(IS_IK), bone_data_->bone_flags.IK, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(LAYER), bone_data_->layer, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(PHYSICS_AFTER_DEFORM), bone_data_->bone_flags.Physics_after_deform, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(INDEXED_TAIL_POSITION), bone_data_->bone_flags.indexed_tail_position, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(INHERIT_ROTATION), bone_data_->bone_flags.Inherit_rotation, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(INHERIT_TRANSLATION), bone_data_->bone_flags.Inherit_translation, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(FIXED_AXIS), bone_data_->bone_flags.Fixed_axis, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(LOCAL_COORDINATE), bone_data_->bone_flags.Local_coordinate, DESCFLAGS_SET::NONE);
-			if (bone_data_->bone_flags.indexed_tail_position == 1) {
-				PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
-			}
-			else
-			{
-				PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Local_coordinate) {
-				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_X), (Vector)bone_data_->bone_local_X, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_Z), (Vector)bone_data_->bone_local_Z, DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Fixed_axis == 1) {
-				PMX_bone_tag->SetParameter(DescID(BONE_FIXED_AXIS), (Vector)bone_data_->bone_fixed_axis, DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Inherit_translation == 1)
-			{
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
-				BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
-				if (inherit_bone_parent_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				}
-				inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE),bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Inherit_rotation == 1)
-			{
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
-				BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
-				if (inherit_bone_parent_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				}
-				inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE),bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-			}
-			mmd::PMX_Bone_Tag::tagUpData(PMX_bone_tag, bone);
-
-			if (bone_data_->bone_flags.IK == 1)
-			{
-				BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561	
-				IK_tag->SetName(bone_data_->bone_name_local);
-				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
-				BaseLink* target_link = BaseLink::Alloc();
-				if (target_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				}
-				target_link->SetLink(bone);
-				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TARGET), target_link, DESCFLAGS_SET::NONE);
-				BaseLink* tip_link = BaseLink::Alloc();
-				if (tip_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				}
-				tip_link->SetLink(bone_map.Find(bone_data_->IK_target_index)->GetValue());
-				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TIP), tip_link, DESCFLAGS_SET::NONE);
-				DynamicDescription* const ddesc = PMX_model_tag->GetDynamicDescription();
-				if (ddesc == nullptr)return maxon::UnexpectedError(MAXON_SOURCE_LOCATION);
-				DescID ik_link_id;
-				MAXON_SCOPE
+				PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
+				BaseObject* bone = BaseObject::Alloc(Ojoint);
+				bone->SetName(bone_data_->bone_name_local);
+				if (bone_data_->parent_bone_index == -1)
 				{
-				BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
-				bc.SetString(DESC_NAME, bone_data_->bone_name_local);
-				bc.SetData(DESC_PARENTGROUP, GeData { CUSTOMDATATYPE_DESCID, DescID(MODEL_IK_GRP) });
-				ik_link_id = ddesc->Alloc(bc);
+					bone->SetFrozenPos(bone_data_->position * PositionMultiple);
+					doc->InsertObject(bone, bones, nullptr);
 				}
-				BaseLink* ik_link = BaseLink::Alloc();
-				if (ik_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				else {
+					bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position)* PositionMultiple);
+					doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
 				}
-				ik_link->SetLink(IK_tag);
-				PMX_model_tag->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
+				bone_map.Insert(i, bone)iferr_return;
+			}
+			EventAdd();
+			for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
+			{
+				PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
+				BaseObject* bone = bone_map.Find(i)->GetValue();
+				BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
+				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(BONE_NAME_LOCAL), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(BONE_NAME_UNIVERSAL), bone_data_->bone_name_universal, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(PARENT_BONE_INDEX), bone_data_->parent_bone_index, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(ROTATABLE), bone_data_->bone_flags.Rotatable, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(TRANSLATABLE), bone_data_->bone_flags.Translatable, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(VISIBLE), bone_data_->bone_flags.Is_visible, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(ENABLED), bone_data_->bone_flags.Enabled, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(IS_IK), bone_data_->bone_flags.IK, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(LAYER), bone_data_->layer, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(PHYSICS_AFTER_DEFORM), bone_data_->bone_flags.Physics_after_deform, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INDEXED_TAIL_POSITION), bone_data_->bone_flags.indexed_tail_position, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_ROTATION), bone_data_->bone_flags.Inherit_rotation, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_TRANSLATION), bone_data_->bone_flags.Inherit_translation, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(FIXED_AXIS), bone_data_->bone_flags.Fixed_axis, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(LOCAL_COORDINATE), bone_data_->bone_flags.Local_coordinate, DESCFLAGS_SET::NONE);
+				if (bone_data_->bone_flags.indexed_tail_position == 1) {
+					PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
+				}
+				else
+				{
+					PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
+				}
+				if (bone_data_->bone_flags.Local_coordinate) {
+					PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_X), (Vector)bone_data_->bone_local_X, DESCFLAGS_SET::NONE);
+					PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_Z), (Vector)bone_data_->bone_local_Z, DESCFLAGS_SET::NONE);
+				}
+				if (bone_data_->bone_flags.Fixed_axis == 1) {
+					PMX_bone_tag->SetParameter(DescID(BONE_FIXED_AXIS), (Vector)bone_data_->bone_fixed_axis, DESCFLAGS_SET::NONE);
+				}
+				if (settings.Import_inherit) {
+					if (bone_data_->bone_flags.Inherit_translation == 1)
+					{
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
+						BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
+						if (inherit_bone_parent_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
+					}
+					if (bone_data_->bone_flags.Inherit_rotation == 1)
+					{
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
+						BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
+						if (inherit_bone_parent_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
+					}
+				}
+				mmd::PMX_Bone_Tag::tagUpData(PMX_bone_tag, bone);
+				if (settings.Import_ik) {
+					if (bone_data_->bone_flags.IK == 1)
+					{
+						BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561	
+						IK_tag->SetName(bone_data_->bone_name_local);
+						IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
+						BaseLink* target_link = BaseLink::Alloc();
+						if (target_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						target_link->SetLink(bone);
+						IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TARGET), target_link, DESCFLAGS_SET::NONE);
+						BaseLink* tip_link = BaseLink::Alloc();
+						if (tip_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						tip_link->SetLink(bone_map.Find(bone_data_->IK_target_index)->GetValue());
+						IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TIP), tip_link, DESCFLAGS_SET::NONE);
+						DynamicDescription* const ddesc = PMX_model_tag->GetDynamicDescription();
+						if (ddesc == nullptr)return maxon::UnexpectedError(MAXON_SOURCE_LOCATION);
+						DescID ik_link_id;
+						MAXON_SCOPE
+						{
+						BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
+						bc.SetString(DESC_NAME, bone_data_->bone_name_local);
+						bc.SetData(DESC_PARENTGROUP, GeData { CUSTOMDATATYPE_DESCID, DescID(MODEL_IK_GRP) });
+						ik_link_id = ddesc->Alloc(bc);
+						}
+						BaseLink* ik_link = BaseLink::Alloc();
+						if (ik_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						ik_link->SetLink(IK_tag);
+						PMX_model_tag->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
+					}
+				}
 			}
 		}
 		Int32 part_surface_end = 0;
 		for (Int32 j = 0; j < pmx_model->model_data_count.material_data_count; j++)
 		{
 			PMX_Material_Data* material_data = pmx_model->material_data[j];
-			PolygonObject* part = PolygonObject::Alloc(material_data->surface_count * 3, material_data->surface_count);
-			part->SetName(material_data->material_name_local);
-			Vector* part_points = part->GetPointW();
-			CPolygon* part_polygon = part->GetPolygonW();
-			CAWeightTag* weight_tag = CAWeightTag::Alloc();
-			if (weight_tag == nullptr)
-			{
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			part->InsertTag(weight_tag);
-			maxon::BaseArray<Int32> vertex_index;
-			maxon::HashMap<Int32, mmd::pointO_point> vertex_index_map;
-			maxon::PointerArray<CPolygon> surfaces;
-			Int32 surface_count = material_data->surface_count;
-			for (Int32 i = 0 ,c = 0; i < surface_count; i++ ,c += 3)
-			{
-				CPolygon* surface = pmx_model->surface_data[i + part_surface_end];
-				vertex_index.Append(surface->a)iferr_return;
-				vertex_index.Append(surface->b)iferr_return;
-				vertex_index.Append(surface->c)iferr_return;
-				vertex_index_map.Insert(surface->a, pointO_point(part, c))iferr_return;
-				vertex_index_map.Insert(surface->b, pointO_point(part, c+1))iferr_return;
-				vertex_index_map.Insert(surface->c, pointO_point(part, c+2))iferr_return;
-			}
-			Int32 vertex_data_count = surface_count * 3;
-			maxon::HashMap<Int32, Int32> bone_index_map;
-			for (Int32 i = 0, c = 0; i < vertex_data_count; i++, c += 3)
-			{
-				if (i % 3000 == 0) {
-					StatusSetText("Import vertex " + String::IntToString(i) + "of " + String::IntToString(vertex_data_count));
-					StatusSetBar(i * 100 / vertex_data_count);
-				}				
-				CPolygon surface(c + 2, c + 1, c);
-				PMX_Vertex_Data*  vertex_data_ = pmx_model->vertex_data[vertex_index[i]];
-				part_points[i] = vertex_data_->position * PositionMultiple;
-				switch (vertex_data_->weight_deform_type)
-				{
-				case 0:
-				{
-					auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B1.bone1);
-					if (bone1_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_B1.bone1,weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B1.bone1)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B1.bone1)->GetValue(), i, 1);
-					}
-					else
-					{
-						weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, 1);
-					}					
-					break;
-				}
-				case 1:
-				{
-					auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B2.bone1);
-					if (bone1_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_B2.bone1, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B2.bone1)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B2.bone1)->GetValue(), i, vertex_data_->weight_deform_B2.weight1);
-					}
-					else
-					{
-						weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B2.weight1);
-					}
-					auto bone2_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B2.bone2);
-					if (bone2_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_B2.bone2, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B2.bone2)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B2.bone2)->GetValue(), i, 1 - vertex_data_->weight_deform_B2.weight1 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_B2.bone2)->GetValue(), i));
-					}
-					else
-					{
-						weight_tag->SetWeight(bone2_Index_ptr->GetValue(), i, 1 - vertex_data_->weight_deform_B2.weight1 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(),i));
-					}
-					break;
-				}
-				case 2:
-				{
-					auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B4.bone1);
-					if (bone1_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_B4.bone1, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B4.bone1)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone1)->GetValue(), i, vertex_data_->weight_deform_B4.weight1);
-					}
-					else
-					{
-						weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B4.weight1);
-					}
-					auto bone2_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B4.bone2);
-					if (bone2_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_B4.bone2, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B4.bone2)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone2)->GetValue(), i, vertex_data_->weight_deform_B4.weight2 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone2)->GetValue(), i));
-					}
-					else
-					{
-						weight_tag->SetWeight(bone2_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B4.weight2 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), i));
-					}
-					auto bone3_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B4.bone3);
-					if (bone3_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_B4.bone3, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B4.bone3)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone3)->GetValue(), i, vertex_data_->weight_deform_B4.weight3 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone3)->GetValue(), i));
-					}
-					else
-					{
-						weight_tag->SetWeight(bone3_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B4.weight3 + weight_tag->GetWeight(bone3_Index_ptr->GetValue(), i));
-					}
-					auto bone4_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B4.bone4);
-					if (bone4_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_B4.bone4, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B4.bone4)->GetValue()))iferr_return;
-						if (vertex_data_->weight_deform_B4.weight4 > 0) {
-							weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone4)->GetValue(), i, vertex_data_->weight_deform_B4.weight4 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone4)->GetValue(), i));
-						}
-					}
-					else
-					{
-						if (vertex_data_->weight_deform_B4.weight4 > 0) {
-							weight_tag->SetWeight(bone4_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B4.weight4 + weight_tag->GetWeight(bone4_Index_ptr->GetValue(), i));
-						}
-					}
-					break;
-				}
-				case 3:
-				{
-					auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_S.bone1);
-					if (bone1_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_S.bone1, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_S.bone1)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_S.bone1)->GetValue(), i, vertex_data_->weight_deform_S.weight1);
-					}
-					else
-					{
-						weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, vertex_data_->weight_deform_S.weight1);
-					}
-					auto bone2_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_S.bone2);
-					if (bone2_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_S.bone2, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_S.bone2)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_S.bone2)->GetValue(), i, 1 - vertex_data_->weight_deform_S.weight1 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_S.bone2)->GetValue(), i));
-					}
-					else
-					{
-						weight_tag->SetWeight(bone2_Index_ptr->GetValue(), i, 1 - vertex_data_->weight_deform_S.weight1 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), i));
-					}
-					break;
-				}
-				case 4:
-				{
-					auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_Q.bone1);
-					if (bone1_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_Q.bone1, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_Q.bone1)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone1)->GetValue(), i, vertex_data_->weight_deform_Q.weight1);
-					}
-					else
-					{
-						weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, vertex_data_->weight_deform_Q.weight1);
-					}
-					auto bone2_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_Q.bone2);
-					if (bone2_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_Q.bone2, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_Q.bone2)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone2)->GetValue(), i, vertex_data_->weight_deform_Q.weight2 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone2)->GetValue(), i));
-					}
-					else
-					{
-						weight_tag->SetWeight(bone2_Index_ptr->GetValue(), i, vertex_data_->weight_deform_Q.weight2 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), i));
-					}
-					auto bone3_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_Q.bone3);
-					if (bone3_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_Q.bone3, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_Q.bone3)->GetValue()))iferr_return;
-						weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone3)->GetValue(), i, vertex_data_->weight_deform_Q.weight3 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone3)->GetValue(), i));
-					}
-					else
-					{
-						weight_tag->SetWeight(bone3_Index_ptr->GetValue(), i, vertex_data_->weight_deform_Q.weight3 + weight_tag->GetWeight(bone3_Index_ptr->GetValue(), i));
-					}
-					auto bone4_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_Q.bone4);
-					if (bone4_Index_ptr == nullptr)
-					{
-						bone_index_map.Insert(vertex_data_->weight_deform_Q.bone4, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_Q.bone4)->GetValue()))iferr_return;
-						if (vertex_data_->weight_deform_Q.weight4 > 0) {
-							weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone4)->GetValue(), i, vertex_data_->weight_deform_Q.weight4 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone4)->GetValue(), i));
-						}
-					}
-					else
-					{
-						if (vertex_data_->weight_deform_Q.weight4 > 0) {
-							weight_tag->SetWeight(bone4_Index_ptr->GetValue(), i, vertex_data_->weight_deform_Q.weight4 + weight_tag->GetWeight(bone4_Index_ptr->GetValue(), i));
-						}
-					}
-					break;
-				}
-				}
-				surfaces.Append(surface)iferr_return;
-			}	
-			vertex_index.Reset();
-			part->Message(MSG_UPDATE);
-			NormalTag* normal_tag = NormalTag::Alloc(material_data->surface_count);
-			if (normal_tag == nullptr)
-			{
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			UVWTag* uvw_tag = UVWTag::Alloc(material_data->surface_count);
-			if (uvw_tag == nullptr)
-			{
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			NormalHandle normal_handle = normal_tag->GetDataAddressW();
-			UVWHandle uvw_handle = uvw_tag->GetDataAddressW();
-			for (Int32 i = 0; i < surface_count; i++)
-			{
-				CPolygon* surface = pmx_model->surface_data[i + part_surface_end];
-				PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->c];
-				PMX_Vertex_Data* vertex1 = pmx_model->vertex_data[surface->b];
-				PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->a];
-				part_polygon[i] = surfaces[i];
-				Vector normal0 = (Vector)vertex0->normal;
-				Vector normal1 = (Vector)vertex1->normal;
-				Vector normal2 = (Vector)vertex2->normal;
-				Vector normal3(0,0,0);
-				normal0.Normalize();
-				normal1.Normalize();
-				normal2.Normalize();
-				normal3.Normalize();
-				NormalTag::Set(normal_handle, i, NormalStruct(normal0, normal1, normal2, normal3));
-				UVWTag::Set(uvw_handle, i, UVWStruct(Vector(vertex0->UV.x, vertex0->UV.y, 0), Vector(vertex1->UV.x, vertex1->UV.y, 0), Vector(vertex2->UV.x, vertex2->UV.y, 0)));
-			}
-			surfaces.Reset();
-			part->Message(MSG_UPDATE);
-			part_surface_end += material_data->surface_count;
-			part->InsertTag(normal_tag);
-			part->InsertTag(uvw_tag);
-			part->SetPhong(true, true, 0.7853982);
-			doc->InsertObject(part, meshes, nullptr);
-			EventAdd();
-			doc->SetSelection(part);
-			doc->SetMode(Mpolygons);
-			BaseSelect* all_select = part->GetPolygonS();
-			all_select->SelectAll(0, material_data->surface_count - 1);
-			CallCommand(14039);
-			all_select->DeselectAll();	
-			doc->SetMode(Mmodel);
-			doc->SetSelection(nullptr);
-			BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
-			doc->InsertObject(morphdeformer, part, nullptr);
-			EventAdd();
-
-			/*CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
-			if (morph_tag == nullptr)
-			{
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			part->InsertTag(morph_tag);
-			morph_tag->InitMorphs();
-			morph_tag->SetParameter(ID_CA_POSE_POINTS, true, DESCFLAGS_SET::NONE);
-			morph_tag->ExitEdit(doc, true);
-			CAMorph* base_morph = morph_tag->AddMorph();
-			if (base_morph == nullptr)
-			{
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			base_morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
-			morph_tag->UpdateMorphs();
-			EventAdd(EVENT::NONE);
-			Int32 morph_data_count = pmx_model->model_data_count.morph_data_count;
-			for (Int32 i = 0; i < morph_data_count; i++)
-			{
-				StatusSetText("Import morphs..."_s);
-				StatusSetBar(i * 100 / morph_data_count);
-				PMX_Morph_Data* morph_data = pmx_model->morph_data[i];
-				if (morph_data->morph_type == 1) 
-				{
-					maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data->offset_data;
-					if (vertex_index_map.Find((*vertex_morph_data_arr)[0].vertex_index) != nullptr) {
-
-					}
-					CAMorph* morph = morph_tag->AddMorph();
-					if (morph == nullptr)
+			PolygonObject* part = nullptr;
+			CAWeightTag* weight_tag = nullptr;
+			if (settings.Import_polygon) {
+				part = PolygonObject::Alloc(material_data->surface_count * 3, material_data->surface_count);
+				part->SetName(material_data->material_name_local);
+				Vector* part_points = part->GetPointW();
+				CPolygon* part_polygon = part->GetPolygonW();				
+				if (settings.Import_weights) {
+					weight_tag = CAWeightTag::Alloc();
+					if (weight_tag == nullptr)
 					{
 						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 						MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 						return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					}					
-					Int32 offset_count = morph_data->offset_count;
-					for (Int32 j = 0; j < offset_count; j++) //设置变形后点的位置
-					{
-						PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
-						auto vertex_index_ptr = vertex_index_map.Find(vertex_morph_data.vertex_index);
-						if (vertex_index_ptr != nullptr) {
-							mmd::pointW_point part_point_ = vertex_index_ptr->GetValue();
-							if (part_point_.pointO == part_point_obj) {
-								Vector* part_points_ = part_point_.pointO->GetPointW();
-								part_points_[part_point_.point] += vertex_morph_data.translation * PositionMultiple;
-							}							
+					}
+					part->InsertTag(weight_tag);
+				}
+				maxon::BaseArray<Int32> vertex_index;
+				maxon::HashMap<Int32, mmd::object_point> vertex_index_map;
+				maxon::PointerArray<CPolygon> surfaces;
+				Int32 surface_count = material_data->surface_count;
+				for (Int32 i = 0, c = 0; i < surface_count; i++, c += 3)
+				{
+					CPolygon* surface = pmx_model->surface_data[i + part_surface_end];
+					vertex_index.Append(surface->a)iferr_return;
+					vertex_index.Append(surface->b)iferr_return;
+					vertex_index.Append(surface->c)iferr_return;
+					vertex_index_map.Insert(surface->a, object_point(part, c))iferr_return;
+					vertex_index_map.Insert(surface->b, object_point(part, c + 1))iferr_return;
+					vertex_index_map.Insert(surface->c, object_point(part, c + 2))iferr_return;
+				}
+				Int32 vertex_data_count = surface_count * 3;
+				maxon::HashMap<Int32, Int32> bone_index_map;
+				for (Int32 i = 0, c = 0; i < vertex_data_count; i++, c += 3)
+				{
+					if (i % 3000 == 0) {
+						StatusSetText("Import vertex " + String::IntToString(i) + "of " + String::IntToString(vertex_data_count));
+						StatusSetBar(i * 100 / vertex_data_count);
+					}
+					CPolygon surface(c + 2, c + 1, c);
+					PMX_Vertex_Data*  vertex_data_ = pmx_model->vertex_data[vertex_index[i]];
+					part_points[i] = vertex_data_->position * PositionMultiple;
+					if (settings.Import_weights) {
+						switch (vertex_data_->weight_deform_type)
+						{
+						case 0:
+						{
+							auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B1.bone1);
+							if (bone1_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_B1.bone1, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B1.bone1)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B1.bone1)->GetValue(), i, 1);
+							}
+							else
+							{
+								weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, 1);
+							}
+							break;
+						}
+						case 1:
+						{
+							auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B2.bone1);
+							if (bone1_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_B2.bone1, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B2.bone1)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B2.bone1)->GetValue(), i, vertex_data_->weight_deform_B2.weight1);
+							}
+							else
+							{
+								weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B2.weight1);
+							}
+							auto bone2_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B2.bone2);
+							if (bone2_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_B2.bone2, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B2.bone2)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B2.bone2)->GetValue(), i, 1 - vertex_data_->weight_deform_B2.weight1 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_B2.bone2)->GetValue(), i));
+							}
+							else
+							{
+								weight_tag->SetWeight(bone2_Index_ptr->GetValue(), i, 1 - vertex_data_->weight_deform_B2.weight1 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), i));
+							}
+							break;
+						}
+						case 2:
+						{
+							auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B4.bone1);
+							if (bone1_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_B4.bone1, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B4.bone1)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone1)->GetValue(), i, vertex_data_->weight_deform_B4.weight1);
+							}
+							else
+							{
+								weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B4.weight1);
+							}
+							auto bone2_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B4.bone2);
+							if (bone2_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_B4.bone2, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B4.bone2)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone2)->GetValue(), i, vertex_data_->weight_deform_B4.weight2 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone2)->GetValue(), i));
+							}
+							else
+							{
+								weight_tag->SetWeight(bone2_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B4.weight2 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), i));
+							}
+							auto bone3_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B4.bone3);
+							if (bone3_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_B4.bone3, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B4.bone3)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone3)->GetValue(), i, vertex_data_->weight_deform_B4.weight3 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone3)->GetValue(), i));
+							}
+							else
+							{
+								weight_tag->SetWeight(bone3_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B4.weight3 + weight_tag->GetWeight(bone3_Index_ptr->GetValue(), i));
+							}
+							auto bone4_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_B4.bone4);
+							if (bone4_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_B4.bone4, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_B4.bone4)->GetValue()))iferr_return;
+								if (vertex_data_->weight_deform_B4.weight4 > 0) {
+									weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone4)->GetValue(), i, vertex_data_->weight_deform_B4.weight4 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_B4.bone4)->GetValue(), i));
+								}
+							}
+							else
+							{
+								if (vertex_data_->weight_deform_B4.weight4 > 0) {
+									weight_tag->SetWeight(bone4_Index_ptr->GetValue(), i, vertex_data_->weight_deform_B4.weight4 + weight_tag->GetWeight(bone4_Index_ptr->GetValue(), i));
+								}
+							}
+							break;
+						}
+						case 3:
+						{
+							auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_S.bone1);
+							if (bone1_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_S.bone1, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_S.bone1)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_S.bone1)->GetValue(), i, vertex_data_->weight_deform_S.weight1);
+							}
+							else
+							{
+								weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, vertex_data_->weight_deform_S.weight1);
+							}
+							auto bone2_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_S.bone2);
+							if (bone2_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_S.bone2, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_S.bone2)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_S.bone2)->GetValue(), i, 1 - vertex_data_->weight_deform_S.weight1 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_S.bone2)->GetValue(), i));
+							}
+							else
+							{
+								weight_tag->SetWeight(bone2_Index_ptr->GetValue(), i, 1 - vertex_data_->weight_deform_S.weight1 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), i));
+							}
+							break;
+						}
+						case 4:
+						{
+							auto bone1_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_Q.bone1);
+							if (bone1_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_Q.bone1, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_Q.bone1)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone1)->GetValue(), i, vertex_data_->weight_deform_Q.weight1);
+							}
+							else
+							{
+								weight_tag->SetWeight(bone1_Index_ptr->GetValue(), i, vertex_data_->weight_deform_Q.weight1);
+							}
+							auto bone2_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_Q.bone2);
+							if (bone2_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_Q.bone2, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_Q.bone2)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone2)->GetValue(), i, vertex_data_->weight_deform_Q.weight2 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone2)->GetValue(), i));
+							}
+							else
+							{
+								weight_tag->SetWeight(bone2_Index_ptr->GetValue(), i, vertex_data_->weight_deform_Q.weight2 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), i));
+							}
+							auto bone3_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_Q.bone3);
+							if (bone3_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_Q.bone3, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_Q.bone3)->GetValue()))iferr_return;
+								weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone3)->GetValue(), i, vertex_data_->weight_deform_Q.weight3 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone3)->GetValue(), i));
+							}
+							else
+							{
+								weight_tag->SetWeight(bone3_Index_ptr->GetValue(), i, vertex_data_->weight_deform_Q.weight3 + weight_tag->GetWeight(bone3_Index_ptr->GetValue(), i));
+							}
+							auto bone4_Index_ptr = bone_index_map.Find(vertex_data_->weight_deform_Q.bone4);
+							if (bone4_Index_ptr == nullptr)
+							{
+								bone_index_map.Insert(vertex_data_->weight_deform_Q.bone4, weight_tag->AddJoint(bone_map.Find(vertex_data_->weight_deform_Q.bone4)->GetValue()))iferr_return;
+								if (vertex_data_->weight_deform_Q.weight4 > 0) {
+									weight_tag->SetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone4)->GetValue(), i, vertex_data_->weight_deform_Q.weight4 + weight_tag->GetWeight(bone_index_map.Find(vertex_data_->weight_deform_Q.bone4)->GetValue(), i));
+								}
+							}
+							else
+							{
+								if (vertex_data_->weight_deform_Q.weight4 > 0) {
+									weight_tag->SetWeight(bone4_Index_ptr->GetValue(), i, vertex_data_->weight_deform_Q.weight4 + weight_tag->GetWeight(bone4_Index_ptr->GetValue(), i));
+								}
+							}
+							break;
+						}
 						}
 					}
-					part_point_obj->Message(MSG_UPDATE);
-					morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
-					morph->SetName(morph_data->morph_name_local);
-					morph->SetStrength(0);
-					for (Int32 j = 0; j < offset_count; j++) //恢复点的位置
+					surfaces.Append(surface)iferr_return;
+				}
+				vertex_index.Reset();
+				part->Message(MSG_UPDATE);
+				NormalTag* normal_tag = nullptr;
+				NormalHandle normal_handle = nullptr;
+				if (settings.Import_normal) {				
+				normal_tag = NormalTag::Alloc(material_data->surface_count);
+				if (normal_tag == nullptr)
+				{
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				    normal_handle = normal_tag->GetDataAddressW();
+					part->InsertTag(normal_tag);
+				}
+				UVWHandle uvw_handle = nullptr;
+				UVWTag* uvw_tag = nullptr;
+				if (settings.Import_uv) {
+					uvw_tag = UVWTag::Alloc(material_data->surface_count);
+					if (uvw_tag == nullptr)
 					{
-						PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
-						auto vertex_index_ptr = vertex_index_map.Find(vertex_morph_data.vertex_index);
-						if (vertex_index_ptr != nullptr)
+						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					}
+					uvw_handle = uvw_tag->GetDataAddressW();
+					part->InsertTag(uvw_tag);
+				}
+				for (Int32 i = 0; i < surface_count; i++)
+				{
+					CPolygon* surface = pmx_model->surface_data[i + part_surface_end];
+					PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->c];
+					PMX_Vertex_Data* vertex1 = pmx_model->vertex_data[surface->b];
+					PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->a];
+					part_polygon[i] = surfaces[i];
+					if (settings.Import_normal) {
+						Vector normal0 = (Vector)vertex0->normal;
+						Vector normal1 = (Vector)vertex1->normal;
+						Vector normal2 = (Vector)vertex2->normal;
+						Vector normal3(0, 0, 0);
+						normal0.Normalize();
+						normal1.Normalize();
+						normal2.Normalize();
+						normal3.Normalize();
+						NormalTag::Set(normal_handle, i, NormalStruct(normal0, normal1, normal2, normal3));
+					}
+					if (settings.Import_uv) {
+						UVWTag::Set(uvw_handle, i, UVWStruct(Vector(vertex0->UV.x, vertex0->UV.y, 0), Vector(vertex1->UV.x, vertex1->UV.y, 0), Vector(vertex2->UV.x, vertex2->UV.y, 0)));
+					}
+				}
+				surfaces.Reset();
+				part->Message(MSG_UPDATE);
+				part_surface_end += material_data->surface_count;
+				part->SetPhong(true, true, 0.7853982);
+				doc->InsertObject(part, meshes, nullptr);
+				EventAdd();
+				doc->SetSelection(part);
+				doc->SetMode(Mpolygons);
+				BaseSelect* all_select = part->GetPolygonS();
+				all_select->SelectAll(0, material_data->surface_count - 1);
+				CallCommand(14039);
+				all_select->DeselectAll();
+				doc->SetMode(Mmodel);
+				doc->SetSelection(nullptr);
+				BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
+				doc->InsertObject(morphdeformer, part, nullptr);
+				EventAdd();
+
+				/*CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
+				if (morph_tag == nullptr)
+				{
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				part->InsertTag(morph_tag);
+				morph_tag->InitMorphs();
+				morph_tag->SetParameter(ID_CA_POSE_POINTS, true, DESCFLAGS_SET::NONE);
+				morph_tag->ExitEdit(doc, true);
+				CAMorph* base_morph = morph_tag->AddMorph();
+				if (base_morph == nullptr)
+				{
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				base_morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
+				morph_tag->UpdateMorphs();
+				EventAdd(EVENT::NONE);
+				Int32 morph_data_count = pmx_model->model_data_count.morph_data_count;
+				for (Int32 i = 0; i < morph_data_count; i++)
+				{
+					StatusSetText("Import morphs..."_s);
+					StatusSetBar(i * 100 / morph_data_count);
+					PMX_Morph_Data* morph_data = pmx_model->morph_data[i];
+					if (morph_data->morph_type == 1)
+					{
+						maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data->offset_data;
+						if (vertex_index_map.Find((*vertex_morph_data_arr)[0].vertex_index) != nullptr) {
+
+						}
+						CAMorph* morph = morph_tag->AddMorph();
+						if (morph == nullptr)
 						{
-							mmd::pointW_point part_point_ = vertex_index_ptr->GetValue();
-							if (part_point_.pointO == part_point_obj) {
-								Vector* part_points_ = part_point_.pointO->GetPointW();
-								part_points_[part_point_.point] = pmx_model->vertex_data[vertex_morph_data.vertex_index]->position * PositionMultiple;
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						Int32 offset_count = morph_data->offset_count;
+						for (Int32 j = 0; j < offset_count; j++) //设置变形后点的位置
+						{
+							PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
+							auto vertex_index_ptr = vertex_index_map.Find(vertex_morph_data.vertex_index);
+							if (vertex_index_ptr != nullptr) {
+								mmd::pointW_point part_point_ = vertex_index_ptr->GetValue();
+								if (part_point_.pointO == part_point_obj) {
+									Vector* part_points_ = part_point_.pointO->GetPointW();
+									part_points_[part_point_.point] += vertex_morph_data.translation * PositionMultiple;
+								}
 							}
 						}
+						part_point_obj->Message(MSG_UPDATE);
+						morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
+						morph->SetName(morph_data->morph_name_local);
+						morph->SetStrength(0);
+						for (Int32 j = 0; j < offset_count; j++) //恢复点的位置
+						{
+							PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
+							auto vertex_index_ptr = vertex_index_map.Find(vertex_morph_data.vertex_index);
+							if (vertex_index_ptr != nullptr)
+							{
+								mmd::pointW_point part_point_ = vertex_index_ptr->GetValue();
+								if (part_point_.pointO == part_point_obj) {
+									Vector* part_points_ = part_point_.pointO->GetPointW();
+									part_points_[part_point_.point] = pmx_model->vertex_data[vertex_morph_data.vertex_index]->position * PositionMultiple;
+								}
+							}
+						}
+						part_point_obj->Message(MSG_UPDATE);
 					}
-					part_point_obj->Message(MSG_UPDATE);
 				}
+				morph_tag->UpdateMorphs();
+				EventAdd();
+				morph_tag->SetParameter(ID_CA_POSE_MODE, ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);*/
+				vertex_index_map.Reset();
 			}
-			morph_tag->UpdateMorphs();
-			EventAdd();
-			morph_tag->SetParameter(ID_CA_POSE_MODE, ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);*/
-			vertex_index_map.Reset();
-			Material* material = Material::Alloc();
-			if (material == nullptr) {
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			material->SetName(material_data->material_name_local);
-			BaseChannel* basecolor_channel = material->GetChannel(CHANNEL_COLOR);
-			material->SetChannelState(CHANNEL_ALPHA, true);
-			BaseChannel* alpha_channel = material->GetChannel(CHANNEL_ALPHA);
-			if (basecolor_channel == nullptr) {
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			if (material_data->texture_index == -1)
-			{
-				BaseShader* alpha_shader = BaseShader::Alloc(Xcolor);
-				alpha_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(1, 1, 1), DESCFLAGS_SET::NONE);
-				alpha_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
-				material->SetParameter(DescID(MATERIAL_ALPHA_SHADER), alpha_shader, DESCFLAGS_SET::NONE);
-				material->InsertShader(alpha_shader);
-				BaseShader* basecolor_shader = BaseShader::Alloc(Xcolor);
-				basecolor_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
-				basecolor_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
-				material->SetParameter(DescID(MATERIAL_COLOR_SHADER), basecolor_shader, DESCFLAGS_SET::NONE);
-				material->InsertShader(basecolor_shader);
-			}else{
-				String texture = pmx_model->texture_data[material_data->texture_index];
-				Filename texture_file(texture);
-				if (texture_file.CheckSuffix("png"_s) || texture_file.CheckSuffix("PNG"_s) || texture_file.CheckSuffix("Png"_s) || texture_file.CheckSuffix("pNg"_s) || texture_file.CheckSuffix("pnG"_s) || texture_file.CheckSuffix("PNg"_s) || texture_file.CheckSuffix("pNG"_s))
+			Material* material = nullptr;
+			if (settings.Import_material) {
+				material = Material::Alloc();
+				if (material == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				material->SetName(material_data->material_name_local);
+				BaseChannel* basecolor_channel = material->GetChannel(CHANNEL_COLOR);
+				material->SetChannelState(CHANNEL_ALPHA, true);
+				BaseChannel* alpha_channel = material->GetChannel(CHANNEL_ALPHA);
+				if (basecolor_channel == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				if (material_data->texture_index == -1)
 				{
-					BaseContainer bc;
-					bc = basecolor_channel->GetData();
-					material->SetParameter(DescID(MATERIAL_COLOR_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
-					bc.SetString(BASECHANNEL_TEXTURE, path + texture);
-					basecolor_channel->SetData(bc);
-					bc = alpha_channel->GetData();
-					bc.SetString(BASECHANNEL_TEXTURE, path + texture);
-					alpha_channel->SetData(bc);
-				}
-				else {
-					BaseContainer bc;
-					bc = basecolor_channel->GetData();
-					material->SetParameter(DescID(MATERIAL_COLOR_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
-					bc.SetString(BASECHANNEL_TEXTURE, path + texture);
-					basecolor_channel->SetData(bc);
 					BaseShader* alpha_shader = BaseShader::Alloc(Xcolor);
 					alpha_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(1, 1, 1), DESCFLAGS_SET::NONE);
 					alpha_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
 					material->SetParameter(DescID(MATERIAL_ALPHA_SHADER), alpha_shader, DESCFLAGS_SET::NONE);
 					material->InsertShader(alpha_shader);
+					BaseShader* basecolor_shader = BaseShader::Alloc(Xcolor);
+					basecolor_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
+					basecolor_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
+					material->SetParameter(DescID(MATERIAL_COLOR_SHADER), basecolor_shader, DESCFLAGS_SET::NONE);
+					material->InsertShader(basecolor_shader);
+				}
+				else {
+					String texture = pmx_model->texture_data[material_data->texture_index];
+					Filename texture_file(texture);
+					if (texture_file.CheckSuffix("png"_s) || texture_file.CheckSuffix("PNG"_s) || texture_file.CheckSuffix("Png"_s) || texture_file.CheckSuffix("pNg"_s) || texture_file.CheckSuffix("pnG"_s) || texture_file.CheckSuffix("PNg"_s) || texture_file.CheckSuffix("pNG"_s))
+					{
+						BaseContainer bc;
+						bc = basecolor_channel->GetData();
+						material->SetParameter(DescID(MATERIAL_COLOR_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
+						bc.SetString(BASECHANNEL_TEXTURE, path + texture);
+						basecolor_channel->SetData(bc);
+						bc = alpha_channel->GetData();
+						bc.SetString(BASECHANNEL_TEXTURE, path + texture);
+						alpha_channel->SetData(bc);
+					}
+					else {
+						BaseContainer bc;
+						bc = basecolor_channel->GetData();
+						material->SetParameter(DescID(MATERIAL_COLOR_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
+						bc.SetString(BASECHANNEL_TEXTURE, path + texture);
+						basecolor_channel->SetData(bc);
+						BaseShader* alpha_shader = BaseShader::Alloc(Xcolor);
+						alpha_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(1, 1, 1), DESCFLAGS_SET::NONE);
+						alpha_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
+						material->SetParameter(DescID(MATERIAL_ALPHA_SHADER), alpha_shader, DESCFLAGS_SET::NONE);
+						material->InsertShader(alpha_shader);
+					}
+				}
+				doc->InsertMaterial(material);
+				if (settings.Import_polygon) {
+					TextureTag* texture_tag = TextureTag::Alloc();
+					if (texture_tag == nullptr)
+					{
+						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					}
+					texture_tag->SetMaterial(material);
+					texture_tag->SetName(material_data->material_name_local);
+					texture_tag->SetParameter(DescID(TEXTURETAG_PROJECTION), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
+					part->InsertTag(texture_tag);
 				}
 			}
-			doc->InsertMaterial(material);
-			TextureTag* texture_tag = TextureTag::Alloc();
-			if (texture_tag == nullptr)
-			{
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			texture_tag->SetMaterial(material);
-			texture_tag->SetName(material_data->material_name_local);
-			texture_tag->SetParameter(DescID(TEXTURETAG_PROJECTION), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
-			part->InsertTag(texture_tag);	
-			weight_tag->SetBindPose(doc, false);
-			CAWeightMgr::NormalizeWeights(doc);
+			if (settings.Import_weights) {
+				weight_tag->SetBindPose(doc, false);
+				CAWeightMgr::NormalizeWeights(doc);
+			}			
 		}
 		bone_map.Reset();
 	}else{
 		BaseObject* model_ = BaseObject::Alloc(Onull);
-		model_->SetName(pmx_model->model_info.model_name_local);
-		BaseObject* bones = BaseObject::Alloc(Onull);
-		bones->SetName("Bones"_s);
-		doc->InsertObject(model_, nullptr, nullptr);
-		doc->InsertObject(bones, model_, nullptr);
+		model_->SetName(pmx_model->model_info.model_name_local);		
+		doc->InsertObject(model_, nullptr, nullptr);	
 		BaseTag* PMX_model_tag = model_->MakeTag(ID_PMX_MODEL_TAG);
 		PMX_model_tag->SetParameter(DescID(ID_BASELIST_NAME), pmx_model->model_info.model_name_local, DESCFLAGS_SET::NONE);
 		PMX_model_tag->SetParameter(DescID(PMX_VERSION), pmx_model->model_info.version, DESCFLAGS_SET::NONE);
@@ -1149,245 +1185,288 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		PMX_model_tag->SetParameter(DescID(MODEL_NAME_UNIVERSAL), pmx_model->model_info.model_name_universal, DESCFLAGS_SET::NONE);
 		PMX_model_tag->SetParameter(DescID(COMMENTS_LOCAL), pmx_model->model_info.comments_local, DESCFLAGS_SET::NONE);
 		PMX_model_tag->SetParameter(DescID(COMMENTS_UNIVERSAL), pmx_model->model_info.comments_universal, DESCFLAGS_SET::NONE);
-		PolygonObject* model = PolygonObject::Alloc(pmx_model->model_data_count.vertex_data_count, pmx_model->model_data_count.surface_data_count);
-		model->SetName("Mesh"_s);
-		PointObject* model_point_obj = ToPoint(model);
-		Vector* model_points = model_point_obj->GetPointW();
-		PolygonObject* model_polygon_obj = ToPoly(model);
-		CPolygon* model_polygon = model_polygon_obj->GetPolygonW();
-		CAWeightTag* weight_tag = CAWeightTag::Alloc();
-		if (weight_tag == nullptr)
-		{
-			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		BaseObject* bones = nullptr;
+		if (settings.Import_bone) {
+			bones = BaseObject::Alloc(Onull);
+			bones->SetName("Bones"_s);
+			doc->InsertObject(bones, model_, nullptr);
 		}
-		model->InsertTag(weight_tag);
+		PolygonObject* model = nullptr;
+		PointObject* model_point_obj = nullptr;
+		Vector* model_points = nullptr;
+		PolygonObject* model_polygon_obj = nullptr;
+		CPolygon* model_polygon = nullptr;
+		BaseSelect* select = nullptr;
+		Int32 select_end = 0;
+		if (settings.Import_polygon) {
+			model = PolygonObject::Alloc(pmx_model->model_data_count.vertex_data_count, pmx_model->model_data_count.surface_data_count);
+			model->SetName("Mesh"_s);
+			model_point_obj = ToPoint(model);
+			model_points = model_point_obj->GetPointW();
+			model_polygon_obj = ToPoly(model);
+			model_polygon = model_polygon_obj->GetPolygonW();
+		}
+		CAWeightTag* weight_tag = nullptr;
+		if (settings.Import_weights) {
+			weight_tag = CAWeightTag::Alloc();
+			if (weight_tag == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			}
+			model->InsertTag(weight_tag);
+		}
 		maxon::HashMap<Int32, BaseObject*> bone_map;
-		Int32 bone_data_count = pmx_model->model_data_count.bone_data_count;
-		for (Int32 i = 0; i < bone_data_count; i++)
-		{
-			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
-			BaseObject* bone = BaseObject::Alloc(Ojoint);
-			bone->SetName(bone_data_->bone_name_local);
-			weight_tag->AddJoint(bone);
-			if (bone_data_->parent_bone_index == -1)
+		if (settings.Import_bone) {
+			Int32 bone_data_count = pmx_model->model_data_count.bone_data_count;
+			for (Int32 i = 0; i < bone_data_count; i++)
 			{
-				bone->SetFrozenPos(bone_data_->position * PositionMultiple);
-				doc->InsertObject(bone, bones, nullptr);
-			}
-			else {
-				bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position)* PositionMultiple);
-				doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
-			}
-			bone_map.Insert(i, bone)iferr_return;
-		}
-		EventAdd();
-		for (Int32 i = 0; i < bone_data_count; i++)
-		{
-			PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
-			BaseObject* bone = bone_map.Find(i)->GetValue();
-			BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
-			PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(BONE_NAME_LOCAL), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(BONE_NAME_UNIVERSAL), bone_data_->bone_name_universal, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(PARENT_BONE_INDEX), bone_data_->parent_bone_index, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(ROTATABLE), bone_data_->bone_flags.Rotatable, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(TRANSLATABLE), bone_data_->bone_flags.Translatable, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(VISIBLE), bone_data_->bone_flags.Is_visible, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(ENABLED), bone_data_->bone_flags.Enabled, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(IS_IK), bone_data_->bone_flags.IK, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(LAYER), bone_data_->layer, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(PHYSICS_AFTER_DEFORM), bone_data_->bone_flags.Physics_after_deform, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(INDEXED_TAIL_POSITION), bone_data_->bone_flags.indexed_tail_position, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(INHERIT_ROTATION), bone_data_->bone_flags.Inherit_rotation, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(INHERIT_TRANSLATION), bone_data_->bone_flags.Inherit_translation, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(FIXED_AXIS), bone_data_->bone_flags.Fixed_axis, DESCFLAGS_SET::NONE);
-			PMX_bone_tag->SetParameter(DescID(LOCAL_COORDINATE), bone_data_->bone_flags.Local_coordinate, DESCFLAGS_SET::NONE);
-			if (bone_data_->bone_flags.indexed_tail_position == 1) {
-				PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
-			}
-			else
-			{
-				PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Local_coordinate) {
-				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_X), (Vector)bone_data_->bone_local_X, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_Z), (Vector)bone_data_->bone_local_Z, DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Fixed_axis == 1) {
-				PMX_bone_tag->SetParameter(DescID(BONE_FIXED_AXIS), (Vector)bone_data_->bone_fixed_axis, DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Inherit_translation == 1)
-			{
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
-				BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
-				if (inherit_bone_parent_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
+				BaseObject* bone = BaseObject::Alloc(Ojoint);
+				bone->SetName(bone_data_->bone_name_local);
+				if (settings.Import_weights) {
+					weight_tag->AddJoint(bone);
 				}
-				inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-			}
-			if (bone_data_->bone_flags.Inherit_rotation == 1)
-			{
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
-				BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
-				if (inherit_bone_parent_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				}
-				inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
-			}
-			mmd::PMX_Bone_Tag::tagUpData(PMX_bone_tag, bone);
-
-			if (bone_data_->bone_flags.IK == 1)
-			{
-				BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561	
-				IK_tag->SetName(bone_data_->bone_name_local);
-				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
-				BaseLink* target_link = BaseLink::Alloc();
-				if (target_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				}
-				target_link->SetLink(bone);
-				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TARGET), target_link, DESCFLAGS_SET::NONE);
-				BaseLink* tip_link = BaseLink::Alloc();
-				if (tip_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				}
-				tip_link->SetLink(bone_map.Find(bone_data_->IK_target_index)->GetValue());
-				IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TIP), tip_link, DESCFLAGS_SET::NONE);
-				DynamicDescription* const ddesc = PMX_model_tag->GetDynamicDescription();
-				if (ddesc == nullptr)return maxon::UnexpectedError(MAXON_SOURCE_LOCATION);
-				DescID ik_link_id;
-				MAXON_SCOPE
+				if (bone_data_->parent_bone_index == -1)
 				{
-				BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
-				bc.SetString(DESC_NAME, bone_data_->bone_name_local);
-				bc.SetData(DESC_PARENTGROUP, GeData { CUSTOMDATATYPE_DESCID, DescID(MODEL_IK_GRP) });
-				ik_link_id = ddesc->Alloc(bc);
+					bone->SetFrozenPos(bone_data_->position * PositionMultiple);
+					doc->InsertObject(bone, bones, nullptr);
 				}
-				BaseLink* ik_link = BaseLink::Alloc();
-				if (ik_link == nullptr) {
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				else {
+					bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position)* PositionMultiple);
+					doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
 				}
-				ik_link->SetLink(IK_tag);
-				PMX_model_tag->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
+				bone_map.Insert(i, bone)iferr_return;
+			}
+			EventAdd();
+			for (Int32 i = 0; i < bone_data_count; i++)
+			{
+				PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
+				BaseObject* bone = bone_map.Find(i)->GetValue();
+				BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
+				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(BONE_NAME_LOCAL), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(BONE_NAME_UNIVERSAL), bone_data_->bone_name_universal, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(PARENT_BONE_INDEX), bone_data_->parent_bone_index, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(ROTATABLE), bone_data_->bone_flags.Rotatable, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(TRANSLATABLE), bone_data_->bone_flags.Translatable, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(VISIBLE), bone_data_->bone_flags.Is_visible, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(ENABLED), bone_data_->bone_flags.Enabled, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(IS_IK), bone_data_->bone_flags.IK, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(LAYER), bone_data_->layer, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(PHYSICS_AFTER_DEFORM), bone_data_->bone_flags.Physics_after_deform, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INDEXED_TAIL_POSITION), bone_data_->bone_flags.indexed_tail_position, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_ROTATION), bone_data_->bone_flags.Inherit_rotation, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(INHERIT_TRANSLATION), bone_data_->bone_flags.Inherit_translation, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(FIXED_AXIS), bone_data_->bone_flags.Fixed_axis, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(LOCAL_COORDINATE), bone_data_->bone_flags.Local_coordinate, DESCFLAGS_SET::NONE);
+				if (bone_data_->bone_flags.indexed_tail_position == 1) {
+					PMX_bone_tag->SetParameter(DescID(TAIL_INDEX), bone_data_->tail_index, DESCFLAGS_SET::NONE);
+				}
+				else
+				{
+					PMX_bone_tag->SetParameter(DescID(TAIL_POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
+				}
+				if (bone_data_->bone_flags.Local_coordinate) {
+					PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_X), (Vector)bone_data_->bone_local_X, DESCFLAGS_SET::NONE);
+					PMX_bone_tag->SetParameter(DescID(BONE_LOCAL_Z), (Vector)bone_data_->bone_local_Z, DESCFLAGS_SET::NONE);
+				}
+				if (bone_data_->bone_flags.Fixed_axis == 1) {
+					PMX_bone_tag->SetParameter(DescID(BONE_FIXED_AXIS), (Vector)bone_data_->bone_fixed_axis, DESCFLAGS_SET::NONE);
+				}
+				if (settings.Import_inherit) {
+					if (bone_data_->bone_flags.Inherit_translation == 1)
+					{
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
+						BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
+						if (inherit_bone_parent_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
+					}
+					if (bone_data_->bone_flags.Inherit_rotation == 1)
+					{
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INDEX), bone_data_->inherit_bone_parent_index, DESCFLAGS_SET::NONE);
+						BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
+						if (inherit_bone_parent_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						inherit_bone_parent_link->SetLink(bone_map.Find(bone_data_->inherit_bone_parent_index)->GetValue());
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
+					}
+				}
+				mmd::PMX_Bone_Tag::tagUpData(PMX_bone_tag, bone);
+				if (settings.Import_ik) {
+					if (bone_data_->bone_flags.IK == 1)
+					{
+						BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561	
+						IK_tag->SetName(bone_data_->bone_name_local);
+						IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
+						BaseLink* target_link = BaseLink::Alloc();
+						if (target_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						target_link->SetLink(bone);
+						IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TARGET), target_link, DESCFLAGS_SET::NONE);
+						BaseLink* tip_link = BaseLink::Alloc();
+						if (tip_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						tip_link->SetLink(bone_map.Find(bone_data_->IK_target_index)->GetValue());
+						IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TIP), tip_link, DESCFLAGS_SET::NONE);
+						DynamicDescription* const ddesc = PMX_model_tag->GetDynamicDescription();
+						if (ddesc == nullptr)return maxon::UnexpectedError(MAXON_SOURCE_LOCATION);
+						DescID ik_link_id;
+						MAXON_SCOPE
+						{
+						BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
+						bc.SetString(DESC_NAME, bone_data_->bone_name_local);
+						bc.SetData(DESC_PARENTGROUP, GeData { CUSTOMDATATYPE_DESCID, DescID(MODEL_IK_GRP) });
+						ik_link_id = ddesc->Alloc(bc);
+						}
+						BaseLink* ik_link = BaseLink::Alloc();
+						if (ik_link == nullptr) {
+							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+							return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						}
+						ik_link->SetLink(IK_tag);
+						PMX_model_tag->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
+					}
+				}
 			}
 		}
 		bone_map.Reset();
-		Int32 vertex_data_count = pmx_model->model_data_count.vertex_data_count;
-		for (Int32 i = 0; i < vertex_data_count; i++)
-		{
-			if (i % 3000 == 0) {
-				StatusSetText("Import vertex " + String::IntToString(i) + "of " + String::IntToString(vertex_data_count));
-				StatusSetBar(i * 100 / vertex_data_count);
-			}			
-			PMX_Vertex_Data* vertex_data_ = pmx_model->vertex_data[i];
-			model_points[i] = vertex_data_->position * PositionMultiple;
-			switch (vertex_data_->weight_deform_type)
+		if (settings.Import_polygon) {
+			Int32 vertex_data_count = pmx_model->model_data_count.vertex_data_count;
+			for (Int32 i = 0; i < vertex_data_count; i++)
 			{
-			case 0:
-			{
-				weight_tag->SetWeight(vertex_data_->weight_deform_B1.bone1, i, 1);
-				break;
-			}
-			case 1:
-			{
-				weight_tag->SetWeight(vertex_data_->weight_deform_B2.bone1, i, vertex_data_->weight_deform_B2.weight1);
-				weight_tag->SetWeight(vertex_data_->weight_deform_B2.bone2, i, 1 - vertex_data_->weight_deform_B2.weight1 + weight_tag->GetWeight(vertex_data_->weight_deform_B2.bone2, i));
-				break;
-			}
-			case 2:
-			{
-				weight_tag->SetWeight(vertex_data_->weight_deform_B4.bone1, i, vertex_data_->weight_deform_B4.weight1);
-				weight_tag->SetWeight(vertex_data_->weight_deform_B4.bone2, i, vertex_data_->weight_deform_B4.weight2 + weight_tag->GetWeight(vertex_data_->weight_deform_B4.bone2, i));
-				weight_tag->SetWeight(vertex_data_->weight_deform_B4.bone3, i, vertex_data_->weight_deform_B4.weight3 + weight_tag->GetWeight(vertex_data_->weight_deform_B4.bone3, i));
-				if (vertex_data_->weight_deform_B4.weight4 > 0.0) {
-					weight_tag->SetWeight(vertex_data_->weight_deform_B4.bone4, i, vertex_data_->weight_deform_B4.weight4 + weight_tag->GetWeight(vertex_data_->weight_deform_B4.bone4, i));
+				if (i % 3000 == 0) {
+					StatusSetText("Import vertex " + String::IntToString(i) + "of " + String::IntToString(vertex_data_count));
+					StatusSetBar(i * 100 / vertex_data_count);
 				}
-				break;
-			}
-			case 3:
-			{
-				weight_tag->SetWeight(vertex_data_->weight_deform_S.bone1, i, vertex_data_->weight_deform_S.weight1);
-				weight_tag->SetWeight(vertex_data_->weight_deform_S.bone2, i, 1 - vertex_data_->weight_deform_S.weight1 + weight_tag->GetWeight(vertex_data_->weight_deform_S.bone2, i));
-				break;
-			}
-			case 4:
-			{
-				weight_tag->SetWeight(vertex_data_->weight_deform_Q.bone1, i, vertex_data_->weight_deform_Q.weight1);
-				weight_tag->SetWeight(vertex_data_->weight_deform_Q.bone2, i, vertex_data_->weight_deform_Q.weight2 + weight_tag->GetWeight(vertex_data_->weight_deform_Q.bone2,i));
-				weight_tag->SetWeight(vertex_data_->weight_deform_Q.bone3, i, vertex_data_->weight_deform_Q.weight3 + weight_tag->GetWeight(vertex_data_->weight_deform_Q.bone3, i));
-				if (vertex_data_->weight_deform_Q.weight4 > 0.0) {
-					weight_tag->SetWeight(vertex_data_->weight_deform_Q.bone4, i, vertex_data_->weight_deform_Q.weight4 + weight_tag->GetWeight(vertex_data_->weight_deform_Q.bone4, i));
+				PMX_Vertex_Data* vertex_data_ = pmx_model->vertex_data[i];
+				model_points[i] = vertex_data_->position * PositionMultiple;
+				if (settings.Import_weights) {
+					switch (vertex_data_->weight_deform_type)
+					{
+					case 0:
+					{
+						weight_tag->SetWeight(vertex_data_->weight_deform_B1.bone1, i, 1);
+						break;
+					}
+					case 1:
+					{
+						weight_tag->SetWeight(vertex_data_->weight_deform_B2.bone1, i, vertex_data_->weight_deform_B2.weight1);
+						weight_tag->SetWeight(vertex_data_->weight_deform_B2.bone2, i, 1 - vertex_data_->weight_deform_B2.weight1 + weight_tag->GetWeight(vertex_data_->weight_deform_B2.bone2, i));
+						break;
+					}
+					case 2:
+					{
+						weight_tag->SetWeight(vertex_data_->weight_deform_B4.bone1, i, vertex_data_->weight_deform_B4.weight1);
+						weight_tag->SetWeight(vertex_data_->weight_deform_B4.bone2, i, vertex_data_->weight_deform_B4.weight2 + weight_tag->GetWeight(vertex_data_->weight_deform_B4.bone2, i));
+						weight_tag->SetWeight(vertex_data_->weight_deform_B4.bone3, i, vertex_data_->weight_deform_B4.weight3 + weight_tag->GetWeight(vertex_data_->weight_deform_B4.bone3, i));
+						if (vertex_data_->weight_deform_B4.weight4 > 0.0) {
+							weight_tag->SetWeight(vertex_data_->weight_deform_B4.bone4, i, vertex_data_->weight_deform_B4.weight4 + weight_tag->GetWeight(vertex_data_->weight_deform_B4.bone4, i));
+						}
+						break;
+					}
+					case 3:
+					{
+						weight_tag->SetWeight(vertex_data_->weight_deform_S.bone1, i, vertex_data_->weight_deform_S.weight1);
+						weight_tag->SetWeight(vertex_data_->weight_deform_S.bone2, i, 1 - vertex_data_->weight_deform_S.weight1 + weight_tag->GetWeight(vertex_data_->weight_deform_S.bone2, i));
+						break;
+					}
+					case 4:
+					{
+						weight_tag->SetWeight(vertex_data_->weight_deform_Q.bone1, i, vertex_data_->weight_deform_Q.weight1);
+						weight_tag->SetWeight(vertex_data_->weight_deform_Q.bone2, i, vertex_data_->weight_deform_Q.weight2 + weight_tag->GetWeight(vertex_data_->weight_deform_Q.bone2, i));
+						weight_tag->SetWeight(vertex_data_->weight_deform_Q.bone3, i, vertex_data_->weight_deform_Q.weight3 + weight_tag->GetWeight(vertex_data_->weight_deform_Q.bone3, i));
+						if (vertex_data_->weight_deform_Q.weight4 > 0.0) {
+							weight_tag->SetWeight(vertex_data_->weight_deform_Q.bone4, i, vertex_data_->weight_deform_Q.weight4 + weight_tag->GetWeight(vertex_data_->weight_deform_Q.bone4, i));
+						}
+						break;
+					}
+					}
 				}
-				break;
 			}
+			model_point_obj->Message(MSG_UPDATE);
+			NormalTag* normal_tag = nullptr;
+			NormalHandle normal_handle = nullptr;
+			if (settings.Import_normal) {
+				normal_tag = NormalTag::Alloc(pmx_model->model_data_count.surface_data_count);
+				if (normal_tag == nullptr)
+				{
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				normal_handle = normal_tag->GetDataAddressW();
+				model->InsertTag(normal_tag);
 			}
-		}
-		model_point_obj->Message(MSG_UPDATE);
-		NormalTag* normal_tag = NormalTag::Alloc(pmx_model->model_data_count.surface_data_count);
-		if (normal_tag == nullptr)
-		{
-			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		}
-		UVWTag* uvw_tag = UVWTag::Alloc(pmx_model->model_data_count.surface_data_count);
-		if (uvw_tag == nullptr)
-		{
-			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		}
-		NormalHandle normal_handle = normal_tag->GetDataAddressW();
-		UVWHandle uvw_handle = uvw_tag->GetDataAddressW();
-		Int32 surface_data_count = pmx_model->model_data_count.surface_data_count;
-		for (Int32 i = 0; i < surface_data_count; i++)
-		{
-			if (i % 1000 == 0) {
-				StatusSetText("Import surface " + String::IntToString(i) + "of " + String::IntToString(surface_data_count));
-				StatusSetBar(i * 100 / surface_data_count);
+			UVWTag* uvw_tag = nullptr;
+			UVWHandle uvw_handle = nullptr;
+			if (settings.Import_uv) {
+				uvw_tag = UVWTag::Alloc(pmx_model->model_data_count.surface_data_count);
+				if (uvw_tag == nullptr)
+				{
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				uvw_handle = uvw_tag->GetDataAddressW();
+				model->InsertTag(uvw_tag);
 			}
-			CPolygon* surface = pmx_model->surface_data[i];
-			PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->c];
-			PMX_Vertex_Data* vertex1 = pmx_model->vertex_data[surface->b];
-			PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->a];
-			model_polygon[i] = CPolygon(surface->c, surface->b,surface->a);
-			Vector normal0 = (Vector)vertex0->normal;
-			Vector normal1 = (Vector)vertex1->normal;
-			Vector normal2 = (Vector)vertex2->normal;
-			Vector normal3(0, 0, 0);
-			normal0.Normalize();
-			normal1.Normalize();
-			normal2.Normalize();
-			normal3.Normalize();
-			NormalTag::Set(normal_handle, i, NormalStruct(normal0, normal1, normal2, normal3));
-			UVWTag::Set(uvw_handle, i, UVWStruct(Vector(vertex0->UV.x, vertex0->UV.y, 0), Vector(vertex1->UV.x, vertex1->UV.y, 0), Vector(vertex2->UV.x, vertex2->UV.y, 0)));
+			Int32 surface_data_count = pmx_model->model_data_count.surface_data_count;
+			for (Int32 i = 0; i < surface_data_count; i++)
+			{
+				if (i % 1000 == 0) {
+					StatusSetText("Import surface " + String::IntToString(i) + "of " + String::IntToString(surface_data_count));
+					StatusSetBar(i * 100 / surface_data_count);
+				}
+				CPolygon* surface = pmx_model->surface_data[i];
+				PMX_Vertex_Data* vertex0 = pmx_model->vertex_data[surface->c];
+				PMX_Vertex_Data* vertex1 = pmx_model->vertex_data[surface->b];
+				PMX_Vertex_Data* vertex2 = pmx_model->vertex_data[surface->a];
+				model_polygon[i] = CPolygon(surface->c, surface->b, surface->a);
+				if (settings.Import_normal) {
+					Vector normal0 = (Vector)vertex0->normal;
+					Vector normal1 = (Vector)vertex1->normal;
+					Vector normal2 = (Vector)vertex2->normal;
+					Vector normal3(0, 0, 0);
+					normal0.Normalize();
+					normal1.Normalize();
+					normal2.Normalize();
+					normal3.Normalize();
+					NormalTag::Set(normal_handle, i, NormalStruct(normal0, normal1, normal2, normal3));
+				}
+				if (settings.Import_uv) {
+					UVWTag::Set(uvw_handle, i, UVWStruct(Vector(vertex0->UV.x, vertex0->UV.y, 0), Vector(vertex1->UV.x, vertex1->UV.y, 0), Vector(vertex2->UV.x, vertex2->UV.y, 0)));
+				}
+			}
+			model->SetPhong(true, true, 0.7853982);
+			doc->InsertObject(model, model_, nullptr);
+			BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
+			doc->InsertObject(morphdeformer, model, nullptr);
+			EventAdd();
+			doc->SetMode(Mpolygons);
+			select = model->GetPolygonS();
 		}
-		model->InsertTag(uvw_tag);
-		model->InsertTag(normal_tag); 
-		model->SetPhong(true, true, 0.7853982);
-		doc->InsertObject(model, model_, nullptr);
-		BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
-		doc->InsertObject(morphdeformer, model, nullptr);
-		EventAdd();
 		/*CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
-		if (morph_tag == nullptr) 
+		if (morph_tag == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -1420,122 +1499,127 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				}				
-				maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data->offset_data;	
+				}
+				maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data->offset_data;
 				morph_tag->ExitEdit(doc, true);
 				Int32 offset_count = morph_data->offset_count;
 				for (Int32 j = 0; j < offset_count; j++) //设置变形后点的位置
-				{					
+				{
 					PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
 					model_points[vertex_morph_data.vertex_index] += vertex_morph_data.translation * PositionMultiple;
 				}
 				model_point_obj->Message(MSG_UPDATE);
-				morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);	
+				morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
 				morph_tag->UpdateMorphs();
 				EventAdd();
-				morph->SetName(morph_data->morph_name_local);			
+				morph->SetName(morph_data->morph_name_local);
 				morph->SetStrength(0);
 				for (Int32 j = 0; j < offset_count; j++) //恢复点的位置
 				{
 					PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
 					model_points[vertex_morph_data.vertex_index] = pmx_model->vertex_data[vertex_morph_data.vertex_index]->position * PositionMultiple;
 				}
-				model_point_obj->Message(MSG_UPDATE);		
+				model_point_obj->Message(MSG_UPDATE);
 			}
 		}
 		morph_tag->SetParameter(DescID(ID_CA_POSE_MODE), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);*/
-		doc->SetMode(Mpolygons);
-		BaseSelect* select = model->GetPolygonS();
-		Int32 select_end = 0;
-		Int32 material_data_count = pmx_model->model_data_count.material_data_count;
-		for (Int32 i = 0; i < material_data_count; i++)
-		{
-			StatusSetText("Import materials..."_s);
-			StatusSetBar(i * 100 / material_data_count);
-			PMX_Material_Data* material_data = pmx_model->material_data[i];
-			Material* material = Material::Alloc();
-			if (material == nullptr) {
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			material->SetName(material_data->material_name_local);
-			BaseChannel* basecolor_channel = material->GetChannel(CHANNEL_COLOR);
-			material->SetChannelState(CHANNEL_ALPHA, true);
-			BaseChannel* alpha_channel = material->GetChannel(CHANNEL_ALPHA);
-			if (basecolor_channel == nullptr) {
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			if (material_data->texture_index == -1)
+		if (settings.Import_material) {
+			Int32 material_data_count = pmx_model->model_data_count.material_data_count;
+			for (Int32 i = 0; i < material_data_count; i++)
 			{
-				BaseShader* alpha_shader = BaseShader::Alloc(Xcolor);
-				alpha_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(1, 1, 1), DESCFLAGS_SET::NONE);
-				alpha_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
-				material->SetParameter(DescID(MATERIAL_ALPHA_SHADER), alpha_shader, DESCFLAGS_SET::NONE);
-				material->InsertShader(alpha_shader);
-				BaseShader* basecolor_shader = BaseShader::Alloc(Xcolor);
-				basecolor_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
-				basecolor_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
-				material->SetParameter(DescID(MATERIAL_COLOR_SHADER), basecolor_shader, DESCFLAGS_SET::NONE);
-				material->InsertShader(basecolor_shader);
-			}
-			else
-			{
-				String texture = pmx_model->texture_data[material_data->texture_index];
-				Filename texture_file(texture);
-				if (texture_file.CheckSuffix("png"_s) || texture_file.CheckSuffix("PNG"_s) || texture_file.CheckSuffix("Png"_s) || texture_file.CheckSuffix("pNg"_s) || texture_file.CheckSuffix("pnG"_s) || texture_file.CheckSuffix("PNg"_s) || texture_file.CheckSuffix("pNG"_s))
-				{
-					BaseContainer bc;
-					bc = basecolor_channel->GetData();
-					material->SetParameter(DescID(MATERIAL_COLOR_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
-					bc.SetString(BASECHANNEL_TEXTURE, path + texture);
-					basecolor_channel->SetData(bc);
-					bc = alpha_channel->GetData();
-					bc.SetString(BASECHANNEL_TEXTURE, path + texture);
-					alpha_channel->SetData(bc);
+				StatusSetText("Import materials..."_s);
+				StatusSetBar(i * 100 / material_data_count);
+				PMX_Material_Data* material_data = pmx_model->material_data[i];
+				Material* material = Material::Alloc();
+				if (material == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 				}
-				else {
-					BaseContainer bc;
-					bc = basecolor_channel->GetData();
-					material->SetParameter(DescID(MATERIAL_COLOR_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
-					bc.SetString(BASECHANNEL_TEXTURE, path + texture);
-					basecolor_channel->SetData(bc);
+				material->SetName(material_data->material_name_local);
+				BaseChannel* basecolor_channel = material->GetChannel(CHANNEL_COLOR);
+				material->SetChannelState(CHANNEL_ALPHA, true);
+				BaseChannel* alpha_channel = material->GetChannel(CHANNEL_ALPHA);
+				if (basecolor_channel == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
+				if (material_data->texture_index == -1)
+				{
 					BaseShader* alpha_shader = BaseShader::Alloc(Xcolor);
 					alpha_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(1, 1, 1), DESCFLAGS_SET::NONE);
 					alpha_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
 					material->SetParameter(DescID(MATERIAL_ALPHA_SHADER), alpha_shader, DESCFLAGS_SET::NONE);
 					material->InsertShader(alpha_shader);
-				}				
+					BaseShader* basecolor_shader = BaseShader::Alloc(Xcolor);
+					basecolor_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
+					basecolor_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
+					material->SetParameter(DescID(MATERIAL_COLOR_SHADER), basecolor_shader, DESCFLAGS_SET::NONE);
+					material->InsertShader(basecolor_shader);
+				}
+				else
+				{
+					String texture = pmx_model->texture_data[material_data->texture_index];
+					Filename texture_file(texture);
+					if (texture_file.CheckSuffix("png"_s) || texture_file.CheckSuffix("PNG"_s) || texture_file.CheckSuffix("Png"_s) || texture_file.CheckSuffix("pNg"_s) || texture_file.CheckSuffix("pnG"_s) || texture_file.CheckSuffix("PNg"_s) || texture_file.CheckSuffix("pNG"_s))
+					{
+						BaseContainer bc;
+						bc = basecolor_channel->GetData();
+						material->SetParameter(DescID(MATERIAL_COLOR_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
+						bc.SetString(BASECHANNEL_TEXTURE, path + texture);
+						basecolor_channel->SetData(bc);
+						bc = alpha_channel->GetData();
+						bc.SetString(BASECHANNEL_TEXTURE, path + texture);
+						alpha_channel->SetData(bc);
+					}
+					else {
+						BaseContainer bc;
+						bc = basecolor_channel->GetData();
+						material->SetParameter(DescID(MATERIAL_COLOR_COLOR), Vector(material_data->diffuse_colour), DESCFLAGS_SET::NONE);
+						bc.SetString(BASECHANNEL_TEXTURE, path + texture);
+						basecolor_channel->SetData(bc);
+						BaseShader* alpha_shader = BaseShader::Alloc(Xcolor);
+						alpha_shader->SetParameter(DescID(COLORSHADER_COLOR), Vector(1, 1, 1), DESCFLAGS_SET::NONE);
+						alpha_shader->SetParameter(DescID(COLORSHADER_BRIGHTNESS), material_data->diffuse_colour.w, DESCFLAGS_SET::NONE);
+						material->SetParameter(DescID(MATERIAL_ALPHA_SHADER), alpha_shader, DESCFLAGS_SET::NONE);
+						material->InsertShader(alpha_shader);
+					}
+				}
+				doc->InsertMaterial(material);
+				if (settings.Import_polygon) {
+					doc->SetSelection(model);
+					select->SelectAll(select_end, select_end + material_data->surface_count - 1);
+					select_end += material_data->surface_count;
+					CallCommand(12552);
+					doc->GetActiveTag()->SetName(material_data->material_name_local);
+					TextureTag* texture_tag = TextureTag::Alloc();
+					if (texture_tag == nullptr)
+					{
+						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+						return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					}
+					texture_tag->SetMaterial(material);
+					texture_tag->SetName(material_data->material_name_local);
+					texture_tag->SetParameter(DescID(TEXTURETAG_RESTRICTION), material_data->material_name_local, DESCFLAGS_SET::NONE);
+					texture_tag->SetParameter(DescID(TEXTURETAG_PROJECTION), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
+					model->InsertTag(texture_tag, doc->GetActiveTag());
+				}
 			}
-			doc->InsertMaterial(material);
-			doc->SetSelection(model);
-			select->SelectAll(select_end, select_end + material_data->surface_count - 1);
-			select_end += material_data->surface_count;
-			CallCommand(12552);
-			doc->GetActiveTag()->SetName(material_data->material_name_local);
-			TextureTag* texture_tag = TextureTag::Alloc();
-			if (texture_tag == nullptr)
-			{
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			}
-			texture_tag->SetMaterial(material);
-			texture_tag->SetName(material_data->material_name_local);
-			texture_tag->SetParameter(DescID(TEXTURETAG_RESTRICTION), material_data->material_name_local, DESCFLAGS_SET::NONE);
-			texture_tag->SetParameter(DescID(TEXTURETAG_PROJECTION), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
-			model->InsertTag(texture_tag, doc->GetActiveTag());
 		}
 		EventAdd();	
-		select->SelectAll(0, surface_data_count - 1);
-		CallCommand(14039);
-		select->DeselectAll();
-		doc->SetMode(Mmodel);
-		doc->SetSelection(nullptr);
-		weight_tag->SetBindPose(doc, false);
-		CAWeightMgr::NormalizeWeights(doc);
+		if (settings.Import_polygon) {
+			select->SelectAll(0, model->GetPolygonCount() - 1);
+			CallCommand(14039);
+			select->DeselectAll();
+			doc->SetMode(Mmodel);
+			doc->SetSelection(nullptr);
+		}
+		if (settings.Import_weights) {
+			weight_tag->SetBindPose(doc, false);
+			CAWeightMgr::NormalizeWeights(doc);
+		}
 	}
 	StatusClear();
 	return maxon::OK;

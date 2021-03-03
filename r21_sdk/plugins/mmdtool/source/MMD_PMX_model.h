@@ -334,11 +334,25 @@ namespace mmd {
 		~PMX_Joint_Data() {};
 	};
 
-	struct pointO_point
+	struct object_point
 	{
-		PolygonObject* pointO;
+		PolygonObject* object;
 		Int32 point;
-		pointO_point(PolygonObject*& pointO_, Int32  point_) :pointO(pointO_), point(point_) {}
+		object_point(PolygonObject*& object_, Int32  point_) :object(object_), point(point_) {}
+	};
+
+	struct PMX_Model_import_settings
+	{
+		Bool Import_polygon;
+		Bool Import_normal;
+		Bool Import_uv;
+		Bool Import_material;
+		Bool Import_bone;
+		Bool Import_weights;
+		Bool Import_ik;
+		Bool Import_inherit;
+		Bool Import_expression;
+		Bool Import_multipart;
 	};
 
 	class PMXModel
@@ -378,7 +392,7 @@ namespace mmd {
 		~PMXModel();
 		maxon::Result<void> LoadFromFile(BaseFile* const file);
 		maxon::Result<void> WriteToFile(BaseFile* const file);
-		static maxon::Result<void> FromFileImportModel(Float &PositionMultiple, Bool& Separate);
+		static maxon::Result<void> FromFileImportModel(Float &PositionMultiple, PMX_Model_import_settings& settings);
 	};
 }
 #endif __MMD_VMD_MODEl_H__
