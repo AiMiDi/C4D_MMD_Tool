@@ -1,4 +1,4 @@
-#ifndef __MMD_PMX_TAG_H__
+﻿#ifndef __MMD_PMX_TAG_H__
 #define __MMD_PMX_TAG_H__
 
 #include "main.h"

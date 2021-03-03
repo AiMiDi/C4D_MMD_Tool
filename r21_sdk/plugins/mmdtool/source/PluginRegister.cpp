@@ -29,11 +29,27 @@ enum                                // Uniquely identify all your dialog element
 
 	DLG_PMX_MOD_IMPORT_SIZE_NAME,
 	DLG_PMX_MOD_IMPORT_SIZE,
-	DLG_PMX_MOD_IMPORT_MULTIPART,
+	/*
+	多边形Polygon  法线Normal
+	UV             材质Material 
+	骨骼Bone       权重Weights
+	IK             付予Inherit 
+	表情Expression 分部分Multipart
+	*/
+	DLG_PMX_MOD_IMPORT_POLYGON,//多边形Polygon
+	DLG_PMX_MOD_IMPORT_NORMAL,//法线Normal
+	DLG_PMX_MOD_IMPORT_UV,//UV
+	DLG_PMX_MOD_IMPORT_MATERIAL,//材质Material 
+	DLG_PMX_MOD_IMPORT_BONE,//骨骼Bone
+	DLG_PMX_MOD_IMPORT_WEIGHTS,//权重Weights
+	DLG_PMX_MOD_IMPORT_IK,//IK
+	DLG_PMX_MOD_IMPORT_INHERIT,//付予Inherit 
+	DLG_PMX_MOD_IMPORT_EXPRESSION,//表情Expression
+	DLG_PMX_MOD_IMPORT_MULTIPART,//分部分Multipart
 	DLG_PMX_MOD_IMPORT_BUTTON,
 };
 
-class MMDToolDialog : public GeDialog
+class MMDToolDialog : public GeDialog 
 {
 public:
 	MMDToolDialog(void) {}
@@ -140,8 +156,21 @@ public:
 		AddEditNumberArrows(DLG_PMX_MOD_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		AddCheckbox(DLG_PMX_MOD_IMPORT_MULTIPART, BFH_LEFT, 0, 0, GeLoadString(IDS_PMX_MOD_IMPORT_MULTIPART_NAME));
-
+		GroupBegin(1007, BFH_CENTER, 2, 5, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
+		GroupBorder(BORDER_GROUP_IN);
+		GroupBorderSpace(5, 5, 5, 10);
+		AddCheckbox(DLG_PMX_MOD_IMPORT_POLYGON, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_POLYGON));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_NORMAL, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_NORMAL));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_UV, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_UV));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_MATERIAL, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_MATERIAL));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_BONE, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_BONE));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_WEIGHTS, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_WEIGHTS));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_IK, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_IK));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_INHERIT, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_INHERIT));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_EXPRESSION, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_EXPRESSION));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_MULTIPART, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_MULTIPART));
+		GroupEnd();
+	
 		AddButton(DLG_PMX_MOD_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_PMX_MOD_IMPORT_BUTTON));
 		GroupEnd();
 		//ImportModelEnd
@@ -156,16 +185,25 @@ public:
 
 	virtual Bool InitValues(void)
 	{
-		GeDialog::SetFloat(DLG_VMD_CAM_IMPORT_SIZE, 8.5, 0, 100);
-		GeDialog::SetFloat(DLG_VMD_CAM_IMPORT_OFFSET, 0);
-		GeDialog::SetFloat(DLG_VMD_CAM_EXPORT_SIZE, 0.118, 0, 100);
-		GeDialog::SetFloat(DLG_VMD_CAM_EXPORT_OFFSET, 0);
-		GeDialog::SetFloat(DLG_VMD_MOT_IMPORT_SIZE, 8.5, 0, 100);
-		GeDialog::SetFloat(DLG_VMD_MOT_IMPORT_OFFSET, 0);
-		GeDialog::SetBool(DLG_VMD_MOT_IMPORT_QUAT, 1);
-		GeDialog::SetBool(DLG_VMD_MOT_IMPORT_DETAIL, 0);
-		GeDialog::SetFloat(DLG_PMX_MOD_IMPORT_SIZE, 8.5, 0, 100);
-		GeDialog::SetBool(DLG_PMX_MOD_IMPORT_MULTIPART, 1);
+		SetFloat(DLG_VMD_CAM_IMPORT_SIZE, 8.5, 0, 100);
+		SetFloat(DLG_VMD_CAM_IMPORT_OFFSET, 0);
+		SetFloat(DLG_VMD_CAM_EXPORT_SIZE, 0.118, 0, 100);
+		SetFloat(DLG_VMD_CAM_EXPORT_OFFSET, 0);
+		SetFloat(DLG_VMD_MOT_IMPORT_SIZE, 8.5, 0, 100);
+		SetFloat(DLG_VMD_MOT_IMPORT_OFFSET, 0);
+		SetBool(DLG_VMD_MOT_IMPORT_QUAT, 1);
+		SetBool(DLG_VMD_MOT_IMPORT_DETAIL, 0);
+		SetFloat(DLG_PMX_MOD_IMPORT_SIZE, 8.5, 0, 100);
+		SetBool(DLG_PMX_MOD_IMPORT_POLYGON, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_NORMAL, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_UV, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_MATERIAL, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_BONE, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_IK, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_INHERIT, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_MULTIPART, 1);
 		return true;
 	}
 
@@ -181,51 +219,110 @@ public:
 		{
 			Float PositionMultiple_;
 			Float TimeOffset_;
-			GeDialog::GetFloat(DLG_VMD_CAM_IMPORT_SIZE, PositionMultiple_);
-			GeDialog::GetFloat(DLG_VMD_CAM_IMPORT_OFFSET, TimeOffset_);
+			GetFloat(DLG_VMD_CAM_IMPORT_SIZE, PositionMultiple_);
+			GetFloat(DLG_VMD_CAM_IMPORT_OFFSET, TimeOffset_);
 			iferr(mmd::VMDAnimation::FromFileImportCamera(PositionMultiple_, TimeOffset_))
 			{
 				return false;
 			}
-			return true;
+			break;
 		}
 		case (DLG_VMD_CAM_EXPORT_BUTTON):
 		{
 			Float PositionMultiple_;
 			Float TimeOffset_;
-			GeDialog::GetFloat(DLG_VMD_CAM_EXPORT_SIZE, PositionMultiple_);
-			GeDialog::GetFloat(DLG_VMD_CAM_EXPORT_OFFSET, TimeOffset_);
+			GetFloat(DLG_VMD_CAM_EXPORT_SIZE, PositionMultiple_);
+			GetFloat(DLG_VMD_CAM_EXPORT_OFFSET, TimeOffset_);
 			iferr(mmd::VMDAnimation::FromDocumentExportCamera(PositionMultiple_, TimeOffset_))
 			{
 				return false;
 			}
-			return true;
+			break;
 		}
 		case (DLG_VMD_MOT_IMPORT_BUTTON):
 		{
-			Float PositionMultiple_,TimeOffset_;
+			Float PositionMultiple_, TimeOffset_;
 			Bool QuaternionRotationSW_, DetailReport_;
-			GeDialog::GetFloat(DLG_VMD_MOT_IMPORT_SIZE, PositionMultiple_);
-			GeDialog::GetFloat(DLG_VMD_MOT_IMPORT_OFFSET, TimeOffset_);
-			GeDialog::GetBool(DLG_VMD_MOT_IMPORT_QUAT, QuaternionRotationSW_);
-			GeDialog::GetBool(DLG_VMD_MOT_IMPORT_DETAIL, DetailReport_);
+			GetFloat(DLG_VMD_MOT_IMPORT_SIZE, PositionMultiple_);
+			GetFloat(DLG_VMD_MOT_IMPORT_OFFSET, TimeOffset_);
+			GetBool(DLG_VMD_MOT_IMPORT_QUAT, QuaternionRotationSW_);
+			GetBool(DLG_VMD_MOT_IMPORT_DETAIL, DetailReport_);
 			iferr(mmd::VMDAnimation::FromFileImportMotions(PositionMultiple_, TimeOffset_, QuaternionRotationSW_, DetailReport_))
 			{
 				return false;
 			}
-			return true;
+			break;
 		}
 		case (DLG_PMX_MOD_IMPORT_BUTTON):
 		{
 			Float PositionMultiple_;
-			Bool Separate_ = 0;
-			GeDialog::GetFloat(DLG_PMX_MOD_IMPORT_SIZE, PositionMultiple_);
-			GeDialog::GetBool(DLG_PMX_MOD_IMPORT_MULTIPART, Separate_);
-			iferr(mmd::PMXModel::FromFileImportModel(PositionMultiple_, Separate_))
+			GetFloat(DLG_PMX_MOD_IMPORT_SIZE, PositionMultiple_);
+			mmd::PMX_Model_import_settings settings_;
+			GetBool(DLG_PMX_MOD_IMPORT_POLYGON, settings_.Import_polygon);
+			GetBool(DLG_PMX_MOD_IMPORT_NORMAL, settings_.Import_normal);
+			GetBool(DLG_PMX_MOD_IMPORT_UV, settings_.Import_uv);
+			GetBool(DLG_PMX_MOD_IMPORT_MATERIAL, settings_.Import_material);
+			GetBool(DLG_PMX_MOD_IMPORT_BONE, settings_.Import_bone);
+			GetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, settings_.Import_weights);
+			GetBool(DLG_PMX_MOD_IMPORT_IK, settings_.Import_ik);
+			GetBool(DLG_PMX_MOD_IMPORT_INHERIT, settings_.Import_inherit);
+			GetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, settings_.Import_expression);
+			GetBool(DLG_PMX_MOD_IMPORT_MULTIPART, settings_.Import_multipart);
+			iferr(mmd::PMXModel::FromFileImportModel(PositionMultiple_, settings_))
 			{
 				return false;
 			}
-			return true;
+			break;
+		}
+		case (DLG_PMX_MOD_IMPORT_BONE):
+		{
+			Bool Import_bone = 0;
+			GetBool(DLG_PMX_MOD_IMPORT_BONE, Import_bone);
+
+			if (Import_bone == 0) {
+				SetBool(DLG_PMX_MOD_IMPORT_IK, 0);
+				SetBool(DLG_PMX_MOD_IMPORT_INHERIT, 0);
+				SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, 0);
+				Enable(DLG_PMX_MOD_IMPORT_WEIGHTS, false);
+				Enable(DLG_PMX_MOD_IMPORT_IK, false);
+				Enable(DLG_PMX_MOD_IMPORT_INHERIT, false);
+			}
+			else {
+				Enable(DLG_PMX_MOD_IMPORT_WEIGHTS, true);
+				Enable(DLG_PMX_MOD_IMPORT_IK, true);
+				Enable(DLG_PMX_MOD_IMPORT_INHERIT, true);
+				SetBool(DLG_PMX_MOD_IMPORT_IK, 1);
+				SetBool(DLG_PMX_MOD_IMPORT_INHERIT, 1);
+				SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, 1);
+			}
+			break;
+		}	
+		case (DLG_PMX_MOD_IMPORT_POLYGON):
+		{
+			Bool Import_polygon = 0;
+			GetBool(DLG_PMX_MOD_IMPORT_POLYGON, Import_polygon);
+
+			if (Import_polygon == 0) {
+				SetBool(DLG_PMX_MOD_IMPORT_NORMAL, 0);
+				SetBool(DLG_PMX_MOD_IMPORT_UV, 0);
+				SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, 0);
+				SetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, 0);
+				Enable(DLG_PMX_MOD_IMPORT_WEIGHTS, false);
+				Enable(DLG_PMX_MOD_IMPORT_NORMAL, false);
+				Enable(DLG_PMX_MOD_IMPORT_UV, false);
+				Enable(DLG_PMX_MOD_IMPORT_EXPRESSION, false);
+			}
+			else {
+				Enable(DLG_PMX_MOD_IMPORT_WEIGHTS, true);
+				Enable(DLG_PMX_MOD_IMPORT_NORMAL, true);
+				Enable(DLG_PMX_MOD_IMPORT_UV, true);
+				Enable(DLG_PMX_MOD_IMPORT_EXPRESSION, true);
+				SetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, 1);
+				SetBool(DLG_PMX_MOD_IMPORT_NORMAL, 1);
+				SetBool(DLG_PMX_MOD_IMPORT_UV, 1);
+				SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, 1);
+			}
+			break;
 		}
 		}
 		return true;
