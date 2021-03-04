@@ -1267,7 +1267,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float& PositionM
 	return maxon::OK;
 }
 
-maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float &PositionMultiple, Float &TimeOffset, Bool &QuaternionRotationSW, Bool DetailReport) {
+maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMultiple, Float& TimeOffset, Bool& QuaternionRotationSW, Bool& DetailReport, Bool& ByTag) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc<BaseFile> file;
@@ -1337,7 +1337,21 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float &PositionMult
 		{
 			if (node->GetType() == Ojoint)
 			{
-				bone_name_map.Insert(node->GetName(), node)iferr_return;
+				if (ByTag) {
+					BaseTag* node_tag = node->GetTag(ID_PMX_BONE_TAG);
+					if (node_tag != nullptr) {						
+						GeData data;
+						node_tag->GetParameter(DescID(1001), data, DESCFLAGS_GET::NONE);//BONE_NAME_LOCAL = 1001
+						String node_name = data.GetString();
+						bone_name_map.Insert(node_name, node)iferr_return;
+					}
+					else {
+						bone_name_map.Insert(node->GetName(), node)iferr_return;
+					}
+				}
+				else {
+					bone_name_map.Insert(node->GetName(), node)iferr_return;
+				}			
 			}
 			BaseTag* const tag = node->GetTag(Tposemorph);
 			if (tag != nullptr && tag->IsInstanceOf(Tposemorph))

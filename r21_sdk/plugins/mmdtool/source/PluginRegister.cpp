@@ -25,6 +25,7 @@ enum                                // Uniquely identify all your dialog element
 	DLG_VMD_MOT_IMPORT_OFFSET,
 	DLG_VMD_MOT_IMPORT_QUAT,
 	DLG_VMD_MOT_IMPORT_DETAIL,
+	DLG_VMD_MOT_IMPORT_BY_TAG,
 	DLG_VMD_MOT_IMPORT_BUTTON,
 
 	DLG_PMX_MOD_IMPORT_SIZE_NAME,
@@ -46,6 +47,8 @@ enum                                // Uniquely identify all your dialog element
 	DLG_PMX_MOD_IMPORT_INHERIT,//付予Inherit 
 	DLG_PMX_MOD_IMPORT_EXPRESSION,//表情Expression
 	DLG_PMX_MOD_IMPORT_MULTIPART,//分部分Multipart
+	DLG_PMX_MOD_IMPORT_ENGLISH,
+	DLG_PMX_MOD_IMPORT_ENGLISH_CHECK,
 	DLG_PMX_MOD_IMPORT_BUTTON,
 };
 
@@ -133,9 +136,10 @@ public:
 		AddEditNumberArrows(DLG_VMD_MOT_IMPORT_OFFSET, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1004, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+		GroupBegin(1004, BFH_LEFT, 3, 1, ""_s, 0, 350, 10);
 		AddCheckbox(DLG_VMD_MOT_IMPORT_QUAT, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_QUAT_NAME));
 		AddCheckbox(DLG_VMD_MOT_IMPORT_DETAIL, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_DETAIL_NAME));
+		AddCheckbox(DLG_VMD_MOT_IMPORT_BY_TAG, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_BY_TAG));
 		GroupEnd();
 
 		AddButton(DLG_VMD_MOT_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_MOT_IMPORT_BUTTON));
@@ -156,7 +160,7 @@ public:
 		AddEditNumberArrows(DLG_PMX_MOD_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1007, BFH_CENTER, 2, 5, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
+		GroupBegin(1007, BFH_CENTER, 2, 6, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		AddCheckbox(DLG_PMX_MOD_IMPORT_POLYGON, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_POLYGON));
@@ -169,6 +173,8 @@ public:
 		AddCheckbox(DLG_PMX_MOD_IMPORT_INHERIT, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_INHERIT));
 		AddCheckbox(DLG_PMX_MOD_IMPORT_EXPRESSION, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_EXPRESSION));
 		AddCheckbox(DLG_PMX_MOD_IMPORT_MULTIPART, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_MULTIPART));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_ENGLISH, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_ENGLISH));
+		AddCheckbox(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_ENGLISH_CHECK));
 		GroupEnd();
 	
 		AddButton(DLG_PMX_MOD_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_PMX_MOD_IMPORT_BUTTON));
@@ -193,6 +199,7 @@ public:
 		SetFloat(DLG_VMD_MOT_IMPORT_OFFSET, 0);
 		SetBool(DLG_VMD_MOT_IMPORT_QUAT, 1);
 		SetBool(DLG_VMD_MOT_IMPORT_DETAIL, 0);
+		SetBool(DLG_VMD_MOT_IMPORT_BY_TAG, 1);
 		SetFloat(DLG_PMX_MOD_IMPORT_SIZE, 8.5, 0, 100);
 		SetBool(DLG_PMX_MOD_IMPORT_POLYGON, 1);
 		SetBool(DLG_PMX_MOD_IMPORT_NORMAL, 1);
@@ -204,6 +211,8 @@ public:
 		SetBool(DLG_PMX_MOD_IMPORT_INHERIT, 1);
 		SetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, 1);
 		SetBool(DLG_PMX_MOD_IMPORT_MULTIPART, 1);
+		SetBool(DLG_PMX_MOD_IMPORT_ENGLISH, 0);
+		SetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, 0);
 		return true;
 	}
 
@@ -242,12 +251,13 @@ public:
 		case (DLG_VMD_MOT_IMPORT_BUTTON):
 		{
 			Float PositionMultiple_, TimeOffset_;
-			Bool QuaternionRotationSW_, DetailReport_;
+			Bool QuaternionRotationSW_, DetailReport_,ByTag_;
 			GetFloat(DLG_VMD_MOT_IMPORT_SIZE, PositionMultiple_);
 			GetFloat(DLG_VMD_MOT_IMPORT_OFFSET, TimeOffset_);
 			GetBool(DLG_VMD_MOT_IMPORT_QUAT, QuaternionRotationSW_);
 			GetBool(DLG_VMD_MOT_IMPORT_DETAIL, DetailReport_);
-			iferr(mmd::VMDAnimation::FromFileImportMotions(PositionMultiple_, TimeOffset_, QuaternionRotationSW_, DetailReport_))
+			GetBool(DLG_VMD_MOT_IMPORT_BY_TAG, ByTag_);
+			iferr(mmd::VMDAnimation::FromFileImportMotions(PositionMultiple_, TimeOffset_, QuaternionRotationSW_, DetailReport_, ByTag_))
 			{
 				return false;
 			}
@@ -268,6 +278,8 @@ public:
 			GetBool(DLG_PMX_MOD_IMPORT_INHERIT, settings_.Import_inherit);
 			GetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, settings_.Import_expression);
 			GetBool(DLG_PMX_MOD_IMPORT_MULTIPART, settings_.Import_multipart);
+			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH, settings_.Import_english);
+			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, settings_.Import_english_check);
 			iferr(mmd::PMXModel::FromFileImportModel(PositionMultiple_, settings_))
 			{
 				return false;
@@ -321,6 +333,19 @@ public:
 				SetBool(DLG_PMX_MOD_IMPORT_NORMAL, 1);
 				SetBool(DLG_PMX_MOD_IMPORT_UV, 1);
 				SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, 1);
+			}
+			break;
+		}
+		case (DLG_PMX_MOD_IMPORT_ENGLISH):
+		{
+			Bool Import_english = 0;
+			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH, Import_english);
+
+			if (Import_english == 0) {
+				SetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, 0);
+			}
+			else {
+				SetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, 1);
 			}
 			break;
 		}

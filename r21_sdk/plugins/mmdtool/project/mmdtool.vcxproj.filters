@@ -45,6 +45,9 @@
     <ClCompile Include="..\source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\NameConversion.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\res\c4d_symbols.h">
@@ -69,6 +72,9 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\source\main.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NameConversion.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
