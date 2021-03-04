@@ -41,6 +41,7 @@ STRINGTABLE
 	IDS_VMD_MOT_IMPORT_OFFSET_NAME "Offset";
 	IDS_VMD_MOT_IMPORT_QUAT_NAME "Quaternion rotation";
 	IDS_VMD_MOT_IMPORT_DETAIL_NAME "Detail report";
+    IDS_VMD_MOT_IMPORT_BY_TAG "By tag";
 	IDS_VMD_MOT_IMPORT_BUTTON "Import";
 
 	IDS_PMX_MOD_TOOL_TITLE "Model";
@@ -57,7 +58,11 @@ STRINGTABLE
 	IDS_PMX_MOD_IMPORT_INHERIT "Inherit";
 	IDS_PMX_MOD_IMPORT_EXPRESSION "Expression";
 	IDS_PMX_MOD_IMPORT_MULTIPART "Multipart";
+	IDS_PMX_MOD_IMPORT_ENGLISH "English";
+	IDS_PMX_MOD_IMPORT_ENGLISH_CHECK "Check english";
 	IDS_PMX_MOD_IMPORT_BUTTON "Import";
+
+	IDS_UPDATA_NAME_CONVERSION_TITLE "Manually confirm English(If it is not filled in, it will be generated automatically.)";
 
 	IDS_PMX_MATERIAL_TAG "PMX_Material_Tag";
 	IDS_PMX_BONE_TAG "PMX_Bone_Tag";

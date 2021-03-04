@@ -352,6 +352,8 @@ namespace mmd {
 		Bool Import_ik;
 		Bool Import_inherit;
 		Bool Import_expression;
+		Bool Import_english;
+		Bool Import_english_check;
 		Bool Import_multipart;
 	};
 

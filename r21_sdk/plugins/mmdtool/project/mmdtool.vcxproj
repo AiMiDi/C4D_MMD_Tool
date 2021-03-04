@@ -181,6 +181,7 @@
     <ClCompile Include="..\source\MMD_PMX_model.cpp" />
     <ClCompile Include="..\source\MMD_PMX_tag.cpp" />
     <ClCompile Include="..\source\MMD_VMD_animation.cpp" />
+    <ClCompile Include="..\source\NameConversion.cpp" />
     <ClCompile Include="..\source\PluginRegister.cpp" />
     <ClCompile Include="..\source\main.cpp" />
   </ItemGroup>
@@ -193,6 +194,7 @@
     <ClInclude Include="..\source\MMD_PMX_tag.h" />
     <ClInclude Include="..\source\MMD_VMD_animation.h" />
     <ClInclude Include="..\source\main.h" />
+    <ClInclude Include="..\source\NameConversion.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\res\description\PMX_Bone_Tag.res" />

@@ -588,9 +588,14 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 	path.Delete(path.GetLength() - fn.GetFileString().GetLength(), fn.GetFileString().GetLength());
 	file->Close();
 	file.Free();
-	if (settings.Import_multipart) {
-		BaseObject* model_ = BaseObject::Alloc(Onull);
-		model_->SetName(pmx_model->model_info.model_name_local);
+	if (settings.Import_multipart) {	
+		NameConversion name_conversion;
+		BaseObject* model_ = BaseObject::Alloc(Onull);	
+		if (settings.Import_english) {
+			model_->SetName("Model"_s);
+		}else{
+			model_->SetName(pmx_model->model_info.model_name_local);
+		}	
 		doc->InsertObject(model_, nullptr, nullptr);
 		BaseObject* meshes = nullptr;
 		if (settings.Import_polygon) {
@@ -616,8 +621,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
 			{
 				PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
-				BaseObject* bone = BaseObject::Alloc(Ojoint);
-				bone->SetName(bone_data_->bone_name_local);
+				BaseObject* bone = BaseObject::Alloc(Ojoint);				
+				name_conversion.InitConver(bone_data_->bone_name_local);
 				if (bone_data_->parent_bone_index == -1)
 				{
 					bone->SetFrozenPos(bone_data_->position * PositionMultiple);
@@ -630,10 +635,23 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				bone_map.Insert(i, bone)iferr_return;
 			}
 			EventAdd();
+			if (settings.Import_english_check) {
+				name_conversion.CheckUpdata();
+			}
+			else {
+				name_conversion.AutoUpdata();
+			}
 			for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
 			{
 				PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
+				name_conversion.Conver(bone_data_->bone_name_local, bone_data_->bone_name_universal);			
 				BaseObject* bone = bone_map.Find(i)->GetValue();
+				if (settings.Import_english) {
+					bone->SetName(bone_data_->bone_name_universal);
+				}
+				else {
+					bone->SetName(bone_data_->bone_name_local);
+				}				
 				BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
 				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(BONE_NAME_LOCAL), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
@@ -699,7 +717,12 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 					if (bone_data_->bone_flags.IK == 1)
 					{
 						BaseTag* IK_tag = bone_map.Find((*(bone_data_->IK_links.End() - 1))->bone_index)->GetValue()->MakeTag(1019561);//Ik Tag ID : 1019561	
-						IK_tag->SetName(bone_data_->bone_name_local);
+						if (settings.Import_english) {
+							IK_tag->SetName(bone_data_->bone_name_universal);
+						}
+						else {
+							IK_tag->SetName(bone_data_->bone_name_local);
+						}
 						IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
 						BaseLink* target_link = BaseLink::Alloc();
 						if (target_link == nullptr) {
@@ -747,7 +770,12 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			CAWeightTag* weight_tag = nullptr;
 			if (settings.Import_polygon) {
 				part = PolygonObject::Alloc(material_data->surface_count * 3, material_data->surface_count);
-				part->SetName(material_data->material_name_local);
+				if (settings.Import_english) {
+					part->SetName("Material_" + String::IntToString(j));
+				}
+				else {
+					part->SetName(material_data->material_name_local);
+				}
 				Vector* part_points = part->GetPointW();
 				CPolygon* part_polygon = part->GetPolygonW();				
 				if (settings.Import_weights) {
@@ -1104,7 +1132,12 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 				}
-				material->SetName(material_data->material_name_local);
+				if (settings.Import_english) {
+					material->SetName("Material_"+String::IntToString(j));
+				}
+				else {
+					material->SetName(material_data->material_name_local);
+				}			
 				BaseChannel* basecolor_channel = material->GetChannel(CHANNEL_COLOR);
 				material->SetChannelState(CHANNEL_ALPHA, true);
 				BaseChannel* alpha_channel = material->GetChannel(CHANNEL_ALPHA);
