@@ -5,6 +5,9 @@ enum
 	PMX_BONE_INFO_GRP = 1000,
 	BONE_NAME_LOCAL,//骨骼本地名称
 	BONE_NAME_UNIVERSAL,//骨骼通用名称
+	BONE_NAME_IS,//骨骼显示名称	
+
+
 	POSITION,//位置
 
 	PMX_BONE_PARENT_BONE_GRP,//亲骨组
@@ -24,9 +27,8 @@ enum
 
 	PMX_BONE_END_OF_BONE_GRP,//骨骼末端
 	INDEXED_TAIL_POSITION,//骨骼尾部(尖端)位置
-	TAIL_IS_INDEX = 1,//是连接子骨骼
-	TAIL_IS_POSITION = 0,//是连接相对位置
-	TAIL_INDEX = 1018,//子骨骼索引
+
+	TAIL_INDEX,//子骨骼索引
 	TAIL_POSITION,//相对位置
 
 	PMX_BONE_INHERIT_GRP,//骨骼继承组
@@ -44,5 +46,12 @@ enum
 	LOCAL_COORDINATE,//启用Local轴
 	BONE_LOCAL_X,//骨骼Local坐标-X矢量
 	BONE_LOCAL_Z,//骨骼Local坐标-Z矢量
+
+	NAME_IS_LOCAL = 0,//骨骼使用本地名称
+	NAME_IS_UNIVERSAL = 1,//骨骼使用通用名称
+
+	TAIL_IS_INDEX = 0,//是连接子骨骼
+	TAIL_IS_POSITION = 1,//是连接相对位置
+
 };
 #endif _PMX_BONE_TAG_H_

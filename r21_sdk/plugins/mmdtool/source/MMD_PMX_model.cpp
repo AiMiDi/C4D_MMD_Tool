@@ -644,18 +644,15 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
 			{
 				PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
-				name_conversion.Conver(bone_data_->bone_name_local, bone_data_->bone_name_universal);			
-				BaseObject* bone = bone_map.Find(i)->GetValue();
-				if (settings.Import_english) {
-					bone->SetName(bone_data_->bone_name_universal);
-				}
-				else {
-					bone->SetName(bone_data_->bone_name_local);
+				if (bone_data_->bone_name_universal == ""_s) {
+					name_conversion.Conver(bone_data_->bone_name_local, bone_data_->bone_name_universal);			
 				}				
+				BaseObject* bone = bone_map.Find(i)->GetValue();			
 				BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
 				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(BONE_NAME_LOCAL), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(BONE_NAME_UNIVERSAL), bone_data_->bone_name_universal, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(BONE_NAME_IS), settings.Import_english, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(POSITION), bone_data_->position * PositionMultiple, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PARENT_BONE_INDEX), bone_data_->parent_bone_index, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(ROTATABLE), bone_data_->bone_flags.Rotatable, DESCFLAGS_SET::NONE);

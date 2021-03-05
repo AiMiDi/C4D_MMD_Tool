@@ -2,8 +2,11 @@ STRINGTABLE PMX_Bone_Tag
 {
 	PMX_Bone_Tag "PMX\u9aa8\u9abc\u6807\u7b7e";
 	PMX_BONE_INFO_GRP "\u9aa8\u9abc\u4fe1\u606f";
-	BONE_NAME_LOCAL "\u9aa8\u9abc\u672c\u5730\u540d\u79f0";
-	BONE_NAME_UNIVERSAL "\u9aa8\u9abc\u901a\u7528\u540d\u79f0";
+	BONE_NAME_LOCAL "\u9aa8\u9abc\u672c\u5730\u540d\u79f0(\u548c)";
+	BONE_NAME_UNIVERSAL "\u9aa8\u9abc\u901a\u7528\u540d\u79f0(\u82f1)";
+	BONE_NAME_IS "\u9aa8\u9abc\u663e\u793a\u540d\u79f0";
+	NAME_IS_LOCAL "\u9aa8\u9abc\u672c\u5730\u540d\u79f0(\u548c)";
+	NAME_IS_UNIVERSAL "\u9aa8\u9abc\u901a\u7528\u540d\u79f0(\u82f1)";
 	POSITION "\u4f4d\u7f6e";
 
 	PMX_BONE_PARENT_BONE_GRP "\u4eb2\u9aa8\u9abc";

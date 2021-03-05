@@ -4,6 +4,9 @@ STRINGTABLE PMX_Bone_Tag
 	PMX_BONE_INFO_GRP "Bone info";
 	BONE_NAME_LOCAL "Bone local name";
 	BONE_NAME_UNIVERSAL "Bone universal name";
+	BONE_NAME_IS "Bone display name";
+	NAME_IS_LOCAL "Bone local name";
+	NAME_IS_UNIVERSAL "Bone universal name";
 	POSITION "Position";
 
 	PMX_BONE_PARENT_BONE_GRP "Parent bone";

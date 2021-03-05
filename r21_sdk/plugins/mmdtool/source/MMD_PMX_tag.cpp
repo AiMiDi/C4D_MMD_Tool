@@ -35,6 +35,7 @@ Bool mmd::PMX_Bone_Tag::Init(GeListNode* node)
 {
 	node->SetParameter(DescID(ID_BASELIST_NAME), GeLoadString(IDS_PMX_MODEL_TAG), DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(BONE_NAME_LOCAL), "bone"_s, DESCFLAGS_SET::NONE);
+	node->SetParameter(DescID(NAME_IS_LOCAL), 2, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(BONE_NAME_UNIVERSAL), "bone"_s, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(PARENT_BONE_INDEX), -1, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(ROTATABLE), 1, DESCFLAGS_SET::NONE);
@@ -164,6 +165,17 @@ Bool mmd::PMX_Bone_Tag::tagUpData(BaseTag* tag, BaseObject* obj)
 			}
 		}
 		GeData Ge_data;
+		tag->GetParameter(DescID(BONE_NAME_IS), Ge_data, DESCFLAGS_GET::NONE);
+		Int32 bone_name_is = Ge_data.GetInt32();
+		if (bone_name_is) {
+			tag->GetParameter(DescID(BONE_NAME_UNIVERSAL), Ge_data, DESCFLAGS_GET::NONE);
+			obj->SetName(Ge_data.GetString());
+		}
+		else {
+			tag->GetParameter(DescID(BONE_NAME_LOCAL), Ge_data, DESCFLAGS_GET::NONE);
+			obj->SetName(Ge_data.GetString());
+		}
+
 		tag->GetParameter(DescID(ROTATABLE), Ge_data, DESCFLAGS_GET::NONE);
 		Bool Is_rotatable = Ge_data.GetBool();
 		if (Is_rotatable == 1) {
@@ -263,9 +275,11 @@ Bool mmd::PMX_Bone_Tag::tagUpData(BaseTag* tag, BaseObject* obj)
 			obj->SetParameter(DescID(ID_BASELIST_ICON_COLORIZE_MODE), ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM, DESCFLAGS_SET::NONE);
 			obj->SetParameter(DescID(ID_BASELIST_ICON_COLOR), Vector(0.4, 0.4, 0.4), DESCFLAGS_SET::NONE);
 			obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_DISPLAY), ID_CA_JOINT_OBJECT_BONE_DISPLAY_NONE, DESCFLAGS_SET::NONE);
 		}
 		else {
 			obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_DISPLAY), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS, DESCFLAGS_SET::NONE);
+			obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_DISPLAY), ID_CA_JOINT_OBJECT_BONE_DISPLAY_STANDARD, DESCFLAGS_SET::NONE);
 		}
 
 		tag->GetParameter(DescID(FIXED_AXIS), Ge_data, DESCFLAGS_GET::NONE);

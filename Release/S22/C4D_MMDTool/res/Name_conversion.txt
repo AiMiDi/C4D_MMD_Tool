@@ -198,12 +198,12 @@
 上半身3,upper body3;
 左肩P,shoulderP_L;
 左肩C,shoulderC_L;
-左腕捩1,Left arm screw1;
-左腕捩2,Left arm screw2;
-左腕捩3,Left arm screw3;
-左手捩1,Left hand screw1;
-左手捩2,Left hand screw2;
-左手捩3,Left hand screw3;
+左腕捩1,arm screw1_L;
+左腕捩2,arm screw2_L;
+左腕捩3,arm screw3_L;
+左手捩1,hand screw1_L;
+左手捩2,hand screw2_L;
+左手捩3,hand screw3_L;
 左ダミー,dummy_L;
 左親指０,thumb0_L;
 右親指０,thumb0_R;
