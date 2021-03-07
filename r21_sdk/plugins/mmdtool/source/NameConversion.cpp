@@ -1,6 +1,71 @@
 ﻿#include "NameConversion.h"
 
 
+Bool NameConversion::UpdataNameConversionDialog::CreateLayout()
+{
+
+	SetTitle(GeLoadString(IDS_UPDATA_NAME_CONVERSION_TITLE));
+	BaseContainer settings;
+	settings.SetBool(BITMAPBUTTON_BUTTON, false);
+	void* const customGUI = AddCustomGui(100000, CUSTOMGUI_BITMAPBUTTON, ""_s, BFH_SCALE, SizePix(300), SizePix(78), settings);
+	BitmapButtonCustomGui* const bitmapButtonGUI = static_cast<BitmapButtonCustomGui*>(customGUI);
+	if (bitmapButtonGUI)
+	{
+		bitmapButtonGUI->SetImage(AutoBitmap("mmd_tool_title.png"_s), true, false);
+	}
+
+	ScrollGroupBegin(100002, BFH_SCALEFIT, SCROLLGROUP_VERT | SCROLLGROUP_BORDERIN, 0, 300);
+	GroupBegin(100003, BFH_CENTER, 1, 1, ""_s, 0, 0, 300);
+	const Int conversion_count = name_conversion->updata_name_conversion_count;
+	for (Int i = 0; i < conversion_count; i++) {
+		GroupBegin(100004 + 2 * conversion_count, BFH_CENTER, 2, 1, ""_s, 0, 300, 10);
+		AddEditText(100004 + i, BFH_LEFT, 400, 10, 0);
+		AddEditText(100004 + i + conversion_count, BFH_LEFT, 400, 10, 0);
+		GroupEnd();
+	}
+	GroupEnd();
+	GroupEnd();
+	AddButton(100001, BFH_CENTER, 500, 30, "OK"_s);
+	return true;
+}
+
+Bool NameConversion::UpdataNameConversionDialog::InitValues()
+{
+	const Int conversion_count = name_conversion->updata_name_conversion_count;
+	for (Int i = 0; i < conversion_count; i++) {
+		SetString(100004 + i, name_conversion->updata_name_conversion_arr[i], 0);
+		SetString(100004 + i + conversion_count, ""_s, 0);
+	}
+	return true;
+}
+
+Bool NameConversion::UpdataNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
+{
+	switch (id)
+	{
+	case (100001):
+	{
+		const Int conversion_count = name_conversion->updata_name_conversion_count;
+		maxon::HashMap<String, String>& name_L_to_U_map_ = name_conversion->name_L_to_U_map;
+		maxon::HashMap<String, String>& name_U_to_L_map_ = name_conversion->name_U_to_L_map;
+		for (Int i = 0; i < conversion_count; i++) {
+			String str1 = name_conversion->updata_name_conversion_arr[i], str2;
+			GetString(100004 + i + conversion_count, str2);
+			if (str2 == ""_s) {
+				iferr(name_L_to_U_map_.Insert(str1, "bone_" + String::IntToString(i)))return false;
+				iferr(name_U_to_L_map_.Insert("bone_" + String::IntToString(i), str1))return false;
+			}
+			else {
+				if (!name_conversion->Add(str1, str2))return false;
+			}
+		}
+		this->Close();
+		break;
+	}
+	}
+	return true;
+}
+
 NameConversion::NameConversion()
 {
 	file = BaseFile::Alloc();
@@ -113,7 +178,7 @@ Bool NameConversion::Conver(String& str, String& res, Bool op) {
 Bool NameConversion::Add(String& str1, String& str2) {
 	if (file == nullptr)return false;
 	String Str_w(str1 + "," + str2 + ";\n");
-	Int Strlen_w = Str_w.GetCStringLen(STRINGENCODING::UTF8)+1;
+	Int Strlen_w = static_cast<Int>(Str_w.GetCStringLen(STRINGENCODING::UTF8))+1;
 	Char* CStr_w = new Char[Strlen_w]{ 0 };
 	Str_w.GetCString(CStr_w, Strlen_w, STRINGENCODING::UTF8);
 	for (Int i = 0; i < Strlen_w - 1;i++) {
@@ -126,7 +191,7 @@ Bool NameConversion::Add(String& str1, String& str2) {
 
 Bool NameConversion::CheckUpdata() {
 	UpdataNameConversionDialog dialog(this);
-	dialog.Open(DLG_TYPE::MODAL, ID_MMD_TOOL);
+	dialog.Open(DLG_TYPE::MODAL, ID_MMD_TOOL,-1,-1,0,0,1);                                                                                                                             
 	return true;
 }
 

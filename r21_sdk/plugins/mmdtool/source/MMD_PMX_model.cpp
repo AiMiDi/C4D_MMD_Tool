@@ -7,31 +7,24 @@ mmd::PMXModel::~PMXModel() {
 	for (auto i : vertex_data) {
 		delete i;
 	}
-	vertex_data.Reset();
 	for (auto i : surface_data) {
 		delete i;
 	}
-	surface_data.Reset();
 	for (auto i : material_data) {
 		delete i;
 	}
-	material_data.Reset();
 	for (auto i : bone_data) {
 		delete i;
 	}
-	bone_data.Reset();
 	for (auto i : morph_data) {
 		delete i;
 	}
-	morph_data.Reset();
 	for (auto i : rigid_body_data) {
 		delete i;
 	}
-	rigid_body_data.Reset();
 	for (auto i : joint_data) {
 		delete i;
 	}
-	joint_data.Reset();
 }
 
 String mmd::PMXModel::ReadText(BaseFile* const file, Char& text_encoding)
