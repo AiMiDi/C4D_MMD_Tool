@@ -1,4 +1,4 @@
-#include "MMD_VMD_animation.h"
+﻿#include "MMD_VMD_animation.h"
 
 mmd::VMDAnimation::VMDAnimation() {
 	this->IsCamera = 0;
@@ -1314,6 +1314,12 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		file.Free();
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
+	}
+	if (mmd_animation->IsCamera == 1) {
+		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
+		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
+		file.Free();
+		return maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
 	}
 	struct morph_id_tag
 	{
