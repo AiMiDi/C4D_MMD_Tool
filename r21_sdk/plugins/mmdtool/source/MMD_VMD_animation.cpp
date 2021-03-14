@@ -380,11 +380,16 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 			CameraKeyPX->SetValue(CameraCurvePX, CameraFrame.position.x * PositionMultiple);
 			CameraKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraKeyPX->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-			ValueOfTwoFrames = NextCameraFrame.position.x * PositionMultiple - CameraFrame.position.x * PositionMultiple;
-			CameraKeyPX->SetTimeLeft(CameraCurvePX, TimeLeft[0]);
-			CameraKeyPX->SetValueLeft(CameraCurvePX, ValueLeft[0]);
-			CameraKeyPX->SetTimeRight(CameraCurvePX, BaseTime(TimeOfTwoFrames*((Float)NextCameraFrame.XCurve.ax / 127.0), 30));
-			CameraKeyPX->SetValueRight(CameraCurvePX, ValueOfTwoFrames*((Float)NextCameraFrame.XCurve.ay / 127.0));//value和time都得记录..
+			ValueOfTwoFrames = NextCameraFrame.position.x * PositionMultiple - CameraFrame.position.x * PositionMultiple;		
+			if (CameraFrame.XCurve.ax == 127 - CameraFrame.XCurve.bx&& CameraFrame.XCurve.ay == 127 - CameraFrame.XCurve.by) {
+				CameraKeyPX->SetInterpolation(CameraCurvePX, CINTERPOLATION::LINEAR);
+			}
+			else {
+				CameraKeyPX->SetTimeLeft(CameraCurvePX, TimeLeft[0]);
+				CameraKeyPX->SetValueLeft(CameraCurvePX, ValueLeft[0]);
+				CameraKeyPX->SetTimeRight(CameraCurvePX, BaseTime(TimeOfTwoFrames* ((Float)NextCameraFrame.XCurve.ax / 127.0), 30));
+				CameraKeyPX->SetValueRight(CameraCurvePX, ValueOfTwoFrames* ((Float)NextCameraFrame.XCurve.ay / 127.0));//value和time都得记录..
+			}			
 			TimeLeft[0] = BaseTime(-TimeOfTwoFrames * ((Float)NextCameraFrame.XCurve.bx / 127.0), 30);
 			ValueLeft[0] = -ValueOfTwoFrames * ((Float)NextCameraFrame.XCurve.by / 127.0);
 			CameraCurvePX->InsertKey(CameraKeyPX);
@@ -395,10 +400,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 			CameraKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraKeyPY->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 			ValueOfTwoFrames = NextCameraFrame.position.y * PositionMultiple - CameraFrame.position.y * PositionMultiple;
-			CameraKeyPY->SetTimeLeft(CameraCurvePY, TimeLeft[1]);
-			CameraKeyPY->SetValueLeft(CameraCurvePY, ValueLeft[1]);
-			CameraKeyPY->SetTimeRight(CameraCurvePY, BaseTime(TimeOfTwoFrames*((Float)NextCameraFrame.YCurve.ax / 127.0), 30));
-			CameraKeyPY->SetValueRight(CameraCurvePY, ValueOfTwoFrames*((Float)NextCameraFrame.YCurve.ay / 127.0));
+			if (CameraFrame.YCurve.ax == 127 - CameraFrame.YCurve.bx && CameraFrame.YCurve.ay == 127 - CameraFrame.YCurve.by) {
+				CameraKeyPY->SetInterpolation(CameraCurvePY, CINTERPOLATION::LINEAR);
+			}
+			else {
+				CameraKeyPY->SetTimeLeft(CameraCurvePY, TimeLeft[1]);
+				CameraKeyPY->SetValueLeft(CameraCurvePY, ValueLeft[1]);
+				CameraKeyPY->SetTimeRight(CameraCurvePY, BaseTime(TimeOfTwoFrames * ((Float)NextCameraFrame.YCurve.ax / 127.0), 30));
+				CameraKeyPY->SetValueRight(CameraCurvePY, ValueOfTwoFrames * ((Float)NextCameraFrame.YCurve.ay / 127.0));
+			}
 			TimeLeft[1] = BaseTime(-TimeOfTwoFrames * ((Float)NextCameraFrame.YCurve.bx / 127.0), 30);
 			ValueLeft[1] = -ValueOfTwoFrames * ((Float)NextCameraFrame.YCurve.by / 127.0);
 			CameraCurvePY->InsertKey(CameraKeyPY);
@@ -409,10 +419,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 			CameraKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraKeyPZ->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 			ValueOfTwoFrames = NextCameraFrame.position.z * PositionMultiple - CameraFrame.position.z * PositionMultiple;
-			CameraKeyPZ->SetTimeLeft(CameraCurvePZ, TimeLeft[2]);
-			CameraKeyPZ->SetValueLeft(CameraCurvePZ, ValueLeft[2]);
-			CameraKeyPZ->SetTimeRight(CameraCurvePZ, BaseTime(TimeOfTwoFrames*((Float)NextCameraFrame.ZCurve.ax / 127.0), 30));
-			CameraKeyPZ->SetValueRight(CameraCurvePZ, ValueOfTwoFrames*((Float)NextCameraFrame.ZCurve.ay / 127.0));
+			if (CameraFrame.ZCurve.ax == 127 - CameraFrame.ZCurve.bx && CameraFrame.ZCurve.ay == 127 - CameraFrame.ZCurve.by) {
+				CameraKeyPZ->SetInterpolation(CameraCurvePZ, CINTERPOLATION::LINEAR);
+			}
+			else {
+				CameraKeyPZ->SetTimeLeft(CameraCurvePZ, TimeLeft[2]);
+				CameraKeyPZ->SetValueLeft(CameraCurvePZ, ValueLeft[2]);
+				CameraKeyPZ->SetTimeRight(CameraCurvePZ, BaseTime(TimeOfTwoFrames * ((Float)NextCameraFrame.ZCurve.ax / 127.0), 30));
+				CameraKeyPZ->SetValueRight(CameraCurvePZ, ValueOfTwoFrames * ((Float)NextCameraFrame.ZCurve.ay / 127.0));
+			}
 			TimeLeft[2] = BaseTime(-TimeOfTwoFrames * ((Float)NextCameraFrame.ZCurve.bx / 127.0), 30);
 			ValueLeft[2] = -ValueOfTwoFrames * ((Float)NextCameraFrame.ZCurve.by / 127.0);
 			CameraCurvePZ->InsertKey(CameraKeyPZ);
@@ -423,10 +438,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 			CameraKeyRX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraKeyRX->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 			ValueOfTwoFrames = NextCameraFrame.rotation.x - CameraFrame.rotation.x;
-			CameraKeyRX->SetTimeLeft(CameraCurveRX, TimeLeft[3]);
-			CameraKeyRX->SetValueLeft(CameraCurveRX, ValueLeft[3]);
-			CameraKeyRX->SetTimeRight(CameraCurveRX, BaseTime(TimeOfTwoFrames*((Float)NextCameraFrame.RCurve.ax / 127.0), 30));
-			CameraKeyRX->SetValueRight(CameraCurveRX, ValueOfTwoFrames*((Float)NextCameraFrame.RCurve.ay / 127.0));
+			if (CameraFrame.RCurve.ax == 127 - CameraFrame.RCurve.bx && CameraFrame.RCurve.ay == 127 - CameraFrame.RCurve.by) {
+				CameraKeyRX->SetInterpolation(CameraCurveRX, CINTERPOLATION::LINEAR);
+			}
+			else {
+				CameraKeyRX->SetTimeLeft(CameraCurveRX, TimeLeft[3]);
+				CameraKeyRX->SetValueLeft(CameraCurveRX, ValueLeft[3]);
+				CameraKeyRX->SetTimeRight(CameraCurveRX, BaseTime(TimeOfTwoFrames * ((Float)NextCameraFrame.RCurve.ax / 127.0), 30));
+				CameraKeyRX->SetValueRight(CameraCurveRX, ValueOfTwoFrames * ((Float)NextCameraFrame.RCurve.ay / 127.0));
+			}
 			TimeLeft[3] = BaseTime(-TimeOfTwoFrames * ((Float)NextCameraFrame.RCurve.bx / 127.0), 30);
 			ValueLeft[3] = -ValueOfTwoFrames * ((Float)NextCameraFrame.RCurve.by / 127.0);
 			CameraCurveRX->InsertKey(CameraKeyRX);
@@ -437,10 +457,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 			CameraKeyRY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraKeyRY->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 			ValueOfTwoFrames = NextCameraFrame.rotation.y - CameraFrame.rotation.y;
-			CameraKeyRY->SetTimeLeft(CameraCurveRY, TimeLeft[4]);
-			CameraKeyRY->SetValueLeft(CameraCurveRY, ValueLeft[4]);
-			CameraKeyRY->SetTimeRight(CameraCurveRY, BaseTime(TimeOfTwoFrames*((Float)NextCameraFrame.RCurve.ax / 127.0), 30));
-			CameraKeyRY->SetValueRight(CameraCurveRY, ValueOfTwoFrames*((Float)NextCameraFrame.RCurve.ay / 127.0));
+			if (CameraFrame.RCurve.ax == 127 - CameraFrame.RCurve.bx && CameraFrame.RCurve.ay == 127 - CameraFrame.RCurve.by) {
+				CameraKeyRY->SetInterpolation(CameraCurveRY, CINTERPOLATION::LINEAR);
+			}
+			else {
+				CameraKeyRY->SetTimeLeft(CameraCurveRY, TimeLeft[4]);
+				CameraKeyRY->SetValueLeft(CameraCurveRY, ValueLeft[4]);
+				CameraKeyRY->SetTimeRight(CameraCurveRY, BaseTime(TimeOfTwoFrames * ((Float)NextCameraFrame.RCurve.ax / 127.0), 30));
+				CameraKeyRY->SetValueRight(CameraCurveRY, ValueOfTwoFrames * ((Float)NextCameraFrame.RCurve.ay / 127.0));
+			}
 			TimeLeft[4] = BaseTime(-TimeOfTwoFrames * ((Float)NextCameraFrame.RCurve.bx / 127.0), 30);
 			ValueLeft[4] = -ValueOfTwoFrames * ((Float)NextCameraFrame.RCurve.by / 127.0);
 			CameraCurveRY->InsertKey(CameraKeyRY);
@@ -451,10 +476,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 			CameraKeyRZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraKeyRZ->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 			ValueOfTwoFrames = NextCameraFrame.rotation.z - CameraFrame.rotation.z;
-			CameraKeyRZ->SetTimeLeft(CameraCurveRZ, TimeLeft[5]);
-			CameraKeyRZ->SetValueLeft(CameraCurveRZ, ValueLeft[5]);
-			CameraKeyRZ->SetTimeRight(CameraCurveRZ, BaseTime(TimeOfTwoFrames*((Float)NextCameraFrame.RCurve.ax / 127.0), 30));
-			CameraKeyRZ->SetValueRight(CameraCurveRZ, ValueOfTwoFrames*((Float)NextCameraFrame.RCurve.ay / 127.0));
+			if (CameraFrame.RCurve.ax == 127 - CameraFrame.RCurve.bx && CameraFrame.RCurve.ay == 127 - CameraFrame.RCurve.by) {
+				CameraKeyRZ->SetInterpolation(CameraCurveRZ, CINTERPOLATION::LINEAR);
+			}
+			else {
+				CameraKeyRZ->SetTimeLeft(CameraCurveRZ, TimeLeft[5]);
+				CameraKeyRZ->SetValueLeft(CameraCurveRZ, ValueLeft[5]);
+				CameraKeyRZ->SetTimeRight(CameraCurveRZ, BaseTime(TimeOfTwoFrames * ((Float)NextCameraFrame.RCurve.ax / 127.0), 30));
+				CameraKeyRZ->SetValueRight(CameraCurveRZ, ValueOfTwoFrames * ((Float)NextCameraFrame.RCurve.ay / 127.0));
+			}
 			TimeLeft[5] = BaseTime(-TimeOfTwoFrames * ((Float)NextCameraFrame.RCurve.bx / 127.0), 30);
 			ValueLeft[5] = -ValueOfTwoFrames * ((Float)NextCameraFrame.RCurve.by / 127.0);
 			CameraCurveRZ->InsertKey(CameraKeyRZ);
@@ -465,10 +495,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 			CameraKeyDistance->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraKeyDistance->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 			ValueOfTwoFrames = NextCameraFrame.distance * PositionMultiple - CameraFrame.distance * PositionMultiple;
-			CameraKeyDistance->SetTimeLeft(CameraCurveDistance, TimeLeft[6]);
-			CameraKeyDistance->SetValueLeft(CameraCurveDistance, ValueLeft[6]);
-			CameraKeyDistance->SetTimeRight(CameraCurveDistance, BaseTime(TimeOfTwoFrames*((Float)NextCameraFrame.DCurve.ax / 127.0), 30));
-			CameraKeyDistance->SetValueRight(CameraCurveDistance, ValueOfTwoFrames*((Float)NextCameraFrame.DCurve.ay / 127.0));
+			if (CameraFrame.DCurve.ax == 127 - CameraFrame.DCurve.bx && CameraFrame.DCurve.ay == 127 - CameraFrame.DCurve.by) {
+				CameraKeyDistance->SetInterpolation(CameraCurveDistance, CINTERPOLATION::LINEAR);
+			}
+			else {
+				CameraKeyDistance->SetTimeLeft(CameraCurveDistance, TimeLeft[6]);
+				CameraKeyDistance->SetValueLeft(CameraCurveDistance, ValueLeft[6]);
+				CameraKeyDistance->SetTimeRight(CameraCurveDistance, BaseTime(TimeOfTwoFrames * ((Float)NextCameraFrame.DCurve.ax / 127.0), 30));
+				CameraKeyDistance->SetValueRight(CameraCurveDistance, ValueOfTwoFrames * ((Float)NextCameraFrame.DCurve.ay / 127.0));
+			}
 			TimeLeft[6] = BaseTime(-TimeOfTwoFrames * ((Float)NextCameraFrame.DCurve.bx / 127.0), 30);
 			ValueLeft[6] = -ValueOfTwoFrames * ((Float)NextCameraFrame.DCurve.by / 127.0);
 			CameraCurveDistance->InsertKey(CameraKeyDistance);
@@ -479,10 +514,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float &PositionMulti
 			CameraKeyAOV->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraKeyAOV->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 			ValueOfTwoFrames = (Int32)NextCameraFrame.viewing_angle - (Int32)CameraFrame.viewing_angle;
-			CameraKeyAOV->SetTimeLeft(CameraCurveAOV, TimeLeft[7]);
-			CameraKeyAOV->SetValueLeft(CameraCurveAOV, ValueLeft[7]);
-			CameraKeyAOV->SetTimeRight(CameraCurveAOV, BaseTime(TimeOfTwoFrames*((Float)NextCameraFrame.VCurve.ax / 127.0), 30));
-			CameraKeyAOV->SetValueRight(CameraCurveAOV, ValueOfTwoFrames*((Float)NextCameraFrame.VCurve.ay / 127.0));
+			if (CameraFrame.VCurve.ax == 127 - CameraFrame.VCurve.bx && CameraFrame.VCurve.ay == 127 - CameraFrame.VCurve.by) {
+				CameraKeyAOV->SetInterpolation(CameraCurveAOV, CINTERPOLATION::LINEAR);
+			}
+			else {
+				CameraKeyAOV->SetTimeLeft(CameraCurveAOV, TimeLeft[7]);
+				CameraKeyAOV->SetValueLeft(CameraCurveAOV, ValueLeft[7]);
+				CameraKeyAOV->SetTimeRight(CameraCurveAOV, BaseTime(TimeOfTwoFrames * ((Float)NextCameraFrame.VCurve.ax / 127.0), 30));
+				CameraKeyAOV->SetValueRight(CameraCurveAOV, ValueOfTwoFrames * ((Float)NextCameraFrame.VCurve.ay / 127.0));
+			}
 			TimeLeft[7] = BaseTime(-TimeOfTwoFrames * ((Float)NextCameraFrame.VCurve.bx / 127.0), 30);
 			ValueLeft[7] = -ValueOfTwoFrames * ((Float)NextCameraFrame.VCurve.by / 127.0);
 			CameraCurveAOV->InsertKey(CameraKeyAOV);
