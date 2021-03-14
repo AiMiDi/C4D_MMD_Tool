@@ -31,6 +31,59 @@ Bool mmd::PMX_Model_Tag::GetDDescription(GeListNode* node, Description* descript
 	return true;
 }
 
+Bool mmd::PMX_Model_Tag::UpDataBoneList(BaseTag* tag, BaseObject* obj) {
+	if (tag == nullptr || obj == nullptr) {
+		return false;
+	}
+	Int index = 0;
+	BaseObject* Bones_obj = obj->GetDown();
+	while (Bones_obj->GetName() != "Bones" && Bones_obj != nullptr)
+	{
+		Bones_obj = Bones_obj->GetNext();
+	}
+	if (Bones_obj == nullptr) {
+		return false;
+	}else {
+		BaseObject* bone = Bones_obj->GetDown();
+		if (bone!=nullptr) {
+
+			maxon::Queue<BaseObject*> nodes;
+			iferr(nodes.Push(bone))return false;
+			while (!nodes.IsEmpty())
+			{
+				BaseObject* node = *(nodes.Pop());
+				while (node != nullptr)
+				{
+					if (node->GetType() == Ojoint)
+					{
+							BaseTag* node_tag = node->GetTag(ID_PMX_BONE_TAG);
+							if (node_tag != nullptr) {
+								node_tag->SetParameter(DescID(BONE_INDEX), String::IntToString(index), DESCFLAGS_SET::NONE);
+								index++;
+							}				
+					}
+					iferr(nodes.Push(node->GetDown()))return false;
+					if (node != bone) {
+						node = node->GetNext();
+					}
+					else {
+						break;
+					}
+				}
+			}
+		}
+	}
+	return true;
+}
+
+Bool mmd::PMX_Model_Tag::Message(GeListNode* node, Int32 type, void* data) {
+	if (type == MSG_DRAGANDDROP || type == MSG_PMX_BONE_ORDER_CHANGES)
+	{
+		
+	}
+	return true;
+}
+
 Bool mmd::PMX_Bone_Tag::Init(GeListNode* node)
 {
 	node->SetParameter(DescID(ID_BASELIST_NAME), GeLoadString(IDS_PMX_MODEL_TAG), DESCFLAGS_SET::NONE);
@@ -134,15 +187,11 @@ Bool mmd::PMX_Bone_Tag::GetDEnabling(GeListNode *node, const DescID &id, const G
 
 Bool mmd::PMX_Bone_Tag::Message(GeListNode* node, Int32 type, void* data)
 {
-	switch (type)
+	if (type == 1073741828)
 	{
-		case(MSG_DESCRIPTION_CHECKUPDATE):
-		{
-			BaseTag* tag = (BaseTag*)node;
-			tagUpData(tag, tag->GetObject()) ? true : false;
-			break;
-		}
-	}	
+		BaseTag* tag = (BaseTag*)node;
+		return tagUpData(tag, tag->GetObject()) ? true : false;
+	}
 	return true;
 }
 
@@ -151,20 +200,25 @@ Bool mmd::PMX_Bone_Tag::tagUpData(BaseTag* tag, BaseObject* obj)
 		if (tag == nullptr || obj == nullptr) {			
 			return false;
 		}
-		BaseObject* pred_obj = obj->GetUp();
-		if (pred_obj != nullptr) {
-			if (pred_obj->GetName() != "Bones"_s) {
+		GeData Ge_data;
+		BaseObject* up_obj = obj->GetUp();
+		if (up_obj != nullptr) {
+			if (up_obj->GetName() != "Bones"_s) {
 				BaseLink* parent_bone_link = BaseLink::Alloc();
 				if (parent_bone_link == nullptr) {
 					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 					return false;
 				}
-				parent_bone_link->SetLink(pred_obj);
+				parent_bone_link->SetLink(up_obj);
 				tag->SetParameter(DescID(PARENT_BONE_LINK), parent_bone_link, DESCFLAGS_SET::NONE);
+				BaseTag* up_tag = up_obj->GetTag(ID_PMX_BONE_TAG);
+				if (up_tag != nullptr) {
+					up_tag->GetParameter(DescID(BONE_INDEX), Ge_data, DESCFLAGS_GET::NONE);
+					tag->SetParameter(DescID(PARENT_BONE_INDEX), Ge_data.GetString().ToInt32(nullptr), DESCFLAGS_SET::NONE);
+				}
 			}
 		}
-		GeData Ge_data;
 		tag->GetParameter(DescID(BONE_NAME_IS), Ge_data, DESCFLAGS_GET::NONE);
 		Int32 bone_name_is = Ge_data.GetInt32();
 		if (bone_name_is) {

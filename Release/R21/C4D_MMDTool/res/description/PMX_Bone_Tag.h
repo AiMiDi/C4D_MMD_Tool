@@ -1,8 +1,9 @@
 #ifndef _PMX_BONE_TAG_H_
 #define _PMX_BONE_TAG_H_
-enum
+enum 
 {
 	PMX_BONE_INFO_GRP = 1000,
+	BONE_INDEX,
 	BONE_NAME_LOCAL,//骨骼本地名称
 	BONE_NAME_UNIVERSAL,//骨骼通用名称
 	BONE_NAME_IS,//骨骼显示名称	

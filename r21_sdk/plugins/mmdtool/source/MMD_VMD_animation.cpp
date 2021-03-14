@@ -1,4 +1,4 @@
-﻿#include "MMD_VMD_animation.h"
+#include "MMD_VMD_animation.h"
 
 mmd::VMDAnimation::VMDAnimation() {
 	this->IsCamera = 0;
@@ -14,11 +14,6 @@ mmd::VMDAnimation::~VMDAnimation()
 	this->morph_frames.Reset();
 	this->camera_frames.Reset();
 	this->light_frames.Reset();
-	this->IsCamera = 0;
-	this->MotionFrameNumber = 0;
-	this->MorphFrameNumber = 0;
-	this->CameraFrameNumber = 0;
-	this->LightFrameNumber = 0;
 }
 
 maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
@@ -1330,6 +1325,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 
 	maxon::Queue<BaseObject*> nodes;
 	nodes.Push(SelectObject)iferr_return;
+	GeData data;
+
 	while (!nodes.IsEmpty())
 	{
 		BaseObject* node = *(nodes.Pop());
@@ -1340,10 +1337,9 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 				if (ByTag) {
 					BaseTag* node_tag = node->GetTag(ID_PMX_BONE_TAG);
 					if (node_tag != nullptr) {						
-						GeData data;
-						node_tag->GetParameter(DescID(1001), data, DESCFLAGS_GET::NONE);//BONE_NAME_LOCAL = 1001
-						String node_name = data.GetString();
-						bone_name_map.Insert(node_name, node)iferr_return;
+						
+						node_tag->GetParameter(DescID(BONE_NAME_LOCAL), data, DESCFLAGS_GET::NONE);
+						bone_name_map.Insert(data.GetString(), node)iferr_return;
 					}
 					else {
 						bone_name_map.Insert(node->GetName(), node)iferr_return;
@@ -1361,7 +1357,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 				{
 					CAMorph* morph = pose_morph_tag->GetMorph(i);
 					DescID morphID = pose_morph_tag->GetMorphID(i);
-					morph_name_map.Insert(morph->GetName(), { morphID,tag })iferr_return;
+					morph_name_map.Insert(morph->GetName(), morph_id_tag{ morphID,tag })iferr_return;
 				}
 			}
 			nodes.Push(node->GetDown())iferr_return;
@@ -1377,7 +1373,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 
 	maxon::HashMap<String, maxon::BaseArray<VMD_Motion>*> MotionFrameArray_map;
 	maxon::HashMap<String, maxon::BaseArray<VMD_Morph>*> MorphFrameArray_map;
-	for (UInt32 i = 0; i < mmd_animation->MotionFrameNumber; i++)
+	Int32 MotionFrameNumber = mmd_animation->MotionFrameNumber;
+	for (Int32 i = 0; i < MotionFrameNumber; i++)
 	{
 		String bone_name = mmd_animation->motion_frames[i].bone_name;
 		auto MotionFrame_ptr = MotionFrameArray_map.Find(bone_name);
@@ -1392,7 +1389,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 			MotionFrame_ptr->GetValue()->Append(mmd_animation->motion_frames[i])iferr_return;
 		}
 	}
-	for (UInt32 i = 0; i < mmd_animation->MorphFrameNumber; i++)
+	Int32 MorphFrameNumber = mmd_animation->MorphFrameNumber;
+	for (Int32 i = 0; i < MorphFrameNumber; i++)
 	{
 		String morph_name = mmd_animation->morph_frames[i].morph_name;
 		auto MorphFrame_ptr = MorphFrameArray_map.Find(morph_name);
@@ -1423,7 +1421,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 	String motion_frame_bone_number_S = String::IntToString(motion_frame_bone_number);
 	for (String motion_bone_name : MotionFrameArray_map.GetKeys())
 	{
-		maxon::BaseArray<mmd::VMD_Motion>* MotionFrameArray = (MotionFrameArray_map.Find(motion_bone_name)->GetValue());
+		maxon::BaseArray<mmd::VMD_Motion>* MotionFrameArray = MotionFrameArray_map.Find(motion_bone_name)->GetValue();
 		auto bone_ptr = bone_name_map.Find(motion_bone_name);
 
 		if (bone_ptr != nullptr)
@@ -1431,11 +1429,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 			BaseObject* bone = bone_ptr->GetValue();
 			if (bone != nullptr)
 			{
-				if (QuaternionRotationSW) {
-					if (bone->IsQuaternionRotationMode() == false)
-					{
-						bone->SetQuaternionRotationMode(true, false);
-					}
+				if (QuaternionRotationSW && bone->IsQuaternionRotationMode() == false) {
+					bone->SetQuaternionRotationMode(true, false);					
 				}
 				CTrack* BoneTrackPX = bone->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
 				CTrack::Free(BoneTrackPX);
@@ -1479,19 +1474,19 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 				{
 					StatusSetText("Import motion of bone " + String::IntToString(bone_cnt) + "/" + motion_frame_bone_number_S);
 					StatusSetBar(i * 100 / motion_frame_number);
-					if (i == 0)
+					if (i == 0 && motion_frame_number != 1)
 					{
-						MotionFrame = (*MotionFrameArray)[i];
-						NextMotionFrame = (*MotionFrameArray)[i + 1];
+						MotionFrame = MotionFrameArray->operator[](i);
+						NextMotionFrame = MotionFrameArray->operator[](i + 1);
 					}
-					else if (i == MotionFrameArray->GetCount() - 1)
+					else if (i == motion_frame_number - 1)
 					{
 						MotionFrame = NextMotionFrame;
 					}
 					else
 					{
 						MotionFrame = NextMotionFrame;
-						NextMotionFrame = (*MotionFrameArray)[i + 1];
+						NextMotionFrame = MotionFrameArray->operator[](i + 1);
 					}
 					TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
 					MotionKeyTime = BaseTime(MotionFrame.frame_no + TimeOffset, 30);

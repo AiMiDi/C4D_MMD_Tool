@@ -2,6 +2,7 @@
 #define __MMD_VMD_ANIMATION_H__
 
 #include "main.h"
+#include "description/PMX_Bone_Tag.h"
 
 namespace mmd {
 
@@ -42,38 +43,39 @@ namespace mmd {
 		vec3 position;
 	};
 
-	class VMDMotionSortedArray : public maxon::SortedArray<VMDMotionSortedArray, maxon::PointerArray<VMD_Motion>>
-	{
-	public:
-		static Bool LessThan(const VMD_Motion& a, const VMD_Motion& b) { return a.frame_no < b.frame_no; }
-		static Bool IsEqual(const VMD_Motion& a, const VMD_Motion& b) { return a.frame_no == b.frame_no; }
-	};
 
-	class VMDMorphSortedArray : public maxon::SortedArray<VMDMorphSortedArray, maxon::PointerArray<VMD_Morph>>
-	{
-	public:
-		static Bool LessThan(const VMD_Morph& a, const VMD_Morph& b) { return a.frame_no < b.frame_no; }
-		static Bool IsEqual(const VMD_Morph& a, const VMD_Morph& b) { return a.frame_no == b.frame_no; }
-	};
-
-	class VMDCameraSortedArray : public maxon::SortedArray<VMDCameraSortedArray, maxon::PointerArray<VMD_Camera>>
-	{
-	public:
-		static Bool LessThan(const VMD_Camera& a, const VMD_Camera& b) { return a.frame_no < b.frame_no; }
-		static Bool IsEqual(const VMD_Camera& a, const VMD_Camera& b) { return a.frame_no == b.frame_no; }
-	};
-
-	class VMDLightSortedArray : public maxon::SortedArray<VMDLightSortedArray, maxon::PointerArray<VMD_Light>>
-	{
-	public:
-		static Bool LessThan(const VMD_Light& a, const VMD_Light& b) { return a.frame_no < b.frame_no; }
-		static Bool IsEqual(const VMD_Light& a, const VMD_Light& b) { return a.frame_no == b.frame_no; }
-	};
 
 
 class VMDAnimation 
 {
 	private:
+		class VMDMotionSortedArray : public maxon::SortedArray<VMDMotionSortedArray, maxon::PointerArray<VMD_Motion>>
+		{
+		public:
+			static Bool LessThan(const VMD_Motion& a, const VMD_Motion& b) { return a.frame_no < b.frame_no; }
+			static Bool IsEqual(const VMD_Motion& a, const VMD_Motion& b) { return a.frame_no == b.frame_no; }
+		};
+
+		class VMDMorphSortedArray : public maxon::SortedArray<VMDMorphSortedArray, maxon::PointerArray<VMD_Morph>>
+		{
+		public:
+			static Bool LessThan(const VMD_Morph& a, const VMD_Morph& b) { return a.frame_no < b.frame_no; }
+			static Bool IsEqual(const VMD_Morph& a, const VMD_Morph& b) { return a.frame_no == b.frame_no; }
+		};
+
+		class VMDCameraSortedArray : public maxon::SortedArray<VMDCameraSortedArray, maxon::PointerArray<VMD_Camera>>
+		{
+		public:
+			static Bool LessThan(const VMD_Camera& a, const VMD_Camera& b) { return a.frame_no < b.frame_no; }
+			static Bool IsEqual(const VMD_Camera& a, const VMD_Camera& b) { return a.frame_no == b.frame_no; }
+		};
+
+		class VMDLightSortedArray : public maxon::SortedArray<VMDLightSortedArray, maxon::PointerArray<VMD_Light>>
+		{
+		public:
+			static Bool LessThan(const VMD_Light& a, const VMD_Light& b) { return a.frame_no < b.frame_no; }
+			static Bool IsEqual(const VMD_Light& a, const VMD_Light& b) { return a.frame_no == b.frame_no; }
+		};
 		String ModelName;
 		Bool IsCamera;
 		UInt32 MotionFrameNumber;

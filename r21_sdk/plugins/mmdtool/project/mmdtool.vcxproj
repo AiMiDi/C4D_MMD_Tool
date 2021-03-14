@@ -78,7 +78,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../res;../res/description;../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>26495;4003;4061;4062;4100;4127;4131;4191;4265;4266;4296;4307;4324;4350;4351;4355;4365;4371;4458;4463;4464;4987;4503;4514;4519;4530;4548;4571;4574;4577;4592;4611;4623;4625;4626;4628;4640;4647;4668;4710;4711;4714;4738;4768;4774;4820;4826;4868;4883;4917;4928;4946;5026;5027;5039;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>26451;26495;4003;4061;4062;4100;4127;4131;4191;4265;4266;4296;4307;4324;4350;4351;4355;4365;4371;4458;4463;4464;4987;4503;4514;4519;4530;4548;4571;4574;4577;4592;4611;4623;4625;4626;4628;4640;4647;4668;4710;4711;4714;4738;4768;4774;4820;4826;4868;4883;4917;4928;4946;5026;5027;5039;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
@@ -100,6 +100,7 @@
       <AdditionalIncludeDirectories>../generated/hxx;../res;../res/description;../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Optimization>MaxSpeed</Optimization>
+      <DisableSpecificWarnings>26495;26451;4003;4061;4062;4100;4127;4131;4191;4265;4266;4296;4307;4324;4350;4351;4355;4365;4371;4458;4463;4464;4987;4503;4514;4519;4530;4548;4571;4574;4577;4592;4611;4623;4625;4626;4628;4640;4647;4668;4710;4711;4714;4738;4768;4774;4820;4826;4868;4883;4917;4928;4946;5026;5027;5039;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />

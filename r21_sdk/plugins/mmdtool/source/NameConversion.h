@@ -22,20 +22,15 @@ private:
 		UpdataNameConversionDialog(NameConversion* name_conversion_) : name_conversion(name_conversion_) {}
 	};
 public:
-
-
 	NameConversion();
 	~NameConversion();
 
 	Bool Init();	
 	Bool InitConver(String& str, Bool op = true);
-
 	Bool Conver(String& str, String& res, Bool op = true);
 	Bool Add(String& str1, String& str2);
-
 	Bool CheckUpdata();
 	Bool AutoUpdata();
-
 };
 
 #endif __NAME_CONVERSION_H__

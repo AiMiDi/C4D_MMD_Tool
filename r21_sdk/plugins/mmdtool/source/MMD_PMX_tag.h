@@ -6,22 +6,29 @@
 #include "description/PMX_Model_Tag.h"
 #include "description/PMX_Bone_Tag.h"
 
+#define MSG_PMX_BONE_ORDER_CHANGES 1056720
+
 namespace mmd {
+
+	
 
 	class PMX_Model_Tag : public TagData
 	{
+		
 	public:
-		virtual Bool Init(GeListNode* node);
-		virtual Bool GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags);
+		Bool Init(GeListNode* node);
+		Bool Message(GeListNode* node, Int32 type, void* data);
+		Bool GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags);
+		static Bool UpDataBoneList(BaseTag* tag, BaseObject* obj);
 		static NodeData* Alloc() { return NewObjClear(PMX_Model_Tag); }
 	};
 
 	class PMX_Bone_Tag : public TagData
 	{
 	public:
-		virtual Bool Init(GeListNode* node);
-		virtual Bool GetDEnabling(GeListNode *node, const DescID &id, const GeData &t_data, DESCFLAGS_ENABLE flags, const BaseContainer *itemdesc);
-		virtual Bool Message(GeListNode* node, Int32 type, void* data);
+		Bool Init(GeListNode* node);
+		Bool GetDEnabling(GeListNode *node, const DescID &id, const GeData &t_data, DESCFLAGS_ENABLE flags, const BaseContainer *itemdesc);
+		Bool Message(GeListNode* node, Int32 type, void* data);
 		static Bool tagUpData(BaseTag* tag, BaseObject* obj);
 		static NodeData* Alloc() { return NewObjClear(PMX_Bone_Tag); }
 	};
