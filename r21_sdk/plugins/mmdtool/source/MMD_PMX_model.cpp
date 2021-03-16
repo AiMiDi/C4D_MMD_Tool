@@ -1528,7 +1528,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			doc->SetMode(Mpolygons);
 			select = model->GetPolygonS();
 		}
-		/*CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
+		/*
+		//Initialization morph tag.
+		CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
 		if (morph_tag == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -1537,6 +1539,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		}
 		model->InsertTag(morph_tag);
 		morph_tag->InitMorphs();
+
+		//Add base morph to the tag.
 		morph_tag->SetParameter(ID_CA_POSE_POINTS, true, DESCFLAGS_SET::NONE);
 		morph_tag->ExitEdit(doc, true);
 		CAMorph* base_morph = morph_tag->AddMorph();
@@ -1549,7 +1553,11 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 		base_morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
 		morph_tag->UpdateMorphs();
 		EventAdd();
+		
+		//Get the morph data count.
 		Int32 morph_data_count = pmx_model->model_data_count.morph_data_count;
+
+
 		for (Int32 i = 0; i < morph_data_count; i++)
 		{
 			StatusSetText("Import morphs..."_s);
@@ -1566,18 +1574,30 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data->offset_data;
 				morph_tag->ExitEdit(doc, true);
 				Int32 offset_count = morph_data->offset_count;
-				for (Int32 j = 0; j < offset_count; j++) //设置变形后点的位置
+
+				//Set the position of the deformed point.
+				for (Int32 j = 0; j < offset_count; j++) 
 				{
+					//This structure records the index of the point and the displacement of the point.
 					PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
+
+					//Move the point.
+					//"vertex_morph_data.vertex_index"(UInt32) is index of the point.
+					//"vertex_morph_data.translation"(vec3) is displacement of the point.
+					//The parameter "PositionMultiple"(Float32) is used to set the displacement scaling.
+					//"model_point_obj"(Vector[]) is the point write handle of the model.
 					model_points[vertex_morph_data.vertex_index] += vertex_morph_data.translation * PositionMultiple;
 				}
+				//Update point data.
 				model_point_obj->Message(MSG_UPDATE);
 				morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::POINTS);
 				morph_tag->UpdateMorphs();
 				EventAdd();
 				morph->SetName(morph_data->morph_name_local);
 				morph->SetStrength(0);
-				for (Int32 j = 0; j < offset_count; j++) //恢复点的位置
+
+				//The position of the recovery point is the initial.
+				for (Int32 j = 0; j < offset_count; j++) 
 				{
 					PMX_Morph_vertex vertex_morph_data = (*vertex_morph_data_arr)[j];
 					model_points[vertex_morph_data.vertex_index] = pmx_model->vertex_data[vertex_morph_data.vertex_index]->position * PositionMultiple;
@@ -1585,7 +1605,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				model_point_obj->Message(MSG_UPDATE);
 			}
 		}
-		morph_tag->SetParameter(DescID(ID_CA_POSE_MODE), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);*/
+		//Set "ID_CA_POSE_MODE" parameter to animation.
+		morph_tag->SetParameter(DescID(ID_CA_POSE_MODE), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
+		*/
+
 		if (settings.Import_material) {
 			Int32 material_data_count = pmx_model->model_data_count.material_data_count;
 			for (Int32 i = 0; i < material_data_count; i++)
