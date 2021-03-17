@@ -1710,3 +1710,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 	}
 	return maxon::OK;
 }
+
+maxon::Result<void> mmd::PMXModel::FromDocumentExportModel(Float& PositionMultiple, PMX_Model_export_settings& settings) {
+	return maxon::OK;
+}

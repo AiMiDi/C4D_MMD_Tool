@@ -357,6 +357,18 @@ namespace mmd {
 		Bool Import_multipart;
 	};
 
+	struct PMX_Model_export_settings {
+		Bool Export_polygon;
+		Bool Export_normal;
+		Bool Export_uv;
+		Bool Export_material;
+		Bool Export_bone;
+		Bool Export_weights;
+		Bool Export_ik;
+		Bool Export_inherit;
+		Bool Export_expression;
+	};
+
 
 	class PMXModel
 	{
@@ -445,6 +457,7 @@ namespace mmd {
 		maxon::Result<void> LoadFromFile(BaseFile* const file);
 		maxon::Result<void> WriteToFile(BaseFile* const file);
 		static maxon::Result<void> FromFileImportModel(Float &PositionMultiple, PMX_Model_import_settings& settings);
+		static maxon::Result<void> FromDocumentExportModel(Float& PositionMultiple, PMX_Model_export_settings& settings);
 	};
 }
 #endif __MMD_VMD_MODEl_H__
