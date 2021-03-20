@@ -3,7 +3,7 @@
 #include "MMD_VMD_animation.h"
 #include "MMD_PMX_tag.h"
 
-enum                                // Uniquely identify all your dialog elements here.
+enum                             // Uniquely identify all your dialog elements here.
 {
 	DLG_VMD_CAM_IMPORT_TITLE = 10000,
 	DLG_VMD_CAM_IMPORT_SIZE,

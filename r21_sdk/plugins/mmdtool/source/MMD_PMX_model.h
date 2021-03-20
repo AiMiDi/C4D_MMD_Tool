@@ -334,13 +334,6 @@ namespace mmd {
 		~PMX_Joint_Data() {};
 	};
 
-	struct object_point
-	{
-		PolygonObject* object;
-		Int32 point;
-		object_point(PolygonObject*& object_, Int32  point_) :object(object_), point(point_) {}
-	};
-
 	struct PMX_Model_import_settings
 	{
 		Bool Import_polygon;
@@ -389,68 +382,6 @@ namespace mmd {
 		inline Int32 ReadIndex(BaseFile* const file, Char& index_size);
 		inline UInt32 ReadUIndex(BaseFile* const file, Char& index_size);
 
-		class Import_Multipart_PMX_Vertex_Job : public maxon::JobInterfaceTemplate<Import_Multipart_PMX_Vertex_Job, void>
-		{
-		private:
-			Int32 vertex_data_being, vertex_data_end;
-			std::unique_ptr<PMXModel>& pmx_model;
-			Vector* part_points;
-			PMX_Model_import_settings& settings;
-			Float& PositionMultiple;
-			CAWeightTag* weight_tag;
-			maxon::BaseArray<Int32>& vertex_index;
-			maxon::HashMap<Int32, Int32>& bone_index_map;
-		public:
-			Import_Multipart_PMX_Vertex_Job(Int32 vertex_data_being_,
-				Int32 vertex_data_end_,
-				std::unique_ptr<PMXModel>& pmx_model_,
-				Vector* part_points_, PMX_Model_import_settings& settings_,
-				Float& PositionMultiple_,
-				CAWeightTag* weight_tag_,
-				maxon::BaseArray<Int32>& vertex_index_,
-				maxon::HashMap<Int32, Int32>& bone_index_map_) :
-				vertex_data_being(vertex_data_being_),
-				vertex_data_end(vertex_data_end_),
-				pmx_model(pmx_model_),
-				part_points(part_points_),
-				settings(settings_),
-				PositionMultiple(PositionMultiple_),
-				weight_tag(weight_tag_),
-				vertex_index(vertex_index_),
-				bone_index_map(bone_index_map_) {
-			}
-			~Import_Multipart_PMX_Vertex_Job() {}
-			maxon::Result<void> operator ()();
-		};
-
-		class Import_PMX_Vertex_Job : public maxon::JobInterfaceTemplate<Import_PMX_Vertex_Job, void>
-		{
-		private:
-			Int32 vertex_data_being, vertex_data_end;
-			std::unique_ptr<PMXModel>& pmx_model;
-			Vector* model_points;
-			PMX_Model_import_settings& settings;
-			Float& PositionMultiple;
-			CAWeightTag* weight_tag;
-		public:
-			Import_PMX_Vertex_Job(Int32 vertex_data_being_,
-				Int32 vertex_data_end_,
-				std::unique_ptr<PMXModel>& pmx_model_,
-				Vector* model_points_,
-				PMX_Model_import_settings& settings_,
-				Float& PositionMultiple_,
-				CAWeightTag* weight_tag_) :
-				vertex_data_being(vertex_data_being_),
-				vertex_data_end(vertex_data_end_),
-				pmx_model(pmx_model_),
-				model_points(model_points_),
-				settings(settings_),
-				PositionMultiple(PositionMultiple_),
-				weight_tag(weight_tag_) {
-			}
-			~Import_PMX_Vertex_Job() {}
-			maxon::Result<void> operator ()();
-		};
 	public:
 		PMXModel();
 		~PMXModel();

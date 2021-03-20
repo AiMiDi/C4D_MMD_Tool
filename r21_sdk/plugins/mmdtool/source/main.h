@@ -17,6 +17,7 @@
 #include "maxon/sortedarray.h"
 #include "maxon/pointerarray.h"
 #include "maxon/queue.h"
+#include "maxon/baselist.h"
 #include "maxon/timevalue.h"
 #include "operatingsystem.h"
 #include "customgui_priority.h"
