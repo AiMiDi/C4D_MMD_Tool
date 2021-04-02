@@ -647,11 +647,11 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			maxon::ParallelFor::Dynamic(0, bone_data_count, [&pmx_model, &name_conversion, &PositionMultiple, &settings, &PMX_model_tag, &bone_map](const Int32 i)->maxon::Result<void>
 			{
 				iferr_scope;
-				PMX_Bone_Data * bone_data_ = pmx_model->bone_data[i];
+				PMX_Bone_Data* bone_data_ = pmx_model->bone_data[i];
 				if (bone_data_->bone_name_universal == ""_s) {
-					name_conversion.Conver(bone_data_->bone_name_local, bone_data_->bone_name_universal);			
-				}				
-				BaseObject* bone = bone_map.Find(i)->GetValue();			
+					name_conversion.Conver(bone_data_->bone_name_local, bone_data_->bone_name_universal);
+				}
+				BaseObject* bone = bone_map.Find(i)->GetValue();
 				BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
 				PMX_bone_tag->SetParameter(DescID(BONE_INDEX), String::IntToString(i), DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
@@ -715,7 +715,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 					}
 				}
-				mmd::PMX_Bone_Tag::tagUpData(PMX_bone_tag, bone);
 				if (settings.Import_ik) {
 					if (bone_data_->bone_flags.IK == 1)
 					{
@@ -764,7 +763,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 						for (auto IK_link : bone_data_->IK_links) {
 							if (IK_link->has_limits == 1) {
 								BaseObject* IK_link_bone = bone_map.Find(IK_link->bone_index)->GetValue();
-								IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_H),true, DESCFLAGS_SET::NONE);
+								IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_H), true, DESCFLAGS_SET::NONE);
 								IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_P), true, DESCFLAGS_SET::NONE);
 								IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_B), true, DESCFLAGS_SET::NONE);
 								IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_MAX_ROT), -(Vector)IK_link->limit_min, DESCFLAGS_SET::NONE);
@@ -1054,7 +1053,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				doc->SetMode(Mpolygons);
 				BaseSelect* all_select = part->GetPolygonS();
 				all_select->SelectAll(0, material_data->surface_count - 1);
-				CallCommand(14039);
+				if(IsCommandEnabled(14039))CallCommand(14039);
 				all_select->DeselectAll();
 				doc->SetMode(Mmodel);
 				doc->SetSelection(nullptr);
@@ -1213,7 +1212,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			}*/	
 			if (settings.Import_weights) {
 				weight_tag->SetBindPose(doc, false);
-				CAWeightMgr::NormalizeWeights(doc);
 			}
 		}
 	}else{
@@ -1360,7 +1358,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 						PMX_bone_tag->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), bone_data_->inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 					}
 				}
-				mmd::PMX_Bone_Tag::tagUpData(PMX_bone_tag, bone);
 				if (settings.Import_ik) {
 					if (bone_data_->bone_flags.IK == 1)
 					{

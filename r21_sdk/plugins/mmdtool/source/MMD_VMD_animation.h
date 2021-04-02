@@ -3,14 +3,17 @@
 
 #include "main.h"
 #include "description/PMX_Bone_Tag.h"
+#include "description/VMD_Cam_Obj.h"
 
-namespace mmd {
+namespace mmd{
 
 	typedef maxon::Vec3<Float32> vec3;
 	typedef maxon::Vec4<Float32> vec4;
 
 	struct VMD_Curve {
 		UChar ax, ay, bx, by;
+		VMD_Curve():ax(20), ay(20), bx(-20), by(-20) {}
+		VMD_Curve(UChar ax_, UChar ay_, UChar bx_, UChar by_) :ax(ax_), ay(ay_), bx(bx_), by(by_) {}
 	};
 
 	struct VMD_Motion {
@@ -43,11 +46,8 @@ namespace mmd {
 		vec3 position;
 	};
 
-
-
-
-class VMDAnimation 
-{
+	class VMDAnimation
+	{
 	private:
 		class VMDMotionSortedArray : public maxon::SortedArray<VMDMotionSortedArray, maxon::PointerArray<VMD_Motion>>
 		{
@@ -96,7 +96,39 @@ class VMDAnimation
 		static maxon::Result<void> FromFileImportCamera(Float& PositionMultiple, Float& TimeOffset);
 		static maxon::Result<void> FromDocumentExportCamera(Float& PositionMultiple, Float& TimeOffset);
 		static maxon::Result<void> FromFileImportMotions(Float& PositionMultiple, Float& TimeOffset, Bool& QuaternionRotationSW, Bool& DetailReport, Bool& ByTag);
-};
+	};
+
+	class VMD_Cam_Obj : public ObjectData
+	{
+		VMD_Cam_Obj() { cam = nullptr; prev_frame = -1; prev_curve_type = -1;}
+		~VMD_Cam_Obj() {}
+		BaseObject* cam;
+		maxon::HashMap<Int32, VMD_Curve*> XCurve;
+		maxon::HashMap<Int32, VMD_Curve*> YCurve;
+		maxon::HashMap<Int32, VMD_Curve*> ZCurve;
+		maxon::HashMap<Int32, VMD_Curve*> RCurve;
+		maxon::HashMap<Int32, VMD_Curve*> DCurve;
+		maxon::HashMap<Int32, VMD_Curve*> VCurve;
+		maxon::HashMap<Int32, VMD_Curve*> ACurve;		
+		Int32 prev_frame; 
+		Int32 prev_curve_type;
+		INSTANCEOF(VMD_Cam_Obj, ObjectData)
+	public:
+		// 用于限制SplineData的回调函数
+		static Bool SplineDataCallBack(Int32 cid, const void* data);
+		Bool GetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve);
+		Bool SetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve);
+		inline Bool CurveInit(GeListNode* node);
+		virtual Bool Init(GeListNode* node);
+		virtual Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags);
+		virtual Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc);
+		virtual Bool Message(GeListNode* node, Int32 type, void* data);
+		virtual DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh);		
+		virtual EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags);
+		virtual Bool AddToExecution(BaseObject* op, PriorityList* list);
+		virtual void Free(GeListNode* node);
+		static NodeData* Alloc() { return NewObjClear(VMD_Cam_Obj); }
+	};
 
 } // namespace
 #endif  __MMD_VMD_ANIMATION_H__

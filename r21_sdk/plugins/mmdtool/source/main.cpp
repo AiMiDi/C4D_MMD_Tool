@@ -8,6 +8,8 @@ Bool PluginStart()
 		return false;
 	if (!RegisterPMXBoneTag())
 		return false;
+	if (!RegisterVMDCamObj())
+		return false;
 	return true;
 }
 

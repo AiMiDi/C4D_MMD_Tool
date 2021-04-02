@@ -30,13 +30,6 @@ enum                             // Uniquely identify all your dialog elements h
 
 	DLG_PMX_MOD_IMPORT_SIZE_NAME,
 	DLG_PMX_MOD_IMPORT_SIZE,
-	/*
-	多边形Polygon  法线Normal
-	UV             材质Material 
-	骨骼Bone       权重Weights
-	IK             付予Inherit 
-	表情Expression 分部分Multipart
-	*/
 	DLG_PMX_MOD_IMPORT_POLYGON,//多边形Polygon
 	DLG_PMX_MOD_IMPORT_NORMAL,//法线Normal
 	DLG_PMX_MOD_IMPORT_UV,//UV
@@ -369,14 +362,18 @@ public:
 
 Bool RegisterPMXModelTag()
 {
-	return RegisterTagPlugin(ID_PMX_MODEL_TAG, GeLoadString(IDS_PMX_MODEL_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE , mmd::PMX_Model_Tag::Alloc, "PMX_Model_Tag"_s, AutoBitmap("MMDIcon.tif"_s), 0);
+	return RegisterTagPlugin(ID_PMX_MODEL_TAG, GeLoadString(IDS_PMX_MODEL_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Model_Tag::Alloc, "PMX_Model_Tag"_s, AutoBitmap("MMDIcon.tif"_s), 0);
 }
 
 Bool RegisterPMXBoneTag()
 {
-	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.tif"_s), 0);
+	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.tif"_s), 0);
 }
 
+Bool RegisterVMDCamObj()
+{
+	return RegisterObjectPlugin(ID_VMD_CAM_OBJ, GeLoadString(IDS_VMD_CAM_OBJ), OBJECT_CALL_ADDEXECUTION, mmd::VMD_Cam_Obj::Alloc, "VMD_Cam_Obj"_s, AutoBitmap("pmx_boen.tif"_s), 0);
+}
 /*
 Bool RegisterPMXMaterialTag()
 {

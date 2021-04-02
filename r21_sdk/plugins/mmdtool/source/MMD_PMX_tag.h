@@ -10,26 +10,29 @@
 
 namespace mmd {
 
-	
-
 	class PMX_Model_Tag : public TagData
 	{
-		
+		BaseTag* tag;
+		BaseObject* obj;
+		Bool tagUpDataSW;
+		PMX_Model_Tag() { obj = nullptr; tag = nullptr; tagUpDataSW = false;}
+		INSTANCEOF(PMX_Model_Tag ,TagData)
 	public:
-		Bool Init(GeListNode* node);
-		Bool Message(GeListNode* node, Int32 type, void* data);
-		Bool GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags);
-		static Bool UpDataBoneList(BaseTag* tag, BaseObject* obj);
+		virtual Bool Init(GeListNode* node);
+		virtual Bool GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags);
+		virtual EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 	priority, EXECUTIONFLAGS flags);
+		virtual Bool AddToExecution(BaseTag* tag, PriorityList* list);
 		static NodeData* Alloc() { return NewObjClear(PMX_Model_Tag); }
 	};
 
 	class PMX_Bone_Tag : public TagData
 	{
+		INSTANCEOF(PMX_Bone_Tag, TagData)
 	public:
-		Bool Init(GeListNode* node);
-		Bool GetDEnabling(GeListNode *node, const DescID &id, const GeData &t_data, DESCFLAGS_ENABLE flags, const BaseContainer *itemdesc);
-		Bool Message(GeListNode* node, Int32 type, void* data);
-		static Bool tagUpData(BaseTag* tag, BaseObject* obj);
+		virtual Bool Init(GeListNode* node);
+		virtual Bool GetDEnabling(GeListNode *node, const DescID &id, const GeData &t_data, DESCFLAGS_ENABLE flags, const BaseContainer *itemdesc);
+		virtual EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 	priority, EXECUTIONFLAGS flags);
+		virtual Bool AddToExecution(BaseTag* tag, PriorityList* list);
 		static NodeData* Alloc() { return NewObjClear(PMX_Bone_Tag); }
 	};
 

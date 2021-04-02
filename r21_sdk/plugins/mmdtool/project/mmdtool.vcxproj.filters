@@ -77,12 +77,18 @@
     <ClInclude Include="..\source\NameConversion.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\res\description\VMD_Cam_Obj.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\res\description\PMX_Model_Tag.res">
       <Filter>res\description</Filter>
     </Text>
     <Text Include="..\res\description\PMX_Bone_Tag.res">
+      <Filter>res\description</Filter>
+    </Text>
+    <Text Include="..\res\description\VMD_Cam_Obj.res">
       <Filter>res\description</Filter>
     </Text>
   </ItemGroup>
@@ -96,5 +102,9 @@
     <None Include="..\res\strings_en-US\description\PMX_Model_Tag.str">
       <Filter>res\str</Filter>
     </None>
+    <None Include="..\res\strings_en-US\description\VMD_Cam_Obj.str">
+      <Filter>res\str</Filter>
+    </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

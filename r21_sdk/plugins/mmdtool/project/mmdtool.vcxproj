@@ -191,6 +191,7 @@
     <ClInclude Include="..\res\c4d_symbols.h" />
     <ClInclude Include="..\res\description\PMX_Bone_Tag.h" />
     <ClInclude Include="..\res\description\PMX_Model_Tag.h" />
+    <ClInclude Include="..\res\description\VMD_Cam_Obj.h" />
     <ClInclude Include="..\source\EncodingConversion.h" />
     <ClInclude Include="..\source\MMD_PMX_model.h" />
     <ClInclude Include="..\source\MMD_PMX_tag.h" />
@@ -206,6 +207,11 @@
     <None Include="..\res\strings_en-US\c4d_strings.str" />
     <None Include="..\res\strings_en-US\description\PMX_Bone_Tag.str" />
     <None Include="..\res\strings_en-US\description\PMX_Model_Tag.str" />
+    <None Include="..\res\strings_en-US\description\VMD_Cam_Obj.str" />
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\res\description\VMD_Cam_Obj.res" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

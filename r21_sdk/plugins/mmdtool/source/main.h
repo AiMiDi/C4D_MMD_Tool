@@ -7,6 +7,8 @@
 #define ID_PMX_RIGID_TAG 1056722
 #define ID_PMX_JOINT_TAG 1056723
 #define ID_PMX_MODEL_TAG 1056724
+#define ID_VMD_MOTION_TAG 1056979
+#define ID_VMD_CAM_OBJ 1056978
 #define ID_MMD_TOOL 1056563
 
 #include <memory>
@@ -19,8 +21,13 @@
 #include "maxon/queue.h"
 #include "maxon/baselist.h"
 #include "maxon/timevalue.h"
+#include "customgui_splinecontrol.h"
 #include "operatingsystem.h"
 #include "customgui_priority.h"
+#include "customgui_splinecontrol.h"
+#include "c4d_objectdata.h"
+#include "c4d_tagdata.h"
+#include "lib_description.h"
 #include "lib_ca.h"
 #include "tcaposemorph.h"
 #include "xcolor.h"
@@ -28,6 +35,7 @@
 #include "tcaik.h"
 #include "tcaconstraint.h"
 #include "tcaweight.h"
+#include "maxon/apibase.h"
 #include "lib_ca.h"
 #include "lib_modeling.h"
 #include "lib_ngon.h"
@@ -42,6 +50,7 @@ class MMDToolDialog;
 
 Bool RegisterPMXModelTag();
 Bool RegisterPMXBoneTag();
+Bool RegisterVMDCamObj();
 /*Bool RegisterPMXMaterialTag();
 Bool RegisterPMXDisplayTag();
 Bool RegisterPMXRigidTag();
