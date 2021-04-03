@@ -1266,15 +1266,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				PMX_Bone_Data* bone_data_ = pmx_model->bone_data[i];
 				BaseObject* bone = BaseObject::Alloc(Ojoint);
 				name_conversion.InitConver(bone_data_->bone_name_local);
-				if (bone_data_->parent_bone_index == -1)
-				{
-					bone->SetFrozenPos(bone_data_->position * PositionMultiple);
-					doc->InsertObject(bone, bones, nullptr);
-				}
-				else {
-					bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position) * PositionMultiple);
-					doc->InsertObject(bone, bone_map.Find(bone_data_->parent_bone_index)->GetValue(), nullptr);
-				}
+
 				if (settings.Import_weights) {
 					weight_tag->AddJoint(bone);
 				}
@@ -1295,6 +1287,18 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 					name_conversion.Conver(bone_data_->bone_name_local, bone_data_->bone_name_universal);
 				}
 				BaseObject* bone = bone_map.Find(i)->GetValue();
+				if (bone_data_->parent_bone_index == -1)
+				{
+					bone->SetFrozenPos(bone_data_->position * PositionMultiple);
+					doc->InsertObject(bone, bones, nullptr);
+				}
+				else {
+					bone->SetFrozenPos((bone_data_->position - pmx_model->bone_data[bone_data_->parent_bone_index]->position) * PositionMultiple);
+					auto parent_bone_ptr = bone_map.Find(bone_data_->parent_bone_index);
+					if (parent_bone_ptr != nullptr) {
+						doc->InsertObject(bone, parent_bone_ptr->GetValue(), nullptr);
+					}
+				}
 				BaseTag* PMX_bone_tag = bone->MakeTag(ID_PMX_BONE_TAG);
 				PMX_bone_tag->SetParameter(DescID(BONE_INDEX), String::IntToString(i), DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_->bone_name_local, DESCFLAGS_SET::NONE);
