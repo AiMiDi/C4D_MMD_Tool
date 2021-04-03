@@ -644,9 +644,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 			else {
 				name_conversion.AutoUpdata();
 			}
-			maxon::ParallelFor::Dynamic(0, bone_data_count, [&pmx_model, &name_conversion, &PositionMultiple, &settings, &PMX_model_tag, &bone_map](const Int32 i)->maxon::Result<void>
+			for (Int32 i = 0; i < bone_data_count; i++)
 			{
-				iferr_scope;
 				PMX_Bone_Data* bone_data_ = pmx_model->bone_data[i];
 				if (bone_data_->bone_name_universal == ""_s) {
 					name_conversion.Conver(bone_data_->bone_name_local, bone_data_->bone_name_universal);
@@ -772,8 +771,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 						}
 					}
 				}
-				return maxon::OK;
-			})iferr_return;
+			}
 		}
 		/*struct point_info
 		{
@@ -1287,9 +1285,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 				name_conversion.AutoUpdata();
 			}
 			Int32 bone_data_count = pmx_model->model_data_count.bone_data_count;
-			maxon::ParallelFor::Dynamic(0, bone_data_count, [&pmx_model, &name_conversion, &PositionMultiple, &settings, &PMX_model_tag, &bone_map](const Int32 i)->maxon::Result<void>
+			for (Int32 i = 0; i < bone_data_count; i++)
 			{
-				iferr_scope;
 				PMX_Bone_Data* bone_data_ = pmx_model->bone_data[i];
 				if (bone_data_->bone_name_universal == ""_s) {
 					name_conversion.Conver(bone_data_->bone_name_local, bone_data_->bone_name_universal);
@@ -1415,8 +1412,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(Float &PositionMultiple, 
 						}
 					}
 				}
-				return maxon::OK;
-			})iferr_return;
+			}
 		}
 		bone_map.Reset();
 		if (settings.Import_polygon) {
