@@ -1,6 +1,6 @@
 STRINGTABLE PMX_Bone_Tag
 {
-	PMX_Bone_Tag "PMX_Bone_Tag";
+	PMX_Bone_Tag "PMX Bone Tag";
 	PMX_BONE_INFO_GRP "Bone info";
 	BONE_INDEX "Bone index";
 	BONE_NAME_LOCAL "Bone local name";

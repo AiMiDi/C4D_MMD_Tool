@@ -79,6 +79,9 @@ enum
 	IDS_PMX_JOINT_TAG,
 	IDS_PMX_MODEL_TAG,
 
+	//obj
+	IDS_VMD_CAM_OBJ,
+
   // End of symbol definition
 };
 #endif C4D_SYMBOLS_H__

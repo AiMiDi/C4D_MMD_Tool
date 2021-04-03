@@ -10,6 +10,8 @@ Bool PluginStart()
 		return false;
 	if (!RegisterVMDCamObj())
 		return false;
+	if (!RegisterVMDCamDrawSceneHook())
+		return false;
 	return true;
 }
 

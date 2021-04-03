@@ -362,17 +362,17 @@ public:
 
 Bool RegisterPMXModelTag()
 {
-	return RegisterTagPlugin(ID_PMX_MODEL_TAG, GeLoadString(IDS_PMX_MODEL_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Model_Tag::Alloc, "PMX_Model_Tag"_s, AutoBitmap("MMDIcon.tif"_s), 0);
+	return RegisterTagPlugin(ID_PMX_MODEL_TAG, GeLoadString(IDS_PMX_MODEL_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Model_Tag::Alloc, "PMX_Model_Tag"_s, AutoBitmap("MMDIcon.png"_s), 0);
 }
 
 Bool RegisterPMXBoneTag()
 {
-	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.tif"_s), 0);
+	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.png"_s), 0);
 }
 
 Bool RegisterVMDCamObj()
 {
-	return RegisterObjectPlugin(ID_VMD_CAM_OBJ, GeLoadString(IDS_VMD_CAM_OBJ), OBJECT_CALL_ADDEXECUTION, mmd::VMD_Cam_Obj::Alloc, "VMD_Cam_Obj"_s, AutoBitmap("pmx_boen.tif"_s), 0);
+	return RegisterObjectPlugin(ID_VMD_CAM_OBJ, GeLoadString(IDS_VMD_CAM_OBJ), OBJECT_CALL_ADDEXECUTION, mmd::VMD_Cam_Obj::Alloc, "VMD_Cam_Obj"_s, AutoBitmap("vmd_cam_obj.png"_s), 0);
 }
 /*
 Bool RegisterPMXMaterialTag()
@@ -396,6 +396,11 @@ Bool RegisterPMXJointTag()
 }
 */
 
+Bool RegisterVMDCamDrawSceneHook()
+{
+	return RegisterSceneHookPlugin(ID_VMD_CAM_DRAW, "VMD Cam Draw"_s, 0, mmd::VMD_Cam_Draw::Alloc, EXECUTIONPRIORITY_GENERATOR, 0);
+}
+
 Bool RegisterMMDTool() {
-	return RegisterCommandPlugin(ID_MMD_TOOL, "MMDTool"_s, 0, AutoBitmap("MMDIcon.tif"_s), "MMD tool for C4D"_s, NewObjClear(MMDTool));
+	return RegisterCommandPlugin(ID_MMD_TOOL, "MMDTool"_s, 0, AutoBitmap("MMDIcon.png"_s), "MMD tool for C4D"_s, NewObjClear(MMDTool));
 }

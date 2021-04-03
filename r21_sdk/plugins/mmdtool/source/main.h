@@ -10,6 +10,7 @@
 #define ID_VMD_MOTION_TAG 1056979
 #define ID_VMD_CAM_OBJ 1056978
 #define ID_MMD_TOOL 1056563
+#define ID_VMD_CAM_DRAW 1057017
 
 #include <memory>
 #include "c4d.h"
@@ -27,6 +28,7 @@
 #include "customgui_splinecontrol.h"
 #include "c4d_objectdata.h"
 #include "c4d_tagdata.h"
+#include "c4d_scenehookdata.h"
 #include "lib_description.h"
 #include "lib_ca.h"
 #include "tcaposemorph.h"
@@ -55,6 +57,7 @@ Bool RegisterVMDCamObj();
 Bool RegisterPMXDisplayTag();
 Bool RegisterPMXRigidTag();
 Bool RegisterPMXJointTag();*/
+Bool RegisterVMDCamDrawSceneHook();
 Bool RegisterMMDTool();
 
 #endif // MAIN_H__
