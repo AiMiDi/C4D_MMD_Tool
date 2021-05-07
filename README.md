@@ -4,15 +4,15 @@
 
 mmdtool for Cinema 4D.
 
-A plugin for Cinema 4D written in C++ used to import MikuMikuDance data into Cinema 4D.
+A plugin for Cinema 4D written in C++ is used to import MikuMikuDance data into Cinema 4D.
 
 ## Release
 
-At present, the main maintenance version is R21 and above.
+At present, the main maintenance version is R21 or higher.
 
 ## version 
 
- version 0.2.0 Initial commit
+version 0.2.0 Initial commit
 
 version 0.2.1 Fix the weight import problem and bone import problem
 
