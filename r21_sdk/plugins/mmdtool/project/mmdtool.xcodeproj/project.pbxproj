@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A045BF0E5C0DC00058010000 /* MMD_VMD_animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C0DC00058000000 /* MMD_VMD_animation.cpp */; };
 		A045BF0E5C2EFB3D0B010000 /* MMD_PMX_model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C2EFB3D0B000000 /* MMD_PMX_model.cpp */; };
+		A045BF0E5C3B84068A010000 /* NameConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C3B84068A000000 /* NameConversion.cpp */; };
 		A045BF0E5C4287392B010000 /* libimage.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C4287392B000000 /* libimage.framework.a */; };
 		A045BF0E5C4ADBC31B010000 /* libcommand.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C4ADBC31B000000 /* libcommand.framework.a */; };
 		A045BF0E5C6542540E010000 /* libmesh_misc.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C6542540E000000 /* libmesh_misc.framework.a */; };
@@ -203,12 +204,14 @@
 		A045BF0E5C1837B5E7000000 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main.h; path = ../source/main.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C2C1B7FD7000000 /* EncodingConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncodingConversion.h; path = ../source/EncodingConversion.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C2EFB3D0B000000 /* MMD_PMX_model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMD_PMX_model.cpp; path = ../source/MMD_PMX_model.cpp; sourceTree = SOURCE_ROOT; };
+		A045BF0E5C3B84068A000000 /* NameConversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NameConversion.cpp; path = ../source/NameConversion.cpp; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C3D48A85D000000 /* MMD_VMD_animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMD_VMD_animation.h; path = ../source/MMD_VMD_animation.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C4287392B020000 /* image.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = image.framework.xcodeproj; path = ../../../frameworks/image.framework/project/image.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C448F46FA000000 /* c4d_symbols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_symbols.h; path = ../res/c4d_symbols.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C4ADBC31B020000 /* command.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = command.framework.xcodeproj; path = ../../../frameworks/command.framework/project/command.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C5603B941000000 /* MMD_PMX_tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMD_PMX_tag.h; path = ../source/MMD_PMX_tag.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C6542540E020000 /* mesh_misc.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mesh_misc.framework.xcodeproj; path = ../../../frameworks/mesh_misc.framework/project/mesh_misc.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A045BF0E5C72BB660D000000 /* VMD_Cam_Obj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMD_Cam_Obj.h; path = ../res/description/VMD_Cam_Obj.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C7BB7F0FF000000 /* PluginRegister.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginRegister.cpp; path = ../source/PluginRegister.cpp; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C898175D0000000 /* MMD_PMX_model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMD_PMX_model.h; path = ../source/MMD_PMX_model.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C8A3C2298020000 /* math.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = math.framework.xcodeproj; path = ../../../frameworks/math.framework/project/math.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -216,6 +219,7 @@
 		A045BF0E5CBC4C136C020000 /* python.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = python.framework.xcodeproj; path = ../../../frameworks/python.framework/project/python.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CD80552BB000000 /* interface_registration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interface_registration.cpp; path = ../generated/hxx/interface_registration.cpp; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CD93CCD9F000000 /* register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = register.cpp; path = ../generated/hxx/register.cpp; sourceTree = SOURCE_ROOT; };
+		A045BF0E5CE05C930F000000 /* NameConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameConversion.h; path = ../source/NameConversion.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CE3FA683C000000 /* MMD_PMX_tag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMD_PMX_tag.cpp; path = ../source/MMD_PMX_tag.cpp; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CE5C793BF000000 /* PMX_Bone_Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PMX_Bone_Tag.h; path = ../res/description/PMX_Bone_Tag.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CE921D362000000 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../source/main.cpp; sourceTree = SOURCE_ROOT; };
@@ -324,6 +328,7 @@
 			children = (
 				A045BF0E5CE5C793BF000000 /* PMX_Bone_Tag.h */,
 				A045BF0E5CFB374D58000000 /* PMX_Model_Tag.h */,
+				A045BF0E5C72BB660D000000 /* VMD_Cam_Obj.h */,
 			);
 			name = description;
 			path = ../res/description;
@@ -388,6 +393,8 @@
 				A045BF0E5C5603B941000000 /* MMD_PMX_tag.h */,
 				A045BF0E5C0DC00058000000 /* MMD_VMD_animation.cpp */,
 				A045BF0E5C3D48A85D000000 /* MMD_VMD_animation.h */,
+				A045BF0E5C3B84068A000000 /* NameConversion.cpp */,
+				A045BF0E5CE05C930F000000 /* NameConversion.h */,
 				A045BF0E5C7BB7F0FF000000 /* PluginRegister.cpp */,
 			);
 			name = source;
@@ -659,6 +666,7 @@
 			files = (
 				A045BF0E5C0DC00058010000 /* MMD_VMD_animation.cpp in Sources */,
 				A045BF0E5C2EFB3D0B010000 /* MMD_PMX_model.cpp in Sources */,
+				A045BF0E5C3B84068A010000 /* NameConversion.cpp in Sources */,
 				A045BF0E5C7BB7F0FF010000 /* PluginRegister.cpp in Sources */,
 				A045BF0E5C933AE152010000 /* EncodingConversion.cpp in Sources */,
 				A045BF0E5CD80552BB010000 /* interface_registration.cpp in Sources */,

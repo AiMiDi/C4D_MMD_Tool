@@ -16,9 +16,6 @@
     <Filter Include="source">
       <UniqueIdentifier>{8800E4E7-0D26-2958-0000-0000CA90681B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\str">
-      <UniqueIdentifier>{a328e355-eba8-4a96-a811-e7449cd473f8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -39,13 +36,16 @@
     <ClCompile Include="..\source\MMD_VMD_animation.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\NameConversion.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\PluginRegister.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\NameConversion.cpp">
+    <ClCompile Include="..\source\ImagesGUI.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,6 +57,9 @@
       <Filter>res\description</Filter>
     </ClInclude>
     <ClInclude Include="..\res\description\PMX_Model_Tag.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\res\description\VMD_Cam_Obj.h">
       <Filter>res\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\EncodingConversion.h">
@@ -71,40 +74,25 @@
     <ClInclude Include="..\source\MMD_VMD_animation.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\main.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\NameConversion.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\res\description\VMD_Cam_Obj.h">
-      <Filter>res\description</Filter>
+    <ClInclude Include="..\source\main.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ImagesGUI.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\res\description\PMX_Model_Tag.res">
+    <None Include="..\res\description\PMX_Bone_Tag.res">
       <Filter>res\description</Filter>
-    </Text>
-    <Text Include="..\res\description\PMX_Bone_Tag.res">
+    </None>
+    <None Include="..\res\description\PMX_Model_Tag.res">
       <Filter>res\description</Filter>
-    </Text>
-    <Text Include="..\res\description\VMD_Cam_Obj.res">
+    </None>
+    <None Include="..\res\description\VMD_Cam_Obj.res">
       <Filter>res\description</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\res\strings_en-US\c4d_strings.str">
-      <Filter>res\str</Filter>
     </None>
-    <None Include="..\res\strings_en-US\description\PMX_Bone_Tag.str">
-      <Filter>res\str</Filter>
-    </None>
-    <None Include="..\res\strings_en-US\description\PMX_Model_Tag.str">
-      <Filter>res\str</Filter>
-    </None>
-    <None Include="..\res\strings_en-US\description\VMD_Cam_Obj.str">
-      <Filter>res\str</Filter>
-    </None>
-    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

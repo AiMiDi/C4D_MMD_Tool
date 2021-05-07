@@ -3,7 +3,8 @@
 
 #include "main.h"
 
-class NameConversion {
+class NameConversion 
+{
 private:
 	BaseFile* file;
 	Int updata_name_conversion_count;

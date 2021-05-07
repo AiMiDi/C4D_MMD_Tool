@@ -2,6 +2,7 @@
 #include "MMD_PMX_model.h"
 #include "MMD_VMD_animation.h"
 #include "MMD_PMX_tag.h"
+#include "ImagesGUI.h"
 
 enum                             // Uniquely identify all your dialog elements here.
 {
@@ -17,7 +18,16 @@ enum                             // Uniquely identify all your dialog elements h
 	DLG_VMD_CAM_EXPORT_SIZE_NAME,
 	DLG_VMD_CAM_EXPORT_OFFSET,
 	DLG_VMD_CAM_EXPORT_OFFSET_NAME,
+	DLG_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME,
+	DLG_VMD_CAM_EXPORT_ROTATION_TWEEN,
 	DLG_VMD_CAM_EXPORT_BUTTON,
+
+	DLG_VMD_CAM_CONVER_DIS_NAME,
+	DLG_VMD_CAM_CONVER_DIS,
+	DLG_VMD_CAM_CONVER_ROTATION_TWEEN_NAME,
+	DLG_VMD_CAM_CONVER_ROTATION_TWEEN,
+	DLG_VMD_CAM_CONVER_BUTTON,
+
 
 	DLG_VMD_MOT_IMPORT_SIZE_NAME,
 	DLG_VMD_MOT_IMPORT_SIZE,
@@ -47,30 +57,29 @@ enum                             // Uniquely identify all your dialog elements h
 
 class MMDToolDialog : public GeDialog 
 {
+	ImagesGUI* Images;
 public:
-	MMDToolDialog(void) {}
-	virtual ~MMDToolDialog(void) {}
+	MMDToolDialog(void) { Images = nullptr; }
+	virtual ~MMDToolDialog(void) { delete Images; }
 
 	//----------
 	//-- Set up dialog elements here:
+	
 
 	virtual Bool CreateLayout(void)
 	{
 
 		SetTitle(GeLoadString(IDS_VMD_TOOL_TITLE));
-
-		BaseContainer settings;
-		settings.SetBool(BITMAPBUTTON_BUTTON, false);
-		void* const customGUI = AddCustomGui(999, CUSTOMGUI_BITMAPBUTTON, ""_s, BFH_SCALE, SizePix(300), SizePix(78), settings);
-		BitmapButtonCustomGui* const bitmapButtonGUI = static_cast<BitmapButtonCustomGui*>(customGUI);
-		if (bitmapButtonGUI)
-		{
-			bitmapButtonGUI->SetImage(AutoBitmap("mmd_tool_title.png"_s), true, false);
-		}
+		Images = new ImagesGUI("mmd_tool_title.png"_s, 300, 78);
+		C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(78));
+		if (userAreaGadget != nullptr)
+			this->AttachUserArea((*Images), userAreaGadget);
 
 		TabGroupBegin(1000, BFH_SCALEFIT | BFV_SCALEFIT);
-		//CameraBegin
-		GroupBegin(1100, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_TOOL_TITLE), 0, 350, 0);
+		//CameraBegin		
+		GroupBegin(1100, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_TOOL_TITLE), 0, 350, 0);	
+		ScrollGroupBegin(1200, BFH_CENTER, SCROLLGROUP_VERT | SCROLLGROUP_BORDERIN, 0, 200);
+		GroupBegin(1300, BFH_CENTER, 1, 2, ""_s, 0, 350, 0);
 		//ImportCameraBegin
 		GroupBegin(1001, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_IMPORT_TITLE), 0, 0, 0);
 		GroupBorder(BORDER_GROUP_IN);
@@ -106,30 +115,63 @@ public:
 		AddEditNumberArrows(DLG_VMD_CAM_EXPORT_OFFSET, BFH_LEFT, 250, 10);
 		GroupEnd();
 
+		GroupBegin(1007, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+		AddStaticText(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME), BORDER_NONE);
+		AddComboButton(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, BFH_LEFT, 242, 10);
+		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_X));
+		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 1, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Y));
+		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 2, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Z));
+		GroupEnd();
+
 		AddButton(DLG_VMD_CAM_EXPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_CAM_EXPORT_BUTTON));
 		GroupEnd();
 		//ExportCameraEnd
-		GroupEnd();
-		//CameraEnd
-		//MotionBegin
-		GroupBegin(1200, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_TOOL_TITLE), 0, 350, 0);
-		//ImportMotionBegin
-		GroupBegin(1001, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_IMPORT_TITLE), 0, 0, 0);
+
+		//ConversionCameraBegin
+		GroupBegin(1008, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_CONVER_TITLE), 0, 0, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 
-		GroupBegin(1002, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+		GroupBegin(1009, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+		AddStaticText(DLG_VMD_CAM_CONVER_DIS_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_CONVER_DIS_NAME), BORDER_NONE);
+		AddEditNumberArrows(DLG_VMD_CAM_CONVER_DIS, BFH_LEFT, 250, 10);
+		GroupEnd();
+
+		GroupBegin(1010, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+		AddStaticText(DLG_VMD_CAM_CONVER_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_NAME), BORDER_NONE);
+		AddComboButton(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, BFH_LEFT, 242, 10);
+		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_X));
+		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 1, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Y));
+		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 2, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Z));
+		GroupEnd();
+
+		AddButton(DLG_VMD_CAM_CONVER_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_CAM_CONVER_BUTTON));
+		GroupEnd();
+		//ConversionCameraEnd
+		GroupEnd();
+		GroupEnd();
+		GroupEnd();
+		//CameraEnd
+		//MotionBegin
+		GroupBegin(1400, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_TOOL_TITLE), 0, 350, 0);
+		//ImportMotionBegin
+		GroupBegin(1101, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_IMPORT_TITLE), 0, 0, 0);
+		GroupBorder(BORDER_GROUP_IN);
+		GroupBorderSpace(5, 5, 5, 10);
+		GroupSpace(2, 5);
+
+		GroupBegin(1102, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_MOT_IMPORT_SIZE_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_MOT_IMPORT_SIZE_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_MOT_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1003, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+		GroupBegin(1103, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_MOT_IMPORT_OFFSET_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_MOT_IMPORT_OFFSET_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_MOT_IMPORT_OFFSET, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1004, BFH_LEFT, 3, 1, ""_s, 0, 350, 10);
+		GroupBegin(1104, BFH_LEFT, 3, 1, ""_s, 0, 350, 10);
 		AddCheckbox(DLG_VMD_MOT_IMPORT_QUAT, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_QUAT_NAME));
 		AddCheckbox(DLG_VMD_MOT_IMPORT_DETAIL, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_DETAIL_NAME));
 		AddCheckbox(DLG_VMD_MOT_IMPORT_BY_TAG, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_BY_TAG));
@@ -141,19 +183,19 @@ public:
 		GroupEnd();
 		//MotionEnd
 		//ModelBegin
-		GroupBegin(1300, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_TOOL_TITLE), 0, 350, 0);
+		GroupBegin(1500, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_TOOL_TITLE), 0, 350, 0);
 		//ImportModelBegin
-		GroupBegin(1005, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_IMPORT_TITLE), 0, 0, 0);
+		GroupBegin(1201, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_IMPORT_TITLE), 0, 0, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 
-		GroupBegin(1006, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+		GroupBegin(1202, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_PMX_MOD_IMPORT_SIZE_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_PMX_MOD_IMPORT_SIZE_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_PMX_MOD_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1007, BFH_CENTER, 2, 6, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
+		GroupBegin(1203, BFH_CENTER, 2, 6, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		AddCheckbox(DLG_PMX_MOD_IMPORT_POLYGON, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_POLYGON));
@@ -188,6 +230,9 @@ public:
 		SetFloat(DLG_VMD_CAM_IMPORT_OFFSET, 0);
 		SetFloat(DLG_VMD_CAM_EXPORT_SIZE, 0.118, 0, 100);
 		SetFloat(DLG_VMD_CAM_EXPORT_OFFSET, 0);
+		SetInt32(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 0);
+		SetFloat(DLG_VMD_CAM_CONVER_DIS, 0);
+		SetInt32(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 0);
 		SetFloat(DLG_VMD_MOT_IMPORT_SIZE, 8.5, 0, 100);
 		SetFloat(DLG_VMD_MOT_IMPORT_OFFSET, 0);
 		SetBool(DLG_VMD_MOT_IMPORT_QUAT, 1);
@@ -229,13 +274,27 @@ public:
 			}
 			break;
 		}
+		case (DLG_VMD_CAM_CONVER_BUTTON):
+		{
+			Float distance_;
+			Int32 use_rotation_;
+			GetFloat(DLG_VMD_CAM_CONVER_DIS, distance_);
+			GetInt32(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, use_rotation_);
+			iferr(mmd::VMD_Cam_Obj::ConversionCamera(distance_, use_rotation_))
+			{
+				return false;
+			}
+			break;
+		}
 		case (DLG_VMD_CAM_EXPORT_BUTTON):
 		{
 			Float PositionMultiple_;
 			Float TimeOffset_;
+			Int32 use_rotation_;
 			GetFloat(DLG_VMD_CAM_EXPORT_SIZE, PositionMultiple_);
 			GetFloat(DLG_VMD_CAM_EXPORT_OFFSET, TimeOffset_);
-			iferr(mmd::VMDAnimation::FromDocumentExportCamera(PositionMultiple_, TimeOffset_))
+			GetInt32(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, use_rotation_);
+			iferr(mmd::VMDAnimation::FromDocumentExportCamera(PositionMultiple_, TimeOffset_, use_rotation_))
 			{
 				return false;
 			}

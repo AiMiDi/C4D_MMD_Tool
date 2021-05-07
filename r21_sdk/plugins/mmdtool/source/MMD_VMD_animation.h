@@ -10,14 +10,16 @@ namespace mmd{
 	typedef maxon::Vec3<Float32> vec3;
 	typedef maxon::Vec4<Float32> vec4;
 
-	struct VMD_Curve {
+	struct VMD_Curve //MMD风格的补间曲线
+	{
 		UChar ax, ay, bx, by;
 	public:
-		VMD_Curve():ax(20), ay(20), bx(-20), by(-20) {}
+		VMD_Curve():ax(20), ay(20), bx(20), by(20) {}
 		VMD_Curve(UChar ax_, UChar ay_, UChar bx_, UChar by_) :ax(ax_), ay(ay_), bx(bx_), by(by_) {}
 	};
 
-	struct VMD_Motion {
+	struct VMD_Motion //MMD风格的动作
+	{
 		String bone_name;//动作对应骨骼名称
 		UInt32 frame_no;//动作所在帧位置
 		vec3 position;//动作对应骨骼位置
@@ -25,13 +27,15 @@ namespace mmd{
 		VMD_Curve XCurve, YCurve, ZCurve, RCurve;//动作补间曲线
 	};
 
-	struct VMD_Morph {
+	struct VMD_Morph //MMD风格的表情动画
+	{
 		String morph_name;//动作对应表情名称
 		UInt32 frame_no;//动作对应表情所在帧位置
 		Float32 weight;//表情变形程度
 	};
 
-	struct VMD_Camera {
+	struct VMD_Camera //MMD风格的摄像机动画
+	{
 		UInt32 frame_no;//摄像机动作所在帧位置
 		Float32 distance; //摄像机视点距离
 		vec3 position;//摄像机视点位置
@@ -41,7 +45,8 @@ namespace mmd{
 		UChar perspective; // 0:on, 1:off
 	};
 
-	struct VMD_Light {
+	struct VMD_Light //MMD风格的灯光动画
+	{
 		UInt32 frame_no;
 		vec3 rgb;
 		vec3 position;
@@ -77,30 +82,49 @@ namespace mmd{
 			static Bool LessThan(const VMD_Light& a, const VMD_Light& b) { return a.frame_no < b.frame_no; }
 			static Bool IsEqual(const VMD_Light& a, const VMD_Light& b) { return a.frame_no == b.frame_no; }
 		};
+		//最初使用动作模型名称
 		String ModelName;
+		//是否为摄像机动作
 		Bool IsCamera;
+		//动作关键帧数量
 		UInt32 MotionFrameNumber;
+		//表情关键帧数量
 		UInt32 MorphFrameNumber;
+		//摄像机关键帧数量
 		UInt32 CameraFrameNumber;
+		//灯光关键帧数量
 		UInt32 LightFrameNumber;
+		//动作数据数组
 		VMDMotionSortedArray motion_frames;
+		//表情动画数据数组
 		VMDMorphSortedArray morph_frames;
+		//摄像机数据数组
 		VMDCameraSortedArray camera_frames;
+		//灯光数据数组
 		VMDLightSortedArray light_frames;
 	public:
+		//构造函数
 		VMDAnimation();
+		//析构函数
 		~VMDAnimation();
 
+		//用于从文件导入到对象
 		maxon::Result<void> LoadFromFile(BaseFile* const file);
+		//用于将对象保存到文件
 		maxon::Result<void> WriteToFile(BaseFile* const file);
 
-		static maxon::Result<void> FromFileImportCamera(Float& PositionMultiple, Float& TimeOffset);
-		static maxon::Result<void> FromDocumentExportCamera(Float& PositionMultiple, Float& TimeOffset);
-		static maxon::Result<void> FromFileImportMotions(Float& PositionMultiple, Float& TimeOffset, Bool& QuaternionRotationSW, Bool& DetailReport, Bool& ByTag);
+		//从文件导入摄像机数据
+		static maxon::Result<void> FromFileImportCamera(Float PositionMultiple, Float TimeOffset);
+		//从项目导出摄像机数据
+		static maxon::Result<void> FromDocumentExportCamera(Float PositionMultiple, Float TimeOffset, Int32 use_rotation);
+		//从文件导入动作或表情数据
+		static maxon::Result<void> FromFileImportMotions(Float PositionMultiple, Float TimeOffset, Bool QuaternionRotationSW, Bool DetailReport, Bool ByTag);
 	};
 
 	class VMD_Cam_Obj : public ObjectData
 	{		
+	private:
+		//使用Map储存补间曲线数据
 		maxon::HashMap<Int32, VMD_Curve*> XCurve;
 		maxon::HashMap<Int32, VMD_Curve*> YCurve;
 		maxon::HashMap<Int32, VMD_Curve*> ZCurve;
@@ -108,27 +132,53 @@ namespace mmd{
 		maxon::HashMap<Int32, VMD_Curve*> DCurve;
 		maxon::HashMap<Int32, VMD_Curve*> VCurve;
 		maxon::HashMap<Int32, VMD_Curve*> ACurve;	
+		//构造函数
 		VMD_Cam_Obj() { cam = nullptr; prev_frame = -1; prev_curve_type = -1;}
+		//析构函数
 		~VMD_Cam_Obj() {}		
+		//储存前一帧，以确定更新状态
 		Int32 prev_frame; 
+		//储存上一种曲线类型，以确定更新状态
 		Int32 prev_curve_type;
-		INSTANCEOF(VMD_Cam_Obj, ObjectData)
-	public:
+		//管理的摄像机对象
 		BaseObject* cam;
+		INSTANCEOF(VMD_Cam_Obj, ObjectData)
+
+	public:		
 		// 用于限制SplineData的回调函数
 		static Bool SplineDataCallBack(Int32 cid, const void* data);
+		//将普通摄像机转换为MMD摄像机
+		static maxon::Result<BaseObject*> ConversionCamera(Float distance,Int32 use_rotation,BaseObject* str_cam = nullptr);
+		//获取曲线值
 		Bool GetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve);
+		//设置曲线值
 		Bool SetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve);
+		//更新补间曲线
 		Bool UpdateCurve(Int32 frame_on);
+		//更新全部补间曲线
 		Bool UpdateAllCurve();
-		inline Bool CurveInit(GeListNode* node);
+		//获取对象管理的摄像机对象
+		BaseObject* GetCamera() { return cam; }
+		//初始化摄像机对象
+		inline Bool CameraInit();
+		//初始化曲线
+		inline Bool CurveInit();
+
+		//对象初始化
 		virtual Bool Init(GeListNode* node);
+		//设置参数时调用，用于调用SplineData的回调函数
 		virtual Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags);
+		//禁用与启用参数
 		virtual Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc);
+		//接收Message时调用，用于处理事件
 		virtual Bool Message(GeListNode* node, Int32 type, void* data);	
+		//实时调用
 		virtual EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags);
+		//将实时调用添加入优先级列表
 		virtual Bool AddToExecution(BaseObject* op, PriorityList* list);
+		//删除函数
 		virtual void Free(GeListNode* node);
+		//生成函数
 		static NodeData* Alloc() { return NewObjClear(VMD_Cam_Obj); }
 	};
 

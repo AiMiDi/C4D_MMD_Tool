@@ -1,6 +1,7 @@
 #include "MMD_VMD_animation.h"
 
 void mmd::VMD_Cam_Obj::Free(GeListNode* node) {
+	//GetActiveDocument()->FindSceneHook(ID_VMD_CAM_DRAW)->GetNodeData<VMD_Cam_Draw>()->DeleteDrawObj((BaseObject*)node);
 	for (auto i : XCurve.GetValues()) {
 		if (i != nullptr)delete i;
 	}
@@ -61,22 +62,28 @@ Bool mmd::VMD_Cam_Obj::GetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve) {
 	case (XCURVE): {
 		auto xCurve_ptr = XCurve.Find(frame_on);
 		if (xCurve_ptr == nullptr) {
-			curve = new VMD_Curve();
+			curve->ax = 20;
+			curve->bx = 20;
+			curve->ay = 20;
+			curve->by = 20;
 			return false;
 		}
 		else {
-			curve = xCurve_ptr->GetValue();
+			*curve = *(xCurve_ptr->GetValue());
 		}
 		break;
 	}
 	case (YCURVE): {
 		auto yCurve_ptr = YCurve.Find(frame_on);
 		if (yCurve_ptr == nullptr) {
-			curve = new VMD_Curve();
+			curve->ax = 20;
+			curve->bx = 20;
+			curve->ay = 20;
+			curve->by = 20;
 			return false;
 		}
 		else {
-			curve = yCurve_ptr->GetValue();
+			*curve = *(yCurve_ptr->GetValue());
 		}
 		break;
 	}
@@ -84,55 +91,70 @@ Bool mmd::VMD_Cam_Obj::GetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve) {
 	{
 		auto zCurve_ptr = ZCurve.Find(frame_on);
 		if (zCurve_ptr == nullptr) {
-			curve = new VMD_Curve();
+			curve->ax = 20;
+			curve->bx = 20;
+			curve->ay = 20;
+			curve->by = 20;
 			return false;
 		}
 		else {
-			curve = zCurve_ptr->GetValue();
+			*curve = *(zCurve_ptr->GetValue());
 		}
 		break;
 	}
 	case (RCURVE): {
 		auto rCurve_ptr = RCurve.Find(frame_on);
 		if (rCurve_ptr == nullptr) {
-			curve = new VMD_Curve();
+			curve->ax = 20;
+			curve->bx = 20;
+			curve->ay = 20;
+			curve->by = 20;
 			return false;
 		}
 		else {
-			curve = rCurve_ptr->GetValue();
+			*curve = *(rCurve_ptr->GetValue());
 		}
 		break;
 	}
 	case (DCURVE): {
 		auto dCurve_ptr = DCurve.Find(frame_on);
 		if (dCurve_ptr == nullptr) {
-			curve = new VMD_Curve();
+			curve->ax = 20;
+			curve->bx = 20;
+			curve->ay = 20;
+			curve->by = 20;
 			return false;
 		}
 		else {
-			curve = dCurve_ptr->GetValue();
+			*curve = *(dCurve_ptr->GetValue());
 		}
 		break;
 	}
 	case (VCURVE): {
 		auto vCurve_ptr = VCurve.Find(frame_on);
 		if (vCurve_ptr == nullptr) {
-			curve = new VMD_Curve();
+			curve->ax = 20;
+			curve->bx = 20;
+			curve->ay = 20;
+			curve->by = 20;
 			return false;
 		}
 		else {
-			curve = vCurve_ptr->GetValue();
+			*curve = *(vCurve_ptr->GetValue());
 		}
 		break;
 	}
 	case (ACURVE): {
 		auto aCurve_ptr = ACurve.Find(frame_on);
 		if (aCurve_ptr == nullptr) {
-			curve = new VMD_Curve();
+			curve->ax = 20;
+			curve->bx = 20;
+			curve->ay = 20;
+			curve->by = 20;
 			return false;
 		}
 		else {
-			curve = aCurve_ptr->GetValue();
+			*curve = *(aCurve_ptr->GetValue());
 		}
 		break;
 	}
@@ -436,9 +458,36 @@ Bool mmd::VMD_Cam_Obj::UpdateCurve(Int32 frame_on) {
 	}
 	return true;
 }
-Bool mmd::VMD_Cam_Obj::CurveInit(GeListNode* node) {
-	if (node == nullptr)return false;
-	BaseContainer* bc = ((BaseList2D*)node)->GetDataInstance();
+Bool mmd::VMD_Cam_Obj::CameraInit() {
+	if (cam == nullptr) {
+		BaseObject* down_obj = reinterpret_cast<BaseObject*>(Get()->GetDown());
+		if (down_obj != nullptr) {
+			if (down_obj->GetType() == Ocamera) {
+				cam = down_obj;
+			}
+			else {
+				cam = BaseObject::Alloc(Ocamera);//5103
+				cam->SetName("Camera"_s);
+				BaseTag* ProtectionTag = BaseTag::Alloc(Tprotection);
+				ProtectionTag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
+				cam->InsertTag(ProtectionTag);
+				cam->InsertUnder(Get());
+			}
+		}
+		else {
+			cam = BaseObject::Alloc(Ocamera);//5103
+			cam->SetName("Camera"_s);
+			BaseTag* ProtectionTag = BaseTag::Alloc(Tprotection);
+			ProtectionTag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
+			cam->InsertTag(ProtectionTag);
+			cam->InsertUnder(Get());
+		}
+	}
+	return true;
+}
+Bool mmd::VMD_Cam_Obj::CurveInit() {
+	if (Get() == nullptr)return false;
+	BaseContainer* bc = ((BaseList2D*)Get())->GetDataInstance();
 	GeData data = GeData(CUSTOMDATATYPE_SPLINE, DEFAULTVALUE);
 	SplineData* spline = (SplineData*)data.GetCustomDataType(CUSTOMDATATYPE_SPLINE);
 	if (spline)
@@ -460,15 +509,7 @@ Bool mmd::VMD_Cam_Obj::CurveInit(GeListNode* node) {
 Bool mmd::VMD_Cam_Obj::Init(GeListNode* node) {
 	if (node == nullptr || !SUPER::Init(node))return false;
 	node->SetParameter(DescID(CURVE_TYPE), 6, DESCFLAGS_SET::NONE);
-	if (!CurveInit(node))return false;
-	if (cam == nullptr) {
-		cam = BaseObject::Alloc(Ocamera);//5103
-		cam->SetName("Camera"_s);
-		BaseTag* ProtectionTag = BaseTag::Alloc(Tprotection);
-		ProtectionTag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
-		cam->InsertTag(ProtectionTag);
-		cam->InsertUnder(node);
-	}
+	if (!CurveInit())return false;
 	return true;
 }
 Bool mmd::VMD_Cam_Obj::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
@@ -488,7 +529,7 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 		{
 		case(INIT_CURVE_BUTTON):
 		{
-			CurveInit(node);
+			CurveInit();
 			break;
 		}
 		case(REGISTER_CURVE_BUTTON):
@@ -890,6 +931,7 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 		break;
 	}
 	case(MSG_MENUPREPARE): {
+		if (!CameraInit())return true;
 		node->SetParameter(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y), 85.0, DESCFLAGS_SET::NONE);
 		cam->SetRelPos(Vector(0, 0, -382.5));
 		break;
@@ -899,18 +941,20 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 	}
 	return true;
 }
+
 Bool mmd::VMD_Cam_Obj::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
 {
 	if (id[0].id == FRAME_ON)return false;
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
 }
+
 Bool mmd::VMD_Cam_Draw::Draw(BaseSceneHook* node, BaseDocument* doc, BaseDraw* bd, BaseDrawHelp* bh, BaseThread* bt, SCENEHOOKDRAW flags) {
 	if (!node || !doc || !bd || !bh) return false;
 	if (flags != SCENEHOOKDRAW::DRAW_PASS) return true;
-	// store and set line width
 	BaseObject* op = doc->GetActiveObject();
 	if (op != nullptr) {
 		if (op->GetType() == ID_VMD_CAM_OBJ) {
+			// store and set line width
 			const GeData oldLineWidth = bd->GetDrawParam(DRAW_PARAMETER_LINEWIDTH);
 			bd->SetDrawParam(DRAW_PARAMETER_LINEWIDTH, GeData{ 4.0 });
 			const Vector& screenSpacePos = bd->WS(op->GetMg().off);
@@ -932,6 +976,30 @@ Bool mmd::VMD_Cam_Draw::Draw(BaseSceneHook* node, BaseDocument* doc, BaseDraw* b
 EXECUTIONRESULT mmd::VMD_Cam_Obj::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) {
 	if (op == nullptr || doc == nullptr) {
 		return EXECUTIONRESULT::OK;
+	}
+	if (cam == nullptr) {
+		BaseObject* down_obj = op->GetDown();
+		if (down_obj != nullptr) {
+			if (down_obj->GetType() == Ocamera) {
+				cam = down_obj;
+			}
+			else {
+				cam = BaseObject::Alloc(Ocamera);//5103
+				cam->SetName("Camera"_s);
+				BaseTag* ProtectionTag = BaseTag::Alloc(Tprotection);
+				ProtectionTag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
+				cam->InsertTag(ProtectionTag);
+				cam->InsertUnder(op);
+			}
+		}
+		else {
+			cam = BaseObject::Alloc(Ocamera);//5103
+			cam->SetName("Camera"_s);
+			BaseTag* ProtectionTag = BaseTag::Alloc(Tprotection);
+			ProtectionTag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
+			cam->InsertTag(ProtectionTag);
+			cam->InsertUnder(op);
+		}
 	}
 	GeData data;
 	op->GetParameter(DescID(FRAME_ON), data, DESCFLAGS_GET::NONE);
@@ -1050,7 +1118,376 @@ Bool mmd::VMD_Cam_Obj::AddToExecution(BaseObject* op, PriorityList* list) {
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return true;
 }
+maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, Int32 use_rotation, BaseObject* str_cam) {
+	//获取活动文档
+	BaseDocument* doc = GetActiveDocument();
+	if (doc == nullptr) {
+		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + "error");
+		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + "error");
+		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+	}
+	BaseObject* SelectObject = nullptr;
+	
+	if (str_cam == nullptr) //若传入的参数非空则使用传入参数
+	{
+		//获取选中对象
+		SelectObject = doc->GetActiveObject();
+		if (SelectObject == nullptr) {
+			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+			MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+			return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+		}
+	}
+	else //否则使用选择参数
+	{
+		SelectObject = str_cam;
+	}
 
+	//判断选中对象类型是否为摄像机
+	if (SelectObject->GetType() != Ocamera) {
+		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_CONVER_TYPE_ERR));
+		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_CONVER_TYPE_ERR));
+		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+	}
+
+	//创建转换目标对象
+	BaseObject* VMDCamera = BaseObject::Alloc(ID_VMD_CAM_OBJ);
+	if (VMDCamera == nullptr) {
+		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+	}
+
+	//创建要转化摄像机的副本，防止操作破坏原摄像机对象的数据
+	BaseObject* SelectObjectClone = (BaseObject*)SelectObject->GetClone(COPYFLAGS::NO_HIERARCHY, nullptr);
+	VMDCamera->SetName(SelectObjectClone->GetName());
+	doc->InsertObject(VMDCamera, nullptr, nullptr);
+
+	//获取目标对象内部的数据
+	mmd::VMD_Cam_Obj* VMDCamera_data = VMDCamera->GetNodeData<VMD_Cam_Obj>();
+	if (!VMDCamera_data->CameraInit()) {
+		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+	}
+	BaseObject* VMDCameraDistance = VMDCamera_data->cam;
+
+	//将时间设置为0
+	doc->SetTime(BaseTime());
+
+	//确保每个必要的参数都注册了CTrack，没有则创建一个
+	CTrack* strTrackPX = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	if (strTrackPX == nullptr) {
+		strTrackPX = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+		strTrackPX->GetCurve()->AddKeyAdaptTangent(BaseTime(), false)->SetValue(strTrackPX->GetCurve(), SelectObjectClone->GetRelPos().x);
+		SelectObjectClone->InsertTrackSorted(strTrackPX);
+	}
+	CTrack* strTrackPY = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	if (strTrackPY == nullptr) {
+		strTrackPY = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+		strTrackPY->GetCurve()->AddKeyAdaptTangent(BaseTime(), false)->SetValue(strTrackPY->GetCurve(), SelectObjectClone->GetRelPos().y);
+		SelectObjectClone->InsertTrackSorted(strTrackPY);
+	}
+	CTrack* strTrackPZ = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	if (strTrackPZ == nullptr) {
+		strTrackPZ = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+		strTrackPZ->GetCurve()->AddKeyAdaptTangent(BaseTime(), false)->SetValue(strTrackPZ->GetCurve(), SelectObjectClone->GetRelPos().z);
+		SelectObjectClone->InsertTrackSorted(strTrackPZ);
+	}
+	CTrack* strTrackRX = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	if (strTrackRX == nullptr) {
+		strTrackRX = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+		strTrackRX->GetCurve()->AddKeyAdaptTangent(BaseTime(), false)->SetValue(strTrackRX->GetCurve(), SelectObjectClone->GetRelRot().x);
+		SelectObjectClone->InsertTrackSorted(strTrackRX);
+	}
+	CTrack* strTrackRY = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	if (strTrackRY == nullptr) {
+		strTrackRY = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+		strTrackRY->GetCurve()->AddKeyAdaptTangent(BaseTime(), false)->SetValue(strTrackRY->GetCurve(), SelectObjectClone->GetRelRot().y);
+		SelectObjectClone->InsertTrackSorted(strTrackRY);
+	}
+	CTrack* strTrackRZ = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	if (strTrackRZ == nullptr) {
+		strTrackRZ = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+		strTrackRZ->GetCurve()->AddKeyAdaptTangent(BaseTime(), false)->SetValue(strTrackRZ->GetCurve(), SelectObjectClone->GetRelRot().z);
+		SelectObjectClone->InsertTrackSorted(strTrackRZ);
+	}
+	CTrack* strTrackAOV = SelectObjectClone->FindCTrack(DescID(CAMERAOBJECT_APERTURE));
+	if (strTrackAOV == nullptr) {
+		strTrackAOV = CTrack::Alloc(SelectObjectClone, DescID(CAMERAOBJECT_APERTURE));
+		strTrackAOV->GetCurve()->AddKeyAdaptTangent(BaseTime(),false)->SetValue(strTrackAOV->GetCurve(), ((CameraObject*)SelectObjectClone)->GetAperture());
+		SelectObjectClone->InsertTrackSorted(strTrackAOV);
+	}
+
+	//确保生成成功
+	if (strTrackPX == nullptr || strTrackPY == nullptr || strTrackPZ == nullptr || strTrackRX == nullptr || strTrackRY == nullptr || strTrackRZ == nullptr || strTrackAOV == nullptr) 
+	{
+		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+	}
+
+	//获取曲线对象
+	CCurve* strCurvePX = strTrackPX->GetCurve();
+	CCurve* strCurvePY = strTrackPY->GetCurve();
+	CCurve* strCurvePZ = strTrackPZ->GetCurve();
+	CCurve* strCurveRX = strTrackRX->GetCurve();
+	CCurve* strCurveRY = strTrackRY->GetCurve();
+	CCurve* strCurveRZ = strTrackRZ->GetCurve();
+	CCurve* strCurveAOV = strTrackAOV->GetCurve();
+
+	//确保获取成功
+	if (strCurvePX == nullptr || strCurvePY == nullptr || strCurvePZ == nullptr || strCurveRX == nullptr || strCurveRY == nullptr || strCurveRZ == nullptr  || strCurveAOV == nullptr ) 
+	{
+		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+	}
+
+	//将所有参数的全部关键帧所在帧置入数组（frame_arr）
+	maxon::BaseArray<Int32> frame_arr;
+	const Int32 PXKeyCount = strCurvePX->GetKeyCount();	
+	for (Int32 i = 0; i < PXKeyCount; i++) {
+		Int32 strframePX = strCurvePX->GetKey(i)->GetTime().GetFrame(30);
+		if (frame_arr.Find(strframePX) == maxon::BaseArray<Int32>::Iterator()) {
+			iferr(frame_arr.Append(strframePX))return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
+	}
+	const Int32 PYKeyCount = strCurvePY->GetKeyCount();
+	for (Int32 i = 0; i < PYKeyCount; i++) {
+		Int32 strframePY = strCurvePY->GetKey(i)->GetTime().GetFrame(30);
+		if (frame_arr.Find(strframePY) == maxon::BaseArray<Int32>::Iterator()) {
+			iferr(frame_arr.Append(strframePY))return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
+	}
+	const Int32 PZKeyCount = strCurvePZ->GetKeyCount();
+	for (Int32 i = 0; i < PZKeyCount; i++) {
+		Int32 strframePZ = strCurvePZ->GetKey(i)->GetTime().GetFrame(30);
+		if (frame_arr.Find(strframePZ) == maxon::BaseArray<Int32>::Iterator()) {
+			iferr(frame_arr.Append(strframePZ))return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
+	}
+	const Int32 RXKeyCount = strCurveRX->GetKeyCount();
+	for (Int32 i = 0; i < RXKeyCount; i++) {
+		Int32 strframeRX = strCurveRX->GetKey(i)->GetTime().GetFrame(30);
+		if (frame_arr.Find(strframeRX) == maxon::BaseArray<Int32>::Iterator()) {
+			iferr(frame_arr.Append(strframeRX))return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
+	}
+	const Int32 RYKeyCount = strCurveRY->GetKeyCount();
+	for (Int32 i = 0; i < RYKeyCount; i++) {
+		Int32 strframeRY = strCurveRY->GetKey(i)->GetTime().GetFrame(30);
+		if (frame_arr.Find(strframeRY) == maxon::BaseArray<Int32>::Iterator()) {
+			iferr(frame_arr.Append(strframeRY))return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
+	}
+	const Int32 RZKeyCount = strCurveRZ->GetKeyCount();
+	for (Int32 i = 0; i < RZKeyCount; i++) {
+		Int32 strframeRZ = strCurveRZ->GetKey(i)->GetTime().GetFrame(30);
+		if (frame_arr.Find(strframeRZ) == maxon::BaseArray<Int32>::Iterator()) {
+			iferr(frame_arr.Append(strframeRZ))return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
+	}
+	const Int32 AOVKeyCount = strCurveAOV->GetKeyCount();
+	for (Int32 i = 0; i < AOVKeyCount; i++) {
+		Int32 strframeAOV = strCurveAOV->GetKey(i)->GetTime().GetFrame(30);
+		if (frame_arr.Find(strframeAOV) == maxon::BaseArray<Int32>::Iterator()) {
+			iferr(frame_arr.Append(strframeAOV))return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
+	}
+
+	//为目标对象生成动画轨迹
+	CTrack* CameraTrackPX = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	CTrack* CameraTrackPY = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	CTrack* CameraTrackPZ = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	CTrack* CameraTrackRX = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	CTrack* CameraTrackRY = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	CTrack* CameraTrackRZ = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	CTrack* CameraTrackDistance = CTrack::Alloc(VMDCameraDistance, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	CTrack* CameraTrackAOV = CTrack::Alloc(VMDCameraDistance, DescID(CAMERAOBJECT_APERTURE));
+	CTrack* Frame_onTrack = CTrack::Alloc(VMDCamera, DescID(FRAME_ON));
+	
+	//确保生成成功
+	if (CameraTrackPX == nullptr || CameraTrackPY == nullptr || CameraTrackPZ == nullptr || CameraTrackRX == nullptr || CameraTrackRY == nullptr || CameraTrackRZ == nullptr || CameraTrackDistance == nullptr || CameraTrackAOV == nullptr|| Frame_onTrack==nullptr) 
+	{
+		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+	}
+	CCurve* CameraCurvePX = CameraTrackPX->GetCurve();
+	CCurve* CameraCurvePY = CameraTrackPY->GetCurve();
+	CCurve* CameraCurvePZ = CameraTrackPZ->GetCurve();
+	CCurve* CameraCurveRX = CameraTrackRX->GetCurve();
+	CCurve* CameraCurveRY = CameraTrackRY->GetCurve();
+	CCurve* CameraCurveRZ = CameraTrackRZ->GetCurve();
+	CCurve* CameraCurveDistance = CameraTrackDistance->GetCurve();
+	CCurve* CameraCurveAOV = CameraTrackAOV->GetCurve();
+	CCurve* Frame_onCurve = Frame_onTrack->GetCurve();
+	
+	//确保获取成功
+	if (CameraCurvePX == nullptr || CameraCurvePY == nullptr || CameraCurvePZ == nullptr || CameraCurveRX == nullptr || CameraCurveRY == nullptr || CameraCurveRZ == nullptr || CameraCurveDistance == nullptr || CameraCurveAOV == nullptr || Frame_onCurve == nullptr) 
+	{
+		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+	}
+
+	//将生成的动画轨迹插入目标对象
+	VMDCamera->InsertTrackSorted(CameraTrackPX);
+	VMDCamera->InsertTrackSorted(CameraTrackPY);
+	VMDCamera->InsertTrackSorted(CameraTrackPZ);
+	VMDCamera->InsertTrackSorted(CameraTrackRX);
+	VMDCamera->InsertTrackSorted(CameraTrackRY);
+	VMDCamera->InsertTrackSorted(CameraTrackRZ);
+	VMDCamera->InsertTrackSorted(Frame_onTrack);
+	VMDCameraDistance->InsertTrackSorted(CameraTrackDistance);
+	VMDCameraDistance->InsertTrackSorted(CameraTrackAOV);	
+	
+	//确保每个参数在同一帧都注册了关键帧（根据frame_arr查找）
+	for (Int32 i : frame_arr) 
+	{
+		BaseTime frame_time(i, 30);
+		if (strCurvePX->FindKey(frame_time) == nullptr) {
+			strCurvePX->AddKeyAdaptTangent(frame_time, false);
+		}
+		if (strCurvePY->FindKey(frame_time) == nullptr) {
+			strCurvePY->AddKeyAdaptTangent(frame_time, false);
+		}
+		if (strCurvePZ->FindKey(frame_time) == nullptr) {
+			strCurvePZ->AddKeyAdaptTangent(frame_time, false);
+		}
+		if (strCurveRX->FindKey(frame_time) == nullptr) {
+			strCurveRX->AddKeyAdaptTangent(frame_time, false);
+		}
+		if (strCurveRY->FindKey(frame_time) == nullptr) {
+			strCurveRY->AddKeyAdaptTangent(frame_time, false);
+		}
+		if (strCurveRZ->FindKey(frame_time) == nullptr) {
+			strCurveRZ->AddKeyAdaptTangent(frame_time, false);
+		}
+		if (strCurveAOV->FindKey(frame_time) == nullptr) {
+			strCurveAOV->AddKeyAdaptTangent(frame_time, false);
+		}
+		if (CameraCurveDistance->FindKey(frame_time) == nullptr) {
+			CameraCurveDistance->AddKeyAdaptTangent(frame_time, false);
+		}
+	}
+
+	//转换移动和旋转写入对象，添加关键帧数据
+	for (Int32 i : frame_arr) 
+	{
+		BaseTime frame_time(i, 30);
+		CameraCurvePX->AddKey(frame_time)->SetValue(CameraCurvePX, strCurvePX->FindKey(frame_time)->GetValue());
+		CameraCurvePY->AddKey(frame_time)->SetValue(CameraCurvePY, strCurvePY->FindKey(frame_time)->GetValue());
+		CameraCurvePZ->AddKey(frame_time)->SetValue(CameraCurvePZ, strCurvePZ->FindKey(frame_time)->GetValue());
+		CameraCurveRX->AddKey(frame_time)->SetValue(CameraCurveRX, strCurveRX->FindKey(frame_time)->GetValue());
+		CameraCurveRY->AddKey(frame_time)->SetValue(CameraCurveRY, strCurveRY->FindKey(frame_time)->GetValue());
+		CameraCurveRZ->AddKey(frame_time)->SetValue(CameraCurveRZ, strCurveRZ->FindKey(frame_time)->GetValue());
+		CameraCurveAOV->AddKey(frame_time)->SetValue(CameraCurveAOV, strCurveAOV->FindKey(frame_time)->GetValue());
+		CameraCurveDistance->AddKey(frame_time)->SetValue(CameraCurveDistance, CameraCurveDistance->FindKey(frame_time)->GetValue());
+		CKey* KeyFrame_on = Frame_onCurve->AddKey(frame_time);
+		KeyFrame_on->SetValue(Frame_onCurve, i);
+		KeyFrame_on->SetInterpolation(Frame_onCurve, CINTERPOLATION::STEP);
+		KeyFrame_on->ChangeNBit(NBIT::CKEY_LOCK_T, NBITCONTROL::SET);
+		KeyFrame_on->ChangeNBit(NBIT::CKEY_LOCK_V, NBITCONTROL::SET);
+	}	
+
+	Float ValueOfTwoFrames;
+	Int32 TimeOfTwoFrames;
+	Int32 frame_on, next_frame_on;
+	Int32 frame_arr_count = frame_arr.GetCount();
+	const Float Fps = doc->GetFps();
+	//转换曲线并保存到对象
+	CKey* Key = nullptr;
+	CKey* NextKey = nullptr;
+	Float64 KeyLeftX = 0., KeyLeftY = 0., KeyRightX = 0., KeyRightY = 0., NextKeyLeftX = 0., NextKeyLeftY = 0., NextKeyRightX = 0., NextKeyRightY = 0.;
+	for (Int i = 0; i < frame_arr_count; i++) 
+	{
+		frame_on = frame_arr[i];	
+		BaseTime frame_time(frame_on);
+		if (i != frame_arr_count - 1) {				
+			next_frame_on = frame_arr[i+1];
+			BaseTime next_frame_time(next_frame_on);
+			TimeOfTwoFrames = maxon::Abs(next_frame_on - frame_on);
+			//PX
+			Key = strCurvePX->GetKey(i);
+			NextKey = strCurvePX-> GetKey(i + 1);
+			if (Key != nullptr && NextKey != nullptr) {
+				ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();	
+				strCurvePX->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+				strCurvePX->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+				iferr(VMDCamera_data->XCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0),maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0) , maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+			}
+
+			Key = strCurvePY->GetKey(i);
+			NextKey = strCurvePY->GetKey(i + 1);
+			if (Key != nullptr && NextKey != nullptr) {
+				ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
+				strCurvePY->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+				strCurvePY->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+				iferr(VMDCamera_data->YCurve.Insert(frame_on,new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0),maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0) , maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+			}
+
+			Key = strCurvePZ->GetKey(i);
+			NextKey = strCurvePZ->GetKey(i + 1);
+			if (Key != nullptr && NextKey != nullptr) {
+				ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
+				strCurvePZ->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+				strCurvePZ->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+				iferr(VMDCamera_data->ZCurve.Insert(frame_on,new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0),maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0) , maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+			}
+
+			Key = strCurveAOV->GetKey(i);
+			NextKey = strCurveAOV->GetKey(i + 1);
+			if (Key != nullptr && NextKey != nullptr) {
+				ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
+				strCurveAOV->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+				strCurveAOV->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+				iferr(VMDCamera_data->VCurve.Insert(frame_on,new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0),maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0) , maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+			}
+			iferr(VMDCamera_data->DCurve.Insert(frame_on, new mmd::VMD_Curve()))return nullptr;
+			switch (use_rotation)
+			{
+			case 0:
+				Key = strCurveRX->GetKey(i);
+				NextKey = strCurveRX->GetKey(i + 1);
+				if (Key != nullptr && NextKey != nullptr) {
+					ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
+					strCurveRX->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+					strCurveRX->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+					iferr(VMDCamera_data->RCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX* Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX* Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+				}
+				break;
+			case 1:
+				Key = strCurveRY->GetKey(i);
+				NextKey = strCurveRY->GetKey(i + 1);
+				if (Key != nullptr && NextKey != nullptr) {
+					ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
+					strCurveRY->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+					strCurveRY->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+					iferr(VMDCamera_data->RCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX* Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX* Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+				}
+				break;
+			case 2:
+				Key = strCurveRZ->GetKey(i);
+				NextKey = strCurveRZ->GetKey(i + 1);
+				if (Key != nullptr && NextKey != nullptr) {
+					ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
+					strCurveRZ->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+					strCurveRZ->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+					iferr(VMDCamera_data->RCurve.Insert(frame_on,new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0),maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0) , maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+				}
+				break;
+			default:
+				break;
+			}
+		}	
+	}
+	CameraCurveDistance->AddKey(BaseTime(0, 30))->SetValue(CameraCurveDistance, distance);
+	EventAdd();
+	if (!VMDCamera_data->UpdateAllCurve())return nullptr;
+	doc->SetTime(BaseTime(1));
+	doc->SetTime(BaseTime());
+	return maxon::Result<BaseObject*>(VMDCamera);
+}
 mmd::VMDAnimation::VMDAnimation() {
 	this->IsCamera = 0;
 	this->MotionFrameNumber = 0;
@@ -1074,10 +1511,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	mmd::VMD_Morph morph_frame;
 	mmd::VMD_Camera camera_frame;
 	mmd::VMD_Light light_frame;
-	if (!file->ReadBytes(VMDVersion, 30))return maxon::FAILED;
+	if (!file->ReadBytes(VMDVersion, 30))return maxon::Error();
 	if (!strncmp(VMDVersion, "Vocaloid Motion Data file", 26))
 	{
-		if (!file->ReadBytes(VMDModelName, 10))return maxon::FAILED;
+		if (!file->ReadBytes(VMDModelName, 10))return maxon::Error();
 		this->ModelName = EncodingConversion::JIStoUTF8(VMDModelName);
 		if (!this->ModelName.LexComparePart("カメラ・照明"_s, 12, 0) == 0) {
 			this->IsCamera = 1;
@@ -1088,7 +1525,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	}
 	else if (!strncmp(VMDVersion, "Vocaloid Motion Data 0002", 26))
 	{
-		if (!file->ReadBytes(VMDModelName, 20))return maxon::FAILED;
+		if (!file->ReadBytes(VMDModelName, 20))return maxon::Error();
 		this->ModelName = EncodingConversion::JIStoUTF8(VMDModelName);
 		if (this->ModelName.LexComparePart("カメラ・照明"_s, 12, 0) == 0) {
 			this->IsCamera = 1;
@@ -1096,51 +1533,51 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 		else {
 			this->IsCamera = 0;
 		}
-		if (!file->ReadUInt32(&(this->MotionFrameNumber)))return maxon::FAILED;
+		if (!file->ReadUInt32(&(this->MotionFrameNumber)))return maxon::Error();
 		for (UInt32 i = 0; i < this->MotionFrameNumber; i++) {
 			//111 bytes
 			Char bone_name[15]{ 0 };
-			if (!file->ReadBytes(bone_name, 15))return maxon::FAILED;
-			if (!file->ReadUInt32(&(motion_frame.frame_no)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(motion_frame.position.x)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(motion_frame.position.y)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(motion_frame.position.z)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(motion_frame.rotation.x)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(motion_frame.rotation.y)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(motion_frame.rotation.z)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(motion_frame.rotation.w)))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.XCurve.ax)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.XCurve.bx)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.XCurve.ay)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.XCurve.by)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.YCurve.ax)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.YCurve.bx)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.YCurve.ay)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.YCurve.by)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.ZCurve.ax)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.ZCurve.bx)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.ZCurve.ay)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.ZCurve.by)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.RCurve.ax)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.RCurve.bx)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.RCurve.ay)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
-			if (!file->ReadUChar(&(motion_frame.RCurve.by)))return maxon::FAILED;
-			if (!file->Seek(3))return maxon::FAILED;
+			if (!file->ReadBytes(bone_name, 15))return maxon::Error();
+			if (!file->ReadUInt32(&(motion_frame.frame_no)))return maxon::Error();
+			if (!file->ReadFloat32(&(motion_frame.position.x)))return maxon::Error();
+			if (!file->ReadFloat32(&(motion_frame.position.y)))return maxon::Error();
+			if (!file->ReadFloat32(&(motion_frame.position.z)))return maxon::Error();
+			if (!file->ReadFloat32(&(motion_frame.rotation.x)))return maxon::Error();
+			if (!file->ReadFloat32(&(motion_frame.rotation.y)))return maxon::Error();
+			if (!file->ReadFloat32(&(motion_frame.rotation.z)))return maxon::Error();
+			if (!file->ReadFloat32(&(motion_frame.rotation.w)))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.XCurve.ax)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.XCurve.bx)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.XCurve.ay)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.XCurve.by)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.YCurve.ax)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.YCurve.bx)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.YCurve.ay)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.YCurve.by)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.ZCurve.ax)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.ZCurve.bx)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.ZCurve.ay)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.ZCurve.by)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.RCurve.ax)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.RCurve.bx)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.RCurve.ay)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
+			if (!file->ReadUChar(&(motion_frame.RCurve.by)))return maxon::Error();
+			if (!file->Seek(3))return maxon::Error();
 			motion_frame.XCurve.bx = 127 - motion_frame.XCurve.bx;
 			motion_frame.XCurve.by = 127 - motion_frame.XCurve.by;
 			motion_frame.YCurve.bx = 127 - motion_frame.YCurve.bx;
@@ -1153,51 +1590,51 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 			this->motion_frames.Append(motion_frame)iferr_return;
 		}
 
-		if (!file->ReadUInt32(&(this->MorphFrameNumber)))return maxon::FAILED;
+		if (!file->ReadUInt32(&(this->MorphFrameNumber)))return maxon::Error();
 		for (UInt32 i = 0; i < this->MorphFrameNumber; i++) {
 			//23 bytes
 			Char morph_name[15]{ 0 };
-			if (!file->ReadBytes(morph_name, 15))return maxon::FAILED;
-			if (!file->ReadUInt32(&(morph_frame.frame_no)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(morph_frame.weight)))return maxon::FAILED;
+			if (!file->ReadBytes(morph_name, 15))return maxon::Error();
+			if (!file->ReadUInt32(&(morph_frame.frame_no)))return maxon::Error();
+			if (!file->ReadFloat32(&(morph_frame.weight)))return maxon::Error();
 			morph_frame.morph_name = EncodingConversion::JIStoUTF8(morph_name);
 			this->morph_frames.Append(morph_frame)iferr_return;
 		}
-		if (!file->ReadUInt32(&(this->CameraFrameNumber)))return maxon::FAILED;
+		if (!file->ReadUInt32(&(this->CameraFrameNumber)))return maxon::Error();
 		for (UInt32 i = 0; i < this->CameraFrameNumber; i++) {
 			//61 bytes
-			if (!file->ReadUInt32(&(camera_frame.frame_no)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(camera_frame.distance)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(camera_frame.position.x)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(camera_frame.position.y)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(camera_frame.position.z)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(camera_frame.rotation.y)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(camera_frame.rotation.x)))return maxon::FAILED;
-			if (!file->ReadFloat32(&(camera_frame.rotation.z)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.XCurve.ax)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.XCurve.bx)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.XCurve.ay)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.XCurve.by)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.YCurve.ax)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.YCurve.bx)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.YCurve.ay)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.YCurve.by)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.ZCurve.ax)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.ZCurve.bx)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.ZCurve.ay)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.ZCurve.by)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.RCurve.ax)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.RCurve.bx)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.RCurve.ay)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.RCurve.by)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.DCurve.ax)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.DCurve.bx)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.DCurve.ay)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.DCurve.by)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.VCurve.ax)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.VCurve.bx)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.VCurve.ay)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.VCurve.by)))return maxon::FAILED;
+			if (!file->ReadUInt32(&(camera_frame.frame_no)))return maxon::Error();
+			if (!file->ReadFloat32(&(camera_frame.distance)))return maxon::Error();
+			if (!file->ReadFloat32(&(camera_frame.position.x)))return maxon::Error();
+			if (!file->ReadFloat32(&(camera_frame.position.y)))return maxon::Error();
+			if (!file->ReadFloat32(&(camera_frame.position.z)))return maxon::Error();
+			if (!file->ReadFloat32(&(camera_frame.rotation.y)))return maxon::Error();
+			if (!file->ReadFloat32(&(camera_frame.rotation.x)))return maxon::Error();
+			if (!file->ReadFloat32(&(camera_frame.rotation.z)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.XCurve.ax)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.XCurve.bx)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.XCurve.ay)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.XCurve.by)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.YCurve.ax)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.YCurve.bx)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.YCurve.ay)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.YCurve.by)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.ZCurve.ax)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.ZCurve.bx)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.ZCurve.ay)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.ZCurve.by)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.RCurve.ax)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.RCurve.bx)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.RCurve.ay)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.RCurve.by)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.DCurve.ax)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.DCurve.bx)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.DCurve.ay)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.DCurve.by)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.VCurve.ax)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.VCurve.bx)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.VCurve.ay)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.VCurve.by)))return maxon::Error();
 			camera_frame.XCurve.bx = 127 - camera_frame.XCurve.bx;
 			camera_frame.XCurve.by = 127 - camera_frame.XCurve.by;
 			camera_frame.YCurve.bx = 127 - camera_frame.YCurve.bx;
@@ -1210,16 +1647,15 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 			camera_frame.DCurve.by = 127 - camera_frame.DCurve.by;
 			camera_frame.VCurve.bx = 127 - camera_frame.VCurve.bx;
 			camera_frame.VCurve.by = 127 - camera_frame.VCurve.by;
-			if (!file->ReadUInt32(&(camera_frame.viewing_angle)))return maxon::FAILED;
-			if (!file->ReadUChar(&(camera_frame.perspective)))return maxon::FAILED;
-			GePrint(String::UIntToString(camera_frame.frame_no) + ":" + String::IntToString(camera_frame.XCurve.ax) + " " + String::IntToString(camera_frame.XCurve.ay) + " " + String::IntToString(camera_frame.XCurve.bx) + " " + String::IntToString(camera_frame.XCurve.by));
+			if (!file->ReadUInt32(&(camera_frame.viewing_angle)))return maxon::Error();
+			if (!file->ReadUChar(&(camera_frame.perspective)))return maxon::Error();
 			this->camera_frames.Append(camera_frame)iferr_return;
 		}
 
-		if (!file->ReadUInt32(&(this->LightFrameNumber)))return maxon::FAILED;
+		if (!file->ReadUInt32(&(this->LightFrameNumber)))return maxon::Error();
 		for (UInt32 i = 0; i < this->LightFrameNumber; i++) {
 			//28 bytes
-			if (!file->ReadBytes(&light_frame, 28))return maxon::FAILED;
+			if (!file->ReadBytes(&light_frame, 28))return maxon::Error();
 			this->light_frames.Append(light_frame)iferr_return;
 		}
 	}
@@ -1255,7 +1691,6 @@ maxon::Result<void> mmd::VMDAnimation::WriteToFile(BaseFile* const file) {
 			return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, "Write file error"_s);
 		}
 	}
-	GePrint("BoneFrameNumber:"_s + maxon::String::UIntToString((this->MotionFrameNumber)));
 	if (!file->WriteUInt32(this->MorphFrameNumber)) {
 		GePrint("Write file error"_s);
 		MessageDialog("Write to file failed: Write file error"_s);
@@ -1268,20 +1703,60 @@ maxon::Result<void> mmd::VMDAnimation::WriteToFile(BaseFile* const file) {
 			return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, "Write file error"_s);
 		}
 	}
-	GePrint("MorphFrameNumber:"_s + maxon::String::UIntToString((this->MorphFrameNumber)));
 	if (!file->WriteUInt32(this->CameraFrameNumber)) {
 		GePrint("Write file error"_s);
 		MessageDialog("Write CameraFrameNumber to file failed: Write file error"_s);
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, "Write file error"_s);
 	}
 	for (UInt32 i = 0; i < this->CameraFrameNumber; i++) {
-		if (!file->WriteBytes(&((this->camera_frames)[i]), 61)) {
-			GePrint("Write file error"_s);
-			MessageDialog("Write to file failed: Write file error"_s);
-			return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, "Write file error"_s);
-		}
+		mmd::VMD_Camera camera_frame = (this->camera_frames)[i];
+		camera_frame.XCurve.bx = 127 - camera_frame.XCurve.bx;
+		camera_frame.XCurve.by = 127 - camera_frame.XCurve.by;
+		camera_frame.YCurve.bx = 127 - camera_frame.YCurve.bx;
+		camera_frame.YCurve.by = 127 - camera_frame.YCurve.by;
+		camera_frame.ZCurve.bx = 127 - camera_frame.ZCurve.bx;
+		camera_frame.ZCurve.by = 127 - camera_frame.ZCurve.by;
+		camera_frame.RCurve.bx = 127 - camera_frame.RCurve.bx;
+		camera_frame.RCurve.by = 127 - camera_frame.RCurve.by;
+		camera_frame.DCurve.bx = 127 - camera_frame.DCurve.bx;
+		camera_frame.DCurve.by = 127 - camera_frame.DCurve.by;
+		camera_frame.VCurve.bx = 127 - camera_frame.VCurve.bx;
+		camera_frame.VCurve.by = 127 - camera_frame.VCurve.by;
+		if (!file->WriteUInt32(camera_frame.frame_no))return maxon::Error();
+		if (!file->WriteFloat32(camera_frame.distance))return maxon::Error();
+		if (!file->WriteFloat32(camera_frame.position.x))return maxon::Error();
+		if (!file->WriteFloat32(camera_frame.position.y))return maxon::Error();
+		if (!file->WriteFloat32(camera_frame.position.z))return maxon::Error();
+		if (!file->WriteFloat32(camera_frame.rotation.y))return maxon::Error();
+		if (!file->WriteFloat32(camera_frame.rotation.x))return maxon::Error();
+		if (!file->WriteFloat32(camera_frame.rotation.z))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.XCurve.ax))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.XCurve.bx))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.XCurve.ay))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.XCurve.by))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.YCurve.ax))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.YCurve.bx))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.YCurve.ay))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.YCurve.by))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.ZCurve.ax))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.ZCurve.bx))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.ZCurve.ay))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.ZCurve.by))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.RCurve.ax))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.RCurve.bx))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.RCurve.ay))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.RCurve.by))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.DCurve.ax))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.DCurve.bx))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.DCurve.ay))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.DCurve.by))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.VCurve.ax))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.VCurve.bx))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.VCurve.ay))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.VCurve.by))return maxon::Error();
+		if (!file->WriteUInt32(camera_frame.viewing_angle))return maxon::Error();
+		if (!file->WriteUChar(camera_frame.perspective))return maxon::Error();
 	}
-	GePrint("CameraFrameNumber:"_s + maxon::String::UIntToString((this->CameraFrameNumber)));
 	if (!file->WriteUInt32(this->LightFrameNumber)) {
 		GePrint("Write file error"_s);
 		MessageDialog("Write to file failed: Write file error"_s);
@@ -1294,10 +1769,9 @@ maxon::Result<void> mmd::VMDAnimation::WriteToFile(BaseFile* const file) {
 			return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, "Write file error"_s);
 		}
 	}
-	GePrint("LightFrameNumber:"_s + maxon::String::UIntToString((this->LightFrameNumber)));
 	return maxon::OK;
 }
-maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float& PositionMultiple, Float& TimeOffset) {
+maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultiple, Float TimeOffset) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc <BaseFile> file;
@@ -1305,11 +1779,9 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float& PositionMulti
 	if (doc == nullptr) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + "error");
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
 	if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE))) {
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
 	if (file == nullptr) {
@@ -1320,13 +1792,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float& PositionMulti
 	if (!file->Open(fn, FILEOPEN::READ, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA)) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
-		file.Free();
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 	}
 	if (!(fn.CheckSuffix("vmd"_s) || (fn.CheckSuffix("VMD"_s)))) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
-		file.Free();
 		return maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
 	}
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
@@ -1335,13 +1805,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float& PositionMulti
 	if (mmd_animation == nullptr) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		file.Free();
 		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 	}
 	iferr(mmd_animation->LoadFromFile(file)) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
-		file.Free();
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 	}
 	if (mmd_animation->IsCamera) {
@@ -1351,14 +1819,14 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float& PositionMulti
 		if (VMDCamera == nullptr) {
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			file.Free();
 			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		}
-		mmd::VMD_Cam_Obj* VMDCamera_data = VMDCamera->GetNodeData<VMD_Cam_Obj>();
-		BaseObject* VMDCameraDistance = VMDCamera_data->cam;
+		VMDCamera->SetName(fn.GetFileString());
 		doc->InsertObject(VMDCamera, nullptr, nullptr);
-
-
+		mmd::VMD_Cam_Obj* VMDCamera_data = VMDCamera->GetNodeData<VMD_Cam_Obj>();
+		VMDCamera_data->CameraInit();
+		BaseObject* VMDCameraDistance = VMDCamera_data->GetCamera();
+		
 		CTrack* CameraTrackPX = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
 		CTrack* CameraTrackPY = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
 		CTrack* CameraTrackPZ = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
@@ -1367,10 +1835,10 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float& PositionMulti
 		CTrack* CameraTrackRZ = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
 		CTrack* CameraTrackDistance = CTrack::Alloc(VMDCameraDistance, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
 		CTrack* CameraTrackAOV = CTrack::Alloc(VMDCameraDistance, DescID(CAMERAOBJECT_APERTURE));
-		if (CameraTrackPX == nullptr || CameraTrackPY == nullptr || CameraTrackPZ == nullptr || CameraTrackRX == nullptr || CameraTrackRY == nullptr || CameraTrackRZ == nullptr || VMDCameraDistance == nullptr || CameraTrackAOV == nullptr) {
+		if (CameraTrackPX == nullptr || CameraTrackPY == nullptr || CameraTrackPZ == nullptr || CameraTrackRX == nullptr || CameraTrackRY == nullptr || CameraTrackRZ == nullptr || CameraTrackDistance == nullptr || CameraTrackAOV == nullptr)//确保生成成功 
+		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			file.Free();
 			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		}
 		CCurve* CameraCurvePX = CameraTrackPX->GetCurve();
@@ -1381,6 +1849,12 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float& PositionMulti
 		CCurve* CameraCurveRZ = CameraTrackRZ->GetCurve();
 		CCurve* CameraCurveDistance = CameraTrackDistance->GetCurve();
 		CCurve* CameraCurveAOV = CameraTrackAOV->GetCurve();
+		if (CameraCurvePX == nullptr || CameraCurvePY == nullptr || CameraCurvePZ == nullptr || CameraCurveRX == nullptr || CameraCurveRY == nullptr || CameraCurveRZ == nullptr || CameraCurveDistance == nullptr || CameraCurveAOV == nullptr ) //确保获取成功
+		{
+			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+			MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+			return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+		}
 		VMDCamera->InsertTrackSorted(CameraTrackPX);
 		VMDCamera->InsertTrackSorted(CameraTrackPY);
 		VMDCamera->InsertTrackSorted(CameraTrackPZ);
@@ -1422,21 +1896,21 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float& PositionMulti
 			CameraKeyPX->SetValue(CameraCurvePX, CameraFrame.position.x * PositionMultiple);
 			CameraKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePX->InsertKey(CameraKeyPX);
-			if (i != camera_frame_number - 1)VMDCamera_data->SetCurve(XCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.XCurve));
+			VMDCamera_data->SetCurve(XCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.XCurve));
 
 			CKey* CameraKeyPY = CKey::Alloc();//PY
 			CameraKeyPY->SetTime(CameraCurvePY, KeyTime);
 			CameraKeyPY->SetValue(CameraCurvePY, CameraFrame.position.y * PositionMultiple);
 			CameraKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePY->InsertKey(CameraKeyPY);
-			if (i != camera_frame_number - 1)VMDCamera_data->SetCurve(YCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.YCurve));
+			VMDCamera_data->SetCurve(YCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.YCurve));
 
 			CKey* CameraKeyPZ = CKey::Alloc();//PZ
 			CameraKeyPZ->SetTime(CameraCurvePZ, KeyTime);
 			CameraKeyPZ->SetValue(CameraCurvePZ, CameraFrame.position.z * PositionMultiple);
 			CameraKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePZ->InsertKey(CameraKeyPZ);
-			if (i != camera_frame_number - 1)VMDCamera_data->SetCurve(ZCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.ZCurve));
+			VMDCamera_data->SetCurve(ZCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.ZCurve));
 
 			CKey* CameraKeyRX = CKey::Alloc();//RX
 			CameraKeyRX->SetTime(CameraCurveRX, KeyTime);
@@ -1455,42 +1929,40 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float& PositionMulti
 			CameraKeyRZ->SetValue(CameraCurveRZ, CameraFrame.rotation.z);
 			CameraKeyRZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurveRZ->InsertKey(CameraKeyRZ);
-			if (i != camera_frame_number - 1)VMDCamera_data->SetCurve(RCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.RCurve));
+			VMDCamera_data->SetCurve(RCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.RCurve));
 
 			CKey* CameraKeyDistance = CKey::Alloc();;
 			CameraKeyDistance->SetTime(CameraCurveDistance, KeyTime);
 			CameraKeyDistance->SetValue(CameraCurveDistance, CameraFrame.distance * PositionMultiple);
 			CameraKeyDistance->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurveDistance->InsertKey(CameraKeyDistance);
-			if (i != camera_frame_number - 1)VMDCamera_data->SetCurve(DCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.DCurve));
+			VMDCamera_data->SetCurve(DCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.DCurve));
 
 			CKey* CameraKeyAOV = CKey::Alloc();
 			CameraKeyAOV->SetTime(CameraCurveAOV, KeyTime);
 			CameraKeyAOV->SetValue(CameraCurveAOV, CameraFrame.viewing_angle);
 			CameraKeyAOV->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurveAOV->InsertKey(CameraKeyAOV);
-			if (i != camera_frame_number - 1)VMDCamera_data->SetCurve(VCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.VCurve));
+			VMDCamera_data->SetCurve(VCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.VCurve));
 		}
 		VMDCamera_data->UpdateAllCurve();
 		timing.Stop();
 		StatusClear();
-		doc->SetMaxTime(BaseTime(Max30, 30));
-		doc->SetLoopMaxTime(BaseTime(Max30, 30));
+		doc->SetMaxTime(BaseTime(Max30 + 1, 30));
+		doc->SetLoopMaxTime(BaseTime(Max30 + 1, 30));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_OK, maxon::String::UIntToString(mmd_animation->CameraFrameNumber), String::FloatToString(timing.GetMilliseconds())));
 		EventAdd(EVENT::NONE);
 		doc->SetTime(BaseTime(1, 30));
 		doc->SetTime(BaseTime(0, 30));
-		file.Free();
 		doc->EndUndo();
 		return maxon::OK;
 	}
 	else {
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_CAM_ERR));
-		file.Free();
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_CAM_ERR));
 	}
 }
-maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float& PositionMultiple, Float& TimeOffset) {
+maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMultiple, Float TimeOffset,Int32 use_rotation) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc<BaseFile> file;
@@ -1498,12 +1970,10 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float& PositionM
 	if (doc == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
 	if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::SAVE, GeLoadString(IDS_MES_SAVEFILE)))
 	{
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
 	if (!(fn.CheckSuffix("vmd"_s) || (fn.CheckSuffix("VMD"_s)))) {
@@ -1517,813 +1987,151 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float& PositionM
 	if (!file->Open(fn, FILEOPEN::WRITE, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA)) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
-		file.Free();
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 	}
 	BaseObject* SelectObject = doc->GetActiveObject();
 	if (SelectObject == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
-	if (SelectObject->GetType() != Onull || SelectObject->GetDown()->GetType() != Ocamera) {
+	BaseObject* CameraObj = nullptr;
+	if (SelectObject->GetType() == Ocamera) //选择对象为普通摄像机则转化
+	{
+		auto res = VMD_Cam_Obj::ConversionCamera(0.,use_rotation,SelectObject);
+		iferr(res.GetError())return maxon::Error();
+		CameraObj = res.GetValue();
+	}
+	else if (SelectObject->GetType() == ID_VMD_CAM_OBJ) //选择对象为vmd摄像机则直接使用
+	{
+		CameraObj = SelectObject;
+	}
+	else //都不是则返回错误
+	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TYPE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TYPE_ERR));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
+	//获取内置数据
+	mmd::VMD_Cam_Obj* VMDCamera_data = CameraObj->GetNodeData<VMD_Cam_Obj>();
+	if (VMDCamera_data == nullptr) {
+		return maxon::Error();
+	}
+	BaseObject* VMDCameraDistance = VMDCamera_data->GetCamera();
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
-	StatusSetSpin();
-	CTrack* CameraTrackPX = SelectObject->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+	CTrack* CameraTrackPX = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
 	if (CameraTrackPX == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PX"_s));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PX"_s));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
-	CTrack* CameraTrackPY = SelectObject->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+	CTrack* CameraTrackPY = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
 	if (CameraTrackPY == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PY"_s));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PY"_s));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
-	CTrack* CameraTrackPZ = SelectObject->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+	CTrack* CameraTrackPZ = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
 	if (CameraTrackPZ == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PZ"_s));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PZ"_s));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
-	CTrack* CameraTrackRX = SelectObject->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+	CTrack* CameraTrackRX = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
 	if (CameraTrackRX == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RX"_s));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RX"_s));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
-	CTrack* CameraTrackRY = SelectObject->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+	CTrack* CameraTrackRY = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
 	if (CameraTrackRY == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RY"_s));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RY"_s));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
-	CTrack* CameraTrackRZ = SelectObject->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+	CTrack* CameraTrackRZ = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
 
 	if (CameraTrackRZ == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RZ"_s));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RZ"_s));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
-	CTrack* CameraTrackDistance = SelectObject->GetDown()->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+	CTrack* CameraTrackFrame_on = CameraObj->FindCTrack(DescID(FRAME_ON));
+
+	if (CameraTrackFrame_on == nullptr) {
+		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "Frame_on"_s));
+		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "Frame_on"_s));
+		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+	}
+	CTrack* CameraTrackDistance = VMDCameraDistance->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
 
 	if (CameraTrackDistance == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "Distance"_s));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "Distance"_s));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
-	CTrack* CameraTrackAOV = SelectObject->GetDown()->FindCTrack(DescID(DescLevel(CAMERAOBJECT_APERTURE, DTYPE_REAL, 0)));
+	CTrack* CameraTrackAOV = VMDCameraDistance->FindCTrack(DescID(DescLevel(CAMERAOBJECT_APERTURE, DTYPE_REAL, 0)));
 	if (CameraTrackAOV == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "AOV"_s));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "AOV"_s));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
-	maxon::HashMap<Int32, Bool> isFrame;
 	CCurve* CameraCurvePX = CameraTrackPX->GetCurve();
 	CCurve* CameraCurvePY = CameraTrackPY->GetCurve();
 	CCurve* CameraCurvePZ = CameraTrackPZ->GetCurve();
 	CCurve* CameraCurveRX = CameraTrackRX->GetCurve();
 	CCurve* CameraCurveRY = CameraTrackRY->GetCurve();
 	CCurve* CameraCurveRZ = CameraTrackRZ->GetCurve();
+	CCurve* CameraCurveFrame_on = CameraTrackFrame_on->GetCurve();
 	CCurve* CameraCurveDistance = CameraTrackDistance->GetCurve();
 	CCurve* CameraCurveAOV = CameraTrackAOV->GetCurve();
 
-	Int32 PXKeyCount = CameraCurvePX->GetKeyCount();
-	for (Int32 i = 0; i < PXKeyCount; i++) {
-		Int32 Frame_on = CameraCurvePX->GetKey(i)->GetTime().GetFrame(30);
-		auto isFrame_ptr = isFrame.Find(Frame_on);
-		if (isFrame_ptr != nullptr) {
-			isFrame.Insert(Frame_on, true)iferr_return;
-		}
-	}
-
-	Int32 PYKeyCount = CameraCurvePY->GetKeyCount();
-	for (Int32 i = 0; i < PXKeyCount; i++) {
-		Int32 Frame_on = CameraCurvePY->GetKey(i)->GetTime().GetFrame(30);
-		auto isFrame_ptr = isFrame.Find(Frame_on);
-		if (isFrame_ptr != nullptr) {
-			isFrame.Insert(Frame_on, true)iferr_return;
-		}
-	}
-
-	Int32 PZKeyCount = CameraCurvePZ->GetKeyCount();
-	for (Int32 i = 0; i < PZKeyCount; i++) {
-		Int32 Frame_on = CameraCurvePZ->GetKey(i)->GetTime().GetFrame(30);
-		auto isFrame_ptr = isFrame.Find(Frame_on);
-		if (isFrame_ptr != nullptr) {
-			isFrame.Insert(Frame_on, true)iferr_return;
-		}
-	}
-
-	Int32 RXKeyCount = CameraCurveRX->GetKeyCount();
-	for (Int32 i = 0; i < RXKeyCount; i++) {
-		Int32 Frame_on = CameraCurveRX->GetKey(i)->GetTime().GetFrame(30);
-		auto isFrame_ptr = isFrame.Find(Frame_on);
-		if (isFrame_ptr != nullptr) {
-			isFrame.Insert(Frame_on, true)iferr_return;
-		}
-	}
-
-	Int32 RYKeyCount = CameraCurveRY->GetKeyCount();
-	for (Int32 i = 0; i < RYKeyCount; i++) {
-		Int32 Frame_on = CameraCurveRY->GetKey(i)->GetTime().GetFrame(30);
-		auto isFrame_ptr = isFrame.Find(Frame_on);
-		if (isFrame_ptr != nullptr) {
-			isFrame.Insert(Frame_on, true)iferr_return;
-		}
-	}
-
-	Int32 RZKeyCount = CameraCurveRZ->GetKeyCount();
-	for (Int32 i = 0; i < RZKeyCount; i++) {
-		Int32 Frame_on = CameraCurveRZ->GetKey(i)->GetTime().GetFrame(30);
-		auto isFrame_ptr = isFrame.Find(Frame_on);
-		if (isFrame_ptr != nullptr) {
-			isFrame.Insert(Frame_on, true)iferr_return;
-		}
-	}
-
-	Int32 DistanceKeyCount = CameraCurveDistance->GetKeyCount();
-	for (Int32 i = 0; i < DistanceKeyCount; i++) {
-		Int32 Frame_on = CameraCurveDistance->GetKey(i)->GetTime().GetFrame(30);
-		auto isFrame_ptr = isFrame.Find(Frame_on);
-		if (isFrame_ptr != nullptr) {
-			isFrame.Insert(Frame_on, true)iferr_return;
-		}
-	}
-
-	Int32 AOVKeyCount = CameraCurveAOV->GetKeyCount();
-	for (Int32 i = 0; i < AOVKeyCount; i++) {
-		Int32 Frame_on = CameraCurveAOV->GetKey(i)->GetTime().GetFrame(30);
-		auto isFrame_ptr = isFrame.Find(Frame_on);
-		if (isFrame_ptr != nullptr) {
-			isFrame.Insert(Frame_on, true)iferr_return;
-		}
-	}
+	const Int32 FrameCount = CameraCurveFrame_on->GetKeyCount();
 
 	std::unique_ptr<mmd::VMDAnimation> mmd_animation(new mmd::VMDAnimation);
 	if (mmd_animation == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		file.Free();
 		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 	}
-	/*
-	for (Int32 i : isFrame.GetKeys()) {
-		doc->SetTime(BaseTime(i, 30));
-		mmd::VMD_Camera CameraFrame;
-		Int32 CameraFrame_on = i + TimeOffset;
-	}
-	doc->SetTime(BaseTime(0, 30));
-	*/
-	maxon::HashMap<maxon::Int32, mmd::VMD_Camera> Frames;
-
-	for (Int32 i = 0; i < CameraCurvePX->GetKeyCount(); i++) {
-		CKey* Key = CameraCurvePX->GetKey(i);
-		if (Key) {
-			Int32 CameraFrame_on = Key->GetTime().GetFrame(30) + TimeOffset;
-			mmd::VMD_Camera CameraFrame;
-			if (Frames.FindValue(CameraFrame_on)) {
-				CameraFrame = *(Frames.FindValue(CameraFrame_on));
-				Frames.Erase(CameraFrame_on)iferr_return;
-			}
-			if (i != CameraCurvePX->GetKeyCount() - 1) {
-				CKey* NextKey = CameraCurvePX->GetKey(i + 1);
-				if (NextKey) {
-					Int32 NextCameraFrame_ = NextKey->GetTime().GetFrame(30) + TimeOffset;
-					Int32 TimeOfTwoFrames = NextCameraFrame_ - CameraFrame_on;
-					Float ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
-					CameraFrame.frame_no = (UInt32)CameraFrame_on;
-					CameraFrame.position.x = Key->GetValue() * PositionMultiple;
-					CameraFrame.XCurve.ax = (UChar)((Key->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-					CameraFrame.XCurve.ay = (UChar)((Key->GetValueRight() * 127.0) / (ValueOfTwoFrames * PositionMultiple));
-					CameraFrame.XCurve.bx = (UChar)((NextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-					CameraFrame.XCurve.by = (UChar)((NextKey->GetValueLeft() * (Float)-128) / (ValueOfTwoFrames * PositionMultiple));
-					Frames.Insert(CameraFrame_on, CameraFrame)iferr_return;
-				}
-			}
-			else {
-				CameraFrame.frame_no = (UInt32)CameraFrame_on;
-				CameraFrame.position.x = Key->GetValue() * PositionMultiple;
-				CameraFrame.XCurve.ax = 20;
-				CameraFrame.XCurve.ay = 20;
-				CameraFrame.XCurve.bx = 107;
-				CameraFrame.XCurve.by = 107;
-				Frames.Insert(CameraFrame_on, CameraFrame)iferr_return;
-			}
-		}
-	}
-	for (Int32 i = 0; i < CameraCurvePY->GetKeyCount(); i++) {
-		CKey* Key = CameraCurvePY->GetKey(i);
-		if (Key) {
-			Int32 CameraFrame_on = Key->GetTime().GetFrame(30) + TimeOffset;
-			mmd::VMD_Camera CameraFrame;
-			if (Frames.FindValue(CameraFrame_on)) {
-				CameraFrame = *(Frames.FindValue(CameraFrame_on));
-				Frames.Erase(CameraFrame_on)iferr_return;
-			}
-			if (i != CameraCurvePY->GetKeyCount() - 1) {
-				CKey* NextKey = CameraCurvePY->GetKey(i + 1);
-				if (NextKey) {
-					Int32 NextCameraFrame_ = NextKey->GetTime().GetFrame(30) + TimeOffset;
-					Int32 TimeOfTwoFrames = NextCameraFrame_ - CameraFrame_on;
-					Float ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
-					CameraFrame.frame_no = (UInt32)CameraFrame_on;
-					CameraFrame.position.y = Key->GetValue() * PositionMultiple;
-					CameraFrame.YCurve.ax = (UChar)((Key->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-					CameraFrame.YCurve.ay = (UChar)((Key->GetValueRight() * 127.0) / (ValueOfTwoFrames * PositionMultiple));
-					CameraFrame.YCurve.bx = (UChar)((NextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-					CameraFrame.YCurve.by = (UChar)((NextKey->GetValueLeft() * (Float)-128) / (ValueOfTwoFrames * PositionMultiple));
-					Frames.Insert(CameraFrame_on, CameraFrame)iferr_return;
-				}
-
-			}
-			else {
-				CameraFrame.frame_no = (UInt32)CameraFrame_on;
-				CameraFrame.position.y = Key->GetValue() * PositionMultiple;
-				CameraFrame.YCurve.ax = 20;
-				CameraFrame.YCurve.ay = 20;
-				CameraFrame.YCurve.bx = 107;
-				CameraFrame.YCurve.by = 107;
-				Frames.Insert(CameraFrame_on, CameraFrame)iferr_return;
-			}
-		}
-	}
-	for (Int32 i = 0; i < CameraCurvePZ->GetKeyCount(); i++) {
-		CKey* Key = CameraCurvePZ->GetKey(i);
-		if (Key) {
-			Int32 CameraFrame_on = Key->GetTime().GetFrame(30) + TimeOffset;
-			mmd::VMD_Camera CameraFrame;
-			if (Frames.FindValue(CameraFrame_on)) {
-				CameraFrame = *(Frames.FindValue(CameraFrame_on));
-				Frames.Erase(CameraFrame_on)iferr_return;
-			}
-			if (i != CameraCurvePZ->GetKeyCount() - 1) {
-				CKey* NextKey = CameraCurvePZ->GetKey(i + 1);
-				if (NextKey) {
-					Int32 NextCameraFrame_ = NextKey->GetTime().GetFrame(30) + TimeOffset;
-					Int32 TimeOfTwoFrames = NextCameraFrame_ - CameraFrame_on;
-					Float ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
-					CameraFrame.frame_no = (UInt32)CameraFrame_on;
-					CameraFrame.position.z = Key->GetValue() * PositionMultiple;
-					CameraFrame.ZCurve.ax = (UChar)((Key->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-					CameraFrame.ZCurve.ay = (UChar)((Key->GetValueRight() * 127.0) / (ValueOfTwoFrames * PositionMultiple));
-					CameraFrame.ZCurve.bx = (UChar)((NextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-					CameraFrame.ZCurve.by = (UChar)((NextKey->GetValueLeft() * (Float)-128) / (ValueOfTwoFrames * PositionMultiple));
-					Frames.Insert(CameraFrame_on, CameraFrame)iferr_return;
-				}
-
-			}
-			else {
-				CameraFrame.frame_no = (UInt32)CameraFrame_on;
-				CameraFrame.position.z = Key->GetValue() * PositionMultiple;
-				CameraFrame.ZCurve.ax = 20;
-				CameraFrame.ZCurve.ay = 20;
-				CameraFrame.ZCurve.bx = 107;
-				CameraFrame.ZCurve.by = 107;
-				Frames.Insert(CameraFrame_on, CameraFrame)iferr_return;
-			}
-		}
-	}
-
-	RXKeyCount -= 1;
-	RYKeyCount -= 1;
-	RZKeyCount -= 1;
-	Int32 RKeyCount = maxon::Max(maxon::Max(RXKeyCount, RYKeyCount), RZKeyCount);
-
-	for (Int32 i = 0; i < RKeyCount; i++) {
-		CKey* RXKey = nullptr;
-		CKey* RYKey = nullptr;
-		CKey* RZKey = nullptr;
-
-		Int32 RXCameraFrame_ = 0;
-		Int32 RYCameraFrame_ = 0;
-		Int32 RZCameraFrame_ = 0;
-
-		Bool ReadRX = 0, ReadRY = 0, ReadRZ = 0;
-
-		if (RXKeyCount)
-		{
-			RXKey = CameraCurveRX->GetKey(i);
-			RXCameraFrame_ = RXKey->GetTime().GetFrame(30) + TimeOffset;
-		}
-
-		if (RYKeyCount)
-		{
-			RYKey = CameraCurveRY->GetKey(i);
-			RYCameraFrame_ = RYKey->GetTime().GetFrame(30) + TimeOffset;
-		}
-
-		if (RZKeyCount)
-		{
-			RZKey = CameraCurveRZ->GetKey(i);
-			RZCameraFrame_ = RZKey->GetTime().GetFrame(30) + TimeOffset;
-		}
-
-		if (RXKeyCount && RYKeyCount && RZKeyCount)
-		{
-			if (RXKey && RYKey && RZKey)
-			{
-				if ((RXCameraFrame_ == RYCameraFrame_) && (RYCameraFrame_ == RZCameraFrame_))
-				{
-					ReadRX = 1;
-					ReadRY = 1;
-					ReadRZ = 1;
-					mmd::VMD_Curve RXCurve;
-					mmd::VMD_Curve RYCurve;
-					mmd::VMD_Curve RZCurve;
-					mmd::VMD_Camera CameraFrame;
-					if (Frames.FindValue(RXCameraFrame_)) {
-						CameraFrame = *(Frames.FindValue(RXCameraFrame_));
-						Frames.Erase(RXCameraFrame_)iferr_return;
-					}
-					CameraFrame.frame_no = (UInt32)RXCameraFrame_;
-					CameraFrame.rotation.y = RXKey->GetValue();
-					if (i != RXKeyCount - 1) {
-						CKey* RXNextKey = CameraCurveRX->GetKey(i + 1);
-						Int32 NextCameraFrame_ = RXNextKey->GetTime().GetFrame(30) + TimeOffset;
-						Int32 TimeOfTwoFrames = NextCameraFrame_ - RXCameraFrame_;
-						Float ValueOfTwoFrames = RXNextKey->GetValue() - RXKey->GetValue();
-						RXCurve.ax = (UChar)((RXKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-						RXCurve.ay = (UChar)((RXKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-						RXCurve.bx = (UChar)((RXNextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-						RXCurve.by = (UChar)((RXNextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-					}
-					else {
-						RXCurve.ax = 20;
-						RXCurve.ay = 20;
-						RXCurve.bx = 107;
-						RXCurve.by = 107;
-					}
-					CameraFrame.frame_no = (UInt32)RYCameraFrame_;
-					CameraFrame.rotation.x = RYKey->GetValue();
-					if (i != RYKeyCount - 1) {
-						CKey* RYNextKey = CameraCurveRY->GetKey(i + 1);
-						Int32 NextCameraFrame_ = RYNextKey->GetTime().GetFrame(30) + TimeOffset;
-						Int32 TimeOfTwoFrames = NextCameraFrame_ - RYCameraFrame_;
-						Float ValueOfTwoFrames = RYNextKey->GetValue() - RYKey->GetValue();
-						RYCurve.ax = (UChar)((RYKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-						RYCurve.ay = (UChar)((RYKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-						RYCurve.bx = (UChar)((RYNextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-						RYCurve.by = (UChar)((RYNextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-					}
-					else {
-						RYCurve.ax = 20;
-						RYCurve.ay = 20;
-						RYCurve.bx = 107;
-						RYCurve.by = 107;
-					}
-					CameraFrame.frame_no = (UInt32)RYCameraFrame_;
-					CameraFrame.rotation.z = RZKey->GetValue();
-					if (i != RZKeyCount - 1) {
-						CKey* RZNextKey = CameraCurveRZ->GetKey(i + 1);
-						Int32 NextCameraFrame_ = RZNextKey->GetTime().GetFrame(30) + TimeOffset;
-						Int32 TimeOfTwoFrames = NextCameraFrame_ - RZCameraFrame_;
-						Float ValueOfTwoFrames = RZNextKey->GetValue() - RZKey->GetValue();
-						RZCurve.ax = (UChar)((RZKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-						RZCurve.ay = (UChar)((RZKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-						RZCurve.bx = (UChar)((RZNextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-						RZCurve.by = (UChar)((RZNextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-					}
-					else {
-						RZCurve.ax = 20;
-						RZCurve.ay = 20;
-						RZCurve.bx = 107;
-						RZCurve.by = 107;
-					}
-					CameraFrame.RCurve.ax = maxon::Max(maxon::Max(RXCurve.ax, RYCurve.ax), RZCurve.ax);
-					CameraFrame.RCurve.ay = maxon::Max(maxon::Max(RXCurve.ay, RYCurve.ay), RZCurve.ay);
-					CameraFrame.RCurve.bx = maxon::Max(maxon::Max(RXCurve.bx, RYCurve.bx), RZCurve.bx);
-					CameraFrame.RCurve.by = maxon::Max(maxon::Max(RXCurve.by, RYCurve.by), RZCurve.by);
-					Frames.Insert(RXCameraFrame_, CameraFrame)iferr_return;
-					RXKeyCount--;
-					RYKeyCount--;
-					RZKeyCount--;
-				}
-			}
-		}
-
-		if (ReadRX != 1 && ReadRY != 1)
-		{
-			if (RXKeyCount && RYKeyCount)
-			{
-				if (RXKey && RYKey)
-				{
-					if (RYCameraFrame_ == RXCameraFrame_)
-					{
-						ReadRX = 1;
-						ReadRY = 1;
-						mmd::VMD_Curve RXCurve;
-						mmd::VMD_Curve RYCurve;
-						mmd::VMD_Camera CameraFrame;
-						if (Frames.FindValue(RXCameraFrame_)) {
-							CameraFrame = *(Frames.FindValue(RXCameraFrame_));
-							Frames.Erase(RXCameraFrame_)iferr_return;
-						}
-						CameraFrame.frame_no = (UInt32)RXCameraFrame_;
-						CameraFrame.rotation.y = RXKey->GetValue();
-						if (i != RXKeyCount - 1) {
-							CKey* RXNextKey = CameraCurveRX->GetKey(i + 1);
-							Int32 NextCameraFrame_ = RXNextKey->GetTime().GetFrame(30) + TimeOffset;
-							Int32 TimeOfTwoFrames = NextCameraFrame_ - RXCameraFrame_;
-							Float ValueOfTwoFrames = RXNextKey->GetValue() - RXKey->GetValue();
-							RXCurve.ax = (UChar)((RXKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-							RXCurve.ay = (UChar)((RXKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-							RXCurve.bx = (UChar)((RXNextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-							RXCurve.by = (UChar)((RXNextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-						}
-						else {
-							RXCurve.ax = 20;
-							RXCurve.ay = 20;
-							RXCurve.bx = 107;
-							RXCurve.by = 107;
-						}
-						CameraFrame.frame_no = (UInt32)RYCameraFrame_;
-						CameraFrame.rotation.x = RYKey->GetValue();
-						if (i != RYKeyCount - 1) {
-							CKey* RYNextKey = CameraCurveRY->GetKey(i + 1);
-							Int32 NextCameraFrame_ = RYNextKey->GetTime().GetFrame(30) + TimeOffset;
-							Int32 TimeOfTwoFrames = NextCameraFrame_ - RYCameraFrame_;
-							Float ValueOfTwoFrames = RYNextKey->GetValue() - RYKey->GetValue();
-							RYCurve.ax = (UChar)((RYKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-							RYCurve.ay = (UChar)((RYKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-							RYCurve.bx = (UChar)((RYNextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-							RYCurve.by = (UChar)((RYNextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-						}
-						else {
-							RYCurve.ax = 20;
-							RYCurve.ay = 20;
-							RYCurve.bx = 107;
-							RYCurve.by = 107;
-						}
-						CameraFrame.RCurve.ax = maxon::Max(RXCurve.ax, RYCurve.ax);
-						CameraFrame.RCurve.ay = maxon::Max(RXCurve.ay, RYCurve.ay);
-						CameraFrame.RCurve.bx = maxon::Max(RXCurve.bx, RYCurve.bx);
-						CameraFrame.RCurve.by = maxon::Max(RXCurve.by, RYCurve.by);
-						Frames.Insert(RXCameraFrame_, CameraFrame)iferr_return;
-						RXKeyCount--;
-						RYKeyCount--;
-					}
-				}
-			}
-		}
-
-		if (ReadRZ != 1 && ReadRY != 1)
-		{
-			if (RZKeyCount && RYKeyCount)
-			{
-				if (RXKey && RYKey)
-				{
-					if (RYCameraFrame_ == RZCameraFrame_)
-					{
-						ReadRZ = 1;
-						ReadRY = 1;
-						mmd::VMD_Curve RYCurve;
-						mmd::VMD_Curve RZCurve;
-						mmd::VMD_Camera CameraFrame;
-						if (Frames.FindValue(RXCameraFrame_)) {
-							CameraFrame = *(Frames.FindValue(RXCameraFrame_));
-							Frames.Erase(RXCameraFrame_)iferr_return;
-						}
-						CameraFrame.frame_no = (UInt32)RYCameraFrame_;
-						CameraFrame.rotation.x = RYKey->GetValue();
-						if (i != RYKeyCount - 1) {
-							CKey* RYNextKey = CameraCurveRY->GetKey(i + 1);
-							Int32 NextCameraFrame_ = RYNextKey->GetTime().GetFrame(30) + TimeOffset;
-							Int32 TimeOfTwoFrames = NextCameraFrame_ - RYCameraFrame_;
-							Float ValueOfTwoFrames = RYNextKey->GetValue() - RYKey->GetValue();
-							RYCurve.ax = (UChar)((RYKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-							RYCurve.ay = (UChar)((RYKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-							RYCurve.bx = (UChar)((RYNextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-							RYCurve.by = (UChar)((RYNextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-						}
-						else {
-							RYCurve.ax = 20;
-							RYCurve.ay = 20;
-							RYCurve.bx = 107;
-							RYCurve.by = 107;
-						}
-						CameraFrame.frame_no = (UInt32)RYCameraFrame_;
-						CameraFrame.rotation.z = RZKey->GetValue();
-						if (i != RZKeyCount - 1) {
-							CKey* RZNextKey = CameraCurveRZ->GetKey(i + 1);
-							Int32 NextCameraFrame_ = RZNextKey->GetTime().GetFrame(30) + TimeOffset;
-							Int32 TimeOfTwoFrames = NextCameraFrame_ - RZCameraFrame_;
-							Float ValueOfTwoFrames = RZNextKey->GetValue() - RZKey->GetValue();
-							RZCurve.ax = (UChar)((RZKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-							RZCurve.ay = (UChar)((RZKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-							RZCurve.bx = (UChar)((RZNextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-							RZCurve.by = (UChar)((RZNextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-						}
-						else {
-							RZCurve.ax = 20;
-							RZCurve.ay = 20;
-							RZCurve.bx = 107;
-							RZCurve.by = 107;
-						}
-						CameraFrame.RCurve.ax = maxon::Max(RYCurve.ax, RZCurve.ax);
-						CameraFrame.RCurve.ay = maxon::Max(RYCurve.ay, RZCurve.ay);
-						CameraFrame.RCurve.bx = maxon::Max(RYCurve.bx, RZCurve.bx);
-						CameraFrame.RCurve.by = maxon::Max(RYCurve.by, RZCurve.by);
-						Frames.Insert(RXCameraFrame_, CameraFrame)iferr_return;
-						RZKeyCount--;
-						RYKeyCount--;
-					}
-				}
-			}
-		}
-
-		if (ReadRX != 1 && ReadRZ != 1)
-		{
-			if (RXKeyCount && RZKeyCount)
-			{
-				if (RXKey && RYKey)
-				{
-					if (RYCameraFrame_ == RXCameraFrame_)
-					{
-						ReadRX = 1;
-						ReadRZ = 1;
-						mmd::VMD_Curve RXCurve;
-						mmd::VMD_Curve RZCurve;
-						mmd::VMD_Camera CameraFrame;
-						if (Frames.FindValue(RXCameraFrame_)) {
-							CameraFrame = *(Frames.FindValue(RXCameraFrame_));
-							Frames.Erase(RXCameraFrame_)iferr_return;
-						}
-						CameraFrame.frame_no = (UInt32)RXCameraFrame_;
-						CameraFrame.rotation.y = RXKey->GetValue();
-						if (i != RXKeyCount - 1) {
-							CKey* RXNextKey = CameraCurveRX->GetKey(i + 1);
-							Int32 NextCameraFrame_ = RXNextKey->GetTime().GetFrame(30) + TimeOffset;
-							Int32 TimeOfTwoFrames = NextCameraFrame_ - RXCameraFrame_;
-							Float ValueOfTwoFrames = RXNextKey->GetValue() - RXKey->GetValue();
-							RXCurve.ax = (UChar)((RXKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-							RXCurve.ay = (UChar)((RXKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-							RXCurve.bx = (UChar)((RXNextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-							RXCurve.by = (UChar)((RXNextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-						}
-						else {
-							RXCurve.ax = 20;
-							RXCurve.ay = 20;
-							RXCurve.bx = 107;
-							RXCurve.by = 107;
-						}
-						CameraFrame.frame_no = (UInt32)RYCameraFrame_;
-						CameraFrame.rotation.z = RZKey->GetValue();
-						if (i != RZKeyCount - 1) {
-							CKey* RZNextKey = CameraCurveRZ->GetKey(i + 1);
-							Int32 NextCameraFrame_ = RZNextKey->GetTime().GetFrame(30) + TimeOffset;
-							Int32 TimeOfTwoFrames = NextCameraFrame_ - RZCameraFrame_;
-							Float ValueOfTwoFrames = RZNextKey->GetValue() - RZKey->GetValue();
-							RZCurve.ax = (UChar)((RZKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-							RZCurve.ay = (UChar)((RZKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-							RZCurve.bx = (UChar)((RZNextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-							RZCurve.by = (UChar)((RZNextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-						}
-						else {
-							RZCurve.ax = 20;
-							RZCurve.ay = 20;
-							RZCurve.bx = 107;
-							RZCurve.by = 107;
-						}
-						CameraFrame.RCurve.ax = maxon::Max(RXCurve.ax, RZCurve.ax);
-						CameraFrame.RCurve.ay = maxon::Max(RXCurve.ay, RZCurve.ay);
-						CameraFrame.RCurve.bx = maxon::Max(RXCurve.bx, RZCurve.bx);
-						CameraFrame.RCurve.by = maxon::Max(RXCurve.by, RZCurve.by);
-						Frames.Insert(RXCameraFrame_, CameraFrame)iferr_return;
-						RXKeyCount--;
-						RZKeyCount--;
-					}
-				}
-			}
-		}
-
-		if (ReadRX != 1)
-		{
-			if (RXKeyCount)
-			{
-				if (RXKey)
-				{
-					mmd::VMD_Camera CameraFrame;
-					if (Frames.FindValue(RXCameraFrame_)) {
-						CameraFrame = *(Frames.FindValue(RXCameraFrame_));
-						Frames.Erase(RXCameraFrame_)iferr_return;
-					}
-					CameraFrame.frame_no = (UInt32)RXCameraFrame_;
-					CameraFrame.rotation.y = RXKey->GetValue();
-					if (i != RXKeyCount - 1) {
-						CKey* NextKey = CameraCurveRX->GetKey(i + 1);
-						Int32 NextCameraFrame_ = NextKey->GetTime().GetFrame(30) + TimeOffset;
-						Int32 TimeOfTwoFrames = NextCameraFrame_ - RXCameraFrame_;
-						Float ValueOfTwoFrames = NextKey->GetValue() - RXKey->GetValue();
-						CameraFrame.RCurve.ax = (UChar)((RXKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-						CameraFrame.RCurve.ay = (UChar)((RXKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-						CameraFrame.RCurve.bx = (UChar)((NextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-						CameraFrame.RCurve.by = (UChar)((NextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-						Frames.Insert(RXCameraFrame_, CameraFrame)iferr_return;
-					}
-					else {
-						CameraFrame.RCurve.ax = 20;
-						CameraFrame.RCurve.ay = 20;
-						CameraFrame.RCurve.bx = 107;
-						CameraFrame.RCurve.by = 107;
-						Frames.Insert(RXCameraFrame_, CameraFrame)iferr_return;
-					}
-					RXKeyCount--;
-				}
-			}
-		}
-
-		if (ReadRY != 1)
-		{
-			if (RYKeyCount)
-			{
-				if (RXKey)
-				{
-					mmd::VMD_Camera CameraFrame;
-					if (Frames.FindValue(RYCameraFrame_)) {
-						CameraFrame = *(Frames.FindValue(RYCameraFrame_));
-						Frames.Erase(RYCameraFrame_)iferr_return;
-					}
-					CameraFrame.frame_no = (UInt32)RYCameraFrame_;
-					CameraFrame.rotation.x = RYKey->GetValue();
-					if (i != RYKeyCount - 1) {
-						CKey* NextKey = CameraCurveRY->GetKey(i + 1);
-						Int32 NextCameraFrame_ = NextKey->GetTime().GetFrame(30) + TimeOffset;
-						Int32 TimeOfTwoFrames = NextCameraFrame_ - RYCameraFrame_;
-						Float ValueOfTwoFrames = NextKey->GetValue() - RYKey->GetValue();
-						CameraFrame.RCurve.ax = (UChar)((RYKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-						CameraFrame.RCurve.ay = (UChar)((RYKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-						CameraFrame.RCurve.bx = (UChar)((NextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-						CameraFrame.RCurve.by = (UChar)((NextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-						Frames.Insert(RYCameraFrame_, CameraFrame)iferr_return;
-					}
-					else {
-						CameraFrame.RCurve.ax = 20;
-						CameraFrame.RCurve.ay = 20;
-						CameraFrame.RCurve.bx = 107;
-						CameraFrame.RCurve.by = 107;
-						Frames.Insert(RYCameraFrame_, CameraFrame)iferr_return;
-					}
-					RYKeyCount--;
-				}
-			}
-		}
-
-		if (ReadRZ != 1)
-		{
-			if (RZKeyCount)
-			{
-				if (RXKey)
-				{
-					mmd::VMD_Camera CameraFrame;
-					if (Frames.FindValue(RZCameraFrame_)) {
-						CameraFrame = *(Frames.FindValue(RZCameraFrame_));
-						Frames.Erase(RZCameraFrame_)iferr_return;
-					}
-					CameraFrame.frame_no = (UInt32)RYCameraFrame_;
-					CameraFrame.rotation.z = RZKey->GetValue();
-					if (i != RZKeyCount - 1) {
-						CKey* NextKey = CameraCurveRZ->GetKey(i + 1);
-						Int32 NextCameraFrame_ = NextKey->GetTime().GetFrame(30) + TimeOffset;
-						Int32 TimeOfTwoFrames = NextCameraFrame_ - RZCameraFrame_;
-						Float ValueOfTwoFrames = NextKey->GetValue() - RZKey->GetValue();
-						CameraFrame.RCurve.ax = (UChar)((RZKey->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-						CameraFrame.RCurve.ay = (UChar)((RZKey->GetValueRight() * 127.0) / ValueOfTwoFrames);
-						CameraFrame.RCurve.bx = (UChar)((NextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-						CameraFrame.RCurve.by = (UChar)((NextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-						Frames.Insert(RZCameraFrame_, CameraFrame)iferr_return;
-					}
-					else {
-						CameraFrame.RCurve.ax = 20;
-						CameraFrame.RCurve.ay = 20;
-						CameraFrame.RCurve.bx = 107;
-						CameraFrame.RCurve.by = 107;
-						Frames.Insert(RZCameraFrame_, CameraFrame)iferr_return;
-					}
-					RZKeyCount--;
-				}
-			}
-		}
-	}
-	for (Int32 i = 0; i < CameraCurveDistance->GetKeyCount(); i++) {
-		CKey* Key = CameraCurveDistance->GetKey(i);
-		if (Key) {
-			Int32 CameraFrame_ = Key->GetTime().GetFrame(30) + TimeOffset;
-			mmd::VMD_Camera CameraFrame;
-			if (Frames.FindValue(CameraFrame_))
-			{
-				CameraFrame = *(Frames.FindValue(CameraFrame_));
-				Frames.Erase(CameraFrame_)iferr_return;
-			}
-			if (i != CameraCurveDistance->GetKeyCount() - 1)
-			{
-				CKey* NextKey = CameraCurveDistance->GetKey(i + 1);
-				if (NextKey)
-				{
-					Int32 NextCameraFrame_ = NextKey->GetTime().GetFrame(30) + TimeOffset;
-					Int32 TimeOfTwoFrames = NextCameraFrame_ - CameraFrame_;
-					Float ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
-					CameraFrame.frame_no = (UInt32)CameraFrame_;
-					CameraFrame.distance = Key->GetValue() * PositionMultiple;
-					CameraFrame.DCurve.ax = (UChar)((Key->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-					CameraFrame.DCurve.ay = (UChar)((Key->GetValueRight() * 127.0) / (ValueOfTwoFrames * PositionMultiple));
-					CameraFrame.DCurve.bx = (UChar)((NextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-					CameraFrame.DCurve.by = (UChar)((NextKey->GetValueLeft() * (Float)-128) / (ValueOfTwoFrames * PositionMultiple));
-					Frames.Insert(CameraFrame_, CameraFrame)iferr_return;
-				}
-
-			}
-			else
-			{
-				CameraFrame.frame_no = (UInt32)CameraFrame_;
-				CameraFrame.distance = Key->GetValue() * PositionMultiple;
-				CameraFrame.DCurve.ax = 20;
-				CameraFrame.DCurve.ay = 20;
-				CameraFrame.DCurve.bx = 107;
-				CameraFrame.DCurve.by = 107;
-				Frames.Insert(CameraFrame_, CameraFrame)iferr_return;
-			}
-		}
-	}
-	for (Int32 i = 0; i < CameraCurveAOV->GetKeyCount(); i++)
+	for (Int32 i = 0; i < FrameCount; i++)
 	{
-		CKey* Key = CameraCurveAOV->GetKey(i);
-		if (Key)
-		{
-			Int32 CameraFrame_ = Key->GetTime().GetFrame(30) + TimeOffset;
-			mmd::VMD_Camera CameraFrame;
-			if (Frames.FindValue(CameraFrame_))
-			{
-				CameraFrame = *(Frames.FindValue(CameraFrame_));
-				Frames.Erase(CameraFrame_)iferr_return;
-			}
-			if (i != CameraCurveAOV->GetKeyCount() - 1)
-			{
-				CKey* NextKey = CameraCurveAOV->GetKey(i + 1);
-				if (NextKey)
-				{
-					Int32 NextCameraFrame_ = NextKey->GetTime().GetFrame(30) + TimeOffset;
-					Int32 TimeOfTwoFrames = NextCameraFrame_ - CameraFrame_;
-					Float ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
-					CameraFrame.frame_no = (UInt32)CameraFrame_;
-					CameraFrame.viewing_angle = Key->GetValue();
-					CameraFrame.VCurve.ax = (UChar)((Key->GetTimeRight().GetFrame(30) * 128) / TimeOfTwoFrames);
-					CameraFrame.VCurve.ay = (UChar)((Key->GetValueRight() * 127.0) / ValueOfTwoFrames);
-					CameraFrame.VCurve.bx = (UChar)((NextKey->GetTimeLeft().GetFrame(30) * -128) / TimeOfTwoFrames);
-					CameraFrame.VCurve.by = (UChar)((NextKey->GetValueLeft() * (Float)-128) / ValueOfTwoFrames);
-					Frames.Insert(CameraFrame_, CameraFrame)iferr_return;
-				}
-
-			}
-			else
-			{
-				CameraFrame.frame_no = (UInt32)CameraFrame_;
-				CameraFrame.viewing_angle = Key->GetValue();
-				CameraFrame.VCurve.ax = 20;
-				CameraFrame.VCurve.ay = 20;
-				CameraFrame.VCurve.bx = 107;
-				CameraFrame.VCurve.by = 107;
-				Frames.Insert(CameraFrame_, CameraFrame)iferr_return;
-			}
+		StatusSetSpin();
+		mmd::VMD_Camera CameraFrame;
+		Int32 Frame_on = CameraCurveFrame_on->GetKey(i)->GetValue() ;
+		CameraFrame.frame_no = Frame_on + TimeOffset;
+		CameraFrame.position = vec3(CameraCurvePX->GetKey(i)->GetValue() * PositionMultiple, CameraCurvePY->GetKey(i)->GetValue() * PositionMultiple, CameraCurvePZ->GetKey(i)->GetValue() * PositionMultiple);
+		CameraFrame.rotation = vec3(CameraCurveRX->GetKey(i)->GetValue(), CameraCurveRY->GetKey(i)->GetValue(), CameraCurveRZ->GetKey(i)->GetValue());
+		CameraFrame.distance = CameraCurveDistance->GetKey(i)->GetValue() * PositionMultiple;
+		CameraFrame.viewing_angle = CameraCurveAOV->GetKey(i)->GetValue();
+		CameraFrame.perspective = 0;
+		VMDCamera_data->GetCurve(XCURVE, Frame_on, &CameraFrame.XCurve);
+		VMDCamera_data->GetCurve(YCURVE, Frame_on, &CameraFrame.YCurve);
+		VMDCamera_data->GetCurve(ZCURVE, Frame_on, &CameraFrame.ZCurve);
+		VMDCamera_data->GetCurve(RCURVE, Frame_on, &CameraFrame.RCurve);
+		VMDCamera_data->GetCurve(DCURVE, Frame_on, &CameraFrame.DCurve);
+		VMDCamera_data->GetCurve(VCURVE, Frame_on, &CameraFrame.VCurve);
+		iferr(mmd_animation->camera_frames.Append(CameraFrame)){
+			GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		}
 	}
 
 	mmd_animation->ModelName = "カメラ・照明"_s;
-	mmd_animation->CameraFrameNumber = Frames.GetCount();
-	for (mmd::VMD_Camera val : Frames.GetValues())
-	{
-		mmd_animation->camera_frames.Append(val)iferr_return;
-	}
+	mmd_animation->IsCamera = true;
+	mmd_animation->CameraFrameNumber = FrameCount;
 	iferr(mmd_animation->WriteToFile(file))
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
-		file.Free();
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
 	}
 	timing.Stop();
 	StatusClear();
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::UIntToString(mmd_animation->CameraFrameNumber), String::FloatToString(timing.GetMilliseconds())));
-	Frames.Reset();
-	file.Free();
 	return maxon::OK;
 }
-maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMultiple, Float& TimeOffset, Bool& QuaternionRotationSW, Bool& DetailReport, Bool& ByTag) {
+maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMultiple, Float TimeOffset, Bool QuaternionRotationSW, Bool DetailReport, Bool ByTag) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc<BaseFile> file;
@@ -2331,18 +2139,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 	if (doc == nullptr) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + "error");
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
 	BaseObject* SelectObject = doc->GetActiveObject();
 	if (SelectObject == nullptr) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
 	if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE))) {
-		file.Free();
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
 	if (file == nullptr) {
@@ -2353,13 +2158,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 	if (!file->Open(fn, FILEOPEN::READ, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA)) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
-		file.Free();
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 	}
 	if (!(fn.CheckSuffix("vmd"_s) || (fn.CheckSuffix("VMD"_s)))) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
-		file.Free();
 		return maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
 	}
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
@@ -2367,19 +2170,16 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float& PositionMult
 	if (mmd_animation == nullptr) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		file.Free();
 		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 	}
 	iferr(mmd_animation->LoadFromFile(file)) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
-		file.Free();
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 	}
 	if (mmd_animation->IsCamera == 1) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
-		file.Free();
 		return maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
 	}
 	struct morph_id_tag

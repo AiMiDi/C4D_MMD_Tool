@@ -1,0 +1,20 @@
+STRINGTABLE VMD_Cam_Obj
+{
+	VMD_Cam_Obj "VMD Cam Object";
+	VMD_CAM_OBJ_GRP "Animation";
+	FRAME_ON "Frame on";
+	INIT_CURVE_BUTTON "Init curve";
+	REGISTER_CURVE_BUTTON "Register key frame";
+	DELETE_CURVE_BUTTON "Delete key frame";
+	UPDATE_CURVE_BUTTON "Update all curve";
+	CURVE_TYPE "Curve type";
+	VMD_CAM_OBJ_SPLINE "Curve";
+
+	XCURVE "Position X curve";
+	YCURVE "Position Y curve";
+	ZCURVE "Position Z curve";
+	RCURVE "Rotation curve";
+	DCURVE "Distance curve";
+	VCURVE "AOV curve";
+	ACURVE "All curve";
+}

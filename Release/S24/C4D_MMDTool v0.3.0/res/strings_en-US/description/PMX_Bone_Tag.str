@@ -1,0 +1,50 @@
+STRINGTABLE PMX_Bone_Tag
+{
+	PMX_Bone_Tag "PMX Bone Tag";
+	PMX_BONE_INFO_GRP "Bone info";
+	BONE_INDEX "Bone index";
+	BONE_NAME_LOCAL "Bone local name";
+	BONE_NAME_UNIVERSAL "Bone universal name";
+	BONE_NAME_IS "Bone display name";
+	NAME_IS_LOCAL "Bone local name";
+	NAME_IS_UNIVERSAL "Bone universal name";
+	POSITION "Position";
+
+	PMX_BONE_PARENT_BONE_GRP "Parent bone";
+	PARENT_BONE_INDEX "Parent bone Index";
+	PARENT_BONE_LINK "";
+
+	PMX_BONE_FLAG_GRP "Bone features";
+	ROTATABLE "Is rotatable";
+	TRANSLATABLE "Is translatable";
+	VISIBLE "Is visible";
+	ENABLED "Is enable";
+	IS_IK "Is IK";
+
+	PMX_BONE_DEFORM_LAYER_GRP "Deformation";
+	LAYER "Deformation layer";
+	PHYSICS_AFTER_DEFORM "Physics after deform";
+
+	PMX_BONE_END_OF_BONE_GRP "Bone tail pointing";
+	INDEXED_TAIL_POSITION "Tail pointing";
+	TAIL_IS_INDEX "Index";
+	TAIL_IS_POSITION "Position";
+	TAIL_INDEX "Tail index";
+	TAIL_POSITION "Tail position";
+	
+	PMX_BONE_INHERIT_GRP "Bone inherit";
+	INHERIT_ROTATION "Inherit rotation";
+	INHERIT_TRANSLATION "Inherit translation";
+	INHERIT_BONE_PARENT_INDEX "Inherit bone parent index";
+	INHERIT_BONE_PARENT_INFLUENCE "Inherit bone parent influence";
+	INHERIT_BONE_PARENT_LINK "";
+
+	PMX_BONE_FIXED_AXIS_GRP "Fixed axis";
+	FIXED_AXIS "Enable bone fixed axis";
+	BONE_FIXED_AXIS "Bone fixed axis";
+
+	PMX_BONE_LOCAL_COORDINATE_GRP "Local coordinate";
+	LOCAL_COORDINATE "Enable local coordinate";
+	BONE_LOCAL_X "Bone local X";
+	BONE_LOCAL_Z "Bone local Z";
+}
