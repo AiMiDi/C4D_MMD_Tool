@@ -8,6 +8,8 @@ A plugin for Cinema 4D written in C++ is used to import MikuMikuDance data into 
 
 ## Release
 
+Click the latest version of the plugin under `Release` to download it
+
 At present, the main maintenance version is R21 or higher.
 
 ## version 
@@ -61,6 +63,8 @@ Cinema 4D的mmdtool。
 用C ++编写的Cinema 4D插件，用于将MikuMikuDance数据导入Cinema 4D。
 
 ## 发行版
+
+插件点击`Release`下的最新版本下载
 
 目前，主要维护版本为R21及更高版本。
 
