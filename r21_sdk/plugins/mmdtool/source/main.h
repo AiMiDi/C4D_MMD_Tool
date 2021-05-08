@@ -43,6 +43,7 @@
 #include "lib_ngon.h"
 #include "c4d_baseobject.h"
 #include "tprotection.h"
+#include "MMD_struct.h"
 #include "NameConversion.h"
 #include "undef_win_macros.h"
 #include "EncodingConversion.h"

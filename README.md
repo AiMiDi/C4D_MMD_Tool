@@ -34,6 +34,8 @@ version 0.2.9.1  Added the function of deleting key frames of camera objects.
 
 version 0.3.0  Improve camera action export function, support S24.
 
+version 0.3.1 Improve the action import and PMX skeleton objects; fix the situation that the imported model may be stuck.
+
 ## usage
 
 1.Select the corresponding version of the plugin and place it in the plugins folder under the Cinema 4D installation directory.
@@ -85,6 +87,8 @@ version 0.2.9.0 修复了导入模型可能卡住的问题。
 version 0.2.9.1  增加了删除摄像机对象关键帧的功能。
 
 version 0.3.0  完善摄像头动作导出功能，支持S24。
+
+version 0.3.1 完善动作导入和PMX骨骼对象；修复导入模型可能卡死的情况。
 
 ## 使用方法
 

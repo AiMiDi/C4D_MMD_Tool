@@ -83,6 +83,9 @@
     <ClInclude Include="..\source\ImagesGUI.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\MMD_struct.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\description\PMX_Bone_Tag.res">
@@ -93,6 +96,18 @@
     </None>
     <None Include="..\res\description\VMD_Cam_Obj.res">
       <Filter>res\description</Filter>
+    </None>
+    <None Include="..\res\strings_en-US\c4d_strings.str">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\strings_en-US\description\PMX_Bone_Tag.str">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\strings_en-US\description\PMX_Model_Tag.str">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\res\strings_en-US\description\VMD_Cam_Obj.str">
+      <Filter>res</Filter>
     </None>
   </ItemGroup>
 </Project>

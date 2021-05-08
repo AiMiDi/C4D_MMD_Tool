@@ -13,25 +13,25 @@ mmd::PMXModel::PMXModel() {
 }
 mmd::PMXModel::~PMXModel() {
 	for (auto i : vertex_data) {
-		delete i;
+		if (i != nullptr)delete i;
 	}
 	for (auto i : surface_data) {
-		delete i;
+		if (i != nullptr)delete i;
 	}
 	for (auto i : material_data) {
-		delete i;
+		if (i != nullptr)delete i;
 	}
 	for (auto i : bone_data) {
-		delete i;
+		if (i != nullptr)delete i;
 	}
 	for (auto i : morph_data) {
-		delete i;
+		if (i != nullptr)delete i;
 	}
 	for (auto i : rigid_body_data) {
-		delete i;
+		if (i != nullptr)delete i;
 	}
 	for (auto i : joint_data) {
-		delete i;
+		if (i != nullptr)delete i;
 	}
 }
 
@@ -151,6 +151,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 	for (Int32 i = 0; i < model_data_count_.vertex_data_count; i++)
 	{
 		PMX_Vertex_Data* vertex_data_ = new PMX_Vertex_Data;
+		if (vertex_data_ == nullptr) {
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
 		if (!file->ReadVector32(&(vertex_data_->position)))return maxon::Error();
 		if (!file->ReadVector32(&(vertex_data_->normal)))return maxon::Error();
 		if (!file->ReadBytes(&(vertex_data_->UV), sizeof(vec2)))return maxon::Error();
@@ -233,6 +238,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 	for (Int32 i = 0; i < model_data_count_.material_data_count; i++)
 	{
 		PMX_Material_Data* material_data_ = new PMX_Material_Data;
+		if (material_data_ == nullptr) {
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
 		material_data_->material_name_local = ReadText(file, model_info_.text_encoding);
 		material_data_->material_name_universal = ReadText(file, model_info_.text_encoding);
 		if (!file->ReadBytes(&(material_data_->diffuse_colour), sizeof(vec4)))return maxon::Error();
@@ -263,6 +273,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 	for (Int32 i = 0; i < model_data_count_.bone_data_count; i++)
 	{
 		PMX_Bone_Data* bone_data_ = new PMX_Bone_Data;
+		if (bone_data_ == nullptr) {
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
 		bone_data_->bone_name_local = ReadText(file, model_info_.text_encoding);
 		bone_data_->bone_name_universal = ReadText(file, model_info_.text_encoding);
 		if (!file->ReadVector32(&(bone_data_->position)))return maxon::Error();
@@ -303,6 +318,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			for (Int32 j = 0; j < bone_data_->IK_link_count; j++)
 			{
 				PMX_IK_links* IK_link = new PMX_IK_links;
+				if (IK_link == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
 				IK_link->bone_index = ReadIndex(file, model_info_.bone_index_size);
 				if (!file->ReadBool(&(IK_link->has_limits)))return maxon::Error();
 				if (IK_link->has_limits)
@@ -319,6 +339,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 	for (Int32 i = 0; i < model_data_count_.morph_data_count; i++)
 	{
 		PMX_Morph_Data* morph_data_ = new PMX_Morph_Data;
+		if (morph_data_ == nullptr) {
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
 		morph_data_->morph_name_local = ReadText(file, model_info_.text_encoding);
 		morph_data_->morph_name_universal = ReadText(file, model_info_.text_encoding);
 		if (!file->ReadChar(&(morph_data_->panel_type)))return maxon::Error();
@@ -329,45 +354,82 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 		case 0:
 		{
 			offset_data_ = new maxon::PointerArray<PMX_Morph_group>;
+			if (offset_data_ == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			}
 			morph_data_->offset_data = offset_data_;
 			break;
 		}
 		case 1:
 		{
 			offset_data_ = new maxon::PointerArray<PMX_Morph_vertex>;
+			if (offset_data_ == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			}
 			morph_data_->offset_data = offset_data_;
 			break;
 		}
 		case 2:
 		{
 			offset_data_ = new maxon::PointerArray<PMX_Morph_bone>;
+			if (offset_data_ == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			}
 			morph_data_->offset_data = offset_data_;
 			break;
 		}
 		case 3:
 		{
 			offset_data_ = new maxon::PointerArray<PMX_Morph_UV>;
+			if (offset_data_ == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			}
 			morph_data_->offset_data = offset_data_;
 			break;
 		}
 		case 8:
 		{
 			offset_data_ = new maxon::PointerArray<PMX_Morph_material>;
+			if (offset_data_ == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			}
 			morph_data_->offset_data = offset_data_;
 			break;
 		}
 		case 9:
 		{
 			offset_data_ = new maxon::PointerArray<PMX_Morph_flip>;
+			if (offset_data_ == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			}
 			morph_data_->offset_data = offset_data_;
 			break;
 		}
 		case 10:
 		{
 			offset_data_ = new maxon::PointerArray<PMX_Morph_impulse>;
+			if (offset_data_ == nullptr) {
+				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			}
 			morph_data_->offset_data = offset_data_;
 			break;
 		}
+		default:
+			break;
 		}
 		if (!file->ReadInt32(&(morph_data_->offset_count)))return maxon::Error();
 		for (Int32 j = 0; j < morph_data_->offset_count; j++)
@@ -378,6 +440,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			{
 				maxon::PointerArray<PMX_Morph_group>* offset_data_groups = (maxon::PointerArray<PMX_Morph_group>*)offset_data_;
 				PMX_Morph_group* offset_data_group_ = new PMX_Morph_group;
+				if (offset_data_group_== nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
 				offset_data_group_->morph_index = ReadIndex(file, model_info_.morph_index_size);
 				if (!file->ReadFloat32(&(offset_data_group_->influence)))return maxon::Error();
 				offset_data_groups->AppendPtr(offset_data_group_)iferr_return;
@@ -387,6 +454,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			{
 				maxon::PointerArray<PMX_Morph_vertex>* offset_data_vertexs = (maxon::PointerArray<PMX_Morph_vertex>*)offset_data_;
 				PMX_Morph_vertex* offset_data_vertex_ = new PMX_Morph_vertex;
+				if (offset_data_vertex_ == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
 				offset_data_vertex_->vertex_index = ReadIndex(file, model_info_.vertex_index_size);
 				if (!file->ReadVector32(&(offset_data_vertex_->translation)))return maxon::Error();
 				offset_data_vertexs->AppendPtr(offset_data_vertex_)iferr_return;
@@ -396,6 +468,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			{
 				maxon::PointerArray<PMX_Morph_bone>* offset_data_bones = (maxon::PointerArray<PMX_Morph_bone>*)offset_data_;
 				PMX_Morph_bone* offset_data_bone_ = new PMX_Morph_bone;
+				if (offset_data_bone_ == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
 				offset_data_bone_->bone_index = ReadIndex(file, model_info_.bone_index_size);
 				if (!file->ReadVector32(&(offset_data_bone_->translation)))return maxon::Error();
 				vec4 q_rotation;
@@ -412,6 +489,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			{
 				maxon::PointerArray<PMX_Morph_UV>* offset_data_UVs = (maxon::PointerArray<PMX_Morph_UV>*)offset_data_;
 				PMX_Morph_UV* offset_data_UV_ = new PMX_Morph_UV;
+				if (offset_data_UV_ == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
 				offset_data_UV_->vertex_index = ReadIndex(file, model_info_.vertex_index_size);
 				if (!file->ReadBytes(&(offset_data_UV_->floats), sizeof(vec4)))return maxon::Error();
 				offset_data_UVs->AppendPtr(offset_data_UV_)iferr_return;
@@ -441,6 +523,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			{
 				maxon::PointerArray<PMX_Morph_material>* offset_data_materials = (maxon::PointerArray<PMX_Morph_material>*)offset_data_;
 				PMX_Morph_material* offset_data_material_ = new PMX_Morph_material;
+				if (offset_data_material_ == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
 				offset_data_material_->material_index = ReadIndex(file, model_info_.material_index_size);
 				if (!file->ReadChar(&(offset_data_material_->blend_mode)))return maxon::Error();
 				if (!file->ReadBytes(&(offset_data_material_->diffuse), sizeof(vec4)))return maxon::Error();
@@ -459,6 +546,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			{
 				maxon::PointerArray<PMX_Morph_flip>* offset_data_flips = (maxon::PointerArray<PMX_Morph_flip>*)offset_data_;
 				PMX_Morph_flip* offset_data_flip_ = new PMX_Morph_flip;
+				if (offset_data_flip_ == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
 				offset_data_flip_->morph_index = ReadIndex(file, model_info_.morph_index_size);
 				if (!file->ReadFloat32(&(offset_data_flip_->influence)))return maxon::Error();
 				offset_data_flips->AppendPtr(offset_data_flip_)iferr_return;
@@ -468,6 +560,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 			{
 				maxon::PointerArray<PMX_Morph_impulse>* offset_data_impulses = (maxon::PointerArray<PMX_Morph_impulse>*)offset_data_;
 				PMX_Morph_impulse* offset_data_impulse_ = new PMX_Morph_impulse;
+				if (offset_data_impulse_ == nullptr) {
+					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+					return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				}
 				offset_data_impulse_->rigid_body_index = ReadIndex(file, model_info_.rigidbody_index_size);
 				if (!file->ReadChar(&(offset_data_impulse_->local_flag)))return maxon::Error();
 				if (!file->ReadVector32(&(offset_data_impulse_->movement_speed)))return maxon::Error();
@@ -475,6 +572,8 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 				offset_data_impulses->AppendPtr(offset_data_impulse_)iferr_return;
 				break;
 			}
+			default:
+			break;
 			}
 		}
 		this->morph_data.Append(morph_data_)iferr_return;
@@ -483,6 +582,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 	for (Int32 i = 0; i < model_data_count_.display_data_count; i++)
 	{
 		PMX_Display_Data* display_data_ = new PMX_Display_Data;
+		if (display_data_ == nullptr) {
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
 		display_data_->display_name_local = ReadText(file, model_info_.text_encoding);
 		display_data_->display_name_universal = ReadText(file, model_info_.text_encoding);
 		if (!file->ReadChar(&(display_data_->special_flag)))return maxon::Error();
@@ -507,6 +611,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 	for (Int32 i = 0; i < model_data_count_.rigid_body_data_count; i++)
 	{
 		PMX_Rigid_Body_Data* rigid_body_data_ = new PMX_Rigid_Body_Data;
+		if (rigid_body_data_ == nullptr) {
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
 		rigid_body_data_->rigid_body_name_local = ReadText(file, model_info_.text_encoding);
 		rigid_body_data_->rigid_body_name_universal = ReadText(file, model_info_.text_encoding);
 		rigid_body_data_->related_bone_index = ReadIndex(file, model_info_.bone_index_size);
@@ -528,6 +637,11 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file) {
 	for (Int32 i = 0; i < model_data_count_.joint_data_count; i++)
 	{
 		PMX_Joint_Data* joint_data_ = new PMX_Joint_Data;
+		if (joint_data_ == nullptr) {
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+		}
 		joint_data_->joint_name_local = ReadText(file, model_info_.text_encoding);
 		joint_data_->joint_name_universal = ReadText(file, model_info_.text_encoding);
 		if (!file->ReadChar(&(joint_data_->joint_type)))return maxon::Error();

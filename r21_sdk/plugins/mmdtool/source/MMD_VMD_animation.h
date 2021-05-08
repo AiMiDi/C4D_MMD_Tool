@@ -2,55 +2,11 @@
 #define __MMD_VMD_ANIMATION_H__
 
 #include "main.h"
+#include "MMD_PMX_tag.h"
 #include "description/PMX_Bone_Tag.h"
 #include "description/VMD_Cam_Obj.h"
 
 namespace mmd{
-
-	typedef maxon::Vec3<Float32> vec3;
-	typedef maxon::Vec4<Float32> vec4;
-
-	struct VMD_Curve //MMD风格的补间曲线
-	{
-		UChar ax, ay, bx, by;
-	public:
-		VMD_Curve():ax(20), ay(20), bx(20), by(20) {}
-		VMD_Curve(UChar ax_, UChar ay_, UChar bx_, UChar by_) :ax(ax_), ay(ay_), bx(bx_), by(by_) {}
-	};
-
-	struct VMD_Motion //MMD风格的动作
-	{
-		String bone_name;//动作对应骨骼名称
-		UInt32 frame_no;//动作所在帧位置
-		vec3 position;//动作对应骨骼位置
-		vec4 rotation;//动作对应骨骼旋转(四元)
-		VMD_Curve XCurve, YCurve, ZCurve, RCurve;//动作补间曲线
-	};
-
-	struct VMD_Morph //MMD风格的表情动画
-	{
-		String morph_name;//动作对应表情名称
-		UInt32 frame_no;//动作对应表情所在帧位置
-		Float32 weight;//表情变形程度
-	};
-
-	struct VMD_Camera //MMD风格的摄像机动画
-	{
-		UInt32 frame_no;//摄像机动作所在帧位置
-		Float32 distance; //摄像机视点距离
-		vec3 position;//摄像机视点位置
-		vec3 rotation;//摄像机视点旋转(x和y翻转的欧拉角)
-		VMD_Curve XCurve, YCurve, ZCurve, RCurve, DCurve, VCurve;//动作补间曲线
-		UInt32 viewing_angle;//视野角
-		UChar perspective; // 0:on, 1:off
-	};
-
-	struct VMD_Light //MMD风格的灯光动画
-	{
-		UInt32 frame_no;
-		vec3 rgb;
-		vec3 position;
-	};
 
 	class VMDAnimation
 	{
