@@ -36,7 +36,17 @@ version 0.2.9.1  Added the function of deleting key frames of camera objects.
 
 version 0.3.0  Improve camera action export function, support S24.
 
-version 0.3.1 Improve the action import and PMX skeleton objects; fix the situation that the imported model may be stuck.
+version 0.3.1 Improve the action import and PMX bone objects; fix the situation that the imported model may be stuck.
+
+version 0.3.2
+
+​	1.Optimize the processing method of the imported model to ensure the same effect as in MMD.
+
+​	2.Optimize the leg bone problem of the imported model to ensure the same effect as in MMD.
+
+​	3.Optimized the detection of the alpha channel of the picture, and fixed the problem that the material was incorrectly imported into the transparent channel
+
+​	4.Increased code stability and reduced accidental crashes.
 
 ## usage
 
@@ -93,6 +103,16 @@ version 0.2.9.1  增加了删除摄像机对象关键帧的功能。
 version 0.3.0  完善摄像头动作导出功能，支持S24。
 
 version 0.3.1 完善动作导入和PMX骨骼对象；修复导入模型可能卡死的情况。
+
+version 0.3.2
+
+​	1.优化导入模型赋予亲的处理方式，确保与MMD中效果相同。
+
+​	2.优化导入模型的腿部骨骼问题，确保与MMD中效果相同。
+
+​	3.优化了图片alpha通道的检测，修复了材质错误导入透明通道的问题。
+
+​	4.增加了代码稳定性，减少了意外的崩溃。
 
 ## 使用方法
 

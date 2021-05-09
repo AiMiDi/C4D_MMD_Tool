@@ -12,10 +12,9 @@ namespace mmd {
 
 	class PMX_Model_Tag : public TagData
 	{
-		BaseTag* tag;
-		BaseObject* obj;
-		Bool tagUpDataSW;
-		PMX_Model_Tag() { obj = nullptr; tag = nullptr; tagUpDataSW = false;}
+		BaseTag* tag = nullptr;
+		BaseObject* obj = nullptr;
+		Bool tagUpDataSW = false;
 		INSTANCEOF(PMX_Model_Tag ,TagData)
 	public:
 		virtual Bool Init(GeListNode* node);
@@ -34,14 +33,13 @@ namespace mmd {
 		maxon::HashMap<Int32, mmd::VMD_Curve*> RCurve;
 		maxon::HashMap<Int32, mmd::VMD_Curve*> ACurve;
 		//储存前一帧，以确定更新状态
-		Int32 prev_frame;
+		Int32 prev_frame = -1;
 		//储存上一种曲线类型，以确定更新状态
-		Int32 prev_curve_type;
+		Int32 prev_curve_type = -1;
 		//对应的主对象
-		BaseObject* obj;
+		BaseObject* obj = nullptr;
 		INSTANCEOF(PMX_Bone_Tag, TagData)
 	public:
-		PMX_Bone_Tag() { obj = nullptr; }
 		// 用于限制SplineData的回调函数
 		static Bool SplineDataCallBack(Int32 cid, const void* data);
 		//获取曲线值
@@ -64,6 +62,7 @@ namespace mmd {
 		virtual Bool AddToExecution(BaseTag* tag, PriorityList* list);
 		static NodeData* Alloc() { return NewObjClear(PMX_Bone_Tag); }
 	};
+
 
 	/*	
 	class PMX_Material_Tag : public TagData

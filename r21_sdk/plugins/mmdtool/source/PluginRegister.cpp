@@ -429,10 +429,12 @@ Bool RegisterPMXBoneTag()
 	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.png"_s), 0);
 }
 
+
 Bool RegisterVMDCamObj()
 {
 	return RegisterObjectPlugin(ID_VMD_CAM_OBJ, GeLoadString(IDS_VMD_CAM_OBJ), OBJECT_CALL_ADDEXECUTION, mmd::VMD_Cam_Obj::Alloc, "VMD_Cam_Obj"_s, AutoBitmap("vmd_cam_obj.png"_s), 0);
 }
+
 /*
 Bool RegisterPMXMaterialTag()
 {

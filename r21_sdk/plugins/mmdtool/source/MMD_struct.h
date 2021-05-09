@@ -355,8 +355,8 @@ namespace mmd {
 		2 - 物理+骨骼
 		*/
 		Char physics_mode = 0;
-		PMX_Rigid_Body_Data() {};
-		~PMX_Rigid_Body_Data() {};
+		PMX_Rigid_Body_Data() {}
+		~PMX_Rigid_Body_Data() {}
 	};
 	struct PMX_Joint_Data
 	{

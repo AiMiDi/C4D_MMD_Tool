@@ -26,7 +26,7 @@ namespace mmd {
 		inline UInt32 ReadUIndex(BaseFile* const file, Char& index_size);
 
 	public:
-		PMXModel();
+		PMXModel(){}
 		~PMXModel();
 		maxon::Result<void> LoadFromFile(BaseFile* const file);
 		maxon::Result<void> WriteToFile(BaseFile* const file);

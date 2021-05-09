@@ -42,6 +42,8 @@ Bool mmd::VMD_Cam_Obj::SplineDataCallBack(Int32 cid, const void* data)
 		{
 			// 获取当前knot。
 			CustomSplineKnot* knot = splineData->GetKnot(i);
+			if (knot == nullptr)
+				continue;
 			// 切线存在于相对于其顶点的向量空间中，因此我们首先使切线向量全局化，然后限制它们。
 			Vector globalLeftTangent = knot->vPos + knot->vTangentLeft;
 			globalLeftTangent.ClampMax(Vector(127, 127, 0));
@@ -166,13 +168,22 @@ Bool mmd::VMD_Cam_Obj::GetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve) {
 }
 Bool mmd::VMD_Cam_Obj::SetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve) {
 	BaseObject* obj = (BaseObject*)Get();
+	if (obj == nullptr) {
+		return false;
+	}
 	CTrack* Frame_onTrack = obj->FindCTrack(DescID(VMD_CAM_OBJ_FRAME_ON));
 	if (Frame_onTrack == nullptr) {
 		Frame_onTrack = CTrack::Alloc(obj, DescID(VMD_CAM_OBJ_FRAME_ON));
 		obj->InsertTrackSorted(Frame_onTrack);
 	}
 	CCurve* Frame_onCurve = Frame_onTrack->GetCurve();
+	if (Frame_onCurve == nullptr) {
+		return false;
+	}
 	CKey* KeyFrame_on = Frame_onCurve->AddKey(BaseTime(frame_on, 30));
+	if (KeyFrame_on == nullptr) {
+		return false;
+	}
 	KeyFrame_on->SetValue(Frame_onCurve, frame_on);
 	KeyFrame_on->SetInterpolation(Frame_onCurve, CINTERPOLATION::STEP);
 	KeyFrame_on->ChangeNBit(NBIT::CKEY_LOCK_T, NBITCONTROL::SET);
@@ -490,7 +501,7 @@ Bool mmd::VMD_Cam_Obj::CurveInit() {
 	BaseContainer* bc = ((BaseList2D*)Get())->GetDataInstance();
 	GeData data = GeData(CUSTOMDATATYPE_SPLINE, DEFAULTVALUE);
 	SplineData* spline = (SplineData*)data.GetCustomDataType(CUSTOMDATATYPE_SPLINE);
-	if (spline)
+	if (spline!=nullptr)
 	{
 		spline->AdaptRange(0, 127, 127, 0, 127, 127);
 		spline->InsertKnot(0.0, 0.0, FLAG_KNOT_LOCK_X | FLAG_KNOT_LOCK_Y);
@@ -535,10 +546,16 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 		case(VMD_CAM_OBJ_REGISTER_CURVE_BUTTON):
 		{
 			BaseObject* obj = (BaseObject*)node;
+			if (obj == nullptr) {
+				return true;
+			}
 			BaseTime time = GetActiveDocument()->GetTime();
 			Int32 frame = time.GetFrame(30);
 			GeData data_, Curve_type_data;
 			BaseContainer* bc = ((BaseList2D*)node)->GetDataInstance();
+			if (bc == nullptr) {
+				return true;
+			}
 			data_ = bc->GetData(VMD_CAM_OBJ_SPLINE);
 			SplineData* spline = (SplineData*)data_.GetCustomDataType(CUSTOMDATATYPE_SPLINE);
 
@@ -598,23 +615,56 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 			CCurve* CurveAOV = TrackAOV->GetCurve();
 			CCurve* Frame_onCurve = Frame_onTrack->GetCurve();
 
+			//确保获取成功
+			if (CurvePX == nullptr || CurvePY == nullptr || CurvePZ == nullptr || CurveRX == nullptr || CurveRY == nullptr || CurveRZ == nullptr || CurveDistance == nullptr || CurveAOV == nullptr || Frame_onCurve == nullptr)
+			{
+				return true;
+			}
+
 			CKey* KeyPX = CurvePX->AddKeyAdaptTangent(time, true);
+			if (KeyPX == nullptr) {
+				return true;
+			}
 			KeyPX->SetValue(CurvePX, obj->GetRelPos().x);
 			CKey* KeyPY = CurvePY->AddKeyAdaptTangent(time, true);
+			if (KeyPY == nullptr) {
+				return true;
+			}
 			KeyPY->SetValue(CurvePY, obj->GetRelPos().y);
 			CKey* KeyPZ = CurvePZ->AddKeyAdaptTangent(time, true);
+			if (KeyPZ == nullptr) {
+				return true;
+			}
 			KeyPZ->SetValue(CurvePZ, obj->GetRelPos().z);
 			CKey* KeyRX = CurveRX->AddKeyAdaptTangent(time, true);
+			if (KeyRX == nullptr) {
+				return true;
+			}
 			KeyRX->SetValue(CurveRX, obj->GetRelRot().x);
 			CKey* KeyRY = CurveRY->AddKeyAdaptTangent(time, true);
+			if (KeyRY == nullptr) {
+				return true;
+			}
 			KeyRY->SetValue(CurveRY, obj->GetRelRot().y);
 			CKey* KeyRZ = CurveRZ->AddKeyAdaptTangent(time, true);
+			if (KeyRZ == nullptr) {
+				return true;
+			}
 			KeyRZ->SetValue(CurveRZ, obj->GetRelRot().z);
 			CKey* DistanceKey = CurveDistance->AddKeyAdaptTangent(time, true);
+			if (DistanceKey == nullptr) {
+				return true;
+			}
 			DistanceKey->SetValue(CurveDistance, cam->GetRelPos().z);
 			CKey* AOVKey = CurveAOV->AddKeyAdaptTangent(time, true);
+			if (AOVKey == nullptr) {
+				return true;
+			}
 			AOVKey->SetValue(CurveAOV, static_cast<CameraObject*>(obj)->GetAperture());
 			CKey* KeyFrame_on = Frame_onCurve->AddKey(time);
+			if (KeyFrame_on == nullptr) {
+				return true;
+			}
 			KeyFrame_on->SetValue(Frame_onCurve, time.GetFrame(30));
 			KeyFrame_on->SetInterpolation(Frame_onCurve, CINTERPOLATION::STEP);
 			KeyFrame_on->ChangeNBit(NBIT::CKEY_LOCK_T, NBITCONTROL::SET);
@@ -624,6 +674,9 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 			{
 				// 获取当前knot。
 				CustomSplineKnot* knot = spline->GetKnot(i);
+				if (knot == nullptr) {
+					return true;
+				}
 				// 切线存在于相对于其顶点的向量空间中，因此我们首先使切线向量全局化，然后限制它们。
 				Vector globalLeftTangent = knot->vPos + knot->vTangentLeft;
 				globalLeftTangent.ClampMax(Vector(127, 127, 0));
@@ -823,10 +876,16 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 		case(VMD_CAM_OBJ_DELETE_CURVE_BUTTON):
 		{
 			BaseObject* obj = (BaseObject*)node;
+			if (obj == nullptr) {
+				return true;
+			}
 			BaseTime time = GetActiveDocument()->GetTime();
 			Int32 frame = time.GetFrame(30);
 			GeData data_, Curve_type_data;
 			BaseContainer* bc = ((BaseList2D*)node)->GetDataInstance();
+			if (bc == nullptr) {
+				return true;
+			}
 			data_ = bc->GetData(VMD_CAM_OBJ_SPLINE);
 			SplineData* spline = (SplineData*)data_.GetCustomDataType(CUSTOMDATATYPE_SPLINE);
 
@@ -876,6 +935,11 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 			CCurve* CurveDistance = TrackDistance->GetCurve();
 			CCurve* CurveAOV = TrackAOV->GetCurve();
 			CCurve* Frame_onCurve = Frame_onTrack->GetCurve();
+
+			if (CurvePX == nullptr || CurvePY == nullptr || CurvePZ == nullptr || CurveRX == nullptr || CurveRY == nullptr || CurveRZ == nullptr || CurveDistance == nullptr || CurveAOV == nullptr || Frame_onCurve == nullptr)
+			{
+				return true;
+			}
 
 			CKey* KeyPX = CurvePX->FindKey(time);
 			if (KeyPX == nullptr) {
@@ -1008,14 +1072,23 @@ EXECUTIONRESULT mmd::VMD_Cam_Obj::Execute(BaseObject* op, BaseDocument* doc, Bas
 	if (prev_frame != frame_on || prev_curve_type != curve_type)
 	{
 		BaseContainer* bc = ((BaseList2D*)op)->GetDataInstance();
+		if (bc == nullptr) {
+			return EXECUTIONRESULT::OK;
+		}
 		GeData data_ = bc->GetData(VMD_CAM_OBJ_SPLINE);
 		SplineData* spline = (SplineData*)data_.GetCustomDataType(CUSTOMDATATYPE_SPLINE);
+		if (spline == nullptr) {
+			return EXECUTIONRESULT::OK;
+		}
 		switch (curve_type)
 		{
 		case (VMD_CAM_OBJ_XCURVE): {
 			auto xCurve_ptr = XCurve.Find(frame_on);
 			if (xCurve_ptr != nullptr) {
 				mmd::VMD_Curve* xCurve = xCurve_ptr->GetValue();
+				if (xCurve == nullptr) {
+					return EXECUTIONRESULT::OK;
+				}
 				spline->GetKnot(0)->vTangentRight = Vector(xCurve->ax, xCurve->ay, 0);
 				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = -Vector(xCurve->bx, xCurve->by, 0);
 			}
@@ -1029,6 +1102,9 @@ EXECUTIONRESULT mmd::VMD_Cam_Obj::Execute(BaseObject* op, BaseDocument* doc, Bas
 			auto yCurve_ptr = YCurve.Find(frame_on);
 			if (yCurve_ptr != nullptr) {
 				mmd::VMD_Curve* yCurve = yCurve_ptr->GetValue();
+				if (yCurve == nullptr) {
+					return EXECUTIONRESULT::OK;
+				}
 				spline->GetKnot(0)->vTangentRight = Vector(yCurve->ax, yCurve->ay, 0);
 				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = -Vector(yCurve->bx, yCurve->by, 0);
 			}
@@ -1042,6 +1118,9 @@ EXECUTIONRESULT mmd::VMD_Cam_Obj::Execute(BaseObject* op, BaseDocument* doc, Bas
 			auto zCurve_ptr = ZCurve.Find(frame_on);
 			if (zCurve_ptr != nullptr) {
 				mmd::VMD_Curve* zCurve = zCurve_ptr->GetValue();
+				if (zCurve == nullptr) {
+					return EXECUTIONRESULT::OK;
+				}
 				spline->GetKnot(0)->vTangentRight = Vector(zCurve->ax, zCurve->ay, 0);
 				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = -Vector(zCurve->bx, zCurve->by, 0);
 			}
@@ -1055,6 +1134,9 @@ EXECUTIONRESULT mmd::VMD_Cam_Obj::Execute(BaseObject* op, BaseDocument* doc, Bas
 			auto rCurve_ptr = RCurve.Find(frame_on);
 			if (rCurve_ptr != nullptr) {
 				mmd::VMD_Curve* rCurve = rCurve_ptr->GetValue();
+				if (rCurve == nullptr) {
+					return EXECUTIONRESULT::OK;
+				}
 				spline->GetKnot(0)->vTangentRight = Vector(rCurve->ax, rCurve->ay, 0);
 				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = -Vector(rCurve->bx, rCurve->by, 0);
 			}
@@ -1068,6 +1150,9 @@ EXECUTIONRESULT mmd::VMD_Cam_Obj::Execute(BaseObject* op, BaseDocument* doc, Bas
 			auto dCurve_ptr = DCurve.Find(frame_on);
 			if (dCurve_ptr != nullptr) {
 				mmd::VMD_Curve* dCurve = dCurve_ptr->GetValue();
+				if (dCurve == nullptr) {
+					return EXECUTIONRESULT::OK;
+				}
 				spline->GetKnot(0)->vTangentRight = Vector(dCurve->ax, dCurve->ay, 0);
 				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = -Vector(dCurve->bx, dCurve->by, 0);
 			}
@@ -1081,6 +1166,9 @@ EXECUTIONRESULT mmd::VMD_Cam_Obj::Execute(BaseObject* op, BaseDocument* doc, Bas
 			auto vCurve_ptr = VCurve.Find(frame_on);
 			if (vCurve_ptr != nullptr) {
 				mmd::VMD_Curve* vCurve = vCurve_ptr->GetValue();
+				if (vCurve == nullptr) {
+					return EXECUTIONRESULT::OK;
+				}
 				spline->GetKnot(0)->vTangentRight = Vector(vCurve->ax, vCurve->ay, 0);
 				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = -Vector(vCurve->bx, vCurve->by, 0);
 			}
@@ -1094,6 +1182,9 @@ EXECUTIONRESULT mmd::VMD_Cam_Obj::Execute(BaseObject* op, BaseDocument* doc, Bas
 			auto aCurve_ptr = ACurve.Find(frame_on);
 			if (aCurve_ptr != nullptr) {
 				mmd::VMD_Curve* aCurve = aCurve_ptr->GetValue();
+				if (aCurve == nullptr) {
+					return EXECUTIONRESULT::OK;
+				}
 				spline->GetKnot(0)->vTangentRight = Vector(aCurve->ax, aCurve->ay, 0);
 				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = -Vector(aCurve->bx, aCurve->by, 0);
 			}
@@ -1113,6 +1204,9 @@ EXECUTIONRESULT mmd::VMD_Cam_Obj::Execute(BaseObject* op, BaseDocument* doc, Bas
 	return EXECUTIONRESULT::OK;
 }
 Bool mmd::VMD_Cam_Obj::AddToExecution(BaseObject* op, PriorityList* list) {
+	if (list == nullptr || op == nullptr) {
+		return true;
+	}
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return true;
 }
@@ -1485,13 +1579,6 @@ maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, In
 	doc->SetTime(BaseTime(1));
 	doc->SetTime(BaseTime());
 	return maxon::Result<BaseObject*>(VMDCamera);
-}
-mmd::VMDAnimation::VMDAnimation() {
-	this->IsCamera = 0;
-	this->MotionFrameNumber = 0;
-	this->MorphFrameNumber = 0;
-	this->CameraFrameNumber = 0;
-	this->LightFrameNumber = 0;
 }
 mmd::VMDAnimation::~VMDAnimation()
 {
@@ -2692,11 +2779,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 	bone_name_map.Reset();
 	morph_name_map.Reset();
 	for (auto i : MorphFrameList_map.GetValues()) {
-		delete i;
+		if (i != nullptr)delete i;
 	}
 	MorphFrameList_map.Reset();
 	for (auto i : MotionFrameList_map.GetValues()) {
-		delete i;
+		if (i != nullptr)delete i;
 	}
 	MotionFrameList_map.Reset();
 	not_find_bone_S.Reset();

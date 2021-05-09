@@ -6,8 +6,8 @@
 class NameConversion 
 {
 private:
-	BaseFile* file;
-	Int updata_name_conversion_count;
+	BaseFile* file = nullptr;
+	Int updata_name_conversion_count = 0;
 	maxon::BaseArray<String> updata_name_conversion_arr;
 	maxon::HashMap<String, String> name_L_to_U_map;
 	maxon::HashMap<String, String> name_U_to_L_map;
@@ -15,7 +15,7 @@ private:
 
 	class UpdataNameConversionDialog : public GeDialog
 	{
-		NameConversion* name_conversion;	
+		NameConversion* name_conversion = nullptr;
 		Bool CreateLayout();
 		Bool InitValues();
 		Bool Command(Int32 id, const BaseContainer& msg);

@@ -41,15 +41,15 @@ namespace mmd{
 		//最初使用动作模型名称
 		String ModelName;
 		//是否为摄像机动作
-		Bool IsCamera;
+		Bool IsCamera = false;
 		//动作关键帧数量
-		UInt32 MotionFrameNumber;
+		UInt32 MotionFrameNumber = 0;
 		//表情关键帧数量
-		UInt32 MorphFrameNumber;
+		UInt32 MorphFrameNumber = 0;
 		//摄像机关键帧数量
-		UInt32 CameraFrameNumber;
+		UInt32 CameraFrameNumber = 0;
 		//灯光关键帧数量
-		UInt32 LightFrameNumber;
+		UInt32 LightFrameNumber = 0;
 		//动作数据数组
 		VMDMotionSortedArray motion_frames;
 		//表情动画数据数组
@@ -60,7 +60,7 @@ namespace mmd{
 		VMDLightSortedArray light_frames;
 	public:
 		//构造函数
-		VMDAnimation();
+		VMDAnimation(){}
 		//析构函数
 		~VMDAnimation();
 
@@ -88,16 +88,14 @@ namespace mmd{
 		maxon::HashMap<Int32, VMD_Curve*> DCurve;
 		maxon::HashMap<Int32, VMD_Curve*> VCurve;
 		maxon::HashMap<Int32, VMD_Curve*> ACurve;	
-		//构造函数
-		VMD_Cam_Obj() { cam = nullptr; prev_frame = -1; prev_curve_type = -1;}
 		//析构函数
 		~VMD_Cam_Obj() {}		
 		//储存前一帧，以确定更新状态
-		Int32 prev_frame; 
+		Int32 prev_frame = -1;
 		//储存上一种曲线类型，以确定更新状态
-		Int32 prev_curve_type;
+		Int32 prev_curve_type = -1;
 		//管理的摄像机对象
-		BaseObject* cam;
+		BaseObject* cam = nullptr;
 		INSTANCEOF(VMD_Cam_Obj, ObjectData)
 
 	public:		
