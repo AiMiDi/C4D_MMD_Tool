@@ -1,6 +1,6 @@
 # C4D MMD Tool
 
-[![](https://img.shields.io/github/downloads/AiMiDi/C4D_MMD_Tool/total)](https://github.com/AiMiDi/C4D_MMD_Tool/releases)[![](https://img.shields.io/github/forks/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/network/members)[![](https://img.shields.io/github/stars/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/stargazers)[![](https://img.shields.io/github/license/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/blob/main/LICENSE.md)![](https://img.shields.io/github/languages/top/AiMiDi/C4D_MMD_Tool)![](https://img.shields.io/github/last-commit/AiMiDi/C4D_MMD_Tool)![](https://img.shields.io/github/v/release/AiMiDi/C4D_MMD_Tool)
+[![](https://img.shields.io/github/downloads/AiMiDi/C4D_MMD_Tool/total)](https://github.com/AiMiDi/C4D_MMD_Tool/releases)[![](https://img.shields.io/github/forks/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/network/members)[![](https://img.shields.io/github/stars/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/stargazers)[![](https://img.shields.io/github/license/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/blob/main/LICENSE.md)![](https://img.shields.io/github/languages/top/AiMiDi/C4D_MMD_Tool)![](https://img.shields.io/github/last-commit/AiMiDi/C4D_MMD_Tool)[![](https://img.shields.io/github/v/release/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.3.3)
 
 [![](https://img.shields.io/badge/ReadMe-%E4%B8%AD%E6%96%87-red)](README_zh.md)
 
@@ -14,7 +14,7 @@ A plugin for Cinema 4D written in C++ is used to import MikuMikuDance data into 
 
 ## Release
 
-Click the latest version of the plugin under `Release` to download it
+Click the latest version of the plugin under [![](https://img.shields.io/github/v/release/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.3.3) to download it
 
 At present, the main maintenance version is R21 or higher.
 
