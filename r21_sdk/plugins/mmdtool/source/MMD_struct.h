@@ -385,32 +385,4 @@ namespace mmd {
 		PMX_Joint_Data() {};
 		~PMX_Joint_Data() {};
 	};
-
-	struct PMX_Model_import_settings
-	{
-		Bool Import_polygon;
-		Bool Import_normal;
-		Bool Import_uv;
-		Bool Import_material;
-		Bool Import_bone;
-		Bool Import_weights;
-		Bool Import_ik;
-		Bool Import_inherit;
-		Bool Import_expression;
-		Bool Import_english;
-		Bool Import_english_check;
-		Bool Import_multipart;
-	};
-
-	struct PMX_Model_export_settings {
-		Bool Export_polygon;
-		Bool Export_normal;
-		Bool Export_uv;
-		Bool Export_material;
-		Bool Export_bone;
-		Bool Export_weights;
-		Bool Export_ik;
-		Bool Export_inherit;
-		Bool Export_expression;
-	};
 }

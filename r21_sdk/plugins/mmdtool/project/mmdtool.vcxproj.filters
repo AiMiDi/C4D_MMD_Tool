@@ -16,6 +16,12 @@
     <Filter Include="source">
       <UniqueIdentifier>{8800E4E7-0D26-2958-0000-0000CA90681B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\头文件">
+      <UniqueIdentifier>{95f5e845-2939-4d10-8d85-c0019095b807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\源文件">
+      <UniqueIdentifier>{111233f1-e023-45c0-a491-5e45e4a1fa51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -25,28 +31,28 @@
       <Filter>generated\hxx</Filter>
     </ClCompile>
     <ClCompile Include="..\source\EncodingConversion.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\MMD_PMX_model.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\MMD_PMX_tag.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\MMD_VMD_animation.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\NameConversion.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PluginRegister.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\main.cpp">
-      <Filter>source</Filter>
+      <Filter>source\源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\source\ImagesGUI.cpp">
-      <Filter>source</Filter>
+      <Filter>source\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\main.cpp">
+      <Filter>source\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MMD_PMX_model.cpp">
+      <Filter>source\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MMD_PMX_tag.cpp">
+      <Filter>source\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MMD_VMD_animation.cpp">
+      <Filter>source\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NameConversion.cpp">
+      <Filter>source\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PluginRegister.cpp">
+      <Filter>source\源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -63,28 +69,28 @@
       <Filter>res\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\EncodingConversion.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\MMD_PMX_model.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\MMD_PMX_tag.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\MMD_VMD_animation.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NameConversion.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\main.h">
-      <Filter>source</Filter>
+      <Filter>source\头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ImagesGUI.h">
-      <Filter>source</Filter>
+      <Filter>source\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\main.h">
+      <Filter>source\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MMD_PMX_model.h">
+      <Filter>source\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MMD_PMX_tag.h">
+      <Filter>source\头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\source\MMD_struct.h">
-      <Filter>source</Filter>
+      <Filter>source\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MMD_VMD_animation.h">
+      <Filter>source\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NameConversion.h">
+      <Filter>source\头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

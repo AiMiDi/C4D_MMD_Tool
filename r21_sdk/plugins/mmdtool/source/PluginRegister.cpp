@@ -53,18 +53,21 @@ enum                             // Uniquely identify all your dialog elements h
 	DLG_PMX_MOD_IMPORT_ENGLISH,
 	DLG_PMX_MOD_IMPORT_ENGLISH_CHECK,
 	DLG_PMX_MOD_IMPORT_BUTTON,
+
 };
 
-class MMDToolDialog : public GeDialog 
+class MMDToolDialog : public GeDialog
 {
-	ImagesGUI* Images;
+	ImagesGUI* Images = nullptr;
 public:
-	MMDToolDialog(void) { Images = nullptr; }
-	virtual ~MMDToolDialog(void) { delete Images; }
+	MMDToolDialog() {}
+	virtual ~MMDToolDialog(void) {
+		delete Images;
+	}
 
 	//----------
 	//-- Set up dialog elements here:
-	
+
 
 	virtual Bool CreateLayout(void)
 	{
@@ -77,7 +80,7 @@ public:
 
 		TabGroupBegin(1000, BFH_SCALEFIT | BFV_SCALEFIT);
 		//CameraBegin		
-		GroupBegin(1100, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_TOOL_TITLE), 0, 350, 0);	
+		GroupBegin(1100, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_TOOL_TITLE), 0, 350, 0);
 		ScrollGroupBegin(1200, BFH_CENTER, SCROLLGROUP_VERT | SCROLLGROUP_BORDERIN, 0, 200);
 		GroupBegin(1300, BFH_CENTER, 1, 2, ""_s, 0, 350, 0);
 		//ImportCameraBegin
@@ -195,7 +198,8 @@ public:
 		AddEditNumberArrows(DLG_PMX_MOD_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1203, BFH_CENTER, 2, 6, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
+
+		GroupBegin(1204, BFH_CENTER, 2, 6, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		AddCheckbox(DLG_PMX_MOD_IMPORT_POLYGON, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_POLYGON));
@@ -211,7 +215,7 @@ public:
 		AddCheckbox(DLG_PMX_MOD_IMPORT_ENGLISH, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_ENGLISH));
 		AddCheckbox(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_ENGLISH_CHECK));
 		GroupEnd();
-	
+
 		AddButton(DLG_PMX_MOD_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_PMX_MOD_IMPORT_BUTTON));
 		GroupEnd();
 		//ImportModelEnd
@@ -257,7 +261,7 @@ public:
 	//----------
 	//-- Deal with any modification or "clicking" events here:
 
-	virtual Bool Command(Int32 id, const BaseContainer &msg)
+	virtual Bool Command(Int32 id, const BaseContainer& msg)
 	{
 		iferr_scope;
 		switch (id)
@@ -303,7 +307,7 @@ public:
 		case (DLG_VMD_MOT_IMPORT_BUTTON):
 		{
 			Float PositionMultiple_, TimeOffset_;
-			Bool QuaternionRotationSW_, DetailReport_,ByTag_;
+			Bool QuaternionRotationSW_, DetailReport_, ByTag_;
 			GetFloat(DLG_VMD_MOT_IMPORT_SIZE, PositionMultiple_);
 			GetFloat(DLG_VMD_MOT_IMPORT_OFFSET, TimeOffset_);
 			GetBool(DLG_VMD_MOT_IMPORT_QUAT, QuaternionRotationSW_);
@@ -360,7 +364,7 @@ public:
 				SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, 1);
 			}
 			break;
-		}	
+		}
 		case (DLG_PMX_MOD_IMPORT_POLYGON):
 		{
 			Bool Import_polygon = 0;

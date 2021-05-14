@@ -27,6 +27,10 @@ STRINGTABLE
 	IDS_MES_IMPORT_MOT_CF_BONE "Can't find # bone(s)";
 	IDS_MES_IMPORT_MOT_CF_MORPH "Can't find # morph(s)";
 
+	IDS_MES_INQUIRY_OVERWRITING_FILE "Do you want to overwrite the file?";
+	IDS_MES_CONFIRM_DELETE_FILE "Are you sure to delete the # configuration file?";
+	IDS_MES_CANNOT_DELETE_DEFAULT "The default configuration file cannot be deleted!";
+
 	IDS_VMD_TOOL_TITLE "MMD Tool";
 	IDS_VMD_CAM_TOOL_TITLE "Camera";
 	IDS_VMD_CAM_IMPORT_TITLE "Camera Import";
@@ -76,9 +80,18 @@ STRINGTABLE
 	IDS_PMX_MOD_IMPORT_MULTIPART "Multipart";
 	IDS_PMX_MOD_IMPORT_ENGLISH "English";
 	IDS_PMX_MOD_IMPORT_ENGLISH_CHECK "Check english";
+	
 	IDS_PMX_MOD_IMPORT_BUTTON "Import";
 
 	IDS_UPDATA_NAME_CONVERSION_TITLE "Manually confirm English(If it is not filled in, it will be generated automatically.)";
+	IDS_NAME_CONVER_NAMEMAP_NAME "English config file";
+	IDS_NAME_CONVER_OK "OK";
+	IDS_NAME_CONVER_CANCEL "Cancel";
+	IDS_NAME_CONVER_NEW_DELETE "Delete config";
+	IDS_NAME_CONVER_IGNORE "Hidden confirmed";
+	IDS_NAME_CONVER_NEW_NAME "New config";
+	IDS_NAME_CONVER_NEW_ADD "New";
+	IDS_NAME_CONVER_NEW_INCREMENT_ADD "New increment";
 
 	IDS_PMX_MATERIAL_TAG "PMX_Material_Tag";
 	IDS_PMX_BONE_TAG "PMX_Bone_Tag";

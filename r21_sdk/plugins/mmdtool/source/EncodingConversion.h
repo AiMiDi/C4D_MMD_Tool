@@ -2,6 +2,7 @@
 #define __ENCODING_CONVERSION_H__
 
 #include "c4d.h"
+#include "undef_win_macros.h"
 #include <windows.h>
 
 namespace EncodingConversion

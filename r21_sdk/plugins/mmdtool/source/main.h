@@ -46,7 +46,6 @@
 #include "tprotection.h"
 #include "MMD_struct.h"
 #include "NameConversion.h"
-#include "undef_win_macros.h"
 #include "EncodingConversion.h"
 
 class MMDTool;
