@@ -1,69 +1,66 @@
 ﻿#include "EncodingConversion.h"
 
-wchar_t* EncodingConversion::SjisToUnicode(char *Str_)
-{
-	UInt32 StrLen = MultiByteToWideChar(932, 0, Str_, -1, NULL, 0);
-	wchar_t *res = new wchar_t[StrLen] {0};
-	if (!res)
-	{
-		delete[] res;
-	}
-	MultiByteToWideChar(932, 0, Str_, -1, res, StrLen);
-	return res;
-}
-char* EncodingConversion::UnicodeToUTF8(wchar_t *wStr_)
-{
-	UInt32 wStrLen = WideCharToMultiByte(65001, 0, wStr_, -1, NULL, 0, NULL, 0);
-	char *res;
-	res = new char[wStrLen] {0};
-	if (!res)
-	{
-		delete[] res;
-	}
-	WideCharToMultiByte(65001, 0, wStr_, -1, res, wStrLen, NULL, 0);
-	return res;
-}
 
-wchar_t* EncodingConversion::UTF8ToUnicode(char *Str_)
+inline void* EncodingConversion::Memcpy(void* dst, const void* src, size_t size)
 {
-	UInt32 StrLen = MultiByteToWideChar(65001, 0, Str_, -1, NULL, 0);
-	wchar_t* res = new wchar_t[StrLen] {0};
-	if (!res)
+	char* psrc;
+	char* pdst;
+	if (nullptr == dst || nullptr == src)
 	{
-		delete[] res;
+		return nullptr;
 	}
-	MultiByteToWideChar(65001, 0, Str_, -1, res, StrLen);
-	return res;
-}
-char* EncodingConversion::UnicodeToSjis(wchar_t *wStr_)
-{
-	UInt32 wStrLen = WideCharToMultiByte(932, 0, wStr_, -1, NULL, 0, NULL, 0);
-	char* res = new char[wStrLen] {0};
-	if (!res)
+	if ((src < dst) && (char*)src + size > (char*)dst) //自后向前拷贝
 	{
-		delete[] res;
+		psrc = (char*)src + size - 1;
+		pdst = (char*)dst + size - 1;
+		while (size--)
+		{
+			*pdst-- = *psrc--;
+		}
 	}
-	WideCharToMultiByte(932, 0, wStr_, -1, res, wStrLen, NULL, 0);
-	return res;
+	else
+	{
+		psrc = (char*)src;
+		pdst = (char*)dst;
+		while (size--)
+		{
+			*pdst++ = *psrc++;
+		}
+	}
+	return dst;
 }
 
 String EncodingConversion::JIStoUTF8(char* Str_) {
-	wchar_t *tmp = SjisToUnicode(Str_);
-	char *outChar = UnicodeToUTF8(tmp);
-	String res;
-	res.SetCString(outChar, -1, STRINGENCODING::UTF8);
+	UInt32 wStrLen = MultiByteToWideChar(932, 0, Str_, -1, NULL, 0);
+	wchar_t* tmp = new wchar_t[wStrLen] {0};
+	if (!tmp)
+	{
+		delete[] tmp;
+	}
+	MultiByteToWideChar(932, 0, Str_, -1, tmp, wStrLen);
+	Utf16Char* outChar = new Utf16Char[wStrLen + 1]{ 0 };
+	EncodingConversion::Memcpy(outChar, tmp, wStrLen * sizeof(wchar_t));
+	delete[] tmp;
+	String res(outChar);
+	delete[] outChar;
 	return res;
 }
 
 char* EncodingConversion::UTF8toJIS(String& Str_) {
-	Int32 StrLen = Str_.GetCStringLen(STRINGENCODING::UTF8);
-	char* inStr = new char[StrLen] {0};
-	if (!inStr)
-	{
-		delete[] inStr;
+	maxon::Utf16CharBuffer wchar_buffer;
+	iferr(Str_.GetUtf16(wchar_buffer))return nullptr;
+	UInt32 wStrLen = wchar_buffer.GetCount();
+	wchar_t* tmp = new wchar_t[wStrLen + 1]{ 0 };
+	for (Int32 i = 0; i < wStrLen; i++) {
+		tmp[i] = wchar_buffer[i];
 	}
-	Str_.GetCString(inStr, -1, STRINGENCODING::UTF8);
-	wchar_t *tmp = UTF8ToUnicode(inStr);
-	char* res = UnicodeToSjis(tmp);
+	UInt32 StrLen = WideCharToMultiByte(932, 0, tmp, -1, NULL, 0, NULL, 0);
+	char* res = new char[StrLen] {0};
+	if (!res)
+	{
+		delete[] res;
+	}
+	WideCharToMultiByte(932, 0, tmp, -1, res, StrLen, NULL, 0);
+	delete[] tmp;
 	return res;
 }

@@ -39,6 +39,12 @@
     <ClCompile Include="..\source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\ImagesGUI.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NameConversion.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\res\c4d_symbols.h">
@@ -65,5 +71,28 @@
     <ClInclude Include="..\res\description\PMX_Bone_Tag.h">
       <Filter>res\description</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\ImagesGUI.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MMD_struct.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NameConversion.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\res\description\VMD_Cam_Obj.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\description\PMX_Bone_Tag.res">
+      <Filter>res\description</Filter>
+    </None>
+    <None Include="..\res\description\PMX_Model_Tag.res">
+      <Filter>res\description</Filter>
+    </None>
+    <None Include="..\res\description\VMD_Cam_Obj.res">
+      <Filter>res\description</Filter>
+    </None>
   </ItemGroup>
 </Project>

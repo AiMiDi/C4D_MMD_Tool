@@ -16,7 +16,7 @@ A plugin for Cinema 4D written in C++ is used to import MikuMikuDance data into 
 
 Click the latest version of the plugin under [![](https://img.shields.io/github/v/release/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.3.3) to download it
 
-At present, the main maintenance version is R21 or higher.
+At present, the main maintenance version is R20 or higher, R19 and lower versions are not supported.
 
 ## version 
 
@@ -57,6 +57,8 @@ At present, the main maintenance version is R21 or higher.
 **version 0.3.3** Introduce the YAML configuration file; rewrite and rename the English module.
 
 ![](https://ftp.bmp.ovh/imgs/2021/05/84376d077a7e0721.jpg)
+
+**version 0.3.4** Add the setting record function, save the last used configuration; update the R20 version.
 
 ## usage
 

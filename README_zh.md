@@ -16,7 +16,7 @@ Cinema 4D的mmdtool。
 
 插件点击 [![](https://img.shields.io/github/v/release/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/releases) 下的最新版本下载
 
-目前，主要维护版本为R21及更高版本。
+目前，主要维护版本为R20及更高版本，R19及以下版本未提供支持。
 
 ## 版本更新
 
@@ -57,6 +57,8 @@ Cinema 4D的mmdtool。
 **version 0.3.3** 引入YAML配置文件；重写更名英文模块。
 
 ![](https://ftp.bmp.ovh/imgs/2021/05/5c6d8897c477f188.jpg)
+
+**version 0.3.4** 添加设置记录功能，保存上一次使用配置；更新R20版本。
 
 ## 使用方法
 

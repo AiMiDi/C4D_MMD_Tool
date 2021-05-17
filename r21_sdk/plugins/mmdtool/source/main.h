@@ -14,6 +14,7 @@
 #define ID_VMD_CAM_DRAW 1057017
 
 #include <memory>
+#include <fstream>
 #include "c4d.h"
 #include "c4d_plugin.h"
 #include "ge_prepass.h"
@@ -44,9 +45,12 @@
 #include "lib_ngon.h"
 #include "c4d_baseobject.h"
 #include "tprotection.h"
+#include "ImagesGUI.h"
 #include "MMD_struct.h"
-#include "NameConversion.h"
 #include "EncodingConversion.h"
+#undef _HAS_EXCEPTIONS
+#define _HAS_EXCEPTIONS 1
+#include "yaml-cpp/yaml.h"
 
 class MMDTool;
 class MMDToolDialog;

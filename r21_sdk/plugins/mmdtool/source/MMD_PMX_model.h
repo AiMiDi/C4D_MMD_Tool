@@ -2,6 +2,7 @@
 #define __MMD_VMD_MODEl_H__
 
 #include "main.h"
+#include "NameConversion.h"
 #include "MMD_PMX_tag.h"
 
 namespace mmd {
