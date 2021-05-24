@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "MMD_PMX_tag.h"
+#include "EncodingConversion.h"
 #include "description/PMX_Bone_Tag.h"
 #include "description/VMD_Cam_Obj.h"
 

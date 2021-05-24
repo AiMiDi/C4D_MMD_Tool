@@ -188,6 +188,7 @@
     <ClCompile Include="..\source\NameConversion.cpp" />
     <ClCompile Include="..\source\PluginRegister.cpp" />
     <ClCompile Include="..\source\main.cpp" />
+    <ClCompile Include="..\source\ProcessProgressDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\res\c4d_symbols.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="..\source\MMD_VMD_animation.h" />
     <ClInclude Include="..\source\NameConversion.h" />
     <ClInclude Include="..\source\main.h" />
+    <ClInclude Include="..\source\ProcessProgressDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\description\PMX_Bone_Tag.res" />

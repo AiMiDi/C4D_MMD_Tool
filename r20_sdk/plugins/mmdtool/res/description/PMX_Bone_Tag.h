@@ -1,6 +1,7 @@
 #ifndef _PMX_BONE_TAG_H_
 #define _PMX_BONE_TAG_H_
-enum 
+
+enum
 {
 	PMX_BONE_INFO_GRP = 1000,
 	BONE_INDEX,

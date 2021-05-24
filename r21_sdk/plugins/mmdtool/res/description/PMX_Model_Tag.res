@@ -1,6 +1,6 @@
 CONTAINER PMX_Model_Tag {
 	NAME PMX_Model_Tag;
-	INCLUDE Tbase;
+	INCLUDE Texpression;
 
 	GROUP MODEL_INFO_GRP {
 		DEFAULT 1;

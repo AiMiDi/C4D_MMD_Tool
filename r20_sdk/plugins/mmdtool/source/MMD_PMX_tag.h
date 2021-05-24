@@ -20,7 +20,6 @@ namespace mmd {
 		virtual Bool Init(GeListNode* node);
 		virtual Bool GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags);
 		virtual EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 	priority, EXECUTIONFLAGS flags);
-		virtual Bool AddToExecution(BaseTag* tag, PriorityList* list);
 		static NodeData* Alloc() { return NewObjClear(PMX_Model_Tag); }
 	};
 
@@ -59,7 +58,6 @@ namespace mmd {
 		virtual Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags);
 		virtual Bool GetDEnabling(GeListNode *node, const DescID &id, const GeData &t_data, DESCFLAGS_ENABLE flags, const BaseContainer *itemdesc);
 		virtual EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 	priority, EXECUTIONFLAGS flags);
-		virtual Bool AddToExecution(BaseTag* tag, PriorityList* list);
 		static NodeData* Alloc() { return NewObjClear(PMX_Bone_Tag); }
 	};
 

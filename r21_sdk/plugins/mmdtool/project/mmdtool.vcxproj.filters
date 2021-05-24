@@ -54,6 +54,9 @@
     <ClCompile Include="..\source\PluginRegister.cpp">
       <Filter>source\源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\ProcessProgressDialog.cpp">
+      <Filter>source\源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\res\c4d_symbols.h">
@@ -90,6 +93,9 @@
       <Filter>source\头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\source\NameConversion.h">
+      <Filter>source\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ProcessProgressDialog.h">
       <Filter>source\头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,5 @@
 #include "main.h"
+#include "ProcessProgressDialog.h"
 #include "MMD_PMX_model.h"
 #include "MMD_VMD_animation.h"
 #include "MMD_PMX_tag.h"
@@ -73,27 +74,27 @@ public:
 
 		SetTitle(GeLoadString(IDS_VMD_TOOL_TITLE));
 		Images = new ImagesGUI("mmd_tool_title.png"_s, 300, 78);
-		C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(280), SizePix(78));
+		C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(78));
 		if (userAreaGadget != nullptr)
 			this->AttachUserArea((*Images), userAreaGadget);
 
 		TabGroupBegin(1000, BFH_SCALEFIT | BFV_SCALEFIT);
 		//CameraBegin		
-		GroupBegin(1100, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_TOOL_TITLE), 0, 400, 0);
+		GroupBegin(1100, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_TOOL_TITLE), 0, 350, 0);
 		ScrollGroupBegin(1200, BFH_CENTER, SCROLLGROUP_VERT | SCROLLGROUP_BORDERIN, 0, 200);
-		GroupBegin(1300, BFH_CENTER, 1, 2, ""_s, 0, 400, 0);
+		GroupBegin(1300, BFH_CENTER, 1, 2, ""_s, 0, 350, 0);
 		//ImportCameraBegin
 		GroupBegin(1001, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_IMPORT_TITLE), 0, 0, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 
-		GroupBegin(1002, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1002, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_IMPORT_SIZE_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_IMPORT_SIZE_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_CAM_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1003, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1003, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_IMPORT_OFFSET_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_IMPORT_OFFSET_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_CAM_IMPORT_OFFSET, BFH_LEFT, 250, 10);
 		GroupEnd();
@@ -107,17 +108,17 @@ public:
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 
-		GroupBegin(1005, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1005, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_EXPORT_SIZE_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_EXPORT_SIZE_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_CAM_EXPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1006, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1006, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_EXPORT_OFFSET_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_EXPORT_OFFSET_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_CAM_EXPORT_OFFSET, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1007, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1007, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME), BORDER_NONE);
 		AddComboButton(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, BFH_LEFT, 242, 10);
 		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_X));
@@ -135,12 +136,12 @@ public:
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 
-		GroupBegin(1009, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1009, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_CONVER_DIS_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_CONVER_DIS_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_CAM_CONVER_DIS, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1010, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1010, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_CONVER_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_NAME), BORDER_NONE);
 		AddComboButton(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, BFH_LEFT, 242, 10);
 		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_X));
@@ -156,24 +157,24 @@ public:
 		GroupEnd();
 		//CameraEnd
 		//MotionBegin
-		GroupBegin(1400, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_TOOL_TITLE), 0, 400, 0);
+		GroupBegin(1400, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_TOOL_TITLE), 0, 350, 0);
 		//ImportMotionBegin
 		GroupBegin(1101, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_IMPORT_TITLE), 0, 0, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 
-		GroupBegin(1102, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1102, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_MOT_IMPORT_SIZE_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_MOT_IMPORT_SIZE_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_MOT_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1103, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1103, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_MOT_IMPORT_OFFSET_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_MOT_IMPORT_OFFSET_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_MOT_IMPORT_OFFSET, BFH_LEFT, 250, 10);
 		GroupEnd();
 
-		GroupBegin(1104, BFH_LEFT, 3, 1, ""_s, 0, 400, 10);
+		GroupBegin(1104, BFH_LEFT, 3, 1, ""_s, 0, 350, 10);
 		AddCheckbox(DLG_VMD_MOT_IMPORT_QUAT, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_QUAT_NAME));
 		AddCheckbox(DLG_VMD_MOT_IMPORT_DETAIL, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_DETAIL_NAME));
 		AddCheckbox(DLG_VMD_MOT_IMPORT_BY_TAG, BFH_LEFT, 100, 0, GeLoadString(IDS_VMD_MOT_IMPORT_BY_TAG));
@@ -185,20 +186,20 @@ public:
 		GroupEnd();
 		//MotionEnd
 		//ModelBegin
-		GroupBegin(1500, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_TOOL_TITLE), 0, 400, 0);
+		GroupBegin(1500, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_TOOL_TITLE), 0, 350, 0);
 		//ImportModelBegin
 		GroupBegin(1201, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_IMPORT_TITLE), 0, 0, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 
-		GroupBegin(1202, BFH_LEFT, 2, 1, ""_s, 0, 400, 10);
+		GroupBegin(1202, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_PMX_MOD_IMPORT_SIZE_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_PMX_MOD_IMPORT_SIZE_NAME), BORDER_NONE);
 		AddEditNumberArrows(DLG_PMX_MOD_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 
 
-		GroupBegin(1204, BFH_CENTER, 2, 6, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 400, 0);
+		GroupBegin(1204, BFH_CENTER, 2, 6, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
 		GroupBorder(BORDER_GROUP_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		AddCheckbox(DLG_PMX_MOD_IMPORT_POLYGON, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_POLYGON));
@@ -227,7 +228,7 @@ public:
 	//----------
 	//-- Assign dialog elements their initial values here:
 
-	void inline LoadConfig(YAML::Node node) {
+	void inline LoadConfig(YAML::Node& node) {
 		try {
 			node = YAML::LoadFile((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
 		}
@@ -617,12 +618,12 @@ public:
 			config["PMX_MOD_IMPORT_MATERIAL"] = settings_.Import_material;
 			config["PMX_MOD_IMPORT_BONE"] = settings_.Import_bone;
 			config["PMX_MOD_IMPORT_WEIGHTS"] = settings_.Import_weights;
-			config["PMX_MOD_IMPORT_IKT"] = settings_.Import_ik;
+			config["PMX_MOD_IMPORT_IK"] = settings_.Import_ik;
 			config["PMX_MOD_IMPORT_INHERIT"] = settings_.Import_inherit;
 			config["PMX_MOD_IMPORT_EXPRESSION"] = settings_.Import_expression;
 			config["PMX_MOD_IMPORT_MULTIPART"] = settings_.Import_multipart;
 			config["PMX_MOD_IMPORT_ENGLISH"] = settings_.Import_english;
-			config["DLG_PMX_MOD_IMPORT_ENGLISH_CHECK"] = settings_.Import_english_check;		
+			config["PMX_MOD_IMPORT_ENGLISH_CHECK"] = settings_.Import_english_check;		
 			std::ofstream fout((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
 			fout << config;
 			iferr(mmd::PMXModel::FromFileImportModel(PositionMultiple_, settings_))
@@ -702,6 +703,7 @@ public:
 class MMDTool : public CommandData
 {
 	MMDToolDialog mmd_tool_dialog;
+	
 public:
 	virtual Bool Execute(BaseDocument* doc) {
 		if (mmd_tool_dialog.IsOpen() == false)
@@ -714,12 +716,12 @@ public:
 
 Bool RegisterPMXModelTag()
 {
-	return RegisterTagPlugin(ID_PMX_MODEL_TAG, GeLoadString(IDS_PMX_MODEL_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Model_Tag::Alloc, "PMX_Model_Tag"_s, AutoBitmap("MMDIcon.png"_s), 0);
+	return RegisterTagPlugin(ID_PMX_MODEL_TAG, GeLoadString(IDS_PMX_MODEL_TAG), TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Model_Tag::Alloc, "PMX_Model_Tag"_s, AutoBitmap("MMDIcon.png"_s), 0);
 }
 
 Bool RegisterPMXBoneTag()
 {
-	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.png"_s), 0);
+	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.png"_s), 0);
 }
 
 

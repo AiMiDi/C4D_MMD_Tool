@@ -1,4 +1,5 @@
 #include "main.h"
+#include "ProcessProgressDialog.h"
 #include "MMD_PMX_model.h"
 #include "MMD_VMD_animation.h"
 #include "MMD_PMX_tag.h"
@@ -227,7 +228,7 @@ public:
 	//----------
 	//-- Assign dialog elements their initial values here:
 
-	void inline LoadConfig(YAML::Node node) {
+	void inline LoadConfig(YAML::Node& node) {
 		try {
 			node = YAML::LoadFile((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
 		}
@@ -617,12 +618,12 @@ public:
 			config["PMX_MOD_IMPORT_MATERIAL"] = settings_.Import_material;
 			config["PMX_MOD_IMPORT_BONE"] = settings_.Import_bone;
 			config["PMX_MOD_IMPORT_WEIGHTS"] = settings_.Import_weights;
-			config["PMX_MOD_IMPORT_IKT"] = settings_.Import_ik;
+			config["PMX_MOD_IMPORT_IK"] = settings_.Import_ik;
 			config["PMX_MOD_IMPORT_INHERIT"] = settings_.Import_inherit;
 			config["PMX_MOD_IMPORT_EXPRESSION"] = settings_.Import_expression;
 			config["PMX_MOD_IMPORT_MULTIPART"] = settings_.Import_multipart;
 			config["PMX_MOD_IMPORT_ENGLISH"] = settings_.Import_english;
-			config["DLG_PMX_MOD_IMPORT_ENGLISH_CHECK"] = settings_.Import_english_check;		
+			config["PMX_MOD_IMPORT_ENGLISH_CHECK"] = settings_.Import_english_check;		
 			std::ofstream fout((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
 			fout << config;
 			iferr(mmd::PMXModel::FromFileImportModel(PositionMultiple_, settings_))
@@ -702,6 +703,7 @@ public:
 class MMDTool : public CommandData
 {
 	MMDToolDialog mmd_tool_dialog;
+	
 public:
 	virtual Bool Execute(BaseDocument* doc, GeDialog* parentManager) {
 		if (mmd_tool_dialog.IsOpen() == false)
@@ -714,12 +716,12 @@ public:
 
 Bool RegisterPMXModelTag()
 {
-	return RegisterTagPlugin(ID_PMX_MODEL_TAG, GeLoadString(IDS_PMX_MODEL_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Model_Tag::Alloc, "PMX_Model_Tag"_s, AutoBitmap("MMDIcon.png"_s), 0);
+	return RegisterTagPlugin(ID_PMX_MODEL_TAG, GeLoadString(IDS_PMX_MODEL_TAG), TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Model_Tag::Alloc, "PMX_Model_Tag"_s, AutoBitmap("MMDIcon.png"_s), 0);
 }
 
 Bool RegisterPMXBoneTag()
 {
-	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_ADDTOTAKEGROUP | TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.png"_s), 0);
+	return RegisterTagPlugin(ID_PMX_BONE_TAG, GeLoadString(IDS_PMX_BONE_TAG), TAG_VISIBLE | TAG_EXPRESSION, mmd::PMX_Bone_Tag::Alloc, "PMX_Bone_Tag"_s, AutoBitmap("pmx_boen.png"_s), 0);
 }
 
 

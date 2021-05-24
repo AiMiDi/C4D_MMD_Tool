@@ -38,6 +38,7 @@
 #include "ocajoint.h"
 #include "tcaik.h"
 #include "tcaconstraint.h"
+#include "maxon/synchronized.h"
 #include "tcaweight.h"
 #include "maxon/apibase.h"
 #include "lib_ca.h"
@@ -47,7 +48,6 @@
 #include "tprotection.h"
 #include "ImagesGUI.h"
 #include "MMD_struct.h"
-#include "EncodingConversion.h"
 #undef _HAS_EXCEPTIONS
 #define _HAS_EXCEPTIONS 1
 #include "yaml-cpp/yaml.h"

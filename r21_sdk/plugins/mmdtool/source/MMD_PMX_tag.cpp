@@ -40,10 +40,6 @@ EXECUTIONRESULT mmd::PMX_Model_Tag::Execute(BaseTag* tag, BaseDocument* doc, Bas
 
 	return EXECUTIONRESULT::OK;
 }
-Bool mmd::PMX_Model_Tag::AddToExecution(BaseTag* tag, PriorityList* list) {
-	//list->Add(tag, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
-	return true;
-}
 
 Bool mmd::PMX_Bone_Tag::SplineDataCallBack(Int32 cid, const void* data)
 {
@@ -434,6 +430,16 @@ Bool mmd::PMX_Bone_Tag::Init(GeListNode* node)
 	node->SetParameter(DescID(INHERIT_BONE_PARENT_INFLUENCE), 1.0, DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(BONE_LOCAL_X), Vector(1, 0, 0), DESCFLAGS_SET::NONE);
 	node->SetParameter(DescID(BONE_LOCAL_Z), Vector(0, 0, 1), DESCFLAGS_SET::NONE);
+	GeData priority;
+	if (node->GetParameter(DescLevel(EXPRESSION_PRIORITY), priority, DESCFLAGS_GET::NONE))
+	{
+		PriorityData* pd = (PriorityData*)priority.GetCustomDataType(CUSTOMGUI_PRIORITY_DATA);
+		if (pd) {
+			pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 1);
+		}
+
+		node->SetParameter(DescLevel(EXPRESSION_PRIORITY), priority, DESCFLAGS_SET::NONE);
+	}
 	if (!CurveInit())return false;
 	return true;
 }
@@ -812,13 +818,6 @@ EXECUTIONRESULT mmd::PMX_Bone_Tag::Execute(BaseTag* tag, BaseDocument* doc, Base
 		}
 	}
 	return EXECUTIONRESULT::OK;
-}
-Bool mmd::PMX_Bone_Tag::AddToExecution(BaseTag* tag, PriorityList* list) {
-	if (list == nullptr || tag == nullptr) {
-		return true;
-	}
-	list->Add(tag, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
-	return true;
 }
 Bool mmd::PMX_Bone_Tag::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {

@@ -1,6 +1,6 @@
 CONTAINER PMX_Bone_Tag {
 	NAME PMX_Bone_Tag;
-	INCLUDE Tbase;
+	INCLUDE Texpression;
 
 	GROUP PMX_BONE_INFO_GRP {
 		DEFAULT 1;

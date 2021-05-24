@@ -28,10 +28,10 @@ private:
 			NameMapArray.Reset();
 		}
 	};
+	Bool LoadConfig(Filename fn);
 public:
 	NameConversion(){}
 	~NameConversion();
-	Bool LoadConfig(Filename fn);
 	Bool InitConver(String& str, Bool op = true);
 	Bool Conver(String& str, String& res, Bool op = true);
 	Bool CheckUpdata();
