@@ -380,7 +380,7 @@ public:
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_IMPORT_DETAIL, false);
-			config["VMD_MOT_IMPORT_DETAIL"] = true;
+			config["VMD_MOT_IMPORT_DETAIL"] = false;
 			updata = true;
 		}
 		try {

@@ -224,7 +224,7 @@ namespace mmd {
 	};
 	struct PMX_Morph_vertex
 	{
-		Int32 vertex_index = 0;//顶点索引
+		UInt32 vertex_index = 0;//顶点索引
 		vec3 translation;//移动
 	};
 	struct PMX_Morph_bone

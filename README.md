@@ -62,6 +62,8 @@ At present, the main maintenance version are R20 and higher, R19 and lower are u
 
 **version 0.3.5** Fix stuck and errors caused by configuration files, increase multi-thread safety, and reduce crashes.
 
+**version 0.3.6** Fix the problem of multi-part import face error, and add the function of importing multi-part vertex expressions.
+
 ## usage
 
 1.Select the corresponding version of the plugin and place it in the plugins folder under the Cinema 4D installation directory.

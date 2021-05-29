@@ -1955,23 +1955,23 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultip
 		Int32 KeyFrame;
 		mmd::VMD_Camera CameraFrame, NextCameraFrame;
 		UInt32 camera_frame_number = mmd_animation->CameraFrameNumber;
-		for (UInt32 i = 0; i < camera_frame_number; i++)
+		for (UInt32 camera_frame_index = 0; camera_frame_index < camera_frame_number; camera_frame_index++)
 		{
 			StatusSetText("Import camera..."_s);
-			StatusSetBar(i * 100 / camera_frame_number);
-			if (i == 0 && camera_frame_number != 1)
+			StatusSetBar(camera_frame_index * 100 / camera_frame_number);
+			if (camera_frame_index == 0 && camera_frame_number != 1)
 			{
-				CameraFrame = mmd_animation->camera_frames[i];
-				NextCameraFrame = mmd_animation->camera_frames[i + 1];
+				CameraFrame = mmd_animation->camera_frames[camera_frame_index];
+				NextCameraFrame = mmd_animation->camera_frames[camera_frame_index + 1];
 			}
-			else if (i == mmd_animation->CameraFrameNumber - 1)
+			else if (camera_frame_index == mmd_animation->CameraFrameNumber - 1)
 			{
 				CameraFrame = NextCameraFrame;
 			}
 			else
 			{
 				CameraFrame = NextCameraFrame;
-				NextCameraFrame = mmd_animation->camera_frames[i + 1];
+				NextCameraFrame = mmd_animation->camera_frames[camera_frame_index + 1];
 			}
 			KeyFrame = CameraFrame.frame_no + TimeOffset + 1.0;
 			KeyTime = BaseTime(KeyFrame, 30);
@@ -2178,16 +2178,16 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMu
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 	}
-	for (Int32 i = 0; i < FrameCount; i++)
+	for (Int32 frame_index = 0; frame_index < FrameCount; frame_index++)
 	{
 		StatusSetSpin();
 		mmd::VMD_Camera CameraFrame;
-		Int32 Frame_on = CameraCurveFrame_on->GetKey(i)->GetValue();
+		Int32 Frame_on = CameraCurveFrame_on->GetKey(frame_index)->GetValue();
 		CameraFrame.frame_no = Frame_on + TimeOffset;
-		CameraFrame.position = vec3(CameraCurvePX->GetKey(i)->GetValue() * PositionMultiple, CameraCurvePY->GetKey(i)->GetValue() * PositionMultiple, CameraCurvePZ->GetKey(i)->GetValue() * PositionMultiple);
-		CameraFrame.rotation = vec3(CameraCurveRX->GetKey(i)->GetValue(), CameraCurveRY->GetKey(i)->GetValue(), CameraCurveRZ->GetKey(i)->GetValue());
-		CameraFrame.distance = CameraCurveDistance->GetKey(i)->GetValue() * PositionMultiple;
-		CameraFrame.viewing_angle = CameraCurveAOV->GetKey(i)->GetValue();
+		CameraFrame.position = vec3(CameraCurvePX->GetKey(frame_index)->GetValue() * PositionMultiple, CameraCurvePY->GetKey(frame_index)->GetValue() * PositionMultiple, CameraCurvePZ->GetKey(frame_index)->GetValue() * PositionMultiple);
+		CameraFrame.rotation = vec3(CameraCurveRX->GetKey(frame_index)->GetValue(), CameraCurveRY->GetKey(frame_index)->GetValue(), CameraCurveRZ->GetKey(frame_index)->GetValue());
+		CameraFrame.distance = CameraCurveDistance->GetKey(frame_index)->GetValue() * PositionMultiple;
+		CameraFrame.viewing_angle = CameraCurveAOV->GetKey(frame_index)->GetValue();
 		CameraFrame.perspective = 0;
 		VMDCamera_data->GetCurve(VMD_CAM_OBJ_XCURVE, Frame_on, &CameraFrame.XCurve);
 		VMDCamera_data->GetCurve(VMD_CAM_OBJ_YCURVE, Frame_on, &CameraFrame.YCurve);
@@ -2357,35 +2357,35 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 	maxon::HashMap<String, maxon::BaseList<VMD_Motion>*> MotionFrameList_map;
 	maxon::HashMap<String, maxon::BaseList<VMD_Morph>*> MorphFrameList_map;
 	Int32 MotionFrameNumber = mmd_animation->MotionFrameNumber;
-	for (Int32 i = 0; i < MotionFrameNumber; i++)
+	for (Int32 motion_frame_index = 0; motion_frame_index < MotionFrameNumber; motion_frame_index++)
 	{
-		String bone_name = mmd_animation->motion_frames[i].bone_name;
+		String bone_name = mmd_animation->motion_frames[motion_frame_index].bone_name;
 		auto MotionFrame_ptr = MotionFrameList_map.Find(bone_name);
 		if (MotionFrame_ptr == nullptr)
 		{
 			maxon::BaseList<VMD_Motion>* MotionFrame = new maxon::BaseList<VMD_Motion>;
-			MotionFrame->Append(mmd_animation->motion_frames[i])iferr_return;
+			MotionFrame->Append(mmd_animation->motion_frames[motion_frame_index])iferr_return;
 			MotionFrameList_map.Insert(bone_name, MotionFrame)iferr_return;
 		}
 		else
 		{
-			MotionFrame_ptr->GetValue()->Append(mmd_animation->motion_frames[i])iferr_return;
+			MotionFrame_ptr->GetValue()->Append(mmd_animation->motion_frames[motion_frame_index])iferr_return;
 		}
 	}
 	Int32 MorphFrameNumber = mmd_animation->MorphFrameNumber;
-	for (Int32 i = 0; i < MorphFrameNumber; i++)
+	for (Int32 morph_frame_index = 0; morph_frame_index < MorphFrameNumber; morph_frame_index++)
 	{
-		String morph_name = mmd_animation->morph_frames[i].morph_name;
+		String morph_name = mmd_animation->morph_frames[morph_frame_index].morph_name;
 		auto MorphFrame_ptr = MorphFrameList_map.Find(morph_name);
 		if (MorphFrame_ptr == nullptr)
 		{
 			maxon::BaseList<VMD_Morph>* MorphFrame = new maxon::BaseList<VMD_Morph>;
-			MorphFrame->Append(mmd_animation->morph_frames[i])iferr_return;
+			MorphFrame->Append(mmd_animation->morph_frames[morph_frame_index])iferr_return;
 			MorphFrameList_map.Insert(morph_name, MorphFrame)iferr_return;
 		}
 		else
 		{
-			MorphFrame_ptr->GetValue()->Append(mmd_animation->morph_frames[i])iferr_return;
+			MorphFrame_ptr->GetValue()->Append(mmd_animation->morph_frames[morph_frame_index])iferr_return;
 		}
 	}
 	Int32 MaxTime;
@@ -2466,23 +2466,23 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 						CCurve* BoneCurveRY = BoneTrackRY->GetCurve();
 						CCurve* BoneCurveRZ = BoneTrackRZ->GetCurve();
 						Int32 motion_frame_number = MotionFrameList->GetCount();
-						for (Int32 i = 0; i < motion_frame_number; i++)
+						for (Int32 motion_index = 0; motion_index < motion_frame_number; motion_index++)
 						{
 							StatusSetText("Import motion of bone " + String::IntToString(bone_cnt) + "/" + motion_frame_bone_number_S);
-							StatusSetBar(i * 100 / motion_frame_number);
-							if (i == 0 && motion_frame_number != 1)
+							StatusSetBar(motion_index * 100 / motion_frame_number);
+							if (motion_index == 0 && motion_frame_number != 1)
 							{
-								MotionFrame = MotionFrameList->operator[](i);
-								NextMotionFrame = MotionFrameList->operator[](i + 1);
+								MotionFrame = MotionFrameList->operator[](motion_index);
+								NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 							}
-							else if (i == motion_frame_number - 1)
+							else if (motion_index == motion_frame_number - 1)
 							{
 								MotionFrame = NextMotionFrame;
 							}
 							else
 							{
 								MotionFrame = NextMotionFrame;
-								NextMotionFrame = MotionFrameList->operator[](i + 1);
+								NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 							}
 							TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
 							MotionKeyTime = BaseTime(MotionFrame.frame_no + TimeOffset, 30);
@@ -2661,23 +2661,23 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 					CCurve* BoneCurveRY = BoneTrackRY->GetCurve();
 					CCurve* BoneCurveRZ = BoneTrackRZ->GetCurve();
 					Int32 motion_frame_number = MotionFrameList->GetCount();
-					for (Int32 i = 0; i < motion_frame_number; i++)
+					for (Int32 motion_index = 0; motion_index < motion_frame_number; motion_index++)
 					{
 						StatusSetText("Import motion of bone " + String::IntToString(bone_cnt) + "/" + motion_frame_bone_number_S);
-						StatusSetBar(i * 100 / motion_frame_number);
-						if (i == 0 && motion_frame_number != 1)
+						StatusSetBar(motion_index * 100 / motion_frame_number);
+						if (motion_index == 0 && motion_frame_number != 1)
 						{
-							MotionFrame = MotionFrameList->operator[](i);
-							NextMotionFrame = MotionFrameList->operator[](i + 1);
+							MotionFrame = MotionFrameList->operator[](motion_index);
+							NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 						}
-						else if (i == motion_frame_number - 1)
+						else if (motion_index == motion_frame_number - 1)
 						{
 							MotionFrame = NextMotionFrame;
 						}
 						else
 						{
 							MotionFrame = NextMotionFrame;
-							NextMotionFrame = MotionFrameList->operator[](i + 1);
+							NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 						}
 						TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
 						Int32 frame_no = MotionFrame.frame_no + TimeOffset;
@@ -2737,11 +2737,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 				}
 				CCurve* MorphCurve = MorphTrack->GetCurve();
 				Int32 morph_frame_number = MorphFrameList->GetCount();
-				for (Int32 i = 0; i < morph_frame_number; i++)
+				for (Int32 morph_index = 0; morph_index < morph_frame_number; morph_index++)
 				{
 					StatusSetText("Import motion of morph " + String::IntToString(morph_cnt) + "/" + motion_frame_morph_number_S);
-					StatusSetBar(i * 100 / morph_frame_number);
-					MorphFrame = (*MorphFrameList)[i];
+					StatusSetBar(morph_index * 100 / morph_frame_number);
+					MorphFrame = (*MorphFrameList)[morph_index];
 					CKey* MorphKey = CKey::Alloc();
 					MorphKey->SetTime(MorphCurve, BaseTime(MorphFrame.frame_no + TimeOffset, 30));
 					MorphKey->SetValue(MorphCurve, MorphFrame.weight);
