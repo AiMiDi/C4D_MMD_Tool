@@ -74,6 +74,6 @@ At present, the main maintenance version are R20 and higher, R19 and lower are u
 
 AiMiDi
 
-https://github.com/AiMiDi/C4D_MMD_Tool
+[![](https://img.shields.io/badge/-@AiMiDi-%23181717?style=flat-square&logo=github)](https://github.com/AiMiDi)   
 
-https://space.bilibili.com/30898053
+[![](https://img.shields.io/badge/-%40艾米蒂aimidi-blue?style=flat-square&logo=bilibili)](https://space.bilibili.com/30898053)
