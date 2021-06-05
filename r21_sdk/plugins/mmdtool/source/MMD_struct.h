@@ -76,6 +76,8 @@ namespace mmd {
 		String model_name_universal;//通用模型名
 		String comments_local;//本地语言模型描述
 		String comments_universal;//通用语言模型描述
+		Bool have_UV_morph = false; //是否有UV表情
+		Bool have_vertex_morph = false;//是否有顶点表情
 	};
 
 	struct BDEF1//权重==1

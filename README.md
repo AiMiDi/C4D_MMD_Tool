@@ -64,6 +64,8 @@ At present, the main maintenance version are R20 and higher, R19 and lower are u
 
 **version 0.3.6** Fix the problem of multi-part import face error, and add the function of importing multi-part vertex expressions.
 
+**version 0.3.7** Fixed the problem that the plug-in might not be loaded, and added bone expression import.
+
 ## usage
 
 1.Select the corresponding version of the plugin and place it in the plugins folder under the Cinema 4D installation directory.

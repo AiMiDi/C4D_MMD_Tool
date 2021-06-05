@@ -69,12 +69,11 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>..\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <SourcePath>$(VC_SourcePath);</SourcePath>
     <LibraryPath>..\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -82,13 +81,13 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../res;../res/description;../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../include;../include/yaml-cpp;../include/yaml-cpp/contrib;../include/yaml-cpp/node;../include/yaml-cpp/node/detail;../res;../res/description;../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cpp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -99,8 +98,9 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../res;../res/description;../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../include;../include/yaml-cpp;../include/yaml-cpp/contrib;../include/yaml-cpp/node;../include/yaml-cpp/node/detail;../res;../res/description;../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
@@ -187,10 +187,46 @@
     <ClCompile Include="..\source\MMD_VMD_animation.cpp" />
     <ClCompile Include="..\source\NameConversion.cpp" />
     <ClCompile Include="..\source\PluginRegister.cpp" />
-    <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\ProcessProgressDialog.cpp" />
+    <ClCompile Include="..\source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\yaml-cpp\anchor.h" />
+    <ClInclude Include="..\include\yaml-cpp\binary.h" />
+    <ClInclude Include="..\include\yaml-cpp\contrib\anchordict.h" />
+    <ClInclude Include="..\include\yaml-cpp\contrib\graphbuilder.h" />
+    <ClInclude Include="..\include\yaml-cpp\dll.h" />
+    <ClInclude Include="..\include\yaml-cpp\emitfromevents.h" />
+    <ClInclude Include="..\include\yaml-cpp\emitter.h" />
+    <ClInclude Include="..\include\yaml-cpp\emitterdef.h" />
+    <ClInclude Include="..\include\yaml-cpp\emittermanip.h" />
+    <ClInclude Include="..\include\yaml-cpp\emitterstyle.h" />
+    <ClInclude Include="..\include\yaml-cpp\eventhandler.h" />
+    <ClInclude Include="..\include\yaml-cpp\exceptions.h" />
+    <ClInclude Include="..\include\yaml-cpp\mark.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\convert.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\detail\bool_type.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\detail\impl.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\detail\iterator.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\detail\iterator_fwd.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\detail\memory.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\detail\node.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\detail\node_data.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\detail\node_iterator.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\detail\node_ref.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\emit.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\impl.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\iterator.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\node.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\parse.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\ptr.h" />
+    <ClInclude Include="..\include\yaml-cpp\node\type.h" />
+    <ClInclude Include="..\include\yaml-cpp\null.h" />
+    <ClInclude Include="..\include\yaml-cpp\ostream_wrapper.h" />
+    <ClInclude Include="..\include\yaml-cpp\parser.h" />
+    <ClInclude Include="..\include\yaml-cpp\stlemitter.h" />
+    <ClInclude Include="..\include\yaml-cpp\traits.h" />
+    <ClInclude Include="..\include\yaml-cpp\yaml.h" />
     <ClInclude Include="..\res\c4d_symbols.h" />
     <ClInclude Include="..\res\description\PMX_Bone_Tag.h" />
     <ClInclude Include="..\res\description\PMX_Model_Tag.h" />
@@ -199,20 +235,11 @@
     <ClInclude Include="..\source\ImagesGUI.h" />
     <ClInclude Include="..\source\MMD_PMX_model.h" />
     <ClInclude Include="..\source\MMD_PMX_tag.h" />
-    <ClInclude Include="..\source\MMD_struct.h" />
     <ClInclude Include="..\source\MMD_VMD_animation.h" />
+    <ClInclude Include="..\source\MMD_struct.h" />
     <ClInclude Include="..\source\NameConversion.h" />
-    <ClInclude Include="..\source\main.h" />
     <ClInclude Include="..\source\ProcessProgressDialog.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\res\description\PMX_Bone_Tag.res" />
-    <None Include="..\res\description\PMX_Model_Tag.res" />
-    <None Include="..\res\description\VMD_Cam_Obj.res" />
-    <None Include="..\res\strings_en-US\c4d_strings.str" />
-    <None Include="..\res\strings_en-US\description\PMX_Bone_Tag.str" />
-    <None Include="..\res\strings_en-US\description\PMX_Model_Tag.str" />
-    <None Include="..\res\strings_en-US\description\VMD_Cam_Obj.str" />
+    <ClInclude Include="..\source\main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

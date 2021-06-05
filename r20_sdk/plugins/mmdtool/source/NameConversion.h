@@ -3,6 +3,13 @@
 
 #include "main.h"
 
+#ifdef _HAS_EXCEPTIONS
+#undef _HAS_EXCEPTIONS
+#define _HAS_EXCEPTIONS 1
+#endif _HAS_EXCEPTIONS
+
+#include "yaml-cpp/yaml.h"
+
 #define ID_MMD_TOOL 1056563
 
 class NameConversion 

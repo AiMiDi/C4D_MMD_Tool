@@ -4,6 +4,13 @@
 #include "MMD_VMD_animation.h"
 #include "MMD_PMX_tag.h"
 
+#ifdef _HAS_EXCEPTIONS
+#undef _HAS_EXCEPTIONS
+#define _HAS_EXCEPTIONS 1
+#endif _HAS_EXCEPTIONS
+
+#include "yaml-cpp/yaml.h"
+
 enum                             // Uniquely identify all your dialog elements here.
 {
 	DLG_VMD_CAM_IMPORT_TITLE = 10000,
@@ -59,6 +66,7 @@ enum                             // Uniquely identify all your dialog elements h
 class MMDToolDialog : public GeDialog
 {
 	ImagesGUI* Images = nullptr;
+	std::string config_path = std::string((GeGetPluginResourcePath() + "config.yaml").GetString().GetCStringCopy(STRINGENCODING::UTF8));
 public:
 	MMDToolDialog() {}
 	virtual ~MMDToolDialog(void) {
@@ -226,15 +234,17 @@ public:
 	}
 
 	//----------
-	//-- Assign dialog elements their initial values here:
-
-	void inline LoadConfig(YAML::Node& node) {
-		try {
-			node = YAML::LoadFile((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
+	//-- Assign dialog elements their initial values here:	
+	
+	YAML::Node LoadConfig() {
+		try {		
+			YAML::Node node(YAML::LoadFile(config_path));
+			return node;
 		}
 		catch (YAML::BadFile) {
 			GePrint("Failed to load the YAML file!"_s);
-			std::ofstream fout((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
+			YAML::Node node;
+			std::ofstream fout(config_path);
 			node["VMD_CAM_IMPORT_SIZE"] = 8.5;
 			node["VMD_CAM_IMPORT_OFFSET"] = 0;
 			node["VMD_CAM_EXPORT_SIZE"] = 0.118;
@@ -286,14 +296,14 @@ public:
 			SetBool(DLG_PMX_MOD_IMPORT_MULTIPART, true);
 			SetBool(DLG_PMX_MOD_IMPORT_ENGLISH, false);
 			SetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, false);
+			return node;
 		}
 	}
 
 	virtual Bool InitValues(void)
 	{
-		YAML::Node config;
+		YAML::Node config(LoadConfig());
 		Bool updata = false;
-		LoadConfig(config);
 		try {
 			SetFloat(DLG_VMD_CAM_IMPORT_SIZE, config["VMD_CAM_IMPORT_SIZE"].as<float>(), 0, 100);
 		}
@@ -497,7 +507,7 @@ public:
 			updata = true;
 		}
 		if (updata) {
-			std::ofstream fout((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
+			std::ofstream fout(config_path);
 			fout << config;
 		}
 		return true;
@@ -517,11 +527,10 @@ public:
 			Float TimeOffset_;
 			GetFloat(DLG_VMD_CAM_IMPORT_SIZE, PositionMultiple_);
 			GetFloat(DLG_VMD_CAM_IMPORT_OFFSET, TimeOffset_);
-			YAML::Node config;
-			LoadConfig(config);
+			YAML::Node config(LoadConfig());
 			config["VMD_CAM_IMPORT_SIZE"] = PositionMultiple_;
 			config["VMD_CAM_IMPORT_OFFSET"] = TimeOffset_;
-			std::ofstream fout((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
+			std::ofstream fout(config_path);
 			fout << config;
 			iferr(mmd::VMDAnimation::FromFileImportCamera(PositionMultiple_, TimeOffset_))
 			{
@@ -535,11 +544,10 @@ public:
 			Int32 use_rotation_;
 			GetFloat(DLG_VMD_CAM_CONVER_DIS, distance_);
 			GetInt32(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, use_rotation_);
-			YAML::Node config;
-			LoadConfig(config);
+			YAML::Node config(LoadConfig());
 			config["VMD_CAM_CONVER_DIS"] = distance_;
 			config["VMD_CAM_CONVER_ROTATION_TWEEN"] = use_rotation_;
-			std::ofstream fout((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
+			std::ofstream fout(config_path);
 			fout << config;
 			iferr(mmd::VMD_Cam_Obj::ConversionCamera(distance_, use_rotation_))
 			{
@@ -555,12 +563,11 @@ public:
 			GetFloat(DLG_VMD_CAM_EXPORT_SIZE, PositionMultiple_);
 			GetFloat(DLG_VMD_CAM_EXPORT_OFFSET, TimeOffset_);
 			GetInt32(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, use_rotation_);
-			YAML::Node config;
-			LoadConfig(config);
+			YAML::Node config(LoadConfig());
 			config["VMD_CAM_EXPORT_SIZE"] = PositionMultiple_;
 			config["VMD_CAM_EXPORT_OFFSET"] = TimeOffset_;
 			config["VMD_CAM_EXPORT_ROTATION_TWEEN"] = use_rotation_;
-			std::ofstream fout((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
+			std::ofstream fout(config_path);
 			fout << config;
 			iferr(mmd::VMDAnimation::FromDocumentExportCamera(PositionMultiple_, TimeOffset_, use_rotation_))
 			{
@@ -577,14 +584,13 @@ public:
 			GetBool(DLG_VMD_MOT_IMPORT_QUAT, QuaternionRotationSW_);
 			GetBool(DLG_VMD_MOT_IMPORT_DETAIL, DetailReport_);
 			GetBool(DLG_VMD_MOT_IMPORT_BY_TAG, ByTag_);
-			YAML::Node config;
-			LoadConfig(config);
+			YAML::Node config(LoadConfig());
 			config["VMD_MOT_IMPORT_SIZE"] = PositionMultiple_;
 			config["VMD_MOT_IMPORT_OFFSET"] = TimeOffset_;
 			config["VMD_MOT_IMPORT_QUAT"] = QuaternionRotationSW_;
 			config["VMD_MOT_IMPORT_DETAIL"] = DetailReport_;
 			config["VMD_MOT_IMPORT_BY_TAG"] = ByTag_;
-			std::ofstream fout((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
+			std::ofstream fout(config_path);
 			fout << config;
 			iferr(mmd::VMDAnimation::FromFileImportMotions(PositionMultiple_, TimeOffset_, QuaternionRotationSW_, DetailReport_, ByTag_))
 			{
@@ -609,8 +615,7 @@ public:
 			GetBool(DLG_PMX_MOD_IMPORT_MULTIPART, settings_.Import_multipart);
 			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH, settings_.Import_english);
 			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, settings_.Import_english_check);
-			YAML::Node config;
-			LoadConfig(config);
+			YAML::Node config(LoadConfig());
 			config["PMX_MOD_IMPORT_SIZE"] = PositionMultiple_;
 			config["PMX_MOD_IMPORT_POLYGON"] = settings_.Import_polygon;
 			config["PMX_MOD_IMPORT_NORMAL"] = settings_.Import_normal;
@@ -624,7 +629,7 @@ public:
 			config["PMX_MOD_IMPORT_MULTIPART"] = settings_.Import_multipart;
 			config["PMX_MOD_IMPORT_ENGLISH"] = settings_.Import_english;
 			config["PMX_MOD_IMPORT_ENGLISH_CHECK"] = settings_.Import_english_check;		
-			std::ofstream fout((GeGetPluginResourcePath() + Filename("config.yaml"_s)).GetString().GetCStringCopy(STRINGENCODING::UTF8));
+			std::ofstream fout(config_path);
 			fout << config;
 			iferr(mmd::PMXModel::FromFileImportModel(PositionMultiple_, settings_))
 			{
