@@ -36,9 +36,11 @@ namespace mmd {
 		//储存上一种曲线类型，以确定更新状态
 		Int32 prev_curve_type = -1;
 		//对应的主对象
-		BaseObject* obj = nullptr;
+		BaseObject* obj = nullptr;		
 		INSTANCEOF(PMX_Bone_Tag, TagData)
 	public:
+		//是否是物理骨骼
+		Bool Is_physical = false;
 		// 用于限制SplineData的回调函数
 		static Bool SplineDataCallBack(Int32 cid, const void* data);
 		//获取曲线值

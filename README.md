@@ -66,6 +66,8 @@ At present, the main maintenance version are R20 and higher, R19 and lower are u
 
 **version 0.3.7** Fixed the problem that the plug-in might not be loaded, and added bone expression import.
 
+**version 0.3.7.5** Fix the problem of non-rotatable bones and import animation of physical bones. Add UV expression import (only multi-part import mode).
+
 ## usage
 
 1.Select the corresponding version of the plugin and place it in the plugins folder under the Cinema 4D installation directory.
