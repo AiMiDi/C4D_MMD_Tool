@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{0AA0DCFB-6A50-0B40-B8CD-9BA8709E7CE2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Bullet3Collision">
+      <UniqueIdentifier>{63C1D309-8189-4241-BFA7-89C8EA1C96D8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Bullet3Collision\BroadPhaseCollision">
+      <UniqueIdentifier>{7BFB6304-6AB2-9444-8145-5989C589FD85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Bullet3Collision\NarrowPhaseCollision">
+      <UniqueIdentifier>{83CC0624-3E55-F04F-942D-9505FE9FD769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Bullet3Collision\BroadPhaseCollision\shared">
+      <UniqueIdentifier>{8A186F27-F64D-BA4A-9120-64EA1A51B447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Bullet3Collision\NarrowPhaseCollision\shared">
+      <UniqueIdentifier>{FD1175CC-35BB-1449-83AC-390525941890}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Bullet3Collision\BroadPhaseCollision\b3BroadphaseCallback.h">
+      <Filter>src\Bullet3Collision\BroadPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\BroadPhaseCollision\b3DynamicBvh.h">
+      <Filter>src\Bullet3Collision\BroadPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\BroadPhaseCollision\b3DynamicBvhBroadphase.h">
+      <Filter>src\Bullet3Collision\BroadPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\BroadPhaseCollision\b3OverlappingPair.h">
+      <Filter>src\Bullet3Collision\BroadPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\BroadPhaseCollision\b3OverlappingPairCache.h">
+      <Filter>src\Bullet3Collision\BroadPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\BroadPhaseCollision\shared\b3Aabb.h">
+      <Filter>src\Bullet3Collision\BroadPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\b3Config.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\b3Contact4.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\b3ConvexUtility.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\b3CpuNarrowPhase.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\b3RaycastInfo.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\b3RigidBodyCL.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3BvhSubtreeInfoData.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3BvhTraversal.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3ClipFaces.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3Collidable.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3Contact4Data.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3ContactConvexConvexSAT.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3ContactSphereSphere.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3ConvexPolyhedronData.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3FindConcaveSatAxis.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3FindSeparatingAxis.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3MprPenetration.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3NewContactReduction.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3QuantizedBvhNodeData.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3ReduceContacts.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3RigidBodyData.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\shared\b3UpdateAabbs.h">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision\shared</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Bullet3Collision\BroadPhaseCollision\b3DynamicBvh.cpp">
+      <Filter>src\Bullet3Collision\BroadPhaseCollision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Bullet3Collision\BroadPhaseCollision\b3DynamicBvhBroadphase.cpp">
+      <Filter>src\Bullet3Collision\BroadPhaseCollision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Bullet3Collision\BroadPhaseCollision\b3OverlappingPairCache.cpp">
+      <Filter>src\Bullet3Collision\BroadPhaseCollision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\b3ConvexUtility.cpp">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Bullet3Collision\NarrowPhaseCollision\b3CpuNarrowPhase.cpp">
+      <Filter>src\Bullet3Collision\NarrowPhaseCollision</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

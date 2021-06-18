@@ -38,7 +38,8 @@ Bool mmd::VMD_Cam_Obj::SplineDataCallBack(Int32 cid, const void* data)
 		限制就是把切线控制点正交投影切线到“[0，1]”。
 		如果要缩放向量，使位于[0，1]区间外部的控制柄以该控制柄接触该框边界的方式进行缩放。
 		*/
-		for (int i = 0; i < splineData->GetKnotCount(); i++)
+		const Int32 KnotCount = splineData->GetKnotCount();
+		for (Int32 i = 0; i < KnotCount; i++)
 		{
 			// 获取当前knot。
 			CustomSplineKnot* knot = splineData->GetKnot(i);
@@ -236,7 +237,8 @@ Bool mmd::VMD_Cam_Obj::UpdateAllCurve() {
 	if (Frame_onTrack != nullptr) {
 		CCurve* Frame_onCurve = Frame_onTrack->GetCurve();
 		if (Frame_onCurve != nullptr) {
-			for (Int32 i = 0; i < Frame_onCurve->GetKeyCount(); i++) {
+			const Int32 KeyCount = Frame_onCurve->GetKeyCount();
+			for (Int32 i = 0; i < KeyCount; i++) {
 				UpdateCurve(Frame_onCurve->GetKey(i)->GetValue());
 			}
 		}
@@ -669,8 +671,8 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 			KeyFrame_on->SetInterpolation(Frame_onCurve, CINTERPOLATION::STEP);
 			KeyFrame_on->ChangeNBit(NBIT::CKEY_LOCK_T, NBITCONTROL::SET);
 			KeyFrame_on->ChangeNBit(NBIT::CKEY_LOCK_V, NBITCONTROL::SET);
-
-			for (int i = 0; i < spline->GetKnotCount(); i++)
+			const Int32 KnotCount = spline->GetKnotCount();
+			for (int i = 0; i < KnotCount; i++)
 			{
 				// 获取当前knot。
 				CustomSplineKnot* knot = spline->GetKnot(i);
@@ -1210,7 +1212,7 @@ Bool mmd::VMD_Cam_Obj::AddToExecution(BaseObject* op, PriorityList* list) {
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return true;
 }
-maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, Int32 use_rotation, BaseObject* str_cam) {
+maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(VMD_Conversion_Camera_settings setting) {
 	//获取活动文档
 	BaseDocument* doc = GetActiveDocument();
 	if (doc == nullptr) {
@@ -1220,7 +1222,7 @@ maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, In
 	}
 	BaseObject* SelectObject = nullptr;
 
-	if (str_cam == nullptr) //若传入的参数非空则使用传入参数
+	if (setting.str_cam == nullptr) //若传入的参数非空则使用传入参数
 	{
 		//获取选中对象
 		SelectObject = doc->GetActiveObject();
@@ -1232,7 +1234,7 @@ maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, In
 	}
 	else //否则使用选择参数
 	{
-		SelectObject = str_cam;
+		SelectObject = setting.str_cam;
 	}
 
 	//判断选中对象类型是否为摄像机
@@ -1536,7 +1538,7 @@ maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, In
 				iferr(VMDCamera_data->VCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
 			}
 			iferr(VMDCamera_data->DCurve.Insert(frame_on, new mmd::VMD_Curve()))return nullptr;
-			switch (use_rotation)
+			switch (setting.use_rotation)
 			{
 			case 0:
 				Key = strCurveRX->GetKey(i);
@@ -1573,7 +1575,7 @@ maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, In
 			}
 		}
 	}
-	CameraCurveDistance->AddKey(BaseTime(0, 30))->SetValue(CameraCurveDistance, distance);
+	CameraCurveDistance->AddKey(BaseTime(0, 30))->SetValue(CameraCurveDistance, setting.distance);
 	EventAdd();
 	if (!VMDCamera_data->UpdateAllCurve())return nullptr;
 	doc->SetTime(BaseTime(1));
@@ -1856,7 +1858,7 @@ maxon::Result<void> mmd::VMDAnimation::WriteToFile(BaseFile* const file) {
 	}
 	return maxon::OK;
 }
-maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultiple, Float TimeOffset) {
+maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_settings setting) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc <BaseFile> file;
@@ -1954,7 +1956,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultip
 		BaseTime KeyTime = BaseTime(0, 30);
 		Int32 KeyFrame;
 		mmd::VMD_Camera CameraFrame, NextCameraFrame;
-		UInt32 camera_frame_number = mmd_animation->CameraFrameNumber;
+		const UInt32 camera_frame_number = mmd_animation->CameraFrameNumber;
 		for (UInt32 camera_frame_index = 0; camera_frame_index < camera_frame_number; camera_frame_index++)
 		{
 			StatusSetText("Import camera..."_s);
@@ -1973,26 +1975,26 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultip
 				CameraFrame = NextCameraFrame;
 				NextCameraFrame = mmd_animation->camera_frames[camera_frame_index + 1];
 			}
-			KeyFrame = CameraFrame.frame_no + TimeOffset + 1.0;
+			KeyFrame = CameraFrame.frame_no + setting.TimeOffset + 1.0;
 			KeyTime = BaseTime(KeyFrame, 30);
 
 			CKey* CameraKeyPX = CKey::Alloc();//PX
 			CameraKeyPX->SetTime(CameraCurvePX, KeyTime);
-			CameraKeyPX->SetValue(CameraCurvePX, CameraFrame.position.x * PositionMultiple);
+			CameraKeyPX->SetValue(CameraCurvePX, CameraFrame.position.x * setting.PositionMultiple);
 			CameraKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePX->InsertKey(CameraKeyPX);
 			VMDCamera_data->SetCurve(VMD_CAM_OBJ_XCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.XCurve));
 
 			CKey* CameraKeyPY = CKey::Alloc();//PY
 			CameraKeyPY->SetTime(CameraCurvePY, KeyTime);
-			CameraKeyPY->SetValue(CameraCurvePY, CameraFrame.position.y * PositionMultiple);
+			CameraKeyPY->SetValue(CameraCurvePY, CameraFrame.position.y * setting.PositionMultiple);
 			CameraKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePY->InsertKey(CameraKeyPY);
 			VMDCamera_data->SetCurve(VMD_CAM_OBJ_YCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.YCurve));
 
 			CKey* CameraKeyPZ = CKey::Alloc();//PZ
 			CameraKeyPZ->SetTime(CameraCurvePZ, KeyTime);
-			CameraKeyPZ->SetValue(CameraCurvePZ, CameraFrame.position.z * PositionMultiple);
+			CameraKeyPZ->SetValue(CameraCurvePZ, CameraFrame.position.z * setting.PositionMultiple);
 			CameraKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePZ->InsertKey(CameraKeyPZ);
 			VMDCamera_data->SetCurve(VMD_CAM_OBJ_ZCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.ZCurve));
@@ -2018,7 +2020,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultip
 
 			CKey* CameraKeyDistance = CKey::Alloc();;
 			CameraKeyDistance->SetTime(CameraCurveDistance, KeyTime);
-			CameraKeyDistance->SetValue(CameraCurveDistance, CameraFrame.distance * PositionMultiple);
+			CameraKeyDistance->SetValue(CameraCurveDistance, CameraFrame.distance * setting.PositionMultiple);
 			CameraKeyDistance->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurveDistance->InsertKey(CameraKeyDistance);
 			VMDCamera_data->SetCurve(VMD_CAM_OBJ_DCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.DCurve));
@@ -2047,11 +2049,12 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultip
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_CAM_ERR));
 	}
 }
-maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMultiple, Float TimeOffset, Int32 use_rotation) {
+maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_export_settings setting) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc<BaseFile> file;
 	BaseDocument* doc = GetActiveDocument();
+	setting.PositionMultiple /= 1;
 	if (doc == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
@@ -2083,7 +2086,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMu
 	BaseObject* CameraObj = nullptr;
 	if (SelectObject->GetType() == Ocamera) //选择对象为普通摄像机则转化
 	{
-		auto res = VMD_Cam_Obj::ConversionCamera(0., use_rotation, SelectObject);
+		auto res = VMD_Cam_Obj::ConversionCamera(VMD_Conversion_Camera_settings{ 0., setting.use_rotation, SelectObject });
 		iferr(res.GetError())return maxon::Error();
 		CameraObj = res.GetValue();
 	}
@@ -2183,10 +2186,10 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMu
 		StatusSetSpin();
 		mmd::VMD_Camera CameraFrame;
 		Int32 Frame_on = CameraCurveFrame_on->GetKey(frame_index)->GetValue();
-		CameraFrame.frame_no = Frame_on + TimeOffset;
-		CameraFrame.position = vec3(CameraCurvePX->GetKey(frame_index)->GetValue() * PositionMultiple, CameraCurvePY->GetKey(frame_index)->GetValue() * PositionMultiple, CameraCurvePZ->GetKey(frame_index)->GetValue() * PositionMultiple);
+		CameraFrame.frame_no = Frame_on + setting.TimeOffset;
+		CameraFrame.position = vec3(CameraCurvePX->GetKey(frame_index)->GetValue() * setting.PositionMultiple, CameraCurvePY->GetKey(frame_index)->GetValue() * setting.PositionMultiple, CameraCurvePZ->GetKey(frame_index)->GetValue() * setting.PositionMultiple);
 		CameraFrame.rotation = vec3(CameraCurveRX->GetKey(frame_index)->GetValue(), CameraCurveRY->GetKey(frame_index)->GetValue(), CameraCurveRZ->GetKey(frame_index)->GetValue());
-		CameraFrame.distance = CameraCurveDistance->GetKey(frame_index)->GetValue() * PositionMultiple;
+		CameraFrame.distance = CameraCurveDistance->GetKey(frame_index)->GetValue() * setting.PositionMultiple;
 		CameraFrame.viewing_angle = CameraCurveAOV->GetKey(frame_index)->GetValue();
 		CameraFrame.perspective = 0;
 		VMDCamera_data->GetCurve(VMD_CAM_OBJ_XCURVE, Frame_on, &CameraFrame.XCurve);
@@ -2216,7 +2219,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMu
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::UIntToString(mmd_animation->CameraFrameNumber), String::FloatToString(timing.GetMilliseconds())));
 	return maxon::OK;
 }
-maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMultiple, Float TimeOffset, Bool QuaternionRotationSW, Bool DetailReport, Bool ByTag) {
+maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_settings setting) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc<BaseFile> file;
@@ -2282,10 +2285,21 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 		{
 			if (node->GetType() == Ojoint)
 			{
-				if (ByTag) {
+				if (setting.ByTag) {
 					BaseTag* node_tag = node->GetTag(ID_PMX_BONE_TAG);
 					if (node_tag != nullptr) {
-
+						PMX_Bone_Tag* pmx_bone_tag_data = node_tag->GetNodeData<PMX_Bone_Tag>();
+						for(bone_morph_data& i : pmx_bone_tag_data->bone_morph_data_arr) {
+							auto morph_arr_ptr = morph_name_map.Find(i.name);
+							if (morph_arr_ptr == nullptr) {
+								maxon::BaseList<morph_id_tag>morph_arr;
+								morph_arr.Append(morph_id_tag{ i.strength_id,node_tag })iferr_return;
+								morph_name_map.Insert(i.name, morph_arr)iferr_return;
+							}
+							else {
+								morph_arr_ptr->GetValue().Append(morph_id_tag{ i.strength_id,node_tag })iferr_return;
+							}
+						}
 						node_tag->GetParameter(DescID(BONE_NAME_LOCAL), data, DESCFLAGS_GET::NONE);
 						String bone_name = data.GetString();
 						auto bone_arr_ptr = bone_name_map.Find(bone_name);
@@ -2329,7 +2343,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 			if (tag != nullptr && tag->IsInstanceOf(Tposemorph))
 			{
 				CAPoseMorphTag* const pose_morph_tag = static_cast<CAPoseMorphTag*>(tag);
-				for (Int32 i = 0; i < pose_morph_tag->GetMorphCount(); i++)
+				const Int32 MorphCount = pose_morph_tag->GetMorphCount();
+				for (Int32 i = 0; i < MorphCount; i++)
 				{
 					String morph_name = pose_morph_tag->GetMorph(i)->GetName();
 					auto morph_arr_ptr = morph_name_map.Find(morph_name);
@@ -2425,7 +2440,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 				if (bone.tag == nullptr) {
 					if (bone.obj != nullptr)
 					{
-						if (QuaternionRotationSW && bone.obj->IsQuaternionRotationMode() == false) {
+						if (setting.QuaternionRotationSW && bone.obj->IsQuaternionRotationMode() == false) {
 							bone.obj->SetQuaternionRotationMode(true, false);
 						}
 						CTrack* BoneTrackPX = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
@@ -2485,7 +2500,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 								NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 							}
 							TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-							MotionKeyTime = BaseTime(MotionFrame.frame_no + TimeOffset, 30);
+							MotionKeyTime = BaseTime(MotionFrame.frame_no + setting.TimeOffset, 30);
 
 							Vector32 rotation;
 							rotation.x = -maxon::ATan2(2 * MotionFrame.rotation.y * MotionFrame.rotation.w + 2 * MotionFrame.rotation.x * MotionFrame.rotation.z, 1 - 2 * (MotionFrame.rotation.x * MotionFrame.rotation.x + MotionFrame.rotation.y * MotionFrame.rotation.y));
@@ -2498,10 +2513,10 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 
 							CKey* MotionKeyPX = CKey::Alloc();//PX
 							MotionKeyPX->SetTime(BoneCurvePX, MotionKeyTime);
-							MotionKeyPX->SetValue(BoneCurvePX, MotionFrame.position.x * PositionMultiple);
+							MotionKeyPX->SetValue(BoneCurvePX, MotionFrame.position.x * setting.PositionMultiple);
 							MotionKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 							MotionKeyPX->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-							ValueOfTwoMotionFrames = NextMotionFrame.position.x * PositionMultiple - MotionFrame.position.x * PositionMultiple;
+							ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.PositionMultiple - MotionFrame.position.x * setting.PositionMultiple;
 							if (MotionFrame.XCurve.ax == 127 - MotionFrame.XCurve.bx && MotionFrame.XCurve.ay == 127 - MotionFrame.XCurve.by) {
 								MotionKeyPX->SetInterpolation(BoneCurvePX, CINTERPOLATION::LINEAR);
 							}
@@ -2517,10 +2532,10 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 
 							CKey* MotionKeyPY = CKey::Alloc();//PY
 							MotionKeyPY->SetTime(BoneCurvePY, MotionKeyTime);
-							MotionKeyPY->SetValue(BoneCurvePY, MotionFrame.position.y * PositionMultiple);
+							MotionKeyPY->SetValue(BoneCurvePY, MotionFrame.position.y * setting.PositionMultiple);
 							MotionKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 							MotionKeyPY->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-							ValueOfTwoMotionFrames = NextMotionFrame.position.y * PositionMultiple - MotionFrame.position.y * PositionMultiple;
+							ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.PositionMultiple - MotionFrame.position.y * setting.PositionMultiple;
 							if (MotionFrame.YCurve.ax == 127 - MotionFrame.YCurve.bx && MotionFrame.YCurve.ay == 127 - MotionFrame.YCurve.by) {
 								MotionKeyPY->SetInterpolation(BoneCurvePY, CINTERPOLATION::LINEAR);
 							}
@@ -2536,10 +2551,10 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 
 							CKey* MotionKeyPZ = CKey::Alloc();//PZ
 							MotionKeyPZ->SetTime(BoneCurvePZ, MotionKeyTime);
-							MotionKeyPZ->SetValue(BoneCurvePZ, MotionFrame.position.z * PositionMultiple);
+							MotionKeyPZ->SetValue(BoneCurvePZ, MotionFrame.position.z * setting.PositionMultiple);
 							MotionKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 							MotionKeyPZ->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-							ValueOfTwoMotionFrames = NextMotionFrame.position.z * PositionMultiple - MotionFrame.position.z * PositionMultiple;
+							ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.PositionMultiple - MotionFrame.position.z * setting.PositionMultiple;
 							if (MotionFrame.ZCurve.ax == 127 - MotionFrame.ZCurve.bx && MotionFrame.ZCurve.ay == 127 - MotionFrame.ZCurve.by) {
 								MotionKeyPZ->SetInterpolation(BoneCurvePZ, CINTERPOLATION::LINEAR);
 							}
@@ -2556,7 +2571,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 							CKey* MotionKeyRX = CKey::Alloc();//RX
 							MotionKeyRX->SetTime(BoneCurveRX, MotionKeyTime);
 							MotionKeyRX->SetValue(BoneCurveRX, rotation.x);
-							if (!QuaternionRotationSW) {
+							if (!setting.QuaternionRotationSW) {
 								MotionKeyRX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 								MotionKeyRX->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 								ValueOfTwoMotionFrames = next_rotation.x - rotation.x;
@@ -2577,7 +2592,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 							CKey* MotionKeyRY = CKey::Alloc();//RY
 							MotionKeyRY->SetTime(BoneCurveRY, MotionKeyTime);
 							MotionKeyRY->SetValue(BoneCurveRY, rotation.y);
-							if (!QuaternionRotationSW) {
+							if (!setting.QuaternionRotationSW) {
 								MotionKeyRY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 								MotionKeyRY->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 								ValueOfTwoMotionFrames = next_rotation.y - rotation.y;
@@ -2598,7 +2613,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 							CKey* MotionKeyRZ = CKey::Alloc();//RZ
 							MotionKeyRZ->SetTime(BoneCurveRZ, MotionKeyTime);
 							MotionKeyRZ->SetValue(BoneCurveRZ, rotation.z);
-							if (!QuaternionRotationSW) {
+							if (!setting.QuaternionRotationSW) {
 								MotionKeyRZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 								MotionKeyRZ->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 								ValueOfTwoMotionFrames = next_rotation.z - rotation.z;
@@ -2620,7 +2635,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 					}
 				}
 				else {
-					if (QuaternionRotationSW && bone.obj->IsQuaternionRotationMode() == false) {
+					if (setting.QuaternionRotationSW && bone.obj->IsQuaternionRotationMode() == false) {
 						bone.obj->SetQuaternionRotationMode(true, false);
 					}
 					PMX_Bone_Tag* tag_data = bone.tag->GetNodeData<PMX_Bone_Tag>();
@@ -2704,14 +2719,14 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 								NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 							}
 							TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-							Int32 frame_no = MotionFrame.frame_no + TimeOffset;
+							Int32 frame_no = MotionFrame.frame_no + setting.TimeOffset;
 							MotionKeyTime = BaseTime(frame_no, 30);
 							if (Is_translatable) {
-								BoneCurvePX->AddKey(MotionKeyTime)->SetValue(BoneCurvePX, MotionFrame.position.x * PositionMultiple);
+								BoneCurvePX->AddKey(MotionKeyTime)->SetValue(BoneCurvePX, MotionFrame.position.x * setting.PositionMultiple);
 								tag_data->SetCurve(PMX_BONE_TAG_XCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.XCurve));
-								BoneCurvePY->AddKey(MotionKeyTime)->SetValue(BoneCurvePY, MotionFrame.position.y * PositionMultiple);
+								BoneCurvePY->AddKey(MotionKeyTime)->SetValue(BoneCurvePY, MotionFrame.position.y * setting.PositionMultiple);
 								tag_data->SetCurve(PMX_BONE_TAG_YCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.YCurve));
-								BoneCurvePZ->AddKey(MotionKeyTime)->SetValue(BoneCurvePZ, MotionFrame.position.z * PositionMultiple);
+								BoneCurvePZ->AddKey(MotionKeyTime)->SetValue(BoneCurvePZ, MotionFrame.position.z * setting.PositionMultiple);
 								tag_data->SetCurve(PMX_BONE_TAG_ZCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.ZCurve));
 							}
 							if (Is_rotatable) {
@@ -2726,7 +2741,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 								BoneCurveRX->AddKey(MotionKeyTime)->SetValue(BoneCurveRX, rotation.x);
 								BoneCurveRY->AddKey(MotionKeyTime)->SetValue(BoneCurveRY, rotation.y);
 								BoneCurveRZ->AddKey(MotionKeyTime)->SetValue(BoneCurveRZ, rotation.z);
-								if (!QuaternionRotationSW) {
+								if (!setting.QuaternionRotationSW) {
 									tag_data->SetCurve(PMX_BONE_TAG_RCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.RCurve));
 								}
 							}
@@ -2772,7 +2787,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 					StatusSetBar(morph_index * 100 / morph_frame_number);
 					MorphFrame = (*MorphFrameList)[morph_index];
 					CKey* MorphKey = CKey::Alloc();
-					MorphKey->SetTime(MorphCurve, BaseTime(MorphFrame.frame_no + TimeOffset, 30));
+					MorphKey->SetTime(MorphCurve, BaseTime(MorphFrame.frame_no + setting.TimeOffset, 30));
 					MorphKey->SetValue(MorphCurve, MorphFrame.weight);
 					MorphCurve->InsertKey(MorphKey);
 				}
@@ -2792,7 +2807,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 	doc->SetTime(BaseTime(1, 30));
 	doc->SetTime(BaseTime(0, 30));
 	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK, String::IntToString(bone_cnt), String::IntToString(morph_cnt), String::IntToString(motion_frame_bone_number + motion_frame_morph_number), String::FloatToString(timing.GetMilliseconds())) + "\n";
-	if (DetailReport == 1) {
+	if (setting.DetailReport == 1) {
 		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_S.GetCount())) + ":\n";
 		for (String i : not_find_bone_S)
 		{

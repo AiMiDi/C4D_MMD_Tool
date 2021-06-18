@@ -4,13 +4,13 @@
 #include "main.h"
 #include "NameConversion.h"
 #include "EncodingConversion.h"
-#include "ProcessProgressDialog.h"
-#include "MMD_PMX_tag.h"
+#include "MMD_PMX_Control.h"
 
 namespace mmd {
 
 	struct PMX_Model_import_settings
 	{
+		Float PositionMultiple;
 		Bool Import_polygon;
 		Bool Import_normal;
 		Bool Import_uv;
@@ -26,6 +26,7 @@ namespace mmd {
 	};
 
 	struct PMX_Model_export_settings {
+		Float PositionMultiple;
 		Bool Export_polygon;
 		Bool Export_normal;
 		Bool Export_uv;
@@ -61,8 +62,8 @@ namespace mmd {
 		~PMXModel();
 		maxon::Result<void> LoadFromFile(BaseFile* const file);
 		maxon::Result<void> WriteToFile(BaseFile* const file);
-		static maxon::Result<void> FromFileImportModel(Float &PositionMultiple, PMX_Model_import_settings& settings);
-		static maxon::Result<void> FromDocumentExportModel(Float& PositionMultiple, PMX_Model_export_settings& settings);
+		static maxon::Result<void> FromFileImportModel(PMX_Model_import_settings& settings);
+		static maxon::Result<void> FromDocumentExportModel(PMX_Model_export_settings& settings);
 	};
 }
 #endif __MMD_VMD_MODEl_H__

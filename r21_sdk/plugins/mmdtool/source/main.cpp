@@ -12,6 +12,8 @@ Bool PluginStart()
 		return false;
 	if (!RegisterVMDCamDrawSceneHook())
 		return false;
+	if (!RegisterC4DBulletTest())
+		return false;
 	return true;
 }
 

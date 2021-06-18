@@ -48,9 +48,6 @@
     <ClCompile Include="..\source\MMD_PMX_model.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\MMD_PMX_tag.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\MMD_VMD_animation.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -60,10 +57,13 @@
     <ClCompile Include="..\source\PluginRegister.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\ProcessProgressDialog.cpp">
+    <ClCompile Include="..\source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\main.cpp">
+    <ClCompile Include="..\source\BulletTest.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MMD_PMX_Control.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -197,7 +197,7 @@
     <ClInclude Include="..\source\MMD_PMX_model.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\MMD_PMX_tag.h">
+    <ClInclude Include="..\source\MMD_PMX_Control.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\source\MMD_VMD_animation.h">
@@ -209,11 +209,18 @@
     <ClInclude Include="..\source\NameConversion.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\ProcessProgressDialog.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\main.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\BulletTest.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\description\PMX_Bone_Tag.res">
+      <Filter>res\description</Filter>
+    </None>
+    <None Include="..\res\description\PMX_Model_Tag.res" />
+    <None Include="..\res\description\VMD_Cam_Obj.res" />
   </ItemGroup>
 </Project>

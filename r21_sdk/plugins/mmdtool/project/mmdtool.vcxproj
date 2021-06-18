@@ -25,6 +25,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
+    <UseDebugLibraries>true</UseDebugLibraries>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -69,25 +70,30 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>..\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>..\..\..\yaml_cpp\include;..\..\..\bullet\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>..\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>..\..\..\yaml_cpp\include;..\..\..\bullet\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\bullet\src</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../include;../include/yaml-cpp;../include/yaml-cpp/contrib;../include/yaml-cpp/node;../include/yaml-cpp/node/detail;../res;../res/description;../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../generated/hxx;../include;../include/yaml-cpp;../include/yaml-cpp/contrib;../include/yaml-cpp/node;../include/yaml-cpp/node/detail;../res;../res/description;../source;..\..\..\bullet\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;_DEBUG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <IgnoreSpecificDefaultLibraries />
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>yaml-cpp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;..\..\..\yaml_cpp\project\Debug\yaml-cppd.lib;..\..\..\bullet\bin\BulletDynamics_vs2010_x64_debug.lib;..\..\..\bullet\bin\BulletCollision_vs2010_x64_debug.lib;..\..\..\bullet\bin\LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -99,13 +105,14 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../include;../include/yaml-cpp;../include/yaml-cpp/contrib;../include/yaml-cpp/node;../include/yaml-cpp/node/detail;../res;../res/description;../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>yaml-cpp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;..\..\..\yaml_cpp\project\Release\yaml-cpp.lib;..\..\..\bullet\bin\LinearMath_vs2010_x64_release.lib;..\..\..\bullet\bin\BulletCollision_vs2010_x64_release.lib;..\..\..\bullet\bin\BulletDynamics_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -176,18 +183,27 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\bullet\build3\vs2010\BulletCollision.vcxproj">
+      <Project>{ef3aa8ed-16b6-1242-90f3-28a9e9271d16}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\bullet\build3\vs2010\BulletDynamics.vcxproj">
+      <Project>{eb508bab-bb29-1643-aeeb-1af40754e395}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\bullet\build3\vs2010\LinearMath.vcxproj">
+      <Project>{59465160-044d-554d-bf26-5a2da1ad274c}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
     <ClCompile Include="..\generated\hxx\register.cpp" />
+    <ClCompile Include="..\source\BulletTest.cpp" />
     <ClCompile Include="..\source\EncodingConversion.cpp" />
     <ClCompile Include="..\source\ImagesGUI.cpp" />
+    <ClCompile Include="..\source\MMD_PMX_Control.cpp" />
     <ClCompile Include="..\source\MMD_PMX_model.cpp" />
-    <ClCompile Include="..\source\MMD_PMX_tag.cpp" />
     <ClCompile Include="..\source\MMD_VMD_animation.cpp" />
     <ClCompile Include="..\source\NameConversion.cpp" />
     <ClCompile Include="..\source\PluginRegister.cpp" />
-    <ClCompile Include="..\source\ProcessProgressDialog.cpp" />
     <ClCompile Include="..\source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -231,15 +247,20 @@
     <ClInclude Include="..\res\description\PMX_Bone_Tag.h" />
     <ClInclude Include="..\res\description\PMX_Model_Tag.h" />
     <ClInclude Include="..\res\description\VMD_Cam_Obj.h" />
+    <ClInclude Include="..\source\BulletTest.h" />
     <ClInclude Include="..\source\EncodingConversion.h" />
     <ClInclude Include="..\source\ImagesGUI.h" />
     <ClInclude Include="..\source\MMD_PMX_model.h" />
-    <ClInclude Include="..\source\MMD_PMX_tag.h" />
+    <ClInclude Include="..\source\MMD_PMX_Control.h" />
     <ClInclude Include="..\source\MMD_VMD_animation.h" />
     <ClInclude Include="..\source\MMD_struct.h" />
     <ClInclude Include="..\source\NameConversion.h" />
-    <ClInclude Include="..\source\ProcessProgressDialog.h" />
     <ClInclude Include="..\source\main.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\description\PMX_Bone_Tag.res" />
+    <None Include="..\res\description\PMX_Model_Tag.res" />
+    <None Include="..\res\description\VMD_Cam_Obj.res" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

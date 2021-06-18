@@ -14,6 +14,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
+*.dll
 
 # Fortran module files
 *.mod
@@ -23,6 +24,7 @@
 *.lai
 *.la
 *.a
+*.lib
 
 # Executables
 *.exe
@@ -31,7 +33,6 @@
 
 r20_sdk/frameworks/
 
-r21_sdk/frameworks/
 
 r21_sdk/plugins/maxonsdk.module/
 
@@ -64,3 +65,13 @@ r20_sdk/plugins/project/.vs/
 r20_sdk/plugins/mmdtool/generated/
 
 r21_sdk/plugins/mmdtool/generated/
+
+r21_sdk/bullet/build3/vs2010/obj/
+
+r21_sdk/bullet/build3/vs2010/.vs/
+
+r21_sdk/yaml_cpp/project/.vs/
+
+r21_sdk/yaml_cpp/project/yaml-cpp.dir/
+
+r21_sdk/frameworks/

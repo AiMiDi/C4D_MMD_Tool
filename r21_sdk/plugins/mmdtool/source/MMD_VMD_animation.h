@@ -2,13 +2,43 @@
 #define __MMD_VMD_ANIMATION_H__
 
 #include "main.h"
-#include "MMD_PMX_tag.h"
+#include "MMD_PMX_Control.h"
 #include "EncodingConversion.h"
 #include "description/PMX_Bone_Tag.h"
 #include "description/VMD_Cam_Obj.h"
 
 namespace mmd{
 
+	struct VMD_Camera_import_settings
+	{
+		Float PositionMultiple = 8.5;
+		Float TimeOffset = 0;
+	};
+	struct VMD_Camera_export_settings
+	{
+		Float PositionMultiple = 8.5;
+		Float TimeOffset = 0;
+		Int32 use_rotation = 0;
+	};
+	struct VMD_Conversion_Camera_settings {
+		Float distance = 0;
+		Int32 use_rotation = 0;
+		BaseObject* str_cam = nullptr;
+	}; 
+	struct VMD_Motions_import_settings {
+		Float PositionMultiple = 8.5;
+		Float TimeOffset = 0;
+		Bool QuaternionRotationSW = true;
+		Bool DetailReport = false;
+		Bool ByTag = true;
+	};
+	struct VMD_Motions_export_settings {
+		Float PositionMultiple = 8.5;
+		Float TimeOffset = 0;
+		Bool QuaternionRotationSW;
+		Bool DetailReport;
+		Bool ByTag;
+	};
 	class VMDAnimation
 	{
 	private:
@@ -71,11 +101,11 @@ namespace mmd{
 		maxon::Result<void> WriteToFile(BaseFile* const file);
 
 		//从文件导入摄像机数据
-		static maxon::Result<void> FromFileImportCamera(Float PositionMultiple, Float TimeOffset);
+		static maxon::Result<void> FromFileImportCamera(VMD_Camera_import_settings setting);
 		//从项目导出摄像机数据
-		static maxon::Result<void> FromDocumentExportCamera(Float PositionMultiple, Float TimeOffset, Int32 use_rotation);
+		static maxon::Result<void> FromDocumentExportCamera(VMD_Camera_export_settings setting);
 		//从文件导入动作或表情数据
-		static maxon::Result<void> FromFileImportMotions(Float PositionMultiple, Float TimeOffset, Bool QuaternionRotationSW, Bool DetailReport, Bool ByTag);
+		static maxon::Result<void> FromFileImportMotions(VMD_Motions_import_settings setting);
 	};
 
 	class VMD_Cam_Obj : public ObjectData
@@ -103,7 +133,7 @@ namespace mmd{
 		// 用于限制SplineData的回调函数
 		static Bool SplineDataCallBack(Int32 cid, const void* data);
 		//将普通摄像机转换为MMD摄像机
-		static maxon::Result<BaseObject*> ConversionCamera(Float distance,Int32 use_rotation,BaseObject* str_cam = nullptr);
+		static maxon::Result<BaseObject*> ConversionCamera(VMD_Conversion_Camera_settings setting);
 		//获取曲线值
 		Bool GetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve);
 		//设置曲线值
