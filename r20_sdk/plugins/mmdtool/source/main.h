@@ -5,13 +5,15 @@
 #define ID_PMX_BONE_TAG 1056720
 //#define ID_PMX_BONE_INHERIT 1057256
 #define ID_PMX_DISPLAY_TAG 	1056721
-#define ID_PMX_RIGID_TAG 1056722
-#define ID_PMX_JOINT_TAG 1056723
+#define ID_PMX_RIGID_OBJ 1056722
+#define ID_PMX_JOINT_OBJ 1056723
 #define ID_PMX_MODEL_TAG 1056724
 #define ID_VMD_MOTION_TAG 1056979
 #define ID_VMD_CAM_OBJ 1056978
 #define ID_MMD_TOOL 1056563
 #define ID_VMD_CAM_DRAW 1057017
+#define ID_VMD_IMPORT 1057489
+#define ID_VMD_EXPORT 1057490;
 
 #include <memory>
 #include <fstream>
@@ -61,5 +63,7 @@ Bool RegisterPMXRigidTag();
 Bool RegisterPMXJointTag();*/
 Bool RegisterVMDCamDrawSceneHook();
 Bool RegisterMMDTool();
+Bool RegisterC4DBulletTest();
+Bool RegisterVMDImport();
 
 #endif // MAIN_H__

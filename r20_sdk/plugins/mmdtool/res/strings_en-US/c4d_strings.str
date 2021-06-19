@@ -31,6 +31,10 @@ STRINGTABLE
 	IDS_MES_CONFIRM_DELETE_FILE "Are you sure to delete the # configuration file?";
 	IDS_MES_CANNOT_DELETE_DEFAULT "The default configuration file cannot be deleted!";
 
+	IDS_MES_BONE_MORPH_DELETE "Do you want to delete # bone morph?";
+
+        IDS_MES_IMPORT_VMD_CAM_ONLY "Only support the drag and drop import of camera animation VMD files.Please open the plug-in GUI to import the model animation!";
+
 	IDS_VMD_TOOL_TITLE "MMD Tool";
 	IDS_VMD_CAM_TOOL_TITLE "Camera";
 	IDS_VMD_CAM_IMPORT_TITLE "Camera Import";
@@ -92,6 +96,15 @@ STRINGTABLE
 	IDS_NAME_CONVER_NEW_NAME "New config";
 	IDS_NAME_CONVER_NEW_ADD "New";
 	IDS_NAME_CONVER_NEW_INCREMENT_ADD "New increment";
+
+	IDS_BONE_TRANSLATION "Bone translation";
+	IDS_BONE_ROTATION "Bone rotation";
+	IDS_BONE_DELETE "Delete morph";
+	IDS_BONE_RENAME "Rename morph";
+
+	IDS_MSG_RENAME "Rename morph:";
+	IDS_MSG_RENAME_OK "OK";
+	IDS_MSG_RENAME_CANCEL "Cancel";
 
 	IDS_PMX_MATERIAL_TAG "PMX_Material_Tag";
 	IDS_PMX_BONE_TAG "PMX_Bone_Tag";

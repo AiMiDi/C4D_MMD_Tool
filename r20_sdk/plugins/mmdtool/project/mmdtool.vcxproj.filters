@@ -27,9 +27,6 @@
     <ClCompile Include="..\source\MMD_PMX_model.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\MMD_PMX_tag.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\MMD_VMD_animation.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -45,6 +42,12 @@
     <ClCompile Include="..\source\NameConversion.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\BulletTest.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MMD_PMX_Control.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\res\c4d_symbols.h">
@@ -57,9 +60,6 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\source\MMD_PMX_model.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\MMD_PMX_tag.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\source\MMD_VMD_animation.h">
@@ -82,6 +82,12 @@
     </ClInclude>
     <ClInclude Include="..\res\description\VMD_Cam_Obj.h">
       <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\BulletTest.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MMD_PMX_Control.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

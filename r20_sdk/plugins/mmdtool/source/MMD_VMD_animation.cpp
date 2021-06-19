@@ -38,7 +38,8 @@ Bool mmd::VMD_Cam_Obj::SplineDataCallBack(Int32 cid, const void* data)
 		限制就是把切线控制点正交投影切线到“[0，1]”。
 		如果要缩放向量，使位于[0，1]区间外部的控制柄以该控制柄接触该框边界的方式进行缩放。
 		*/
-		for (int i = 0; i < splineData->GetKnotCount(); i++)
+		const Int32 KnotCount = splineData->GetKnotCount();
+		for (Int32 i = 0; i < KnotCount; i++)
 		{
 			// 获取当前knot。
 			CustomSplineKnot* knot = splineData->GetKnot(i);
@@ -236,7 +237,8 @@ Bool mmd::VMD_Cam_Obj::UpdateAllCurve() {
 	if (Frame_onTrack != nullptr) {
 		CCurve* Frame_onCurve = Frame_onTrack->GetCurve();
 		if (Frame_onCurve != nullptr) {
-			for (Int32 i = 0; i < Frame_onCurve->GetKeyCount(); i++) {
+			const Int32 KeyCount = Frame_onCurve->GetKeyCount();
+			for (Int32 i = 0; i < KeyCount; i++) {
 				UpdateCurve(Frame_onCurve->GetKey(i)->GetValue());
 			}
 		}
@@ -669,8 +671,8 @@ Bool mmd::VMD_Cam_Obj::Message(GeListNode* node, Int32 type, void* data) {
 			KeyFrame_on->SetInterpolation(Frame_onCurve, CINTERPOLATION::STEP);
 			KeyFrame_on->ChangeNBit(NBIT::CKEY_LOCK_T, NBITCONTROL::SET);
 			KeyFrame_on->ChangeNBit(NBIT::CKEY_LOCK_V, NBITCONTROL::SET);
-
-			for (int i = 0; i < spline->GetKnotCount(); i++)
+			const Int32 KnotCount = spline->GetKnotCount();
+			for (int i = 0; i < KnotCount; i++)
 			{
 				// 获取当前knot。
 				CustomSplineKnot* knot = spline->GetKnot(i);
@@ -1210,7 +1212,7 @@ Bool mmd::VMD_Cam_Obj::AddToExecution(BaseObject* op, PriorityList* list) {
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return true;
 }
-maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, Int32 use_rotation, BaseObject* str_cam) {
+maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(VMD_Conversion_Camera_settings setting) {
 	//获取活动文档
 	BaseDocument* doc = GetActiveDocument();
 	if (doc == nullptr) {
@@ -1220,7 +1222,7 @@ maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, In
 	}
 	BaseObject* SelectObject = nullptr;
 
-	if (str_cam == nullptr) //若传入的参数非空则使用传入参数
+	if (setting.str_cam == nullptr) //若传入的参数非空则使用传入参数
 	{
 		//获取选中对象
 		SelectObject = doc->GetActiveObject();
@@ -1232,7 +1234,7 @@ maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, In
 	}
 	else //否则使用选择参数
 	{
-		SelectObject = str_cam;
+		SelectObject = setting.str_cam;
 	}
 
 	//判断选中对象类型是否为摄像机
@@ -1536,7 +1538,7 @@ maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, In
 				iferr(VMDCamera_data->VCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
 			}
 			iferr(VMDCamera_data->DCurve.Insert(frame_on, new mmd::VMD_Curve()))return nullptr;
-			switch (use_rotation)
+			switch (setting.use_rotation)
 			{
 			case 0:
 				Key = strCurveRX->GetKey(i);
@@ -1573,7 +1575,7 @@ maxon::Result<BaseObject*> mmd::VMD_Cam_Obj::ConversionCamera(Float distance, In
 			}
 		}
 	}
-	CameraCurveDistance->AddKey(BaseTime(0, 30))->SetValue(CameraCurveDistance, distance);
+	CameraCurveDistance->AddKey(BaseTime(0, 30))->SetValue(CameraCurveDistance, setting.distance);
 	EventAdd();
 	if (!VMDCamera_data->UpdateAllCurve())return nullptr;
 	doc->SetTime(BaseTime(1));
@@ -1601,7 +1603,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	{
 		if (!file->ReadBytes(VMDModelName, 10))return maxon::Error();
 		this->ModelName = EncodingConversion::JIStoUTF8(VMDModelName);
-		if (!this->ModelName.LexComparePart("カメラ・照明"_s, 12, 0) == 0) {
+		if (this->ModelName.LexComparePart("カメラ・照明"_s, 12, 0) == 0) {
 			this->IsCamera = 1;
 		}
 		else {
@@ -1618,137 +1620,137 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 		else {
 			this->IsCamera = 0;
 		}
-		if (!file->ReadUInt32(&(this->MotionFrameNumber)))return maxon::Error();
-		for (UInt32 i = 0; i < this->MotionFrameNumber; i++) {
-			//111 bytes
-			Char bone_name[15]{ 0 };
-			if (!file->ReadBytes(bone_name, 15))return maxon::Error();
-			if (!file->ReadUInt32(&(motion_frame.frame_no)))return maxon::Error();
-			if (!file->ReadFloat32(&(motion_frame.position.x)))return maxon::Error();
-			if (!file->ReadFloat32(&(motion_frame.position.y)))return maxon::Error();
-			if (!file->ReadFloat32(&(motion_frame.position.z)))return maxon::Error();
-			if (!file->ReadFloat32(&(motion_frame.rotation.x)))return maxon::Error();
-			if (!file->ReadFloat32(&(motion_frame.rotation.y)))return maxon::Error();
-			if (!file->ReadFloat32(&(motion_frame.rotation.z)))return maxon::Error();
-			if (!file->ReadFloat32(&(motion_frame.rotation.w)))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.XCurve.ax)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.XCurve.bx)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.XCurve.ay)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.XCurve.by)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.YCurve.ax)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.YCurve.bx)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.YCurve.ay)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.YCurve.by)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.ZCurve.ax)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.ZCurve.bx)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.ZCurve.ay)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.ZCurve.by)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.RCurve.ax)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.RCurve.bx)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.RCurve.ay)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			if (!file->ReadUChar(&(motion_frame.RCurve.by)))return maxon::Error();
-			if (!file->Seek(3))return maxon::Error();
-			motion_frame.XCurve.bx = 127 - motion_frame.XCurve.bx;
-			motion_frame.XCurve.by = 127 - motion_frame.XCurve.by;
-			motion_frame.YCurve.bx = 127 - motion_frame.YCurve.bx;
-			motion_frame.YCurve.by = 127 - motion_frame.YCurve.by;
-			motion_frame.ZCurve.bx = 127 - motion_frame.ZCurve.bx;
-			motion_frame.ZCurve.by = 127 - motion_frame.ZCurve.by;
-			motion_frame.RCurve.bx = 127 - motion_frame.RCurve.bx;
-			motion_frame.RCurve.by = 127 - motion_frame.RCurve.by;
-			motion_frame.bone_name = EncodingConversion::JIStoUTF8(bone_name);
-			this->motion_frames.Append(motion_frame)iferr_return;
-		}
-
-		if (!file->ReadUInt32(&(this->MorphFrameNumber)))return maxon::Error();
-		for (UInt32 i = 0; i < this->MorphFrameNumber; i++) {
-			//23 bytes
-			Char morph_name[15]{ 0 };
-			if (!file->ReadBytes(morph_name, 15))return maxon::Error();
-			if (!file->ReadUInt32(&(morph_frame.frame_no)))return maxon::Error();
-			if (!file->ReadFloat32(&(morph_frame.weight)))return maxon::Error();
-			morph_frame.morph_name = EncodingConversion::JIStoUTF8(morph_name);
-			this->morph_frames.Append(morph_frame)iferr_return;
-		}
-		if (!file->ReadUInt32(&(this->CameraFrameNumber)))return maxon::Error();
-		for (UInt32 i = 0; i < this->CameraFrameNumber; i++) {
-			//61 bytes
-			if (!file->ReadUInt32(&(camera_frame.frame_no)))return maxon::Error();
-			if (!file->ReadFloat32(&(camera_frame.distance)))return maxon::Error();
-			if (!file->ReadFloat32(&(camera_frame.position.x)))return maxon::Error();
-			if (!file->ReadFloat32(&(camera_frame.position.y)))return maxon::Error();
-			if (!file->ReadFloat32(&(camera_frame.position.z)))return maxon::Error();
-			if (!file->ReadFloat32(&(camera_frame.rotation.y)))return maxon::Error();
-			if (!file->ReadFloat32(&(camera_frame.rotation.x)))return maxon::Error();
-			if (!file->ReadFloat32(&(camera_frame.rotation.z)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.XCurve.ax)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.XCurve.bx)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.XCurve.ay)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.XCurve.by)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.YCurve.ax)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.YCurve.bx)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.YCurve.ay)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.YCurve.by)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.ZCurve.ax)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.ZCurve.bx)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.ZCurve.ay)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.ZCurve.by)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.RCurve.ax)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.RCurve.bx)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.RCurve.ay)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.RCurve.by)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.DCurve.ax)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.DCurve.bx)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.DCurve.ay)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.DCurve.by)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.VCurve.ax)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.VCurve.bx)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.VCurve.ay)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.VCurve.by)))return maxon::Error();
-			camera_frame.XCurve.bx = 127 - camera_frame.XCurve.bx;
-			camera_frame.XCurve.by = 127 - camera_frame.XCurve.by;
-			camera_frame.YCurve.bx = 127 - camera_frame.YCurve.bx;
-			camera_frame.YCurve.by = 127 - camera_frame.YCurve.by;
-			camera_frame.ZCurve.bx = 127 - camera_frame.ZCurve.bx;
-			camera_frame.ZCurve.by = 127 - camera_frame.ZCurve.by;
-			camera_frame.RCurve.bx = 127 - camera_frame.RCurve.bx;
-			camera_frame.RCurve.by = 127 - camera_frame.RCurve.by;
-			camera_frame.DCurve.bx = 127 - camera_frame.DCurve.bx;
-			camera_frame.DCurve.by = 127 - camera_frame.DCurve.by;
-			camera_frame.VCurve.bx = 127 - camera_frame.VCurve.bx;
-			camera_frame.VCurve.by = 127 - camera_frame.VCurve.by;
-			if (!file->ReadUInt32(&(camera_frame.viewing_angle)))return maxon::Error();
-			if (!file->ReadUChar(&(camera_frame.perspective)))return maxon::Error();
-			this->camera_frames.Append(camera_frame)iferr_return;
-		}
-
-		if (!file->ReadUInt32(&(this->LightFrameNumber)))return maxon::Error();
-		for (UInt32 i = 0; i < this->LightFrameNumber; i++) {
-			//28 bytes
-			if (!file->ReadBytes(&light_frame, 28))return maxon::Error();
-			this->light_frames.Append(light_frame)iferr_return;
-		}
 	}
 	else
 	{
 		GePrint("File corruption or unknown version"_s);
 		MessageDialog("Import failed; File corruption or unknown version"_s);
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, "File corruption or unknown version"_s);
+	}
+	if (!file->ReadUInt32(&(this->MotionFrameNumber)))return maxon::Error();
+	for (UInt32 i = 0; i < this->MotionFrameNumber; i++) {
+		//111 bytes
+		Char bone_name[15]{ 0 };
+		if (!file->ReadBytes(bone_name, 15))return maxon::Error();
+		if (!file->ReadUInt32(&(motion_frame.frame_no)))return maxon::Error();
+		if (!file->ReadFloat32(&(motion_frame.position.x)))return maxon::Error();
+		if (!file->ReadFloat32(&(motion_frame.position.y)))return maxon::Error();
+		if (!file->ReadFloat32(&(motion_frame.position.z)))return maxon::Error();
+		if (!file->ReadFloat32(&(motion_frame.rotation.x)))return maxon::Error();
+		if (!file->ReadFloat32(&(motion_frame.rotation.y)))return maxon::Error();
+		if (!file->ReadFloat32(&(motion_frame.rotation.z)))return maxon::Error();
+		if (!file->ReadFloat32(&(motion_frame.rotation.w)))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.XCurve.ax)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.XCurve.bx)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.XCurve.ay)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.XCurve.by)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.YCurve.ax)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.YCurve.bx)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.YCurve.ay)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.YCurve.by)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.ZCurve.ax)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.ZCurve.bx)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.ZCurve.ay)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.ZCurve.by)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.RCurve.ax)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.RCurve.bx)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.RCurve.ay)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		if (!file->ReadUChar(&(motion_frame.RCurve.by)))return maxon::Error();
+		if (!file->Seek(3))return maxon::Error();
+		motion_frame.XCurve.bx = 127 - motion_frame.XCurve.bx;
+		motion_frame.XCurve.by = 127 - motion_frame.XCurve.by;
+		motion_frame.YCurve.bx = 127 - motion_frame.YCurve.bx;
+		motion_frame.YCurve.by = 127 - motion_frame.YCurve.by;
+		motion_frame.ZCurve.bx = 127 - motion_frame.ZCurve.bx;
+		motion_frame.ZCurve.by = 127 - motion_frame.ZCurve.by;
+		motion_frame.RCurve.bx = 127 - motion_frame.RCurve.bx;
+		motion_frame.RCurve.by = 127 - motion_frame.RCurve.by;
+		motion_frame.bone_name = EncodingConversion::JIStoUTF8(bone_name);
+		this->motion_frames.Append(motion_frame)iferr_return;
+	}
+
+	if (!file->ReadUInt32(&(this->MorphFrameNumber)))return maxon::Error();
+	for (UInt32 i = 0; i < this->MorphFrameNumber; i++) {
+		//23 bytes
+		Char morph_name[15]{ 0 };
+		if (!file->ReadBytes(morph_name, 15))return maxon::Error();
+		if (!file->ReadUInt32(&(morph_frame.frame_no)))return maxon::Error();
+		if (!file->ReadFloat32(&(morph_frame.weight)))return maxon::Error();
+		morph_frame.morph_name = EncodingConversion::JIStoUTF8(morph_name);
+		this->morph_frames.Append(morph_frame)iferr_return;
+	}
+	if (!file->ReadUInt32(&(this->CameraFrameNumber)))return maxon::Error();
+	for (UInt32 i = 0; i < this->CameraFrameNumber; i++) {
+		//61 bytes
+		if (!file->ReadUInt32(&(camera_frame.frame_no)))return maxon::Error();
+		if (!file->ReadFloat32(&(camera_frame.distance)))return maxon::Error();
+		if (!file->ReadFloat32(&(camera_frame.position.x)))return maxon::Error();
+		if (!file->ReadFloat32(&(camera_frame.position.y)))return maxon::Error();
+		if (!file->ReadFloat32(&(camera_frame.position.z)))return maxon::Error();
+		if (!file->ReadFloat32(&(camera_frame.rotation.y)))return maxon::Error();
+		if (!file->ReadFloat32(&(camera_frame.rotation.x)))return maxon::Error();
+		if (!file->ReadFloat32(&(camera_frame.rotation.z)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.XCurve.ax)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.XCurve.bx)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.XCurve.ay)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.XCurve.by)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.YCurve.ax)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.YCurve.bx)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.YCurve.ay)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.YCurve.by)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.ZCurve.ax)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.ZCurve.bx)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.ZCurve.ay)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.ZCurve.by)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.RCurve.ax)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.RCurve.bx)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.RCurve.ay)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.RCurve.by)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.DCurve.ax)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.DCurve.bx)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.DCurve.ay)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.DCurve.by)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.VCurve.ax)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.VCurve.bx)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.VCurve.ay)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.VCurve.by)))return maxon::Error();
+		camera_frame.XCurve.bx = 127 - camera_frame.XCurve.bx;
+		camera_frame.XCurve.by = 127 - camera_frame.XCurve.by;
+		camera_frame.YCurve.bx = 127 - camera_frame.YCurve.bx;
+		camera_frame.YCurve.by = 127 - camera_frame.YCurve.by;
+		camera_frame.ZCurve.bx = 127 - camera_frame.ZCurve.bx;
+		camera_frame.ZCurve.by = 127 - camera_frame.ZCurve.by;
+		camera_frame.RCurve.bx = 127 - camera_frame.RCurve.bx;
+		camera_frame.RCurve.by = 127 - camera_frame.RCurve.by;
+		camera_frame.DCurve.bx = 127 - camera_frame.DCurve.bx;
+		camera_frame.DCurve.by = 127 - camera_frame.DCurve.by;
+		camera_frame.VCurve.bx = 127 - camera_frame.VCurve.bx;
+		camera_frame.VCurve.by = 127 - camera_frame.VCurve.by;
+		if (!file->ReadUInt32(&(camera_frame.viewing_angle)))return maxon::Error();
+		if (!file->ReadUChar(&(camera_frame.perspective)))return maxon::Error();
+		this->camera_frames.Append(camera_frame)iferr_return;
+	}
+
+	if (!file->ReadUInt32(&(this->LightFrameNumber)))return maxon::Error();
+	for (UInt32 i = 0; i < this->LightFrameNumber; i++) {
+		//28 bytes
+		if (!file->ReadBytes(&light_frame, 28))return maxon::Error();
+		this->light_frames.Append(light_frame)iferr_return;
 	}
 	return maxon::OK;
 }
@@ -1856,18 +1858,29 @@ maxon::Result<void> mmd::VMDAnimation::WriteToFile(BaseFile* const file) {
 	}
 	return maxon::OK;
 }
-maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultiple, Float TimeOffset) {
+maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_settings setting) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc <BaseFile> file;
-	BaseDocument* doc = GetActiveDocument();
-	if (doc == nullptr) {
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + "error");
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR));
-		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+	BaseDocument* doc;
+	if (setting.doc == nullptr) {
+		doc = GetActiveDocument();
+		if (doc == nullptr) {
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + "error");
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR));
+			return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+		}
 	}
-	if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE))) {
-		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+	else {
+		doc = setting.doc;
+	}
+	if (setting.fn == Filename()) {
+		if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE))) {
+			return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+		}
+	}
+	else {
+		fn = setting.fn;
 	}
 	if (file == nullptr) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -1954,11 +1967,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultip
 		BaseTime KeyTime = BaseTime(0, 30);
 		Int32 KeyFrame;
 		mmd::VMD_Camera CameraFrame, NextCameraFrame;
-		UInt32 camera_frame_number = mmd_animation->CameraFrameNumber;
+		const UInt32 camera_frame_number = mmd_animation->CameraFrameNumber;
 		for (UInt32 camera_frame_index = 0; camera_frame_index < camera_frame_number; camera_frame_index++)
 		{
 			StatusSetText("Import camera..."_s);
-			StatusSetBar(camera_frame_index * 100 / camera_frame_number);
+			StatusSetSpin();
 			if (camera_frame_index == 0 && camera_frame_number != 1)
 			{
 				CameraFrame = mmd_animation->camera_frames[camera_frame_index];
@@ -1973,26 +1986,26 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultip
 				CameraFrame = NextCameraFrame;
 				NextCameraFrame = mmd_animation->camera_frames[camera_frame_index + 1];
 			}
-			KeyFrame = CameraFrame.frame_no + TimeOffset + 1.0;
+			KeyFrame = CameraFrame.frame_no + setting.TimeOffset + 1.0;
 			KeyTime = BaseTime(KeyFrame, 30);
 
 			CKey* CameraKeyPX = CKey::Alloc();//PX
 			CameraKeyPX->SetTime(CameraCurvePX, KeyTime);
-			CameraKeyPX->SetValue(CameraCurvePX, CameraFrame.position.x * PositionMultiple);
+			CameraKeyPX->SetValue(CameraCurvePX, CameraFrame.position.x * setting.PositionMultiple);
 			CameraKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePX->InsertKey(CameraKeyPX);
 			VMDCamera_data->SetCurve(VMD_CAM_OBJ_XCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.XCurve));
 
 			CKey* CameraKeyPY = CKey::Alloc();//PY
 			CameraKeyPY->SetTime(CameraCurvePY, KeyTime);
-			CameraKeyPY->SetValue(CameraCurvePY, CameraFrame.position.y * PositionMultiple);
+			CameraKeyPY->SetValue(CameraCurvePY, CameraFrame.position.y * setting.PositionMultiple);
 			CameraKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePY->InsertKey(CameraKeyPY);
 			VMDCamera_data->SetCurve(VMD_CAM_OBJ_YCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.YCurve));
 
 			CKey* CameraKeyPZ = CKey::Alloc();//PZ
 			CameraKeyPZ->SetTime(CameraCurvePZ, KeyTime);
-			CameraKeyPZ->SetValue(CameraCurvePZ, CameraFrame.position.z * PositionMultiple);
+			CameraKeyPZ->SetValue(CameraCurvePZ, CameraFrame.position.z * setting.PositionMultiple);
 			CameraKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePZ->InsertKey(CameraKeyPZ);
 			VMDCamera_data->SetCurve(VMD_CAM_OBJ_ZCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.ZCurve));
@@ -2018,7 +2031,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultip
 
 			CKey* CameraKeyDistance = CKey::Alloc();;
 			CameraKeyDistance->SetTime(CameraCurveDistance, KeyTime);
-			CameraKeyDistance->SetValue(CameraCurveDistance, CameraFrame.distance * PositionMultiple);
+			CameraKeyDistance->SetValue(CameraCurveDistance, CameraFrame.distance * setting.PositionMultiple);
 			CameraKeyDistance->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurveDistance->InsertKey(CameraKeyDistance);
 			VMDCamera_data->SetCurve(VMD_CAM_OBJ_DCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.DCurve));
@@ -2047,11 +2060,12 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(Float PositionMultip
 		return maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_CAM_ERR));
 	}
 }
-maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMultiple, Float TimeOffset, Int32 use_rotation) {
+maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_export_settings setting) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc<BaseFile> file;
 	BaseDocument* doc = GetActiveDocument();
+	setting.PositionMultiple /= 1;
 	if (doc == nullptr) {
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
@@ -2083,7 +2097,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMu
 	BaseObject* CameraObj = nullptr;
 	if (SelectObject->GetType() == Ocamera) //选择对象为普通摄像机则转化
 	{
-		auto res = VMD_Cam_Obj::ConversionCamera(0., use_rotation, SelectObject);
+		auto res = VMD_Cam_Obj::ConversionCamera(VMD_Conversion_Camera_settings{ 0., setting.use_rotation, SelectObject });
 		iferr(res.GetError())return maxon::Error();
 		CameraObj = res.GetValue();
 	}
@@ -2183,10 +2197,10 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMu
 		StatusSetSpin();
 		mmd::VMD_Camera CameraFrame;
 		Int32 Frame_on = CameraCurveFrame_on->GetKey(frame_index)->GetValue();
-		CameraFrame.frame_no = Frame_on + TimeOffset;
-		CameraFrame.position = vec3(CameraCurvePX->GetKey(frame_index)->GetValue() * PositionMultiple, CameraCurvePY->GetKey(frame_index)->GetValue() * PositionMultiple, CameraCurvePZ->GetKey(frame_index)->GetValue() * PositionMultiple);
+		CameraFrame.frame_no = Frame_on + setting.TimeOffset;
+		CameraFrame.position = vec3(CameraCurvePX->GetKey(frame_index)->GetValue() * setting.PositionMultiple, CameraCurvePY->GetKey(frame_index)->GetValue() * setting.PositionMultiple, CameraCurvePZ->GetKey(frame_index)->GetValue() * setting.PositionMultiple);
 		CameraFrame.rotation = vec3(CameraCurveRX->GetKey(frame_index)->GetValue(), CameraCurveRY->GetKey(frame_index)->GetValue(), CameraCurveRZ->GetKey(frame_index)->GetValue());
-		CameraFrame.distance = CameraCurveDistance->GetKey(frame_index)->GetValue() * PositionMultiple;
+		CameraFrame.distance = CameraCurveDistance->GetKey(frame_index)->GetValue() * setting.PositionMultiple;
 		CameraFrame.viewing_angle = CameraCurveAOV->GetKey(frame_index)->GetValue();
 		CameraFrame.perspective = 0;
 		VMDCamera_data->GetCurve(VMD_CAM_OBJ_XCURVE, Frame_on, &CameraFrame.XCurve);
@@ -2216,7 +2230,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(Float PositionMu
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::UIntToString(mmd_animation->CameraFrameNumber), String::FloatToString(timing.GetMilliseconds())));
 	return maxon::OK;
 }
-maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMultiple, Float TimeOffset, Bool QuaternionRotationSW, Bool DetailReport, Bool ByTag) {
+maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_settings setting) {
 	iferr_scope;
 	Filename fn;
 	AutoAlloc<BaseFile> file;
@@ -2226,13 +2240,13 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR));
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
+	if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE))) {
+		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
+	}
 	BaseObject* SelectObject = doc->GetActiveObject();
 	if (SelectObject == nullptr) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
-		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
-	}
-	if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE))) {
 		return maxon::NullptrError(MAXON_SOURCE_LOCATION);
 	}
 	if (file == nullptr) {
@@ -2282,10 +2296,21 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 		{
 			if (node->GetType() == Ojoint)
 			{
-				if (ByTag) {
+				if (setting.ByTag) {
 					BaseTag* node_tag = node->GetTag(ID_PMX_BONE_TAG);
 					if (node_tag != nullptr) {
-
+						PMX_Bone_Tag* pmx_bone_tag_data = node_tag->GetNodeData<PMX_Bone_Tag>();
+						for(bone_morph_data& i : pmx_bone_tag_data->bone_morph_data_arr) {
+							auto morph_arr_ptr = morph_name_map.Find(i.name);
+							if (morph_arr_ptr == nullptr) {
+								maxon::BaseList<morph_id_tag>morph_arr;
+								morph_arr.Append(morph_id_tag{ i.strength_id,node_tag })iferr_return;
+								morph_name_map.Insert(i.name, morph_arr)iferr_return;
+							}
+							else {
+								morph_arr_ptr->GetValue().Append(morph_id_tag{ i.strength_id,node_tag })iferr_return;
+							}
+						}
 						node_tag->GetParameter(DescID(BONE_NAME_LOCAL), data, DESCFLAGS_GET::NONE);
 						String bone_name = data.GetString();
 						auto bone_arr_ptr = bone_name_map.Find(bone_name);
@@ -2329,7 +2354,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 			if (tag != nullptr && tag->IsInstanceOf(Tposemorph))
 			{
 				CAPoseMorphTag* const pose_morph_tag = static_cast<CAPoseMorphTag*>(tag);
-				for (Int32 i = 0; i < pose_morph_tag->GetMorphCount(); i++)
+				const Int32 MorphCount = pose_morph_tag->GetMorphCount();
+				for (Int32 i = 0; i < MorphCount; i++)
 				{
 					String morph_name = pose_morph_tag->GetMorph(i)->GetName();
 					auto morph_arr_ptr = morph_name_map.Find(morph_name);
@@ -2425,7 +2451,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 				if (bone.tag == nullptr) {
 					if (bone.obj != nullptr)
 					{
-						if (QuaternionRotationSW && bone.obj->IsQuaternionRotationMode() == false) {
+						if (setting.QuaternionRotationSW && bone.obj->IsQuaternionRotationMode() == false) {
 							bone.obj->SetQuaternionRotationMode(true, false);
 						}
 						CTrack* BoneTrackPX = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
@@ -2469,7 +2495,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 						for (Int32 motion_index = 0; motion_index < motion_frame_number; motion_index++)
 						{
 							StatusSetText("Import motion of bone " + String::IntToString(bone_cnt) + "/" + motion_frame_bone_number_S);
-							StatusSetBar(motion_index * 100 / motion_frame_number);
+							StatusSetSpin();
 							if (motion_index == 0 && motion_frame_number != 1)
 							{
 								MotionFrame = MotionFrameList->operator[](motion_index);
@@ -2485,7 +2511,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 								NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 							}
 							TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-							MotionKeyTime = BaseTime(MotionFrame.frame_no + TimeOffset, 30);
+							MotionKeyTime = BaseTime(MotionFrame.frame_no + setting.TimeOffset, 30);
 
 							Vector32 rotation;
 							rotation.x = -maxon::ATan2(2 * MotionFrame.rotation.y * MotionFrame.rotation.w + 2 * MotionFrame.rotation.x * MotionFrame.rotation.z, 1 - 2 * (MotionFrame.rotation.x * MotionFrame.rotation.x + MotionFrame.rotation.y * MotionFrame.rotation.y));
@@ -2498,10 +2524,10 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 
 							CKey* MotionKeyPX = CKey::Alloc();//PX
 							MotionKeyPX->SetTime(BoneCurvePX, MotionKeyTime);
-							MotionKeyPX->SetValue(BoneCurvePX, MotionFrame.position.x * PositionMultiple);
+							MotionKeyPX->SetValue(BoneCurvePX, MotionFrame.position.x * setting.PositionMultiple);
 							MotionKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 							MotionKeyPX->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-							ValueOfTwoMotionFrames = NextMotionFrame.position.x * PositionMultiple - MotionFrame.position.x * PositionMultiple;
+							ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.PositionMultiple - MotionFrame.position.x * setting.PositionMultiple;
 							if (MotionFrame.XCurve.ax == 127 - MotionFrame.XCurve.bx && MotionFrame.XCurve.ay == 127 - MotionFrame.XCurve.by) {
 								MotionKeyPX->SetInterpolation(BoneCurvePX, CINTERPOLATION::LINEAR);
 							}
@@ -2517,10 +2543,10 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 
 							CKey* MotionKeyPY = CKey::Alloc();//PY
 							MotionKeyPY->SetTime(BoneCurvePY, MotionKeyTime);
-							MotionKeyPY->SetValue(BoneCurvePY, MotionFrame.position.y * PositionMultiple);
+							MotionKeyPY->SetValue(BoneCurvePY, MotionFrame.position.y * setting.PositionMultiple);
 							MotionKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 							MotionKeyPY->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-							ValueOfTwoMotionFrames = NextMotionFrame.position.y * PositionMultiple - MotionFrame.position.y * PositionMultiple;
+							ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.PositionMultiple - MotionFrame.position.y * setting.PositionMultiple;
 							if (MotionFrame.YCurve.ax == 127 - MotionFrame.YCurve.bx && MotionFrame.YCurve.ay == 127 - MotionFrame.YCurve.by) {
 								MotionKeyPY->SetInterpolation(BoneCurvePY, CINTERPOLATION::LINEAR);
 							}
@@ -2536,10 +2562,10 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 
 							CKey* MotionKeyPZ = CKey::Alloc();//PZ
 							MotionKeyPZ->SetTime(BoneCurvePZ, MotionKeyTime);
-							MotionKeyPZ->SetValue(BoneCurvePZ, MotionFrame.position.z * PositionMultiple);
+							MotionKeyPZ->SetValue(BoneCurvePZ, MotionFrame.position.z * setting.PositionMultiple);
 							MotionKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 							MotionKeyPZ->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-							ValueOfTwoMotionFrames = NextMotionFrame.position.z * PositionMultiple - MotionFrame.position.z * PositionMultiple;
+							ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.PositionMultiple - MotionFrame.position.z * setting.PositionMultiple;
 							if (MotionFrame.ZCurve.ax == 127 - MotionFrame.ZCurve.bx && MotionFrame.ZCurve.ay == 127 - MotionFrame.ZCurve.by) {
 								MotionKeyPZ->SetInterpolation(BoneCurvePZ, CINTERPOLATION::LINEAR);
 							}
@@ -2556,7 +2582,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 							CKey* MotionKeyRX = CKey::Alloc();//RX
 							MotionKeyRX->SetTime(BoneCurveRX, MotionKeyTime);
 							MotionKeyRX->SetValue(BoneCurveRX, rotation.x);
-							if (!QuaternionRotationSW) {
+							if (!setting.QuaternionRotationSW) {
 								MotionKeyRX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 								MotionKeyRX->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 								ValueOfTwoMotionFrames = next_rotation.x - rotation.x;
@@ -2577,7 +2603,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 							CKey* MotionKeyRY = CKey::Alloc();//RY
 							MotionKeyRY->SetTime(BoneCurveRY, MotionKeyTime);
 							MotionKeyRY->SetValue(BoneCurveRY, rotation.y);
-							if (!QuaternionRotationSW) {
+							if (!setting.QuaternionRotationSW) {
 								MotionKeyRY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 								MotionKeyRY->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 								ValueOfTwoMotionFrames = next_rotation.y - rotation.y;
@@ -2598,7 +2624,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 							CKey* MotionKeyRZ = CKey::Alloc();//RZ
 							MotionKeyRZ->SetTime(BoneCurveRZ, MotionKeyTime);
 							MotionKeyRZ->SetValue(BoneCurveRZ, rotation.z);
-							if (!QuaternionRotationSW) {
+							if (!setting.QuaternionRotationSW) {
 								MotionKeyRZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 								MotionKeyRZ->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 								ValueOfTwoMotionFrames = next_rotation.z - rotation.z;
@@ -2620,7 +2646,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 					}
 				}
 				else {
-					if (QuaternionRotationSW && bone.obj->IsQuaternionRotationMode() == false) {
+					if (setting.QuaternionRotationSW && bone.obj->IsQuaternionRotationMode() == false) {
 						bone.obj->SetQuaternionRotationMode(true, false);
 					}
 					PMX_Bone_Tag* tag_data = bone.tag->GetNodeData<PMX_Bone_Tag>();
@@ -2688,7 +2714,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 						for (Int32 motion_index = 0; motion_index < motion_frame_number; motion_index++)
 						{
 							StatusSetText("Import motion of bone " + String::IntToString(bone_cnt) + "/" + motion_frame_bone_number_S);
-							StatusSetBar(motion_index * 100 / motion_frame_number);
+							StatusSetSpin();
 							if (motion_index == 0 && motion_frame_number != 1)
 							{
 								MotionFrame = MotionFrameList->operator[](motion_index);
@@ -2704,14 +2730,14 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 								NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 							}
 							TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-							Int32 frame_no = MotionFrame.frame_no + TimeOffset;
+							Int32 frame_no = MotionFrame.frame_no + setting.TimeOffset;
 							MotionKeyTime = BaseTime(frame_no, 30);
 							if (Is_translatable) {
-								BoneCurvePX->AddKey(MotionKeyTime)->SetValue(BoneCurvePX, MotionFrame.position.x * PositionMultiple);
+								BoneCurvePX->AddKey(MotionKeyTime)->SetValue(BoneCurvePX, MotionFrame.position.x * setting.PositionMultiple);
 								tag_data->SetCurve(PMX_BONE_TAG_XCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.XCurve));
-								BoneCurvePY->AddKey(MotionKeyTime)->SetValue(BoneCurvePY, MotionFrame.position.y * PositionMultiple);
+								BoneCurvePY->AddKey(MotionKeyTime)->SetValue(BoneCurvePY, MotionFrame.position.y * setting.PositionMultiple);
 								tag_data->SetCurve(PMX_BONE_TAG_YCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.YCurve));
-								BoneCurvePZ->AddKey(MotionKeyTime)->SetValue(BoneCurvePZ, MotionFrame.position.z * PositionMultiple);
+								BoneCurvePZ->AddKey(MotionKeyTime)->SetValue(BoneCurvePZ, MotionFrame.position.z * setting.PositionMultiple);
 								tag_data->SetCurve(PMX_BONE_TAG_ZCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.ZCurve));
 							}
 							if (Is_rotatable) {
@@ -2726,7 +2752,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 								BoneCurveRX->AddKey(MotionKeyTime)->SetValue(BoneCurveRX, rotation.x);
 								BoneCurveRY->AddKey(MotionKeyTime)->SetValue(BoneCurveRY, rotation.y);
 								BoneCurveRZ->AddKey(MotionKeyTime)->SetValue(BoneCurveRZ, rotation.z);
-								if (!QuaternionRotationSW) {
+								if (!setting.QuaternionRotationSW) {
 									tag_data->SetCurve(PMX_BONE_TAG_RCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.RCurve));
 								}
 							}
@@ -2769,10 +2795,10 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 				for (Int32 morph_index = 0; morph_index < morph_frame_number; morph_index++)
 				{
 					StatusSetText("Import motion of morph " + String::IntToString(morph_cnt) + "/" + motion_frame_morph_number_S);
-					StatusSetBar(morph_index * 100 / morph_frame_number);
+					StatusSetSpin();
 					MorphFrame = (*MorphFrameList)[morph_index];
 					CKey* MorphKey = CKey::Alloc();
-					MorphKey->SetTime(MorphCurve, BaseTime(MorphFrame.frame_no + TimeOffset, 30));
+					MorphKey->SetTime(MorphCurve, BaseTime(MorphFrame.frame_no + setting.TimeOffset, 30));
 					MorphKey->SetValue(MorphCurve, MorphFrame.weight);
 					MorphCurve->InsertKey(MorphKey);
 				}
@@ -2792,7 +2818,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 	doc->SetTime(BaseTime(1, 30));
 	doc->SetTime(BaseTime(0, 30));
 	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK, String::IntToString(bone_cnt), String::IntToString(morph_cnt), String::IntToString(motion_frame_bone_number + motion_frame_morph_number), String::FloatToString(timing.GetMilliseconds())) + "\n";
-	if (DetailReport == 1) {
+	if (setting.DetailReport == 1) {
 		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_S.GetCount())) + ":\n";
 		for (String i : not_find_bone_S)
 		{
@@ -2818,4 +2844,35 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(Float PositionMulti
 	not_find_bone_S.Reset();
 	not_find_morph_S.Reset();
 	return maxon::OK;
+}
+
+Bool  mmd::VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, UChar* probe, Int32 size) {
+	Char VMDVersion[30]{ 0 };
+	Char VMDModelName[20]{ 0 };
+	CopyMem(probe, VMDVersion, 30);
+	CopyMem(probe + 30, VMDModelName, 20);
+	VMDVersion[29] = 0;
+	if (!(name.CheckSuffix("vmd"_s) || name.CheckSuffix("Vmd"_s) || name.CheckSuffix("VMd"_s) || name.CheckSuffix("VMD"_s) || name.CheckSuffix("vMD"_s) || name.CheckSuffix("vmD"_s))) {
+		return false;
+	}
+	if (strncmp(VMDVersion, "Vocaloid Motion Data file", 26)||strncmp(VMDVersion, "Vocaloid Motion Data 0002", 26))
+	{
+		String ModelName = EncodingConversion::JIStoUTF8(VMDModelName);
+		if (ModelName.LexComparePart("カメラ・照明"_s, 12, 0) == 0) {
+			IsCamera = 1;
+		}
+		return true;
+	}
+	return false;
+}
+FILEERROR  mmd::VMDLoaderData::Load(BaseSceneLoader* node, const Filename& name, BaseDocument* doc, SCENEFILTER filterflags, maxon::String* error, BaseThread* bt) {
+	if (IsCamera) {
+		VMDLoaderCameraDialog dlg_Camera(name,doc);
+		dlg_Camera.Open(DLG_TYPE::MODAL, ID_VMD_IMPORT, -1, -1, 350, 80);
+		IsCamera = 0;
+	}
+	else {
+		MessageDialog(GeLoadString(IDS_MES_IMPORT_VMD_CAM_ONLY));
+	}
+	return FILEERROR::NONE;
 }

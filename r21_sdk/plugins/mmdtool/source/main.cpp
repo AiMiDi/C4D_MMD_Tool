@@ -12,7 +12,9 @@ Bool PluginStart()
 		return false;
 	if (!RegisterVMDCamDrawSceneHook())
 		return false;
-	if (!RegisterC4DBulletTest())
+	//if (!RegisterC4DBulletTest())
+	//	return false;
+	if(!RegisterVMDImport())
 		return false;
 	return true;
 }

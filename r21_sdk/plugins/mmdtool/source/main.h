@@ -12,6 +12,8 @@
 #define ID_VMD_CAM_OBJ 1056978
 #define ID_MMD_TOOL 1056563
 #define ID_VMD_CAM_DRAW 1057017
+#define ID_VMD_IMPORT 1057489
+#define ID_VMD_EXPORT 1057490;
 
 #include <memory>
 #include <fstream>
@@ -62,5 +64,6 @@ Bool RegisterPMXJointTag();*/
 Bool RegisterVMDCamDrawSceneHook();
 Bool RegisterMMDTool();
 Bool RegisterC4DBulletTest();
+Bool RegisterVMDImport();
 
 #endif // MAIN_H__

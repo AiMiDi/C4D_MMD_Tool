@@ -18,6 +18,8 @@ Click the latest version of the plugin under [![](https://img.shields.io/github/
 
 At present, the main maintenance version are R20 and higher, R19 and lower are unsupported.
 
+If there is a problem with selecting multiple-parts when the model is imported, please do not check it.
+
 ## version 
 
 **version 0.2.0** Initial commit
@@ -67,6 +69,20 @@ At present, the main maintenance version are R20 and higher, R19 and lower are u
 **version 0.3.7** Fixed the problem that the plug-in might not be loaded, and added bone expression import.
 
 **version 0.3.7.5** Fix the problem of non-rotatable bones and import animation of physical bones. Add UV expression import (only multi-part import mode).
+
+**version 0.3.8**
+
+​	1.Rewrite the bone expression part.
+
+​	2.Add UV expression import (multi-part import mode).
+
+​	3.Fix some errors of imported models.
+
+​	4.Add the function of cleaning up the unconnected vertices of the imported model.
+
+​	5.Add drag and drop import of camera animation.
+
+​	6.Pre-loaded physics engine module support.
 
 ## usage
 

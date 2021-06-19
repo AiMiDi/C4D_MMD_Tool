@@ -131,7 +131,7 @@ Bool NameConversion::UpdataNameConversionDialog::Command(Int32 id, const BaseCon
 			else {
 				iferr(name_L_to_U_map_.Insert(str1, str2))return false;
 				iferr(name_U_to_L_map_.Insert(str2, str1))return false;
-				config[str1.GetCStringCopy(STRINGENCODING::UTF8)] = str2.GetCStringCopy(STRINGENCODING::UTF8);
+				config[std::string(str1.GetCStringCopy(STRINGENCODING::UTF8))] = std::string(str2.GetCStringCopy(STRINGENCODING::UTF8));
 			}
 		}
 		fout << '\n' << config;

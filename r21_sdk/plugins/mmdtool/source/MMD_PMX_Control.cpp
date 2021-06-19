@@ -890,12 +890,16 @@ EXECUTIONRESULT mmd::PMX_Bone_Tag::Execute(BaseTag* tag, BaseDocument* doc, Base
 	op_rotation = op_rotation - prev_rotation;
 	prev_rotation = Vector(0);
 	for (bone_morph_data& id : bone_morph_data_arr) {
-		tag->GetParameter(DescID(id.strength_id), Ge_data, DESCFLAGS_GET::NONE);
-		Float strength = Ge_data.GetFloat();
-		tag->GetParameter(DescID(id.translation_id), Ge_data, DESCFLAGS_GET::NONE);
-		prev_position += Ge_data.GetVector()* strength;
-		tag->GetParameter(DescID(id.rotation_id), Ge_data, DESCFLAGS_GET::NONE);
-		prev_rotation += Ge_data.GetVector() * strength;
+		Float strength = 0;
+		if (tag->GetParameter(DescID(id.strength_id), Ge_data, DESCFLAGS_GET::NONE)) {
+			strength = Ge_data.GetFloat();
+		}
+		if (tag->GetParameter(DescID(id.translation_id), Ge_data, DESCFLAGS_GET::NONE)) {
+			prev_position += Ge_data.GetVector() * strength;
+		}
+		if (tag->GetParameter(DescID(id.rotation_id), Ge_data, DESCFLAGS_GET::NONE)) {
+			prev_rotation += Ge_data.GetVector() * strength;
+		}
 	}
 	op->SetParameter(DescID(ID_BASEOBJECT_FROZEN_POSITION), op_position + prev_position, DESCFLAGS_SET::NONE);
 	op->SetParameter(DescID(ID_BASEOBJECT_FROZEN_ROTATION), op_rotation + prev_rotation, DESCFLAGS_SET::NONE);

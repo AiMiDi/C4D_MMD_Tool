@@ -2,13 +2,45 @@
 #define __MMD_VMD_ANIMATION_H__
 
 #include "main.h"
-#include "MMD_PMX_tag.h"
+#include "MMD_PMX_Control.h"
 #include "EncodingConversion.h"
 #include "description/PMX_Bone_Tag.h"
 #include "description/VMD_Cam_Obj.h"
 
 namespace mmd{
 
+	struct VMD_Camera_import_settings
+	{
+		Float PositionMultiple = 8.5;
+		Float TimeOffset = 0;
+		Filename fn = Filename();
+		BaseDocument* doc = nullptr;
+	};
+	struct VMD_Camera_export_settings
+	{
+		Float PositionMultiple = 8.5;
+		Float TimeOffset = 0;
+		Int32 use_rotation = 0;
+	};
+	struct VMD_Conversion_Camera_settings {
+		Float distance = 0;
+		Int32 use_rotation = 0;
+		BaseObject* str_cam = nullptr;
+	}; 
+	struct VMD_Motions_import_settings {
+		Float PositionMultiple = 8.5;
+		Float TimeOffset = 0;
+		Bool QuaternionRotationSW = true;
+		Bool DetailReport = false;
+		Bool ByTag = true;
+	};
+	struct VMD_Motions_export_settings {
+		Float PositionMultiple = 8.5;
+		Float TimeOffset = 0;
+		Bool QuaternionRotationSW;
+		Bool DetailReport;
+		Bool ByTag;
+	};
 	class VMDAnimation
 	{
 	private:
@@ -71,11 +103,11 @@ namespace mmd{
 		maxon::Result<void> WriteToFile(BaseFile* const file);
 
 		//从文件导入摄像机数据
-		static maxon::Result<void> FromFileImportCamera(Float PositionMultiple, Float TimeOffset);
+		static maxon::Result<void> FromFileImportCamera(VMD_Camera_import_settings setting);
 		//从项目导出摄像机数据
-		static maxon::Result<void> FromDocumentExportCamera(Float PositionMultiple, Float TimeOffset, Int32 use_rotation);
+		static maxon::Result<void> FromDocumentExportCamera(VMD_Camera_export_settings setting);
 		//从文件导入动作或表情数据
-		static maxon::Result<void> FromFileImportMotions(Float PositionMultiple, Float TimeOffset, Bool QuaternionRotationSW, Bool DetailReport, Bool ByTag);
+		static maxon::Result<void> FromFileImportMotions(VMD_Motions_import_settings setting);
 	};
 
 	class VMD_Cam_Obj : public ObjectData
@@ -103,7 +135,7 @@ namespace mmd{
 		// 用于限制SplineData的回调函数
 		static Bool SplineDataCallBack(Int32 cid, const void* data);
 		//将普通摄像机转换为MMD摄像机
-		static maxon::Result<BaseObject*> ConversionCamera(Float distance,Int32 use_rotation,BaseObject* str_cam = nullptr);
+		static maxon::Result<BaseObject*> ConversionCamera(VMD_Conversion_Camera_settings setting);
 		//获取曲线值
 		Bool GetCurve(Int32 type, Int32 frame_on, VMD_Curve* curve);
 		//设置曲线值
@@ -136,6 +168,98 @@ namespace mmd{
 		//生成函数
 		static NodeData* Alloc() { return NewObjClear(VMD_Cam_Obj); }
 	};
+
+	class VMDLoaderData : public SceneLoaderData
+	{
+		Bool IsCamera = 0;
+		class VMDLoaderCameraDialog : public GeDialog
+		{
+			ImagesGUI* Images = nullptr;
+			Filename fn;
+			BaseDocument* doc = nullptr;
+		public:
+			VMDLoaderCameraDialog(Filename fn_, BaseDocument* doc_):fn(fn_),doc(doc_) {
+			}
+			virtual ~VMDLoaderCameraDialog(void) {
+				delete Images;
+			}
+
+			virtual Bool CreateLayout(void)
+			{
+
+				SetTitle(GeLoadString(IDS_VMD_TOOL_TITLE));
+				Images = new ImagesGUI("mmd_tool_title.png"_s, 300, 78);
+				C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(78));
+				if (userAreaGadget != nullptr)
+					this->AttachUserArea((*Images), userAreaGadget);
+				GroupBegin(1001, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_IMPORT_TITLE), 0, 0, 0);
+				GroupBorder(BORDER_GROUP_IN);
+				GroupBorderSpace(5, 5, 5, 10);
+				GroupSpace(2, 5);
+
+				GroupBegin(1002, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+				AddStaticText(100001, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_IMPORT_SIZE_NAME), BORDER_NONE);
+				AddEditNumberArrows(100002, BFH_LEFT, 250, 10);
+				GroupEnd();
+
+				GroupBegin(1003, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
+				AddStaticText(100003, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_IMPORT_OFFSET_NAME), BORDER_NONE);
+				AddEditNumberArrows(100004, BFH_LEFT, 250, 10);
+				GroupEnd();
+
+
+				GroupBegin(1004, BFH_CENTER, 2, 1, ""_s, 0, 350, 10);
+				GroupSpace(50,0);
+				AddButton(100005, BFH_CENTER, 100, 30, GeLoadString(IDS_VMD_CAM_IMPORT_BUTTON));
+				AddButton(100006, BFH_CENTER, 100, 30, GeLoadString(IDS_MSG_RENAME_CANCEL));
+				GroupEnd();
+				return true;
+			}
+
+			virtual Bool InitValues(void)
+			{
+				SetFloat(100002, 8.5);
+				SetFloat(100004, 0);
+				return true;
+			}
+
+			virtual Bool Command(Int32 id, const BaseContainer& msg)
+			{
+				iferr_scope;
+				switch(id)
+				{
+				case 100005:
+				{
+					mmd::VMD_Camera_import_settings setting_;
+					setting_.fn = fn;
+					setting_.doc = doc;
+					GetFloat(100002, setting_.PositionMultiple);
+					GetFloat(100004, setting_.TimeOffset);
+					iferr(mmd::VMDAnimation::FromFileImportCamera(setting_))
+					{
+						return false;
+					}
+					Close();
+					break;
+				}
+				case 100006:
+				{
+					Close();
+					break;
+				}
+				default:
+					break;
+				}
+				return true;
+			}
+		};
+	public:
+		virtual Bool Identify(BaseSceneLoader* node, const Filename& name, UChar* probe, Int32 size);
+		virtual FILEERROR Load(BaseSceneLoader* node, const Filename& name, BaseDocument* doc, SCENEFILTER filterflags, maxon::String* error, BaseThread* bt);
+		static NodeData* Alloc() { return NewObjClear(VMDLoaderData); }
+	};
+
+
 
 	class VMD_Cam_Draw : public SceneHookData
 	{	

@@ -1,4 +1,4 @@
-#include "main.h"
+﻿#include "main.h"
 #include "MMD_PMX_model.h"
 #include "MMD_VMD_animation.h"
 #include "MMD_PMX_Control.h"
@@ -796,4 +796,9 @@ Bool RegisterVMDCamDrawSceneHook()
 
 Bool RegisterMMDTool() {
 	return RegisterCommandPlugin(ID_MMD_TOOL, "MMDTool"_s, 0, AutoBitmap("MMDIcon.png"_s), "MMD tool for C4D"_s, NewObjClear(MMDTool));
+}
+
+Bool RegisterVMDImport()
+{
+	return RegisterSceneLoaderPlugin(ID_VMD_IMPORT, "VMD(.vmd)"_s, 0, mmd::VMDLoaderData::Alloc, "VMD import"_s);
 }
