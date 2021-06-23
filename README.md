@@ -84,6 +84,16 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 ​	6.Pre-loaded physics engine module support.
 
+**version 0.3.8.1** Add tool modules.
+
+​	If the model has a problem similar to the following figure after importing the action, you can try to use the tool to repair it.
+
+​		1.Select the model.
+
+​		2.Click on the fix action tool button.
+
+![](https://ftp.bmp.ovh/imgs/2021/06/56cdad59253281fe.png)
+
 ## usage
 
 1.Select the corresponding version of the plugin and place it in the plugins folder under the Cinema 4D installation directory.

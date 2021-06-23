@@ -84,6 +84,16 @@ Cinema 4D的mmdtool。
 
 ​	6.预载物理引擎模块支持。
 
+**version 0.3.8.1** 添加工具模块。
+
+​	如果导入动作后模型出现类似下图问题，可以尝试使用工具修复。
+
+​		1.选择模型。
+
+​		2.点击修复动作工具按钮。
+
+![](https://ftp.bmp.ovh/imgs/2021/06/dcd23ba3025a0a8e.png)
+
 ## 使用方法
 
 1.选择相应的插件版本，并将其放置在Cinema 4D安装目录下的plugins文件夹中。
@@ -97,3 +107,5 @@ AiMiDi
 [![](https://img.shields.io/badge/-@AiMiDi-%23181717?style=flat-square&logo=github)](https://github.com/AiMiDi)   
 
 [![](https://img.shields.io/badge/-%40艾米蒂aimidi-blue?style=flat-square&logo=bilibili)](https://space.bilibili.com/30898053)
+
+讨论群：790973593

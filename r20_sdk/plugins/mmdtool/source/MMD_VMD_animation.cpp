@@ -1603,7 +1603,8 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	{
 		if (!file->ReadBytes(VMDModelName, 10))return maxon::Error();
 		this->ModelName = EncodingConversion::JIStoUTF8(VMDModelName);
-		if (this->ModelName.LexComparePart("カメラ・照明"_s, 12, 0) == 0) {
+		if (this->ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) //カメラ・照明 
+		{
 			this->IsCamera = 1;
 		}
 		else {
@@ -1614,7 +1615,8 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	{
 		if (!file->ReadBytes(VMDModelName, 20))return maxon::Error();
 		this->ModelName = EncodingConversion::JIStoUTF8(VMDModelName);
-		if (this->ModelName.LexComparePart("カメラ・照明"_s, 12, 0) == 0) {
+		if (this->ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) //カメラ・照明 
+		{
 			this->IsCamera = 1;
 		}
 		else {
@@ -2851,14 +2853,14 @@ Bool  mmd::VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, 
 	Char VMDModelName[20]{ 0 };
 	CopyMem(probe, VMDVersion, 30);
 	CopyMem(probe + 30, VMDModelName, 20);
-	VMDVersion[29] = 0;
 	if (!(name.CheckSuffix("vmd"_s) || name.CheckSuffix("Vmd"_s) || name.CheckSuffix("VMd"_s) || name.CheckSuffix("VMD"_s) || name.CheckSuffix("vMD"_s) || name.CheckSuffix("vmD"_s))) {
 		return false;
 	}
 	if (strncmp(VMDVersion, "Vocaloid Motion Data file", 26)||strncmp(VMDVersion, "Vocaloid Motion Data 0002", 26))
 	{
 		String ModelName = EncodingConversion::JIStoUTF8(VMDModelName);
-		if (ModelName.LexComparePart("カメラ・照明"_s, 12, 0) == 0) {
+		if (ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) //カメラ・照明 
+		{
 			IsCamera = 1;
 		}
 		return true;

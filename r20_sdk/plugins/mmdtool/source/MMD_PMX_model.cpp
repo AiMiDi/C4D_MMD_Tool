@@ -1470,9 +1470,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					part->InsertTag(texture_tag);
 				}
 			}
-
-			if (settings.Import_weights) {
-			}
 		}
 
 		if (settings.Import_expression) {
@@ -2400,9 +2397,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			cd.mode = MODELINGCOMMANDMODE::POINTSELECTION;
 			if (!SendModelingCommand(MCOMMAND_SELECTINVERSE, cd)) return maxon::FAILED;
 			if (!SendModelingCommand(MCOMMAND_DELETE, cd)) return maxon::FAILED;
-		}
-		if (settings.Import_weights) {
-			CAWeightMgr::NormalizeWeights(doc);
 		}
 	}
 	doc->SetMode(Mmodel);

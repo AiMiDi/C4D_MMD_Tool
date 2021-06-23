@@ -28,12 +28,12 @@ STRINGTABLE
 	IDS_MES_IMPORT_MOT_CF_MORPH "Can't find # morph(s)";
 
 	IDS_MES_INQUIRY_OVERWRITING_FILE "Do you want to overwrite the file?";
-	IDS_MES_CONFIRM_DELETE_FILE "Are you sure to delete the # configuration file?";
+	IDS_MES_CONFIRM_DELETE_FILE "Do you want to delete all animations of the selected model?";
 	IDS_MES_CANNOT_DELETE_DEFAULT "The default configuration file cannot be deleted!";
 
 	IDS_MES_BONE_MORPH_DELETE "Do you want to delete # bone morph?";
-
-        IDS_MES_IMPORT_VMD_CAM_ONLY "Only support the drag and drop import of camera animation VMD files.Please open the plug-in GUI to import the model animation!";
+	IDS_MES_DELETE_ANIM "Do you want to delete all the animation data of the model?";
+    IDS_MES_IMPORT_VMD_CAM_ONLY "Only support the drag and drop import of camera animation VMD files.Please open the plug-in GUI to import the model animation!";
 
 	IDS_VMD_TOOL_TITLE "MMD Tool";
 	IDS_VMD_CAM_TOOL_TITLE "Camera";
@@ -96,6 +96,11 @@ STRINGTABLE
 	IDS_NAME_CONVER_NEW_NAME "New config";
 	IDS_NAME_CONVER_NEW_ADD "New";
 	IDS_NAME_CONVER_NEW_INCREMENT_ADD "New increment";
+	
+	IDS_TOOL_GRP_TITLE "Tool";
+	IDS_ANIM_TOOL_TITLE "Animation tool";
+	IDS_ANIM_TOOL_FIX_ANIM_BUTTON "Try to fix animation";
+	IDS_ANIM_TOOL_DEL_ANIM_BUTTON "Delete animation";
 
 	IDS_BONE_TRANSLATION "Bone translation";
 	IDS_BONE_ROTATION "Bone rotation";

@@ -1,4 +1,4 @@
-﻿#include "main.h"
+#include "main.h"
 #include "MMD_PMX_model.h"
 #include "MMD_VMD_animation.h"
 #include "MMD_PMX_Control.h"
@@ -53,6 +53,8 @@ enum                             // Uniquely identify all your dialog elements h
 	DLG_PMX_MOD_IMPORT_ENGLISH_CHECK,
 	DLG_PMX_MOD_IMPORT_BUTTON,
 
+	DLG_ANIM_TOOL_FIX_ANIM_BUTTON,
+	DLG_ANIM_TOOL_DEL_ANIM_BUTTON
 };
 
 class MMDToolDialog : public GeDialog
@@ -222,6 +224,21 @@ public:
 		//ImportModelEnd
 		GroupEnd();
 		//ModelEnd
+
+		GroupBegin(1600, BFH_CENTER, 1, 2, GeLoadString(IDS_TOOL_GRP_TITLE), 0, 350, 0);
+		//ToollBegin
+		GroupBegin(1301, BFH_CENTER, 1, 2, GeLoadString(IDS_ANIM_TOOL_TITLE), 0, 0, 0);
+		//AnimationBegin
+		GroupBorder(BORDER_GROUP_IN);
+		GroupBorderSpace(5, 5, 5, 10);
+		GroupSpace(2, 5);
+		AddButton(DLG_ANIM_TOOL_FIX_ANIM_BUTTON, BFH_CENTER, 350, 30, GeLoadString(IDS_ANIM_TOOL_FIX_ANIM_BUTTON));
+		AddButton(DLG_ANIM_TOOL_DEL_ANIM_BUTTON, BFH_CENTER, 350, 30, GeLoadString(IDS_ANIM_TOOL_DEL_ANIM_BUTTON));
+		GroupEnd();
+		//AnimationEnd
+		GroupEnd();
+		//ToolEnd
+
 		GroupEnd();
 		return true;
 	}
@@ -562,7 +579,7 @@ public:
 		iferr_scope;
 		switch (id)
 		{
-		case (DLG_VMD_CAM_IMPORT_BUTTON):
+		case DLG_VMD_CAM_IMPORT_BUTTON:
 		{
 			mmd::VMD_Camera_import_settings setting_;
 			GetFloat(DLG_VMD_CAM_IMPORT_SIZE, setting_.PositionMultiple);
@@ -578,7 +595,7 @@ public:
 			}
 			break;
 		}
-		case (DLG_VMD_CAM_CONVER_BUTTON):
+		case DLG_VMD_CAM_CONVER_BUTTON:
 		{	
 			mmd::VMD_Conversion_Camera_settings setting_;
 			GetFloat(DLG_VMD_CAM_CONVER_DIS, setting_.distance);
@@ -594,7 +611,7 @@ public:
 			}
 			break;
 		}
-		case (DLG_VMD_CAM_EXPORT_BUTTON):
+		case DLG_VMD_CAM_EXPORT_BUTTON:
 		{
 			mmd::VMD_Camera_export_settings setting_;
 			GetFloat(DLG_VMD_CAM_EXPORT_SIZE, setting_.PositionMultiple);
@@ -612,7 +629,7 @@ public:
 			}
 			break;
 		}
-		case (DLG_VMD_MOT_IMPORT_BUTTON):
+		case DLG_VMD_MOT_IMPORT_BUTTON:
 		{	
 			mmd::VMD_Motions_import_settings setting_;
 			GetFloat(DLG_VMD_MOT_IMPORT_SIZE, setting_.PositionMultiple);
@@ -634,7 +651,7 @@ public:
 			}
 			break;
 		}
-		case (DLG_PMX_MOD_IMPORT_BUTTON):
+		case DLG_PMX_MOD_IMPORT_BUTTON:
 		{				
 			mmd::PMX_Model_import_settings setting_;
 			GetFloat(DLG_PMX_MOD_IMPORT_SIZE, setting_.PositionMultiple);
@@ -672,7 +689,7 @@ public:
 			}
 			break;
 		}
-		case (DLG_PMX_MOD_IMPORT_BONE):
+		case DLG_PMX_MOD_IMPORT_BONE:
 		{
 			Bool Import_bone = 0;
 			GetBool(DLG_PMX_MOD_IMPORT_BONE, Import_bone);
@@ -694,7 +711,7 @@ public:
 			}
 			break;
 		}
-		case (DLG_PMX_MOD_IMPORT_POLYGON):
+		case DLG_PMX_MOD_IMPORT_POLYGON:
 		{
 			Bool Import_polygon = 0;
 			GetBool(DLG_PMX_MOD_IMPORT_POLYGON, Import_polygon);
@@ -720,7 +737,7 @@ public:
 			}
 			break;
 		}
-		case (DLG_PMX_MOD_IMPORT_ENGLISH):
+		case DLG_PMX_MOD_IMPORT_ENGLISH:
 		{
 			Bool Import_english = 0;
 			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH, Import_english);
@@ -729,6 +746,165 @@ public:
 			}
 			else {
 				SetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, 1);
+			}
+			break;
+		}
+		case DLG_ANIM_TOOL_FIX_ANIM_BUTTON:
+		{
+			BaseDocument* doc = GetActiveDocument();
+			if (doc == nullptr) {
+				GePrint("error"_s);
+				MessageDialog("error"_s);
+				return true;
+			}
+			BaseObject* SelectObject = doc->GetActiveObject();
+			if (SelectObject == nullptr) {
+				GePrint(GeLoadString(IDS_MES_SELECT_ERR));
+				MessageDialog(GeLoadString(IDS_MES_SELECT_ERR));
+				return true;
+			}
+
+			maxon::Queue<BaseObject*> nodes;
+			iferr(nodes.Push(SelectObject))return true;
+			GeData data;
+			while (!nodes.IsEmpty())
+			{
+				BaseObject* node = *(nodes.Pop());
+				while (node != nullptr)
+				{
+					if (node->GetType() == Ojoint)
+					{
+							BaseTag* bone_tag = node->GetTag(ID_PMX_BONE_TAG);
+							if (bone_tag != nullptr) {
+								mmd::PMX_Bone_Tag* pmx_bone_tag_data = bone_tag->GetNodeData<mmd::PMX_Bone_Tag>();
+								bone_tag->GetParameter(DescID(BONE_NAME_LOCAL), data, DESCFLAGS_GET::NONE);
+								String bone_name = data.GetString();					
+								if ((bone_name.LexComparePart(L"\u30b0\u30eb\u30fc\u30d6"_s, 5, 0) == 0) || (bone_name.LexComparePart(L"\u5168\u3066\u306e\u89aa"_s, 5, 0) == 0) || (bone_name.LexComparePart(L"\u8170"_s, 2, 0) == 0) || (bone_name.LexComparePart(L"\u8170\u30ad\u30e3\u30f3\u30bb\u30eb\u5de6"_s, 8, 0) == 0) || (bone_name.LexComparePart(L"\u8170\u30ad\u30e3\u30f3\u30bb\u30eb\u53f3"_s, 8, 0) == 0)) //グルーブ 全ての親 腰 腰キャンセル左 腰キャンセル右
+								{
+									CTrack* BoneTrackPX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackPX);								
+									CTrack* BoneTrackPY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackPY);									
+									CTrack* BoneTrackPZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackPZ);								
+									CTrack* BoneTrackRX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackRX);									
+									CTrack* BoneTrackRY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackRY);									
+									CTrack* BoneTrackRZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackRZ);
+									node->SetRelPos(Vector(0));
+									node->SetRelRot(Vector(0));							
+								}
+							}
+							else {
+								String bone_name = node->GetName();
+								if ((bone_name.LexComparePart(L"\u30b0\u30eb\u30fc\u30d6"_s, 5, 0) == 0) || (bone_name.LexComparePart(L"\u5168\u3066\u306e\u89aa"_s, 5, 0) == 0) || (bone_name.LexComparePart(L"\u8170"_s, 2, 0) == 0) || (bone_name.LexComparePart(L"\u8170\u30ad\u30e3\u30f3\u30bb\u30eb\u5de6"_s, 8, 0) == 0) || (bone_name.LexComparePart(L"\u8170\u30ad\u30e3\u30f3\u30bb\u30eb\u53f3"_s, 8, 0) == 0)) //グルーブ 全ての親 腰 腰キャンセル左 腰キャンセル右
+								{
+									CTrack* BoneTrackPX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackPX);
+									CTrack* BoneTrackPY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackPY);
+									CTrack* BoneTrackPZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackPZ);
+									CTrack* BoneTrackRX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackRX);
+									CTrack* BoneTrackRY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackRY);
+									CTrack* BoneTrackRZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrackRZ);
+									node->SetRelPos(Vector(0));
+									node->SetRelRot(Vector(0));
+								}
+							}
+					}
+					iferr(nodes.Push(node->GetDown()))return true;
+					if (node != SelectObject) {
+						node = node->GetNext();
+					}
+					else {
+						break;
+					}
+				}
+			}
+			nodes.Reset();
+			doc->SetTime(BaseTime(1, 30));
+			doc->SetTime(BaseTime(0, 30));
+			break;
+		}
+		case DLG_ANIM_TOOL_DEL_ANIM_BUTTON:
+		{
+			BaseDocument* doc = GetActiveDocument();
+			if (doc == nullptr) {
+				GePrint("error"_s);
+				MessageDialog("error"_s);
+				return true;
+			}
+			BaseObject* SelectObject = doc->GetActiveObject();
+			if (SelectObject == nullptr) {
+				GePrint(GeLoadString(IDS_MES_SELECT_ERR));
+				MessageDialog(GeLoadString(IDS_MES_SELECT_ERR));
+				return true;
+			}
+			if (QuestionDialog(IDS_MES_DELETE_ANIM)) {
+				maxon::Queue<BaseObject*> nodes;
+				iferr(nodes.Push(SelectObject))return true;
+				GeData data;
+				while (!nodes.IsEmpty())
+				{
+					BaseObject* node = *(nodes.Pop());
+					while (node != nullptr)
+					{
+						if (node->GetType() == Ojoint)
+						{
+							BaseTag* const node_bone_tag = node->GetTag(ID_PMX_BONE_TAG);
+							if (node_bone_tag != nullptr && node_bone_tag->IsInstanceOf(ID_PMX_BONE_TAG)) {
+								mmd::PMX_Bone_Tag* pmx_bone_tag_data = node_bone_tag->GetNodeData<mmd::PMX_Bone_Tag>();
+								for (mmd::bone_morph_data& i : pmx_bone_tag_data->bone_morph_data_arr) {
+									CTrack* morph_track = node_bone_tag->FindCTrack(i.strength_id);
+									CTrack::Free(morph_track);
+									node_bone_tag->SetParameter(i.strength_id, 0, DESCFLAGS_SET::NONE);
+								}
+							}
+							CTrack* BoneTrackPX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrackPX);
+							CTrack* BoneTrackPY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrackPY);
+							CTrack* BoneTrackPZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrackPZ);
+							CTrack* BoneTrackRX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrackRX);
+							CTrack* BoneTrackRY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrackRY);
+							CTrack* BoneTrackRZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrackRZ);
+							node->SetRelPos(Vector(0));
+							node->SetRelRot(Vector(0));
+						}
+						BaseTag* const node_morph_tag = node->GetTag(Tposemorph);
+						if (node_morph_tag != nullptr && node_morph_tag->IsInstanceOf(Tposemorph))
+						{
+							CAPoseMorphTag* const pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
+							const Int32 MorphCount = pose_morph_tag->GetMorphCount();
+							for (Int32 i = 0; i < MorphCount; i++)
+							{
+								CTrack* morph_track = node_morph_tag->FindCTrack(pose_morph_tag->GetMorphID(i));
+								CTrack::Free(morph_track);
+								pose_morph_tag->GetMorph(i)->SetStrength(0);
+							}
+						}
+						iferr(nodes.Push(node->GetDown()))return true;
+						if (node != SelectObject) {
+							node = node->GetNext();
+						}
+						else {
+							break;
+						}
+					}
+				}
+				nodes.Reset();
+				doc->SetTime(BaseTime(1, 30));
+				doc->SetTime(BaseTime(0, 30));
 			}
 			break;
 		}
