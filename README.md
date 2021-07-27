@@ -20,6 +20,8 @@ At present, the main maintenance version are R20 and higher, R19 and lower are u
 
 If there is a problem with selecting multiple-parts when the model is imported, please do not check it.
 
+**If the plugin is installed, please check whether the latest version of C4D is installed (such as R21 is R21.207, R21.115 does not show the upgrade can be used)**
+
 ## version 
 
 **version 0.2.0** Initial commit
@@ -93,6 +95,22 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 ​		2.Click on the fix action tool button.
 
 ![](https://ftp.bmp.ovh/imgs/2021/06/56cdad59253281fe.png)
+
+**version 0.3.9**
+
+​		1. Added support for rigidbodies and joints. (Currently not implemented in physics)
+
+​		2. Fix the GUI scroll bar problem.
+
+​		3. Fixed an issue where animation curves could not be saved.
+
+​		4. Add new model management objects.
+
+​		5. Add model display filter system.
+
+​		6. Add IK enabled, model display animation import.
+
+​		7. Fixed some actions importing problems.
 
 ## usage
 

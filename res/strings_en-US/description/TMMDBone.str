@@ -1,0 +1,68 @@
+STRINGTABLE TMMDBone
+{
+	TMMDBone "MMD Bone Tag";
+	PMX_BONE_INFO_GRP "MMD Bone info";
+	PMX_BONE_INDEX "    Bone index";
+	PMX_BONE_NAME_LOCAL "Bone local name";
+	PMX_BONE_NAME_UNIVERSAL "Bone universal name";
+	PMX_BONE_NAME_IS "Bone display name";
+	PMX_BONE_NAME_IS_LOCAL "Bone local name";
+	PMX_BONE_NAME_IS_UNIVERSAL "Bone universal name";
+	PMX_BONE_POSITION "Position";
+
+	PMX_BONE_PARENT_BONE_GRP "Parent bone";
+	PMX_BONE_PARENT_BONE_INDEX "Parent bone Index";
+	PMX_BONE_PARENT_BONE_LINK "";
+
+	PMX_BONE_FLAG_GRP "Bone features";
+	PMX_BONE_ROTATABLE "Is rotatable";
+	PMX_BONE_TRANSLATABLE "Is translatable";
+	PMX_BONE_VISIBLE "Is visible";
+	PMX_BONE_ENABLED "Is enable";
+	PMX_BONE_IS_IK "Is IK";
+
+	PMX_BONE_DEFORM_LAYER_GRP "Deformation";
+	PMX_BONE_LAYER "Deformation layer";
+	PMX_BONE_PHYSICS_AFTER_DEFORM "Physics after deform";
+
+	PMX_BONE_END_OF_BONE_GRP "Bone tail pointing";
+	PMX_BONE_INDEXED_TAIL_POSITION "Tail pointing";
+	PMX_BONE_TAIL_IS_INDEX "Index";
+	PMX_BONE_TAIL_IS_POSITION "Position";
+	PMX_BONE_TAIL_INDEX "Tail index";
+	PMX_BONE_TAIL_POSITION "Tail position";
+	
+	PMX_BONE_INHERIT_GRP "Bone inherit";
+	PMX_BONE_INHERIT_ROTATION "Inherit rotation";
+	PMX_BONE_INHERIT_TRANSLATION "Inherit translation";
+	PMX_BONE_INHERIT_BONE_PARENT_INDEX "Inherit bone parent index";
+	PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE "Inherit bone parent influence";
+	PMX_BONE_INHERIT_BONE_PARENT_LINK "";
+
+	PMX_BONE_FIXED_AXIS_GRP "Fixed axis";
+	PMX_BONE_LOCAL_IS_AXIS "Enable bone fixed axis";
+	PMX_BONE_FIXED_AXIS "Bone fixed axis";
+
+	PMX_BONE_LOCAL_COORDINATE_GRP "Local coordinate";
+	PMX_BONE_LOCAL_COORDINATE "Enable local coordinate";
+	PMX_BONE_LOCAL_X "Bone local X";
+	PMX_BONE_LOCAL_Z "Bone local Z";
+
+	PMX_BONE_TAG_ANIMATION_GRP "Animation";
+	PMX_BONE_TAG_FRAME_ON "Frame on";
+	PMX_BONE_TAG_CURVE_TYPE "Curve type";
+	PMX_BONE_TAG_SPLINE "Curve";
+	PMX_BONE_TAG_INIT_CURVE_BUTTON "Init curve";
+	PMX_BONE_TAG_REGISTER_CURVE_BUTTON "Register key frame";
+	PMX_BONE_TAG_UPDATE_CURVE_BUTTON "Update all curve";
+	PMX_BONE_TAG_DELETE_CURVE_BUTTON "Delete key frame";
+    PMX_BONE_MORPH_GRP "Bone morph";
+	PMX_BONE_MORPH_ADD_NAME "Add bone morph name";
+	PMX_BONE_MORPH_ADD_BUTTON "Add bone morph";
+
+	PMX_BONE_TAG_XCURVE "Position X curve";
+	PMX_BONE_TAG_YCURVE "Position Y curve";
+	PMX_BONE_TAG_ZCURVE "Position Z curve";
+	PMX_BONE_TAG_RCURVE "Rotation curve";
+	PMX_BONE_TAG_ACURVE "All curve";
+}

@@ -1,0 +1,130 @@
+STRINGTABLE
+{
+	IDS_MES_OPENFILE "Open";
+	IDS_MES_SAVEFILE "Save";
+
+	IDS_MES_MEM_ERR "Out of memory error";
+	IDS_MES_OPEN_FILE_ERR "Open file error";
+	IDS_MES_SELECT_ERR "Please select an object";
+
+	IDS_MES_IMPORT_ERR "Import failed:";
+	IDS_MES_IMPORT_TYPE_ERR "File is not a vmd file";
+	IDS_MES_IMPORT_READ_ERR "Cannot read file";
+	IDS_MES_IMPORT_CAM_ERR "It's not a camera VMD file";
+	IDS_MES_IMPORT_MOD_ERR "It's not a model VMD file";
+	IDS_MES_IMPORT_OK "Successfully imported # Frame(s) at # ms!";
+
+	IDS_MES_EXPORT_ERR "Export failed:";
+	IDS_MES_EXPORT_TYPE_ERR "Please select a legal camera combination object";
+	IDS_MES_EXPORT_TRACK_ERR "Can't find # track";
+	IDS_MES_EXPORT_WRITE_ERR "Cannot write file";
+	IDS_MES_EXPORT_OK "Successfully exported # Frame(s) at # ms!";
+
+	IDS_MES_CONVER_ERR "Conversion failed:";
+	IDS_MES_CONVER_TYPE_ERR "The selected object is not a camera.";
+
+	IDS_MES_IMPORT_MOT_OK "Successfully imported # bone's and # morph's # Frame(s) at # ms!";
+	IDS_MES_IMPORT_MOT_CF_BONE "Can't find # bone(s)";
+	IDS_MES_IMPORT_MOT_CF_MORPH "Can't find # morph(s)";
+
+	IDS_MES_INQUIRY_OVERWRITING_FILE "Do you want to overwrite the file?";
+	IDS_MES_CONFIRM_DELETE_FILE "Do you want to delete all animations of the selected model?";
+	IDS_MES_CANNOT_DELETE_DEFAULT "The default configuration file cannot be deleted!";
+
+	IDS_MES_BONE_MORPH_DELETE "Do you want to delete # bone morph?";
+	IDS_MES_DELETE_ALL_ANIM "Do you want to delete all the animation data of the model?";
+	IDS_MES_DELETE_BONE_ANIM "Do you want to delete all the bone animation data of the model?";
+	IDS_MES_DELETE_MORPH_ANIM "Do you want to delete all the morph animation data of the model?";
+    IDS_MES_IMPORT_VMD_CAM_ONLY "Only support the drag and drop import of camera animation VMD files.Please open the plug-in GUI to import the model animation!";
+
+	IDS_VMD_TOOL_TITLE "MMD Tool";
+	IDS_VMD_CAM_TOOL_TITLE "Camera";
+	IDS_VMD_CAM_IMPORT_TITLE "Camera Import";
+	IDS_VMD_CAM_IMPORT_SIZE_NAME "Size";
+	IDS_VMD_CAM_IMPORT_OFFSET_NAME "Offset";
+	IDS_VMD_CAM_IMPORT_BUTTON "Import";
+
+	IDS_VMD_CAM_EXPORT_TITLE "Camera Export";
+	IDS_VMD_CAM_EXPORT_SIZE_NAME "Size";
+	IDS_VMD_CAM_EXPORT_OFFSET_NAME "Offset";
+    IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME "Use rotation curve";
+	IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_X "X";
+	IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Y "Y";
+	IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Z "X";
+	IDS_VMD_CAM_EXPORT_BUTTON "Export";
+
+	IDS_VMD_CAM_CONVER_TITLE "Conversion camera";
+	IDS_VMD_CAM_CONVER_DIS_NAME "Distance";
+	IDS_VMD_CAM_CONVER_ROTATION_TWEEN_NAME "Use rotation curve";
+	IDS_VMD_CAM_CONVER_ROTATION_TWEEN_X "X";
+	IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Y "Y";
+	IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Z "X";
+	IDS_VMD_CAM_CONVER_BUTTON "Conversion";
+
+	IDS_VMD_MOT_TOOL_TITLE "Motion";
+	IDS_VMD_MOT_IMPORT_TITLE "Motion Import";
+	IDS_VMD_MOT_IMPORT_SIZE_NAME "Size";
+	IDS_VMD_MOT_IMPORT_OFFSET_NAME "Offset";
+	IDS_VMD_MOT_IMPORT_QUAT_NAME "Quaternion rotation";
+	IDS_VMD_MOT_IMPORT_DETAIL_NAME "Detail report";
+    IDS_VMD_MOT_IMPORT_BY_TAG "By tag";
+	IDS_VMD_MOT_IMPORT_BUTTON "Import";
+
+	IDS_PMX_MOD_TOOL_TITLE "Model";
+	IDS_PMX_MOD_IMPORT_TITLE "Model Import";
+	IDS_PMX_MOD_IMPORT_SIZE_NAME "Size";
+	IDS_PMX_MOD_IMPORT_SETTINGS "Import settings";
+	IDS_PMX_MOD_IMPORT_POLYGON "Polygon";
+	IDS_PMX_MOD_IMPORT_NORMAL "Normal";
+	IDS_PMX_MOD_IMPORT_UV "UV";
+	IDS_PMX_MOD_IMPORT_MATERIAL "Material";
+	IDS_PMX_MOD_IMPORT_BONE "Bone";
+	IDS_PMX_MOD_IMPORT_WEIGHTS "Weights";
+	IDS_PMX_MOD_IMPORT_IK "IK";
+	IDS_PMX_MOD_IMPORT_INHERIT "Inherit";
+	IDS_PMX_MOD_IMPORT_EXPRESSION "Expression";
+	IDS_PMX_MOD_IMPORT_MULTIPART "Multipart";
+	IDS_PMX_MOD_IMPORT_ENGLISH "English";
+	IDS_PMX_MOD_IMPORT_ENGLISH_CHECK "Check english";	
+	IDS_PMX_MOD_IMPORT_BUTTON "Import";
+
+	IDS_UPDATA_NAME_CONVERSION_TITLE "Manually confirm English(If it is not filled in, it will be generated automatically.)";
+	IDS_NAME_CONVER_NAMEMAP_NAME "English config file";
+	IDS_NAME_CONVER_OK "OK";
+	IDS_NAME_CONVER_CANCEL "Cancel";
+	IDS_NAME_CONVER_NEW_DELETE "Delete config";
+	IDS_NAME_CONVER_IGNORE "Hidden confirmed";
+	IDS_NAME_CONVER_NEW_NAME "New config";
+	IDS_NAME_CONVER_NEW_ADD "New";
+	IDS_NAME_CONVER_NEW_INCREMENT_ADD "New increment";
+	
+	IDS_TOOL_GRP_TITLE "Tool";
+	IDS_ANIM_TOOL_TITLE "Animation tool";
+	IDS_ANIM_TOOL_FIX_ANIM_BUTTON "Try to fix animation";
+
+	IDS_BONE_TRANSLATION "Bone translation";
+	IDS_BONE_ROTATION "Bone rotation";
+	IDS_BONE_DELETE "Delete morph";
+	IDS_BONE_RENAME "Rename morph";
+
+	IDS_MSG_RENAME "Rename morph:";
+	IDS_MSG_RENAME_OK "OK";
+	IDS_MSG_RENAME_CANCEL "Cancel";
+
+	IDS_T_MMD_MATERIAL "MMD Material";
+	IDS_T_MMD_BONE "MMD Bone";
+	IDS_O_MMD_MODEL "MMD Model";
+	IDS_O_MMD_RIGID "MMD Rigid";
+	IDS_O_MMD_JOINT "MMD Joint";
+	IDS_O_MMD_CAMERA "MMD Camera";
+	IDS_O_MMD_MESH_ROOT "MMD Mesh Root";
+	IDS_O_MMD_BONE_ROOT "MMD Bone Root";
+	IDS_O_MMD_RIGID_ROOT "MMD Rigid Root";
+	IDS_O_MMD_JOINT_ROOT "MMD Joint Root";
+	MODEL_IK_GRP "IK";
+	
+	IDS_RIGID_SHAPE_SIZE_R "radius";
+	IDS_RIGID_SHAPE_SIZE_L "length";
+	IDS_RIGID_SHAPE_SIZE_W "width";
+	IDS_RIGID_SHAPE_SIZE_H "height";
+}
