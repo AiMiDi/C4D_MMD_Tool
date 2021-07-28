@@ -80,11 +80,11 @@ public:
 		if (userAreaGadget != nullptr)
 			this->AttachUserArea((*Images), userAreaGadget);
 
+		ScrollGroupBegin(1200, BFH_CENTER, SCROLLGROUP_VERT | SCROLLGROUP_AUTOHORIZ | SCROLLGROUP_AUTOVERT, 0, 210);
 		TabGroupBegin(1000, BFH_SCALEFIT | BFV_SCALEFIT);
 		//CameraBegin		
 		GroupBegin(1100, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_TOOL_TITLE), 0, 350, 0);
-		ScrollGroupBegin(1200, BFH_CENTER, SCROLLGROUP_VERT | SCROLLGROUP_BORDERIN, 0, 200);
-		GroupBegin(1300, BFH_CENTER, 1, 2, ""_s, 0, 350, 0);
+
 		//ImportCameraBegin
 		GroupBegin(1001, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_IMPORT_TITLE), 0, 0, 0);
 		GroupBorder(BORDER_GROUP_IN);
@@ -154,8 +154,7 @@ public:
 		AddButton(DLG_VMD_CAM_CONVER_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_CAM_CONVER_BUTTON));
 		GroupEnd();
 		//ConversionCameraEnd
-		GroupEnd();
-		GroupEnd();
+
 		GroupEnd();
 		//CameraEnd
 		//MotionBegin
@@ -236,7 +235,9 @@ public:
 		//AnimationEnd
 		GroupEnd();
 		//ToolEnd
-
+		//ScrollGroupEnd;
+		GroupEnd();
+		//TabGroupEnd
 		GroupEnd();
 		return true;
 	}

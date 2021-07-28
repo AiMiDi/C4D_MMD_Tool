@@ -1253,6 +1253,9 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
+	iferr_scope_handler{
+		return true;
+	};
 	switch (type)
 	{
 	case MSG_DESCRIPTION_CHECKUPDATE:
@@ -1436,7 +1439,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 					xCurvr->by = by;
 				}
 				else {
-					iferr(XCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					XCurve.Insert(frame, NewObj(mmd::VMD_Curve,ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -1450,7 +1453,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 					yCurvr->by = by;
 				}
 				else {
-					iferr(YCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					YCurve.Insert(frame, NewObj(mmd::VMD_Curve,ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -1464,7 +1467,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 					zCurvr->by = by;
 				}
 				else {
-					iferr(ZCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					ZCurve.Insert(frame, NewObj(mmd::VMD_Curve,ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -1478,7 +1481,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 					rCurvr->by = by;
 				}
 				else {
-					iferr(RCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					RCurve.Insert(frame, NewObj(mmd::VMD_Curve,ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -1492,7 +1495,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 					xCurvr->by = by;
 				}
 				else {
-					iferr(XCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					XCurve.Insert(frame, NewObj(mmd::VMD_Curve,ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto yCurvr_ptr = YCurve.Find(frame);
 				if (yCurvr_ptr != nullptr) {
@@ -1503,7 +1506,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 					yCurvr->by = by;
 				}
 				else {
-					iferr(YCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					YCurve.Insert(frame, NewObj(mmd::VMD_Curve,ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto zCurvr_ptr = ZCurve.Find(frame);
 				if (zCurvr_ptr != nullptr) {
@@ -1514,7 +1517,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 					zCurvr->by = by;
 				}
 				else {
-					iferr(ZCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					ZCurve.Insert(frame, NewObj(mmd::VMD_Curve,ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto rCurvr_ptr = RCurve.Find(frame);
 				if (rCurvr_ptr != nullptr) {
@@ -1525,7 +1528,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 					rCurvr->by = by;
 				}
 				else {
-					iferr(RCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					RCurve.Insert(frame, NewObj(mmd::VMD_Curve,ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto aCurvr_ptr = ACurve.Find(frame);
 				if (aCurvr_ptr != nullptr) {
@@ -1536,7 +1539,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 					aCurvr->by = by;
 				}
 				else {
-					iferr(ACurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					ACurve.Insert(frame, NewObj(mmd::VMD_Curve,ax, ay, bx, by).GetValue())iferr_return;
 				}
 				UpdateCurve(frame);
 				break;
@@ -1746,6 +1749,9 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data) {
 	return true;
 }
 Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level) {
+	iferr_scope_handler{
+		return false;
+	};
 	if (!hf->ReadInt32(&this->bone_morph_name_index))
 		return false;
 	if (!hf->ReadInt32(&this->prev_frame))
@@ -1767,8 +1773,7 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		if (!hf->ReadMemory(&data, &size))
 			return false;
-		iferr(this->XCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->XCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve, *static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 		return false;
@@ -1778,8 +1783,7 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		if (!hf->ReadMemory(&data, &size))
 			return false;
-		iferr(this->YCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->YCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve, *static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 		return false;
@@ -1789,8 +1793,7 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		if (!hf->ReadMemory(&data, &size))
 			return false;
-		iferr(this->ZCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->ZCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve, *static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 		return false;
@@ -1800,8 +1803,7 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		if (!hf->ReadMemory(&data, &size))
 			return false;
-		iferr(this->RCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->RCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve, *static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 		return false;
@@ -1811,8 +1813,7 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		if (!hf->ReadMemory(&data, &size))
 			return false;
-		iferr(this->ACurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->ACurve.Insert(TempIndex, NewObj(mmd::VMD_Curve, *static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 		return false;
@@ -1823,8 +1824,7 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		Int32 TempIndex = 0;
 		if (!hf->ReadInt32(&TempIndex))
 			return false;
-		iferr(this->button_id_map.Insert(TempID, TempIndex))
-			return false;
+		this->button_id_map.Insert(TempID, TempIndex)iferr_return;
 	}
 	hf->ReadInt32(&CountTemp);
 	for (Int32 i = 0; i < CountTemp; i++) {
@@ -1845,8 +1845,7 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		if (!hf->ReadString(&TempData.name))
 			return false;
-		iferr(this->bone_morph_data_arr.Append(TempData))
-			return false;
+		this->bone_morph_data_arr.Append(TempData)iferr_return;
 	}
 	return SUPER::Read(node, hf, level);
 }
@@ -1939,21 +1938,22 @@ Bool mmd::TMMDBone::Write(GeListNode* node, HyperFile* hf) {
 	return SUPER::Write(node, hf);
 }
 void mmd::TMMDBone::Free(GeListNode* node) {
-	for (auto i : this->XCurve.GetValues()) {
-		if (i != nullptr)delete i;
+	for (auto i : XCurve.GetValues()) {
+		if (i != nullptr)DeleteObj(i);
 	}
-	for (auto i : this->YCurve.GetValues()) {
-		if (i != nullptr)delete i;
+	for (auto i : YCurve.GetValues()) {
+		if (i != nullptr)DeleteObj(i);
 	}
-	for (auto i : this->ZCurve.GetValues()) {
-		if (i != nullptr)delete i;
+	for (auto i : ZCurve.GetValues()) {
+		if (i != nullptr)DeleteObj(i);
 	}
-	for (auto i : this->RCurve.GetValues()) {
-		if (i != nullptr)delete i;
+	for (auto i : RCurve.GetValues()) {
+		if (i != nullptr)DeleteObj(i);
 	}
 	for (auto i : this->ACurve.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
+
 }
 
 //*******************
@@ -3078,49 +3078,49 @@ Bool mmd::OMMDBoneRoot::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, new OMMDBoneRoot_MSG(0, BONE_DISPLAY_TYPE_ON));
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG,0, BONE_DISPLAY_TYPE_ON).GetValue());
 			break;
 		}
 		case BONE_DISPLAY_TYPE_OFF:
 		{
 			op->SetEditorMode(MODE_OFF);
 			op->SetRenderMode(MODE_OFF);
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, new OMMDBoneRoot_MSG(0, BONE_DISPLAY_TYPE_OFF));
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG,0, BONE_DISPLAY_TYPE_OFF).GetValue());
 			break;
 		}
 		case BONE_DISPLAY_TYPE_MOVABLE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, new OMMDBoneRoot_MSG(0, BONE_DISPLAY_TYPE_MOVABLE));
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG,0, BONE_DISPLAY_TYPE_MOVABLE).GetValue());
 			break;
 		}
 		case BONE_DISPLAY_TYPE_VISIBLE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, new OMMDBoneRoot_MSG(0, BONE_DISPLAY_TYPE_VISIBLE));
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG,0, BONE_DISPLAY_TYPE_VISIBLE).GetValue());
 			break;
 		}
 		case BONE_DISPLAY_TYPE_ROTATABLE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, new OMMDBoneRoot_MSG(0, BONE_DISPLAY_TYPE_ROTATABLE));
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG,0, BONE_DISPLAY_TYPE_ROTATABLE).GetValue());
 			break;
 		}
 		case BONE_DISPLAY_TYPE_ENABLED:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, new OMMDBoneRoot_MSG(0, BONE_DISPLAY_TYPE_ENABLED));
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG,0, BONE_DISPLAY_TYPE_ENABLED).GetValue());
 			break;
 		}
 		case BONE_DISPLAY_TYPE_IK:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, new OMMDBoneRoot_MSG(0, BONE_DISPLAY_TYPE_IK));
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG,0, BONE_DISPLAY_TYPE_IK).GetValue());
 			break;
 		}
 		default:
@@ -3178,19 +3178,19 @@ Bool mmd::OMMDRigidRoot::SetDParameter(GeListNode* node, const DescID& id, const
 		{
 		case RIGID_DISPLAY_TYPE_OFF:
 		{
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, new OMMDRigidRoot_MSG(0,RIGID_DISPLAY_TYPE_OFF));
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, NewObj(OMMDRigidRoot_MSG,0,RIGID_DISPLAY_TYPE_OFF).GetValue());
 			break;
 		}
 		case RIGID_DISPLAY_TYPE_ON:
 		{
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, new OMMDRigidRoot_MSG(0,RIGID_DISPLAY_TYPE_ON));
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, NewObj(OMMDRigidRoot_MSG,0,RIGID_DISPLAY_TYPE_ON).GetValue());
 			if(op->GetTag(Tdisplay)!=nullptr)
 				op->GetTag(Tdisplay)->SetParameter(DISPLAYTAG_SDISPLAYMODE, DISPLAYTAG_SDISPLAY_GOURAUD, DESCFLAGS_SET::NONE);
 			break;
 		}
 		case RIGID_DISPLAY_TYPE_WIRE:
 		{
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, new OMMDRigidRoot_MSG(0,RIGID_DISPLAY_TYPE_WIRE));
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, NewObj(OMMDRigidRoot_MSG,0,RIGID_DISPLAY_TYPE_WIRE).GetValue());
 			if (op->GetTag(Tdisplay) != nullptr)
 				op->GetTag(Tdisplay)->SetParameter(DISPLAYTAG_SDISPLAYMODE, DISPLAYTAG_SDISPLAY_NOSHADING, DESCFLAGS_SET::NONE);
 			break;
@@ -3261,17 +3261,17 @@ Bool mmd::OMMDJointRoot::SetDParameter(GeListNode* node, const DescID& id, const
 		{
 		case JOINT_DISPLAY_TYPE_OFF:
 		{
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, new OMMDJointRoot_MSG(0, JOINT_DISPLAY_TYPE_OFF));
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG,0, JOINT_DISPLAY_TYPE_OFF).GetValue());
 			break;
 		}
 		case JOINT_DISPLAY_TYPE_ON:
 		{
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, new OMMDJointRoot_MSG(0, JOINT_DISPLAY_TYPE_ON));
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG,0, JOINT_DISPLAY_TYPE_ON).GetValue());
 			break;
 		}
 		case JOINT_DISPLAY_TYPE_WIRE:
 		{
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, new OMMDJointRoot_MSG(0, JOINT_DISPLAY_TYPE_WIRE));
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG,0, JOINT_DISPLAY_TYPE_WIRE).GetValue());
 			break;
 		}
 		default:

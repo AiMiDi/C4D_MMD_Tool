@@ -66,15 +66,13 @@ namespace mmd {
 	{
 		UInt32	frame_no = 0;
 		Bool show = true;
-		maxon::BaseArray<VMD_IkInfo*> ik_Infos;
+		maxon::PointerArray<VMD_IkInfo> ik_Infos;
 
 		VMD_Model(){}
 		VMD_Model(const mmd::VMD_Model& src) {
 			this->frame_no = src.frame_no;
-			this->show = src.show;
-			for (auto i : src.ik_Infos) {
-				this->ik_Infos.Append(new mmd::VMD_IkInfo(i->name, i->enable))iferr_ignore("Errors are handled after append"_s);
-			}
+			this->show = src.show;			
+			this->ik_Infos.CopyFrom(src.ik_Infos)iferr_ignore("err"_s);
 		}
 		mmd::VMD_Model& mmd::VMD_Model::operator =(const mmd::VMD_Model& src) {
 			if (&src == this)
@@ -83,17 +81,8 @@ namespace mmd {
 			}
 			this->frame_no = src.frame_no;
 			this->show = src.show;
-			for (auto i : src.ik_Infos) {
-				this->ik_Infos.Append(new mmd::VMD_IkInfo(i->name, i->enable))iferr_ignore("Errors are handled after append"_s);
-			}
+			this->ik_Infos.CopyFrom(src.ik_Infos)iferr_ignore("err"_s);
 			return *this;
-		}
-		~VMD_Model(){
-			for (VMD_IkInfo* i : ik_Infos) {
-				if (i != nullptr)
-					delete i;
-			}
-			ik_Infos.Reset();
 		}
 	};
 
@@ -157,7 +146,15 @@ namespace mmd {
 	};
 	struct PMX_Data_count
 	{
-		Int32 vertex_data_count = 0, surface_data_count = 0, texture_data_count = 0, material_data_count = 0, bone_data_count = 0, morph_data_count = 0, display_data_count = 0, rigid_body_data_count = 0, joint_data_count = 0;
+		Int32 vertex_data_count = 0,
+			surface_data_count = 0, 
+			texture_data_count = 0, 
+			material_data_count = 0,
+			bone_data_count = 0,
+			morph_data_count = 0, 
+			display_data_count = 0, 
+			rigid_body_data_count = 0,
+			joint_data_count = 0;
 	};
 	struct PMX_Vertex_Data//顶点数据
 	{
@@ -187,6 +184,16 @@ namespace mmd {
 		Bool vertex_colour : 1;//使用额外的Vector4d32作为顶点的颜色
 		Bool point_drawing : 1;//三个顶点都被画出
 		Bool line_drawing : 1;//三个边被画出
+		PMX_Material_Flags() {
+			this->no_cull = 0;
+			this->ground_shadow = 0;
+			this->draw_shadow = 0;
+			this->Receive_shadow = 0;
+			this->has_edge = 0;
+			this->vertex_colour = 0;
+			this->point_drawing = 0;
+			this->line_drawing = 0;
+		}
 	};
 	struct PMX_Material_Data//材质数据
 	{
@@ -203,11 +210,8 @@ namespace mmd {
 		Int32 environment_index = 0;//环境（高光贴图）索引，用于环境映射
 		Char environment_blend_mode = 0;//环境（高光贴图）混合模式,0=禁用, 1=乘, 2=加, 3=额外的Vector4d32
 		Char toon_reference = 0;//贴图引用 0 = 引用纹理, 1 = 内部引用
-		union
-		{
-			Int32 toon_part;
-			Char toon_internal;
-		};//贴图值,取决于贴图引用
+		Int32 toon_part;
+		Char toon_internal;
 		String meta_data;//元数据,用于脚本或其他数据
 		Int32 surface_count = 0; //面数量,表示当前材质影响了多少个面
 		PMX_Material_Data() {};
@@ -229,6 +233,20 @@ namespace mmd {
 		Bool Physics_after_deform : 1;//先变形，后算物理
 		Bool External_parent_deform : 1;//外部亲骨骼变形
 		Bool : 2;//占位
+		PMX_Bone_Flags(){
+			this->indexed_tail_position = 0;
+			this->Rotatable = 0;
+			this->Translatable = 0;
+			this->Is_visible = 0;
+			this->Enabled = 0;
+			this->IK = 0;
+			this->Inherit_rotation = 0;
+			this->Inherit_translation = 0;
+			this->Fixed_axis = 0;
+			this->Local_coordinate = 0;
+			this->Physics_after_deform = 0;
+			this->External_parent_deform = 0;
+		}
 	};
 	struct PMX_IK_links
 	{
@@ -245,11 +263,9 @@ namespace mmd {
 		Int32 parent_bone_index = 0;//亲骨索引, 特殊的：操作中心的亲骨为-1
 		Int32 layer = 0;//变形阶层
 		PMX_Bone_Flags bone_flags;//Bone标志
-		union
-		{
-			Vector32 tail_position;
-			Int32 tail_index;
-		};//尾部位置,相对位置或连接子骨骼
+		Vector32 tail_position;
+		Int32 tail_index = 0;
+		//尾部位置,相对位置或连接子骨骼
 		Int32 inherit_bone_parent_index = 0;//骨骼继承-亲骨索引
 		Float32 inherit_bone_parent_influence = 0.;//骨骼继承-影响权重
 		Vector32 bone_fixed_axis;//骨骼固定轴-轴方向
@@ -260,14 +276,54 @@ namespace mmd {
 		Int32 IK_loop_count = 0;//IK骨-循环计数
 		Float32 IK_limit_radian = 0.;//IK骨-单位角
 		Int32 IK_link_count = 0;//IK骨-IK链计数
-		maxon::BaseArray<PMX_IK_links*> IK_links;
+		maxon::PointerArray<PMX_IK_links> IK_links;
 		PMX_Bone_Data() {};
-		~PMX_Bone_Data() {
-			for (auto i : IK_links) {
-				if(i!=nullptr)delete i;
+		~PMX_Bone_Data() {};
+		PMX_Bone_Data(const PMX_Bone_Data& src) {
+			this->bone_name_local = src.bone_name_local;
+			this->bone_name_universal= src.bone_name_universal;
+			this->position= src.position;
+			this->parent_bone_index = src.parent_bone_index;
+			this->layer = src.layer;
+			this->bone_flags = src.bone_flags;
+			this->tail_position = src.tail_position;
+			this->tail_index = src.tail_index;
+			this->inherit_bone_parent_index = src.inherit_bone_parent_index;
+			this->inherit_bone_parent_influence = src.inherit_bone_parent_influence;
+			this->bone_fixed_axis= src.bone_fixed_axis;
+			this->bone_local_X= src.bone_local_X;
+			this->bone_local_Z= src.bone_local_Z;
+			this->IK_target_index = src.IK_target_index;
+			this->IK_loop_count = src.IK_loop_count;
+			this->IK_limit_radian = src.IK_limit_radian;
+			this->IK_link_count = src.IK_link_count;
+			this->IK_links.CopyFrom(src.IK_links)iferr_ignore("err"_s);
+		}
+		mmd::PMX_Bone_Data& mmd::PMX_Bone_Data::operator =(const mmd::PMX_Bone_Data& src) {
+			if (&src == this)
+			{
+				return *this;
 			}
-			IK_links.Reset();
-		};
+			this->bone_name_local = src.bone_name_local;
+			this->bone_name_universal = src.bone_name_universal;
+			this->position = src.position;
+			this->parent_bone_index = src.parent_bone_index;
+			this->layer = src.layer;
+			this->bone_flags = src.bone_flags;
+			this->tail_position = src.tail_position;
+			this->tail_index = src.tail_index;
+			this->inherit_bone_parent_index = src.inherit_bone_parent_index;
+			this->inherit_bone_parent_influence = src.inherit_bone_parent_influence;
+			this->bone_fixed_axis = src.bone_fixed_axis;
+			this->bone_local_X = src.bone_local_X;
+			this->bone_local_Z = src.bone_local_Z;
+			this->IK_target_index = src.IK_target_index;
+			this->IK_loop_count = src.IK_loop_count;
+			this->IK_limit_radian = src.IK_limit_radian;
+			this->IK_link_count = src.IK_link_count;
+			this->IK_links.CopyFrom(src.IK_links)iferr_ignore("err"_s);
+			return *this;
+		}
 	};
 	struct PMX_Morph_group
 	{
@@ -336,7 +392,56 @@ namespace mmd {
 		void* offset_data = nullptr;//偏移量数据
 		PMX_Morph_Data() {};
 		~PMX_Morph_Data() {
-			if(offset_data!=nullptr)delete offset_data;
+			if (offset_data != nullptr)
+			{
+				switch (this->morph_type)
+				{
+				case 0:
+				{
+					maxon::PointerArray<PMX_Morph_group>* offset_data_groups = (maxon::PointerArray<PMX_Morph_group>*)offset_data;
+					DeleteObj(offset_data_groups);
+					break;
+				}
+				case 1:
+				{
+					maxon::PointerArray<PMX_Morph_vertex>* offset_data_vertexs = (maxon::PointerArray<PMX_Morph_vertex>*)offset_data;
+					DeleteObj(offset_data_vertexs);
+					break;
+				}
+				case 2:
+				{
+					maxon::PointerArray<PMX_Morph_bone>* offset_data_bones = (maxon::PointerArray<PMX_Morph_bone>*)offset_data;
+					DeleteObj(offset_data_bones);
+					break;
+				}
+				case 3:
+				{
+					maxon::PointerArray<PMX_Morph_UV>* offset_data_UVs = (maxon::PointerArray<PMX_Morph_UV>*)offset_data;
+					DeleteObj(offset_data_UVs);
+					break;
+				}
+				case 8:
+				{
+					maxon::PointerArray<PMX_Morph_material>* offset_data_materials = (maxon::PointerArray<PMX_Morph_material>*)offset_data;
+					DeleteObj(offset_data_materials);
+					break;
+				}
+				case 9:
+				{
+					maxon::PointerArray<PMX_Morph_flip>* offset_data_flips = (maxon::PointerArray<PMX_Morph_flip>*)offset_data;
+					DeleteObj(offset_data_flips);
+					break;
+				}
+				case 10:
+				{
+					maxon::PointerArray<PMX_Morph_impulse>* offset_data_impulses = (maxon::PointerArray<PMX_Morph_impulse>*)offset_data;
+					DeleteObj(offset_data_impulses);
+					break;
+				}
+				default:
+					break;
+				}
+			}
 		};
 	};
 	struct PMX_Frame_data//帧数据
@@ -350,14 +455,16 @@ namespace mmd {
 		String display_name_universal;//表示枠通用名称
 		Char special_flag = 0;//0表示普通帧，1表示特殊帧
 		Int32 frame_count = 0;//记录有多少个帧
-		maxon::BaseArray<PMX_Frame_data*> Frames;//帧数据
-		PMX_Display_Data() {};
-		~PMX_Display_Data() {
-			for (auto i : Frames) {
-				if (i != nullptr)delete i;
-			}
-			Frames.Reset();
-		};
+		maxon::PointerArray<PMX_Frame_data> Frames;//帧数据
+		PMX_Display_Data() {}
+		PMX_Display_Data(const PMX_Display_Data& src) {
+			this->display_name_local=src.display_name_local;
+			this->display_name_universal = src.display_name_universal;
+			this->special_flag = src.special_flag;
+			this->frame_count = src.frame_count;
+			this->Frames.CopyFrom(src.Frames)iferr_ignore("err"_s);
+		}
+
 	};
 	struct PMX_Rigid_body_non_collision_group//非碰撞组掩码(2bytes)
 	{
@@ -377,6 +484,58 @@ namespace mmd {
 		Bool G14 : 1;
 		Bool G15 : 1;
 		Bool G16 : 1;
+		PMX_Rigid_body_non_collision_group() {
+			this->G1 = 0;
+			this->G2 = 0;
+			this->G3 = 0;
+			this->G4 = 0;
+			this->G5 = 0;
+			this->G6 = 0;
+			this->G7 = 0;
+			this->G8 = 0;
+			this->G9 = 0;
+			this->G10 = 0;
+			this->G11 = 0;
+			this->G12 = 0;
+			this->G13 = 0;
+			this->G14 = 0;
+			this->G15 = 0;
+			this->G16 = 0;
+		}
+		PMX_Rigid_body_non_collision_group(
+		Bool G1_ =0,
+		Bool G2_ =0,
+		Bool G3_ =0,
+		Bool G4_ =0,
+		Bool G5_ =0,
+		Bool G6_ =0,
+		Bool G7_ =0,
+		Bool G8_ =0,
+		Bool G9_ =0,
+		Bool G10_ =0,
+		Bool G11_ =0,
+		Bool G12_ =0,
+		Bool G13_ =0,
+		Bool G14_ =0,
+		Bool G15_ =0,
+		Bool G16_ =0) {
+			this->G1 = G1_;
+			this->G2 = G2_;
+			this->G3 = G3_;
+			this->G4 = G4_;
+			this->G5 = G5_;
+			this->G6 = G6_;
+			this->G7 = G7_;
+			this->G8 = G8_;
+			this->G9 = G9_;
+			this->G10 = G10_;
+			this->G11 = G11_;
+			this->G12 = G12_;
+			this->G13 = G13_;
+			this->G14 = G14_;
+			this->G15 = G15_;
+			this->G16 = G16_;
+		}
 	};
 	struct PMX_Rigid_Body_Data
 	{
@@ -384,7 +543,7 @@ namespace mmd {
 		String rigid_body_name_universal;//刚体通用名称
 		Int32 related_bone_index=0;//关联骨骼索引
 		Char group_id = 0;//群组ID
-		PMX_Rigid_body_non_collision_group non_collision_group;//非碰撞组
+		PMX_Rigid_body_non_collision_group non_collision_group = 0;//非碰撞组
 		/*
 		刚体形状类型
 		0 - 球

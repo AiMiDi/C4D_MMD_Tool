@@ -129,12 +129,12 @@ namespace mmd {
 		//储存上一种曲线类型，以确定更新状态
 		Int32 prev_curve_type = -1;
 		//对应的主对象
-		BaseObject* obj = nullptr;		
+		BaseObject* obj = nullptr;
 		Vector prev_position;
 		Vector prev_rotation;
 		INSTANCEOF(TMMDBone, TagData)
-	public:	
-		maxon::BaseArray<bone_morph_data> bone_morph_data_arr;	
+	public:
+		maxon::BaseArray<bone_morph_data> bone_morph_data_arr;
 		//是否是物理骨骼
 		Bool Is_physical = false;
 		Bool SetBondMorphTranslation(Int32 id, Vector& translation) {
@@ -167,7 +167,7 @@ namespace mmd {
 		virtual Bool Init(GeListNode* node);
 		//设置参数时调用，用于调用SplineData的回调函数
 		virtual Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags);
-		virtual Bool GetDEnabling(GeListNode *node, const DescID &id, const GeData &t_data, DESCFLAGS_ENABLE flags, const BaseContainer *itemdesc);
+		virtual Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc);
 		virtual EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 	priority, EXECUTIONFLAGS flags);
 		virtual Bool Read(GeListNode* node, HyperFile* hf, Int32 level);
 		virtual Bool Write(GeListNode* node, HyperFile* hf);
@@ -177,9 +177,9 @@ namespace mmd {
 
 	class OMMDRigid : public ObjectData
 	{
-	private:	
+	private:
 		Vector position_frozne = Vector();
-		Vector rotation_frozne = Vector();		
+		Vector rotation_frozne = Vector();
 		//析构函数
 		~OMMDRigid() {}
 		Int32 DisplayType = RIGID_DISPLAY_TYPE_OFF;
@@ -237,7 +237,7 @@ namespace mmd {
 		//生成函数
 		static NodeData* Alloc() { return NewObjClear(OMMDJoint); }
 	};
-	/*	
+	/*
 	class PMX_Material_Tag : public TagData
 	{
 	public:

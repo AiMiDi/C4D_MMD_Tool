@@ -24,8 +24,8 @@
 
 #include <memory>
 #include <fstream>
-#include "customgui_iconchooser.h"
 #include "c4d.h"
+#include "customgui_iconchooser.h"
 #include "c4d_plugin.h"
 #include "ge_prepass.h"
 #include "c4d_symbols.h"

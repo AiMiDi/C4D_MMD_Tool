@@ -236,7 +236,7 @@ namespace mmd
 		}
 
 		m_group = bc->GetInt32(RIGID_GROUP_ID);
-		PMX_Rigid_body_non_collision_group groupMask{ 
+		PMX_Rigid_body_non_collision_group groupMask(
 			bc->GetBool(RIGID_NON_COLLISION_GROUP_0),
 			bc->GetBool(RIGID_NON_COLLISION_GROUP_1),
 			bc->GetBool(RIGID_NON_COLLISION_GROUP_2),
@@ -252,7 +252,7 @@ namespace mmd
 			bc->GetBool(RIGID_NON_COLLISION_GROUP_12),
 			bc->GetBool(RIGID_NON_COLLISION_GROUP_13),
 			bc->GetBool(RIGID_NON_COLLISION_GROUP_14),
-			bc->GetBool(RIGID_NON_COLLISION_GROUP_15)};
+			bc->GetBool(RIGID_NON_COLLISION_GROUP_15));
 		m_groupMask = *reinterpret_cast<uint16_t*>(&groupMask);
 		m_node = node;
 		m_name = bc->GetString(RIGID_NAME_LOCAL);

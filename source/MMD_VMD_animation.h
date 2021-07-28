@@ -115,7 +115,19 @@ namespace mmd{
 		//构造函数
 		VMDAnimation(){}
 		//析构函数
-		~VMDAnimation(){}
+		~VMDAnimation(){
+			motion_frames.Reset();
+			//表情动画数据数组
+			morph_frames.Reset();
+			//摄像机数据数组
+			camera_frames.Reset();
+			//灯光数据数组
+			light_frames.Reset();
+			//灯光数据数组
+			shadow_frames.Reset();
+			//灯光数据数组
+			model_frames.Reset();
+		}
 
 		//用于从文件导入到对象
 		maxon::Result<void> LoadFromFile(BaseFile* const file);
@@ -202,7 +214,7 @@ namespace mmd{
 			BaseDocument* doc = nullptr;
 		public:
 			VMDLoaderCameraDialog(Filename fn_, BaseDocument* doc_):fn(fn_),doc(doc_) {}
-			virtual ~VMDLoaderCameraDialog(void) {delete Images;}
+			virtual ~VMDLoaderCameraDialog(void) { DeleteObj(Images);}
 			virtual Bool CreateLayout(void);
 			virtual Bool InitValues(void);
 			virtual Bool Command(Int32 id, const BaseContainer& msg);
@@ -223,4 +235,4 @@ namespace mmd{
 		static NodeData* Alloc(void) { return NewObjClear(VMD_Cam_Draw); }
 	};
 } // namespace
-#endif  __MMD_VMD_ANIMATION_H__
+#endif  //__MMD_VMD_ANIMATION_H__

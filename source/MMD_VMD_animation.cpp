@@ -3,25 +3,25 @@
 void mmd::OMMDCamera::Free(GeListNode* node) {
 	//GetActiveDocument()->FindSceneHook(ID_S_MMD_CAM_DRAW)->GetNodeData<VMD_Cam_Draw>()->DeleteDrawObj((BaseObject*)node);
 	for (auto i : XCurve.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
 	for (auto i : YCurve.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
 	for (auto i : ZCurve.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
 	for (auto i : RCurve.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
 	for (auto i : DCurve.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
 	for (auto i : VCurve.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
 	for (auto i : this->ACurve.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
 }
 Bool mmd::OMMDCamera::SplineDataCallBack(Int32 cid, const void* data)
@@ -537,6 +537,9 @@ Bool mmd::OMMDCamera::SetDParameter(GeListNode* node, const DescID& id, const Ge
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
+	iferr_scope_handler{
+		return true;
+	};
 	switch (type)
 	{
 	case MSG_DESCRIPTION_COMMAND: {
@@ -713,7 +716,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					xCurvr->by = by;
 				}
 				else {
-					iferr(XCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					XCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -727,7 +730,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					yCurvr->by = by;
 				}
 				else {
-					iferr(YCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					YCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -741,7 +744,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					zCurvr->by = by;
 				}
 				else {
-					iferr(ZCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					ZCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -755,7 +758,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					rCurvr->by = by;
 				}
 				else {
-					iferr(RCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					RCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -769,7 +772,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					dCurvr->by = by;
 				}
 				else {
-					iferr(DCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					DCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -783,7 +786,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					vCurvr->by = by;
 				}
 				else {
-					iferr(VCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					VCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				break;
 			}
@@ -797,7 +800,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					xCurvr->by = by;
 				}
 				else {
-					iferr(XCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					XCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto yCurvr_ptr = YCurve.Find(frame);
 				if (yCurvr_ptr != nullptr) {
@@ -808,7 +811,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					yCurvr->by = by;
 				}
 				else {
-					iferr(YCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					YCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto zCurvr_ptr = ZCurve.Find(frame);
 				if (zCurvr_ptr != nullptr) {
@@ -819,7 +822,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					zCurvr->by = by;
 				}
 				else {
-					iferr(ZCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					ZCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto rCurvr_ptr = RCurve.Find(frame);
 				if (rCurvr_ptr != nullptr) {
@@ -830,7 +833,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					rCurvr->by = by;
 				}
 				else {
-					iferr(RCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					RCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto dCurvr_ptr = DCurve.Find(frame);
 				if (dCurvr_ptr != nullptr) {
@@ -841,7 +844,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					dCurvr->by = by;
 				}
 				else {
-					iferr(DCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					DCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto vCurvr_ptr = VCurve.Find(frame);
 				if (vCurvr_ptr != nullptr) {
@@ -852,7 +855,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					vCurvr->by = by;
 				}
 				else {
-					iferr(VCurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					VCurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				auto aCurvr_ptr = ACurve.Find(frame);
 				if (aCurvr_ptr != nullptr) {
@@ -863,7 +866,7 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data) {
 					aCurvr->by = by;
 				}
 				else {
-					iferr(ACurve.Insert(frame, new  mmd::VMD_Curve(ax, ay, bx, by)))return false;
+					ACurve.Insert(frame, NewObj(mmd::VMD_Curve, ax, ay, bx, by).GetValue())iferr_return;
 				}
 				UpdateCurve(frame);
 				break;
@@ -1216,6 +1219,9 @@ Bool mmd::OMMDCamera::AddToExecution(BaseObject* op, PriorityList* list) {
 	return true;
 }
 maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Camera_settings setting) {
+	iferr_scope_handler{
+	return nullptr;
+	};
 	//获取活动文档
 	BaseDocument* doc = GetActiveDocument();
 	if (doc == nullptr) {
@@ -1511,7 +1517,7 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 				ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
 				strCurvePX->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
 				strCurvePX->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				iferr(VMDCamera_data->XCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+				VMDCamera_data->XCurve.Insert(frame_on, NewObj(mmd::VMD_Curve,(UChar)maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0)).GetValue())iferr_return;
 			}
 
 			Key = strCurvePY->GetKey(i);
@@ -1520,7 +1526,7 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 				ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
 				strCurvePY->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
 				strCurvePY->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				iferr(VMDCamera_data->YCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+				VMDCamera_data->YCurve.Insert(frame_on, NewObj(mmd::VMD_Curve,(UChar)maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0)).GetValue())iferr_return;
 			}
 
 			Key = strCurvePZ->GetKey(i);
@@ -1529,7 +1535,7 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 				ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
 				strCurvePZ->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
 				strCurvePZ->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				iferr(VMDCamera_data->ZCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+				VMDCamera_data->ZCurve.Insert(frame_on, NewObj(mmd::VMD_Curve,(UChar)maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0)).GetValue())iferr_return;
 			}
 
 			Key = strCurveAOV->GetKey(i);
@@ -1538,9 +1544,9 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 				ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
 				strCurveAOV->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
 				strCurveAOV->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				iferr(VMDCamera_data->VCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+				VMDCamera_data->VCurve.Insert(frame_on, NewObj(mmd::VMD_Curve,(UChar)maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0)).GetValue())iferr_return;
 			}
-			iferr(VMDCamera_data->DCurve.Insert(frame_on, new mmd::VMD_Curve()))return nullptr;
+			VMDCamera_data->DCurve.Insert(frame_on, NewObj(mmd::VMD_Curve).GetValue())iferr_return;
 			switch (setting.use_rotation)
 			{
 			case 0:
@@ -1550,7 +1556,7 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 					ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
 					strCurveRX->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
 					strCurveRX->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-					iferr(VMDCamera_data->RCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+					VMDCamera_data->RCurve.Insert(frame_on, NewObj(mmd::VMD_Curve,(UChar)maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0)).GetValue())iferr_return;
 				}
 				break;
 			case 1:
@@ -1560,7 +1566,7 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 					ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
 					strCurveRY->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
 					strCurveRY->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-					iferr(VMDCamera_data->RCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+					VMDCamera_data->RCurve.Insert(frame_on, NewObj(mmd::VMD_Curve,(UChar)maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0)).GetValue())iferr_return;
 				}
 				break;
 			case 2:
@@ -1570,7 +1576,7 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 					ValueOfTwoFrames = NextKey->GetValue() - Key->GetValue();
 					strCurveRZ->GetTangents(i, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
 					strCurveRZ->GetTangents(i + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-					iferr(VMDCamera_data->RCurve.Insert(frame_on, new mmd::VMD_Curve(maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0))))return nullptr;
+					VMDCamera_data->RCurve.Insert(frame_on, NewObj(mmd::VMD_Curve,(UChar)maxon::Abs(KeyRightX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(KeyRightY / ValueOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftX * Fps / (Float)TimeOfTwoFrames * 127.0), (UChar)maxon::Abs(NextKeyLeftY / ValueOfTwoFrames * 127.0)).GetValue())iferr_return;
 				}
 				break;
 			default:
@@ -1586,6 +1592,9 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 	return maxon::Result<BaseObject*>(VMDCamera);
 }
 Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level) {
+	iferr_scope_handler{
+		return false;
+	};
 	if (!hf->ReadInt32(&this->prev_frame))
 	return false;
 	if (!hf->ReadInt32(&this->prev_curve_type))
@@ -1601,8 +1610,7 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		return false;
 		if (!hf->ReadMemory(&data, &size))
 		return false;
-		iferr(this->XCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->XCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve,*static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 	return false;
@@ -1612,8 +1620,7 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		return false;
 		if (!hf->ReadMemory(&data, &size))
 		return false;
-		iferr(this->YCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->YCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve,*static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 	return false;
@@ -1623,8 +1630,7 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		return false;
 		if (!hf->ReadMemory(&data, &size))
 		return false;
-		iferr(this->ZCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->ZCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve,*static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 	return false;
@@ -1634,8 +1640,7 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		return false;
 		if (!hf->ReadMemory(&data, &size))
 		return false;
-		iferr(this->RCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->RCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve,*static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 		return false;
@@ -1645,8 +1650,7 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		if (!hf->ReadMemory(&data, &size))
 			return false;
-		iferr(this->DCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->DCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve,*static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if (!hf->ReadInt32(&CountTemp))
 		return false;
@@ -1656,8 +1660,7 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		if (!hf->ReadMemory(&data, &size))
 			return false;
-		iferr(this->VCurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->VCurve.Insert(TempIndex, NewObj(mmd::VMD_Curve,*static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	if(!hf->ReadInt32(&CountTemp))
 	return false;
@@ -1667,8 +1670,7 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		return false;
 		if (!hf->ReadMemory(&data, &size))
 		return false;
-		iferr(this->ACurve.Insert(TempIndex, new mmd::VMD_Curve(*static_cast<mmd::VMD_Curve*>(data))))
-			return false;
+		this->ACurve.Insert(TempIndex, NewObj(mmd::VMD_Curve,*static_cast<mmd::VMD_Curve*>(data)).GetValue())iferr_return;
 	}
 	
 	return SUPER::Read(node, hf, level);
@@ -1745,6 +1747,9 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf) {
 	return SUPER::Write(node, hf);
 }
 Bool mmd::OMMDCamera::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) {
+	iferr_scope_handler{
+		return false;
+	};
 	OMMDCamera* const destObject = static_cast<OMMDCamera*>(dest);
 	if (destObject == nullptr) {
 		return false;
@@ -1752,32 +1757,25 @@ Bool mmd::OMMDCamera::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnod
 	destObject->prev_frame = this->prev_frame;
 	destObject->prev_curve_type = this->prev_curve_type;
 	for (auto i : this->XCurve.GetKeys()) {
-		iferr(destObject->XCurve.Insert(i, new mmd::VMD_Curve(*this->XCurve.Find(i)->GetValue())))
-			return false;
+		destObject->XCurve.Insert(i, NewObj(mmd::VMD_Curve,*this->XCurve.Find(i)->GetValue()).GetValue())iferr_return;
 	}
 	for (auto i : this->YCurve.GetKeys()) {
-		iferr(destObject->YCurve.Insert(i, new mmd::VMD_Curve(*this->YCurve.Find(i)->GetValue())))
-			return false;
+		destObject->YCurve.Insert(i, NewObj(mmd::VMD_Curve,*this->YCurve.Find(i)->GetValue()).GetValue())iferr_return;
 	}
 	for (auto i : this->ZCurve.GetKeys()) {
-		iferr(destObject->ZCurve.Insert(i, new mmd::VMD_Curve(*this->ZCurve.Find(i)->GetValue())))
-			return false;
+		destObject->ZCurve.Insert(i, NewObj(mmd::VMD_Curve,*this->ZCurve.Find(i)->GetValue()).GetValue())iferr_return;
 	}
 	for (auto i : this->RCurve.GetKeys()) {
-		iferr(destObject->RCurve.Insert(i, new mmd::VMD_Curve(*this->RCurve.Find(i)->GetValue())))
-			return false;
+		destObject->RCurve.Insert(i, NewObj(mmd::VMD_Curve,*this->RCurve.Find(i)->GetValue()).GetValue())iferr_return;
 	}
 	for (auto i : this->DCurve.GetKeys()) {
-		iferr(destObject->DCurve.Insert(i, new mmd::VMD_Curve(*this->DCurve.Find(i)->GetValue())))
-			return false;
+		destObject->DCurve.Insert(i, NewObj(mmd::VMD_Curve,*this->DCurve.Find(i)->GetValue()).GetValue())iferr_return;
 	}
 	for (auto i : this->VCurve.GetKeys()) {
-		iferr(destObject->VCurve.Insert(i, new mmd::VMD_Curve(*this->VCurve.Find(i)->GetValue())))
-			return false;
+		destObject->VCurve.Insert(i, NewObj(mmd::VMD_Curve,*this->VCurve.Find(i)->GetValue()).GetValue())iferr_return;
 	}
 	for (auto i : this->ACurve.GetKeys()) {
-		iferr(destObject->ACurve.Insert(i, new mmd::VMD_Curve(*this->ACurve.Find(i)->GetValue())))
-			return false;
+		destObject->ACurve.Insert(i, NewObj(mmd::VMD_Curve,*this->ACurve.Find(i)->GetValue()).GetValue())iferr_return;
 	}
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
@@ -1822,7 +1820,9 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	if (!file->ReadUInt32(&(this->MotionFrameNumber)))return maxon::Error();
 	for (UInt32 i = 0; i < this->MotionFrameNumber; i++) {
 		//111 bytes
-		mmd::VMD_Motion* motion_frame=new mmd::VMD_Motion();
+		mmd::VMD_Motion* motion_frame = NewObj(mmd::VMD_Motion)iferr_return;
+		if(motion_frame==nullptr)
+			return maxon::Error();
 		Char bone_name[15]{ 0 };
 		if (!file->ReadBytes(bone_name, 15))return maxon::Error();
 		if (!file->ReadUInt32(&(motion_frame->frame_no)))return maxon::Error();
@@ -1881,7 +1881,9 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	for (UInt32 i = 0; i < this->MorphFrameNumber; i++) {
 		//23 bytes
 		Char morph_name[15]{ 0 };
-		mmd::VMD_Morph* morph_frame = new mmd::VMD_Morph();
+		mmd::VMD_Morph* morph_frame = NewObj(mmd::VMD_Morph)iferr_return;
+		if (morph_frame == nullptr)
+			return maxon::Error();
 		if (!file->ReadBytes(morph_name, 15))return maxon::Error();
 		if (!file->ReadUInt32(&morph_frame->frame_no))return maxon::Error();
 		if (!file->ReadFloat32(&morph_frame->weight))return maxon::Error();
@@ -1891,7 +1893,9 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	if (!file->ReadUInt32(&(this->CameraFrameNumber)))return maxon::Error();
 	for (UInt32 i = 0; i < this->CameraFrameNumber; i++) {
 		//61 bytes
-		mmd::VMD_Camera* camera_frame = new mmd::VMD_Camera();
+		mmd::VMD_Camera* camera_frame = NewObj(mmd::VMD_Camera)iferr_return;
+		if (camera_frame == nullptr)
+			return maxon::Error();
 		if (!file->ReadUInt32(&(camera_frame->frame_no)))return maxon::Error();
 		if (!file->ReadFloat32(&(camera_frame->distance)))return maxon::Error();
 		if (!file->ReadFloat32(&(camera_frame->position.x)))return maxon::Error();
@@ -1944,7 +1948,9 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	if (!file->ReadUInt32(&(this->LightFrameNumber)))return maxon::Error();
 	for (UInt32 i = 0; i < this->LightFrameNumber; i++) {
 		//28 bytes
-		mmd::VMD_Light* light_frame = new mmd::VMD_Light();
+		mmd::VMD_Light* light_frame = NewObj(mmd::VMD_Light)iferr_return;
+		if (light_frame == nullptr)
+			return maxon::Error();
 		if (!file->ReadBytes(light_frame, sizeof(mmd::VMD_Light)))return maxon::Error();
 		this->light_frames.AppendPtr(light_frame)iferr_return;
 	}
@@ -1952,14 +1958,18 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 	if (!file->ReadUInt32(&(this->ShadowFrameNumber)))return maxon::Error();
 	for (UInt32 i = 0; i < this->ShadowFrameNumber; i++) {
 		//12 bytes
-		mmd::VMD_Shadow* shadow_frame = new mmd::VMD_Shadow();
+		mmd::VMD_Shadow* shadow_frame = NewObj(mmd::VMD_Shadow)iferr_return;
+		if (shadow_frame == nullptr)
+			return maxon::Error();
 		if (!file->ReadBytes(shadow_frame, sizeof(mmd::VMD_Shadow)))return maxon::Error();
 		this->shadow_frames.AppendPtr(shadow_frame)iferr_return;
 	}
 
 	if (!file->ReadUInt32(&(this->ModelFrameNumber)))return maxon::Error();
 	for (UInt32 i = 0; i < this->ModelFrameNumber; i++) {
-		mmd::VMD_Model* model_frame = new mmd::VMD_Model();
+		mmd::VMD_Model* model_frame = NewObj(mmd::VMD_Model)iferr_return;
+		if (model_frame == nullptr)
+			return maxon::Error();
 		if (!file->ReadUInt32(&model_frame->frame_no))return maxon::Error();
 		if (!file->ReadBool(&model_frame->show))return maxon::Error();
 		UINT32 ikInfoCount = 0;
@@ -1969,8 +1979,8 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(BaseFile* const file)
 			Bool ik_enable;
 			Char ik_name[20]{ 0 };
 			if (!file->ReadBytes(ik_name, 20))return maxon::Error();
-			if (!file->ReadBool(&ik_enable))return maxon::Error();
-			model_frame->ik_Infos.Append(new mmd::VMD_IkInfo(EncodingConversion::JIStoUTF8(ik_name),ik_enable))iferr_return;
+			if (!file->ReadBool(&ik_enable))return maxon::Error(); 
+			model_frame->ik_Infos.AppendPtr(NewObj(mmd::VMD_IkInfo, EncodingConversion::JIStoUTF8(ik_name), ik_enable).GetValue())iferr_return;
 		}
 		this->model_frames.AppendPtr(model_frame)iferr_return;
 	}
@@ -2121,12 +2131,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 	}
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
 	StatusSetSpin();
-	std::unique_ptr<mmd::VMDAnimation> mmd_animation(new mmd::VMDAnimation);
-	if (mmd_animation == nullptr) {
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-	}
+	maxon::UniqueRef<mmd::VMDAnimation> mmd_animation = maxon::UniqueRef<mmd::VMDAnimation>::Create()iferr_return;
+
 	iferr(mmd_animation->LoadFromFile(file)) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
@@ -2216,21 +2222,21 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 			CameraKeyPX->SetValue(CameraCurvePX, CameraFrame.position.x * setting.PositionMultiple);
 			CameraKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePX->InsertKey(CameraKeyPX);
-			VMDCamera_data->SetCurve(VMD_CAM_OBJ_XCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.XCurve));
+			VMDCamera_data->SetCurve(VMD_CAM_OBJ_XCURVE, KeyFrame, NewObj(mmd::VMD_Curve,CameraFrame.XCurve).GetValue());
 
 			CKey* CameraKeyPY = CKey::Alloc();//PY
 			CameraKeyPY->SetTime(CameraCurvePY, KeyTime);
 			CameraKeyPY->SetValue(CameraCurvePY, CameraFrame.position.y * setting.PositionMultiple);
 			CameraKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePY->InsertKey(CameraKeyPY);
-			VMDCamera_data->SetCurve(VMD_CAM_OBJ_YCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.YCurve));
+			VMDCamera_data->SetCurve(VMD_CAM_OBJ_YCURVE, KeyFrame, NewObj(mmd::VMD_Curve,CameraFrame.YCurve).GetValue());
 
 			CKey* CameraKeyPZ = CKey::Alloc();//PZ
 			CameraKeyPZ->SetTime(CameraCurvePZ, KeyTime);
 			CameraKeyPZ->SetValue(CameraCurvePZ, CameraFrame.position.z * setting.PositionMultiple);
 			CameraKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurvePZ->InsertKey(CameraKeyPZ);
-			VMDCamera_data->SetCurve(VMD_CAM_OBJ_ZCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.ZCurve));
+			VMDCamera_data->SetCurve(VMD_CAM_OBJ_ZCURVE, KeyFrame, NewObj(mmd::VMD_Curve,CameraFrame.ZCurve).GetValue());
 
 			CKey* CameraKeyRX = CKey::Alloc();//RX
 			CameraKeyRX->SetTime(CameraCurveRX, KeyTime);
@@ -2249,21 +2255,21 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 			CameraKeyRZ->SetValue(CameraCurveRZ, CameraFrame.rotation.z);
 			CameraKeyRZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurveRZ->InsertKey(CameraKeyRZ);
-			VMDCamera_data->SetCurve(VMD_CAM_OBJ_RCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.RCurve));
+			VMDCamera_data->SetCurve(VMD_CAM_OBJ_RCURVE, KeyFrame, NewObj(mmd::VMD_Curve,CameraFrame.RCurve).GetValue());
 
 			CKey* CameraKeyDistance = CKey::Alloc();;
 			CameraKeyDistance->SetTime(CameraCurveDistance, KeyTime);
 			CameraKeyDistance->SetValue(CameraCurveDistance, CameraFrame.distance * setting.PositionMultiple);
 			CameraKeyDistance->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurveDistance->InsertKey(CameraKeyDistance);
-			VMDCamera_data->SetCurve(VMD_CAM_OBJ_DCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.DCurve));
+			VMDCamera_data->SetCurve(VMD_CAM_OBJ_DCURVE, KeyFrame, NewObj(mmd::VMD_Curve,CameraFrame.DCurve).GetValue());
 
 			CKey* CameraKeyAOV = CKey::Alloc();
 			CameraKeyAOV->SetTime(CameraCurveAOV, KeyTime);
 			CameraKeyAOV->SetValue(CameraCurveAOV, CameraFrame.viewing_angle);
 			CameraKeyAOV->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			CameraCurveAOV->InsertKey(CameraKeyAOV);
-			VMDCamera_data->SetCurve(VMD_CAM_OBJ_VCURVE, KeyFrame, new mmd::VMD_Curve(CameraFrame.VCurve));
+			VMDCamera_data->SetCurve(VMD_CAM_OBJ_VCURVE, KeyFrame, NewObj(mmd::VMD_Curve,CameraFrame.VCurve).GetValue());
 		}
 		VMDCamera_data->UpdateAllCurve();
 		timing.Stop();
@@ -2408,12 +2414,8 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 
 	const Int32 FrameCount = CameraCurveFrame_on->GetKeyCount();
 
-	std::unique_ptr<mmd::VMDAnimation> mmd_animation(new mmd::VMDAnimation);
-	if (mmd_animation == nullptr) {
-		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-	}
+	maxon::UniqueRef<mmd::VMDAnimation> mmd_animation = maxon::UniqueRef<mmd::VMDAnimation>::Create()iferr_return;
+
 	for (Int32 frame_index = 0; frame_index < FrameCount; frame_index++)
 	{
 		StatusSetSpin();
@@ -2487,12 +2489,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 		return maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
 	}
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
-	std::unique_ptr<mmd::VMDAnimation> mmd_animation(new mmd::VMDAnimation);
-	if (mmd_animation == nullptr) {
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-	}
+	maxon::UniqueRef<mmd::VMDAnimation> mmd_animation = maxon::UniqueRef<mmd::VMDAnimation>::Create()iferr_return;
+
 	iferr(mmd_animation->LoadFromFile(file)) {
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
@@ -2629,7 +2627,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 		auto MotionFrame_ptr = MotionFrameList_map.Find(bone_name);
 		if (MotionFrame_ptr == nullptr)
 		{
-			maxon::BaseList<VMD_Motion>* MotionFrame = new maxon::BaseList<VMD_Motion>;
+			maxon::BaseList<VMD_Motion>* MotionFrame = NewObj(maxon::BaseList<VMD_Motion>)iferr_return;
 			MotionFrame->Append(mmd_animation->motion_frames[motion_frame_index])iferr_return;
 			MotionFrameList_map.Insert(bone_name, MotionFrame)iferr_return;
 		}
@@ -2645,7 +2643,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 		auto MorphFrame_ptr = MorphFrameList_map.Find(morph_name);
 		if (MorphFrame_ptr == nullptr)
 		{
-			maxon::BaseList<VMD_Morph>* MorphFrame = new maxon::BaseList<VMD_Morph>;
+			maxon::BaseList<VMD_Morph>* MorphFrame = NewObj(maxon::BaseList<VMD_Morph>)iferr_return;
 			MorphFrame->Append(mmd_animation->morph_frames[morph_frame_index])iferr_return;
 			MorphFrameList_map.Insert(morph_name, MorphFrame)iferr_return;
 		}
@@ -2974,11 +2972,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 							MotionKeyTime = BaseTime(frame_no, 30);
 							if (Is_translatable) {
 								BoneCurvePX->AddKey(MotionKeyTime)->SetValue(BoneCurvePX, MotionFrame.position.x * setting.PositionMultiple);
-								tag_data->SetCurve(PMX_BONE_TAG_XCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.XCurve));
+								tag_data->SetCurve(PMX_BONE_TAG_XCURVE, frame_no, NewObj(mmd::VMD_Curve,MotionFrame.XCurve).GetValue());
 								BoneCurvePY->AddKey(MotionKeyTime)->SetValue(BoneCurvePY, MotionFrame.position.y * setting.PositionMultiple);
-								tag_data->SetCurve(PMX_BONE_TAG_YCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.YCurve));
+								tag_data->SetCurve(PMX_BONE_TAG_YCURVE, frame_no, NewObj(mmd::VMD_Curve,MotionFrame.YCurve).GetValue());
 								BoneCurvePZ->AddKey(MotionKeyTime)->SetValue(BoneCurvePZ, MotionFrame.position.z * setting.PositionMultiple);
-								tag_data->SetCurve(PMX_BONE_TAG_ZCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.ZCurve));
+								tag_data->SetCurve(PMX_BONE_TAG_ZCURVE, frame_no, NewObj(mmd::VMD_Curve,MotionFrame.ZCurve).GetValue());
 							}
 							if (Is_rotatable) {
 								
@@ -2993,7 +2991,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 								BoneCurveRY->AddKey(MotionKeyTime)->SetValue(BoneCurveRY, rotation.y);
 								BoneCurveRZ->AddKey(MotionKeyTime)->SetValue(BoneCurveRZ, rotation.z);
 								if (!setting.QuaternionRotationSW) {
-									tag_data->SetCurve(PMX_BONE_TAG_RCURVE, frame_no, new mmd::VMD_Curve(MotionFrame.RCurve));
+									tag_data->SetCurve(PMX_BONE_TAG_RCURVE, frame_no, NewObj(mmd::VMD_Curve,MotionFrame.RCurve).GetValue());
 								}
 							}
 						}				
@@ -3081,8 +3079,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 		BaseTime time = BaseTime(model_frame.frame_no + setting.TimeOffset, 30);
 		ModelEditorDisplayCurve->AddKey(time)->SetValue(ModelEditorDisplayCurve, !model_frame.show);
 		ModelRenderDisplayCurve->AddKey(time)->SetValue(ModelRenderDisplayCurve, !model_frame.show);
-		for (mmd::VMD_IkInfo* ikInfo : model_frame.ik_Infos) {
-			auto ikTagListPtr = ik_tag_map.Find(ikInfo->name);
+		for (const mmd::VMD_IkInfo& ikInfo : model_frame.ik_Infos) {
+			auto ikTagListPtr = ik_tag_map.Find(ikInfo.name);
 			if (ikTagListPtr != nullptr) {
 				maxon::BaseList<BaseTag*>& ikTagList = ikTagListPtr->GetValue();
 				for (BaseTag* ikTag : ikTagList) {
@@ -3091,7 +3089,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 					if (IKEnableTrack == nullptr)
 						return maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION);
 					CCurve* IKEnableCurve = IKEnableTrack->GetCurve();
-					IKEnableCurve->AddKey(time)->SetValue(IKEnableCurve, ikInfo->enable);
+					IKEnableCurve->AddKey(time)->SetValue(IKEnableCurve, ikInfo.enable);
 				}
 			}
 		}
@@ -3120,11 +3118,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 	bone_name_map.Reset();
 	morph_name_map.Reset();
 	for (auto i : MorphFrameList_map.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
 	MorphFrameList_map.Reset();
 	for (auto i : MotionFrameList_map.GetValues()) {
-		if (i != nullptr)delete i;
+		if (i != nullptr)DeleteObj(i);
 	}
 	MotionFrameList_map.Reset();
 	not_find_bone_S.Reset();
@@ -3135,7 +3133,7 @@ Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::CreateLayout(void)
 {
 
 	SetTitle(GeLoadString(IDS_VMD_TOOL_TITLE));
-	Images = new ImagesGUI("mmd_tool_title.png"_s, 300, 78);
+	Images = NewObj(ImagesGUI,"mmd_tool_title.png"_s, 300, 78).GetValue();
 	C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(78));
 	if (userAreaGadget != nullptr)
 		this->AttachUserArea((*Images), userAreaGadget);

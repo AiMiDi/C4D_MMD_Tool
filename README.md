@@ -112,6 +112,12 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 ​		7. Fixed some actions importing problems.
 
+**version 0.3.9.1**
+
+​		1. Fixed the problem of stuck animation after import.
+
+​		2. Fix some possible memory leaks.
+
 ## usage
 
 1.Select the corresponding version of the plugin and place it in the plugins folder under the Cinema 4D installation directory.
