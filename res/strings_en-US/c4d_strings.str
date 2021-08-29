@@ -36,26 +36,30 @@ STRINGTABLE
 	IDS_MES_DELETE_BONE_ANIM "Do you want to delete all the bone animation data of the model?";
 	IDS_MES_DELETE_MORPH_ANIM "Do you want to delete all the morph animation data of the model?";
     IDS_MES_IMPORT_VMD_CAM_ONLY "Only support the drag and drop import of camera animation VMD files.Please open the plug-in GUI to import the model animation!";
+	IDS_MES_DELETE_BONE_CURVE "Do you want to delete this key frame of the bone?";
+	IDS_MES_DELETE_BONE_ALL_CURVE "Do you want to delete all the key frame of the bone?";
+	IDS_MES_DELETE_CAM_CURVE "Do you want to delete this key frame of the Camera?";
+	IDS_MES_DELETE_CAM_ALL_CURVE "Do you want to delete all the key frame of the Camera?";
 
 	IDS_VMD_TOOL_TITLE "MMD Tool";
 	IDS_VMD_CAM_TOOL_TITLE "Camera";
 	IDS_VMD_CAM_IMPORT_TITLE "Camera Import";
-	IDS_VMD_CAM_IMPORT_SIZE_NAME "Size";
-	IDS_VMD_CAM_IMPORT_OFFSET_NAME "Offset";
+	IDS_VMD_CAM_IMPORT_SIZE "Size";
+	IDS_VMD_CAM_IMPORT_OFFSET "Offset";
 	IDS_VMD_CAM_IMPORT_BUTTON "Import";
 
 	IDS_VMD_CAM_EXPORT_TITLE "Camera Export";
-	IDS_VMD_CAM_EXPORT_SIZE_NAME "Size";
-	IDS_VMD_CAM_EXPORT_OFFSET_NAME "Offset";
-    IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME "Use rotation curve";
+	IDS_VMD_CAM_EXPORT_SIZE "Size";
+	IDS_VMD_CAM_EXPORT_OFFSET "Offset";
+    IDS_VMD_CAM_EXPORT_ROTATION_TWEEN "Use rotation curve";
 	IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_X "X";
 	IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Y "Y";
 	IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Z "X";
 	IDS_VMD_CAM_EXPORT_BUTTON "Export";
 
 	IDS_VMD_CAM_CONVER_TITLE "Conversion camera";
-	IDS_VMD_CAM_CONVER_DIS_NAME "Distance";
-	IDS_VMD_CAM_CONVER_ROTATION_TWEEN_NAME "Use rotation curve";
+	IDS_VMD_CAM_CONVER_DIS "Distance";
+	IDS_VMD_CAM_CONVER_ROTATION_TWEEN "Use rotation curve";
 	IDS_VMD_CAM_CONVER_ROTATION_TWEEN_X "X";
 	IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Y "Y";
 	IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Z "X";
@@ -63,16 +67,30 @@ STRINGTABLE
 
 	IDS_VMD_MOT_TOOL_TITLE "Motion";
 	IDS_VMD_MOT_IMPORT_TITLE "Motion Import";
-	IDS_VMD_MOT_IMPORT_SIZE_NAME "Size";
-	IDS_VMD_MOT_IMPORT_OFFSET_NAME "Offset";
-	IDS_VMD_MOT_IMPORT_QUAT_NAME "Quaternion rotation";
-	IDS_VMD_MOT_IMPORT_DETAIL_NAME "Detail report";
-    IDS_VMD_MOT_IMPORT_BY_TAG "By tag";
+	IDS_VMD_MOT_IMPORT_SIZE "Size";
+	IDS_VMD_MOT_IMPORT_OFFSET "Offset";
+	IDS_VMD_MOT_IMPORT_MOTION "Import motion";
+	IDS_VMD_MOT_IMPORT_MORPH "Import morph";
+	IDS_VMD_MOT_IMPORT_MODEL_INFO "Import model info";
+	IDS_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION "Delete previous animation";
+	IDS_VMD_MOT_IMPORT_DETAIL "Detail report";
 	IDS_VMD_MOT_IMPORT_BUTTON "Import";
+
+	IDS_VMD_MOT_EXPORT_TITLE "Motion Export(Beta)";
+	IDS_VMD_MOT_EXPORT_SIZE "Size";
+	IDS_VMD_MOT_EXPORT_OFFSET "Offset";
+	IDS_VMD_MOT_EXPORT_ROTATION_TWEEN "Use rotation curve";
+	IDS_VMD_MOT_EXPORT_ROTATION_TWEEN_X "X";
+	IDS_VMD_MOT_EXPORT_ROTATION_TWEEN_Y "Y";
+	IDS_VMD_MOT_EXPORT_ROTATION_TWEEN_Z "Z";
+	IDS_VMD_MOT_EXPORT_MOTION "Export motion";
+	IDS_VMD_MOT_EXPORT_MORPH "Export morph";
+	IDS_VMD_MOT_EXPORT_MODEL_INFO "Export model info";
+	IDS_VMD_MOT_EXPORT_BUTTON "Export";
 
 	IDS_PMX_MOD_TOOL_TITLE "Model";
 	IDS_PMX_MOD_IMPORT_TITLE "Model Import";
-	IDS_PMX_MOD_IMPORT_SIZE_NAME "Size";
+	IDS_PMX_MOD_IMPORT_SIZE "Size";
 	IDS_PMX_MOD_IMPORT_SETTINGS "Import settings";
 	IDS_PMX_MOD_IMPORT_POLYGON "Polygon";
 	IDS_PMX_MOD_IMPORT_NORMAL "Normal";
@@ -97,10 +115,6 @@ STRINGTABLE
 	IDS_NAME_CONVER_NEW_NAME "New config";
 	IDS_NAME_CONVER_NEW_ADD "New";
 	IDS_NAME_CONVER_NEW_INCREMENT_ADD "New increment";
-	
-	IDS_TOOL_GRP_TITLE "Tool";
-	IDS_ANIM_TOOL_TITLE "Animation tool";
-	IDS_ANIM_TOOL_FIX_ANIM_BUTTON "Try to fix animation";
 
 	IDS_BONE_TRANSLATION "Bone translation";
 	IDS_BONE_ROTATION "Bone rotation";

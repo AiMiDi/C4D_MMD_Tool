@@ -94,7 +94,7 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 ​		2.Click on the fix action tool button.
 
-![](https://ftp.bmp.ovh/imgs/2021/06/56cdad59253281fe.png)
+(V0.4 has been temporarily removed)
 
 **version 0.3.9**
 
@@ -117,6 +117,18 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 ​		1. Fixed the problem of stuck animation after import.
 
 ​		2. Fix some possible memory leaks.
+
+**version 0.4**
+
+​		1. Fix the action confusion problem after importing motion capture to make animation.
+
+​		2. Change the animation import to multithreaded optimization speed.
+
+​		3. Fix some curve problems.
+
+​		4. Fix known bugs
+
+​		5. Fix some possible memory leaks.
 
 ## usage
 

@@ -2,14 +2,11 @@
 #define __ENCODING_CONVERSION_H__
 
 #include "c4d.h"
-#include "undef_win_macros.h"
-#include <windows.h>
 
 namespace EncodingConversion
 {
-	void* Memcpy(void* dst, const void* src, size_t size);
-	String JIStoUTF8(char* Str_);
-	char* UTF8toJIS(String& Str_);
+	extern Bool SJIStoUTF8(char* strin, String& strout);
+	extern Bool UTF8toSJIS(String& strin, char* strout);
 };
 
-#endif __ENCODING_CONVERSION_H__
+#endif /* __ENCODING_CONVERSION_H__ */

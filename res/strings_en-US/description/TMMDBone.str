@@ -59,6 +59,7 @@ STRINGTABLE TMMDBone
     PMX_BONE_MORPH_GRP "Bone morph";
 	PMX_BONE_MORPH_ADD_NAME "Add bone morph name";
 	PMX_BONE_MORPH_ADD_BUTTON "Add bone morph";
+	PMX_BONE_TAG_DELETE_ALL_CURVE_BUTTON "Delete all key frame";
 
 	PMX_BONE_TAG_XCURVE "Position X curve";
 	PMX_BONE_TAG_YCURVE "Position Y curve";

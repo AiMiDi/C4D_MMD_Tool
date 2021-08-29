@@ -12,6 +12,8 @@ CONTAINER OMMDCamera {
 			ANIM OFF;
 			MIN 0;
 			MAX 5;
+			FIT_H;
+			SCALE_H;
 
 			CYCLE {
 				VMD_CAM_OBJ_XCURVE;
@@ -35,18 +37,31 @@ CONTAINER OMMDCamera {
 			}
 
 			GROUP {
-				COLUMNS 4;
+				COLUMNS 5;
 
 				BUTTON VMD_CAM_OBJ_INIT_CURVE_BUTTON {
+					FIT_H;
+					SCALE_H;
 				}
 
 				BUTTON VMD_CAM_OBJ_REGISTER_CURVE_BUTTON {
-				}
-
-				BUTTON VMD_CAM_OBJ_DELETE_CURVE_BUTTON {
+					FIT_H;
+					SCALE_H;
 				}
 
 				BUTTON VMD_CAM_OBJ_UPDATE_CURVE_BUTTON {
+					FIT_H;
+					SCALE_H;
+				}
+
+				BUTTON VMD_CAM_OBJ_DELETE_CURVE_BUTTON {
+					FIT_H;
+					SCALE_H;
+				}
+
+				BUTTON VMD_CAM_OBJ_DELETE_ALL_CURVE_BUTTON {
+					FIT_H;
+					SCALE_H;
 				}
 			}
 		}

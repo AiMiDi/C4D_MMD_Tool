@@ -9,6 +9,7 @@ STRINGTABLE OMMDCamera
 	VMD_CAM_OBJ_UPDATE_CURVE_BUTTON "Update all curve";
 	VMD_CAM_OBJ_CURVE_TYPE "Curve type";
 	VMD_CAM_OBJ_SPLINE "Curve";
+	VMD_CAM_OBJ_DELETE_ALL_CURVE_BUTTON "Delete all key frame";
 
 	VMD_CAM_OBJ_XCURVE "Position X curve";
 	VMD_CAM_OBJ_YCURVE "Position Y curve";

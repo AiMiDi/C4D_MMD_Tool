@@ -1,14 +1,16 @@
-﻿#include "BulletTest.h"
-
-static  maxon::ThreadRefTemplate<mmd::BulletThread> g_bulletThread;
+#include "BulletTest.h"
+#include <vector>
+static maxon::ThreadRefTemplate<mmd::BulletThread> g_bulletThread;
 
 namespace mmd
 {
 	Matrix4d InvZ(const Matrix4d& m)
-	{		
-		const Matrix4d& invZ = MatToGLMat(MatrixScale(Vector(1, 1, -1)));
-		return invZ * m * invZ;
+	{
+		const Matrix4d invZ = MatToGLMat(MatrixScale(Vector(1, 1, -1)));
+		return(invZ * m * invZ);
 	}
+
+
 	struct MMDFilterCallback : public btOverlapFilterCallback
 	{
 		std::vector<btBroadphaseProxy*> nonFilterProxy;
@@ -17,19 +19,20 @@ namespace mmd
 			auto findIt = std::find_if(
 				nonFilterProxy.begin(),
 				nonFilterProxy.end(),
-				[proxy0, proxy1](const auto& x) {return x == proxy0 || x == proxy1; }
+				[proxy0, proxy1](const auto& x) { return(x == proxy0 || x == proxy1); }
 			);
 			if (findIt != nonFilterProxy.end())
 			{
-				return true;
+				return(true);
 			}
 			Bool collides = (proxy0->m_collisionFilterGroup & proxy1->m_collisionFilterMask) != 0;
 			collides = collides && (proxy1->m_collisionFilterGroup & proxy0->m_collisionFilterMask);
-			return collides;
+			return(collides);
 		}
 	};
 
-	Bool BulletThread::PhysicsCreate() {
+	Bool BulletThread::PhysicsCreate()
+	{
 		broadphase = std::make_unique<btDbvtBroadphase>();
 
 		collisionConfig = std::make_unique<btDefaultCollisionConfiguration>();
@@ -57,10 +60,12 @@ namespace mmd
 		filterCB->nonFilterProxy.push_back(groundRB->getBroadphaseProxy());
 		dynamicsWorld->getPairCache()->setOverlapFilterCallback(filterCB.get());
 		filterCB = std::move(filterCB);
-		return true;
+		return(true);
 	}
 
-	void BulletThread::PhysicsDestroy() {
+
+	void BulletThread::PhysicsDestroy()
+	{
 		if (dynamicsWorld != nullptr && groundRB != nullptr)
 		{
 			dynamicsWorld->removeRigidBody(groundRB.get());
@@ -75,50 +80,66 @@ namespace mmd
 		groundMS = nullptr;
 		groundRB = nullptr;
 	}
+
+
 	void BulletThread::SetFPS(Int32 fps)
 	{
 		fps = fps;
 	}
 
+
 	Int32 BulletThread::GetFPS() const
 	{
-		return fps;
+		return(fps);
 	}
+
 
 	void BulletThread::SetMaxSubStepCount(Int32 numSteps)
 	{
 		maxSubStepCount = numSteps;
 	}
 
+
 	Int32 BulletThread::GetMaxSubStepCount() const
 	{
-		return maxSubStepCount;
+		return(maxSubStepCount);
 	}
+
 
 	btDiscreteDynamicsWorld* BulletThread::GetDynamicsWorld() const
 	{
-		return dynamicsWorld.get();
+		return(dynamicsWorld.get());
 	}
 
-	//*******************
-	// MMDRigidBody
-	//*******************
+
+	/*
+	 * *******************
+	 * MMDRigidBody
+	 * *******************
+	 */
 
 	MMDRigidBody::MMDRigidBody()
 		: m_rigidBodyType(TRACK_BONES)
 		, m_group(0)
 		, m_groupMask(0)
 		, m_node(0)
-		, m_offsetMat(Matrix4d()){}
+		, m_offsetMat(Matrix4d())
+	{
+	}
 
-	MMDRigidBody::~MMDRigidBody() {}
+
+	MMDRigidBody::~MMDRigidBody()
+	{
+	}
+
 
 	Bool MMDRigidBody::Create(OMMDRigid* pmxRigidBody)
 	{
 		Destroy();
 		BaseContainer* bc = static_cast<BaseList2D*>(pmxRigidBody->Get())->GetDataInstance();
-		if (bc == nullptr) {
-			return false;
+		if (bc == nullptr)
+		{
+			return(false);
 		}
 		m_rigidBodyType = bc->GetInt32(RIGID_PHYSICS_MODE);
 
@@ -145,11 +166,11 @@ namespace mmd
 		}
 		if (m_shape == nullptr)
 		{
-			return false;
+			return(false);
 		}
 
-		btScalar mass(0.0f);
-		btVector3 localInteria(0, 0, 0);
+		btScalar	mass(0.0f);
+		btVector3	localInteria(0, 0, 0);
 		if (m_rigidBodyType != TRACK_BONES)
 		{
 			mass = bc->GetFloat(RIGID_MASS);
@@ -161,30 +182,29 @@ namespace mmd
 		Matrix m = HPBToMatrix(Vector(
 			bc->GetInt32(RIGID_SHAPE_ROTATION_X),
 			bc->GetInt32(RIGID_SHAPE_ROTATION_Y),
-			bc->GetInt32(RIGID_SHAPE_ROTATION_Z)),ROTATIONORDER::HPB)
-			*MatrixMove(Vector(
-			bc->GetInt32(RIGID_SHAPE_POSITION_X),
-			bc->GetInt32(RIGID_SHAPE_POSITION_Y),
-			bc->GetInt32(RIGID_SHAPE_POSITION_Z)));
+			bc->GetInt32(RIGID_SHAPE_ROTATION_Z)), ROTATIONORDER::HPB)
+			* MatrixMove(Vector(
+				bc->GetInt32(RIGID_SHAPE_POSITION_X),
+				bc->GetInt32(RIGID_SHAPE_POSITION_Y),
+				bc->GetInt32(RIGID_SHAPE_POSITION_Z)));
 		Matrix4d rbMat = InvZ(MatToGLMat(m));
 
 		BaseObject* kinematicObject = nullptr;
-		bool overrideNode = true;
+		bool		overrideNode = true;
 		BaseLink* bonelink = bc->GetBaseLink(RIGID_RELATED_BONE_LINK);
 		BaseObject* node = nullptr;
-		if (bonelink != nullptr) {
+		if (bonelink != nullptr)
+		{
 			node = static_cast<BaseObject*>(bonelink->GetLink(pmxRigidBody->Get()->GetDocument()));
-		}		
+		}
 		if (node != nullptr)
 		{
 			m_offsetMat = ~MatToGLMat(node->GetMl()) * rbMat;
 			kinematicObject = node;
 		}
-		else
-		{
-			BaseObject* root = pmxRigidBody->RigidRoot;
-			m_offsetMat = ~MatToGLMat(root->GetMl()) * rbMat;
-			kinematicObject = root;
+		else {
+			kinematicObject = pmxRigidBody->RigidRoot;
+			m_offsetMat = ~MatToGLMat(kinematicObject->GetMl()) * rbMat;
 			overrideNode = false;
 		}
 
@@ -194,8 +214,7 @@ namespace mmd
 			m_kinematicMotionState = std::make_unique<KinematicMotionState>(kinematicObject, m_offsetMat);
 			MMDMotionState = m_kinematicMotionState.get();
 		}
-		else
-		{
+		else {
 			if (node != nullptr)
 			{
 				if (m_rigidBodyType == PHYSICAL_CALCULUS)
@@ -211,8 +230,7 @@ namespace mmd
 					MMDMotionState = m_activeMotionState.get();
 				}
 			}
-			else
-			{
+			else {
 				m_activeMotionState = std::make_unique<DefaultMotionState>(m_offsetMat);
 				m_kinematicMotionState = std::make_unique<KinematicMotionState>(kinematicObject, m_offsetMat);
 				MMDMotionState = m_activeMotionState.get();
@@ -257,28 +275,33 @@ namespace mmd
 		m_node = node;
 		m_name = bc->GetString(RIGID_NAME_LOCAL);
 
-		return true;
+		return(true);
 	}
+
 
 	void MMDRigidBody::Destroy()
 	{
 		m_shape = nullptr;
 	}
 
-	btRigidBody * MMDRigidBody::GetRigidBody() const
+
+	btRigidBody* MMDRigidBody::GetRigidBody() const
 	{
-		return m_rigidBody.get();
+		return(m_rigidBody.get());
 	}
+
 
 	uint16_t MMDRigidBody::GetGroup() const
 	{
-		return m_group;
+		return(m_group);
 	}
+
 
 	uint16_t MMDRigidBody::GetGroupMask() const
 	{
-		return m_groupMask;
+		return(m_groupMask);
 	}
+
 
 	void MMDRigidBody::SetActivation(bool activation)
 	{
@@ -289,17 +312,16 @@ namespace mmd
 				m_rigidBody->setCollisionFlags(m_rigidBody->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
 				m_rigidBody->setMotionState(m_activeMotionState.get());
 			}
-			else
-			{
+			else {
 				m_rigidBody->setCollisionFlags(m_rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 				m_rigidBody->setMotionState(m_kinematicMotionState.get());
 			}
 		}
-		else
-		{
+		else {
 			m_rigidBody->setMotionState(m_kinematicMotionState.get());
 		}
 	}
+
 
 	void MMDRigidBody::ResetTransform()
 	{
@@ -308,6 +330,7 @@ namespace mmd
 			m_activeMotionState->Reset();
 		}
 	}
+
 
 	void MMDRigidBody::Reset(BulletThread* physics)
 	{
@@ -322,6 +345,7 @@ namespace mmd
 		m_rigidBody->clearForces();
 	}
 
+
 	void MMDRigidBody::ReflectGlobalTransform()
 	{
 		if (m_activeMotionState != nullptr)
@@ -334,6 +358,7 @@ namespace mmd
 		}
 	}
 
+
 	void MMDRigidBody::CalcLocalTransform()
 	{
 		if (m_node != nullptr)
@@ -344,37 +369,42 @@ namespace mmd
 				auto local = ~MatToGLMat(parent->GetMl()) * MatToGLMat(m_node->GetMl());
 				m_node->SetMl(GLMatToMat(local));
 			}
-			else
-			{
+			else {
 				m_node->SetMl(m_node->GetMl());
 			}
 		}
 	}
+
 
 	Matrix4d MMDRigidBody::GetTransform()
 	{
 		btTransform transform = m_rigidBody->getCenterOfMassTransform();
 		alignas(16) Matrix4d mat;
 		transform.getOpenGLMatrix(&mat[0][0]);
-		return InvZ(mat);
+		return(InvZ(mat));
 	}
 
-	//*******************
-	// MMDJoint
-	//*******************
+
+	/*
+	 * *******************
+	 * MMDJoint
+	 * *******************
+	 */
 	MMDJoint::MMDJoint()
 	{
 	}
+
 
 	MMDJoint::~MMDJoint()
 	{
 	}
 
+
 	Bool MMDJoint::CreateJoint(OMMDJoint* pmxJoint, MMDRigidBody* rigidBodyA, MMDRigidBody* rigidBodyB)
 	{
 		Destroy();
 		BaseContainer* bc = static_cast<BaseList2D*>(pmxJoint->Get())->GetDataInstance();
-		btMatrix3x3 rotMat;
+		btMatrix3x3	rotMat;
 		rotMat.setEulerZYX(
 			bc->GetFloat(JOINT_ATTITUDE_ROTATION_X),
 			bc->GetFloat(JOINT_ATTITUDE_ROTATION_Y),
@@ -388,8 +418,8 @@ namespace mmd
 		));
 		transform.setBasis(rotMat);
 
-		btTransform invA = rigidBodyA->GetRigidBody()->getWorldTransform().inverse();
-		btTransform invB = rigidBodyB->GetRigidBody()->getWorldTransform().inverse();
+		btTransform	invA = rigidBodyA->GetRigidBody()->getWorldTransform().inverse();
+		btTransform	invB = rigidBodyB->GetRigidBody()->getWorldTransform().inverse();
 		invA = invA * transform;
 		invB = invB * transform;
 		switch (bc->GetInt32(JOINT_TYPE))
@@ -428,17 +458,19 @@ namespace mmd
 		}
 		case P2P:
 		{
+			Matrix4d transformA= rigidBodyA->GetTransform();
+			Matrix4d transformB = rigidBodyB->GetTransform();
 			auto constraint = std::make_unique<btPoint2PointConstraint>(
 				*rigidBodyA->GetRigidBody(),
 				*rigidBodyB->GetRigidBody(),
 				btVector3(
-					rigidBodyA->GetTransform().v4.x,
-					rigidBodyA->GetTransform().v4.y,
-					rigidBodyA->GetTransform().v4.z),
+					transformA.v4.x,
+					transformA.v4.y,
+					transformA.v4.z),
 				btVector3(
-					rigidBodyB->GetTransform().v4.x,
-					rigidBodyB->GetTransform().v4.y,
-					rigidBodyB->GetTransform().v4.z));
+					transformB.v4.x,
+					transformB.v4.y,
+					transformB.v4.z));
 			m_constraint = std::move(constraint);
 			break;
 		}
@@ -460,7 +492,7 @@ namespace mmd
 				bc->GetFloat(JOINT_SPRING_POSITION_X),
 				bc->GetFloat(JOINT_SPRING_POSITION_Y),
 				bc->GetFloat(JOINT_SPRING_POSITION_Z)
-				);
+			);
 			constraint->setMotorTarget(btQuaternion(
 				bc->GetFloat(JOINT_SPRING_ROTATION_X),
 				bc->GetFloat(JOINT_SPRING_ROTATION_Y),
@@ -503,11 +535,11 @@ namespace mmd
 				bc->GetFloat(JOINT_SPRING_POSITION_X),
 				bc->GetFloat(JOINT_SPRING_POSITION_Y),
 				bc->GetFloat(JOINT_SPRING_POSITION_Z));
-			constraint->enableAngularMotor(bc->GetFloat(JOINT_SPRING_ROTATION_X),bc->GetFloat(JOINT_SPRING_ROTATION_Y),bc->GetFloat(JOINT_SPRING_ROTATION_Z));
+			constraint->enableAngularMotor(bc->GetFloat(JOINT_SPRING_ROTATION_X), bc->GetFloat(JOINT_SPRING_ROTATION_Y), bc->GetFloat(JOINT_SPRING_ROTATION_Z));
 			m_constraint = std::move(constraint);
 			break;
 		}
-		default: //SpringDOF6
+		default: /* SpringDOF6 */
 		{
 			auto constraint = std::make_unique<btGeneric6DofSpringConstraint>(
 				*rigidBodyA->GetRigidBody(),
@@ -571,38 +603,66 @@ namespace mmd
 			m_constraint = std::move(constraint);
 			break;
 		}
-		}	
-		return true;
+		}
+		return(true);
 	}
+
 
 	void MMDJoint::Destroy()
 	{
 		m_constraint = nullptr;
 	}
 
+
 	btTypedConstraint* MMDJoint::GetConstraint() const
 	{
-		return m_constraint.get();
+		return(m_constraint.get());
 	}
 }
 
-	Bool C4DBulletTest::Execute(BaseDocument* doc, GeDialog* parentManager) {
-
-		if (op) {
-			if (!g_bulletThread)
-			{
-				// create and start thread
-				g_bulletThread = mmd::BulletThread::Create().GetValue();
-				iferr(g_bulletThread.Start())return false;
-			}
-
-			op = false;
-		}
-		else {
-			g_bulletThread->CancelAndWait();
-			g_bulletThread = nullptr;
-			op = true;
+#if API_VERSION >= 21000
+Bool C4DBulletTest::Execute(BaseDocument* doc, GeDialog* parentManager)
+{
+	if (op)
+	{
+		if (!g_bulletThread)
+		{
+			/* create and start thread */
+			g_bulletThread = mmd::BulletThread::Create().GetValue();
+			iferr(g_bulletThread.Start())
+				return(false);
 		}
 
-		return true;
+		op = false;
 	}
+	else {
+		g_bulletThread->CancelAndWait();
+		g_bulletThread = nullptr;
+		op = true;
+	}
+	return(true);
+}
+#else
+Bool C4DBulletTest::Execute(BaseDocument* doc)
+{
+	if (op)
+	{
+		if (!g_bulletThread)
+		{
+			/* create and start thread */
+			g_bulletThread = mmd::BulletThread::Create().GetValue();
+			iferr(g_bulletThread.Start())
+				return(false);
+		}
+
+		op = false;
+	}
+	else {
+		g_bulletThread->CancelAndWait();
+		g_bulletThread = nullptr;
+		op = true;
+	}
+	return(true);
+}
+#endif
+
