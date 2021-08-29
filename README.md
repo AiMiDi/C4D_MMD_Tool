@@ -120,15 +120,18 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 **version 0.4**
 
-​		1. Fix the action confusion problem after importing motion capture to make animation.
+​		1. Add the action export function
 
-​		2. Change the animation import to multithreaded optimization speed.
+​		2. Fix the action confusion problem after importing motion capture to make animation.
 
-​		3. Fix some curve problems.
+​		3. Change the animation import to multithreaded optimization speed.
 
-​		4. Fix known bugs
+​		4. Fix some curve problems.
 
-​		5. Fix some possible memory leaks.
+​		5. Fix known bugs
+
+​		6. Fix some possible memory leaks.
+
 
 ## usage
 
