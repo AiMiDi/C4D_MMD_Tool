@@ -132,6 +132,13 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 ​		6. Fix some possible memory leaks.
 
+**version 0.4.1**
+
+​	1. Add camera bake export.
+
+​	2. Add motion bake export. 
+
+​	3. Improve Ik.
 
 ## usage
 
