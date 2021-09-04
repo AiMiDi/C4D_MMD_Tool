@@ -40,16 +40,17 @@ namespace mmd {
 
 	struct VMD_Camera_import_settings
 	{
-		Float		PositionMultiple = 8.5;
-		Float		TimeOffset = 0;
+		Float		position_multiple = 8.5;
+		Float		time_offset = 0;
 		Filename	fn = Filename();
 		BaseDocument* doc = nullptr;
 	};
 	struct VMD_Camera_export_settings
 	{
-		Float	PositionMultiple = 8.5;
-		Float	TimeOffset = 0;
+		Float	position_multiple = 8.5;
+		Float	time_offset = 0;
 		Int32	use_rotation = 0;
+		Bool    use_bake = true;
 	};
 	struct VMD_Conversion_Camera_settings {
 		Float		distance = 0;
@@ -57,21 +58,21 @@ namespace mmd {
 		BaseObject* str_cam = nullptr;
 	};
 	struct VMD_Motions_import_settings {
-		Float	PositionMultiple = 8.5;
-		Float	TimeOffset = 0;
-		Bool    ImportMotion = true;
-		Bool    ImportMorph = true;
-		Bool    ImportModelInfo = true;
-		Bool	DeletePreviousAnimation = true;
-		Bool	DetailReport = false;
+		Float	position_multiple = 8.5;
+		Float	time_offset = 0;
+		Bool    import_motion = true;
+		Bool    import_morph = true;
+		Bool    import_model_info = true;
+		Bool	delete_previous_animation = true;
+		Bool	detail_report = false;
 	};
 	struct VMD_Motions_export_settings {
-		Float	PositionMultiple = 8.5;
-		Float	TimeOffset = 0;
+		Float	position_multiple = 8.5;
+		Float	time_offset = 0;
 		Int32   use_rotation = 0;
-		Bool    ExportMotion = true;
-		Bool    ExportMorph = true;
-		Bool    ExportModelInfo = true;
+		Bool    export_motion = true;
+		Bool    export_morph = true;
+		Bool    export_model_info = true;
 	};
 	class VMDAnimation
 	{

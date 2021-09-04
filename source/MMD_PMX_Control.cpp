@@ -217,18 +217,18 @@ Bool mmd::OMMDModel::Message(GeListNode* node, Int32 type, void* data)
 								pmx_bone_tag_data->DeleteAllKeyFrame();
 							}
 							else {
-								CTrack* BoneTrackPX = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackPX);
-								CTrack* BoneTrackPY = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackPY);
-								CTrack* BoneTrackPZ = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackPZ);
-								CTrack* BoneTrackRX = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackRX);
-								CTrack* BoneTrackRY = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackRY);
-								CTrack* BoneTrackRZ = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackRZ);
+								CTrack* BoneTrack_position_x = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_position_x);
+								CTrack* BoneTrack_position_y = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_position_y);
+								CTrack* BoneTrack_position_z = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_position_z);
+								CTrack* BoneTrack_rotation_x = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_rotation_x);
+								CTrack* BoneTrack_rotation_y = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_rotation_y);
+								CTrack* BoneTrack_rotation_z = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_rotation_z);
 								node_->SetRelPos(Vector(0));
 								node_->SetRelRot(Vector(0));
 							}
@@ -375,18 +375,18 @@ Bool mmd::OMMDModel::Message(GeListNode* node, Int32 type, void* data)
 								pmx_bone_tag_data->DeleteAllKeyFrame();
 							}
 							else {
-								CTrack* BoneTrackPX = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackPX);
-								CTrack* BoneTrackPY = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackPY);
-								CTrack* BoneTrackPZ = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackPZ);
-								CTrack* BoneTrackRX = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackRX);
-								CTrack* BoneTrackRY = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackRY);
-								CTrack* BoneTrackRZ = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								CTrack::Free(BoneTrackRZ);
+								CTrack* BoneTrack_position_x = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_position_x);
+								CTrack* BoneTrack_position_y = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_position_y);
+								CTrack* BoneTrack_position_z = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_position_z);
+								CTrack* BoneTrack_rotation_x = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_rotation_x);
+								CTrack* BoneTrack_rotation_y = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_rotation_y);
+								CTrack* BoneTrack_rotation_z = node_->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+								CTrack::Free(BoneTrack_rotation_z);
 								node_->SetRelPos(Vector(0));
 								node_->SetRelRot(Vector(0));
 							}
@@ -799,138 +799,138 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 		obj->SetQuaternionRotationMode(false, false);
 	}
 
-	CCurve* CurvePX = nullptr;
-	CCurve* CurvePY = nullptr;
-	CCurve* CurvePZ = nullptr;
-	CCurve* CurveRX = nullptr;
-	CCurve* CurveRY = nullptr;
-	CCurve* CurveRZ = nullptr;
+	CCurve* Curve_position_x = nullptr;
+	CCurve* Curve_position_y = nullptr;
+	CCurve* Curve_position_z = nullptr;
+	CCurve* Curve_rotation_x = nullptr;
+	CCurve* Curve_rotation_y = nullptr;
+	CCurve* Curve_rotation_z = nullptr;
 
 	node->GetDocument()->SetTime(BaseTime(0.));
 
-	CTrack* TrackPX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	if (TrackPX == nullptr)
+	CTrack* Track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	if (Track_position_x == nullptr)
 	{
-		TrackPX = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-		CurvePX = TrackPX->GetCurve();
-		CurvePX->AddKey(BaseTime());
-		obj->InsertTrackSorted(TrackPX);
+		Track_position_x = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+		Curve_position_x = Track_position_x->GetCurve();
+		Curve_position_x->AddKey(BaseTime());
+		obj->InsertTrackSorted(Track_position_x);
 	}
 	else {
-		CurvePX = TrackPX->GetCurve();
+		Curve_position_x = Track_position_x->GetCurve();
 	}
-	CTrack* TrackPY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	if (TrackPY == nullptr)
+	CTrack* Track_position_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	if (Track_position_y == nullptr)
 	{
-		TrackPY = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-		CurvePY = TrackPY->GetCurve();
-		CurvePY->AddKey(BaseTime());
-		obj->InsertTrackSorted(TrackPY);
+		Track_position_y = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+		Curve_position_y = Track_position_y->GetCurve();
+		Curve_position_y->AddKey(BaseTime());
+		obj->InsertTrackSorted(Track_position_y);
 	}
 	else {
-		CurvePY = TrackPY->GetCurve();
+		Curve_position_y = Track_position_y->GetCurve();
 	}
-	CTrack* TrackPZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	if (TrackPZ == nullptr)
+	CTrack* Track_position_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	if (Track_position_z == nullptr)
 	{
-		TrackPZ = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-		CurvePZ = TrackPZ->GetCurve();
-		CurvePZ->AddKey(BaseTime());
-		obj->InsertTrackSorted(TrackPZ);
+		Track_position_z = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+		Curve_position_z = Track_position_z->GetCurve();
+		Curve_position_z->AddKey(BaseTime());
+		obj->InsertTrackSorted(Track_position_z);
 	}
 	else {
-		CurvePZ = TrackPZ->GetCurve();
+		Curve_position_z = Track_position_z->GetCurve();
 	}
-	CTrack* TrackRX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	if (TrackRX == nullptr)
+	CTrack* Track_rotation_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	if (Track_rotation_x == nullptr)
 	{
-		TrackRX = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-		CurveRX = TrackRX->GetCurve();
-		CurveRX->AddKey(BaseTime());
-		obj->InsertTrackSorted(TrackRX);
+		Track_rotation_x = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+		Curve_rotation_x = Track_rotation_x->GetCurve();
+		Curve_rotation_x->AddKey(BaseTime());
+		obj->InsertTrackSorted(Track_rotation_x);
 	}
 	else {
-		CurveRX = TrackRX->GetCurve();
+		Curve_rotation_x = Track_rotation_x->GetCurve();
 	}
-	CTrack* TrackRY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	if (TrackRY == nullptr)
+	CTrack* Track_rotation_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	if (Track_rotation_y == nullptr)
 	{
-		TrackRY = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-		CurveRY = TrackRY->GetCurve();
-		CurveRY->AddKey(BaseTime());
-		obj->InsertTrackSorted(TrackRY);
+		Track_rotation_y = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+		Curve_rotation_y = Track_rotation_y->GetCurve();
+		Curve_rotation_y->AddKey(BaseTime());
+		obj->InsertTrackSorted(Track_rotation_y);
 	}
 	else {
-		CurveRY = TrackRY->GetCurve();
+		Curve_rotation_y = Track_rotation_y->GetCurve();
 	}
-	CTrack* TrackRZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	if (TrackRZ == nullptr)
+	CTrack* Track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	if (Track_rotation_z == nullptr)
 	{
-		TrackRZ = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-		CurveRZ = TrackRZ->GetCurve();
-		CurveRZ->AddKey(BaseTime());
-		obj->InsertTrackSorted(TrackRZ);
+		Track_rotation_z = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+		Curve_rotation_z = Track_rotation_z->GetCurve();
+		Curve_rotation_z->AddKey(BaseTime());
+		obj->InsertTrackSorted(Track_rotation_z);
 	}
 	else {
-		CurveRZ = TrackRZ->GetCurve();
+		Curve_rotation_z = Track_rotation_z->GetCurve();
 	}
 
 	maxon::HashSet<MyBaseTime> frame_set;
-	Int32 frame_count = CurvePX->GetKeyCount();
+	Int32 frame_count = Curve_position_x->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(CurvePX->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(Curve_position_x->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = CurvePY->GetKeyCount();
+	frame_count = Curve_position_y->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(CurvePY->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(Curve_position_y->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = CurvePZ->GetKeyCount();
+	frame_count = Curve_position_z->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(CurvePZ->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(Curve_position_z->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = CurveRX->GetKeyCount();
+	frame_count = Curve_rotation_x->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(CurveRX->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(Curve_rotation_x->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = CurveRY->GetKeyCount();
+	frame_count = Curve_rotation_y->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(CurveRY->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(Curve_rotation_y->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = CurveRZ->GetKeyCount();
+	frame_count = Curve_rotation_z->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(CurveRZ->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(Curve_rotation_z->GetKey(i)->GetTime())iferr_return;
 	}
 	for (const BaseTime& time : frame_set)
 	{
-		CKey* KeyPX = CurvePX->FindKey(time);
-		if (KeyPX == nullptr) {
-			KeyPX = CurvePX->AddKeyAdaptTangent(time, true);
+		CKey* Key_position_x = Curve_position_x->FindKey(time);
+		if (Key_position_x == nullptr) {
+			Key_position_x = Curve_position_x->AddKeyAdaptTangent(time, true);
 		}
-		CKey* KeyPY = CurvePY->FindKey(time);
-		if (KeyPY == nullptr) {
-			KeyPY = CurvePY->AddKeyAdaptTangent(time, true);
+		CKey* Key_position_y = Curve_position_y->FindKey(time);
+		if (Key_position_y == nullptr) {
+			Key_position_y = Curve_position_y->AddKeyAdaptTangent(time, true);
 		}
-		CKey* KeyPZ = CurvePZ->FindKey(time);
-		if (KeyPZ == nullptr) {
-			KeyPZ = CurvePZ->AddKeyAdaptTangent(time, true);
+		CKey* Key_position_z = Curve_position_z->FindKey(time);
+		if (Key_position_z == nullptr) {
+			Key_position_z = Curve_position_z->AddKeyAdaptTangent(time, true);
 		}
-		CKey* KeyRX = CurveRX->FindKey(time);
-		if (KeyRX == nullptr) {
-			KeyRX = CurveRX->AddKeyAdaptTangent(time, true);
+		CKey* Key_rotation_x = Curve_rotation_x->FindKey(time);
+		if (Key_rotation_x == nullptr) {
+			Key_rotation_x = Curve_rotation_x->AddKeyAdaptTangent(time, true);
 		}
-		CKey* KeyRY = CurveRY->FindKey(time);
-		if (KeyRY == nullptr) {
-			KeyRY = CurveRY->AddKeyAdaptTangent(time, true);
+		CKey* Key_rotation_y = Curve_rotation_y->FindKey(time);
+		if (Key_rotation_y == nullptr) {
+			Key_rotation_y = Curve_rotation_y->AddKeyAdaptTangent(time, true);
 		}
-		CKey* KeyRZ = CurveRZ->FindKey(time);
-		if (KeyRZ == nullptr) {
-			KeyRZ = CurveRZ->AddKeyAdaptTangent(time, true);
+		CKey* Key_rotation_z = Curve_rotation_z->FindKey(time);
+		if (Key_rotation_z == nullptr) {
+			Key_rotation_z = Curve_rotation_z->AddKeyAdaptTangent(time, true);
 		}
 	}
 
@@ -946,21 +946,21 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 	Int32 next_key_frame = 0;
 
 	//第一帧
-	now_key = CurvePX->GetKey(0);
+	now_key = Curve_position_x->GetKey(0);
 	now_key_frame = now_key->GetTime().GetFrame(Fps);
 	if (frame_count > 0) //第一帧不是最后一帧
 	{
-		next_key = CurvePX->GetKey(1);
+		next_key = Curve_position_x->GetKey(1);
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
 		ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 		TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-		CurvePX->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-		CurvePX->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+		Curve_position_x->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+		Curve_position_x->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))),false))
 			return false;
 	}
 	//最后一帧
-	if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, CurvePX->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+	if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, Curve_position_x->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
 		return false;
 	}
 	// 循环第2到最后一个
@@ -968,33 +968,33 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 	{
 		now_key = next_key;
 		now_key_frame = next_key_frame;
-		next_key = CurvePX->GetKey(key_index + 1);
+		next_key = Curve_position_x->GetKey(key_index + 1);
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
 		ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 		TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
 		KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-		CurvePX->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+		Curve_position_x->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
 
 	}
 
 	//第一帧
-	now_key = CurvePY->GetKey(0);
+	now_key = Curve_position_y->GetKey(0);
 	now_key_frame = now_key->GetTime().GetFrame(Fps);
 	if (frame_count > 0) //第一帧不是最后一帧
 	{
-		next_key = CurvePY->GetKey(1);
+		next_key = Curve_position_y->GetKey(1);
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
 		ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 		TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-		CurvePY->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-		CurvePY->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+		Curve_position_y->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+		Curve_position_y->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
 	}
 	//最后一帧
-	if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, CurvePY->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+	if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, Curve_position_y->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
 		return false;
 	}
 	// 循环第2到最后一个
@@ -1002,32 +1002,32 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 	{
 		now_key = next_key;
 		now_key_frame = next_key_frame;
-		next_key = CurvePY->GetKey(key_index + 1);
+		next_key = Curve_position_y->GetKey(key_index + 1);
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
 		ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 		TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
 		KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-		CurvePY->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+		Curve_position_y->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
 	}
 
 	//第一帧
-	now_key = CurvePZ->GetKey(0);
+	now_key = Curve_position_z->GetKey(0);
 	now_key_frame = now_key->GetTime().GetFrame(Fps);
 	if (frame_count > 0) //第一帧不是最后一帧
 	{
-		next_key = CurvePZ->GetKey(1);
+		next_key = Curve_position_z->GetKey(1);
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
 		ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 		TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-		CurvePZ->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-		CurvePZ->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+		Curve_position_z->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+		Curve_position_z->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
 	}
 	//最后一帧
-	if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, CurvePZ->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+	if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, Curve_position_z->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
 		return false;
 	}
 	// 循环第2到最后一个
@@ -1035,12 +1035,12 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 	{
 		now_key = next_key;
 		now_key_frame = next_key_frame;
-		next_key = CurvePZ->GetKey(key_index + 1);
+		next_key = Curve_position_z->GetKey(key_index + 1);
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
 		ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 		TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
 		KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-		CurvePZ->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+		Curve_position_z->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
 	}
@@ -1048,21 +1048,21 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 	{
 	case 0:
 		//第一帧
-		now_key = CurveRX->GetKey(0);
+		now_key = Curve_rotation_x->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(Fps);
 		if (frame_count > 0) //第一帧不是最后一帧
 		{
-			next_key = CurveRX->GetKey(1);
+			next_key = Curve_rotation_x->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
 			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 			TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-			CurveRX->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-			CurveRX->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+			Curve_rotation_x->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+			Curve_rotation_x->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
 		}
 		//最后一帧
-		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, CurveRX->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_x->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
 			return false;
 		}
 		// 循环第2到最后一个
@@ -1070,33 +1070,33 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 		{
 			now_key = next_key;
 			now_key_frame = next_key_frame;
-			next_key = CurveRX->GetKey(key_index + 1);
+			next_key = Curve_rotation_x->GetKey(key_index + 1);
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
 			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 			TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
 			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-			CurveRX->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+			Curve_rotation_x->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
 		}
 		break;
 	case 1:
 		//第一帧
-		now_key = CurveRY->GetKey(0);
+		now_key = Curve_rotation_y->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(Fps);
 		if (frame_count > 0) //第一帧不是最后一帧
 		{
-			next_key = CurveRY->GetKey(1);
+			next_key = Curve_rotation_y->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
 			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 			TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-			CurveRY->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-			CurveRY->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+			Curve_rotation_y->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+			Curve_rotation_y->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
 		}
 		//最后一帧
-		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, CurveRY->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_y->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
 			return false;
 		}
 		// 循环第2到最后一个
@@ -1104,33 +1104,33 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 		{
 			now_key = next_key;
 			now_key_frame = next_key_frame;
-			next_key = CurveRY->GetKey(key_index + 1);
+			next_key = Curve_rotation_y->GetKey(key_index + 1);
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
 			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 			TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
 			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-			CurveRY->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+			Curve_rotation_y->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
 		}
 		break;
 	case 2:
 		//第一帧
-		now_key = CurveRZ->GetKey(0);
+		now_key = Curve_rotation_z->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(Fps);
 		if (frame_count > 0) //第一帧不是最后一帧
 		{
-			next_key = CurveRZ->GetKey(1);
+			next_key = Curve_rotation_z->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
 			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 			TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-			CurveRZ->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-			CurveRZ->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+			Curve_rotation_z->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
+			Curve_rotation_z->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
 		}
 		//最后一帧
-		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, CurveRZ->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_z->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
 			return false;
 		}
 		// 循环第2到最后一个
@@ -1138,12 +1138,12 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 		{
 			now_key = next_key;
 			now_key_frame = next_key_frame;
-			next_key = CurveRZ->GetKey(key_index + 1);
+			next_key = Curve_rotation_z->GetKey(key_index + 1);
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
 			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 			TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
 			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-			CurveRZ->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
+			Curve_rotation_z->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
 		}
@@ -1171,94 +1171,94 @@ inline Bool mmd::TMMDBone::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 	}
 	const BaseTime	time = BaseTime(Float(frame_on), 30.);
 
-	CTrack* TrackPX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	if (TrackPX == nullptr)
+	CTrack* Track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	if (Track_position_x == nullptr)
 	{
-		TrackPX = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-		obj->InsertTrackSorted(TrackPX);
+		Track_position_x = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+		obj->InsertTrackSorted(Track_position_x);
 	}
-	CTrack* TrackPY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	if (TrackPY == nullptr)
+	CTrack* Track_position_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	if (Track_position_y == nullptr)
 	{
-		TrackPY = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-		obj->InsertTrackSorted(TrackPY);
+		Track_position_y = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+		obj->InsertTrackSorted(Track_position_y);
 	}
-	CTrack* TrackPZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	if (TrackPZ == nullptr)
+	CTrack* Track_position_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	if (Track_position_z == nullptr)
 	{
-		TrackPZ = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-		obj->InsertTrackSorted(TrackPZ);
+		Track_position_z = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+		obj->InsertTrackSorted(Track_position_z);
 	}
-	CTrack* TrackRX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	if (TrackRX == nullptr)
+	CTrack* Track_rotation_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	if (Track_rotation_x == nullptr)
 	{
-		TrackRX = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-		obj->InsertTrackSorted(TrackRX);
+		Track_rotation_x = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+		obj->InsertTrackSorted(Track_rotation_x);
 	}
-	CTrack* TrackRY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	if (TrackRY == nullptr)
+	CTrack* Track_rotation_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	if (Track_rotation_y == nullptr)
 	{
-		TrackRY = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-		obj->InsertTrackSorted(TrackRY);
+		Track_rotation_y = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+		obj->InsertTrackSorted(Track_rotation_y);
 	}
-	CTrack* TrackRZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	if (TrackRZ == nullptr)
+	CTrack* Track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	if (Track_rotation_z == nullptr)
 	{
-		TrackRZ = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-		obj->InsertTrackSorted(TrackRZ);
+		Track_rotation_z = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+		obj->InsertTrackSorted(Track_rotation_z);
 	}
 
-	CCurve* CurvePX = TrackPX->GetCurve();
-	CCurve* CurvePY = TrackPY->GetCurve();
-	CCurve* CurvePZ = TrackPZ->GetCurve();
-	CCurve* CurveRX = TrackRX->GetCurve();
-	CCurve* CurveRY = TrackRY->GetCurve();
-	CCurve* CurveRZ = TrackRZ->GetCurve();
+	CCurve* Curve_position_x = Track_position_x->GetCurve();
+	CCurve* Curve_position_y = Track_position_y->GetCurve();
+	CCurve* Curve_position_z = Track_position_z->GetCurve();
+	CCurve* Curve_rotation_x = Track_rotation_x->GetCurve();
+	CCurve* Curve_rotation_y = Track_rotation_y->GetCurve();
+	CCurve* Curve_rotation_z = Track_rotation_z->GetCurve();
 
 	Vector RelPos = obj->GetRelPos();
 	Vector RelRot = obj->GetRelRot();
 
-	CKey* KeyPX = CurvePX->FindKey(time);
-	if (KeyPX == nullptr) {
-		KeyPX = CurvePX->AddKey(time);
+	CKey* Key_position_x = Curve_position_x->FindKey(time);
+	if (Key_position_x == nullptr) {
+		Key_position_x = Curve_position_x->AddKey(time);
 	}
 	else {
-		KeyPX->SetValue(CurvePX, RelPos.x);
+		Key_position_x->SetValue(Curve_position_x, RelPos.x);
 	}
-	CKey* KeyPY = CurvePY->FindKey(time);
-	if (KeyPY == nullptr) {
-		KeyPY = CurvePY->AddKey(time);
-	}
-	else {
-		KeyPY->SetValue(CurvePY, RelPos.y);
-	}
-	CKey* KeyPZ = CurvePZ->FindKey(time);
-	if (KeyPZ == nullptr) {
-		KeyPZ = CurvePZ->AddKey(time);
+	CKey* Key_position_y = Curve_position_y->FindKey(time);
+	if (Key_position_y == nullptr) {
+		Key_position_y = Curve_position_y->AddKey(time);
 	}
 	else {
-		KeyPZ->SetValue(CurvePZ, RelPos.z);
+		Key_position_y->SetValue(Curve_position_y, RelPos.y);
 	}
-	CKey* KeyRX = CurveRX->FindKey(time);
-	if (KeyRX == nullptr) {
-		KeyRX = CurveRX->AddKey(time);
-	}
-	else {
-		KeyRX->SetValue(CurveRX, RelRot.x);
-	}
-	CKey* KeyRY = CurveRY->FindKey(time);
-	if (KeyRY == nullptr) {
-		KeyRY = CurveRY->AddKey(time);
+	CKey* Key_position_z = Curve_position_z->FindKey(time);
+	if (Key_position_z == nullptr) {
+		Key_position_z = Curve_position_z->AddKey(time);
 	}
 	else {
-		KeyRY->SetValue(CurveRY, RelRot.y);
+		Key_position_z->SetValue(Curve_position_z, RelPos.z);
 	}
-	CKey* KeyRZ = CurveRZ->FindKey(time);
-	if (KeyRZ == nullptr) {
-		KeyRZ = CurveRZ->AddKey(time);
+	CKey* Key_rotation_x = Curve_rotation_x->FindKey(time);
+	if (Key_rotation_x == nullptr) {
+		Key_rotation_x = Curve_rotation_x->AddKey(time);
 	}
 	else {
-		KeyRZ->SetValue(CurveRZ, RelRot.z);
+		Key_rotation_x->SetValue(Curve_rotation_x, RelRot.x);
+	}
+	CKey* Key_rotation_y = Curve_rotation_y->FindKey(time);
+	if (Key_rotation_y == nullptr) {
+		Key_rotation_y = Curve_rotation_y->AddKey(time);
+	}
+	else {
+		Key_rotation_y->SetValue(Curve_rotation_y, RelRot.y);
+	}
+	CKey* Key_rotation_z = Curve_rotation_z->FindKey(time);
+	if (Key_rotation_z == nullptr) {
+		Key_rotation_z = Curve_rotation_z->AddKey(time);
+	}
+	else {
+		Key_rotation_z->SetValue(Curve_rotation_z, RelRot.z);
 	}
 	GeData	spline_data;
 	BaseContainer* bc = ((BaseList2D*)node)->GetDataInstance();
@@ -1365,28 +1365,28 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 
 	BaseTag* tag = static_cast<BaseTag*>(Get());
 	CTrack* Frame_onTrack = obj->FindCTrack(DescID(PMX_BONE_TAG_FRAME_ON));
-	CTrack* TrackPX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	CTrack* TrackPY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	CTrack* TrackPZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	CTrack* TrackRX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	CTrack* TrackRY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	CTrack* TrackRZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	CTrack* Track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	CTrack* Track_position_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	CTrack* Track_position_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	CTrack* Track_rotation_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	CTrack* Track_rotation_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	CTrack* Track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
 	CTrack* frameTrack = tag->FindCTrack(DescID(PMX_BONE_TAG_FRAME_ON));
 
-	if (TrackPX == nullptr || TrackPY == nullptr || TrackPZ == nullptr || TrackRX == nullptr || TrackRY == nullptr || TrackRZ == nullptr|| frameTrack==nullptr)
+	if (Track_position_x == nullptr || Track_position_y == nullptr || Track_position_z == nullptr || Track_rotation_x == nullptr || Track_rotation_y == nullptr || Track_rotation_z == nullptr|| frameTrack==nullptr)
 	{
 		return false;
 	}
 
-	CCurve* CurvePX = TrackPX->GetCurve();
-	CCurve* CurvePY = TrackPY->GetCurve();
-	CCurve* CurvePZ = TrackPZ->GetCurve();
-	CCurve* CurveRX = TrackRX->GetCurve();
-	CCurve* CurveRY = TrackRY->GetCurve();
-	CCurve* CurveRZ = TrackRZ->GetCurve();
+	CCurve* Curve_position_x = Track_position_x->GetCurve();
+	CCurve* Curve_position_y = Track_position_y->GetCurve();
+	CCurve* Curve_position_z = Track_position_z->GetCurve();
+	CCurve* Curve_rotation_x = Track_rotation_x->GetCurve();
+	CCurve* Curve_rotation_y = Track_rotation_y->GetCurve();
+	CCurve* Curve_rotation_z = Track_rotation_z->GetCurve();
 	CCurve* frameCurve = frameTrack->GetCurve();
 
-	if (CurvePX == nullptr || CurvePY == nullptr || CurvePZ == nullptr || CurveRX == nullptr || CurveRY == nullptr || CurveRZ == nullptr|| frameCurve==nullptr)
+	if (Curve_position_x == nullptr || Curve_position_y == nullptr || Curve_position_z == nullptr || Curve_rotation_x == nullptr || Curve_rotation_y == nullptr || Curve_rotation_z == nullptr|| frameCurve==nullptr)
 	{
 		return false;
 	}
@@ -1418,18 +1418,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurvePX->FindKey(time);
+			key = Curve_position_x->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurvePX->FindKey(next_time);
+				next_key = Curve_position_x->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(CurvePX, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-						next_key->SetValueLeft(CurvePX, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-						key->SetTimeRight(CurvePX, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-						key->SetValueRight(CurvePX, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+						next_key->SetTimeLeft(Curve_position_x, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+						next_key->SetValueLeft(Curve_position_x, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+						key->SetTimeRight(Curve_position_x, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+						key->SetValueRight(Curve_position_x, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -1437,18 +1437,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurvePY->FindKey(time);
+			key = Curve_position_y->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurvePY->FindKey(next_time);
+				next_key = Curve_position_y->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(CurvePY, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-						next_key->SetValueLeft(CurvePY, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-						key->SetTimeRight(CurvePY, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-						key->SetValueRight(CurvePY, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+						next_key->SetTimeLeft(Curve_position_y, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+						next_key->SetValueLeft(Curve_position_y, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+						key->SetTimeRight(Curve_position_y, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+						key->SetValueRight(Curve_position_y, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -1456,18 +1456,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurvePZ->FindKey(time);
+			key = Curve_position_z->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurvePZ->FindKey(next_time);
+				next_key = Curve_position_z->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(CurvePZ, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-						next_key->SetValueLeft(CurvePZ, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-						key->SetTimeRight(CurvePZ, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-						key->SetValueRight(CurvePZ, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+						next_key->SetTimeLeft(Curve_position_z, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+						next_key->SetValueLeft(Curve_position_z, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+						key->SetTimeRight(Curve_position_z, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+						key->SetValueRight(Curve_position_z, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -1475,18 +1475,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurveRX->FindKey(time);
+			key = Curve_rotation_x->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurveRX->FindKey(next_time);
+				next_key = Curve_rotation_x->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(CurveRX, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-						next_key->SetValueLeft(CurveRX, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-						key->SetTimeRight(CurveRX, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-						key->SetValueRight(CurveRX, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+						next_key->SetTimeLeft(Curve_rotation_x, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+						next_key->SetValueLeft(Curve_rotation_x, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+						key->SetTimeRight(Curve_rotation_x, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+						key->SetValueRight(Curve_rotation_x, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -1494,18 +1494,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurveRY->FindKey(time);
+			key = Curve_rotation_y->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurveRY->FindKey(next_time);
+				next_key = Curve_rotation_y->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(CurveRY, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-						next_key->SetValueLeft(CurveRY, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-						key->SetTimeRight(CurveRY, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-						key->SetValueRight(CurveRY, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+						next_key->SetTimeLeft(Curve_rotation_y, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+						next_key->SetValueLeft(Curve_rotation_y, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+						key->SetTimeRight(Curve_rotation_y, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+						key->SetValueRight(Curve_rotation_y, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -1513,18 +1513,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurveRZ->FindKey(time);
+			key = Curve_rotation_z->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurveRZ->FindKey(next_time);
+				next_key = Curve_rotation_z->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(CurveRZ, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-						next_key->SetValueLeft(CurveRZ, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-						key->SetTimeRight(CurveRZ, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-						key->SetValueRight(CurveRZ, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+						next_key->SetTimeLeft(Curve_rotation_z, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+						next_key->SetValueLeft(Curve_rotation_z, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+						key->SetTimeRight(Curve_rotation_z, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+						key->SetValueRight(Curve_rotation_z, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -1570,41 +1570,41 @@ inline Bool mmd::TMMDBone::DeleteKeyFrame(Int32 frame_on, GeListNode* node){
 		interpolator_A_map.Erase(interpolator_a_ptr);
 	}
 
-	CTrack* TrackPX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	if (TrackPX != nullptr)
+	CTrack* Track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	if (Track_position_x != nullptr)
 	{
-		CKey* KeyPX = TrackPX->GetCurve()->FindKey(time);
-		CKey::Free(KeyPX);
+		CKey* Key_position_x = Track_position_x->GetCurve()->FindKey(time);
+		CKey::Free(Key_position_x);
 	}
-	CTrack* TrackPY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	if (TrackPY != nullptr)
+	CTrack* Track_position_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	if (Track_position_y != nullptr)
 	{
-		CKey* KeyPY = TrackPY->GetCurve()->FindKey(time);
-		CKey::Free(KeyPY);
+		CKey* Key_position_y = Track_position_y->GetCurve()->FindKey(time);
+		CKey::Free(Key_position_y);
 	}
-	CTrack* TrackPZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	if (TrackPZ != nullptr)
+	CTrack* Track_position_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	if (Track_position_z != nullptr)
 	{
-		CKey* KeyPZ = TrackPZ->GetCurve()->FindKey(time);
-		CKey::Free(KeyPZ);
+		CKey* Key_position_z = Track_position_z->GetCurve()->FindKey(time);
+		CKey::Free(Key_position_z);
 	}
-	CTrack* TrackRX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	if (TrackRX != nullptr)
+	CTrack* Track_rotation_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	if (Track_rotation_x != nullptr)
 	{
-		CKey* KeyRX = TrackRX->GetCurve()->FindKey(time);
-		CKey::Free(KeyRX);
+		CKey* Key_rotation_x = Track_rotation_x->GetCurve()->FindKey(time);
+		CKey::Free(Key_rotation_x);
 	}
-	CTrack* TrackRY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	if (TrackRY != nullptr)
+	CTrack* Track_rotation_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	if (Track_rotation_y != nullptr)
 	{
-		CKey* KeyRY = TrackRY->GetCurve()->FindKey(time);
-		CKey::Free(KeyRY);
+		CKey* Key_rotation_y = Track_rotation_y->GetCurve()->FindKey(time);
+		CKey::Free(Key_rotation_y);
 	}
-	CTrack* TrackRZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	if (TrackRZ != nullptr)
+	CTrack* Track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	if (Track_rotation_z != nullptr)
 	{
-		CKey* KeyRZ = TrackRZ->GetCurve()->FindKey(time);
-		CKey::Free(KeyRZ);
+		CKey* Key_rotation_z = Track_rotation_z->GetCurve()->FindKey(time);
+		CKey::Free(Key_rotation_z);
 	}
 	CTrack* Frame_onTrack = static_cast<BaseTag*>(node)->FindCTrack(DescID(PMX_BONE_TAG_FRAME_ON));
 	if (Frame_onTrack != nullptr)
@@ -1632,18 +1632,18 @@ inline Bool  mmd::TMMDBone::DeleteAllKeyFrame(GeListNode* node) {
 	this->interpolator_A_map.Reset();
 	CTrack* Frame_onTrack = static_cast<BaseTag*>(node)->FindCTrack(DescID(PMX_BONE_TAG_FRAME_ON));
 	CTrack::Free(Frame_onTrack);
-	CTrack* TrackPX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	CTrack::Free(TrackPX);
-	CTrack* TrackPY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	CTrack::Free(TrackPY);
-	CTrack* TrackPZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	CTrack::Free(TrackPZ);
-	CTrack* TrackRX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	CTrack::Free(TrackRX);
-	CTrack* TrackRY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	CTrack::Free(TrackRY);
-	CTrack* TrackRZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	CTrack::Free(TrackRZ);
+	CTrack* Track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	CTrack::Free(Track_position_x);
+	CTrack* Track_position_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	CTrack::Free(Track_position_y);
+	CTrack* Track_position_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	CTrack::Free(Track_position_z);
+	CTrack* Track_rotation_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	CTrack::Free(Track_rotation_x);
+	CTrack* Track_rotation_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	CTrack::Free(Track_rotation_y);
+	CTrack* Track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	CTrack::Free(Track_rotation_z);
 	obj->SetRelPos(Vector());
 	obj->SetRelRot(Vector());
 	return true;

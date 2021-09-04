@@ -843,7 +843,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 	file->Close();
 
 	Int insideCount = 0;
-	if (settings.Import_multipart)
+	if (settings.import_multipart)
 	{
 		NameConversion	name_conversion;
 		BaseObject* ModelRoot = BaseObject::Alloc(ID_O_MMD_MODEL);
@@ -853,7 +853,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 			return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 		}
-		if (settings.Import_english)
+		if (settings.import_english)
 		{
 			ModelRoot->SetName("Model"_s);
 		}
@@ -865,7 +865,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			return(maxon::Error());
 		doc->InsertObject(ModelRoot, nullptr, nullptr);
 		BaseObject* MesheRoot = nullptr;
-		if (settings.Import_polygon)
+		if (settings.import_polygon)
 		{
 			if (ModelRootData->MeshRoot != nullptr)
 			{
@@ -885,7 +885,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			}
 		}
 		BaseObject* BoneRoot = nullptr;
-		if (settings.Import_bone)
+		if (settings.import_bone)
 		{
 			if (ModelRootData->BoneRoot != nullptr)
 			{
@@ -910,7 +910,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 		ModelRoot->SetParameter(DescID(COMMENTS_LOCAL), pmx_model->model_info.comments_local, DESCFLAGS_SET::NONE);
 		ModelRoot->SetParameter(DescID(COMMENTS_UNIVERSAL), pmx_model->model_info.comments_universal, DESCFLAGS_SET::NONE);
 		maxon::HashMap<Int32, BaseObject*> bone_map;
-		if (settings.Import_bone)
+		if (settings.import_bone)
 		{
 			Int32 bone_data_count = pmx_model->model_data_count.bone_data_count;
 			for (Int32 bone_index = 0; bone_index < bone_data_count; bone_index++)
@@ -927,7 +927,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				bone_map.Insert(bone_index, bone) iferr_return;
 			}
 			EventAdd();
-			if (settings.Import_english_check)
+			if (settings.import_english_check)
 			{
 				name_conversion.CheckUpdata();
 			}
@@ -949,11 +949,11 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				BaseObject* bone = bone_ptr->GetValue();
 				if (bone_data_.parent_bone_index == -1)
 				{
-					bone->SetFrozenPos((Vector)bone_data_.position * settings.PositionMultiple);
+					bone->SetFrozenPos((Vector)bone_data_.position * settings.position_multiple);
 					doc->InsertObject(bone, BoneRoot, nullptr);
 				}
 				else {
-					bone->SetFrozenPos((Vector)(bone_data_.position - pmx_model->bone_data[bone_data_.parent_bone_index].position) * settings.PositionMultiple);
+					bone->SetFrozenPos((Vector)(bone_data_.position - pmx_model->bone_data[bone_data_.parent_bone_index].position) * settings.position_multiple);
 					auto parent_bone_ptr = bone_map.Find(bone_data_.parent_bone_index);
 					if (parent_bone_ptr != nullptr)
 					{
@@ -974,8 +974,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_.bone_name_local, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_LOCAL), bone_data_.bone_name_local, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_UNIVERSAL), bone_data_.bone_name_universal, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_IS), settings.Import_english, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(PMX_BONE_POSITION), (Vector)bone_data_.position * settings.PositionMultiple, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_IS), settings.import_english, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(PMX_BONE_POSITION), (Vector)bone_data_.position * settings.position_multiple, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_ROTATABLE), bone_data_.bone_flags.Rotatable, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_TRANSLATABLE), bone_data_.bone_flags.Translatable, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_VISIBLE), bone_data_.bone_flags.Is_visible, DESCFLAGS_SET::NONE);
@@ -993,7 +993,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					PMX_bone_tag->SetParameter(DescID(PMX_BONE_TAIL_INDEX), bone_data_.tail_index, DESCFLAGS_SET::NONE);
 				}
 				else {
-					PMX_bone_tag->SetParameter(DescID(PMX_BONE_TAIL_POSITION), (Vector)bone_data_.position * settings.PositionMultiple, DESCFLAGS_SET::NONE);
+					PMX_bone_tag->SetParameter(DescID(PMX_BONE_TAIL_POSITION), (Vector)bone_data_.position * settings.position_multiple, DESCFLAGS_SET::NONE);
 				}
 				if (bone_data_.bone_flags.Local_coordinate)
 				{
@@ -1004,7 +1004,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				{
 					PMX_bone_tag->SetParameter(DescID(PMX_BONE_FIXED_AXIS), (Vector)bone_data_.bone_fixed_axis, DESCFLAGS_SET::NONE);
 				}
-				if (settings.Import_inherit)
+				if (settings.import_inherit)
 				{
 					if (bone_data_.bone_flags.Inherit_translation == 1)
 					{
@@ -1039,12 +1039,12 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE), bone_data_.inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 					}
 				}
-				if (settings.Import_ik)
+				if (settings.import_ik)
 				{
 					if (bone_data_.bone_flags.IK == 1)
 					{
 						BaseTag* IK_tag = bone_map.Find((bone_data_.IK_links.End() - 1)->bone_index)->GetValue()->MakeTag(1019561); /* Ik Tag ID : 1019561 */
-						if (settings.Import_english)
+						if (settings.import_english)
 						{
 							IK_tag->SetName(bone_data_.bone_name_universal);
 						}
@@ -1097,7 +1097,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 								BaseObject* IK_link_bone = bone_map.Find(IK_link.bone_index)->GetValue();
 								if (IK_link_bone != nullptr)
 								{
-									IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_PREFERRED_ROT), Vector(0, PI05, 0), DESCFLAGS_SET::NONE);
+									IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_MAX_ROT), Vector(-IK_link.limit_min.x, -IK_link.limit_min.y, IK_link.limit_min.z), DESCFLAGS_SET::NONE);
+									IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_MIN_ROT), Vector(-IK_link.limit_max.x, -IK_link.limit_max.y, IK_link.limit_max.z), DESCFLAGS_SET::NONE);
 								}
 							}
 						}
@@ -1161,7 +1162,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			PMX_Material_Data& material_data = pmx_model->material_data[material_index];
 			PolygonObject* part = nullptr;
 			CAWeightTag* weight_tag = nullptr;
-			if (settings.Import_polygon)
+			if (settings.import_polygon)
 			{
 				const Int32	surface_count = material_data.surface_count;
 				const Int32	vertex_data_count = surface_count * 3;
@@ -1175,7 +1176,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 				}
-				if (settings.Import_english)
+				if (settings.import_english)
 				{
 					part->SetName("Material_" + String::IntToString(material_index));
 				}
@@ -1200,7 +1201,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 				}
-				if (settings.Import_weights)
+				if (settings.import_weights)
 				{
 					weight_tag = CAWeightTag::Alloc();
 					if (weight_tag == nullptr)
@@ -1212,7 +1213,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					part->InsertTag(weight_tag);
 				}
 				CAPoseMorphTag* morph_tag = nullptr;
-				if (settings.Import_expression)
+				if (settings.import_expression)
 				{
 					/* Initialization morph tag. */
 					morph_tag = CAPoseMorphTag::Alloc();
@@ -1282,7 +1283,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}
 				maxon::HashMap<Int32, Int32>	joint_bone_map;
 				const Int32			vertex_index_arr_count = vertex_index_arr->GetCount();
-				if (settings.Import_weights)
+				if (settings.import_weights)
 				{
 					for (Int32 part_vertex_index = 0; part_vertex_index < vertex_index_arr_count; part_vertex_index++)
 					{
@@ -1371,8 +1372,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}, [&pmx_model, &part_points, &settings, &weight_tag, &vertex_index_arr, &joint_bone_map, &material_data](const Int32 part_vertex_index, LocalData& context)->maxon::Result<void>
 				{
 					PMX_Vertex_Data& vertex_data_ = pmx_model->vertex_data[vertex_index_arr->operator[](part_vertex_index)];
-					part_points[part_vertex_index] = Vector(vertex_data_.position * settings.PositionMultiple);
-					if (settings.Import_weights)
+					part_points[part_vertex_index] = Vector(vertex_data_.position * settings.position_multiple);
+					if (settings.import_weights)
 					{
 						switch (vertex_data_.weight_deform_type)
 						{
@@ -1455,7 +1456,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				joint_bone_map.Reset();
 				NormalTag* normal_tag = nullptr;
 				NormalHandle	normal_handle;
-				if (settings.Import_normal)
+				if (settings.import_normal)
 				{
 					normal_tag = NormalTag::Alloc(material_data.surface_count);
 					if (normal_tag == nullptr)
@@ -1469,7 +1470,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}
 				UVWTag* uvw_tag = nullptr;
 				UVWHandle	uvw_handle;
-				if (settings.Import_uv)
+				if (settings.import_uv)
 				{
 					uvw_tag = UVWTag::Alloc(material_data.surface_count);
 					if (uvw_tag == nullptr)
@@ -1496,7 +1497,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					g_spinlock.Lock();
 					part_polygon[surface_index] = CPolygon(vertex_info_map.Find(surface.c)->GetValue().point_index, vertex_info_map.Find(surface.b)->GetValue().point_index, vertex_info_map.Find(surface.a)->GetValue().point_index);
 					g_spinlock.Unlock();
-					if (settings.Import_normal)
+					if (settings.import_normal)
 					{
 						Vector normal0 = (Vector)vertex0.normal;
 						Vector normal1 = (Vector)vertex1.normal;
@@ -1510,7 +1511,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						NormalTag::Set(normal_handle, surface_index, NormalStruct(normal0, normal1, normal2, normal3));
 						g_spinlock.Unlock();
 					}
-					if (settings.Import_uv)
+					if (settings.import_uv)
 					{
 						g_spinlock.Lock();
 						UVWTag::Set(uvw_handle, surface_index, UVWStruct(Vector(vertex0.UV.x, vertex0.UV.y, 0), Vector(vertex1.UV.x, vertex1.UV.y, 0), Vector(vertex2.UV.x, vertex2.UV.y, 0)));
@@ -1531,7 +1532,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				part_polygon_obj->Message(MSG_UPDATE);
 				part->SetPhong(true, true, 0.7853982);
 				doc->InsertObject(part, MesheRoot, nullptr);
-				if (settings.Import_weights)
+				if (settings.import_weights)
 				{
 					BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
 					if (morphdeformer == nullptr)
@@ -1556,7 +1557,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				 * if (!SendModelingCommand(MCOMMAND_DELETE, cd)) return maxon::FAILED;
 				 */
 				morph_tag_list.Append(tag_info{ morph_tag, vertex_index_arr }) iferr_return;
-				if (settings.Import_expression)
+				if (settings.import_expression)
 				{
 					/* Add base morph to the tag. */
 					if (pmx_model->model_info.have_vertex_morph)
@@ -1581,7 +1582,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				part_surface_end += material_data.surface_count;
 			}
 			Material* material = nullptr;
-			if (settings.Import_material)
+			if (settings.import_material)
 			{
 				material = Material::Alloc();
 				if (material == nullptr)
@@ -1590,7 +1591,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 				}
-				if (settings.Import_english)
+				if (settings.import_english)
 				{
 					material->SetName("Material_" + String::IntToString(material_index));
 				}
@@ -1674,7 +1675,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					}
 				}
 				doc->InsertMaterial(material);
-				if (settings.Import_polygon)
+				if (settings.import_polygon)
 				{
 					TextureTag* texture_tag = TextureTag::Alloc();
 					if (texture_tag == nullptr)
@@ -1690,7 +1691,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}
 			}
 
-			if (settings.Import_weights)
+			if (settings.import_weights)
 			{
 				CAWeightMgr::NormalizeWeights(doc);
 #if API_VERSION >= 21000
@@ -1703,7 +1704,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			}
 		}
 
-		if (settings.Import_expression)
+		if (settings.import_expression)
 		{
 			Int32									morph_data_count = pmx_model->model_data_count.morph_data_count;                /* Get the morph data count. */
 			maxon::HashMap<BaseObject*, CAPoseMorphTag*>				bone_tag_map;
@@ -1783,7 +1784,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 									{
 										morph_node = morph_node->GetNext();
 									}
-									morph_node->SetPoint(point_info_.point_index, Vector(vertex_morph_data_arr->operator[](offset_count_index).translation * settings.PositionMultiple));
+									morph_node->SetPoint(point_info_.point_index, Vector(vertex_morph_data_arr->operator[](offset_count_index).translation * settings.position_multiple));
 								}
 							}
 						}
@@ -1792,7 +1793,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					break;
 				}
 				case 2: {
-					if (settings.Import_bone)
+					if (settings.import_bone)
 					{
 						maxon::PointerArray<PMX_Morph_bone>* bone_morph_data_arr = (maxon::PointerArray<PMX_Morph_bone>*)morph_data.offset_data; /* 读取表情数据储存的变换信息 */
 						Int32					offset_count = morph_data.offset_count;                                      /* 读取表情数据储存的变换信息个数 */
@@ -1811,7 +1812,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 									Int32 bone_morph_data_index = pmx_bone_tag_data->AddBondMorph(morph_data.morph_name_local);
 									if (bone_morph_data_index == -1)
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-									if (!pmx_bone_tag_data->SetBondMorphTranslation(bone_morph_data_index, Vector(bone_morph_data.translation * settings.PositionMultiple)))
+									if (!pmx_bone_tag_data->SetBondMorphTranslation(bone_morph_data_index, Vector(bone_morph_data.translation * settings.position_multiple)))
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 									if (!pmx_bone_tag_data->SetBondMorphRotation(bone_morph_data_index, Vector(bone_morph_data.rotation)))
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
@@ -1939,7 +1940,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 		ModelRoot->SetParameter(DescID(COMMENTS_LOCAL), pmx_model->model_info.comments_local, DESCFLAGS_SET::NONE);
 		ModelRoot->SetParameter(DescID(COMMENTS_UNIVERSAL), pmx_model->model_info.comments_universal, DESCFLAGS_SET::NONE);
 		BaseObject* BoneRoot = nullptr;
-		if (settings.Import_bone)
+		if (settings.import_bone)
 		{
 			if (ModelRootData->BoneRoot != nullptr)
 			{
@@ -1966,7 +1967,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 		Int32		select_end = 0;
 		const Int32	vertex_data_count = pmx_model->model_data_count.vertex_data_count;
 		const Int32	surface_data_count = pmx_model->model_data_count.surface_data_count;
-		if (settings.Import_polygon)
+		if (settings.import_polygon)
 		{
 			model = PolygonObject::Alloc(vertex_data_count, surface_data_count);
 			if (model == nullptr)
@@ -1982,7 +1983,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			model_polygon = model_polygon_obj->GetPolygonW();
 		}
 		CAWeightTag* weight_tag = nullptr;
-		if (settings.Import_weights)
+		if (settings.import_weights)
 		{
 			weight_tag = CAWeightTag::Alloc();
 			if (weight_tag == nullptr)
@@ -1994,7 +1995,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			model->InsertTag(weight_tag);
 		}
 		maxon::HashMap<Int32, BaseObject*> bone_map;
-		if (settings.Import_bone)
+		if (settings.import_bone)
 		{
 			for (Int32 i = 0; i < pmx_model->model_data_count.bone_data_count; i++)
 			{
@@ -2008,14 +2009,14 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}
 				name_conversion.InitConver(bone_data_.bone_name_local);
 
-				if (settings.Import_weights)
+				if (settings.import_weights)
 				{
 					weight_tag->AddJoint(bone);
 				}
 				bone_map.Insert(i, bone) iferr_return;
 			}
 			EventAdd();
-			if (settings.Import_english_check)
+			if (settings.import_english_check)
 			{
 				name_conversion.CheckUpdata();
 			}
@@ -2038,11 +2039,11 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				BaseObject* bone = bone_ptr->GetValue();
 				if (bone_data_.parent_bone_index == -1)
 				{
-					bone->SetFrozenPos((Vector)bone_data_.position * settings.PositionMultiple);
+					bone->SetFrozenPos((Vector)bone_data_.position * settings.position_multiple);
 					doc->InsertObject(bone, BoneRoot, nullptr);
 				}
 				else {
-					bone->SetFrozenPos((Vector)(bone_data_.position - pmx_model->bone_data[bone_data_.parent_bone_index].position) * settings.PositionMultiple);
+					bone->SetFrozenPos((Vector)(bone_data_.position - pmx_model->bone_data[bone_data_.parent_bone_index].position) * settings.position_multiple);
 					auto parent_bone_ptr = bone_map.Find(bone_data_.parent_bone_index);
 					if (parent_bone_ptr != nullptr)
 					{
@@ -2063,8 +2064,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_.bone_name_local, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_LOCAL), bone_data_.bone_name_local, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_UNIVERSAL), bone_data_.bone_name_universal, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_IS), settings.Import_english, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(PMX_BONE_POSITION), (Vector)bone_data_.position * settings.PositionMultiple, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_IS), settings.import_english, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(DescID(PMX_BONE_POSITION), (Vector)bone_data_.position * settings.position_multiple, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_ROTATABLE), bone_data_.bone_flags.Rotatable, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_TRANSLATABLE), bone_data_.bone_flags.Translatable, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_VISIBLE), bone_data_.bone_flags.Is_visible, DESCFLAGS_SET::NONE);
@@ -2082,7 +2083,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					PMX_bone_tag->SetParameter(DescID(PMX_BONE_TAIL_INDEX), bone_data_.tail_index, DESCFLAGS_SET::NONE);
 				}
 				else {
-					PMX_bone_tag->SetParameter(DescID(PMX_BONE_TAIL_POSITION), (Vector)bone_data_.position * settings.PositionMultiple, DESCFLAGS_SET::NONE);
+					PMX_bone_tag->SetParameter(DescID(PMX_BONE_TAIL_POSITION), (Vector)bone_data_.position * settings.position_multiple, DESCFLAGS_SET::NONE);
 				}
 				if (bone_data_.bone_flags.Local_coordinate)
 				{
@@ -2093,7 +2094,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				{
 					PMX_bone_tag->SetParameter(DescID(PMX_BONE_FIXED_AXIS), (Vector)bone_data_.bone_fixed_axis, DESCFLAGS_SET::NONE);
 				}
-				if (settings.Import_inherit)
+				if (settings.import_inherit)
 				{
 					if (bone_data_.bone_flags.Inherit_translation == 1)
 					{
@@ -2128,7 +2129,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE), bone_data_.inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 					}
 				}
-				if (settings.Import_ik)
+				if (settings.import_ik)
 				{
 					if (bone_data_.bone_flags.IK == 1)
 					{
@@ -2139,7 +2140,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 							return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 						}
-						if (settings.Import_english)
+						if (settings.import_english)
 						{
 							IK_tag->SetName(bone_data_.bone_name_universal);
 						}
@@ -2192,7 +2193,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 								BaseObject* IK_link_bone = bone_map.Find(IK_link.bone_index)->GetValue();
 								if (IK_link_bone != nullptr)
 								{
-									IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_PREFERRED_ROT), Vector(0, PI05, 0), DESCFLAGS_SET::NONE);
+									IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_MAX_ROT), Vector(-IK_link.limit_min.x, -IK_link.limit_min.y, IK_link.limit_min.z), DESCFLAGS_SET::NONE);
+									IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_MIN_ROT), Vector(-IK_link.limit_max.x, -IK_link.limit_max.y, IK_link.limit_max.z), DESCFLAGS_SET::NONE);
 								}
 							}
 						}
@@ -2226,7 +2228,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}
 			}
 		}
-		if (settings.Import_polygon)
+		if (settings.import_polygon)
 		{
 			insideCount = 0;
 			maxon::ParallelFor::Dynamic<LocalData, maxon::PARALLELFORFLAGS::INITTHREADED_FINALIZESYNC>(0, vertex_data_count, [](LocalData& context)
@@ -2236,9 +2238,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			{
 				PMX_Vertex_Data& vertex_data_ = pmx_model->vertex_data[vertex_index];
 				g_spinlock.Lock();
-				model_points[vertex_index] = Vector(vertex_data_.position * settings.PositionMultiple);
+				model_points[vertex_index] = Vector(vertex_data_.position * settings.position_multiple);
 				g_spinlock.Unlock();
-				if (settings.Import_weights)
+				if (settings.import_weights)
 				{
 					switch (vertex_data_.weight_deform_type)
 					{
@@ -2312,7 +2314,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			model_point_obj->Message(MSG_UPDATE);
 			NormalTag* normal_tag = nullptr;
 			NormalHandle	normal_handle;
-			if (settings.Import_normal)
+			if (settings.import_normal)
 			{
 				normal_tag = NormalTag::Alloc(pmx_model->model_data_count.surface_data_count);
 				if (normal_tag == nullptr)
@@ -2326,7 +2328,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			}
 			UVWTag* uvw_tag = nullptr;
 			UVWHandle	uvw_handle;
-			if (settings.Import_uv)
+			if (settings.import_uv)
 			{
 				uvw_tag = UVWTag::Alloc(pmx_model->model_data_count.surface_data_count);
 				if (uvw_tag == nullptr)
@@ -2352,7 +2354,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				g_spinlock.Lock();
 				model_polygon[surface_index] = CPolygon(surface.c, surface.b, surface.a);
 				g_spinlock.Unlock();
-				if (settings.Import_normal)
+				if (settings.import_normal)
 				{
 					Vector normal0 = (Vector)vertex0.normal;
 					Vector normal1 = (Vector)vertex1.normal;
@@ -2366,7 +2368,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					NormalTag::Set(normal_handle, surface_index, NormalStruct(normal0, normal1, normal2, normal3));
 					g_spinlock.Unlock();
 				}
-				if (settings.Import_uv)
+				if (settings.import_uv)
 				{
 					g_spinlock.Lock();
 					UVWTag::Set(uvw_handle, surface_index, UVWStruct(Vector(vertex0.UV.x, vertex0.UV.y, 0), Vector(vertex1.UV.x, vertex1.UV.y, 0), Vector(vertex2.UV.x, vertex2.UV.y, 0)));
@@ -2392,7 +2394,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			else {
 				doc->InsertObject(model, ModelRoot, nullptr);
 			}
-			if (settings.Import_weights)
+			if (settings.import_weights)
 			{
 				BaseObject* morphdeformer = BaseObject::Alloc(Oskin);
 				if (morphdeformer == nullptr)
@@ -2407,7 +2409,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			doc->SetMode(Mpolygons);
 			select = model->GetPolygonS();
 		}
-		if (settings.Import_expression)
+		if (settings.import_expression)
 		{
 			maxon::HashMap<BaseObject*, CAPoseMorphTag*> bone_tag_map;
 			/* Initialization morph tag. */
@@ -2473,7 +2475,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					morph->SetMode(doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
 					maxon::ParallelFor::Dynamic(0, offset_count, [&morph_node, &vertex_morph_data_arr, &settings](const Int32 pointIndex)
 					{
-						morph_node->SetPoint(vertex_morph_data_arr->operator									[](pointIndex).vertex_index, Vector(vertex_morph_data_arr->operator[](pointIndex).translation * settings.PositionMultiple));
+						morph_node->SetPoint(vertex_morph_data_arr->operator									[](pointIndex).vertex_index, Vector(vertex_morph_data_arr->operator[](pointIndex).translation * settings.position_multiple));
 					});
 					morph->SetMode(doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
 					morph_tag->UpdateMorphs();
@@ -2483,7 +2485,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					break;
 				}
 				case 2: {
-					if (settings.Import_bone)
+					if (settings.import_bone)
 					{
 						maxon::PointerArray<PMX_Morph_bone>* bone_morph_data_arr = (maxon::PointerArray<PMX_Morph_bone>*)morph_data.offset_data; /* 读取表情数据储存的变换信息 */
 						Int32					offset_count = morph_data.offset_count;                                      /* 读取表情数据储存的变换信息个数 */
@@ -2502,7 +2504,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 									Int32 bone_morph_data_index = pmx_bone_tag_data->AddBondMorph(morph_data.morph_name_local);
 									if (bone_morph_data_index == -1)
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-									if (!pmx_bone_tag_data->SetBondMorphTranslation(bone_morph_data_index, Vector(bone_morph_data.translation * settings.PositionMultiple)))
+									if (!pmx_bone_tag_data->SetBondMorphTranslation(bone_morph_data_index, Vector(bone_morph_data.translation * settings.position_multiple)))
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 									if (!pmx_bone_tag_data->SetBondMorphRotation(bone_morph_data_index, Vector(bone_morph_data.rotation)))
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
@@ -2574,7 +2576,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			bone_tag_map.Reset();
 		}
 		bone_map.Reset();
-		if (settings.Import_material)
+		if (settings.import_material)
 		{
 			Int32 material_data_count = pmx_model->model_data_count.material_data_count;
 			for (Int32 material_index = 0; material_index < material_data_count; material_index++)
@@ -2666,7 +2668,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					}
 				}
 				doc->InsertMaterial(material);
-				if (settings.Import_polygon)
+				if (settings.import_polygon)
 				{
 					doc->SetSelection(model);
 					select->SelectAll(select_end, select_end + material_data.surface_count - 1);
@@ -2689,7 +2691,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			}
 		}
 		EventAdd();
-		if (settings.Import_polygon)
+		if (settings.import_polygon)
 		{
 			doc->SetSelection(model);
 			ModelingCommandData cd;
@@ -2706,7 +2708,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			if (!SendModelingCommand(MCOMMAND_DELETE, cd))
                 return maxon::Error();
 		}
-		if (settings.Import_weights)
+		if (settings.import_weights)
 		{
 			CAWeightMgr::NormalizeWeights(doc);
 #if API_VERSION >= 21000

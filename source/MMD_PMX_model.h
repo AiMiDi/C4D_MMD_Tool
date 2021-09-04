@@ -9,32 +9,32 @@
 namespace mmd {
 	struct PMX_Model_import_settings
 	{
-		Float	PositionMultiple;
-		Bool	Import_polygon;
-		Bool	Import_normal;
-		Bool	Import_uv;
-		Bool	Import_material;
-		Bool	Import_bone;
-		Bool	Import_weights;
-		Bool	Import_ik;
-		Bool	Import_inherit;
-		Bool	Import_expression;
-		Bool	Import_english;
-		Bool	Import_english_check;
-		Bool	Import_multipart;
+		Float	position_multiple;
+		Bool	import_polygon;
+		Bool	import_normal;
+		Bool	import_uv;
+		Bool	import_material;
+		Bool	import_bone;
+		Bool	import_weights;
+		Bool	import_ik;
+		Bool	import_inherit;
+		Bool	import_expression;
+		Bool	import_english;
+		Bool	import_english_check;
+		Bool	import_multipart;
 	};
 
 	struct PMX_Model_export_settings {
-		Float	PositionMultiple;
-		Bool	Export_polygon;
-		Bool	Export_normal;
-		Bool	Export_uv;
-		Bool	Export_material;
-		Bool	Export_bone;
-		Bool	Export_weights;
-		Bool	Export_ik;
-		Bool	Export_inherit;
-		Bool	Export_expression;
+		Float	position_multiple;
+		Bool	export_polygon;
+		Bool	export_normal;
+		Bool	export_uv;
+		Bool	export_material;
+		Bool	export_bone;
+		Bool	export_weights;
+		Bool	export_ik;
+		Bool	export_inherit;
+		Bool	export_expression;
 	};
 
 	class PMXModel

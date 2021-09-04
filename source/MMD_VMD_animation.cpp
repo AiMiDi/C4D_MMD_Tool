@@ -369,41 +369,41 @@ inline Bool mmd::OMMDCamera::RegisterKeyFrame(Int32 frame_on, GeListNode* node) 
 	data_ = bc->GetData(VMD_CAM_OBJ_SPLINE);
 	SplineData* spline = (SplineData*)data_.GetCustomDataType(CUSTOMDATATYPE_SPLINE);
 
-	CTrack* TrackPX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	if (TrackPX == nullptr)
+	CTrack* Track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	if (Track_position_x == nullptr)
 	{
-		TrackPX = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-		obj->InsertTrackSorted(TrackPX);
+		Track_position_x = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+		obj->InsertTrackSorted(Track_position_x);
 	}
-	CTrack* TrackPY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	if (TrackPY == nullptr)
+	CTrack* Track_position_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	if (Track_position_y == nullptr)
 	{
-		TrackPY = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-		obj->InsertTrackSorted(TrackPY);
+		Track_position_y = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+		obj->InsertTrackSorted(Track_position_y);
 	}
-	CTrack* TrackPZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	if (TrackPZ == nullptr)
+	CTrack* Track_position_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	if (Track_position_z == nullptr)
 	{
-		TrackPZ = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-		obj->InsertTrackSorted(TrackPZ);
+		Track_position_z = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+		obj->InsertTrackSorted(Track_position_z);
 	}
-	CTrack* TrackRX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	if (TrackRX == nullptr)
+	CTrack* Track_rotation_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	if (Track_rotation_x == nullptr)
 	{
-		TrackRX = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-		obj->InsertTrackSorted(TrackRX);
+		Track_rotation_x = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+		obj->InsertTrackSorted(Track_rotation_x);
 	}
-	CTrack* TrackRY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	if (TrackRY == nullptr)
+	CTrack* Track_rotation_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	if (Track_rotation_y == nullptr)
 	{
-		TrackRY = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-		obj->InsertTrackSorted(TrackRY);
+		Track_rotation_y = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+		obj->InsertTrackSorted(Track_rotation_y);
 	}
-	CTrack* TrackRZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	if (TrackRZ == nullptr)
+	CTrack* Track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	if (Track_rotation_z == nullptr)
 	{
-		TrackRZ = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-		obj->InsertTrackSorted(TrackRZ);
+		Track_rotation_z = CTrack::Alloc(obj, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+		obj->InsertTrackSorted(Track_rotation_z);
 	}
 	CTrack* TrackD = cam->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
 	if (TrackD == nullptr)
@@ -418,95 +418,95 @@ inline Bool mmd::OMMDCamera::RegisterKeyFrame(Int32 frame_on, GeListNode* node) 
 		cam->InsertTrackSorted(TrackV);
 	}
 
-	CCurve* CurvePX = TrackPX->GetCurve();
-	CCurve* CurvePY = TrackPY->GetCurve();
-	CCurve* CurvePZ = TrackPZ->GetCurve();
-	CCurve* CurveRX = TrackRX->GetCurve();
-	CCurve* CurveRY = TrackRY->GetCurve();
-	CCurve* CurveRZ = TrackRZ->GetCurve();
+	CCurve* Curve_position_x = Track_position_x->GetCurve();
+	CCurve* Curve_position_y = Track_position_y->GetCurve();
+	CCurve* Curve_position_z = Track_position_z->GetCurve();
+	CCurve* Curve_rotation_x = Track_rotation_x->GetCurve();
+	CCurve* Curve_rotation_y = Track_rotation_y->GetCurve();
+	CCurve* Curve_rotation_z = Track_rotation_z->GetCurve();
 	CCurve* CurveD = TrackD->GetCurve();
 	CCurve* CurveV = TrackV->GetCurve();
 
 	/* 确保获取成功 */
-	if (CurvePX == nullptr || CurvePY == nullptr || CurvePZ == nullptr || CurveRX == nullptr || CurveRY == nullptr || CurveRZ == nullptr || CurveD == nullptr || CurveV == nullptr)
+	if (Curve_position_x == nullptr || Curve_position_y == nullptr || Curve_position_z == nullptr || Curve_rotation_x == nullptr || Curve_rotation_y == nullptr || Curve_rotation_z == nullptr || CurveD == nullptr || CurveV == nullptr)
 	{
 		return(true);
 	}
 	Vector RelPos = obj->GetRelPos();
 	Vector RelRot = obj->GetRelRot();
 
-	CKey* KeyPX = CurvePX->FindKey(time);
-	if (KeyPX == nullptr)
+	CKey* Key_position_x = Curve_position_x->FindKey(time);
+	if (Key_position_x == nullptr)
 	{
-		KeyPX = CurvePX->AddKey(time);
-		if (KeyPX == nullptr)
+		Key_position_x = Curve_position_x->AddKey(time);
+		if (Key_position_x == nullptr)
 		{
 			return(true);
 		}
 	}
 	else {
-		KeyPX->SetValue(CurvePX, RelPos.x);
+		Key_position_x->SetValue(Curve_position_x, RelPos.x);
 	}
-	CKey* KeyPY = CurvePY->FindKey(time);
-	if (KeyPY == nullptr)
+	CKey* Key_position_y = Curve_position_y->FindKey(time);
+	if (Key_position_y == nullptr)
 	{
-		KeyPY = CurvePY->AddKey(time);
-		if (KeyPY == nullptr)
+		Key_position_y = Curve_position_y->AddKey(time);
+		if (Key_position_y == nullptr)
 		{
 			return(true);
 		}
 	}
 	else {
-		KeyPY->SetValue(CurvePY, RelPos.y);
+		Key_position_y->SetValue(Curve_position_y, RelPos.y);
 	}
-	CKey* KeyPZ = CurvePZ->FindKey(time);
-	if (KeyPZ == nullptr)
+	CKey* Key_position_z = Curve_position_z->FindKey(time);
+	if (Key_position_z == nullptr)
 	{
-		KeyPZ = CurvePZ->AddKey(time);
-		if (KeyPZ == nullptr)
+		Key_position_z = Curve_position_z->AddKey(time);
+		if (Key_position_z == nullptr)
 		{
 			return(true);
 		}
 	}
 	else {
-		KeyPZ->SetValue(CurvePZ, RelPos.z);
+		Key_position_z->SetValue(Curve_position_z, RelPos.z);
 	}
-	CKey* KeyRX = CurveRX->FindKey(time);
-	if (KeyRX == nullptr)
+	CKey* Key_rotation_x = Curve_rotation_x->FindKey(time);
+	if (Key_rotation_x == nullptr)
 	{
-		KeyRX = CurveRX->AddKey(time);
-		if (KeyRX == nullptr)
+		Key_rotation_x = Curve_rotation_x->AddKey(time);
+		if (Key_rotation_x == nullptr)
 		{
 			return(true);
 		}
 	}
 	else {
-		KeyRX->SetValue(CurveRX, RelRot.x);
+		Key_rotation_x->SetValue(Curve_rotation_x, RelRot.x);
 	}
-	CKey* KeyRY = CurveRY->FindKey(time);
-	KeyRY = CurveRY->AddKey(time);
-	if (KeyRY == nullptr)
+	CKey* Key_rotation_y = Curve_rotation_y->FindKey(time);
+	Key_rotation_y = Curve_rotation_y->AddKey(time);
+	if (Key_rotation_y == nullptr)
 	{
-		KeyRY = CurveRY->AddKey(time);
-		if (KeyRY == nullptr)
+		Key_rotation_y = Curve_rotation_y->AddKey(time);
+		if (Key_rotation_y == nullptr)
 		{
 			return(true);
 		}
 	}
 	else {
-		KeyRY->SetValue(CurveRY, RelRot.y);
+		Key_rotation_y->SetValue(Curve_rotation_y, RelRot.y);
 	}
-	CKey* KeyRZ = CurveRZ->FindKey(time);
-	if (KeyRZ == nullptr)
+	CKey* Key_rotation_z = Curve_rotation_z->FindKey(time);
+	if (Key_rotation_z == nullptr)
 	{
-		KeyRZ = CurveRZ->AddKey(time);
-		if (KeyRZ == nullptr)
+		Key_rotation_z = Curve_rotation_z->AddKey(time);
+		if (Key_rotation_z == nullptr)
 		{
 			return(true);
 		}
 	}
 	else {
-		KeyRZ->SetValue(CurveRZ, RelRot.z);
+		Key_rotation_z->SetValue(Curve_rotation_z, RelRot.z);
 	}
 	CKey* KeyD = CurveD->FindKey(time);
 	if (KeyD == nullptr)
@@ -693,33 +693,32 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 	{
 		return(false);
 	}
-	CTrack* Frame_onTrack = obj->FindCTrack(DescID(PMX_BONE_TAG_FRAME_ON));
-	CTrack* TrackPX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	CTrack* TrackPY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	CTrack* TrackPZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	CTrack* TrackRX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	CTrack* TrackRY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	CTrack* TrackRZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	CTrack* TrackDistance = cam->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	CTrack* TrackAOV = cam->FindCTrack(DescID(CAMERAOBJECT_APERTURE));
-	CTrack* frameTrack = obj->FindCTrack(DescID(VMD_CAM_OBJ_FRAME_ON));
+	CTrack* track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	CTrack* track_position_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	CTrack* track_position_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	CTrack* track_rotation_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	CTrack* track_rotation_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	CTrack* track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	CTrack* track_distance = cam->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	CTrack* track_AOV = cam->FindCTrack(DescID(CAMERAOBJECT_APERTURE));
+	CTrack* track_frame = obj->FindCTrack(DescID(VMD_CAM_OBJ_FRAME_ON));
 
-	if (TrackPX == nullptr || TrackPY == nullptr || TrackPZ == nullptr || TrackRX == nullptr || TrackRY == nullptr || TrackRZ == nullptr || TrackDistance == nullptr || TrackAOV == nullptr || frameTrack == nullptr)
+	if (track_position_x == nullptr || track_position_y == nullptr || track_position_z == nullptr || track_rotation_x == nullptr || track_rotation_y == nullptr || track_rotation_z == nullptr || track_distance == nullptr || track_AOV == nullptr || track_frame == nullptr)
 	{
 		return false;
 	}
 
-	CCurve* CurvePX = TrackPX->GetCurve();
-	CCurve* CurvePY = TrackPY->GetCurve();
-	CCurve* CurvePZ = TrackPZ->GetCurve();
-	CCurve* CurveRX = TrackRX->GetCurve();
-	CCurve* CurveRY = TrackRY->GetCurve();
-	CCurve* CurveRZ = TrackRZ->GetCurve();
-	CCurve* CurveDistance = TrackDistance->GetCurve();
-	CCurve* CurveAOV = TrackAOV->GetCurve();
-	CCurve* frameCurve = frameTrack->GetCurve();
+	CCurve* curve_position_x = track_position_x->GetCurve();
+	CCurve* curve_position_y = track_position_y->GetCurve();
+	CCurve* curve_position_z = track_position_z->GetCurve();
+	CCurve* curve_rotation_x = track_rotation_x->GetCurve();
+	CCurve* curve_rotation_y = track_rotation_y->GetCurve();
+	CCurve* curve_rotation_z = track_rotation_z->GetCurve();
+	CCurve* curve_distance = track_distance->GetCurve();
+	CCurve* curve_AOV = track_AOV->GetCurve();
+	CCurve* curve_frame = track_frame->GetCurve();
 
-	if (CurvePX == nullptr || CurvePY == nullptr || CurvePZ == nullptr || CurveRX == nullptr || CurveRY == nullptr || CurveRZ == nullptr || CurveDistance == nullptr || CurveAOV == nullptr || frameCurve == nullptr)
+	if (curve_position_x == nullptr || curve_position_y == nullptr || curve_position_z == nullptr || curve_rotation_x == nullptr || curve_rotation_y == nullptr || curve_rotation_z == nullptr || curve_distance == nullptr || curve_AOV == nullptr || curve_frame == nullptr)
 	{
 		return false;
 	}
@@ -734,12 +733,12 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 	CKey* frame_next = nullptr;
 	maxon::HashMap<Int32, mmd::VMDInterpolator>::Entry* interpolator_ptr;
 
-	const Int32 KeyCount = frameCurve->GetKeyCount();
-	for (Int32 frame_index = 0; frame_index < KeyCount; frame_index++)
+	const Int32 kKeyCount = curve_frame->GetKeyCount();
+	for (Int32 frame_index = 0; frame_index < kKeyCount; frame_index++)
 	{
-		frame_on = frameCurve->GetKey(frame_index)->GetValue();
+		frame_on = curve_frame->GetKey(frame_index)->GetValue();
 		time = BaseTime(frame_on, 30.);
-		frame_next = frameCurve->FindKey(BaseTime(frame_on + 1, 30.), nullptr, FINDANIM::RIGHT); /* 加一排除所在的那一帧 */
+		frame_next = curve_frame->FindKey(BaseTime(frame_on + 1, 30.), nullptr, FINDANIM::RIGHT); /* 加一排除所在的那一帧 */
 		if (frame_next == nullptr)
 		{
 			break;
@@ -751,18 +750,18 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurvePX->FindKey(time);
+			key = curve_position_x->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurvePX->FindKey(next_time);
+				next_key = curve_position_x->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(CurvePX, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(CurvePX, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(CurvePX, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(CurvePX, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_position_x, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+					next_key->SetValueLeft(curve_position_x, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+					key->SetTimeRight(curve_position_x, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+					key->SetValueRight(curve_position_x, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -770,18 +769,18 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurvePY->FindKey(time);
+			key = curve_position_y->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurvePY->FindKey(next_time);
+				next_key = curve_position_y->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(CurvePY, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(CurvePY, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(CurvePY, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(CurvePY, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_position_y, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+					next_key->SetValueLeft(curve_position_y, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+					key->SetTimeRight(curve_position_y, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+					key->SetValueRight(curve_position_y, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -789,18 +788,18 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurvePZ->FindKey(time);
+			key = curve_position_z->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurvePZ->FindKey(next_time);
+				next_key = curve_position_z->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(CurvePZ, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(CurvePZ, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(CurvePZ, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(CurvePZ, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_position_z, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+					next_key->SetValueLeft(curve_position_z, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+					key->SetTimeRight(curve_position_z, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+					key->SetValueRight(curve_position_z, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -808,18 +807,18 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurveRX->FindKey(time);
+			key = curve_rotation_x->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurveRX->FindKey(next_time);
+				next_key = curve_rotation_x->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(CurveRX, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(CurveRX, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(CurveRX, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(CurveRX, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_rotation_x, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+					next_key->SetValueLeft(curve_rotation_x, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+					key->SetTimeRight(curve_rotation_x, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+					key->SetValueRight(curve_rotation_x, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -827,18 +826,18 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurveRY->FindKey(time);
+			key = curve_rotation_y->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurveRY->FindKey(next_time);
+				next_key = curve_rotation_y->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(CurveRY, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(CurveRY, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(CurveRY, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(CurveRY, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_rotation_y, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+					next_key->SetValueLeft(curve_rotation_y, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+					key->SetTimeRight(curve_rotation_y, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+					key->SetValueRight(curve_rotation_y, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -846,18 +845,18 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurveRZ->FindKey(time);
+			key = curve_rotation_z->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurveRZ->FindKey(next_time);
+				next_key = curve_rotation_z->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(CurveRZ, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(CurveRZ, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(CurveRZ, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(CurveRZ, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_rotation_z, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+					next_key->SetValueLeft(curve_rotation_z, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+					key->SetTimeRight(curve_rotation_z, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+					key->SetValueRight(curve_rotation_z, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -865,18 +864,18 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurveDistance->FindKey(time);
+			key = curve_distance->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurveDistance->FindKey(next_time);
+				next_key = curve_distance->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(CurveDistance, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(CurveDistance, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(CurveDistance, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(CurveDistance, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_distance, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+					next_key->SetValueLeft(curve_distance, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+					key->SetTimeRight(curve_distance, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+					key->SetValueRight(curve_distance, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -884,18 +883,18 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 		if (interpolator_ptr != nullptr)
 		{
 			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
-			key = CurveAOV->FindKey(time);
+			key = curve_AOV->FindKey(time);
 			if (key != nullptr)
 			{
-				next_key = CurveAOV->FindKey(next_time);
+				next_key = curve_AOV->FindKey(next_time);
 				if (next_key != nullptr)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(CurveAOV, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(CurveAOV, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(CurveAOV, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(CurveAOV, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_AOV, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
+					next_key->SetValueLeft(curve_AOV, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
+					key->SetTimeRight(curve_AOV, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
+					key->SetValueRight(curve_AOV, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
 				}
 			}
 		}
@@ -978,7 +977,7 @@ inline Bool mmd::OMMDCamera::DeleteKeyFrame(Int32 frame_on, GeListNode* node) {
 	{
 		return(true);
 	}
-	BaseTime	time = BaseTime(Float(frame_on), 30.);
+	BaseTime time = BaseTime(Float(frame_on), 30.);
 
 	auto interpolator_x_ptr = interpolator_X_map.Find(frame_on);
 	if (interpolator_x_ptr != nullptr)
@@ -1016,41 +1015,41 @@ inline Bool mmd::OMMDCamera::DeleteKeyFrame(Int32 frame_on, GeListNode* node) {
 		interpolator_A_map.Erase(interpolator_a_ptr);
 	}
 
-	CTrack* TrackPX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	if (TrackPX != nullptr)
+	CTrack* Track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	if (Track_position_x != nullptr)
 	{
-		CKey* KeyPX = TrackPX->GetCurve()->FindKey(time);
-		CKey::Free(KeyPX);
+		CKey* Key_position_x = Track_position_x->GetCurve()->FindKey(time);
+		CKey::Free(Key_position_x);
 	}
-	CTrack* TrackPY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	if (TrackPY != nullptr)
+	CTrack* Track_position_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	if (Track_position_y != nullptr)
 	{
-		CKey* KeyPY = TrackPY->GetCurve()->FindKey(time);
-		CKey::Free(KeyPY);
+		CKey* Key_position_y = Track_position_y->GetCurve()->FindKey(time);
+		CKey::Free(Key_position_y);
 	}
-	CTrack* TrackPZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	if (TrackPZ != nullptr)
+	CTrack* Track_position_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	if (Track_position_z != nullptr)
 	{
-		CKey* KeyPZ = TrackPZ->GetCurve()->FindKey(time);
-		CKey::Free(KeyPZ);
+		CKey* Key_position_z = Track_position_z->GetCurve()->FindKey(time);
+		CKey::Free(Key_position_z);
 	}
-	CTrack* TrackRX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	if (TrackRX != nullptr)
+	CTrack* Track_rotation_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	if (Track_rotation_x != nullptr)
 	{
-		CKey* KeyRX = TrackRX->GetCurve()->FindKey(time);
-		CKey::Free(KeyRX);
+		CKey* Key_rotation_x = Track_rotation_x->GetCurve()->FindKey(time);
+		CKey::Free(Key_rotation_x);
 	}
-	CTrack* TrackRY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	if (TrackRY != nullptr)
+	CTrack* Track_rotation_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	if (Track_rotation_y != nullptr)
 	{
-		CKey* KeyRY = TrackRY->GetCurve()->FindKey(time);
-		CKey::Free(KeyRY);
+		CKey* Key_rotation_y = Track_rotation_y->GetCurve()->FindKey(time);
+		CKey::Free(Key_rotation_y);
 	}
-	CTrack* TrackRZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	if (TrackRZ != nullptr)
+	CTrack* Track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	if (Track_rotation_z != nullptr)
 	{
-		CKey* KeyRZ = TrackRZ->GetCurve()->FindKey(time);
-		CKey::Free(KeyRZ);
+		CKey* Key_rotation_z = Track_rotation_z->GetCurve()->FindKey(time);
+		CKey::Free(Key_rotation_z);
 	}
 	CTrack* TrackDistance = cam->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
 	if (TrackDistance != nullptr)
@@ -1093,18 +1092,18 @@ inline Bool mmd::OMMDCamera::DeleteAllKeyFrame(GeListNode* node) {
 	this->interpolator_A_map.Reset();
 	CTrack* Frame_onTrack = obj->FindCTrack(DescID(PMX_BONE_TAG_FRAME_ON));
 	CTrack::Free(Frame_onTrack);
-	CTrack* TrackPX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	CTrack::Free(TrackPX);
-	CTrack* TrackPY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	CTrack::Free(TrackPY);
-	CTrack* TrackPZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	CTrack::Free(TrackPZ);
-	CTrack* TrackRX = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	CTrack::Free(TrackRX);
-	CTrack* TrackRY = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	CTrack::Free(TrackRY);
-	CTrack* TrackRZ = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	CTrack::Free(TrackRZ);
+	CTrack* Track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	CTrack::Free(Track_position_x);
+	CTrack* Track_position_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	CTrack::Free(Track_position_y);
+	CTrack* Track_position_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	CTrack::Free(Track_position_z);
+	CTrack* Track_rotation_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	CTrack::Free(Track_rotation_x);
+	CTrack* Track_rotation_y = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	CTrack::Free(Track_rotation_y);
+	CTrack* Track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	CTrack::Free(Track_rotation_z);
 	CTrack* TrackDistance = cam->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
 	CTrack::Free(TrackDistance);
 	CTrack* TrackAOV = cam->FindCTrack(DescID(CAMERAOBJECT_APERTURE));
@@ -1229,7 +1228,7 @@ Bool mmd::VMD_Cam_Draw::Draw(BaseSceneHook* node, BaseDocument* doc, BaseDraw* b
 		if (op->GetType() == ID_O_MMD_CAMERA)
 		{
 			/* store and set line width */
-			const GeData oldLineWidth = bd->GetDrawParam(DRAW_PARAMETER_LINEWIDTH);
+			const GeData kOldLineWidth = bd->GetDrawParam(DRAW_PARAMETER_LINEWIDTH);
 			bd->SetDrawParam(DRAW_PARAMETER_LINEWIDTH, GeData{ 4.0 });
 			const Vector& screenSpacePos = bd->WS(op->GetMg().off);
 			/* set color */
@@ -1241,7 +1240,7 @@ Bool mmd::VMD_Cam_Draw::Draw(BaseSceneHook* node, BaseDocument* doc, BaseDraw* b
 			/* reset matrix */
 			bd->SetMatrix_Matrix(NULL, Matrix(), 0);
 			/* reset parameter */
-			bd->SetDrawParam(DRAW_PARAMETER_LINEWIDTH, oldLineWidth);
+			bd->SetDrawParam(DRAW_PARAMETER_LINEWIDTH, kOldLineWidth);
 		}
 	}
 	if (bd->TestBreak())
@@ -1437,13 +1436,13 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + "error");
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	BaseObject* SelectObject = nullptr;
+	BaseObject* select_object = nullptr;
 
 	if (setting.str_cam == nullptr) /* 若传入的参数非空则使用传入参数 */
 	{
 		/* 获取选中对象 */
-		SelectObject = doc->GetActiveObject();
-		if (SelectObject == nullptr)
+		select_object = doc->GetActiveObject();
+		if (select_object == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 			MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
@@ -1451,11 +1450,11 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 		}
 	}
 	else { /* 否则使用选择参数 */
-		SelectObject = setting.str_cam;
+		select_object = setting.str_cam;
 	}
 
 	/* 判断选中对象类型是否为摄像机 */
-	if (SelectObject->GetType() != Ocamera)
+	if (select_object->GetType() != Ocamera)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_CONVER_TYPE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_CONVER_TYPE_ERR));
@@ -1463,8 +1462,8 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 	}
 
 	/* 创建转换目标对象 */
-	BaseObject* VMDCamera = BaseObject::Alloc(ID_O_MMD_CAMERA);
-	if (VMDCamera == nullptr)
+	BaseObject* VMD_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
+	if (VMD_camera == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -1472,74 +1471,74 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 	}
 
 	/* 创建要转化摄像机的副本，防止操作破坏原摄像机对象的数据 */
-	BaseObject* SelectObjectClone = (BaseObject*)SelectObject->GetClone(COPYFLAGS::NO_HIERARCHY, nullptr);
-	VMDCamera->SetName(SelectObjectClone->GetName());
-	doc->InsertObject(VMDCamera, nullptr, nullptr);
+	BaseObject* select_object_clone = (BaseObject*)select_object->GetClone(COPYFLAGS::NO_HIERARCHY, nullptr);
+	VMD_camera->SetName(select_object_clone->GetName());
+	doc->InsertObject(VMD_camera, nullptr, nullptr);
 
 	/* 获取目标对象内部的数据 */
-	mmd::OMMDCamera* VMDCamera_data = VMDCamera->GetNodeData<OMMDCamera>();
-	if (!VMDCamera_data->CameraInit())
+	mmd::OMMDCamera* VMD_camera_data = VMD_camera->GetNodeData<OMMDCamera>();
+	if (!VMD_camera_data->CameraInit())
 	{
 		return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 	}
-	BaseObject* VMDCameraDistance = VMDCamera_data->cam;
+	BaseObject* VMD_camera_distance = VMD_camera_data->cam;
 
 	/* 将时间设置为0 */
 	doc->SetTime(BaseTime(0.));
 
 	/* 确保每个必要的参数都注册了CTrack，没有则创建一个 */
-	CTrack* strTrackPX = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	if (strTrackPX == nullptr)
+	CTrack* str_track_position_x = select_object_clone->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	if (str_track_position_x == nullptr)
 	{
-		strTrackPX = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-		strTrackPX->GetCurve()->AddKey(BaseTime())->SetValue(strTrackPX->GetCurve(), SelectObjectClone->GetRelPos().x);
-		SelectObjectClone->InsertTrackSorted(strTrackPX);
+		str_track_position_x = CTrack::Alloc(select_object_clone, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+		str_track_position_x->GetCurve()->AddKey(BaseTime())->SetValue(str_track_position_x->GetCurve(), select_object_clone->GetRelPos().x);
+		select_object_clone->InsertTrackSorted(str_track_position_x);
 	}
-	CTrack* strTrackPY = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	if (strTrackPY == nullptr)
+	CTrack* str_track_position_y = select_object_clone->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	if (str_track_position_y == nullptr)
 	{
-		strTrackPY = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-		strTrackPY->GetCurve()->AddKey(BaseTime())->SetValue(strTrackPY->GetCurve(), SelectObjectClone->GetRelPos().y);
-		SelectObjectClone->InsertTrackSorted(strTrackPY);
+		str_track_position_y = CTrack::Alloc(select_object_clone, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+		str_track_position_y->GetCurve()->AddKey(BaseTime())->SetValue(str_track_position_y->GetCurve(), select_object_clone->GetRelPos().y);
+		select_object_clone->InsertTrackSorted(str_track_position_y);
 	}
-	CTrack* strTrackPZ = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	if (strTrackPZ == nullptr)
+	CTrack* str_track_position_z = select_object_clone->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	if (str_track_position_z == nullptr)
 	{
-		strTrackPZ = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-		strTrackPZ->GetCurve()->AddKey(BaseTime())->SetValue(strTrackPZ->GetCurve(), SelectObjectClone->GetRelPos().z);
-		SelectObjectClone->InsertTrackSorted(strTrackPZ);
+		str_track_position_z = CTrack::Alloc(select_object_clone, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+		str_track_position_z->GetCurve()->AddKey(BaseTime())->SetValue(str_track_position_z->GetCurve(), select_object_clone->GetRelPos().z);
+		select_object_clone->InsertTrackSorted(str_track_position_z);
 	}
-	CTrack* strTrackRX = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	if (strTrackRX == nullptr)
+	CTrack* str_track_rotation_x = select_object_clone->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	if (str_track_rotation_x == nullptr)
 	{
-		strTrackRX = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-		strTrackRX->GetCurve()->AddKey(BaseTime())->SetValue(strTrackRX->GetCurve(), SelectObjectClone->GetRelRot().x);
-		SelectObjectClone->InsertTrackSorted(strTrackRX);
+		str_track_rotation_x = CTrack::Alloc(select_object_clone, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+		str_track_rotation_x->GetCurve()->AddKey(BaseTime())->SetValue(str_track_rotation_x->GetCurve(), select_object_clone->GetRelRot().x);
+		select_object_clone->InsertTrackSorted(str_track_rotation_x);
 	}
-	CTrack* strTrackRY = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	if (strTrackRY == nullptr)
+	CTrack* strTrack_rotation_y = select_object_clone->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	if (strTrack_rotation_y == nullptr)
 	{
-		strTrackRY = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-		strTrackRY->GetCurve()->AddKey(BaseTime())->SetValue(strTrackRY->GetCurve(), SelectObjectClone->GetRelRot().y);
-		SelectObjectClone->InsertTrackSorted(strTrackRY);
+		strTrack_rotation_y = CTrack::Alloc(select_object_clone, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+		strTrack_rotation_y->GetCurve()->AddKey(BaseTime())->SetValue(strTrack_rotation_y->GetCurve(), select_object_clone->GetRelRot().y);
+		select_object_clone->InsertTrackSorted(strTrack_rotation_y);
 	}
-	CTrack* strTrackRZ = SelectObjectClone->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	if (strTrackRZ == nullptr)
+	CTrack* str_track_rotation_z = select_object_clone->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	if (str_track_rotation_z == nullptr)
 	{
-		strTrackRZ = CTrack::Alloc(SelectObjectClone, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-		strTrackRZ->GetCurve()->AddKey(BaseTime())->SetValue(strTrackRZ->GetCurve(), SelectObjectClone->GetRelRot().z);
-		SelectObjectClone->InsertTrackSorted(strTrackRZ);
+		str_track_rotation_z = CTrack::Alloc(select_object_clone, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+		str_track_rotation_z->GetCurve()->AddKey(BaseTime())->SetValue(str_track_rotation_z->GetCurve(), select_object_clone->GetRelRot().z);
+		select_object_clone->InsertTrackSorted(str_track_rotation_z);
 	}
-	CTrack* strTrackAOV = SelectObjectClone->FindCTrack(DescID(CAMERAOBJECT_APERTURE));
-	if (strTrackAOV == nullptr)
+	CTrack* str_track_AOV = select_object_clone->FindCTrack(DescID(CAMERAOBJECT_APERTURE));
+	if (str_track_AOV == nullptr)
 	{
-		strTrackAOV = CTrack::Alloc(SelectObjectClone, DescID(CAMERAOBJECT_APERTURE));
-		strTrackAOV->GetCurve()->AddKey(BaseTime())->SetValue(strTrackAOV->GetCurve(), ((CameraObject*)SelectObjectClone)->GetAperture());
-		SelectObjectClone->InsertTrackSorted(strTrackAOV);
+		str_track_AOV = CTrack::Alloc(select_object_clone, DescID(CAMERAOBJECT_APERTURE));
+		str_track_AOV->GetCurve()->AddKey(BaseTime())->SetValue(str_track_AOV->GetCurve(), ((CameraObject*)select_object_clone)->GetAperture());
+		select_object_clone->InsertTrackSorted(str_track_AOV);
 	}
 
 	/* 确保生成成功 */
-	if (strTrackPX == nullptr || strTrackPY == nullptr || strTrackPZ == nullptr || strTrackRX == nullptr || strTrackRY == nullptr || strTrackRZ == nullptr || strTrackAOV == nullptr)
+	if (str_track_position_x == nullptr || str_track_position_y == nullptr || str_track_position_z == nullptr || str_track_rotation_x == nullptr || strTrack_rotation_y == nullptr || str_track_rotation_z == nullptr || str_track_AOV == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -1547,96 +1546,88 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 	}
 
 	/* 获取曲线对象 */
-	CCurve* strCurvePX = strTrackPX->GetCurve();
-	CCurve* strCurvePY = strTrackPY->GetCurve();
-	CCurve* strCurvePZ = strTrackPZ->GetCurve();
-	CCurve* strCurveRX = strTrackRX->GetCurve();
-	CCurve* strCurveRY = strTrackRY->GetCurve();
-	CCurve* strCurveRZ = strTrackRZ->GetCurve();
-	CCurve* strCurveAOV = strTrackAOV->GetCurve();
+	CCurve* str_curve_position_x = str_track_position_x->GetCurve();
+	CCurve* str_curve_position_y = str_track_position_y->GetCurve();
+	CCurve* str_curve_position_z = str_track_position_z->GetCurve();
+	CCurve* str_curve_rotation_x = str_track_rotation_x->GetCurve();
+	CCurve* str_curve_rotation_y = strTrack_rotation_y->GetCurve();
+	CCurve* str_curve_rotation_z = str_track_rotation_z->GetCurve();
+	CCurve* str_curve_AOV = str_track_AOV->GetCurve();
 
 	/* 确保获取成功 */
-	if (strCurvePX == nullptr || strCurvePY == nullptr || strCurvePZ == nullptr || strCurveRX == nullptr || strCurveRY == nullptr || strCurveRZ == nullptr || strCurveAOV == nullptr)
+	if (str_curve_position_x == nullptr || str_curve_position_y == nullptr || str_curve_position_z == nullptr || str_curve_rotation_x == nullptr || str_curve_rotation_y == nullptr || str_curve_rotation_z == nullptr || str_curve_AOV == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 	}
-
-	Int32 frame_count_px = strCurvePX->GetKeyCount();
-	Int32 frame_count_py = strCurvePY->GetKeyCount();
-	Int32 frame_count_pz = strCurvePZ->GetKeyCount();
-	Int32 frame_count_rx = strCurveRX->GetKeyCount();
-	Int32 frame_count_ry = strCurveRY->GetKeyCount();
-	Int32 frame_count_rz = strCurveRZ->GetKeyCount();
-	Int32 frame_count_v = strCurveAOV->GetKeyCount();
 
 	/* 将所有参数的全部关键帧所在帧置入数组（frame_arr） */
 	maxon::HashSet<MyBaseTime> frame_set;
-	Int32		frame_count = strCurvePX->GetKeyCount();
+	Int32		frame_count = str_curve_position_x->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(strCurvePX->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(str_curve_position_x->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = strCurvePY->GetKeyCount();
+	frame_count = str_curve_position_y->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(strCurvePY->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(str_curve_position_y->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = strCurvePZ->GetKeyCount();
+	frame_count = str_curve_position_z->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(strCurvePZ->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(str_curve_position_z->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = strCurveRX->GetKeyCount();
+	frame_count = str_curve_rotation_x->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(strCurveRX->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(str_curve_rotation_x->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = strCurveRY->GetKeyCount();
+	frame_count = str_curve_rotation_y->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(strCurveRY->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(str_curve_rotation_y->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = strCurveRZ->GetKeyCount();
+	frame_count = str_curve_rotation_z->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(strCurveRZ->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(str_curve_rotation_z->GetKey(i)->GetTime())iferr_return;
 	}
-	frame_count = strCurveAOV->GetKeyCount();
+	frame_count = str_curve_AOV->GetKeyCount();
 	for (Int32 i = 0; i < frame_count; i++)
 	{
-		frame_set.Insert(strCurveAOV->GetKey(i)->GetTime())iferr_return;
+		frame_set.Insert(str_curve_AOV->GetKey(i)->GetTime())iferr_return;
 	}
 
 	/* 为目标对象生成动画轨迹 */
-	CTrack* CameraTrackPX = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-	CTrack* CameraTrackPY = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-	CTrack* CameraTrackPZ = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	CTrack* CameraTrackRX = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-	CTrack* CameraTrackRY = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-	CTrack* CameraTrackRZ = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-	CTrack* CameraTrackDistance = CTrack::Alloc(VMDCameraDistance, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-	CTrack* CameraTrackAOV = CTrack::Alloc(VMDCameraDistance, DescID(CAMERAOBJECT_APERTURE));
+	CTrack* camera_track_position_x = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+	CTrack* camera_track_position_y = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+	CTrack* camera_track_position_z = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	CTrack* camera_track_rotation_x = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+	CTrack* camera_track_rotation_y = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+	CTrack* camera_track_rotation_z = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+	CTrack* camera_track_distance = CTrack::Alloc(VMD_camera_distance, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+	CTrack* camera_track_AOV = CTrack::Alloc(VMD_camera_distance, DescID(CAMERAOBJECT_APERTURE));
 
 	/* 确保生成成功 */
-	if (CameraTrackPX == nullptr || CameraTrackPY == nullptr || CameraTrackPZ == nullptr || CameraTrackRX == nullptr || CameraTrackRY == nullptr || CameraTrackRZ == nullptr || CameraTrackDistance == nullptr || CameraTrackAOV == nullptr)
+	if (camera_track_position_x == nullptr || camera_track_position_y == nullptr || camera_track_position_z == nullptr || camera_track_rotation_x == nullptr || camera_track_rotation_y == nullptr || camera_track_rotation_z == nullptr || camera_track_distance == nullptr || camera_track_AOV == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 	}
-	CCurve* CameraCurvePX = CameraTrackPX->GetCurve();
-	CCurve* CameraCurvePY = CameraTrackPY->GetCurve();
-	CCurve* CameraCurvePZ = CameraTrackPZ->GetCurve();
-	CCurve* CameraCurveRX = CameraTrackRX->GetCurve();
-	CCurve* CameraCurveRY = CameraTrackRY->GetCurve();
-	CCurve* CameraCurveRZ = CameraTrackRZ->GetCurve();
-	CCurve* CameraCurveDistance = CameraTrackDistance->GetCurve();
-	CCurve* CameraCurveAOV = CameraTrackAOV->GetCurve();
+	CCurve* camera_curve_position_x = camera_track_position_x->GetCurve();
+	CCurve* camera_curve_position_y = camera_track_position_y->GetCurve();
+	CCurve* camera_curve_position_z = camera_track_position_z->GetCurve();
+	CCurve* camera_curve_rotation_x = camera_track_rotation_x->GetCurve();
+	CCurve* camera_curve_rotation_y = camera_track_rotation_y->GetCurve();
+	CCurve* camera_curve_rotation_z = camera_track_rotation_z->GetCurve();
+	CCurve* camera_curve_istance = camera_track_distance->GetCurve();
+	CCurve* camera_curve_AOV = camera_track_AOV->GetCurve();
 
 	/* 确保获取成功 */
-	if (CameraCurvePX == nullptr || CameraCurvePY == nullptr || CameraCurvePZ == nullptr || CameraCurveRX == nullptr || CameraCurveRY == nullptr || CameraCurveRZ == nullptr || CameraCurveDistance == nullptr || CameraCurveAOV == nullptr)
+	if (camera_curve_position_x == nullptr || camera_curve_position_y == nullptr || camera_curve_position_z == nullptr || camera_curve_rotation_x == nullptr || camera_curve_rotation_y == nullptr || camera_curve_rotation_z == nullptr || camera_curve_istance == nullptr || camera_curve_AOV == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
@@ -1644,96 +1635,96 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 	}
 
 	/* 将生成的动画轨迹插入目标对象 */
-	VMDCamera->InsertTrackSorted(CameraTrackPX);
-	VMDCamera->InsertTrackSorted(CameraTrackPY);
-	VMDCamera->InsertTrackSorted(CameraTrackPZ);
-	VMDCamera->InsertTrackSorted(CameraTrackRX);
-	VMDCamera->InsertTrackSorted(CameraTrackRY);
-	VMDCamera->InsertTrackSorted(CameraTrackRZ);
-	VMDCameraDistance->InsertTrackSorted(CameraTrackDistance);
-	VMDCameraDistance->InsertTrackSorted(CameraTrackAOV);
+	VMD_camera->InsertTrackSorted(camera_track_position_x);
+	VMD_camera->InsertTrackSorted(camera_track_position_y);
+	VMD_camera->InsertTrackSorted(camera_track_position_z);
+	VMD_camera->InsertTrackSorted(camera_track_rotation_x);
+	VMD_camera->InsertTrackSorted(camera_track_rotation_y);
+	VMD_camera->InsertTrackSorted(camera_track_rotation_z);
+	VMD_camera_distance->InsertTrackSorted(camera_track_distance);
+	VMD_camera_distance->InsertTrackSorted(camera_track_AOV);
 
 	/* 确保每个参数在同一帧都注册了关键帧（根据frame_arr查找） */
 	for (const BaseTime& frame_time : frame_set)
 	{
-		if (strCurvePX->FindKey(frame_time) == nullptr)
+		if (str_curve_position_x->FindKey(frame_time) == nullptr)
 		{
-			strCurvePX->AddKeyAdaptTangent(frame_time,false);
+			str_curve_position_x->AddKeyAdaptTangent(frame_time,false);
 		}
-		if (strCurvePY->FindKey(frame_time) == nullptr)
+		if (str_curve_position_y->FindKey(frame_time) == nullptr)
 		{
-			strCurvePY->AddKeyAdaptTangent(frame_time, false);
+			str_curve_position_y->AddKeyAdaptTangent(frame_time, false);
 		}
-		if (strCurvePZ->FindKey(frame_time) == nullptr)
+		if (str_curve_position_z->FindKey(frame_time) == nullptr)
 		{
-			strCurvePZ->AddKeyAdaptTangent(frame_time, false);
+			str_curve_position_z->AddKeyAdaptTangent(frame_time, false);
 		}
-		if (strCurveRX->FindKey(frame_time) == nullptr)
+		if (str_curve_rotation_x->FindKey(frame_time) == nullptr)
 		{
-			strCurveRX->AddKeyAdaptTangent(frame_time, false);
+			str_curve_rotation_x->AddKeyAdaptTangent(frame_time, false);
 		}
-		if (strCurveRY->FindKey(frame_time) == nullptr)
+		if (str_curve_rotation_y->FindKey(frame_time) == nullptr)
 		{
-			strCurveRY->AddKeyAdaptTangent(frame_time, false);
+			str_curve_rotation_y->AddKeyAdaptTangent(frame_time, false);
 		}
-		if (strCurveRZ->FindKey(frame_time) == nullptr)
+		if (str_curve_rotation_z->FindKey(frame_time) == nullptr)
 		{
-			strCurveRZ->AddKeyAdaptTangent(frame_time, false);
+			str_curve_rotation_z->AddKeyAdaptTangent(frame_time, false);
 		}
-		if (strCurveAOV->FindKey(frame_time) == nullptr)
+		if (str_curve_AOV->FindKey(frame_time) == nullptr)
 		{
-			strCurveAOV->AddKeyAdaptTangent(frame_time, false);
+			str_curve_AOV->AddKeyAdaptTangent(frame_time, false);
 		}
-		if (CameraCurveDistance->FindKey(frame_time) == nullptr)
+		if (camera_curve_istance->FindKey(frame_time) == nullptr)
 		{
-			CameraCurveDistance->AddKeyAdaptTangent(frame_time, false);
+			camera_curve_istance->AddKeyAdaptTangent(frame_time, false);
 		}
 	}
 
 	/* 转换移动和旋转写入对象，添加关键帧数据 */
 	for (const BaseTime& frame_time : frame_set)
 	{
-		CameraCurvePX->AddKey(frame_time)->SetValue(CameraCurvePX, strCurvePX->FindKey(frame_time)->GetValue());
-		CameraCurvePY->AddKey(frame_time)->SetValue(CameraCurvePY, strCurvePY->FindKey(frame_time)->GetValue());
-		CameraCurvePZ->AddKey(frame_time)->SetValue(CameraCurvePZ, strCurvePZ->FindKey(frame_time)->GetValue());
-		CameraCurveRX->AddKey(frame_time)->SetValue(CameraCurveRX, strCurveRX->FindKey(frame_time)->GetValue());
-		CameraCurveRY->AddKey(frame_time)->SetValue(CameraCurveRY, strCurveRY->FindKey(frame_time)->GetValue());
-		CameraCurveRZ->AddKey(frame_time)->SetValue(CameraCurveRZ, strCurveRZ->FindKey(frame_time)->GetValue());
-		CameraCurveAOV->AddKey(frame_time)->SetValue(CameraCurveAOV, strCurveAOV->FindKey(frame_time)->GetValue());
-		CameraCurveDistance->AddKey(frame_time)->SetValue(CameraCurveDistance, CameraCurveDistance->FindKey(frame_time)->GetValue());
+		camera_curve_position_x->AddKey(frame_time)->SetValue(camera_curve_position_x, str_curve_position_x->FindKey(frame_time)->GetValue());
+		camera_curve_position_y->AddKey(frame_time)->SetValue(camera_curve_position_y, str_curve_position_y->FindKey(frame_time)->GetValue());
+		camera_curve_position_z->AddKey(frame_time)->SetValue(camera_curve_position_z, str_curve_position_z->FindKey(frame_time)->GetValue());
+		camera_curve_rotation_x->AddKey(frame_time)->SetValue(camera_curve_rotation_x, str_curve_rotation_x->FindKey(frame_time)->GetValue());
+		camera_curve_rotation_y->AddKey(frame_time)->SetValue(camera_curve_rotation_y, str_curve_rotation_y->FindKey(frame_time)->GetValue());
+		camera_curve_rotation_z->AddKey(frame_time)->SetValue(camera_curve_rotation_z, str_curve_rotation_z->FindKey(frame_time)->GetValue());
+		camera_curve_AOV->AddKey(frame_time)->SetValue(camera_curve_AOV, str_curve_AOV->FindKey(frame_time)->GetValue());
+		camera_curve_istance->AddKey(frame_time)->SetValue(camera_curve_istance, camera_curve_istance->FindKey(frame_time)->GetValue());
 	}
-	CameraCurveDistance->AddKey(BaseTime(0, 30.))->SetValue(CameraCurveDistance, setting.distance);
+	camera_curve_istance->AddKey(BaseTime(0, 30.))->SetValue(camera_curve_istance, setting.distance);
 
-	Float		ValueOfTwoFrames;
-	Int32		TimeOfTwoFrames;
+	Float		value_of_two_frames;
+	Int32		time_of_two_frames;
 	Int32		frame_on, next_frame_on;
 	frame_count = frame_set.GetCount() - 1;// 只需循环第2到最后一个
 	frame_set.Reset();
 	const Float	Fps = doc->GetFps();
 	/* 转换曲线并保存到对象 */
-	Float KeyLeftX = 0., KeyLeftY = 0., KeyRightX = 0., KeyRightY = 0., NextKeyLeftX = 0., NextKeyLeftY = 0., NextKeyRightX = 0., NextKeyRightY = 0.;
+	Float key_left_x = 0., key_left_y = 0., key_right_x = 0., key_right_y = 0., next_key_left_x = 0., next_key_left_y = 0., next_key_right_x = 0., next_key_right_y = 0.;
 	CKey* now_key = nullptr;
 	CKey* next_key = nullptr;
 	Int32 now_key_frame = 0;
 	Int32 next_key_frame = 0;
 
-	if (frame_count_px != frame_count) {
+	if (str_curve_position_x->GetKeyCount() != frame_count) {
 		//第一帧
-		now_key = strCurvePX->GetKey(0);
+		now_key = str_curve_position_x->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(30.);
 		if (frame_count > 0) //第一帧不是最后一帧
 		{
-			next_key = strCurvePX->GetKey(1);
+			next_key = str_curve_position_x->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(30.);
-			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-			TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-			strCurvePX->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-			strCurvePX->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+			value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+			time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+			str_curve_position_x->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
+			str_curve_position_x->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 				return false;
 		}
 		//最后一帧
-		if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, strCurvePX->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
+		if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, str_curve_position_x->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
 			return false;
 		}
 		// 循环第2到最后一个
@@ -1741,34 +1732,34 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 		{
 			now_key = next_key;
 			now_key_frame = next_key_frame;
-			next_key = strCurvePX->GetKey(key_index + 1);
+			next_key = str_curve_position_x->GetKey(key_index + 1);
 			next_key_frame = next_key->GetTime().GetFrame(30.);
-			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-			TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-			strCurvePX->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+			value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+			time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+			key_left_x = next_key_left_x, key_left_y = next_key_left_y, key_right_x = next_key_right_x, key_right_y = next_key_right_y;
+			str_curve_position_x->GetTangents(key_index + 1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 				return false;
 
 		}
 	}
-	if (frame_count_py != frame_count) {
+	if (str_curve_position_y->GetKeyCount() != frame_count) {
 		//第一帧
-		now_key = strCurvePY->GetKey(0);
+		now_key = str_curve_position_y->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(30.);
 		if (frame_count > 0) //第一帧不是最后一帧
 		{
-			next_key = strCurvePY->GetKey(1);
+			next_key = str_curve_position_y->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(30.);
-			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-			TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-			strCurvePY->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-			strCurvePY->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+			value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+			time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+			str_curve_position_y->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
+			str_curve_position_y->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 				return false;
 		}
 		//最后一帧
-		if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, strCurvePY->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
+		if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, str_curve_position_y->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
 			return false;
 		}
 		// 循环第2到最后一个
@@ -1776,33 +1767,33 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 		{
 			now_key = next_key;
 			now_key_frame = next_key_frame;
-			next_key = strCurvePY->GetKey(key_index + 1);
+			next_key = str_curve_position_y->GetKey(key_index + 1);
 			next_key_frame = next_key->GetTime().GetFrame(30.);
-			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-			TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-			strCurvePY->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+			value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+			time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+			key_left_x = next_key_left_x, key_left_y = next_key_left_y, key_right_x = next_key_right_x, key_right_y = next_key_right_y;
+			str_curve_position_y->GetTangents(key_index + 1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 				return false;
 		}
 	}
-	if (frame_count_pz != frame_count) {
+	if (str_curve_position_z->GetKeyCount() != frame_count) {
 		//第一帧
-		now_key = strCurvePZ->GetKey(0);
+		now_key = str_curve_position_z->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(30.);
 		if (frame_count > 0) //第一帧不是最后一帧
 		{
-			next_key = strCurvePZ->GetKey(1);
+			next_key = str_curve_position_z->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(30.);
-			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-			TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-			strCurvePZ->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-			strCurvePZ->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+			value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+			time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+			str_curve_position_z->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
+			str_curve_position_z->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 				return false;
 		}
 		//最后一帧
-		if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, strCurvePZ->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
+		if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, str_curve_position_z->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
 			return false;
 		}
 		// 循环第2到最后一个
@@ -1810,13 +1801,13 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 		{
 			now_key = next_key;
 			now_key_frame = next_key_frame;
-			next_key = strCurvePZ->GetKey(key_index + 1);
+			next_key = str_curve_position_z->GetKey(key_index + 1);
 			next_key_frame = next_key->GetTime().GetFrame(30.);
-			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-			TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-			strCurvePZ->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+			value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+			time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+			key_left_x = next_key_left_x, key_left_y = next_key_left_y, key_right_x = next_key_right_x, key_right_y = next_key_right_y;
+			str_curve_position_z->GetTangents(key_index + 1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 				return false;
 		}
 	}
@@ -1824,23 +1815,23 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 	switch (setting.use_rotation)
 	{
 	case 0:
-		if (frame_count_rx != frame_count) {
+		if (str_curve_rotation_x->GetKeyCount() != frame_count) {
 			//第一帧
-			now_key = strCurveRX->GetKey(0);
+			now_key = str_curve_rotation_x->GetKey(0);
 			now_key_frame = now_key->GetTime().GetFrame(30.);
 			if (frame_count > 0) //第一帧不是最后一帧
 			{
-				next_key = strCurveRX->GetKey(1);
+				next_key = str_curve_rotation_x->GetKey(1);
 				next_key_frame = next_key->GetTime().GetFrame(30.);
-				ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-				TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-				strCurveRX->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-				strCurveRX->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+				value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+				time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+				str_curve_rotation_x->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
+				str_curve_rotation_x->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+				if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 					return false;
 			}
 			//最后一帧
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, strCurveRX->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, str_curve_rotation_x->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
 				return false;
 			}
 			// 循环第2到最后一个
@@ -1848,35 +1839,35 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 			{
 				now_key = next_key;
 				now_key_frame = next_key_frame;
-				next_key = strCurveRX->GetKey(key_index + 1);
+				next_key = str_curve_rotation_x->GetKey(key_index + 1);
 				next_key_frame = next_key->GetTime().GetFrame(30.);
-				ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-				TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-				KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-				strCurveRX->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+				value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+				time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+				key_left_x = next_key_left_x, key_left_y = next_key_left_y, key_right_x = next_key_right_x, key_right_y = next_key_right_y;
+				str_curve_rotation_x->GetTangents(key_index + 1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+				if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 					return false;
 			}
 		}
 		break;
 	case 1:
-		if (frame_count_ry != frame_count) {
+		if (str_curve_rotation_y->GetKeyCount() != frame_count) {
 			//第一帧
-			now_key = strCurveRY->GetKey(0);
+			now_key = str_curve_rotation_y->GetKey(0);
 			now_key_frame = now_key->GetTime().GetFrame(30.);
 			if (frame_count > 0) //第一帧不是最后一帧
 			{
-				next_key = strCurveRY->GetKey(1);
+				next_key = str_curve_rotation_y->GetKey(1);
 				next_key_frame = next_key->GetTime().GetFrame(30.);
-				ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-				TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-				strCurveRY->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-				strCurveRY->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+				value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+				time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+				str_curve_rotation_y->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
+				str_curve_rotation_y->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+				if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 					return false;
 			}
 			//最后一帧
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, strCurveRY->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, str_curve_rotation_y->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
 				return false;
 			}
 			// 循环第2到最后一个
@@ -1884,35 +1875,35 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 			{
 				now_key = next_key;
 				now_key_frame = next_key_frame;
-				next_key = strCurveRY->GetKey(key_index + 1);
+				next_key = str_curve_rotation_y->GetKey(key_index + 1);
 				next_key_frame = next_key->GetTime().GetFrame(30.);
-				ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-				TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-				KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-				strCurveRY->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+				value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+				time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+				key_left_x = next_key_left_x, key_left_y = next_key_left_y, key_right_x = next_key_right_x, key_right_y = next_key_right_y;
+				str_curve_rotation_y->GetTangents(key_index + 1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+				if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 					return false;
 			}
 		}
 		break;
 	case 2:
-		if (frame_count_rz != frame_count) {
+		if (str_curve_rotation_z->GetKeyCount() != frame_count) {
 			//第一帧
-			now_key = strCurveRZ->GetKey(0);
+			now_key = str_curve_rotation_z->GetKey(0);
 			now_key_frame = now_key->GetTime().GetFrame(30.);
 			if (frame_count > 0) //第一帧不是最后一帧
 			{
-				next_key = strCurveRZ->GetKey(1);
+				next_key = str_curve_rotation_z->GetKey(1);
 				next_key_frame = next_key->GetTime().GetFrame(30.);
-				ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-				TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-				strCurveRZ->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-				strCurveRZ->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+				value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+				time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+				str_curve_rotation_z->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
+				str_curve_rotation_z->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+				if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 					return false;
 			}
 			//最后一帧
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, strCurveRZ->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, str_curve_rotation_z->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
 				return false;
 			}
 			// 循环第2到最后一个
@@ -1920,13 +1911,13 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 			{
 				now_key = next_key;
 				now_key_frame = next_key_frame;
-				next_key = strCurveRZ->GetKey(key_index + 1);
+				next_key = str_curve_rotation_z->GetKey(key_index + 1);
 				next_key_frame = next_key->GetTime().GetFrame(30.);
-				ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-				TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-				KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-				strCurveRZ->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-				if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+				value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+				time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+				key_left_x = next_key_left_x, key_left_y = next_key_left_y, key_right_x = next_key_right_x, key_right_y = next_key_right_y;
+				str_curve_rotation_z->GetTangents(key_index + 1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+				if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 					return false;
 			}
 		}
@@ -1934,23 +1925,23 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 	default:
 		break;
 	}
-	if (frame_count_rx != frame_count) {
+	if (str_curve_rotation_x->GetKeyCount() != frame_count) {
 		//第一帧
-		now_key = strCurveAOV->GetKey(0);
+		now_key = str_curve_AOV->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(30.);
 		if (frame_count > 0) //第一帧不是最后一帧
 		{
-			next_key = strCurveAOV->GetKey(1);
+			next_key = str_curve_AOV->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(30.);
-			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-			TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-			strCurveAOV->GetTangents(0, &KeyLeftY, &KeyRightY, &KeyLeftX, &KeyRightX);
-			strCurveAOV->GetTangents(1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+			value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+			time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+			str_curve_AOV->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
+			str_curve_AOV->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 				return false;
 		}
 		//最后一帧
-		if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, strCurveAOV->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
+		if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, str_curve_AOV->GetKey(frame_count)->GetTime().GetFrame(30.), VMDInterpolator())) {
 			return false;
 		}
 
@@ -1959,13 +1950,13 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 		{
 			now_key = next_key;
 			now_key_frame = next_key_frame;
-			next_key = strCurveAOV->GetKey(key_index + 1);
+			next_key = str_curve_AOV->GetKey(key_index + 1);
 			next_key_frame = next_key->GetTime().GetFrame(30.);
-			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
-			TimeOfTwoFrames = next_key->GetTime().GetFrame(30.) - now_key_frame;
-			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
-			strCurveAOV->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
-			if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames)))))
+			value_of_two_frames = next_key->GetValue() - now_key->GetValue();
+			time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
+			key_left_x = next_key_left_x, key_left_y = next_key_left_y, key_right_x = next_key_right_x, key_right_y = next_key_right_y;
+			str_curve_AOV->GetTangents(key_index + 1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, now_key_frame, VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 				return false;
 			
 		}
@@ -1974,16 +1965,16 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 	for (Int32 key_index = 0; key_index < frame_count; key_index++)
 	{
 		// 距离没有曲线，顺便在循环里设置线性曲线
-		if (!VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_DCURVE, now_key_frame, VMDInterpolator()))
+		if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_DCURVE, now_key_frame, VMDInterpolator()))
 			return false;
 	}
 
 	EventAdd();
-	if (!VMDCamera_data->UpdateAllInterpolator())
+	if (!VMD_camera_data->UpdateAllInterpolator())
 		return(nullptr);
 	doc->SetTime(BaseTime(1));
 	doc->SetTime(BaseTime());
-	return(maxon::Result<BaseObject*>(VMDCamera));
+	return(maxon::Result<BaseObject*>(VMD_camera));
 }
 
 
@@ -1996,12 +1987,12 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return(false);
 	if (!hf->ReadInt32(&this->prev_interpolator_type))
 		return(false);
-	Int32	CountTemp = 0;
+	Int32	count = 0;
 	Int	size = sizeof(mmd::VMDInterpolator);
 	void* data;
-	if (!hf->ReadInt32(&CountTemp))
+	if (!hf->ReadInt32(&count))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count; i++)
 	{
 		Int32 TempIndex = 0;
 		if (!hf->ReadInt32(&TempIndex))
@@ -2010,9 +2001,9 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return(false);
 		this->interpolator_X_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	if (!hf->ReadInt32(&CountTemp))
+	if (!hf->ReadInt32(&count))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count; i++)
 	{
 		Int32 TempIndex = 0;
 		if (!hf->ReadInt32(&TempIndex))
@@ -2021,9 +2012,9 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return(false);
 		this->interpolator_Y_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	if (!hf->ReadInt32(&CountTemp))
+	if (!hf->ReadInt32(&count))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count; i++)
 	{
 		Int32 TempIndex = 0;
 		if (!hf->ReadInt32(&TempIndex))
@@ -2032,9 +2023,9 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return(false);
 		this->interpolator_Z_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	if (!hf->ReadInt32(&CountTemp))
+	if (!hf->ReadInt32(&count))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count; i++)
 	{
 		Int32 TempIndex = 0;
 		if (!hf->ReadInt32(&TempIndex))
@@ -2043,9 +2034,9 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return(false);
 		this->interpolator_R_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	if (!hf->ReadInt32(&CountTemp))
+	if (!hf->ReadInt32(&count))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count; i++)
 	{
 		Int32 TempIndex = 0;
 		if (!hf->ReadInt32(&TempIndex))
@@ -2054,9 +2045,9 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return(false);
 		this->interpolator_D_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	if (!hf->ReadInt32(&CountTemp))
+	if (!hf->ReadInt32(&count))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count; i++)
 	{
 		Int32 TempIndex = 0;
 		if (!hf->ReadInt32(&TempIndex))
@@ -2065,9 +2056,9 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return(false);
 		this->interpolator_V_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	if (!hf->ReadInt32(&CountTemp))
+	if (!hf->ReadInt32(&count))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count; i++)
 	{
 		Int32 TempIndex = 0;
 		if (!hf->ReadInt32(&TempIndex))
@@ -2087,8 +2078,8 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 		return(false);
 	if (!hf->WriteInt32(this->prev_interpolator_type))
 		return(false);
-	Int32 CountTemp = this->interpolator_X_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	Int32 count = this->interpolator_X_map.GetCount();
+	if (!hf->WriteInt32(count))
 		return(false);
 	for (auto i : this->interpolator_X_map.GetKeys())
 	{
@@ -2097,8 +2088,8 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&this->interpolator_X_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = this->interpolator_Y_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count = this->interpolator_Y_map.GetCount();
+	if (!hf->WriteInt32(count))
 		return(false);
 	for (auto i : this->interpolator_Y_map.GetKeys())
 	{
@@ -2107,8 +2098,8 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&this->interpolator_Y_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = this->interpolator_Z_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count = this->interpolator_Z_map.GetCount();
+	if (!hf->WriteInt32(count))
 		return(false);
 	for (auto i : this->interpolator_Z_map.GetKeys())
 	{
@@ -2117,8 +2108,8 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&this->interpolator_Z_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = this->interpolator_R_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count = this->interpolator_R_map.GetCount();
+	if (!hf->WriteInt32(count))
 		return(false);
 	for (auto i : this->interpolator_R_map.GetKeys())
 	{
@@ -2127,8 +2118,8 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&this->interpolator_R_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = this->interpolator_D_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count = this->interpolator_D_map.GetCount();
+	if (!hf->WriteInt32(count))
 		return(false);
 	for (auto i : this->interpolator_D_map.GetKeys())
 	{
@@ -2137,8 +2128,8 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&this->interpolator_D_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = this->interpolator_V_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count = this->interpolator_V_map.GetCount();
+	if (!hf->WriteInt32(count))
 		return(false);
 	for (auto i : this->interpolator_V_map.GetKeys())
 	{
@@ -2147,8 +2138,8 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&this->interpolator_V_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = this->interpolator_A_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count = this->interpolator_A_map.GetCount();
+	if (!hf->WriteInt32(count))
 		return(false);
 	for (auto i : this->interpolator_A_map.GetKeys())
 	{
@@ -2188,17 +2179,17 @@ Bool mmd::OMMDCamera::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnod
 inline maxon::Vector4d32 mmd::VMDAnimation::EulerToQuaternion(maxon::Vector& euler) {
 
 	// pitch(H), roll(-P), yaw(Z)
-	Float sx = sin(-euler.y * 0.5);
-	Float sy = sin(euler.x * 0.5);
-	Float sz = sin(euler.z * 0.5);
-	Float cx = cos(-euler.y * 0.5);
-	Float cy = cos(euler.x * 0.5);
-	Float cz = cos(euler.z * 0.5);
+	const Float sx = sin(-euler.y * 0.5);
+	const Float sy = sin(euler.x * 0.5);
+	const Float sz = sin(euler.z * 0.5);
+	const Float cx = cos(-euler.y * 0.5);
+	const Float cy = cos(euler.x * 0.5);
+	const Float cz = cos(euler.z * 0.5);
 
-	Float w = (cz * cy * cx) + (sz * sy * sx);
-	Float x = (cz * cy * sx) + (sz * sy * cx);
-	Float y = (sz * cy * sx) - (cz * sy * cx);
-	Float z = (cz * sy * sx) - (sz * cy * cx);
+	const Float w = (cz * cy * cx) + (sz * sy * sx);
+	const Float x = (cz * cy * sx) + (sz * sy * cx);
+	const Float y = (sz * cy * sx) - (cz * sy * cx);
+	const Float z = (cz * sy * sx) - (sz * cy * cx);
 
 	return maxon::Vector4d32(x, y, z, w);
 }
@@ -2207,18 +2198,18 @@ inline maxon::Vector4d32 mmd::VMDAnimation::EulerToQuaternion(maxon::Vector& eul
 inline maxon::Vector mmd::VMDAnimation::QuaternionToEuler(maxon::Vector4d32& quaternion)
 {
 	//pitch(y - axis rotation)
-	Float sinr_cosp = 2.0 * (quaternion.w * quaternion.y + quaternion.x * quaternion.z);
-	Float cosr_cosp = 1.0 - (2.0 * (quaternion.x * quaternion.x + quaternion.y * quaternion.y));
-	Float pitch = -atan2(sinr_cosp, cosr_cosp);
+	const Float sinr_cosp = 2.0 * (quaternion.w * quaternion.y + quaternion.x * quaternion.z);
+	const Float cosr_cosp = 1.0 - (2.0 * (quaternion.x * quaternion.x + quaternion.y * quaternion.y));
+	const Float pitch = -atan2(sinr_cosp, cosr_cosp);
 
 	//yaw(z - axis rotation)
-	Float siny_cosp = 2.0 * (-quaternion.w * quaternion.z - quaternion.x * quaternion.y);
-	Float cosy_cosp = 1.0 - (2.0 * (quaternion.x * quaternion.x + quaternion.z * quaternion.z));
-	Float yaw = atan2(siny_cosp, cosy_cosp);
+	const Float siny_cosp = 2.0 * (-quaternion.w * quaternion.z - quaternion.x * quaternion.y);
+	const Float cosy_cosp = 1.0 - (2.0 * (quaternion.x * quaternion.x + quaternion.z * quaternion.z));
+	const Float yaw = atan2(siny_cosp, cosy_cosp);
 	
 	//roll(x - axis rotation)
 	Float roll = 0.0;
-	Float sinp = 2.0 * (quaternion.z * quaternion.y - quaternion.w * quaternion.x);
+	const Float sinp = 2.0 * (quaternion.z * quaternion.y - quaternion.w * quaternion.x);
 	if (sinp >= 1.0)
 	{
 		roll = -PI05; // use 90 degrees if out of range
@@ -2275,16 +2266,16 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR)));
 	}
 
-	Char	VMDVersion[30]{ 0 };
-	Char	VMDModelName[20]{ 0 };
+	Char VMD_version[30]{ 0 };
+	Char VMD_model_name[20]{ 0 };
 
-	if (!file->ReadBytes(VMDVersion, 30))
+	if (!file->ReadBytes(VMD_version, 30))
 		return(maxon::Error());
-	if (!strncmp(VMDVersion, "Vocaloid Motion Data", 21))
+	if (!strncmp(VMD_version, "Vocaloid Motion Data", 21))
 	{
-		if (!file->ReadBytes(VMDModelName, 10))
+		if (!file->ReadBytes(VMD_model_name, 10))
 			return(maxon::Error());
-		EncodingConversion::SJIStoUTF8(VMDModelName, this->ModelName);
+		EncodingConversion::SJIStoUTF8(VMD_model_name, this->ModelName);
 		if (this->ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) /* カメラ・照明 */
 		{
 			this->IsCamera = 1;
@@ -2293,11 +2284,11 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 			this->IsCamera = 0;
 		}
 	}
-	else if (!strncmp(VMDVersion, "Vocaloid Motion Data 0002", 26))
+	else if (!strncmp(VMD_version, "Vocaloid Motion Data 0002", 26))
 	{
-		if (!file->ReadBytes(VMDModelName, 20))
+		if (!file->ReadBytes(VMD_model_name, 20))
 			return(maxon::Error());
-		EncodingConversion::SJIStoUTF8(VMDModelName, this->ModelName);
+		EncodingConversion::SJIStoUTF8(VMD_model_name, this->ModelName);
 		if (this->ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) /* カメラ・照明 */
 		{
 			this->IsCamera = 1;
@@ -2312,10 +2303,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, "File corruption or unknown version"_s));
 	}
 	if (file->GetPosition() < file->GetLength()) {
-		UInt32 MotionFrameNumber = 0;
-		if (!file->ReadUInt32(&(MotionFrameNumber)))
+		register UInt32 motion_frame_number = 0;
+		if (!file->ReadUInt32(&(motion_frame_number)))
 			return(maxon::Error());
-		for (UInt32 i = 0; i < MotionFrameNumber; i++)
+		while (motion_frame_number--)
 		{
 			/* 111 bytes */
 			mmd::VMD_Motion* motion_frame = NewObj(mmd::VMD_Motion) iferr_return;
@@ -2343,10 +2334,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		}
 	}
 	if (file->GetPosition() < file->GetLength()) {
-		UInt32 MorphFrameNumber = 0;
-		if (!file->ReadUInt32(&(MorphFrameNumber)))
+		register UInt32 morph_frame_number = 0;
+		if (!file->ReadUInt32(&(morph_frame_number)))
 			return(maxon::Error());
-		for (UInt32 i = 0; i < MorphFrameNumber; i++)
+		while (morph_frame_number--)
 		{
 			/* 23 bytes */
 			mmd::VMD_Morph* morph_frame = NewObj(mmd::VMD_Morph) iferr_return;
@@ -2364,10 +2355,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		}
 	}
 	if (file->GetPosition() < file->GetLength()) {
-		UInt32 CameraFrameNumber = 0;
-		if (!file->ReadUInt32(&(CameraFrameNumber)))
+		register UInt32 camera_frame_number = 0;
+		if (!file->ReadUInt32(&(camera_frame_number)))
 			return(maxon::Error());
-		for (UInt32 i = 0; i < CameraFrameNumber; i++)
+		while (camera_frame_number--)
 		{
 			/* 61 bytes */
 			mmd::VMD_Camera* camera_frame = NewObj(mmd::VMD_Camera) iferr_return;
@@ -2401,10 +2392,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		}
 	}
 	if (file->GetPosition() < file->GetLength()) {
-		UInt32 LightFrameNumber = 0;
-		if (!file->ReadUInt32(&(LightFrameNumber)))
+		register UInt32 light_frame_number = 0;
+		if (!file->ReadUInt32(&(light_frame_number)))
 			return(maxon::Error());
-		for (UInt32 i = 0; i < LightFrameNumber; i++)
+		while (light_frame_number--)
 		{
 			/* 28 bytes */
 			mmd::VMD_Light* light_frame = NewObj(mmd::VMD_Light) iferr_return;
@@ -2416,10 +2407,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		}
 	}
 	if (file->GetPosition() < file->GetLength()) {
-		UInt32 ShadowFrameNumber = 0;
-		if (!file->ReadUInt32(&(ShadowFrameNumber)))
+		register UInt32 shadow_frame_number = 0;
+		if (!file->ReadUInt32(&(shadow_frame_number)))
 			return(maxon::Error());
-		for (UInt32 i = 0; i < ShadowFrameNumber; i++)
+		while (shadow_frame_number--)
 		{
 			/* 12 bytes */
 			mmd::VMD_Shadow* shadow_frame = NewObj(mmd::VMD_Shadow) iferr_return;
@@ -2431,10 +2422,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		}
 	}
 	if (file->GetPosition() < file->GetLength()) {
-		UInt32 ModelFrameNumber = 0;
-		if (!file->ReadUInt32(&(ModelFrameNumber)))
+		register UInt32 model_frame_number = 0;
+		if (!file->ReadUInt32(&(model_frame_number)))
 			return(maxon::Error());
-		for (UInt32 i = 0; i < ModelFrameNumber; i++)
+		while (model_frame_number--)
 		{
 			mmd::VMD_Model* model_frame = NewObj(mmd::VMD_Model) iferr_return;
 			if (model_frame == nullptr)
@@ -2443,10 +2434,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 				return(maxon::Error());
 			if (!file->ReadBool(&model_frame->show))
 				return(maxon::Error());
-			UInt32 ikInfoCount = 0;
-			if (!file->ReadUInt32(&ikInfoCount))
+			UInt32 ik_info_number = 0;
+			if (!file->ReadUInt32(&ik_info_number))
 				return(maxon::Error());
-			while (ikInfoCount--)
+			while (ik_info_number--)
 			{
 				Bool	ik_enable;
 				Char	ik_name[20]{ 0 };
@@ -2491,12 +2482,12 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 	EncodingConversion::UTF8toSJIS(this->ModelName, VMDModelName);
 	if (!file->WriteBytes(VMDModelName, 20))
 		return(maxon::Error());
-	Int MotionFrameNumber = this->motion_frames.GetCount();
-	if (!file->WriteUInt32(MotionFrameNumber))
+	register UInt32 motion_frame_number = this->motion_frames.GetCount();
+	if (!file->WriteUInt32(motion_frame_number))
 		return(maxon::Error());
-	for (Int i = 0; i < MotionFrameNumber; i++)
+	while (motion_frame_number--)
 	{
-		mmd::VMD_Motion motion_frame = (this->motion_frames)[i];
+		mmd::VMD_Motion motion_frame = (this->motion_frames)[motion_frame_number];
 		maxon::AutoMem<maxon::Char> bone_name = NewMemClear(maxon::Char, (motion_frame.bone_name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
 		EncodingConversion::UTF8toSJIS(motion_frame.bone_name, bone_name);
 		if (!file->WriteBytes(bone_name, 15))
@@ -2516,12 +2507,12 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		if (!motion_frame.interpolator_r.WriteBoneInterpolator(file))
 			return(maxon::Error());
 	}
-	Int MorphFrameNumber = this->morph_frames.GetCount();
-	if (!file->WriteUInt32(MorphFrameNumber))
+	register UInt32 morph_frame_number = this->morph_frames.GetCount();
+	if (!file->WriteUInt32(morph_frame_number))
 		return(maxon::Error());
-	for (Int i = 0; i < MorphFrameNumber; i++)
+	while (morph_frame_number--)
 	{
-		mmd::VMD_Morph morph_frame = (this->morph_frames)[i];
+		mmd::VMD_Morph morph_frame = (this->morph_frames)[morph_frame_number];
 		maxon::AutoMem<maxon::Char> morph_name = NewMemClear(maxon::Char, (morph_frame.morph_name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
 		EncodingConversion::UTF8toSJIS(morph_frame.morph_name, morph_name);
 		if (!file->WriteBytes(morph_name, 15))
@@ -2531,12 +2522,12 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		if (!file->WriteFloat32(morph_frame.weight))
 			return(maxon::Error());
 	}
-	Int CameraFrameNumber = this->camera_frames.GetCount();
-	if (!file->WriteUInt32(CameraFrameNumber))
+	register UInt32 camera_frame_number = this->camera_frames.GetCount();
+	if (!file->WriteUInt32(camera_frame_number))
 		return(maxon::Error());
-	for (Int i = 0; i < CameraFrameNumber; i++)
+	while (camera_frame_number--)
 	{
-		mmd::VMD_Camera camera_frame = (this->camera_frames)[i];
+		mmd::VMD_Camera camera_frame = (this->camera_frames)[camera_frame_number];
 		if (!file->WriteUInt32(camera_frame.frame_no))
 			return(maxon::Error());
 		if (!file->WriteFloat32(camera_frame.distance))
@@ -2562,28 +2553,28 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		if (!file->WriteUChar(camera_frame.perspective))
 			return(maxon::Error());
 	}
-	Int LightFrameNumber = this->light_frames.GetCount();
-	if (!file->WriteUInt32(LightFrameNumber))
+	register UInt32 light_frame_number = this->light_frames.GetCount();
+	if (!file->WriteUInt32(light_frame_number))
 		return(maxon::Error());
-	for (Int i = 0; i < LightFrameNumber; i++)
+	while(light_frame_number--)
 	{
-		if (!file->WriteBytes(&((this->light_frames)[i]), sizeof(mmd::VMD_Light)))
+		if (!file->WriteBytes(&((this->light_frames)[light_frame_number]), sizeof(mmd::VMD_Light)))
 			return(maxon::Error());
 	}
-	Int ShadowFrameNumber = this->shadow_frames.GetCount();
-	if (!file->WriteUInt32(ShadowFrameNumber))
+	register UInt32 shadow_frame_number = this->shadow_frames.GetCount();
+	if (!file->WriteUInt32(shadow_frame_number))
 		return(maxon::Error());
-	for (Int i = 0; i < ShadowFrameNumber; i++)
+	while (shadow_frame_number--)
 	{
-		if (!file->WriteBytes(&((this->shadow_frames)[i]), sizeof(mmd::VMD_Shadow)))
+		if (!file->WriteBytes(&((this->shadow_frames)[shadow_frame_number]), sizeof(mmd::VMD_Shadow)))
 			return(maxon::Error());
 	}
-	Int ModelFrameNumber = this->model_frames.GetCapacityCount();
-	if (!file->WriteUInt32(ModelFrameNumber))
+	register UInt32 model_frame_number = this->model_frames.GetCapacityCount();
+	if (!file->WriteUInt32(model_frame_number))
 		return(maxon::Error());
-	for (Int i = 0; i < ModelFrameNumber; i++)
+	while (model_frame_number--)
 	{
-		const mmd::VMD_Model& model_frame = (this->model_frames)[i];
+		const mmd::VMD_Model& model_frame = (this->model_frames)[model_frame_number];
 		if (!file->WriteUInt32(model_frame.frame_no))
 			return(maxon::Error());
 		if (!file->WriteBool(model_frame.show))
@@ -2641,7 +2632,6 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 		return(maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR)));
 	}
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
-	StatusSetSpin();
 	maxon::UniqueRef<mmd::VMDAnimation> mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
 
 	iferr(mmd_animation->LoadFromFile(fn))
@@ -2654,60 +2644,60 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 	{
 		doc->StartUndo();
 
-		BaseObject* VMDCamera = BaseObject::Alloc(ID_O_MMD_CAMERA);
-		if (VMDCamera == nullptr)
+		BaseObject* VMD_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
+		if (VMD_camera == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 			return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 		}
-		VMDCamera->SetName(fn.GetFileString());
-		doc->InsertObject(VMDCamera, nullptr, nullptr);
-		mmd::OMMDCamera* VMDCamera_data = VMDCamera->GetNodeData<OMMDCamera>();
-		VMDCamera_data->CameraInit();
-		BaseObject* VMDCameraDistance = VMDCamera_data->GetCamera();
+		VMD_camera->SetName(fn.GetFileString());
+		doc->InsertObject(VMD_camera, nullptr, nullptr);
+		mmd::OMMDCamera* VMD_camera_data = VMD_camera->GetNodeData<OMMDCamera>();
+		VMD_camera_data->CameraInit();
+		BaseObject* VMD_camera_distance = VMD_camera_data->GetCamera();
 
-		CTrack* CameraTrackPX = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-		CTrack* CameraTrackPY = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-		CTrack* CameraTrackPZ = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-		CTrack* CameraTrackRX = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-		CTrack* CameraTrackRY = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-		CTrack* CameraTrackRZ = CTrack::Alloc(VMDCamera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
-		CTrack* CameraTrackDistance = CTrack::Alloc(VMDCameraDistance, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-		CTrack* CameraTrackAOV = CTrack::Alloc(VMDCameraDistance, DescID(CAMERAOBJECT_APERTURE));
-		if (CameraTrackPX == nullptr || CameraTrackPY == nullptr || CameraTrackPZ == nullptr || CameraTrackRX == nullptr || CameraTrackRY == nullptr || CameraTrackRZ == nullptr || CameraTrackDistance == nullptr || CameraTrackAOV == nullptr) /* 确保生成成功 */
+		CTrack* camera_track_position_x = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+		CTrack* camera_track_position_y = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+		CTrack* camera_track_position_z = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+		CTrack* camera_track_rotation_x = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+		CTrack* camera_track_rotation_y = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+		CTrack* camera_track_rotation_z = CTrack::Alloc(VMD_camera, DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+		CTrack* camera_track_distance = CTrack::Alloc(VMD_camera_distance, DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+		CTrack* camera_track_AOV = CTrack::Alloc(VMD_camera_distance, DescID(CAMERAOBJECT_APERTURE));
+		if (camera_track_position_x == nullptr || camera_track_position_y == nullptr || camera_track_position_z == nullptr || camera_track_rotation_x == nullptr || camera_track_rotation_y == nullptr || camera_track_rotation_z == nullptr || camera_track_distance == nullptr || camera_track_AOV == nullptr) /* 确保生成成功 */
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 			return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 		}
-		CCurve* CameraCurvePX = CameraTrackPX->GetCurve();
-		CCurve* CameraCurvePY = CameraTrackPY->GetCurve();
-		CCurve* CameraCurvePZ = CameraTrackPZ->GetCurve();
-		CCurve* CameraCurveRX = CameraTrackRX->GetCurve();
-		CCurve* CameraCurveRY = CameraTrackRY->GetCurve();
-		CCurve* CameraCurveRZ = CameraTrackRZ->GetCurve();
-		CCurve* CameraCurveDistance = CameraTrackDistance->GetCurve();
-		CCurve* CameraCurveAOV = CameraTrackAOV->GetCurve();
-		if (CameraCurvePX == nullptr || CameraCurvePY == nullptr || CameraCurvePZ == nullptr || CameraCurveRX == nullptr || CameraCurveRY == nullptr || CameraCurveRZ == nullptr || CameraCurveDistance == nullptr || CameraCurveAOV == nullptr) /* 确保获取成功 */
+		CCurve* camera_curve_position_x = camera_track_position_x->GetCurve();
+		CCurve* camera_curve_position_y = camera_track_position_y->GetCurve();
+		CCurve* camera_curve_position_z = camera_track_position_z->GetCurve();
+		CCurve* camera_curve_rotation_x = camera_track_rotation_x->GetCurve();
+		CCurve* camera_curve_rotation_y = camera_track_rotation_y->GetCurve();
+		CCurve* camera_curve_rotation_z = camera_track_rotation_z->GetCurve();
+		CCurve* camera_curve_distance = camera_track_distance->GetCurve();
+		CCurve* camera_curve_AOV = camera_track_AOV->GetCurve();
+		if (camera_curve_position_x == nullptr || camera_curve_position_y == nullptr || camera_curve_position_z == nullptr || camera_curve_rotation_x == nullptr || camera_curve_rotation_y == nullptr || camera_curve_rotation_z == nullptr || camera_curve_distance == nullptr || camera_curve_AOV == nullptr) /* 确保获取成功 */
 		{
 			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 			MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 			return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 		}
-		VMDCamera->InsertTrackSorted(CameraTrackPX);
-		VMDCamera->InsertTrackSorted(CameraTrackPY);
-		VMDCamera->InsertTrackSorted(CameraTrackPZ);
-		VMDCamera->InsertTrackSorted(CameraTrackRX);
-		VMDCamera->InsertTrackSorted(CameraTrackRY);
-		VMDCamera->InsertTrackSorted(CameraTrackRZ);
-		VMDCameraDistance->InsertTrackSorted(CameraTrackDistance);
-		VMDCameraDistance->InsertTrackSorted(CameraTrackAOV);
+		VMD_camera->InsertTrackSorted(camera_track_position_x);
+		VMD_camera->InsertTrackSorted(camera_track_position_y);
+		VMD_camera->InsertTrackSorted(camera_track_position_z);
+		VMD_camera->InsertTrackSorted(camera_track_rotation_x);
+		VMD_camera->InsertTrackSorted(camera_track_rotation_y);
+		VMD_camera->InsertTrackSorted(camera_track_rotation_z);
+		VMD_camera_distance->InsertTrackSorted(camera_track_distance);
+		VMD_camera_distance->InsertTrackSorted(camera_track_AOV);
 
-		BaseTime	MaxTime = maxon::Max(doc->GetMaxTime(), BaseTime((mmd_animation->camera_frames.End() - 1).GetPtr()->frame_no, 30.));
-		BaseTime	KeyTime = BaseTime(0, 30.);
-		Int32		KeyFrame = 0;
-		mmd::VMD_Camera CameraFrame, NextCameraFrame;
+		const BaseTime kMaxTime = maxon::Max(doc->GetMaxTime(), BaseTime((mmd_animation->camera_frames.End() - 1).GetPtr()->frame_no, 30.));
+		BaseTime	key_on_time = BaseTime(0, 30.);
+		Int32		key_on_frame = 0;
+		mmd::VMD_Camera now_camera_frame, next_camera_frame;
 		const Int	camera_frame_number = mmd_animation->camera_frames.GetCount();
 		for (Int camera_frame_index = 0; camera_frame_index < camera_frame_number; camera_frame_index++)
 		{
@@ -2715,79 +2705,79 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 			StatusSetSpin();
 			if (camera_frame_index == 0 && camera_frame_number != 1)
 			{
-				CameraFrame = mmd_animation->camera_frames[camera_frame_index];
-				NextCameraFrame = mmd_animation->camera_frames[camera_frame_index + 1];
+				now_camera_frame = mmd_animation->camera_frames[camera_frame_index];
+				next_camera_frame = mmd_animation->camera_frames[camera_frame_index + 1];
 			}
 			else if (camera_frame_index == camera_frame_number - 1)
 			{
-				CameraFrame = NextCameraFrame;
+				now_camera_frame = next_camera_frame;
 			}
 			else {
-				CameraFrame = NextCameraFrame;
-				NextCameraFrame = mmd_animation->camera_frames[camera_frame_index + 1];
+				now_camera_frame = next_camera_frame;
+				next_camera_frame = mmd_animation->camera_frames[camera_frame_index + 1];
 			}
-			KeyFrame = Int32(CameraFrame.frame_no) + maxon::SafeConvert<Int32>(setting.TimeOffset);
-			KeyTime = BaseTime(KeyFrame, 30.);
+			key_on_frame = Int32(now_camera_frame.frame_no) + maxon::SafeConvert<Int32>(setting.time_offset);
+			key_on_time = BaseTime(key_on_frame, 30.);
 
-			CKey* CameraKeyPX = CKey::Alloc();      /* PX */
-			CameraKeyPX->SetTime(CameraCurvePX, KeyTime);
-			CameraKeyPX->SetValue(CameraCurvePX, CameraFrame.position.x * setting.PositionMultiple);
-			CameraKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-			CameraCurvePX->InsertKey(CameraKeyPX);
-			VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, KeyFrame,std::move(CameraFrame.interpolator_x));
+			CKey* camera_key_position_x = CKey::Alloc();      /* _position_x */
+			camera_key_position_x->SetTime(camera_curve_position_x, key_on_time);
+			camera_key_position_x->SetValue(camera_curve_position_x, now_camera_frame.position.x * setting.position_multiple);
+			camera_key_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+			camera_curve_position_x->InsertKey(camera_key_position_x);
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, key_on_frame,std::move(now_camera_frame.interpolator_x));
 
-			CKey* CameraKeyPY = CKey::Alloc();      /* PY */
-			CameraKeyPY->SetTime(CameraCurvePY, KeyTime);
-			CameraKeyPY->SetValue(CameraCurvePY, CameraFrame.position.y * setting.PositionMultiple);
-			CameraKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-			CameraCurvePY->InsertKey(CameraKeyPY);
-			VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, KeyFrame, std::move(CameraFrame.interpolator_y));
+			CKey* camera_key_position_y = CKey::Alloc();      /* _position_y */
+			camera_key_position_y->SetTime(camera_curve_position_y, key_on_time);
+			camera_key_position_y->SetValue(camera_curve_position_y, now_camera_frame.position.y * setting.position_multiple);
+			camera_key_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+			camera_curve_position_y->InsertKey(camera_key_position_y);
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, key_on_frame, std::move(now_camera_frame.interpolator_y));
 
-			CKey* CameraKeyPZ = CKey::Alloc();      /* PZ */
-			CameraKeyPZ->SetTime(CameraCurvePZ, KeyTime);
-			CameraKeyPZ->SetValue(CameraCurvePZ, CameraFrame.position.z * setting.PositionMultiple);
-			CameraKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-			CameraCurvePZ->InsertKey(CameraKeyPZ);
-			VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, KeyFrame, std::move(CameraFrame.interpolator_z));
+			CKey* camera_key_position_z = CKey::Alloc();      /* _position_z */
+			camera_key_position_z->SetTime(camera_curve_position_z, key_on_time);
+			camera_key_position_z->SetValue(camera_curve_position_z, now_camera_frame.position.z * setting.position_multiple);
+			camera_key_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+			camera_curve_position_z->InsertKey(camera_key_position_z);
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, key_on_frame, std::move(now_camera_frame.interpolator_z));
 
-			CKey* CameraKeyRX = CKey::Alloc();      /* RH(y) */
-			CameraKeyRX->SetTime(CameraCurveRX, KeyTime);
-			CameraKeyRX->SetValue(CameraCurveRX, CameraFrame.rotation.y);
-			CameraKeyRX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-			CameraCurveRX->InsertKey(CameraKeyRX);
+			CKey* camera_key_rotation_x = CKey::Alloc();      /* RH(y) */
+			camera_key_rotation_x->SetTime(camera_curve_rotation_x, key_on_time);
+			camera_key_rotation_x->SetValue(camera_curve_rotation_x, now_camera_frame.rotation.y);
+			camera_key_rotation_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+			camera_curve_rotation_x->InsertKey(camera_key_rotation_x);
 
-			CKey* CameraKeyRY = CKey::Alloc();      /* RP(x) */
-			CameraKeyRY->SetTime(CameraCurveRY, KeyTime);
-			CameraKeyRY->SetValue(CameraCurveRY, CameraFrame.rotation.x);
-			CameraKeyRY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-			CameraCurveRY->InsertKey(CameraKeyRY);
+			CKey* camera_key_rotation_y = CKey::Alloc();      /* RP(x) */
+			camera_key_rotation_y->SetTime(camera_curve_rotation_y, key_on_time);
+			camera_key_rotation_y->SetValue(camera_curve_rotation_y, now_camera_frame.rotation.x);
+			camera_key_rotation_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+			camera_curve_rotation_y->InsertKey(camera_key_rotation_y);
 
-			CKey* CameraKeyRZ = CKey::Alloc();      /* RB(z) */
-			CameraKeyRZ->SetTime(CameraCurveRZ, KeyTime);
-			CameraKeyRZ->SetValue(CameraCurveRZ, CameraFrame.rotation.z);
-			CameraKeyRZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-			CameraCurveRZ->InsertKey(CameraKeyRZ);
-			VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, KeyFrame, std::move(CameraFrame.interpolator_r));
+			CKey* camera_key_rotation_z = CKey::Alloc();      /* RB(z) */
+			camera_key_rotation_z->SetTime(camera_curve_rotation_z, key_on_time);
+			camera_key_rotation_z->SetValue(camera_curve_rotation_z, now_camera_frame.rotation.z);
+			camera_key_rotation_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+			camera_curve_rotation_z->InsertKey(camera_key_rotation_z);
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, key_on_frame, std::move(now_camera_frame.interpolator_r));
 
-			CKey* CameraKeyDistance = CKey::Alloc();;
-			CameraKeyDistance->SetTime(CameraCurveDistance, KeyTime);
-			CameraKeyDistance->SetValue(CameraCurveDistance, CameraFrame.distance * setting.PositionMultiple);
-			CameraKeyDistance->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-			CameraCurveDistance->InsertKey(CameraKeyDistance);
-			VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_DCURVE, KeyFrame, std::move(CameraFrame.interpolator_d));
+			CKey* camera_key_distance = CKey::Alloc();;
+			camera_key_distance->SetTime(camera_curve_distance, key_on_time);
+			camera_key_distance->SetValue(camera_curve_distance, now_camera_frame.distance * setting.position_multiple);
+			camera_key_distance->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+			camera_curve_distance->InsertKey(camera_key_distance);
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_DCURVE, key_on_frame, std::move(now_camera_frame.interpolator_d));
 
-			CKey* CameraKeyAOV = CKey::Alloc();
-			CameraKeyAOV->SetTime(CameraCurveAOV, KeyTime);
-			CameraKeyAOV->SetValue(CameraCurveAOV, CameraFrame.viewing_angle);
-			CameraKeyAOV->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-			CameraCurveAOV->InsertKey(CameraKeyAOV);
-			VMDCamera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, KeyFrame, std::move(CameraFrame.interpolator_v));
+			CKey* camera_key_AOV = CKey::Alloc();
+			camera_key_AOV->SetTime(camera_curve_AOV, key_on_time);
+			camera_key_AOV->SetValue(camera_curve_AOV, now_camera_frame.viewing_angle);
+			camera_key_AOV->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+			camera_curve_AOV->InsertKey(camera_key_AOV);
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, key_on_frame, std::move(now_camera_frame.interpolator_v));
 		}
-		VMDCamera_data->UpdateAllInterpolator();
+		VMD_camera_data->UpdateAllInterpolator();
 		timing.Stop();
 		StatusClear();
-		doc->SetMaxTime(MaxTime);
-		doc->SetLoopMaxTime(MaxTime);
+		doc->SetMaxTime(kMaxTime);
+		doc->SetLoopMaxTime(kMaxTime);
 		EventAdd(EVENT::NONE);
 		doc->SetTime(BaseTime(1., 30.));
 		doc->SetTime(BaseTime(0., 30.));
@@ -2807,7 +2797,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 	iferr_scope;
 	Filename		fn;
 	BaseDocument* doc = GetActiveDocument();
-	setting.PositionMultiple = 1.0 / setting.PositionMultiple;
+	setting.position_multiple = 1.0 / setting.position_multiple;
 	if (doc == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
@@ -2815,30 +2805,30 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
 
-	BaseObject* SelectObject = doc->GetActiveObject();
-	if (SelectObject == nullptr)
+	BaseObject* select_object = doc->GetActiveObject();
+	if (select_object == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
 	doc->SetTime(BaseTime(0.));
-	BaseObject* CameraObj = nullptr;
-	AutoFree<BaseObject> CameraObj_tmp;					  /*转化对象自动销毁 */
+	BaseObject* camera_obj = nullptr;
+	AutoFree<BaseObject> camera_object_tmp;					  /*转化对象自动销毁 */
 
 	/*选择对象为普通摄像机则转化 */
-	if (SelectObject->GetType() == Ocamera)               
+	if (select_object->GetType() == Ocamera)               
 	{
-		auto res = OMMDCamera::ConversionCamera(VMD_Conversion_Camera_settings{ 0., setting.use_rotation, SelectObject });
-		CameraObj_tmp.Assign(res.GetValue());
+		auto res = OMMDCamera::ConversionCamera(VMD_Conversion_Camera_settings{ 0., setting.use_rotation, select_object });
+		camera_object_tmp.Assign(res.GetValue());
 		iferr(res.GetError()) 
 			return(maxon::Error());
-		CameraObj = CameraObj_tmp;
+		camera_obj = camera_object_tmp;
 	}
 	/*选择对象为vmd摄像机则直接使用 */
-	else if(SelectObject->GetType() == ID_O_MMD_CAMERA) 
+	else if(select_object->GetType() == ID_O_MMD_CAMERA) 
 	{
-		CameraObj = SelectObject;
+		camera_obj = select_object;
 	}
 	/*都不是则返回错误 */
 	else 
@@ -2854,112 +2844,139 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 	}
 	
 	/* 获取内置数据 */
-	mmd::OMMDCamera* VMDCamera_data = CameraObj->GetNodeData<OMMDCamera>();
-	if (VMDCamera_data == nullptr)
+	mmd::OMMDCamera* VMD_camera_data = camera_obj->GetNodeData<OMMDCamera>();
+	if (VMD_camera_data == nullptr)
 	{
 		return(maxon::Error());
 	}
-	BaseObject* VMDCameraDistance = VMDCamera_data->GetCamera();
+	BaseObject* VMD_camera_distance = VMD_camera_data->GetCamera();
 	maxon::TimeValue	timing = maxon::TimeValue::GetTime();
-	CTrack* CameraTrackPX = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-	if (CameraTrackPX == nullptr)
+	CTrack* camera_track_position_x = camera_obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+	if (camera_track_position_x == nullptr)
 	{
-		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PX"_s));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PX"_s));
+		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_position_x"_s));
+		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_position_x"_s));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	CTrack* CameraTrackPY = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-	if (CameraTrackPY == nullptr)
+	CTrack* camera_track_position_y = camera_obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+	if (camera_track_position_y == nullptr)
 	{
-		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PY"_s));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PY"_s));
+		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_position_y"_s));
+		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_position_y"_s));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	CTrack* CameraTrackPZ = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-	if (CameraTrackPZ == nullptr)
+	CTrack* camera_track_position_z = camera_obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+	if (camera_track_position_z == nullptr)
 	{
-		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PZ"_s));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "PZ"_s));
+		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_position_z"_s));
+		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_position_z"_s));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	CTrack* CameraTrackRX = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-	if (CameraTrackRX == nullptr)
+	CTrack* camera_track_rotation_x = camera_obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+	if (camera_track_rotation_x == nullptr)
 	{
-		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RX"_s));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RX"_s));
+		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_rotation_x"_s));
+		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_rotation_x"_s));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	CTrack* CameraTrackRY = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-	if (CameraTrackRY == nullptr)
+	CTrack* camera_track_rotation_y = camera_obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+	if (camera_track_rotation_y == nullptr)
 	{
-		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RY"_s));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RY"_s));
+		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_rotation_y"_s));
+		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_rotation_y"_s));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	CTrack* CameraTrackRZ = CameraObj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+	CTrack* camera_track_rotation_z = camera_obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
 
-	if (CameraTrackRZ == nullptr)
+	if (camera_track_rotation_z == nullptr)
 	{
-		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RZ"_s));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "RZ"_s));
+		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_rotation_z"_s));
+		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "_rotation_z"_s));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	CTrack* CameraTrackFrame_on = CameraObj->FindCTrack(DescID(VMD_CAM_OBJ_FRAME_ON));
-
-	if (CameraTrackFrame_on == nullptr)
+	CTrack* camera_track_frame_on = camera_obj->FindCTrack(DescID(VMD_CAM_OBJ_FRAME_ON));
+	if (camera_track_frame_on == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "Frame_on"_s));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "Frame_on"_s));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	CTrack* CameraTrackDistance = VMDCameraDistance->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-
+	CTrack* CameraTrackDistance = VMD_camera_distance->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
 	if (CameraTrackDistance == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "Distance"_s));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "Distance"_s));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	CTrack* CameraTrackAOV = VMDCameraDistance->FindCTrack(DescID(DescLevel(CAMERAOBJECT_APERTURE, DTYPE_REAL, 0)));
+	CTrack* CameraTrackAOV = VMD_camera_distance->FindCTrack(DescID(DescLevel(CAMERAOBJECT_APERTURE, DTYPE_REAL, 0)));
 	if (CameraTrackAOV == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TRACK_ERR, "AOV"_s));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	CCurve* CameraCurvePX = CameraTrackPX->GetCurve();
-	CCurve* CameraCurvePY = CameraTrackPY->GetCurve();
-	CCurve* CameraCurvePZ = CameraTrackPZ->GetCurve();
-	CCurve* CameraCurveRX = CameraTrackRX->GetCurve();
-	CCurve* CameraCurveRY = CameraTrackRY->GetCurve();
-	CCurve* CameraCurveRZ = CameraTrackRZ->GetCurve();
-	CCurve* CameraCurveFrame_on = CameraTrackFrame_on->GetCurve();
-	CCurve* CameraCurveDistance = CameraTrackDistance->GetCurve();
-	CCurve* CameraCurveAOV = CameraTrackAOV->GetCurve();
-
-	const Int32 FrameCount = CameraCurveFrame_on->GetKeyCount();
-
+	CCurve* camera_curve_position_x = camera_track_position_x->GetCurve();
+	CCurve* camera_curve_position_y = camera_track_position_y->GetCurve();
+	CCurve* camera_curve_position_z = camera_track_position_z->GetCurve();
+	CCurve* camera_curve_rotation_x = camera_track_rotation_x->GetCurve();
+	CCurve* camera_curve_rotation_y = camera_track_rotation_y->GetCurve();
+	CCurve* camera_curve_rotation_z = camera_track_rotation_z->GetCurve();
+	CCurve* camera_curve_distance = CameraTrackDistance->GetCurve();
+	CCurve* camera_curve_AOV = CameraTrackAOV->GetCurve();	
+	CCurve* camera_curve_frame_on = camera_track_frame_on->GetCurve();
+	const Int32 kFps = doc->GetFps();
 	maxon::UniqueRef<mmd::VMDAnimation> mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
-
-	for (Int32 frame_index = 0; frame_index < FrameCount; frame_index++)
-	{
-		StatusSetSpin();
-		mmd::VMD_Camera* CameraFrame =NewObj(mmd::VMD_Camera)iferr_return;
-		Int32 Frame_on = CameraCurveFrame_on->GetKey(frame_index)->GetValue();
-		CameraFrame->frame_no = Frame_on + setting.TimeOffset;
-		CameraFrame->position = Vector32(CameraCurvePX->GetKey(frame_index)->GetValue() * setting.PositionMultiple, CameraCurvePY->GetKey(frame_index)->GetValue() * setting.PositionMultiple, CameraCurvePZ->GetKey(frame_index)->GetValue() * setting.PositionMultiple);
-		CameraFrame->rotation = Vector32(CameraCurveRY->GetKey(frame_index)->GetValue(), CameraCurveRX->GetKey(frame_index)->GetValue(), CameraCurveRZ->GetKey(frame_index)->GetValue()); /*H(y) P(x) B(z)*/
-		CameraFrame->distance = Float32(CameraCurveDistance->GetKey(frame_index)->GetValue() * setting.PositionMultiple);
-		CameraFrame->viewing_angle = maxon::SafeConvert<UInt32>(CameraCurveAOV->GetKey(frame_index)->GetValue());
-		CameraFrame->perspective = 0;
-		VMDCamera_data->GetInterpolator(VMD_CAM_OBJ_XCURVE, Frame_on, CameraFrame->interpolator_x);
-		VMDCamera_data->GetInterpolator(VMD_CAM_OBJ_YCURVE, Frame_on, CameraFrame->interpolator_y);
-		VMDCamera_data->GetInterpolator(VMD_CAM_OBJ_ZCURVE, Frame_on, CameraFrame->interpolator_z);
-		VMDCamera_data->GetInterpolator(VMD_CAM_OBJ_RCURVE, Frame_on, CameraFrame->interpolator_r);
-		VMDCamera_data->GetInterpolator(VMD_CAM_OBJ_DCURVE, Frame_on, CameraFrame->interpolator_d);
-		VMDCamera_data->GetInterpolator(VMD_CAM_OBJ_VCURVE, Frame_on, CameraFrame->interpolator_v);
-		mmd_animation->camera_frames.AppendPtr(CameraFrame)iferr_return;
+	if (setting.use_bake == true) {
+		register const BaseTime kEndFrame = maxon::Max(maxon::Max(maxon::Max(maxon::Max(maxon::Max(maxon::Max(maxon::Max(
+			camera_curve_position_x->GetEndTime(),
+			camera_curve_position_y->GetEndTime()),
+			camera_curve_position_z->GetEndTime()),
+			camera_curve_rotation_x->GetEndTime()),
+			camera_curve_rotation_y->GetEndTime()),
+			camera_curve_rotation_z->GetEndTime()),
+			camera_curve_distance->GetEndTime()),
+			camera_curve_AOV->GetEndTime());
+		register const BaseTime kTimeOne = BaseTime(1, kFps);
+		for (register BaseTime time_on = BaseTime(); time_on < kEndFrame; time_on = time_on + kTimeOne)
+		{
+			StatusSetSpin();
+			mmd::VMD_Camera* camera_frame = NewObj(mmd::VMD_Camera)iferr_return;
+			camera_frame->frame_no = time_on.GetFrame(kFps) + setting.time_offset;
+			camera_frame->position = Vector32(camera_curve_position_x->GetValue(time_on) * setting.position_multiple, camera_curve_position_y->GetValue(time_on) * setting.position_multiple, camera_curve_position_z->GetValue(time_on) * setting.position_multiple);
+			camera_frame->rotation = Vector32(camera_curve_rotation_y->GetValue(time_on), camera_curve_rotation_x->GetValue(time_on), camera_curve_rotation_z->GetValue(time_on)); /*H(y) P(x) B(z)*/
+			camera_frame->distance = Float32(camera_curve_distance->GetValue(time_on) * setting.position_multiple);
+			camera_frame->viewing_angle = maxon::SafeConvert<UInt32>(camera_curve_AOV->GetValue(time_on));
+			camera_frame->perspective = 0;
+			camera_frame->interpolator_x = VMDInterpolator();
+			camera_frame->interpolator_y = VMDInterpolator();
+			camera_frame->interpolator_z = VMDInterpolator();
+			camera_frame->interpolator_r = VMDInterpolator();
+			camera_frame->interpolator_d = VMDInterpolator();
+			camera_frame->interpolator_v = VMDInterpolator();
+			mmd_animation->camera_frames.AppendPtr(camera_frame)iferr_return;
+		}
 	}
-
+	else {
+		register const Int32 kFrameCount = camera_curve_frame_on->GetKeyCount();
+		for (register Int32 frame_index = 0; frame_index < kFrameCount; frame_index++)
+		{
+			StatusSetSpin();
+			mmd::VMD_Camera* camera_frame = NewObj(mmd::VMD_Camera)iferr_return;
+			Int32 Frame_on = camera_curve_frame_on->GetKey(frame_index)->GetValue();
+			camera_frame->frame_no = Frame_on + setting.time_offset;
+			camera_frame->position = Vector32(camera_curve_position_x->GetKey(frame_index)->GetValue() * setting.position_multiple, camera_curve_position_y->GetKey(frame_index)->GetValue() * setting.position_multiple, camera_curve_position_z->GetKey(frame_index)->GetValue() * setting.position_multiple);
+			camera_frame->rotation = Vector32(camera_curve_rotation_y->GetKey(frame_index)->GetValue(), camera_curve_rotation_x->GetKey(frame_index)->GetValue(), camera_curve_rotation_z->GetKey(frame_index)->GetValue()); /*H(y) P(x) B(z)*/
+			camera_frame->distance = Float32(camera_curve_distance->GetKey(frame_index)->GetValue() * setting.position_multiple);
+			camera_frame->viewing_angle = maxon::SafeConvert<UInt32>(camera_curve_AOV->GetKey(frame_index)->GetValue());
+			camera_frame->perspective = 0;
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_XCURVE, Frame_on, camera_frame->interpolator_x);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_YCURVE, Frame_on, camera_frame->interpolator_y);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_ZCURVE, Frame_on, camera_frame->interpolator_z);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_RCURVE, Frame_on, camera_frame->interpolator_r);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_DCURVE, Frame_on, camera_frame->interpolator_d);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_VCURVE, Frame_on, camera_frame->interpolator_v);
+			mmd_animation->camera_frames.AppendPtr(camera_frame)iferr_return;
+		}
+	}
 	mmd_animation->ModelName = "カメラ・照明"_s;
 	mmd_animation->IsCamera = true;
 	iferr(mmd_animation->SaveToFile(fn))
@@ -3032,9 +3049,9 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 	maxon::Queue<BaseObject*> nodes;
 	nodes.Push(SelectObject) iferr_return;
 	GeData data;
-	if (setting.DeletePreviousAnimation == true) 
+	if (setting.delete_previous_animation == true) 
 	{
-		if (setting.ImportMotion == true && setting.ImportMorph == true)
+		if (setting.import_motion == true && setting.import_morph == true)
 		{
 			while (!nodes.IsEmpty())
 			{
@@ -3091,18 +3108,18 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 							else {
 								bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, nullptr }) iferr_return;
 							}
-							CTrack* BoneTrackPX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackPX);
-							CTrack* BoneTrackPY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackPY);
-							CTrack* BoneTrackPZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackPZ);
-							CTrack* BoneTrackRX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackRX);
-							CTrack* BoneTrackRY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackRY);
-							CTrack* BoneTrackRZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackRZ);
+							CTrack* BoneTrack_position_x = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_position_x);
+							CTrack* BoneTrack_position_y = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_position_y);
+							CTrack* BoneTrack_position_z = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_position_z);
+							CTrack* BoneTrack_rotation_x = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_rotation_x);
+							CTrack* BoneTrack_rotation_y = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_rotation_y);
+							CTrack* BoneTrack_rotation_z = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_rotation_z);
 							node->SetRelPos(Vector(0));
 							node->SetRelRot(Vector(0));
 						}
@@ -3161,7 +3178,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 				}
 			}
 		}
-		else if (setting.ImportMotion == true && setting.ImportMorph == false)
+		else if (setting.import_motion == true && setting.import_morph == false)
 		{
 			while (!nodes.IsEmpty())
 			{
@@ -3215,18 +3232,18 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 							else {
 								bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, nullptr }) iferr_return;
 							}
-							CTrack* BoneTrackPX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackPX);
-							CTrack* BoneTrackPY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackPY);
-							CTrack* BoneTrackPZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackPZ);
-							CTrack* BoneTrackRX = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackRX);
-							CTrack* BoneTrackRY = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackRY);
-							CTrack* BoneTrackRZ = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrackRZ);
+							CTrack* BoneTrack_position_x = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_position_x);
+							CTrack* BoneTrack_position_y = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_position_y);
+							CTrack* BoneTrack_position_z = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_position_z);
+							CTrack* BoneTrack_rotation_x = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_rotation_x);
+							CTrack* BoneTrack_rotation_y = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_rotation_y);
+							CTrack* BoneTrack_rotation_z = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+							CTrack::Free(BoneTrack_rotation_z);
 							node->SetRelPos(Vector(0));
 							node->SetRelRot(Vector(0));
 						}
@@ -3282,7 +3299,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 				}
 			}
 		}
-		else if (setting.ImportMotion == false && setting.ImportMorph == true)
+		else if (setting.import_motion == false && setting.import_morph == true)
 		{
 			while (!nodes.IsEmpty())
 			{
@@ -3396,7 +3413,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 				}
 			}
 		}
-		if (setting.ImportModelInfo == true) {
+		if (setting.import_model_info == true) {
 			CTrack* ModelEditorDisplayTrack = SelectObject->FindCTrack(ID_BASEOBJECT_VISIBILITY_EDITOR);
 			CTrack::Free(ModelEditorDisplayTrack);
 			SelectObject->SetParameter(ID_BASEOBJECT_VISIBILITY_EDITOR, 2, DESCFLAGS_SET::NONE);
@@ -3516,7 +3533,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 	maxon::BaseArray<String> motion_bone_name_array;
 	maxon::BaseArray<String> motion_morph_name_array;
 	const Int32 MotionFrameNumber = mmd_animation->motion_frames.GetCount();
-	if (setting.ImportMotion == true) 
+	if (setting.import_motion == true) 
 	{
 		for (Int32 motion_frame_index = 0; motion_frame_index < MotionFrameNumber; motion_frame_index++)
 		{
@@ -3535,7 +3552,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 		}
 	}
 	const Int32 MorphFrameNumber = mmd_animation->morph_frames.GetCount();
-	if (setting.ImportMorph == true) {
+	if (setting.import_morph == true) {
 		for (Int32 morph_frame_index = 0; morph_frame_index < MorphFrameNumber; morph_frame_index++)
 		{
 			String	morph_name = mmd_animation->morph_frames[morph_frame_index].morph_name;
@@ -3578,8 +3595,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 	Int				motion_frame_bone_number = motion_bone_name_array.GetCount();
 	String				motion_frame_bone_number_S = String::IntToString(motion_frame_bone_number);
 	maxon::BaseArray<String>	not_find_bone_S;
-	if (setting.ImportMotion == true) {
-		if (setting.DeletePreviousAnimation == true) {
+	if (setting.import_motion == true) {
+		if (setting.delete_previous_animation == true) {
 
 			insideCount = 0;
 			maxon::ParallelFor::Dynamic<LocalData, maxon::PARALLELFORFLAGS::INITTHREADED_FINALIZESYNC>(0, motion_frame_bone_number - 1,
@@ -3612,55 +3629,55 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 								if (bone.obj != nullptr)
 								{
 									bone.obj->SetQuaternionRotationMode(true, false);
-									CTrack* BoneTrackPX = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrackPX);
-									BoneTrackPX = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									if (BoneTrackPX == nullptr) {
+									CTrack* BoneTrack_position_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrack_position_x);
+									BoneTrack_position_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									if (BoneTrack_position_x == nullptr) {
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackPX);
-									CTrack* BoneTrackPY = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrackPX);
-									BoneTrackPY = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									if (BoneTrackPY == nullptr) {
+									bone.obj->InsertTrackSorted(BoneTrack_position_x);
+									CTrack* BoneTrack_position_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrack_position_x);
+									BoneTrack_position_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									if (BoneTrack_position_y == nullptr) {
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackPY);
-									CTrack* BoneTrackPZ = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrackPX);
-									BoneTrackPZ = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									if (BoneTrackPZ == nullptr) {
+									bone.obj->InsertTrackSorted(BoneTrack_position_y);
+									CTrack* BoneTrack_position_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrack_position_x);
+									BoneTrack_position_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									if (BoneTrack_position_z == nullptr) {
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackPZ);
-									CTrack* BoneTrackRX = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrackPX);
-									BoneTrackRX = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									if (BoneTrackRX == nullptr) {
+									bone.obj->InsertTrackSorted(BoneTrack_position_z);
+									CTrack* BoneTrack_rotation_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrack_position_x);
+									BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									if (BoneTrack_rotation_x == nullptr) {
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackRX);
-									CTrack* BoneTrackRY = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrackPX);
-									BoneTrackRY = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									if (BoneTrackRY == nullptr) {
+									bone.obj->InsertTrackSorted(BoneTrack_rotation_x);
+									CTrack* BoneTrack_rotation_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrack_position_x);
+									BoneTrack_rotation_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									if (BoneTrack_rotation_y == nullptr) {
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackRY);
-									CTrack* BoneTrackRZ = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrackPX);
-									BoneTrackRZ = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									if (BoneTrackRZ == nullptr) {
+									bone.obj->InsertTrackSorted(BoneTrack_rotation_y);
+									CTrack* BoneTrack_rotation_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									CTrack::Free(BoneTrack_position_x);
+									BoneTrack_rotation_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									if (BoneTrack_rotation_z == nullptr) {
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackRZ);
+									bone.obj->InsertTrackSorted(BoneTrack_rotation_z);
 
-									CCurve* BoneCurvePX = BoneTrackPX->GetCurve();
-									CCurve* BoneCurvePY = BoneTrackPY->GetCurve();
-									CCurve* BoneCurvePZ = BoneTrackPZ->GetCurve();
-									CCurve* BoneCurveRX = BoneTrackRX->GetCurve();
-									CCurve* BoneCurveRY = BoneTrackRY->GetCurve();
-									CCurve* BoneCurveRZ = BoneTrackRZ->GetCurve();
+									CCurve* BoneCurve_position_x = BoneTrack_position_x->GetCurve();
+									CCurve* BoneCurve_position_y = BoneTrack_position_y->GetCurve();
+									CCurve* BoneCurve_position_z = BoneTrack_position_z->GetCurve();
+									CCurve* BoneCurve_rotation_x = BoneTrack_rotation_x->GetCurve();
+									CCurve* BoneCurve_rotation_y = BoneTrack_rotation_y->GetCurve();
+									CCurve* BoneCurve_rotation_z = BoneTrack_rotation_z->GetCurve();
 									Int	motion_frame_number = MotionFrameList->GetCount();
 									for (Int motion_index = 0; motion_index < motion_frame_number; motion_index++)
 									{
@@ -3678,85 +3695,85 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 											NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 										}
 										TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-										MotionKeyTime = BaseTime(MotionFrame.frame_no + setting.TimeOffset, 30.);
+										MotionKeyTime = BaseTime(Float(MotionFrame.frame_no) + setting.time_offset, 30.);
 
 										Vector rotation = QuaternionToEuler(MotionFrame.rotation);
 										Vector next_rotation = QuaternionToEuler(NextMotionFrame.rotation);
 
-										CKey* MotionKeyPX = CKey::Alloc(); /* PX */
-										MotionKeyPX->SetTime(BoneCurvePX, MotionKeyTime);
-										MotionKeyPX->SetValue(BoneCurvePX, MotionFrame.position.x * setting.PositionMultiple);
-										MotionKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-										MotionKeyPX->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-										ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.PositionMultiple - MotionFrame.position.x * setting.PositionMultiple;
+										CKey* MotionKey_position_x = CKey::Alloc(); /* _position_x */
+										MotionKey_position_x->SetTime(BoneCurve_position_x, MotionKeyTime);
+										MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
+										MotionKey_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+										MotionKey_position_x->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
+										ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.position_multiple - MotionFrame.position.x * setting.position_multiple;
 										if (MotionFrame.interpolator_x.ax == 127 - MotionFrame.interpolator_x.bx && MotionFrame.interpolator_x.ay == 127 - MotionFrame.interpolator_x.by)
 										{
-											MotionKeyPX->SetInterpolation(BoneCurvePX, CINTERPOLATION::LINEAR);
+											MotionKey_position_x->SetInterpolation(BoneCurve_position_x, CINTERPOLATION::LINEAR);
 										}
 										else {
-											MotionKeyPX->SetTimeLeft(BoneCurvePX, MotionKeyTimeLeft[0]);
-											MotionKeyPX->SetValueLeft(BoneCurvePX, MotionKeyValueLeft[0]);
-											MotionKeyPX->SetTimeRight(BoneCurvePX, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ax / 127.0), 30.));
-											MotionKeyPX->SetValueRight(BoneCurvePX, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ay / 127.0));
+											MotionKey_position_x->SetTimeLeft(BoneCurve_position_x, MotionKeyTimeLeft[0]);
+											MotionKey_position_x->SetValueLeft(BoneCurve_position_x, MotionKeyValueLeft[0]);
+											MotionKey_position_x->SetTimeRight(BoneCurve_position_x, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ax / 127.0), 30.));
+											MotionKey_position_x->SetValueRight(BoneCurve_position_x, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ay / 127.0));
 										}
 										MotionKeyTimeLeft[0] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.bx / 127.0), 30.);
 										MotionKeyValueLeft[0] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.by / 127.0);
-										BoneCurvePX->InsertKey(MotionKeyPX);
+										BoneCurve_position_x->InsertKey(MotionKey_position_x);
 
-										CKey* MotionKeyPY = CKey::Alloc(); /* PY */
-										MotionKeyPY->SetTime(BoneCurvePY, MotionKeyTime);
-										MotionKeyPY->SetValue(BoneCurvePY, MotionFrame.position.y * setting.PositionMultiple);
-										MotionKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-										MotionKeyPY->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-										ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.PositionMultiple - MotionFrame.position.y * setting.PositionMultiple;
+										CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
+										MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
+										MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
+										MotionKey_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+										MotionKey_position_y->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
+										ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.position_multiple - MotionFrame.position.y * setting.position_multiple;
 										if (MotionFrame.interpolator_y.ax == 127 - MotionFrame.interpolator_y.bx && MotionFrame.interpolator_y.ay == 127 - MotionFrame.interpolator_y.by)
 										{
-											MotionKeyPY->SetInterpolation(BoneCurvePY, CINTERPOLATION::LINEAR);
+											MotionKey_position_y->SetInterpolation(BoneCurve_position_y, CINTERPOLATION::LINEAR);
 										}
 										else {
-											MotionKeyPY->SetTimeLeft(BoneCurvePY, MotionKeyTimeLeft[1]);
-											MotionKeyPY->SetValueLeft(BoneCurvePY, MotionKeyValueLeft[1]);
-											MotionKeyPY->SetTimeRight(BoneCurvePY, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ax / 127.0), 30.));
-											MotionKeyPY->SetValueRight(BoneCurvePY, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ay / 127.0));
+											MotionKey_position_y->SetTimeLeft(BoneCurve_position_y, MotionKeyTimeLeft[1]);
+											MotionKey_position_y->SetValueLeft(BoneCurve_position_y, MotionKeyValueLeft[1]);
+											MotionKey_position_y->SetTimeRight(BoneCurve_position_y, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ax / 127.0), 30.));
+											MotionKey_position_y->SetValueRight(BoneCurve_position_y, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ay / 127.0));
 										}
 										MotionKeyTimeLeft[1] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.bx / 127.0), 30.);
 										MotionKeyValueLeft[1] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.by / 127.0);
-										BoneCurvePY->InsertKey(MotionKeyPY);
+										BoneCurve_position_y->InsertKey(MotionKey_position_y);
 
-										CKey* MotionKeyPZ = CKey::Alloc(); /* PZ */
-										MotionKeyPZ->SetTime(BoneCurvePZ, MotionKeyTime);
-										MotionKeyPZ->SetValue(BoneCurvePZ, MotionFrame.position.z * setting.PositionMultiple);
-										MotionKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-										MotionKeyPZ->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-										ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.PositionMultiple - MotionFrame.position.z * setting.PositionMultiple;
+										CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
+										MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
+										MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
+										MotionKey_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+										MotionKey_position_z->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
+										ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.position_multiple - MotionFrame.position.z * setting.position_multiple;
 										if (MotionFrame.interpolator_z.ax == 127 - MotionFrame.interpolator_z.bx && MotionFrame.interpolator_z.ay == 127 - MotionFrame.interpolator_z.by)
 										{
-											MotionKeyPZ->SetInterpolation(BoneCurvePZ, CINTERPOLATION::LINEAR);
+											MotionKey_position_z->SetInterpolation(BoneCurve_position_z, CINTERPOLATION::LINEAR);
 										}
 										else {
-											MotionKeyPZ->SetTimeLeft(BoneCurvePZ, MotionKeyTimeLeft[2]);
-											MotionKeyPZ->SetValueLeft(BoneCurvePZ, MotionKeyValueLeft[2]);
-											MotionKeyPZ->SetTimeRight(BoneCurvePZ, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ax / 127.0), 30.));
-											MotionKeyPZ->SetValueRight(BoneCurvePZ, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ay / 127.0));
+											MotionKey_position_z->SetTimeLeft(BoneCurve_position_z, MotionKeyTimeLeft[2]);
+											MotionKey_position_z->SetValueLeft(BoneCurve_position_z, MotionKeyValueLeft[2]);
+											MotionKey_position_z->SetTimeRight(BoneCurve_position_z, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ax / 127.0), 30.));
+											MotionKey_position_z->SetValueRight(BoneCurve_position_z, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ay / 127.0));
 										}
 										MotionKeyTimeLeft[2] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.bx / 127.0), 30.);
 										MotionKeyValueLeft[2] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.by / 127.0);
-										BoneCurvePZ->InsertKey(MotionKeyPZ);
+										BoneCurve_position_z->InsertKey(MotionKey_position_z);
 
-										CKey* MotionKeyRX = CKey::Alloc(); /* RX */
-										MotionKeyRX->SetTime(BoneCurveRX, MotionKeyTime);
-										MotionKeyRX->SetValue(BoneCurveRX, rotation.x);
-										BoneCurveRX->InsertKey(MotionKeyRX);
+										CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
+										MotionKey_rotation_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
+										MotionKey_rotation_x->SetValue(BoneCurve_rotation_x, rotation.x);
+										BoneCurve_rotation_x->InsertKey(MotionKey_rotation_x);
 
-										CKey* MotionKeyRY = CKey::Alloc(); /* RY */
-										MotionKeyRY->SetTime(BoneCurveRY, MotionKeyTime);
-										MotionKeyRY->SetValue(BoneCurveRY, rotation.y);
-										BoneCurveRY->InsertKey(MotionKeyRY);
+										CKey* MotionKey_rotation_y = CKey::Alloc(); /* _rotation_y */
+										MotionKey_rotation_y->SetTime(BoneCurve_rotation_y, MotionKeyTime);
+										MotionKey_rotation_y->SetValue(BoneCurve_rotation_y, rotation.y);
+										BoneCurve_rotation_y->InsertKey(MotionKey_rotation_y);
 
-										CKey* MotionKeyRZ = CKey::Alloc(); /* RZ */
-										MotionKeyRZ->SetTime(BoneCurveRZ, MotionKeyTime);
-										MotionKeyRZ->SetValue(BoneCurveRZ, rotation.z);
-										BoneCurveRZ->InsertKey(MotionKeyRZ);
+										CKey* MotionKey_rotation_z = CKey::Alloc(); /* _rotation_z */
+										MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
+										MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
+										BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
 									}
 									bone_cnt++;
 								}
@@ -3769,73 +3786,73 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 								const Bool	Is_translatable = bc->GetBool(PMX_BONE_TRANSLATABLE);
 								const Bool	Is_rotatable = bc->GetBool(PMX_BONE_ROTATABLE);
 								const Bool	Is_inherit = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION) || bc->GetBool(PMX_BONE_INHERIT_ROTATION);
-								CTrack* BoneTrackPX = nullptr;
-								CTrack* BoneTrackPY = nullptr;
-								CTrack* BoneTrackPZ = nullptr;
-								CTrack* BoneTrackRX = nullptr;
-								CTrack* BoneTrackRY = nullptr;
-								CTrack* BoneTrackRZ = nullptr;
-								CCurve* BoneCurvePX = nullptr;
-								CCurve* BoneCurvePY = nullptr;
-								CCurve* BoneCurvePZ = nullptr;
-								CCurve* BoneCurveRX = nullptr;
-								CCurve* BoneCurveRY = nullptr;
-								CCurve* BoneCurveRZ = nullptr;
+								CTrack* BoneTrack_position_x = nullptr;
+								CTrack* BoneTrack_position_y = nullptr;
+								CTrack* BoneTrack_position_z = nullptr;
+								CTrack* BoneTrack_rotation_x = nullptr;
+								CTrack* BoneTrack_rotation_y = nullptr;
+								CTrack* BoneTrack_rotation_z = nullptr;
+								CCurve* BoneCurve_position_x = nullptr;
+								CCurve* BoneCurve_position_y = nullptr;
+								CCurve* BoneCurve_position_z = nullptr;
+								CCurve* BoneCurve_rotation_x = nullptr;
+								CCurve* BoneCurve_rotation_y = nullptr;
+								CCurve* BoneCurve_rotation_z = nullptr;
 								if (!(Is_physical || Is_inherit))
 								{
 									if (Is_translatable)
 									{
 										bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrackPX);
-										BoneTrackPX = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-										if (BoneTrackPX == nullptr) {
+										CTrack::Free(BoneTrack_position_x);
+										BoneTrack_position_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+										if (BoneTrack_position_x == nullptr) {
 												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 										}
-										bone.obj->InsertTrackSorted(BoneTrackPX);
-										BoneTrackPY = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrackPY);
-										BoneTrackPY = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-										if (BoneTrackPY == nullptr) {
+										bone.obj->InsertTrackSorted(BoneTrack_position_x);
+										BoneTrack_position_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+										CTrack::Free(BoneTrack_position_y);
+										BoneTrack_position_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+										if (BoneTrack_position_y == nullptr) {
 												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 										}
-										bone.obj->InsertTrackSorted(BoneTrackPY);
-										BoneTrackPZ = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrackPZ);
-										BoneTrackPZ = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-										if (BoneTrackPZ == nullptr) {
+										bone.obj->InsertTrackSorted(BoneTrack_position_y);
+										BoneTrack_position_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+										CTrack::Free(BoneTrack_position_z);
+										BoneTrack_position_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+										if (BoneTrack_position_z == nullptr) {
 												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 										}
-										bone.obj->InsertTrackSorted(BoneTrackPZ);
-										BoneCurvePX = BoneTrackPX->GetCurve();
-										BoneCurvePY = BoneTrackPY->GetCurve();
-										BoneCurvePZ = BoneTrackPZ->GetCurve();
+										bone.obj->InsertTrackSorted(BoneTrack_position_z);
+										BoneCurve_position_x = BoneTrack_position_x->GetCurve();
+										BoneCurve_position_y = BoneTrack_position_y->GetCurve();
+										BoneCurve_position_z = BoneTrack_position_z->GetCurve();
 									}
 									if (Is_rotatable)
 									{
-										BoneTrackRX = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrackRX);
-										BoneTrackRX = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-										if (BoneTrackRX == nullptr) {
+										BoneTrack_rotation_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+										CTrack::Free(BoneTrack_rotation_x);
+										BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+										if (BoneTrack_rotation_x == nullptr) {
 												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 										}
-										bone.obj->InsertTrackSorted(BoneTrackRX);
-										BoneTrackRY = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrackRY);
-										BoneTrackRY = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-										if (BoneTrackRY == nullptr) {
+										bone.obj->InsertTrackSorted(BoneTrack_rotation_x);
+										BoneTrack_rotation_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+										CTrack::Free(BoneTrack_rotation_y);
+										BoneTrack_rotation_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+										if (BoneTrack_rotation_y == nullptr) {
 												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 										}
-										bone.obj->InsertTrackSorted(BoneTrackRY);
-										BoneTrackRZ = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrackRZ);
-										BoneTrackRZ = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-										if (BoneTrackRZ == nullptr) {
+										bone.obj->InsertTrackSorted(BoneTrack_rotation_y);
+										BoneTrack_rotation_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+										CTrack::Free(BoneTrack_rotation_z);
+										BoneTrack_rotation_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+										if (BoneTrack_rotation_z == nullptr) {
 												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 										}
-										bone.obj->InsertTrackSorted(BoneTrackRZ);
-										BoneCurveRX = BoneTrackRX->GetCurve();
-										BoneCurveRY = BoneTrackRY->GetCurve();
-										BoneCurveRZ = BoneTrackRZ->GetCurve();
+										bone.obj->InsertTrackSorted(BoneTrack_rotation_z);
+										BoneCurve_rotation_x = BoneTrack_rotation_x->GetCurve();
+										BoneCurve_rotation_y = BoneTrack_rotation_y->GetCurve();
+										BoneCurve_rotation_z = BoneTrack_rotation_z->GetCurve();
 									}
 
 									Int motion_frame_number = MotionFrameList->GetCount();
@@ -3855,43 +3872,43 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 											NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 										}
 										TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-										Int32 frame_no = Int32(MotionFrame.frame_no) + Int32(setting.TimeOffset);
+										Int32 frame_no = Int32(MotionFrame.frame_no) + Int32(setting.time_offset);
 										MotionKeyTime = BaseTime(Float(frame_no), 30.);
 
 										if (Is_translatable)
 										{
-											CKey* MotionKeyPX = CKey::Alloc(); /* PX */
-											MotionKeyPX->SetValue(BoneCurvePX, MotionFrame.position.x * setting.PositionMultiple);
-											MotionKeyPX->SetTime(BoneCurveRX, MotionKeyTime);
-											BoneCurvePX->InsertKey(MotionKeyPX);
-											tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no, std::move( MotionFrame.interpolator_x));
-											CKey* MotionKeyPY = CKey::Alloc(); /* PY */
-											MotionKeyPY->SetValue(BoneCurvePY, MotionFrame.position.y * setting.PositionMultiple);
-											MotionKeyPY->SetTime(BoneCurvePY, MotionKeyTime);
-											BoneCurvePY->InsertKey(MotionKeyPY);
-											tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, std::move( MotionFrame.interpolator_y));
-											CKey* MotionKeyPZ = CKey::Alloc(); /* PZ */
-											MotionKeyPZ->SetValue(BoneCurvePZ, MotionFrame.position.z * setting.PositionMultiple);
-											MotionKeyPZ->SetTime(BoneCurvePZ, MotionKeyTime);
-											BoneCurvePZ->InsertKey(MotionKeyPZ);
-											tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no, std::move( MotionFrame.interpolator_z));
+											CKey* MotionKey_position_x = CKey::Alloc(); /* _position_x */
+											MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
+											MotionKey_position_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
+											BoneCurve_position_x->InsertKey(MotionKey_position_x);
+											tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no,MotionFrame.interpolator_x);
+											CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
+											MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
+											MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
+											BoneCurve_position_y->InsertKey(MotionKey_position_y);
+											tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, MotionFrame.interpolator_y);
+											CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
+											MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
+											MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
+											BoneCurve_position_z->InsertKey(MotionKey_position_z);
+											tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no,  MotionFrame.interpolator_z);
 										}
 										if (Is_rotatable)
 										{
 											Vector rotation = QuaternionToEuler(MotionFrame.rotation);
-											CKey* MotionKeyRX = CKey::Alloc(); /* RX */
-											MotionKeyRX->SetValue(BoneCurveRX, rotation.x);
-											MotionKeyRX->SetTime(BoneCurveRX, MotionKeyTime);
-											BoneCurveRX->InsertKey(MotionKeyRX);
-											CKey* MotionKeyRY = CKey::Alloc(); /* RY */
-											MotionKeyRY->SetValue(BoneCurveRY, rotation.y);
-											MotionKeyRY->SetTime(BoneCurveRY, MotionKeyTime);
-											BoneCurveRY->InsertKey(MotionKeyRY);
-											CKey* MotionKeyRZ = CKey::Alloc(); /* RZ */
-											MotionKeyRZ->SetValue(BoneCurveRZ, rotation.z);
-											MotionKeyRZ->SetTime(BoneCurveRZ, MotionKeyTime);
-											BoneCurveRZ->InsertKey(MotionKeyRZ);
-											tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no, std::move( MotionFrame.interpolator_r));
+											CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
+											MotionKey_rotation_x->SetValue(BoneCurve_rotation_x, rotation.x);
+											MotionKey_rotation_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
+											BoneCurve_rotation_x->InsertKey(MotionKey_rotation_x);
+											CKey* MotionKey_rotation_y = CKey::Alloc(); /* _rotation_y */
+											MotionKey_rotation_y->SetValue(BoneCurve_rotation_y, rotation.y);
+											MotionKey_rotation_y->SetTime(BoneCurve_rotation_y, MotionKeyTime);
+											BoneCurve_rotation_y->InsertKey(MotionKey_rotation_y);
+											CKey* MotionKey_rotation_z = CKey::Alloc(); /* _rotation_z */
+											MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
+											MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
+											BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
+											tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no, MotionFrame.interpolator_r);
 										}
 									}
 									tag_data->UpdateAllInterpolator();
@@ -3951,72 +3968,73 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 						if (bone.obj != nullptr)
 						{
 							bone.obj->SetQuaternionRotationMode(true, false);
-							CTrack* BoneTrackPX = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							if (BoneTrackPX == nullptr)
+							CTrack* BoneTrack_position_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+							if (BoneTrack_position_x == nullptr)
 							{
-								BoneTrackPX = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								if (BoneTrackPX == nullptr)
+								BoneTrack_position_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+								if (BoneTrack_position_x == nullptr)
 								{
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 								}
-								bone.obj->InsertTrackSorted(BoneTrackPX);
+								bone.obj->InsertTrackSorted(BoneTrack_position_x);
 							}
-							CTrack* BoneTrackPY = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							if (BoneTrackPX == nullptr)
+							CTrack* BoneTrack_position_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+							if (BoneTrack_position_x == nullptr)
 							{
-								BoneTrackPY = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								if (BoneTrackPY == nullptr)
+								BoneTrack_position_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+								if (BoneTrack_position_y == nullptr)
 								{
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 								}
-								bone.obj->InsertTrackSorted(BoneTrackPY);
+								bone.obj->InsertTrackSorted(BoneTrack_position_y);
 							}
-							CTrack* BoneTrackPZ = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							if (BoneTrackPX == nullptr)
+							CTrack* BoneTrack_position_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+							if (BoneTrack_position_x == nullptr)
 							{
-								BoneTrackPZ = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								if (BoneTrackPZ == nullptr)
+								BoneTrack_position_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+								if (BoneTrack_position_z == nullptr)
 								{
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 								}
-								bone.obj->InsertTrackSorted(BoneTrackPZ);
+								bone.obj->InsertTrackSorted(BoneTrack_position_z);
 							}
-							CTrack* BoneTrackRX = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							if (BoneTrackPX == nullptr)
+							CTrack* BoneTrack_rotation_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+							if (BoneTrack_position_x == nullptr)
 							{
-								BoneTrackRX = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								if (BoneTrackRX == nullptr)
+								BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+								if (BoneTrack_rotation_x == nullptr)
 								{
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 								}
-								bone.obj->InsertTrackSorted(BoneTrackRX);
+								bone.obj->InsertTrackSorted(BoneTrack_rotation_x);
 							}
-							CTrack* BoneTrackRY = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							if (BoneTrackPX == nullptr)
+							CTrack* BoneTrack_rotation_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+							if (BoneTrack_position_x == nullptr)
 							{
-								BoneTrackRY = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								if (BoneTrackRY == nullptr)
+								BoneTrack_rotation_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+								if (BoneTrack_rotation_y == nullptr)
 								{
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 								}
-								bone.obj->InsertTrackSorted(BoneTrackRY);
+								bone.obj->InsertTrackSorted(BoneTrack_rotation_y);
 							}
-							CTrack* BoneTrackRZ = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							if (BoneTrackPX == nullptr)
+							CTrack* BoneTrack_rotation_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+							if (BoneTrack_position_x == nullptr)
 							{
-								BoneTrackRZ = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								if (BoneTrackRZ == nullptr)
+								BoneTrack_rotation_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+								if (BoneTrack_rotation_z == nullptr)
 								{
 										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 								}
-								bone.obj->InsertTrackSorted(BoneTrackRZ);
+								bone.obj->InsertTrackSorted(BoneTrack_rotation_z);
 							}
-							CCurve* BoneCurvePX = BoneTrackPX->GetCurve();
-							CCurve* BoneCurvePY = BoneTrackPY->GetCurve();
-							CCurve* BoneCurvePZ = BoneTrackPZ->GetCurve();
-							CCurve* BoneCurveRX = BoneTrackRX->GetCurve();
-							CCurve* BoneCurveRY = BoneTrackRY->GetCurve();
-							CCurve* BoneCurveRZ = BoneTrackRZ->GetCurve();
+							CCurve* BoneCurve_position_x = BoneTrack_position_x->GetCurve();
+							CCurve* BoneCurve_position_y = BoneTrack_position_y->GetCurve();
+							CCurve* BoneCurve_position_z = BoneTrack_position_z->GetCurve();
+							CCurve* BoneCurve_rotation_x = BoneTrack_rotation_x->GetCurve();
+							CCurve* BoneCurve_rotation_y = BoneTrack_rotation_y->GetCurve();
+							CCurve* BoneCurve_rotation_z = BoneTrack_rotation_z->GetCurve();
+
 							Int	motion_frame_number = MotionFrameList->GetCount();
 							for (Int motion_index = 0; motion_index < motion_frame_number; motion_index++)
 							{
@@ -4036,85 +4054,85 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 									NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 								}
 								TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-								MotionKeyTime = BaseTime(MotionFrame.frame_no + setting.TimeOffset, 30.);
+								MotionKeyTime = BaseTime(Float(MotionFrame.frame_no) + setting.time_offset, 30.);
 
 								Vector rotation = QuaternionToEuler(MotionFrame.rotation);
 								Vector next_rotation = QuaternionToEuler(NextMotionFrame.rotation);
 
-								CKey* MotionKeyPX = CKey::Alloc(); /* PX */
-								MotionKeyPX->SetTime(BoneCurvePX, MotionKeyTime);
-								MotionKeyPX->SetValue(BoneCurvePX, MotionFrame.position.x * setting.PositionMultiple);
-								MotionKeyPX->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-								MotionKeyPX->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-								ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.PositionMultiple - MotionFrame.position.x * setting.PositionMultiple;
+								CKey* MotionKey_position_x = CKey::Alloc(); /* _position_x */
+								MotionKey_position_x->SetTime(BoneCurve_position_x, MotionKeyTime);
+								MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
+								MotionKey_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+								MotionKey_position_x->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
+								ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.position_multiple - MotionFrame.position.x * setting.position_multiple;
 								if (MotionFrame.interpolator_x.ax == 127 - MotionFrame.interpolator_x.bx && MotionFrame.interpolator_x.ay == 127 - MotionFrame.interpolator_x.by)
 								{
-									MotionKeyPX->SetInterpolation(BoneCurvePX, CINTERPOLATION::LINEAR);
+									MotionKey_position_x->SetInterpolation(BoneCurve_position_x, CINTERPOLATION::LINEAR);
 								}
 								else {
-									MotionKeyPX->SetTimeLeft(BoneCurvePX, MotionKeyTimeLeft[0]);
-									MotionKeyPX->SetValueLeft(BoneCurvePX, MotionKeyValueLeft[0]);
-									MotionKeyPX->SetTimeRight(BoneCurvePX, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ax / 127.0), 30.));
-									MotionKeyPX->SetValueRight(BoneCurvePX, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ay / 127.0));
+									MotionKey_position_x->SetTimeLeft(BoneCurve_position_x, MotionKeyTimeLeft[0]);
+									MotionKey_position_x->SetValueLeft(BoneCurve_position_x, MotionKeyValueLeft[0]);
+									MotionKey_position_x->SetTimeRight(BoneCurve_position_x, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ax / 127.0), 30.));
+									MotionKey_position_x->SetValueRight(BoneCurve_position_x, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ay / 127.0));
 								}
 								MotionKeyTimeLeft[0] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.bx / 127.0), 30.);
 								MotionKeyValueLeft[0] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.by / 127.0);
-								BoneCurvePX->InsertKey(MotionKeyPX);
+								BoneCurve_position_x->InsertKey(MotionKey_position_x);
 
-								CKey* MotionKeyPY = CKey::Alloc(); /* PY */
-								MotionKeyPY->SetTime(BoneCurvePY, MotionKeyTime);
-								MotionKeyPY->SetValue(BoneCurvePY, MotionFrame.position.y * setting.PositionMultiple);
-								MotionKeyPY->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-								MotionKeyPY->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-								ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.PositionMultiple - MotionFrame.position.y * setting.PositionMultiple;
+								CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
+								MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
+								MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
+								MotionKey_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+								MotionKey_position_y->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
+								ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.position_multiple - MotionFrame.position.y * setting.position_multiple;
 								if (MotionFrame.interpolator_y.ax == 127 - MotionFrame.interpolator_y.bx && MotionFrame.interpolator_y.ay == 127 - MotionFrame.interpolator_y.by)
 								{
-									MotionKeyPY->SetInterpolation(BoneCurvePY, CINTERPOLATION::LINEAR);
+									MotionKey_position_y->SetInterpolation(BoneCurve_position_y, CINTERPOLATION::LINEAR);
 								}
 								else {
-									MotionKeyPY->SetTimeLeft(BoneCurvePY, MotionKeyTimeLeft[1]);
-									MotionKeyPY->SetValueLeft(BoneCurvePY, MotionKeyValueLeft[1]);
-									MotionKeyPY->SetTimeRight(BoneCurvePY, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ax / 127.0), 30.));
-									MotionKeyPY->SetValueRight(BoneCurvePY, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ay / 127.0));
+									MotionKey_position_y->SetTimeLeft(BoneCurve_position_y, MotionKeyTimeLeft[1]);
+									MotionKey_position_y->SetValueLeft(BoneCurve_position_y, MotionKeyValueLeft[1]);
+									MotionKey_position_y->SetTimeRight(BoneCurve_position_y, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ax / 127.0), 30.));
+									MotionKey_position_y->SetValueRight(BoneCurve_position_y, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ay / 127.0));
 								}
 								MotionKeyTimeLeft[1] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.bx / 127.0), 30.);
 								MotionKeyValueLeft[1] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.by / 127.0);
-								BoneCurvePY->InsertKey(MotionKeyPY);
+								BoneCurve_position_y->InsertKey(MotionKey_position_y);
 
-								CKey* MotionKeyPZ = CKey::Alloc(); /* PZ */
-								MotionKeyPZ->SetTime(BoneCurvePZ, MotionKeyTime);
-								MotionKeyPZ->SetValue(BoneCurvePZ, MotionFrame.position.z * setting.PositionMultiple);
-								MotionKeyPZ->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-								MotionKeyPZ->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-								ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.PositionMultiple - MotionFrame.position.z * setting.PositionMultiple;
+								CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
+								MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
+								MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
+								MotionKey_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+								MotionKey_position_z->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
+								ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.position_multiple - MotionFrame.position.z * setting.position_multiple;
 								if (MotionFrame.interpolator_z.ax == 127 - MotionFrame.interpolator_z.bx && MotionFrame.interpolator_z.ay == 127 - MotionFrame.interpolator_z.by)
 								{
-									MotionKeyPZ->SetInterpolation(BoneCurvePZ, CINTERPOLATION::LINEAR);
+									MotionKey_position_z->SetInterpolation(BoneCurve_position_z, CINTERPOLATION::LINEAR);
 								}
 								else {
-									MotionKeyPZ->SetTimeLeft(BoneCurvePZ, MotionKeyTimeLeft[2]);
-									MotionKeyPZ->SetValueLeft(BoneCurvePZ, MotionKeyValueLeft[2]);
-									MotionKeyPZ->SetTimeRight(BoneCurvePZ, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ax / 127.0), 30.));
-									MotionKeyPZ->SetValueRight(BoneCurvePZ, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ay / 127.0));
+									MotionKey_position_z->SetTimeLeft(BoneCurve_position_z, MotionKeyTimeLeft[2]);
+									MotionKey_position_z->SetValueLeft(BoneCurve_position_z, MotionKeyValueLeft[2]);
+									MotionKey_position_z->SetTimeRight(BoneCurve_position_z, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ax / 127.0), 30.));
+									MotionKey_position_z->SetValueRight(BoneCurve_position_z, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ay / 127.0));
 								}
 								MotionKeyTimeLeft[2] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.bx / 127.0), 30.);
 								MotionKeyValueLeft[2] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.by / 127.0);
-								BoneCurvePZ->InsertKey(MotionKeyPZ);
+								BoneCurve_position_z->InsertKey(MotionKey_position_z);
 
-								CKey* MotionKeyRX = CKey::Alloc(); /* RX */
-								MotionKeyRX->SetTime(BoneCurveRX, MotionKeyTime);
-								MotionKeyRX->SetValue(BoneCurveRX, rotation.x);
-								BoneCurveRX->InsertKey(MotionKeyRX);
+								CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
+								MotionKey_rotation_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
+								MotionKey_rotation_x->SetValue(BoneCurve_rotation_x, rotation.x);
+								BoneCurve_rotation_x->InsertKey(MotionKey_rotation_x);
 
-								CKey* MotionKeyRY = CKey::Alloc(); /* RY */
-								MotionKeyRY->SetTime(BoneCurveRY, MotionKeyTime);
-								MotionKeyRY->SetValue(BoneCurveRY, rotation.y);
-								BoneCurveRY->InsertKey(MotionKeyRY);
+								CKey* MotionKey_rotation_y = CKey::Alloc(); /* _rotation_y */
+								MotionKey_rotation_y->SetTime(BoneCurve_rotation_y, MotionKeyTime);
+								MotionKey_rotation_y->SetValue(BoneCurve_rotation_y, rotation.y);
+								BoneCurve_rotation_y->InsertKey(MotionKey_rotation_y);
 
-								CKey* MotionKeyRZ = CKey::Alloc(); /* RZ */
-								MotionKeyRZ->SetTime(BoneCurveRZ, MotionKeyTime);
-								MotionKeyRZ->SetValue(BoneCurveRZ, rotation.z);
-								BoneCurveRZ->InsertKey(MotionKeyRZ);
+								CKey* MotionKey_rotation_z = CKey::Alloc(); /* _rotation_z */
+								MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
+								MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
+								BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
 							}
 							bone_cnt++;
 						}
@@ -4127,93 +4145,93 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 						const Bool	Is_translatable = bc->GetBool(PMX_BONE_TRANSLATABLE);
 						const Bool	Is_rotatable = bc->GetBool(PMX_BONE_ROTATABLE);
 						const Bool	Is_inherit = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION) || bc->GetBool(PMX_BONE_INHERIT_ROTATION);
-						CTrack* BoneTrackPX = nullptr;
-						CTrack* BoneTrackPY = nullptr;
-						CTrack* BoneTrackPZ = nullptr;
-						CTrack* BoneTrackRX = nullptr;
-						CTrack* BoneTrackRY = nullptr;
-						CTrack* BoneTrackRZ = nullptr;
-						CCurve* BoneCurvePX = nullptr;
-						CCurve* BoneCurvePY = nullptr;
-						CCurve* BoneCurvePZ = nullptr;
-						CCurve* BoneCurveRX = nullptr;
-						CCurve* BoneCurveRY = nullptr;
-						CCurve* BoneCurveRZ = nullptr;
+						CTrack* BoneTrack_position_x = nullptr;
+						CTrack* BoneTrack_position_y = nullptr;
+						CTrack* BoneTrack_position_z = nullptr;
+						CTrack* BoneTrack_rotation_x = nullptr;
+						CTrack* BoneTrack_rotation_y = nullptr;
+						CTrack* BoneTrack_rotation_z = nullptr;
+						CCurve* BoneCurve_position_x = nullptr;
+						CCurve* BoneCurve_position_y = nullptr;
+						CCurve* BoneCurve_position_z = nullptr;
+						CCurve* BoneCurve_rotation_x = nullptr;
+						CCurve* BoneCurve_rotation_y = nullptr;
+						CCurve* BoneCurve_rotation_z = nullptr;
 						if (!(Is_physical || Is_inherit))
 						{
 							if (Is_translatable)
 							{
 								bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								if (BoneTrackPX == nullptr)
+								if (BoneTrack_position_x == nullptr)
 								{
-									BoneTrackPX = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									if (BoneTrackPX == nullptr)
+									BoneTrack_position_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									if (BoneTrack_position_x == nullptr)
 									{
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackPX);
+									bone.obj->InsertTrackSorted(BoneTrack_position_x);
 								}
-								BoneTrackPY = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								if (BoneTrackPY == nullptr)
+								BoneTrack_position_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+								if (BoneTrack_position_y == nullptr)
 								{
-									BoneTrackPY = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									if (BoneTrackPY == nullptr)
+									BoneTrack_position_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									if (BoneTrack_position_y == nullptr)
 									{
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackPY);
+									bone.obj->InsertTrackSorted(BoneTrack_position_y);
 								}
-								BoneTrackPZ = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								if (BoneTrackPZ == nullptr)
+								BoneTrack_position_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+								if (BoneTrack_position_z == nullptr)
 								{
-									BoneTrackPZ = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									if (BoneTrackPZ == nullptr)
+									BoneTrack_position_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									if (BoneTrack_position_z == nullptr)
 									{
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackPZ);
+									bone.obj->InsertTrackSorted(BoneTrack_position_z);
 								}
-								BoneCurvePX = BoneTrackPX->GetCurve();
-								BoneCurvePY = BoneTrackPY->GetCurve();
-								BoneCurvePZ = BoneTrackPZ->GetCurve();
+								BoneCurve_position_x = BoneTrack_position_x->GetCurve();
+								BoneCurve_position_y = BoneTrack_position_y->GetCurve();
+								BoneCurve_position_z = BoneTrack_position_z->GetCurve();
 							}
 							if (Is_rotatable)
 							{
-								BoneTrackRX = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								if (BoneTrackRX == nullptr)
-									BoneTrackRX = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								if (BoneTrackRX == nullptr)
+								BoneTrack_rotation_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+								if (BoneTrack_rotation_x == nullptr)
+									BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+								if (BoneTrack_rotation_x == nullptr)
 								{
-									BoneTrackRX = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									if (BoneTrackRX == nullptr)
+									BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+									if (BoneTrack_rotation_x == nullptr)
 									{
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackRX);
+									bone.obj->InsertTrackSorted(BoneTrack_rotation_x);
 								}
-								BoneTrackRY = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								if (BoneTrackRY == nullptr)
+								BoneTrack_rotation_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+								if (BoneTrack_rotation_y == nullptr)
 								{
-									BoneTrackRY = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									if (BoneTrackRY == nullptr)
+									BoneTrack_rotation_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
+									if (BoneTrack_rotation_y == nullptr)
 									{
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackRY);
+									bone.obj->InsertTrackSorted(BoneTrack_rotation_y);
 								}
-								BoneTrackRZ = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								if (BoneTrackRZ == nullptr)
+								BoneTrack_rotation_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+								if (BoneTrack_rotation_z == nullptr)
 								{
-									BoneTrackRZ = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									if (BoneTrackRZ == nullptr)
+									BoneTrack_rotation_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
+									if (BoneTrack_rotation_z == nullptr)
 									{
 											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
-									bone.obj->InsertTrackSorted(BoneTrackRZ);
+									bone.obj->InsertTrackSorted(BoneTrack_rotation_z);
 								}
-								BoneCurveRX = BoneTrackRX->GetCurve();
-								BoneCurveRY = BoneTrackRY->GetCurve();
-								BoneCurveRZ = BoneTrackRZ->GetCurve();
+								BoneCurve_rotation_x = BoneTrack_rotation_x->GetCurve();
+								BoneCurve_rotation_y = BoneTrack_rotation_y->GetCurve();
+								BoneCurve_rotation_z = BoneTrack_rotation_z->GetCurve();
 							}
 
 							Int motion_frame_number = MotionFrameList->GetCount();
@@ -4235,44 +4253,44 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 									NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
 								}
 								TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-								Int32 frame_no = Int32(MotionFrame.frame_no) + Int32(setting.TimeOffset);
+								Int32 frame_no = Int32(MotionFrame.frame_no) + maxon::SafeConvert<Int32>(setting.time_offset);
 								MotionKeyTime = BaseTime(Float(frame_no), 30.);
 
 
 								if (Is_translatable)
 								{
-									CKey* MotionKeyPX = CKey::Alloc(); /* PX */
-									MotionKeyPX->SetValue(BoneCurvePX, MotionFrame.position.x * setting.PositionMultiple);
-									MotionKeyPX->SetTime(BoneCurveRX, MotionKeyTime);
-									BoneCurvePX->InsertKey(MotionKeyPX);
-									tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no, std::move( MotionFrame.interpolator_x));
-									CKey* MotionKeyPY = CKey::Alloc(); /* PY */
-									MotionKeyPY->SetValue(BoneCurvePY, MotionFrame.position.y * setting.PositionMultiple);
-									MotionKeyPY->SetTime(BoneCurvePY, MotionKeyTime);
-									BoneCurvePY->InsertKey(MotionKeyPY);
-									tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, std::move( MotionFrame.interpolator_y));
-									CKey* MotionKeyPZ = CKey::Alloc(); /* PZ */
-									MotionKeyPZ->SetValue(BoneCurvePZ, MotionFrame.position.z * setting.PositionMultiple);
-									MotionKeyPZ->SetTime(BoneCurvePZ, MotionKeyTime);
-									BoneCurvePZ->InsertKey(MotionKeyPZ);
-									tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no, std::move( MotionFrame.interpolator_z));
+									CKey* MotionKey_position_x = CKey::Alloc(); /* _position_x */
+									MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
+									MotionKey_position_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
+									BoneCurve_position_x->InsertKey(MotionKey_position_x);
+									tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no, MotionFrame.interpolator_x);
+									CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
+									MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
+									MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
+									BoneCurve_position_y->InsertKey(MotionKey_position_y);
+									tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, MotionFrame.interpolator_y);
+									CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
+									MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
+									MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
+									BoneCurve_position_z->InsertKey(MotionKey_position_z);
+									tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no, MotionFrame.interpolator_z);
 								}
 								if (Is_rotatable)
 								{
 									Vector rotation = QuaternionToEuler(MotionFrame.rotation);
-									CKey* MotionKeyRX = CKey::Alloc(); /* RX */
-									MotionKeyRX->SetValue(BoneCurveRX, rotation.x);
-									MotionKeyRX->SetTime(BoneCurveRX, MotionKeyTime);
-									BoneCurveRX->InsertKey(MotionKeyRX);
-									CKey* MotionKeyRY = CKey::Alloc(); /* RY */
-									MotionKeyRY->SetValue(BoneCurveRY, rotation.y);
-									MotionKeyRY->SetTime(BoneCurveRY, MotionKeyTime);
-									BoneCurveRY->InsertKey(MotionKeyRY);
-									CKey* MotionKeyRZ = CKey::Alloc(); /* RZ */
-									MotionKeyRZ->SetValue(BoneCurveRZ, rotation.z);
-									MotionKeyRZ->SetTime(BoneCurveRZ, MotionKeyTime);
-									BoneCurveRZ->InsertKey(MotionKeyRZ);
-									tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no, std::move( MotionFrame.interpolator_r));
+									CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
+									MotionKey_rotation_x->SetValue(BoneCurve_rotation_x, rotation.x);
+									MotionKey_rotation_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
+									BoneCurve_rotation_x->InsertKey(MotionKey_rotation_x);
+									CKey* MotionKey_rotation_y = CKey::Alloc(); /* _rotation_y */
+									MotionKey_rotation_y->SetValue(BoneCurve_rotation_y, rotation.y);
+									MotionKey_rotation_y->SetTime(BoneCurve_rotation_y, MotionKeyTime);
+									BoneCurve_rotation_y->InsertKey(MotionKey_rotation_y);
+									CKey* MotionKey_rotation_z = CKey::Alloc(); /* _rotation_z */
+									MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
+									MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
+									BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
+									tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no,MotionFrame.interpolator_r);
 								}
 							}
 							tag_data->UpdateAllInterpolator();
@@ -4308,7 +4326,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 	Int				motion_frame_morph_number = motion_morph_name_array.GetCount();
 	String				motion_frame_morph_number_S = String::IntToString(motion_frame_morph_number);
 	maxon::BaseArray<String>	not_find_morph_S;
-	if (setting.ImportMorph == true) {
+	if (setting.import_morph == true) {
 
 		insideCount = 0;
 		maxon::ParallelFor::Dynamic<LocalData, maxon::PARALLELFORFLAGS::INITTHREADED_FINALIZESYNC>(0, motion_frame_morph_number - 1,
@@ -4344,11 +4362,9 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 						Int	morph_frame_number = MorphFrameList->GetCount();
 						for (Int morph_index = 0; morph_index < morph_frame_number; morph_index++)
 						{
-							StatusSetText("Import motion of morph " + String::IntToString(morph_cnt) + "/" + motion_frame_morph_number_S);
-							StatusSetSpin();
 							MorphFrame = (*MorphFrameList)[morph_index];
 							CKey* MorphKey = CKey::Alloc();
-							MorphKey->SetTime(MorphCurve, BaseTime(MorphFrame.frame_no + setting.TimeOffset, 30.));
+							MorphKey->SetTime(MorphCurve, BaseTime(MorphFrame.frame_no + setting.time_offset, 30.));
 							MorphKey->SetValue(MorphCurve, MorphFrame.weight);
 							MorphCurve->InsertKey(MorphKey);
 						}
@@ -4370,14 +4386,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 			}, [&insideCount, &motion_frame_morph_number](LocalData& context)
 			{
 				insideCount += context.localCount;
-				if (GeIsMainThread())
+				if (GeIsMainThread()) {
 					StatusSetText("Import morph " + String::IntToString(insideCount) + " of " + String::IntToString(motion_frame_morph_number));
+				}
 			}) iferr_return;
 	}
 	motion_morph_name_array.Reset();
 
 	/*ImportMotion*/
-	if (setting.ImportModelInfo == true)
+	if (setting.import_model_info == true)
 	{
 		CTrack* ModelEditorDisplayTrack = SelectObject->FindCTrack(ID_BASEOBJECT_VISIBILITY_EDITOR);
 		if (ModelEditorDisplayTrack == nullptr)
@@ -4404,10 +4421,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 		}
 		CCurve* ModelRenderDisplayCurve = ModelRenderDisplayTrack->GetCurve();
 		const Int ModelFrameNumber = mmd_animation->model_frames.GetCount();
-		for (Int morph_frame_index = 0; morph_frame_index < ModelFrameNumber; morph_frame_index++)
+		for (Int model_frame_index = 0; model_frame_index < ModelFrameNumber; model_frame_index++)
 		{
-			const mmd::VMD_Model& model_frame = mmd_animation->model_frames[morph_frame_index];
-			BaseTime		time = BaseTime(model_frame.frame_no + setting.TimeOffset, 30.);
+			StatusSetSpin();
+			const mmd::VMD_Model& model_frame = mmd_animation->model_frames[model_frame_index];
+			BaseTime		time = BaseTime(model_frame.frame_no + setting.time_offset, 30.);
 			CKey* ModelEditorDisplayKey = CKey::Alloc();
 			ModelEditorDisplayKey->SetTime(ModelEditorDisplayCurve, time);
 			ModelEditorDisplayKey->SetValue(ModelEditorDisplayCurve,!model_frame.show);
@@ -4453,7 +4471,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 	doc->SetTime(BaseTime(1, 30.));
 	doc->SetTime(BaseTime(0, 30.));
 	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK, String::IntToString(bone_cnt), String::IntToString(morph_cnt), String::IntToString(motion_frame_bone_number + motion_frame_morph_number), String::FloatToString(timing.GetMilliseconds())) + "\n";
-	if (setting.DetailReport == 1)
+	if (setting.detail_report == 1)
 	{
 		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_S.GetCount())) + ":\n";
 		for (String i : not_find_bone_S)
@@ -4475,7 +4493,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 	iferr_scope;
 	Filename		fn;
 	BaseDocument* doc = GetActiveDocument();
-	setting.PositionMultiple = 1.0 / setting.PositionMultiple;
+	setting.position_multiple = 1.0 / setting.position_multiple;
 	if (doc == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
@@ -4566,7 +4584,8 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 
 	doc->SetTime(BaseTime(0.));
 
-	if (setting.ExportMotion == true) {
+	if (setting.export_motion == true) {
+		maxon::HashSet<bone_obj_tag>	no_tag_bone_set;
 		for (const bone_obj_tag& bone : bone_set)
 		{
 			if (bone.tag != nullptr)
@@ -4577,56 +4596,61 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 				String  bone_name = ge_data.GetString();
 				// bone_tag_data->AutoRegisterKeyFrame(setting.use_rotation);
 
-				CTrack* TrackPX = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
-				CTrack* TrackPY = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
-				CTrack* TrackPZ = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
-				CTrack* TrackRX = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
-				CTrack* TrackRY = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
-				CTrack* TrackRZ = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+				CTrack* track_position_x = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+				CTrack* track_position_y = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+				CTrack* track_position_z = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+				CTrack* track_rotation_x = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+				CTrack* track_rotation_y = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+				CTrack* yrack_rotation_z = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
 
-				if (TrackPX == nullptr || TrackPY == nullptr || TrackPZ == nullptr || TrackRX == nullptr || TrackRY == nullptr || TrackRZ == nullptr)
+				if (track_position_x == nullptr||
+					track_position_y == nullptr||
+					track_position_z == nullptr||
+					track_rotation_x == nullptr||
+					track_rotation_y == nullptr|| 
+					yrack_rotation_z == nullptr)
 				{
 					continue;
 				}
 
-				CCurve* CurvePX = TrackPX->GetCurve();
-				CCurve* CurvePY = TrackPY->GetCurve();
-				CCurve* CurvePZ = TrackPZ->GetCurve();
-				CCurve* CurveRX = TrackRX->GetCurve();
-				CCurve* CurveRY = TrackRY->GetCurve();
-				CCurve* CurveRZ = TrackRZ->GetCurve();
+				CCurve* Curve_position_x = track_position_x->GetCurve();
+				CCurve* Curve_position_y = track_position_y->GetCurve();
+				CCurve* Curve_position_z = track_position_z->GetCurve();
+				CCurve* Curve_rotation_x = track_rotation_x->GetCurve();
+				CCurve* Curve_rotation_y = track_rotation_y->GetCurve();
+				CCurve* Curve_rotation_z = yrack_rotation_z->GetCurve();
 
-				if (CurvePX == nullptr || CurvePY == nullptr || CurvePZ == nullptr || CurveRX == nullptr || CurveRY == nullptr || CurveRZ == nullptr)
+				if (Curve_position_x == nullptr || Curve_position_y == nullptr || Curve_position_z == nullptr || Curve_rotation_x == nullptr || Curve_rotation_y == nullptr || Curve_rotation_z == nullptr)
 				{
 					continue;
 				}
 
 				CKey* key = nullptr;
-				const Int32 bone_key_count = CurvePX->GetKeyCount();
+				const Int32 bone_key_count = Curve_position_x->GetKeyCount();
 				for (Int32 key_index = 0; key_index < bone_key_count; key_index++)
 				{
 					mmd::VMD_Motion* vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
 					vmd_motion_data->bone_name = bone_name;
-					key = CurvePX->GetKey(key_index);
+					key = Curve_position_x->GetKey(key_index);
 					vmd_motion_data->frame_no = key->GetTime().GetFrame(30.);
-					vmd_motion_data->position.x = key->GetValue() * setting.PositionMultiple;
-					key = CurvePY->GetKey(key_index);
-					vmd_motion_data->position.y = key->GetValue() * setting.PositionMultiple;
-					key = CurvePZ->GetKey(key_index);
-					vmd_motion_data->position.z = key->GetValue() * setting.PositionMultiple;
+					vmd_motion_data->position.x = key->GetValue() * setting.position_multiple;
+					key = Curve_position_y->GetKey(key_index);
+					vmd_motion_data->position.y = key->GetValue() * setting.position_multiple;
+					key = Curve_position_z->GetKey(key_index);
+					vmd_motion_data->position.z = key->GetValue() * setting.position_multiple;
 					Vector rotation = Vector();
-					key = CurveRX->GetKey(key_index);
+					key = Curve_rotation_x->GetKey(key_index);
 					rotation.x = key->GetValue();
-					key = CurveRY->GetKey(key_index);
+					key = Curve_rotation_y->GetKey(key_index);
 					rotation.y = key->GetValue();
-					key = CurveRZ->GetKey(key_index);
+					key = Curve_rotation_z->GetKey(key_index);
 					rotation.z = key->GetValue();
 					vmd_motion_data->rotation = EulerToQuaternion(rotation);
 					bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_x);
 					bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_y);
 					bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_z);
 					bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_r);
-					vmd_motion_data->frame_no += setting.TimeOffset;
+					vmd_motion_data->frame_no += setting.time_offset;
 					mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 				}
 			}
@@ -4637,7 +4661,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 		}
 	}
 
-	if (setting.ExportMorph == true) {
+	if (setting.export_morph == true) {
 		for (const morph_id_tag& morph : morph_set) {
 			CTrack* morph_track = morph.tag->FindCTrack(morph.id);
 			if (morph_track != nullptr) {
@@ -4647,7 +4671,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 					for (Int32 key_index = 0; key_index < morph_key_count; key_index++) {
 						mmd::VMD_Morph* vmd_morph_data = NewObj(mmd::VMD_Morph)iferr_return;
 						CKey* key = morph_curve->GetKey(key_index);
-						vmd_morph_data->frame_no = key->GetTime().GetFrame(30.) + setting.TimeOffset;
+						vmd_morph_data->frame_no = key->GetTime().GetFrame(30.) + setting.time_offset;
 						vmd_morph_data->weight = key->GetValue();
 						vmd_morph_data->morph_name = morph.name;
 						mmd_animation->morph_frames.AppendPtr(vmd_morph_data)iferr_return;
@@ -4657,7 +4681,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 		}
 	}
 
-	if (setting.ExportModelInfo == true)
+	if (setting.export_model_info == true)
 	{
 		maxon::HashSet<MyBaseTime> time_set;
 
@@ -4685,7 +4709,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 			for (const BaseTime& time : time_set)
 			{
 				mmd::VMD_Model* model_frame = NewObj(mmd::VMD_Model)iferr_return;
-				model_frame->frame_no = time.GetFrame(30.) + setting.TimeOffset;
+				model_frame->frame_no = time.GetFrame(30.) + setting.time_offset;
 				if (ModelEditorDisplayCurve->GetValue(time) == 2) {
 					model_frame->show = false;
 				}
@@ -4726,7 +4750,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 		}
 		else {
 			mmd::VMD_Model* model_frame = NewObj(mmd::VMD_Model)iferr_return;
-			model_frame->frame_no = setting.TimeOffset;
+			model_frame->frame_no = setting.time_offset;
 			model_frame->show = true;
 			mmd_animation->model_frames.AppendPtr(model_frame)iferr_return;
 		}
@@ -4795,8 +4819,8 @@ Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::Command(Int32 id, const BaseCont
 		mmd::VMD_Camera_import_settings setting_;
 		setting_.fn = fn;
 		setting_.doc = doc;
-		GetFloat(100002, setting_.PositionMultiple);
-		GetFloat(100004, setting_.TimeOffset);
+		GetFloat(100002, setting_.position_multiple);
+		GetFloat(100004, setting_.time_offset);
 		iferr(mmd::VMDAnimation::FromFileImportCamera(setting_))
 		{
 			return(false);
