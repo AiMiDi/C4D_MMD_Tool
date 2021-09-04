@@ -73,6 +73,7 @@ namespace mmd {
 		Bool    export_motion = true;
 		Bool    export_morph = true;
 		Bool    export_model_info = true;
+		Bool    use_bake = true;
 	};
 	class VMDAnimation
 	{
