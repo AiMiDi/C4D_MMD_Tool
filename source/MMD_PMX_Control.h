@@ -1,7 +1,7 @@
 #ifndef __MMD_PMX_CONTROL_H__
 #define __MMD_PMX_CONTROL_H__
 
-#include "main.h"
+#include "MMD_utility.h"
 #include "c4d_nodedata.h"
 #include "description/OMMDModel.h"
 #include "description/TMMDBone.h"

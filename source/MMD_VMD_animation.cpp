@@ -63,10 +63,8 @@ inline Bool mmd::OMMDCamera::GetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_x_ptr = interpolator_X_map.Find(frame_on);
 		if (interpolator_x_ptr == nullptr)
 		{
-			interpolator.ax = 20;
-			interpolator.bx = 107;
-			interpolator.ay = 20;
-			interpolator.by = 107;
+			/*Set the interpolator as the default*/
+			interpolator.SetValue();
 			return(false);
 		}
 		else {
@@ -78,10 +76,8 @@ inline Bool mmd::OMMDCamera::GetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_y_ptr = interpolator_Y_map.Find(frame_on);
 		if (interpolator_y_ptr == nullptr)
 		{
-			interpolator.ax = 20;
-			interpolator.bx = 107;
-			interpolator.ay = 20;
-			interpolator.by = 107;
+			/*Set the interpolator as the default*/
+			interpolator.SetValue();
 			return(false);
 		}
 		else {
@@ -94,10 +90,8 @@ inline Bool mmd::OMMDCamera::GetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_z_ptr = interpolator_Z_map.Find(frame_on);
 		if (interpolator_z_ptr == nullptr)
 		{
-			interpolator.ax = 20;
-			interpolator.bx = 107;
-			interpolator.ay = 20;
-			interpolator.by = 107;
+			/*Set the interpolator as the default*/
+			interpolator.SetValue();
 			return(false);
 		}
 		else {
@@ -109,10 +103,8 @@ inline Bool mmd::OMMDCamera::GetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_r_ptr = interpolator_R_map.Find(frame_on);
 		if (interpolator_r_ptr == nullptr)
 		{
-			interpolator.ax = 20;
-			interpolator.bx = 107;
-			interpolator.ay = 20;
-			interpolator.by = 107;
+			/*Set the interpolator as the default*/
+			interpolator.SetValue();
 			return(false);
 		}
 		else {
@@ -124,10 +116,8 @@ inline Bool mmd::OMMDCamera::GetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_d_ptr = interpolator_D_map.Find(frame_on);
 		if (interpolator_d_ptr == nullptr)
 		{
-			interpolator.ax = 20;
-			interpolator.bx = 107;
-			interpolator.ay = 20;
-			interpolator.by = 107;
+			/*Set the interpolator as the default*/
+			interpolator.SetValue();
 			return(false);
 		}
 		else {
@@ -139,10 +129,8 @@ inline Bool mmd::OMMDCamera::GetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_v_ptr = interpolator_V_map.Find(frame_on);
 		if (interpolator_v_ptr == nullptr)
 		{
-			interpolator.ax = 20;
-			interpolator.bx = 107;
-			interpolator.ay = 20;
-			interpolator.by = 107;
+			/*Set the interpolator as the default*/
+			interpolator.SetValue();
 			return(false);
 		}
 		else {
@@ -154,10 +142,8 @@ inline Bool mmd::OMMDCamera::GetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_a_ptr = interpolator_A_map.Find(frame_on);
 		if (interpolator_a_ptr == nullptr)
 		{
-			interpolator.ax = 20;
-			interpolator.bx = 107;
-			interpolator.ay = 20;
-			interpolator.by = 107;
+			/*Set the interpolator as the default*/
+			interpolator.SetValue();
 			return(false);
 		}
 		else {
@@ -209,8 +195,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_x_ptr = interpolator_X_map.Find(frame_on);
 		if (interpolator_x_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_x = interpolator_x_ptr->GetValue();
-			interpolator_x = interpolator;
+			mmd::VMDInterpolator& interpolator_position_x = interpolator_x_ptr->GetValue();
+			interpolator_position_x = interpolator;
 		}
 		else {
 			interpolator_X_map.Insert(frame_on, interpolator) iferr_return;
@@ -221,8 +207,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_y_ptr = interpolator_Y_map.Find(frame_on);
 		if (interpolator_y_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_y = interpolator_y_ptr->GetValue();
-			interpolator_y = interpolator;
+			mmd::VMDInterpolator& interpolator_position_y = interpolator_y_ptr->GetValue();
+			interpolator_position_y = interpolator;
 		}
 		else {
 			interpolator_Y_map.Insert(frame_on, interpolator) iferr_return;
@@ -233,8 +219,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_z_ptr = interpolator_Z_map.Find(frame_on);
 		if (interpolator_z_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_z = interpolator_z_ptr->GetValue();
-			interpolator_z = interpolator;
+			mmd::VMDInterpolator& interpolator_position_z = interpolator_z_ptr->GetValue();
+			interpolator_position_z = interpolator;
 		}
 		else {
 			interpolator_Z_map.Insert(frame_on, interpolator) iferr_return;
@@ -245,8 +231,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_r_ptr = interpolator_R_map.Find(frame_on);
 		if (interpolator_r_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_r = interpolator_r_ptr->GetValue();
-			interpolator_r = interpolator;
+			mmd::VMDInterpolator& interpolator_position_r = interpolator_r_ptr->GetValue();
+			interpolator_position_r = interpolator;
 		}
 		else {
 			interpolator_R_map.Insert(frame_on, interpolator) iferr_return;
@@ -257,8 +243,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_d_ptr = interpolator_D_map.Find(frame_on);
 		if (interpolator_d_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_d = interpolator_d_ptr->GetValue();
-			interpolator_d = interpolator;
+			mmd::VMDInterpolator& interpolator_position_d = interpolator_d_ptr->GetValue();
+			interpolator_position_d = interpolator;
 		}
 		else {
 			interpolator_D_map.Insert(frame_on, interpolator) iferr_return;
@@ -269,8 +255,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_v_ptr = interpolator_V_map.Find(frame_on);
 		if (interpolator_v_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_v = interpolator_v_ptr->GetValue();
-			interpolator_v = interpolator;
+			mmd::VMDInterpolator& interpolator_position_v = interpolator_v_ptr->GetValue();
+			interpolator_position_v = interpolator;
 		}
 		else {
 			interpolator_V_map.Insert(frame_on, interpolator) iferr_return;
@@ -281,8 +267,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_x_ptr = interpolator_X_map.Find(frame_on);
 		if (interpolator_x_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_x = interpolator_x_ptr->GetValue();
-			interpolator_x = interpolator;
+			mmd::VMDInterpolator& interpolator_position_x = interpolator_x_ptr->GetValue();
+			interpolator_position_x = interpolator;
 		}
 		else {
 			interpolator_X_map.Insert(frame_on, interpolator) iferr_return;
@@ -290,8 +276,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_y_ptr = interpolator_Y_map.Find(frame_on);
 		if (interpolator_y_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_y = interpolator_y_ptr->GetValue();
-			interpolator_y = interpolator;
+			mmd::VMDInterpolator& interpolator_position_y = interpolator_y_ptr->GetValue();
+			interpolator_position_y = interpolator;
 		}
 		else {
 			interpolator_Y_map.Insert(frame_on, interpolator) iferr_return;
@@ -299,8 +285,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_z_ptr = interpolator_Z_map.Find(frame_on);
 		if (interpolator_z_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_z = interpolator_z_ptr->GetValue();
-			interpolator_z = interpolator;
+			mmd::VMDInterpolator& interpolator_position_z = interpolator_z_ptr->GetValue();
+			interpolator_position_z = interpolator;
 		}
 		else {
 			interpolator_Z_map.Insert(frame_on, interpolator) iferr_return;
@@ -308,8 +294,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_r_ptr = interpolator_R_map.Find(frame_on);
 		if (interpolator_r_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_r = interpolator_r_ptr->GetValue();
-			interpolator_r = interpolator;
+			mmd::VMDInterpolator& interpolator_position_r = interpolator_r_ptr->GetValue();
+			interpolator_position_r = interpolator;
 		}
 		else {
 			interpolator_R_map.Insert(frame_on, interpolator) iferr_return;
@@ -317,8 +303,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_d_ptr = interpolator_D_map.Find(frame_on);
 		if (interpolator_d_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_d = interpolator_d_ptr->GetValue();
-			interpolator_d = interpolator;
+			mmd::VMDInterpolator& interpolator_position_d = interpolator_d_ptr->GetValue();
+			interpolator_position_d = interpolator;
 		}
 		else {
 			interpolator_D_map.Insert(frame_on, interpolator) iferr_return;
@@ -326,8 +312,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 		auto interpolator_v_ptr = interpolator_V_map.Find(frame_on);
 		if (interpolator_v_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_v = interpolator_v_ptr->GetValue();
-			interpolator_v = interpolator;
+			mmd::VMDInterpolator& interpolator_position_v = interpolator_v_ptr->GetValue();
+			interpolator_position_v = interpolator;
 		}
 		else {
 			interpolator_V_map.Insert(frame_on, interpolator) iferr_return;
@@ -344,6 +330,7 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 
 inline Bool mmd::OMMDCamera::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 	iferr_scope_handler{
+		MessageDialog(err.ToString(nullptr));
 		return false;
 	};
 	if (node == nullptr)
@@ -758,10 +745,10 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(curve_position_x, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(curve_position_x, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(curve_position_x, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(curve_position_x, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_position_x, BaseTime(-TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::bx)) / 127.0), 30.));
+					next_key->SetValueLeft(curve_position_x, -ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::by)) / 127.0));
+					key->SetTimeRight(curve_position_x, BaseTime(TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ax)) / 127.0), 30.));
+					key->SetValueRight(curve_position_x, ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
 				}
 			}
 		}
@@ -777,10 +764,10 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(curve_position_y, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(curve_position_y, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(curve_position_y, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(curve_position_y, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_position_y, BaseTime(-TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::bx)) / 127.0), 30.));
+					next_key->SetValueLeft(curve_position_y, -ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::by)) / 127.0));
+					key->SetTimeRight(curve_position_y, BaseTime(TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ax)) / 127.0), 30.));
+					key->SetValueRight(curve_position_y, ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
 				}
 			}
 		}
@@ -796,10 +783,10 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(curve_position_z, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(curve_position_z, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(curve_position_z, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(curve_position_z, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_position_z, BaseTime(-TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::bx)) / 127.0), 30.));
+					next_key->SetValueLeft(curve_position_z, -ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::by)) / 127.0));
+					key->SetTimeRight(curve_position_z, BaseTime(TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ax)) / 127.0), 30.));
+					key->SetValueRight(curve_position_z, ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
 				}
 			}
 		}
@@ -815,10 +802,10 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(curve_rotation_x, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(curve_rotation_x, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(curve_rotation_x, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(curve_rotation_x, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_rotation_x, BaseTime(-TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::bx)) / 127.0), 30.));
+					next_key->SetValueLeft(curve_rotation_x, -ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::by)) / 127.0));
+					key->SetTimeRight(curve_rotation_x, BaseTime(TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ax)) / 127.0), 30.));
+					key->SetValueRight(curve_rotation_x, ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
 				}
 			}
 		}
@@ -834,10 +821,10 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(curve_rotation_y, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(curve_rotation_y, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(curve_rotation_y, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(curve_rotation_y, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_rotation_y, BaseTime(-TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::bx)) / 127.0), 30.));
+					next_key->SetValueLeft(curve_rotation_y, -ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::by)) / 127.0));
+					key->SetTimeRight(curve_rotation_y, BaseTime(TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ax)) / 127.0), 30.));
+					key->SetValueRight(curve_rotation_y, ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
 				}
 			}
 		}
@@ -853,10 +840,10 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(curve_rotation_z, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(curve_rotation_z, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(curve_rotation_z, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(curve_rotation_z, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_rotation_z, BaseTime(-TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::bx)) / 127.0), 30.));
+					next_key->SetValueLeft(curve_rotation_z, -ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::by)) / 127.0));
+					key->SetTimeRight(curve_rotation_z, BaseTime(TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ax)) / 127.0), 30.));
+					key->SetValueRight(curve_rotation_z, ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
 				}
 			}
 		}
@@ -872,10 +859,10 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(curve_distance, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(curve_distance, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(curve_distance, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(curve_distance, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_distance, BaseTime(-TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::bx)) / 127.0), 30.));
+					next_key->SetValueLeft(curve_distance, -ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::by)) / 127.0));
+					key->SetTimeRight(curve_distance, BaseTime(TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ax)) / 127.0), 30.));
+					key->SetValueRight(curve_distance, ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
 				}
 			}
 		}
@@ -891,10 +878,10 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 				{
 					ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
 					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-					next_key->SetTimeLeft(curve_AOV, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.bx / 127.0), 30.));
-					next_key->SetValueLeft(curve_AOV, -ValueOfTwoFrames * ((Float)interpolator.by / 127.0));
-					key->SetTimeRight(curve_AOV, BaseTime(TimeOfTwoFrames * ((Float)interpolator.ax / 127.0), 30.));
-					key->SetValueRight(curve_AOV, ValueOfTwoFrames * ((Float)interpolator.ay / 127.0));
+					next_key->SetTimeLeft(curve_AOV, BaseTime(-TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::bx)) / 127.0), 30.));
+					next_key->SetValueLeft(curve_AOV, -ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::by)) / 127.0));
+					key->SetTimeRight(curve_AOV, BaseTime(TimeOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ax)) / 127.0), 30.));
+					key->SetValueRight(curve_AOV, ValueOfTwoFrames * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
 				}
 			}
 		}
@@ -1141,7 +1128,8 @@ Bool mmd::OMMDCamera::SetDParameter(GeListNode* node, const DescID& id, const Ge
 Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
-		return(true);
+		MessageDialog(err.ToString(nullptr));
+		return false;
 	};
 	switch (type)
 	{
@@ -1307,9 +1295,9 @@ EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, Base
 			auto interpolator_x_ptr = interpolator_X_map.Find(frame_on);
 			if (interpolator_x_ptr != nullptr)
 			{
-				mmd::VMDInterpolator& interpolator_x = interpolator_x_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_x.ax, interpolator_x.ay, 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_x.bx - 127., interpolator_x.by - 127., 0.);
+				mmd::VMDInterpolator& interpolator_position_x = interpolator_x_ptr->GetValue();
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_position_x.GetValue(VMDInterpolator::PartType::ax), interpolator_position_x.GetValue(VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) - 127., interpolator_position_x.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1321,9 +1309,9 @@ EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, Base
 			auto interpolator_y_ptr = interpolator_Y_map.Find(frame_on);
 			if (interpolator_y_ptr != nullptr)
 			{
-				mmd::VMDInterpolator& interpolator_y = interpolator_y_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_y.ax, interpolator_y.ay, 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_y.bx - 127., interpolator_y.by - 127., 0.);
+				mmd::VMDInterpolator& interpolator_position_y = interpolator_y_ptr->GetValue();
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_position_y.GetValue(VMDInterpolator::PartType::ax), interpolator_position_y.GetValue(VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) - 127., interpolator_position_y.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1335,9 +1323,9 @@ EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, Base
 			auto interpolator_z_ptr = interpolator_Z_map.Find(frame_on);
 			if (interpolator_z_ptr != nullptr)
 			{
-				mmd::VMDInterpolator& interpolator_z = interpolator_z_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_z.ax, interpolator_z.ay, 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_z.bx - 127., interpolator_z.by - 127., 0.);
+				mmd::VMDInterpolator& interpolator_position_z = interpolator_z_ptr->GetValue();
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_position_z.GetValue(VMDInterpolator::PartType::ax), interpolator_position_z.GetValue(VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) - 127., interpolator_position_z.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1349,9 +1337,9 @@ EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, Base
 			auto interpolator_r_ptr = interpolator_R_map.Find(frame_on);
 			if (interpolator_r_ptr != nullptr)
 			{
-				mmd::VMDInterpolator& interpolator_r = interpolator_r_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_r.ax, interpolator_r.ay, 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_r.bx - 127., interpolator_r.by - 127., 0.);
+				mmd::VMDInterpolator& interpolator_position_r = interpolator_r_ptr->GetValue();
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_position_r.GetValue(VMDInterpolator::PartType::ax), interpolator_position_r.GetValue(VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_position_r.GetValue(VMDInterpolator::PartType::bx) - 127., interpolator_position_r.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1363,9 +1351,9 @@ EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, Base
 			auto interpolator_d_ptr = interpolator_D_map.Find(frame_on);
 			if (interpolator_d_ptr != nullptr)
 			{
-				mmd::VMDInterpolator& interpolator_d = interpolator_d_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_d.ax, interpolator_d.ay, 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_d.bx - 127., interpolator_d.by - 127., 0.);
+				mmd::VMDInterpolator& interpolator_position_d = interpolator_d_ptr->GetValue();
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_position_d.GetValue(VMDInterpolator::PartType::ax), interpolator_position_d.GetValue(VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_position_d.GetValue(VMDInterpolator::PartType::bx) - 127., interpolator_position_d.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1377,9 +1365,9 @@ EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, Base
 			auto interpolator_v_ptr = interpolator_V_map.Find(frame_on);
 			if (interpolator_v_ptr != nullptr)
 			{
-				mmd::VMDInterpolator& interpolator_v = interpolator_v_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_v.ax, interpolator_v.ay, 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_v.bx - 127., interpolator_v.by - 127., 0.);
+				mmd::VMDInterpolator& interpolator_position_v = interpolator_v_ptr->GetValue();
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_position_v.GetValue(VMDInterpolator::PartType::ax), interpolator_position_v.GetValue(VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_position_v.GetValue(VMDInterpolator::PartType::bx) - 127., interpolator_position_v.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1392,8 +1380,8 @@ EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, Base
 			if (interpolator_a_ptr != nullptr)
 			{
 				mmd::VMDInterpolator& interpolator_a = interpolator_a_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_a.ax, interpolator_a.ay, 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_a.bx - 127., interpolator_a.by - 127., 0.);
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_a.GetValue(VMDInterpolator::PartType::ax), interpolator_a.GetValue(VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_a.GetValue(VMDInterpolator::PartType::bx) - 127., interpolator_a.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1426,7 +1414,8 @@ Bool mmd::OMMDCamera::AddToExecution(BaseObject* op, PriorityList* list)
 maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Camera_settings setting)
 {
 	iferr_scope_handler{
-		return(nullptr);
+		MessageDialog(err.ToString(nullptr));
+		return nullptr;
 	};
 	/* 获取活动文档 */
 	BaseDocument* doc = GetActiveDocument();
@@ -1981,7 +1970,8 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
-		return(false);
+		MessageDialog(err.ToString(nullptr));
+		return false;
 	};
 	if (!hf->ReadInt32(&this->prev_frame))
 		return(false);
@@ -2156,7 +2146,8 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 Bool mmd::OMMDCamera::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
 {
 	iferr_scope_handler{
-		return(false);
+		MessageDialog(err.ToString(nullptr));
+		return false;
 	};
 	OMMDCamera* const destObject = static_cast<OMMDCamera*>(dest);
 	if (destObject == nullptr)
@@ -2173,78 +2164,6 @@ Bool mmd::OMMDCamera::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnod
 	destObject->interpolator_V_map.CopyFrom(this->interpolator_V_map) iferr_return;
 	destObject->interpolator_A_map.CopyFrom(this->interpolator_A_map) iferr_return;
 	return(SUPER::CopyTo(dest, snode, dnode, flags, trn));
-}
-
-
-inline maxon::Vector4d32 mmd::VMDAnimation::EulerToQuaternion(maxon::Vector& euler) {
-
-	// pitch(H), roll(-P), yaw(Z)
-	const Float sx = sin(-euler.y * 0.5);
-	const Float sy = sin(euler.x * 0.5);
-	const Float sz = sin(euler.z * 0.5);
-	const Float cx = cos(-euler.y * 0.5);
-	const Float cy = cos(euler.x * 0.5);
-	const Float cz = cos(euler.z * 0.5);
-
-	const Float w = (cz * cy * cx) + (sz * sy * sx);
-	const Float x = (cz * cy * sx) + (sz * sy * cx);
-	const Float y = (sz * cy * sx) - (cz * sy * cx);
-	const Float z = (cz * sy * sx) - (sz * cy * cx);
-
-	return maxon::Vector4d32(x, y, z, w);
-}
-
-
-inline maxon::Vector mmd::VMDAnimation::QuaternionToEuler(maxon::Vector4d32& quaternion)
-{
-	//pitch(y - axis rotation)
-	const Float sinr_cosp = 2.0 * (quaternion.w * quaternion.y + quaternion.x * quaternion.z);
-	const Float cosr_cosp = 1.0 - (2.0 * (quaternion.x * quaternion.x + quaternion.y * quaternion.y));
-	const Float pitch = -atan2(sinr_cosp, cosr_cosp);
-
-	//yaw(z - axis rotation)
-	const Float siny_cosp = 2.0 * (-quaternion.w * quaternion.z - quaternion.x * quaternion.y);
-	const Float cosy_cosp = 1.0 - (2.0 * (quaternion.x * quaternion.x + quaternion.z * quaternion.z));
-	const Float yaw = atan2(siny_cosp, cosy_cosp);
-	
-	//roll(x - axis rotation)
-	Float roll = 0.0;
-	const Float sinp = 2.0 * (quaternion.z * quaternion.y - quaternion.w * quaternion.x);
-	if (sinp >= 1.0)
-	{
-		roll = -PI05; // use 90 degrees if out of range
-	}
-	else if (sinp <= -1.0)
-	{
-		roll = PI05;
-	}
-	else {
-		roll = -asin(sinp);
-	}
-
-	//fixing the x rotation, part 1
-	if (quaternion.x * quaternion.x > 0.5f || quaternion.w < 0.0f)
-	{
-		if (quaternion.x < 0.0f)
-		{
-			roll = -PI - roll;
-		}
-		else
-		{
-			roll = PI * copysign(1.0, quaternion.w) - roll;
-		}
-	}
-
-	//fixing the x rotation, part 2
-	if (roll > PI05) 
-	{
-		roll = PI - roll;
-	}
-	else if (roll < -PI05)
-	{
-		roll = -PI - roll;
-	}
-	return maxon::Vector(pitch, -roll, yaw);// HPB
 }
 
 
@@ -2275,7 +2194,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 	{
 		if (!file->ReadBytes(VMD_model_name, 10))
 			return(maxon::Error());
-		EncodingConversion::SJIStoUTF8(VMD_model_name, this->ModelName);
+		SJIStoUTF8(VMD_model_name, this->ModelName);
 		if (this->ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) /* カメラ・照明 */
 		{
 			this->IsCamera = 1;
@@ -2288,7 +2207,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 	{
 		if (!file->ReadBytes(VMD_model_name, 20))
 			return(maxon::Error());
-		EncodingConversion::SJIStoUTF8(VMD_model_name, this->ModelName);
+		SJIStoUTF8(VMD_model_name, this->ModelName);
 		if (this->ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) /* カメラ・照明 */
 		{
 			this->IsCamera = 1;
@@ -2321,15 +2240,15 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 				return(maxon::Error());
 			if (!file->ReadBytes(&(motion_frame->rotation), sizeof(Vector4d32)))
 				return(maxon::Error());
-			if (!motion_frame->interpolator_x.ReadBoneInterpolator(file))
+			if (!motion_frame->interpolator_position_x.ReadBoneInterpolator(file))
 				return(maxon::Error());
-			if (!motion_frame->interpolator_y.ReadBoneInterpolator(file))
+			if (!motion_frame->interpolator_position_y.ReadBoneInterpolator(file))
 				return(maxon::Error());
-			if (!motion_frame->interpolator_z.ReadBoneInterpolator(file))
+			if (!motion_frame->interpolator_position_z.ReadBoneInterpolator(file))
 				return(maxon::Error());
-			if (!motion_frame->interpolator_r.ReadBoneInterpolator(file))
+			if (!motion_frame->interpolator_position_r.ReadBoneInterpolator(file))
 				return(maxon::Error());
-			EncodingConversion::SJIStoUTF8(bone_name, motion_frame->bone_name);
+			SJIStoUTF8(bone_name, motion_frame->bone_name);
 			this->motion_frames.AppendPtr(motion_frame) iferr_return;
 		}
 	}
@@ -2350,7 +2269,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 				return(maxon::Error());
 			if (!file->ReadFloat32(&morph_frame->weight))
 				return(maxon::Error());
-			EncodingConversion::SJIStoUTF8(morph_name, morph_frame->morph_name);
+			SJIStoUTF8(morph_name, morph_frame->morph_name);
 			this->morph_frames.AppendPtr(morph_frame) iferr_return;
 		}
 	}
@@ -2372,17 +2291,17 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 				return(maxon::Error());
 			if (!file->ReadBytes(&(camera_frame->rotation), sizeof(Vector32)))
 				return(maxon::Error());
-			if (!camera_frame->interpolator_x.ReadCameraInterpolator(file))
+			if (!camera_frame->interpolator_position_x.ReadCameraInterpolator(file))
 				return(maxon::Error());
-			if (!camera_frame->interpolator_y.ReadCameraInterpolator(file))
+			if (!camera_frame->interpolator_position_y.ReadCameraInterpolator(file))
 				return(maxon::Error());
-			if (!camera_frame->interpolator_z.ReadCameraInterpolator(file))
+			if (!camera_frame->interpolator_position_z.ReadCameraInterpolator(file))
 				return(maxon::Error());
-			if (!camera_frame->interpolator_r.ReadCameraInterpolator(file))
+			if (!camera_frame->interpolator_position_r.ReadCameraInterpolator(file))
 				return(maxon::Error());
-			if (!camera_frame->interpolator_d.ReadCameraInterpolator(file))
+			if (!camera_frame->interpolator_position_d.ReadCameraInterpolator(file))
 				return(maxon::Error());
-			if (!camera_frame->interpolator_v.ReadCameraInterpolator(file))
+			if (!camera_frame->interpolator_position_v.ReadCameraInterpolator(file))
 				return(maxon::Error());
 			if (!file->ReadUInt32(&(camera_frame->viewing_angle)))
 				return(maxon::Error());
@@ -2446,8 +2365,8 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 				if (!file->ReadBool(&ik_enable))
 					return(maxon::Error());
 				String ik_name_;
-				EncodingConversion::SJIStoUTF8(ik_name, ik_name_);
-				model_frame->ik_Infos.AppendPtr(NewObj(mmd::VMD_IkInfo, ik_name_, ik_enable).GetValue()) iferr_return;
+				SJIStoUTF8(ik_name, ik_name_);
+				model_frame->IKs_Info.AppendPtr(NewObj(mmd::VMD_IkInfo, ik_name_, ik_enable).GetValue()) iferr_return;
 			}
 			this->model_frames.AppendPtr(model_frame) iferr_return;
 		}
@@ -2479,7 +2398,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 	if (!file->WriteBytes(VMDVersion, 30))
 		return(maxon::Error());
 	maxon::AutoMem<maxon::Char> VMDModelName = NewMemClear(maxon::Char, (this->ModelName.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
-	EncodingConversion::UTF8toSJIS(this->ModelName, VMDModelName);
+	UTF8toSJIS(this->ModelName, VMDModelName);
 	if (!file->WriteBytes(VMDModelName, 20))
 		return(maxon::Error());
 	register UInt32 motion_frame_number = this->motion_frames.GetCount();
@@ -2489,7 +2408,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 	{
 		mmd::VMD_Motion motion_frame = (this->motion_frames)[motion_frame_number];
 		maxon::AutoMem<maxon::Char> bone_name = NewMemClear(maxon::Char, (motion_frame.bone_name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
-		EncodingConversion::UTF8toSJIS(motion_frame.bone_name, bone_name);
+		UTF8toSJIS(motion_frame.bone_name, bone_name);
 		if (!file->WriteBytes(bone_name, 15))
 			return(maxon::Error());
 		if (!file->WriteUInt32(motion_frame.frame_no))
@@ -2498,13 +2417,13 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 			return(maxon::Error());
 		if (!file->WriteBytes(&(motion_frame.rotation), sizeof(Vector4d32)))
 			return(maxon::Error());
-		if (!motion_frame.interpolator_x.WriteBoneInterpolator(file))
+		if (!motion_frame.interpolator_position_x.WriteBoneInterpolator(file))
 			return(maxon::Error());
-		if (!motion_frame.interpolator_y.WriteBoneInterpolator(file))
+		if (!motion_frame.interpolator_position_y.WriteBoneInterpolator(file))
 			return(maxon::Error());
-		if (!motion_frame.interpolator_z.WriteBoneInterpolator(file))
+		if (!motion_frame.interpolator_position_z.WriteBoneInterpolator(file))
 			return(maxon::Error());
-		if (!motion_frame.interpolator_r.WriteBoneInterpolator(file))
+		if (!motion_frame.interpolator_position_r.WriteBoneInterpolator(file))
 			return(maxon::Error());
 	}
 	register UInt32 morph_frame_number = this->morph_frames.GetCount();
@@ -2514,7 +2433,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 	{
 		mmd::VMD_Morph morph_frame = (this->morph_frames)[morph_frame_number];
 		maxon::AutoMem<maxon::Char> morph_name = NewMemClear(maxon::Char, (morph_frame.morph_name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
-		EncodingConversion::UTF8toSJIS(morph_frame.morph_name, morph_name);
+		UTF8toSJIS(morph_frame.morph_name, morph_name);
 		if (!file->WriteBytes(morph_name, 15))
 			return(maxon::Error());
 		if (!file->WriteUInt32(morph_frame.frame_no))
@@ -2536,17 +2455,17 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 			return(maxon::Error());
 		if (!file->WriteBytes(&(camera_frame.rotation), sizeof(Vector32)))
 			return(maxon::Error());
-		if (!camera_frame.interpolator_x.WriteCameraInterpolator(file))
+		if (!camera_frame.interpolator_position_x.WriteCameraInterpolator(file))
 			return(maxon::Error());
-		if (!camera_frame.interpolator_y.WriteCameraInterpolator(file))
+		if (!camera_frame.interpolator_position_y.WriteCameraInterpolator(file))
 			return(maxon::Error());
-		if (!camera_frame.interpolator_z.WriteCameraInterpolator(file))
+		if (!camera_frame.interpolator_position_z.WriteCameraInterpolator(file))
 			return(maxon::Error());
-		if (!camera_frame.interpolator_r.WriteCameraInterpolator(file))
+		if (!camera_frame.interpolator_position_r.WriteCameraInterpolator(file))
 			return(maxon::Error());
-		if (!camera_frame.interpolator_d.WriteCameraInterpolator(file))
+		if (!camera_frame.interpolator_position_d.WriteCameraInterpolator(file))
 			return(maxon::Error());
-		if (!camera_frame.interpolator_v.WriteCameraInterpolator(file))
+		if (!camera_frame.interpolator_position_v.WriteCameraInterpolator(file))
 			return(maxon::Error());
 		if (!file->WriteUInt32(camera_frame.viewing_angle))
 			return(maxon::Error());
@@ -2579,14 +2498,14 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 			return(maxon::Error());
 		if (!file->WriteBool(model_frame.show))
 			return(maxon::Error());
-		UInt32 ikInfoCount = model_frame.ik_Infos.GetCount();
+		UInt32 ikInfoCount = model_frame.IKs_Info.GetCount();
 		if (!file->WriteUInt32(ikInfoCount))
 			return(maxon::Error());
 		while (ikInfoCount--)
 		{
-			VMD_IkInfo ikInfo = model_frame.ik_Infos[ikInfoCount];
+			VMD_IkInfo ikInfo = model_frame.IKs_Info[ikInfoCount];
 			maxon::AutoMem<maxon::Char> ik_name_ = NewMemClear(maxon::Char, (ikInfo.name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
-			EncodingConversion::UTF8toSJIS(ikInfo.name, ik_name_);
+			UTF8toSJIS(ikInfo.name, ik_name_);
 			if (!file->WriteBytes(ik_name_, 20))
 				return(maxon::Error());
 			if (!file->WriteUChar(ikInfo.enable))
@@ -2632,15 +2551,13 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 		return(maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR)));
 	}
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
-	maxon::UniqueRef<mmd::VMDAnimation> mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
-
-	iferr(mmd_animation->LoadFromFile(fn))
+	iferr(this->LoadFromFile(fn))
 	{
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR)));
 	}
-	if (mmd_animation->IsCamera)
+	if (this->IsCamera)
 	{
 		doc->StartUndo();
 
@@ -2694,19 +2611,19 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 		VMD_camera_distance->InsertTrackSorted(camera_track_distance);
 		VMD_camera_distance->InsertTrackSorted(camera_track_AOV);
 
-		const BaseTime kMaxTime = maxon::Max(doc->GetMaxTime(), BaseTime((mmd_animation->camera_frames.End() - 1).GetPtr()->frame_no, 30.));
+		const BaseTime kMaxTime = maxon::Max(doc->GetMaxTime(), BaseTime((this->camera_frames.End() - 1).GetPtr()->frame_no, 30.));
 		BaseTime	key_on_time = BaseTime(0, 30.);
 		Int32		key_on_frame = 0;
 		mmd::VMD_Camera now_camera_frame, next_camera_frame;
-		const Int	camera_frame_number = mmd_animation->camera_frames.GetCount();
+		const Int	camera_frame_number = this->camera_frames.GetCount();
 		for (Int camera_frame_index = 0; camera_frame_index < camera_frame_number; camera_frame_index++)
 		{
 			StatusSetText("Import camera..."_s);
 			StatusSetSpin();
 			if (camera_frame_index == 0 && camera_frame_number != 1)
 			{
-				now_camera_frame = mmd_animation->camera_frames[camera_frame_index];
-				next_camera_frame = mmd_animation->camera_frames[camera_frame_index + 1];
+				now_camera_frame = this->camera_frames[camera_frame_index];
+				next_camera_frame = this->camera_frames[camera_frame_index + 1];
 			}
 			else if (camera_frame_index == camera_frame_number - 1)
 			{
@@ -2714,7 +2631,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 			}
 			else {
 				now_camera_frame = next_camera_frame;
-				next_camera_frame = mmd_animation->camera_frames[camera_frame_index + 1];
+				next_camera_frame = this->camera_frames[camera_frame_index + 1];
 			}
 			key_on_frame = Int32(now_camera_frame.frame_no) + maxon::SafeConvert<Int32>(setting.time_offset);
 			key_on_time = BaseTime(key_on_frame, 30.);
@@ -2724,21 +2641,21 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 			camera_key_position_x->SetValue(camera_curve_position_x, now_camera_frame.position.x * setting.position_multiple);
 			camera_key_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_position_x->InsertKey(camera_key_position_x);
-			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, key_on_frame,std::move(now_camera_frame.interpolator_x));
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, key_on_frame,std::move(now_camera_frame.interpolator_position_x));
 
 			CKey* camera_key_position_y = CKey::Alloc();      /* _position_y */
 			camera_key_position_y->SetTime(camera_curve_position_y, key_on_time);
 			camera_key_position_y->SetValue(camera_curve_position_y, now_camera_frame.position.y * setting.position_multiple);
 			camera_key_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_position_y->InsertKey(camera_key_position_y);
-			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, key_on_frame, std::move(now_camera_frame.interpolator_y));
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, key_on_frame, std::move(now_camera_frame.interpolator_position_y));
 
 			CKey* camera_key_position_z = CKey::Alloc();      /* _position_z */
 			camera_key_position_z->SetTime(camera_curve_position_z, key_on_time);
 			camera_key_position_z->SetValue(camera_curve_position_z, now_camera_frame.position.z * setting.position_multiple);
 			camera_key_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_position_z->InsertKey(camera_key_position_z);
-			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, key_on_frame, std::move(now_camera_frame.interpolator_z));
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, key_on_frame, std::move(now_camera_frame.interpolator_position_z));
 
 			CKey* camera_key_rotation_x = CKey::Alloc();      /* RH(y) */
 			camera_key_rotation_x->SetTime(camera_curve_rotation_x, key_on_time);
@@ -2757,21 +2674,21 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 			camera_key_rotation_z->SetValue(camera_curve_rotation_z, now_camera_frame.rotation.z);
 			camera_key_rotation_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_rotation_z->InsertKey(camera_key_rotation_z);
-			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, key_on_frame, std::move(now_camera_frame.interpolator_r));
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, key_on_frame, std::move(now_camera_frame.interpolator_position_r));
 
 			CKey* camera_key_distance = CKey::Alloc();;
 			camera_key_distance->SetTime(camera_curve_distance, key_on_time);
 			camera_key_distance->SetValue(camera_curve_distance, now_camera_frame.distance * setting.position_multiple);
 			camera_key_distance->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_distance->InsertKey(camera_key_distance);
-			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_DCURVE, key_on_frame, std::move(now_camera_frame.interpolator_d));
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_DCURVE, key_on_frame, std::move(now_camera_frame.interpolator_position_d));
 
 			CKey* camera_key_AOV = CKey::Alloc();
 			camera_key_AOV->SetTime(camera_curve_AOV, key_on_time);
 			camera_key_AOV->SetValue(camera_curve_AOV, now_camera_frame.viewing_angle);
 			camera_key_AOV->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_AOV->InsertKey(camera_key_AOV);
-			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, key_on_frame, std::move(now_camera_frame.interpolator_v));
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_VCURVE, key_on_frame, std::move(now_camera_frame.interpolator_position_v));
 		}
 		VMD_camera_data->UpdateAllInterpolator();
 		timing.Stop();
@@ -2924,7 +2841,6 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 	CCurve* camera_curve_AOV = CameraTrackAOV->GetCurve();	
 	CCurve* camera_curve_frame_on = camera_track_frame_on->GetCurve();
 	const Int32 kFps = doc->GetFps();
-	maxon::UniqueRef<mmd::VMDAnimation> mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
 	if (setting.use_bake == true) {
 		register const BaseTime kEndFrame = maxon::Max(maxon::Max(maxon::Max(maxon::Max(maxon::Max(maxon::Max(maxon::Max(
 			camera_curve_position_x->GetEndTime(),
@@ -2945,7 +2861,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 			camera_frame->rotation = Vector32(camera_curve_rotation_y->GetValue(time_on), camera_curve_rotation_x->GetValue(time_on), camera_curve_rotation_z->GetValue(time_on)); /*H(y) P(x) B(z)*/
 			camera_frame->distance = Float32(camera_curve_distance->GetValue(time_on) * setting.position_multiple);
 			camera_frame->viewing_angle = maxon::SafeConvert<UInt32>(camera_curve_AOV->GetValue(time_on));
-			mmd_animation->camera_frames.AppendPtr(camera_frame)iferr_return;
+			this->camera_frames.AppendPtr(camera_frame)iferr_return;
 		}
 	}
 	else {
@@ -2961,18 +2877,18 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 			camera_frame->distance = Float32(camera_curve_distance->GetKey(frame_index)->GetValue() * setting.position_multiple);
 			camera_frame->viewing_angle = maxon::SafeConvert<UInt32>(camera_curve_AOV->GetKey(frame_index)->GetValue());
 			camera_frame->perspective = 0;
-			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_XCURVE, Frame_on, camera_frame->interpolator_x);
-			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_YCURVE, Frame_on, camera_frame->interpolator_y);
-			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_ZCURVE, Frame_on, camera_frame->interpolator_z);
-			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_RCURVE, Frame_on, camera_frame->interpolator_r);
-			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_DCURVE, Frame_on, camera_frame->interpolator_d);
-			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_VCURVE, Frame_on, camera_frame->interpolator_v);
-			mmd_animation->camera_frames.AppendPtr(camera_frame)iferr_return;
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_XCURVE, Frame_on, camera_frame->interpolator_position_x);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_YCURVE, Frame_on, camera_frame->interpolator_position_y);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_ZCURVE, Frame_on, camera_frame->interpolator_position_z);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_RCURVE, Frame_on, camera_frame->interpolator_position_r);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_DCURVE, Frame_on, camera_frame->interpolator_position_d);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_VCURVE, Frame_on, camera_frame->interpolator_position_v);
+			this->camera_frames.AppendPtr(camera_frame)iferr_return;
 		}
 	}
-	mmd_animation->ModelName = "カメラ・照明"_s;
-	mmd_animation->IsCamera = true;
-	iferr(mmd_animation->SaveToFile(fn))
+	this->ModelName = "カメラ・照明"_s;
+	this->IsCamera = true;
+	iferr(this->SaveToFile(fn))
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
@@ -2980,12 +2896,12 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 	}
 	timing.Stop();
 	StatusClear();
-	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::IntToString(mmd_animation->camera_frames.GetCount()), String::FloatToString(timing.GetMilliseconds())));
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::IntToString(this->camera_frames.GetCount()), String::FloatToString(timing.GetMilliseconds())));
 	return(maxon::OK);
 }
 
 
-maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_settings setting)
+maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_settings setting)
 {
 	maxon::HashMap<String, maxon::BaseList<bone_obj_tag>*>	bone_name_map;
 	maxon::HashMap<String, maxon::BaseList<morph_id_tag>*>	morph_name_map;
@@ -2993,10 +2909,10 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 	maxon::HashMap<String, maxon::BaseList<VMD_Motion>*>	MotionFrameList_map;
 	maxon::HashMap<String, maxon::BaseList<VMD_Morph>*>	MorphFrameList_map;
 	iferr_scope_handler{
+		MessageDialog(err.ToString(nullptr));
 		EXIT_FromFileImportMotions
 		return err;
 	};	
-	
 	BaseDocument* doc = GetActiveDocument();
 	if (doc == nullptr)
 	{
@@ -3022,17 +2938,14 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
 		return(maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR)));
 	}
-
 	maxon::TimeValue			timing = maxon::TimeValue::GetTime();
-	maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
-
-	iferr(mmd_animation->LoadFromFile(fn))
+	iferr(this->LoadFromFile(fn))
 	{
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
 		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR)));
 	}
-	if (mmd_animation->IsCamera == 1)
+	if (this->IsCamera == 1)
 	{
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
@@ -3525,40 +3438,40 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 	nodes.Reset();
 	maxon::BaseArray<String> motion_bone_name_array;
 	maxon::BaseArray<String> motion_morph_name_array;
-	const Int32 MotionFrameNumber = mmd_animation->motion_frames.GetCount();
+	const Int32 MotionFrameNumber = this->motion_frames.GetCount();
 	if (setting.import_motion == true) 
 	{
 		for (Int32 motion_frame_index = 0; motion_frame_index < MotionFrameNumber; motion_frame_index++)
 		{
-			String	bone_name = mmd_animation->motion_frames[motion_frame_index].bone_name;
+			String	bone_name = this->motion_frames[motion_frame_index].bone_name;
 			auto	MotionFrame_ptr = MotionFrameList_map.Find(bone_name);
 			if (MotionFrame_ptr == nullptr)
 			{
 				maxon::BaseList<VMD_Motion>* MotionFrame = NewObj(maxon::BaseList<VMD_Motion>) iferr_return;
-				MotionFrame->Append(mmd_animation->motion_frames[motion_frame_index]) iferr_return;
+				MotionFrame->Append(this->motion_frames[motion_frame_index]) iferr_return;
 				MotionFrameList_map.Insert(bone_name, MotionFrame) iferr_return;
 				motion_bone_name_array.Append(bone_name)iferr_return;
 			}
 			else {
-				MotionFrame_ptr->GetValue()->Append(mmd_animation->motion_frames[motion_frame_index]) iferr_return;
+				MotionFrame_ptr->GetValue()->Append(this->motion_frames[motion_frame_index]) iferr_return;
 			}
 		}
 	}
-	const Int32 MorphFrameNumber = mmd_animation->morph_frames.GetCount();
+	const Int32 MorphFrameNumber = this->morph_frames.GetCount();
 	if (setting.import_morph == true) {
 		for (Int32 morph_frame_index = 0; morph_frame_index < MorphFrameNumber; morph_frame_index++)
 		{
-			String	morph_name = mmd_animation->morph_frames[morph_frame_index].morph_name;
+			String	morph_name = this->morph_frames[morph_frame_index].morph_name;
 			auto	MorphFrame_ptr = MorphFrameList_map.Find(morph_name);
 			if (MorphFrame_ptr == nullptr)
 			{
 				maxon::BaseList<VMD_Morph>* MorphFrame = NewObj(maxon::BaseList<VMD_Morph>) iferr_return;
-				MorphFrame->Append(mmd_animation->morph_frames[morph_frame_index]) iferr_return;
+				MorphFrame->Append(this->morph_frames[morph_frame_index]) iferr_return;
 				MorphFrameList_map.Insert(morph_name, MorphFrame) iferr_return;
 				motion_morph_name_array.Append(morph_name)iferr_return;
 			}
 			else {
-				MorphFrame_ptr->GetValue()->Append(mmd_animation->morph_frames[morph_frame_index]) iferr_return;
+				MorphFrame_ptr->GetValue()->Append(this->morph_frames[morph_frame_index]) iferr_return;
 			}
 		}
 	}
@@ -3568,15 +3481,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 	Int32 MaxTime;
 	if (MorphFrameNumber != 0 && MotionFrameNumber != 0)
 	{
-		MaxTime = maxon::Max((doc->GetMaxTime()).GetFrame(30.), maxon::Max((Int32)mmd_animation->motion_frames[MotionFrameNumber - 1].frame_no, (Int32)mmd_animation->morph_frames[MorphFrameNumber - 1].frame_no));
+		MaxTime = maxon::Max((doc->GetMaxTime()).GetFrame(30.), maxon::Max((Int32)this->motion_frames[MotionFrameNumber - 1].frame_no, (Int32)this->morph_frames[MorphFrameNumber - 1].frame_no));
 	}
 	else if (MorphFrameNumber != 0)
 	{
-		MaxTime = maxon::Max((doc->GetMaxTime()).GetFrame(30.), (Int32)mmd_animation->morph_frames[MorphFrameNumber - 1].frame_no);
+		MaxTime = maxon::Max((doc->GetMaxTime()).GetFrame(30.), (Int32)this->morph_frames[MorphFrameNumber - 1].frame_no);
 	}
 	else if (MotionFrameNumber != 0)
 	{
-		MaxTime = maxon::Max((doc->GetMaxTime()).GetFrame(30.), (Int32)mmd_animation->motion_frames[MotionFrameNumber - 1].frame_no);
+		MaxTime = maxon::Max((doc->GetMaxTime()).GetFrame(30.), (Int32)this->motion_frames[MotionFrameNumber - 1].frame_no);
 	}
 	else {
 		MaxTime = doc->GetMaxTime().GetFrame(30.);
@@ -3699,18 +3612,18 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 										MotionKey_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 										MotionKey_position_x->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 										ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.position_multiple - MotionFrame.position.x * setting.position_multiple;
-										if (MotionFrame.interpolator_x.ax == 127 - MotionFrame.interpolator_x.bx && MotionFrame.interpolator_x.ay == 127 - MotionFrame.interpolator_x.by)
+										if (MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::by))
 										{
 											MotionKey_position_x->SetInterpolation(BoneCurve_position_x, CINTERPOLATION::LINEAR);
 										}
 										else {
 											MotionKey_position_x->SetTimeLeft(BoneCurve_position_x, MotionKeyTimeLeft[0]);
 											MotionKey_position_x->SetValueLeft(BoneCurve_position_x, MotionKeyValueLeft[0]);
-											MotionKey_position_x->SetTimeRight(BoneCurve_position_x, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ax / 127.0), 30.));
-											MotionKey_position_x->SetValueRight(BoneCurve_position_x, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ay / 127.0));
+											MotionKey_position_x->SetTimeRight(BoneCurve_position_x, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
+											MotionKey_position_x->SetValueRight(BoneCurve_position_x, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) / 127.0));
 										}
-										MotionKeyTimeLeft[0] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.bx / 127.0), 30.);
-										MotionKeyValueLeft[0] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.by / 127.0);
+										MotionKeyTimeLeft[0] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
+										MotionKeyValueLeft[0] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::by) / 127.0);
 										BoneCurve_position_x->InsertKey(MotionKey_position_x);
 
 										CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
@@ -3719,18 +3632,18 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 										MotionKey_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 										MotionKey_position_y->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 										ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.position_multiple - MotionFrame.position.y * setting.position_multiple;
-										if (MotionFrame.interpolator_y.ax == 127 - MotionFrame.interpolator_y.bx && MotionFrame.interpolator_y.ay == 127 - MotionFrame.interpolator_y.by)
+										if (MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::by))
 										{
 											MotionKey_position_y->SetInterpolation(BoneCurve_position_y, CINTERPOLATION::LINEAR);
 										}
 										else {
 											MotionKey_position_y->SetTimeLeft(BoneCurve_position_y, MotionKeyTimeLeft[1]);
 											MotionKey_position_y->SetValueLeft(BoneCurve_position_y, MotionKeyValueLeft[1]);
-											MotionKey_position_y->SetTimeRight(BoneCurve_position_y, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ax / 127.0), 30.));
-											MotionKey_position_y->SetValueRight(BoneCurve_position_y, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ay / 127.0));
+											MotionKey_position_y->SetTimeRight(BoneCurve_position_y, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
+											MotionKey_position_y->SetValueRight(BoneCurve_position_y, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) / 127.0));
 										}
-										MotionKeyTimeLeft[1] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.bx / 127.0), 30.);
-										MotionKeyValueLeft[1] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.by / 127.0);
+										MotionKeyTimeLeft[1] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
+										MotionKeyValueLeft[1] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::by) / 127.0);
 										BoneCurve_position_y->InsertKey(MotionKey_position_y);
 
 										CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
@@ -3739,18 +3652,18 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 										MotionKey_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 										MotionKey_position_z->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 										ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.position_multiple - MotionFrame.position.z * setting.position_multiple;
-										if (MotionFrame.interpolator_z.ax == 127 - MotionFrame.interpolator_z.bx && MotionFrame.interpolator_z.ay == 127 - MotionFrame.interpolator_z.by)
+										if (MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::by))
 										{
 											MotionKey_position_z->SetInterpolation(BoneCurve_position_z, CINTERPOLATION::LINEAR);
 										}
 										else {
 											MotionKey_position_z->SetTimeLeft(BoneCurve_position_z, MotionKeyTimeLeft[2]);
 											MotionKey_position_z->SetValueLeft(BoneCurve_position_z, MotionKeyValueLeft[2]);
-											MotionKey_position_z->SetTimeRight(BoneCurve_position_z, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ax / 127.0), 30.));
-											MotionKey_position_z->SetValueRight(BoneCurve_position_z, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ay / 127.0));
+											MotionKey_position_z->SetTimeRight(BoneCurve_position_z, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
+											MotionKey_position_z->SetValueRight(BoneCurve_position_z, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) / 127.0));
 										}
-										MotionKeyTimeLeft[2] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.bx / 127.0), 30.);
-										MotionKeyValueLeft[2] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.by / 127.0);
+										MotionKeyTimeLeft[2] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
+										MotionKeyValueLeft[2] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::by) / 127.0);
 										BoneCurve_position_z->InsertKey(MotionKey_position_z);
 
 										CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
@@ -3874,17 +3787,17 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 											MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
 											MotionKey_position_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
 											BoneCurve_position_x->InsertKey(MotionKey_position_x);
-											tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no,MotionFrame.interpolator_x);
+											tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no,MotionFrame.interpolator_position_x);
 											CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
 											MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
 											MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
 											BoneCurve_position_y->InsertKey(MotionKey_position_y);
-											tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, MotionFrame.interpolator_y);
+											tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, MotionFrame.interpolator_position_y);
 											CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
 											MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
 											MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
 											BoneCurve_position_z->InsertKey(MotionKey_position_z);
-											tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no,  MotionFrame.interpolator_z);
+											tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no,  MotionFrame.interpolator_position_z);
 										}
 										if (Is_rotatable)
 										{
@@ -3901,7 +3814,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 											MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
 											MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
 											BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
-											tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no, MotionFrame.interpolator_r);
+											tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no, MotionFrame.interpolator_position_r);
 										}
 									}
 									tag_data->UpdateAllInterpolator();
@@ -4058,18 +3971,18 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 								MotionKey_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 								MotionKey_position_x->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 								ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.position_multiple - MotionFrame.position.x * setting.position_multiple;
-								if (MotionFrame.interpolator_x.ax == 127 - MotionFrame.interpolator_x.bx && MotionFrame.interpolator_x.ay == 127 - MotionFrame.interpolator_x.by)
+								if (MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::by))
 								{
 									MotionKey_position_x->SetInterpolation(BoneCurve_position_x, CINTERPOLATION::LINEAR);
 								}
 								else {
 									MotionKey_position_x->SetTimeLeft(BoneCurve_position_x, MotionKeyTimeLeft[0]);
 									MotionKey_position_x->SetValueLeft(BoneCurve_position_x, MotionKeyValueLeft[0]);
-									MotionKey_position_x->SetTimeRight(BoneCurve_position_x, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ax / 127.0), 30.));
-									MotionKey_position_x->SetValueRight(BoneCurve_position_x, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.ay / 127.0));
+									MotionKey_position_x->SetTimeRight(BoneCurve_position_x, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
+									MotionKey_position_x->SetValueRight(BoneCurve_position_x, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) / 127.0));
 								}
-								MotionKeyTimeLeft[0] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.bx / 127.0), 30.);
-								MotionKeyValueLeft[0] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_x.by / 127.0);
+								MotionKeyTimeLeft[0] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
+								MotionKeyValueLeft[0] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::by) / 127.0);
 								BoneCurve_position_x->InsertKey(MotionKey_position_x);
 
 								CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
@@ -4078,18 +3991,18 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 								MotionKey_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 								MotionKey_position_y->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 								ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.position_multiple - MotionFrame.position.y * setting.position_multiple;
-								if (MotionFrame.interpolator_y.ax == 127 - MotionFrame.interpolator_y.bx && MotionFrame.interpolator_y.ay == 127 - MotionFrame.interpolator_y.by)
+								if (MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::by))
 								{
 									MotionKey_position_y->SetInterpolation(BoneCurve_position_y, CINTERPOLATION::LINEAR);
 								}
 								else {
 									MotionKey_position_y->SetTimeLeft(BoneCurve_position_y, MotionKeyTimeLeft[1]);
 									MotionKey_position_y->SetValueLeft(BoneCurve_position_y, MotionKeyValueLeft[1]);
-									MotionKey_position_y->SetTimeRight(BoneCurve_position_y, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ax / 127.0), 30.));
-									MotionKey_position_y->SetValueRight(BoneCurve_position_y, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.ay / 127.0));
+									MotionKey_position_y->SetTimeRight(BoneCurve_position_y, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
+									MotionKey_position_y->SetValueRight(BoneCurve_position_y, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) / 127.0));
 								}
-								MotionKeyTimeLeft[1] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.bx / 127.0), 30.);
-								MotionKeyValueLeft[1] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_y.by / 127.0);
+								MotionKeyTimeLeft[1] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
+								MotionKeyValueLeft[1] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::by) / 127.0);
 								BoneCurve_position_y->InsertKey(MotionKey_position_y);
 
 								CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
@@ -4098,18 +4011,18 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 								MotionKey_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 								MotionKey_position_z->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
 								ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.position_multiple - MotionFrame.position.z * setting.position_multiple;
-								if (MotionFrame.interpolator_z.ax == 127 - MotionFrame.interpolator_z.bx && MotionFrame.interpolator_z.ay == 127 - MotionFrame.interpolator_z.by)
+								if (MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::by))
 								{
 									MotionKey_position_z->SetInterpolation(BoneCurve_position_z, CINTERPOLATION::LINEAR);
 								}
 								else {
 									MotionKey_position_z->SetTimeLeft(BoneCurve_position_z, MotionKeyTimeLeft[2]);
 									MotionKey_position_z->SetValueLeft(BoneCurve_position_z, MotionKeyValueLeft[2]);
-									MotionKey_position_z->SetTimeRight(BoneCurve_position_z, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ax / 127.0), 30.));
-									MotionKey_position_z->SetValueRight(BoneCurve_position_z, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.ay / 127.0));
+									MotionKey_position_z->SetTimeRight(BoneCurve_position_z, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
+									MotionKey_position_z->SetValueRight(BoneCurve_position_z, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) / 127.0));
 								}
-								MotionKeyTimeLeft[2] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.bx / 127.0), 30.);
-								MotionKeyValueLeft[2] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_z.by / 127.0);
+								MotionKeyTimeLeft[2] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
+								MotionKeyValueLeft[2] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::by) / 127.0);
 								BoneCurve_position_z->InsertKey(MotionKey_position_z);
 
 								CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
@@ -4256,17 +4169,17 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 									MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
 									MotionKey_position_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
 									BoneCurve_position_x->InsertKey(MotionKey_position_x);
-									tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no, MotionFrame.interpolator_x);
+									tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no, MotionFrame.interpolator_position_x);
 									CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
 									MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
 									MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
 									BoneCurve_position_y->InsertKey(MotionKey_position_y);
-									tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, MotionFrame.interpolator_y);
+									tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, MotionFrame.interpolator_position_y);
 									CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
 									MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
 									MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
 									BoneCurve_position_z->InsertKey(MotionKey_position_z);
-									tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no, MotionFrame.interpolator_z);
+									tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no, MotionFrame.interpolator_position_z);
 								}
 								if (Is_rotatable)
 								{
@@ -4283,7 +4196,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 									MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
 									MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
 									BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
-									tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no,MotionFrame.interpolator_r);
+									tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no,MotionFrame.interpolator_position_r);
 								}
 							}
 							tag_data->UpdateAllInterpolator();
@@ -4413,11 +4326,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 			SelectObject->InsertTrackSorted(ModelRenderDisplayTrack);
 		}
 		CCurve* ModelRenderDisplayCurve = ModelRenderDisplayTrack->GetCurve();
-		const Int ModelFrameNumber = mmd_animation->model_frames.GetCount();
+		const Int ModelFrameNumber = this->model_frames.GetCount();
 		for (Int model_frame_index = 0; model_frame_index < ModelFrameNumber; model_frame_index++)
 		{
 			StatusSetSpin();
-			const mmd::VMD_Model& model_frame = mmd_animation->model_frames[model_frame_index];
+			const mmd::VMD_Model& model_frame = this->model_frames[model_frame_index];
 			BaseTime		time = BaseTime(model_frame.frame_no + setting.time_offset, 30.);
 			CKey* ModelEditorDisplayKey = CKey::Alloc();
 			ModelEditorDisplayKey->SetTime(ModelEditorDisplayCurve, time);
@@ -4427,7 +4340,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 			ModelRenderDisplayKey->SetTime(ModelRenderDisplayCurve, time);
 			ModelRenderDisplayKey->SetValue(ModelRenderDisplayCurve, !model_frame.show);
 			ModelRenderDisplayCurve->InsertKey(ModelRenderDisplayKey);
-			for (const mmd::VMD_IkInfo& ikInfo : model_frame.ik_Infos)
+			for (const mmd::VMD_IkInfo& ikInfo : model_frame.IKs_Info)
 			{
 				auto ikTagListPtr = ik_tag_map.Find(ikInfo.name);
 				if (ikTagListPtr != nullptr)
@@ -4482,7 +4395,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotions(VMD_Motions_import_
 }
 
 
-maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_export_settings setting) {
+maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_export_settings setting) {
 	iferr_scope;
 	Filename		fn;
 	BaseDocument* doc = GetActiveDocument();
@@ -4512,9 +4425,8 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 	}
 	
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
-	maxon::UniqueRef<mmd::VMDAnimation> mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
-	mmd_animation->ModelName = select_object->GetName();
-	mmd_animation->IsCamera = false;
+	this->ModelName = select_object->GetName();
+	this->IsCamera = false;
 	maxon::HashSet<bone_obj_tag>	bone_set;
 	maxon::HashSet<morph_id_tag>	morph_set;
 	maxon::HashSet<BaseTag*>		ik_tag_set;
@@ -4644,7 +4556,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 						rotation.z = curve_rotation_z->GetValue(time_on);
 						vmd_motion_data->rotation = EulerToQuaternion(rotation);
 						/*The interpolation curve is linear and the default values are used.*/
-						mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
+						this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 					}
 				}
 				else if (curve_rotation_x == nullptr || curve_rotation_y == nullptr || curve_rotation_z == nullptr) 
@@ -4662,7 +4574,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 						vmd_motion_data->position.z = curve_position_z->GetValue(time_on) * setting.position_multiple;	
 						vmd_motion_data->rotation = bone_rotation;
 						/*The interpolation curve is linear and the default values are used.*/
-						mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
+						this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 					}
 				}
 				else
@@ -4683,7 +4595,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 						rotation.z = curve_rotation_z->GetValue(time_on);
 						vmd_motion_data->rotation = EulerToQuaternion(rotation);
 						/*The interpolation curve is linear and the default values are used.*/
-						mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
+						this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 					}
 				}
 			}
@@ -4760,12 +4672,12 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 							key = curve_rotation_z->GetKey(key_index);
 							rotation.z = key->GetValue();
 							vmd_motion_data->rotation = EulerToQuaternion(rotation);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_x);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_y);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_z);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_r);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_x);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_y);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_z);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_r);
 							vmd_motion_data->frame_no += setting.time_offset;
-							mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
+							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 						}
 					}
 					else if (curve_rotation_x == nullptr || curve_rotation_y == nullptr || curve_rotation_z == nullptr)
@@ -4784,12 +4696,12 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 							key = curve_position_z->GetKey(key_index);
 							vmd_motion_data->position.z = key->GetValue() * setting.position_multiple;
 							vmd_motion_data->rotation = bone_rotation;
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_x);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_y);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_z);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_r);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_x);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_y);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_z);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_r);
 							vmd_motion_data->frame_no += setting.time_offset;
-							mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
+							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 						}
 					}
 					else
@@ -4814,12 +4726,12 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 							key = curve_rotation_z->GetKey(key_index);
 							rotation.z = key->GetValue();
 							vmd_motion_data->rotation = EulerToQuaternion(rotation);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_x);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_y);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_z);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_r);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_x);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_y);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_z);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_r);
 							vmd_motion_data->frame_no += setting.time_offset;
-							mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
+							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 						}
 					}
 				
@@ -4893,7 +4805,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 							rotation.z = curve_rotation_z->GetValue(time_on);
 							vmd_motion_data->rotation = EulerToQuaternion(rotation);
 							/*The interpolation curve is linear and the default values are used.*/
-							mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
+							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 						}
 					}
 					else if (curve_rotation_x == nullptr || curve_rotation_y == nullptr || curve_rotation_z == nullptr)
@@ -4911,7 +4823,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 							vmd_motion_data->position.z = curve_position_z->GetValue(time_on) * setting.position_multiple;
 							vmd_motion_data->rotation = bone_rotation;
 							/*The interpolation curve is linear and the default values are used.*/
-							mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
+							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 						}
 					}
 					else
@@ -4932,7 +4844,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 							rotation.z = curve_rotation_z->GetValue(time_on);
 							vmd_motion_data->rotation = EulerToQuaternion(rotation);
 							/*The interpolation curve is linear and the default values are used.*/
-							mmd_animation->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
+							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 						}
 					}
 					if (kIsQuaternionRotation == true) {
@@ -4956,7 +4868,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 						vmd_morph_data->frame_no = key->GetTime().GetFrame(30.) + setting.time_offset;
 						vmd_morph_data->weight = key->GetValue();
 						vmd_morph_data->morph_name = morph.name;
-						mmd_animation->morph_frames.AppendPtr(vmd_morph_data)iferr_return;
+						this->morph_frames.AppendPtr(vmd_morph_data)iferr_return;
 					}
 				}
 			}
@@ -5025,9 +4937,9 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 						}
 					}
 					ikInfo->enable = IKEnableKey->GetGeData().GetBool();
-					model_frame->ik_Infos.AppendPtr(ikInfo)iferr_return;
+					model_frame->IKs_Info.AppendPtr(ikInfo)iferr_return;
 				}
-				mmd_animation->model_frames.AppendPtr(model_frame)iferr_return;
+				this->model_frames.AppendPtr(model_frame)iferr_return;
 			}
 		}
 		else {
@@ -5039,13 +4951,13 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 				ikTag->GetParameter(ID_CA_IK_TAG_TARGET, data, DESCFLAGS_GET::NONE);
 				ikInfo->name = data.GetBaseLink()->GetLink(doc)->GetName();
 				ikInfo->enable = true;
-				model_frame->ik_Infos.AppendPtr(ikInfo)iferr_return;
+				model_frame->IKs_Info.AppendPtr(ikInfo)iferr_return;
 			}
-			mmd_animation->model_frames.AppendPtr(model_frame)iferr_return;
+			this->model_frames.AppendPtr(model_frame)iferr_return;
 		}
 	}
 
-	iferr(mmd_animation->SaveToFile(fn))
+	iferr(this->SaveToFile(fn))
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
@@ -5053,7 +4965,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotions(VMD_Motions_exp
 	}
 	timing.Stop();
 	StatusClear();
-	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::IntToString(mmd_animation->motion_frames.GetCount() + mmd_animation->morph_frames.GetCount() + mmd_animation->model_frames.GetCount()), String::FloatToString(timing.GetMilliseconds())));
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::IntToString(this->motion_frames.GetCount() + this->morph_frames.GetCount() + this->model_frames.GetCount()), String::FloatToString(timing.GetMilliseconds())));
 	return(maxon::OK);
 }
 
@@ -5100,7 +5012,10 @@ Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::InitValues(void)
 
 Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::Command(Int32 id, const BaseContainer& msg)
 {
-	iferr_scope;
+	iferr_scope_handler{
+		MessageDialog(err.ToString(nullptr));
+		return false;
+	};
 	switch (id)
 	{
 	case 100005:
@@ -5110,7 +5025,8 @@ Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::Command(Int32 id, const BaseCont
 		setting_.doc = doc;
 		GetFloat(100002, setting_.position_multiple);
 		GetFloat(100004, setting_.time_offset);
-		iferr(mmd::VMDAnimation::FromFileImportCamera(setting_))
+		maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+		iferr(mmd_animation ->FromFileImportCamera(setting_))
 		{
 			return(false);
 		}
@@ -5142,7 +5058,7 @@ Bool mmd::VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, U
 	if (strncmp(VMDVersion, "Vocaloid Motion Data file", 26) || strncmp(VMDVersion, "Vocaloid Motion Data 0002", 26))
 	{
 		String ModelName;
-		EncodingConversion::SJIStoUTF8(VMDModelName, ModelName);
+		SJIStoUTF8(VMDModelName, ModelName);
 		if (ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) /* カメラ・照明 */
 		{
 			IsCamera = 1;

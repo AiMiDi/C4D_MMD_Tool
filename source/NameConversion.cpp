@@ -1,4 +1,4 @@
-﻿#include "NameConversion.h"
+#include "NameConversion.h"
 
 namespace YAML {
 	template<>

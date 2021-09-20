@@ -1,4 +1,4 @@
-﻿#ifndef __NAME_CONVERSION_H__
+#ifndef __NAME_CONVERSION_H__
 #define __NAME_CONVERSION_H__
 
 #include "main.h"
@@ -9,6 +9,7 @@
 #endif _HAS_EXCEPTIONS
 
 #include "yaml-cpp/yaml.h"
+#include "NameConversion.h"
 
 #define ID_MMD_TOOL 1056563
 

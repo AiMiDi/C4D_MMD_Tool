@@ -1,4 +1,4 @@
-﻿#ifndef MAIN_H__
+#ifndef MAIN_H__
 #define MAIN_H__
 
 /*
@@ -62,10 +62,15 @@
 #include "c4d_baseobject.h"
 #include "tprotection.h"
 #include "ImagesGUI.h"
-#include "MMD_struct.h"
 
 #if API_VERSION >= 21000
 #include "customgui_iconchooser.h"
+#endif
+
+#if API_VERSION < 23000
+namespace maxon {
+    using HashInt = UInt;
+}
 #endif
 
 class MMDTool;

@@ -1,5 +1,5 @@
 #ifndef __C4DBULLETTEST__H__
-#include "main.h"
+#include "MMD_utility.h"
 #include "MMD_PMX_Control.h"
 #include "btBulletDynamicsCommon.h"
 
