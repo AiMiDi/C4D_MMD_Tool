@@ -4,6 +4,12 @@
 #include "MMD_PMX_Control.h"
 #include "MMD_VPD_pose.h"
 
+#if API_VERSION >= 25000
+#define COMBO_BOX_W 253
+#else
+#define COMBO_BOX_W 242
+#endif
+
 /* Uniquely identify all dialog elements here. */
 enum
 {
@@ -108,7 +114,7 @@ public:
 		GroupBegin(1100, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_TOOL_TITLE), 0, 350, 0);
 		/* ImportCameraBegin */
 		GroupBegin(1001, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_IMPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1002, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -124,7 +130,7 @@ public:
 		GroupEnd();
 		/* ExportCameraBegin */
 		GroupBegin(1004, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_EXPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1005, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -137,7 +143,7 @@ public:
 		GroupEnd();
 		GroupBegin(1007, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN), BORDER_NONE);
-		AddComboBox(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, BFH_LEFT, 242, 10);
+		AddComboBox(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, BFH_LEFT, COMBO_BOX_W, 10);
 		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_X));
 		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 1, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Y));
 		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 2, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Z));
@@ -148,7 +154,7 @@ public:
 		GroupEnd();
 		/* ConversionCameraBegin */
 		GroupBegin(1008, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_CONVER_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1009, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -157,7 +163,7 @@ public:
 		GroupEnd();
 		GroupBegin(1010, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_CONVER_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN), BORDER_NONE);
-		AddComboBox(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, BFH_LEFT, 242, 10);
+		AddComboBox(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, BFH_LEFT, COMBO_BOX_W, 10);
 		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_X));
 		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 1, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Y));
 		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 2, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Z));
@@ -171,7 +177,7 @@ public:
 		GroupBegin(1400, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_TOOL_TITLE), 0, 350, 0);
 		/* ImportMotionBegin */
 		GroupBegin(1101, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_IMPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1102, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -191,11 +197,11 @@ public:
 		AddCheckbox(DLG_VMD_MOT_IMPORT_DETAIL, BFH_LEFT, 180, 13, GeLoadString(IDS_VMD_MOT_IMPORT_DETAIL));
 		GroupEnd();
 		AddButton(DLG_VMD_MOT_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_MOT_IMPORT_BUTTON));
-		/* ImportPostEnd */
+		/* ImportMotionEnd */
 		GroupEnd();		
-		/* ExportPostBegin */
+		/* ExportMotionBegin */
 		GroupBegin(1105, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_EXPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1106, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -208,7 +214,7 @@ public:
 		GroupEnd();
 		GroupBegin(1008, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_MOT_EXPORT_ROTATION_TWEEN), BORDER_NONE);
-		AddComboBox(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, BFH_LEFT, 242, 10);
+		AddComboBox(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, BFH_LEFT, COMBO_BOX_W, 10);
 		AddChild(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_MOT_EXPORT_ROTATION_TWEEN_X));
 		AddChild(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, 1, GeLoadString(IDS_VMD_MOT_EXPORT_ROTATION_TWEEN_Y));
 		AddChild(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, 2, GeLoadString(IDS_VMD_MOT_EXPORT_ROTATION_TWEEN_Z));
@@ -225,8 +231,8 @@ public:
 		GroupEnd();	
 		/* ImportPostBegin */
 		GroupBegin(1110, BFH_CENTER, 1, 2, GeLoadString(IDS_VPD_POSE_IMPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
-		GroupBorderSpace(5, 5, 5, 10);
+		GroupBorder(BORDER_IN);
+		GroupBorderSpace(28, 5, 28, 10);
 		GroupSpace(2, 5);
 		AddButton(DLG_VPD_POSE_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VPD_POSE_IMPORT_BUTTON));
 		/* ImportPostEnd */
@@ -237,7 +243,7 @@ public:
 		GroupBegin(1500, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_TOOL_TITLE), 0, 350, 0);
 		/* ImportModelBegin */
 		GroupBegin(1201, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_IMPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1202, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -245,7 +251,7 @@ public:
 		AddEditNumberArrows(DLG_PMX_MOD_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 		GroupBegin(1203, BFH_CENTER, 2, 6, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		AddCheckbox(DLG_PMX_MOD_IMPORT_POLYGON, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_POLYGON));
 		AddCheckbox(DLG_PMX_MOD_IMPORT_NORMAL, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_NORMAL));

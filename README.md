@@ -138,7 +138,15 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 ​	2. Add motion bake export. 
 
-​	3. Improve Ik.
+​	3.Improve Ik.
+
+**version 0.4.2**
+
+​	1. Add import pose.
+
+​	2. Improve the function of PMX Control.
+
+​	3. Support R25.
 
 ## usage
 
