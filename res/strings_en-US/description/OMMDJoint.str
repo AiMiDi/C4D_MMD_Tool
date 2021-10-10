@@ -11,6 +11,7 @@ STRINGTABLE OMMDJoint
 	JOINT_LINK_RIGID_GRP "Joint link rigid body";
 	JOINT_LINK_RIGID_A_INDEX "Rigid body A";
 	JOINT_LINK_RIGID_B_INDEX "Rigid body B";
+	JOINT_LINK_RIGID_SET_NAME_BUTTON "Set joint name by link rigid body";
 
 	JOINT_ATTITUDE_GRP "Position/Rotation";
 	JOINT_ATTITUDE_POSITION "Position";

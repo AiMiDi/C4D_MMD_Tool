@@ -175,17 +175,17 @@ namespace mmd {
 		/* 析构函数 */
 		~VMDAnimation()
 		{
-			motion_frames.Reset();
+			this->motion_frames.Reset();
 			/* 表情动画数据数组 */
-			morph_frames.Reset();
+			this->morph_frames.Reset();
 			/* 摄像机数据数组 */
-			camera_frames.Reset();
+			this->camera_frames.Reset();
 			/* 灯光数据数组 */
-			light_frames.Reset();
+			this->light_frames.Reset();
 			/* 灯光数据数组 */
-			shadow_frames.Reset();
+			this->shadow_frames.Reset();
 			/* 灯光数据数组 */
-			model_frames.Reset();
+			this->model_frames.Reset();
 		}
 		/* 从文件导入摄像机数据 */
 		maxon::Result<void> FromFileImportCamera(VMD_Camera_import_settings setting);

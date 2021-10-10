@@ -191,19 +191,14 @@ namespace mmd
 
 		BaseObject* kinematicObject = nullptr;
 		bool		overrideNode = true;
-		BaseLink* bonelink = bc->GetBaseLink(RIGID_RELATED_BONE_LINK);
 		BaseObject* node = nullptr;
-		if (bonelink != nullptr)
-		{
-			node = static_cast<BaseObject*>(bonelink->GetLink(pmxRigidBody->Get()->GetDocument()));
-		}
 		if (node != nullptr)
 		{
 			m_offsetMat = ~MatToGLMat(node->GetMl()) * rbMat;
 			kinematicObject = node;
 		}
 		else {
-			kinematicObject = pmxRigidBody->RigidRoot;
+			kinematicObject = pmxRigidBody->GetRootObject();
 			m_offsetMat = ~MatToGLMat(kinematicObject->GetMl()) * rbMat;
 			overrideNode = false;
 		}

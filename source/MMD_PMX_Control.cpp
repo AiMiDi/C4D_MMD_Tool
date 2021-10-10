@@ -2,7 +2,7 @@
 
 /*
  * *******************
- * PMX Model Tag
+ * PMX Model Object
  * *******************
  */
 
@@ -21,8 +21,53 @@ Bool mmd::OMMDModel::Init(GeListNode* node)
 	bc->SetString(COMMENTS_UNIVERSAL, "description"_s);
 	return(true);
 }
-
-
+Bool mmd::OMMDModel::Read(GeListNode* node, HyperFile* hf, Int32 level) {
+	AutoAlloc<BaseLink> mesh_root_link;
+	AutoAlloc<BaseLink> rigid_root_link;
+	AutoAlloc<BaseLink> joint_root_link;
+	AutoAlloc<BaseLink> bone_root_link;
+	if (!mesh_root_link->Read(hf))
+		return(false);
+	if (!rigid_root_link->Read(hf))
+		return(false);
+	if (!joint_root_link->Read(hf))
+		return(false);
+	if (!bone_root_link->Read(hf))
+		return(false);
+	this->MeshRoot = static_cast<BaseObject*>(mesh_root_link->GetLink(GetActiveDocument()));
+	this->RigidRoot = static_cast<BaseObject*>(rigid_root_link->GetLink(GetActiveDocument()));
+	this->JointRoot = static_cast<BaseObject*>(joint_root_link->GetLink(GetActiveDocument()));
+	this->BoneRoot = static_cast<BaseObject*>(bone_root_link->GetLink(GetActiveDocument()));
+	return true;
+}
+Bool mmd::OMMDModel::Write(GeListNode* node, HyperFile* hf) {
+	AutoAlloc<BaseLink> mesh_root_link;
+	AutoAlloc<BaseLink> rigid_root_link;
+	AutoAlloc<BaseLink> joint_root_link;
+	AutoAlloc<BaseLink> bone_root_link;
+	mesh_root_link->SetLink(this->MeshRoot);
+	rigid_root_link->SetLink(this->RigidRoot);
+	joint_root_link->SetLink(this->JointRoot);
+	bone_root_link->SetLink(this->BoneRoot);
+	if (!mesh_root_link->Write(hf))
+		return(false);
+	if (!rigid_root_link->Write(hf))
+		return(false);
+	if (!joint_root_link->Write(hf))
+		return(false);
+	if (!bone_root_link->Write(hf))
+		return(false);
+	return true;
+}
+Bool mmd::OMMDModel::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
+{
+	OMMDModel* const destObject = static_cast<OMMDModel*>(dest);
+	destObject->BoneRoot = this->BoneRoot;
+	destObject->JointRoot = this->JointRoot;
+	destObject->RigidRoot = this->RigidRoot;
+	destObject->MeshRoot = this->MeshRoot;
+	return(true);
+}
 EXECUTIONRESULT mmd::OMMDModel::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (op == nullptr || doc == nullptr)
@@ -54,76 +99,82 @@ EXECUTIONRESULT mmd::OMMDModel::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	nodes.Reset();
 	if (JointRoot_ == nullptr)
 	{
-		this->JointRoot = BaseObject::Alloc(ID_O_MMD_JOINT_ROOT);
-		this->JointRoot->InsertUnder(op);
+		BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_JOINT_ROOT);
+		tmp->InsertUnder(op);
+		this->JointRoot = tmp;
 	}
 	else {
 		this->JointRoot = JointRoot_;
 	}
 	if (RigidRoot_ == nullptr)
 	{
-		this->RigidRoot = BaseObject::Alloc(ID_O_MMD_RIGID_ROOT);
-		this->RigidRoot->InsertUnder(op);
+		BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_RIGID_ROOT);
+		tmp->InsertUnder(op);
+		this->RigidRoot = tmp;
 	}
 	else {
 		this->RigidRoot = RigidRoot_;
 	}
 	if (BoneRoot_ == nullptr)
 	{
-		this->BoneRoot = BaseObject::Alloc(ID_O_MMD_BONE_ROOT);
-		this->BoneRoot->InsertUnder(op);
+		BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_BONE_ROOT);
+		tmp->InsertUnder(op);
+		this->BoneRoot = tmp;
 	}
 	else {
 		this->BoneRoot = BoneRoot_;
 	}
 	if (MeshRoot_ == nullptr)
 	{
-		this->MeshRoot = BaseObject::Alloc(ID_O_MMD_MESH_ROOT);
-		this->MeshRoot->InsertUnder(op);
+		BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_MESH_ROOT);
+		tmp->InsertUnder(op);
+		this->MeshRoot = tmp;
 	}
 	else {
 		this->MeshRoot = MeshRoot_;
 	}
-	this->BoneRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_MSG_type::RigidRoot, this->RigidRoot).GetValue());
-	this->BoneRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_MSG_type::JointRoot, this->JointRoot).GetValue());
-	this->RigidRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_MSG_type::BoneRoot, this->BoneRoot).GetValue());
-	this->JointRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_MSG_type::BoneRoot, this->BoneRoot).GetValue());
-	this->JointRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_MSG_type::RigidRoot, this->RigidRoot).GetValue());
+	this->BoneRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_Root_type::RigidRoot, this->RigidRoot).GetValue());
+	this->BoneRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_Root_type::JointRoot, this->JointRoot).GetValue());
+	this->RigidRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_Root_type::BoneRoot, this->BoneRoot).GetValue());
+	this->RigidRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_Root_type::JointRoot, this->JointRoot).GetValue());
+	this->JointRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_Root_type::BoneRoot, this->BoneRoot).GetValue());
+	this->JointRoot->Message(ID_O_MMD_MODEL, NewObj(mmd::OMMDModel_MSG, OMMDModel_Root_type::RigidRoot, this->RigidRoot).GetValue());
 	return(EXECUTIONRESULT::OK);
 }
-
-
 Bool mmd::OMMDModel::CreateRoot()
 {
-	BaseObject* op = static_cast<BaseObject*>(Get());
-	if (op != nullptr)
+    BaseObject* op = static_cast<BaseObject*>(Get());
+	const BaseDocument* doc = GetActiveDocument();
+	if (op != nullptr && doc != nullptr)
 	{
 		if (this->JointRoot == nullptr)
 		{
-			this->JointRoot = BaseObject::Alloc(ID_O_MMD_JOINT_ROOT);
-			this->JointRoot->InsertUnder(op);
+			BaseObject* joint_root_object = BaseObject::Alloc(ID_O_MMD_JOINT_ROOT);
+			joint_root_object->InsertUnder(op);
+			this->JointRoot = joint_root_object;
 		}
 		if (this->RigidRoot == nullptr)
 		{
-			this->RigidRoot = BaseObject::Alloc(ID_O_MMD_RIGID_ROOT);
-			this->RigidRoot->InsertUnder(op);
+			BaseObject* rigid_root_object = BaseObject::Alloc(ID_O_MMD_RIGID_ROOT);
+			rigid_root_object->InsertUnder(op);
+			this->RigidRoot = rigid_root_object;
 		}
 		if (this->BoneRoot == nullptr)
 		{
-			this->BoneRoot = BaseObject::Alloc(ID_O_MMD_BONE_ROOT);
-			this->BoneRoot->InsertUnder(op);
+			BaseObject* bone_root_object = BaseObject::Alloc(ID_O_MMD_BONE_ROOT);
+			bone_root_object->InsertUnder(op);
+			this->BoneRoot = bone_root_object;
 		}
 		if (this->MeshRoot == nullptr)
 		{
-			this->MeshRoot = BaseObject::Alloc(ID_O_MMD_MESH_ROOT);
-			this->MeshRoot->InsertUnder(op);
+			BaseObject* mesh_root_object = BaseObject::Alloc(ID_O_MMD_MESH_ROOT);
+			mesh_root_object->InsertUnder(op);
+			this->MeshRoot = mesh_root_object;
 		}
 		return(true);
 	}
 	return(false);
 }
-
-
 Bool mmd::OMMDModel::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (list == nullptr || op == nullptr)
@@ -133,8 +184,6 @@ Bool mmd::OMMDModel::AddToExecution(BaseObject* op, PriorityList* list)
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return(true);
 }
-
-
 Bool mmd::OMMDModel::GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags)
 {
 	if (!description->LoadDescription("OMMDModel"_s))
@@ -158,8 +207,6 @@ Bool mmd::OMMDModel::GetDDescription(GeListNode* node, Description* description,
 
 	return(SUPER::GetDDescription(node, description, flags));
 }
-
-
 Bool mmd::OMMDModel::Message(GeListNode* node, Int32 type, void* data)
 {
 	switch (type)
@@ -440,7 +487,6 @@ Bool mmd::OMMDModel::Message(GeListNode* node, Int32 type, void* data)
 	return(true);
 }
 
-
 /*
  * *******************
  * PMX Bone Tag
@@ -512,8 +558,6 @@ inline Int32 mmd::TMMDBone::AddBondMorph(String morph_name)
 	}
 	return(index);
 }
-
-
 Bool mmd::TMMDBone::SplineDataCallBack(Int32 cid, const void* data)
 {
 	/* 还有其他一些回调类型，我们在这里仅使用SPLINE_CALLBACK_CORE_MESSAGE */
@@ -551,8 +595,6 @@ Bool mmd::TMMDBone::SplineDataCallBack(Int32 cid, const void* data)
 	}
 	return(true);
 }
-
-
 Bool mmd::TMMDBone::GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator)
 {
 	switch (type)
@@ -628,8 +670,6 @@ Bool mmd::TMMDBone::GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator&
 	}
 	return(true);
 }
-
-
 Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator,Bool cover)
 {
 	iferr_scope_handler{
@@ -767,8 +807,6 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator&
 	}
 	return(true);
 }
-
-
 Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 	iferr_scope_handler{
 		return false;
@@ -783,7 +821,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 	}
 
 	Bool quaternion_rotation_mode = obj->IsQuaternionRotationMode();
-	if (quaternion_rotation_mode = true) {
+	if (quaternion_rotation_mode == true) {
 		obj->SetQuaternionRotationMode(false, false);
 	}
 
@@ -794,7 +832,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 	CCurve* Curve_rotation_y = nullptr;
 	CCurve* Curve_rotation_z = nullptr;
 
-	node->GetDocument()->SetTime(BaseTime(0.));
+	GetActiveDocument()->SetTime(BaseTime(0.));
 
 	CTrack* Track_position_x = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
 	if (Track_position_x == nullptr)
@@ -924,7 +962,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 
 	frame_count = frame_set.GetCount() - 1;
 	frame_set.Reset();
-	const Float	Fps = node->GetDocument()->GetFps();
+	const Float	Fps = GetActiveDocument()->GetFps();
 	Float		ValueOfTwoFrames;
 	Int32		TimeOfTwoFrames;
 	Float KeyLeftX = 0., KeyLeftY = 0., KeyRightX = 0., KeyRightY = 0., NextKeyLeftX = 0., NextKeyLeftY = 0., NextKeyRightX = 0., NextKeyRightY = 0.;
@@ -1143,8 +1181,6 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation,GeListNode* node){
 	this->UpdateAllInterpolator(node);
 	return true;
 }
-
-
 inline Bool mmd::TMMDBone::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 	iferr_scope_handler{
 		return false;
@@ -1342,8 +1378,6 @@ inline Bool mmd::TMMDBone::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 	this->UpdateAllInterpolator(node);
 	return true;
 }
-
-
 inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 {	
 	if (obj == nullptr)
@@ -1519,8 +1553,6 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 	}
 	return(true);
 }
-
-
 inline Bool mmd::TMMDBone::DeleteKeyFrame(Int32 frame_on, GeListNode* node){
 	if (obj == nullptr)
 	{
@@ -1602,8 +1634,6 @@ inline Bool mmd::TMMDBone::DeleteKeyFrame(Int32 frame_on, GeListNode* node){
 	}
 	return true;
 }
-
-
 inline Bool  mmd::TMMDBone::DeleteAllKeyFrame(GeListNode* node) {
 	if (obj == nullptr)
 	{
@@ -1636,8 +1666,6 @@ inline Bool  mmd::TMMDBone::DeleteAllKeyFrame(GeListNode* node) {
 	obj->SetRelRot(Vector());
 	return true;
 }
-
-
 inline Bool mmd::TMMDBone::InitInterpolator(GeListNode* node)
 {
 	if (node == nullptr)
@@ -1663,26 +1691,25 @@ inline Bool mmd::TMMDBone::InitInterpolator(GeListNode* node)
 	bc->SetData(PMX_BONE_TAG_SPLINE, data);
 	return(true);
 }
-
-
 Bool mmd::TMMDBone::Init(GeListNode* node)
 {
 	if (node == nullptr)
 		return(false);
 	BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
 	if (bc == nullptr)
-		return(false);
+		return(false);	
 	bc->SetString(ID_BASELIST_NAME, GeLoadString(IDS_T_MMD_BONE));
 	bc->SetString(PMX_BONE_NAME_LOCAL, "bone"_s);
 	bc->SetInt32(PMX_BONE_NAME_IS_LOCAL, 2);
 	bc->SetString(PMX_BONE_NAME_UNIVERSAL, "bone"_s);
-	bc->SetInt32(PMX_BONE_PARENT_BONE_INDEX, -1);
+	bc->SetString(PMX_BONE_PARENT_BONE_INDEX, "-1"_s);
+	bc->SetString(PMX_BONE_PARENT_BONE_NAME, ""_s);
 	bc->SetInt32(PMX_BONE_ROTATABLE, 1);
 	bc->SetInt32(PMX_BONE_VISIBLE, 1);
 	bc->SetInt32(PMX_BONE_ENABLED, 1);
 	bc->SetInt32(PMX_BONE_TAIL_INDEX, -1);
 	bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, -1);
-	bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE, 1.0);
+	bc->SetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE, 1.0);
 	bc->SetVector(PMX_BONE_LOCAL_X, Vector(1, 0, 0));
 	bc->SetVector(PMX_BONE_LOCAL_Z, Vector(0, 0, 1));
 	GeData priority;
@@ -1700,23 +1727,11 @@ Bool mmd::TMMDBone::Init(GeListNode* node)
 		return(false);
 	return(true);
 }
-
-
 Bool mmd::TMMDBone::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
 {
 	if (id[0].id == PMX_BONE_TAG_FRAME_ON)
 	{
 		return(false);
-	}
-	if (id[0].id == PMX_BONE_PARENT_BONE_LINK)
-	{
-		GeData Ge_data;
-		node->GetParameter(DescID(PMX_BONE_PARENT_BONE_INDEX), Ge_data, DESCFLAGS_GET::NONE);
-		Int32 parent_bone_index = Ge_data.GetInt32();
-		if (parent_bone_index == -1)
-		{
-			return(false);
-		}
 	}
 	if (id[0].id == PMX_BONE_TAIL_INDEX)
 	{
@@ -1806,8 +1821,6 @@ Bool mmd::TMMDBone::GetDEnabling(GeListNode* node, const DescID& id, const GeDat
 	}
 	return(SUPER::GetDEnabling(node, id, t_data, flags, itemdesc));
 }
-
-
 EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (tag == nullptr || op == nullptr)
@@ -1861,25 +1874,20 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 	GeData		Ge_data;
 	BaseObject* up_obj = op->GetUp();
 	BaseObject* pred_obj = op->GetPred();
+	BaseTag* lase_tag = nullptr;
+	BaseObject* lase_obj = nullptr;
+	BaseObject* tmp_lase_obj = nullptr;
 	Int32		pred_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
 	if (up_obj != nullptr)
 	{
 		if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
 		{
-			BaseLink* parent_bone_link = BaseLink::Alloc();
-			if (parent_bone_link == nullptr)
-			{
-				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-				return(EXECUTIONRESULT::OK);
-			}
-			parent_bone_link->SetLink(up_obj);
-			tag->SetParameter(DescID(PMX_BONE_PARENT_BONE_LINK), parent_bone_link, DESCFLAGS_SET::NONE);
+			tag->SetParameter(DescID(PMX_BONE_PARENT_BONE_NAME), up_obj->GetName(), DESCFLAGS_SET::NONE);
 			BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE);
 			if (up_tag != nullptr)
 			{
 				up_tag->GetParameter(DescID(PMX_BONE_INDEX), Ge_data, DESCFLAGS_GET::NONE);
-				bc->SetInt32(PMX_BONE_PARENT_BONE_INDEX, Ge_data.GetString().ToInt32(nullptr));
+				bc->SetData(PMX_BONE_PARENT_BONE_INDEX, Ge_data);
 			}
 			if (pred_obj == nullptr)
 			{
@@ -1890,13 +1898,24 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 				}
 			}
 			else {
-				BaseObject* lase_obj = pred_obj;
-				while (lase_obj->GetDownLast() != nullptr)
-				{
-					lase_obj = lase_obj->GetDownLast();
+				/* 获取上一个骨骼 */
+				while (!pred_obj->IsInstanceOf(Ojoint)) {
+					pred_obj = pred_obj->GetPred();
 				}
-
-				BaseTag* lase_tag = lase_obj->GetTag(ID_T_MMD_BONE);
+				lase_obj = pred_obj;
+				/* 获取到最后一个骨骼 */
+				tmp_lase_obj = lase_obj->GetDownLast();
+				while (tmp_lase_obj != nullptr)
+				{
+					if (tmp_lase_obj->IsInstanceOf(Ojoint)) {
+						lase_obj = tmp_lase_obj;
+					}
+					else {
+						tmp_lase_obj = tmp_lase_obj->GetPred();
+					}
+					tmp_lase_obj = tmp_lase_obj->GetDownLast();
+				}
+				lase_tag = lase_obj->GetTag(ID_T_MMD_BONE);
 				if (lase_tag != nullptr)
 				{
 					lase_tag->GetParameter(PMX_BONE_INDEX, Ge_data, DESCFLAGS_GET::NONE);
@@ -1914,10 +1933,27 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 				bc->SetString(PMX_BONE_INDEX, "0"_s);
 			}
 			else {
-				BaseTag* pred_tag = pred_obj->GetTag(ID_T_MMD_BONE);
-				if (pred_tag != nullptr)
+				/* 获取上一个骨骼 */
+				while (!pred_obj->IsInstanceOf(Ojoint)) {
+					pred_obj = pred_obj->GetPred();
+				}
+				lase_obj = pred_obj;
+				/* 获取到最后一个骨骼 */
+				tmp_lase_obj = lase_obj->GetDownLast();
+				while (tmp_lase_obj!=nullptr)
 				{
-					pred_tag->GetParameter(PMX_BONE_INDEX, Ge_data, DESCFLAGS_GET::NONE);
+					if (tmp_lase_obj->IsInstanceOf(Ojoint)) {
+						lase_obj = tmp_lase_obj;
+					}
+					else {
+						tmp_lase_obj = tmp_lase_obj->GetPred();
+					}
+					tmp_lase_obj = tmp_lase_obj->GetDownLast();
+				}
+				lase_tag = lase_obj->GetTag(ID_T_MMD_BONE);
+				if (lase_tag != nullptr)
+				{
+					lase_tag->GetParameter(PMX_BONE_INDEX, Ge_data, DESCFLAGS_GET::NONE);
 					bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
 				}
 			}
@@ -1929,8 +1965,9 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 		bc->SetString(PMX_BONE_INDEX, "0"_s);
 	}
 	Int32 now_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
-	if (now_index != pred_index && this->BoneRoot != nullptr)
-		this->BoneRoot->Message(ID_T_MMD_BONE, NewObj(mmd::OMMDBone_MSG, pred_index, now_index, op).GetValue());
+	if (now_index != pred_index && this->BoneRoot != nullptr) {
+		this->BoneRoot->Message(ID_T_MMD_BONE, nullptr);
+	}
 	Int32	frame_on = bc->GetInt32(PMX_BONE_TAG_FRAME_ON);
 	Int32	curve_type = bc->GetInt32(PMX_BONE_TAG_CURVE_TYPE);
 	if (prev_frame != frame_on || prev_interpolator_type != curve_type)
@@ -2022,10 +2059,9 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 		if (inherit_bone_parent == nullptr)
 		{
 				BaseLink* inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
-				inherit_bone_parent = (BaseObject*)inherit_bone_parent_link->GetLink(tag->GetDocument());
-		}
-		if (inherit_bone_parent != nullptr)
-		{
+				if (inherit_bone_parent_link != nullptr)
+					inherit_bone_parent = (BaseObject*)inherit_bone_parent_link->GetLink(tag->GetDocument());
+		}else{
 			op->SetRelRot(inherit_bone_parent->GetRelRot() * bc->GetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE));
 		}
 	}
@@ -2034,14 +2070,12 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 		if (inherit_bone_parent == nullptr)
 		{
 			BaseLink* inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
-			inherit_bone_parent = (BaseObject*)inherit_bone_parent_link->GetLink(tag->GetDocument());
-		}
-		if (inherit_bone_parent != nullptr)
-		{
+			if (inherit_bone_parent_link != nullptr)
+				inherit_bone_parent = (BaseObject*)inherit_bone_parent_link->GetLink(tag->GetDocument());
+		}else{
 			op->SetRelPos(inherit_bone_parent->GetRelPos() * bc->GetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE));
 		}
 	}
-
 	op->GetParameter(DescID(ID_BASEOBJECT_FROZEN_POSITION), Ge_data, DESCFLAGS_GET::NONE);
 	Vector op_position = Ge_data.GetVector() - prev_position;
 	prev_position = Vector(0);
@@ -2069,8 +2103,6 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 
 	return(EXECUTIONRESULT::OK);
 }
-
-
 Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
@@ -2228,8 +2260,36 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 	}
 	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
 	{
-		BaseLink* inherit_bone_parent_link = t_data.GetBaseLink();
-		inherit_bone_parent = (BaseObject*)inherit_bone_parent_link->GetLink(node->GetDocument());
+		if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_LINK, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
+			if (this->BoneRoot != nullptr) {
+				BaseLink* inherit_bone_parent_link = t_data.GetBaseLink();
+				if (inherit_bone_parent_link != nullptr) {
+					inherit_bone_parent = static_cast<BaseObject*>(inherit_bone_parent_link->GetLink(GetActiveDocument()));
+					auto inherit_bone_parent_index_ptr = this->BoneRoot->GetNodeData<OMMDBoneRoot>()->BoneToIndexMap.Find(inherit_bone_parent);
+					if (inherit_bone_parent_index_ptr != nullptr) {
+						bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index_ptr->GetValue());
+					}
+				}
+			}
+		}
+		break;
+	}
+	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
+	{
+		if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_INDEX, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
+			if (this->BoneRoot != nullptr) {
+				Int32 inherit_bone_parent_index = t_data.GetInt32();
+				auto inherit_bone_parent_link_ptr = this->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(inherit_bone_parent_index);
+				if (inherit_bone_parent_link_ptr != nullptr) {
+					BaseLink* inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
+					if (inherit_bone_parent_link == nullptr) {
+						inherit_bone_parent_link = BaseLink::Alloc();
+						node->SetParameter(PMX_BONE_INHERIT_BONE_PARENT_LINK, inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+					}
+					inherit_bone_parent_link->SetLink(inherit_bone_parent_link_ptr->GetValue());
+				}
+			}
+		}
 		break;
 	}
 	case PMX_BONE_IS_IK:
@@ -2257,13 +2317,11 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
-
-
 inline Bool mmd::TMMDBone::RefreshColor(GeListNode* node, BaseObject* op)
 {
 	if (op == nullptr)
 	{
-		op = obj;
+		op = this->obj;
 	}
 	if (node == nullptr)
 	{
@@ -2313,8 +2371,6 @@ inline Bool mmd::TMMDBone::RefreshColor(GeListNode* node, BaseObject* op)
 	}
 	return(true);
 }
-
-
 Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
@@ -2475,8 +2531,36 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 		}
 		case PMX_BONE_INHERIT_BONE_PARENT_LINK:
 		{
-			BaseLink* inherit_bone_parent_link = bc->GetBaseLink(id);
-			inherit_bone_parent = (BaseObject*)inherit_bone_parent_link->GetLink(node->GetDocument());
+			if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_LINK, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
+				if (this->BoneRoot != nullptr) {
+					BaseLink* inherit_bone_parent_link = bc->GetBaseLink(id);
+					if (inherit_bone_parent_link != nullptr) {
+						inherit_bone_parent = static_cast<BaseObject*>(inherit_bone_parent_link->GetLink(GetActiveDocument()));
+						auto inherit_bone_parent_index_ptr = this->BoneRoot->GetNodeData<OMMDBoneRoot>()->BoneToIndexMap.Find(inherit_bone_parent);
+						if (inherit_bone_parent_index_ptr != nullptr) {
+							bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index_ptr->GetValue());
+						}
+					}
+				}
+			}
+			break;
+		}
+		case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
+		{
+			if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_INDEX, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
+				if (this->BoneRoot != nullptr) {
+					Int32 inherit_bone_parent_index = bc->GetInt32(id);
+					auto inherit_bone_parent_link_ptr = this->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(inherit_bone_parent_index);
+					if (inherit_bone_parent_link_ptr != nullptr) {
+						BaseLink* inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
+						if (inherit_bone_parent_link == nullptr) {
+							inherit_bone_parent_link = BaseLink::Alloc();
+							node->SetParameter(PMX_BONE_INHERIT_BONE_PARENT_LINK, inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+						}
+						inherit_bone_parent_link->SetLink(inherit_bone_parent_link_ptr->GetValue());
+					}
+				}
+			}
 			break;
 		}
 		case PMX_BONE_IS_IK:
@@ -2509,6 +2593,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 		DescriptionCommand* dc = (DescriptionCommand*)data;
 		if (dc == nullptr)
 			return(false);
+		BaseDocument* doc = node->GetDocument();
 		if (dc->_descId.GetDepth() == 2)
 		{
 			/* check if it is a user data button */
@@ -2583,8 +2668,8 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 		{
 			BaseTime time = GetActiveDocument()->GetTime();
 			this->RegisterKeyFrame(time.GetFrame(30.), node);
-			node->GetDocument()->SetTime(BaseTime());
-			node->GetDocument()->SetTime(time);
+			doc->SetTime(BaseTime());
+			doc->SetTime(time);
 			break;
 		}
 		case PMX_BONE_TAG_UPDATE_CURVE_BUTTON:
@@ -2599,8 +2684,8 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 				BaseTime time = GetActiveDocument()->GetTime();
 				this->DeleteKeyFrame(time.GetFrame(30.), node);
 				this->InitInterpolator(node);
-				node->GetDocument()->SetTime(BaseTime());
-				node->GetDocument()->SetTime(time);
+				doc->SetTime(BaseTime());
+				doc->SetTime(time);
 			}
 			break;
 		}
@@ -2610,8 +2695,8 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 			{
 				this->DeleteAllKeyFrame(node);
 				this->InitInterpolator(node);
-				node->GetDocument()->SetTime(BaseTime(1));
-				node->GetDocument()->SetTime(BaseTime());
+				doc->SetTime(BaseTime(1));
+				doc->SetTime(BaseTime());
 			}
 			break;
 		}
@@ -2647,6 +2732,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 	case  ID_O_MMD_BONE_ROOT:
 	{
 		OMMDBoneRoot_MSG* msg = static_cast<OMMDBoneRoot_MSG*>(data);
+		BaseDocument* doc = GetActiveDocument();
 		if (msg != nullptr && bc != nullptr)
 		{
 			switch (msg->type)
@@ -2743,7 +2829,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 								if (up_tag != nullptr)
 								{
 									up_tag->GetParameter(DescID(PMX_BONE_INDEX), Ge_data, DESCFLAGS_GET::NONE);
-									bc->SetInt32(PMX_BONE_PARENT_BONE_INDEX, Ge_data.GetString().ToInt32(nullptr));
+									bc->SetData(PMX_BONE_PARENT_BONE_INDEX, Ge_data);
 								}
 								if (pred_obj == nullptr)
 								{
@@ -2788,7 +2874,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 						}
 						Int32 now_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
 						if (now_index != pred_index && this->BoneRoot != nullptr)
-							this->BoneRoot->Message(ID_T_MMD_BONE, NewObj(mmd::OMMDBone_MSG, pred_index, now_index, obj).GetValue());
+							this->BoneRoot->Message(ID_T_MMD_BONE, nullptr);
 					}
 				break;
 			}
@@ -2804,13 +2890,17 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 	}
 	return(true);
 }
-
-
 Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
 		return(false);
 	};
+	AutoAlloc<BaseLink> bone_root_link;
+	if (bone_root_link == nullptr)
+		return false;
+	if (!bone_root_link->Read(hf))
+		return(false);
+	this->BoneRoot = static_cast<BaseObject*>(bone_root_link->GetLink(GetActiveDocument()));
 	if (!hf->ReadInt32(&this->bone_morph_name_index))
 		return(false);
 	if (!hf->ReadInt32(&this->prev_frame))
@@ -2915,10 +3005,14 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	}
 	return(SUPER::Read(node, hf, level));
 }
-
-
 Bool mmd::TMMDBone::Write(GeListNode* node, HyperFile* hf)
 {
+	AutoAlloc<BaseLink> bone_root_link;
+	if (bone_root_link == nullptr)
+		return false;
+	bone_root_link->SetLink(this->BoneRoot);
+	if (!bone_root_link->Write(hf))
+		return(false);
 	if (!hf->WriteInt32(this->bone_morph_name_index))
 		return(false);
 	if (!hf->WriteInt32(this->prev_frame))
@@ -3013,8 +3107,6 @@ Bool mmd::TMMDBone::Write(GeListNode* node, HyperFile* hf)
 	}
 	return(SUPER::Write(node, hf));
 }
-
-
 void mmd::TMMDBone::Free(GeListNode* node)
 {
 	this->interpolator_X_map.Reset();
@@ -3024,7 +3116,6 @@ void mmd::TMMDBone::Free(GeListNode* node)
 	this->interpolator_A_map.Reset();
 	this->bone_morph_data_arr.Reset();
 }
-
 
 /*
  * *******************
@@ -3063,6 +3154,7 @@ Bool mmd::OMMDRigid::Init(GeListNode* node)
 	if (bc == nullptr)
 		return(false);
 	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
+	bc->SetInt32(RIGID_RELATED_BONE_INDEX, -1);
 	bc->SetFloat(RIGID_SHAPE_SIZE_X, 17.);
 	bc->SetFloat(RIGID_SHAPE_SIZE_Y, 17.);
 	bc->SetFloat(RIGID_SHAPE_SIZE_Z, 17.);
@@ -3075,8 +3167,6 @@ Bool mmd::OMMDRigid::Init(GeListNode* node)
 #endif
 	return(true);
 }
-
-
 Bool mmd::OMMDRigid::GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags)
 {
 	if (!(node && description))
@@ -3126,11 +3216,13 @@ Bool mmd::OMMDRigid::GetDDescription(GeListNode* node, Description* description,
 			break;
 		}
 	}
+	settings = description->GetParameterI(RIGID_RELATED_BONE_INDEX, nullptr);
+	if (settings != nullptr) {
+		settings->SetContainer(DESC_CYCLE, this->RigidRoot->GetNodeData<OMMDRigidRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->bone_items);
+	}
 	flags |= DESCFLAGS_DESC::LOADED;
 	return(SUPER::GetDDescription(node, description, flags));
 }
-
-
 Bool mmd::OMMDRigid::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
@@ -3379,8 +3471,6 @@ Bool mmd::OMMDRigid::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
-
-
 Bool mmd::OMMDRigid::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
 {
 	switch (id[0].id)
@@ -3394,8 +3484,6 @@ Bool mmd::OMMDRigid::GetDEnabling(GeListNode* node, const DescID& id, const GeDa
 	}
 	return(SUPER::GetDEnabling(node, id, t_data, flags, itemdesc));
 }
-
-
 Bool mmd::OMMDRigid::Message(GeListNode* node, Int32 type, void* data)
 {
 	switch (type)
@@ -3435,7 +3523,6 @@ case MSG_GETCUSTOMICON:
 		break;
 	}
 #endif
-	
 	case MSG_DESCRIPTION_CHECKUPDATE:
 	{
 		const Int32	id = static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id;
@@ -3751,9 +3838,7 @@ case MSG_GETCUSTOMICON:
 					BaseObject::Free(pdraw_obj);
 				}
 			}
-			else {
-				this->Mode = msg->Mode;
-			}
+			this->Mode = msg->Mode;
 		}
 		break;
 	}
@@ -3762,8 +3847,6 @@ case MSG_GETCUSTOMICON:
 	}
 	return(SUPER::Message(node, type, data));
 }
-
-
 DRAWRESULT mmd::OMMDRigid::Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh)
 {
 	if (drawpass == DRAWPASS::OBJECT)
@@ -3915,21 +3998,26 @@ DRAWRESULT mmd::OMMDRigid::Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd,
 	}
 	return(SUPER::Draw(op, drawpass, bd, bh));
 }
-
-
 EXECUTIONRESULT mmd::OMMDRigid::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (op == nullptr || doc == nullptr)
 	{
 		return(EXECUTIONRESULT::OK);
 	}
+	BaseContainer* bc = static_cast<BaseList2D*>(op)->GetDataInstance();
+	if (bc == nullptr)
+	{
+		return(EXECUTIONRESULT::OK);
+	}
 	BaseObject* PredObject = op->GetPred();
 	BaseObject* UpObject = op->GetUp();
-	if (UpObject == nullptr && this->RigidRoot != nullptr)
+	BaseObject* rigid_root_object = this->RigidRoot;
+	if (UpObject == nullptr && rigid_root_object != nullptr)
 	{
 		op->Remove();
-		op->InsertUnderLast(this->RigidRoot);
+		op->InsertUnderLast(rigid_root_object);
 	}
+	Int32 pred_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
 	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_RIGID_ROOT))
 	{
 		if (PredObject == nullptr)
@@ -3937,20 +4025,25 @@ EXECUTIONRESULT mmd::OMMDRigid::Execute(BaseObject* op, BaseDocument* doc, BaseT
 			op->SetParameter(RIGID_INDEX, "0"_s, DESCFLAGS_SET::NONE);
 		}
 		else {
+			while (PredObject!=nullptr && !PredObject->IsInstanceOf(ID_O_MMD_RIGID))
+			{
+				PredObject = PredObject->GetPred();
+			}
 			GeData data;
 			PredObject->GetParameter(RIGID_INDEX, data, DESCFLAGS_GET::NONE);
 			String RigidIndex = data.GetString();
 			op->SetParameter(RIGID_INDEX, String::IntToString(RigidIndex.ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
 		}
-		if (this->RigidRoot == nullptr)
+		if (rigid_root_object == nullptr)
 		{
-			this->RigidRoot = UpObject;
+			this->RigidRoot=UpObject;
 		}
 	}
+	Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
+	if (now_index != pred_index && this->RigidRoot != nullptr)
+		this->RigidRoot->Message(ID_O_MMD_RIGID, NewObj(mmd::OMMDRigid_MSG, pred_index, now_index, op).GetValue());
 	return(EXECUTIONRESULT::OK);
 }
-
-
 Bool mmd::OMMDRigid::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (list == nullptr || op == nullptr)
@@ -3960,8 +4053,26 @@ Bool mmd::OMMDRigid::AddToExecution(BaseObject* op, PriorityList* list)
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return(true);
 }
-
-
+Bool mmd::OMMDRigid::Read(GeListNode* node, HyperFile* hf, Int32 level)
+{
+	AutoAlloc<BaseLink> rigid_root_link;
+	if (rigid_root_link == nullptr)
+		return false;
+	if (!rigid_root_link->Read(hf))
+		return(false);
+	this->RigidRoot = static_cast<BaseObject*>(rigid_root_link->GetLink(GetActiveDocument()));
+	return true;
+}
+Bool mmd::OMMDRigid::Write(GeListNode* node, HyperFile* hf)
+{
+	AutoAlloc<BaseLink> rigid_root_link;
+	if (rigid_root_link == nullptr)
+		return false;
+	rigid_root_link->SetLink(this->RigidRoot);
+	if (!rigid_root_link->Write(hf))
+		return(false);
+	return true;
+}
 Bool mmd::OMMDRigid::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
 {
 	OMMDRigid* const destObject = static_cast<OMMDRigid*>(dest);
@@ -3971,14 +4082,11 @@ Bool mmd::OMMDRigid::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode
 	destObject->DisplayType == this->DisplayType;
 	return(true);
 }
-
-
 void mmd::OMMDRigid::Free(GeListNode* node)
 {
-	BaseObject::Free(pdraw_obj);
-	BaseObject::Free(draw_obj);
+	BaseObject::Free(this->pdraw_obj);
+	BaseObject::Free(this->draw_obj);
 }
-
 
 /*
  * *******************
@@ -3994,7 +4102,6 @@ const Vector PMX_Joint_Color[6] = {
 	Vector(109, 162, 255) / 255,
 	Vector(255, 155, 230) / 255
 };
-
 Bool mmd::OMMDJoint::Init(GeListNode* node)
 {
 	if (node == nullptr)
@@ -4010,8 +4117,6 @@ Bool mmd::OMMDJoint::Init(GeListNode* node)
 	bc->SetInt32(JOINT_ATTITUDE_USE_BONE_INDEX, -1);
 	return(true);
 }
-
-
 Bool mmd::OMMDJoint::GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags)
 {
 	if (!(node && description))
@@ -4020,17 +4125,25 @@ Bool mmd::OMMDJoint::GetDDescription(GeListNode* node, Description* description,
 		return(false);
 	BaseContainer* settings = nullptr;
 	BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
+	settings = description->GetParameterI(JOINT_LINK_RIGID_A_INDEX, nullptr);
+	if (settings != nullptr) {
+		settings->SetContainer(DESC_CYCLE, this->JointRoot->GetNodeData<OMMDJointRoot>()->RigidRoot->GetNodeData<OMMDRigidRoot>()->rigid_items);
+	}
+	settings = description->GetParameterI(JOINT_LINK_RIGID_B_INDEX, nullptr);
+	if (settings != nullptr) {
+		settings->SetContainer(DESC_CYCLE, this->JointRoot->GetNodeData<OMMDJointRoot>()->RigidRoot->GetNodeData<OMMDRigidRoot>()->rigid_items);
+	}
+	settings = description->GetParameterI(JOINT_ATTITUDE_USE_BONE_INDEX, nullptr);
+	if (settings != nullptr) {
+		settings->SetContainer(DESC_CYCLE, this->JointRoot->GetNodeData<OMMDJointRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->bone_items);
+	}
 	flags |= DESCFLAGS_DESC::LOADED;
 	return(SUPER::GetDDescription(node, description, flags));
 }
-
-
 Bool mmd::OMMDJoint::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
-
-
 Bool mmd::OMMDJoint::Message(GeListNode* node, Int32 type, void* data)
 {
 	switch (type)
@@ -4074,13 +4187,78 @@ Bool mmd::OMMDJoint::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
+	case MSG_DESCRIPTION_COMMAND:
+	{
+		DescriptionCommand* dc = (DescriptionCommand*)data;
+		BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
+		if (bc == nullptr)
+			return(true);
+		switch (dc->_descId[0].id)
+		{
+		case JOINT_LINK_RIGID_SET_NAME_BUTTON:
+		{
+			String name = "<->"_s;
+			auto a_rigid_ptr = this->JointRoot->GetNodeData<OMMDJointRoot>()->RigidRoot->GetNodeData<OMMDRigidRoot>()->IndexToRigidMap.Find(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX));
+			if (a_rigid_ptr != nullptr) {
+				BaseObject* a_rigid_object = a_rigid_ptr->GetValue();
+				if (a_rigid_object != nullptr) {
+					name = a_rigid_object->GetName() + name;
+				}
+			}
+			auto b_rigid_ptr = this->JointRoot->GetNodeData<OMMDJointRoot>()->RigidRoot->GetNodeData<OMMDRigidRoot>()->IndexToRigidMap.Find(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX));
+			if (b_rigid_ptr != nullptr) {
+				BaseObject* b_rigid_object = b_rigid_ptr->GetValue();
+				if (b_rigid_object != nullptr) {
+					name = name + b_rigid_object->GetName();
+				}
+			}
+			static_cast<BaseObject*>(node)->SetName(name);
+			break;
+		}
+		case JOINT_ATTITUDE_USE_BONE_BUTTON:
+		{
+			auto bone_ptr = this->JointRoot->GetNodeData<OMMDJointRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(bc->GetInt32(JOINT_ATTITUDE_USE_BONE_INDEX));
+			if (bone_ptr != nullptr) {
+				static_cast<BaseObject*>(node)->SetAbsPos(bone_ptr->GetValue()->GetAbsPos());
+			}
+			break;
+		}
+		case JOINT_PARAMETER_RESET_BUTTON:
+		{
+			bc->SetFloat(JOINT_PARAMETER_POSITION_X_MIN, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_POSITION_X_MAX, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_POSITION_Y_MIN, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_POSITION_Y_MAX, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_POSITION_Z_MIN, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_POSITION_Z_MAX, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_ROTATION_X_MIN, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_ROTATION_X_MAX, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_ROTATION_Y_MIN, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_ROTATION_Y_MAX, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_ROTATION_Z_MIN, 0.0);
+			bc->SetFloat(JOINT_PARAMETER_ROTATION_Z_MAX, 0.0);
+			break;
+		}
+		case JOINT_SPRING_RESET_BUTTON:
+		{
+			bc->SetFloat(JOINT_SPRING_POSITION_X, 0.0);
+			bc->SetFloat(JOINT_SPRING_POSITION_Y, 0.0);
+			bc->SetFloat(JOINT_SPRING_POSITION_Z, 0.0);
+			bc->SetFloat(JOINT_SPRING_ROTATION_X, 0.0);
+			bc->SetFloat(JOINT_SPRING_ROTATION_Y, 0.0);
+			bc->SetFloat(JOINT_SPRING_ROTATION_Z, 0.0);
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
 	default:
 		break;
 	}
 	return(SUPER::Message(node, type, data));
 }
-
-
 DRAWRESULT mmd::OMMDJoint::Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh)
 {
 	if (drawpass == DRAWPASS::OBJECT)
@@ -4125,8 +4303,6 @@ DRAWRESULT mmd::OMMDJoint::Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd,
 	}
 	return(SUPER::Draw(op, drawpass, bd, bh));
 }
-
-
 EXECUTIONRESULT mmd::OMMDJoint::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (op == nullptr || doc == nullptr)
@@ -4159,8 +4335,6 @@ EXECUTIONRESULT mmd::OMMDJoint::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	}
 	return(EXECUTIONRESULT::OK);
 }
-
-
 Bool mmd::OMMDJoint::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (list == nullptr || op == nullptr)
@@ -4170,8 +4344,22 @@ Bool mmd::OMMDJoint::AddToExecution(BaseObject* op, PriorityList* list)
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return(true);
 }
-
-
+Bool mmd::OMMDJoint::Read(GeListNode* node, HyperFile* hf, Int32 level)
+{
+	AutoAlloc<BaseLink> joint_root_link;
+	if (!joint_root_link->Read(hf))
+		return(false);
+	this->JointRoot = static_cast<BaseObject*>(joint_root_link->GetLink(GetActiveDocument()));
+	return true;
+}
+Bool mmd::OMMDJoint::Write(GeListNode* node, HyperFile* hf)
+{
+	AutoAlloc<BaseLink> joint_root_link;
+	joint_root_link->SetLink(this->JointRoot);
+	if (!joint_root_link->Write(hf))
+		return(false);
+	return true;
+}
 Bool mmd::OMMDJoint::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
 {
 	OMMDJoint* const destObject = static_cast<OMMDJoint*>(dest);
@@ -4181,7 +4369,6 @@ Bool mmd::OMMDJoint::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode
 	destObject->DisplayType = this->DisplayType;
 	return(true);
 }
-
 
 /*
  * *******************
@@ -4210,8 +4397,6 @@ Bool mmd::OMMDMeshRoot::Init(GeListNode* node)
 	}
 	return(true);
 }
-
-
 Bool mmd::OMMDMeshRoot::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	BaseObject* op = static_cast<BaseObject*>(node);
@@ -4280,7 +4465,6 @@ Bool mmd::OMMDMeshRoot::SetDParameter(GeListNode* node, const DescID& id, const 
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
 
-
 /*
  * *******************
  * PMX Bone Root Object
@@ -4289,6 +4473,8 @@ Bool mmd::OMMDMeshRoot::SetDParameter(GeListNode* node, const DescID& id, const 
 
 Bool mmd::OMMDBoneRoot::Init(GeListNode* node)
 {
+	this->RigidRoot = BaseLink::Alloc();
+	this->JointRoot = BaseLink::Alloc();
 	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	if (node != nullptr)
 	{
@@ -4301,8 +4487,76 @@ Bool mmd::OMMDBoneRoot::Init(GeListNode* node)
 	}
 	return(true);
 }
-
-
+void mmd::OMMDBoneRoot::Free(GeListNode* node) {
+	BaseLink::Free(this->RigidRoot);
+	BaseLink::Free(this->JointRoot);
+}
+Bool mmd::OMMDBoneRoot::Read(GeListNode* node, HyperFile* hf, Int32 level) 
+{
+	if (!this->RigidRoot->Read(hf))
+		return(false);
+	if (!this->JointRoot->Read(hf))
+		return(false);
+	Int64 bone_map_count = 0;
+	if (!hf->ReadInt64(&bone_map_count))
+		return(false);
+	this->IndexToBoneMap.Reset();
+	this->BoneToIndexMap.Reset();
+	Int32 index = 0;
+	for (Int64 i = 0; i < bone_map_count; i++)
+	{	
+		if (!hf->ReadInt32(&index))
+			return(false);
+		AutoAlloc<BaseLink> tmp;
+		if (!tmp->Read(hf))
+			return(false);
+		iferr(this->IndexToBoneMap.Insert(index,static_cast<BaseObject*>(tmp->GetLink(GetActiveDocument()))))		
+			return(false);
+		iferr(this->BoneToIndexMap.Insert(static_cast<BaseObject*>(tmp->GetLink(GetActiveDocument())), index))
+			return(false);
+	}
+	return true;
+}
+Bool mmd::OMMDBoneRoot::Write(GeListNode* node, HyperFile* hf) 
+{
+	if (!this->RigidRoot->Write(hf))
+		return(false);
+	if (!this->JointRoot->Write(hf))
+		return(false);
+	if (!hf->WriteInt64(this->IndexToBoneMap.GetCount()))
+		return(false);
+	for (auto& i : this->IndexToBoneMap.GetKeys())
+	{
+		AutoAlloc<BaseLink> tmp;
+		tmp->SetLink(IndexToBoneMap.Find(i)->GetValue());
+		if (!hf->WriteInt32(i))
+			return(false);
+		if (!tmp->Write(hf))
+			return(false);
+	}
+	return true;
+}
+Bool mmd::OMMDBoneRoot::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
+{
+	OMMDBoneRoot* const destObject = static_cast<OMMDBoneRoot*>(dest);
+	BaseLink::Free(destObject->RigidRoot);
+	destObject->RigidRoot=this->RigidRoot->GetClone(flags, trn);
+	BaseLink::Free(destObject->JointRoot);
+	destObject->JointRoot=this->JointRoot->GetClone(flags, trn);
+	BaseObject* tmp = nullptr;
+	this->IndexToBoneMap.Reset();
+	this->BoneToIndexMap.Reset();
+	for (auto& i : this->IndexToBoneMap.GetKeys())
+	{
+		tmp = this->IndexToBoneMap.Find(i)->GetValue();
+		iferr(destObject->IndexToBoneMap.Insert(i, tmp))
+			return(false);
+		iferr(destObject->BoneToIndexMap.Insert(tmp, i))
+			return(false);
+		tmp = nullptr;
+	}
+	return true;
+}
 Bool mmd::OMMDBoneRoot::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	BaseObject* op = static_cast<BaseObject*>(node);
@@ -4365,8 +4619,6 @@ Bool mmd::OMMDBoneRoot::SetDParameter(GeListNode* node, const DescID& id, const 
 	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
-
-
 Bool mmd::OMMDBoneRoot::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
@@ -4376,15 +4628,16 @@ Bool mmd::OMMDBoneRoot::Message(GeListNode* node, Int32 type, void* data)
 	{
 	case MSG_DESCRIPTION_COMMAND:
 	{
-		DescriptionCommand* dc = (DescriptionCommand*)data;
+		DescriptionCommand* dc = static_cast<DescriptionCommand*>(data);
 		if (dc->_descId[0].id == ADD_BONE_BUTTON)
 		{
 			BaseObject* newBone = BaseObject::Alloc(Ojoint);
 			if (newBone != nullptr)
 			{
 				auto bone_node = newBone->MakeTag(ID_T_MMD_BONE)->GetNodeData<TMMDBone>();
+				newBone->SetName(newBone->GetName() + "." + String::IntToString(this->name_cnt++));
 				bone_node->SetObj(newBone);
-				bone_node->SetRootObj(static_cast<BaseObject*>(node));
+				bone_node->SetRootObject(static_cast<BaseObject*>(node));
 				bone_node->RefreshColor();
 				newBone->InsertUnder(node);
 			}
@@ -4392,23 +4645,46 @@ Bool mmd::OMMDBoneRoot::Message(GeListNode* node, Int32 type, void* data)
 		break;
 	}
 	case ID_T_MMD_BONE:
-	{
-		OMMDBone_MSG* msg = static_cast<OMMDBone_MSG*>(data);
-		if (msg != nullptr)
+	{		
+		BaseObject* op = static_cast<BaseObject*>(node);
+		this->bone_items.FlushAll();
+		this->bone_items.SetString(-1, "-"_s);
+		this->IndexToBoneMap.Reset();
+		this->BoneToIndexMap.Reset();
+		maxon::Queue<BaseObject*> nodes;
+		GeData ge_data;
+		Int32 bone_index = 0;
+		BaseTag* node_bone_tag = nullptr;
+		iferr(nodes.Push(op)) return(true);
+		while (!nodes.IsEmpty())
 		{
-			if (BoneIndexMap.Find(msg->pred_index) != nullptr)
+			BaseObject* node_ = *(nodes.Pop());
+			while (node_ != nullptr)
 			{
-				BoneIndexMap.Erase(msg->pred_index) iferr_return;
-			}
-			if (BoneIndexMap.Find(msg->now_index) != nullptr)
-			{
-				BoneIndexMap.Erase(msg->now_index) iferr_return;
-				BoneIndexMap.Insert(msg->now_index, msg->bone) iferr_return;
-			}
-			else {
-				BoneIndexMap.Insert(msg->now_index, msg->bone) iferr_return;
+				if (node_->GetType() == Ojoint)
+				{
+					node_bone_tag = node_->GetTag(ID_T_MMD_BONE);
+					if (node_bone_tag != nullptr)
+					{
+						node_bone_tag->GetParameter(PMX_BONE_INDEX, ge_data, DESCFLAGS_GET::NONE);
+						bone_index = ge_data.GetString().ToInt32(nullptr);
+						this->bone_items.SetString(bone_index, node_->GetName());
+						this->IndexToBoneMap.Insert(bone_index, node_)iferr_return;
+						this->BoneToIndexMap.Insert(node_, bone_index)iferr_return;
+					}
+				}
+				iferr(nodes.Push(node_->GetDown()))
+					return(true);
+				if (node_ != op)
+				{
+					node_ = node_->GetNext();
+				}
+				else {
+					break;
+				}
 			}
 		}
+		nodes.Reset();
 		break;
 	}
 	case ID_O_MMD_MODEL:
@@ -4418,14 +4694,14 @@ Bool mmd::OMMDBoneRoot::Message(GeListNode* node, Int32 type, void* data)
 		{
 			switch (msg->type)
 			{
-			case OMMDModel_MSG_type::JointRoot:
+			case OMMDModel_Root_type::JointRoot:
 			{
-				this->JointRoot = msg->Root;
+				this->JointRoot->SetLink(msg->Root);
 				break;
 
-			case OMMDModel_MSG_type::RigidRoot:
+			case OMMDModel_Root_type::RigidRoot:
 			{
-				this->RigidRoot = msg->Root;
+				this->RigidRoot->SetLink(msg->Root);
 				break;
 			}
 			default:
@@ -4440,7 +4716,6 @@ Bool mmd::OMMDBoneRoot::Message(GeListNode* node, Int32 type, void* data)
 	}
 	return(true);
 }
-
 
 /*
  * *******************
@@ -4469,8 +4744,74 @@ Bool mmd::OMMDRigidRoot::Init(GeListNode* node)
 	}
 	return(true);
 }
+void mmd::OMMDRigidRoot::Free(GeListNode* node) 
+{
 
-
+}
+Bool mmd::OMMDRigidRoot::Read(GeListNode* node, HyperFile* hf, Int32 level)
+{
+	AutoAlloc<BaseLink> bone_root_link;
+	if (bone_root_link == nullptr)
+		return false;
+	if (!bone_root_link->Read(hf))
+		return(false);
+	this->BoneRoot = static_cast<BaseObject*>(bone_root_link->GetLink(GetActiveDocument()));
+	AutoAlloc<BaseLink> joint_root_link;
+	if (joint_root_link == nullptr)
+		return false;
+	if (!joint_root_link->Read(hf))
+		return(false);
+	this->JointRoot = static_cast<BaseObject*>(joint_root_link->GetLink(GetActiveDocument()));
+	Int64 rigid_map_count = 0;
+	if (!hf->ReadInt64(&rigid_map_count))
+		return(false);
+	Int32 index = 0;
+	for (Int64 i = 0; i < rigid_map_count; i++)
+	{
+		if (!hf->ReadInt32(&index))
+			return(false);
+		AutoAlloc<BaseLink> tmp;
+		if (!tmp->Read(hf))
+			return(false);
+		iferr(this->IndexToRigidMap.Insert(index, static_cast<BaseObject*>(tmp->GetLink(GetActiveDocument()))))
+			return(false);
+	}
+	return(true);
+}
+Bool mmd::OMMDRigidRoot::Write(GeListNode* node, HyperFile* hf)
+{
+	AutoAlloc<BaseLink> bone_root_link;
+	if (bone_root_link == nullptr)
+		return false;
+	bone_root_link->SetLink(this->BoneRoot);
+	if (!bone_root_link->Write(hf))
+		return(false);
+	AutoAlloc<BaseLink> joint_root_link;
+	if (joint_root_link == nullptr)
+		return false;
+	joint_root_link->SetLink(this->JointRoot);
+	if (!joint_root_link->Write(hf))
+		return(false);
+	if (!hf->WriteInt64(this->IndexToRigidMap.GetCount()))
+		return(false);
+	for (auto& i : this->IndexToRigidMap.GetKeys())
+	{
+		if (!hf->WriteInt32(i))
+			return(false);
+		AutoAlloc<BaseLink> tmp;
+		tmp->SetLink(this->IndexToRigidMap.Find(i)->GetValue());
+		if (!tmp->Write(hf))
+			return(false);
+	}
+	return(true);
+}
+Bool mmd::OMMDRigidRoot::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
+{
+	OMMDRigidRoot* const destObject = static_cast<OMMDRigidRoot*>(dest);
+	destObject->BoneRoot = this->BoneRoot;
+	destObject->JointRoot = this->JointRoot;
+	return(true);
+}
 Bool mmd::OMMDRigidRoot::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	BaseObject* op = static_cast<BaseObject*>(node);
@@ -4503,10 +4844,12 @@ Bool mmd::OMMDRigidRoot::SetDParameter(GeListNode* node, const DescID& id, const
 	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
-
-
 Bool mmd::OMMDRigidRoot::Message(GeListNode* node, Int32 type, void* data)
 {
+	iferr_scope_handler{
+	return(true);
+	};
+	BaseDocument* doc = GetActiveDocument();
 	switch (type)
 	{
 	case MSG_DESCRIPTION_COMMAND:
@@ -4517,8 +4860,30 @@ Bool mmd::OMMDRigidRoot::Message(GeListNode* node, Int32 type, void* data)
 			BaseObject* newRigid = BaseObject::Alloc(ID_O_MMD_RIGID);
 			if (newRigid != nullptr)
 			{
+				newRigid->SetName(newRigid->GetName() + "." + String::IntToString(this->name_cnt++));
 				newRigid->InsertUnder(node);
 			}
+		}
+		break;
+	}
+	case ID_O_MMD_RIGID:
+	{
+		BaseObject* op = static_cast<BaseObject*>(node);
+		this->rigid_items.FlushAll();
+		this->rigid_items.SetString(-1, "-"_s);
+		this->IndexToRigidMap.Reset();
+		GeData ge_data;
+		BaseObject* node_ = op->GetDown();
+		while (node_ != nullptr)
+		{
+			if (node_->GetType() == ID_O_MMD_RIGID)
+			{
+				node_->GetParameter(RIGID_INDEX, ge_data, DESCFLAGS_GET::NONE);
+				Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
+				this->rigid_items.SetString(rigid_index, node_->GetName());
+				this->IndexToRigidMap.Insert(rigid_index, node_)iferr_return;
+			}
+			node_ = node_->GetNext();
 		}
 		break;
 	}
@@ -4529,10 +4894,14 @@ Bool mmd::OMMDRigidRoot::Message(GeListNode* node, Int32 type, void* data)
 		{
 			switch (msg->type)
 			{
-			case  OMMDModel_MSG_type::BoneRoot:
+			case  OMMDModel_Root_type::BoneRoot:
 			{
 				this->BoneRoot = msg->Root;
 				break;
+			}
+			case OMMDModel_Root_type::JointRoot:
+			{
+				this->JointRoot = msg->Root;
 			}
 			default:
 				break;
@@ -4545,7 +4914,6 @@ Bool mmd::OMMDRigidRoot::Message(GeListNode* node, Int32 type, void* data)
 	}
 	return(true);
 }
-
 
 /*
  * *******************
@@ -4567,8 +4935,37 @@ Bool mmd::OMMDJointRoot::Init(GeListNode* node)
 	}
 	return(true);
 }
-
-
+Bool mmd::OMMDJointRoot::Read(GeListNode* node, HyperFile* hf, Int32 level)
+{
+	AutoAlloc<BaseLink> bone_root_link;
+	if (!bone_root_link->Read(hf))
+		return(false);
+	this->BoneRoot = static_cast<BaseObject*>(bone_root_link->GetLink(GetActiveDocument()));
+	AutoAlloc<BaseLink> rigid_root_link;
+	if (!rigid_root_link->Read(hf))
+		return(false);
+	this->RigidRoot = static_cast<BaseObject*>(rigid_root_link->GetLink(GetActiveDocument()));
+	return(true);
+}
+Bool mmd::OMMDJointRoot::Write(GeListNode* node, HyperFile* hf)
+{
+	AutoAlloc<BaseLink> bone_root_link;
+	bone_root_link->SetLink(this->BoneRoot);
+	if (!bone_root_link->Write(hf))
+		return(false);
+	AutoAlloc<BaseLink> rigid_root_link;
+	rigid_root_link->SetLink(this->RigidRoot);
+	if (!rigid_root_link->Write(hf))
+		return(false);
+	return(true);
+}
+Bool mmd::OMMDJointRoot::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
+{
+	OMMDJointRoot* const destObject = static_cast<OMMDJointRoot*>(dest);
+	destObject->BoneRoot = this->BoneRoot;
+	destObject->RigidRoot = this->RigidRoot;
+	return(true);
+}
 Bool mmd::OMMDJointRoot::Message(GeListNode* node, Int32 type, void* data)
 {
 	switch (type)
@@ -4581,6 +4978,7 @@ Bool mmd::OMMDJointRoot::Message(GeListNode* node, Int32 type, void* data)
 			BaseObject* newJoint = BaseObject::Alloc(ID_O_MMD_JOINT);
 			if (newJoint != nullptr)
 			{
+				newJoint->SetName(newJoint->GetName() + "." + String::IntToString(this->name_cnt++));
 				newJoint->InsertUnder(node);
 			}
 		}
@@ -4593,12 +4991,12 @@ Bool mmd::OMMDJointRoot::Message(GeListNode* node, Int32 type, void* data)
 		{
 			switch (msg->type)
 			{
-			case OMMDModel_MSG_type::BoneRoot:
+			case OMMDModel_Root_type::BoneRoot:
 			{
 				this->BoneRoot = msg->Root;
 				break;
 
-			case OMMDModel_MSG_type::RigidRoot:
+			case OMMDModel_Root_type::RigidRoot:
 			{
 				this->RigidRoot = msg->Root;
 				break;
@@ -4606,17 +5004,15 @@ Bool mmd::OMMDJointRoot::Message(GeListNode* node, Int32 type, void* data)
 			default:
 				break;
 			}
-			}
-			break;
+			}	
 		}
+		break;
 	}
 	default:
 		break;
 	}
 	return(true);
 }
-
-
 Bool mmd::OMMDJointRoot::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	if (id[0].id == JOINT_DISPLAY_TYPE)
@@ -4644,5 +5040,3 @@ Bool mmd::OMMDJointRoot::SetDParameter(GeListNode* node, const DescID& id, const
 	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
-
-

@@ -873,13 +873,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 		BaseObject* MesheRoot = nullptr;
 		if (settings.import_polygon)
 		{
-			if (ModelRootData->MeshRoot != nullptr)
+			MesheRoot = ModelRootData->GetRootObject(OMMDModel_Root_type::MeshRoot);
+			if (MesheRoot == nullptr)
 			{
-				MesheRoot = ModelRootData->MeshRoot;
-			}
-			else {
 				MesheRoot = BaseObject::Alloc(Onull);
-
 				if (MesheRoot == nullptr)
 				{
 					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -893,11 +890,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 		BaseObject* BoneRoot = nullptr;
 		if (settings.import_bone)
 		{
-			if (ModelRootData->BoneRoot != nullptr)
+			BoneRoot = ModelRootData->GetRootObject(OMMDModel_Root_type::BoneRoot);
+			if (BoneRoot == nullptr)
 			{
-				BoneRoot = ModelRootData->BoneRoot;
-			}
-			else {
 				BoneRoot = BaseObject::Alloc(Onull);
 				if (BoneRoot == nullptr)
 				{
@@ -933,7 +928,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				name_conversion.InitConver(bone_data_.bone_name_local);
 				bone_map.Insert(bone_index, bone) iferr_return;
 			}
-			EventAdd();
 			if (settings.import_english_check)
 			{
 				name_conversion.CheckUpdata();
@@ -964,7 +958,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						doc->InsertObject(bone, parent_bone_ptr->GetValue(), nullptr);
 					}
 				}
-			}
+			}	
+			EventAdd();
 			/*Create tag and import data.*/
 			for (Int32 bone_index = 0; bone_index < kBoneDataCount; bone_index++)
 			{
@@ -989,7 +984,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}
 				TMMDBone* bone_tag_data = PMX_bone_tag->GetNodeData<TMMDBone>();
 				bone_tag_data->SetObj(bone);
-				bone_tag_data->SetRootObj(BoneRoot);
+				bone_tag_data->SetRootObject(BoneRoot);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_INDEX), String::IntToString(bone_index), DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_.bone_name_local, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_LOCAL), bone_data_.bone_name_local, DESCFLAGS_SET::NONE);
@@ -1028,7 +1023,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				{
 					if (bone_data_.bone_flags.Inherit_translation == 1)
 					{
-						PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_INDEX), bone_data_.inherit_bone_parent_index, DESCFLAGS_SET::NONE);
 						BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
 						if (inherit_bone_parent_link == nullptr)
 						{
@@ -1044,7 +1038,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					}
 					if (bone_data_.bone_flags.Inherit_rotation == 1)
 					{
-						PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_INDEX), bone_data_.inherit_bone_parent_index, DESCFLAGS_SET::NONE);
 						BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
 						if (inherit_bone_parent_link == nullptr)
 						{
@@ -1155,6 +1148,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					}
 				}
 			}
+			BoneRoot->Message(ID_T_MMD_BONE);
+			DescriptionCheckUpdate* msg_data = NewObj(DescriptionCheckUpdate)iferr_return;
+			msg_data->descid = NewObj(DescID,PMX_BONE_INHERIT_BONE_PARENT_LINK)iferr_return;
+			BoneRoot->MultiMessage(MULTIMSG_ROUTE::BROADCAST, MSG_DESCRIPTION_CHECKUPDATE, msg_data);
 			for (PMX_Rigid_Body_Data& rigid_body_data : this->rigid_body_data)
 			{
 				const Int32 bone_index = rigid_body_data.related_bone_index;
@@ -2000,11 +1997,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 		BaseObject* BoneRoot = nullptr;
 		if (settings.import_bone)
 		{
-			if (ModelRootData->BoneRoot != nullptr)
+			BoneRoot = ModelRootData->GetRootObject(OMMDModel_Root_type::BoneRoot);
+			if (BoneRoot == nullptr)
 			{
-				BoneRoot = ModelRootData->BoneRoot;
-			}
-			else {
 				BoneRoot = BaseObject::Alloc(Onull);
 				if (BoneRoot == nullptr)
 				{
@@ -2069,8 +2064,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}
 				name_conversion.InitConver(bone_data_.bone_name_local);
 				bone_map.Insert(bone_index, bone) iferr_return;
-			}
-			EventAdd();
+			}			
 			if (settings.import_english_check)
 			{
 				name_conversion.CheckUpdata();
@@ -2102,6 +2096,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					}
 				}
 			}
+			EventAdd();
 			/*Create tag and import data.*/
 			for (Int32 bone_index = 0; bone_index < kBoneDataCount; bone_index++)
 			{
@@ -2126,7 +2121,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}
 				TMMDBone* bone_tag_data = PMX_bone_tag->GetNodeData<TMMDBone>();
 				bone_tag_data->SetObj(bone);
-				bone_tag_data->SetRootObj(BoneRoot);
+				bone_tag_data->SetRootObject(BoneRoot);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_INDEX), String::IntToString(bone_index), DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(ID_BASELIST_NAME), bone_data_.bone_name_local, DESCFLAGS_SET::NONE);
 				PMX_bone_tag->SetParameter(DescID(PMX_BONE_NAME_LOCAL), bone_data_.bone_name_local, DESCFLAGS_SET::NONE);
@@ -2165,7 +2160,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				{
 					if (bone_data_.bone_flags.Inherit_translation == 1)
 					{
-						PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_INDEX), bone_data_.inherit_bone_parent_index, DESCFLAGS_SET::NONE);
 						BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
 						if (inherit_bone_parent_link == nullptr)
 						{
@@ -2181,7 +2175,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					}
 					if (bone_data_.bone_flags.Inherit_rotation == 1)
 					{
-						PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_INDEX), bone_data_.inherit_bone_parent_index, DESCFLAGS_SET::NONE);
 						BaseLink* inherit_bone_parent_link = BaseLink::Alloc();
 						if (inherit_bone_parent_link == nullptr)
 						{
@@ -2292,6 +2285,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					}
 				}
 			}
+			BoneRoot->Message(ID_T_MMD_BONE);
+			DescriptionCheckUpdate* msg_data = NewObj(DescriptionCheckUpdate)iferr_return;
+			msg_data->descid = NewObj(DescID, PMX_BONE_INHERIT_BONE_PARENT_LINK)iferr_return;
+			BoneRoot->MultiMessage(MULTIMSG_ROUTE::BROADCAST, MSG_DESCRIPTION_CHECKUPDATE, msg_data);
 			for (PMX_Rigid_Body_Data& rigid_body_data : this->rigid_body_data)
 			{
 				const Int32 bone_index = rigid_body_data.related_bone_index;
@@ -2481,9 +2478,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					StatusSetText("Import surface " + String::IntToString(insideCount) + " of " + String::IntToString(surface_data_count));
 			}) iferr_return;
 			model->SetPhong(true, true, 0.7853982);
-			if (ModelRootData->MeshRoot != nullptr)
+			BaseObject* MesheRoot = ModelRootData->GetRootObject(OMMDModel_Root_type::MeshRoot);
+			if (MesheRoot != nullptr)
 			{
-				doc->InsertObject(model, ModelRootData->MeshRoot, nullptr);
+				doc->InsertObject(model, MesheRoot, nullptr);
 			}
 			else {
 				doc->InsertObject(model, ModelRoot, nullptr);
