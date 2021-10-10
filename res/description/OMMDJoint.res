@@ -44,14 +44,12 @@ CONTAINER OMMDJoint {
 
 		GROUP JOINT_LINK_RIGID_GRP {
 			DEFAULT 1;
-			FIT_H;
-			SCALE_H;
 
 			LONG JOINT_LINK_RIGID_A_INDEX {
-				FIT_H;
-				SCALE_H;
 				ANIM OFF;
 				MIN -1;
+				FIT_H;
+				SCALE_H;
 
 				CYCLE {
 					JOINT_RIGID_NONE;
@@ -59,14 +57,19 @@ CONTAINER OMMDJoint {
 			}
 
 			LONG JOINT_LINK_RIGID_B_INDEX {
-				FIT_H;
-				SCALE_H;
 				ANIM OFF;
 				MIN -1;
+				FIT_H;
+				SCALE_H;
 
 				CYCLE {
 					JOINT_RIGID_NONE;
 				}
+			}
+
+			BUTTON JOINT_LINK_RIGID_SET_NAME_BUTTON {
+				FIT_H;
+				SCALE_H;
 			}
 		}
 

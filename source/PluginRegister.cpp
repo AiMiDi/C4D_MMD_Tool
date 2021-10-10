@@ -2,6 +2,13 @@
 #include "MMD_PMX_model.h"
 #include "MMD_VMD_animation.h"
 #include "MMD_PMX_Control.h"
+#include "MMD_VPD_pose.h"
+
+#if API_VERSION >= 25000
+#define COMBO_BOX_W 253
+#else
+#define COMBO_BOX_W 242
+#endif
 
 /* Uniquely identify all dialog elements here. */
 enum
@@ -53,6 +60,8 @@ enum
 	DLG_VMD_MOT_EXPORT_ROTATION_TWEEN,
 	DLG_VMD_MOT_EXPORT_BUTTON,
 
+	DLG_VPD_POSE_IMPORT_BUTTON,
+
 	DLG_PMX_MOD_IMPORT_SIZE_NAME,
 	DLG_PMX_MOD_IMPORT_SIZE,
 	DLG_PMX_MOD_IMPORT_POLYGON,     /* 多边形Polygon */
@@ -99,15 +108,13 @@ public:
 		C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(78));
 		if (userAreaGadget != nullptr)
 			this->AttachUserArea((*Images), userAreaGadget);
-
 		ScrollGroupBegin(1200, BFH_CENTER, SCROLLGROUP_VERT | SCROLLGROUP_AUTOHORIZ | SCROLLGROUP_AUTOVERT, 0, 210);
 		TabGroupBegin(1000, BFH_SCALEFIT | BFV_SCALEFIT);
 		/* CameraBegin */
 		GroupBegin(1100, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_TOOL_TITLE), 0, 350, 0);
-
 		/* ImportCameraBegin */
 		GroupBegin(1001, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_IMPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1002, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -118,15 +125,12 @@ public:
 		AddStaticText(DLG_VMD_CAM_IMPORT_OFFSET_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_IMPORT_OFFSET), BORDER_NONE);
 		AddEditNumberArrows(DLG_VMD_CAM_IMPORT_OFFSET, BFH_LEFT, 250, 10);
 		GroupEnd();
-
 		AddButton(DLG_VMD_CAM_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_CAM_IMPORT_BUTTON));
+		/* ImportCameraEnd */
 		GroupEnd();
-		/*
-		 * ImportCameraEnd
-		 * ExportCameraBegin
-		 */
+		/* ExportCameraBegin */
 		GroupBegin(1004, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_EXPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1005, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -139,19 +143,18 @@ public:
 		GroupEnd();
 		GroupBegin(1007, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN), BORDER_NONE);
-		AddComboBox(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, BFH_LEFT, 242, 10);
+		AddComboBox(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, BFH_LEFT, COMBO_BOX_W, 10);
 		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_X));
 		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 1, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Y));
 		AddChild(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 2, GeLoadString(IDS_VMD_CAM_EXPORT_ROTATION_TWEEN_Z));
 		GroupEnd();
 		AddCheckbox(DLG_VMD_CAM_EXPORT_USE_BAKE, BFH_LEFT, 350, 13, GeLoadString(IDS_VMD_CAM_EXPORT_USE_BAKE));
 		AddButton(DLG_VMD_CAM_EXPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_CAM_EXPORT_BUTTON));
-		GroupEnd();
 		/* ExportCameraEnd */
-
+		GroupEnd();
 		/* ConversionCameraBegin */
 		GroupBegin(1008, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_CAM_CONVER_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1009, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -160,24 +163,21 @@ public:
 		GroupEnd();
 		GroupBegin(1010, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_CAM_CONVER_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN), BORDER_NONE);
-		AddComboBox(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, BFH_LEFT, 242, 10);
+		AddComboBox(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, BFH_LEFT, COMBO_BOX_W, 10);
 		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_X));
 		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 1, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Y));
 		AddChild(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 2, GeLoadString(IDS_VMD_CAM_CONVER_ROTATION_TWEEN_Z));
 		GroupEnd();
 		AddButton(DLG_VMD_CAM_CONVER_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_CAM_CONVER_BUTTON));
-		GroupEnd();
 		/* ConversionCameraEnd */
-
 		GroupEnd();
-		/*
-		 * CameraEnd
-		 * MotionBegin
-		 */
+		/* CameraEnd */
+		GroupEnd();
+		/* MotionBegin */
 		GroupBegin(1400, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_TOOL_TITLE), 0, 350, 0);
 		/* ImportMotionBegin */
 		GroupBegin(1101, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_IMPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1102, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -197,12 +197,11 @@ public:
 		AddCheckbox(DLG_VMD_MOT_IMPORT_DETAIL, BFH_LEFT, 180, 13, GeLoadString(IDS_VMD_MOT_IMPORT_DETAIL));
 		GroupEnd();
 		AddButton(DLG_VMD_MOT_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_MOT_IMPORT_BUTTON));
-		GroupEnd();
 		/* ImportMotionEnd */
-
+		GroupEnd();		
 		/* ExportMotionBegin */
 		GroupBegin(1105, BFH_CENTER, 1, 2, GeLoadString(IDS_VMD_MOT_EXPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1106, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -215,7 +214,7 @@ public:
 		GroupEnd();
 		GroupBegin(1008, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
 		AddStaticText(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN_NAME, BFH_LEFT, 100, 10, GeLoadString(IDS_VMD_MOT_EXPORT_ROTATION_TWEEN), BORDER_NONE);
-		AddComboBox(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, BFH_LEFT, 242, 10);
+		AddComboBox(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, BFH_LEFT, COMBO_BOX_W, 10);
 		AddChild(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, 0, GeLoadString(IDS_VMD_MOT_EXPORT_ROTATION_TWEEN_X));
 		AddChild(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, 1, GeLoadString(IDS_VMD_MOT_EXPORT_ROTATION_TWEEN_Y));
 		AddChild(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, 2, GeLoadString(IDS_VMD_MOT_EXPORT_ROTATION_TWEEN_Z));
@@ -228,17 +227,23 @@ public:
 		AddCheckbox(DLG_VMD_MOT_EXPORT_USE_BAKE, BFH_LEFT, 180, 13, GeLoadString(IDS_VMD_MOT_EXPORT_USE_BAKE));
 		GroupEnd();
 		AddButton(DLG_VMD_MOT_EXPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VMD_MOT_EXPORT_BUTTON));
-		GroupEnd();
 		/* ExportMotionEnd */
+		GroupEnd();	
+		/* ImportPostBegin */
+		GroupBegin(1110, BFH_CENTER, 1, 2, GeLoadString(IDS_VPD_POSE_IMPORT_TITLE), 0, 0, 0);
+		GroupBorder(BORDER_IN);
+		GroupBorderSpace(28, 5, 28, 10);
+		GroupSpace(2, 5);
+		AddButton(DLG_VPD_POSE_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_VPD_POSE_IMPORT_BUTTON));
+		/* ImportPostEnd */
 		GroupEnd();
-		/*
-		 * MotionEnd
-		 * ModelBegin
-		 */
+		/* MotionEnd */
+		GroupEnd();	
+		/* ModelBegin */
 		GroupBegin(1500, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_TOOL_TITLE), 0, 350, 0);
 		/* ImportModelBegin */
 		GroupBegin(1201, BFH_CENTER, 1, 2, GeLoadString(IDS_PMX_MOD_IMPORT_TITLE), 0, 0, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		GroupSpace(2, 5);
 		GroupBegin(1202, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
@@ -246,7 +251,7 @@ public:
 		AddEditNumberArrows(DLG_PMX_MOD_IMPORT_SIZE, BFH_LEFT, 250, 10);
 		GroupEnd();
 		GroupBegin(1203, BFH_CENTER, 2, 6, GeLoadString(IDS_PMX_MOD_IMPORT_SETTINGS), 0, 350, 0);
-		GroupBorder(BORDER_GROUP_IN);
+		GroupBorder(BORDER_IN);
 		GroupBorderSpace(5, 5, 5, 10);
 		AddCheckbox(DLG_PMX_MOD_IMPORT_POLYGON, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_POLYGON));
 		AddCheckbox(DLG_PMX_MOD_IMPORT_NORMAL, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_NORMAL));
@@ -262,21 +267,16 @@ public:
 		AddCheckbox(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, BFH_LEFT, 180, 13, GeLoadString(IDS_PMX_MOD_IMPORT_ENGLISH_CHECK));
 		GroupEnd();
 		AddButton(DLG_PMX_MOD_IMPORT_BUTTON, BFH_CENTER, 300, 30, GeLoadString(IDS_PMX_MOD_IMPORT_BUTTON));
-		GroupEnd();
 		/* ImportModelEnd */
 		GroupEnd();
 		/* ModelEnd */
-		/*
-		 * ToolEnd
-		 * ScrollGroupEnd;
-		 */
+		GroupEnd();	
+		/* ToolEnd */
 		GroupEnd();
 		/* TabGroupEnd */
 		GroupEnd();
 		return(true);
 	}
-
-
 	/*
 	 * ----------
 	 * -- Assign dialog elements their initial values here:
@@ -747,9 +747,17 @@ public:
 
 	virtual Bool Command(Int32 id, const BaseContainer& msg)
 	{
-		iferr_scope;
+		iferr_scope_handler{
+			return false;
+		};
 		switch (id)
+		{		
+		case DLG_VPD_POSE_IMPORT_BUTTON:
 		{
+			maxon::UniqueRef<mmd::VPD_pose>	mmd_pose = NewObj(mmd::VPD_pose)iferr_return;
+			mmd_pose->FromFileImportPose(mmd::VPD_pose_import_settings())iferr_return;
+			break;
+		}
 		case DLG_VMD_CAM_IMPORT_BUTTON:
 		{
 			mmd::VMD_Camera_import_settings setting_;
@@ -760,10 +768,8 @@ public:
 			config["VMD_CAM_IMPORT_OFFSET"] = setting_.time_offset;
 			std::ofstream fout(config_path);
 			fout << config;
-			iferr(mmd::VMDAnimation::FromFileImportCamera(setting_))
-			{
-				return(false);
-			}
+			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			mmd_animation->FromFileImportCamera(setting_)iferr_return;
 			break;
 		}
 		case DLG_VMD_CAM_CONVER_BUTTON:
@@ -776,10 +782,7 @@ public:
 			config["VMD_CAM_CONVER_ROTATION_TWEEN"] = setting_.use_rotation;
 			std::ofstream fout(config_path);
 			fout << config;
-			iferr(mmd::OMMDCamera::ConversionCamera(setting_))
-			{
-				return(false);
-			}
+			mmd::OMMDCamera::ConversionCamera(setting_)iferr_return;
 			break;
 		}
 		case DLG_VMD_CAM_EXPORT_BUTTON:
@@ -796,10 +799,8 @@ public:
 			config["VMD_CAM_EXPORT_ROTATION_TWEEN"] = setting_.use_rotation;
 			std::ofstream fout(config_path);
 			fout << config;
-			iferr(mmd::VMDAnimation::FromDocumentExportCamera(setting_))
-			{
-				return(false);
-			}
+			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			mmd_animation->FromDocumentExportCamera(setting_)iferr_return;
 			break;
 		}
 		case DLG_VMD_CAM_EXPORT_USE_BAKE:
@@ -834,10 +835,8 @@ public:
 			config["VMD_MOT_IMPORT_DETAIL"] = setting_.detail_report;
 			std::ofstream fout(config_path);
 			fout << config;
-			iferr(mmd::VMDAnimation::FromFileImportMotions(setting_))
-			{
-				return(false);
-			}
+			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			mmd_animation->FromFileImportMotion(setting_)iferr_return;
 			break;
 		}
 		case DLG_VMD_MOT_EXPORT_BUTTON:
@@ -860,10 +859,8 @@ public:
 			config["VMD_MOT_EXPORT_USE_BAKE"] = setting_.use_bake;
 			std::ofstream fout(config_path);
 			fout << config;
-			iferr(mmd::VMDAnimation::FromDocumentExportMotions(setting_))
-			{
-				return(false);
-			}
+			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			mmd_animation->FromDocumentExportMotion(setting_)iferr_return;
 			break;
 		}
 		case DLG_VMD_MOT_EXPORT_USE_BAKE:
@@ -910,10 +907,8 @@ public:
 			config["PMX_MOD_IMPORT_ENGLISH_CHECK"] = setting_.import_english_check;
 			std::ofstream fout(config_path);
 			fout << config;
-			iferr(mmd::PMXModel::FromFileImportModel(setting_))
-			{
-				return(false);
-			}
+			maxon::UniqueRef<mmd::PMXModel> pmx_model = NewObj(mmd::PMXModel) iferr_return;
+			pmx_model->FromFileImportModel(setting_)iferr_return;
 			break;
 		}
 		case DLG_PMX_MOD_IMPORT_BONE:

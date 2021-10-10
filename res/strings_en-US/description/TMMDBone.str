@@ -2,7 +2,8 @@ STRINGTABLE TMMDBone
 {
 	TMMDBone "MMD Bone Tag";
 	PMX_BONE_INFO_GRP "MMD Bone info";
-	PMX_BONE_INDEX "    Bone index";
+	PMX_BONE_INDEX_TEXT "    Bone index            ";
+	PMX_BONE_INDEX "";
 	PMX_BONE_NAME_LOCAL "Bone local name";
 	PMX_BONE_NAME_UNIVERSAL "Bone universal name";
 	PMX_BONE_NAME_IS "Bone display name";
@@ -10,9 +11,9 @@ STRINGTABLE TMMDBone
 	PMX_BONE_NAME_IS_UNIVERSAL "Bone universal name";
 	PMX_BONE_POSITION "Position";
 
-	PMX_BONE_PARENT_BONE_GRP "Parent bone";
-	PMX_BONE_PARENT_BONE_INDEX "Parent bone Index";
-	PMX_BONE_PARENT_BONE_LINK "";
+	PMX_BONE_PARENT_BONE_TEXT "    Parent bone Index";
+	PMX_BONE_PARENT_BONE_INDEX "";
+	PMX_BONE_PARENT_BONE_NAME "";
 
 	PMX_BONE_FLAG_GRP "Bone features";
 	PMX_BONE_ROTATABLE "Is rotatable";
