@@ -1435,7 +1435,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 							if (!weight_tag->SetWeight(joint_bone_map.Find(vertex_data_.weight_deform_B2.bone1)->GetValue(), part_vertex_index, vertex_data_.weight_deform_B2.weight1))
 								return(maxon::Error());
 							auto bone2_Index_ptr = joint_bone_map.Find(vertex_data_.weight_deform_B2.bone2);
-							if (!weight_tag->SetWeight(bone2_Index_ptr->GetValue(), part_vertex_index, 1 - vertex_data_.weight_deform_B2.weight1 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), part_vertex_index)))
+							if (!weight_tag->SetWeight(bone2_Index_ptr->GetValue(), part_vertex_index, 1.0 - vertex_data_.weight_deform_B2.weight1 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), part_vertex_index)))
 								return(maxon::Error());
 							break;
 						}
@@ -1462,7 +1462,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 							if (!weight_tag->SetWeight(joint_bone_map.Find(vertex_data_.weight_deform_S.bone1)->GetValue(), part_vertex_index, vertex_data_.weight_deform_S.weight1))
 								return(maxon::Error());
 							auto bone2_Index_ptr = joint_bone_map.Find(vertex_data_.weight_deform_S.bone2);
-							if (!weight_tag->SetWeight(bone2_Index_ptr->GetValue(), part_vertex_index, 1 - vertex_data_.weight_deform_S.weight1 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), part_vertex_index)))
+							if (!weight_tag->SetWeight(bone2_Index_ptr->GetValue(), part_vertex_index, 1.0 - vertex_data_.weight_deform_S.weight1 + weight_tag->GetWeight(bone2_Index_ptr->GetValue(), part_vertex_index)))
 								return(maxon::Error());
 							break;
 						}
@@ -1726,7 +1726,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				doc->InsertMaterial(material);
 				if (settings.import_polygon)
 				{
-					TextureTag* texture_tag = TextureTag::Alloc();
+					TextureTag* const texture_tag = static_cast<TextureTag*>(part->MakeTag(Ttexture));
 					if (texture_tag == nullptr)
 					{
 						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -1736,7 +1736,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					texture_tag->SetMaterial(material);
 					texture_tag->SetName(material_data.material_name_local);
 					texture_tag->SetParameter(DescID(TEXTURETAG_PROJECTION), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
-					part->InsertTag(texture_tag);
 				}
 			}
 
@@ -2064,7 +2063,8 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				}
 				name_conversion.InitConver(bone_data_.bone_name_local);
 				bone_map.Insert(bone_index, bone) iferr_return;
-			}			
+			}
+			EventAdd();
 			if (settings.import_english_check)
 			{
 				name_conversion.CheckUpdata();
@@ -2082,6 +2082,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 				}
 				BaseObject* bone = bone_ptr->GetValue();
+				if (settings.import_weights) {
+					Int32 joint_index = weight_tag->AddJoint(bone);
+				}
 				if (bone_data_.parent_bone_index == -1)
 				{
 					bone->SetFrozenPos(Vector(bone_data_.position) * settings.position_multiple);
@@ -2334,7 +2337,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					{
 					case 0:
 					{
-						if (!weight_tag->SetWeight(vertex_data_.weight_deform_B1.bone1, vertex_index, 1))
+						if (!weight_tag->SetWeight(vertex_data_.weight_deform_B1.bone1, vertex_index, 1.0))
 							return(maxon::Error());
 						break;
 					}
@@ -2342,7 +2345,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					{
 						if (!weight_tag->SetWeight(vertex_data_.weight_deform_B2.bone1, vertex_index, vertex_data_.weight_deform_B2.weight1))
 							return(maxon::Error());
-						if (!weight_tag->SetWeight(vertex_data_.weight_deform_B2.bone2, vertex_index, 1 - vertex_data_.weight_deform_B2.weight1 + weight_tag->GetWeight(vertex_data_.weight_deform_B2.bone2, vertex_index)))
+						if (!weight_tag->SetWeight(vertex_data_.weight_deform_B2.bone2, vertex_index, 1.0 - vertex_data_.weight_deform_B2.weight1 + weight_tag->GetWeight(vertex_data_.weight_deform_B2.bone2, vertex_index)))
 							return(maxon::Error());
 						break;
 					}
@@ -2365,7 +2368,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					{
 						if (!weight_tag->SetWeight(vertex_data_.weight_deform_S.bone1, vertex_index, vertex_data_.weight_deform_S.weight1))
 							return(maxon::Error());
-						if (!weight_tag->SetWeight(vertex_data_.weight_deform_S.bone2, vertex_index, 1 - vertex_data_.weight_deform_S.weight1 + weight_tag->GetWeight(vertex_data_.weight_deform_S.bone2, vertex_index)))
+						if (!weight_tag->SetWeight(vertex_data_.weight_deform_S.bone2, vertex_index, 1.0 - vertex_data_.weight_deform_S.weight1 + weight_tag->GetWeight(vertex_data_.weight_deform_S.bone2, vertex_index)))
 							return(maxon::Error());
 						break;
 					}
@@ -2770,7 +2773,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					select_end += material_data.surface_count;
 					CallCommand(12552);
 					doc->GetActiveTag()->SetName(material_data.material_name_local);
-					TextureTag* texture_tag = TextureTag::Alloc();
+					TextureTag* const texture_tag = static_cast<TextureTag*>(model->MakeTag(Ttexture,doc->GetActiveTag()));
 					if (texture_tag == nullptr)
 					{
 						GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -2781,7 +2784,6 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					texture_tag->SetName(material_data.material_name_local);
 					texture_tag->SetParameter(DescID(TEXTURETAG_RESTRICTION), material_data.material_name_local, DESCFLAGS_SET::NONE);
 					texture_tag->SetParameter(DescID(TEXTURETAG_PROJECTION), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
-					model->InsertTag(texture_tag, doc->GetActiveTag());
 				}
 			}
 		}

@@ -3466,6 +3466,20 @@ Bool mmd::OMMDRigid::SetDParameter(GeListNode* node, const DescID& id, const GeD
 		}
 		break;
 	}
+	case RIGID_RELATED_BONE_INDEX:
+	{
+		auto related_bone_ptr = this->RigidRoot->GetNodeData<OMMDRigidRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(t_data.GetInt32());
+		if (related_bone_ptr != nullptr)
+		{
+			related_bone = related_bone_ptr->GetValue();
+		}
+		break;
+	}
+	case RIGID_PHYSICS_MODE:
+	{
+		this->physics_mode = t_data.GetInt32();
+		break;
+	}
 	default:
 		break;
 	}
@@ -3476,8 +3490,388 @@ Bool mmd::OMMDRigid::GetDEnabling(GeListNode* node, const DescID& id, const GeDa
 	switch (id[0].id)
 	{
 	case ID_BASEOBJECT_REL_POSITION:
-		return(false);
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
 	case ID_BASEOBJECT_REL_ROTATION:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case ID_BASEOBJECT_FROZEN_POSITION:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case ID_BASEOBJECT_FROZEN_ROTATION:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_RELATED_BONE_INDEX:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_PHYSICS_MODE:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_GROUP_ID:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_TYPE:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_SIZE_X:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_SIZE_Y:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_SIZE_Z:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_POSITION_X:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_POSITION_Y:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_POSITION_Z:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_ROTATION_X:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_ROTATION_Y:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_SHAPE_ROTATION_Z:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_MASS:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_REPULSION:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_FRICTION_FORCE:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_MOVE_ATTENUATION:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_ROTATION_DAMPING:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_0:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_1:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_2:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_3:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_4:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_5:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_6:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_7:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_8:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_9:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_10:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_11:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_12:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_13:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_14:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case RIGID_NON_COLLISION_GROUP_15:
+	{
+		if (this->mode == RIGID_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case ID_BASEOBJECT_REL_SCALE:
+		return(false);
+	case ID_BASEOBJECT_FROZEN_SCALE:
 		return(false);
 	default:
 		break;
@@ -3767,6 +4161,20 @@ case MSG_GETCUSTOMICON:
 			}
 			break;
 		}
+		case RIGID_RELATED_BONE_INDEX:
+		{
+			auto related_bone_ptr = this->RigidRoot->GetNodeData<OMMDRigidRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(bc->GetInt32(RIGID_RELATED_BONE_INDEX));
+			if (related_bone_ptr != nullptr)
+			{
+				related_bone = related_bone_ptr->GetValue();
+			}
+			break;
+		}
+		case RIGID_PHYSICS_MODE:
+		{
+			this->physics_mode = bc->GetInt32(RIGID_PHYSICS_MODE);
+			break;
+		}
 		default:
 			break;
 		}
@@ -3777,7 +4185,8 @@ case MSG_GETCUSTOMICON:
 		OMMDRigidRoot_MSG* msg = static_cast<OMMDRigidRoot_MSG*>(data);
 		if (msg != nullptr)
 		{
-			if (msg->type == 0)
+			switch (msg->type) {
+			case 0:
 			{
 				this->DisplayType = msg->DisplayType;
 				if (draw_obj == nullptr)
@@ -3837,8 +4246,45 @@ case MSG_GETCUSTOMICON:
 					BaseObject::Free(draw_obj);
 					BaseObject::Free(pdraw_obj);
 				}
+				break;
 			}
-			this->Mode = msg->Mode;
+			case 1:
+			{
+				BaseObject* op = static_cast<BaseObject*>(node);
+				if (this->mode == RIGID_MODE_EDIT && msg->mode == RIGID_MODE_ANIM) {				
+					no_anim_pos = op->GetAbsPos();
+					no_anim_rot = op->GetAbsRot();
+					if (related_bone != nullptr) {
+						this->relative_bone_position = op->GetAbsPos() - related_bone->GetAbsPos();
+						this->relative_bone_rotation = op->GetAbsRot() - related_bone->GetAbsRot();
+					}
+				}
+				else if (this->mode == RIGID_MODE_ANIM && msg->mode == RIGID_MODE_EDIT) {
+					op->SetAbsPos(no_anim_pos);
+					op->SetAbsRot(no_anim_rot);
+				}
+				this->mode = msg->mode;	
+				if (protection_tag != nullptr) {
+					if (this->mode == RIGID_MODE_ANIM) {
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_X), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_Y), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_Z), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_X), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_Y), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_Z), true, DESCFLAGS_SET::NONE);
+					}
+					else {
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_X), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_Y), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_X), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_Y), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_Z), false, DESCFLAGS_SET::NONE);
+					}
+				}
+				break;
+			}
+			}
 		}
 		break;
 	}
@@ -4008,7 +4454,7 @@ EXECUTIONRESULT mmd::OMMDRigid::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	if (bc == nullptr)
 	{
 		return(EXECUTIONRESULT::OK);
-	}
+	}	
 	BaseObject* PredObject = op->GetPred();
 	BaseObject* UpObject = op->GetUp();
 	BaseObject* rigid_root_object = this->RigidRoot;
@@ -4042,6 +4488,40 @@ EXECUTIONRESULT mmd::OMMDRigid::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
 	if (now_index != pred_index && this->RigidRoot != nullptr)
 		this->RigidRoot->Message(ID_O_MMD_RIGID, NewObj(mmd::OMMDRigid_MSG, pred_index, now_index, op).GetValue());
+	if (this->protection_tag == nullptr) {
+		this->protection_tag = op->MakeTag(Tprotection);
+		this->protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+		this->protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
+		this->protection_tag->SetParameter(DescID(PROTECTION_ALLOW_EXPRESSIONS), true, DESCFLAGS_SET::NONE);
+	}
+	if (this->mode == RIGID_MODE_ANIM) {
+		switch (this->physics_mode)
+		{
+		case TRACK_BONES:
+		{
+			if (related_bone != nullptr) {
+				op->SetAbsPos(related_bone->GetAbsPos() + this->relative_bone_position);
+				op->SetAbsRot(related_bone->GetAbsRot() + this->relative_bone_rotation);
+			}
+			break;
+		}
+		case PHYSICAL_CALCULUS:
+		{
+			if (related_bone != nullptr) {
+				related_bone->SetAbsPos(op->GetAbsPos() - this->relative_bone_position);
+				related_bone->SetAbsRot(op->GetAbsRot() - this->relative_bone_rotation);
+			}
+			break;
+		}
+		case PHYSICS_AND_BONES:
+		{
+
+			break;
+		}
+		default:
+			break;
+		}
+	}
 	return(EXECUTIONRESULT::OK);
 }
 Bool mmd::OMMDRigid::AddToExecution(BaseObject* op, PriorityList* list)
@@ -4055,21 +4535,47 @@ Bool mmd::OMMDRigid::AddToExecution(BaseObject* op, PriorityList* list)
 }
 Bool mmd::OMMDRigid::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
+	hf->ReadInt32(&this->DisplayType);
+	hf->ReadInt32(&this->mode);
+	hf->ReadInt32(&this->physics_mode);
+	hf->ReadVector(&this->no_anim_pos);
+	hf->ReadVector(&this->no_anim_rot);
+	hf->ReadVector(&this->relative_bone_position);
+	hf->ReadVector(&this->relative_bone_rotation);
 	AutoAlloc<BaseLink> rigid_root_link;
 	if (rigid_root_link == nullptr)
 		return false;
 	if (!rigid_root_link->Read(hf))
 		return(false);
 	this->RigidRoot = static_cast<BaseObject*>(rigid_root_link->GetLink(GetActiveDocument()));
+	AutoAlloc<BaseLink> related_bone_link;
+	if (related_bone_link == nullptr)
+		return false;
+	if (!related_bone_link->Read(hf))
+		return(false);
+	this->related_bone = static_cast<BaseObject*>(related_bone_link->GetLink(GetActiveDocument()));
 	return true;
 }
 Bool mmd::OMMDRigid::Write(GeListNode* node, HyperFile* hf)
 {
+	hf->WriteInt32(this->DisplayType);
+	hf->WriteInt32(this->mode);
+	hf->WriteInt32(this->physics_mode);
+	hf->WriteVector(this->no_anim_pos);
+	hf->WriteVector(this->no_anim_rot);
+	hf->WriteVector(this->relative_bone_position);
+	hf->WriteVector(this->relative_bone_rotation);
 	AutoAlloc<BaseLink> rigid_root_link;
 	if (rigid_root_link == nullptr)
 		return false;
 	rigid_root_link->SetLink(this->RigidRoot);
 	if (!rigid_root_link->Write(hf))
+		return(false);
+	AutoAlloc<BaseLink> related_bone_link;
+	if (related_bone_link == nullptr)
+		return false;
+	related_bone_link->SetLink(this->related_bone);
+	if (!related_bone_link->Write(hf))
 		return(false);
 	return true;
 }
@@ -4079,7 +4585,13 @@ Bool mmd::OMMDRigid::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode
 	if (destObject == nullptr)
 		return(false);
 	destObject->RigidRoot = this->RigidRoot;
-	destObject->DisplayType == this->DisplayType;
+	destObject->related_bone = this->related_bone;
+	destObject->mode = this->mode;
+	destObject->DisplayType = this->DisplayType;
+	destObject->no_anim_pos = this->no_anim_pos;
+	destObject->no_anim_rot = this->no_anim_rot;
+	destObject->relative_bone_position = this->relative_bone_position;
+	destObject->relative_bone_rotation = this->relative_bone_rotation;
 	return(true);
 }
 void mmd::OMMDRigid::Free(GeListNode* node)
@@ -4142,7 +4654,401 @@ Bool mmd::OMMDJoint::GetDDescription(GeListNode* node, Description* description,
 }
 Bool mmd::OMMDJoint::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
+	switch (id[0].id)
+	{
+	case JOINT_LINK_RIGID_A_INDEX:
+	{
+		auto link_rigid_a_ptr = this->JointRoot->GetNodeData<OMMDJointRoot>()->RigidRoot->GetNodeData<OMMDRigidRoot>()->IndexToRigidMap.Find(t_data.GetInt32());
+		if (link_rigid_a_ptr != nullptr) {
+			link_rigid_a = link_rigid_a_ptr->GetValue();
+		}
+		break;
+	}
+	case JOINT_LINK_RIGID_B_INDEX:
+	{
+		auto link_rigid_b_ptr = this->JointRoot->GetNodeData<OMMDJointRoot>()->RigidRoot->GetNodeData<OMMDRigidRoot>()->IndexToRigidMap.Find(t_data.GetInt32());
+		if (link_rigid_b_ptr != nullptr) {
+			link_rigid_b = link_rigid_b_ptr->GetValue();
+		}
+		break;
+	}
+	default:
+		break;
+	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
+}
+Bool mmd::OMMDJoint::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
+{
+	switch (id[0].id)
+	{
+	case ID_BASEOBJECT_REL_POSITION:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case ID_BASEOBJECT_REL_ROTATION:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case ID_BASEOBJECT_FROZEN_POSITION:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case ID_BASEOBJECT_FROZEN_ROTATION:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_TYPE:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_LINK_RIGID_A_INDEX:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_LINK_RIGID_B_INDEX:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_ATTITUDE_POSITION_X:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_ATTITUDE_POSITION_Y:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_ATTITUDE_POSITION_Z:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_ATTITUDE_ROTATION_X:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_ATTITUDE_ROTATION_Y:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_ATTITUDE_ROTATION_Z:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_ATTITUDE_USE_BONE_INDEX:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_POSITION_X_MIN:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_POSITION_X_MAX:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_POSITION_Y_MIN:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_POSITION_Y_MAX:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_POSITION_Z_MIN:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_POSITION_Z_MAX:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_ROTATION_X_MIN:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_ROTATION_X_MAX:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_ROTATION_Y_MIN:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_ROTATION_Y_MAX:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_ROTATION_Z_MIN:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_ROTATION_Z_MAX:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_SPRING_POSITION_X:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_SPRING_POSITION_Y:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_SPRING_POSITION_Z:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_SPRING_ROTATION_X:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_SPRING_ROTATION_Y:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_SPRING_ROTATION_Z:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_LINK_RIGID_SET_NAME_BUTTON:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_ATTITUDE_USE_BONE_BUTTON:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_PARAMETER_RESET_BUTTON:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case JOINT_SPRING_RESET_BUTTON:
+	{
+		if (this->mode == JOINT_MODE_ANIM)
+		{
+			return(false);
+		}
+		else {
+			return(true);
+		}
+	}
+	case ID_BASEOBJECT_REL_SCALE:
+		return(false);
+	case ID_BASEOBJECT_FROZEN_SCALE:
+		return(false);
+	default:
+		break;
+	}
+	return(SUPER::GetDEnabling(node, id, t_data, flags, itemdesc));
 }
 Bool mmd::OMMDJoint::Message(GeListNode* node, Int32 type, void* data)
 {
@@ -4177,12 +5083,37 @@ Bool mmd::OMMDJoint::Message(GeListNode* node, Int32 type, void* data)
 		OMMDJointRoot_MSG* msg = static_cast<OMMDJointRoot_MSG*>(data);
 		if (msg != nullptr)
 		{
-			if (msg->type == 0)
+			switch (msg->type)
+			{
+			case 0:
 			{
 				this->DisplayType = msg->DisplayType;
 			}
-			else {
-				this->Mode = msg->Mode;
+			case 1:
+			{
+				this->mode = msg->mode;
+				if (protection_tag != nullptr) {
+					if (this->mode == RIGID_MODE_ANIM) {
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_X), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_Y), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_Z), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_X), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_Y), true, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_Z), true, DESCFLAGS_SET::NONE);
+					}
+					else {
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_X), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_Y), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_X), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_Y), false, DESCFLAGS_SET::NONE);
+						this->protection_tag->SetParameter(DescID(PROTECTION_R_Z), false, DESCFLAGS_SET::NONE);
+					}
+				}
+				break;
+			}
+			default:
+				break;
 			}
 		}
 		break;
@@ -4247,6 +5178,33 @@ Bool mmd::OMMDJoint::Message(GeListNode* node, Int32 type, void* data)
 			bc->SetFloat(JOINT_SPRING_ROTATION_X, 0.0);
 			bc->SetFloat(JOINT_SPRING_ROTATION_Y, 0.0);
 			bc->SetFloat(JOINT_SPRING_ROTATION_Z, 0.0);
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	case MSG_DESCRIPTION_CHECKUPDATE:
+	{
+		const Int32	id = static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id;
+		BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
+		switch (id)
+		{
+		case JOINT_LINK_RIGID_A_INDEX:
+		{
+			auto link_rigid_a_ptr = this->JointRoot->GetNodeData<OMMDJointRoot>()->RigidRoot->GetNodeData<OMMDRigidRoot>()->IndexToRigidMap.Find(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX));
+			if (link_rigid_a_ptr != nullptr) {
+				link_rigid_a = link_rigid_a_ptr->GetValue();
+			}
+			break;
+		}
+		case JOINT_LINK_RIGID_B_INDEX:
+		{
+			auto link_rigid_b_ptr = this->JointRoot->GetNodeData<OMMDJointRoot>()->RigidRoot->GetNodeData<OMMDRigidRoot>()->IndexToRigidMap.Find(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX));
+			if (link_rigid_b_ptr != nullptr) {
+				link_rigid_b = link_rigid_b_ptr->GetValue();
+			}
 			break;
 		}
 		default:
@@ -4333,6 +5291,12 @@ EXECUTIONRESULT mmd::OMMDJoint::Execute(BaseObject* op, BaseDocument* doc, BaseT
 			this->JointRoot = UpObject;
 		}
 	}
+	if (this->protection_tag == nullptr) {
+		this->protection_tag = op->MakeTag(Tprotection);
+		this->protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+		this->protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
+		this->protection_tag->SetParameter(DescID(PROTECTION_ALLOW_EXPRESSIONS), true, DESCFLAGS_SET::NONE);
+	}
 	return(EXECUTIONRESULT::OK);
 }
 Bool mmd::OMMDJoint::AddToExecution(BaseObject* op, PriorityList* list)
@@ -4346,17 +5310,37 @@ Bool mmd::OMMDJoint::AddToExecution(BaseObject* op, PriorityList* list)
 }
 Bool mmd::OMMDJoint::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
+	hf->ReadInt32(&this->DisplayType);
+	hf->ReadInt32(&this->mode);
 	AutoAlloc<BaseLink> joint_root_link;
 	if (!joint_root_link->Read(hf))
 		return(false);
 	this->JointRoot = static_cast<BaseObject*>(joint_root_link->GetLink(GetActiveDocument()));
+	AutoAlloc<BaseLink> link_rigid_a_link;
+	if (!link_rigid_a_link->Read(hf))
+		return(false);
+	this->link_rigid_a = static_cast<BaseObject*>(link_rigid_a_link->GetLink(GetActiveDocument()));
+	AutoAlloc<BaseLink> link_rigid_b_link;
+	if (!link_rigid_b_link->Read(hf))
+		return(false);
+	this->link_rigid_b = static_cast<BaseObject*>(link_rigid_b_link->GetLink(GetActiveDocument()));
 	return true;
 }
 Bool mmd::OMMDJoint::Write(GeListNode* node, HyperFile* hf)
 {
+	hf->WriteInt32(this->DisplayType);
+	hf->WriteInt32(this->mode);
 	AutoAlloc<BaseLink> joint_root_link;
 	joint_root_link->SetLink(this->JointRoot);
 	if (!joint_root_link->Write(hf))
+		return(false);
+	AutoAlloc<BaseLink> link_rigid_a_link;
+	link_rigid_a_link->SetLink(this->link_rigid_a);
+	if (!link_rigid_a_link->Write(hf))
+		return(false);
+	AutoAlloc<BaseLink> link_rigid_b_link;
+	link_rigid_b_link->SetLink(this->link_rigid_b);
+	if (!link_rigid_b_link->Write(hf))
 		return(false);
 	return true;
 }
@@ -4366,6 +5350,9 @@ Bool mmd::OMMDJoint::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode
 	if (destObject == nullptr)
 		return(false);
 	destObject->JointRoot = this->JointRoot;
+	destObject->link_rigid_a = this->link_rigid_a;
+	destObject->link_rigid_b = this->link_rigid_b;
+	destObject->mode = this->mode;
 	destObject->DisplayType = this->DisplayType;
 	return(true);
 }
@@ -4815,7 +5802,9 @@ Bool mmd::OMMDRigidRoot::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* d
 Bool mmd::OMMDRigidRoot::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	BaseObject* op = static_cast<BaseObject*>(node);
-	if (id[0].id == RIGID_DISPLAY_TYPE)
+	switch (id[0].id)
+	{
+	case RIGID_DISPLAY_TYPE:
 	{
 		switch (t_data.GetInt32())
 		{
@@ -4841,6 +5830,29 @@ Bool mmd::OMMDRigidRoot::SetDParameter(GeListNode* node, const DescID& id, const
 		default:
 			break;
 		}
+		break;
+	}
+	case RIGID_MODE:
+	{
+		switch (t_data.GetInt32())
+		{
+		case RIGID_MODE_ANIM:
+		{
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, NewObj(OMMDRigidRoot_MSG, 1, 0, RIGID_MODE_ANIM).GetValue());
+			break;
+		}
+		case RIGID_MODE_EDIT:
+		{
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, NewObj(OMMDRigidRoot_MSG, 1, 0, RIGID_MODE_EDIT).GetValue());
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	default:
+		break;
 	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
@@ -4854,6 +5866,10 @@ Bool mmd::OMMDRigidRoot::Message(GeListNode* node, Int32 type, void* data)
 	{
 	case MSG_DESCRIPTION_COMMAND:
 	{
+		BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
+		if (bc == nullptr) {
+			return(true);
+		}
 		DescriptionCommand* dc = (DescriptionCommand*)data;
 		if (dc->_descId[0].id == ADD_RIGID_BUTTON)
 		{
@@ -4862,6 +5878,8 @@ Bool mmd::OMMDRigidRoot::Message(GeListNode* node, Int32 type, void* data)
 			{
 				newRigid->SetName(newRigid->GetName() + "." + String::IntToString(this->name_cnt++));
 				newRigid->InsertUnder(node);
+				newRigid->Message(ID_O_MMD_RIGID_ROOT, NewObj(OMMDRigidRoot_MSG, 0, bc->GetInt32(RIGID_DISPLAY_TYPE) ,0).GetValue());
+				newRigid->Message(ID_O_MMD_RIGID_ROOT, NewObj(OMMDRigidRoot_MSG, 1, 0, bc->GetInt32(RIGID_MODE)).GetValue());
 			}
 		}
 		break;
@@ -4919,7 +5937,7 @@ Bool mmd::OMMDRigidRoot::Message(GeListNode* node, Int32 type, void* data)
  * *******************
  * PMX Joint Root Object
  * *******************
- */
+ */ 
 
 Bool mmd::OMMDJointRoot::Init(GeListNode* node)
 {
@@ -4972,6 +5990,10 @@ Bool mmd::OMMDJointRoot::Message(GeListNode* node, Int32 type, void* data)
 	{
 	case MSG_DESCRIPTION_COMMAND:
 	{
+		BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
+		if (bc == nullptr) {
+			return(true);
+		}
 		DescriptionCommand* dc = (DescriptionCommand*)data;
 		if (dc->_descId[0].id == ADD_JOINT_BUTTON)
 		{
@@ -4980,6 +6002,8 @@ Bool mmd::OMMDJointRoot::Message(GeListNode* node, Int32 type, void* data)
 			{
 				newJoint->SetName(newJoint->GetName() + "." + String::IntToString(this->name_cnt++));
 				newJoint->InsertUnder(node);
+				newJoint->Message(ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG, 0, bc->GetInt32(JOINT_DISPLAY_TYPE), 0).GetValue());
+				newJoint->Message(ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG, 1, 0, bc->GetInt32(JOINT_MODE)).GetValue());
 			}
 		}
 		break;
@@ -5015,28 +6039,20 @@ Bool mmd::OMMDJointRoot::Message(GeListNode* node, Int32 type, void* data)
 }
 Bool mmd::OMMDJointRoot::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
-	if (id[0].id == JOINT_DISPLAY_TYPE)
+	switch (id[0].id)
 	{
-		switch (t_data.GetInt32())
-		{
-		case JOINT_DISPLAY_TYPE_OFF:
-		{
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG, 0, JOINT_DISPLAY_TYPE_OFF).GetValue());
-			break;
-		}
-		case JOINT_DISPLAY_TYPE_ON:
-		{
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG, 0, JOINT_DISPLAY_TYPE_ON).GetValue());
-			break;
-		}
-		case JOINT_DISPLAY_TYPE_WIRE:
-		{
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG, 0, JOINT_DISPLAY_TYPE_WIRE).GetValue());
-			break;
-		}
-		default:
-			break;
-		}
+	case JOINT_DISPLAY_TYPE:
+	{
+		node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG, 0, t_data.GetInt32(), 0).GetValue());
+		break;
+	}
+	case JOINT_MODE:
+	{
+		node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, NewObj(OMMDJointRoot_MSG, 1, 0, t_data.GetInt32()).GetValue());
+		break;
+	}
+	default:
+		break;
 	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }

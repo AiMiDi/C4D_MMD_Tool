@@ -9,8 +9,6 @@ namespace mmd
 		const Matrix4d invZ = MatToGLMat(MatrixScale(Vector(1, 1, -1)));
 		return(invZ * m * invZ);
 	}
-
-
 	struct MMDFilterCallback : public btOverlapFilterCallback
 	{
 		std::vector<btBroadphaseProxy*> nonFilterProxy;
@@ -30,7 +28,6 @@ namespace mmd
 			return(collides);
 		}
 	};
-
 	Bool BulletThread::PhysicsCreate()
 	{
 		broadphase = std::make_unique<btDbvtBroadphase>();
@@ -62,8 +59,6 @@ namespace mmd
 		filterCB = std::move(filterCB);
 		return(true);
 	}
-
-
 	void BulletThread::PhysicsDestroy()
 	{
 		if (dynamicsWorld != nullptr && groundRB != nullptr)
@@ -80,37 +75,26 @@ namespace mmd
 		groundMS = nullptr;
 		groundRB = nullptr;
 	}
-
-
 	void BulletThread::SetFPS(Int32 fps)
 	{
 		fps = fps;
 	}
-
-
 	Int32 BulletThread::GetFPS() const
 	{
 		return(fps);
 	}
-
-
 	void BulletThread::SetMaxSubStepCount(Int32 numSteps)
 	{
 		maxSubStepCount = numSteps;
 	}
-
-
 	Int32 BulletThread::GetMaxSubStepCount() const
 	{
 		return(maxSubStepCount);
 	}
-
-
 	btDiscreteDynamicsWorld* BulletThread::GetDynamicsWorld() const
 	{
 		return(dynamicsWorld.get());
 	}
-
 
 	/*
 	 * *******************
@@ -126,13 +110,9 @@ namespace mmd
 		, m_offsetMat(Matrix4d())
 	{
 	}
-
-
 	MMDRigidBody::~MMDRigidBody()
 	{
 	}
-
-
 	Bool MMDRigidBody::Create(OMMDRigid* pmxRigidBody)
 	{
 		Destroy();
@@ -269,35 +249,24 @@ namespace mmd
 		m_groupMask = *reinterpret_cast<uint16_t*>(&groupMask);
 		m_node = node;
 		m_name = bc->GetString(RIGID_NAME_LOCAL);
-
 		return(true);
 	}
-
-
 	void MMDRigidBody::Destroy()
 	{
 		m_shape = nullptr;
 	}
-
-
 	btRigidBody* MMDRigidBody::GetRigidBody() const
 	{
 		return(m_rigidBody.get());
 	}
-
-
 	uint16_t MMDRigidBody::GetGroup() const
 	{
 		return(m_group);
 	}
-
-
 	uint16_t MMDRigidBody::GetGroupMask() const
 	{
 		return(m_groupMask);
 	}
-
-
 	void MMDRigidBody::SetActivation(bool activation)
 	{
 		if (m_rigidBodyType != TRACK_BONES)
@@ -316,8 +285,6 @@ namespace mmd
 			m_rigidBody->setMotionState(m_kinematicMotionState.get());
 		}
 	}
-
-
 	void MMDRigidBody::ResetTransform()
 	{
 		if (m_activeMotionState != nullptr)
@@ -325,8 +292,6 @@ namespace mmd
 			m_activeMotionState->Reset();
 		}
 	}
-
-
 	void MMDRigidBody::Reset(BulletThread* physics)
 	{
 		auto cache = physics->GetDynamicsWorld()->getPairCache();
@@ -339,8 +304,6 @@ namespace mmd
 		m_rigidBody->setLinearVelocity(btVector3(0, 0, 0));
 		m_rigidBody->clearForces();
 	}
-
-
 	void MMDRigidBody::ReflectGlobalTransform()
 	{
 		if (m_activeMotionState != nullptr)
@@ -352,8 +315,6 @@ namespace mmd
 			m_kinematicMotionState->ReflectGlobalTransform();
 		}
 	}
-
-
 	void MMDRigidBody::CalcLocalTransform()
 	{
 		if (m_node != nullptr)
@@ -369,8 +330,6 @@ namespace mmd
 			}
 		}
 	}
-
-
 	Matrix4d MMDRigidBody::GetTransform()
 	{
 		btTransform transform = m_rigidBody->getCenterOfMassTransform();

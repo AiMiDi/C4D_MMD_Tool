@@ -296,13 +296,18 @@ namespace mmd {
 	class OMMDRigid : public ObjectData
 	{
 	private:
-		Vector	position_frozne = Vector();
-		Vector	rotation_frozne = Vector();	
+		Vector		no_anim_pos = Vector();
+		Vector		no_anim_rot = Vector();
+		Vector		relative_bone_position = Vector();
+		Vector		relative_bone_rotation = Vector();
 		Int32		DisplayType = RIGID_DISPLAY_TYPE_OFF;
-		Int32		Mode = RIGID_MODE_ANIM;
+		Int32		mode = RIGID_MODE_ANIM;
+		Int32		physics_mode = TRACK_BONES;
 		BaseObject* pdraw_obj = nullptr;
 		BaseObject* draw_obj = nullptr;
 		BaseObject* RigidRoot = nullptr;
+		BaseObject* related_bone = nullptr;
+		BaseTag* protection_tag = nullptr;
 		OMMDRigid() {}
 		~OMMDRigid(){}
 		MAXON_DISALLOW_COPY_AND_ASSIGN(OMMDRigid);
@@ -340,8 +345,11 @@ namespace mmd {
 	{
 	private:
 		Int32	DisplayType = JOINT_DISPLAY_TYPE_OFF;
-		Int32	Mode = JOINT_MODE_ANIM;
+		Int32	mode = JOINT_MODE_ANIM;
 		BaseObject* JointRoot = nullptr;
+		BaseObject* link_rigid_a = nullptr;
+		BaseObject* link_rigid_b = nullptr;
+		BaseTag* protection_tag = nullptr;
 		OMMDJoint() {}
 		~OMMDJoint() {}
 		MAXON_DISALLOW_COPY_AND_ASSIGN(OMMDJoint);
@@ -353,6 +361,7 @@ namespace mmd {
 		/* 设置参数时调用，用于调用SplineData的回调函数 */
 		virtual Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags);
 		virtual Bool GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags);
+		Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc);
 		/* 接收Message时调用，用于处理事件 */
 		virtual Bool Message(GeListNode* node, Int32 type, void* data);
 		virtual DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh);
@@ -408,24 +417,24 @@ namespace mmd {
 	{
 		Int32	type = 0;
 		Int32	DisplayType = RIGID_DISPLAY_TYPE_OFF;
-		Int32	Mode = RIGID_MODE_ANIM;
-		OMMDRigidRoot_MSG(Int32 type_ = 0, Int32 DisplayType_ = RIGID_DISPLAY_TYPE_OFF, Int32 Mode_ = RIGID_MODE_ANIM)
+		Int32	mode = RIGID_MODE_ANIM;
+		OMMDRigidRoot_MSG(Int32 type_ = 0, Int32 DisplayType_ = RIGID_DISPLAY_TYPE_OFF, Int32 mode_ = RIGID_MODE_ANIM)
 		{
 			type = type_;
 			DisplayType = DisplayType_;
-			Mode = Mode_;
+			mode = mode_;
 		}
 	};
 	struct OMMDJointRoot_MSG
 	{
 		Int32	type = 0;
 		Int32	DisplayType = JOINT_DISPLAY_TYPE_OFF;
-		Int32	Mode = JOINT_MODE_ANIM;
-		OMMDJointRoot_MSG(Int32 type_ = 0, Int32 DisplayType_ = JOINT_DISPLAY_TYPE_OFF, Int32 Mode_ = JOINT_MODE_ANIM)
+		Int32	mode = JOINT_MODE_ANIM;
+		OMMDJointRoot_MSG(Int32 type_ = 0, Int32 DisplayType_ = JOINT_DISPLAY_TYPE_OFF, Int32 mode_ = JOINT_MODE_ANIM)
 		{
 			type = type_;
 			DisplayType = DisplayType_;
-			Mode = Mode_;
+			mode = mode_;
 		}
 	};
 	/*
