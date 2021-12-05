@@ -1,0 +1,2 @@
+*.py linguist-language=cpp
+*.objective-c linguist-language=cpp
