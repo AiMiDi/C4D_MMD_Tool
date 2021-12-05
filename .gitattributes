@@ -1,2 +1,2 @@
 *.py linguist-language=c++
-*.objective-c linguist-language=c++
+*.h linguist-language=c++
