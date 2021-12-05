@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+<Type Name="maxon::TimerValue">
+    <DisplayString>{_value} ms</DisplayString>
+</Type>
+
+<Type Name="maxon::AutoMem&lt;*&gt;">
+    <DisplayString>{_object}</DisplayString>
+</Type>
+
+<Type Name="maxon::Vec2&lt;*&gt;">
+    <DisplayString>{{ {x}, {y} }</DisplayString>
+    <Expand>
+        <Item Name="x">x</Item>
+        <Item Name="y">y</Item>
+        <Item Name="len (3. approx)">0.5*((x*x+y*y) * (0.125+1/(0.5*(x*x+y*y)+2))+0.5) + (x*x+y*y) / (2*((x*x+y*y) * (0.125+1/(0.5*(x*x+y*y)+2))+0.5))</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::Vec3&lt;*&gt;">
+    <DisplayString>{{ {x}, {y}, {z} }</DisplayString>
+    <Expand>
+        <Item Name="x">x</Item>
+        <Item Name="y">y</Item>
+        <Item Name="z">z</Item>
+        <Item Name="len (3. approx)">0.5*((x*x+y*y+z*z) * (0.125+1/(0.5*(x*x+y*y+z*z)+2))+0.5) + (x*x+y*y+z*z) / (2*((x*x+y*y+z*z) * (0.125+1/(0.5*(x*x+y*y+z*z)+2))+0.5))</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::Vec4&lt;*&gt;">
+    <DisplayString>{{ {x}, {y}, {z}, {w} }</DisplayString>
+    <Expand>
+        <Item Name="x">x</Item>
+        <Item Name="y">y</Item>
+        <Item Name="z">z</Item>
+        <Item Name="w">w</Item>
+        <Item Name="len (3. approx)">0.5*((x*x+y*y+z*z+w*w) * (0.125+1/(0.5*(x*x+y*y+z*z+w*w)+2))+0.5) + (x*x+y*y+z*z+w*w) / (2*((x*x+y*y+z*z+w*w) * (0.125+1/(0.5*(x*x+y*y+z*z+w*w)+2))+0.5))</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::Col3&lt;*&gt;">
+  <DisplayString>{{ {r}, {g}, {b} }</DisplayString>
+  <Expand>
+    <Item Name="r">r</Item>
+    <Item Name="g">g</Item>
+    <Item Name="b">b</Item>
+  </Expand>
+</Type>
+
+<Type Name="maxon::Col4&lt;*&gt;">
+  <DisplayString>{{ {r}, {g}, {b}, {a} }</DisplayString>
+  <Expand>
+    <Item Name="r">r</Item>
+    <Item Name="g">g</Item>
+    <Item Name="b">b</Item>
+    <Item Name="a">a</Item>
+  </Expand>
+</Type>
+  
+<Type Name="maxon::Pair&lt;*&gt;">
+    <DisplayString>{{ {first}, {second} }</DisplayString>
+    <Expand>
+        <Item Name="first">first</Item>
+        <Item Name="second">second</Item>
+    </Expand>
+</Type>
+
+<Type Name="maxon::UuidX4hi">
+  <!-- Helper structure for maxon::Uuid -->
+  <AlternativeType Name="maxon::UuidX4lo" />
+  <DisplayString Condition="v==0">0</DisplayString>
+  <DisplayString Condition="v==1">1</DisplayString>
+  <DisplayString Condition="v==2">2</DisplayString>
+  <DisplayString Condition="v==3">3</DisplayString>
+  <DisplayString Condition="v==4">4</DisplayString>
+  <DisplayString Condition="v==5">5</DisplayString>
+  <DisplayString Condition="v==6">6</DisplayString>
+  <DisplayString Condition="v==7">7</DisplayString>
+  <DisplayString Condition="v==8">8</DisplayString>
+  <DisplayString Condition="v==9">9</DisplayString>
+  <DisplayString Condition="v==10">A</DisplayString>
+  <DisplayString Condition="v==11">B</DisplayString>
+  <DisplayString Condition="v==12">C</DisplayString>
+  <DisplayString Condition="v==13">D</DisplayString>
+  <DisplayString Condition="v==14">E</DisplayString>
+  <DisplayString>F</DisplayString>
+</Type>
+<Type Name="maxon::UuidX8">
+  <!-- Helper structure for maxon::Uuid -->
+    <DisplayString>{*(maxon::UuidX4hi*)(this)}{*(maxon::UuidX4lo*)(this)}</DisplayString>
+</Type>
+<Type Name="maxon::UuidX32">
+  <!-- Helper structure for maxon::Uuid -->
+  <DisplayString>{((maxon::UuidX8*)this)[0]}{((maxon::UuidX8*)this)[1]}{((maxon::UuidX8*)this)[2]}{((maxon::UuidX8*)this)[3]}</DisplayString>
+</Type>
+<Type Name="maxon::Uuid">
+  <!-- Helper structure for maxon::Uuid -->
+  <DisplayString Condition="_object == 0">nullptr</DisplayString>
+  <DisplayString Condition="_object != 0">UUID: {(*(maxon::UuidX32**)this)}-{*(maxon::UuidX8*)((*(maxon::UChar**)this)+0x4)}{*(maxon::UuidX8*)((*(maxon::UChar**)this)+0x5)}-{*(maxon::UuidX8*)((*(maxon::UChar**)this)+0x6)}{*(maxon::UuidX8*)((*(maxon::UChar**)this)+0x7)}-{*(maxon::UuidX8*)((*(maxon::UChar**)this)+0x8)}{*(maxon::UuidX8*)((*(maxon::UChar**)this)+0x9)}-{*(maxon::UuidX32*)((*(maxon::UChar**)this)+0xA)}{*(maxon::UuidX8*)((*(maxon::UChar**)this)+0xE)}{*(maxon::UuidX8*)((*(maxon::UChar**)this)+0xF)}</DisplayString>
+</Type>
+
+<Type Name="maxon::CString">
+  <DisplayString Condition="_object == 0">nullptr</DisplayString>
+  <DisplayString Condition="_object != 0">{{ "{(*((char**)(((char*)_object)+0))), [(*((int*)(((char*)_object)+0+sizeof(char*))))]sb}" RefCnt: {(*((long*)(((char*)_object)-8))/16)}x }</DisplayString>
+	<StringView>(*((char**)(((char*)_object)+0))), [(*((int*)(((char*)_object)+0+sizeof(char*))))]sb</StringView>
+	<Expand>
+      <Item Name="String">(*((char**)(((char*)_object)+0))), [(*((int*)(((char*)_object)+0+sizeof(char*))))]sb</Item>
+			<Item Name="Length">(*((int*)(((char*)_object)+0+sizeof(char*)))) > 0 ? (*((int*)(((char*)_object)+0+sizeof(char*)))) - 1 : 0</Item>
+      <Item Name="RefCnt">*((long*)(((char*)_object)-8))/16</Item>
+	</Expand>
+</Type>
+
+<Type Name="maxon::String">
+    <DisplayString Condition="_object == 0">nullptr</DisplayString>
+    
+    <!-- Section for the new string layout in R19 and futurama -->
+    <DisplayString Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)+0) &lt; 0">{{ "{(*((char**)(((char*)_object)+24))), [(*((int*)(((char*)_object)+24+sizeof(char*))))]sb}" RefCnt: {(*((long*)(((char*)_object)-8))/16)}x }</DisplayString>
+    <DisplayString Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)+0) == 0">{{ "{(*((unsigned short**)(((char*)_object)+24))), [(*((int*)(((char*)_object)+24+sizeof(char*))))/8]sub}" RefCnt: {(*((long*)(((char*)_object)-8))/16)}x }</DisplayString>
+    <DisplayString Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)+0) == 1">{{ "[4byte-unicode]{(*((unsigned int**)(((char*)_object)+24))), [(*((int*)(((char*)_object)+24+sizeof(char*))))/8]su}" RefCnt: {(*((long*)(((char*)_object)-8))/16)}x }</DisplayString>
+		<StringView Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)+0) &lt; 0">(*((char**)(((char*)_object)+24))), [(*((int*)(((char*)_object)+24+sizeof(char*))))]sb</StringView>
+		<StringView Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)+0) == 0">(*((unsigned short**)(((char*)_object)+24))), [(*((int*)(((char*)_object)+24+sizeof(char*))))/8]sub</StringView>
+    <Expand>
+        <Item Name="Length" Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)) &lt; 0">(*((int*)(((char*)_object)+24+sizeof(char*))))</Item>
+        <Item Name="Length" Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)) == 0">(*((int*)(((char*)_object)+24+sizeof(char*)))) / 2</Item>
+        <Item Name="Length" Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)) == 1">(*((int*)(((char*)_object)+24+sizeof(char*)))) / 4</Item>
+    		<Item Name="Width"  Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)) &lt; 0">1</Item>
+    		<Item Name="Width"  Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)) == 0">2</Item>
+    		<Item Name="Width"  Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1 &amp;&amp; *(((char*)_object)) == 1">4</Item>
+        <Item Name="Pointer"  Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1&amp;&amp; *(((char*)_object)+0) &lt; 0">(*((char**)(((char*)_object)+24))), [(*((int*)(((char*)_object)+24+sizeof(char*))))]sb</Item>
+        <Item Name="Pointer"  Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1&amp;&amp; *(((char*)_object)+0) == 0">(*((unsigned short**)(((char*)_object)+24))), [(*((int*)(((char*)_object)+24+sizeof(char*))))/8]sub</Item>
+        <Item Name="Pointer"  Condition="_object != 0 &amp;&amp; *(((short*)_object)+1) == -1 &amp;&amp; *(((int*)_object)+1) == -1&amp;&amp; *(((char*)_object)+0) == 1">(*((unsigned int**)(((char*)_object)+24))), [(*((int*)(((char*)_object)+24+sizeof(char*))))/8]su</Item>
+      <Item Name="RefCnt">*((long*)(((char*)_object)-8))/16</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::Id">
+    <DisplayString Condition="_value == 0">nullptr</DisplayString>
+    <DisplayString Condition="_value != 0">{_value,s}</DisplayString>
+		<StringView>_value,s</StringView>
+    <Expand>
+        <Item Name="Value">_value,s</Item>
+        <Item Name="Hash">_hash,x</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::InternedId">
+    <DisplayString>{*_id}</DisplayString>
+</Type>
+
+<Type Name="maxon::Url">
+    <DisplayString Condition="_object == 0">nullptr</DisplayString>
+    <DisplayString Condition="_object != 0 &amp;&amp; ((maxon::Url*)(((int*)(((char*)_object)+0+2*sizeof(char*)+sizeof(char*)))))->_object == 0">{{ {*(maxon::Id*)(((int*)(((char*)_object)+0)))} Path: {*(maxon::String*)(((int*)(((char*)_object)+0+2*sizeof(char*))))} RefCnt: {(*((long*)(((char*)_object)-8))/16)}x }</DisplayString>
+    <DisplayString Condition="_object != 0 &amp;&amp; ((maxon::Url*)(((int*)(((char*)_object)+0+2*sizeof(char*)+sizeof(char*)))))->_object != 0">{{ {*(maxon::Id*)(((int*)(((char*)_object)+0)))} Authority: {*(maxon::Url*)(((int*)(((char*)_object)+0+3*sizeof(char*))))} Path: {*(maxon::String*)(((int*)(((char*)_object)+0+2*sizeof(char*))))} RefCnt: {(*((long*)(((char*)_object)-8))/16)}x }</DisplayString>
+    <Expand>
+        <Item Name="Protocol">*(maxon::Id*)(((int*)(((char*)_object)+0)))</Item>
+        <Item Name="Path">*(maxon::String*)(((int*)(((char*)_object)+0+2*sizeof(char*))))</Item>
+        <Item Name="Authority">*(maxon::Url*)(((int*)(((char*)_object)+0+3*sizeof(char*))))</Item>
+        <Item Name="RefCnt">*((long*)(((char*)_object)-8))/16</Item>
+        <Item Name="Data">*(maxon::DataDictionary*)(((int*)(((char*)_object)+0+3*sizeof(char*)+8)))</Item>
+        <Item Name="TransientData">*(maxon::DataDictionary*)(((int*)(((char*)_object)+0+3*sizeof(char*)+8+8)))</Item>      
+    </Expand>
+</Type>
+
+<!-- We need to use the hash value to identify the datatype, unfortunatly they are different for both 32 and 64 bit -->
+<Type Name="maxon::Data">
+    <DisplayString Condition="_typeInfo._ptr._object == 0">nullptr</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x63aea)">{{ Bool: {*(Bool*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x69356)">{{ Char: {*(Char*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x7514b)">{{ UChar: {*(UChar*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x35e54)">{{ Int16: {*(Int16*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x25eff)">{{ UInt16: {*(UInt16*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x35e8e)">{{ Int32: {*(Int32*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x25f39)">{{ UInt32: {*(UInt32*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x35eed)">{{ Int64: {*(Int64*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x25f98)">{{ UInt64: {*(UInt64*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x101bb)">{{ Float32: {*(Float32*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x1021a)">{{ Float64: {*(Float64*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x556ad)">{{ Vector2d32: {*(math.module.xdl64!maxon::Vec2&lt;float,1&gt;*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x5622e)">{{ Vector2d64: {*(math.module.xdl64!maxon::Vec2&lt;double,1&gt;*)*(char**)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x6c7cc)">{{ Vector32: {*(math.module.xdl64!maxon::Vec3&lt;float,1&gt;*)*(char**)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x6d34d)">{{ Vector64: {*(math.module.xdl64!maxon::Vec3&lt;double,1&gt;*)*(char**)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x038eb)">{{ Vector4d32: {*(math.module.xdl64!maxon::Vec4&lt;float,1&gt;*)*(char**)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x0446c)">{{ Vector4d64: {*(math.module.xdl64!maxon::Vec4&lt;double,1&gt;*)*(char**)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x3c358)">{{ String: {*(maxon::String*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x22f39)">{{ CString: {*(maxon::CString*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x44734)">{{ Url: {*(maxon::Url*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x62647)">{{ DataDictionary: {*(maxon::DataDictionary*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x40272)">{{ DataType: {*(maxon::DataType**)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x3f62b)">{{ ConditionVariableRef: {*(maxon::ConditionVariableRef*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x48360)">{{ ObjectRef: {*(maxon::ObjectRef*)&amp;_memBlock.dummy} }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x5491a)">{{ InternedId: {*(maxon::InternedId*)(char*)&amp;_memBlock.dummy} }</DisplayString>
+		<!-- Id is smalldata in 32 bit and bigdata in 64 bit -->
+		<DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; (_typeInfo._ptr._object->_id._hash == 0x008100c6         )">{{ Id: {*(maxon::Id*)&amp;_memBlock.dummy} }</DisplayString>
+		<DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; (_typeInfo._ptr._object->_id._hash == 0x000154931e777829 )">{{ Id: {*(maxon::Id*)*(char**)&amp;_memBlock.dummy} }</DisplayString>
+		<DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; _typeInfo._ptr._object->_size &lt;= 8">{{ {_typeInfo._ptr._object->_id} SmallData }</DisplayString>
+    <DisplayString Condition="_typeInfo._ptr._object != 0 &amp;&amp; _typeInfo._ptr._object->_size > 8">{{ {_typeInfo._ptr._object->_id} BigData }</DisplayString>
+    <Expand>
+        <Item Name="DataTypeInfo">_typeInfo._ptr._object->_id</Item>
+        <Item Condition="_typeInfo._ptr._object != 0 &amp;&amp; _typeInfo._ptr._object->_size &lt;= 8" Name="Small DataPtr">&amp;_memBlock.dummy</Item>
+        <Item Condition="_typeInfo._ptr._object != 0 &amp;&amp; _typeInfo._ptr._object->_size > 8" Name="Big DataPtr">*(char**)&amp;_memBlock.dummy</Item>
+
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x63aea)">*(Bool*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x69356)">*(Char*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x7514b)">*(UChar*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x35e54)">*(Int16*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x25eff)">*(UInt16*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x35e8e)">*(Int32*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x25f39)">*(UInt32*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x35eed)">*(Int64*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x25f98)">*(UInt64*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x101bb)">*(Float32*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x1021a)">*(Float64*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x556ad)">*(math.module.xdl64!maxon::Vec2&lt;float,1&gt;*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x5622e)">*(math.module.xdl64!maxon::Vec2&lt;double,1&gt;*)*(char**)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x6c7cc)">*(math.module.xdl64!maxon::Vec3&lt;float,1&gt;*)*(char**)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x6d34d)">*(math.module.xdl64!maxon::Vec3&lt;double,1&gt;*)*(char**)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x038eb)">*(math.module.xdl64!maxon::Vec4&lt;float,1&gt;*)*(char**)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x0446c)">*(math.module.xdl64!maxon::Vec4&lt;double,1&gt;*)*(char**)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x3c358)">*(maxon::String*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x22f39)">*(maxon::CString*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x44734)">*(maxon::Url*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x62647)">*(maxon::DataDictionary*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x40272)">*(maxon::DataType**)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x3f62b)">*(maxon::ConditionVariableRef*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x48360)">*(maxon::ObjectRef*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x5491a)">*(maxon::InternedId*)(char*)&amp;_memBlock.dummy</ExpandedItem>
+				<!-- Id is smalldata in 32 bit and bigdata in 64 bit -->
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; (_typeInfo._ptr._object->_id._hash == 0x008100c6         )">*(maxon::Id*)&amp;_memBlock.dummy</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo._ptr._object != 0 &amp;&amp; (_typeInfo._ptr._object->_id._hash == 0x000154931e777829 )">*(maxon::Id*)*(char**)&amp;_memBlock.dummy</ExpandedItem>
+		</Expand>
+</Type>
+
+<!-- We need to use the hash value to identify the datatype, unfortunatly they are different for both 32 and 64 bit -->
+<Type Name="maxon::ConstDataPtr">
+    <DisplayString Condition="_typeInfo == 0">nullptr</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x71a78)">{{ Bool: {*(Bool*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x772e4)">{{ Char: {*(Char*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x2637d)">{{ UChar: {*(UChar*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x67086)">{{ Int16: {*(Int16*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x1930d)">{{ UInt16: {*(UInt16*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x670c0)">{{ Int32: {*(Int32*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x19347)">{{ UInt32: {*(UInt32*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x6711f)">{{ Int64: {*(Int64*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x193a6)">{{ UInt64: {*(UInt64*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x04f6d)">{{ Float32: {*(Float32*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x04fcc)">{{ Float64: {*(Float64*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x2a567)">{{ Vector2d32: {*(math.module.xdl64!maxon::Vec2&lt;float,1&gt;*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x2b0e8)">{{ Vector2d64: {*(math.module.xdl64!maxon::Vec2&lt;double,1&gt;*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x289e8)">{{ Vector32: {*(math.module.xdl64!maxon::Vec3&lt;float,1&gt;*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x29569)">{{ Vector64: {*(math.module.xdl64!maxon::Vec3&lt;double,1&gt;*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x26e69)">{{ Vector4d32: {*(math.module.xdl64!maxon::Vec4&lt;float,1&gt;*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x279ea)">{{ Vector4d64: {*(math.module.xdl64!maxon::Vec4&lt;double,1&gt;*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x3c358)">{{ String: {*(maxon::String*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x22f39)">{{ CString: {*(maxon::CString*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x44734)">{{ Url: {*(maxon::Url*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x62647)">{{ DataDictionary: {*(maxon::DataDictionary*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x40272)">{{ DataType: {*(maxon::DataType**)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x3f62b)">{{ ConditionVariableRef: {*(maxon::ConditionVariableRef*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x18948)">{{ ObjectRef: {*(maxon::ObjectRef*)_dataPtr} }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x5491a)">{{ InternedId: {*(maxon::InternedId*)_dataPtr} }</DisplayString>
+		<!-- Id is smalldata in 32 bit and bigdata in 64 bit -->
+		<DisplayString Condition="_typeInfo != 0 &amp;&amp; (_typeInfo._ptr._object->_id._hash == 0x008100c6         )">{{ Id: {*(maxon::Id*)_dataPtr} }</DisplayString>
+		<DisplayString Condition="_typeInfo != 0 &amp;&amp; (_typeInfo._ptr._object->_id._hash == 0x000154931e777829 )">{{ Id: {*(maxon::Id*)_dataPtr} }</DisplayString>
+		<DisplayString Condition="_typeInfo != 0 &amp;&amp; _typeInfo._ptr._object->_size &lt;= 8">{{ {_typeInfo._ptr._object->_id} SmallData }</DisplayString>
+    <DisplayString Condition="_typeInfo != 0 &amp;&amp; _typeInfo._ptr._object->_size > 8">{{ {_typeInfo._ptr._object->_id} BigData }</DisplayString>
+    <Expand>
+        <Item Name="DataTypeInfo">_typeInfo._ptr._object->_id</Item>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x71a78)">*(Bool*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x772e4)">*(Char*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x2637d)">*(UChar*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x67086)">*(Int16*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x1930d)">*(UInt16*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x670c0)">*(Int32*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x19347)">*(UInt32*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x6711f)">*(Int64*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x193a6)">*(UInt64*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x04f6d)">*(Float32*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x04fcc)">*(Float64*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x2a567)">*(math.module.xdl64!maxon::Vec2&lt;float,1&gt;*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x2b0e8)">*(math.module.xdl64!maxon::Vec2&lt;double,1&gt;*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x289e8)">*(math.module.xdl64!maxon::Vec3&lt;float,1&gt;*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x29569)">*(math.module.xdl64!maxon::Vec3&lt;double,1&gt;*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x26e69)">*(math.module.xdl64!maxon::Vec4&lt;float,1&gt;*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x279ea)">*(math.module.xdl64!maxon::Vec4&lt;double,1&gt;*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x3c358)">*(maxon::String*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x22f39)">*(maxon::CString*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x44734)">*(maxon::Url*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x62647)">*(maxon::DataDictionary*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x40272)">*(maxon::DataType**)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x3f62b)">*(maxon::ConditionVariableRef*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x18948)">*(maxon::ObjectRef*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; ((_typeInfo._ptr._object->_id._hash &amp; 0x7ffff) == 0x5491a)">*(maxon::InternedId*)*(char**)_dataPtr</ExpandedItem>
+				<!-- Id is smalldata in 32 bit and bigdata in 64 bit -->
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; (_typeInfo._ptr._object->_id._hash == 0x008100c6         )">*(maxon::Id*)_dataPtr</ExpandedItem>
+				<ExpandedItem Condition="_typeInfo != 0 &amp;&amp; (_typeInfo._ptr._object->_id._hash == 0x000154931e777829 )">*(maxon::Id*)_dataPtr</ExpandedItem>
+		</Expand>
+</Type>
+
+<Type Name="maxon::BaseArray&lt;*&gt;">
+    <DisplayString Condition="_cnt &gt; 7">{{ Count={(size_t) _cnt} [{_ptr[0]}, {_ptr[1]}, {_ptr[2]}, {_ptr[3]}, {_ptr[4]}, {_ptr[5]}, {_ptr[6]}, ...] }</DisplayString>
+    <DisplayString Condition="_cnt == 7">{{ Count={(size_t) _cnt} [{_ptr[0]}, {_ptr[1]}, {_ptr[2]}, {_ptr[3]}, {_ptr[4]}, {_ptr[5]}, {_ptr[6]}] }</DisplayString>
+    <DisplayString Condition="_cnt == 6">{{ Count={(size_t) _cnt} [{_ptr[0]}, {_ptr[1]}, {_ptr[2]}, {_ptr[3]}, {_ptr[4]}, {_ptr[5]}] }</DisplayString>
+    <DisplayString Condition="_cnt == 5">{{ Count={(size_t) _cnt} [{_ptr[0]}, {_ptr[1]}, {_ptr[2]}, {_ptr[3]}, {_ptr[4]}] }</DisplayString>
+    <DisplayString Condition="_cnt == 4">{{ Count={(size_t) _cnt} [{_ptr[0]}, {_ptr[1]}, {_ptr[2]}, {_ptr[3]}] }</DisplayString>
+    <DisplayString Condition="_cnt == 3">{{ Count={(size_t) _cnt} [{_ptr[0]}, {_ptr[1]}, {_ptr[2]}] }</DisplayString>
+    <DisplayString Condition="_cnt == 2">{{ Count={(size_t) _cnt} [{_ptr[0]}, {_ptr[1]}] }</DisplayString>
+    <DisplayString Condition="_cnt == 1">{{ Count={(size_t) _cnt} [{_ptr[0]}] }</DisplayString>
+    <DisplayString Condition="_cnt == 0">{{ Count={(size_t) _cnt} }</DisplayString>
+    <Expand>
+        <Item Name="Size">_cnt</Item>
+        <Item Name="Capacity">_capacity</Item>
+        <Item Name="Pointer">_ptr, [_cnt]</Item>
+        <ArrayItems>
+            <Size>_cnt</Size>
+            <ValuePointer>_ptr</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+<Type Name="maxon::BlockArray&lt;*&gt;">
+    <DisplayString Condition="_blocks._array._cnt == 1">Elements: {{ Count={(size_t) _blocks._array._ptr[0]._cnt} }</DisplayString>
+    <DisplayString Condition="_blocks._array._cnt != 1">Blocks: {{ Count={(size_t) _blocks._array._cnt} }</DisplayString>
+    <Expand>
+        <Item Name="IsContinuous" >_blocks._isContinuous</Item>
+        <Item Condition="_blocks._array._cnt == 1" Name="Size" >_blocks._array._ptr[0]._cnt</Item>
+        <Item Condition="_blocks._array._cnt == 1" Name="Capacity">_blocks._array._ptr[0]._capacity</Item>
+        <Item Condition="_blocks._array._cnt == 1" Name="Pointer">_blocks._array._ptr[0]._ptr, [_blocks._array._ptr[0]._cnt]</Item>
+        <ArrayItems Condition="_blocks._array._cnt == 1">
+            <Size>_blocks._array._ptr[0]._cnt</Size>
+            <ValuePointer>_blocks._array._ptr[0]._ptr</ValuePointer>
+        </ArrayItems>
+
+        <Item Condition="_blocks._array._cnt != 1" Name="Blocks" >_blocks._array._cnt</Item>
+        <ArrayItems Condition="_blocks._array._cnt != 1">
+            <Size>_blocks._array._cnt</Size>
+            <ValuePointer>_blocks._array._ptr</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+<Type Name="maxon::SortedArray&lt;*&gt;">
+    <DisplayString Condition="_array._cnt &gt; 3">{{ Sorted={_sorted}, Count={(size_t) _array._cnt} [{_array._ptr[0]}, {_array._ptr[1]}, {_array._ptr[2]}, {_array._ptr[3]}, ...] }</DisplayString>
+    <DisplayString Condition="_array._cnt == 3">{{ Sorted={_sorted}, Count={(size_t) _array._cnt} [{_array._ptr[0]}, {_array._ptr[1]}, {_array._ptr[2]}] }</DisplayString>
+    <DisplayString Condition="_array._cnt == 2">{{ Sorted={_sorted}, Count={(size_t) _array._cnt} [{_array._ptr[0]}, {_array._ptr[1]}] }</DisplayString>
+    <DisplayString Condition="_array._cnt == 1">{{ Sorted={_sorted}, Count={(size_t) _array._cnt} [{_array._ptr[0]}] }</DisplayString>
+    <DisplayString Condition="_array._cnt == 0">{{ Sorted={_sorted}, Count={(size_t) _array._cnt} }</DisplayString>
+    <Expand>
+        <Item Name="Sorted">_sorted</Item>
+        <ExpandedItem>_array</ExpandedItem>
+    </Expand>
+</Type>
+
+<Type Name="maxon::Block&lt;*&gt;">
+    <DisplayString>{{ Count={(size_t) _size} }</DisplayString>
+    <Expand>
+        <Item Name="Size">_size</Item>
+        <Item Name="Pointer">($T1*)_ptr, [_size]</Item>
+        <ArrayItems>
+            <Size>_size</Size>
+            <ValuePointer>($T1*)_ptr</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+
+<Type Name="maxon::ConditionVariableRef">
+    <DisplayString Condition="_object == 0">nullptr</DisplayString>
+    <DisplayString Condition="_object != 0">{{ CurrentCnt={(*((long*)(((char*)_object)+0)))} SetCnt={(*((long*)(((char*)_object)+0+4)))}  RefCnt: {(*((long*)(((char*)_object)-8))/16)}x }</DisplayString>
+    <Expand>
+        <Item Name="CurrentCnt">*((long*)(((char*)_object)+0))</Item>
+        <Item Name="SetCnt">*((long*)(((char*)_object)+0+4))</Item>
+        <Item Name="RefCnt">*((long*)(((char*)_object)-8))/16</Item>
+		</Expand>
+</Type>
+
+
+<!-- Helper for ObjectRef (ClassInfo) -->
+<Type Name="maxon::ComponentInfo">
+    <DisplayString>{{ {_descriptor->_idBuffer,s} }</DisplayString>
+</Type>
+
+
+<Type Name="maxon::ClassInterface{*">
+    <DisplayString>{{ {*(maxon::Id*)(((int*)(((char*)this)+0)))} RefCnt: {(*((long*)(((char*)this)-8))/8)}x }</DisplayString>
+    <Expand>
+<!--        <Item Name="ClassName">*(maxon::Id*)(((int*)(((char*)_object)+0)))</Item> -->
+		</Expand>
+</Type>
+
+<Type Name="maxon::ReferenceBase&lt;*&gt;">
+    <DisplayString Condition="*(char**)this == 0">nullptr</DisplayString>
+    <DisplayString Condition="*(char**)this != 0">{{ RefCnt: {(*((long*)(((char*)_object)-8))/16)}x {*_object->_classInfo->_class} }</DisplayString>
+    <Expand>
+        <Item Name="RefCnt">(*((long*)(((char*)_object)-8))/16)</Item>
+        <Item Name="Pointer">_object</Item>
+				<Item Name="ClassInfo">*_object->_classInfo->_class</Item>
+			
+		</Expand>
+</Type>
+
+<!-- maxon::ObjectRef -->
+<Type Name="maxon::Object::ConstReferenceFunctionsImpl&lt;*&gt;">
+    <DisplayString Condition="*(char**)this == 0">nullptr</DisplayString>
+    <DisplayString Condition="*(char**)this != 0">{{ {*((const maxon::ClassInfo* const)**(char***)this)->_class} RefCnt: {*(long*)(*(char**)this-sizeof(char*))/8}x }</DisplayString>
+    <Expand>
+				<Item Name="ClassName">*((const maxon::ClassInfo* const)**(char***)this)->_class</Item>
+        <Item Name="RefCnt">*(long*)(*(char**)this-sizeof(char*))/8</Item>
+        <Item Name="Pointer">*(void**)this</Item>
+				<ExpandedItem>((const maxon::ClassInfo* const)**(char***)this)->_infoArray</ExpandedItem>
+		</Expand>
+</Type>
+
+<!-- Helper for HashMap -->
+<!-- implementation without value, this one overwrites the other one if possible with the current datatype -->
+<Type Name="maxon::HashMap&lt;*,maxon::UnitType,*&gt;::Bucket{*">
+    <DisplayString Condition="list->_next == 0">{{ Hash={list->_hashCode,x} Key={list->_key} }</DisplayString>
+    <DisplayString Condition="list->_next != 0">{{ >>> Hash={list->_hashCode,x} Key={list->_key} }</DisplayString>
+    <Expand>
+      <Item Name="Next">list->_next</Item>
+      <Item Name="Key">list->_key</Item>
+      <Item Name="Hash">list->_hashCode</Item>
+    </Expand>
+</Type>
+  
+<!-- second implementation with value, this one overwrites the other one if possible with the current datatype -->
+<Type Name="maxon::HashMap&lt;*&gt;::Bucket{*">
+    <DisplayString Condition="list->_next == 0">{{ Hash={list->_hashCode,x} Key={list->_key} Value={list->_value} }</DisplayString>
+    <DisplayString Condition="list->_next != 0">{{ >>> Hash={list->_hashCode,x} Key={list->_key} Value={list->_value} }</DisplayString>
+    <Expand>
+      <Item Name="Next">list->_next</Item>
+      <Item Name="Key">list->_key</Item>
+      <Item Name="Value">list->_value</Item>
+      <Item Name="Hash">list->_hashCode</Item>
+    </Expand>
+</Type>
+
+
+
+<Type Name="maxon::HashMap&lt;*&gt;">
+    <DisplayString Condition="_nonemptyBucketCount == 0">{{ Count={(size_t) _size} }</DisplayString>
+    <DisplayString Condition="_nonemptyBucketCount != 0">{{ Count={(size_t) _size} }</DisplayString>
+    <Expand>
+        <Item Name="Size">_size</Item>
+        <ArrayItems>
+            <Size>_nonemptyBucketCount</Size>
+            <ValuePointer>_nonemptyBuckets</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+<Type Name="maxon::DataDictionary">
+    <DisplayString Condition="_object == 0">Empty</DisplayString>
+    <DisplayString Condition="_object != 0">{{ Type={*((int*)(((char*)_object)+0))} Elements={((maxon::DataDictionaryNatVisHelper*)(((int*)(((char*)_object)+0+sizeof(int)+sizeof(char*)+(sizeof(char*)==8?sizeof(int):0)))))->_size} RefCnt: {(*((long*)(((char*)_object)-8))/16)}x }</DisplayString>
+    <DisplayString Condition="_object != 0">{{ Type={*((int*)(((char*)_object)+0))} RefCnt: {(*((long*)(((char*)_object)-8))/16)}x }</DisplayString>
+    <Expand>
+        <Item Condition="_object != 0" Name="Elements">((maxon::DataDictionaryNatVisHelper*)(((int*)(((char*)_object)+0+sizeof(int)+sizeof(char*)+(sizeof(char*)==8?sizeof(int):0)))))->_size</Item>
+        <Item Condition="_object != 0" Name="Buckets">((maxon::DataDictionaryNatVisHelper*)(((int*)(((char*)_object)+0+sizeof(int)+sizeof(char*)+(sizeof(char*)==8?sizeof(int):0)))))->_nonemptyBucketCount</Item>
+        <ArrayItems Condition="_object != 0">
+            <Size>((maxon::DataDictionaryNatVisHelper*)(((int*)(((char*)_object)+0+sizeof(int)+sizeof(char*)+(sizeof(char*)==8?sizeof(int):0)))))->_nonemptyBucketCount</Size>
+            <ValuePointer>((maxon::DataDictionaryNatVisHelper*)(((int*)(((char*)_object)+0+sizeof(int)+sizeof(char*)+(sizeof(char*)==8?sizeof(int):0)))))->_nonemptyBuckets</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+<Type Name="maxon::DataType">
+  <DisplayString>{_ptr._object}</DisplayString>
+</Type>
+
+<Type Name="maxon::DataTypeImpl">
+    <DisplayString>{_id._value,s}</DisplayString>
+    <Expand>
+        <Item Name="Id">_id._value,s</Item>
+        <Item Name="Hash">_id._hash,x</Item>
+        <Item Name="Size">_size</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::Spinlock">
+    <DisplayString Condition="_state._value == 0">{{ Unlocked, _state={_state._value}}</DisplayString>
+    <DisplayString Condition="_state._value == 1">{{ Locked, _state={_state._value}}</DisplayString>
+    <DisplayString>{{ Illegal, _state={_state._value}}</DisplayString>
+    <Expand>
+				<Synthetic Name="Locked" Condition="_state._value == 0"><DisplayString>No</DisplayString></Synthetic>
+				<Synthetic Name="Locked" Condition="_state._value == 1"><DisplayString>Yes</DisplayString></Synthetic>
+        <Item Name="_state">_state._value</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::RWSpinlock">
+    <DisplayString Condition="_state._value == 0">{{ Unlocked, _state={_state._value}}</DisplayString>
+    <DisplayString Condition="_state._value &amp; 1">{{ Write Locked, _state={_state._value}}</DisplayString>
+    <DisplayString>{{ ReadLocks={_state._value&gt;&gt;2} WriteLock={_state._value&amp;1} WritePending={(_state._value&amp;2)&gt;&gt;1} _state={_state._value}}</DisplayString>
+    <Expand>
+        <Item Name="ReadLocks">_state._value&gt;&gt;2</Item>
+				<Synthetic Name="WriteLock" Condition="(_state._value &amp; 1) == 0"><DisplayString>No</DisplayString></Synthetic>
+				<Synthetic Name="WriteLock" Condition="(_state._value &amp; 1) == 1"><DisplayString>Yes</DisplayString></Synthetic>
+				<Synthetic Name="WritePending" Condition="(_state._value &amp; 2) == 0"><DisplayString>No</DisplayString></Synthetic>
+				<Synthetic Name="WritePending" Condition="(_state._value &amp; 2) == 2"><DisplayString>Yes</DisplayString></Synthetic>
+        <Item Name="_state">_state._value</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::LazyInitState">
+    <DisplayString Condition="_state._value == 0">{{ Uninitialized, _state={_state._value}}</DisplayString>
+    <DisplayString Condition="_state._value == 1">{{ Initializing, _state={_state._value}}</DisplayString>
+    <DisplayString Condition="_state._value == 2">{{ Initialized, _state={_state._value}}</DisplayString>
+    <DisplayString>{{ Illegal, _state={_state._value}}</DisplayString>
+    <Expand>
+				<Synthetic Name="Initialized" Condition="_state._value == 0"><DisplayString>No</DisplayString></Synthetic>
+				<Synthetic Name="Initialized" Condition="_state._value == 1"><DisplayString>Initializing</DisplayString></Synthetic>
+				<Synthetic Name="Initialized" Condition="_state._value == 2"><DisplayString>Yes</DisplayString></Synthetic>
+        <Item Name="_state">_state._value</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::MeshPolygon">
+    <DisplayString Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._hullVertexCount == 3">{_ngon._hullVertexCount}-Gon [{((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[0]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[1]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[2]}]</DisplayString>
+    <DisplayString Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._hullVertexCount == 4">{_ngon._hullVertexCount}-Gon [{((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[0]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[1]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[2]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[3]}]</DisplayString>
+    <DisplayString Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._hullVertexCount == 5">{_ngon._hullVertexCount}-Gon [{((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[0]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[1]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[2]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[3]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[4]}]</DisplayString>
+    <DisplayString Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._hullVertexCount == 6">{_ngon._hullVertexCount}-Gon [{((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[0]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[1]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[2]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[3]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[4]}, {((int*)(_ngon._ngonData + 2 + _ngon._ngonData[1]))[5]}]</DisplayString>
+    <DisplayString Condition="_ngon._ngonIdentifier == -2">{_ngon._hullVertexCount}-Gon</DisplayString>
+    <DisplayString Condition="_vertex[0]==0 &amp;&amp; _vertex[1]==0 &amp;&amp; _vertex[2]==0">Empty []</DisplayString>
+    <DisplayString Condition="_vertex[3]==-1">Tri [{_vertex[0]}, {_vertex[1]}, {_vertex[2]}]</DisplayString>
+    <DisplayString Condition="_vertex[3]!=-1">Quad [{_vertex[0]}, {_vertex[1]}, {_vertex[2]}, {_vertex[3]}]</DisplayString>
+    <Expand>
+        <Item Name="Hull Vertex Count" Condition="_ngon._ngonIdentifier == -2">_ngon._hullVertexCount</Item>
+        <Item Name="Total Vertex Count" Condition="_ngon._ngonIdentifier == -2">_ngon._ngonData[0]</Item>
+        <Item Name="Hole Count" Condition="_ngon._ngonIdentifier == -2">_ngon._ngonData[1]</Item>
+
+				<Synthetic Name="Vertices"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2">
+            <Size>_ngon._hullVertexCount</Size>
+            <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[1])</ValuePointer>
+        </ArrayItems>
+        <ArrayItems Condition="_ngon._ngonIdentifier != -2 &amp;&amp; _vertex[0]==0 &amp;&amp; _vertex[1]==0 &amp;&amp; _vertex[2]==0">
+            <Size>0</Size>
+            <ValuePointer>_vertex</ValuePointer>
+        </ArrayItems>
+        <ArrayItems Condition="_ngon._ngonIdentifier != -2 &amp;&amp; !(_vertex[0]==0 &amp;&amp; _vertex[1]==0 &amp;&amp; _vertex[2]==0) &amp;&amp; _vertex[3]==-1">
+            <Size>3</Size>
+            <ValuePointer>_vertex</ValuePointer>
+        </ArrayItems>
+        <ArrayItems Condition="_ngon._ngonIdentifier != -2 &amp;&amp; _vertex[3]!=-1">
+            <Size>4</Size>
+            <ValuePointer>_vertex</ValuePointer>
+        </ArrayItems>
+
+				<Synthetic Name="Vertices (Hole 0)" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] == 1"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] == 1">
+            <Size>_ngon._ngonData[0] - _ngon._ngonData[2]</Size>
+            <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[1] + _ngon._ngonData[2])</ValuePointer>
+        </ArrayItems>
+				<Synthetic Name="Vertices (Hole 0)" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] &gt; 1"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] &gt; 1">
+            <Size>_ngon._ngonData[3] - _ngon._ngonData[2]</Size>
+            <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[1] + _ngon._ngonData[2])</ValuePointer>
+        </ArrayItems>
+
+				<Synthetic Name="Vertices (Hole 1)" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] == 2"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] == 2">
+            <Size>_ngon._ngonData[0] - _ngon._ngonData[3]</Size>
+            <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[1] + _ngon._ngonData[3])</ValuePointer>
+        </ArrayItems>
+				<Synthetic Name="Vertices (Hole 1)" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] &gt; 2"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] &gt; 2">
+            <Size>_ngon._ngonData[4] - _ngon._ngonData[3]</Size>
+            <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[1] + _ngon._ngonData[3])</ValuePointer>
+        </ArrayItems>
+
+				<Synthetic Name="Vertices (Hole 2)" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] == 3"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] == 3">
+            <Size>_ngon._ngonData[0] - _ngon._ngonData[4]</Size>
+            <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[1] + _ngon._ngonData[4])</ValuePointer>
+        </ArrayItems>
+				<Synthetic Name="Vertices (Hole 2)" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] &gt; 3"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] &gt; 3">
+            <Size>_ngon._ngonData[5] - _ngon._ngonData[4]</Size>
+            <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[1] + _ngon._ngonData[4])</ValuePointer>
+        </ArrayItems>
+
+				<Synthetic Name="Vertices (Hole 3)" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] == 4"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] == 4">
+            <Size>_ngon._ngonData[0] - _ngon._ngonData[5]</Size>
+            <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[1] + _ngon._ngonData[5])</ValuePointer>
+        </ArrayItems>
+				<Synthetic Name="Vertices (Hole 3)" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] &gt; 4"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; _ngon._ngonData[1] &gt; 4">
+            <Size>_ngon._ngonData[6] - _ngon._ngonData[5]</Size>
+            <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[1] + _ngon._ngonData[5])</ValuePointer>
+        </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [0]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 0"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 0">
+          <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1])</ValuePointer>
+      </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [1]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 1">
+        <DisplayString></DisplayString>
+      </Synthetic>
+      <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 1">
+        <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1] + 4)</ValuePointer>
+      </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [2]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 2">
+        <DisplayString></DisplayString>
+      </Synthetic>
+      <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 2">
+        <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1] + 8)</ValuePointer>
+      </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [3]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 3">
+        <DisplayString></DisplayString>
+      </Synthetic>
+      <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 3">
+        <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1] + 12)</ValuePointer>
+      </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [4]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 4">
+        <DisplayString></DisplayString>
+      </Synthetic>
+      <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 4">
+        <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1] + 16)</ValuePointer>
+      </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [5]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 5">
+        <DisplayString></DisplayString>
+      </Synthetic>
+      <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 5">
+        <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1] + 20)</ValuePointer>
+      </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [6]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 6">
+        <DisplayString></DisplayString>
+      </Synthetic>
+      <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 6">
+        <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1] + 24)</ValuePointer>
+      </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [7]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 7">
+        <DisplayString></DisplayString>
+      </Synthetic>
+      <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 7">
+        <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1] + 28)</ValuePointer>
+      </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [8]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 8">
+        <DisplayString></DisplayString>
+      </Synthetic>
+      <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 8">
+        <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1] + 32)</ValuePointer>
+      </ArrayItems>
+
+      <Synthetic Name="Plain Polygon [9]" Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 9">
+        <DisplayString></DisplayString>
+      </Synthetic>
+      <ArrayItems Condition="_ngon._ngonIdentifier == -2 &amp;&amp; (_ngon._ngonData[0] + _ngon._ngonData[1] * 2 -2) > 9">
+        <Size>4</Size>
+        <ValuePointer>(int*)(_ngon._ngonData + 2 + _ngon._ngonData[0] + _ngon._ngonData[1] + 36)</ValuePointer>
+      </ArrayItems>
+    </Expand>
+</Type>
+
+<Type Name="maxon::MeshPolygonList">
+    <DisplayString Condition="_list[0]==-1">0 Polygons</DisplayString>
+    <DisplayString Condition="_list[0]!=-2 &amp;&amp; _list[1]==-1">1 Polygon [{_list[0]}]</DisplayString>
+    <DisplayString Condition="_list[0]!=-2 &amp;&amp; _list[2]==-1">2 Polygons [{_list[0]}, {_list[1]}]</DisplayString>
+    <DisplayString Condition="_list[0]!=-2 &amp;&amp; _list[3]==-1">3 Polygons [{_list[0]}, {_list[1]}, {_list[2]}]</DisplayString>
+    <DisplayString Condition="_list[0]!=-2 &amp;&amp; _list[4]==-1">4 Polygons [{_list[0]}, {_list[1]}, {_list[2]}, {_list[3]}]</DisplayString>
+    <DisplayString Condition="_list[0]!=-2 &amp;&amp; _list[5]==-1">5 Polygons [{_list[0]}, {_list[1]}, {_list[2]}, {_list[3]}, {_list[4]}]</DisplayString>
+    <DisplayString Condition="_list[0]!=-2 &amp;&amp; _list[5]!=-1">6 Polygons [{_list[0]}, {_list[1]}, {_list[2]}, {_list[3]}, {_list[4]}, {_list[5]}]</DisplayString>
+    <DisplayString Condition="_list[0]==-2">{_list[1]} Polygons [{(*((UInt32**)(_list + 2)))[0]}, {(*((UInt32**)(_list + 2)))[1]}, {(*((UInt32**)(_list + 2)))[2]}, {(*((UInt32**)(_list + 2)))[3]}, {(*((UInt32**)(_list + 2)))[4]}, {(*((UInt32**)(_list + 2)))[5]}, ...]</DisplayString>
+    <Expand>
+				<Synthetic Name="Polygons"><DisplayString></DisplayString></Synthetic>
+        <ArrayItems Condition="_list[0]==-2">
+            <Size>_list[1]</Size>
+            <ValuePointer>(*((UInt32**)(_list + 2)))</ValuePointer>
+        </ArrayItems>
+		</Expand>
+</Type>
+
+<Type Name="maxon::BigInteger">
+  	<DisplayString Condition="_object == 0">nullptr</DisplayString>
+  	<DisplayString Condition="_object != 0" LegacyAddin="legacy_typeviewer.dll" Export="BigInteger_Viewer"></DisplayString>
+</Type>
+
+<Type Name="maxon::RangeSet&lt;*&gt;">
+  	<DisplayString LegacyAddin="legacy_typeviewer.dll" Export="XRangeSet_Viewer"></DisplayString>
+</Type>
+
+<Type Name="maxon::MeshPolygonSelection">
+  	<DisplayString>{_polygons}</DisplayString>
+</Type>
+
+<Type Name="maxon::HybridSet&lt;*&gt;">
+  	<DisplayString Condition="_small==true">{*((maxon::BaseArray&lt;$T1,16,0,maxon::DefaultAllocator&gt;*)_union)}</DisplayString>
+  	<DisplayString Condition="_small==false">&gt;64 elements</DisplayString>
+    <Expand>
+        <ArrayItems Condition="_small==true">
+            <Size>((maxon::BaseArray&lt;$T1,16,0,maxon::DefaultAllocator&gt;*)_union)->_cnt</Size>
+            <ValuePointer>((maxon::BaseArray&lt;$T1,16,0,maxon::DefaultAllocator&gt;*)_union)->_ptr</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+<Type Name="maxon::NodePath">
+	<DisplayString Condition="_object != 0">{(*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)this)->_path} {(*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)this)->_kind}</DisplayString>
+	<DisplayString Condition="_object == 0">nullptr</DisplayString>
+	<Expand>
+		<Item Name="path">*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)this</Item>
+	</Expand>
+</Type>
+
+
+<Type Name="maxon::nodes::MutablePort">
+	<DisplayString Condition="_node._data.ptr != 0">{*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)&amp;_node._path}, {(maxon::NODE_KIND)(((nodes.module.xdl64!maxon::nodes::GNodeData*)(((Int)_node._data.ptr)&amp;~1))->flags &amp; 0xFF)}</DisplayString>
+	<DisplayString Condition="_node._data.ptr == 0">nullptr</DisplayString>
+    <Expand>
+        <Item Name="path">*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)&amp;_node._path</Item>
+        <Item Name="kind">(maxon::NODE_KIND)(((nodes.module.xdl64!maxon::nodes::GNodeData*)(((Int)_node._data.ptr)&amp;~1))->flags &amp; 0xFF)</Item>
+        <Item Name="children">((nodes.module.xdl64!maxon::nodes::GNodeData*)(((Int)_node._data.ptr)&amp;~1))->children</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::nodes::Port">
+  <DisplayString>{*(maxon::nodes::MutablePort*)this}</DisplayString>
+</Type>
+
+<Type Name="maxon::nodes::MutablePortParent">
+	<DisplayString Condition="_node._data.ptr != 0">{*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)&amp;_node._path}, {(maxon::NODE_KIND)(((nodes.module.xdl64!maxon::nodes::GNodeData*)(((Int)_node._data.ptr)&amp;~1))->flags &amp; 0xFF)}</DisplayString>
+	<DisplayString Condition="_node._data.ptr == 0">nullptr</DisplayString>
+	<Expand>
+		<Item Name="path">*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)&amp;_node._path</Item>
+		<Item Name="kind">(maxon::NODE_KIND)(((nodes.module.xdl64!maxon::nodes::GNodeData*)(((Int)_node._data.ptr)&amp;~1))->flags &amp; 0xFF)</Item>
+		<Item Name="children">((nodes.module.xdl64!maxon::nodes::GNodeData*)(((Int)_node._data.ptr)&amp;~1))->children</Item>
+	</Expand>
+</Type>
+
+<Type Name="maxon::nodes::PortParent">
+  <DisplayString>{*(maxon::nodes::MutablePortParent*)this}</DisplayString>
+</Type>
+
+<Type Name="maxon::nodes::MutableNode">
+	<DisplayString Condition="_node._data.ptr != 0">{*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)&amp;_node._path}, {(maxon::NODE_KIND)(((nodes.module.xdl64!maxon::nodes::GNodeData*)(((Int)_node._data.ptr)&amp;~1))->flags &amp; 0xFF)}</DisplayString>
+	<DisplayString Condition="_node._data.ptr == 0">nullptr</DisplayString>
+	<Expand>
+		<Item Name="path">*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)&amp;_node._path</Item>
+		<Item Name="kind">(maxon::NODE_KIND)(((nodes.module.xdl64!maxon::nodes::GNodeData*)(((Int)_node._data.ptr)&amp;~1))->flags &amp; 0xFF)</Item>
+		<Item Name="children">((nodes.module.xdl64!maxon::nodes::GNodeData*)(((Int)_node._data.ptr)&amp;~1))->children</Item>
+	</Expand>
+</Type>
+
+<Type Name="maxon::nodes::Node">
+  <DisplayString>{*(maxon::nodes::MutableNode*)this}</DisplayString>
+</Type>
+
+<Type Name="maxon::nodes::NodeSystem">
+  	<DisplayString Condition="*((Int*)this) != 0">{((nodes.module.xdl64!maxon::nodes::NodeSystemImpl*)(*(char**)this+8))->_id}</DisplayString>
+  	<DisplayString Condition="*((Int*)this) == 0">nullptr</DisplayString>
+    <Expand>
+        <Item Name="content">*((nodes.module.xdl64!maxon::nodes::NodeSystemImpl**)this)</Item>
+		</Expand>
+</Type>
+
+<Type Name="maxon::GraphNode">
+  	<DisplayString Condition="_mem[0] != 0">{(*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)&amp;_mem[0])->_path}, {(maxon::NODE_KIND)(((nodes.module.xdl64!maxon::nodes::GNodeData*)_mem[1])->flags &amp; 0xFF)}</DisplayString>
+  	<DisplayString Condition="_mem[0] == 0">nullptr</DisplayString>
+    <Expand>
+        <Item Name="path">(*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)&amp;_mem[0])->_path</Item>
+        <Item Name="kind">(maxon::NODE_KIND)(((nodes.module.xdl64!maxon::nodes::GNodeData*)_mem[1])->flags &amp; 0xFF)</Item>
+		</Expand>
+</Type>
+
+	
+	
+<Type Name="maxon::ColorProfile">
+	<DisplayString Condition="*(char**)this == 0">nullptr</DisplayString>
+	<DisplayString Condition="*(char**)this != 0">{{ RefCnt: {(*((long*)(((char*)_object)-8))/16)}x Name: { *(maxon::String*)(*(Int*)_object + 40) } }</DisplayString>
+	<Expand>
+		<Item Name="RefCnt">(*((long*)(((char*)_object)-8))/16)</Item>
+		<Item Name="Pointer">_object</Item>
+	</Expand>
+</Type>
+	
+<Type Name="maxon::LayerSet">
+	<DisplayString Condition="_object == 0">Empty</DisplayString>
+	<DisplayString Condition="_object != 0">{ (maxon::String*)((char*)_object + 64) } { (maxon::HashSet&lt;maxon::String,maxon::DefaultCompare,maxon::DefaultAllocator,0&gt;*)_object }</DisplayString>
+	<Expand>
+		<Item Name="Image">(maxon::String*)((char*)_object + 64)</Item>
+		<Item Name="Layers">(maxon::HashSet&lt;maxon::String,maxon::DefaultCompare,maxon::DefaultAllocator,0&gt;*)_object</Item>
+	</Expand>
+</Type>
+
+<Type Name="maxon::LayerSetInterface">
+	<DisplayString Condition="this == 0">Empty</DisplayString>
+	<DisplayString Condition="this != 0">{ (maxon::String*)((char*)this + 64) } { (maxon::HashSet&lt;maxon::String,maxon::LayerSetCompare,maxon::DefaultAllocator,0&gt;*)this }</DisplayString>
+	<Expand>
+		<Item Name="Image">(maxon::String*)((char*)this + 64)</Item>
+		<Item Name="Layers">(maxon::HashSet&lt;maxon::String,maxon::LayerSetCompare,maxon::DefaultAllocator,0&gt;*)this</Item>
+	</Expand>
+</Type>
+	
+</AutoVisualizer>

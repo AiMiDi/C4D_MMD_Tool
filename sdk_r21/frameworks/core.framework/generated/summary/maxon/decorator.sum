@@ -1,0 +1,3 @@
+maxon.DecoratorInterface	"net.maxon.interface.decorator"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\decorator.h(22,7)	ObjectInterface	PrivateGetDecoratedObject	
+maxon.EagerDecoratorInterface	"net.maxon.interface.eagerdecorator"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\decorator.h(46,7)	DecoratorInterface	PrivateSetDecoratedObject	
+maxon.WeakDecoratorInterface	"net.maxon.interface.weakdecorator"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\decorator.h(92,7)	DecoratorInterface	PrivateSetDecoratedObject	

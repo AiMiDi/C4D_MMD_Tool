@@ -1,0 +1,2 @@
+maxon.DecoratorInterface=D:\C4DSDK\C4D_MMDTool\r20_sdk\frameworks\core.framework\source\maxon\decorator.h(22,7)=Object:PrivateGetDecoratedObject
+maxon.EagerDecoratorInterface=D:\C4DSDK\C4D_MMDTool\r20_sdk\frameworks\core.framework\source\maxon\decorator.h(46,7)=DecoratorInterface:PrivateSetDecoratedObject

@@ -1,0 +1,4 @@
+maxon.BlendAnimationInterface=ObserverObjectInterface:AddTween,CancelAndWait,GetProgress,GetState,GetTimerRef,GetTweens,RemoveTween,StartAnimation
+maxon.BlendFunctionInterface=Object:MapValue
+maxon.BlendTweenInterface=ObserverObjectInterface:GetEnd,GetFunction,GetMappedValue,GetStart,ObservableAnimation,SetEnd,SetFunction,SetNewTarget,SetStart
+maxon.FFTInterface=Object:GetSupportOptions,Transform1D,Transform2D

@@ -1,0 +1,2 @@
+maxon.ThreadCancelledErrorInterface	"net.maxon.interface.threadcancellederror"	D:\C4DSDK\sdk_s22\frameworks\core.framework\source\maxon\threadservices.h(14,7)	ErrorInterface		
+maxon.JobErrorInterface	"net.maxon.interface.joberror"	D:\C4DSDK\sdk_s22\frameworks\core.framework\source\maxon\threadservices.h(22,7)	ErrorInterface		

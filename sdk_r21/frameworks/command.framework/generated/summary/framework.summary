@@ -1,0 +1,8 @@
+maxon.CommandClassInterface	"net.maxon.command.interface.command"	D:\C4DSDK\r21_sdk\frameworks\command.framework\source\maxon\commandbase.h(230,7)	ObjectInterface	Execute,GetState	
+maxon.CommandConversionClassInterface	"net.maxon.command.interface.commandconversion"	D:\C4DSDK\r21_sdk\frameworks\command.framework\source\maxon\commandbase.h(315,7)	ObjectInterface	ConvertInput,ConvertOutput,ExecuteCustomActions,GetCommandId,GetLegacyCommandId	
+maxon.CommandDataInterface	"net.maxon.command.interface.commanddata"	D:\C4DSDK\r21_sdk\frameworks\command.framework\source\maxon\commandbase.h(86,7)	DataDictionaryObjectInterface		
+maxon.CommandDescriptionClassInterface	"net.maxon.command.interface.commanddescriptioninterface"	D:\C4DSDK\r21_sdk\frameworks\command.framework\source\maxon\commandbase.h(269,7)	DataDictionaryReferenceObjectInterface,DataDescriptionObjectInterface		
+maxon.CommandInteractionClassInterface	"net.maxon.command.interface.commandinteraction"	D:\C4DSDK\r21_sdk\frameworks\command.framework\source\maxon\commandbase.h(254,7)	ObjectInterface	Interact	
+maxon.LegacyCommandClassInterface	"net.maxon.command.interface.legacycommand"	D:\C4DSDK\r21_sdk\frameworks\command.framework\source\maxon\commandbase.h(281,7)	CommandClassInterface	ConvertSettings	
+maxon.LegacyCommandDataInterface	"net.maxon.command.interface.legacycommanddata"	D:\C4DSDK\r21_sdk\frameworks\command.framework\source\maxon\commandbase.h(164,7)	CommandDataInterface	GetLegacyData,GetLegacyDataCount,SetLegacyData	
+maxon.MigratedCommandClassInterface	"net.maxon.command.interface.migratedcommand"	D:\C4DSDK\r21_sdk\frameworks\command.framework\source\maxon\commandbase.h(299,7)	LegacyCommandClassInterface	GetMigratedCommandId	

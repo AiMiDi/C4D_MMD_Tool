@@ -22,7 +22,6 @@ namespace mmd {
 		Bool	import_english_check;
 		Bool	import_multipart;
 	};
-
 	struct PMX_Model_export_settings {
 		Float	position_multiple;
 		Bool	export_polygon;
@@ -35,7 +34,6 @@ namespace mmd {
 		Bool	export_inherit;
 		Bool	export_expression;
 	};
-
 	class PMXModel
 	{
 		MAXON_DISALLOW_COPY_AND_ASSIGN(PMXModel);

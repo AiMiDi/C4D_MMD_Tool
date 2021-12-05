@@ -1,0 +1,11 @@
+#ifndef FSOLIDWORKSIMPORT_H__
+#define FSOLIDWORKSIMPORT_H__
+
+enum
+{
+	SOLIDWORKSIMPORT_GROUP				= 999
+};
+
+#endif // FSOLIDWORKSIMPORT_H__
+
+

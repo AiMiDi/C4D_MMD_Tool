@@ -1,0 +1,12 @@
+#ifndef DPSRMATRIX_H__
+#define DPSRMATRIX_H__
+
+enum
+{
+	PSRMATRIX_POS			= 1000,
+	PSRMATRIX_SCALE		= 1001,
+	PSRMATRIX_ROT			= 1002,
+	PSRMATRIX_ORDER		= 1003
+};
+
+#endif // DPSRMATRIX_H__

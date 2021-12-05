@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="generated">
+      <UniqueIdentifier>{20E84835-FF3D-CDFD-0000-5284111A998F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\hxx">
+      <UniqueIdentifier>{20E84835-FF3D-CDFD-8ACC-618A6830A19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{20E84835-FF3D-CDFD-0000-0000CA90681B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon">
+      <UniqueIdentifier>{20E84835-FF3D-CDFD-29DB-81C65E166B42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon\definitions">
+      <UniqueIdentifier>{20E84835-FF3D-CDFD-DEDC-9E6DA00A7BE6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <Filter>generated\hxx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\maxon\nodes.cpp">
+      <Filter>source\maxon</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\datadescription_nodes.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_access.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_color.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_context.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_conversion.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_dataflow.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_generator.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_math.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_meta.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_string.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_structure.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_utility.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\node_or_template.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodecontext_asset.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodeerrors.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodes_all.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodes_corenodes_base.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodes_import.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodesgraph.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodesgraph_helpers.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodeslib.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodesystem.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodesystem_class.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodesystem_data.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodesystem_derivation.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodetemplate.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\portattributes.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?fileVersion 4.0.0?>
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+  <storageModule moduleId="org.eclipse.cdt.core.settings">
+    <cconfiguration id="cdt.managedbuild.config.gnu.lib.debug.240832557">
+      <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.lib.debug.240832557" moduleId="org.eclipse.cdt.core.settings" name="Debug64">
+        <macros>
+          <stringMacro name="MAXON_ROOTDIR" type="VALUE_PATH_ANY" value="${ProjDirPath}/../../../../" />
+          <stringMacro name="MAXON_FRAMEWORKS_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/" />
+          <stringMacro name="MAXON_BIN_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}" />
+          <stringMacro name="MAXON_SETTINGS_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}settings/" />
+          <stringMacro name="MAXON_CORE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}core.framework/" />
+          <stringListMacro name="MAXON_CORE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_IMAGE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}image.framework/" />
+          <stringListMacro name="MAXON_IMAGE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_PROJECT_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/exchange.framework/" />
+          <stringMacro name="MAXON_PROJECT_SOURCE" type="VALUE_PATH_ANY" value="${MAXON_PROJECT_DIR}source/" />
+          <stringListMacro name="MAXON_PROJECT_SOURCE_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_PROJECT_DIR}source/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}source/maxon/material/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}generated/hxx/&quot;" />
+          </stringListMacro>
+          <stringMacro name="MAXON_RESOURCE_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}resource/" />
+          <stringMacro name="MAXON_RESOURCE_DESC_RES_DIR" type="VALUE_PATH_ANY" value="${MAXON_RESOURCE_DIR}descriptions/res/" />
+          <stringMacro />
+        </macros>
+        <extensions>
+          <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser" />
+          <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+        </extensions>
+      </storageModule>
+      <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        <configuration artifactExtension="a" artifactName="${MAXON_PROJECT_DIR}exchange.framework_debug64" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="64 Bit Debug Build" id="cdt.managedbuild.config.gnu.lib.debug.240832557" name="Debug64" parent="cdt.managedbuild.config.gnu.lib.debug" preannouncebuildStep="Pre-build step" prebuildStep="${MAXON_SETTINGS_PATH}prebuild_eclipse ${MAXON_SETTINGS_PATH} &quot;${MAXON_PROJECT_DIR}&quot; 1 &quot;${MAXON_PROJECT_DIR}exchange.framework_debug64.a&quot; ${MAXON_ROOTDIR}frameworks/core.framework/core.framework_debug64.a ${MAXON_ROOTDIR}frameworks/image.framework/image.framework_debug64.a ">
+          <folderInfo id="cdt.managedbuild.config.gnu.lib.debug.240832557." name="/" resourcePath="">
+            <toolChain id="cdt.managedbuild.toolchain.gnu.lib.debug.539857055" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.lib.debug">
+              <targetPlatform id="cdt.managedbuild.target.gnu.platform.lib.debug.1111201528" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.lib.debug" />
+              <builder buildPath="${workspace_loc:/exchange.framework/Debug}" command="${MAXON_SETTINGS_PATH}make_eclipse" id="cdt.managedbuild.target.gnu.builder.lib.debug.933933544" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.lib.debug" />
+              <tool command="ar" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.archiver.lib.debug.1808049570" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.lib.debug">
+                <outputType id="cdt.managedbuild.tool.gnu.archiver.output.3629127129" outputPrefix="" superClass="cdt.managedbuild.tool.gnu.archiver.output" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.lib.debug.1322540104" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.lib.debug">
+                <option id="gnu.cpp.compiler.lib.debug.option.optimization.level.3207101836" name="Optimization Level" superClass="gnu.cpp.compiler.lib.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated" />
+                <option id="gnu.cpp.compiler.lib.debug.option.debugging.level.730753203" name="Debug Level" superClass="gnu.cpp.compiler.lib.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated" />
+                <option id="gnu.cpp.compiler.option.preprocessor.def.242798277" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+                  <listOptionValue builtIn="false" value="_DEBUG" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_DEBUG" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_64BIT" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_LINUX" />
+                  <listOptionValue builtIn="false" value="MAXON_API" />
+                  <listOptionValue builtIn="false" value="MAXON_MODULE_ID='&quot;net.maxon.exchange.framework&quot;'" />
+                </option>
+                <option id="gnu.cpp.compiler.option.include.paths.4214925971" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option id="gnu.cpp.compiler.option.other.pic.3374293903" name="Position Independent Code (-fPIC)" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean" />
+                <option id="gnu.cpp.compiler.option.other.other.3170652233" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=gnu++0x -lm -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Werror=conversion-null -Werror=char-subscripts -Werror=reorder -Werror=sequence-point -Werror=unused-result -Wno-strict-aliasing -fvisibility=hidden -mssse3" valueType="string" />
+                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.3814477224" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.c.compiler.lib.debug.2097495496" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.debug">
+                <option id="gnu.c.compiler.option.include.paths.3387982995" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.lib.debug.option.optimization.level.1187210124" name="Optimization Level" superClass="gnu.c.compiler.lib.debug.option.optimization.level" valueType="enumerated" />
+                <option id="gnu.c.compiler.option.misc.pic.2933114723" name="Position Independent Code (-fPIC)" superClass="gnu.c.compiler.option.misc.pic" value="true" valueType="boolean" />
+                <option id="gnu.c.compiler.lib.debug.option.debugging.level.642597555" name="Debug Level" superClass="gnu.c.compiler.lib.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated" />
+                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.3829002024" superClass="cdt.managedbuild.tool.gnu.c.compiler.input" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.c.linker.base.896058219" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base" />
+              <tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.3758552299" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base" />
+              <tool id="cdt.managedbuild.tool.gnu.assembler.lib.debug.3846111260" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.lib.debug">
+                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.3736730492" superClass="cdt.managedbuild.tool.gnu.assembler.input" />
+              </tool>
+            </toolChain>
+          </folderInfo>
+        </configuration>
+      </storageModule>
+      <storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+        <externalSettings containerId="core.framework;cdt.managedbuild.config.gnu.lib.debug.1704402857" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+        <externalSettings containerId="image.framework;cdt.managedbuild.config.gnu.lib.debug.684681061" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+      </storageModule>
+    </cconfiguration>
+    <cconfiguration id="cdt.managedbuild.config.gnu.lib.release.1233723373">
+      <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.lib.release.1233723373" moduleId="org.eclipse.cdt.core.settings" name="Release64">
+        <macros>
+          <stringMacro name="MAXON_ROOTDIR" type="VALUE_PATH_ANY" value="${ProjDirPath}/../../../../" />
+          <stringMacro name="MAXON_FRAMEWORKS_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/" />
+          <stringMacro name="MAXON_BIN_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}" />
+          <stringMacro name="MAXON_SETTINGS_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}settings/" />
+          <stringMacro name="MAXON_CORE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}core.framework/" />
+          <stringListMacro name="MAXON_CORE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_IMAGE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}image.framework/" />
+          <stringListMacro name="MAXON_IMAGE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_PROJECT_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/exchange.framework/" />
+          <stringMacro name="MAXON_PROJECT_SOURCE" type="VALUE_PATH_ANY" value="${MAXON_PROJECT_DIR}source/" />
+          <stringListMacro name="MAXON_PROJECT_SOURCE_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_PROJECT_DIR}source/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}source/maxon/material/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}generated/hxx/&quot;" />
+          </stringListMacro>
+          <stringMacro name="MAXON_RESOURCE_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}resource/" />
+          <stringMacro name="MAXON_RESOURCE_DESC_RES_DIR" type="VALUE_PATH_ANY" value="${MAXON_RESOURCE_DIR}descriptions/res/" />
+          <stringMacro />
+        </macros>
+        <extensions>
+          <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser" />
+          <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+        </extensions>
+      </storageModule>
+      <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        <configuration artifactExtension="a" artifactName="${MAXON_PROJECT_DIR}exchange.framework_release64" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="64 Bit Release Build" id="cdt.managedbuild.config.gnu.lib.release.1233723373" name="Release64" parent="cdt.managedbuild.config.gnu.lib.release" preannouncebuildStep="Pre-build step" prebuildStep="${MAXON_SETTINGS_PATH}prebuild_eclipse ${MAXON_SETTINGS_PATH} &quot;${MAXON_PROJECT_DIR}&quot; 1 &quot;${MAXON_PROJECT_DIR}exchange.framework_release64.a&quot; ${MAXON_ROOTDIR}frameworks/core.framework/core.framework_release64.a ${MAXON_ROOTDIR}frameworks/image.framework/image.framework_release64.a ">
+          <folderInfo id="cdt.managedbuild.config.gnu.lib.release.1233723373." name="/" resourcePath="">
+            <toolChain id="cdt.managedbuild.toolchain.gnu.lib.release.3124909919" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.lib.release">
+              <targetPlatform id="cdt.managedbuild.target.gnu.platform.lib.release.2126743864" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.lib.release" />
+              <builder buildPath="${workspace_loc:/exchange.framework/Release}" command="${MAXON_SETTINGS_PATH}make_eclipse" id="cdt.managedbuild.target.gnu.builder.lib.release.2689313832" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.lib.release" />
+              <tool command="ar" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.archiver.lib.release.2322674402" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.lib.release">
+                <outputType id="cdt.managedbuild.tool.gnu.archiver.output.3921600013" outputPrefix="" superClass="cdt.managedbuild.tool.gnu.archiver.output" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.lib.release.1540957832" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.lib.release">
+                <option id="gnu.cpp.compiler.lib.release.option.optimization.level.3768154956" name="Optimization Level" superClass="gnu.cpp.compiler.lib.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated" />
+                <option id="gnu.cpp.compiler.lib.release.option.debugging.level.2221084571" name="Debug Level" superClass="gnu.cpp.compiler.lib.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated" />
+                <option id="gnu.cpp.compiler.option.preprocessor.def.949816313" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_RELEASE" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_64BIT" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_LINUX" />
+                  <listOptionValue builtIn="false" value="MAXON_API" />
+                  <listOptionValue builtIn="false" value="MAXON_MODULE_ID='&quot;net.maxon.exchange.framework&quot;'" />
+                </option>
+                <option id="gnu.cpp.compiler.option.include.paths.4233571399" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option id="gnu.cpp.compiler.option.other.pic.3840005699" name="Position Independent Code (-fPIC)" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean" />
+                <option id="gnu.cpp.compiler.option.other.other.1413889149" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=gnu++0x -lm -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Werror=conversion-null -Werror=char-subscripts -Werror=reorder -Werror=sequence-point -Werror=unused-result -Wno-strict-aliasing -fvisibility=hidden -mssse3" valueType="string" />
+                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1654414876" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.c.compiler.lib.release.1539131400" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.release">
+                <option id="gnu.c.compiler.option.include.paths.4110321223" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.lib.release.option.optimization.level.3025232204" name="Optimization Level" superClass="gnu.c.compiler.lib.release.option.optimization.level" valueType="enumerated" />
+                <option id="gnu.c.compiler.option.misc.pic.773608727" name="Position Independent Code (-fPIC)" superClass="gnu.c.compiler.option.misc.pic" value="true" valueType="boolean" />
+                <option id="gnu.c.compiler.lib.release.option.debugging.level.4028950939" name="Debug Level" superClass="gnu.c.compiler.lib.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated" />
+                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2727845788" superClass="cdt.managedbuild.tool.gnu.c.compiler.input" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.c.linker.base.1667395359" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base" />
+              <tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.3745136799" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base" />
+              <tool id="cdt.managedbuild.tool.gnu.assembler.lib.release.2984624220" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.lib.release">
+                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.4249216752" superClass="cdt.managedbuild.tool.gnu.assembler.input" />
+              </tool>
+            </toolChain>
+          </folderInfo>
+        </configuration>
+      </storageModule>
+      <storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+        <externalSettings containerId="core.framework;cdt.managedbuild.config.gnu.lib.release.47796585" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+        <externalSettings containerId="image.framework;cdt.managedbuild.config.gnu.lib.release.1559190309" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+      </storageModule>
+    </cconfiguration>
+    <cconfiguration id="intel.linux.x86_64.a.rel.309750285_13.0.0">
+      <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="intel.linux.x86_64.a.rel.309750285_13.0.0" moduleId="org.eclipse.cdt.core.settings" name="Intel64">
+        <macros>
+          <stringMacro name="MAXON_ROOTDIR" type="VALUE_PATH_ANY" value="${ProjDirPath}/../../../../" />
+          <stringMacro name="MAXON_FRAMEWORKS_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/" />
+          <stringMacro name="MAXON_BIN_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}" />
+          <stringMacro name="MAXON_SETTINGS_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}settings/" />
+          <stringMacro name="MAXON_CORE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}core.framework/" />
+          <stringListMacro name="MAXON_CORE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_IMAGE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}image.framework/" />
+          <stringListMacro name="MAXON_IMAGE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_PROJECT_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/exchange.framework/" />
+          <stringMacro name="MAXON_PROJECT_SOURCE" type="VALUE_PATH_ANY" value="${MAXON_PROJECT_DIR}source/" />
+          <stringListMacro name="MAXON_PROJECT_SOURCE_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_PROJECT_DIR}source/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}source/maxon/material/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}generated/hxx/&quot;" />
+          </stringListMacro>
+          <stringMacro name="MAXON_RESOURCE_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}resource/" />
+          <stringMacro name="MAXON_RESOURCE_DESC_RES_DIR" type="VALUE_PATH_ANY" value="${MAXON_RESOURCE_DIR}descriptions/res/" />
+          <stringMacro />
+        </macros>
+        <extensions>
+          <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser" />
+          <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.ICCErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+        </extensions>
+      </storageModule>
+      <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        <configuration artifactExtension="a" artifactName="${MAXON_PROJECT_DIR}exchange.framework_intel64" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="64 Bit Intel Build" errorParsers="org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.ICCErrorParser" id="intel.linux.x86_64.a.rel.309750285_13.0.0" name="Intel64" parent="intel.linux.x86_64.a.rel_13.0.0" preannouncebuildStep="Pre-build step" prebuildStep="${MAXON_SETTINGS_PATH}prebuild_eclipse ${MAXON_SETTINGS_PATH} &quot;${MAXON_PROJECT_DIR}&quot; 1 &quot;${MAXON_PROJECT_DIR}exchange.framework_intel64.a&quot; ${MAXON_ROOTDIR}frameworks/core.framework/core.framework_intel64.a ${MAXON_ROOTDIR}frameworks/image.framework/image.framework_intel64.a ">
+          <folderInfo id="intel.linux.x86_64.a.rel.309750285._13.0.0" name="/" resourcePath="">
+            <toolChain id="intel.toolchain.linux.x86_64.a.rel.420353351_13.0.0" name="Intel Toolchain for Static Library on Intel(R) 64" superClass="intel.toolchain.linux.x86_64.a.rel_13.0.0">
+              <targetPlatform archList="x86_64" binaryParser="org.eclipse.cdt.core.ELF" id="intel.platform.linux.x86_64.a.rel_13.0.0.2335151264" name="Platform.A.Release" osList="linux" superClass="intel.platform.linux.x86_64.a.rel_13.0.0" />
+              <builder autoBuildTarget="all" buildPath="${workspace_loc:/exchange.framework/Intel}" command="${MAXON_SETTINGS_PATH}make_eclipse" cleanBuildTarget="clean" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="intel.builder.linux.x86_64.a.rel.3997959161_13.0.0" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="intel.builder.linux.x86_64.a.rel_13.0.0" />
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="intel.cpp.compilestep.linux.x86_64.a.rel.4057849874_13.0.0" name="Intel Intel(R) 64 C++ Compiler" superClass="intel.cpp.compilestep.linux.x86_64.a.rel_13.0.0">
+                <option id="intel.compilestep.preprocessor.defsym.1693951279" name="Preprocessor Definitions (-D)" superClass="intel.compilestep.preprocessor.defsym" valueType="definedSymbols">
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_RELEASE" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_64BIT" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_LINUX" />
+                  <listOptionValue builtIn="false" value="MAXON_API" />
+                  <listOptionValue builtIn="false" value="MAXON_MODULE_ID='&quot;net.maxon.exchange.framework&quot;'" />
+                </option>
+                <option id="intel.compilestep.preprocessor.includedirectories.643101646" name="Additional Include Directories (-I)" superClass="intel.compilestep.preprocessor.includedirectories" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option id="intel.compilestep.gnu.misc.other.3627499118" name="Internal Options used in Project Converter" superClass="intel.compilestep.gnu.misc.other" value="-c -fmessage-length=0 -std=gnu++0x -lm -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Werror=conversion-null -Werror=char-subscripts -Werror=reorder -Werror=sequence-point -Werror=unused-result -Wno-strict-aliasing -fvisibility=hidden -mssse3" valueType="string" />
+                <option id="intel.compilestep.coptions.2365941569" name="Additional Options" superClass="intel.compilestep.coptions" value="-c -fmessage-length=0 -std=gnu++0x -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Wno-strict-aliasing -wd327 -mssse3" valueType="string" />
+                <option id="intel.compilestep.gnucoptions.2797630215" name="Internal Options used in Project Converter" superClass="intel.compilestep.gnucoptions" value="-c -fmessage-length=0 -std=gnu++0x -lm -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Werror=conversion-null -Werror=char-subscripts -Werror=reorder -Werror=sequence-point -Werror=unused-result -Wno-strict-aliasing -fvisibility=hidden -fPIC -mssse3" valueType="string" />
+                <option id="intel.compilestep.gnucoptions.orphan.2991200527" name="Internal Options used in Project Converter" superClass="intel.compilestep.gnucoptions.orphan" value="-fPIC " valueType="string" />
+                <option id="intel.compilestep.cg.fpic.2056785858" name="Generate Position Independent Code (-fpic)" superClass="intel.compilestep.cg.fpic" value="true" valueType="boolean" />
+                <option id="intel.compilestep.output.asmsrc.1230624986" name="Generate Assembler Source File (-S)" superClass="intel.compilestep.output.asmsrc" value="false" valueType="boolean" />
+                <option id="intel.compilestep.general.optimization2.2190905777" name="Optimization Level" superClass="intel.compilestep.general.optimization2" value="general.opt.speedHLO" valueType="enumerated" />
+                <option id="intel.compilestep.optimization.inline.expand1.3984252269" name="Inline Function Expansion" superClass="intel.compilestep.optimization.inline.expand1" value="inl.exp1.anysuitable" valueType="enumerated" />
+                <option id="intel.compilestep.general.debug.cpp.x86_64.a.rel.1923145195_13.0.0" name="Include Debug Information (-g)" superClass="intel.compilestep.general.debug.cpp.x86_64.a.rel_13.0.0" value="true" valueType="boolean" />
+                <inputType id="intel.cpp.compilestep.input.920942033" superClass="intel.cpp.compilestep.input" />
+              </tool>
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="intel.c.compilestep.linux.x86_64.a.rel.3490607122_13.0.0" name="Intel Intel(R) 64 C Compiler" superClass="intel.c.compilestep.linux.x86_64.a.rel_13.0.0">
+                <option id="intel.compilestep.preprocessor.includedirectories.643101646" name="Additional Include Directories (-I)" superClass="intel.compilestep.preprocessor.includedirectories" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option id="gnu.c.compiler.option.misc.pic.2938017254" name="Position Independent Code (-fPIC)" superClass="gnu.c.compiler.option.misc.pic" value="true" valueType="boolean" />
+                <inputType id="intel.c.compilestep.input.1158276561" superClass="intel.c.compilestep.input" />
+              </tool>
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="intel.arstep.linux.x86_64.a.rel.1131762833_13.0.0" name="Intel Intel(R) 64 Archiver" superClass="intel.arstep.linux.x86_64.a.rel_13.0.0">
+                <outputType id="intel.arstep.linux.output.952398869" outputPrefix="" superClass="intel.arstep.linux.output"  />
+              </tool>
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.c.linker.base.900960750" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base" />
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.linker.base.3763454830" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base" />
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.assembler.lib.release.3999534699" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.lib.release">
+                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.3741633023" superClass="cdt.managedbuild.tool.gnu.assembler.input" />
+              </tool>
+            </toolChain>
+          </folderInfo>
+        </configuration>
+      </storageModule>
+      <storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+        <externalSettings containerId="core.framework;intel.linux.x86_64.a.rel.1773320585" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+        <externalSettings containerId="image.framework;intel.linux.x86_64.a.rel.753598789" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+      </storageModule>
+    </cconfiguration>
+    <cconfiguration id="cdt.managedbuild.config.gnu.lib.debug.4213990895">
+      <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.lib.debug.4213990895" moduleId="org.eclipse.cdt.core.settings" name="Debug64Standalone">
+        <macros>
+          <stringMacro name="MAXON_ROOTDIR" type="VALUE_PATH_ANY" value="${ProjDirPath}/../../../../" />
+          <stringMacro name="MAXON_FRAMEWORKS_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/" />
+          <stringMacro name="MAXON_BIN_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}" />
+          <stringMacro name="MAXON_SETTINGS_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}settings/" />
+          <stringMacro name="MAXON_CORE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}core.framework/" />
+          <stringListMacro name="MAXON_CORE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_IMAGE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}image.framework/" />
+          <stringListMacro name="MAXON_IMAGE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_PROJECT_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/exchange.framework/" />
+          <stringMacro name="MAXON_PROJECT_SOURCE" type="VALUE_PATH_ANY" value="${MAXON_PROJECT_DIR}source/" />
+          <stringListMacro name="MAXON_PROJECT_SOURCE_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_PROJECT_DIR}source/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}source/maxon/material/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}generated/hxx/&quot;" />
+          </stringListMacro>
+          <stringMacro name="MAXON_RESOURCE_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}resource/" />
+          <stringMacro name="MAXON_RESOURCE_DESC_RES_DIR" type="VALUE_PATH_ANY" value="${MAXON_RESOURCE_DIR}descriptions/res/" />
+          <stringMacro />
+        </macros>
+        <extensions>
+          <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser" />
+          <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+        </extensions>
+      </storageModule>
+      <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        <configuration artifactExtension="a" artifactName="${MAXON_PROJECT_DIR}exchange.framework_debug64standalone" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="64 Bit Debug Standalone Build" id="cdt.managedbuild.config.gnu.lib.debug.4213990895" name="Debug64Standalone" parent="cdt.managedbuild.config.gnu.lib.debug" preannouncebuildStep="Pre-build step" prebuildStep="${MAXON_SETTINGS_PATH}prebuild_eclipse ${MAXON_SETTINGS_PATH} &quot;${MAXON_PROJECT_DIR}&quot; 1 &quot;${MAXON_PROJECT_DIR}exchange.framework_debug64standalone.a&quot; ${MAXON_ROOTDIR}frameworks/core.framework/core.framework_debug64standalone.a ${MAXON_ROOTDIR}frameworks/image.framework/image.framework_debug64standalone.a ">
+          <folderInfo id="cdt.managedbuild.config.gnu.lib.debug.4213990895." name="/" resourcePath="">
+            <toolChain id="cdt.managedbuild.toolchain.gnu.lib.debug.2589613029" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.lib.debug">
+              <targetPlatform id="cdt.managedbuild.target.gnu.platform.lib.debug.439292908" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.lib.debug" />
+              <builder buildPath="${workspace_loc:/exchange.framework/Debug}" command="${MAXON_SETTINGS_PATH}make_eclipse" id="cdt.managedbuild.target.gnu.builder.lib.debug.4206281468" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.lib.debug" />
+              <tool command="ar" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.archiver.lib.debug.2752059138" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.lib.debug">
+                <outputType id="cdt.managedbuild.tool.gnu.archiver.output.3793890923" outputPrefix="" superClass="cdt.managedbuild.tool.gnu.archiver.output" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.lib.debug.3663518876" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.lib.debug">
+                <option id="gnu.cpp.compiler.lib.debug.option.optimization.level.2668234968" name="Optimization Level" superClass="gnu.cpp.compiler.lib.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated" />
+                <option id="gnu.cpp.compiler.lib.debug.option.debugging.level.811822929" name="Debug Level" superClass="gnu.cpp.compiler.lib.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated" />
+                <option id="gnu.cpp.compiler.option.preprocessor.def.2308631039" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+                  <listOptionValue builtIn="false" value="__STANDALONEAPP" />
+                  <listOptionValue builtIn="false" value="_DEBUG" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_DEBUG" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_64BIT" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_LINUX" />
+                  <listOptionValue builtIn="false" value="MAXON_API" />
+                  <listOptionValue builtIn="false" value="MAXON_MODULE_ID='&quot;net.maxon.exchange.framework&quot;'" />
+                </option>
+                <option id="gnu.cpp.compiler.option.include.paths.4087693681" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option id="gnu.cpp.compiler.option.other.pic.4199813877" name="Position Independent Code (-fPIC)" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean" />
+                <option id="gnu.cpp.compiler.option.other.other.925240827" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=gnu++0x -lm -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Werror=conversion-null -Werror=char-subscripts -Werror=reorder -Werror=sequence-point -Werror=unused-result -Wno-strict-aliasing -fvisibility=hidden -mssse3" valueType="string" />
+                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.448941884" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.c.compiler.lib.debug.3914861340" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.debug">
+                <option id="gnu.c.compiler.option.include.paths.2560829297" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.lib.debug.option.optimization.level.3452134104" name="Optimization Level" superClass="gnu.c.compiler.lib.debug.option.optimization.level" valueType="enumerated" />
+                <option id="gnu.c.compiler.option.misc.pic.3839427233" name="Position Independent Code (-fPIC)" superClass="gnu.c.compiler.option.misc.pic" value="true" valueType="boolean" />
+                <option id="gnu.c.compiler.lib.debug.option.debugging.level.4189607249" name="Debug Level" superClass="gnu.c.compiler.lib.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated" />
+                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1872281020" superClass="cdt.managedbuild.tool.gnu.c.compiler.input" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.c.linker.base.1444655513" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base" />
+              <tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1446481945" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base" />
+              <tool id="cdt.managedbuild.tool.gnu.assembler.lib.debug.2031832136" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.lib.debug">
+                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.3206771944" superClass="cdt.managedbuild.tool.gnu.assembler.input" />
+              </tool>
+            </toolChain>
+          </folderInfo>
+        </configuration>
+      </storageModule>
+      <storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+        <externalSettings containerId="core.framework;cdt.managedbuild.config.gnu.lib.debug.1002025067" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+        <externalSettings containerId="image.framework;cdt.managedbuild.config.gnu.lib.debug.2195669799" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+      </storageModule>
+    </cconfiguration>
+    <cconfiguration id="cdt.managedbuild.config.gnu.lib.release.2019164103">
+      <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.lib.release.2019164103" moduleId="org.eclipse.cdt.core.settings" name="Release64Standalone">
+        <macros>
+          <stringMacro name="MAXON_ROOTDIR" type="VALUE_PATH_ANY" value="${ProjDirPath}/../../../../" />
+          <stringMacro name="MAXON_FRAMEWORKS_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/" />
+          <stringMacro name="MAXON_BIN_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}" />
+          <stringMacro name="MAXON_SETTINGS_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}settings/" />
+          <stringMacro name="MAXON_CORE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}core.framework/" />
+          <stringListMacro name="MAXON_CORE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_IMAGE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}image.framework/" />
+          <stringListMacro name="MAXON_IMAGE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_PROJECT_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/exchange.framework/" />
+          <stringMacro name="MAXON_PROJECT_SOURCE" type="VALUE_PATH_ANY" value="${MAXON_PROJECT_DIR}source/" />
+          <stringListMacro name="MAXON_PROJECT_SOURCE_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_PROJECT_DIR}source/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}source/maxon/material/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}generated/hxx/&quot;" />
+          </stringListMacro>
+          <stringMacro name="MAXON_RESOURCE_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}resource/" />
+          <stringMacro name="MAXON_RESOURCE_DESC_RES_DIR" type="VALUE_PATH_ANY" value="${MAXON_RESOURCE_DIR}descriptions/res/" />
+          <stringMacro />
+        </macros>
+        <extensions>
+          <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser" />
+          <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+        </extensions>
+      </storageModule>
+      <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        <configuration artifactExtension="a" artifactName="${MAXON_PROJECT_DIR}exchange.framework_release64standalone" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="64 Bit Release Standalone Build" id="cdt.managedbuild.config.gnu.lib.release.2019164103" name="Release64Standalone" parent="cdt.managedbuild.config.gnu.lib.release" preannouncebuildStep="Pre-build step" prebuildStep="${MAXON_SETTINGS_PATH}prebuild_eclipse ${MAXON_SETTINGS_PATH} &quot;${MAXON_PROJECT_DIR}&quot; 1 &quot;${MAXON_PROJECT_DIR}exchange.framework_release64standalone.a&quot; ${MAXON_ROOTDIR}frameworks/core.framework/core.framework_release64standalone.a ${MAXON_ROOTDIR}frameworks/image.framework/image.framework_release64standalone.a ">
+          <folderInfo id="cdt.managedbuild.config.gnu.lib.release.2019164103." name="/" resourcePath="">
+            <toolChain id="cdt.managedbuild.toolchain.gnu.lib.release.3605650725" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.lib.release">
+              <targetPlatform id="cdt.managedbuild.target.gnu.platform.lib.release.1845836204" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.lib.release" />
+              <builder buildPath="${workspace_loc:/exchange.framework/Release}" command="${MAXON_SETTINGS_PATH}make_eclipse" id="cdt.managedbuild.target.gnu.builder.lib.release.1442767036" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.lib.release" />
+              <tool command="ar" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.archiver.lib.release.2791031234" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.lib.release">
+                <outputType id="cdt.managedbuild.tool.gnu.archiver.output.2570845623" outputPrefix="" superClass="cdt.managedbuild.tool.gnu.archiver.output" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.lib.release.1539254876" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.lib.release">
+                <option id="gnu.cpp.compiler.lib.release.option.optimization.level.2370106136" name="Optimization Level" superClass="gnu.cpp.compiler.lib.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated" />
+                <option id="gnu.cpp.compiler.lib.release.option.debugging.level.4115195753" name="Debug Level" superClass="gnu.cpp.compiler.lib.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated" />
+                <option id="gnu.cpp.compiler.option.preprocessor.def.1165239371" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+                  <listOptionValue builtIn="false" value="__STANDALONEAPP" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_RELEASE" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_64BIT" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_LINUX" />
+                  <listOptionValue builtIn="false" value="MAXON_API" />
+                  <listOptionValue builtIn="false" value="MAXON_MODULE_ID='&quot;net.maxon.exchange.framework&quot;'" />
+                </option>
+                <option id="gnu.cpp.compiler.option.include.paths.1447454525" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option id="gnu.cpp.compiler.option.other.pic.1820780481" name="Position Independent Code (-fPIC)" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean" />
+                <option id="gnu.cpp.compiler.option.other.other.3167107399" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=gnu++0x -lm -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Werror=conversion-null -Werror=char-subscripts -Werror=reorder -Werror=sequence-point -Werror=unused-result -Wno-strict-aliasing -fvisibility=hidden -mssse3" valueType="string" />
+                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.710356552" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.c.compiler.lib.release.75438300" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.release">
+                <option id="gnu.c.compiler.option.include.paths.3009596733" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.lib.release.option.optimization.level.2881572120" name="Optimization Level" superClass="gnu.c.compiler.lib.release.option.optimization.level" valueType="enumerated" />
+                <option id="gnu.c.compiler.option.misc.pic.3381566573" name="Position Independent Code (-fPIC)" superClass="gnu.c.compiler.option.misc.pic" value="true" valueType="boolean" />
+                <option id="gnu.c.compiler.lib.release.option.debugging.level.2646265193" name="Debug Level" superClass="gnu.c.compiler.lib.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated" />
+                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2739666120" superClass="cdt.managedbuild.tool.gnu.c.compiler.input" />
+              </tool>
+              <tool id="cdt.managedbuild.tool.gnu.c.linker.base.4108414309" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base" />
+              <tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1568648165" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base" />
+              <tool id="cdt.managedbuild.tool.gnu.assembler.lib.release.2435179528" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.lib.release">
+                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.990222580" superClass="cdt.managedbuild.tool.gnu.assembler.input" />
+              </tool>
+            </toolChain>
+          </folderInfo>
+        </configuration>
+      </storageModule>
+      <storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+        <externalSettings containerId="core.framework;cdt.managedbuild.config.gnu.lib.release.3288706115" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+        <externalSettings containerId="image.framework;cdt.managedbuild.config.gnu.lib.release.74154239" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+      </storageModule>
+    </cconfiguration>
+    <cconfiguration id="intel.linux.x86_64.a.rel.1006087977_13.0.0">
+      <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="intel.linux.x86_64.a.rel.1006087977_13.0.0" moduleId="org.eclipse.cdt.core.settings" name="Intel64Standalone">
+        <macros>
+          <stringMacro name="MAXON_ROOTDIR" type="VALUE_PATH_ANY" value="${ProjDirPath}/../../../../" />
+          <stringMacro name="MAXON_FRAMEWORKS_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/" />
+          <stringMacro name="MAXON_BIN_PATH" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}" />
+          <stringMacro name="MAXON_SETTINGS_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}settings/" />
+          <stringMacro name="MAXON_CORE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}core.framework/" />
+          <stringListMacro name="MAXON_CORE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math&quot;" />
+            <value name="&quot;${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_IMAGE.FRAMEWORK_ROOT_PATH" type="VALUE_PATH_ANY" value="${MAXON_FRAMEWORKS_PATH}image.framework/" />
+          <stringListMacro name="MAXON_IMAGE.FRAMEWORK_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source&quot;" />
+            <value name="&quot;${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities&quot;" />
+            <value name="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+          </stringListMacro>
+          <stringMacro name="MAXON_PROJECT_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}frameworks/exchange.framework/" />
+          <stringMacro name="MAXON_PROJECT_SOURCE" type="VALUE_PATH_ANY" value="${MAXON_PROJECT_DIR}source/" />
+          <stringListMacro name="MAXON_PROJECT_SOURCE_PATH_LIST" type="VALUE_PATH_ANY_LIST">
+            <value name="&quot;${MAXON_PROJECT_DIR}source/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}source/maxon/material/&quot;" />
+            <value name="&quot;${MAXON_PROJECT_DIR}generated/hxx/&quot;" />
+          </stringListMacro>
+          <stringMacro name="MAXON_RESOURCE_DIR" type="VALUE_PATH_ANY" value="${MAXON_ROOTDIR}resource/" />
+          <stringMacro name="MAXON_RESOURCE_DESC_RES_DIR" type="VALUE_PATH_ANY" value="${MAXON_RESOURCE_DIR}descriptions/res/" />
+          <stringMacro />
+        </macros>
+        <extensions>
+          <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser" />
+          <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+          <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser" />
+        </extensions>
+      </storageModule>
+      <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        <configuration artifactExtension="a" artifactName="${MAXON_PROJECT_DIR}exchange.framework_intel64standalone" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="64 Bit Intel Standalone Build" errorParsers="org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.ICCErrorParser" id="intel.linux.x86_64.a.rel.1006087977_13.0.0" name="Intel64Standalone" parent="intel.linux.x86_64.a.rel_13.0.0" preannouncebuildStep="Pre-build step" prebuildStep="${MAXON_SETTINGS_PATH}prebuild_eclipse ${MAXON_SETTINGS_PATH} &quot;${MAXON_PROJECT_DIR}&quot; 1 &quot;${MAXON_PROJECT_DIR}exchange.framework_intel64standalone.a&quot; ${MAXON_ROOTDIR}frameworks/core.framework/core.framework_intel64standalone.a ${MAXON_ROOTDIR}frameworks/image.framework/image.framework_intel64standalone.a ">
+          <folderInfo id="intel.linux.x86_64.a.rel.1006087977._13.0.0" name="/" resourcePath="">
+            <toolChain id="intel.toolchain.linux.x86_64.a.rel.4216577597_13.0.0" name="Intel Toolchain for Static Library on Intel(R) 64" superClass="intel.toolchain.linux.x86_64.a.rel_13.0.0">
+              <targetPlatform archList="x86_64" binaryParser="org.eclipse.cdt.core.ELF" id="intel.platform.linux.x86_64.a.rel_13.0.0.1751088452" name="Platform.A.Release" osList="linux" superClass="intel.platform.linux.x86_64.a.rel_13.0.0" />
+              <builder autoBuildTarget="all" buildPath="${workspace_loc:/exchange.framework/Intel}" command="${MAXON_SETTINGS_PATH}make_eclipse" cleanBuildTarget="clean" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="intel.builder.linux.x86_64.a.rel.4013567051_13.0.0" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="intel.builder.linux.x86_64.a.rel_13.0.0" />
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="intel.cpp.compilestep.linux.x86_64.a.rel.562034322_13.0.0" name="Intel Intel(R) 64 C++ Compiler" superClass="intel.cpp.compilestep.linux.x86_64.a.rel_13.0.0">
+                <option id="intel.compilestep.preprocessor.defsym.2284375381" name="Preprocessor Definitions (-D)" superClass="intel.compilestep.preprocessor.defsym" valueType="definedSymbols">
+                  <listOptionValue builtIn="false" value="__STANDALONEAPP" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_RELEASE" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_64BIT" />
+                  <listOptionValue builtIn="false" value="MAXON_TARGET_LINUX" />
+                  <listOptionValue builtIn="false" value="MAXON_API" />
+                  <listOptionValue builtIn="false" value="MAXON_MODULE_ID='&quot;net.maxon.exchange.framework&quot;'" />
+                </option>
+                <option id="intel.compilestep.preprocessor.includedirectories.577008982" name="Additional Include Directories (-I)" superClass="intel.compilestep.preprocessor.includedirectories" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option id="intel.compilestep.gnu.misc.other.4162274998" name="Internal Options used in Project Converter" superClass="intel.compilestep.gnu.misc.other" value="-c -fmessage-length=0 -std=gnu++0x -lm -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Werror=conversion-null -Werror=char-subscripts -Werror=reorder -Werror=sequence-point -Werror=unused-result -Wno-strict-aliasing -fvisibility=hidden -mssse3" valueType="string" />
+                <option id="intel.compilestep.coptions.4023086083" name="Additional Options" superClass="intel.compilestep.coptions" value="-c -fmessage-length=0 -std=gnu++0x -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Wno-strict-aliasing -wd327 -mssse3" valueType="string" />
+                <option id="intel.compilestep.gnucoptions.2561763453" name="Internal Options used in Project Converter" superClass="intel.compilestep.gnucoptions" value="-c -fmessage-length=0 -std=gnu++0x -lm -g -Wno-multichar -Wno-invalid-offsetof -Wno-switch -Werror=conversion-null -Werror=char-subscripts -Werror=reorder -Werror=sequence-point -Werror=unused-result -Wno-strict-aliasing -fvisibility=hidden -fPIC -mssse3" valueType="string" />
+                <option id="intel.compilestep.gnucoptions.orphan.2622565749" name="Internal Options used in Project Converter" superClass="intel.compilestep.gnucoptions.orphan" value="-fPIC " valueType="string" />
+                <option id="intel.compilestep.cg.fpic.2818840802" name="Generate Position Independent Code (-fpic)" superClass="intel.compilestep.cg.fpic" value="true" valueType="boolean" />
+                <option id="intel.compilestep.output.asmsrc.4196544714" name="Generate Assembler Source File (-S)" superClass="intel.compilestep.output.asmsrc" value="false" valueType="boolean" />
+                <option id="intel.compilestep.general.optimization2.141843347" name="Optimization Level" superClass="intel.compilestep.general.optimization2" value="general.opt.speedHLO" valueType="enumerated" />
+                <option id="intel.compilestep.optimization.inline.expand1.1492689495" name="Inline Function Expansion" superClass="intel.compilestep.optimization.inline.expand1" value="inl.exp1.anysuitable" valueType="enumerated" />
+                <option id="intel.compilestep.general.debug.cpp.x86_64.a.rel.1923145195_13.0.0" name="Include Debug Information (-g)" superClass="intel.compilestep.general.debug.cpp.x86_64.a.rel_13.0.0" value="true" valueType="boolean" />
+                <inputType id="intel.cpp.compilestep.input.3213140851" superClass="intel.cpp.compilestep.input" />
+              </tool>
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="intel.c.compilestep.linux.x86_64.a.rel.1918199442_13.0.0" name="Intel Intel(R) 64 C Compiler" superClass="intel.c.compilestep.linux.x86_64.a.rel_13.0.0">
+                <option id="intel.compilestep.preprocessor.includedirectories.577008982" name="Additional Include Directories (-I)" superClass="intel.compilestep.preprocessor.includedirectories" valueType="includePath">
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_SOURCE}" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/" />
+                  <listOptionValue builtIn="false" value="${MAXON_PROJECT_DIR}source/maxon/material/" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/math" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_CORE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}source/maxon/utilities" />
+                  <listOptionValue builtIn="false" value="${MAXON_IMAGE.FRAMEWORK_ROOT_PATH}generated/hxx" />
+                </option>
+                <option id="gnu.c.compiler.option.misc.pic.2504594494" name="Position Independent Code (-fPIC)" superClass="gnu.c.compiler.option.misc.pic" value="true" valueType="boolean" />
+                <inputType id="intel.c.compilestep.input.2425959283" superClass="intel.c.compilestep.input" />
+              </tool>
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="intel.arstep.linux.x86_64.a.rel.194579635_13.0.0" name="Intel Intel(R) 64 Archiver" superClass="intel.arstep.linux.x86_64.a.rel_13.0.0">
+                <outputType id="intel.arstep.linux.output.2039075503" outputPrefix="" superClass="intel.arstep.linux.output"  />
+              </tool>
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.c.linker.base.109822774" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base" />
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.linker.base.111649206" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base" />
+              <tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.assembler.lib.release.3451094681" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.lib.release">
+                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1871939205" superClass="cdt.managedbuild.tool.gnu.assembler.input" />
+              </tool>
+            </toolChain>
+          </folderInfo>
+        </configuration>
+      </storageModule>
+      <storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+        <externalSettings containerId="core.framework;intel.linux.x86_64.a.rel.2089089445" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+        <externalSettings containerId="image.framework;intel.linux.x86_64.a.rel.3282734177" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier" />
+      </storageModule>
+    </cconfiguration>
+  </storageModule>
+  <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+    <project id="exchange.framework.cdt.managedbuild.target.gnu.lib.2309316025" name="Static Library" projectType="cdt.managedbuild.target.gnu.lib" />
+  </storageModule>
+  <storageModule moduleId="refreshScope" versionNumber="1">
+    <resource resourceType="PROJECT" workspacePath="/exchange.framework" />
+  </storageModule>
+  <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings" />
+  <storageModule moduleId="scannerConfiguration">
+    <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="" />
+    <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.lib.debug.240832557;cdt.managedbuild.config.gnu.lib.debug.240832557.;cdt.managedbuild.tool.gnu.cpp.compiler.lib.debug.1322540104;cdt.managedbuild.tool.gnu.cpp.compiler.input.3814477224">
+      <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP" />
+    </scannerConfigBuildInfo>
+    <scannerConfigBuildInfo instanceId="intel.linux.x86_64.a.rel.309750285_13.0.0;intel.linux.x86_64.a.rel.309750285._13.0.0;intel.cpp.compilestep.linux.x86_64.a.rel.4057849874_13.0.0;intel.cpp.compilestep.input.920942033">
+      <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.intel.compiler.cdt.managedbuilder.ui.ICCManagedMakePerProjectProfile" />
+    </scannerConfigBuildInfo>
+    <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.lib.release.1233723373;cdt.managedbuild.config.gnu.lib.release.1233723373.;cdt.managedbuild.tool.gnu.c.compiler.lib.release.1539131400;cdt.managedbuild.tool.gnu.c.compiler.input.2727845788">
+      <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC" />
+    </scannerConfigBuildInfo>
+    <scannerConfigBuildInfo instanceId="intel.linux.x86_64.a.rel.309750285_13.0.0;intel.linux.x86_64.a.rel.309750285._13.0.0.;intel.c.compilestep.linux.x86_64.a.rel.3490607122_13.0.0;intel.c.compilestep.input.1158276561">
+      <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.intel.compiler.cdt.managedbuilder.ui.ICCManagedMakePerProjectProfile" />
+    </scannerConfigBuildInfo>
+    <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.lib.debug.240832557;cdt.managedbuild.config.gnu.lib.debug.240832557.;cdt.managedbuild.tool.gnu.c.compiler.lib.debug.2097495496;cdt.managedbuild.tool.gnu.c.compiler.input.3829002024">
+      <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC" />
+    </scannerConfigBuildInfo>
+    <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.lib.release.1233723373;cdt.managedbuild.config.gnu.lib.release.1233723373.;cdt.managedbuild.tool.gnu.cpp.compiler.lib.release.1540957832;cdt.managedbuild.tool.gnu.cpp.compiler.input.1654414876">
+      <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP" />
+    </scannerConfigBuildInfo>
+  </storageModule>
+</cproject>

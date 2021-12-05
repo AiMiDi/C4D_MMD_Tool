@@ -148,6 +148,12 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 ​	3. Support R25.
 
+**version 0.4.3**
+
+​	1. Fixed multi-part import import weights not initializing bones.
+
+​	2. Improved weight import.
+
 ## usage
 
 1.Select the corresponding version of the plugin and place it in the plugins folder under the Cinema 4D installation directory.

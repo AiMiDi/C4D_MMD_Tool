@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8800E4E7-0D26-2958-0009-38CB8C5CDEA3}</ProjectGuid>
+    <RootNamespace>maxon</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="./projectsettings.props" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+    <EnableASAN>false</EnableASAN>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\DebugWin64.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\cinema.framework\project\cinema.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\mesh_misc.framework\project\mesh_misc.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\math.framework\project\math.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\crypt.framework\project\crypt.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\python.framework\project\python.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\image.framework\project\image.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\command.framework\project\command.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\ReleaseWin64.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\cinema.framework\project\cinema.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\mesh_misc.framework\project\mesh_misc.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\math.framework\project\math.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\crypt.framework\project\crypt.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\python.framework\project\python.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\image.framework\project\image.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\command.framework\project\command.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.xdl64</TargetExt>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MMDTool_R21</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.xdl64</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>..\..\..\..\lib\yaml_cpp\include;..\..\..\..\lib\bullet\include;..\..\..\..\lib\libiconv-1.16\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>..\..\..\..\lib\yaml_cpp\include;..\..\..\..\lib\bullet\include;..\..\..\..\lib\libiconv-1.16\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../res/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <IgnoreSpecificDefaultLibraries />
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>..\..\..\..\lib\libiconv-1.16\lib\Debug\iconv.lib;..\..\..\..\lib\yaml_cpp\lib\Debug\yaml-cppd.lib;..\..\..\..\lib\bullet\lib\BulletDynamics_vs2010_x64_debug.lib;..\..\..\..\lib\bullet\lib\BulletCollision_vs2010_x64_debug.lib;..\..\..\..\lib\bullet\lib\LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles />
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../res/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>..\..\..\..\lib\libiconv-1.16\lib\Release\iconv.lib;..\..\..\..\lib\yaml_cpp\lib\Release\yaml-cpp.lib;..\..\..\..\lib\bullet\lib\LinearMath_vs2010_x64_release.lib;..\..\..\..\lib\bullet\lib\BulletCollision_vs2010_x64_release.lib;..\..\..\..\lib\bullet\lib\BulletDynamics_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles />
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\cinema.framework\project\cinema.framework.vcxproj">
+      <Project>{69BF9B7D-7EB2-7FC5-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\mesh_misc.framework\project\mesh_misc.framework.vcxproj">
+      <Project>{3A883A00-61CC-D50A-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\math.framework\project\math.framework.vcxproj">
+      <Project>{96B02211-112B-F41C-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\crypt.framework\project\crypt.framework.vcxproj">
+      <Project>{A327271A-42AF-F07A-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\python.framework\project\python.framework.vcxproj">
+      <Project>{BCEDCE2F-468D-93F0-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\image.framework\project\image.framework.vcxproj">
+      <Project>{2F669138-9991-9827-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\command.framework\project\command.framework.vcxproj">
+      <Project>{31F40DC0-08CA-5317-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.vcxproj">
+      <Project>{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\source\BulletTest.cpp" />
+    <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp" />
+    <ClCompile Include="..\..\..\..\source\main.cpp" />
+    <ClCompile Include="..\..\..\..\source\MMD_PMX_Control.cpp" />
+    <ClCompile Include="..\..\..\..\source\MMD_PMX_model.cpp" />
+    <ClCompile Include="..\..\..\..\source\MMD_utility.cpp" />
+    <ClCompile Include="..\..\..\..\source\MMD_VMD_animation.cpp" />
+    <ClCompile Include="..\..\..\..\source\MMD_VPD_pose.cpp" />
+    <ClCompile Include="..\..\..\..\source\NameConversion.cpp" />
+    <ClCompile Include="..\..\..\..\source\PluginRegister.cpp" />
+    <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
+    <ClCompile Include="..\generated\hxx\register.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\res\c4d_symbols.h" />
+    <ClInclude Include="..\..\..\..\res\description\OMMDBoneRoot.h" />
+    <ClInclude Include="..\..\..\..\res\description\OMMDCamera.h" />
+    <ClInclude Include="..\..\..\..\res\description\OMMDJoint.h" />
+    <ClInclude Include="..\..\..\..\res\description\OMMDJointRoot.h" />
+    <ClInclude Include="..\..\..\..\res\description\OMMDMeshRoot.h" />
+    <ClInclude Include="..\..\..\..\res\description\OMMDModel.h" />
+    <ClInclude Include="..\..\..\..\res\description\OMMDRigid.h" />
+    <ClInclude Include="..\..\..\..\res\description\OMMDRigidRoot.h" />
+    <ClInclude Include="..\..\..\..\res\description\TMMDBone.h" />
+    <ClInclude Include="..\..\..\..\source\BulletTest.h" />
+    <ClInclude Include="..\..\..\..\source\ImagesGUI.h" />
+    <ClInclude Include="..\..\..\..\source\main.h" />
+    <ClInclude Include="..\..\..\..\source\MMD_PMX_Control.h" />
+    <ClInclude Include="..\..\..\..\source\MMD_PMX_model.h" />
+    <ClInclude Include="..\..\..\..\source\MMD_utility.h" />
+    <ClInclude Include="..\..\..\..\source\MMD_VMD_animation.h" />
+    <ClInclude Include="..\..\..\..\source\MMD_VPD_pose.h" />
+    <ClInclude Include="..\..\..\..\source\NameConversion.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="AfterClean">
+    <RemoveDir Directories="$(ProjectDir)..\generated" ContinueOnError="true" />
+    <Message Text="Removing generated folder: $(ProjectDir)..\generated" Importance="high" ContinueOnError="true" />
+  </Target>
+</Project>

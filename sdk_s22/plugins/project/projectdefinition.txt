@@ -1,0 +1,4 @@
+Platform=Win64;OSX
+Type=Solution
+Solution=\
+	plugins/mmdtool;

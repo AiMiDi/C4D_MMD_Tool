@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2F669138-9991-9827-0009-38CB8C5CDEA3}</ProjectGuid>
+    <RootNamespace>maxon</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="./projectsettings.props" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\DebugWin64.props" />
+    <Import Project="./image.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\ReleaseWin64.props" />
+    <Import Project="./image.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)_obj\$(ProjectName)\$(PlatformName)_$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)_obj\$(ProjectName)\$(PlatformName)_$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.maxon.image.framework";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <IgnoreSpecificDefaultLibraries />
+    </Lib>
+    <PostBuildEvent>
+      <Command>$(NoInherit)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.maxon.image.framework";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <IgnoreSpecificDefaultLibraries />
+    </Lib>
+    <PostBuildEvent>
+      <Command>$(NoInherit)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp" />
+    <ClCompile Include="..\source\maxon\gfx_image.cpp" />
+    <ClCompile Include="..\source\maxon\gfx_image_pixelformat_template.cpp" />
+    <ClCompile Include="..\source\maxon\gfx_image_updateregion.cpp" />
+    <ClCompile Include="..\source\maxon\half.cpp" />
+    <ClCompile Include="..\source\maxon\mediasession_output.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\audioobject.h" />
+    <ClInclude Include="..\source\maxon\gfx_basictypes.h" />
+    <ClInclude Include="..\source\maxon\gfx_basictypes_3d.h" />
+    <ClInclude Include="..\source\maxon\gfx_image.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_bits.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_colorprofile.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_colorspace.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_colorspaces.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_exif.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_imagechannel.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_imagechannels.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_pixelblend.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_pixelformat.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_pixelformat_dynamic.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_pixelformat_group.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_pixelformat_indexed.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_pixelformat_template.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_pixelformats.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_pixelhandler.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_storage.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_storage_deepimage.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_updateregion.h" />
+    <ClInclude Include="..\source\maxon\gfx_image_vector.h" />
+    <ClInclude Include="..\source\maxon\half.h" />
+    <ClInclude Include="..\source\maxon\imageregionobserver.h" />
+    <ClInclude Include="..\source\maxon\imageregionobserver_helpers.h" />
+    <ClInclude Include="..\source\maxon\imageurlcache.h" />
+    <ClInclude Include="..\source\maxon\layerset.h" />
+    <ClInclude Include="..\source\maxon\mediasession_audio_import.h" />
+    <ClInclude Include="..\source\maxon\mediasession_audiodata.h" />
+    <ClInclude Include="..\source\maxon\mediasession_base.h" />
+    <ClInclude Include="..\source\maxon\mediasession_converter.h" />
+    <ClInclude Include="..\source\maxon\mediasession_errors.h" />
+    <ClInclude Include="..\source\maxon\mediasession_fileformats.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_bmp.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_dds.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_dpx.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_hdr.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_iff.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_jpg.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_openexr.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_pict.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_png.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_psb.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_psd.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_rla.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_tga.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_export_tiff.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_import.h" />
+    <ClInclude Include="..\source\maxon\mediasession_image_import_openexr.h" />
+    <ClInclude Include="..\source\maxon\mediasession_input.h" />
+    <ClInclude Include="..\source\maxon\mediasession_movie_export.h" />
+    <ClInclude Include="..\source\maxon\mediasession_movie_export_avfoundation.h" />
+    <ClInclude Include="..\source\maxon\mediasession_movie_export_avi.h" />
+    <ClInclude Include="..\source\maxon\mediasession_movie_import_winmf.h" />
+    <ClInclude Include="..\source\maxon\mediasession_output.h" />
+    <ClInclude Include="..\source\maxon\mediasession_progress.h" />
+    <ClInclude Include="..\source\maxon\mediasession_session.h" />
+    <ClInclude Include="..\source\maxon\mediasession_stream.h" />
+    <ClInclude Include="..\source\maxon\mediasession_streamformat.h" />
+    <ClInclude Include="..\source\maxon\utilities\gfx_image_blend_functions.h" />
+    <ClInclude Include="..\source\maxon\utilities\gfx_image_functions_color_conversions.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="AfterClean">
+    <RemoveDir Directories="$(ProjectDir)..\generated" ContinueOnError="true" />
+    <Message Text="Removing generated folder: $(ProjectDir)..\generated" Importance="high" ContinueOnError="true" />
+  </Target>
+</Project>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemDefinitionGroup Condition=" ('$(Configuration)'=='Debug') Or ('$(Configuration)'=='LibDebug') ">
+    <PreBuildEvent>
+      <Command>$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor\Python36\python.exe $(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor\sourceprocessor.py --option stylecheck.aswarnings=true $(MAXON_SOURCEPROCESSOR_OPTIONS) "$(ProjectDir).."</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Source processor</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition=" !(('$(Configuration)'=='Debug') Or ('$(Configuration)'=='LibDebug')) ">
+    <PreBuildEvent>
+      <Command>Rem IncrediBuild_OutputDirTree $(ProjectDir)..\generated
+$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor\Python36\python.exe $(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor\sourceprocessor.py $(MAXON_SOURCEPROCESSOR_OPTIONS) "$(ProjectDir).."</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Source processor</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+</Project>

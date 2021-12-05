@@ -1,0 +1,2 @@
+maxon.MediaSessionWrongTypeErrorInterface	"net.maxon.image.interface.mediasessionwrongtypeerror"	G:\C4DSDK\sdk_r25\frameworks\image.framework\source\maxon\mediasession_errors.h(18,7)	ErrorInterface		
+maxon.MediaStreamEOFErrorInterface	"net.maxon.image.interface.mediastreameoferror"	G:\C4DSDK\sdk_r25\frameworks\image.framework\source\maxon\mediasession_errors.h(26,7)	ErrorInterface		

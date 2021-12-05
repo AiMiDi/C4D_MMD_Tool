@@ -1,0 +1,1 @@
+maxon.VoxelizationInterface	"net.maxon.geom.interface.voxelization"	D:\C4DSDK\sdk_s22\frameworks\mesh_misc.framework\source\maxon\voxelization.h(22,7)	ObjectInterface	GetBoundingBox,GetClosestPolys,GetIntersectingIndices,GetIntersectingIndicesPrecise,GetVoxelRangesFromBoundingBox,Init,IsInitialized	

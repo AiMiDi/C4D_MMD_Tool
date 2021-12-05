@@ -1,0 +1,37 @@
+//---Compiler Version
+//GCC_VERSION = 4.2
+//GCC_VERSION = com.apple.compilers.llvmgcc42
+GCC_VERSION = com.apple.compilers.llvm.clang.1_0
+//GCC_VERSION = com.intel.compilers.icc.12_0_0
+
+//---Code Generation---
+GCC_ENABLE_SSE3_EXTENSIONS = YES
+CLANG_ENABLE_CODE_COVERAGE = NO
+GCC_GENERATE_DEBUGGING_SYMBOLS = YES
+GCC_DYNAMIC_NO_PIC = NO								// YES: faster function calls for applications. Not appropriate for shared libraries (which need to be position-independent).
+GCC_INLINES_ARE_PRIVATE_EXTERN = YES	
+GCC_OPTIMIZATION_LEVEL = 0
+GCC_FAST_MATH = NO
+GCC_SYMBOLS_PRIVATE_EXTERN = YES	// YES: all symbols are declared 'private extern' unless explicitly marked to be exported using '__attribute__((visibility("default")))' in code
+GCC_NO_COMMON_BLOCKS = YES
+
+//---Language---
+GCC_ENABLE_CPP_EXCEPTIONS = NO
+GCC_ENABLE_CPP_RTTI = NO
+GCC_ENABLE_OBJC_EXCEPTIONS = YES
+
+// OTHER_CPLUSPLUSFLAGS_BASE is defined here because it is also used in sanitizerbase.xcconfig
+// Inheritance only works between levels, variable assignments perform on the same level will override the previous assignment.
+// You cannot use $(inherited) in an xcconfig file to get the value assigned for a variable from an imported xcconfig file.
+// To use that value you must use separate names and reference those variables in assignment.
+OTHER_CPLUSPLUSFLAGS_BASE = $(OTHER_CFLAGS) -fno-math-errno -Werror=unused-result -Werror=return-type -Werror=return-stack-address -Werror=reinterpret-base-class -Wno-c++1z-extensions
+OTHER_CPLUSPLUSFLAGS = $(OTHER_CPLUSPLUSFLAGS_BASE)
+
+CLANG_CXX_LANGUAGE_STANDARD = c++14
+CLANG_CXX_LIBRARY = libc++
+
+EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "$(inherited) maxon";
+// CC=$(MAXON_ROOTDIR)/frameworks/settings/compile
+// CXX=$(MAXON_ROOTDIR)/frameworks/settings/compile
+
+

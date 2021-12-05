@@ -1,0 +1,1 @@
+maxon.VoxelizationInterface=D:\C4DSDK\C4D_MMDTool\r20_sdk\frameworks\mesh_misc.framework\source\maxon\voxelization.h(22,7)=Object:GetBoundingBox,GetClosestPolys,GetIntersectingIndices,GetIntersectingIndicesPrecise,GetVoxelRangesFromBoundingBox,Init,IsInitialized

@@ -1,0 +1,486 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A04287392B0FD9A8A3010000 /* mediasession_output.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A04287392B0FD9A8A3000000 /* mediasession_output.cpp */; };
+		A04287392B3195AC28010000 /* half.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A04287392B3195AC28000000 /* half.cpp */; };
+		A04287392BC2505DDC010000 /* gfx_image_updateregion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A04287392BC2505DDC000000 /* gfx_image_updateregion.cpp */; };
+		A04287392BD1F773DB010000 /* gfx_image_pixelformat_template.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A04287392BD1F773DB000000 /* gfx_image_pixelformat_template.cpp */; };
+		A04287392BD93CCD9F010000 /* register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A04287392BD93CCD9F000000 /* register.cpp */; };
+		A04287392BE5611A8A010000 /* gfx_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A04287392BE5611A8A000000 /* gfx_image.cpp */; };
+		A04287392BF4AB3A6F010000 /* libcore.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A04287392BF4AB3A6F000000 /* libcore.framework.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A04287392BF4AB3A6F040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A04287392BF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0000;
+			remoteInfo = core.framework;
+		};
+		A04287392BF4AB3A6F040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A04287392BF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0100;
+			remoteInfo = "core.framework static library";
+		};
+		A04287392BF4AB3A6F050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A04287392BF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F000000;
+			remoteInfo = core.framework;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A04287392B00000000000000 /* debugbase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = debugbase.xcconfig; path = ../../../frameworks/settings/debugbase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A04287392B00000000050000 /* releasebase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = releasebase.xcconfig; path = ../../../frameworks/settings/releasebase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A04287392B02F2FBCD000000 /* mediasession_fileformats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_fileformats.h; path = ../source/maxon/mediasession_fileformats.h; sourceTree = SOURCE_ROOT; };
+		A04287392B08D14E28000000 /* gfx_image_pixelhandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_pixelhandler.h; path = ../source/maxon/gfx_image_pixelhandler.h; sourceTree = SOURCE_ROOT; };
+		A04287392B0C467A27000000 /* mediasession_stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_stream.h; path = ../source/maxon/mediasession_stream.h; sourceTree = SOURCE_ROOT; };
+		A04287392B0CBD20A0000000 /* gfx_image_pixelformat_template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_pixelformat_template.h; path = ../source/maxon/gfx_image_pixelformat_template.h; sourceTree = SOURCE_ROOT; };
+		A04287392B0FD9A8A3000000 /* mediasession_output.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mediasession_output.cpp; path = ../source/maxon/mediasession_output.cpp; sourceTree = SOURCE_ROOT; };
+		A04287392B10E77A0B000000 /* gfx_basictypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_basictypes.h; path = ../source/maxon/gfx_basictypes.h; sourceTree = SOURCE_ROOT; };
+		A04287392B11DFD267000000 /* gfx_image_colorspace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_colorspace.h; path = ../source/maxon/gfx_image_colorspace.h; sourceTree = SOURCE_ROOT; };
+		A04287392B1634308A000000 /* gfx_image_colorprofile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_colorprofile.h; path = ../source/maxon/gfx_image_colorprofile.h; sourceTree = SOURCE_ROOT; };
+		A04287392B1EE3C4F7000000 /* mediasession_input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_input.h; path = ../source/maxon/mediasession_input.h; sourceTree = SOURCE_ROOT; };
+		A04287392B21817FE8000000 /* gfx_image_functions_color_conversions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_functions_color_conversions.h; path = ../source/maxon/utilities/gfx_image_functions_color_conversions.h; sourceTree = SOURCE_ROOT; };
+		A04287392B2337082D000000 /* half.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = half.h; path = ../source/maxon/half.h; sourceTree = SOURCE_ROOT; };
+		A04287392B2A1B76E0000000 /* gfx_image_colorspaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_colorspaces.h; path = ../source/maxon/gfx_image_colorspaces.h; sourceTree = SOURCE_ROOT; };
+		A04287392B2BCF2B79000000 /* gfx_basictypes_3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_basictypes_3d.h; path = ../source/maxon/gfx_basictypes_3d.h; sourceTree = SOURCE_ROOT; };
+		A04287392B2E32208F000000 /* audioobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = audioobject.h; path = ../source/maxon/audioobject.h; sourceTree = SOURCE_ROOT; };
+		A04287392B3195AC28000000 /* half.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = half.cpp; path = ../source/maxon/half.cpp; sourceTree = SOURCE_ROOT; };
+		A04287392B3D0CC2AA000000 /* gfx_image_bits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_bits.h; path = ../source/maxon/gfx_image_bits.h; sourceTree = SOURCE_ROOT; };
+		A04287392B42F97C34000000 /* gfx_image_exif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_exif.h; path = ../source/maxon/gfx_image_exif.h; sourceTree = SOURCE_ROOT; };
+		A04287392B558DB6AD000000 /* mediasession_audiodata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_audiodata.h; path = ../source/maxon/mediasession_audiodata.h; sourceTree = SOURCE_ROOT; };
+		A04287392B5831884D000000 /* gfx_image_pixelformat_dynamic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_pixelformat_dynamic.h; path = ../source/maxon/gfx_image_pixelformat_dynamic.h; sourceTree = SOURCE_ROOT; };
+		A04287392B5E057E54000000 /* mediasession_progress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_progress.h; path = ../source/maxon/mediasession_progress.h; sourceTree = SOURCE_ROOT; };
+		A04287392B5FB1E878000000 /* mediasession_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_base.h; path = ../source/maxon/mediasession_base.h; sourceTree = SOURCE_ROOT; };
+		A04287392B7070E9FF000000 /* mediasession_image_export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export.h; path = ../source/maxon/mediasession_image_export.h; sourceTree = SOURCE_ROOT; };
+		A04287392B70F941BA000000 /* gfx_image_pixelformats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_pixelformats.h; path = ../source/maxon/gfx_image_pixelformats.h; sourceTree = SOURCE_ROOT; };
+		A04287392B7A7029EB000000 /* layerset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = layerset.h; path = ../source/maxon/layerset.h; sourceTree = SOURCE_ROOT; };
+		A04287392B863FAC86000000 /* mediasession_image_import_openexr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_import_openexr.h; path = ../source/maxon/mediasession_image_import_openexr.h; sourceTree = SOURCE_ROOT; };
+		A04287392B91B586B1000000 /* mediasession_movie_import_winmf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_movie_import_winmf.h; path = ../source/maxon/mediasession_movie_import_winmf.h; sourceTree = SOURCE_ROOT; };
+		A04287392BA04A13CA000000 /* mediasession_movie_export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_movie_export.h; path = ../source/maxon/mediasession_movie_export.h; sourceTree = SOURCE_ROOT; };
+		A04287392BA5B5E768000000 /* mediasession_output.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_output.h; path = ../source/maxon/mediasession_output.h; sourceTree = SOURCE_ROOT; };
+		A04287392BA826FA6F000000 /* gfx_image_pixelblend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_pixelblend.h; path = ../source/maxon/gfx_image_pixelblend.h; sourceTree = SOURCE_ROOT; };
+		A04287392BAB4F4EF8000000 /* gfx_image_blend_functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_blend_functions.h; path = ../source/maxon/utilities/gfx_image_blend_functions.h; sourceTree = SOURCE_ROOT; };
+		A04287392BB110444D000000 /* gfx_image_pixelformat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_pixelformat.h; path = ../source/maxon/gfx_image_pixelformat.h; sourceTree = SOURCE_ROOT; };
+		A04287392BB34B60F1000000 /* mediasession_movie_export_avfoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_movie_export_avfoundation.h; path = ../source/maxon/mediasession_movie_export_avfoundation.h; sourceTree = SOURCE_ROOT; };
+		A04287392BB393CC03000000 /* mediasession_session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_session.h; path = ../source/maxon/mediasession_session.h; sourceTree = SOURCE_ROOT; };
+		A04287392BB3EBF26C000000 /* gfx_image_imagechannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_imagechannel.h; path = ../source/maxon/gfx_image_imagechannel.h; sourceTree = SOURCE_ROOT; };
+		A04287392BB7C54C4B000000 /* gfx_image_storage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_storage.h; path = ../source/maxon/gfx_image_storage.h; sourceTree = SOURCE_ROOT; };
+		A04287392BC2505DDC000000 /* gfx_image_updateregion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gfx_image_updateregion.cpp; path = ../source/maxon/gfx_image_updateregion.cpp; sourceTree = SOURCE_ROOT; };
+		A04287392BC66EA70F000000 /* gfx_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image.h; path = ../source/maxon/gfx_image.h; sourceTree = SOURCE_ROOT; };
+		A04287392BC993577B000000 /* gfx_image_imagechannels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_imagechannels.h; path = ../source/maxon/gfx_image_imagechannels.h; sourceTree = SOURCE_ROOT; };
+		A04287392BCA1111B0000000 /* mediasession_image_import.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_import.h; path = ../source/maxon/mediasession_image_import.h; sourceTree = SOURCE_ROOT; };
+		A04287392BD1F773DB000000 /* gfx_image_pixelformat_template.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gfx_image_pixelformat_template.cpp; path = ../source/maxon/gfx_image_pixelformat_template.cpp; sourceTree = SOURCE_ROOT; };
+		A04287392BD58AF7DE000000 /* mediasession_image_export_pict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_pict.h; path = ../source/maxon/mediasession_image_export_pict.h; sourceTree = SOURCE_ROOT; };
+		A04287392BD599249F000000 /* mediasession_movie_export_avi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_movie_export_avi.h; path = ../source/maxon/mediasession_movie_export_avi.h; sourceTree = SOURCE_ROOT; };
+		A04287392BD93CCD9F000000 /* register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = register.cpp; path = ../generated/hxx/register.cpp; sourceTree = SOURCE_ROOT; };
+		A04287392BDC5F82E9000000 /* mediasession_image_export_tiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_tiff.h; path = ../source/maxon/mediasession_image_export_tiff.h; sourceTree = SOURCE_ROOT; };
+		A04287392BDC65C5D5000000 /* mediasession_image_export_openexr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_openexr.h; path = ../source/maxon/mediasession_image_export_openexr.h; sourceTree = SOURCE_ROOT; };
+		A04287392BDEA4C7CD000000 /* mediasession_converter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_converter.h; path = ../source/maxon/mediasession_converter.h; sourceTree = SOURCE_ROOT; };
+		A04287392BE5611A8A000000 /* gfx_image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gfx_image.cpp; path = ../source/maxon/gfx_image.cpp; sourceTree = SOURCE_ROOT; };
+		A04287392BED59F2C5000000 /* mediasession_image_export_bmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_bmp.h; path = ../source/maxon/mediasession_image_export_bmp.h; sourceTree = SOURCE_ROOT; };
+		A04287392BED7215B3000000 /* mediasession_image_export_dds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_dds.h; path = ../source/maxon/mediasession_image_export_dds.h; sourceTree = SOURCE_ROOT; };
+		A04287392BED779CEC000000 /* mediasession_image_export_dpx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_dpx.h; path = ../source/maxon/mediasession_image_export_dpx.h; sourceTree = SOURCE_ROOT; };
+		A04287392BEDAA6FF6000000 /* mediasession_image_export_hdr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_hdr.h; path = ../source/maxon/mediasession_image_export_hdr.h; sourceTree = SOURCE_ROOT; };
+		A04287392BEDB94329000000 /* mediasession_image_export_iff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_iff.h; path = ../source/maxon/mediasession_image_export_iff.h; sourceTree = SOURCE_ROOT; };
+		A04287392BEDCBEA21000000 /* mediasession_image_export_jpg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_jpg.h; path = ../source/maxon/mediasession_image_export_jpg.h; sourceTree = SOURCE_ROOT; };
+		A04287392BEE1F8E69000000 /* mediasession_image_export_png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_png.h; path = ../source/maxon/mediasession_image_export_png.h; sourceTree = SOURCE_ROOT; };
+		A04287392BEE21C17F000000 /* mediasession_image_export_psb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_psb.h; path = ../source/maxon/mediasession_image_export_psb.h; sourceTree = SOURCE_ROOT; };
+		A04287392BEE21C901000000 /* mediasession_image_export_psd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_psd.h; path = ../source/maxon/mediasession_image_export_psd.h; sourceTree = SOURCE_ROOT; };
+		A04287392BEE3ABE27000000 /* mediasession_image_export_rla.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_rla.h; path = ../source/maxon/mediasession_image_export_rla.h; sourceTree = SOURCE_ROOT; };
+		A04287392BEE54A74E000000 /* mediasession_image_export_tga.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_image_export_tga.h; path = ../source/maxon/mediasession_image_export_tga.h; sourceTree = SOURCE_ROOT; };
+		A04287392BF377597B000000 /* gfx_image_storage_deepimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_storage_deepimage.h; path = ../source/maxon/gfx_image_storage_deepimage.h; sourceTree = SOURCE_ROOT; };
+		A04287392BF4AB3A6F020000 /* core.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = core.framework.xcodeproj; path = ../../../frameworks/core.framework/project/core.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A04287392BF4BE4B52000000 /* mediasession_errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_errors.h; path = ../source/maxon/mediasession_errors.h; sourceTree = SOURCE_ROOT; };
+		A04287392BFAF7B995000000 /* mediasession_audio_import.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_audio_import.h; path = ../source/maxon/mediasession_audio_import.h; sourceTree = SOURCE_ROOT; };
+		A04287392BFB59BA9E000000 /* mediasession_streamformat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mediasession_streamformat.h; path = ../source/maxon/mediasession_streamformat.h; sourceTree = SOURCE_ROOT; };
+		A04287392BFE9A96E1000000 /* gfx_image_updateregion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx_image_updateregion.h; path = ../source/maxon/gfx_image_updateregion.h; sourceTree = SOURCE_ROOT; };
+		A08C5CDEA34287392B7B0000 /* libimage.framework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libimage.framework.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A08C5CDEA34287392B7B0100 /* libimage.framework_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libimage.framework_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A04287392B000000000F0000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A04287392BF4AB3A6F010000 /* libcore.framework.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A04287392B00000000140000 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				A04287392BF4AB3A6F020000 /* core.framework.xcodeproj */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		A04287392B00000000190000 /* configurations */ = {
+			isa = PBXGroup;
+			children = (
+				A04287392B00000000000000 /* debugbase.xcconfig */,
+				A04287392B00000000050000 /* releasebase.xcconfig */,
+			);
+			name = configurations;
+			sourceTree = "<group>";
+		};
+		A04287392B000000001E0000 = {
+			isa = PBXGroup;
+			children = (
+				A04287392B00000000190000 /* configurations */,
+				A04287392B111A998F000000 /* generated */,
+				A04287392B00000000140000 /* libs */,
+				A04287392B00000000230000 /* products */,
+				A04287392BCA90681B000000 /* source */,
+			);
+			sourceTree = "<group>";
+		};
+		A04287392B00000000230000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A08C5CDEA34287392B7B0000 /* libimage.framework.a */,
+				A08C5CDEA34287392B7B0100 /* libimage.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A04287392B111A998F000000 /* generated */ = {
+			isa = PBXGroup;
+			children = (
+				A04287392B681C2CE8000000 /* hxx */,
+			);
+			name = generated;
+			path = ../generated;
+			sourceTree = SOURCE_ROOT;
+		};
+		A04287392B114C574F000000 /* maxon */ = {
+			isa = PBXGroup;
+			children = (
+				A04287392BAD213C4A000000 /* utilities */,
+				A04287392B2E32208F000000 /* audioobject.h */,
+				A04287392B10E77A0B000000 /* gfx_basictypes.h */,
+				A04287392B2BCF2B79000000 /* gfx_basictypes_3d.h */,
+				A04287392BE5611A8A000000 /* gfx_image.cpp */,
+				A04287392BC66EA70F000000 /* gfx_image.h */,
+				A04287392B3D0CC2AA000000 /* gfx_image_bits.h */,
+				A04287392B1634308A000000 /* gfx_image_colorprofile.h */,
+				A04287392B11DFD267000000 /* gfx_image_colorspace.h */,
+				A04287392B2A1B76E0000000 /* gfx_image_colorspaces.h */,
+				A04287392B42F97C34000000 /* gfx_image_exif.h */,
+				A04287392BB3EBF26C000000 /* gfx_image_imagechannel.h */,
+				A04287392BC993577B000000 /* gfx_image_imagechannels.h */,
+				A04287392BA826FA6F000000 /* gfx_image_pixelblend.h */,
+				A04287392BB110444D000000 /* gfx_image_pixelformat.h */,
+				A04287392B70F941BA000000 /* gfx_image_pixelformats.h */,
+				A04287392B5831884D000000 /* gfx_image_pixelformat_dynamic.h */,
+				A04287392BD1F773DB000000 /* gfx_image_pixelformat_template.cpp */,
+				A04287392B0CBD20A0000000 /* gfx_image_pixelformat_template.h */,
+				A04287392B08D14E28000000 /* gfx_image_pixelhandler.h */,
+				A04287392BB7C54C4B000000 /* gfx_image_storage.h */,
+				A04287392BF377597B000000 /* gfx_image_storage_deepimage.h */,
+				A04287392BC2505DDC000000 /* gfx_image_updateregion.cpp */,
+				A04287392BFE9A96E1000000 /* gfx_image_updateregion.h */,
+				A04287392B3195AC28000000 /* half.cpp */,
+				A04287392B2337082D000000 /* half.h */,
+				A04287392B7A7029EB000000 /* layerset.h */,
+				A04287392B558DB6AD000000 /* mediasession_audiodata.h */,
+				A04287392BFAF7B995000000 /* mediasession_audio_import.h */,
+				A04287392B5FB1E878000000 /* mediasession_base.h */,
+				A04287392BDEA4C7CD000000 /* mediasession_converter.h */,
+				A04287392BF4BE4B52000000 /* mediasession_errors.h */,
+				A04287392B02F2FBCD000000 /* mediasession_fileformats.h */,
+				A04287392B7070E9FF000000 /* mediasession_image_export.h */,
+				A04287392BED59F2C5000000 /* mediasession_image_export_bmp.h */,
+				A04287392BED7215B3000000 /* mediasession_image_export_dds.h */,
+				A04287392BED779CEC000000 /* mediasession_image_export_dpx.h */,
+				A04287392BEDAA6FF6000000 /* mediasession_image_export_hdr.h */,
+				A04287392BEDB94329000000 /* mediasession_image_export_iff.h */,
+				A04287392BEDCBEA21000000 /* mediasession_image_export_jpg.h */,
+				A04287392BDC65C5D5000000 /* mediasession_image_export_openexr.h */,
+				A04287392BD58AF7DE000000 /* mediasession_image_export_pict.h */,
+				A04287392BEE1F8E69000000 /* mediasession_image_export_png.h */,
+				A04287392BEE21C17F000000 /* mediasession_image_export_psb.h */,
+				A04287392BEE21C901000000 /* mediasession_image_export_psd.h */,
+				A04287392BEE3ABE27000000 /* mediasession_image_export_rla.h */,
+				A04287392BEE54A74E000000 /* mediasession_image_export_tga.h */,
+				A04287392BDC5F82E9000000 /* mediasession_image_export_tiff.h */,
+				A04287392BCA1111B0000000 /* mediasession_image_import.h */,
+				A04287392B863FAC86000000 /* mediasession_image_import_openexr.h */,
+				A04287392B1EE3C4F7000000 /* mediasession_input.h */,
+				A04287392BA04A13CA000000 /* mediasession_movie_export.h */,
+				A04287392BB34B60F1000000 /* mediasession_movie_export_avfoundation.h */,
+				A04287392BD599249F000000 /* mediasession_movie_export_avi.h */,
+				A04287392B91B586B1000000 /* mediasession_movie_import_winmf.h */,
+				A04287392B0FD9A8A3000000 /* mediasession_output.cpp */,
+				A04287392BA5B5E768000000 /* mediasession_output.h */,
+				A04287392B5E057E54000000 /* mediasession_progress.h */,
+				A04287392BB393CC03000000 /* mediasession_session.h */,
+				A04287392B0C467A27000000 /* mediasession_stream.h */,
+				A04287392BFB59BA9E000000 /* mediasession_streamformat.h */,
+			);
+			name = maxon;
+			path = ../source/maxon;
+			sourceTree = SOURCE_ROOT;
+		};
+		A04287392B681C2CE8000000 /* hxx */ = {
+			isa = PBXGroup;
+			children = (
+				A04287392BD93CCD9F000000 /* register.cpp */,
+			);
+			name = hxx;
+			path = ../generated/hxx;
+			sourceTree = SOURCE_ROOT;
+		};
+		A04287392BAD213C4A000000 /* utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A04287392BAB4F4EF8000000 /* gfx_image_blend_functions.h */,
+				A04287392B21817FE8000000 /* gfx_image_functions_color_conversions.h */,
+			);
+			name = utilities;
+			path = ../source/maxon/utilities;
+			sourceTree = SOURCE_ROOT;
+		};
+		A04287392BCA90681B000000 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				A04287392B114C574F000000 /* maxon */,
+			);
+			name = source;
+			path = ../source;
+			sourceTree = SOURCE_ROOT;
+		};
+		A04287392BF4AB3A6F280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A04287392BF4AB3A6F000000 /* libcore.framework.a */,
+				A04287392BF4AB3A6F000100 /* libcore.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A04287392B000000002D0000 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A08C5CDEA34287392B000000 /* image.framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A04287392B00000000460000 /* Build configuration list for PBXNativeTarget "image.framework" */;
+			buildPhases = (
+				A04287392B00000000690000 /* Run Source Processor */,
+				A04287392B00000000320000 /* Sources */,
+				A04287392B000000000F0000 /* Frameworks */,
+				A04287392B000000002D0000 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A04287392BF4AB3A6F370000 /* PBXTargetDependency */,
+			);
+			name = image.framework;
+			productName = image.framework;
+			productReference = A08C5CDEA34287392B7B0000 /* libimage.framework.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A04287392B000000003C0000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1299;
+			};
+			buildConfigurationList = A04287392B00000000410000 /* Build configuration list for PBXProject "image.framework" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A04287392B000000001E0000;
+			productRefGroup = A04287392B00000000230000 /* products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A04287392BF4AB3A6F280000 /* products */;
+					ProjectRef = A04287392BF4AB3A6F020000 /* core.framework.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				A08C5CDEA34287392B000000 /* image.framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A04287392BF4AB3A6F000000 /* libcore.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework.a;
+			remoteRef = A04287392BF4AB3A6F040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A04287392BF4AB3A6F000100 /* libcore.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework_static.a;
+			remoteRef = A04287392BF4AB3A6F040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A04287392B00000000690000 /* Run Source Processor */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Source Processor";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python ${MAXON_ROOTDIR}frameworks/settings/sourceprocessor/sourceprocessor.py \"$PROJECT_DIR/..\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A04287392B00000000320000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A04287392B0FD9A8A3010000 /* mediasession_output.cpp in Sources */,
+				A04287392B3195AC28010000 /* half.cpp in Sources */,
+				A04287392BC2505DDC010000 /* gfx_image_updateregion.cpp in Sources */,
+				A04287392BD1F773DB010000 /* gfx_image_pixelformat_template.cpp in Sources */,
+				A04287392BD93CCD9F010000 /* register.cpp in Sources */,
+				A04287392BE5611A8A010000 /* gfx_image.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A04287392BF4AB3A6F370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = core.framework;
+			targetProxy = A04287392BF4AB3A6F050000 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A04287392B000000004B0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A04287392B00000000000000 /* debugbase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.image.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source ../source/maxon/utilities $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(inherited)";
+			};
+			name = Debug;
+		};
+		A04287392B00000000500000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A04287392B00000000050000 /* releasebase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.image.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source ../source/maxon/utilities $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(inherited)";
+			};
+			name = Release;
+		};
+		A04287392B000000005A0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A04287392B000000005F0000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A04287392B00000000410000 /* Build configuration list for PBXProject "image.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A04287392B000000004B0000 /* Debug */,
+				A04287392B00000000500000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A04287392B00000000460000 /* Build configuration list for PBXNativeTarget "image.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A04287392B000000005A0000 /* Debug */,
+				A04287392B000000005F0000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A04287392B000000003C0000 /* Project object */;
+}

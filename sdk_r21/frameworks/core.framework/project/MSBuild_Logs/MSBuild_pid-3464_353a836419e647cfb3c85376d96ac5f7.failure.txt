@@ -1,0 +1,49 @@
+UNHANDLED EXCEPTIONS FROM PROCESS 3464:
+=====================
+2021/8/28 17:15:03
+System.AggregateException: 发生一个或多个错误。 ---> Microsoft.Build.Shared.InternalErrorException: MSB0001: Internal MSBuild Error: 引发类型为“System.OutOfMemoryException”的异常。
+=============
+System.OutOfMemoryException: 引发类型为“System.OutOfMemoryException”的异常。
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.IssueUnsubmittedRequests()
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass64_0.<Builder_OnBlockedRequest>b__0()
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass72_0.<QueueAction>b__0()
+
+ ---> System.OutOfMemoryException: 引发类型为“System.OutOfMemoryException”的异常。
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.IssueUnsubmittedRequests()
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass64_0.<Builder_OnBlockedRequest>b__0()
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass72_0.<QueueAction>b__0()
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 Microsoft.Build.Shared.ErrorUtilities.ThrowInternalError(String message, Exception innerException, Object[] args)
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass72_0.<QueueAction>b__0()
+   在 System.Threading.Tasks.Dataflow.ActionBlock`1.ProcessMessage(Action`1 action, KeyValuePair`2 messageWithId)
+   在 System.Threading.Tasks.Dataflow.ActionBlock`1.<>c__DisplayClass6_0.<.ctor>b__0(KeyValuePair`2 messageWithId)
+   在 System.Threading.Tasks.Dataflow.Internal.TargetCore`1.ProcessMessagesLoopCore()
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.CleanupForBuild()
+   在 Microsoft.Build.Execution.OutOfProcNode.HandleShutdown(Exception& exception)
+   在 Microsoft.Build.Execution.OutOfProcNode.Run(Boolean enableReuse, Boolean lowPriority, Exception& shutdownException)
+   在 Microsoft.Build.CommandLine.MSBuildApp.StartLocalNode(CommandLineSwitches commandLineSwitches)
+   在 Microsoft.Build.CommandLine.MSBuildApp.ProcessCommandLineSwitches(CommandLineSwitches switchesFromAutoResponseFile, CommandLineSwitches switchesNotFromAutoResponseFile, String& projectFile, String[]& targets, String& toolsVersion, Dictionary`2& globalProperties, ILogger[]& loggers, LoggerVerbosity& verbosity, List`1& distributedLoggerRecords, Boolean& needToValidateProject, String& schemaFile, Int32& cpuCount, Boolean& enableNodeReuse, TextWriter& preprocessWriter, TextWriter& targetsWriter, Boolean& detailedSummary, ISet`1& warningsAsErrors, ISet`1& warningsAsMessages, Boolean& enableRestore, Boolean& interactive, ProfilerLogger& profilerLogger, Boolean& enableProfiler, Dictionary`2& restoreProperties, Boolean& isolateProjects, GraphBuildOptions& graphBuild, String[]& inputResultsCaches, String& outputResultsCache, Boolean& lowPriority, Boolean recursing)
+   在 Microsoft.Build.CommandLine.MSBuildApp.Execute(String commandLine)
+   在 Microsoft.Build.CommandLine.MSBuildApp.Main()
+---> (内部异常 #0) Microsoft.Build.Shared.InternalErrorException: MSB0001: Internal MSBuild Error: 引发类型为“System.OutOfMemoryException”的异常。
+=============
+System.OutOfMemoryException: 引发类型为“System.OutOfMemoryException”的异常。
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.IssueUnsubmittedRequests()
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass64_0.<Builder_OnBlockedRequest>b__0()
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass72_0.<QueueAction>b__0()
+
+ ---> System.OutOfMemoryException: 引发类型为“System.OutOfMemoryException”的异常。
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.IssueUnsubmittedRequests()
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass64_0.<Builder_OnBlockedRequest>b__0()
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass72_0.<QueueAction>b__0()
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 Microsoft.Build.Shared.ErrorUtilities.ThrowInternalError(String message, Exception innerException, Object[] args)
+   在 Microsoft.Build.BackEnd.BuildRequestEngine.<>c__DisplayClass72_0.<QueueAction>b__0()
+   在 System.Threading.Tasks.Dataflow.ActionBlock`1.ProcessMessage(Action`1 action, KeyValuePair`2 messageWithId)
+   在 System.Threading.Tasks.Dataflow.ActionBlock`1.<>c__DisplayClass6_0.<.ctor>b__0(KeyValuePair`2 messageWithId)
+   在 System.Threading.Tasks.Dataflow.Internal.TargetCore`1.ProcessMessagesLoopCore()<---
+
+===================

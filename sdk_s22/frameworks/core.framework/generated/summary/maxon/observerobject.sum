@@ -1,0 +1,1 @@
+maxon.ObserverObjectInterface	"net.maxon.interface.observerobject"	D:\C4DSDK\sdk_s22\frameworks\core.framework\source\maxon\observerobject.h(24,7)	ObjectInterface	AddSenderSignal,GetName,ObserverConnectNotify,ObserverDestroyed,ObserverDisconnectNotify,RemoveSenderSignal,SetName	

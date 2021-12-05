@@ -282,36 +282,36 @@ namespace mmd {
 	* weight==1 */
 	struct BDEF1                                                    
 	{
-		Int32 bone1 = 0;                                            /* Bone index. */
+		Int32 bone = 0;                                            /* Bone index. */
 	};
 	/* Weight type BDEF2 structure
 	* Bone 2 weight = 1 - (Bone 1 weight) */
 	struct BDEF2                                                    
 	{
-		Int32	bone1 = 0, bone2 = 0;                               /* Bone index. */
-		Float32 weight1 = 0.f;                                      /* Bone 1 weight */
+		Int32	bone[2] = { 0 };                               /* Bone index. */
+		Float32 weight = 0.f;                                      /* Bone 1 weight */
 	};
 	/* Weight type BDEF4 structure 
 	* The sum of four weights is not guaranteed to equal 1 */
 	struct BDEF4                                                    
 	{
-		Int32	bone1 = 0, bone2 = 0, bone3 = 0, bone4 = 0;                    /* Bone index. */
-		Float32 weight1 = 0.f, weight2 = 0.f, weight3 = 0.f, weight4 = 0.f;    /* Bone 1~4 weight */
+		Int32	bone[4] = { 0 };                   /* Bone index. */
+		Float32 weight[4] = { 0.f };    /* Bone 1~4 weight */
 	};
 	/* Weight type SDEF structure
 	* Bone 2 weight = 1 - (Bone 1 weight) */
 	struct SDEF                                                     
 	{
-		Int32		bone1 = 0, bone2 = 0;                             /* Bone index. */
-		Float32		weight1 = 0.f;                                    /* Bone 1 weight */
+		Int32		bone[2] = { 0 };                             /* Bone index. */
+		Float32		weight = 0.f;                                    /* Bone 1 weight */
 		Vector32	R0 = Vector32(), R1 = Vector32(), C = Vector32(); /* R0,R1,C */
 	};
 	/* Weight type QDEF structure
 	* The sum of four weights is not guaranteed to equal 1 */
 	struct QDEF                                                     
 	{
-		Int32	bone1 = 0, bone2 = 0, bone3 = 0, bone4 = 0;                 /* Bone index. */         
-		Float32 weight1 = 0.f, weight2 = 0.f, weight3 = 0.f, weight4 = 0.f; /* Bone 1~4 weight */
+		Int32	bone[4] = { 0 };                /* Bone index. */
+		Float32 weight[4] = { 0.f }; /* Bone 1~4 weight */
 	};
 	struct PMX_Data_count
 	{

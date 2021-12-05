@@ -1,0 +1,6 @@
+maxon/distancequery.h
+maxon/mesh_attribute_base.cpp
+maxon/mesh_attribute_base.h
+maxon/mesh_attribute_utilities.h
+maxon/vertexwrapper.h
+maxon/voxelization.h

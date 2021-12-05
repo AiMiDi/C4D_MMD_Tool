@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="generated">
+      <UniqueIdentifier>{143FD050-0768-3377-0000-5284111A998F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\hxx">
+      <UniqueIdentifier>{143FD050-0768-3377-8ACC-618A6830A19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{143FD050-0768-3377-0000-0000CA90681B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon">
+      <UniqueIdentifier>{143FD050-0768-3377-29DB-81C65E166B42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon\material">
+      <UniqueIdentifier>{143FD050-0768-3377-2E20-8F2F224C6881}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <Filter>generated\hxx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\exchange_strings.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\material\datadescription_material_fbx.h">
+      <Filter>source\maxon\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\material\datadescription_material_forger.h">
+      <Filter>source\maxon\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\material\datadescription_material_gltf.h">
+      <Filter>source\maxon\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\material\datadescription_material_standard_surface.h">
+      <Filter>source\maxon\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\material\datadescription_material_usd.h">
+      <Filter>source\maxon\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\material\materialexport.h">
+      <Filter>source\maxon\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\material\materialimport.h">
+      <Filter>source\maxon\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\material\materialmapping.h">
+      <Filter>source\maxon\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\material\materialparameter.h">
+      <Filter>source\maxon\material</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

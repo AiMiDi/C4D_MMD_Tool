@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CodeBlocks_project_file>
+  <FileVersion major="1" minor="6" />
+  <Project>
+    <Option title="volume.framework" />
+    <Option platforms="Unix;Mac;" />
+    <Option pch_mode="2" />
+    <Option compiler="gcc" />
+    <Option virtualFolders="generated/hxx/;source/maxon/;" />
+    <Build>
+      <Target title="Debug64">
+        <Option output="$(MAXON_PROJECT_DIR)volume.framework_debug64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/debug64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_debug64.a;$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_debug64.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_debug64.a;$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_debug64.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_debug64.a;" />
+        <Compiler>
+          <Add option="-D_DEBUG" />
+          <Add option="-DMAXON_TARGET_DEBUG" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.volume.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-mssse3" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_debug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_debug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_debug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_debug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_debug64.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/volume.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_CINEMA.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)cinema.framework/' />
+          <Variable name="MAXON_COMMAND.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)command.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="Release64">
+        <Option output="$(MAXON_PROJECT_DIR)volume.framework_release64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/release64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_release64.a;$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_release64.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_release64.a;$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_release64.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_release64.a;" />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.volume.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-O3" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-mssse3" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_release64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_release64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_release64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_release64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_release64.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/volume.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_CINEMA.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)cinema.framework/' />
+          <Variable name="MAXON_COMMAND.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)command.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="LibDebug64">
+        <Option output="$(MAXON_PROJECT_DIR)volume.framework_libdebug64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/libdebug64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_libdebug64.a;$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_libdebug64.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_libdebug64.a;$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_libdebug64.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_libdebug64.a;" />
+        <Compiler>
+          <Add option="-D_DEBUG" />
+          <Add option="-DMAXON_TARGET_DEBUG" />
+          <Add option="-D__STANDALONEAPP" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.volume.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-mssse3" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_libdebug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_libdebug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_libdebug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_libdebug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_libdebug64.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/volume.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_CINEMA.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)cinema.framework/' />
+          <Variable name="MAXON_COMMAND.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)command.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="LibRelease64">
+        <Option output="$(MAXON_PROJECT_DIR)volume.framework_librelease64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/librelease64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_librelease64.a;$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_librelease64.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_librelease64.a;$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_librelease64.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_librelease64.a;" />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__STANDALONEAPP" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.volume.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-mssse3" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_librelease64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_librelease64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_librelease64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_librelease64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_librelease64.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/volume.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_CINEMA.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)cinema.framework/' />
+          <Variable name="MAXON_COMMAND.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)command.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="DebugRPi">
+        <Option output="$(MAXON_PROJECT_DIR)volume.framework_debugrpi.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/debugrpi" />
+        <Option compiler="gcc_rpi" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_debugrpi.a;$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_debugrpi.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_debugrpi.a;$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_debugrpi.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_debugrpi.a;" />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__LINUX" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.volume.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_debugrpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_debugrpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_debugrpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_debugrpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_debugrpi.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='arm-linux-gnueabihf' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/volume.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_CINEMA.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)cinema.framework/' />
+          <Variable name="MAXON_COMMAND.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)command.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="ReleaseRPi">
+        <Option output="$(MAXON_PROJECT_DIR)volume.framework_releaserpi.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/releaserpi" />
+        <Option compiler="gcc_rpi" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_releaserpi.a;$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_releaserpi.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_releaserpi.a;$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_releaserpi.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_releaserpi.a;" />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__LINUX" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.volume.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CINEMA.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_COMMAND.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/cinema.framework/cinema.framework_releaserpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/command.framework/command.framework_releaserpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_releaserpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_releaserpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_releaserpi.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='arm-linux-gnueabihf' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/volume.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_CINEMA.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)cinema.framework/' />
+          <Variable name="MAXON_COMMAND.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)command.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+    </Build>
+    <Unit filename="../generated/hxx/register.cpp">
+      <Option virtualFolder="generated/hxx/" />
+    </Unit>
+    <Unit filename="../source/maxon/volume.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/volumeaccessors.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/volumecommands.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/volumeiterators.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/volumetools.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Extensions>
+      <code_completion />
+      <envvars />
+      <lib_finder disable_auto="1" />
+      <debugger />
+    </Extensions>
+  </Project>
+</CodeBlocks_project_file>

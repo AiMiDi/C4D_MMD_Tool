@@ -1,0 +1,16 @@
+#ifndef OPYTHON_H__
+#define OPYTHON_H__
+
+#define Opython 1023866
+
+enum
+{
+	OPYTHON_CODE = 400,
+	OPYTHON_RESET = 401,
+	OPYTHON_OPTIMIZE = 402,
+
+	OPYTHON_MAKEDIRTY = 2000,
+	OPYTHON_OPENEDITOR
+};
+
+#endif // OPYTHON_H__

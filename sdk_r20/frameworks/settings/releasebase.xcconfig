@@ -1,0 +1,46 @@
+//---Architectures---
+ARCHS = x86_64
+ONLY_ACTIVE_ARCH = YES
+SDKROOT = macosx
+
+//---Build Locations---
+SYMROOT = $(MAXON_ROOTDIR)build
+
+//---Build Options---
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+ENABLE_BITCODE = NO
+ENABLE_TESTABILITY = NO
+
+//---Code Signing--- removed as signing will be done during distill process
+//CODE_SIGN_IDENTITY = $(MAXON_CODE_SIGN_IDENTITY)
+
+//---Deployment---
+DEPLOYMENT_POSTPROCESSING = YES
+MACOSX_DEPLOYMENT_TARGET = 10.9
+COMBINE_HIDPI_IMAGES = YES
+COPY_PHASE_STRIP = NO
+STRIP_INSTALLED_PRODUCT = YES
+SEPARATE_STRIP = NO
+DSTROOT = .
+STRIP_STYLE = non-global
+
+//---Linking---
+DEAD_CODE_STRIPPING = YES
+PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES
+
+//---Search Paths---
+ALWAYS_SEARCH_USER_PATHS = NO
+USER_HEADER_SEARCH_PATHS = $(MAXON_ROOTDIR)resource $(MAXON_ROOTDIR)resource/descriptions/res $(MAXON_ROOTDIR)resource/gui_internal
+
+//---Code Generation---
+//---Language---
+#include "compiler"
+
+GCC_OPTIMIZATION_LEVEL = 3
+
+//---Preprocessing---
+GCC_PREPROCESSOR_DEFINITIONS[arch=i386] = __MAC MAXON_TARGET_RELEASE MAXON_TARGET_MACOS MAXON_TARGET_OSX
+GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64] = __MAC __64BIT MAXON_TARGET_RELEASE MAXON_TARGET_MACOS MAXON_TARGET_OSX MAXON_TARGET_64BIT
+
+//---Warnings---
+#include "warnings"

@@ -1,0 +1,57 @@
+#if 1
+namespace maxon
+{
+#ifndef MAXON_REGISTRATION_EXCLUDE_INTERFACES
+	static maxon::InterfaceDefinition s_BlendFunctionInterface(BlendFunctionInterface::_interface, &maxon::g_translationUnit, maxon::EntityBase::FLAGS::MAIN_DEFINITION);
+#endif
+#ifndef MAXON_REGISTRATION_EXCLUDE_REFLECTION
+	class BlendFunctionInterface::ProxyComponent : public maxon::Component<BlendFunctionInterface::ProxyComponent, BlendFunctionInterface>
+	{
+		MAXON_COMPONENT();
+	public:
+		static const maxon::Bool PROXY = true;
+		maxon::reflection::ProxyHandler _handler;
+		Result<Data> MapValue(Float x, const Data& startValue, const Data& endValue) 
+		{
+			const maxon::ComponentInfo* proxy_info;
+			maxon::Object* o_;
+			const maxon::reflection::ProxyHandler* handler_;
+			if (maxon::UInt(this) & (SIZEOF(void*)-1))
+			{
+				o_ = (maxon::Object*) (maxon::UInt(this) & ~maxon::DefaultAllocator::MIN_ALIGNMENT_MASK);
+				proxy_info = &maxon::ClassInfo::PrivateGetClassProxyComponentInfo(o_, _descriptor, reinterpret_cast<const maxon::GenericComponent*>(this));
+				handler_ = reinterpret_cast<const maxon::reflection::ProxyHandler*>(proxy_info->_classProxyHandler.GetPointer());
+			}
+			else
+			{
+				o_ = (maxon::Object*) self.GetPointer();
+				proxy_info = &o_->GetClassInfo()->PrivateGetComponentInfo(_descriptor);
+				handler_ = &_handler;
+			}
+			const MTable& mt_ = ((const PrivateSuperMTable*) proxy_info->_supervtable.GetPointer())->GetMTable<BlendFunctionInterface>();
+			Result<Data> proxy_result = maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::NULLIMPL);
+			maxon::reflection::Argument proxy_args[] = {maxon::reflection::Argument::ByValue(reinterpret_cast<maxon::GenericComponent*>(o_) + mt_._BlendFunctionInterface_MapValue_Offset), maxon::reflection::Argument::ByValue(x), maxon::reflection::Argument::ByReference(startValue), maxon::reflection::Argument::ByReference(endValue)};
+			(*handler_)(_fn_BlendFunctionInterface_MapValue, o_, maxon::reflection::ProxyInvocation(&proxy_result, proxy_args, &maxon::reflection::Invocation<Result<Data>, maxon::GenericComponent*, Float, const Data&, const Data&>::Invoke, (const void*) mt_._BlendFunctionInterface_MapValue));
+			return proxy_result;
+		}
+		static const maxon::reflection::Function* _fn_BlendFunctionInterface_MapValue;
+	};
+	const maxon::reflection::Function* BlendFunctionInterface::ProxyComponent::_fn_BlendFunctionInterface_MapValue;
+	PRIVATE_MAXON_COMPONENT_REGISTER(BlendFunctionInterface::ProxyComponent, , maxon::EntityBase::FLAGS::PROXY, ::MaxonRegistry,);
+#endif
+#ifndef MAXON_REGISTRATION_EXCLUDE_REFLECTION
+	static maxon::Result<void> RegisterReflection_BlendFunctionInterface(maxon::reflection::Class* cls, maxon::reflection::FunctionRegistrationCallback callback)
+	{
+		maxon::reflection::FunctionInfo functions[] =
+		{
+			MAXON_GET_VIRTUAL_METHOD_INFO(INSTANCE_FUNCTION, 0LL, BlendFunctionInterface, _BlendFunctionInterface_MapValue),
+		};
+		return callback(cls, reinterpret_cast<const maxon::EntityReference*>(&BlendFunctionInterface::_interface), maxon::ToBlock(functions));
+	}
+	static maxon::reflection::ContainerInfo g_reflection_BlendFunctionInterface(nullptr, &BlendFunctionInterface::ProxyComponent::_descriptor, &RegisterReflection_BlendFunctionInterface, &PRIVATE_MAXON_MODULE);
+#endif
+#ifndef MAXON_REGISTRATION_EXCLUDE_INTERFACES
+	PRIVATE_MAXON_REGISTRY_DEFINE(BlendFunctions);
+#endif
+}
+#endif

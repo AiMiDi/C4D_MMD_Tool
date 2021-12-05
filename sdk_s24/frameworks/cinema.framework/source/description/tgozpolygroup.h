@@ -1,0 +1,10 @@
+#ifndef _TGOZPOLYGROUP_H__
+#define _TGOZPOLYGROUP_H__
+
+enum
+{
+	ID_ADDPOLYGROUP = 2000,
+	ID_GOZ_POLYGROUP,
+};
+
+#endif // _TGOZPOLYGROUP_H__
