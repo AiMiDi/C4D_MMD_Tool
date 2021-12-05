@@ -164,7 +164,7 @@ inline Float32 Modulo(Float32 a, Float32 b)
 		return 0.0f;
 	Int32 n = (Int32) (a / b);
 
-	a -= n * b;
+	a -= ((Float32)n) * b;
 	if (a < 0.0f)
 		a += b;
 
@@ -185,7 +185,7 @@ inline Float64 Modulo(Float64 a, Float64 b)
 		return 0.0;
 	Int64 n = (Int64) (a / b);
 
-	a -= n * b;
+	a -= ((Float64)n) * b;
 	if (a < 0.0)
 		a += b;
 

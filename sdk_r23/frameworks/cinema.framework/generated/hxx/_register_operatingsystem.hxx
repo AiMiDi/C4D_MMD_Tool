@@ -8,7 +8,7 @@ CINEWARE_NAMESPACE_END
 #ifdef CINEWARE_NAMESPACE_ENABLE
 CINEWARE_NAMESPACE_BEGIN
 #endif
-namespace enum853 { enum class VIEWPORTSELECTFLAGS
+namespace enum854 { enum class VIEWPORTSELECTFLAGS
 {
 	NONE									= 0,			///< None.
 	USE_HN								= 1,			///< Use HyperNURBS.
@@ -18,35 +18,35 @@ namespace enum853 { enum class VIEWPORTSELECTFLAGS
 	USE_DISPLAY_MODE			= 16,			///< If this flag is set and the display mode is Wireframe or Isoparms only edges and vertices are written into the ViewportSelect buffer.\n The ViewportSelect mode must be @ref Mpolyedgepoint.
 	FORCE_USE_DEFORMERS		= 32,			///< Use deformers even when the viewport DISPLAYEDITSTATE::DEFORM is disabled.
 } ; }
-maxon::String PrivateToString_VIEWPORTSELECTFLAGS853(std::underlying_type<enum853::VIEWPORTSELECTFLAGS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_VIEWPORTSELECTFLAGS854(std::underlying_type<enum854::VIEWPORTSELECTFLAGS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum853::VIEWPORTSELECTFLAGS::NONE, (maxon::UInt64) enum853::VIEWPORTSELECTFLAGS::USE_HN, (maxon::UInt64) enum853::VIEWPORTSELECTFLAGS::USE_DEFORMERS, (maxon::UInt64) enum853::VIEWPORTSELECTFLAGS::REGION_SELECT, (maxon::UInt64) enum853::VIEWPORTSELECTFLAGS::IGNORE_HIDDEN_SEL, (maxon::UInt64) enum853::VIEWPORTSELECTFLAGS::USE_DISPLAY_MODE, (maxon::UInt64) enum853::VIEWPORTSELECTFLAGS::FORCE_USE_DEFORMERS};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum854::VIEWPORTSELECTFLAGS::NONE, (maxon::UInt64) enum854::VIEWPORTSELECTFLAGS::USE_HN, (maxon::UInt64) enum854::VIEWPORTSELECTFLAGS::USE_DEFORMERS, (maxon::UInt64) enum854::VIEWPORTSELECTFLAGS::REGION_SELECT, (maxon::UInt64) enum854::VIEWPORTSELECTFLAGS::IGNORE_HIDDEN_SEL, (maxon::UInt64) enum854::VIEWPORTSELECTFLAGS::USE_DISPLAY_MODE, (maxon::UInt64) enum854::VIEWPORTSELECTFLAGS::FORCE_USE_DEFORMERS};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VIEWPORTSELECTFLAGS", SIZEOF(x), true, values, "NONE\0USE_HN\0USE_DEFORMERS\0REGION_SELECT\0IGNORE_HIDDEN_SEL\0USE_DISPLAY_MODE\0FORCE_USE_DEFORMERS\0", fmt);
 }
-namespace enum866 { enum class SCRIPTMODE
+namespace enum867 { enum class SCRIPTMODE
 {
 	NONE							= 0,	///< Normal multi-line text field.
 	PYTHON						= 1,	///< @em %Python syntax highlighting.
 	AM_ID							= 3,	///< Plain Attribute Manager ID (used for online help and new feature highlighting). @since R19
 } ; }
-maxon::String PrivateToString_SCRIPTMODE866(std::underlying_type<enum866::SCRIPTMODE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_SCRIPTMODE867(std::underlying_type<enum867::SCRIPTMODE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum866::SCRIPTMODE::NONE, (maxon::UInt64) enum866::SCRIPTMODE::PYTHON, (maxon::UInt64) enum866::SCRIPTMODE::AM_ID};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum867::SCRIPTMODE::NONE, (maxon::UInt64) enum867::SCRIPTMODE::PYTHON, (maxon::UInt64) enum867::SCRIPTMODE::AM_ID};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SCRIPTMODE", SIZEOF(x), false, values, "NONE\0PYTHON\0AM_ID\0", fmt);
 }
-namespace enum880 { enum class BASEDRAW_HIGHLIGHT
+namespace enum881 { enum class BASEDRAW_HIGHLIGHT
 {
 	BEFORE_TOOLS			= 0, ///< Use ::SCENEHOOKDRAW::HIGHLIGHT_PASS_BEFORE_TOOL as draw mode for the scene hooks.
 	AFTER_TOOLS				= 1, ///< Use ::SCENEHOOKDRAW::HIGHLIGHT_PASS as draw mode for the scene hooks.
 	INVERSE_Z					= 2, ///< Use ::SCENEHOOKDRAW::HIGHLIGHT_PASS_INV as draw mode for the scene hooks.
 	DRAW_AFTER_CLEAR	= 3, ///< Use ::SCENEHOOKDRAW::DRAW_PASS_AFTER_CLEAR as draw mode for the scene hooks.
 } ; }
-maxon::String PrivateToString_BASEDRAW_HIGHLIGHT880(std::underlying_type<enum880::BASEDRAW_HIGHLIGHT>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_BASEDRAW_HIGHLIGHT881(std::underlying_type<enum881::BASEDRAW_HIGHLIGHT>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum880::BASEDRAW_HIGHLIGHT::BEFORE_TOOLS, (maxon::UInt64) enum880::BASEDRAW_HIGHLIGHT::AFTER_TOOLS, (maxon::UInt64) enum880::BASEDRAW_HIGHLIGHT::INVERSE_Z, (maxon::UInt64) enum880::BASEDRAW_HIGHLIGHT::DRAW_AFTER_CLEAR};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum881::BASEDRAW_HIGHLIGHT::BEFORE_TOOLS, (maxon::UInt64) enum881::BASEDRAW_HIGHLIGHT::AFTER_TOOLS, (maxon::UInt64) enum881::BASEDRAW_HIGHLIGHT::INVERSE_Z, (maxon::UInt64) enum881::BASEDRAW_HIGHLIGHT::DRAW_AFTER_CLEAR};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "BASEDRAW_HIGHLIGHT", SIZEOF(x), false, values, "BEFORE_TOOLS\0AFTER_TOOLS\0INVERSE_Z\0DRAW_AFTER_CLEAR\0", fmt);
 }
-namespace enum895 { enum class FIELDLAYER_CHANNELFLAG
+namespace enum896 { enum class FIELDLAYER_CHANNELFLAG
 {
 	NONE					= 0,						///< None.
 	ENABLE				= (1 << 0),			///< The layer is enabled and being sampled.
@@ -55,12 +55,12 @@ namespace enum895 { enum class FIELDLAYER_CHANNELFLAG
 	DIRECTION			= (1 << 3),			///< Direction sampling is enabled for this layer.
 	ROTATION			= (1 << 4)			///< Rotation sampling is enabled for this layer.
 } ; }
-maxon::String PrivateToString_FIELDLAYER_CHANNELFLAG895(std::underlying_type<enum895::FIELDLAYER_CHANNELFLAG>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_FIELDLAYER_CHANNELFLAG896(std::underlying_type<enum896::FIELDLAYER_CHANNELFLAG>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum895::FIELDLAYER_CHANNELFLAG::NONE, (maxon::UInt64) enum895::FIELDLAYER_CHANNELFLAG::ENABLE, (maxon::UInt64) enum895::FIELDLAYER_CHANNELFLAG::VALUE, (maxon::UInt64) enum895::FIELDLAYER_CHANNELFLAG::COLOR, (maxon::UInt64) enum895::FIELDLAYER_CHANNELFLAG::DIRECTION, (maxon::UInt64) enum895::FIELDLAYER_CHANNELFLAG::ROTATION};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum896::FIELDLAYER_CHANNELFLAG::NONE, (maxon::UInt64) enum896::FIELDLAYER_CHANNELFLAG::ENABLE, (maxon::UInt64) enum896::FIELDLAYER_CHANNELFLAG::VALUE, (maxon::UInt64) enum896::FIELDLAYER_CHANNELFLAG::COLOR, (maxon::UInt64) enum896::FIELDLAYER_CHANNELFLAG::DIRECTION, (maxon::UInt64) enum896::FIELDLAYER_CHANNELFLAG::ROTATION};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "FIELDLAYER_CHANNELFLAG", SIZEOF(x), true, values, "NONE\0ENABLE\0VALUE\0COLOR\0DIRECTION\0ROTATION\0", fmt);
 }
-namespace enum909 { enum class POPUPEDITTEXTCALLBACK
+namespace enum910 { enum class POPUPEDITTEXTCALLBACK
 {
 	TEXTCHANGED = 1,			///< Text was changed.
 	CLOSED			= 2,			///< Window was closed.
@@ -68,9 +68,9 @@ namespace enum909 { enum class POPUPEDITTEXTCALLBACK
 	CURSOR_UP		= 4,			///< %User exited by pressing the up key.
 	CURSOR_DOWN = 5				///< %User exited by pressing the down key.
 } ; }
-maxon::String PrivateToString_POPUPEDITTEXTCALLBACK909(std::underlying_type<enum909::POPUPEDITTEXTCALLBACK>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_POPUPEDITTEXTCALLBACK910(std::underlying_type<enum910::POPUPEDITTEXTCALLBACK>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum909::POPUPEDITTEXTCALLBACK::TEXTCHANGED, (maxon::UInt64) enum909::POPUPEDITTEXTCALLBACK::CLOSED, (maxon::UInt64) enum909::POPUPEDITTEXTCALLBACK::CANCELED, (maxon::UInt64) enum909::POPUPEDITTEXTCALLBACK::CURSOR_UP, (maxon::UInt64) enum909::POPUPEDITTEXTCALLBACK::CURSOR_DOWN};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum910::POPUPEDITTEXTCALLBACK::TEXTCHANGED, (maxon::UInt64) enum910::POPUPEDITTEXTCALLBACK::CLOSED, (maxon::UInt64) enum910::POPUPEDITTEXTCALLBACK::CANCELED, (maxon::UInt64) enum910::POPUPEDITTEXTCALLBACK::CURSOR_UP, (maxon::UInt64) enum910::POPUPEDITTEXTCALLBACK::CURSOR_DOWN};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "POPUPEDITTEXTCALLBACK", SIZEOF(x), false, values, "TEXTCHANGED\0CLOSED\0CANCELED\0CURSOR_UP\0CURSOR_DOWN\0", fmt);
 }
 /// @cond IGNORE

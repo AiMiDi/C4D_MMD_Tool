@@ -826,7 +826,7 @@
 
 	//----------------------------------------------------------------------------------------
 	/// Adds a custom event. Results in a @c CoreMessage().
-	/// @see The article @link page_core_messages Core Messages@endlink for more information.
+	/// @see The article @link page_manual_coremessages Core Messages@endlink for more information.
 	/// @param[in] messageid					The message ID. @uniquePluginID\n
 	///																Use a unique plugin ID to make sure that there is no collision.
 	/// @param[in] p1									The first private data for the sent message.
@@ -836,7 +836,7 @@
 
 	//----------------------------------------------------------------------------------------
 	/// Adds a global event to @C4D's event queue. Results in a @c CoreMessage().
-	/// @see The article @link page_core_messages Core Messages@endlink for more information.
+	/// @see The article @link page_manual_coremessages Core Messages@endlink for more information.
 	/// @param[in] eventflag					The event to add: @enumerateEnum{EVENT}
 	//----------------------------------------------------------------------------------------
 	void EventAdd(EVENT eventflag = EVENT::NONE);
@@ -1455,7 +1455,7 @@
 
 	//----------------------------------------------------------------------------------------
 	/// Sends a core message.
-	/// @see The article @link page_core_messages Core Messages@endlink for more information.
+	/// @see The article @link page_manual_coremessages Core Messages@endlink for more information.
 	///
 	/// @b Examples:
 	/// @code

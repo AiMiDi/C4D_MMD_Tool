@@ -364,6 +364,7 @@
     <ClInclude Include="..\source\maxon\utilities\reuse_resource_cache.h" />
     <ClInclude Include="..\source\maxon\utilities\ringbuffer.h" />
     <ClInclude Include="..\source\maxon\utilities\sprintf_safe.h" />
+    <ClInclude Include="..\source\maxon\utilities\sseconversion.h" />
     <ClInclude Include="..\source\maxon\utilities\streamconversion_helper.h" />
     <ClInclude Include="..\source\maxon\utilities\threaded_update_helper.h" />
     <ClInclude Include="..\source\maxon\utilities\undef_win_macros.h" />

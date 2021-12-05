@@ -228,11 +228,9 @@
 		A0F470FF410085DD4E000000 /* c4d_snapdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_snapdata.h; path = ../source/c4d_snapdata.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4100C7DB25000000 /* toolknifepath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolknifepath.h; path = ../source/description/toolknifepath.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4100DE1573000000 /* oshear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oshear.h; path = ../source/description/oshear.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF4100E79C83000000 /* toolsculptbrushproject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolsculptbrushproject.h; path = ../source/description/toolsculptbrushproject.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4100EAE4EE000000 /* lib_polygonreduction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_polygonreduction.h; path = ../source/c4d_libs/lib_polygonreduction.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4101257576000000 /* offd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = offd.h; path = ../source/description/offd.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41012C7B95000000 /* ofur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofur.h; path = ../source/description/ofur.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF410131B03D000000 /* vprenderman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vprenderman.h; path = ../source/description/vprenderman.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF410133C121000000 /* thairlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = thairlight.h; path = ../source/description/thairlight.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41017E19D3000000 /* olod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = olod.h; path = ../source/description/olod.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4101B8F723000000 /* tpointselection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tpointselection.h; path = ../source/description/tpointselection.h; sourceTree = SOURCE_ROOT; };
@@ -361,7 +359,6 @@
 		A0F470FF4119EC0BB3000000 /* mgradialarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgradialarray.h; path = ../source/description/mgradialarray.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF411A09748E000000 /* Obasesurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Obasesurface.h; path = ../source/description/Obasesurface.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF411A0F389B000000 /* c4d_memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_memory.h; path = ../source/c4d_memory.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF411A1E091B000000 /* toolsculptbrushpolish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolsculptbrushpolish.h; path = ../source/description/toolsculptbrushpolish.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF411A53CA5A000000 /* fstlexport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fstlexport.h; path = ../source/description/fstlexport.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF411A5A8822000000 /* opyramid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opyramid.h; path = ../source/description/opyramid.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF411A7890BE000000 /* osweep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osweep.h; path = ../source/description/osweep.h; sourceTree = SOURCE_ROOT; };
@@ -423,7 +420,6 @@
 		A0F470FF4124DD2FA6000000 /* vpcolormapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vpcolormapping.h; path = ../source/description/vpcolormapping.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4124F15A33000000 /* bpsplinegroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bpsplinegroup.h; path = ../source/description/bpsplinegroup.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4124F622F8000000 /* tbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tbase.h; path = ../source/description/tbase.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF412519575A000000 /* dpathlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dpathlist.h; path = ../source/description/dpathlist.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF412532D335000000 /* customgui_inexclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = customgui_inexclude.h; path = ../source/c4d_customgui/customgui_inexclude.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF412569A21C000000 /* lib_sds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lib_sds.cpp; path = ../source/c4d_libs/lib_sds.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF412575ED84000000 /* xslacolorizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xslacolorizer.h; path = ../source/description/xslacolorizer.h; sourceTree = SOURCE_ROOT; };
@@ -450,7 +446,6 @@
 		A0F470FF4128453974000000 /* fbvhimport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fbvhimport.h; path = ../source/description/fbvhimport.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF412854F751000000 /* obaselist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = obaselist.h; path = ../source/description/obaselist.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41287FCFC0000000 /* tooledgecut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tooledgecut.h; path = ../source/description/tooledgecut.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF4128B3AF04000000 /* ofracture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofracture.h; path = ../source/description/ofracture.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4128B567D3000000 /* tcacheproxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tcacheproxy.h; path = ../source/description/tcacheproxy.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4128E35479000000 /* tool_mglinear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tool_mglinear.h; path = ../source/description/tool_mglinear.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4128F7E696000000 /* c4d_canimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = c4d_canimation.cpp; path = ../source/c4d_canimation.cpp; sourceTree = SOURCE_ROOT; };
@@ -504,7 +499,6 @@
 		A0F470FF41309A53B7000000 /* gvvect2matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvvect2matrix.h; path = ../source/description/gvvect2matrix.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4130FEA104000000 /* oetime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oetime.h; path = ../source/description/oetime.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4131369C95000000 /* vppositionpass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vppositionpass.h; path = ../source/description/vppositionpass.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF4131740678000000 /* prefsmetricspreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefsmetricspreferences.h; path = ../source/description/prefsmetricspreferences.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF413207E3E9000000 /* onull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = onull.h; path = ../source/description/onull.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4132A526F1000000 /* dpresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dpresets.h; path = ../source/description/dpresets.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4132B8378C000000 /* omorphdeformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = omorphdeformer.h; path = ../source/description/omorphdeformer.h; sourceTree = SOURCE_ROOT; };
@@ -537,7 +531,6 @@
 		A0F470FF41365D6885000000 /* customgui_pla.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = customgui_pla.h; path = ../source/c4d_customgui/customgui_pla.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4136FAF8D1000000 /* op_repulsebounce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = op_repulsebounce.h; path = ../source/description/op_repulsebounce.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41371892CE000000 /* lib_volumeobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_volumeobject.h; path = ../source/c4d_libs/lib_volumeobject.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41373E730D000000 /* Sgroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sgroup.h; path = ../source/description/Sgroup.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF413780FF03000000 /* oecoffee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oecoffee.h; path = ../source/description/oecoffee.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41379C6A55000000 /* toolphongselection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolphongselection.h; path = ../source/description/toolphongselection.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4137A7F03C000000 /* oloftlegacy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oloftlegacy.h; path = ../source/description/oloftlegacy.h; sourceTree = SOURCE_ROOT; };
@@ -559,9 +552,6 @@
 		A0F470FF413AA3F4DC000000 /* oeshader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oeshader.h; path = ../source/description/oeshader.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF413AE69C8D000000 /* lib_ngon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_ngon.h; path = ../source/c4d_libs/lib_ngon.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF413B1A9CEF000000 /* omograph_fracturevoronoi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = omograph_fracturevoronoi.h; path = ../source/description/omograph_fracturevoronoi.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF413B3B6A35000000 /* fdecay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fdecay.h; path = ../source/description/fdecay.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF413B9AE53A000000 /* fribexport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fribexport.h; path = ../source/description/fribexport.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF413BBA3DBE000000 /* fdelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fdelay.h; path = ../source/description/fdelay.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF413BCA940E000000 /* Fcatiaimport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fcatiaimport.h; path = ../source/description/Fcatiaimport.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF413BE216C8000000 /* c4d_network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_network.h; path = ../source/c4d_network.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF413C4051A6000000 /* otube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = otube.h; path = ../source/description/otube.h; sourceTree = SOURCE_ROOT; };
@@ -584,7 +574,6 @@
 		A0F470FF413FB039A4000000 /* bplayerfolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bplayerfolder.h; path = ../source/description/bplayerfolder.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF413FBA3C45000000 /* osplinerail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osplinerail.h; path = ../source/description/osplinerail.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF413FCD7974000000 /* textag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = textag.h; path = ../source/description/textag.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF413FE15B60000000 /* tspooldummy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tspooldummy.h; path = ../source/description/tspooldummy.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41405EE56A000000 /* fbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fbase.h; path = ../source/description/fbase.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4140761503000000 /* toolsplineproject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolsplineproject.h; path = ../source/description/toolsplineproject.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF414083C846000000 /* toolsculptbrushselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolsculptbrushselect.h; path = ../source/description/toolsculptbrushselect.h; sourceTree = SOURCE_ROOT; };
@@ -601,7 +590,6 @@
 		A0F470FF4141587B6F000000 /* gvtrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvtrack.h; path = ../source/description/gvtrack.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41415C0D92000000 /* c4d_snapplugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = c4d_snapplugin.cpp; path = ../source/c4d_snapplugin.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF4141CB17F7000000 /* gvtrigo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvtrigo.h; path = ../source/description/gvtrigo.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF4141D3F918000000 /* mrenderman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mrenderman.h; path = ../source/description/mrenderman.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4141E4BFE6000000 /* xvenus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xvenus.h; path = ../source/description/xvenus.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4142170438000000 /* vpbirender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vpbirender.h; path = ../source/description/vpbirender.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4142309DC9000000 /* toolmirrorbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolmirrorbase.h; path = ../source/description/toolmirrorbase.h; sourceTree = SOURCE_ROOT; };
@@ -633,7 +621,6 @@
 		A0F470FF414556F327000000 /* Ohoudinigenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ohoudinigenerator.h; path = ../source/description/Ohoudinigenerator.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4145A36263000000 /* fedit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fedit.h; path = ../source/description/fedit.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF414640D2BE000000 /* ocajoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ocajoint.h; path = ../source/description/ocajoint.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF414666B460000000 /* prefsgpurenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefsgpurenderer.h; path = ../source/description/prefsgpurenderer.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4146B6344F000000 /* lib_datetimeparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_datetimeparser.h; path = ../source/c4d_libs/lib_datetimeparser.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4146C5283E000000 /* overridebase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = overridebase.h; path = ../source/description/overridebase.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41471FDD96000000 /* toolsculptbrushgrab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolsculptbrushgrab.h; path = ../source/description/toolsculptbrushgrab.h; sourceTree = SOURCE_ROOT; };
@@ -707,14 +694,12 @@
 		A0F470FF4153A2A3F8000000 /* toolclone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolclone.h; path = ../source/description/toolclone.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4153A5CED0000000 /* toolcloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolcloud.h; path = ../source/description/toolcloud.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4153DC0C0A000000 /* customgui_datetime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = customgui_datetime.cpp; path = ../source/c4d_customgui/customgui_datetime.cpp; sourceTree = SOURCE_ROOT; };
-		A0F470FF4153DD3CDE000000 /* dmline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dmline.h; path = ../source/description/dmline.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4153E7C5B6000000 /* ctphmask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ctphmask.h; path = ../source/description/ctphmask.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF415423D539000000 /* gvmatrix2hpb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvmatrix2hpb.h; path = ../source/description/gvmatrix2hpb.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41542FAC3D000000 /* ovolumesequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ovolumesequence.h; path = ../source/description/ovolumesequence.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41543E2207000000 /* customgui_splinecontrol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = customgui_splinecontrol.cpp; path = ../source/c4d_customgui/customgui_splinecontrol.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF41548E124D000000 /* tlworld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tlworld.h; path = ../source/description/tlworld.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4154CF85CB000000 /* op_friction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = op_friction.h; path = ../source/description/op_friction.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF4154DA1A12000000 /* arprefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arprefs.h; path = ../source/description/arprefs.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4155020DA7000000 /* lib_activeobjectmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_activeobjectmanager.h; path = ../source/c4d_libs/lib_activeobjectmanager.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41559B011B000000 /* hp_spinconvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hp_spinconvert.h; path = ../source/description/hp_spinconvert.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4155C96503000000 /* c4d_basetag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_basetag.h; path = ../source/c4d_basetag.h; sourceTree = SOURCE_ROOT; };
@@ -757,9 +742,7 @@
 		A0F470FF415E1D960E000000 /* oerandomize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oerandomize.h; path = ../source/description/oerandomize.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF415E2CC83F000000 /* ttension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ttension.h; path = ../source/description/ttension.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF415EF886C0000000 /* vpmagicbulletlooks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vpmagicbulletlooks.h; path = ../source/description/vpmagicbulletlooks.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF415F842266000000 /* ftime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ftime.h; path = ../source/description/ftime.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF415FEBCF51000000 /* osniper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osniper.h; path = ../source/description/osniper.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF415FF34889000000 /* tfloat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tfloat.h; path = ../source/description/tfloat.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF416052A532000000 /* gvhair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvhair.h; path = ../source/description/gvhair.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4160AB3383000000 /* gvhair_point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvhair_point.h; path = ../source/description/gvhair_point.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4160B0178C000000 /* bmflatten.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bmflatten.h; path = ../source/description/bmflatten.h; sourceTree = SOURCE_ROOT; };
@@ -838,7 +821,6 @@
 		A0F470FF416EA6CF37000000 /* toolringselection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolringselection.h; path = ../source/description/toolringselection.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF416EC02A9C000000 /* gvpoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvpoly.h; path = ../source/description/gvpoly.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF416ED41503000000 /* bplayerbmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bplayerbmp.h; path = ../source/description/bplayerbmp.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF416EEA3B27000000 /* Smodul.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Smodul.h; path = ../source/description/Smodul.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF416EEE5029000000 /* lib_aes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lib_aes.cpp; path = ../source/c4d_libs/lib_aes.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF416F061053000000 /* flformula.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = flformula.h; path = ../source/description/flformula.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF416F5EE310000000 /* ocacorrectiondeformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ocacorrectiondeformer.h; path = ../source/description/ocacorrectiondeformer.h; sourceTree = SOURCE_ROOT; };
@@ -850,7 +832,6 @@
 		A0F470FF4170B0AD1A000000 /* ckbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ckbase.h; path = ../source/description/ckbase.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4170D2B2BE000000 /* c4d_fielddata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_fielddata.h; path = ../source/c4d_fielddata.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4171066127000000 /* customgui_kerning.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = customgui_kerning.cpp; path = ../source/c4d_customgui/customgui_kerning.cpp; sourceTree = SOURCE_ROOT; };
-		A0F470FF41710E2D26000000 /* fobjexport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fobjexport.h; path = ../source/description/fobjexport.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41715F777B000000 /* c4d_spc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = c4d_spc.cpp; path = ../source/c4d_spc.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF41718A46C8000000 /* ttexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ttexture.h; path = ../source/description/ttexture.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41718C2155000000 /* xslafusion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xslafusion.h; path = ../source/description/xslafusion.h; sourceTree = SOURCE_ROOT; };
@@ -877,14 +858,12 @@
 		A0F470FF4175BEC725000000 /* kedata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = kedata.h; path = ../source/description/kedata.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41765FFE33000000 /* Thoudinitag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thoudinitag.h; path = ../source/description/Thoudinitag.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF417699A025000000 /* gvhair_collision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvhair_collision.h; path = ../source/description/gvhair_collision.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF4176F063E9000000 /* prefsphprefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefsphprefs.h; path = ../source/description/prefsphprefs.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4177543D90000000 /* ttargetexpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ttargetexpression.h; path = ../source/description/ttargetexpression.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41779B9B6D000000 /* lib_editortools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_editortools.h; path = ../source/c4d_libs/lib_editortools.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4177A92E58000000 /* c4d_falloffdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_falloffdata.h; path = ../source/c4d_falloffdata.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4177B5246C000000 /* ge_autoptr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ge_autoptr.h; path = ../source/ge_autoptr.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4177CB65CA000000 /* c4d_nodeplugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = c4d_nodeplugin.cpp; path = ../source/c4d_nodeplugin.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF4178053911000000 /* gvmemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvmemory.h; path = ../source/description/gvmemory.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41783234C8000000 /* osplinetovolume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osplinetovolume.h; path = ../source/description/osplinetovolume.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF417867F187000000 /* toolcajoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolcajoint.h; path = ../source/description/toolcajoint.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41786D507B000000 /* prefsimexport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefsimexport.h; path = ../source/description/prefsimexport.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF417891701D000000 /* tfracturevoronoi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tfracturevoronoi.h; path = ../source/description/tfracturevoronoi.h; sourceTree = SOURCE_ROOT; };
@@ -915,7 +894,6 @@
 		A0F470FF417F6BF3F8000000 /* if_particleage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = if_particleage.h; path = ../source/description/if_particleage.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF417F71507C000000 /* xcheckerboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xcheckerboard.h; path = ../source/description/xcheckerboard.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF417F9A7C27000000 /* c4d_tagplugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_tagplugin.h; path = ../source/c4d_tagplugin.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF417FD9AFA2000000 /* omotioncapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = omotioncapture.h; path = ../source/description/omotioncapture.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41801EA3CC000000 /* ocharacterbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ocharacterbase.h; path = ../source/description/ocharacterbase.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF418085E3FE000000 /* opython.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opython.h; path = ../source/description/opython.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF4180A14AD3000000 /* customgui_texbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = customgui_texbox.cpp; path = ../source/c4d_customgui/customgui_texbox.cpp; sourceTree = SOURCE_ROOT; };
@@ -1063,7 +1041,6 @@
 		A0F470FF419F326D47000000 /* todotag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = todotag.h; path = ../source/description/todotag.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF419F5AE0BD000000 /* tcaweight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tcaweight.h; path = ../source/description/tcaweight.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF419F8944BD000000 /* c4d_operatorplugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_operatorplugin.h; path = ../source/c4d_gv/c4d_operatorplugin.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF419FC43770000000 /* odirectdeltamushdeformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = odirectdeltamushdeformer.h; path = ../source/description/odirectdeltamushdeformer.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF419FE5CD6E000000 /* ocamorphdeformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ocamorphdeformer.h; path = ../source/description/ocamorphdeformer.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41A03F693D000000 /* toolhairroot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolhairroot.h; path = ../source/description/toolhairroot.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41A04C95E5000000 /* c4d_baseobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = c4d_baseobject.cpp; path = ../source/c4d_baseobject.cpp; sourceTree = SOURCE_ROOT; };
@@ -1175,7 +1152,6 @@
 		A0F470FF41B69E161D000000 /* x4d_filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = x4d_filter.h; path = ../source/x4d_filter.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41B6F9DE2F000000 /* dynrigidbodyhiddentag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dynrigidbodyhiddentag.h; path = ../source/description/dynrigidbodyhiddentag.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41B72B657B000000 /* toolfreeselection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolfreeselection.h; path = ../source/description/toolfreeselection.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41B7342DC1000000 /* tvolume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tvolume.h; path = ../source/description/tvolume.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41B76118D2000000 /* customgui_listview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = customgui_listview.cpp; path = ../source/c4d_customgui/customgui_listview.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF41B79DB6D8000000 /* flquantize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = flquantize.h; path = ../source/description/flquantize.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41B7A729F0000000 /* customgui_movieview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = customgui_movieview.cpp; path = ../source/c4d_customgui/customgui_movieview.cpp; sourceTree = SOURCE_ROOT; };
@@ -1224,7 +1200,6 @@
 		A0F470FF41BF26F4AA000000 /* tarchigrass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tarchigrass.h; path = ../source/description/tarchigrass.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41BF39ACA1000000 /* fformula.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fformula.h; path = ../source/description/fformula.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41BF500132000000 /* c4d_shaderplugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_shaderplugin.h; path = ../source/c4d_shaderplugin.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41C07175FC000000 /* vpbloom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vpbloom.h; path = ../source/description/vpbloom.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41C092759F000000 /* flweight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = flweight.h; path = ../source/description/flweight.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41C11A1186000000 /* c4d_nodedata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_nodedata.h; path = ../source/c4d_nodedata.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41C13391C7000000 /* ctpla.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ctpla.h; path = ../source/description/ctpla.h; sourceTree = SOURCE_ROOT; };
@@ -1262,7 +1237,6 @@
 		A0F470FF41C80761BB000000 /* xbeveltool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xbeveltool.h; path = ../source/description/xbeveltool.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41C8665CE7000000 /* c4d_basechannel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = c4d_basechannel.cpp; path = ../source/c4d_basechannel.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF41C87F690C000000 /* gvinclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvinclude.h; path = ../source/description/gvinclude.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41C8876331000000 /* Sclient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sclient.h; path = ../source/description/Sclient.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41C897598A000000 /* omograph_cloner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = omograph_cloner.h; path = ../source/description/omograph_cloner.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41C8998773000000 /* osplinecogwheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osplinecogwheel.h; path = ../source/description/osplinecogwheel.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41C89C7103000000 /* gvcomment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvcomment.h; path = ../source/description/gvcomment.h; sourceTree = SOURCE_ROOT; };
@@ -1274,7 +1248,6 @@
 		A0F470FF41CA3B044A000000 /* dvector4d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dvector4d.h; path = ../source/description/dvector4d.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41CA4E4DB3000000 /* c4d_scenehookdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_scenehookdata.h; path = ../source/c4d_scenehookdata.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41CA95D2D7000000 /* op_motioninheritance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = op_motioninheritance.h; path = ../source/description/op_motioninheritance.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41CAAE54D7000000 /* fobjimport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fobjimport.h; path = ../source/description/fobjimport.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41CABE11F6000000 /* tcrane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tcrane.h; path = ../source/description/tcrane.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41CAC6F64C000000 /* toolsplinechamfer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolsplinechamfer.h; path = ../source/description/toolsplinechamfer.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41CADD4E3A000000 /* in_selfdynamic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = in_selfdynamic.h; path = ../source/description/in_selfdynamic.h; sourceTree = SOURCE_ROOT; };
@@ -1322,7 +1295,6 @@
 		A0F470FF41D33F1289000000 /* lib_volumeobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lib_volumeobject.cpp; path = ../source/c4d_libs/lib_volumeobject.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D350F3A2000000 /* belttag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = belttag.h; path = ../source/description/belttag.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D371DCA2000000 /* omograph_tracer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = omograph_tracer.h; path = ../source/description/omograph_tracer.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41D41A5D19000000 /* Fstepexport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fstepexport.h; path = ../source/description/Fstepexport.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D45D17F9000000 /* odeltamushdeformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = odeltamushdeformer.h; path = ../source/description/odeltamushdeformer.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D46BB013000000 /* gvcolorspace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvcolorspace.h; path = ../source/description/gvcolorspace.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D49442F8000000 /* dynspringobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dynspringobject.h; path = ../source/description/dynspringobject.h; sourceTree = SOURCE_ROOT; };
@@ -1340,7 +1312,6 @@
 		A0F470FF41D7589513000000 /* ohairfeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ohairfeather.h; path = ../source/description/ohairfeather.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D7605598000000 /* customgui_texbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = customgui_texbox.h; path = ../source/c4d_customgui/customgui_texbox.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D777AD81000000 /* ge_prepass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ge_prepass.h; path = ../source/ge_prepass.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41D7CADA8E000000 /* prefscineman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefscineman.h; path = ../source/description/prefscineman.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D7DB911B000000 /* semomix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = semomix.h; path = ../source/description/semomix.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D8674D07000000 /* dgradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dgradient.h; path = ../source/description/dgradient.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41D86899A9000000 /* c4d_customguidata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = c4d_customguidata.cpp; path = ../source/c4d_customguidata.cpp; sourceTree = SOURCE_ROOT; };
@@ -1387,12 +1358,10 @@
 		A0F470FF41DF9E8DA0000000 /* SBnurbs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBnurbs.h; path = ../source/description/SBnurbs.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41DFB7F361000000 /* lib_motiontracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_motiontracker.h; path = ../source/c4d_libs/lib_motiontracker.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41DFEF7034000000 /* bpsplineline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bpsplineline.h; path = ../source/description/bpsplineline.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41E003CAA3000000 /* toolsculptbrushmulti.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolsculptbrushmulti.h; path = ../source/description/toolsculptbrushmulti.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E0122235000000 /* faiexport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = faiexport.h; path = ../source/description/faiexport.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E02058F3000000 /* tool_mgradial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tool_mgradial.h; path = ../source/description/tool_mgradial.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E035018A000000 /* tooledgeselection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tooledgeselection.h; path = ../source/description/tooledgeselection.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E0857289000000 /* lib_instanceobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_instanceobject.h; path = ../source/c4d_libs/lib_instanceobject.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41E09595E0000000 /* toolvolumeremesher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolvolumeremesher.h; path = ../source/description/toolvolumeremesher.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E0BF19BF000000 /* gvbitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gvbitmap.h; path = ../source/description/gvbitmap.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E0C1B7FE000000 /* toolsculptbrushscrape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolsculptbrushscrape.h; path = ../source/description/toolsculptbrushscrape.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E132FC1B000000 /* lib_sculpt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lib_sculpt.cpp; path = ../source/c4d_libs/lib_sculpt.cpp; sourceTree = SOURCE_ROOT; };
@@ -1405,7 +1374,6 @@
 		A0F470FF41E2F9B483000000 /* tooloutlineselection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tooloutlineselection.h; path = ../source/description/tooloutlineselection.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E32E3257000000 /* toutliner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toutliner.h; path = ../source/description/toutliner.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E3A38228000000 /* toolannotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolannotation.h; path = ../source/description/toolannotation.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41E3DC871A000000 /* Sserial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sserial.h; path = ../source/description/Sserial.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E40B303B000000 /* thairprefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = thairprefs.h; path = ../source/description/thairprefs.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E4949714000000 /* lib_cloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_cloud.h; path = ../source/c4d_libs/lib_cloud.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41E4FBC99C000000 /* c4d_falloffplugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = c4d_falloffplugin.cpp; path = ../source/c4d_falloffplugin.cpp; sourceTree = SOURCE_ROOT; };
@@ -1474,7 +1442,6 @@
 		A0F470FF41F4AB3A6F020000 /* core.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = core.framework.xcodeproj; path = ../../../frameworks/core.framework/project/core.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F4E579C8000000 /* oespline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oespline.h; path = ../source/description/oespline.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F4E66098000000 /* dmatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dmatrix.h; path = ../source/description/dmatrix.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41F513B0BB000000 /* toolmeshtovolume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolmeshtovolume.h; path = ../source/description/toolmeshtovolume.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F51E0D62000000 /* lib_tlmarker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lib_tlmarker.cpp; path = ../source/c4d_libs/lib_tlmarker.cpp; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F562D6E3000000 /* xphlensdistortionshader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xphlensdistortionshader.h; path = ../source/description/xphlensdistortionshader.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F63F215F000000 /* prefspaths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefspaths.h; path = ../source/description/prefspaths.h; sourceTree = SOURCE_ROOT; };
@@ -1484,7 +1451,6 @@
 		A0F470FF41F740B9AE000000 /* ocacluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ocacluster.h; path = ../source/description/ocacluster.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F792E9B2000000 /* xslidetool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xslidetool.h; path = ../source/description/xslidetool.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F7B87464000000 /* osculptdisplacement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osculptdisplacement.h; path = ../source/description/osculptdisplacement.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41F81B71C2000000 /* shrenderman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = shrenderman.h; path = ../source/description/shrenderman.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F84A75F3000000 /* dynforce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dynforce.h; path = ../source/description/dynforce.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F84B6AD1000000 /* oevolume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oevolume.h; path = ../source/description/oevolume.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41F88F0FFC000000 /* xbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xbase.h; path = ../source/description/xbase.h; sourceTree = SOURCE_ROOT; };
@@ -1525,7 +1491,6 @@
 		A0F470FF41FD2594D1000000 /* xslabanji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xslabanji.h; path = ../source/description/xslabanji.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41FD2CDAC1000000 /* xslabanzi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xslabanzi.h; path = ../source/description/xslabanzi.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41FD41CB8A000000 /* osplineprofile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osplineprofile.h; path = ../source/description/osplineprofile.h; sourceTree = SOURCE_ROOT; };
-		A0F470FF41FDA5D679000000 /* deltamushbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = deltamushbase.h; path = ../source/description/deltamushbase.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41FDBFE6D2000000 /* mfog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mfog.h; path = ../source/description/mfog.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41FDD065F7000000 /* mgtp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgtp.h; path = ../source/description/mgtp.h; sourceTree = SOURCE_ROOT; };
 		A0F470FF41FDE5FF40000000 /* toolknife.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toolknife.h; path = ../source/description/toolknife.h; sourceTree = SOURCE_ROOT; };
@@ -2032,7 +1997,6 @@
 			isa = PBXGroup;
 			children = (
 				A0F470FF410EF0BA7D000000 /* allplan.h */,
-				A0F470FF4154DA1A12000000 /* arprefs.h */,
 				A0F470FF41D350F3A2000000 /* belttag.h */,
 				A0F470FF41EE77685C000000 /* bmamplify.h */,
 				A0F470FF41729BF6BD000000 /* bmbase.h */,
@@ -2095,7 +2059,6 @@
 				A0F470FF419A46E676000000 /* dcharupdate.h */,
 				A0F470FF41BCE492F5000000 /* dcolora.h */,
 				A0F470FF41EE480B35000000 /* ddoc.h */,
-				A0F470FF41FDA5D679000000 /* deltamushbase.h */,
 				A0F470FF41BAD3363F000000 /* desc_falloffentry.h */,
 				A0F470FF41A832D9B2000000 /* desc_fieldbg.h */,
 				A0F470FF412408D459000000 /* desc_fieldentry.h */,
@@ -2103,9 +2066,7 @@
 				A0F470FF41504731BD000000 /* distanceblur.h */,
 				A0F470FF41529A8225000000 /* dlwghtopts.h */,
 				A0F470FF41F4E66098000000 /* dmatrix.h */,
-				A0F470FF4153DD3CDE000000 /* dmline.h */,
 				A0F470FF4147331FB0000000 /* dmodeling.h */,
-				A0F470FF412519575A000000 /* dpathlist.h */,
 				A0F470FF4132A526F1000000 /* dpresets.h */,
 				A0F470FF4164C316D0000000 /* dprojobjs.h */,
 				A0F470FF4156E7450D000000 /* dpsrmatrix.h */,
@@ -2149,8 +2110,6 @@
 				A0F470FF4142D6C13C000000 /* fcone.h */,
 				A0F470FF41C68C11AF000000 /* fcylinder.h */,
 				A0F470FF41B8242024000000 /* fd3dexport.h */,
-				A0F470FF413B3B6A35000000 /* fdecay.h */,
-				A0F470FF413BBA3DBE000000 /* fdelay.h */,
 				A0F470FF41FE8446EC000000 /* fdemimport.h */,
 				A0F470FF41F1B56E6F000000 /* Fdwg.h */,
 				A0F470FF41C53337D0000000 /* Fdwgobjectvalues.h */,
@@ -2194,24 +2153,19 @@
 				A0F470FF413CD01800000000 /* flvolumeobject.h */,
 				A0F470FF41C092759F000000 /* flweight.h */,
 				A0F470FF41538E2DBA000000 /* fmidi.h */,
-				A0F470FF41710E2D26000000 /* fobjexport.h */,
 				A0F470FF41B0B78000000000 /* fobjexport2.h */,
-				A0F470FF41CAAE54D7000000 /* fobjimport.h */,
 				A0F470FF418B1C4E6F000000 /* fobjimport2.h */,
 				A0F470FF414A1DFCF5000000 /* fpython.h */,
 				A0F470FF410904F178000000 /* fradial.h */,
 				A0F470FF4119D5531C000000 /* frandom.h */,
-				A0F470FF413B9AE53A000000 /* fribexport.h */,
 				A0F470FF41DDCEA5BE000000 /* fshader.h */,
 				A0F470FF412E70B3F8000000 /* fskpimport.h */,
 				A0F470FF412C725775000000 /* Fsolidworksimport.h */,
 				A0F470FF4166CC9A4A000000 /* fsound.h */,
 				A0F470FF4191063BA6000000 /* fsphere.h */,
-				A0F470FF41D41A5D19000000 /* Fstepexport.h */,
 				A0F470FF412DBA84CA000000 /* Fstepimport.h */,
 				A0F470FF411A53CA5A000000 /* fstlexport.h */,
 				A0F470FF4173F3F20B000000 /* fstlimport.h */,
-				A0F470FF415F842266000000 /* ftime.h */,
 				A0F470FF419B8BF5F0000000 /* ftorus.h */,
 				A0F470FF4102D29962000000 /* fusdexporter.h */,
 				A0F470FF41750798D3000000 /* fusdimporter.h */,
@@ -2356,7 +2310,6 @@
 				A0F470FF41258FDE7E000000 /* motionblur.h */,
 				A0F470FF41D0ED4F10000000 /* moutliner.h */,
 				A0F470FF41CE8A465C000000 /* mpreview.h */,
-				A0F470FF4141D3F918000000 /* mrenderman.h */,
 				A0F470FF411D06D29C000000 /* mshadowcatcher.h */,
 				A0F470FF41819B4E89000000 /* mterrain.h */,
 				A0F470FF41DE527C95000000 /* mtoonup.h */,
@@ -2418,7 +2371,6 @@
 				A0F470FF41B06BCBA4000000 /* odeflector.h */,
 				A0F470FF41D45D17F9000000 /* odeltamushdeformer.h */,
 				A0F470FF4148CEFFDB000000 /* odestructor.h */,
-				A0F470FF419FC43770000000 /* odirectdeltamushdeformer.h */,
 				A0F470FF4120516077000000 /* odisc.h */,
 				A0F470FF41883760FB000000 /* odoodle.h */,
 				A0F470FF413780FF03000000 /* oecoffee.h */,
@@ -2459,7 +2411,6 @@
 				A0F470FF4183FD4AA5000000 /* oforeground.h */,
 				A0F470FF4155CEA6B8000000 /* oformula.h */,
 				A0F470FF41F904D983000000 /* ofractal.h */,
-				A0F470FF4128B3AF04000000 /* ofracture.h */,
 				A0F470FF416712C09C000000 /* ofriction.h */,
 				A0F470FF41012C7B95000000 /* ofur.h */,
 				A0F470FF4168B33A9C000000 /* ogravitation.h */,
@@ -2494,7 +2445,6 @@
 				A0F470FF41D371DCA2000000 /* omograph_tracer.h */,
 				A0F470FF4132B8378C000000 /* omorphdeformer.h */,
 				A0F470FF41091CF355000000 /* omospline.h */,
-				A0F470FF417FD9AFA2000000 /* omotioncapture.h */,
 				A0F470FF4107468B14000000 /* omotiontracker.h */,
 				A0F470FF41FF209D5C000000 /* onoisefalloff.h */,
 				A0F470FF413207E3E9000000 /* onull.h */,
@@ -2586,7 +2536,6 @@
 				A0F470FF418D972810000000 /* osplinerectangle.h */,
 				A0F470FF4142774705000000 /* osplinestar.h */,
 				A0F470FF4143633B20000000 /* osplinetext.h */,
-				A0F470FF41783234C8000000 /* osplinetovolume.h */,
 				A0F470FF4115226850000000 /* ostage.h */,
 				A0F470FF411A7890BE000000 /* osweep.h */,
 				A0F470FF4163CB9347000000 /* osweeplegacy.h */,
@@ -2618,13 +2567,11 @@
 				A0F470FF416CDD69A3000000 /* prefs.h */,
 				A0F470FF41FB273D70000000 /* prefsblserver.h */,
 				A0F470FF413E64E359000000 /* prefsbrowser.h */,
-				A0F470FF41D7CADA8E000000 /* prefscineman.h */,
 				A0F470FF415E046694000000 /* prefscolor.h */,
 				A0F470FF415D7BCF47000000 /* prefscommunication.h */,
 				A0F470FF41FCA24F5E000000 /* prefsdatabase.h */,
 				A0F470FF41F2757CA8000000 /* prefsfiles.h */,
 				A0F470FF41BD3049C3000000 /* prefsgoz.h */,
-				A0F470FF414666B460000000 /* prefsgpurenderer.h */,
 				A0F470FF41BEAA90F2000000 /* prefshaircolor.h */,
 				A0F470FF419CCC50FF000000 /* prefshoudini.h */,
 				A0F470FF41786D507B000000 /* prefsimexport.h */,
@@ -2632,13 +2579,11 @@
 				A0F470FF412FFE67E5000000 /* prefslinux.h */,
 				A0F470FF418286680A000000 /* prefsmaterial.h */,
 				A0F470FF41620BC7A4000000 /* prefsmemory.h */,
-				A0F470FF4131740678000000 /* prefsmetricspreferences.h */,
 				A0F470FF416F832B56000000 /* prefsmouse.h */,
 				A0F470FF413E637F77000000 /* prefsnavigation.h */,
 				A0F470FF41A16FB092000000 /* prefsnodeeditor.h */,
 				A0F470FF4169F89FD2000000 /* prefsopengl.h */,
 				A0F470FF41F63F215F000000 /* prefspaths.h */,
-				A0F470FF4176F063E9000000 /* prefsphprefs.h */,
 				A0F470FF410C6AF1D1000000 /* prefsplugins.h */,
 				A0F470FF414CA5EF30000000 /* prefsproman.h */,
 				A0F470FF41DF2BCCA6000000 /* prefsrenderer.h */,
@@ -2658,17 +2603,12 @@
 				A0F470FF41392516E0000000 /* SBplane.h */,
 				A0F470FF411524B884000000 /* SBpolynom.h */,
 				A0F470FF4179AF4C4B000000 /* SBrotate.h */,
-				A0F470FF41C8876331000000 /* Sclient.h */,
 				A0F470FF412A653B58000000 /* sculptprefs.h */,
 				A0F470FF41B15E1784000000 /* sebase.h */,
 				A0F470FF41D7DB911B000000 /* semomix.h */,
 				A0F470FF4115B3AB70000000 /* sesound.h */,
 				A0F470FF419C06E352000000 /* sevalue.h */,
-				A0F470FF41373E730D000000 /* Sgroup.h */,
-				A0F470FF41F81B71C2000000 /* shrenderman.h */,
 				A0F470FF41A96FD9B1000000 /* shxrefopts.h */,
-				A0F470FF416EEA3B27000000 /* Smodul.h */,
-				A0F470FF41E3DC871A000000 /* Sserial.h */,
 				A0F470FF41FB55393F000000 /* STstandard.h */,
 				A0F470FF41D2D61439000000 /* takebase.h */,
 				A0F470FF41519B8D48000000 /* Talembicmorphtag.h */,
@@ -2706,7 +2646,6 @@
 				A0F470FF4109A83FDE000000 /* teye.h */,
 				A0F470FF416B0722D5000000 /* tfacepose.h */,
 				A0F470FF41563D0A42000000 /* Tfbxexportreference.h */,
-				A0F470FF415FF34889000000 /* tfloat.h */,
 				A0F470FF417891701D000000 /* tfracturevoronoi.h */,
 				A0F470FF411AD12D08000000 /* tgozpolygroup.h */,
 				A0F470FF4159782E90000000 /* tgrouppriority.h */,
@@ -2810,7 +2749,6 @@
 				A0F470FF4166A4C4A3000000 /* toolmakeselect.h */,
 				A0F470FF4103039C9F000000 /* toolmatrixextrude.h */,
 				A0F470FF410DFEFB79000000 /* toolmeasure.h */,
-				A0F470FF41F513B0BB000000 /* toolmeshtovolume.h */,
 				A0F470FF4142309DC9000000 /* toolmirrorbase.h */,
 				A0F470FF41FF5D1FB3000000 /* toolmodelingaxis.h */,
 				A0F470FF41BB261073000000 /* toolmodify.h */,
@@ -2838,10 +2776,7 @@
 				A0F470FF417AA49FF1000000 /* toolsculptbrushinflate.h */,
 				A0F470FF416A14B50F000000 /* toolsculptbrushknife.h */,
 				A0F470FF415075B236000000 /* toolsculptbrushmask.h */,
-				A0F470FF41E003CAA3000000 /* toolsculptbrushmulti.h */,
 				A0F470FF416A50C5E4000000 /* toolsculptbrushpinch.h */,
-				A0F470FF411A1E091B000000 /* toolsculptbrushpolish.h */,
-				A0F470FF4100E79C83000000 /* toolsculptbrushproject.h */,
 				A0F470FF4156AAE74F000000 /* toolsculptbrushpull.h */,
 				A0F470FF41CD2CFE3A000000 /* toolsculptbrushrelax.h */,
 				A0F470FF41DF751525000000 /* toolsculptbrushrepeat.h */,
@@ -2865,7 +2800,6 @@
 				A0F470FF411F544A0B000000 /* tooltest.h */,
 				A0F470FF41DACB33A4000000 /* tooltransfer.h */,
 				A0F470FF41D193858E000000 /* tooluntriangulate.h */,
-				A0F470FF41E09595E0000000 /* toolvolumeremesher.h */,
 				A0F470FF41D8ACC5C2000000 /* toolweightbase.h */,
 				A0F470FF41958779C9000000 /* tool_axishelper.h */,
 				A0F470FF415A072ADA000000 /* tool_mggrid.h */,
@@ -2895,7 +2829,6 @@
 				A0F470FF410A6431AF000000 /* tsds.h */,
 				A0F470FF41D15199FC000000 /* tsplinedraw.h */,
 				A0F470FF414FF8D55F000000 /* tsplinenormal.h */,
-				A0F470FF413FE15B60000000 /* tspooldummy.h */,
 				A0F470FF4181C98B32000000 /* tsticktexture.h */,
 				A0F470FF4143029BE9000000 /* tstop.h */,
 				A0F470FF41A8A96311000000 /* tsunexpression.h */,
@@ -2908,14 +2841,12 @@
 				A0F470FF41122EAB6C000000 /* tvertexcolor.h */,
 				A0F470FF41A4A3EEE5000000 /* tvertexmap.h */,
 				A0F470FF41A94C221C000000 /* tvibrate.h */,
-				A0F470FF41B7342DC1000000 /* tvolume.h */,
 				A0F470FF4140B2552E000000 /* tvolumebuilder.h */,
 				A0F470FF41655E536E000000 /* txrefholder.h */,
 				A0F470FF41E1C11BF4000000 /* uv_settings.h */,
 				A0F470FF41158CBE90000000 /* vpambientocclusion.h */,
 				A0F470FF412EE629EC000000 /* vpbase.h */,
 				A0F470FF4142170438000000 /* vpbirender.h */,
-				A0F470FF41C07175FC000000 /* vpbloom.h */,
 				A0F470FF41BAFA65BC000000 /* vpcaustics.h */,
 				A0F470FF4124DD2FA6000000 /* vpcolormapping.h */,
 				A0F470FF41FA572C54000000 /* vpcomic.h */,
@@ -2932,7 +2863,6 @@
 				A0F470FF4131369C95000000 /* vppositionpass.h */,
 				A0F470FF41EA51D7A9000000 /* vppreviewhardware.h */,
 				A0F470FF41561EBDE1000000 /* vpremote.h */,
-				A0F470FF410131B03D000000 /* vprenderman.h */,
 				A0F470FF413DE6FA62000000 /* vpscenemotionblur.h */,
 				A0F470FF41FEA30A44000000 /* vpsharpenfilter.h */,
 				A0F470FF412ABD3E3D000000 /* vpsoftfilter.h */,

@@ -192,7 +192,6 @@ namespace maxon
 	namespace VirtualMachines
 	{
 		PRIVATE_MAXON_DECLARATION_REGISTER_DECLARATION(CPython, , "net.maxon.python.virtualmachine.cpython");
-		PRIVATE_MAXON_DECLARATION_REGISTER_DECLARATION(PyPy, , "net.maxon.python.virtualmachine.pypy");
 	}
 	MAXON_REGISTRY_REGISTER(VmDebuggerConnections);
 	namespace VmDebuggerConnections

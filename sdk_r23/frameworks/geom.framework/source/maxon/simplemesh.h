@@ -81,7 +81,7 @@ public:
 
 	MAXON_OPERATOR_EQUALITY_HASHCODE(Poly, a, b, c, d);
 
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + maxon::ToString(a, formatStatement) + ","_s + maxon::ToString(b, formatStatement)
 			+ ","_s + maxon::ToString(c, formatStatement) + ","_s + maxon::ToString(d, formatStatement) + ")"_s;

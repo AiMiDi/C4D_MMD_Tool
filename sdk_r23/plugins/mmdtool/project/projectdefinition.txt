@@ -5,20 +5,14 @@ Platform=Win64;OSX
 Type=DLL
 
 // API dependencies
-APIS=cinema.framework; \
-	crypt.framework; \
-	core.framework; \
-	command.framework; \
-	image.framework; \
-	math.framework; \
-	mesh_misc.framework; \
-	python.framework;
+APIS=cinema.framework;mesh_misc.framework;math.framework;crypt.framework;python.framework;image.framework;command.framework;core.framework;
 
 // C4D component
 C4D=true
 
-stylecheck.level=0
+stylecheck=false
 
 // Custom ID
 ModuleId=net.aimidi.mmdtool
+
 Encoding=UTF-8

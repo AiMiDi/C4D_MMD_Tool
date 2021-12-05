@@ -83,18 +83,32 @@ public:
 	static void Free(PaintView *&p);
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the "UV Mesh > Show UV Mesh" option status for the view.
+	/// Gets the "View > Show UV Display" option status for the view.
 	/// @param[out] showMesh					Assigned @trueIfOtherwiseFalse{enabled}
 	/// @return												@trueIfOtherwiseFalse{successful}
 	//----------------------------------------------------------------------------------------
 	Bool GetShowMesh(Bool& showMesh);
 
 	//----------------------------------------------------------------------------------------
-	/// Sets the "UV Mesh > Show UV Mesh" option status for the view.
+	/// Sets the "View > Show UV Display" option status for the view.
 	/// @param[in] showMesh						@formatConstant{true} to enable the option.
 	/// @return												@trueIfOtherwiseFalse{successful}
 	//----------------------------------------------------------------------------------------
 	Bool SetShowMesh(Bool showMesh);
+
+	//----------------------------------------------------------------------------------------
+	/// Gets the "View > Show UV Mesh" option status for the view.
+	/// @param[out] showMesh					Assigned @trueIfOtherwiseFalse{enabled}
+	/// @return												@trueIfOtherwiseFalse{successful}
+	//----------------------------------------------------------------------------------------
+	Bool GetShowMeshWireframe(Bool& showMesh);
+
+	//----------------------------------------------------------------------------------------
+	/// Sets the "View > Show UV Mesh" option status for the view.
+	/// @param[in] showMesh						@formatConstant{true} to enable the option.
+	/// @return												@trueIfOtherwiseFalse{successful}
+	//----------------------------------------------------------------------------------------
+	Bool SetShowMeshWireframe(Bool showMesh);
 
 	//----------------------------------------------------------------------------------------
 	/// Updates the view context with the current selection.
@@ -327,6 +341,10 @@ struct PaintLibrary : public C4DLibrary
 	void											(*bpcolorsettingshelpersSetActiveColorPreset)(BPPaintSettings *set);
 	Bool											(*bpcolorsettingshelpersSaveColorSettings)(BPPaintSettings *set);
 	Bool											(*bpcolorsettingshelpersDefineColorPreset)(PaintTexture *tex, PaintLayerBmp *layer, PaintLayerBmp *mask, BPSingleColorSettings *color, Bool wallpaper);
+
+	// iPaintView methods added in R23.1
+	Bool(iPaintView::* GetShowMeshWireframe)(Bool& showMesh);
+	Bool(iPaintView::* SetShowMeshWireframe)(Bool showMesh);
 };
 
 // INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF

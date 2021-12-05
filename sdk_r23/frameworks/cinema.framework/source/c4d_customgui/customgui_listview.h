@@ -86,7 +86,7 @@
 #define ACCEPT_DRAG_OBJECT_FORCE_COPY	(1 << 30)
 
 /// @markPrivate
-#define LISTVIEW_TABLE_SIZE						56
+#define LISTVIEW_TABLE_SIZE						57
 
 class TreeViewCustomGui;
 
@@ -172,7 +172,7 @@ struct TreeViewDropDownMenuInfo
 //-------------------------------------------------------------------------------------------------
 struct TreeViewFloatSliderInfo
 {
-	TreeViewFloatSliderInfo() :value(1.0), minValue(0.0), maxValue(1.0), increment(0.01), floatFormat(FORMAT_PERCENT), state(LV_CHECKBOX_ENABLED) {}
+	TreeViewFloatSliderInfo() :value(1.0), minValue(0.0), maxValue(1.0), minNominalValue(0.0), maxNominalValue(1.0), increment(0.01), floatFormat(FORMAT_PERCENT), state(LV_CHECKBOX_ENABLED), unit(0) {}
 
 	Float value;						///< The current value for the entry
 	Float minValue;					///< The minimum range of the slider as drawn
@@ -705,7 +705,7 @@ class TreeViewFunctions
 		/// @param[in] bDblClk						@trueOtherwiseFalse{for double-click event}
 		/// @param[in] mouseX							The mouse horizontal position local to the left hand edge of the column or NOTOK if dragging a column
 		/// @param[in] mouseY							The mouse vertical position local to the header top or NOTOK if dragging a column
-		/// @param[in] ua									The header's userarea or nullptr if dragging a column
+		/// @param[in] ua									The header's userarea or nullptr if TREEVIEW_MOVE_COLUMN is set to true.
 		/// @return												@trueIfOtherwiseFalse{the tree view needs to be updated}
 		//----------------------------------------------------------------------------------------
 		virtual Bool HeaderClick(void *root, void *userdata, Int32 lColID, Int32 lChannel, Bool bDblClk, Int32 mouseX, Int32 mouseY, GeUserArea* ua);
@@ -873,6 +873,16 @@ class TreeViewFunctions
 		//----------------------------------------------------------------------------------------
 		virtual void SetFloatValue(void *root, void *userdata, void *obj, Int32 lColumn, Float value, Bool finalValue);
 
+		//----------------------------------------------------------------------------------------
+		/// Called to retrieve the name of object @formatParam{obj} for display in the edit text box.
+		/// @param[in] root								The tree root.
+		/// @param[in] userdata						The user data.
+		/// @param[in] obj								An object in the tree.
+		/// @return												The object name.
+		//----------------------------------------------------------------------------------------
+		virtual String GetNameForEdit(void* root, void* userdata, void* obj);
+
+
 		/// @}
 };
 
@@ -907,7 +917,7 @@ public:
 	// Get Functions
 	Bool		IsSelected(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj);
 	Bool		IsOpened(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj);
-	String	GetName(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj);
+	String		GetName(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj);
 	Int			GetId(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj);
 	Int32		GetDragType(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj);
 	Int32		DragStart(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj);
@@ -960,6 +970,8 @@ public:
 	String	GetBubbleHelp(TreeViewFunctions* pFuncs, void* root, void* userdata, void* obj, Int32 col, CellInfo* info);
 	void		SetFloatValue(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj, Int32 lColumn, Float value, Bool finalValue);
 	Bool		IsSelectable(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj);
+
+	String		GetNameForEdit(TreeViewFunctions* pFuncs, void* root, void* userdata, void* obj);
 };
 
 struct InternalFunctionTable
@@ -1039,6 +1051,8 @@ struct InternalFunctionTable
 	/*54*/ String		(TreeViewF::*GetBubbleHelp)(TreeViewFunctions* pFuncs, void* root, void* userdata, void* obj, Int32 col, CellInfo* info);
 	/*55*/ void			(TreeViewF::*SetFloatValue)(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj, Int32 lColumn, Float value, Bool finalValue);
 	/*56*/ Bool			(TreeViewF::*IsSelectable)(TreeViewFunctions* pFuncs, void *root, void *userdata, void *obj);
+
+	/*57*/ String		(TreeViewF::*GetNameForEdit)(TreeViewFunctions* pFuncs, void* root, void* userdata, void* obj);
 };
 
 // INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF

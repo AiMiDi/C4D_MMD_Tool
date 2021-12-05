@@ -7,6 +7,7 @@ namespace maxon
 		"ADD_thread_state@c52e0d8d7af2df35\0" // void ADD_thread_state()
 		"SSL_load_error_strings@c52e0d8d7af2df35\0" // void SSL_load_error_strings()
 		"SSL_library_init@4153dd736b06a0ec\0" // int SSL_library_init()
+		"OPENSSL_init_ssl@4153dd736b06a0ec\0" // int OPENSSL_init_ssl()
 		"SSL_CTX_new@176631932a81e65c\0" // SSL_CTX* SSL_CTX_new(const SSL_METHOD* meth)
 		"TLSv1_method@7ef662892d95cd4a\0" // const SSL_METHOD* TLSv1_method()
 		"TLSv1_1_method@7ef662892d95cd4a\0" // const SSL_METHOD* TLSv1_1_method()
@@ -14,6 +15,7 @@ namespace maxon
 		"SSLv3_method@7ef662892d95cd4a\0" // const SSL_METHOD* SSLv3_method()
 		"SSLv2_method@7ef662892d95cd4a\0" // const SSL_METHOD* SSLv2_method()
 		"SSLv23_method@7ef662892d95cd4a\0" // const SSL_METHOD* SSLv23_method()
+		"TLS_method@7ef662892d95cd4a\0" // const SSL_METHOD* TLS_method()
 		"SSL_new@d625d5441fe91349\0" // SSL* SSL_new(SSL_CTX* ctx)
 		"ERR_get_error_string@b8f12df9fd0527a6\0" // String ERR_get_error_string()
 		"ERR_get_error@76b27a2fe92c86ea\0" // unsigned long ERR_get_error()
@@ -69,6 +71,7 @@ namespace maxon
 		static void ADD_thread_state() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::ADD_thread_state(); return maxon::PrivateLogNullptrError();}
 		static void SSL_load_error_strings() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::SSL_load_error_strings(); return maxon::PrivateLogNullptrError();}
 		static int SSL_library_init() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::SSL_library_init(); return 0;}
+		static int OPENSSL_init_ssl() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::OPENSSL_init_ssl(); return 0;}
 		static SSL_CTX* SSL_CTX_new(const SSL_METHOD* meth) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::SSL_CTX_new(meth); return nullptr;}
 		static const SSL_METHOD* TLSv1_method() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::TLSv1_method(); return nullptr;}
 		static const SSL_METHOD* TLSv1_1_method() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::TLSv1_1_method(); return nullptr;}
@@ -76,6 +79,7 @@ namespace maxon
 		static const SSL_METHOD* SSLv3_method() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::SSLv3_method(); return nullptr;}
 		static const SSL_METHOD* SSLv2_method() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::SSLv2_method(); return nullptr;}
 		static const SSL_METHOD* SSLv23_method() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::SSLv23_method(); return nullptr;}
+		static const SSL_METHOD* TLS_method() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::TLS_method(); return nullptr;}
 		static SSL* SSL_new(SSL_CTX* ctx) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::SSL_new(ctx); return nullptr;}
 		static String ERR_get_error_string() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::ERR_get_error_string(); return maxon::PrivateIncompleteNullReturnValue<String>(maxon::NULL_RETURN_REASON::UNRESOLVED, OVERLOAD_MAX_RANK);}
 		static unsigned long ERR_get_error() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return SSLInterface::ERR_get_error(); return maxon::PrivateIncompleteNullReturnValue<unsigned long>(maxon::NULL_RETURN_REASON::UNRESOLVED, OVERLOAD_MAX_RANK);}
@@ -128,7 +132,9 @@ namespace maxon
 		maxon::details::NullReturnType<void>::value,
 		maxon::details::NullReturnType<void>::value,
 		maxon::details::NullReturnType<int>::value,
+		maxon::details::NullReturnType<int>::value,
 		maxon::details::NullReturnType<SSL_CTX*>::value,
+		maxon::details::NullReturnType<const SSL_METHOD*>::value,
 		maxon::details::NullReturnType<const SSL_METHOD*>::value,
 		maxon::details::NullReturnType<const SSL_METHOD*>::value,
 		maxon::details::NullReturnType<const SSL_METHOD*>::value,
@@ -204,6 +210,10 @@ namespace maxon
 		#endif
 		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
 		#else
+		tbl->_SSLInterface_OPENSSL_init_ssl = &Hxx2::Wrapper<Hxx2::Unresolved>::_SSLInterface_OPENSSL_init_ssl;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
 		tbl->_SSLInterface_SSL_CTX_new = &Hxx2::Wrapper<Hxx2::Unresolved>::_SSLInterface_SSL_CTX_new;
 		#endif
 		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
@@ -229,6 +239,10 @@ namespace maxon
 		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
 		#else
 		tbl->_SSLInterface_SSLv23_method = &Hxx2::Wrapper<Hxx2::Unresolved>::_SSLInterface_SSLv23_method;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_SSLInterface_TLS_method = &Hxx2::Wrapper<Hxx2::Unresolved>::_SSLInterface_TLS_method;
 		#endif
 		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
 		#else

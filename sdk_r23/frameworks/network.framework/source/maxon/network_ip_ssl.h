@@ -16,12 +16,10 @@ enum class SSLSOCKETTYPE
 /// Defines possible ssl protocol versions
 enum class SSLPROTOCOLVERSION
 {
-	TLS1,		///< use TLS1.
-	TLS11,	///< use TLS1.1.
-	TLS12,	///< use TLS1.2.
-	SSL3,		///< use SSL3.
-	SSL2,		///< use SSL2.
-	SSL23,	///< use SSL2 or SSL3.
+	TLS1,			///< use TLS1.
+	TLS11,		///< use TLS1.1.
+	TLS12,		///< use TLS1.2.
+	TLS				///< use newest TLS version.
 } MAXON_ENUM_LIST(SSLPROTOCOLVERSION);
 
 /// Defines possible ssl certificate verification options.

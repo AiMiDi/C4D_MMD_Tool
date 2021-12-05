@@ -75,7 +75,7 @@ public:
 		return out.floatVal;
 	}
 
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		Float32 f = *this;
 		return FormatString("@", f);

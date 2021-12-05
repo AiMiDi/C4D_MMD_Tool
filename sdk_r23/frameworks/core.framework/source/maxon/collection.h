@@ -355,7 +355,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction.
 	/// @return												List of all elements as a String.
 	//----------------------------------------------------------------------------------------
-	inline String ToString(const FormatStatement* formatStatement) const;
+	inline String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns true if this collection contains all elements from another collection.

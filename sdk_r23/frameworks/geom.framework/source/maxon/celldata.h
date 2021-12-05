@@ -23,7 +23,7 @@ struct CellEdge
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. See also @ref format_float.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "(start: "_s + String::IntToString(_start) + ", end:"_s + String::IntToString(_end) + ", next:"_s + String::IntToString(_nextEdgeOfFace) + ", prev:"_s + String::IntToString(_prevEdgeOfFace) + ", reverse:"_s + String::IntToString(_reverseEdge) + ")"_s;
 	}

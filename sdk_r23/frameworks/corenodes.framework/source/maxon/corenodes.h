@@ -86,7 +86,7 @@ struct PortInfo
 	}
 
 	/// @copydoc DefaultDoc::ToString
-	String ToString(const FormatStatement* format) const
+	String ToString(const FormatStatement* format = nullptr) const
 	{
 		return name.ToString(format);
 	}
@@ -377,7 +377,7 @@ public:
 	MAXON_ATTRIBUTE_CLASS(Array<Id>, Filters, "net.maxon.corenode.filters");
 
 	/// @copydoc DefaultDoc::ToString
-	MAXON_FUNCTION String ToString(const FormatStatement* fmt) const { return GetId().ToString(fmt); }
+	MAXON_FUNCTION String ToString(const FormatStatement* fmt = nullptr) const { return GetId().ToString(fmt); }
 };
 
 

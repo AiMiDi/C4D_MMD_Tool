@@ -22,7 +22,7 @@ struct LanguageInterface::Hxx1
 /// @return												Nullptr if the language has no fallback language (e.g. "en-US" has none because it's the root of all languages).
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<LanguageRef>, LanguageRef>::type GetFallbackLanguage() const;
 /// @copydoc DefaultDoc::ToString
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const maxon::FormatStatement* fs) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const maxon::FormatStatement* fs = nullptr) const;
 	};
 	/// Intermediate helper class for LanguageInterface.
 	template <typename S> class ReferenceFunctionsImpl : public ConstReferenceFunctionsImpl<S>

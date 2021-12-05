@@ -73,7 +73,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Called to receive core messages.
-	/// @see The article @link page_core_messages Core Messages@endlink for more information.
+	/// @see The article @link page_manual_coremessages Core Messages@endlink for more information.
 	/// @param[in] id									The core message ID: @enumerateEnum{EVMSG}
 	/// @param[in] bc									The core message container.
 	/// @return												Currently not used.

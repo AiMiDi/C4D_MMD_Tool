@@ -23,7 +23,7 @@ public:
 	static constexpr Float EPSILON12 = 1e-12;
 	static constexpr Float EPSILON14 = 1e-14;
 	static constexpr Float EPSILON16 = 1e-16;
-	static constexpr Float EPSILON_FLOAT = sizeof(Float) == sizeof(double) ? 2.2204460492503131e-016 : 1.192092896e-07F;
+	template <typename FLOATTYPE> static constexpr FLOATTYPE EPSILON_FLOAT = sizeof(FLOATTYPE) == sizeof(double) ? 2.2204460492503131e-016 : 1.192092896e-07F;
 };
 
 } // namespace maxon

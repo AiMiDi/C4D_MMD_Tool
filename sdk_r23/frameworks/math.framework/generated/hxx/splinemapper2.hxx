@@ -41,6 +41,7 @@ struct SplineMapperInterface::MTable
 	BaseArray<SplineMapperKnot>* (*_SplineMapperInterface_GetKnotsRW) (SplineMapperInterface* this_);
 	void (*_SplineMapperInterface_SortKnots) (SplineMapperInterface* this_);
 	Vector2d (*_SplineMapperInterface_ClampPosition) (const SplineMapperInterface* this_, const Vector2d& position);
+	Result<void> (*_SplineMapperInterface_DescribeIO) (const DataSerializeInterface& stream);
 	template <typename IMPL> void Init()
 	{
 		_SplineMapperInterface_Free = &IMPL::_SplineMapperInterface_Free;
@@ -65,6 +66,7 @@ struct SplineMapperInterface::MTable
 		_SplineMapperInterface_GetKnotsRW = &IMPL::_SplineMapperInterface_GetKnotsRW;
 		_SplineMapperInterface_SortKnots = &IMPL::_SplineMapperInterface_SortKnots;
 		_SplineMapperInterface_ClampPosition = &IMPL::_SplineMapperInterface_ClampPosition;
+		_SplineMapperInterface_DescribeIO = &IMPL::_SplineMapperInterface_DescribeIO;
 	}
 };
 
@@ -96,6 +98,7 @@ struct SplineMapperInterface::Hxx2
 		static BaseArray<SplineMapperKnot>* _SplineMapperInterface_GetKnotsRW(SplineMapperInterface* this_) { return C::Get(this_)->GetKnotsRW(); }
 		static void _SplineMapperInterface_SortKnots(SplineMapperInterface* this_) { return C::Get(this_)->SortKnots(); }
 		static Vector2d _SplineMapperInterface_ClampPosition(const SplineMapperInterface* this_, const Vector2d& position) { return C::Get(this_)->ClampPosition(position); }
+		static Result<void> _SplineMapperInterface_DescribeIO(const DataSerializeInterface& stream) { return C::DescribeIO(stream); }
 	};
 
 };
@@ -186,6 +189,10 @@ MAXON_ATTRIBUTE_FORCE_INLINE auto SplineMapperInterface::SortKnots() -> void
 MAXON_ATTRIBUTE_FORCE_INLINE auto SplineMapperInterface::ClampPosition(const Vector2d& position) const -> Vector2d
 {
 	return MTable::_instance._SplineMapperInterface_ClampPosition(this, position);
+}
+MAXON_ATTRIBUTE_FORCE_INLINE auto SplineMapperInterface::DescribeIO(const DataSerializeInterface& stream) -> Result<void>
+{
+	return MTable::_instance._SplineMapperInterface_DescribeIO(stream);
 }
 
 auto SplineMapperInterface::Hxx1::Reference::Create() -> maxon::ResultMemT<SplineMapper>
@@ -349,6 +356,7 @@ template <typename S> MAXON_ATTRIBUTE_FORCE_INLINE auto SplineMapperInterface::H
 	using ReturnHelper = maxon::ReferenceFunctionErrorReturnHelper<S::HAS_ERROR, maxon::Bool(S::Handler::KIND & maxon::VALUEKIND::NEVER_NULLPTR), false, typename std::conditional<S::HAS_ERROR, maxon::Result<Vector2d>, Vector2d>::type>; if (S::HAS_ERROR && this->GetErrorStorage().GetReferencedError()) return ReturnHelper::ReturnErrorOf(this); const SplineMapperInterface* o_ = (const SplineMapperInterface*) this->GetPointer(); if (!(S::Handler::KIND & (maxon::VALUEKIND::DEEP_CONSTNESS | maxon::VALUEKIND::NEVER_NULLPTR)) && MAXON_UNLIKELY(!o_)) { o_ = SplineMapperInterface::NullValuePtr(); if (!o_) return maxon::PrivateIncompleteNullReturnValue<Vector2d>(maxon::NULL_RETURN_REASON::NULLPTR, OVERLOAD_MAX_RANK); } 
 	return (MTable::_instance._SplineMapperInterface_ClampPosition(o_, position));
 }
+template <typename S> MAXON_ATTRIBUTE_FORCE_INLINE auto SplineMapperInterface::Hxx1::ConstReferenceFunctionsImpl<S>::DescribeIO(const DataSerializeInterface& stream) -> Result<void> { return (MTable::_instance._SplineMapperInterface_DescribeIO(stream)); }
 #if defined(MAXON_DEPENDENCY_ENABLE) && !defined(PRIVATE_MAXON_REGISTRATION_UNIT)
 #ifdef MAXON_USE_REGISTER_FUNCTION
 MAXON_STATIC_STORAGE(maxon::EntityUse, s_ui_maxon_SplineMapperInterface); \

@@ -150,7 +150,9 @@ public:
 	template <typename T, typename C> DataTypeImpl(const Id& type, const DataTypeImpl* underlying, const DataTypeImpl* element, const T* dummy1, const C* dummy2,
 																								 VALUEKIND flags = VALUEKIND::NONE, const NonvirtualInterfaceImplementation* impl = nullptr,
 																								 VALUEKIND kind = ValueKindHelper<T, GetDirectlyReferencedType<T>::value>::KIND, const ParametricTypeInterface* pt = nullptr, const DataTypeImpl* extra = nullptr)
-		: _id(type), _size(SIZEOF(T)), _alignment(alignof(T)), _valueKind(kind | flags | ((SIZEOF(T) <= SIZEOF(Int)) ? VALUEKIND::INT_SIZE_OR_LESS : VALUEKIND::NONE) | C::CAPABILITY_FLAGS),
+		: _id(type), _size(SIZEOF(T)), _alignment(alignof(T)),
+			_valueKind(kind | flags | ((SIZEOF(T) <= SIZEOF(Int)) ? VALUEKIND::INT_SIZE_OR_LESS : VALUEKIND::NONE) | C::CAPABILITY_FLAGS
+								 | (((element ? element->GetValueKind() : VALUEKIND::NONE) | (underlying ? underlying->GetValueKind() : VALUEKIND::NONE)) & VALUEKIND::CONTAINS_RECURSIVE_CONTAINER)),
 		_underlying(underlying), _elementType(element), _extraType(extra), _parametricType(pt), _implementation(impl), _conversions(),
 		_construct(&C::Construct), _destruct(&C::Destruct), _moveConstruct(&C::MoveConstruct), _moveFrom(&C::MoveFrom), _copyFrom(&C::CopyFrom),
 		_addReference(&C::AddReference), _removeReference(&C::RemoveReference),
@@ -178,7 +180,9 @@ public:
 	/// @param[in] pt									The parametric type which instantiates the DataType, may be nullptr.
 	//----------------------------------------------------------------------------------------
 	template <typename C> DataTypeImpl(const Id& type, const DataTypeImpl* underlying, const DataTypeImpl* element, Int size, Int alignment, const C* dummy2, VALUEKIND kind, const ParametricTypeInterface* pt = nullptr, const DataTypeImpl* extra = nullptr)
-		: _id(type), _size(size), _alignment(alignment), _valueKind((size <= SIZEOF(Int)) ? kind | VALUEKIND::INT_SIZE_OR_LESS : kind),
+		: _id(type), _size(size), _alignment(alignment),
+			_valueKind(((size <= SIZEOF(Int)) ? kind | VALUEKIND::INT_SIZE_OR_LESS : kind)
+								 | (((element ? element->GetValueKind() : VALUEKIND::NONE) | (underlying ? underlying->GetValueKind() : VALUEKIND::NONE)) & VALUEKIND::CONTAINS_RECURSIVE_CONTAINER)),
 		_underlying(underlying), _elementType(element), _extraType(extra), _parametricType(pt), _typeArgs(nullptr), _conversions(),
 		_construct(&C::Construct), _destruct(&C::Destruct), _moveConstruct(&C::MoveConstruct), _moveFrom(&C::MoveFrom), _copyFrom(&C::CopyFrom),
 		_addReference(&C::AddReference), _removeReference(&C::RemoveReference),
@@ -217,7 +221,7 @@ public:
 		{
 			StrongReferenceCounter::Get(_typeArgs).Inc();
 		}
-		DebugAssert(!(qualification & ~(VALUEKIND::QUALIFIER_MASK | VALUEKIND::FUNCTION | VALUEKIND::ENUM | VALUEKIND::ENUM_LIST | VALUEKIND::ENUM_FLAGS | VALUEKIND::DELEGATE | VALUEKIND::GENERIC_INSTANTIATION | VALUEKIND::RECURSIVE_CONTAINER | VALUEKIND::RESOLVED_RECURSIVE_CONTAINER)));
+		DebugAssert(!(qualification & ~(VALUEKIND::QUALIFIER_MASK | VALUEKIND::FUNCTION | VALUEKIND::ENUM | VALUEKIND::ENUM_LIST | VALUEKIND::ENUM_FLAGS | VALUEKIND::DELEGATE | VALUEKIND::GENERIC_INSTANTIATION | VALUEKIND::RECURSIVE_CONTAINER | VALUEKIND::RESOLVED_RECURSIVE_CONTAINER | VALUEKIND::CONTAINS_RECURSIVE_CONTAINER)));
 		DebugAssert(!(_valueKind & VALUEKIND::GLOBALLY_REFERENCED));
 	}
 
@@ -230,7 +234,7 @@ public:
 	const Id& GetId() const { return _id; }
 
 	/// @copydoc DefaultDoc::ToString
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the size of values of this data type.
@@ -548,11 +552,7 @@ public:
 	// @param[in] offsets							The member offsets of @c tupleType as an array. This is only used for safety checks.
 	void PrivateSetStructType(const TupleDataType& tupleType, const Int* offsets);
 
-	void PrivateSetTypeArgs(StrongRef<const TypeArguments>&& args)
-	{
-		DebugAssert(!_typeArgs);
-		new (&_typeArgs) StrongRef<const TypeArguments>(std::move(args));
-	}
+	void PrivateSetTypeArgs(StrongRef<const TypeArguments>&& args);
 
 	const StrongRef<const DataTypeImpl>& PrivateGetExtraType() const
 	{
@@ -774,7 +774,7 @@ public:
 	const Id& GetId() const { return _ptr ? _ptr->_id : Id::NullValue(); }
 
 	/// @copydoc DefaultDoc::ToString
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the size of values of this data type.
@@ -1534,7 +1534,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. See also @ref format_mixed.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a readable string of the content.
@@ -1940,7 +1940,7 @@ public:
 
 	static const ConstDataPtr& NullValue() { return GetZeroRef<ConstDataPtr>(); }
 
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	template <typename T, typename CHECK = void> class Wrapper;
 

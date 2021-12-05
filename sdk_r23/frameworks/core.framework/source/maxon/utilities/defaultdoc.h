@@ -96,7 +96,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction.
 	/// @return												String representation of this @CLASS.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 };
 
 }

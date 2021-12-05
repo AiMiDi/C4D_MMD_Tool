@@ -28,7 +28,7 @@ template <typename T> struct DrawPoint3d
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + Data(x).ToString(formatStatement) + ", "_s + Data(y).ToString(formatStatement) + ", "_s + Data(z).ToString(formatStatement) + ")"_s;
 	}
@@ -76,7 +76,7 @@ template <typename T> struct DrawDimension3d
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + Data(width).ToString(formatStatement) + ", "_s + Data(height).ToString(formatStatement) + ", "_s + Data(depth).ToString(formatStatement) + ")"_s;
 	}
@@ -129,7 +129,7 @@ template <typename T> struct DrawVolume
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + position.ToString(formatStatement) + ", "_s + Data(size).ToString(formatStatement) + ")"_s;
 	}

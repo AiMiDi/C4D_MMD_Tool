@@ -56,7 +56,7 @@ MATH_SQUAREMATRIX VectorToSquareMatrix(const MATH_VECTOR& dirVector, const MATH_
 	MATH_SQUAREMATRIX mat;
 	mat.v3 = dirVector;
 	mat.v1 = Cross(upVector, mat.v3);
-	mat.v2 = Cross(mat.v1, mat.v3);
+	mat.v2 = Cross(mat.v3, mat.v1);
 	mat.Normalize();
 	return mat;
 }

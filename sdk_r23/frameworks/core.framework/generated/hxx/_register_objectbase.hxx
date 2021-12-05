@@ -301,9 +301,6 @@ namespace maxon
 
 /// @endcond
 
-#ifdef MAXON_API
-#else
-#endif
 	namespace details
 	{
 #ifdef MAXON_TARGET_MACOS

@@ -24,7 +24,7 @@ struct IDENT_VOID
 	Bool operator !=(const IDENT_VOID&) const { return false; }
 	HashInt GetHashCode() const { DebugStop(); return 0; }
 
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "IDENT_VOID"_s;
 	}

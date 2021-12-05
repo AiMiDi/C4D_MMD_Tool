@@ -1009,6 +1009,8 @@ class Parser(object):
             self.lex.consume(owner.simpleName)
             return None
         elif t == 'MAXON_COMPONENT':
+            if self.args.framework and not owner.template:
+                self.warnings.append(t.pos, 'This component is declared in a framework. Use with caution, the memory layout differs between modules in release and debug configuration.')
             t = self.lex.consume('(')
             kind = self.lex.getNoEof(owner)
             if kind != ')':
@@ -1980,7 +1982,7 @@ def loadGenerators(dir, show):
     sys.path.append(gendir)
     generators = []
     for f in os.listdir(gendir):
-        if f.endswith('.py'):
+        if f.endswith('.py') and not f.startswith('.'):
             mod = f[:-3]
             if show:
                 sys.stdout.write('Loading generator module ' + mod + ' from ' + os.path.join(gendir, f) + '...\n')
@@ -2573,6 +2575,7 @@ def process(args):
     args.frameworkRegistration = ''
     args.frameworkRegistrationIncludeReflection = False
     args.moduleRegistration = True
+    args.omitApiDefine = False
     keys, options = parseProjectDefinition(optionLines)
     projPos = SourcePosition(projDefPath, 0, 1, 0)
     for key in keys:
@@ -2629,6 +2632,8 @@ def process(args):
             args.maxon = option.lower() == 'true'
         elif key == 'obfuscate':
             args.obfuscate = option.lower() == 'true'
+        elif key == 'omitapidefine':
+            args.omitApiDefine = option.lower() == 'true'
         elif key == 'moduleid':
             args.projectId = option
         elif key == 'frameworkregistration':
@@ -2650,6 +2655,7 @@ def process(args):
     elif not args.maxon and args.projectId.startswith('net.maxon.'):
         projectErrors.append(SourcePosition(projDefPath, 0, 1, 0), 'Illegal module id ' + args.projectId + ': A module id must not be in the net.maxon domain.')
 
+    args.framework = args.projectType == 'lib' and not args.omitApiDefine
     args.mangledProjectId = args.projectId.replace('.', '_').replace('-', '_')
 
 

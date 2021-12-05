@@ -1026,7 +1026,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	inline String ToString(const FormatStatement* formatStatement) const;
+	inline String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// @markInternal
@@ -1133,7 +1133,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the internal character array.
@@ -1703,7 +1703,7 @@ public:
 	}
 };
 
-template <typename T> inline decltype(std::declval<T>().ToString(nullptr)) ToStringHelper(const T* object, const FormatStatement* formatStatement, Int*)
+template <typename T> inline decltype(std::declval<T>().ToString()) ToStringHelper(const T* object, const FormatStatement* formatStatement, Int*)
 {
 	return object ? object->ToString(formatStatement) : "nullptr"_s;
 }

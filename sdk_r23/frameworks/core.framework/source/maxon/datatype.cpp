@@ -177,6 +177,24 @@ void DataTypeImpl::PrivateSetStructType(const TupleDataType& tupleType, const In
 	}
 }
 
+void DataTypeImpl::PrivateSetTypeArgs(StrongRef<const TypeArguments>&& args)
+{
+	DebugAssert(!_typeArgs);
+	if (args)
+	{
+		for (const Member& mb : *args)
+		{
+			if (mb.type.GetValueKind() & VALUEKIND::CONTAINS_RECURSIVE_CONTAINER)
+			{
+				_valueKind |= VALUEKIND::CONTAINS_RECURSIVE_CONTAINER;
+				break;
+			}
+		}
+	}
+	new (&_typeArgs) StrongRef<const TypeArguments>(std::move(args));
+
+}
+
 // Use DataTypePtr instead of DataType, otherwise we'd introduce circular references.
 using ConversionArray = BaseArray<Tuple<DataTypePtr, CONVERSION_FLAGS, DataType::Conversion>>;
 

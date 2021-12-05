@@ -565,7 +565,20 @@ namespace maxon
 /// @addtogroup SYSTEM
 /// @{
 
+
+/// Assume 64 byte cache line size
 #define MAXON_CACHE_LINE_SIZE 64
+
+#if defined(MAXON_TARGET_CPU_ARM) && (defined(MAXON_TARGET_MACOS) || defined (MAXON_TARGET_IOS))
+	/// Assume 128 byte alignment to avoid false sharing for ARM CPUs like Axx silicon
+	#define MAXON_FALSE_SHARING_SIZE 128
+#else
+	/// Assume 64 byte alignment to avoid false sharing for x86 and unknown architectures
+	#define MAXON_FALSE_SHARING_SIZE 64
+#endif
+
+static_assert(MAXON_FALSE_SHARING_SIZE >= MAXON_CACHE_LINE_SIZE, "The cache line size must be equal or smaller than the false sharing size");
+
 
 #define MAXON_HAS_TRUE_TYPE(E) (!STD_IS_REPLACEMENT(same, decltype(E), std::false_type))
 
@@ -2286,6 +2299,7 @@ enum class VALUEKIND : UInt64
 	CONTAINER_MASK								= 31LL << 55,	///< The data type is a ContainerDataType.
 
 	NAMED_TUPLE										= 1LL << 60,	///< The data type is a TupleDataType with named members created by ParametricTypes::Tuple.
+	CONTAINS_RECURSIVE_CONTAINER	= 1LL << 61,	///< The data type directly or indirectly contains a recursive container type.
 
 	MIN_DERIVED_CONTAINER					= EMPTY_CONTAINER,
 	MIN_ARRAY_CONTAINER						= STATIC_ARRAY_CONTAINER,

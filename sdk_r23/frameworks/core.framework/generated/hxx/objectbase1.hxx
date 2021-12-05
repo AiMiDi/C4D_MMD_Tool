@@ -90,7 +90,7 @@ struct ClassInterface::Hxx1
 /// Returns a readable string of the content.
 /// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 /// @return												The converted result. The representation consists of the class identifier prefixed by "class ".
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement = nullptr) const;
 /// Deletes an instance of a class. This is automatically invoked if the reference count of the instance reaches zero.
 /// @param[in] object							Instance to delete, must not be nullptr.
 		static inline void DeleteInstance(const ObjectInterface* object);
@@ -262,7 +262,7 @@ struct ObjectInterface::Hxx1
 /// Returns a readable string of the content.
 /// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 /// @return												The converted result. By default, this is the name of the class, followed by \@, followed by the hexadecimal memory address of this object.
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement = nullptr) const;
 /// Compares this and #other for equality.
 /// If you implement this method in a component, make sure to incorporate the result of the super implementation in the result.
 /// @param[in] other							Another object.
@@ -425,7 +425,7 @@ struct ErrorInterface::Hxx1
 	//----------------------------------------------------------------------------------------
 	RefMemberType<S> DbgStop()
 	{
-		DebugOutput(OUTPUT::DIAGNOSTIC, static_cast<const typename S::ReferenceClass*>(this)->ToString(nullptr)); DebugStop(); return this->PrivateGetRefMember();
+		DebugOutput(OUTPUT::DIAGNOSTIC, static_cast<const typename S::ReferenceClass*>(this)->ToString()); DebugStop(); return this->PrivateGetRefMember();
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -440,7 +440,7 @@ struct ErrorInterface::Hxx1
 	//----------------------------------------------------------------------------------------
 	RefMemberType<S> CritStop()
 	{
-		CriticalOutput(static_cast<const typename S::ReferenceClass*>(this)->ToString(nullptr)); return this->PrivateGetRefMember();
+		CriticalOutput(static_cast<const typename S::ReferenceClass*>(this)->ToString()); return this->PrivateGetRefMember();
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -455,7 +455,7 @@ struct ErrorInterface::Hxx1
 	//----------------------------------------------------------------------------------------
 	RefMemberType<S> DiagOutput()
 	{
-		DiagnosticOutput(static_cast<const typename S::ReferenceClass*>(this)->ToString(nullptr)); return this->PrivateGetRefMember();
+		DiagnosticOutput(static_cast<const typename S::ReferenceClass*>(this)->ToString()); return this->PrivateGetRefMember();
 	}
 	
 		public:
@@ -679,9 +679,6 @@ public:
 
 /// @endcond
 
-#ifdef MAXON_API
-#else
-#endif
 namespace details
 {
 #ifdef MAXON_TARGET_MACOS

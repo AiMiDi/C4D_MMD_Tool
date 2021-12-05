@@ -962,7 +962,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns a formated string representation of this optional value.
 	//----------------------------------------------------------------------------------------
-	typename SFINAEHelper<String, T>::type ToString(const FormatStatement* format) const
+	typename SFINAEHelper<String, T>::type ToString(const FormatStatement* format = nullptr) const
 	{
 		if (HasValue())
 			return GlobalToString(GetValueRef(), format);

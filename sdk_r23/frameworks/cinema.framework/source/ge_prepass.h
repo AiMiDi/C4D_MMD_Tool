@@ -2548,9 +2548,9 @@ static const Int32 MOUSE_PAINTPOLYSHAPE = 47;			///< Paint polygon shape cursor.
 #define EVMSG_SETMODE   	1055256			    ///< @markPrivate
 
 #define EVMSG_SHOWIN_MT	-200000078			///< Show in Motion editor.
-#define EVMSG_TL_FCURVE_POS		-200000079	///< Switch on show fcurve pos tracks.
-#define EVMSG_TL_FCURVE_ROT		-200000080	///< Switch on show fcurve rot tracks.
-#define EVMSG_TL_FCURVE_SCALE		-200000081	///< Switch on show fcurve scale tracks.
+#define EVMSG_TL_FCURVE_POS		-200000079	///< Show and frame fcurve position tracks.
+#define EVMSG_TL_FCURVE_ROT		-200000080	///< Show and frame fcurve rotation tracks.
+#define EVMSG_TL_FCURVE_SCALE		-200000081	///< Show and frame fcurve scale tracks.
 
 #define EVMSG_TIMELINESELECTION	-1001			///< A timeline selection has been changed (local event).
 #define EVMSG_BROWSERCHANGE			-1002			///< Something in the browser has been changed (local event).
@@ -3375,7 +3375,7 @@ enum class USERAREAFLAGS
 	TABSTOP			= (1 << 0),			///< Tab stop.
 	HANDLEFOCUS	= (1 << 1),			///< Handles focus.
 	COREMESSAGE	= (1 << 2),			///< Receives core messages.
-															///< @see The article @link page_core_messages Core Messages@endlink.
+															///< @see The article @link page_manual_coremessages Core Messages@endlink.
 	SYNCMESSAGE	= (1 << 3),			///< Receives sync messages.
 	DONT_MIRROR	= (1 << 30)			///< Do not mirror the user area.
 } MAXON_ENUM_FLAGS(USERAREAFLAGS);
@@ -4050,7 +4050,8 @@ enum class MODELINGCOMMANDMODE
 enum class MODELINGCOMMANDFLAGS
 {
 	NONE				= 0,						///< None.
-	CREATEUNDO	= (1 << 0)			///< Creates undo and inserts newly created objects into ModelingCommandData::doc, instead of returning in ModelingCommandData::result.
+	CREATEUNDO	= (1 << 0),			///< Creates undo and inserts newly created objects into ModelingCommandData::doc, instead of returning in ModelingCommandData::result.
+	IMPORTER		= (1 << 0)			///< Can be used by importer plugins to avoid additional checks for polygon meshes (e.g conversion of posemorph tags).
 } MAXON_ENUM_FLAGS(MODELINGCOMMANDFLAGS);
 /// @}
 
@@ -4529,7 +4530,8 @@ enum class VIEWPORT_PICK_FLAGS
 	OGL_ONLY_TOPMOST					= (1 << 3),			///< Picks only topmost object. Use this only when the object pointer is not needed. Only works with OpenGL.
 	OGL_ONLY_VISIBLE					= (1 << 4),			///< Picks only visible. Only has an effect when calling ViewportSelect::PickObject() that takes ViewportPixel as argument . Only works with OpenGL.
 	OGL_IGNORE_Z							= (1 << 5),			///< Picks ignore Z position. Set this to only check if an object (and which) was hit, not its Z position. Only works with OpenGL.
-	OGL_ONLY_TOPMOST_WITH_OBJ	= (1 << 6)			///< Picks only topmost object but returns the topmost object with its Z position. Only works with OpenGL.
+	OGL_ONLY_TOPMOST_WITH_OBJ	= (1 << 6),			///< Picks only topmost object but returns the topmost object with its Z position. Only works with OpenGL.
+	NO_DEPTH_CORRECTION				= (1 << 7),			///< To support old tools, the matrix is usually corrected so that the depth can be in the [-1, 1] range. With this option set, this does not happen any more.
 } MAXON_ENUM_FLAGS(VIEWPORT_PICK_FLAGS);
 /// @}
 

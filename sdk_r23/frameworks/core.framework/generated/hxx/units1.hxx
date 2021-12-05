@@ -27,7 +27,7 @@ struct DimensionInterface::Hxx1
 		inline Result<Unit> AddUnit(const Id& unitId, Float siConversionFactor) const;
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<UnitsArray>, UnitsArray>::type GetUnits() const;
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<Bool>, Bool>::type IsEquivalent(const Dimension& other) const;
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* fs) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* fs = nullptr) const;
 	};
 	/// Intermediate helper class for DimensionInterface.
 	template <typename S> class ReferenceFunctionsImpl : public ConstReferenceFunctionsImpl<S>
@@ -103,7 +103,7 @@ struct UnitInterface::Hxx1
 		inline Result<Unit> Copy(const Dimension& quantity) const;
 		inline Result<void> AddToDimension() const;
 		inline Result<Unit> Reduce() const;
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* fs) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* fs = nullptr) const;
 	};
 	/// Intermediate helper class for UnitInterface.
 	template <typename S> class ReferenceFunctionsImpl : public ConstReferenceFunctionsImpl<S>

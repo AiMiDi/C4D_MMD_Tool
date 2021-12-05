@@ -1187,6 +1187,9 @@
     <Unit filename="../source/maxon/utilities/sprintf_safe.h">
       <Option virtualFolder="source/maxon/utilities/" />
     </Unit>
+    <Unit filename="../source/maxon/utilities/sseconversion.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
     <Unit filename="../source/maxon/utilities/streamconversion_helper.h">
       <Option virtualFolder="source/maxon/utilities/" />
     </Unit>

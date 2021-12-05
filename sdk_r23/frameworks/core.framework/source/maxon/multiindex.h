@@ -94,7 +94,7 @@ public:
 		return Iterator();
 	}
 
-	String ToString(const FormatStatement* fmt) const;
+	String ToString(const FormatStatement* fmt = nullptr) const;
 
 	MultiIndex GetParent() const;
 

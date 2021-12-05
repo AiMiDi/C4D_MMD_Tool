@@ -7,24 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A045BF0E5C0DC00058010000 /* MMD_VMD_animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C0DC00058000000 /* MMD_VMD_animation.cpp */; };
-		A045BF0E5C19C035FF010000 /* MMD_PMX_Control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C19C035FF000000 /* MMD_PMX_Control.cpp */; };
-		A045BF0E5C2303D9BD010000 /* BulletTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C2303D9BD000000 /* BulletTest.cpp */; };
-		A045BF0E5C2EFB3D0B010000 /* MMD_PMX_model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C2EFB3D0B000000 /* MMD_PMX_model.cpp */; };
-		A045BF0E5C3179CE04010000 /* ImagesGUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C3179CE04000000 /* ImagesGUI.cpp */; };
-		A045BF0E5C3B84068A010000 /* NameConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C3B84068A000000 /* NameConversion.cpp */; };
 		A045BF0E5C4287392B010000 /* libimage.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C4287392B000000 /* libimage.framework.a */; };
 		A045BF0E5C4ADBC31B010000 /* libcommand.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C4ADBC31B000000 /* libcommand.framework.a */; };
-		A045BF0E5C55A110D9010000 /* MMD_struct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C55A110D9000000 /* MMD_struct.cpp */; };
 		A045BF0E5C6542540E010000 /* libmesh_misc.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C6542540E000000 /* libmesh_misc.framework.a */; };
-		A045BF0E5C7BB7F0FF010000 /* PluginRegister.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C7BB7F0FF000000 /* PluginRegister.cpp */; };
 		A045BF0E5C8A3C2298010000 /* libmath.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C8A3C2298000000 /* libmath.framework.a */; };
-		A045BF0E5C933AE152010000 /* EncodingConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5C933AE152000000 /* EncodingConversion.cpp */; };
 		A045BF0E5CBB14C5CC010000 /* libgeom.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5CBB14C5CC000000 /* libgeom.framework.a */; };
 		A045BF0E5CBC4C136C010000 /* libpython.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5CBC4C136C000000 /* libpython.framework.a */; };
 		A045BF0E5CD80552BB010000 /* interface_registration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5CD80552BB000000 /* interface_registration.cpp */; };
 		A045BF0E5CD93CCD9F010000 /* register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5CD93CCD9F000000 /* register.cpp */; };
-		A045BF0E5CE921D362010000 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5CE921D362000000 /* main.cpp */; };
 		A045BF0E5CEBA5917E010000 /* libcrypt.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5CEBA5917E000000 /* libcrypt.framework.a */; };
 		A045BF0E5CF470FF41010000 /* libcinema.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5CF470FF41000000 /* libcinema.framework.a */; };
 		A045BF0E5CF4AB3A6F010000 /* libcore.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5CF4AB3A6F000000 /* libcore.framework.a */; };
@@ -225,46 +215,17 @@
 /* Begin PBXFileReference section */
 		A045BF0E5C00000000000000 /* debugbase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = debugbase.xcconfig; path = ../../../frameworks/settings/debugbase.xcconfig; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C00000000050000 /* releasebase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = releasebase.xcconfig; path = ../../../frameworks/settings/releasebase.xcconfig; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C068E53D0000000 /* TMMDBone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMMDBone.h; path = ../res/description/TMMDBone.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C0DC00058000000 /* MMD_VMD_animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMD_VMD_animation.cpp; path = ../source/MMD_VMD_animation.cpp; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C127F7180000000 /* OMMDMeshRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMMDMeshRoot.h; path = ../res/description/OMMDMeshRoot.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C1837B5E7000000 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main.h; path = ../source/main.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C19C035FF000000 /* MMD_PMX_Control.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMD_PMX_Control.cpp; path = ../source/MMD_PMX_Control.cpp; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C1D23834F000000 /* OMMDJointRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMMDJointRoot.h; path = ../res/description/OMMDJointRoot.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C1F85E51E000000 /* MMD_struct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMD_struct.h; path = ../source/MMD_struct.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C2303D9BD000000 /* BulletTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BulletTest.cpp; path = ../source/BulletTest.cpp; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C268B39CE000000 /* OMMDRigid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMMDRigid.h; path = ../res/description/OMMDRigid.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C281D2B4C000000 /* OMMDModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMMDModel.h; path = ../res/description/OMMDModel.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C2C1B7FD7000000 /* EncodingConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncodingConversion.h; path = ../source/EncodingConversion.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C2EFB3D0B000000 /* MMD_PMX_model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMD_PMX_model.cpp; path = ../source/MMD_PMX_model.cpp; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C3179CE04000000 /* ImagesGUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImagesGUI.cpp; path = ../source/ImagesGUI.cpp; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C3B84068A000000 /* NameConversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NameConversion.cpp; path = ../source/NameConversion.cpp; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C3D48A85D000000 /* MMD_VMD_animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMD_VMD_animation.h; path = ../source/MMD_VMD_animation.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C4287392B020000 /* image.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = image.framework.xcodeproj; path = ../../../frameworks/image.framework/project/image.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C448F46FA000000 /* c4d_symbols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c4d_symbols.h; path = ../res/c4d_symbols.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C4ADBC31B020000 /* command.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = command.framework.xcodeproj; path = ../../../frameworks/command.framework/project/command.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C55A110D9000000 /* MMD_struct.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMD_struct.cpp; path = ../source/MMD_struct.cpp; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C6542540E020000 /* mesh_misc.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mesh_misc.framework.xcodeproj; path = ../../../frameworks/mesh_misc.framework/project/mesh_misc.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C7BB7F0FF000000 /* PluginRegister.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginRegister.cpp; path = ../source/PluginRegister.cpp; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C898175D0000000 /* MMD_PMX_model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMD_PMX_model.h; path = ../source/MMD_PMX_model.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C89B5246D000000 /* OMMDJoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMMDJoint.h; path = ../res/description/OMMDJoint.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C8A3C2298020000 /* math.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = math.framework.xcodeproj; path = ../../../frameworks/math.framework/project/math.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C8C3E0030000000 /* OMMDRigidRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMMDRigidRoot.h; path = ../res/description/OMMDRigidRoot.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C8F581BC4000000 /* MMD_PMX_Control.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMD_PMX_Control.h; path = ../source/MMD_PMX_Control.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5C933AE152000000 /* EncodingConversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EncodingConversion.cpp; path = ../source/EncodingConversion.cpp; sourceTree = SOURCE_ROOT; };
-		A045BF0E5CB7EB5917000000 /* OMMDBoneRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMMDBoneRoot.h; path = ../res/description/OMMDBoneRoot.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CBB14C5CC020000 /* geom.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = geom.framework.xcodeproj; path = ../../../frameworks/geom.framework/project/geom.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CBC4C136C020000 /* python.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = python.framework.xcodeproj; path = ../../../frameworks/python.framework/project/python.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CD80552BB000000 /* interface_registration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interface_registration.cpp; path = ../generated/hxx/interface_registration.cpp; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CD93CCD9F000000 /* register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = register.cpp; path = ../generated/hxx/register.cpp; sourceTree = SOURCE_ROOT; };
-		A045BF0E5CE05C930F000000 /* NameConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameConversion.h; path = ../source/NameConversion.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5CE921D362000000 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../source/main.cpp; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CEBA5917E020000 /* crypt.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = crypt.framework.xcodeproj; path = ../../../frameworks/crypt.framework/project/crypt.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
-		A045BF0E5CF00D9702000000 /* BulletTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BulletTest.h; path = ../source/BulletTest.h; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CF470FF41020000 /* cinema.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cinema.framework.xcodeproj; path = ../../../frameworks/cinema.framework/project/cinema.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CF4AB3A6F020000 /* core.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = core.framework.xcodeproj; path = ../../../frameworks/core.framework/project/core.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
-		A045BF0E5CF631F109000000 /* ImagesGUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImagesGUI.h; path = ../source/ImagesGUI.h; sourceTree = SOURCE_ROOT; };
-		A045BF0E5CF7845096000000 /* OMMDCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMMDCamera.h; path = ../res/description/OMMDCamera.h; sourceTree = SOURCE_ROOT; };
 		A08C5CDEA345BF0E5C7B0000 /* mmdtool.xlib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mmdtool.xlib; sourceTree = BUILT_PRODUCTS_DIR; };
 		A08C5CDEA345BF0E5C7B0100 /* libmmdtool_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmmdtool_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -321,8 +282,6 @@
 				A045BF0E5C111A998F000000 /* generated */,
 				A045BF0E5C00000000140000 /* libs */,
 				A045BF0E5C00000000230000 /* products */,
-				A045BF0E5C0001B8A0000000 /* res */,
-				A045BF0E5CCA90681B000000 /* source */,
 			);
 			sourceTree = "<group>";
 		};
@@ -334,16 +293,6 @@
 			);
 			name = products;
 			sourceTree = "<group>";
-		};
-		A045BF0E5C0001B8A0000000 /* res */ = {
-			isa = PBXGroup;
-			children = (
-				A045BF0E5C47E4A90D000000 /* description */,
-				A045BF0E5C448F46FA000000 /* c4d_symbols.h */,
-			);
-			name = res;
-			path = ../res;
-			sourceTree = SOURCE_ROOT;
 		};
 		A045BF0E5C111A998F000000 /* generated */ = {
 			isa = PBXGroup;
@@ -362,23 +311,6 @@
 			);
 			name = products;
 			sourceTree = "<group>";
-		};
-		A045BF0E5C47E4A90D000000 /* description */ = {
-			isa = PBXGroup;
-			children = (
-				A045BF0E5CB7EB5917000000 /* OMMDBoneRoot.h */,
-				A045BF0E5CF7845096000000 /* OMMDCamera.h */,
-				A045BF0E5C89B5246D000000 /* OMMDJoint.h */,
-				A045BF0E5C1D23834F000000 /* OMMDJointRoot.h */,
-				A045BF0E5C127F7180000000 /* OMMDMeshRoot.h */,
-				A045BF0E5C281D2B4C000000 /* OMMDModel.h */,
-				A045BF0E5C268B39CE000000 /* OMMDRigid.h */,
-				A045BF0E5C8C3E0030000000 /* OMMDRigidRoot.h */,
-				A045BF0E5C068E53D0000000 /* TMMDBone.h */,
-			);
-			name = description;
-			path = ../res/description;
-			sourceTree = SOURCE_ROOT;
 		};
 		A045BF0E5C4ADBC31B280000 /* products */ = {
 			isa = PBXGroup;
@@ -434,33 +366,6 @@
 			);
 			name = products;
 			sourceTree = "<group>";
-		};
-		A045BF0E5CCA90681B000000 /* source */ = {
-			isa = PBXGroup;
-			children = (
-				A045BF0E5C2303D9BD000000 /* BulletTest.cpp */,
-				A045BF0E5CF00D9702000000 /* BulletTest.h */,
-				A045BF0E5C933AE152000000 /* EncodingConversion.cpp */,
-				A045BF0E5C2C1B7FD7000000 /* EncodingConversion.h */,
-				A045BF0E5C3179CE04000000 /* ImagesGUI.cpp */,
-				A045BF0E5CF631F109000000 /* ImagesGUI.h */,
-				A045BF0E5CE921D362000000 /* main.cpp */,
-				A045BF0E5C1837B5E7000000 /* main.h */,
-				A045BF0E5C19C035FF000000 /* MMD_PMX_Control.cpp */,
-				A045BF0E5C8F581BC4000000 /* MMD_PMX_Control.h */,
-				A045BF0E5C2EFB3D0B000000 /* MMD_PMX_model.cpp */,
-				A045BF0E5C898175D0000000 /* MMD_PMX_model.h */,
-				A045BF0E5C55A110D9000000 /* MMD_struct.cpp */,
-				A045BF0E5C1F85E51E000000 /* MMD_struct.h */,
-				A045BF0E5C0DC00058000000 /* MMD_VMD_animation.cpp */,
-				A045BF0E5C3D48A85D000000 /* MMD_VMD_animation.h */,
-				A045BF0E5C3B84068A000000 /* NameConversion.cpp */,
-				A045BF0E5CE05C930F000000 /* NameConversion.h */,
-				A045BF0E5C7BB7F0FF000000 /* PluginRegister.cpp */,
-			);
-			name = source;
-			path = ../source;
-			sourceTree = SOURCE_ROOT;
 		};
 		A045BF0E5CEBA5917E280000 /* products */ = {
 			isa = PBXGroup;
@@ -745,18 +650,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A045BF0E5C0DC00058010000 /* MMD_VMD_animation.cpp in Sources */,
-				A045BF0E5C19C035FF010000 /* MMD_PMX_Control.cpp in Sources */,
-				A045BF0E5C2303D9BD010000 /* BulletTest.cpp in Sources */,
-				A045BF0E5C2EFB3D0B010000 /* MMD_PMX_model.cpp in Sources */,
-				A045BF0E5C3179CE04010000 /* ImagesGUI.cpp in Sources */,
-				A045BF0E5C3B84068A010000 /* NameConversion.cpp in Sources */,
-				A045BF0E5C55A110D9010000 /* MMD_struct.cpp in Sources */,
-				A045BF0E5C7BB7F0FF010000 /* PluginRegister.cpp in Sources */,
-				A045BF0E5C933AE152010000 /* EncodingConversion.cpp in Sources */,
 				A045BF0E5CD80552BB010000 /* interface_registration.cpp in Sources */,
 				A045BF0E5CD93CCD9F010000 /* register.cpp in Sources */,
-				A045BF0E5CE921D362010000 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -825,7 +720,7 @@
 				);
 				INSTALL_PATH = /..;
 				MAXON_ROOTDIR = ../../../;
-				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../res ../res/description ../source $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/command.framework/source/** $(MAXON_ROOTDIR)frameworks/command.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/crypt.framework/source/** $(MAXON_ROOTDIR)frameworks/crypt.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/geom.framework/source/** $(MAXON_ROOTDIR)frameworks/geom.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/python.framework/source/** $(MAXON_ROOTDIR)frameworks/python.framework/generated/hxx $(inherited)";
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/command.framework/source/** $(MAXON_ROOTDIR)frameworks/command.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/crypt.framework/source/** $(MAXON_ROOTDIR)frameworks/crypt.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/geom.framework/source/** $(MAXON_ROOTDIR)frameworks/geom.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/python.framework/source/** $(MAXON_ROOTDIR)frameworks/python.framework/generated/hxx $(inherited)";
 			};
 			name = Debug;
 		};
@@ -843,7 +738,7 @@
 				);
 				INSTALL_PATH = /..;
 				MAXON_ROOTDIR = ../../../;
-				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../res ../res/description ../source $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/command.framework/source/** $(MAXON_ROOTDIR)frameworks/command.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/crypt.framework/source/** $(MAXON_ROOTDIR)frameworks/crypt.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/geom.framework/source/** $(MAXON_ROOTDIR)frameworks/geom.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/python.framework/source/** $(MAXON_ROOTDIR)frameworks/python.framework/generated/hxx $(inherited)";
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/command.framework/source/** $(MAXON_ROOTDIR)frameworks/command.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/crypt.framework/source/** $(MAXON_ROOTDIR)frameworks/crypt.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/geom.framework/source/** $(MAXON_ROOTDIR)frameworks/geom.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/python.framework/source/** $(MAXON_ROOTDIR)frameworks/python.framework/generated/hxx $(inherited)";
 			};
 			name = Release;
 		};

@@ -391,7 +391,7 @@ public:
 		return result;
 	}
 
-	typename SFINAEHelper<String, K>::type ToString(const FormatStatement* fmt) const
+	typename SFINAEHelper<String, K>::type ToString(const FormatStatement* fmt = nullptr) const
 	{
 		return _map.ToString(fmt);
 	}

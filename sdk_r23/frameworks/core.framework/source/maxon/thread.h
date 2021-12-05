@@ -166,7 +166,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	Result<void> PrivateResetState()
 	{
@@ -471,7 +471,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	Bool operator ==(const ThreadRefTemplate& other) const
 	{
@@ -626,10 +626,10 @@ template <typename FN> inline auto ExecuteOnMainThread(FN&& fn, Bool wait) -> de
 		if (job == nullptr)
 		{
 			// Create a static job on the stack and wait for it.
-			struct alignas(MAXON_CACHE_LINE_SIZE) StaticJob
+			struct alignas(MAXON_FALSE_SHARING_SIZE) StaticJob
 			{
 				StaticJob(FN&& f) : _job(std::forward<FN>(f)) {}
-				UChar dummy[MAXON_CACHE_LINE_SIZE - SIZEOF(StrongReferenceCounter)];
+				UChar dummy[MAXON_FALSE_SHARING_SIZE - SIZEOF(StrongReferenceCounter)];
 				StrongReferenceCounter _referenceCount;
 				ClosureJob<FN, JOBCANCELLATION::AUTOMATIC, typename std::result_of<typename std::remove_reference<FN()>::type>::type> _job;
 			} staticJob(std::forward<FN>(fn));

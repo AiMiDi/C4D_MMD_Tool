@@ -350,7 +350,7 @@ typename std::conditional<std::is_void<T>::value, typename IsFidClass<KEY>::type
 	}
 
 	ifnoerr (TT r = GetDataDescriptionValue2<TT>(key, GetDefaultValueKey()))
-		return std::move(r);
+		return r;
 
 	return GetDefaultFromFidIfAvailable<TT>(key, OVERLOAD_MAX_RANK);
 	MAXON_WARNING_POP

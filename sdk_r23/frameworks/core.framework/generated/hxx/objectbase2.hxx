@@ -948,9 +948,6 @@ static maxon::EntityUse s_ui_maxon_ErrorInterface(ErrorInterface::_interface.Get
 
 /// @endcond
 
-#ifdef MAXON_API
-#else
-#endif
 namespace details
 {
 #ifdef MAXON_TARGET_MACOS

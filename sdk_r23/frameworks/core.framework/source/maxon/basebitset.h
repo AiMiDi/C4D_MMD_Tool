@@ -3,6 +3,7 @@
 
 #include "maxon/basearray.h"
 #include "maxon/error.h"
+#include "maxon/dataserialize.h"
 
 #ifdef MAXON_TARGET_LINUX
 	#ifdef INT_WIDTH
@@ -606,6 +607,20 @@ public:
 	{
 		return _bits.GetCount() * IntTypeBitCount;
 	}
+
+	//----------------------------------------------------------------------------------------
+	/// Describe all elements of this class for I/O operations.
+	/// @param[in] stream							The stream that is used to register the class members.
+	/// @return												OK on success.
+	//----------------------------------------------------------------------------------------
+	static Result<void> DescribeIO(const DataSerializeInterface& stream)
+	{
+		iferr_scope;
+		PrepareDescribe(stream, BaseBitSet<ALLOCATOR>);
+		Describe("_bits", _bits, IntType, DESCRIBEFLAGS::TYPE_ARRAY) iferr_return;
+		return OK;
+	}
+
 
 private:
 	

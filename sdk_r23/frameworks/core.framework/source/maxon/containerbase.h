@@ -62,7 +62,7 @@ public:
 
 	MAXON_METHOD Result<GenericContainerInterface*> Clone(Bool cloneElements = true) const;
 
-	MAXON_METHOD String ToString(const FormatStatement* formatStatement) const;
+	MAXON_METHOD String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	MAXON_METHOD HashInt GetHashCode() const;
 

@@ -1143,7 +1143,7 @@ maxon::Url MaxonConvert(const Filename& val, MAXONCONVERTMODE mode)
 	if (mode == MAXONCONVERTMODE::READ)
 	{
 		ifnoerr (maxon::Url converted = CheckRealFilenameIgnoringCase(url, false))
-			return std::move(converted);
+			return converted;
 	}
 	else if (mode == MAXONCONVERTMODE::WRITE)
 	{
@@ -1153,11 +1153,11 @@ maxon::Url MaxonConvert(const Filename& val, MAXONCONVERTMODE mode)
 		{
 			ifnoerr (converted.Append(name))
 			{
-				return std::move(converted);
+				return converted;
 			}
 		}
 	}
-	return std::move(url);
+	return url;
 #else
 	// no std::move to use RVO
 	return url;

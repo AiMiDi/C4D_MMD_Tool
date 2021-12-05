@@ -293,6 +293,7 @@ maxon/utilities/resultbase.h
 maxon/utilities/reuse_resource_cache.h
 maxon/utilities/ringbuffer.h
 maxon/utilities/sprintf_safe.h
+maxon/utilities/sseconversion.h
 maxon/utilities/streamconversion_helper.h
 maxon/utilities/threaded_update_helper.h
 maxon/utilities/undef_win_macros.h

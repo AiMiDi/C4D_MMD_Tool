@@ -25,7 +25,7 @@ struct MachineInterface::Hxx1
 /// Returns a readable string of the content.
 /// @param[in] formatStatement		Nullptr or additional formatting instruction. Use "{N}" for nive formatting of the name only. Otherwise the unique id is printed together with the name.
 /// @return												The converted result.
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement = nullptr) const;
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<maxon::ObservableRef<ObservableMessageReceivedDelegate>>, maxon::ObservableRef<ObservableMessageReceivedDelegate>>::type ObservableMessageReceived() const;
 	};
 	/// Intermediate helper class for MachineInterface.

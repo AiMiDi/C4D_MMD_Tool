@@ -84,7 +84,7 @@ public:
 			return *_map;
 		}
 
-		String ToString(const FormatStatement* fmt) const
+		String ToString(const FormatStatement* fmt = nullptr) const
 		{
 			return GlobalToString(_value, fmt) + " x"_s + String::UIntToString(_refCount);
 		}
@@ -168,7 +168,7 @@ public:
 			return Bool(_ref);
 		}
 
-		String ToString(const FormatStatement* fs) const
+		String ToString(const FormatStatement* fs = nullptr) const
 		{
 			if (STD_IS_REPLACEMENT(empty, V))
 			{
@@ -189,7 +189,7 @@ public:
 		DebugAssert(_map.IsEmpty(), "All references to entries have to be cleared before RefCountHashMap is destructed.");
 	}
 
-	String ToString(const FormatStatement* fmt) const
+	String ToString(const FormatStatement* fmt = nullptr) const
 	{
 		return _map.ToString(fmt);
 	}

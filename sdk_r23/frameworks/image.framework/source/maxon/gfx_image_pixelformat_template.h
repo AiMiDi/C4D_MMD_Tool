@@ -220,9 +220,9 @@ MAXON_ATTRIBUTE_FORCE_INLINE void ConvertPixel(Pix32s& dst, const Pix64f src) { 
 	}
 #endif
 
-MAXON_ATTRIBUTE_FORCE_INLINE void ConvertPixel(Pix32f& dst, const Pix16u src)  { dst = src * (1.0f / 65535.0f); }
-MAXON_ATTRIBUTE_FORCE_INLINE void ConvertPixel(Pix32f& dst, const Pix32u src)  { dst = src * (1.0f / 4294967295.0f); }
-MAXON_ATTRIBUTE_FORCE_INLINE void ConvertPixel(Pix32f& dst, const Pix32s src)  { dst = Pix32u(src - LIMIT<Pix32s>::MIN) * (1.0f / 4294967295.0f); }
+MAXON_ATTRIBUTE_FORCE_INLINE void ConvertPixel(Pix32f& dst, const Pix16u src)  { dst = (Pix32f)src * (1.0f / 65535.0f); }
+MAXON_ATTRIBUTE_FORCE_INLINE void ConvertPixel(Pix32f& dst, const Pix32u src)  { dst = (Pix32f)src * (1.0f / 4294967295.0f); }
+MAXON_ATTRIBUTE_FORCE_INLINE void ConvertPixel(Pix32f& dst, const Pix32s src)  { dst = Pix32f(Pix32u(src - LIMIT<Pix32s>::MIN)) * (1.0f / 4294967295.0f); }
 MAXON_ATTRIBUTE_FORCE_INLINE void ConvertPixel(Pix32f& dst, const Pix32f src)  { dst = src; }
 MAXON_ATTRIBUTE_FORCE_INLINE void ConvertPixel(Pix32f& dst, const Pix64f src)  { dst = (Pix32f)src; }
 

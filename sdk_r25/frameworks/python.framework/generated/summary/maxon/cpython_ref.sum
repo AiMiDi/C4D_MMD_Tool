@@ -1,11 +1,11 @@
-maxon.py.CPyInterface	"net.maxon.python.interface.cpyref"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(47,7)	ObjectInterface	Decref,Disconnect,GetLibrary,GetPyObject,GetRefCount,GetTypeRef,Incref,Init	
-maxon.py.CPyTypeInterface	"net.maxon.python.interface.cpytype"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(155,7)	CPyInterface		
-maxon.py.CPyFrameInterface	"net.maxon.python.interface.cpyframe"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(181,7)	CPyInterface	GetBack,GetCode,GetLastInstruction	
-maxon.py.CPyTracebackInterface	"net.maxon.python.interface.cpytraceback"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(203,7)	CPyInterface	GetFrameRef,GetLineNumber,GetNext	
-maxon.py.CPyCodeInterface	"net.maxon.python.interface.cpycode"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(219,7)	CPyInterface	GetFilename,GetName	
-maxon.py.MPyClassInterface	"net.maxon.python.interface.mpyclass"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(234,7)	CPyInterface		
-maxon.py.MPyMemberInterface	"net.maxon.python.interface.mpymember"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(246,7)	CPyInterface		
-maxon.py.MPyFunctionInterface	"net.maxon.python.interface.mpyfunction"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(258,7)	CPyInterface	GetFunction	
-maxon.py.MPyDataTypeInterface	"net.maxon.python.interface.mpydatatype"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(272,7)	CPyInterface	GetType	
-maxon.py.MPyDataInterface	"net.maxon.python.interface.mpydata"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(286,7)	CPyInterface	GetData,GetMappingType,GetType,PrivateGetPtr	
-maxon.py.MPyCallerContextInterface	"net.maxon.python.interface.mpycallercontext"	G:\C4DSDK\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(306,7)	CPyInterface		
+maxon.py.CPyInterface	"net.maxon.python.interface.cpyref"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(47,7)	ObjectInterface	Decref,Disconnect,GetLibrary,GetPyObject,GetRefCount,GetTypeRef,Incref,Init	
+maxon.py.CPyTypeInterface	"net.maxon.python.interface.cpytype"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(155,7)	CPyInterface		
+maxon.py.CPyFrameInterface	"net.maxon.python.interface.cpyframe"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(181,7)	CPyInterface	GetBack,GetCode,GetLastInstruction	
+maxon.py.CPyTracebackInterface	"net.maxon.python.interface.cpytraceback"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(203,7)	CPyInterface	GetFrameRef,GetLineNumber,GetNext	
+maxon.py.CPyCodeInterface	"net.maxon.python.interface.cpycode"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(219,7)	CPyInterface	GetFilename,GetName	
+maxon.py.MPyClassInterface	"net.maxon.python.interface.mpyclass"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(234,7)	CPyInterface		
+maxon.py.MPyMemberInterface	"net.maxon.python.interface.mpymember"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(246,7)	CPyInterface		
+maxon.py.MPyFunctionInterface	"net.maxon.python.interface.mpyfunction"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(258,7)	CPyInterface	GetFunction	
+maxon.py.MPyDataTypeInterface	"net.maxon.python.interface.mpydatatype"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(272,7)	CPyInterface	GetType	
+maxon.py.MPyDataInterface	"net.maxon.python.interface.mpydata"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(286,7)	CPyInterface	GetData,GetMappingType,GetType,PrivateGetPtr	
+maxon.py.MPyCallerContextInterface	"net.maxon.python.interface.mpycallercontext"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\python.framework\source\maxon\cpython_ref.h(306,7)	CPyInterface		

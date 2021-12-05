@@ -135,7 +135,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Convert BITS into String.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Describe all elements of this class for I/O operations.

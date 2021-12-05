@@ -44,6 +44,7 @@ namespace maxon
 class DrawportRedrawHelperRef;
 class ViewportRenderRef;
 class DrawportRef;
+class DrawportContextRef;
 class ImageRef;
 class DrawportTextureInterface;
 template <typename ALLOCATOR> class BaseBitSet;
@@ -83,7 +84,7 @@ using NodeMaterialLinkResolveFunc = Delegate<Result<CINEWARE_NAMESPACE::BaseList
 #endif
 
 /// @C4D API version
-#define API_VERSION	23000
+#define API_VERSION	23100
 
 class CINEWARE_SINGLEINHERITANCE C4DAtom;
 class C4DAtomGoal;
@@ -1984,8 +1985,11 @@ struct C4D_Atom
 	maxon::Result<void> (GeListHeadCB::*SetParentCallback		)(maxon::Delegate<maxon::Result<void>(BaseList2D& caller, Int32 type, void* message)>&& callback);
 	maxon::Result<void> (GeListHeadCB::*InvokeParentCallback)(BaseList2D& caller, Int32 type, void* message) const;
 	Bool						(BaseSceneHook::*DisplayControl)(BaseDocument *doc, BaseObject *op, BaseObject *chainstart, BaseDraw *bd, BaseDrawHelp *bh, ControlDisplayStruct &cds) const;
-	Bool						(BaseSceneHook::*InitDisplayControl)(BaseSceneHook *node, BaseDocument* doc, BaseDraw* bd, const AtomArray* active);
+	Bool						(BaseSceneHook::*InitDisplayControlEx)(BaseSceneHook *node, BaseDocument* doc, BaseDraw* bd, const AtomArray* active);
 	void						(BaseSceneHook::*FreeDisplayControl)();
+	// New in 23.1
+	Bool						(BaseSceneHook::*InitDisplayControl)(BaseDocument* doc, BaseDraw* bd, const AtomArray* active);
+	void						(BaseSceneHook::*Draw)(BaseDocument* doc, BaseDraw* bd, BaseDrawHelp* bh, BaseThread* bt, SCENEHOOKDRAW flags);
 };
 
 struct C4D_BaseList
@@ -2992,6 +2996,7 @@ struct C4D_BaseDraw
 	const AtomArray& (*GetXRefObjects			)(const BaseDraw* bd);
 	void						(*GetViewportImage		)(const BaseDraw* bd, maxon::ImageRef& viewportImage);
 	void						(*RenderViewportWithoutPostEffects		)(const BaseDraw* bd, maxon::ImageRef& image);
+	void						(*GetDrawportContext	)(const BaseDraw* bd, maxon::DrawportContextRef& context);
 };
 
 struct C4D_BaseView
@@ -3572,7 +3577,7 @@ struct C4D_Painter
 	BaseBitmap*			(*PT_GetVisibleBitmap)(PaintTexture* tex, Bool recalc);
 	Bool						(*UpdateMeshUVInt)(Bool fullUpdate);
 	BaseBitmap*			(*PT_GetSelectionMaskTexture)(PaintTexture* paintTexture, UInt64 width, UInt64 height, Int32& dirtyCount);
-	const EdgeBaseSelect*	(*GetUVSeams)(const BaseObject* obj);
+	const EdgeBaseSelect*	(*GetUVSeams)(const BaseObject* obj); // TODO: (Benjamin) To be replaced by GetUVSeams2 when we can break the API.
 	BaseMaterial*		(*PM_GetBaseMaterial)(PaintMaterial* pm, BaseDocument* doc);
 	Bool						(*PM_GetPaintAllMaterialFromTexture)(PaintTexture* tex, AtomArray& materials);
 	Bool						(*UVSetSetUVPointSelectionFromTextureView)(TempUVHandle* handle, const BaseSelect* uvPointSelection, Bool bleedSelection);
@@ -3582,6 +3587,7 @@ struct C4D_Painter
 	void						(*PM_GetSelectionMaskState)(Bool& hasSelectionMask, Bool& isEditMaskActive);
 	void						(*PM_GetMaterialChannelDisplay)(BaseDocument* doc, Bool& isSingleDisplayActive, Int32& materialChannel);
 	maxon::Block<Int32>		(*UVGetIslands)(TempUVHandle* handle);
+	const EdgeBaseSelect*	(*GetUVSeams2)(const BaseObject* obj, Bool checkUVSettings);
 };
 
 struct C4D_Network

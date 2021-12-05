@@ -187,7 +187,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD String ToString(const FormatStatement* formatStatement) const;
+	MAXON_METHOD String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Calculates the memory usage for this map.
@@ -704,7 +704,7 @@ public:
 		return c;
 	}
 
-	String ToString(const FormatStatement* formatStatement) const { return GlobalToString(_map, formatStatement); }
+	String ToString(const FormatStatement* formatStatement = nullptr) const { return GlobalToString(_map, formatStatement); }
 
 	Int GetMemorySize() const { return _map.GetMemorySize() + (SIZEOF(MapImpl) - SIZEOF(MAP)); }
 

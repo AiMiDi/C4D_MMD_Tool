@@ -448,7 +448,7 @@ template <typename T, Int STRIDE = 1> struct Vec3
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. See also @ref format_float.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + maxon::ToString(x, formatStatement) + ","_s + maxon::ToString(y, formatStatement) + ","_s + maxon::ToString(z, formatStatement) + ")"_s;
 	}

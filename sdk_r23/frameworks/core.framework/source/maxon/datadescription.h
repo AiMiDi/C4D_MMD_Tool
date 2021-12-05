@@ -96,7 +96,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Use "{N}" for nive formatting of the name only. Otherwise the unique id is printed together with the name.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD String ToString(const FormatStatement* formatStatement) const;
+	MAXON_METHOD String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Describe all elements of this class for I/O operations.

@@ -34,7 +34,7 @@ template <typename T> struct DrawDimension
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + Data(width).ToString(formatStatement) + ","_s + Data(height).ToString(formatStatement) + ")"_s;
 	}
@@ -100,7 +100,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + position.ToString(formatStatement) + ","_s + Data(size).ToString(formatStatement) + ")"_s;
 	}

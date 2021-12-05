@@ -364,7 +364,7 @@ template <typename T, Int STRIDE = 1> struct Col4
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. See also @ref format_float.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + maxon::ToString(r, formatStatement) + ","_s + maxon::ToString(g, formatStatement) + ","_s + maxon::ToString(b, formatStatement) + ","_s + maxon::ToString(a, formatStatement) + ")"_s;
 	}

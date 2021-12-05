@@ -60,6 +60,8 @@ Bool PaintManager::SetAllowSelectUpdate(Bool _allowSelectUpdate){ PaintLibCall(f
 
 Bool PaintView::GetShowMesh(Bool& showMesh){ PaintLibCall(false, GetShowMesh, iPaintView*)(showMesh); }
 Bool PaintView::SetShowMesh(Bool showMesh){ PaintLibCall(false, SetShowMesh, iPaintView*)(showMesh); }
+Bool PaintView::GetShowMeshWireframe(Bool& showMesh){ PaintLibCall(false, GetShowMeshWireframe, iPaintView*)(showMesh); }
+Bool PaintView::SetShowMeshWireframe(Bool showMesh){ PaintLibCall(false, SetShowMeshWireframe, iPaintView*)(showMesh); }
 Bool PaintView::SetContextFromSelection(){ PaintLibCall(false, SetContextFromSelection, iPaintView*)(); }
 Bool PaintView::FitToScreen(){ PaintLibCall(false, FitToScreen, iPaintView*)(); }
 

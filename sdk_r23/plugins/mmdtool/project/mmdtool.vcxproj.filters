@@ -8,10 +8,10 @@
       <UniqueIdentifier>{8800E4E7-0D26-2958-8ACC-618A6830A19B}</UniqueIdentifier>
     </Filter>
     <Filter Include="res">
-      <UniqueIdentifier>{8800E4E7-0D26-2958-0000-00000001B8A0}</UniqueIdentifier>
+      <UniqueIdentifier>{9138088b-1455-4cd3-8ffb-83dc9f9f3735}</UniqueIdentifier>
     </Filter>
     <Filter Include="source">
-      <UniqueIdentifier>{8800E4E7-0D26-2958-0000-0000CA90681B}</UniqueIdentifier>
+      <UniqueIdentifier>{df9823f5-50a0-4aec-a328-3c42b1bf3aac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -20,6 +20,9 @@
     </ClCompile>
     <ClCompile Include="..\generated\hxx\register.cpp">
       <Filter>generated\hxx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\MMD_utility.cpp">
+      <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\source\MMD_VMD_animation.cpp">
       <Filter>source</Filter>
@@ -48,11 +51,11 @@
     <ClCompile Include="..\..\..\..\source\MMD_PMX_model.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\source\MMD_utility.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\source\MMD_PMX_model.h">
+      <Filter>source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\..\source\MMD_utility.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -75,9 +78,6 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\MMD_PMX_Control.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_model.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\res\c4d_symbols.h">

@@ -222,7 +222,7 @@ public:
 	}
 
 	/// @copydoc DefaultDoc::ToString
-	String ToString(const FormatStatement* fs) const;
+	String ToString(const FormatStatement* fs = nullptr) const;
 
 protected:
 	Int _indexDir = -3; // Bit 0 set: output port, remaining bits>>1: index. If index is -1 there is no index, use _name to identify port. If _indexDir is less than -2, the PortId is empty.
@@ -425,7 +425,7 @@ public:
 	}
 
 	/// @copydoc DefaultDoc::ToString
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return String(_name);
 	}

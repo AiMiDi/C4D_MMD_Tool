@@ -120,7 +120,7 @@ public:
 	/// @param[in] formatStatement		Optional format statement.
 	/// @return												A human readable string.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + maxon::ToString(a, formatStatement) + ","_s + maxon::ToString(b, formatStatement)
 		+ ","_s + maxon::ToString(c, formatStatement) + ","_s + maxon::ToString(d, formatStatement) + ")"_s;

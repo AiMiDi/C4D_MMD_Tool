@@ -226,7 +226,7 @@ public:
 		return NULL_VALUE;
 	}
 
-	String ToString(const FormatStatement* fmt) const;
+	String ToString(const FormatStatement* fmt = nullptr) const;
 
 	Bool IsPopulated() const
 	{
@@ -286,7 +286,7 @@ struct Member
 		return {GetDataType<T, GET_DATATYPE_POLICY::NO_DECAY>(), n};
 	}
 
-	String ToString(const FormatStatement* fmt) const;
+	String ToString(const FormatStatement* fmt = nullptr) const;
 
 	MAXON_OPERATOR_EQUALITY_HASHCODE(Member, type, name);
 

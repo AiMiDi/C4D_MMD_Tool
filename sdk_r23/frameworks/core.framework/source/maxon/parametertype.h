@@ -55,7 +55,7 @@ public:
 		return _flags;
 	}
 
-	String ToString(const FormatStatement* fmt) const;
+	String ToString(const FormatStatement* fmt = nullptr) const;
 
 	template <typename T> static ParameterType Get()
 	{

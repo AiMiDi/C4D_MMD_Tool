@@ -60,6 +60,10 @@ public:
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> DescriptionDefinitionChanged(const Id& category, const LanguageRef& language, const IdAndVersion& dataType);
 
+	[[deprecated("Use the overload with language parameter.")]] static MAXON_METHOD Result<BaseArray<Tuple<Id, Data, String>>> GetEffectiveEnumList(const DataDictionary& dataEntry,
+		const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui,
+		const AssetRepositoryRef& repository, const Data* filterData);
+
 	//----------------------------------------------------------------------------------------
 	/// GetEffectiveEnumList returns the enum list prepared for display in the ui with the user order etc.
 	/// It takes DESCRIPTION::DATA::BASE::ENUM and DESCRIPTION::UI::BASE::ENUM into account.
@@ -67,13 +71,15 @@ public:
 	/// @param[in] guiEntry						Description of the ui.
 	/// @param[in] stringDescription	Description of the strings.
 	/// @param[in] resolveExtensionPointsAndGui	True if extension points and ui order should be evaluated. False will return the unprocessed DESCRIPTION::DATA::BASE::ENUM array.
+	/// @param[in] withStrings				True if strings shall be set up.
+	/// @param[in] language						Language to use.
 	/// @param[in] repository					Asset Repository to use.
 	/// @param[in] filterData					Filter only for this one type. Nullptr to disable filtering.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<Tuple<Id, Data, String>>> GetEffectiveEnumList(const DataDictionary& dataEntry,
 		const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui,
-		const AssetRepositoryRef& repository, const Data* filterData);
+		Bool withStrings, const LanguageRef& language, const AssetRepositoryRef& repository, const Data* filterData);
 
 	//----------------------------------------------------------------------------------------
 	/// PostProcessStringDescription description.

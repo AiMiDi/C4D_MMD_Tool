@@ -25,6 +25,7 @@ struct DataDescriptionDatabaseInterface::MTable
 	Result<void> (*_DataDescriptionDatabaseInterface_StoreDescription_1) (const Id& category, const LanguageRef& language, const IdAndVersion& dataType, DataDescription& description);
 	Result<void> (*_DataDescriptionDatabaseInterface_DescriptionDefinitionChanged) (const Id& category, const LanguageRef& language, const IdAndVersion& dataType);
 	Result<BaseArray<Tuple<Id, Data, String>>> (*_DataDescriptionDatabaseInterface_GetEffectiveEnumList) (const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, const AssetRepositoryRef& repository, const Data* filterData);
+	Result<BaseArray<Tuple<Id, Data, String>>> (*_DataDescriptionDatabaseInterface_GetEffectiveEnumList_1) (const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, Bool withStrings, const LanguageRef& language, const AssetRepositoryRef& repository, const Data* filterData);
 	Result<void> (*_DataDescriptionDatabaseInterface_PostProcessStringDescription) (DataDescription& description, const BaseArray<DataDictionary>& entries);
 	template <typename IMPL> void Init()
 	{
@@ -34,6 +35,7 @@ struct DataDescriptionDatabaseInterface::MTable
 		_DataDescriptionDatabaseInterface_StoreDescription_1 = &IMPL::_DataDescriptionDatabaseInterface_StoreDescription_1;
 		_DataDescriptionDatabaseInterface_DescriptionDefinitionChanged = &IMPL::_DataDescriptionDatabaseInterface_DescriptionDefinitionChanged;
 		_DataDescriptionDatabaseInterface_GetEffectiveEnumList = &IMPL::_DataDescriptionDatabaseInterface_GetEffectiveEnumList;
+		_DataDescriptionDatabaseInterface_GetEffectiveEnumList_1 = &IMPL::_DataDescriptionDatabaseInterface_GetEffectiveEnumList_1;
 		_DataDescriptionDatabaseInterface_PostProcessStringDescription = &IMPL::_DataDescriptionDatabaseInterface_PostProcessStringDescription;
 	}
 };
@@ -50,6 +52,7 @@ struct DataDescriptionDatabaseInterface::Hxx2
 		static Result<void> _DataDescriptionDatabaseInterface_StoreDescription_1(const Id& category, const LanguageRef& language, const IdAndVersion& dataType, DataDescription& description) { return C::StoreDescription(category, language, dataType, description); }
 		static Result<void> _DataDescriptionDatabaseInterface_DescriptionDefinitionChanged(const Id& category, const LanguageRef& language, const IdAndVersion& dataType) { return C::DescriptionDefinitionChanged(category, language, dataType); }
 		static Result<BaseArray<Tuple<Id, Data, String>>> _DataDescriptionDatabaseInterface_GetEffectiveEnumList(const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, const AssetRepositoryRef& repository, const Data* filterData) { return C::GetEffectiveEnumList(dataEntry, guiEntry, stringDescription, resolveExtensionPointsAndGui, repository, filterData); }
+		static Result<BaseArray<Tuple<Id, Data, String>>> _DataDescriptionDatabaseInterface_GetEffectiveEnumList_1(const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, Bool withStrings, const LanguageRef& language, const AssetRepositoryRef& repository, const Data* filterData) { return C::GetEffectiveEnumList(dataEntry, guiEntry, stringDescription, resolveExtensionPointsAndGui, withStrings, language, repository, filterData); }
 		static Result<void> _DataDescriptionDatabaseInterface_PostProcessStringDescription(DataDescription& description, const BaseArray<DataDictionary>& entries) { return C::PostProcessStringDescription(description, entries); }
 	};
 
@@ -74,9 +77,13 @@ MAXON_ATTRIBUTE_FORCE_INLINE auto DataDescriptionDatabaseInterface::DescriptionD
 {
 	return MTable::_instance._DataDescriptionDatabaseInterface_DescriptionDefinitionChanged(category, language, dataType);
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto DataDescriptionDatabaseInterface::GetEffectiveEnumList(const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, const AssetRepositoryRef& repository, const Data* filterData) -> Result<BaseArray<Tuple<Id, Data, String>>>
+[[deprecated("Use the overload with language parameter.")]] MAXON_ATTRIBUTE_FORCE_INLINE auto DataDescriptionDatabaseInterface::GetEffectiveEnumList(const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, const AssetRepositoryRef& repository, const Data* filterData) -> Result<BaseArray<Tuple<Id, Data, String>>>
 {
 	return MTable::_instance._DataDescriptionDatabaseInterface_GetEffectiveEnumList(dataEntry, guiEntry, stringDescription, resolveExtensionPointsAndGui, repository, filterData);
+}
+MAXON_ATTRIBUTE_FORCE_INLINE auto DataDescriptionDatabaseInterface::GetEffectiveEnumList(const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, Bool withStrings, const LanguageRef& language, const AssetRepositoryRef& repository, const Data* filterData) -> Result<BaseArray<Tuple<Id, Data, String>>>
+{
+	return MTable::_instance._DataDescriptionDatabaseInterface_GetEffectiveEnumList_1(dataEntry, guiEntry, stringDescription, resolveExtensionPointsAndGui, withStrings, language, repository, filterData);
 }
 MAXON_ATTRIBUTE_FORCE_INLINE auto DataDescriptionDatabaseInterface::PostProcessStringDescription(DataDescription& description, const BaseArray<DataDictionary>& entries) -> Result<void>
 {

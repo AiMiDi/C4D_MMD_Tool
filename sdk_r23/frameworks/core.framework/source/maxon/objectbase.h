@@ -316,7 +316,7 @@ public:
 		return _infoOffset;
 	}
 
-	String ToString(const FormatStatement* fs) const
+	String ToString(const FormatStatement* fs = nullptr) const
 	{
 		return String(_sourceName);
 	}
@@ -519,7 +519,7 @@ public:
 		return GetZeroRef<ComponentDescriptor>();
 	}
 
-	String ToString(const FormatStatement* fs) const
+	String ToString(const FormatStatement* fs = nullptr) const
 	{
 		return GetId().ToString(fs);
 	}
@@ -891,7 +891,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result. The representation consists of the class identifier prefixed by "class ".
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD String ToString(const FormatStatement* formatStatement) const;
+	MAXON_METHOD String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Deletes an instance of a class. This is automatically invoked if the reference count of the instance reaches zero.
@@ -1085,7 +1085,7 @@ protected:
 
 namespace details
 {
-	template <typename I, typename = I * (*)()> struct VirtualCreate
+template <typename I, typename = I * (*)()> struct VirtualCreate
 {
 	static inline I* Create()
 	{
@@ -1099,7 +1099,7 @@ namespace details
 	}
 };
 
-	template <typename I> struct VirtualCreate<I, decltype(&I::Create)>
+template <typename I> struct VirtualCreate<I, decltype(&I::Create)>
 {
 	static inline I* Create()
 	{
@@ -1403,7 +1403,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result. By default, this is the name of the class, followed by \@, followed by the hexadecimal memory address of this object.
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD String ToString(const FormatStatement* formatStatement) const;
+	MAXON_METHOD String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Initializes the object. This method is invoked implicitly when a new object is created (after @c InitComponent has been invoked for each component).
@@ -1757,7 +1757,7 @@ protected:
 	//----------------------------------------------------------------------------------------
 	RefMemberType<S> DbgStop()
 	{
-		DebugOutput(OUTPUT::DIAGNOSTIC, static_cast<const typename S::ReferenceClass*>(this)->ToString(nullptr)); DebugStop(); return this->PrivateGetRefMember();
+		DebugOutput(OUTPUT::DIAGNOSTIC, static_cast<const typename S::ReferenceClass*>(this)->ToString()); DebugStop(); return this->PrivateGetRefMember();
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -1772,7 +1772,7 @@ protected:
 	//----------------------------------------------------------------------------------------
 	RefMemberType<S> CritStop()
 	{
-		CriticalOutput(static_cast<const typename S::ReferenceClass*>(this)->ToString(nullptr)); return this->PrivateGetRefMember();
+		CriticalOutput(static_cast<const typename S::ReferenceClass*>(this)->ToString()); return this->PrivateGetRefMember();
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -1787,7 +1787,7 @@ protected:
 	//----------------------------------------------------------------------------------------
 	RefMemberType<S> DiagOutput()
 	{
-		DiagnosticOutput(static_cast<const typename S::ReferenceClass*>(this)->ToString(nullptr)); return this->PrivateGetRefMember();
+		DiagnosticOutput(static_cast<const typename S::ReferenceClass*>(this)->ToString()); return this->PrivateGetRefMember();
 	}
 	);
 
@@ -2035,19 +2035,12 @@ private:
 //----------------------------------------------------------------------------------------
 #define MAXON_COMPONENT(KIND, ...) \
 	public: \
-		PRIVATE_MAXON_COMPONENT_WARN_IF_FRAMEWORK \
 		static const maxon::Class<>& PrivateGetClass(); \
 		static const maxon::ComponentDescriptor _descriptor; \
 		template <typename C> friend class maxon::ComponentWrapper; \
 		PRIVATE_MAXON_COMPONENT_KIND##KIND \
 		PRIVATE_MAXON_COMPONENT_BASES_A(MAXON_VA_ARGS_POPULATED(__VA_ARGS__), __VA_ARGS__) \
 	private:
-
-#ifdef MAXON_API
-	#define PRIVATE_MAXON_COMPONENT_WARN_IF_FRAMEWORK MAXON_WARNING("This component is declared in a framework. Use with caution, the memory layout differs between modules in release and debug configuration.")
-#else
-	#define PRIVATE_MAXON_COMPONENT_WARN_IF_FRAMEWORK
-#endif
 
 #define PRIVATE_MAXON_COMPONENT_KIND
 #define PRIVATE_MAXON_COMPONENT_KINDNORMAL

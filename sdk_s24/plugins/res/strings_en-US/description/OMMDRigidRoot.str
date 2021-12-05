@@ -1,0 +1,15 @@
+STRINGTABLE OMMDRigidRoot
+{
+	OMMDRigidRoot "MMD Rigid Root";
+	RIGID_ROOT_GRP "Setting";
+	RIGID_DISPLAY_TYPE "Display type";
+	RIGID_MODE "Mode";
+	ADD_RIGID_BUTTON "Add rigid body";
+
+	RIGID_DISPLAY_TYPE_OFF "OFF";
+	RIGID_DISPLAY_TYPE_ON "ON";
+	RIGID_DISPLAY_TYPE_WIRE "Wireframe";
+	
+	RIGID_MODE_ANIM "Animation mode";
+	RIGID_MODE_EDIT "Edit mode";
+}

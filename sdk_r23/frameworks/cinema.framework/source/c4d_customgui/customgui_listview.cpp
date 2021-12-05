@@ -223,6 +223,11 @@ Bool TreeViewF::IsSelectable(TreeViewFunctions* pFuncs, void *root, void *userda
 	return pFuncs->IsSelectable(root, userdata, obj);
 }
 
+String TreeViewF::GetNameForEdit(TreeViewFunctions* pFuncs, void* root, void* userdata, void* obj)
+{
+	return pFuncs->GetNameForEdit(root, userdata, obj);
+}
+
 
 // may not be a member of TreeViewCustomGui, an internal copy is created
 InternalFunctionTable TreeViewInternalFunctionTable;
@@ -291,6 +296,7 @@ Bool TreeViewCustomGui::SetRoot(void *root, TreeViewFunctions *functions, void *
 	f->EmptyText					 = &TreeViewF::EmptyText;
 	f->GetBubbleHelp			 = &TreeViewF::GetBubbleHelp;
 	f->IsSelectable				 = &TreeViewF::IsSelectable;
+	f->GetNameForEdit			 = &TreeViewF::GetNameForEdit;
 
 	return (((iTreeViewCustomGui*)this)->*lib->SetRoot)(root, f, userdata, sizeof(InternalFunctionTable), &TreeViewControlFunctions, functions);
 }
@@ -653,6 +659,13 @@ Bool TreeViewFunctions::IsSelectable(void *root, void *userdata, void *obj)
 {
 	return true;
 }
+
+
+String TreeViewFunctions::GetNameForEdit(void* root, void* userdata, void* obj)
+{
+	return GetName(root, userdata, obj);
+}
+
 
 #ifdef CINEWARE_NAMESPACE_ENABLE
 	CINEWARE_NAMESPACE_END

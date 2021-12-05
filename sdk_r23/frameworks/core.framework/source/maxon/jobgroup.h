@@ -320,7 +320,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 protected:
 /// @cond INTERNAL
@@ -592,7 +592,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 };
 
 
@@ -648,7 +648,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return JobGroupInterface::ToString(formatStatement);
 	}
@@ -832,7 +832,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		const StaticJobGroupInterface<T>* self = this->GetPointer();
 		return self ? self->ToString(formatStatement) : String();
@@ -903,12 +903,12 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @cond IGNORE
-	/// Pointer will be aligned to MAXON_CACHE_LINE_SIZE.
+	/// Pointer will be aligned to MAXON_FALSE_SHARING_SIZE.
 	/// @return												Pointer to an internal buffer. Will never be nullptr (points either to memory allocated with the static group or to the buffer specified in the constructor).
 	//----------------------------------------------------------------------------------------
 	void* PrivateGetExtraBuffer() const
 	{
-		return (void*) ((UInt(this->_ptr + this->_capacity) + MAXON_CACHE_LINE_SIZE - 1) & ~(MAXON_CACHE_LINE_SIZE -1));
+		return (void*) ((UInt(this->_ptr + this->_capacity) + MAXON_FALSE_SHARING_SIZE - 1) & ~(MAXON_FALSE_SHARING_SIZE -1));
 	}
 /// @endcond
 };

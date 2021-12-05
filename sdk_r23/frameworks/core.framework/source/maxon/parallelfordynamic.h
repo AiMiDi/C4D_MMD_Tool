@@ -85,12 +85,12 @@ private:
 	DynamicContext();
 
 private:
-	alignas(MAXON_CACHE_LINE_SIZE) AtomicInt _i;
+	alignas(MAXON_FALSE_SHARING_SIZE) AtomicInt _i;
 };
 
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
-template <typename USERCONTEXT, PARALLELFORFLAGS FLAGS, typename INDEXTYPE, typename INIT, typename FINALIZE> struct alignas(MAXON_CACHE_LINE_SIZE) ParallelFor::ForState
+template <typename USERCONTEXT, PARALLELFORFLAGS FLAGS, typename INDEXTYPE, typename INIT, typename FINALIZE> struct alignas(MAXON_FALSE_SHARING_SIZE) ParallelFor::ForState
 {
 	using JobContext = ForAlignedContext<DynamicContext<USERCONTEXT, INDEXTYPE>, INDEXTYPE, INIT, FINALIZE>;
 
@@ -352,7 +352,7 @@ template <typename CONTEXT, typename FROMTYPE, typename INDEXTYPE, typename LOOP
 	{
 		using Worker = DynamicJob<CONTEXT, PARALLELFORFLAGS::NOINIT_NOFINALIZE, INDEXTYPE, LOOP, Dummy, Dummy>;
 		using ForContexts = ForState<CONTEXT, PARALLELFORFLAGS::NOINIT_NOFINALIZE, INDEXTYPE, Dummy, Dummy>;
-		alignas(alignof(Worker)) Char dummy[SIZEOF(Worker) + MAXON_CACHE_LINE_SIZE + SIZEOF(ForContexts) + SIZEOF(typename ForContexts::JobContext)];
+		alignas(alignof(Worker)) Char dummy[SIZEOF(Worker) + MAXON_FALSE_SHARING_SIZE + SIZEOF(ForContexts) + SIZEOF(typename ForContexts::JobContext)];
 		StaticJobGroupRef<Worker> group;
 
 		if (threadCnt != 1)
@@ -434,7 +434,7 @@ template <typename CONTEXT, PARALLELFORFLAGS FLAGS, typename FROMTYPE, typename 
 	{
 		using Worker = DynamicJob<CONTEXT, FLAGS, INDEXTYPE, LOOP, INIT, FINALIZE>;
 		using ForContexts = ForState<CONTEXT, FLAGS, INDEXTYPE, INIT, FINALIZE>;
-		alignas(alignof(Worker)) Char dummy[SIZEOF(Worker) + MAXON_CACHE_LINE_SIZE + SIZEOF(ForContexts) + SIZEOF(typename ForContexts::JobContext)];
+		alignas(alignof(Worker)) Char dummy[SIZEOF(Worker) + MAXON_FALSE_SHARING_SIZE + SIZEOF(ForContexts) + SIZEOF(typename ForContexts::JobContext)];
 		StaticJobGroupRef<Worker> group;
 
 		if (threadCnt != 1)

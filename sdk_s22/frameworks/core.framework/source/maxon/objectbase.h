@@ -1076,7 +1076,7 @@ protected:
 
 namespace details
 {
-	template <typename I, typename = I * (*)()> struct VirtualCreate
+template <typename I, typename = I * (*)()> struct VirtualCreate
 {
 	static inline I* Create()
 	{
@@ -1090,7 +1090,7 @@ namespace details
 	}
 };
 
-	template <typename I> struct VirtualCreate<I, decltype(&I::Create)>
+template <typename I> struct VirtualCreate<I, decltype(&I::Create)>
 {
 	static inline I* Create()
 	{

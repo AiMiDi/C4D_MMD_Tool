@@ -85,7 +85,7 @@ public:
 	/// @param[in] fs									Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD String ToString(const FormatStatement* fs) const;
+	MAXON_METHOD String ToString(const FormatStatement* fs = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Yields all registered members

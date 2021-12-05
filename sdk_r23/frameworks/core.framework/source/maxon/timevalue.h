@@ -339,7 +339,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or an additional formatting instruction. See also @ref format_timer.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the hash code of this object.

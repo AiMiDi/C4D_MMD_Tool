@@ -23,7 +23,7 @@ struct GenericContainerInterface::Hxx1
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<const ContainerDataType<>&>, const ContainerDataType<>&>::type GetContainerType() const;
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<INTERFACES>, INTERFACES>::type GetInterfaces() const;
 		inline Result<GenericContainerInterface*> Clone(Bool cloneElements = true) const;
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement = nullptr) const;
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<HashValue>, HashValue>::type GetHashValue() const;
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<Bool>, Bool>::type IsEqual(const GenericContainerInterface* other, EQUALITY equality) const;
 /// Finds the member index of the member with the given #name in this. If no such member

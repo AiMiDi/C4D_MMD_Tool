@@ -39,8 +39,10 @@ protected:
 	static const UInt32 crc32tab_o80[256];
 	static const UInt32 crc32tab_o88[256];
 
-public:
 	static const UInt32 RESET_VALUE = 0xffffffff;
+
+public:
+	static const UInt32 UNSET_VALUE = 0; ///< Crc is most liekly unset if GetCrc returns UNSET_VALUE.
 
 	/// Constructs the object and resets its state.
 	Crc32C()
@@ -54,7 +56,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	explicit Crc32C(UInt32 u)
 	{
-		_crc = u ^ 0xffffffff;
+		_crc = u ^ RESET_VALUE;
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -63,7 +65,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	UInt32 GetCrc() const
 	{
-		return _crc ^ 0xffffffff;
+		return _crc ^ RESET_VALUE;
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -80,7 +82,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	void Set(UInt32 u)
 	{
-		_crc = u ^ 0xffffffff;
+		_crc = u ^ RESET_VALUE;
 	}
 
 	//----------------------------------------------------------------------------------------

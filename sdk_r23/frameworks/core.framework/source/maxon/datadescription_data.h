@@ -162,7 +162,8 @@ namespace DESCRIPTION
 				RESOURCE_DEFINE(ENUM_PORTBUNDLE, Id("portbundle"))
 				RESOURCE_DEFINE(ENUM_NODE, Id("node"))
 				RESOURCE_DEFINE(ENUM_TEMPLATE, Id("template"))
-				RESOURCE_DEFINE(ENUM_ATTRIBUTE, Id("attribute")));
+				RESOURCE_DEFINE(ENUM_ATTRIBUTE, Id("attribute"))
+				RESOURCE_DEFINE(ENUM_TYPE, Id("type")));
 
 			/// The processor processes a description, for example to create a node from the description and add it to the nodes registry.
 			MAXON_ATTRIBUTE(Id, PROCESSOR, "net.maxon.description.data.info.processor",

@@ -20,7 +20,7 @@ template <typename K> struct RangeSetPair
 		UnitType second;
 	};
 
-	typename SFINAEHelper<String, K>::type ToString(const FormatStatement* fmt) const
+	typename SFINAEHelper<String, K>::type ToString(const FormatStatement* fmt = nullptr) const
 	{
 		return GlobalToString(first, fmt);
 	}
@@ -588,7 +588,7 @@ public:
 		return Erase(range._minValue, range._maxValue);
 	}
 
-	typename SFINAEHelper<String, K>::type ToString(const FormatStatement* fmt) const
+	typename SFINAEHelper<String, K>::type ToString(const FormatStatement* fmt = nullptr) const
 	{
 		return _map.ToString(fmt);
 	}

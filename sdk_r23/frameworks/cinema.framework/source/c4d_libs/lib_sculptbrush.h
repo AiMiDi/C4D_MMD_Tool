@@ -1627,7 +1627,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// If @ref SculptBrushParams::EnableCustomStamp(@formatConstant{true}) and @ref SculptBrushParams::EnableBrushAccess(@formatConstant{true}) are both set then this method is called to allow to change the BaseBitmap used for the next dab.\n
-	/// This method is called before each individual dab is drawn. This allows to randomize the stamp image during a stroke. Simply set the @c @formatParam{pCustom}->pStamp pointer to point to a BaseBitmap that is owned by the brush.
+	/// This method is called before each individual dab is drawn. This allows to randomize the stamp image during a stroke. Simply set the @c pCustom->pStamp pointer to point to a BaseBitmap that is owned by the brush.
 	/// @param[in] strokeInstanceID		The ID of the brush instance.
 	/// @param[in,out] pCustom				The custom data to set the @c pStamp bitmap pointer.
 	/// @return												@trueIfOtherwiseFalse{something changes since the last time it was called}

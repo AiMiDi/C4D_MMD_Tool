@@ -326,7 +326,7 @@ void VertexColorTag::SetAlpha(VertexColorHandle dataptr, Neighbor* nb, const CPo
 
 Float32 VertexColorTag::GetAlpha(ConstVertexColorHandle dataptr, Neighbor* nb, const CPolygon* vadr, Int32 pIndex)
 {
-	Float32 res = 0.0;
+	Float32 res = 0.0f;
 
 	if (!nb || !vadr) // per vertex mode
 	{
@@ -349,7 +349,7 @@ Float32 VertexColorTag::GetAlpha(ConstVertexColorHandle dataptr, Neighbor* nb, c
 		res += temp.a;
 	}
 	if (faceCount > 0)
-		res /= faceCount;
+		res /= Float32(faceCount);
 
 	return res;
 }

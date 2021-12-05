@@ -31,17 +31,19 @@ class SSLInterface
 public:
 	static MAXON_METHOD ERR_STATE* ERR_get_state();
 	static MAXON_METHOD void ERR_clear_error();
-	static MAXON_METHOD void ADD_thread_state();
-	static MAXON_METHOD void SSL_load_error_strings();
-	static MAXON_METHOD int SSL_library_init();
+	[[deprecated("don't use")]] static MAXON_METHOD void ADD_thread_state();
+	[[deprecated("don't use")]] static MAXON_METHOD void SSL_load_error_strings();
+	[[deprecated("don't use")]] static MAXON_METHOD int SSL_library_init();
+	static MAXON_METHOD int OPENSSL_init_ssl();
 	static MAXON_METHOD SSL_CTX* SSL_CTX_new(const SSL_METHOD* meth);
 //	static MAXON_METHOD const SSL_METHOD* SSLv23_client_method();
-	static MAXON_METHOD const SSL_METHOD* TLSv1_method();		/* TLSv1.0 */
-	static MAXON_METHOD const SSL_METHOD* TLSv1_1_method();		/* TLSv1.1 */
-	static MAXON_METHOD const SSL_METHOD* TLSv1_2_method();		/* TLSv1.2 */
-	static MAXON_METHOD const SSL_METHOD* SSLv3_method();		/* SSLv3 */
-	static MAXON_METHOD const SSL_METHOD* SSLv2_method();		/* SSLv2 */
-	static MAXON_METHOD const SSL_METHOD* SSLv23_method();	/* SSLv3 but can rollback to v2 */
+	[[deprecated("don't use")]] static MAXON_METHOD const SSL_METHOD* TLSv1_method();		/* TLSv1.0 */
+	[[deprecated("don't use")]] static MAXON_METHOD const SSL_METHOD* TLSv1_1_method();		/* TLSv1.1 */
+	[[deprecated("don't use")]] static MAXON_METHOD const SSL_METHOD* TLSv1_2_method();		/* TLSv1.2 */
+	[[deprecated("don't use")]] static MAXON_METHOD const SSL_METHOD* SSLv3_method();		/* SSLv3 */
+	[[deprecated("don't use")]] static MAXON_METHOD const SSL_METHOD* SSLv2_method();		/* SSLv2 */
+	[[deprecated("don't use")]] static MAXON_METHOD const SSL_METHOD* SSLv23_method();	/* SSLv3 but can rollback to v2 */
+	static MAXON_METHOD const SSL_METHOD* TLS_method();
 	static MAXON_METHOD SSL* SSL_new(SSL_CTX* ctx);
 	static MAXON_METHOD String ERR_get_error_string();
 	static MAXON_METHOD unsigned long ERR_get_error();

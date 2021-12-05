@@ -1,1 +1,1 @@
-maxon.CommandObserverInterface	"net.maxon.command.interface.observer"	D:\C4DSDK\sdk_r23\frameworks\command.framework\source\maxon\commandobservable.h(22,7)	ObserverObjectInterface	ObservableCommandInvoked,ObservableCommandStatus	
+maxon.CommandObserverInterface	"net.maxon.command.interface.observer"	D:\C4DSDK\C4D_MMDTool\sdk_r23\frameworks\command.framework\source\maxon\commandobservable.h(22,7)	ObserverObjectInterface	ObservableCommandInvoked,ObservableCommandStatus	

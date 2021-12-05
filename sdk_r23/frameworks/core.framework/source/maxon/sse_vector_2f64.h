@@ -797,7 +797,6 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Shuffles the components of the input vectors. Note that the template arguments must be numeric constants and be either 0 or 1.
 	/// @param[in] a									Input vector A.
-	/// @param[in] b									Input vector B.
 	/// @tparam ma1										Decides which element of vector A becomes the new R0.
 	/// @tparam mb1										Decides which element of vector B becomes the new R0.
 	/// @return												A vector consisting of R0=A[ma1], R1=B[mb1]
@@ -1016,7 +1015,6 @@ protected:
 	//----------------------------------------------------------------------------------------
 	/// Shuffles the components of the input vectors. Note that the template arguments must be numeric constants and be either 0 or 1.
 	/// @param[in] a									Input vector A.
-	/// @param[in] b									Input vector B.
 	/// @tparam ma1										Decides which element of vector A becomes the new R0.
 	/// @tparam mb1										Decides which element of vector B becomes the new R0.
 	/// @return												A vector consisting of R0=A[ma1], R1=B[mb1]

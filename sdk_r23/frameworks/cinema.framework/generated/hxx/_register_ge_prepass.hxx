@@ -1542,7 +1542,7 @@ namespace enum3381 { enum class USERAREAFLAGS
 	TABSTOP			= (1 << 0),			///< Tab stop.
 	HANDLEFOCUS	= (1 << 1),			///< Handles focus.
 	COREMESSAGE	= (1 << 2),			///< Receives core messages.
-															///< @see The article @link page_core_messages Core Messages@endlink.
+															///< @see The article @link page_manual_coremessages Core Messages@endlink.
 	SYNCMESSAGE	= (1 << 3),			///< Receives sync messages.
 	DONT_MIRROR	= (1 << 30)			///< Do not mirror the user area.
 } ; }
@@ -1952,17 +1952,18 @@ maxon::String PrivateToString_MODELINGCOMMANDMODE4044(std::underlying_type<enum4
 	const maxon::UInt64 values[] = {(maxon::UInt64) enum4044::MODELINGCOMMANDMODE::ALL, (maxon::UInt64) enum4044::MODELINGCOMMANDMODE::POINTSELECTION, (maxon::UInt64) enum4044::MODELINGCOMMANDMODE::POLYGONSELECTION, (maxon::UInt64) enum4044::MODELINGCOMMANDMODE::EDGESELECTION};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "MODELINGCOMMANDMODE", SIZEOF(x), false, values, "ALL\0POINTSELECTION\0POLYGONSELECTION\0EDGESELECTION\0", fmt);
 }
-namespace enum4054 { enum class MODELINGCOMMANDFLAGS
+namespace enum4055 { enum class MODELINGCOMMANDFLAGS
 {
 	NONE				= 0,						///< None.
-	CREATEUNDO	= (1 << 0)			///< Creates undo and inserts newly created objects into ModelingCommandData::doc, instead of returning in ModelingCommandData::result.
+	CREATEUNDO	= (1 << 0),			///< Creates undo and inserts newly created objects into ModelingCommandData::doc, instead of returning in ModelingCommandData::result.
+	IMPORTER		= (1 << 0)			///< Can be used by importer plugins to avoid additional checks for polygon meshes (e.g conversion of posemorph tags).
 } ; }
-maxon::String PrivateToString_MODELINGCOMMANDFLAGS4054(std::underlying_type<enum4054::MODELINGCOMMANDFLAGS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_MODELINGCOMMANDFLAGS4055(std::underlying_type<enum4055::MODELINGCOMMANDFLAGS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4054::MODELINGCOMMANDFLAGS::NONE, (maxon::UInt64) enum4054::MODELINGCOMMANDFLAGS::CREATEUNDO};
-	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "MODELINGCOMMANDFLAGS", SIZEOF(x), true, values, "NONE\0CREATEUNDO\0", fmt);
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4055::MODELINGCOMMANDFLAGS::NONE, (maxon::UInt64) enum4055::MODELINGCOMMANDFLAGS::CREATEUNDO, (maxon::UInt64) enum4055::MODELINGCOMMANDFLAGS::IMPORTER};
+	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "MODELINGCOMMANDFLAGS", SIZEOF(x), true, values, "NONE\0CREATEUNDO\0IMPORTER\0", fmt);
 }
-namespace enum4090 { enum class PLUGINTYPE
+namespace enum4091 { enum class PLUGINTYPE
 {
 	ANY									=  0,			///< Any type.
 
@@ -1993,23 +1994,23 @@ namespace enum4090 { enum class PLUGINTYPE
 	SNAP								= 36,			///< Snap. (SnapData)
 	FIELDLAYER					= 37			///< FieldLayer. (FieldLayer)
 } ; }
-maxon::String PrivateToString_PLUGINTYPE4090(std::underlying_type<enum4090::PLUGINTYPE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_PLUGINTYPE4091(std::underlying_type<enum4091::PLUGINTYPE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4090::PLUGINTYPE::ANY, (maxon::UInt64) enum4090::PLUGINTYPE::SHADER, (maxon::UInt64) enum4090::PLUGINTYPE::MATERIAL, (maxon::UInt64) enum4090::PLUGINTYPE::COMMAND, (maxon::UInt64) enum4090::PLUGINTYPE::OBJECT, (maxon::UInt64) enum4090::PLUGINTYPE::TAG, (maxon::UInt64) enum4090::PLUGINTYPE::BITMAPFILTER, (maxon::UInt64) enum4090::PLUGINTYPE::VIDEOPOST, (maxon::UInt64) enum4090::PLUGINTYPE::TOOL, (maxon::UInt64) enum4090::PLUGINTYPE::SCENEHOOK, (maxon::UInt64) enum4090::PLUGINTYPE::NODE, (maxon::UInt64) enum4090::PLUGINTYPE::LIBRARY, (maxon::UInt64) enum4090::PLUGINTYPE::BITMAPLOADER, (maxon::UInt64) enum4090::PLUGINTYPE::BITMAPSAVER, (maxon::UInt64) enum4090::PLUGINTYPE::SCENELOADER, (maxon::UInt64) enum4090::PLUGINTYPE::SCENESAVER, (maxon::UInt64) enum4090::PLUGINTYPE::COREMESSAGE, (maxon::UInt64) enum4090::PLUGINTYPE::CUSTOMGUI, (maxon::UInt64) enum4090::PLUGINTYPE::CUSTOMDATATYPE, (maxon::UInt64) enum4090::PLUGINTYPE::RESOURCEDATATYPE, (maxon::UInt64) enum4090::PLUGINTYPE::MANAGERINFORMATION, (maxon::UInt64) enum4090::PLUGINTYPE::CTRACK, (maxon::UInt64) enum4090::PLUGINTYPE::FALLOFF, (maxon::UInt64) enum4090::PLUGINTYPE::VMAPTRANSFER, (maxon::UInt64) enum4090::PLUGINTYPE::PREFS, (maxon::UInt64) enum4090::PLUGINTYPE::SNAP, (maxon::UInt64) enum4090::PLUGINTYPE::FIELDLAYER};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4091::PLUGINTYPE::ANY, (maxon::UInt64) enum4091::PLUGINTYPE::SHADER, (maxon::UInt64) enum4091::PLUGINTYPE::MATERIAL, (maxon::UInt64) enum4091::PLUGINTYPE::COMMAND, (maxon::UInt64) enum4091::PLUGINTYPE::OBJECT, (maxon::UInt64) enum4091::PLUGINTYPE::TAG, (maxon::UInt64) enum4091::PLUGINTYPE::BITMAPFILTER, (maxon::UInt64) enum4091::PLUGINTYPE::VIDEOPOST, (maxon::UInt64) enum4091::PLUGINTYPE::TOOL, (maxon::UInt64) enum4091::PLUGINTYPE::SCENEHOOK, (maxon::UInt64) enum4091::PLUGINTYPE::NODE, (maxon::UInt64) enum4091::PLUGINTYPE::LIBRARY, (maxon::UInt64) enum4091::PLUGINTYPE::BITMAPLOADER, (maxon::UInt64) enum4091::PLUGINTYPE::BITMAPSAVER, (maxon::UInt64) enum4091::PLUGINTYPE::SCENELOADER, (maxon::UInt64) enum4091::PLUGINTYPE::SCENESAVER, (maxon::UInt64) enum4091::PLUGINTYPE::COREMESSAGE, (maxon::UInt64) enum4091::PLUGINTYPE::CUSTOMGUI, (maxon::UInt64) enum4091::PLUGINTYPE::CUSTOMDATATYPE, (maxon::UInt64) enum4091::PLUGINTYPE::RESOURCEDATATYPE, (maxon::UInt64) enum4091::PLUGINTYPE::MANAGERINFORMATION, (maxon::UInt64) enum4091::PLUGINTYPE::CTRACK, (maxon::UInt64) enum4091::PLUGINTYPE::FALLOFF, (maxon::UInt64) enum4091::PLUGINTYPE::VMAPTRANSFER, (maxon::UInt64) enum4091::PLUGINTYPE::PREFS, (maxon::UInt64) enum4091::PLUGINTYPE::SNAP, (maxon::UInt64) enum4091::PLUGINTYPE::FIELDLAYER};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "PLUGINTYPE", SIZEOF(x), false, values, "ANY\0SHADER\0MATERIAL\0COMMAND\0OBJECT\0TAG\0BITMAPFILTER\0VIDEOPOST\0TOOL\0SCENEHOOK\0NODE\0LIBRARY\0BITMAPLOADER\0BITMAPSAVER\0SCENELOADER\0SCENESAVER\0COREMESSAGE\0CUSTOMGUI\0CUSTOMDATATYPE\0RESOURCEDATATYPE\0MANAGERINFORMATION\0CTRACK\0FALLOFF\0VMAPTRANSFER\0PREFS\0SNAP\0FIELDLAYER\0", fmt);
 }
-namespace enum4101 { enum class DRAWRESULT
+namespace enum4102 { enum class DRAWRESULT
 {
 	FAILURE	= 0,			///< There was an error while drawing.
 	OK			= 1,			///< Something was drawn.
 	SKIP		= 2				///< There was nothing to draw in this pass.
 } ; }
-maxon::String PrivateToString_DRAWRESULT4101(std::underlying_type<enum4101::DRAWRESULT>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_DRAWRESULT4102(std::underlying_type<enum4102::DRAWRESULT>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4101::DRAWRESULT::FAILURE, (maxon::UInt64) enum4101::DRAWRESULT::OK, (maxon::UInt64) enum4101::DRAWRESULT::SKIP};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4102::DRAWRESULT::FAILURE, (maxon::UInt64) enum4102::DRAWRESULT::OK, (maxon::UInt64) enum4102::DRAWRESULT::SKIP};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "DRAWRESULT", SIZEOF(x), false, values, "FAILURE\0OK\0SKIP\0", fmt);
 }
-namespace enum4134 { enum class DISPLAYMODE
+namespace enum4135 { enum class DISPLAYMODE
 {
 	UNKNOWN					= -1,			///< Unknown.
 	GOURAUD					= 0,			///< Gouraud shading.
@@ -2037,12 +2038,12 @@ namespace enum4134 { enum class DISPLAYMODE
 	PRIVATE_FLAT		= 1100,			///< @markPrivate
 	PRIVATE_HIDDEN	= 1400			///< @markPrivate
 } ; }
-maxon::String PrivateToString_DISPLAYMODE4134(std::underlying_type<enum4134::DISPLAYMODE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_DISPLAYMODE4135(std::underlying_type<enum4135::DISPLAYMODE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4134::DISPLAYMODE::UNKNOWN, (maxon::UInt64) enum4134::DISPLAYMODE::GOURAUD, (maxon::UInt64) enum4134::DISPLAYMODE::QUICK, (maxon::UInt64) enum4134::DISPLAYMODE::WIRE, (maxon::UInt64) enum4134::DISPLAYMODE::ISOPARM, (maxon::UInt64) enum4134::DISPLAYMODE::SHADEDBOX, (maxon::UInt64) enum4134::DISPLAYMODE::BOX, (maxon::UInt64) enum4134::DISPLAYMODE::SKELETON, (maxon::UInt64) enum4134::DISPLAYMODE::GOURAUDWIRE, (maxon::UInt64) enum4134::DISPLAYMODE::GOURAUDISOPARM, (maxon::UInt64) enum4134::DISPLAYMODE::QUICKWIRE, (maxon::UInt64) enum4134::DISPLAYMODE::QUICKISOPARM, (maxon::UInt64) enum4134::DISPLAYMODE::FLATWIRE, (maxon::UInt64) enum4134::DISPLAYMODE::FLATISOPARM, (maxon::UInt64) enum4134::DISPLAYMODE::FLATBOX, (maxon::UInt64) enum4134::DISPLAYMODE::HIDDENWIRE, (maxon::UInt64) enum4134::DISPLAYMODE::HIDDENISOPARM, (maxon::UInt64) enum4134::DISPLAYMODE::HIDDENBOX, (maxon::UInt64) enum4134::DISPLAYMODE::SHADEDBOXWIRE, (maxon::UInt64) enum4134::DISPLAYMODE::QUICKBOXWIRE, (maxon::UInt64) enum4134::DISPLAYMODE::QUICKBOX, (maxon::UInt64) enum4134::DISPLAYMODE::PRIVATE_ISOLINE, (maxon::UInt64) enum4134::DISPLAYMODE::PRIVATE_FLAT, (maxon::UInt64) enum4134::DISPLAYMODE::PRIVATE_HIDDEN};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4135::DISPLAYMODE::UNKNOWN, (maxon::UInt64) enum4135::DISPLAYMODE::GOURAUD, (maxon::UInt64) enum4135::DISPLAYMODE::QUICK, (maxon::UInt64) enum4135::DISPLAYMODE::WIRE, (maxon::UInt64) enum4135::DISPLAYMODE::ISOPARM, (maxon::UInt64) enum4135::DISPLAYMODE::SHADEDBOX, (maxon::UInt64) enum4135::DISPLAYMODE::BOX, (maxon::UInt64) enum4135::DISPLAYMODE::SKELETON, (maxon::UInt64) enum4135::DISPLAYMODE::GOURAUDWIRE, (maxon::UInt64) enum4135::DISPLAYMODE::GOURAUDISOPARM, (maxon::UInt64) enum4135::DISPLAYMODE::QUICKWIRE, (maxon::UInt64) enum4135::DISPLAYMODE::QUICKISOPARM, (maxon::UInt64) enum4135::DISPLAYMODE::FLATWIRE, (maxon::UInt64) enum4135::DISPLAYMODE::FLATISOPARM, (maxon::UInt64) enum4135::DISPLAYMODE::FLATBOX, (maxon::UInt64) enum4135::DISPLAYMODE::HIDDENWIRE, (maxon::UInt64) enum4135::DISPLAYMODE::HIDDENISOPARM, (maxon::UInt64) enum4135::DISPLAYMODE::HIDDENBOX, (maxon::UInt64) enum4135::DISPLAYMODE::SHADEDBOXWIRE, (maxon::UInt64) enum4135::DISPLAYMODE::QUICKBOXWIRE, (maxon::UInt64) enum4135::DISPLAYMODE::QUICKBOX, (maxon::UInt64) enum4135::DISPLAYMODE::PRIVATE_ISOLINE, (maxon::UInt64) enum4135::DISPLAYMODE::PRIVATE_FLAT, (maxon::UInt64) enum4135::DISPLAYMODE::PRIVATE_HIDDEN};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "DISPLAYMODE", SIZEOF(x), false, values, "UNKNOWN\0GOURAUD\0QUICK\0WIRE\0ISOPARM\0SHADEDBOX\0BOX\0SKELETON\0GOURAUDWIRE\0GOURAUDISOPARM\0QUICKWIRE\0QUICKISOPARM\0FLATWIRE\0FLATISOPARM\0FLATBOX\0HIDDENWIRE\0HIDDENISOPARM\0HIDDENBOX\0SHADEDBOXWIRE\0QUICKBOXWIRE\0QUICKBOX\0PRIVATE_ISOLINE\0PRIVATE_FLAT\0PRIVATE_HIDDEN\0", fmt);
 }
-namespace enum4150 { enum class DOCUMENTSETTINGS
+namespace enum4151 { enum class DOCUMENTSETTINGS
 {
 	GENERAL					= 0,			///< General settings.
 	MODELING				= 1,			///< Modeler settings. (See @ref MDATA options.)
@@ -2050,12 +2051,12 @@ namespace enum4150 { enum class DOCUMENTSETTINGS
 	ANIMATIONSYSTEM	= 7,			///< Timeline settings. @markPrivate
 	TOOLS						= 8				///< Tools settings.
 } ; }
-maxon::String PrivateToString_DOCUMENTSETTINGS4150(std::underlying_type<enum4150::DOCUMENTSETTINGS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_DOCUMENTSETTINGS4151(std::underlying_type<enum4151::DOCUMENTSETTINGS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4150::DOCUMENTSETTINGS::GENERAL, (maxon::UInt64) enum4150::DOCUMENTSETTINGS::MODELING, (maxon::UInt64) enum4150::DOCUMENTSETTINGS::DOCUMENT, (maxon::UInt64) enum4150::DOCUMENTSETTINGS::ANIMATIONSYSTEM, (maxon::UInt64) enum4150::DOCUMENTSETTINGS::TOOLS};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4151::DOCUMENTSETTINGS::GENERAL, (maxon::UInt64) enum4151::DOCUMENTSETTINGS::MODELING, (maxon::UInt64) enum4151::DOCUMENTSETTINGS::DOCUMENT, (maxon::UInt64) enum4151::DOCUMENTSETTINGS::ANIMATIONSYSTEM, (maxon::UInt64) enum4151::DOCUMENTSETTINGS::TOOLS};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "DOCUMENTSETTINGS", SIZEOF(x), false, values, "GENERAL\0MODELING\0DOCUMENT\0ANIMATIONSYSTEM\0TOOLS\0", fmt);
 }
-namespace enum4175 { enum class VERSIONTYPE
+namespace enum4176 { enum class VERSIONTYPE
 {
 	UNKNOWN						= 0,			///< Unknown version.
 
@@ -2075,12 +2076,12 @@ namespace enum4175 { enum class VERSIONTYPE
 	CPYTHON						= 14,			///< Python - The python executable. Runs without UI.
 	CPYTHON3					= 15			///< Python 3 - The python executable. Runs without UI.
 } ; }
-maxon::String PrivateToString_VERSIONTYPE4175(std::underlying_type<enum4175::VERSIONTYPE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_VERSIONTYPE4176(std::underlying_type<enum4176::VERSIONTYPE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4175::VERSIONTYPE::UNKNOWN, (maxon::UInt64) enum4175::VERSIONTYPE::LITE, (maxon::UInt64) enum4175::VERSIONTYPE::BENCHMARK, (maxon::UInt64) enum4175::VERSIONTYPE::UPDATER, (maxon::UInt64) enum4175::VERSIONTYPE::TEAMRENDER_CLIENT, (maxon::UInt64) enum4175::VERSIONTYPE::TEAMRENDER_SERVER, (maxon::UInt64) enum4175::VERSIONTYPE::CINEMA4D, (maxon::UInt64) enum4175::VERSIONTYPE::COMMANDLINE, (maxon::UInt64) enum4175::VERSIONTYPE::CINEWARE, (maxon::UInt64) enum4175::VERSIONTYPE::CPYTHON, (maxon::UInt64) enum4175::VERSIONTYPE::CPYTHON3};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4176::VERSIONTYPE::UNKNOWN, (maxon::UInt64) enum4176::VERSIONTYPE::LITE, (maxon::UInt64) enum4176::VERSIONTYPE::BENCHMARK, (maxon::UInt64) enum4176::VERSIONTYPE::UPDATER, (maxon::UInt64) enum4176::VERSIONTYPE::TEAMRENDER_CLIENT, (maxon::UInt64) enum4176::VERSIONTYPE::TEAMRENDER_SERVER, (maxon::UInt64) enum4176::VERSIONTYPE::CINEMA4D, (maxon::UInt64) enum4176::VERSIONTYPE::COMMANDLINE, (maxon::UInt64) enum4176::VERSIONTYPE::CINEWARE, (maxon::UInt64) enum4176::VERSIONTYPE::CPYTHON, (maxon::UInt64) enum4176::VERSIONTYPE::CPYTHON3};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VERSIONTYPE", SIZEOF(x), false, values, "UNKNOWN\0LITE\0BENCHMARK\0UPDATER\0TEAMRENDER_CLIENT\0TEAMRENDER_SERVER\0CINEMA4D\0COMMANDLINE\0CINEWARE\0CPYTHON\0CPYTHON3\0", fmt);
 }
-namespace enum4188 { enum class LAYERSETMODE
+namespace enum4189 { enum class LAYERSETMODE
 {
 	LAYERS,					///< Layers / layer Sets.
 	LAYERMASKS,			///< Layer masks.
@@ -2088,12 +2089,12 @@ namespace enum4188 { enum class LAYERSETMODE
 	LAYERALPHA,			///< Layer alpha.
 	DISABLED				///< Disabled.
 } ; }
-maxon::String PrivateToString_LAYERSETMODE4188(std::underlying_type<enum4188::LAYERSETMODE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_LAYERSETMODE4189(std::underlying_type<enum4189::LAYERSETMODE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4188::LAYERSETMODE::LAYERS, (maxon::UInt64) enum4188::LAYERSETMODE::LAYERMASKS, (maxon::UInt64) enum4188::LAYERSETMODE::ALPHAS, (maxon::UInt64) enum4188::LAYERSETMODE::LAYERALPHA, (maxon::UInt64) enum4188::LAYERSETMODE::DISABLED};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4189::LAYERSETMODE::LAYERS, (maxon::UInt64) enum4189::LAYERSETMODE::LAYERMASKS, (maxon::UInt64) enum4189::LAYERSETMODE::ALPHAS, (maxon::UInt64) enum4189::LAYERSETMODE::LAYERALPHA, (maxon::UInt64) enum4189::LAYERSETMODE::DISABLED};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "LAYERSETMODE", SIZEOF(x), false, values, "LAYERS\0LAYERMASKS\0ALPHAS\0LAYERALPHA\0DISABLED\0", fmt);
 }
-namespace enum4235 { enum class OBJECTCATEGORY
+namespace enum4236 { enum class OBJECTCATEGORY
 {
 	NULLOBJECT					= 0,
 	POLYGON							= 1,
@@ -2130,12 +2131,12 @@ namespace enum4235 { enum class OBJECTCATEGORY
 	HAIR								= 32,
 	FIELD								= 33
 } ; }
-maxon::String PrivateToString_OBJECTCATEGORY4235(std::underlying_type<enum4235::OBJECTCATEGORY>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_OBJECTCATEGORY4236(std::underlying_type<enum4236::OBJECTCATEGORY>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4235::OBJECTCATEGORY::NULLOBJECT, (maxon::UInt64) enum4235::OBJECTCATEGORY::POLYGON, (maxon::UInt64) enum4235::OBJECTCATEGORY::SPLINE, (maxon::UInt64) enum4235::OBJECTCATEGORY::GENERATOR, (maxon::UInt64) enum4235::OBJECTCATEGORY::HYPERNURBS, (maxon::UInt64) enum4235::OBJECTCATEGORY::UNUSED1, (maxon::UInt64) enum4235::OBJECTCATEGORY::DEFORMER, (maxon::UInt64) enum4235::OBJECTCATEGORY::CAMERA, (maxon::UInt64) enum4235::OBJECTCATEGORY::LIGHT, (maxon::UInt64) enum4235::OBJECTCATEGORY::SCENE, (maxon::UInt64) enum4235::OBJECTCATEGORY::PARTICLE, (maxon::UInt64) enum4235::OBJECTCATEGORY::OTHER, (maxon::UInt64) enum4235::OBJECTCATEGORY::UNUSED2, (maxon::UInt64) enum4235::OBJECTCATEGORY::GRID, (maxon::UInt64) enum4235::OBJECTCATEGORY::HORIZON, (maxon::UInt64) enum4235::OBJECTCATEGORY::WORLDAXIS, (maxon::UInt64) enum4235::OBJECTCATEGORY::BOUNDS, (maxon::UInt64) enum4235::OBJECTCATEGORY::HUD, (maxon::UInt64) enum4235::OBJECTCATEGORY::SDS, (maxon::UInt64) enum4235::OBJECTCATEGORY::HIGHLIGHTING, (maxon::UInt64) enum4235::OBJECTCATEGORY::MULTIAXIS, (maxon::UInt64) enum4235::OBJECTCATEGORY::OBJECTHANDLES, (maxon::UInt64) enum4235::OBJECTCATEGORY::HANDLEBANDS, (maxon::UInt64) enum4235::OBJECTCATEGORY::SDSCAGE, (maxon::UInt64) enum4235::OBJECTCATEGORY::NGONLINES, (maxon::UInt64) enum4235::OBJECTCATEGORY::JOINT, (maxon::UInt64) enum4235::OBJECTCATEGORY::OBJECTHIGHLIGHTING, (maxon::UInt64) enum4235::OBJECTCATEGORY::GUIDELINES, (maxon::UInt64) enum4235::OBJECTCATEGORY::POI, (maxon::UInt64) enum4235::OBJECTCATEGORY::GRADIENT, (maxon::UInt64) enum4235::OBJECTCATEGORY::BASEGRID, (maxon::UInt64) enum4235::OBJECTCATEGORY::HANDLES, (maxon::UInt64) enum4235::OBJECTCATEGORY::HAIR, (maxon::UInt64) enum4235::OBJECTCATEGORY::FIELD};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4236::OBJECTCATEGORY::NULLOBJECT, (maxon::UInt64) enum4236::OBJECTCATEGORY::POLYGON, (maxon::UInt64) enum4236::OBJECTCATEGORY::SPLINE, (maxon::UInt64) enum4236::OBJECTCATEGORY::GENERATOR, (maxon::UInt64) enum4236::OBJECTCATEGORY::HYPERNURBS, (maxon::UInt64) enum4236::OBJECTCATEGORY::UNUSED1, (maxon::UInt64) enum4236::OBJECTCATEGORY::DEFORMER, (maxon::UInt64) enum4236::OBJECTCATEGORY::CAMERA, (maxon::UInt64) enum4236::OBJECTCATEGORY::LIGHT, (maxon::UInt64) enum4236::OBJECTCATEGORY::SCENE, (maxon::UInt64) enum4236::OBJECTCATEGORY::PARTICLE, (maxon::UInt64) enum4236::OBJECTCATEGORY::OTHER, (maxon::UInt64) enum4236::OBJECTCATEGORY::UNUSED2, (maxon::UInt64) enum4236::OBJECTCATEGORY::GRID, (maxon::UInt64) enum4236::OBJECTCATEGORY::HORIZON, (maxon::UInt64) enum4236::OBJECTCATEGORY::WORLDAXIS, (maxon::UInt64) enum4236::OBJECTCATEGORY::BOUNDS, (maxon::UInt64) enum4236::OBJECTCATEGORY::HUD, (maxon::UInt64) enum4236::OBJECTCATEGORY::SDS, (maxon::UInt64) enum4236::OBJECTCATEGORY::HIGHLIGHTING, (maxon::UInt64) enum4236::OBJECTCATEGORY::MULTIAXIS, (maxon::UInt64) enum4236::OBJECTCATEGORY::OBJECTHANDLES, (maxon::UInt64) enum4236::OBJECTCATEGORY::HANDLEBANDS, (maxon::UInt64) enum4236::OBJECTCATEGORY::SDSCAGE, (maxon::UInt64) enum4236::OBJECTCATEGORY::NGONLINES, (maxon::UInt64) enum4236::OBJECTCATEGORY::JOINT, (maxon::UInt64) enum4236::OBJECTCATEGORY::OBJECTHIGHLIGHTING, (maxon::UInt64) enum4236::OBJECTCATEGORY::GUIDELINES, (maxon::UInt64) enum4236::OBJECTCATEGORY::POI, (maxon::UInt64) enum4236::OBJECTCATEGORY::GRADIENT, (maxon::UInt64) enum4236::OBJECTCATEGORY::BASEGRID, (maxon::UInt64) enum4236::OBJECTCATEGORY::HANDLES, (maxon::UInt64) enum4236::OBJECTCATEGORY::HAIR, (maxon::UInt64) enum4236::OBJECTCATEGORY::FIELD};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "OBJECTCATEGORY", SIZEOF(x), false, values, "NULLOBJECT\0POLYGON\0SPLINE\0GENERATOR\0HYPERNURBS\0UNUSED1\0DEFORMER\0CAMERA\0LIGHT\0SCENE\0PARTICLE\0OTHER\0UNUSED2\0GRID\0HORIZON\0WORLDAXIS\0BOUNDS\0HUD\0SDS\0HIGHLIGHTING\0MULTIAXIS\0OBJECTHANDLES\0HANDLEBANDS\0SDSCAGE\0NGONLINES\0JOINT\0OBJECTHIGHLIGHTING\0GUIDELINES\0POI\0GRADIENT\0BASEGRID\0HANDLES\0HAIR\0FIELD\0", fmt);
 }
-namespace enum4256 { enum class SELECTIONFILTERBIT
+namespace enum4257 { enum class SELECTIONFILTERBIT
 {
 	NONE				= 0,																					///< None.
 	NULLOBJECT	= (1 << Int32(OBJECTCATEGORY::NULLOBJECT)),		///< Null.
@@ -2151,12 +2152,12 @@ namespace enum4256 { enum class SELECTIONFILTERBIT
 	OTHER				= (1 << Int32(OBJECTCATEGORY::OTHER)),				///< Other.
 	JOINT				= (1 << Int32(OBJECTCATEGORY::JOINT))					///< Joint.
 } ; }
-maxon::String PrivateToString_SELECTIONFILTERBIT4256(std::underlying_type<enum4256::SELECTIONFILTERBIT>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_SELECTIONFILTERBIT4257(std::underlying_type<enum4257::SELECTIONFILTERBIT>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4256::SELECTIONFILTERBIT::NONE, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::NULLOBJECT, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::POLYGON, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::SPLINE, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::GENERATOR, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::HYPERNURBS, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::DEFORMER, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::CAMERA, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::LIGHT, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::SCENE, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::PARTICLE, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::OTHER, (maxon::UInt64) enum4256::SELECTIONFILTERBIT::JOINT};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4257::SELECTIONFILTERBIT::NONE, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::NULLOBJECT, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::POLYGON, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::SPLINE, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::GENERATOR, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::HYPERNURBS, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::DEFORMER, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::CAMERA, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::LIGHT, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::SCENE, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::PARTICLE, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::OTHER, (maxon::UInt64) enum4257::SELECTIONFILTERBIT::JOINT};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SELECTIONFILTERBIT", SIZEOF(x), true, values, "NONE\0NULLOBJECT\0POLYGON\0SPLINE\0GENERATOR\0HYPERNURBS\0DEFORMER\0CAMERA\0LIGHT\0SCENE\0PARTICLE\0OTHER\0JOINT\0", fmt);
 }
-namespace enum4270 { enum class OBJECTSTATE
+namespace enum4271 { enum class OBJECTSTATE
 {
 	EDITOR							= 0,		///< Editor visibility.
 	RENDER							= 1,		///< Renderer visibility.
@@ -2165,12 +2166,12 @@ namespace enum4270 { enum class OBJECTSTATE
 	EDITOR_HIERARCHICAL = 4,		///< Hierarchical editor mode (MODE_ON, MODE_OFF)
 	RENDER_HIERARCHICAL	= 5,		///< Hierarchical render mode (MODE_ON, MODE_OFF)
 } ; }
-maxon::String PrivateToString_OBJECTSTATE4270(std::underlying_type<enum4270::OBJECTSTATE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_OBJECTSTATE4271(std::underlying_type<enum4271::OBJECTSTATE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4270::OBJECTSTATE::EDITOR, (maxon::UInt64) enum4270::OBJECTSTATE::RENDER, (maxon::UInt64) enum4270::OBJECTSTATE::DEFORM, (maxon::UInt64) enum4270::OBJECTSTATE::REAL_DEFORM, (maxon::UInt64) enum4270::OBJECTSTATE::EDITOR_HIERARCHICAL, (maxon::UInt64) enum4270::OBJECTSTATE::RENDER_HIERARCHICAL};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4271::OBJECTSTATE::EDITOR, (maxon::UInt64) enum4271::OBJECTSTATE::RENDER, (maxon::UInt64) enum4271::OBJECTSTATE::DEFORM, (maxon::UInt64) enum4271::OBJECTSTATE::REAL_DEFORM, (maxon::UInt64) enum4271::OBJECTSTATE::EDITOR_HIERARCHICAL, (maxon::UInt64) enum4271::OBJECTSTATE::RENDER_HIERARCHICAL};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "OBJECTSTATE", SIZEOF(x), false, values, "EDITOR\0RENDER\0DEFORM\0REAL_DEFORM\0EDITOR_HIERARCHICAL\0RENDER_HIERARCHICAL\0", fmt);
 }
-namespace enum4315 { enum class DISPLAYFILTER : UInt64
+namespace enum4316 { enum class DISPLAYFILTER : UInt64
 {
 	NONE								= UInt64(0),																									///< None.
 	NULLOBJECT					= (UInt64(1) << (UInt64)OBJECTCATEGORY::NULLOBJECT),					///< Null.
@@ -2208,12 +2209,12 @@ namespace enum4315 { enum class DISPLAYFILTER : UInt64
 	HAIR								= (UInt64(1) << (UInt64)OBJECTCATEGORY::HAIR),								///< Hair @since R22
 	FIELD								= (UInt64(1) << (UInt64)OBJECTCATEGORY::FIELD)								///< Field @since R22
 } ; }
-maxon::String PrivateToString_DISPLAYFILTER4315(std::underlying_type<enum4315::DISPLAYFILTER>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_DISPLAYFILTER4316(std::underlying_type<enum4316::DISPLAYFILTER>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4315::DISPLAYFILTER::NONE, (maxon::UInt64) enum4315::DISPLAYFILTER::NULLOBJECT, (maxon::UInt64) enum4315::DISPLAYFILTER::POLYGON, (maxon::UInt64) enum4315::DISPLAYFILTER::SPLINE, (maxon::UInt64) enum4315::DISPLAYFILTER::GENERATOR, (maxon::UInt64) enum4315::DISPLAYFILTER::HYPERNURBS, (maxon::UInt64) enum4315::DISPLAYFILTER::UNUSED1, (maxon::UInt64) enum4315::DISPLAYFILTER::DEFORMER, (maxon::UInt64) enum4315::DISPLAYFILTER::CAMERA, (maxon::UInt64) enum4315::DISPLAYFILTER::LIGHT, (maxon::UInt64) enum4315::DISPLAYFILTER::SCENE, (maxon::UInt64) enum4315::DISPLAYFILTER::PARTICLE, (maxon::UInt64) enum4315::DISPLAYFILTER::OTHER, (maxon::UInt64) enum4315::DISPLAYFILTER::UNUSED2, (maxon::UInt64) enum4315::DISPLAYFILTER::GRID, (maxon::UInt64) enum4315::DISPLAYFILTER::HORIZON, (maxon::UInt64) enum4315::DISPLAYFILTER::WORLDAXIS, (maxon::UInt64) enum4315::DISPLAYFILTER::BOUNDS, (maxon::UInt64) enum4315::DISPLAYFILTER::HUD, (maxon::UInt64) enum4315::DISPLAYFILTER::SDS, (maxon::UInt64) enum4315::DISPLAYFILTER::HIGHLIGHTING, (maxon::UInt64) enum4315::DISPLAYFILTER::MULTIAXIS, (maxon::UInt64) enum4315::DISPLAYFILTER::OBJECTHANDLES, (maxon::UInt64) enum4315::DISPLAYFILTER::HANDLEBANDS, (maxon::UInt64) enum4315::DISPLAYFILTER::SDSCAGE, (maxon::UInt64) enum4315::DISPLAYFILTER::NGONLINES, (maxon::UInt64) enum4315::DISPLAYFILTER::JOINT, (maxon::UInt64) enum4315::DISPLAYFILTER::OBJECTHIGHLIGHTING, (maxon::UInt64) enum4315::DISPLAYFILTER::GUIDELINES, (maxon::UInt64) enum4315::DISPLAYFILTER::POI, (maxon::UInt64) enum4315::DISPLAYFILTER::GRADIENT, (maxon::UInt64) enum4315::DISPLAYFILTER::BASEGRID, (maxon::UInt64) enum4315::DISPLAYFILTER::HANDLES, (maxon::UInt64) enum4315::DISPLAYFILTER::HAIR, (maxon::UInt64) enum4315::DISPLAYFILTER::FIELD};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4316::DISPLAYFILTER::NONE, (maxon::UInt64) enum4316::DISPLAYFILTER::NULLOBJECT, (maxon::UInt64) enum4316::DISPLAYFILTER::POLYGON, (maxon::UInt64) enum4316::DISPLAYFILTER::SPLINE, (maxon::UInt64) enum4316::DISPLAYFILTER::GENERATOR, (maxon::UInt64) enum4316::DISPLAYFILTER::HYPERNURBS, (maxon::UInt64) enum4316::DISPLAYFILTER::UNUSED1, (maxon::UInt64) enum4316::DISPLAYFILTER::DEFORMER, (maxon::UInt64) enum4316::DISPLAYFILTER::CAMERA, (maxon::UInt64) enum4316::DISPLAYFILTER::LIGHT, (maxon::UInt64) enum4316::DISPLAYFILTER::SCENE, (maxon::UInt64) enum4316::DISPLAYFILTER::PARTICLE, (maxon::UInt64) enum4316::DISPLAYFILTER::OTHER, (maxon::UInt64) enum4316::DISPLAYFILTER::UNUSED2, (maxon::UInt64) enum4316::DISPLAYFILTER::GRID, (maxon::UInt64) enum4316::DISPLAYFILTER::HORIZON, (maxon::UInt64) enum4316::DISPLAYFILTER::WORLDAXIS, (maxon::UInt64) enum4316::DISPLAYFILTER::BOUNDS, (maxon::UInt64) enum4316::DISPLAYFILTER::HUD, (maxon::UInt64) enum4316::DISPLAYFILTER::SDS, (maxon::UInt64) enum4316::DISPLAYFILTER::HIGHLIGHTING, (maxon::UInt64) enum4316::DISPLAYFILTER::MULTIAXIS, (maxon::UInt64) enum4316::DISPLAYFILTER::OBJECTHANDLES, (maxon::UInt64) enum4316::DISPLAYFILTER::HANDLEBANDS, (maxon::UInt64) enum4316::DISPLAYFILTER::SDSCAGE, (maxon::UInt64) enum4316::DISPLAYFILTER::NGONLINES, (maxon::UInt64) enum4316::DISPLAYFILTER::JOINT, (maxon::UInt64) enum4316::DISPLAYFILTER::OBJECTHIGHLIGHTING, (maxon::UInt64) enum4316::DISPLAYFILTER::GUIDELINES, (maxon::UInt64) enum4316::DISPLAYFILTER::POI, (maxon::UInt64) enum4316::DISPLAYFILTER::GRADIENT, (maxon::UInt64) enum4316::DISPLAYFILTER::BASEGRID, (maxon::UInt64) enum4316::DISPLAYFILTER::HANDLES, (maxon::UInt64) enum4316::DISPLAYFILTER::HAIR, (maxon::UInt64) enum4316::DISPLAYFILTER::FIELD};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "DISPLAYFILTER", SIZEOF(x), true, values, "NONE\0NULLOBJECT\0POLYGON\0SPLINE\0GENERATOR\0HYPERNURBS\0UNUSED1\0DEFORMER\0CAMERA\0LIGHT\0SCENE\0PARTICLE\0OTHER\0UNUSED2\0GRID\0HORIZON\0WORLDAXIS\0BOUNDS\0HUD\0SDS\0HIGHLIGHTING\0MULTIAXIS\0OBJECTHANDLES\0HANDLEBANDS\0SDSCAGE\0NGONLINES\0JOINT\0OBJECTHIGHLIGHTING\0GUIDELINES\0POI\0GRADIENT\0BASEGRID\0HANDLES\0HAIR\0FIELD\0", fmt);
 }
-namespace enum4329 { enum class DISPLAYEDITSTATE
+namespace enum4330 { enum class DISPLAYEDITSTATE
 {
 	NONE			= 0,						///< None.
 	SDS				= (1 << 0),			///< SDS edit state.
@@ -2221,24 +2222,24 @@ namespace enum4329 { enum class DISPLAYEDITSTATE
 
 	DOCUMENT	= -1			///< Document edit state.
 } ; }
-maxon::String PrivateToString_DISPLAYEDITSTATE4329(std::underlying_type<enum4329::DISPLAYEDITSTATE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_DISPLAYEDITSTATE4330(std::underlying_type<enum4330::DISPLAYEDITSTATE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4329::DISPLAYEDITSTATE::NONE, (maxon::UInt64) enum4329::DISPLAYEDITSTATE::SDS, (maxon::UInt64) enum4329::DISPLAYEDITSTATE::DEFORM, (maxon::UInt64) enum4329::DISPLAYEDITSTATE::DOCUMENT};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4330::DISPLAYEDITSTATE::NONE, (maxon::UInt64) enum4330::DISPLAYEDITSTATE::SDS, (maxon::UInt64) enum4330::DISPLAYEDITSTATE::DEFORM, (maxon::UInt64) enum4330::DISPLAYEDITSTATE::DOCUMENT};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "DISPLAYEDITSTATE", SIZEOF(x), true, values, "NONE\0SDS\0DEFORM\0DOCUMENT\0", fmt);
 }
-namespace enum4341 { enum class THREADTYPE
+namespace enum4342 { enum class THREADTYPE
 {
 	NONE						= 0,						///< None.
 	EDITORREDRAW		= (1 << 0),			///< Editor redraw.
 	RENDEREDITOR		= (1 << 1),			///< Editor render.
 	RENDEREXTERNAL	= (1 << 2)			///< External render.
 } ; }
-maxon::String PrivateToString_THREADTYPE4341(std::underlying_type<enum4341::THREADTYPE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_THREADTYPE4342(std::underlying_type<enum4342::THREADTYPE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4341::THREADTYPE::NONE, (maxon::UInt64) enum4341::THREADTYPE::EDITORREDRAW, (maxon::UInt64) enum4341::THREADTYPE::RENDEREDITOR, (maxon::UInt64) enum4341::THREADTYPE::RENDEREXTERNAL};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4342::THREADTYPE::NONE, (maxon::UInt64) enum4342::THREADTYPE::EDITORREDRAW, (maxon::UInt64) enum4342::THREADTYPE::RENDEREDITOR, (maxon::UInt64) enum4342::THREADTYPE::RENDEREXTERNAL};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "THREADTYPE", SIZEOF(x), true, values, "NONE\0EDITORREDRAW\0RENDEREDITOR\0RENDEREXTERNAL\0", fmt);
 }
-namespace enum4355 { enum class RENDERPROGRESSTYPE
+namespace enum4356 { enum class RENDERPROGRESSTYPE
 {
 	BEFORERENDERING			= 0,			///< Before rendering.
 	DURINGRENDERING			= 1,			///< During rendering.
@@ -2247,23 +2248,23 @@ namespace enum4355 { enum class RENDERPROGRESSTYPE
 	QUICK_PREVIEW				= 4,			///< Quick Preview rendering. @since R17.048
 	AMBIENTOCCLUSION		= 5				///< AO prepass. @since CR17.054 / R18.021
 } ; }
-maxon::String PrivateToString_RENDERPROGRESSTYPE4355(std::underlying_type<enum4355::RENDERPROGRESSTYPE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_RENDERPROGRESSTYPE4356(std::underlying_type<enum4356::RENDERPROGRESSTYPE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4355::RENDERPROGRESSTYPE::BEFORERENDERING, (maxon::UInt64) enum4355::RENDERPROGRESSTYPE::DURINGRENDERING, (maxon::UInt64) enum4355::RENDERPROGRESSTYPE::AFTERRENDERING, (maxon::UInt64) enum4355::RENDERPROGRESSTYPE::GLOBALILLUMINATION, (maxon::UInt64) enum4355::RENDERPROGRESSTYPE::QUICK_PREVIEW, (maxon::UInt64) enum4355::RENDERPROGRESSTYPE::AMBIENTOCCLUSION};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4356::RENDERPROGRESSTYPE::BEFORERENDERING, (maxon::UInt64) enum4356::RENDERPROGRESSTYPE::DURINGRENDERING, (maxon::UInt64) enum4356::RENDERPROGRESSTYPE::AFTERRENDERING, (maxon::UInt64) enum4356::RENDERPROGRESSTYPE::GLOBALILLUMINATION, (maxon::UInt64) enum4356::RENDERPROGRESSTYPE::QUICK_PREVIEW, (maxon::UInt64) enum4356::RENDERPROGRESSTYPE::AMBIENTOCCLUSION};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "RENDERPROGRESSTYPE", SIZEOF(x), false, values, "BEFORERENDERING\0DURINGRENDERING\0AFTERRENDERING\0GLOBALILLUMINATION\0QUICK_PREVIEW\0AMBIENTOCCLUSION\0", fmt);
 }
-namespace enum4366 { enum class RDATA_SAVECALLBACK_CMD
+namespace enum4367 { enum class RDATA_SAVECALLBACK_CMD
 {
 	OPEN	= 1,			///< Open call.
 	WRITE	= 2,			///< Write call.
 	CLOSE	= 3				///< Close call.
 } ; }
-maxon::String PrivateToString_RDATA_SAVECALLBACK_CMD4366(std::underlying_type<enum4366::RDATA_SAVECALLBACK_CMD>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_RDATA_SAVECALLBACK_CMD4367(std::underlying_type<enum4367::RDATA_SAVECALLBACK_CMD>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4366::RDATA_SAVECALLBACK_CMD::OPEN, (maxon::UInt64) enum4366::RDATA_SAVECALLBACK_CMD::WRITE, (maxon::UInt64) enum4366::RDATA_SAVECALLBACK_CMD::CLOSE};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4367::RDATA_SAVECALLBACK_CMD::OPEN, (maxon::UInt64) enum4367::RDATA_SAVECALLBACK_CMD::WRITE, (maxon::UInt64) enum4367::RDATA_SAVECALLBACK_CMD::CLOSE};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "RDATA_SAVECALLBACK_CMD", SIZEOF(x), false, values, "OPEN\0WRITE\0CLOSE\0", fmt);
 }
-namespace enum4380 { enum class VPGETINFO
+namespace enum4381 { enum class VPGETINFO
 {
 	XRESOLUTION	= 0,			///< X resolution.
 	YRESOLUTION	= 1,			///< Y resolution.
@@ -2272,12 +2273,12 @@ namespace enum4380 { enum class VPGETINFO
 	VISIBLE			= 4,			///< Visibility.
 	LINEOFFSET	= 5				///< Offset of component in line.
 } ; }
-maxon::String PrivateToString_VPGETINFO4380(std::underlying_type<enum4380::VPGETINFO>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_VPGETINFO4381(std::underlying_type<enum4381::VPGETINFO>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4380::VPGETINFO::XRESOLUTION, (maxon::UInt64) enum4380::VPGETINFO::YRESOLUTION, (maxon::UInt64) enum4380::VPGETINFO::BITDEPTH, (maxon::UInt64) enum4380::VPGETINFO::CPP, (maxon::UInt64) enum4380::VPGETINFO::VISIBLE, (maxon::UInt64) enum4380::VPGETINFO::LINEOFFSET};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4381::VPGETINFO::XRESOLUTION, (maxon::UInt64) enum4381::VPGETINFO::YRESOLUTION, (maxon::UInt64) enum4381::VPGETINFO::BITDEPTH, (maxon::UInt64) enum4381::VPGETINFO::CPP, (maxon::UInt64) enum4381::VPGETINFO::VISIBLE, (maxon::UInt64) enum4381::VPGETINFO::LINEOFFSET};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VPGETINFO", SIZEOF(x), false, values, "XRESOLUTION\0YRESOLUTION\0BITDEPTH\0CPP\0VISIBLE\0LINEOFFSET\0", fmt);
 }
-namespace enum4416 { enum class DRAWOBJECT
+namespace enum4417 { enum class DRAWOBJECT
 {
 	NONE							= 0,							///< None.
 	FORCELINES				= (1 << 0),				///< Force wireframe display, independent of view settings.
@@ -2308,12 +2309,12 @@ namespace enum4416 { enum class DRAWOBJECT
 	Z_OFFSET					= (1 << 17),			///< Do not change the Z offset during BaseDraw::DrawObject().
 	PRIVATE_ANY				= (1 << 30)				///< @markPrivate
 } ; }
-maxon::String PrivateToString_DRAWOBJECT4416(std::underlying_type<enum4416::DRAWOBJECT>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_DRAWOBJECT4417(std::underlying_type<enum4417::DRAWOBJECT>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4416::DRAWOBJECT::NONE, (maxon::UInt64) enum4416::DRAWOBJECT::FORCELINES, (maxon::UInt64) enum4416::DRAWOBJECT::NOBACKCULL, (maxon::UInt64) enum4416::DRAWOBJECT::LOCALMATRIX, (maxon::UInt64) enum4416::DRAWOBJECT::EDITMODE, (maxon::UInt64) enum4416::DRAWOBJECT::FORCEBASE, (maxon::UInt64) enum4416::DRAWOBJECT::FORCEPOINTS, (maxon::UInt64) enum4416::DRAWOBJECT::NO_EOGL, (maxon::UInt64) enum4416::DRAWOBJECT::USE_OBJECT_COLOR, (maxon::UInt64) enum4416::DRAWOBJECT::USE_CUSTOM_COLOR, (maxon::UInt64) enum4416::DRAWOBJECT::XRAY_ON, (maxon::UInt64) enum4416::DRAWOBJECT::XRAY_OFF, (maxon::UInt64) enum4416::DRAWOBJECT::IMMEDIATELY, (maxon::UInt64) enum4416::DRAWOBJECT::Z_OFFSET, (maxon::UInt64) enum4416::DRAWOBJECT::PRIVATE_ANY};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4417::DRAWOBJECT::NONE, (maxon::UInt64) enum4417::DRAWOBJECT::FORCELINES, (maxon::UInt64) enum4417::DRAWOBJECT::NOBACKCULL, (maxon::UInt64) enum4417::DRAWOBJECT::LOCALMATRIX, (maxon::UInt64) enum4417::DRAWOBJECT::EDITMODE, (maxon::UInt64) enum4417::DRAWOBJECT::FORCEBASE, (maxon::UInt64) enum4417::DRAWOBJECT::FORCEPOINTS, (maxon::UInt64) enum4417::DRAWOBJECT::NO_EOGL, (maxon::UInt64) enum4417::DRAWOBJECT::USE_OBJECT_COLOR, (maxon::UInt64) enum4417::DRAWOBJECT::USE_CUSTOM_COLOR, (maxon::UInt64) enum4417::DRAWOBJECT::XRAY_ON, (maxon::UInt64) enum4417::DRAWOBJECT::XRAY_OFF, (maxon::UInt64) enum4417::DRAWOBJECT::IMMEDIATELY, (maxon::UInt64) enum4417::DRAWOBJECT::Z_OFFSET, (maxon::UInt64) enum4417::DRAWOBJECT::PRIVATE_ANY};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "DRAWOBJECT", SIZEOF(x), true, values, "NONE\0FORCELINES\0NOBACKCULL\0LOCALMATRIX\0EDITMODE\0FORCEBASE\0FORCEPOINTS\0NO_EOGL\0USE_OBJECT_COLOR\0USE_CUSTOM_COLOR\0XRAY_ON\0XRAY_OFF\0IMMEDIATELY\0Z_OFFSET\0PRIVATE_ANY\0", fmt);
 }
-namespace enum4438 { enum class RENDERFLAGS
+namespace enum4439 { enum class RENDERFLAGS
 {
 	NONE									= 0,						///< None.
 	EXTERNAL							= (1 << 0),			///< External render.
@@ -2330,23 +2331,23 @@ namespace enum4438 { enum class RENDERFLAGS
 	PREVIEWSETTINGS				= (1 << 11),		///< Use preview settings. @since R19
 	RENDERQUEUEERRORS 		= (1 << 12)			///< Cancel Render Queue rendering if scene has missing assets. @markPrivate. @since R21
 } ; }
-maxon::String PrivateToString_RENDERFLAGS4438(std::underlying_type<enum4438::RENDERFLAGS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_RENDERFLAGS4439(std::underlying_type<enum4439::RENDERFLAGS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4438::RENDERFLAGS::NONE, (maxon::UInt64) enum4438::RENDERFLAGS::EXTERNAL, (maxon::UInt64) enum4438::RENDERFLAGS::NODOCUMENTCLONE, (maxon::UInt64) enum4438::RENDERFLAGS::SHOWERRORS, (maxon::UInt64) enum4438::RENDERFLAGS::PREVIEWRENDER, (maxon::UInt64) enum4438::RENDERFLAGS::IRR, (maxon::UInt64) enum4438::RENDERFLAGS::CREATE_PICTUREVIEWER, (maxon::UInt64) enum4438::RENDERFLAGS::OPEN_PICTUREVIEWER, (maxon::UInt64) enum4438::RENDERFLAGS::KEEP_CONTEXT, (maxon::UInt64) enum4438::RENDERFLAGS::BATCHRENDER, (maxon::UInt64) enum4438::RENDERFLAGS::NET, (maxon::UInt64) enum4438::RENDERFLAGS::DONTANIMATE, (maxon::UInt64) enum4438::RENDERFLAGS::PREVIEWSETTINGS, (maxon::UInt64) enum4438::RENDERFLAGS::RENDERQUEUEERRORS};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4439::RENDERFLAGS::NONE, (maxon::UInt64) enum4439::RENDERFLAGS::EXTERNAL, (maxon::UInt64) enum4439::RENDERFLAGS::NODOCUMENTCLONE, (maxon::UInt64) enum4439::RENDERFLAGS::SHOWERRORS, (maxon::UInt64) enum4439::RENDERFLAGS::PREVIEWRENDER, (maxon::UInt64) enum4439::RENDERFLAGS::IRR, (maxon::UInt64) enum4439::RENDERFLAGS::CREATE_PICTUREVIEWER, (maxon::UInt64) enum4439::RENDERFLAGS::OPEN_PICTUREVIEWER, (maxon::UInt64) enum4439::RENDERFLAGS::KEEP_CONTEXT, (maxon::UInt64) enum4439::RENDERFLAGS::BATCHRENDER, (maxon::UInt64) enum4439::RENDERFLAGS::NET, (maxon::UInt64) enum4439::RENDERFLAGS::DONTANIMATE, (maxon::UInt64) enum4439::RENDERFLAGS::PREVIEWSETTINGS, (maxon::UInt64) enum4439::RENDERFLAGS::RENDERQUEUEERRORS};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "RENDERFLAGS", SIZEOF(x), true, values, "NONE\0EXTERNAL\0NODOCUMENTCLONE\0SHOWERRORS\0PREVIEWRENDER\0IRR\0CREATE_PICTUREVIEWER\0OPEN_PICTUREVIEWER\0KEEP_CONTEXT\0BATCHRENDER\0NET\0DONTANIMATE\0PREVIEWSETTINGS\0RENDERQUEUEERRORS\0", fmt);
 }
-namespace enum4449 { enum class WRITEMODE
+namespace enum4450 { enum class WRITEMODE
 {
 	STANDARD							= 0,		///< Standard.
 	ASSEMBLE_MOVIE				= 1,		///< Assemble movie.
 	ASSEMBLE_SINGLEIMAGE	= 2			///< Assemble single image.
 } ; }
-maxon::String PrivateToString_WRITEMODE4449(std::underlying_type<enum4449::WRITEMODE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_WRITEMODE4450(std::underlying_type<enum4450::WRITEMODE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4449::WRITEMODE::STANDARD, (maxon::UInt64) enum4449::WRITEMODE::ASSEMBLE_MOVIE, (maxon::UInt64) enum4449::WRITEMODE::ASSEMBLE_SINGLEIMAGE};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4450::WRITEMODE::STANDARD, (maxon::UInt64) enum4450::WRITEMODE::ASSEMBLE_MOVIE, (maxon::UInt64) enum4450::WRITEMODE::ASSEMBLE_SINGLEIMAGE};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "WRITEMODE", SIZEOF(x), false, values, "STANDARD\0ASSEMBLE_MOVIE\0ASSEMBLE_SINGLEIMAGE\0", fmt);
 }
-namespace enum4469 { enum class NETRENDERFLAGS
+namespace enum4470 { enum class NETRENDERFLAGS
 {
 	NONE													= 0,						///< None.
 	OPEN_PICTUREVIEWER						= (1 << 0),			///< Open Picture Viewer.
@@ -2361,12 +2362,12 @@ namespace enum4469 { enum class NETRENDERFLAGS
 	HANDLEWARNINGASERROR					= (1 << 10),		///< Handle warnings as errors.
 	KEEPB3DFILESAFTERASSEMBLING		= (1 << 11)			///< Keep the @BP3D files on assembling.
 } ; }
-maxon::String PrivateToString_NETRENDERFLAGS4469(std::underlying_type<enum4469::NETRENDERFLAGS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_NETRENDERFLAGS4470(std::underlying_type<enum4470::NETRENDERFLAGS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4469::NETRENDERFLAGS::NONE, (maxon::UInt64) enum4469::NETRENDERFLAGS::OPEN_PICTUREVIEWER, (maxon::UInt64) enum4469::NETRENDERFLAGS::SHOWERRORS, (maxon::UInt64) enum4469::NETRENDERFLAGS::DELETEAFTERRENDERING, (maxon::UInt64) enum4469::NETRENDERFLAGS::NOPEERTOPEERASSETDISTRIBUTION, (maxon::UInt64) enum4469::NETRENDERFLAGS::NOREQUESTONDEMAND, (maxon::UInt64) enum4469::NETRENDERFLAGS::EXCLUDECLIENTONLOADINGERROR, (maxon::UInt64) enum4469::NETRENDERFLAGS::SAVERESULTSINREPOSITORY, (maxon::UInt64) enum4469::NETRENDERFLAGS::ASSEMBLEB3DFILESIMMEDIATLEY, (maxon::UInt64) enum4469::NETRENDERFLAGS::NOWRITETEST, (maxon::UInt64) enum4469::NETRENDERFLAGS::HANDLEWARNINGASERROR, (maxon::UInt64) enum4469::NETRENDERFLAGS::KEEPB3DFILESAFTERASSEMBLING};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4470::NETRENDERFLAGS::NONE, (maxon::UInt64) enum4470::NETRENDERFLAGS::OPEN_PICTUREVIEWER, (maxon::UInt64) enum4470::NETRENDERFLAGS::SHOWERRORS, (maxon::UInt64) enum4470::NETRENDERFLAGS::DELETEAFTERRENDERING, (maxon::UInt64) enum4470::NETRENDERFLAGS::NOPEERTOPEERASSETDISTRIBUTION, (maxon::UInt64) enum4470::NETRENDERFLAGS::NOREQUESTONDEMAND, (maxon::UInt64) enum4470::NETRENDERFLAGS::EXCLUDECLIENTONLOADINGERROR, (maxon::UInt64) enum4470::NETRENDERFLAGS::SAVERESULTSINREPOSITORY, (maxon::UInt64) enum4470::NETRENDERFLAGS::ASSEMBLEB3DFILESIMMEDIATLEY, (maxon::UInt64) enum4470::NETRENDERFLAGS::NOWRITETEST, (maxon::UInt64) enum4470::NETRENDERFLAGS::HANDLEWARNINGASERROR, (maxon::UInt64) enum4470::NETRENDERFLAGS::KEEPB3DFILESAFTERASSEMBLING};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "NETRENDERFLAGS", SIZEOF(x), true, values, "NONE\0OPEN_PICTUREVIEWER\0SHOWERRORS\0DELETEAFTERRENDERING\0NOPEERTOPEERASSETDISTRIBUTION\0NOREQUESTONDEMAND\0EXCLUDECLIENTONLOADINGERROR\0SAVERESULTSINREPOSITORY\0ASSEMBLEB3DFILESIMMEDIATLEY\0NOWRITETEST\0HANDLEWARNINGASERROR\0KEEPB3DFILESAFTERASSEMBLING\0", fmt);
 }
-namespace enum4486 { enum class CHECKISRUNNING
+namespace enum4487 { enum class CHECKISRUNNING
 {
 	ANIMATIONRUNNING				= 0,			///< Animation running.
 	VIEWDRAWING							= 1,			///< View drawing.
@@ -2378,12 +2379,12 @@ namespace enum4486 { enum class CHECKISRUNNING
 	BAKING									= 7,			///< Baking.
 	INTERACTIVERENDERING		= 8				///< Interactive rendering.
 } ; }
-maxon::String PrivateToString_CHECKISRUNNING4486(std::underlying_type<enum4486::CHECKISRUNNING>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_CHECKISRUNNING4487(std::underlying_type<enum4487::CHECKISRUNNING>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4486::CHECKISRUNNING::ANIMATIONRUNNING, (maxon::UInt64) enum4486::CHECKISRUNNING::VIEWDRAWING, (maxon::UInt64) enum4486::CHECKISRUNNING::EDITORRENDERING, (maxon::UInt64) enum4486::CHECKISRUNNING::EXTERNALRENDERING, (maxon::UInt64) enum4486::CHECKISRUNNING::PAINTERUPDATING, (maxon::UInt64) enum4486::CHECKISRUNNING::MATERIALPREVIEWRUNNING, (maxon::UInt64) enum4486::CHECKISRUNNING::EVENTSYSTEM, (maxon::UInt64) enum4486::CHECKISRUNNING::BAKING, (maxon::UInt64) enum4486::CHECKISRUNNING::INTERACTIVERENDERING};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4487::CHECKISRUNNING::ANIMATIONRUNNING, (maxon::UInt64) enum4487::CHECKISRUNNING::VIEWDRAWING, (maxon::UInt64) enum4487::CHECKISRUNNING::EDITORRENDERING, (maxon::UInt64) enum4487::CHECKISRUNNING::EXTERNALRENDERING, (maxon::UInt64) enum4487::CHECKISRUNNING::PAINTERUPDATING, (maxon::UInt64) enum4487::CHECKISRUNNING::MATERIALPREVIEWRUNNING, (maxon::UInt64) enum4487::CHECKISRUNNING::EVENTSYSTEM, (maxon::UInt64) enum4487::CHECKISRUNNING::BAKING, (maxon::UInt64) enum4487::CHECKISRUNNING::INTERACTIVERENDERING};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "CHECKISRUNNING", SIZEOF(x), false, values, "ANIMATIONRUNNING\0VIEWDRAWING\0EDITORRENDERING\0EXTERNALRENDERING\0PAINTERUPDATING\0MATERIALPREVIEWRUNNING\0EVENTSYSTEM\0BAKING\0INTERACTIVERENDERING\0", fmt);
 }
-namespace enum4506 { enum class BAKE_TEX_ERR
+namespace enum4507 { enum class BAKE_TEX_ERR
 {
 	NONE								= 0,				///< None.
 	NO_DOC							= 3000,			///< No document.
@@ -2398,23 +2399,23 @@ namespace enum4506 { enum class BAKE_TEX_ERR
 	NO_OPTIMAL_MAPPING	= 3009,			///< Optimal mapping failed.
 	NO_SOURCE_UVW_TAG		= 3010			///< UVW tag for the source object is missing.
 } ; }
-maxon::String PrivateToString_BAKE_TEX_ERR4506(std::underlying_type<enum4506::BAKE_TEX_ERR>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_BAKE_TEX_ERR4507(std::underlying_type<enum4507::BAKE_TEX_ERR>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4506::BAKE_TEX_ERR::NONE, (maxon::UInt64) enum4506::BAKE_TEX_ERR::NO_DOC, (maxon::UInt64) enum4506::BAKE_TEX_ERR::NO_MEM, (maxon::UInt64) enum4506::BAKE_TEX_ERR::NO_RENDER_DOC, (maxon::UInt64) enum4506::BAKE_TEX_ERR::NO_TEXTURE_TAG, (maxon::UInt64) enum4506::BAKE_TEX_ERR::NO_OBJECT, (maxon::UInt64) enum4506::BAKE_TEX_ERR::NO_UVW_TAG, (maxon::UInt64) enum4506::BAKE_TEX_ERR::TEXTURE_MISSING, (maxon::UInt64) enum4506::BAKE_TEX_ERR::WRONG_BITMAP, (maxon::UInt64) enum4506::BAKE_TEX_ERR::USERBREAK, (maxon::UInt64) enum4506::BAKE_TEX_ERR::NO_OPTIMAL_MAPPING, (maxon::UInt64) enum4506::BAKE_TEX_ERR::NO_SOURCE_UVW_TAG};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4507::BAKE_TEX_ERR::NONE, (maxon::UInt64) enum4507::BAKE_TEX_ERR::NO_DOC, (maxon::UInt64) enum4507::BAKE_TEX_ERR::NO_MEM, (maxon::UInt64) enum4507::BAKE_TEX_ERR::NO_RENDER_DOC, (maxon::UInt64) enum4507::BAKE_TEX_ERR::NO_TEXTURE_TAG, (maxon::UInt64) enum4507::BAKE_TEX_ERR::NO_OBJECT, (maxon::UInt64) enum4507::BAKE_TEX_ERR::NO_UVW_TAG, (maxon::UInt64) enum4507::BAKE_TEX_ERR::TEXTURE_MISSING, (maxon::UInt64) enum4507::BAKE_TEX_ERR::WRONG_BITMAP, (maxon::UInt64) enum4507::BAKE_TEX_ERR::USERBREAK, (maxon::UInt64) enum4507::BAKE_TEX_ERR::NO_OPTIMAL_MAPPING, (maxon::UInt64) enum4507::BAKE_TEX_ERR::NO_SOURCE_UVW_TAG};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "BAKE_TEX_ERR", SIZEOF(x), false, values, "NONE\0NO_DOC\0NO_MEM\0NO_RENDER_DOC\0NO_TEXTURE_TAG\0NO_OBJECT\0NO_UVW_TAG\0TEXTURE_MISSING\0WRONG_BITMAP\0USERBREAK\0NO_OPTIMAL_MAPPING\0NO_SOURCE_UVW_TAG\0", fmt);
 }
-namespace enum4517 { enum class GL_MESSAGE
+namespace enum4518 { enum class GL_MESSAGE
 {
 	OK							= 1,
 	ERROR_					= 0,
 	FORCE_EMULATION	= 2
 } ; }
-maxon::String PrivateToString_GL_MESSAGE4517(std::underlying_type<enum4517::GL_MESSAGE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_GL_MESSAGE4518(std::underlying_type<enum4518::GL_MESSAGE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4517::GL_MESSAGE::OK, (maxon::UInt64) enum4517::GL_MESSAGE::ERROR_, (maxon::UInt64) enum4517::GL_MESSAGE::FORCE_EMULATION};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4518::GL_MESSAGE::OK, (maxon::UInt64) enum4518::GL_MESSAGE::ERROR_, (maxon::UInt64) enum4518::GL_MESSAGE::FORCE_EMULATION};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "GL_MESSAGE", SIZEOF(x), false, values, "OK\0ERROR_\0FORCE_EMULATION\0", fmt);
 }
-namespace enum4533 { enum class VIEWPORT_PICK_FLAGS
+namespace enum4535 { enum class VIEWPORT_PICK_FLAGS
 {
 	NONE											= 0,						///< None.
 	ALLOW_OGL									= (1 << 0),			///< Allow OpenGL.
@@ -2423,14 +2424,15 @@ namespace enum4533 { enum class VIEWPORT_PICK_FLAGS
 	OGL_ONLY_TOPMOST					= (1 << 3),			///< Picks only topmost object. Use this only when the object pointer is not needed. Only works with OpenGL.
 	OGL_ONLY_VISIBLE					= (1 << 4),			///< Picks only visible. Only has an effect when calling ViewportSelect::PickObject() that takes ViewportPixel as argument . Only works with OpenGL.
 	OGL_IGNORE_Z							= (1 << 5),			///< Picks ignore Z position. Set this to only check if an object (and which) was hit, not its Z position. Only works with OpenGL.
-	OGL_ONLY_TOPMOST_WITH_OBJ	= (1 << 6)			///< Picks only topmost object but returns the topmost object with its Z position. Only works with OpenGL.
+	OGL_ONLY_TOPMOST_WITH_OBJ	= (1 << 6),			///< Picks only topmost object but returns the topmost object with its Z position. Only works with OpenGL.
+	NO_DEPTH_CORRECTION				= (1 << 7),			///< To support old tools, the matrix is usually corrected so that the depth can be in the [-1, 1] range. With this option set, this does not happen any more.
 } ; }
-maxon::String PrivateToString_VIEWPORT_PICK_FLAGS4533(std::underlying_type<enum4533::VIEWPORT_PICK_FLAGS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_VIEWPORT_PICK_FLAGS4535(std::underlying_type<enum4535::VIEWPORT_PICK_FLAGS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4533::VIEWPORT_PICK_FLAGS::NONE, (maxon::UInt64) enum4533::VIEWPORT_PICK_FLAGS::ALLOW_OGL, (maxon::UInt64) enum4533::VIEWPORT_PICK_FLAGS::DONT_STOP_THREADS, (maxon::UInt64) enum4533::VIEWPORT_PICK_FLAGS::USE_SEL_FILTER, (maxon::UInt64) enum4533::VIEWPORT_PICK_FLAGS::OGL_ONLY_TOPMOST, (maxon::UInt64) enum4533::VIEWPORT_PICK_FLAGS::OGL_ONLY_VISIBLE, (maxon::UInt64) enum4533::VIEWPORT_PICK_FLAGS::OGL_IGNORE_Z, (maxon::UInt64) enum4533::VIEWPORT_PICK_FLAGS::OGL_ONLY_TOPMOST_WITH_OBJ};
-	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VIEWPORT_PICK_FLAGS", SIZEOF(x), true, values, "NONE\0ALLOW_OGL\0DONT_STOP_THREADS\0USE_SEL_FILTER\0OGL_ONLY_TOPMOST\0OGL_ONLY_VISIBLE\0OGL_IGNORE_Z\0OGL_ONLY_TOPMOST_WITH_OBJ\0", fmt);
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4535::VIEWPORT_PICK_FLAGS::NONE, (maxon::UInt64) enum4535::VIEWPORT_PICK_FLAGS::ALLOW_OGL, (maxon::UInt64) enum4535::VIEWPORT_PICK_FLAGS::DONT_STOP_THREADS, (maxon::UInt64) enum4535::VIEWPORT_PICK_FLAGS::USE_SEL_FILTER, (maxon::UInt64) enum4535::VIEWPORT_PICK_FLAGS::OGL_ONLY_TOPMOST, (maxon::UInt64) enum4535::VIEWPORT_PICK_FLAGS::OGL_ONLY_VISIBLE, (maxon::UInt64) enum4535::VIEWPORT_PICK_FLAGS::OGL_IGNORE_Z, (maxon::UInt64) enum4535::VIEWPORT_PICK_FLAGS::OGL_ONLY_TOPMOST_WITH_OBJ, (maxon::UInt64) enum4535::VIEWPORT_PICK_FLAGS::NO_DEPTH_CORRECTION};
+	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VIEWPORT_PICK_FLAGS", SIZEOF(x), true, values, "NONE\0ALLOW_OGL\0DONT_STOP_THREADS\0USE_SEL_FILTER\0OGL_ONLY_TOPMOST\0OGL_ONLY_VISIBLE\0OGL_IGNORE_Z\0OGL_ONLY_TOPMOST_WITH_OBJ\0NO_DEPTH_CORRECTION\0", fmt);
 }
-namespace enum4573 { enum class BACKGROUNDHANDLERCOMMAND
+namespace enum4575 { enum class BACKGROUNDHANDLERCOMMAND
 {
 	ISRUNNING		= 100,			///< Return @formatConstant{true} if the handler is currently running, otherwise @formatConstant{false}.
 	STOP				= 101,			///< Stop the current activity. Return @formatConstant{true} when the activity has stopped.
@@ -2441,12 +2443,12 @@ namespace enum4573 { enum class BACKGROUNDHANDLERCOMMAND
 													///<				That is why only extremely short tasks must be directly processed, otherwise start an asynchronous thread.
 	REMOVE			= 103				///< The handler is being removed. Return @formatConstant{true}.
 } ; }
-maxon::String PrivateToString_BACKGROUNDHANDLERCOMMAND4573(std::underlying_type<enum4573::BACKGROUNDHANDLERCOMMAND>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_BACKGROUNDHANDLERCOMMAND4575(std::underlying_type<enum4575::BACKGROUNDHANDLERCOMMAND>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4573::BACKGROUNDHANDLERCOMMAND::ISRUNNING, (maxon::UInt64) enum4573::BACKGROUNDHANDLERCOMMAND::STOP, (maxon::UInt64) enum4573::BACKGROUNDHANDLERCOMMAND::START, (maxon::UInt64) enum4573::BACKGROUNDHANDLERCOMMAND::REMOVE};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4575::BACKGROUNDHANDLERCOMMAND::ISRUNNING, (maxon::UInt64) enum4575::BACKGROUNDHANDLERCOMMAND::STOP, (maxon::UInt64) enum4575::BACKGROUNDHANDLERCOMMAND::START, (maxon::UInt64) enum4575::BACKGROUNDHANDLERCOMMAND::REMOVE};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "BACKGROUNDHANDLERCOMMAND", SIZEOF(x), false, values, "ISRUNNING\0STOP\0START\0REMOVE\0", fmt);
 }
-namespace enum4599 { enum class BACKGROUNDHANDLERFLAGS
+namespace enum4601 { enum class BACKGROUNDHANDLERFLAGS
 {
 	NONE								= 0,						///< None.
 	VIEWREDRAW					= (1 << 0),			///< View redraw.
@@ -2457,12 +2459,12 @@ namespace enum4599 { enum class BACKGROUNDHANDLERFLAGS
 
 	SHUTDOWN						= -1						///< Shutdown.
 } ; }
-maxon::String PrivateToString_BACKGROUNDHANDLERFLAGS4599(std::underlying_type<enum4599::BACKGROUNDHANDLERFLAGS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_BACKGROUNDHANDLERFLAGS4601(std::underlying_type<enum4601::BACKGROUNDHANDLERFLAGS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4599::BACKGROUNDHANDLERFLAGS::NONE, (maxon::UInt64) enum4599::BACKGROUNDHANDLERFLAGS::VIEWREDRAW, (maxon::UInt64) enum4599::BACKGROUNDHANDLERFLAGS::EDITORRENDDER, (maxon::UInt64) enum4599::BACKGROUNDHANDLERFLAGS::MATERIALPREVIEW, (maxon::UInt64) enum4599::BACKGROUNDHANDLERFLAGS::RENDEREXTERNAL, (maxon::UInt64) enum4599::BACKGROUNDHANDLERFLAGS::PRIVATE_VIEWREDRAW, (maxon::UInt64) enum4599::BACKGROUNDHANDLERFLAGS::SHUTDOWN};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4601::BACKGROUNDHANDLERFLAGS::NONE, (maxon::UInt64) enum4601::BACKGROUNDHANDLERFLAGS::VIEWREDRAW, (maxon::UInt64) enum4601::BACKGROUNDHANDLERFLAGS::EDITORRENDDER, (maxon::UInt64) enum4601::BACKGROUNDHANDLERFLAGS::MATERIALPREVIEW, (maxon::UInt64) enum4601::BACKGROUNDHANDLERFLAGS::RENDEREXTERNAL, (maxon::UInt64) enum4601::BACKGROUNDHANDLERFLAGS::PRIVATE_VIEWREDRAW, (maxon::UInt64) enum4601::BACKGROUNDHANDLERFLAGS::SHUTDOWN};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "BACKGROUNDHANDLERFLAGS", SIZEOF(x), true, values, "NONE\0VIEWREDRAW\0EDITORRENDDER\0MATERIALPREVIEW\0RENDEREXTERNAL\0PRIVATE_VIEWREDRAW\0SHUTDOWN\0", fmt);
 }
-namespace enum4622 { enum class IDENTIFYFILE
+namespace enum4624 { enum class IDENTIFYFILE
 {
 	NONE					= 0,						///< None.
 	SCENE					= (1 << 0),			///< Scene file.
@@ -2474,24 +2476,24 @@ namespace enum4622 { enum class IDENTIFYFILE
 	LAYOUT				= (1 << 7),			///< Layout file.
 	PYTHON				= (1 << 8)			///< Python file.
 } ; }
-maxon::String PrivateToString_IDENTIFYFILE4622(std::underlying_type<enum4622::IDENTIFYFILE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_IDENTIFYFILE4624(std::underlying_type<enum4624::IDENTIFYFILE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4622::IDENTIFYFILE::NONE, (maxon::UInt64) enum4622::IDENTIFYFILE::SCENE, (maxon::UInt64) enum4622::IDENTIFYFILE::IMAGE, (maxon::UInt64) enum4622::IDENTIFYFILE::MOVIE, (maxon::UInt64) enum4622::IDENTIFYFILE::SKIPQUICKTIME, (maxon::UInt64) enum4622::IDENTIFYFILE::SCRIPT, (maxon::UInt64) enum4622::IDENTIFYFILE::SOUND, (maxon::UInt64) enum4622::IDENTIFYFILE::LAYOUT, (maxon::UInt64) enum4622::IDENTIFYFILE::PYTHON};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4624::IDENTIFYFILE::NONE, (maxon::UInt64) enum4624::IDENTIFYFILE::SCENE, (maxon::UInt64) enum4624::IDENTIFYFILE::IMAGE, (maxon::UInt64) enum4624::IDENTIFYFILE::MOVIE, (maxon::UInt64) enum4624::IDENTIFYFILE::SKIPQUICKTIME, (maxon::UInt64) enum4624::IDENTIFYFILE::SCRIPT, (maxon::UInt64) enum4624::IDENTIFYFILE::SOUND, (maxon::UInt64) enum4624::IDENTIFYFILE::LAYOUT, (maxon::UInt64) enum4624::IDENTIFYFILE::PYTHON};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "IDENTIFYFILE", SIZEOF(x), true, values, "NONE\0SCENE\0IMAGE\0MOVIE\0SKIPQUICKTIME\0SCRIPT\0SOUND\0LAYOUT\0PYTHON\0", fmt);
 }
-namespace enum4634 { enum class CALCHARDSHADOW
+namespace enum4636 { enum class CALCHARDSHADOW
 {
 	NONE							= 0,							///< None.
 	TRANSPARENCY			= (1 << 0),				///< Transparencies/alphas for in-between objects will be evaluated.
 	SPECIALGISHADOW		= (1 << 29),			///< @markPrivate
 	SPECIALSELFSHADOW	= (1 << 30)				///< @markPrivate
 } ; }
-maxon::String PrivateToString_CALCHARDSHADOW4634(std::underlying_type<enum4634::CALCHARDSHADOW>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_CALCHARDSHADOW4636(std::underlying_type<enum4636::CALCHARDSHADOW>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4634::CALCHARDSHADOW::NONE, (maxon::UInt64) enum4634::CALCHARDSHADOW::TRANSPARENCY, (maxon::UInt64) enum4634::CALCHARDSHADOW::SPECIALGISHADOW, (maxon::UInt64) enum4634::CALCHARDSHADOW::SPECIALSELFSHADOW};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4636::CALCHARDSHADOW::NONE, (maxon::UInt64) enum4636::CALCHARDSHADOW::TRANSPARENCY, (maxon::UInt64) enum4636::CALCHARDSHADOW::SPECIALGISHADOW, (maxon::UInt64) enum4636::CALCHARDSHADOW::SPECIALSELFSHADOW};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "CALCHARDSHADOW", SIZEOF(x), true, values, "NONE\0TRANSPARENCY\0SPECIALGISHADOW\0SPECIALSELFSHADOW\0", fmt);
 }
-namespace enum4652 { enum class ILLUMINATEFLAGS
+namespace enum4654 { enum class ILLUMINATEFLAGS
 {
 	NONE															= 0,							///< None.
 	SHADOW														= (1 << 0),				///< Full shadow calculations.
@@ -2504,12 +2506,12 @@ namespace enum4652 { enum class ILLUMINATEFLAGS
 	NOGRAIN														= (1 << 24),			///< Do not take grain into account.
 	BACKLIGHT													= (1 << 25)				///< Take backlight into account.
 } ; }
-maxon::String PrivateToString_ILLUMINATEFLAGS4652(std::underlying_type<enum4652::ILLUMINATEFLAGS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_ILLUMINATEFLAGS4654(std::underlying_type<enum4654::ILLUMINATEFLAGS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4652::ILLUMINATEFLAGS::NONE, (maxon::UInt64) enum4652::ILLUMINATEFLAGS::SHADOW, (maxon::UInt64) enum4652::ILLUMINATEFLAGS::NOENVIRONMENT, (maxon::UInt64) enum4652::ILLUMINATEFLAGS::DISABLESHADOWMAP_CORRECTION, (maxon::UInt64) enum4652::ILLUMINATEFLAGS::DISABLESHADOWCASTERMP_CORRECTION, (maxon::UInt64) enum4652::ILLUMINATEFLAGS::LIGHTDIRNORMALS, (maxon::UInt64) enum4652::ILLUMINATEFLAGS::NODISTANCEFALLOFF, (maxon::UInt64) enum4652::ILLUMINATEFLAGS::NOGRAIN, (maxon::UInt64) enum4652::ILLUMINATEFLAGS::BACKLIGHT};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4654::ILLUMINATEFLAGS::NONE, (maxon::UInt64) enum4654::ILLUMINATEFLAGS::SHADOW, (maxon::UInt64) enum4654::ILLUMINATEFLAGS::NOENVIRONMENT, (maxon::UInt64) enum4654::ILLUMINATEFLAGS::DISABLESHADOWMAP_CORRECTION, (maxon::UInt64) enum4654::ILLUMINATEFLAGS::DISABLESHADOWCASTERMP_CORRECTION, (maxon::UInt64) enum4654::ILLUMINATEFLAGS::LIGHTDIRNORMALS, (maxon::UInt64) enum4654::ILLUMINATEFLAGS::NODISTANCEFALLOFF, (maxon::UInt64) enum4654::ILLUMINATEFLAGS::NOGRAIN, (maxon::UInt64) enum4654::ILLUMINATEFLAGS::BACKLIGHT};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "ILLUMINATEFLAGS", SIZEOF(x), true, values, "NONE\0SHADOW\0NOENVIRONMENT\0DISABLESHADOWMAP_CORRECTION\0DISABLESHADOWCASTERMP_CORRECTION\0LIGHTDIRNORMALS\0NODISTANCEFALLOFF\0NOGRAIN\0BACKLIGHT\0", fmt);
 }
-namespace enum4680 { enum class RAYBIT
+namespace enum4682 { enum class RAYBIT
 {
 	NONE								= 0,							///< None.
 	REFLECTION					= (1 << 0),				///< Ray chain contains a reflection ray.
@@ -2532,12 +2534,12 @@ namespace enum4680 { enum class RAYBIT
 	AO								= (1 << 13),			///< Current ray is an Ambient Occlusion ray.
 	COMPOSITING				= (1 << 14)				///< Current ray is a compositing ray.
 } ; }
-maxon::String PrivateToString_RAYBIT4680(std::underlying_type<enum4680::RAYBIT>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_RAYBIT4682(std::underlying_type<enum4682::RAYBIT>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4680::RAYBIT::NONE, (maxon::UInt64) enum4680::RAYBIT::REFLECTION, (maxon::UInt64) enum4680::RAYBIT::TRANSPARENCY, (maxon::UInt64) enum4680::RAYBIT::REFRACTION, (maxon::UInt64) enum4680::RAYBIT::CUSTOM, (maxon::UInt64) enum4680::RAYBIT::CURR_REFLECTION, (maxon::UInt64) enum4680::RAYBIT::CURR_TRANSPARENCY, (maxon::UInt64) enum4680::RAYBIT::CURR_REFRACTION, (maxon::UInt64) enum4680::RAYBIT::CURR_CUSTOM, (maxon::UInt64) enum4680::RAYBIT::VOLUMETRICLIGHT, (maxon::UInt64) enum4680::RAYBIT::ALLOWVLMIX, (maxon::UInt64) enum4680::RAYBIT::GI, (maxon::UInt64) enum4680::RAYBIT::BLURRY, (maxon::UInt64) enum4680::RAYBIT::SSS, (maxon::UInt64) enum4680::RAYBIT::AO, (maxon::UInt64) enum4680::RAYBIT::COMPOSITING};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4682::RAYBIT::NONE, (maxon::UInt64) enum4682::RAYBIT::REFLECTION, (maxon::UInt64) enum4682::RAYBIT::TRANSPARENCY, (maxon::UInt64) enum4682::RAYBIT::REFRACTION, (maxon::UInt64) enum4682::RAYBIT::CUSTOM, (maxon::UInt64) enum4682::RAYBIT::CURR_REFLECTION, (maxon::UInt64) enum4682::RAYBIT::CURR_TRANSPARENCY, (maxon::UInt64) enum4682::RAYBIT::CURR_REFRACTION, (maxon::UInt64) enum4682::RAYBIT::CURR_CUSTOM, (maxon::UInt64) enum4682::RAYBIT::VOLUMETRICLIGHT, (maxon::UInt64) enum4682::RAYBIT::ALLOWVLMIX, (maxon::UInt64) enum4682::RAYBIT::GI, (maxon::UInt64) enum4682::RAYBIT::BLURRY, (maxon::UInt64) enum4682::RAYBIT::SSS, (maxon::UInt64) enum4682::RAYBIT::AO, (maxon::UInt64) enum4682::RAYBIT::COMPOSITING};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "RAYBIT", SIZEOF(x), true, values, "NONE\0REFLECTION\0TRANSPARENCY\0REFRACTION\0CUSTOM\0CURR_REFLECTION\0CURR_TRANSPARENCY\0CURR_REFRACTION\0CURR_CUSTOM\0VOLUMETRICLIGHT\0ALLOWVLMIX\0GI\0BLURRY\0SSS\0AO\0COMPOSITING\0", fmt);
 }
-namespace enum4704 { enum class VOLUMEINFO : UInt32
+namespace enum4706 { enum class VOLUMEINFO : UInt32
 {
 	NONE								= 0,							///< None.
 	REFLECTION					= 0x00000002,			///< Calculates reflections.
@@ -2556,12 +2558,12 @@ namespace enum4704 { enum class VOLUMEINFO : UInt32
 	FINAL_ALPHA					= 0x40000000,			///< Writes final alpha value. @since R18
 	ISNBMMATERIAL				= 0x01000000			///< @markPrivate
 } ; }
-maxon::String PrivateToString_VOLUMEINFO4704(std::underlying_type<enum4704::VOLUMEINFO>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_VOLUMEINFO4706(std::underlying_type<enum4706::VOLUMEINFO>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4704::VOLUMEINFO::NONE, (maxon::UInt64) enum4704::VOLUMEINFO::REFLECTION, (maxon::UInt64) enum4704::VOLUMEINFO::TRANSPARENCY, (maxon::UInt64) enum4704::VOLUMEINFO::ALPHA, (maxon::UInt64) enum4704::VOLUMEINFO::CHANGENORMAL, (maxon::UInt64) enum4704::VOLUMEINFO::DISPLACEMENT, (maxon::UInt64) enum4704::VOLUMEINFO::ENVREQUIRED, (maxon::UInt64) enum4704::VOLUMEINFO::DUDVREQUIRED, (maxon::UInt64) enum4704::VOLUMEINFO::MIPSAT, (maxon::UInt64) enum4704::VOLUMEINFO::VOLUMETRIC, (maxon::UInt64) enum4704::VOLUMEINFO::TRANSFORM, (maxon::UInt64) enum4704::VOLUMEINFO::EVALUATEPROJECTION, (maxon::UInt64) enum4704::VOLUMEINFO::PRIVATE_GLOW, (maxon::UInt64) enum4704::VOLUMEINFO::INITCALCULATION, (maxon::UInt64) enum4704::VOLUMEINFO::FINAL_ALPHA, (maxon::UInt64) enum4704::VOLUMEINFO::ISNBMMATERIAL};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4706::VOLUMEINFO::NONE, (maxon::UInt64) enum4706::VOLUMEINFO::REFLECTION, (maxon::UInt64) enum4706::VOLUMEINFO::TRANSPARENCY, (maxon::UInt64) enum4706::VOLUMEINFO::ALPHA, (maxon::UInt64) enum4706::VOLUMEINFO::CHANGENORMAL, (maxon::UInt64) enum4706::VOLUMEINFO::DISPLACEMENT, (maxon::UInt64) enum4706::VOLUMEINFO::ENVREQUIRED, (maxon::UInt64) enum4706::VOLUMEINFO::DUDVREQUIRED, (maxon::UInt64) enum4706::VOLUMEINFO::MIPSAT, (maxon::UInt64) enum4706::VOLUMEINFO::VOLUMETRIC, (maxon::UInt64) enum4706::VOLUMEINFO::TRANSFORM, (maxon::UInt64) enum4706::VOLUMEINFO::EVALUATEPROJECTION, (maxon::UInt64) enum4706::VOLUMEINFO::PRIVATE_GLOW, (maxon::UInt64) enum4706::VOLUMEINFO::INITCALCULATION, (maxon::UInt64) enum4706::VOLUMEINFO::FINAL_ALPHA, (maxon::UInt64) enum4706::VOLUMEINFO::ISNBMMATERIAL};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VOLUMEINFO", SIZEOF(x), true, values, "NONE\0REFLECTION\0TRANSPARENCY\0ALPHA\0CHANGENORMAL\0DISPLACEMENT\0ENVREQUIRED\0DUDVREQUIRED\0MIPSAT\0VOLUMETRIC\0TRANSFORM\0EVALUATEPROJECTION\0PRIVATE_GLOW\0INITCALCULATION\0FINAL_ALPHA\0ISNBMMATERIAL\0", fmt);
 }
-namespace enum4729 { enum class VIDEOPOSTINFO
+namespace enum4731 { enum class VIDEOPOSTINFO
 {
 	NONE										= 0,							///< None.
 	STOREFRAGMENTS					= (1 << 0),				///< The videopost needs fragment information for whole image at @ref VIDEOPOSTCALL::INNER/@ref VIDEOPOSTCALL::RENDER.
@@ -2581,12 +2583,12 @@ namespace enum4729 { enum class VIDEOPOSTINFO
 	NETCREATEBUFFER_MULTI		= (1 << 17),			///< The videopost creates multiple buffers for the NET Client in VideoPostData::NetCreateBuffer (called consecutively). @since R16.038
 	REQUEST_MOTIONFULL		 	= (1 << 18), 			///< The videopost requires complete motion blur information. @since R17.032
 } ; }
-maxon::String PrivateToString_VIDEOPOSTINFO4729(std::underlying_type<enum4729::VIDEOPOSTINFO>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_VIDEOPOSTINFO4731(std::underlying_type<enum4731::VIDEOPOSTINFO>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4729::VIDEOPOSTINFO::NONE, (maxon::UInt64) enum4729::VIDEOPOSTINFO::STOREFRAGMENTS, (maxon::UInt64) enum4729::VIDEOPOSTINFO::EXECUTELINE, (maxon::UInt64) enum4729::VIDEOPOSTINFO::EXECUTEPIXEL, (maxon::UInt64) enum4729::VIDEOPOSTINFO::REQUEST_MOTIONMATRIX, (maxon::UInt64) enum4729::VIDEOPOSTINFO::REQUEST_MOTIONGEOMETRY, (maxon::UInt64) enum4729::VIDEOPOSTINFO::CALCVOLUMETRIC, (maxon::UInt64) enum4729::VIDEOPOSTINFO::CALCSHADOW, (maxon::UInt64) enum4729::VIDEOPOSTINFO::CUSTOMLENS, (maxon::UInt64) enum4729::VIDEOPOSTINFO::GLOBALILLUMINATION, (maxon::UInt64) enum4729::VIDEOPOSTINFO::CAUSTICS, (maxon::UInt64) enum4729::VIDEOPOSTINFO::CUSTOMLENS_EXTENDED, (maxon::UInt64) enum4729::VIDEOPOSTINFO::NETFRAME, (maxon::UInt64) enum4729::VIDEOPOSTINFO::NETRUNONSERVER, (maxon::UInt64) enum4729::VIDEOPOSTINFO::NETCREATEBUFFER, (maxon::UInt64) enum4729::VIDEOPOSTINFO::NETCREATEBUFFER_MULTI, (maxon::UInt64) enum4729::VIDEOPOSTINFO::REQUEST_MOTIONFULL};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4731::VIDEOPOSTINFO::NONE, (maxon::UInt64) enum4731::VIDEOPOSTINFO::STOREFRAGMENTS, (maxon::UInt64) enum4731::VIDEOPOSTINFO::EXECUTELINE, (maxon::UInt64) enum4731::VIDEOPOSTINFO::EXECUTEPIXEL, (maxon::UInt64) enum4731::VIDEOPOSTINFO::REQUEST_MOTIONMATRIX, (maxon::UInt64) enum4731::VIDEOPOSTINFO::REQUEST_MOTIONGEOMETRY, (maxon::UInt64) enum4731::VIDEOPOSTINFO::CALCVOLUMETRIC, (maxon::UInt64) enum4731::VIDEOPOSTINFO::CALCSHADOW, (maxon::UInt64) enum4731::VIDEOPOSTINFO::CUSTOMLENS, (maxon::UInt64) enum4731::VIDEOPOSTINFO::GLOBALILLUMINATION, (maxon::UInt64) enum4731::VIDEOPOSTINFO::CAUSTICS, (maxon::UInt64) enum4731::VIDEOPOSTINFO::CUSTOMLENS_EXTENDED, (maxon::UInt64) enum4731::VIDEOPOSTINFO::NETFRAME, (maxon::UInt64) enum4731::VIDEOPOSTINFO::NETRUNONSERVER, (maxon::UInt64) enum4731::VIDEOPOSTINFO::NETCREATEBUFFER, (maxon::UInt64) enum4731::VIDEOPOSTINFO::NETCREATEBUFFER_MULTI, (maxon::UInt64) enum4731::VIDEOPOSTINFO::REQUEST_MOTIONFULL};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VIDEOPOSTINFO", SIZEOF(x), true, values, "NONE\0STOREFRAGMENTS\0EXECUTELINE\0EXECUTEPIXEL\0REQUEST_MOTIONMATRIX\0REQUEST_MOTIONGEOMETRY\0CALCVOLUMETRIC\0CALCSHADOW\0CUSTOMLENS\0GLOBALILLUMINATION\0CAUSTICS\0CUSTOMLENS_EXTENDED\0NETFRAME\0NETRUNONSERVER\0NETCREATEBUFFER\0NETCREATEBUFFER_MULTI\0REQUEST_MOTIONFULL\0", fmt);
 }
-namespace enum4746 { enum class SHADERINFO
+namespace enum4748 { enum class SHADERINFO
 {
 	NONE							= 0,							///< None.
 	TRANSFORM					= 0x00000004,			///< Channel needs back-transformed data. (Required for BaseVolumeData::back_p.)
@@ -2597,33 +2599,33 @@ namespace enum4746 { enum class SHADERINFO
 	DYNAMICSUBSHADERS	= 0x00000100,			///< Channel shader has a dynamic list of sub-shaders in its description.
 	TRANSPARENCIES		= 0x00000200			///< Deprecated, not used anymore.
 } ; }
-maxon::String PrivateToString_SHADERINFO4746(std::underlying_type<enum4746::SHADERINFO>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_SHADERINFO4748(std::underlying_type<enum4748::SHADERINFO>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4746::SHADERINFO::NONE, (maxon::UInt64) enum4746::SHADERINFO::TRANSFORM, (maxon::UInt64) enum4746::SHADERINFO::BUMP_SUPPORT, (maxon::UInt64) enum4746::SHADERINFO::ALPHA_SUPPORT, (maxon::UInt64) enum4746::SHADERINFO::REFLECTIONS, (maxon::UInt64) enum4746::SHADERINFO::DUDVREQUIRED, (maxon::UInt64) enum4746::SHADERINFO::DYNAMICSUBSHADERS, (maxon::UInt64) enum4746::SHADERINFO::TRANSPARENCIES};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4748::SHADERINFO::NONE, (maxon::UInt64) enum4748::SHADERINFO::TRANSFORM, (maxon::UInt64) enum4748::SHADERINFO::BUMP_SUPPORT, (maxon::UInt64) enum4748::SHADERINFO::ALPHA_SUPPORT, (maxon::UInt64) enum4748::SHADERINFO::REFLECTIONS, (maxon::UInt64) enum4748::SHADERINFO::DUDVREQUIRED, (maxon::UInt64) enum4748::SHADERINFO::DYNAMICSUBSHADERS, (maxon::UInt64) enum4748::SHADERINFO::TRANSPARENCIES};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SHADERINFO", SIZEOF(x), true, values, "NONE\0TRANSFORM\0BUMP_SUPPORT\0ALPHA_SUPPORT\0REFLECTIONS\0DUDVREQUIRED\0DYNAMICSUBSHADERS\0TRANSPARENCIES\0", fmt);
 }
-namespace enum4757 { enum class SAMPLEBUMP
+namespace enum4759 { enum class SAMPLEBUMP
 {
 	NONE				= 0,						///< None.
 	MIPFALLOFF	= (1 << 0)			///< Additional bump change over distance is considered.
 } ; }
-maxon::String PrivateToString_SAMPLEBUMP4757(std::underlying_type<enum4757::SAMPLEBUMP>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_SAMPLEBUMP4759(std::underlying_type<enum4759::SAMPLEBUMP>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4757::SAMPLEBUMP::NONE, (maxon::UInt64) enum4757::SAMPLEBUMP::MIPFALLOFF};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4759::SAMPLEBUMP::NONE, (maxon::UInt64) enum4759::SAMPLEBUMP::MIPFALLOFF};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SAMPLEBUMP", SIZEOF(x), true, values, "NONE\0MIPFALLOFF\0", fmt);
 }
-namespace enum4770 { enum class INITCALCULATION
+namespace enum4772 { enum class INITCALCULATION
 {
 	SURFACE				= 0,			///< Called during rendering for surface calculation.
 	TRANSPARENCY	= 1,			///< Called during rendering for shadow rays computation.
 	DISPLACEMENT	= 3				///< Called before rendering for displace calculation.
 } ; }
-maxon::String PrivateToString_INITCALCULATION4770(std::underlying_type<enum4770::INITCALCULATION>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_INITCALCULATION4772(std::underlying_type<enum4772::INITCALCULATION>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4770::INITCALCULATION::SURFACE, (maxon::UInt64) enum4770::INITCALCULATION::TRANSPARENCY, (maxon::UInt64) enum4770::INITCALCULATION::DISPLACEMENT};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4772::INITCALCULATION::SURFACE, (maxon::UInt64) enum4772::INITCALCULATION::TRANSPARENCY, (maxon::UInt64) enum4772::INITCALCULATION::DISPLACEMENT};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "INITCALCULATION", SIZEOF(x), false, values, "SURFACE\0TRANSPARENCY\0DISPLACEMENT\0", fmt);
 }
-namespace enum4791 { enum class FIELDLAYER_FLAG
+namespace enum4793 { enum class FIELDLAYER_FLAG
 {
 	NONE										= 0,						///< Default state
 	SKIP										= (1 << 0),			///< Layer calculation is disabled, e.g. the linked object on a standard layer's deform mode is false.
@@ -2637,23 +2639,23 @@ namespace enum4791 { enum class FIELDLAYER_FLAG
 	TEMPORARY								= (1 << 8),			///< Don't save this layer with the list or duplicate it (outside of undo)
 	NOCHILDROTATION					= (1 << 9)			///< Children of this layer wont output their direction.
 } ; }
-maxon::String PrivateToString_FIELDLAYER_FLAG4791(std::underlying_type<enum4791::FIELDLAYER_FLAG>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_FIELDLAYER_FLAG4793(std::underlying_type<enum4793::FIELDLAYER_FLAG>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4791::FIELDLAYER_FLAG::NONE, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::SKIP, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::ERRORSKIP, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::HIDE, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::MODIFYDATA, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::PRESERVEALPHA, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::NOCHILDVALUE, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::NOCHILDCOLOR, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::NOCHILDDIRECTION, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::TEMPORARY, (maxon::UInt64) enum4791::FIELDLAYER_FLAG::NOCHILDROTATION};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4793::FIELDLAYER_FLAG::NONE, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::SKIP, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::ERRORSKIP, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::HIDE, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::MODIFYDATA, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::PRESERVEALPHA, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::NOCHILDVALUE, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::NOCHILDCOLOR, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::NOCHILDDIRECTION, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::TEMPORARY, (maxon::UInt64) enum4793::FIELDLAYER_FLAG::NOCHILDROTATION};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "FIELDLAYER_FLAG", SIZEOF(x), true, values, "NONE\0SKIP\0ERRORSKIP\0HIDE\0MODIFYDATA\0PRESERVEALPHA\0NOCHILDVALUE\0NOCHILDCOLOR\0NOCHILDDIRECTION\0TEMPORARY\0NOCHILDROTATION\0", fmt);
 }
-namespace enum4901 { enum class MULTIPASSCHANNEL
+namespace enum4903 { enum class MULTIPASSCHANNEL
 {
 	NONE						= 0,						///< None.
 	IMAGELAYER			= (1 << 0),			///< Image layer.
 	MATERIALCHANNEL	= (1 << 1)			///< %Material channel.
 } ; }
-maxon::String PrivateToString_MULTIPASSCHANNEL4901(std::underlying_type<enum4901::MULTIPASSCHANNEL>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_MULTIPASSCHANNEL4903(std::underlying_type<enum4903::MULTIPASSCHANNEL>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4901::MULTIPASSCHANNEL::NONE, (maxon::UInt64) enum4901::MULTIPASSCHANNEL::IMAGELAYER, (maxon::UInt64) enum4901::MULTIPASSCHANNEL::MATERIALCHANNEL};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4903::MULTIPASSCHANNEL::NONE, (maxon::UInt64) enum4903::MULTIPASSCHANNEL::IMAGELAYER, (maxon::UInt64) enum4903::MULTIPASSCHANNEL::MATERIALCHANNEL};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "MULTIPASSCHANNEL", SIZEOF(x), false, values, "NONE\0IMAGELAYER\0MATERIALCHANNEL\0", fmt);
 }
-namespace enum4920 { enum class DLG_TYPE
+namespace enum4922 { enum class DLG_TYPE
 {
 	MODAL = 10,											///< Modal dialog.
 	MODAL_RESIZEABLE,								///< Resizable modal dialog.
@@ -2667,12 +2669,12 @@ namespace enum4920 { enum class DLG_TYPE
 
 	DUMMY
 } ; }
-maxon::String PrivateToString_DLG_TYPE4920(std::underlying_type<enum4920::DLG_TYPE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_DLG_TYPE4922(std::underlying_type<enum4922::DLG_TYPE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4920::DLG_TYPE::MODAL, (maxon::UInt64) enum4920::DLG_TYPE::MODAL_RESIZEABLE, (maxon::UInt64) enum4920::DLG_TYPE::ASYNC, (maxon::UInt64) enum4920::DLG_TYPE::ASYNC_POPUP_RESIZEABLE, (maxon::UInt64) enum4920::DLG_TYPE::ASYNC_POPUPEDIT, (maxon::UInt64) enum4920::DLG_TYPE::ASYNC_FULLSCREEN_WORK, (maxon::UInt64) enum4920::DLG_TYPE::ASYNC_FULLSCREEN_MONITOR, (maxon::UInt64) enum4920::DLG_TYPE::DUMMY};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4922::DLG_TYPE::MODAL, (maxon::UInt64) enum4922::DLG_TYPE::MODAL_RESIZEABLE, (maxon::UInt64) enum4922::DLG_TYPE::ASYNC, (maxon::UInt64) enum4922::DLG_TYPE::ASYNC_POPUP_RESIZEABLE, (maxon::UInt64) enum4922::DLG_TYPE::ASYNC_POPUPEDIT, (maxon::UInt64) enum4922::DLG_TYPE::ASYNC_FULLSCREEN_WORK, (maxon::UInt64) enum4922::DLG_TYPE::ASYNC_FULLSCREEN_MONITOR, (maxon::UInt64) enum4922::DLG_TYPE::DUMMY};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "DLG_TYPE", SIZEOF(x), false, values, "MODAL\0MODAL_RESIZEABLE\0ASYNC\0ASYNC_POPUP_RESIZEABLE\0ASYNC_POPUPEDIT\0ASYNC_FULLSCREEN_WORK\0ASYNC_FULLSCREEN_MONITOR\0DUMMY\0", fmt);
 }
-namespace enum4933 { enum class MULTIMSG_ROUTE
+namespace enum4935 { enum class MULTIMSG_ROUTE
 {
 	NONE				= 0,			///< None.
 	UP					= 1,			///< Send to parents.
@@ -2680,23 +2682,23 @@ namespace enum4933 { enum class MULTIMSG_ROUTE
 	DOWN				= 3,			///< Send to children.
 	BROADCAST		= 4				///< Broadcast the message, i.e. distribute it to all branches given by GeListNode::GetBranchInfo.
 } ; }
-maxon::String PrivateToString_MULTIMSG_ROUTE4933(std::underlying_type<enum4933::MULTIMSG_ROUTE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_MULTIMSG_ROUTE4935(std::underlying_type<enum4935::MULTIMSG_ROUTE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4933::MULTIMSG_ROUTE::NONE, (maxon::UInt64) enum4933::MULTIMSG_ROUTE::UP, (maxon::UInt64) enum4933::MULTIMSG_ROUTE::ROOT, (maxon::UInt64) enum4933::MULTIMSG_ROUTE::DOWN, (maxon::UInt64) enum4933::MULTIMSG_ROUTE::BROADCAST};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4935::MULTIMSG_ROUTE::NONE, (maxon::UInt64) enum4935::MULTIMSG_ROUTE::UP, (maxon::UInt64) enum4935::MULTIMSG_ROUTE::ROOT, (maxon::UInt64) enum4935::MULTIMSG_ROUTE::DOWN, (maxon::UInt64) enum4935::MULTIMSG_ROUTE::BROADCAST};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "MULTIMSG_ROUTE", SIZEOF(x), false, values, "NONE\0UP\0ROOT\0DOWN\0BROADCAST\0", fmt);
 }
-namespace enum4944 { enum class VPGETFRAGMENTS
+namespace enum4946 { enum class VPGETFRAGMENTS
 {
 	NONE	= 0,						///< None.
 	Z_P		= (1 << 0),			///< Get VPFragment::z and VPFragment::p.
 	N			= (1 << 1)			///< Get VPFragment::n.
 } ; }
-maxon::String PrivateToString_VPGETFRAGMENTS4944(std::underlying_type<enum4944::VPGETFRAGMENTS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_VPGETFRAGMENTS4946(std::underlying_type<enum4946::VPGETFRAGMENTS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4944::VPGETFRAGMENTS::NONE, (maxon::UInt64) enum4944::VPGETFRAGMENTS::Z_P, (maxon::UInt64) enum4944::VPGETFRAGMENTS::N};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4946::VPGETFRAGMENTS::NONE, (maxon::UInt64) enum4946::VPGETFRAGMENTS::Z_P, (maxon::UInt64) enum4946::VPGETFRAGMENTS::N};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VPGETFRAGMENTS", SIZEOF(x), true, values, "NONE\0Z_P\0N\0", fmt);
 }
-namespace enum4972 { enum class NAV2DCAMERASETTINGSCACHEMODE
+namespace enum4974 { enum class NAV2DCAMERASETTINGSCACHEMODE
 {
 	REVERT = 0,
 	STOREIFIN2D = 1,
@@ -2706,23 +2708,23 @@ namespace enum4972 { enum class NAV2DCAMERASETTINGSCACHEMODE
 	RET_NOCHANGE = 1001,
 	INVALID = 99999
 } ; }
-maxon::String PrivateToString_NAV2DCAMERASETTINGSCACHEMODE4972(std::underlying_type<enum4972::NAV2DCAMERASETTINGSCACHEMODE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_NAV2DCAMERASETTINGSCACHEMODE4974(std::underlying_type<enum4974::NAV2DCAMERASETTINGSCACHEMODE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4972::NAV2DCAMERASETTINGSCACHEMODE::REVERT, (maxon::UInt64) enum4972::NAV2DCAMERASETTINGSCACHEMODE::STOREIFIN2D, (maxon::UInt64) enum4972::NAV2DCAMERASETTINGSCACHEMODE::STOREIFIN2DANDNOTALREADYSTORED, (maxon::UInt64) enum4972::NAV2DCAMERASETTINGSCACHEMODE::FORCESTORE, (maxon::UInt64) enum4972::NAV2DCAMERASETTINGSCACHEMODE::RET_CHANGED, (maxon::UInt64) enum4972::NAV2DCAMERASETTINGSCACHEMODE::RET_NOCHANGE, (maxon::UInt64) enum4972::NAV2DCAMERASETTINGSCACHEMODE::INVALID};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4974::NAV2DCAMERASETTINGSCACHEMODE::REVERT, (maxon::UInt64) enum4974::NAV2DCAMERASETTINGSCACHEMODE::STOREIFIN2D, (maxon::UInt64) enum4974::NAV2DCAMERASETTINGSCACHEMODE::STOREIFIN2DANDNOTALREADYSTORED, (maxon::UInt64) enum4974::NAV2DCAMERASETTINGSCACHEMODE::FORCESTORE, (maxon::UInt64) enum4974::NAV2DCAMERASETTINGSCACHEMODE::RET_CHANGED, (maxon::UInt64) enum4974::NAV2DCAMERASETTINGSCACHEMODE::RET_NOCHANGE, (maxon::UInt64) enum4974::NAV2DCAMERASETTINGSCACHEMODE::INVALID};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "NAV2DCAMERASETTINGSCACHEMODE", SIZEOF(x), false, values, "REVERT\0STOREIFIN2D\0STOREIFIN2DANDNOTALREADYSTORED\0FORCESTORE\0RET_CHANGED\0RET_NOCHANGE\0INVALID\0", fmt);
 }
-namespace enum4984 { enum class SIGNALMODE
+namespace enum4986 { enum class SIGNALMODE
 {
 	// V_ unfortunately has to be used here due to conflicts with MAC OS
 	V_DEFAULT		= 0,			///< Default mode.
 	V_RESERVED	= 1				///< Reserved.
 } ; }
-maxon::String PrivateToString_SIGNALMODE4984(std::underlying_type<enum4984::SIGNALMODE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_SIGNALMODE4986(std::underlying_type<enum4986::SIGNALMODE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4984::SIGNALMODE::V_DEFAULT, (maxon::UInt64) enum4984::SIGNALMODE::V_RESERVED};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum4986::SIGNALMODE::V_DEFAULT, (maxon::UInt64) enum4986::SIGNALMODE::V_RESERVED};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SIGNALMODE", SIZEOF(x), false, values, "V_DEFAULT\0V_RESERVED\0", fmt);
 }
-namespace enum4998 { enum class QUALIFIER
+namespace enum5000 { enum class QUALIFIER
 {
 	NONE			= 0,						///< None.
 	SHIFT			= (1 << 0),			///< @em SHIFT key.
@@ -2731,12 +2733,12 @@ namespace enum4998 { enum class QUALIFIER
 	MOUSEHIT	= (1 << 10)			///< Indication in ObjectData::DetectHandle that the user pressed the mouse (ObjectData::DetectHandle is also called for cursor information, when hovering over a handle).\n
 														///< For instance if @ref QUALIFIER::MOUSEHIT and @ref QUALIFIER::CTRL are set, ObjectData::DetectHandle could create a new element.
 } ; }
-maxon::String PrivateToString_QUALIFIER4998(std::underlying_type<enum4998::QUALIFIER>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_QUALIFIER5000(std::underlying_type<enum5000::QUALIFIER>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum4998::QUALIFIER::NONE, (maxon::UInt64) enum4998::QUALIFIER::SHIFT, (maxon::UInt64) enum4998::QUALIFIER::CTRL, (maxon::UInt64) enum4998::QUALIFIER::ALT, (maxon::UInt64) enum4998::QUALIFIER::MOUSEHIT};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5000::QUALIFIER::NONE, (maxon::UInt64) enum5000::QUALIFIER::SHIFT, (maxon::UInt64) enum5000::QUALIFIER::CTRL, (maxon::UInt64) enum5000::QUALIFIER::ALT, (maxon::UInt64) enum5000::QUALIFIER::MOUSEHIT};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "QUALIFIER", SIZEOF(x), true, values, "NONE\0SHIFT\0CTRL\0ALT\0MOUSEHIT\0", fmt);
 }
-namespace enum5204 { enum class NOTIFY_EVENT
+namespace enum5206 { enum class NOTIFY_EVENT
 {
 	NONE					= -1,
 	ALL						= 10,
@@ -2758,12 +2760,12 @@ namespace enum5204 { enum class NOTIFY_EVENT
 
 	SETNAME				= 200,
 } ; }
-maxon::String PrivateToString_NOTIFY_EVENT5204(std::underlying_type<enum5204::NOTIFY_EVENT>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_NOTIFY_EVENT5206(std::underlying_type<enum5206::NOTIFY_EVENT>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5204::NOTIFY_EVENT::NONE, (maxon::UInt64) enum5204::NOTIFY_EVENT::ALL, (maxon::UInt64) enum5204::NOTIFY_EVENT::ANY, (maxon::UInt64) enum5204::NOTIFY_EVENT::PRE_DEFORM, (maxon::UInt64) enum5204::NOTIFY_EVENT::POST_DEFORM, (maxon::UInt64) enum5204::NOTIFY_EVENT::UNDO, (maxon::UInt64) enum5204::NOTIFY_EVENT::MESSAGE, (maxon::UInt64) enum5204::NOTIFY_EVENT::FREE, (maxon::UInt64) enum5204::NOTIFY_EVENT::COPY, (maxon::UInt64) enum5204::NOTIFY_EVENT::CACHE, (maxon::UInt64) enum5204::NOTIFY_EVENT::REMOVE, (maxon::UInt64) enum5204::NOTIFY_EVENT::CLONE, (maxon::UInt64) enum5204::NOTIFY_EVENT::INSERT, (maxon::UInt64) enum5204::NOTIFY_EVENT::SELECTIONBIT, (maxon::UInt64) enum5204::NOTIFY_EVENT::HIGHLIGHTBIT, (maxon::UInt64) enum5204::NOTIFY_EVENT::SETNAME};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5206::NOTIFY_EVENT::NONE, (maxon::UInt64) enum5206::NOTIFY_EVENT::ALL, (maxon::UInt64) enum5206::NOTIFY_EVENT::ANY, (maxon::UInt64) enum5206::NOTIFY_EVENT::PRE_DEFORM, (maxon::UInt64) enum5206::NOTIFY_EVENT::POST_DEFORM, (maxon::UInt64) enum5206::NOTIFY_EVENT::UNDO, (maxon::UInt64) enum5206::NOTIFY_EVENT::MESSAGE, (maxon::UInt64) enum5206::NOTIFY_EVENT::FREE, (maxon::UInt64) enum5206::NOTIFY_EVENT::COPY, (maxon::UInt64) enum5206::NOTIFY_EVENT::CACHE, (maxon::UInt64) enum5206::NOTIFY_EVENT::REMOVE, (maxon::UInt64) enum5206::NOTIFY_EVENT::CLONE, (maxon::UInt64) enum5206::NOTIFY_EVENT::INSERT, (maxon::UInt64) enum5206::NOTIFY_EVENT::SELECTIONBIT, (maxon::UInt64) enum5206::NOTIFY_EVENT::HIGHLIGHTBIT, (maxon::UInt64) enum5206::NOTIFY_EVENT::SETNAME};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "NOTIFY_EVENT", SIZEOF(x), false, values, "NONE\0ALL\0ANY\0PRE_DEFORM\0POST_DEFORM\0UNDO\0MESSAGE\0FREE\0COPY\0CACHE\0REMOVE\0CLONE\0INSERT\0SELECTIONBIT\0HIGHLIGHTBIT\0SETNAME\0", fmt);
 }
-namespace enum5222 { enum class NOTIFY_EVENT_FLAG
+namespace enum5224 { enum class NOTIFY_EVENT_FLAG
 {
 	REMOVED					= (1 << 0),
 
@@ -2775,12 +2777,12 @@ namespace enum5222 { enum class NOTIFY_EVENT_FLAG
 
 	NONE						= 0
 } ; }
-maxon::String PrivateToString_NOTIFY_EVENT_FLAG5222(std::underlying_type<enum5222::NOTIFY_EVENT_FLAG>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_NOTIFY_EVENT_FLAG5224(std::underlying_type<enum5224::NOTIFY_EVENT_FLAG>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5222::NOTIFY_EVENT_FLAG::REMOVED, (maxon::UInt64) enum5222::NOTIFY_EVENT_FLAG::COPY_UNDO, (maxon::UInt64) enum5222::NOTIFY_EVENT_FLAG::COPY_CACHE, (maxon::UInt64) enum5222::NOTIFY_EVENT_FLAG::COPY_DUPLICATE, (maxon::UInt64) enum5222::NOTIFY_EVENT_FLAG::ONCE, (maxon::UInt64) enum5222::NOTIFY_EVENT_FLAG::COPY, (maxon::UInt64) enum5222::NOTIFY_EVENT_FLAG::NONE};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5224::NOTIFY_EVENT_FLAG::REMOVED, (maxon::UInt64) enum5224::NOTIFY_EVENT_FLAG::COPY_UNDO, (maxon::UInt64) enum5224::NOTIFY_EVENT_FLAG::COPY_CACHE, (maxon::UInt64) enum5224::NOTIFY_EVENT_FLAG::COPY_DUPLICATE, (maxon::UInt64) enum5224::NOTIFY_EVENT_FLAG::ONCE, (maxon::UInt64) enum5224::NOTIFY_EVENT_FLAG::COPY, (maxon::UInt64) enum5224::NOTIFY_EVENT_FLAG::NONE};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "NOTIFY_EVENT_FLAG", SIZEOF(x), true, values, "REMOVED\0COPY_UNDO\0COPY_CACHE\0COPY_DUPLICATE\0ONCE\0COPY\0NONE\0", fmt);
 }
-namespace enum5235 { enum class DESCIDSTATE
+namespace enum5237 { enum class DESCIDSTATE
 {
 	NONE						= 0,					///< None.
 	LOCKED					= 1 << 0,			///< Description element is locked.
@@ -2788,23 +2790,23 @@ namespace enum5235 { enum class DESCIDSTATE
 	OVERRIDE				= 1 << 2,			///< Description is overridden. @since R17.032
 	FORBIDOVERRIDE	= 1 << 3			///< Description cannot be overridden. @since R17.032
 } ; }
-maxon::String PrivateToString_DESCIDSTATE5235(std::underlying_type<enum5235::DESCIDSTATE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_DESCIDSTATE5237(std::underlying_type<enum5237::DESCIDSTATE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5235::DESCIDSTATE::NONE, (maxon::UInt64) enum5235::DESCIDSTATE::LOCKED, (maxon::UInt64) enum5235::DESCIDSTATE::HIDDEN, (maxon::UInt64) enum5235::DESCIDSTATE::OVERRIDE, (maxon::UInt64) enum5235::DESCIDSTATE::FORBIDOVERRIDE};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5237::DESCIDSTATE::NONE, (maxon::UInt64) enum5237::DESCIDSTATE::LOCKED, (maxon::UInt64) enum5237::DESCIDSTATE::HIDDEN, (maxon::UInt64) enum5237::DESCIDSTATE::OVERRIDE, (maxon::UInt64) enum5237::DESCIDSTATE::FORBIDOVERRIDE};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "DESCIDSTATE", SIZEOF(x), true, values, "NONE\0LOCKED\0HIDDEN\0OVERRIDE\0FORBIDOVERRIDE\0", fmt);
 }
-namespace enum5246 { enum class BASEDRAW_HOOK_MESSAGE
+namespace enum5248 { enum class BASEDRAW_HOOK_MESSAGE
 {
 	ADAPTVIEW					= 1,			///< The user clicked on "Adapt View" menu.
 	SET_SCENE_CAMERA	= 2,			///< The user changed the scene camera. The corresponding data is BDSetSceneCameraMsg.
 	DELETEBASEDRAW		= 3				///< The base draw is deleted.
 } ; }
-maxon::String PrivateToString_BASEDRAW_HOOK_MESSAGE5246(std::underlying_type<enum5246::BASEDRAW_HOOK_MESSAGE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_BASEDRAW_HOOK_MESSAGE5248(std::underlying_type<enum5248::BASEDRAW_HOOK_MESSAGE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5246::BASEDRAW_HOOK_MESSAGE::ADAPTVIEW, (maxon::UInt64) enum5246::BASEDRAW_HOOK_MESSAGE::SET_SCENE_CAMERA, (maxon::UInt64) enum5246::BASEDRAW_HOOK_MESSAGE::DELETEBASEDRAW};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5248::BASEDRAW_HOOK_MESSAGE::ADAPTVIEW, (maxon::UInt64) enum5248::BASEDRAW_HOOK_MESSAGE::SET_SCENE_CAMERA, (maxon::UInt64) enum5248::BASEDRAW_HOOK_MESSAGE::DELETEBASEDRAW};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "BASEDRAW_HOOK_MESSAGE", SIZEOF(x), false, values, "ADAPTVIEW\0SET_SCENE_CAMERA\0DELETEBASEDRAW\0", fmt);
 }
-namespace enum5263 { enum class CINEMAINFO
+namespace enum5265 { enum class CINEMAINFO
 {
 	TABLETT						= 4,			///< Tablet.
 	OPENGL						= 7,			///< OpenGL.
@@ -2816,57 +2818,57 @@ namespace enum5263 { enum class CINEMAINFO
 	SETFOREGROUND			= 13,			///< Set foreground.
 	FORCEDIALOG			 	= 14			///< Force dialogs
 } ; }
-maxon::String PrivateToString_CINEMAINFO5263(std::underlying_type<enum5263::CINEMAINFO>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_CINEMAINFO5265(std::underlying_type<enum5265::CINEMAINFO>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5263::CINEMAINFO::TABLETT, (maxon::UInt64) enum5263::CINEMAINFO::OPENGL, (maxon::UInt64) enum5263::CINEMAINFO::TABLETT_HIRES, (maxon::UInt64) enum5263::CINEMAINFO::FORBID_GUI, (maxon::UInt64) enum5263::CINEMAINFO::MINIMAL_VIEWPORT, (maxon::UInt64) enum5263::CINEMAINFO::LISTEN, (maxon::UInt64) enum5263::CINEMAINFO::WATCH_PID, (maxon::UInt64) enum5263::CINEMAINFO::SETFOREGROUND, (maxon::UInt64) enum5263::CINEMAINFO::FORCEDIALOG};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5265::CINEMAINFO::TABLETT, (maxon::UInt64) enum5265::CINEMAINFO::OPENGL, (maxon::UInt64) enum5265::CINEMAINFO::TABLETT_HIRES, (maxon::UInt64) enum5265::CINEMAINFO::FORBID_GUI, (maxon::UInt64) enum5265::CINEMAINFO::MINIMAL_VIEWPORT, (maxon::UInt64) enum5265::CINEMAINFO::LISTEN, (maxon::UInt64) enum5265::CINEMAINFO::WATCH_PID, (maxon::UInt64) enum5265::CINEMAINFO::SETFOREGROUND, (maxon::UInt64) enum5265::CINEMAINFO::FORCEDIALOG};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "CINEMAINFO", SIZEOF(x), true, values, "TABLETT\0OPENGL\0TABLETT_HIRES\0FORBID_GUI\0MINIMAL_VIEWPORT\0LISTEN\0WATCH_PID\0SETFOREGROUND\0FORCEDIALOG\0", fmt);
 }
-namespace enum5274 { enum class PROTOCOL
+namespace enum5276 { enum class PROTOCOL
 {
 	ZERO	= 0,				///< None.
 	IPV4	= 1000,			///< IPv4.
 	IPV6							///< IPv6.
 } ; }
-maxon::String PrivateToString_PROTOCOL5274(std::underlying_type<enum5274::PROTOCOL>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_PROTOCOL5276(std::underlying_type<enum5276::PROTOCOL>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5274::PROTOCOL::ZERO, (maxon::UInt64) enum5274::PROTOCOL::IPV4, (maxon::UInt64) enum5274::PROTOCOL::IPV6};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5276::PROTOCOL::ZERO, (maxon::UInt64) enum5276::PROTOCOL::IPV4, (maxon::UInt64) enum5276::PROTOCOL::IPV6};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "PROTOCOL", SIZEOF(x), false, values, "ZERO\0IPV4\0IPV6\0", fmt);
 }
-namespace enum5285 { enum class RESOLVERESULT
+namespace enum5287 { enum class RESOLVERESULT
 {
 	OK				= 0,			///< Ok.
 	UNKNOWN		= 1,			///< Unknown error while resolving address.
 } ; }
-maxon::String PrivateToString_RESOLVERESULT5285(std::underlying_type<enum5285::RESOLVERESULT>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_RESOLVERESULT5287(std::underlying_type<enum5287::RESOLVERESULT>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5285::RESOLVERESULT::OK, (maxon::UInt64) enum5285::RESOLVERESULT::UNKNOWN};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5287::RESOLVERESULT::OK, (maxon::UInt64) enum5287::RESOLVERESULT::UNKNOWN};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "RESOLVERESULT", SIZEOF(x), false, values, "OK\0UNKNOWN\0", fmt);
 }
-namespace enum5297 { enum class SERVERJOBLIST
+namespace enum5299 { enum class SERVERJOBLIST
 {
 	INACTIVE = 1000,			///<
 	ACTIVE,								///<
 	DOWNLOAD,							///<
 	ALL										///<
 } ; }
-maxon::String PrivateToString_SERVERJOBLIST5297(std::underlying_type<enum5297::SERVERJOBLIST>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_SERVERJOBLIST5299(std::underlying_type<enum5299::SERVERJOBLIST>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5297::SERVERJOBLIST::INACTIVE, (maxon::UInt64) enum5297::SERVERJOBLIST::ACTIVE, (maxon::UInt64) enum5297::SERVERJOBLIST::DOWNLOAD, (maxon::UInt64) enum5297::SERVERJOBLIST::ALL};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5299::SERVERJOBLIST::INACTIVE, (maxon::UInt64) enum5299::SERVERJOBLIST::ACTIVE, (maxon::UInt64) enum5299::SERVERJOBLIST::DOWNLOAD, (maxon::UInt64) enum5299::SERVERJOBLIST::ALL};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SERVERJOBLIST", SIZEOF(x), false, values, "INACTIVE\0ACTIVE\0DOWNLOAD\0ALL\0", fmt);
 }
-namespace enum5309 { enum class EDITION
+namespace enum5311 { enum class EDITION
 {
 	C4D				= (1 << 0),									///< @C4D
 	NETCLIENT	= (1 << 1),									///< NET client.
 	NETSERVER	= (1 << 2),									///< NET server.
 	NET				= (1 << 1) | (1 << 2),			///< NET.
 } ; }
-maxon::String PrivateToString_EDITION5309(std::underlying_type<enum5309::EDITION>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_EDITION5311(std::underlying_type<enum5311::EDITION>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5309::EDITION::C4D, (maxon::UInt64) enum5309::EDITION::NETCLIENT, (maxon::UInt64) enum5309::EDITION::NETSERVER, (maxon::UInt64) enum5309::EDITION::NET};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5311::EDITION::C4D, (maxon::UInt64) enum5311::EDITION::NETCLIENT, (maxon::UInt64) enum5311::EDITION::NETSERVER, (maxon::UInt64) enum5311::EDITION::NET};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "EDITION", SIZEOF(x), true, values, "C4D\0NETCLIENT\0NETSERVER\0NET\0", fmt);
 }
-namespace enum5326 { enum class JOBCOMMAND
+namespace enum5328 { enum class JOBCOMMAND
 {
 	NONE = 1000,			///< Do nothing.
 	FETCHJOB,					///< Fetch job.
@@ -2878,23 +2880,23 @@ namespace enum5326 { enum class JOBCOMMAND
 	ASSEMBLE,					///< Assemble.
 	END								///< End.
 } ; }
-maxon::String PrivateToString_JOBCOMMAND5326(std::underlying_type<enum5326::JOBCOMMAND>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_JOBCOMMAND5328(std::underlying_type<enum5328::JOBCOMMAND>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5326::JOBCOMMAND::NONE, (maxon::UInt64) enum5326::JOBCOMMAND::FETCHJOB, (maxon::UInt64) enum5326::JOBCOMMAND::ALLOCATESPACE, (maxon::UInt64) enum5326::JOBCOMMAND::DOWNLOAD, (maxon::UInt64) enum5326::JOBCOMMAND::RENDER, (maxon::UInt64) enum5326::JOBCOMMAND::DELETE_, (maxon::UInt64) enum5326::JOBCOMMAND::STOPANDDELETE, (maxon::UInt64) enum5326::JOBCOMMAND::ASSEMBLE, (maxon::UInt64) enum5326::JOBCOMMAND::END};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5328::JOBCOMMAND::NONE, (maxon::UInt64) enum5328::JOBCOMMAND::FETCHJOB, (maxon::UInt64) enum5328::JOBCOMMAND::ALLOCATESPACE, (maxon::UInt64) enum5328::JOBCOMMAND::DOWNLOAD, (maxon::UInt64) enum5328::JOBCOMMAND::RENDER, (maxon::UInt64) enum5328::JOBCOMMAND::DELETE_, (maxon::UInt64) enum5328::JOBCOMMAND::STOPANDDELETE, (maxon::UInt64) enum5328::JOBCOMMAND::ASSEMBLE, (maxon::UInt64) enum5328::JOBCOMMAND::END};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "JOBCOMMAND", SIZEOF(x), false, values, "NONE\0FETCHJOB\0ALLOCATESPACE\0DOWNLOAD\0RENDER\0DELETE_\0STOPANDDELETE\0ASSEMBLE\0END\0", fmt);
 }
-namespace enum5337 { enum class RENDERTARGET
+namespace enum5339 { enum class RENDERTARGET
 {
 	ALL = 1000,	///< Use all machines.
 	SPECIFIED,		///< C4DUuid.
 	MINMAX				///< Minimum/maximum. <i>1000</i>:min <i>1001</i>:max
 } ; }
-maxon::String PrivateToString_RENDERTARGET5337(std::underlying_type<enum5337::RENDERTARGET>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_RENDERTARGET5339(std::underlying_type<enum5339::RENDERTARGET>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5337::RENDERTARGET::ALL, (maxon::UInt64) enum5337::RENDERTARGET::SPECIFIED, (maxon::UInt64) enum5337::RENDERTARGET::MINMAX};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5339::RENDERTARGET::ALL, (maxon::UInt64) enum5339::RENDERTARGET::SPECIFIED, (maxon::UInt64) enum5339::RENDERTARGET::MINMAX};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "RENDERTARGET", SIZEOF(x), false, values, "ALL\0SPECIFIED\0MINMAX\0", fmt);
 }
-namespace enum5373 { enum class JOBSTATE
+namespace enum5375 { enum class JOBSTATE
 {
 	IDLE = 1000,								///< Idle.
 
@@ -2925,35 +2927,35 @@ namespace enum5373 { enum class JOBSTATE
 	QUEUED_WAITING,							///< Queued waiting. @since R18
 	ASSEMBLE_PENDING						///< Allocate space running. @since R17.053
 } ; }
-maxon::String PrivateToString_JOBSTATE5373(std::underlying_type<enum5373::JOBSTATE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_JOBSTATE5375(std::underlying_type<enum5375::JOBSTATE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5373::JOBSTATE::IDLE, (maxon::UInt64) enum5373::JOBSTATE::PREPARING_RUNNING, (maxon::UInt64) enum5373::JOBSTATE::PREPARING_FAILED, (maxon::UInt64) enum5373::JOBSTATE::PREPARING_OK, (maxon::UInt64) enum5373::JOBSTATE::RENDER_RUNNING, (maxon::UInt64) enum5373::JOBSTATE::TE_RENDER_PAUSED, (maxon::UInt64) enum5373::JOBSTATE::RENDER_OK, (maxon::UInt64) enum5373::JOBSTATE::RENDER_FAILED, (maxon::UInt64) enum5373::JOBSTATE::ALLOCATESPACE_RUNNING, (maxon::UInt64) enum5373::JOBSTATE::ALLOCATESPACE_OK, (maxon::UInt64) enum5373::JOBSTATE::ALLOCATESPACE_FAILED, (maxon::UInt64) enum5373::JOBSTATE::DOWNLOAD_RUNNING, (maxon::UInt64) enum5373::JOBSTATE::DOWNLOAD_OK, (maxon::UInt64) enum5373::JOBSTATE::DOWNLOAD_FAILED, (maxon::UInt64) enum5373::JOBSTATE::ASSEMBLE_RUNNING, (maxon::UInt64) enum5373::JOBSTATE::ASSEMBLE_OK, (maxon::UInt64) enum5373::JOBSTATE::ASSEMBLE_FAILED, (maxon::UInt64) enum5373::JOBSTATE::STOPPED, (maxon::UInt64) enum5373::JOBSTATE::QUEUED, (maxon::UInt64) enum5373::JOBSTATE::PENDING, (maxon::UInt64) enum5373::JOBSTATE::QUEUED_WAITING, (maxon::UInt64) enum5373::JOBSTATE::ASSEMBLE_PENDING};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5375::JOBSTATE::IDLE, (maxon::UInt64) enum5375::JOBSTATE::PREPARING_RUNNING, (maxon::UInt64) enum5375::JOBSTATE::PREPARING_FAILED, (maxon::UInt64) enum5375::JOBSTATE::PREPARING_OK, (maxon::UInt64) enum5375::JOBSTATE::RENDER_RUNNING, (maxon::UInt64) enum5375::JOBSTATE::TE_RENDER_PAUSED, (maxon::UInt64) enum5375::JOBSTATE::RENDER_OK, (maxon::UInt64) enum5375::JOBSTATE::RENDER_FAILED, (maxon::UInt64) enum5375::JOBSTATE::ALLOCATESPACE_RUNNING, (maxon::UInt64) enum5375::JOBSTATE::ALLOCATESPACE_OK, (maxon::UInt64) enum5375::JOBSTATE::ALLOCATESPACE_FAILED, (maxon::UInt64) enum5375::JOBSTATE::DOWNLOAD_RUNNING, (maxon::UInt64) enum5375::JOBSTATE::DOWNLOAD_OK, (maxon::UInt64) enum5375::JOBSTATE::DOWNLOAD_FAILED, (maxon::UInt64) enum5375::JOBSTATE::ASSEMBLE_RUNNING, (maxon::UInt64) enum5375::JOBSTATE::ASSEMBLE_OK, (maxon::UInt64) enum5375::JOBSTATE::ASSEMBLE_FAILED, (maxon::UInt64) enum5375::JOBSTATE::STOPPED, (maxon::UInt64) enum5375::JOBSTATE::QUEUED, (maxon::UInt64) enum5375::JOBSTATE::PENDING, (maxon::UInt64) enum5375::JOBSTATE::QUEUED_WAITING, (maxon::UInt64) enum5375::JOBSTATE::ASSEMBLE_PENDING};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "JOBSTATE", SIZEOF(x), false, values, "IDLE\0PREPARING_RUNNING\0PREPARING_FAILED\0PREPARING_OK\0RENDER_RUNNING\0TE_RENDER_PAUSED\0RENDER_OK\0RENDER_FAILED\0ALLOCATESPACE_RUNNING\0ALLOCATESPACE_OK\0ALLOCATESPACE_FAILED\0DOWNLOAD_RUNNING\0DOWNLOAD_OK\0DOWNLOAD_FAILED\0ASSEMBLE_RUNNING\0ASSEMBLE_OK\0ASSEMBLE_FAILED\0STOPPED\0QUEUED\0PENDING\0QUEUED_WAITING\0ASSEMBLE_PENDING\0", fmt);
 }
-namespace enum5385 { enum class ZEROCONFMACHINESTATE
+namespace enum5387 { enum class ZEROCONFMACHINESTATE
 {
 	ONLINE		= 1,			///< Online.
 	OFFLINE	= 2,			///< Offline.
 	REMOVED	= 3,			///< Removed.
 	UPDATE		= 4,			///< Update.
 } ; }
-maxon::String PrivateToString_ZEROCONFMACHINESTATE5385(std::underlying_type<enum5385::ZEROCONFMACHINESTATE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_ZEROCONFMACHINESTATE5387(std::underlying_type<enum5387::ZEROCONFMACHINESTATE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5385::ZEROCONFMACHINESTATE::ONLINE, (maxon::UInt64) enum5385::ZEROCONFMACHINESTATE::OFFLINE, (maxon::UInt64) enum5385::ZEROCONFMACHINESTATE::REMOVED, (maxon::UInt64) enum5385::ZEROCONFMACHINESTATE::UPDATE};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5387::ZEROCONFMACHINESTATE::ONLINE, (maxon::UInt64) enum5387::ZEROCONFMACHINESTATE::OFFLINE, (maxon::UInt64) enum5387::ZEROCONFMACHINESTATE::REMOVED, (maxon::UInt64) enum5387::ZEROCONFMACHINESTATE::UPDATE};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "ZEROCONFMACHINESTATE", SIZEOF(x), false, values, "ONLINE\0OFFLINE\0REMOVED\0UPDATE\0", fmt);
 }
-namespace enum5396 { enum class ZEROCONFACTION
+namespace enum5398 { enum class ZEROCONFACTION
 {
 	NONE		= 0,						///< None.
 	RESOLVE	= (1 << 0),			///< Resolve.
 	MONITOR	= (1 << 1)			///< Monitor.
 } ; }
-maxon::String PrivateToString_ZEROCONFACTION5396(std::underlying_type<enum5396::ZEROCONFACTION>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_ZEROCONFACTION5398(std::underlying_type<enum5398::ZEROCONFACTION>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5396::ZEROCONFACTION::NONE, (maxon::UInt64) enum5396::ZEROCONFACTION::RESOLVE, (maxon::UInt64) enum5396::ZEROCONFACTION::MONITOR};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5398::ZEROCONFACTION::NONE, (maxon::UInt64) enum5398::ZEROCONFACTION::RESOLVE, (maxon::UInt64) enum5398::ZEROCONFACTION::MONITOR};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "ZEROCONFACTION", SIZEOF(x), true, values, "NONE\0RESOLVE\0MONITOR\0", fmt);
 }
-namespace enum5435 { enum class ZEROCONFERROR
+namespace enum5437 { enum class ZEROCONFERROR
 {
 	OK												= 0,					///< No error.
 	UNKNOWN										= -65537,			///< Unknown. @c 0xFFFEFFFF
@@ -2987,12 +2989,12 @@ namespace enum5435 { enum class ZEROCONFERROR
 	NOROUTER									= -65566,			///< No router currently configured (probably no network connectivity).
 	POLLINGMODE								= -65567			///< Polling mode.
 } ; }
-maxon::String PrivateToString_ZEROCONFERROR5435(std::underlying_type<enum5435::ZEROCONFERROR>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_ZEROCONFERROR5437(std::underlying_type<enum5437::ZEROCONFERROR>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5435::ZEROCONFERROR::OK, (maxon::UInt64) enum5435::ZEROCONFERROR::UNKNOWN, (maxon::UInt64) enum5435::ZEROCONFERROR::NOSUCHNAME, (maxon::UInt64) enum5435::ZEROCONFERROR::NOMEMORY, (maxon::UInt64) enum5435::ZEROCONFERROR::BADPARAM, (maxon::UInt64) enum5435::ZEROCONFERROR::BADREFERENCE, (maxon::UInt64) enum5435::ZEROCONFERROR::BADSTATE, (maxon::UInt64) enum5435::ZEROCONFERROR::BADFLAGS, (maxon::UInt64) enum5435::ZEROCONFERROR::UNSUPPORTED, (maxon::UInt64) enum5435::ZEROCONFERROR::NOTINITIALIZED, (maxon::UInt64) enum5435::ZEROCONFERROR::ALREADYREGISTERED, (maxon::UInt64) enum5435::ZEROCONFERROR::NAMECONFLICT, (maxon::UInt64) enum5435::ZEROCONFERROR::INVALID, (maxon::UInt64) enum5435::ZEROCONFERROR::FIREWALL, (maxon::UInt64) enum5435::ZEROCONFERROR::INCOMPATIBLE, (maxon::UInt64) enum5435::ZEROCONFERROR::BADINTERFACEINDEX, (maxon::UInt64) enum5435::ZEROCONFERROR::REFUSED, (maxon::UInt64) enum5435::ZEROCONFERROR::NOSUCHRECORD, (maxon::UInt64) enum5435::ZEROCONFERROR::NOAUTH, (maxon::UInt64) enum5435::ZEROCONFERROR::NOSUCHKEY, (maxon::UInt64) enum5435::ZEROCONFERROR::NATTRAVERSAL, (maxon::UInt64) enum5435::ZEROCONFERROR::DOUBLENAT, (maxon::UInt64) enum5435::ZEROCONFERROR::BADTIME, (maxon::UInt64) enum5435::ZEROCONFERROR::BADSIGNAL, (maxon::UInt64) enum5435::ZEROCONFERROR::BADKEY, (maxon::UInt64) enum5435::ZEROCONFERROR::TRANSIENT, (maxon::UInt64) enum5435::ZEROCONFERROR::SERVICENOTRUNNING, (maxon::UInt64) enum5435::ZEROCONFERROR::NATPORTMAPPINGUNSUPPORTED, (maxon::UInt64) enum5435::ZEROCONFERROR::NATPORTMAPPINGDISABLED, (maxon::UInt64) enum5435::ZEROCONFERROR::NOROUTER, (maxon::UInt64) enum5435::ZEROCONFERROR::POLLINGMODE};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5437::ZEROCONFERROR::OK, (maxon::UInt64) enum5437::ZEROCONFERROR::UNKNOWN, (maxon::UInt64) enum5437::ZEROCONFERROR::NOSUCHNAME, (maxon::UInt64) enum5437::ZEROCONFERROR::NOMEMORY, (maxon::UInt64) enum5437::ZEROCONFERROR::BADPARAM, (maxon::UInt64) enum5437::ZEROCONFERROR::BADREFERENCE, (maxon::UInt64) enum5437::ZEROCONFERROR::BADSTATE, (maxon::UInt64) enum5437::ZEROCONFERROR::BADFLAGS, (maxon::UInt64) enum5437::ZEROCONFERROR::UNSUPPORTED, (maxon::UInt64) enum5437::ZEROCONFERROR::NOTINITIALIZED, (maxon::UInt64) enum5437::ZEROCONFERROR::ALREADYREGISTERED, (maxon::UInt64) enum5437::ZEROCONFERROR::NAMECONFLICT, (maxon::UInt64) enum5437::ZEROCONFERROR::INVALID, (maxon::UInt64) enum5437::ZEROCONFERROR::FIREWALL, (maxon::UInt64) enum5437::ZEROCONFERROR::INCOMPATIBLE, (maxon::UInt64) enum5437::ZEROCONFERROR::BADINTERFACEINDEX, (maxon::UInt64) enum5437::ZEROCONFERROR::REFUSED, (maxon::UInt64) enum5437::ZEROCONFERROR::NOSUCHRECORD, (maxon::UInt64) enum5437::ZEROCONFERROR::NOAUTH, (maxon::UInt64) enum5437::ZEROCONFERROR::NOSUCHKEY, (maxon::UInt64) enum5437::ZEROCONFERROR::NATTRAVERSAL, (maxon::UInt64) enum5437::ZEROCONFERROR::DOUBLENAT, (maxon::UInt64) enum5437::ZEROCONFERROR::BADTIME, (maxon::UInt64) enum5437::ZEROCONFERROR::BADSIGNAL, (maxon::UInt64) enum5437::ZEROCONFERROR::BADKEY, (maxon::UInt64) enum5437::ZEROCONFERROR::TRANSIENT, (maxon::UInt64) enum5437::ZEROCONFERROR::SERVICENOTRUNNING, (maxon::UInt64) enum5437::ZEROCONFERROR::NATPORTMAPPINGUNSUPPORTED, (maxon::UInt64) enum5437::ZEROCONFERROR::NATPORTMAPPINGDISABLED, (maxon::UInt64) enum5437::ZEROCONFERROR::NOROUTER, (maxon::UInt64) enum5437::ZEROCONFERROR::POLLINGMODE};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "ZEROCONFERROR", SIZEOF(x), false, values, "OK\0UNKNOWN\0NOSUCHNAME\0NOMEMORY\0BADPARAM\0BADREFERENCE\0BADSTATE\0BADFLAGS\0UNSUPPORTED\0NOTINITIALIZED\0ALREADYREGISTERED\0NAMECONFLICT\0INVALID\0FIREWALL\0INCOMPATIBLE\0BADINTERFACEINDEX\0REFUSED\0NOSUCHRECORD\0NOAUTH\0NOSUCHKEY\0NATTRAVERSAL\0DOUBLENAT\0BADTIME\0BADSIGNAL\0BADKEY\0TRANSIENT\0SERVICENOTRUNNING\0NATPORTMAPPINGUNSUPPORTED\0NATPORTMAPPINGDISABLED\0NOROUTER\0POLLINGMODE\0", fmt);
 }
-namespace enum5465 { enum class COMPONENT_SELECTION_MODES
+namespace enum5467 { enum class COMPONENT_SELECTION_MODES
 {
 	POINTS				= 0,								 ///< Points selection mode.
 	EDGES					= 1,								 ///< Edges selection mode.
@@ -3002,12 +3004,12 @@ namespace enum5465 { enum class COMPONENT_SELECTION_MODES
 	CURRENT				= 5,								 ///< Current component selection mode.
 	UVEDGES				= 6									 ///< UV Edges selection mode. @since R22
 } ; }
-maxon::String PrivateToString_COMPONENT_SELECTION_MODES5465(std::underlying_type<enum5465::COMPONENT_SELECTION_MODES>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_COMPONENT_SELECTION_MODES5467(std::underlying_type<enum5467::COMPONENT_SELECTION_MODES>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5465::COMPONENT_SELECTION_MODES::POINTS, (maxon::UInt64) enum5465::COMPONENT_SELECTION_MODES::EDGES, (maxon::UInt64) enum5465::COMPONENT_SELECTION_MODES::POLYGONS, (maxon::UInt64) enum5465::COMPONENT_SELECTION_MODES::UVPOINTS, (maxon::UInt64) enum5465::COMPONENT_SELECTION_MODES::UVPOLYGONS, (maxon::UInt64) enum5465::COMPONENT_SELECTION_MODES::CURRENT, (maxon::UInt64) enum5465::COMPONENT_SELECTION_MODES::UVEDGES};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5467::COMPONENT_SELECTION_MODES::POINTS, (maxon::UInt64) enum5467::COMPONENT_SELECTION_MODES::EDGES, (maxon::UInt64) enum5467::COMPONENT_SELECTION_MODES::POLYGONS, (maxon::UInt64) enum5467::COMPONENT_SELECTION_MODES::UVPOINTS, (maxon::UInt64) enum5467::COMPONENT_SELECTION_MODES::UVPOLYGONS, (maxon::UInt64) enum5467::COMPONENT_SELECTION_MODES::CURRENT, (maxon::UInt64) enum5467::COMPONENT_SELECTION_MODES::UVEDGES};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "COMPONENT_SELECTION_MODES", SIZEOF(x), false, values, "POINTS\0EDGES\0POLYGONS\0UVPOINTS\0UVPOLYGONS\0CURRENT\0UVEDGES\0", fmt);
 }
-namespace enum5479 { enum class FIELDSAMPLE_FLAG
+namespace enum5481 { enum class FIELDSAMPLE_FLAG
 {
 	VALUE			= 0,														///< Sample only the value at the current point (minimum must still sample the value)
 	DIRECTION	= (1 << 0),											///< Sample the velocity at the current point
@@ -3016,22 +3018,22 @@ namespace enum5479 { enum class FIELDSAMPLE_FLAG
 	ALL				= VALUE | DIRECTION | COLOR,		///< Sample all channels at the current point minus rotation
 	NONLINEARCOLOR	= (1 << 3)								///< Deliver the color in non-linear sRGB colorspace (see Document Linear Color Workflow settings)
 } ; }
-maxon::String PrivateToString_FIELDSAMPLE_FLAG5479(std::underlying_type<enum5479::FIELDSAMPLE_FLAG>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_FIELDSAMPLE_FLAG5481(std::underlying_type<enum5481::FIELDSAMPLE_FLAG>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5479::FIELDSAMPLE_FLAG::VALUE, (maxon::UInt64) enum5479::FIELDSAMPLE_FLAG::DIRECTION, (maxon::UInt64) enum5479::FIELDSAMPLE_FLAG::COLOR, (maxon::UInt64) enum5479::FIELDSAMPLE_FLAG::ROTATION, (maxon::UInt64) enum5479::FIELDSAMPLE_FLAG::ALL, (maxon::UInt64) enum5479::FIELDSAMPLE_FLAG::NONLINEARCOLOR};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5481::FIELDSAMPLE_FLAG::VALUE, (maxon::UInt64) enum5481::FIELDSAMPLE_FLAG::DIRECTION, (maxon::UInt64) enum5481::FIELDSAMPLE_FLAG::COLOR, (maxon::UInt64) enum5481::FIELDSAMPLE_FLAG::ROTATION, (maxon::UInt64) enum5481::FIELDSAMPLE_FLAG::ALL, (maxon::UInt64) enum5481::FIELDSAMPLE_FLAG::NONLINEARCOLOR};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "FIELDSAMPLE_FLAG", SIZEOF(x), true, values, "VALUE\0DIRECTION\0COLOR\0ROTATION\0ALL\0NONLINEARCOLOR\0", fmt);
 }
-namespace enum5489 { enum class FIELDOBJECTSAMPLE_FLAG
+namespace enum5491 { enum class FIELDOBJECTSAMPLE_FLAG
 {
 	NONE										= 0,						///< No flags
 	DISABLEDIRECTIONFALLOFF = (1 << 0)			///< @Markprivate Disables remapping the direction magnitude by the value parameter in order that fieldlayers may use that to blend instead in normal mode
 } ; }
-maxon::String PrivateToString_FIELDOBJECTSAMPLE_FLAG5489(std::underlying_type<enum5489::FIELDOBJECTSAMPLE_FLAG>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_FIELDOBJECTSAMPLE_FLAG5491(std::underlying_type<enum5491::FIELDOBJECTSAMPLE_FLAG>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5489::FIELDOBJECTSAMPLE_FLAG::NONE, (maxon::UInt64) enum5489::FIELDOBJECTSAMPLE_FLAG::DISABLEDIRECTIONFALLOFF};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5491::FIELDOBJECTSAMPLE_FLAG::NONE, (maxon::UInt64) enum5491::FIELDOBJECTSAMPLE_FLAG::DISABLEDIRECTIONFALLOFF};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "FIELDOBJECTSAMPLE_FLAG", SIZEOF(x), true, values, "NONE\0DISABLEDIRECTIONFALLOFF\0", fmt);
 }
-namespace enum5503 { enum class FIELDOBJECT_FLAG
+namespace enum5505 { enum class FIELDOBJECT_FLAG
 {
 	NONE											= 0,								///< No flags
 	INLINE										= (1 << 0),					///< Field calculates using the current values of the field stack.
@@ -3040,52 +3042,52 @@ namespace enum5503 { enum class FIELDOBJECT_FLAG
 	SKIP											= (1 << 3),					///< The Field should be skipped.
 	ERRORSKIP									= (1 << 4)					///< The Field is currently experiencing an error.
 } ; }
-maxon::String PrivateToString_FIELDOBJECT_FLAG5503(std::underlying_type<enum5503::FIELDOBJECT_FLAG>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_FIELDOBJECT_FLAG5505(std::underlying_type<enum5505::FIELDOBJECT_FLAG>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5503::FIELDOBJECT_FLAG::NONE, (maxon::UInt64) enum5503::FIELDOBJECT_FLAG::INLINE, (maxon::UInt64) enum5503::FIELDOBJECT_FLAG::GENERATINGCOLOR, (maxon::UInt64) enum5503::FIELDOBJECT_FLAG::PRESERVEALPHA, (maxon::UInt64) enum5503::FIELDOBJECT_FLAG::SKIP, (maxon::UInt64) enum5503::FIELDOBJECT_FLAG::ERRORSKIP};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5505::FIELDOBJECT_FLAG::NONE, (maxon::UInt64) enum5505::FIELDOBJECT_FLAG::INLINE, (maxon::UInt64) enum5505::FIELDOBJECT_FLAG::GENERATINGCOLOR, (maxon::UInt64) enum5505::FIELDOBJECT_FLAG::PRESERVEALPHA, (maxon::UInt64) enum5505::FIELDOBJECT_FLAG::SKIP, (maxon::UInt64) enum5505::FIELDOBJECT_FLAG::ERRORSKIP};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "FIELDOBJECT_FLAG", SIZEOF(x), true, values, "NONE\0INLINE\0GENERATINGCOLOR\0PRESERVEALPHA\0SKIP\0ERRORSKIP\0", fmt);
 }
-namespace enum5515 { enum class VIEWPORT_RENDER_ID
+namespace enum5517 { enum class VIEWPORT_RENDER_ID
 {
 	RENDER_OBJECT = 0,	///< Return the Id of the render object.
 	DATA_SETTER = 1			///< Return the Id of the data setter.
 } ; }
-maxon::String PrivateToString_VIEWPORT_RENDER_ID5515(std::underlying_type<enum5515::VIEWPORT_RENDER_ID>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_VIEWPORT_RENDER_ID5517(std::underlying_type<enum5517::VIEWPORT_RENDER_ID>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5515::VIEWPORT_RENDER_ID::RENDER_OBJECT, (maxon::UInt64) enum5515::VIEWPORT_RENDER_ID::DATA_SETTER};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5517::VIEWPORT_RENDER_ID::RENDER_OBJECT, (maxon::UInt64) enum5517::VIEWPORT_RENDER_ID::DATA_SETTER};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VIEWPORT_RENDER_ID", SIZEOF(x), false, values, "RENDER_OBJECT\0DATA_SETTER\0", fmt);
 }
-namespace enum5533 { enum class GETALLASSETSRESULT
+namespace enum5535 { enum class GETALLASSETSRESULT
 {
 	FAILED		= 0,		///< Function call went wrong.
 	OK				= 1,		///< Function succeeded and all assets exists.
 	MISSING		= 2			///< Function succeeded but some assets cannot be found.
 } ; }
-maxon::String PrivateToString_GETALLASSETSRESULT5533(std::underlying_type<enum5533::GETALLASSETSRESULT>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_GETALLASSETSRESULT5535(std::underlying_type<enum5535::GETALLASSETSRESULT>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5533::GETALLASSETSRESULT::FAILED, (maxon::UInt64) enum5533::GETALLASSETSRESULT::OK, (maxon::UInt64) enum5533::GETALLASSETSRESULT::MISSING};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5535::GETALLASSETSRESULT::FAILED, (maxon::UInt64) enum5535::GETALLASSETSRESULT::OK, (maxon::UInt64) enum5535::GETALLASSETSRESULT::MISSING};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "GETALLASSETSRESULT", SIZEOF(x), false, values, "FAILED\0OK\0MISSING\0", fmt);
 }
-namespace enum5545 { enum class VIEWPORTTYPE
+namespace enum5547 { enum class VIEWPORTTYPE
 {
 	NONE			= 0,		///< No viewport is active.
 	MAIN_VIEW = 1,		///< Main 3D viewport is active.
 	UV_VIEW		= 2			///< UV viewport is active.
 } ; }
-maxon::String PrivateToString_VIEWPORTTYPE5545(std::underlying_type<enum5545::VIEWPORTTYPE>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_VIEWPORTTYPE5547(std::underlying_type<enum5547::VIEWPORTTYPE>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5545::VIEWPORTTYPE::NONE, (maxon::UInt64) enum5545::VIEWPORTTYPE::MAIN_VIEW, (maxon::UInt64) enum5545::VIEWPORTTYPE::UV_VIEW};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5547::VIEWPORTTYPE::NONE, (maxon::UInt64) enum5547::VIEWPORTTYPE::MAIN_VIEW, (maxon::UInt64) enum5547::VIEWPORTTYPE::UV_VIEW};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "VIEWPORTTYPE", SIZEOF(x), false, values, "NONE\0MAIN_VIEW\0UV_VIEW\0", fmt);
 }
-namespace enum5558 { enum class SCENENODES_IDS
+namespace enum5560 { enum class SCENENODES_IDS
 {
     SCENEHOOK_ID                = 1054188,        ///< SceneHook ID
     MSGUPDATE_LEGACYOBJ_ID      = 180420109,      ///< Legacy Objects Update Message ID.
     PERSISTENT_HASH_LOW_ID      = 180420112       ///< Persistent Hash ID.
 } ; }
-maxon::String PrivateToString_SCENENODES_IDS5558(std::underlying_type<enum5558::SCENENODES_IDS>::type x, const maxon::FormatStatement* fmt)
+maxon::String PrivateToString_SCENENODES_IDS5560(std::underlying_type<enum5560::SCENENODES_IDS>::type x, const maxon::FormatStatement* fmt)
 {
-	const maxon::UInt64 values[] = {(maxon::UInt64) enum5558::SCENENODES_IDS::SCENEHOOK_ID, (maxon::UInt64) enum5558::SCENENODES_IDS::MSGUPDATE_LEGACYOBJ_ID, (maxon::UInt64) enum5558::SCENENODES_IDS::PERSISTENT_HASH_LOW_ID};
+	const maxon::UInt64 values[] = {(maxon::UInt64) enum5560::SCENENODES_IDS::SCENEHOOK_ID, (maxon::UInt64) enum5560::SCENENODES_IDS::MSGUPDATE_LEGACYOBJ_ID, (maxon::UInt64) enum5560::SCENENODES_IDS::PERSISTENT_HASH_LOW_ID};
 	return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SCENENODES_IDS", SIZEOF(x), false, values, "SCENEHOOK_ID\0MSGUPDATE_LEGACYOBJ_ID\0PERSISTENT_HASH_LOW_ID\0", fmt);
 }
 #ifdef CINEWARE_NAMESPACE_ENABLE

@@ -21,6 +21,7 @@ namespace maxon
 
 class ViewportRenderRef;
 class DrawportRef;
+class DrawportContextRef;
 class DrawportRedrawHelperRef;
 class ImageRef;
 
@@ -1834,9 +1835,18 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the underlying drawport.
-	/// @param[in] drawport						The drawport.
+	/// @param[out] drawport					The drawport.
 	//----------------------------------------------------------------------------------------
 	void GetDrawport(maxon::DrawportRef& drawport) const { C4DOS.Br->GetDrawport(this, drawport); }
+
+	//----------------------------------------------------------------------------------------
+	/// Gets the underlying drawport context.
+	/// @param[out] context						The context.
+	//----------------------------------------------------------------------------------------
+	void GetDrawportContext(maxon::DrawportContextRef& context) const
+	{
+		C4DOS.Br->GetDrawportContext(this, context);
+	}
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the color framebuffer.

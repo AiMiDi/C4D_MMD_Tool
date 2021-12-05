@@ -1,1 +1,1 @@
-maxon.DistanceQueryInterface=D:\C4DSDK\C4D_MMDTool\r20_sdk\frameworks\mesh_misc.framework\source\maxon\distancequery.h(109,7)=Object:GetClosestMeshPrimitive,GetDistanceToMesh,GetDistanceToMeshMaxAngleToDirection,GetDistanceToSpline,Init,IsInitialized,Reset,SetThreading
+maxon.DistanceQueryInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\mesh_misc.framework\source\maxon\distancequery.h(109,7)=Object:GetClosestMeshPrimitive,GetDistanceToMesh,GetDistanceToMeshMaxAngleToDirection,GetDistanceToSpline,Init,IsInitialized,Reset,SetThreading

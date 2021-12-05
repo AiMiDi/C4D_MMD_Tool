@@ -233,7 +233,7 @@ template <typename V> struct SqrMat3
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. See also @ref format_float.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + v1.ToString(formatStatement) + ","_s + v2.ToString(formatStatement) + ","_s + v3.ToString(formatStatement) + ")"_s;
 	}
@@ -423,7 +423,7 @@ template <typename V> struct Mat3
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. See also @ref format_float.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return "("_s + sqmat.v1.ToString(formatStatement) + ","_s + sqmat.v2.ToString(formatStatement) + ","_s + sqmat.v3.ToString(formatStatement) + ","_s + off.ToString(formatStatement) + ")"_s;
 	}

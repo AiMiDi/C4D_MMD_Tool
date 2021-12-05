@@ -451,7 +451,6 @@ MAXON_REGISTRY(Class<VirtualMachineRef>, VirtualMachines, "net.maxon.python.regi
 namespace VirtualMachines
 {
 	MAXON_DECLARATION(Class<VirtualMachineRef>, CPython, "net.maxon.python.virtualmachine.cpython");
-	MAXON_DECLARATION(Class<VirtualMachineRef>, PyPy, "net.maxon.python.virtualmachine.pypy");
 }
 
 // Pre configured Python debugger handlers

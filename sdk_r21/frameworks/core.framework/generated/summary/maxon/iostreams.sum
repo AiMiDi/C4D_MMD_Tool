@@ -1,7 +1,7 @@
-maxon.IoErrorInterface	"net.maxon.interface.ioerror"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\iostreams.h(26,7)	ErrorInterface	GetUrl,SetUrl	
-maxon.FileFormatErrorInterface	"net.maxon.interface.fileformaterror"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\iostreams.h(98,7)	IoErrorInterface		
-maxon.UnknownFileSizeErrorInterface	"net.maxon.interface.unknownfilesizeerror"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\iostreams.h(117,7)	ErrorInterface		
-maxon.BaseStreamInterface	"net.maxon.interface.basestream"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\iostreams.h(126,7)	DataDictionaryObjectInterface	Close,DisableBuffering,GetPosition,GetStreamLength,Seek,SeekSupported	
-maxon.InputStreamInterface	"net.maxon.interface.inputstream"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\iostreams.h(206,7)	BaseStreamInterface	BytesAvailable,ReadEOS,Skip	
-maxon.OutputStreamInterface	"net.maxon.interface.outputstream"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\iostreams.h(248,7)	BaseStreamInterface	Flush,Write	
-maxon.InOutputStreamInterface	"net.maxon.interface.inoutputstream"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\iostreams.h(272,7)	InputStreamInterface,OutputStreamInterface		
+maxon.IoErrorInterface	"net.maxon.interface.ioerror"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\core.framework\source\maxon\iostreams.h(26,7)	ErrorInterface	GetUrl,SetUrl	
+maxon.FileFormatErrorInterface	"net.maxon.interface.fileformaterror"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\core.framework\source\maxon\iostreams.h(98,7)	IoErrorInterface		
+maxon.UnknownFileSizeErrorInterface	"net.maxon.interface.unknownfilesizeerror"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\core.framework\source\maxon\iostreams.h(117,7)	ErrorInterface		
+maxon.BaseStreamInterface	"net.maxon.interface.basestream"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\core.framework\source\maxon\iostreams.h(126,7)	DataDictionaryObjectInterface	Close,DisableBuffering,GetPosition,GetStreamLength,Seek,SeekSupported	
+maxon.InputStreamInterface	"net.maxon.interface.inputstream"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\core.framework\source\maxon\iostreams.h(206,7)	BaseStreamInterface	BytesAvailable,ReadEOS,Skip	
+maxon.OutputStreamInterface	"net.maxon.interface.outputstream"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\core.framework\source\maxon\iostreams.h(248,7)	BaseStreamInterface	Flush,Write	
+maxon.InOutputStreamInterface	"net.maxon.interface.inoutputstream"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\core.framework\source\maxon\iostreams.h(272,7)	InputStreamInterface,OutputStreamInterface		

@@ -8,6 +8,7 @@ namespace maxon
 		"StoreDescription@584452f982bb0127\0" // Result<void> StoreDescription(const Id& category, const LanguageRef& language, const IdAndVersion& dataType, DataDescription& description)
 		"DescriptionDefinitionChanged@cd81069121dc5be3\0" // Result<void> DescriptionDefinitionChanged(const Id& category, const LanguageRef& language, const IdAndVersion& dataType)
 		"GetEffectiveEnumList@b096a973d890ece2\0" // Result<BaseArray<Tuple<Id, Data, String>>> GetEffectiveEnumList(const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, const AssetRepositoryRef& repository, const Data* filterData)
+		"GetEffectiveEnumList@dd51da156284be7c\0" // Result<BaseArray<Tuple<Id, Data, String>>> GetEffectiveEnumList(const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, Bool withStrings, const LanguageRef& language, const AssetRepositoryRef& repository, const Data* filterData)
 		"PostProcessStringDescription@21b625553298761\0" // Result<void> PostProcessStringDescription(DataDescription& description, const BaseArray<DataDictionary>& entries)
 	"";
 	MAXON_WARNING_PUSH
@@ -23,6 +24,7 @@ namespace maxon
 		static Result<void> StoreDescription(const Id& category, const LanguageRef& language, const IdAndVersion& dataType, DataDescription& description) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return DataDescriptionDatabaseInterface::StoreDescription(category, language, dataType, description); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
 		static Result<void> DescriptionDefinitionChanged(const Id& category, const LanguageRef& language, const IdAndVersion& dataType) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return DataDescriptionDatabaseInterface::DescriptionDefinitionChanged(category, language, dataType); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
 		static Result<BaseArray<Tuple<Id, Data, String>>> GetEffectiveEnumList(const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, const AssetRepositoryRef& repository, const Data* filterData) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return DataDescriptionDatabaseInterface::GetEffectiveEnumList(dataEntry, guiEntry, stringDescription, resolveExtensionPointsAndGui, repository, filterData); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
+		static Result<BaseArray<Tuple<Id, Data, String>>> GetEffectiveEnumList(const DataDictionary& dataEntry, const DataDictionary& guiEntry, const DataDescription& stringDescription, Bool resolveExtensionPointsAndGui, Bool withStrings, const LanguageRef& language, const AssetRepositoryRef& repository, const Data* filterData) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return DataDescriptionDatabaseInterface::GetEffectiveEnumList(dataEntry, guiEntry, stringDescription, resolveExtensionPointsAndGui, withStrings, language, repository, filterData); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
 		static Result<void> PostProcessStringDescription(DataDescription& description, const BaseArray<DataDictionary>& entries) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return DataDescriptionDatabaseInterface::PostProcessStringDescription(description, entries); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
 	};
 	MAXON_WARNING_POP
@@ -34,6 +36,7 @@ namespace maxon
 		maxon::details::NullReturnType<Result<void>>::value,
 		maxon::details::NullReturnType<Result<void>>::value,
 		maxon::details::NullReturnType<Result<void>>::value,
+		maxon::details::NullReturnType<Result<BaseArray<Tuple<Id, Data, String>>>>::value,
 		maxon::details::NullReturnType<Result<BaseArray<Tuple<Id, Data, String>>>>::value,
 		maxon::details::NullReturnType<Result<void>>::value,
 		maxon::NULL_RETURN_TYPE::OTHER
@@ -70,6 +73,11 @@ namespace maxon
 		if (maxon::details::NullReturnType<Result<BaseArray<Tuple<Id, Data, String>>>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_DataDescriptionDatabaseInterface_GetEffectiveEnumList = &Hxx2::Wrapper<Hxx2::Unresolved>::_DataDescriptionDatabaseInterface_GetEffectiveEnumList;
 		#else
 		tbl->_DataDescriptionDatabaseInterface_GetEffectiveEnumList = &Hxx2::Wrapper<Hxx2::Unresolved>::_DataDescriptionDatabaseInterface_GetEffectiveEnumList;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Result<BaseArray<Tuple<Id, Data, String>>>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_DataDescriptionDatabaseInterface_GetEffectiveEnumList_1 = &Hxx2::Wrapper<Hxx2::Unresolved>::_DataDescriptionDatabaseInterface_GetEffectiveEnumList_1;
+		#else
+		tbl->_DataDescriptionDatabaseInterface_GetEffectiveEnumList_1 = &Hxx2::Wrapper<Hxx2::Unresolved>::_DataDescriptionDatabaseInterface_GetEffectiveEnumList_1;
 		#endif
 		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
 		if (maxon::details::NullReturnType<Result<void>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_DataDescriptionDatabaseInterface_PostProcessStringDescription = &Hxx2::Wrapper<Hxx2::Unresolved>::_DataDescriptionDatabaseInterface_PostProcessStringDescription;

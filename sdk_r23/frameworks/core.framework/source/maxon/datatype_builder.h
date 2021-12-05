@@ -32,7 +32,7 @@ struct DataTypeComponent
 	const ParametricTypeInterface* _additionalRefType = nullptr;
 	BaseArray<DataTypeComponent>	 _children;
 
-	String ToString(const FormatStatement* formatStatement) const
+	String ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		if (_name.IsPopulated())
 			return FormatString("@: @ @", _name, _compName, _children);

@@ -720,7 +720,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns a formated string representation for this tuple.
 	//----------------------------------------------------------------------------------------
-	typename SFINAEHelper<String, T...>::type ToString(const FormatStatement* format) const
+	typename SFINAEHelper<String, T...>::type ToString(const FormatStatement* format = nullptr) const
 	{
 		return ToStringImpl((IndexSequence*) nullptr, format);
 	}
@@ -857,7 +857,7 @@ public:
 	/// Formats an empty tuple as a string.
 	/// @return												Always "()"_s.
 	//----------------------------------------------------------------------------------------
-	const String& ToString(const FormatStatement*) const { return "()"_s; }
+	const String& ToString(const FormatStatement* fmt = nullptr) const { return "()"_s; }
 
 	//----------------------------------------------------------------------------------------
 	/// Calculates hash code of an empty tuple.

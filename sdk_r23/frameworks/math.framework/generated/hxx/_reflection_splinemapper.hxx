@@ -28,6 +28,7 @@ namespace maxon
 			maxon::reflection::GetFunctionInfo<std::remove_pointer<decltype(SplineMapperInterface::MTable::_instance._SplineMapperInterface_GetKnotsRW)>::type>(nullptr, maxon::reflection::Member::KIND::INSTANCE_FUNCTION, "", 0LL, nullptr),
 			maxon::reflection::GetFunctionInfo<std::remove_pointer<decltype(SplineMapperInterface::MTable::_instance._SplineMapperInterface_SortKnots)>::type>(nullptr, maxon::reflection::Member::KIND::INSTANCE_FUNCTION, "", 0LL, nullptr),
 			maxon::reflection::GetFunctionInfo<std::remove_pointer<decltype(SplineMapperInterface::MTable::_instance._SplineMapperInterface_ClampPosition)>::type>(nullptr, maxon::reflection::Member::KIND::CONST_INSTANCE_FUNCTION, "position\0", 1LL, nullptr),
+			maxon::reflection::GetFunctionInfo<std::remove_pointer<decltype(SplineMapperInterface::MTable::_instance._SplineMapperInterface_DescribeIO)>::type>(nullptr, maxon::reflection::Member::KIND::FUNCTION, "stream\0", 1LL, nullptr),
 		};
 		return callback(cls, reinterpret_cast<const maxon::EntityReference*>(&SplineMapperInterface::_interface), maxon::ToBlock(functions));
 	}

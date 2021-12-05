@@ -872,6 +872,9 @@
     <ClInclude Include="..\source\maxon\utilities\sprintf_safe.h">
       <Filter>source\maxon\utilities</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\maxon\utilities\sseconversion.h">
+      <Filter>source\maxon\utilities</Filter>
+    </ClInclude>
     <ClInclude Include="..\source\maxon\utilities\streamconversion_helper.h">
       <Filter>source\maxon\utilities</Filter>
     </ClInclude>

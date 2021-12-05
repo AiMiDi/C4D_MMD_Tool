@@ -1509,6 +1509,11 @@
       <locationURI>PARENT-2-PROJECT_LOC/source/maxon/utilities/sprintf_safe.h</locationURI>
     </link>
     <link>
+      <name>source/maxon/utilities/sseconversion.h</name>
+      <type>1</type>
+      <locationURI>PARENT-2-PROJECT_LOC/source/maxon/utilities/sseconversion.h</locationURI>
+    </link>
+    <link>
       <name>source/maxon/utilities/streamconversion_helper.h</name>
       <type>1</type>
       <locationURI>PARENT-2-PROJECT_LOC/source/maxon/utilities/streamconversion_helper.h</locationURI>

@@ -254,7 +254,7 @@ public:
 	/// @warning This is a non-const function which uses this iterator for the iteration. I.e., after function
 	/// completion this iterator will point to the end.
 	//----------------------------------------------------------------------------------------
-	inline String ToString(const FormatStatement* formatStatement);
+	inline String ToString(const FormatStatement* formatStatement = nullptr);
 
 	//----------------------------------------------------------------------------------------
 	/// Iterates over this foreach iterator until an iteration value is found which equals v.

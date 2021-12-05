@@ -38,5 +38,8 @@ CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES
 CLANG_WARN_COMMA = NO	// Disable until we've switched to Xcode 9
 CLANG_WARN_RANGE_LOOP_ANALYSIS = NO	// Only enable locally because it'll otherwise return a lot of false positives in template code for interators which return copies (for a good reason).
 CLANG_WARN_STRICT_PROTOTYPES = YES
+CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 
 WARNING_CFLAGS = -Wunused-lambda-capture

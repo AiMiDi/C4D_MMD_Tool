@@ -129,7 +129,7 @@ public:
 	}
 #endif
 
-	typename SFINAEHelper<String, T>::type ToString(const FormatStatement* format) const
+	typename SFINAEHelper<String, T>::type ToString(const FormatStatement* format = nullptr) const
 	{
 		return GlobalToString(GetPointer(), format) + "/"_s + GlobalToString(GetTag(), format);
 	}

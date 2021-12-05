@@ -54,7 +54,7 @@ struct ColorProfileInterface::Hxx1
 /// Returns a readable string of the content.
 /// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 /// @return												The converted result. By default, this is the name of the class, followed by \@, followed by the hexadecimal memory address of this object.
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement = nullptr) const;
 /// @cond INTERNAL
 
 /// Describe all elements of this class for I/O operations.

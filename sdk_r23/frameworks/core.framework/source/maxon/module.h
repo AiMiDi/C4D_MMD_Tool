@@ -714,6 +714,8 @@ private:
 /// MAXON_INITIALIZATION(Initialize, Free);
 /// @endcode
 /// @note
+/// The executed code may run on an arbitrary thread. For the rare case of requiring something to initialize on the main thread before the classic API is
+/// available you should use ExecuteOnMainThread (asynchronously) or JobRef::Enqueue to the main thread queue.
 /// Technically both functions aren't passed as macro arguments to the macro, but to a function call of a helper class which is prepared by the macro.
 /// This allows to add breakpoints when lambdas are used as arguments.
 //----------------------------------------------------------------------------------------

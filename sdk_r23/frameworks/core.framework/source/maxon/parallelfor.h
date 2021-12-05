@@ -662,7 +662,7 @@ private:
 	/// @tparam INIT									A class containing an operator ()(CONTEXT&) for per-thread initialization before the loop.
 	/// @tparam FINALIZE							A class containing an operator ()(CONTEXT&) for per-thread cleanup after the loop.
 	//----------------------------------------------------------------------------------------
-	template <typename FORCONTEXT, typename INDEXTYPE, typename INIT, typename FINALIZE> struct alignas(MAXON_CACHE_LINE_SIZE) ForAlignedContext : public FORCONTEXT
+	template <typename FORCONTEXT, typename INDEXTYPE, typename INIT, typename FINALIZE> struct alignas(MAXON_FALSE_SHARING_SIZE) ForAlignedContext : public FORCONTEXT
 	{
 		//----------------------------------------------------------------------------------------
 		/// @param[in] from								Start index.
@@ -716,7 +716,7 @@ private:
 	/// @tparam FORCONTEXT						Either DynamicContext<CONTEXT> or StaticContext<CONTEXT>.
 	/// @tparam INDEXTYPE							An integral type used for the index of the loop.
 	//----------------------------------------------------------------------------------------
-	template <typename FORCONTEXT, typename INDEXTYPE> struct alignas(MAXON_CACHE_LINE_SIZE) ForAlignedContext<FORCONTEXT, INDEXTYPE, Dummy, Dummy> : public FORCONTEXT
+	template <typename FORCONTEXT, typename INDEXTYPE> struct alignas(MAXON_FALSE_SHARING_SIZE) ForAlignedContext<FORCONTEXT, INDEXTYPE, Dummy, Dummy> : public FORCONTEXT
 	{
 		//----------------------------------------------------------------------------------------
 		/// @param[in] from								Start index.
@@ -743,7 +743,7 @@ private:
 	template <typename USERCONTEXT, typename INDEXTYPE> struct StaticContext;
 	template <typename CONTEXT, PARALLELFORFLAGS FLAGS, typename INDEXTYPE, typename LOOP, typename INIT, typename FINALIZE> class StaticJob;
 
-	template <typename USERCONTEXT, PARALLELFORFLAGS FLAGS, typename INDEXTYPE, typename INIT, typename FINALIZE> struct alignas(MAXON_CACHE_LINE_SIZE) ForState;
+	template <typename USERCONTEXT, PARALLELFORFLAGS FLAGS, typename INDEXTYPE, typename INIT, typename FINALIZE> struct alignas(MAXON_FALSE_SHARING_SIZE) ForState;
 	template <typename USERCONTEXT, typename INDEXTYPE> struct DynamicContext;
 	template <typename CONTEXT, PARALLELFORFLAGS FLAGS, typename INDEXTYPE, typename LOOP, typename INIT, typename FINALIZE> class DynamicJob;
 };

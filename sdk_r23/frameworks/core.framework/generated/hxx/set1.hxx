@@ -42,7 +42,7 @@ template <typename TYPE> struct SetInterface<TYPE>::Hxx1
 /// @return												DataType of the elements or nullptr.
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<const DataType&>, const DataType&>::type GetValueDataType() const;
 /// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement = nullptr) const;
 /// Calculates the memory usage for this set.
 /// @return												Memory size in bytes.
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<Int>, Int>::type GetMemorySize() const;

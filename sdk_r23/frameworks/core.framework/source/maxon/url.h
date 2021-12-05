@@ -556,7 +556,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD String ToString(const FormatStatement* formatStatement) const;
+	MAXON_METHOD String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Describe all elements of this class for I/O operations.

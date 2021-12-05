@@ -263,7 +263,7 @@ struct ConversionTestSet
 	{
 	}
 
-	String ToString(const FormatStatement* format) const
+	String ToString(const FormatStatement* format = nullptr) const
 	{
 		return FormatString("(@, @)", conversionId, conversionSettings);
 	}

@@ -1052,9 +1052,6 @@
     <ClInclude Include="..\source\description\Fsolidworksimport.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\Fstepexport.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\Fstepimport.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -1109,18 +1106,6 @@
     <ClInclude Include="..\source\description\STstandard.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\Sclient.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\Sgroup.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\Smodul.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\Sserial.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\Talembicmorphtag.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -1137,9 +1122,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\allplan.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\arprefs.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\belttag.h">
@@ -1304,9 +1286,6 @@
     <ClInclude Include="..\source\description\ddoc.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\deltamushbase.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\desc_falloffentry.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -1328,13 +1307,7 @@
     <ClInclude Include="..\source\description\dmatrix.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\dmline.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\dmodeling.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\dpathlist.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\dpresets.h">
@@ -1443,12 +1416,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\fd3dexport.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\fdecay.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\fdelay.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\fdemimport.h">
@@ -1562,13 +1529,7 @@
     <ClInclude Include="..\source\description\fmidi.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\fobjexport.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\fobjexport2.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\fobjimport.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\fobjimport2.h">
@@ -1581,9 +1542,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\frandom.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\fribexport.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\fshader.h">
@@ -1602,9 +1560,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\fstlimport.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\ftime.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\ftorus.h">
@@ -2039,9 +1994,6 @@
     <ClInclude Include="..\source\description\mpreview.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\mrenderman.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\mshadowcatcher.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -2204,9 +2156,6 @@
     <ClInclude Include="..\source\description\odestructor.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\odirectdeltamushdeformer.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\odisc.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -2324,9 +2273,6 @@
     <ClInclude Include="..\source\description\ofractal.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\ofracture.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\ofriction.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -2421,9 +2367,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\omospline.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\omotioncapture.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\omotiontracker.h">
@@ -2699,9 +2642,6 @@
     <ClInclude Include="..\source\description\osplinetext.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\osplinetovolume.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\ostage.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -2792,9 +2732,6 @@
     <ClInclude Include="..\source\description\prefsbrowser.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\prefscineman.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\prefscolor.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -2808,9 +2745,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\prefsgoz.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\prefsgpurenderer.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\prefshaircolor.h">
@@ -2834,9 +2768,6 @@
     <ClInclude Include="..\source\description\prefsmemory.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\prefsmetricspreferences.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\prefsmouse.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -2850,9 +2781,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\prefspaths.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\prefsphprefs.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\prefsplugins.h">
@@ -2910,9 +2838,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\sevalue.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\shrenderman.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\shxrefopts.h">
@@ -3015,9 +2940,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\tfacepose.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\tfloat.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\tfracturevoronoi.h">
@@ -3344,9 +3266,6 @@
     <ClInclude Include="..\source\description\toolmeasure.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\toolmeshtovolume.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\toolmirrorbase.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -3428,16 +3347,7 @@
     <ClInclude Include="..\source\description\toolsculptbrushmask.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\toolsculptbrushmulti.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\toolsculptbrushpinch.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\toolsculptbrushpolish.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\toolsculptbrushproject.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\toolsculptbrushpull.h">
@@ -3509,9 +3419,6 @@
     <ClInclude Include="..\source\description\tooluntriangulate.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\toolvolumeremesher.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\toolweightbase.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -3581,9 +3488,6 @@
     <ClInclude Include="..\source\description\tsplinenormal.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\tspooldummy.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\tsticktexture.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -3620,9 +3524,6 @@
     <ClInclude Include="..\source\description\tvibrate.h">
       <Filter>source\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\description\tvolume.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\description\tvolumebuilder.h">
       <Filter>source\description</Filter>
     </ClInclude>
@@ -3639,9 +3540,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\vpbirender.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\vpbloom.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\vpcaustics.h">
@@ -3690,9 +3588,6 @@
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\vpremote.h">
-      <Filter>source\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\description\vprenderman.h">
       <Filter>source\description</Filter>
     </ClInclude>
     <ClInclude Include="..\source\description\vpscenemotionblur.h">

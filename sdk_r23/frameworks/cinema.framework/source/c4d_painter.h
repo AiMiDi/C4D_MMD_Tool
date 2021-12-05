@@ -217,12 +217,24 @@ Bool UpdateMeshUV(Bool fullUpdate = false);
 void FreeActiveUVSet(TempUVHandle* handle);
 
 //----------------------------------------------------------------------------------------
+/// @markDeprecated
+/// Use GetUVSeams2(obj, true) to have the same behavior as before, but most of the time you want the "checkUVSettings" parameter to be false.
 /// Gets the UV seam edges for @e obj.\n
 /// The edges are indexed by <tt>4 * polygon + edge</tt> where @c polygon is the polygon index and @c edge is the edge index between @em 0 and @em 3.
+/// @note If the UV seams are disabled in the UV viewport, nullptr will be returned.
 /// @param[in] obj								The object of the UV set.
 /// @return												The UV seam edges. @theOwnsPointed{UV mesh,base select}
 //----------------------------------------------------------------------------------------
 const EdgeBaseSelect* GetUVSeams(const BaseObject* obj);
+
+//----------------------------------------------------------------------------------------
+/// Gets the UV seam edges for @e obj.\n
+/// The edges are indexed by <tt>4 * polygon + edge</tt> where @c polygon is the polygon index and @c edge is the edge index between @em 0 and @em 3.
+/// @param[in] obj								The object of the UV set.
+/// @param[in] checkUVSettings		If true and the UV seams are disabled in the UV viewport, nullptr will be return. If false, will always return the UV seams, without checking if the UV seams settings is enabled or not in the UV viewport.
+/// @return												The UV seam edges. @theOwnsPointed{UV mesh,base select}
+//----------------------------------------------------------------------------------------
+const EdgeBaseSelect* GetUVSeams2(const BaseObject* obj, Bool checkUVSettings = false);
 
 //----------------------------------------------------------------------------------------
 /// Calls UV commands.\n

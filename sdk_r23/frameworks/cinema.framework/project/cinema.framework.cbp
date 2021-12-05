@@ -1460,9 +1460,6 @@
     <Unit filename="../source/description/Fsolidworksimport.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/Fstepexport.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/Fstepimport.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -1517,18 +1514,6 @@
     <Unit filename="../source/description/STstandard.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/Sclient.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/Sgroup.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/Smodul.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/Sserial.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/Talembicmorphtag.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -1545,9 +1530,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/allplan.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/arprefs.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/belttag.h">
@@ -1712,9 +1694,6 @@
     <Unit filename="../source/description/ddoc.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/deltamushbase.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/desc_falloffentry.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -1736,13 +1715,7 @@
     <Unit filename="../source/description/dmatrix.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/dmline.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/dmodeling.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/dpathlist.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/dpresets.h">
@@ -1851,12 +1824,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/fd3dexport.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/fdecay.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/fdelay.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/fdemimport.h">
@@ -1970,13 +1937,7 @@
     <Unit filename="../source/description/fmidi.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/fobjexport.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/fobjexport2.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/fobjimport.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/fobjimport2.h">
@@ -1989,9 +1950,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/frandom.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/fribexport.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/fshader.h">
@@ -2010,9 +1968,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/fstlimport.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/ftime.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/ftorus.h">
@@ -2447,9 +2402,6 @@
     <Unit filename="../source/description/mpreview.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/mrenderman.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/mshadowcatcher.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -2612,9 +2564,6 @@
     <Unit filename="../source/description/odestructor.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/odirectdeltamushdeformer.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/odisc.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -2732,9 +2681,6 @@
     <Unit filename="../source/description/ofractal.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/ofracture.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/ofriction.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -2829,9 +2775,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/omospline.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/omotioncapture.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/omotiontracker.h">
@@ -3107,9 +3050,6 @@
     <Unit filename="../source/description/osplinetext.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/osplinetovolume.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/ostage.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -3200,9 +3140,6 @@
     <Unit filename="../source/description/prefsbrowser.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/prefscineman.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/prefscolor.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -3216,9 +3153,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/prefsgoz.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/prefsgpurenderer.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/prefshaircolor.h">
@@ -3242,9 +3176,6 @@
     <Unit filename="../source/description/prefsmemory.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/prefsmetricspreferences.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/prefsmouse.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -3258,9 +3189,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/prefspaths.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/prefsphprefs.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/prefsplugins.h">
@@ -3318,9 +3246,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/sevalue.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/shrenderman.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/shxrefopts.h">
@@ -3423,9 +3348,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/tfacepose.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/tfloat.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/tfracturevoronoi.h">
@@ -3752,9 +3674,6 @@
     <Unit filename="../source/description/toolmeasure.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/toolmeshtovolume.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/toolmirrorbase.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -3836,16 +3755,7 @@
     <Unit filename="../source/description/toolsculptbrushmask.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/toolsculptbrushmulti.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/toolsculptbrushpinch.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/toolsculptbrushpolish.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/toolsculptbrushproject.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/toolsculptbrushpull.h">
@@ -3917,9 +3827,6 @@
     <Unit filename="../source/description/tooluntriangulate.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/toolvolumeremesher.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/toolweightbase.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -3989,9 +3896,6 @@
     <Unit filename="../source/description/tsplinenormal.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/tspooldummy.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/tsticktexture.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -4028,9 +3932,6 @@
     <Unit filename="../source/description/tvibrate.h">
       <Option virtualFolder="source/description/" />
     </Unit>
-    <Unit filename="../source/description/tvolume.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
     <Unit filename="../source/description/tvolumebuilder.h">
       <Option virtualFolder="source/description/" />
     </Unit>
@@ -4047,9 +3948,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/vpbirender.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/vpbloom.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/vpcaustics.h">
@@ -4098,9 +3996,6 @@
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/vpremote.h">
-      <Option virtualFolder="source/description/" />
-    </Unit>
-    <Unit filename="../source/description/vprenderman.h">
       <Option virtualFolder="source/description/" />
     </Unit>
     <Unit filename="../source/description/vpscenemotionblur.h">

@@ -298,7 +298,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Called when a core message is received.\n
 	/// The message type is given by @formatParam{id} and the message information is stored in @formatParam{msg}.
-	/// @see The article @link page_core_messages Core Messages@endlink for more information.
+	/// @see The article @link page_manual_coremessages Core Messages@endlink for more information.
 	/// @param[in] id									The message type: @enumerateEnum{EVMSG}
 	/// @param[in] msg								The core message container.
 	/// @return												Currently not used.
@@ -1133,7 +1133,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Override this method to react to @C4D core messages.
-	/// @see The article @link page_core_messages Core Messages@endlink for more information.
+	/// @see The article @link page_manual_coremessages Core Messages@endlink for more information.
 	/// @param[in] id									The message ID: @enumerateEnum{EVMSG}
 	/// @param[in] msg								The message container.
 	/// @return												Currently not used.
@@ -2699,7 +2699,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Speedup function that checks if a core message is new or has been already processed.
-	/// @see The article @link page_core_messages Core Messages@endlink for more information.
+	/// @see The article @link page_manual_coremessages Core Messages@endlink for more information.
 	/// @param[in] msg								The core message.
 	/// @param[in] ownlastcoremsg			An optional pointer to a last core message.
 	/// @return												@formatConstant{true} if the message is new, @formatConstant{false} if it is a message of the same age.

@@ -25,7 +25,7 @@ struct UuidInterface::Hxx1
 /// Converts the uuid into a string. The format will be "00000000-0000-0000-0000-000000000000" and the letters will be uppercase.
 /// @param[in] formatStatement		Format statement for string formating.
 /// @return												String representation of the uuid.
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement = nullptr) const;
 /// Compares the uuid against another uuid.
 /// @param[in] uuid								The uuid to compare with.
 /// @return												See COMPARERESULT.

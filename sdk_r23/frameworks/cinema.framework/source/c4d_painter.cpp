@@ -119,6 +119,11 @@ const EdgeBaseSelect* GetUVSeams(const BaseObject* obj)
 	return C4DOS.Pa->GetUVSeams(obj);
 }
 
+const EdgeBaseSelect* GetUVSeams2(const BaseObject* obj, Bool checkUVSettings)
+{
+	return C4DOS.Pa->GetUVSeams2(obj, checkUVSettings);
+}
+
 void FreeActiveUVSet(TempUVHandle* handle)
 {
 	C4DOS.Pa->FreeActiveUVSet(handle);

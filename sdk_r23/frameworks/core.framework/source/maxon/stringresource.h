@@ -54,7 +54,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @copydoc DefaultDoc::ToString
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD String ToString(const maxon::FormatStatement* fs) const;
+	MAXON_METHOD String ToString(const maxon::FormatStatement* fs = nullptr) const;
 };
 
 #define LANGUAGE_ENGLISH_CHR "en-US"

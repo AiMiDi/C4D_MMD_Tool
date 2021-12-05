@@ -213,7 +213,7 @@ struct UrlInterface::Hxx1
 /// Returns a readable string of the content.
 /// @param[in] formatStatement		Nullptr or additional formatting instruction. Currently no additional formatting instructions are supported.
 /// @return												The converted result.
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement = nullptr) const;
 /// Describe all elements of this class for I/O operations.
 /// @param[in] stream							The stream that is used to register the class members.
 /// @return												OK on success.

@@ -45,7 +45,7 @@ struct CryptoKeyInterface::Hxx1
 /// Returns the callback delegate.
 /// @return												The delegate of the callback.
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<const BLOCK_CIPHER_CTR_CALLBACK&>, const BLOCK_CIPHER_CTR_CALLBACK&>::type GetCallbackFunction() const;
-		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement) const;
+		inline typename std::conditional<S::HAS_ERROR, maxon::Result<String>, String>::type ToString(const FormatStatement* formatStatement = nullptr) const;
 	};
 	/// Intermediate helper class for CryptoKeyInterface.
 	template <typename S> class ReferenceFunctionsImpl : public ConstReferenceFunctionsImpl<S>

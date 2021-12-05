@@ -168,7 +168,7 @@ public:
 
 	MAXON_OPERATOR_EQUALITY_HASHCODE(TimeStamp, _value);
 
-	String ToString(const FormatStatement* fs) const
+	String ToString(const FormatStatement* fs = nullptr) const
 	{
 		return String::UIntToString(_value);
 	}

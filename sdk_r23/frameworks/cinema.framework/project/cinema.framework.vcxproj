@@ -427,7 +427,6 @@
     <ClInclude Include="..\source\description\Figesimport.h" />
     <ClInclude Include="..\source\description\Fjtimport.h" />
     <ClInclude Include="..\source\description\Fsolidworksimport.h" />
-    <ClInclude Include="..\source\description\Fstepexport.h" />
     <ClInclude Include="..\source\description\Fstepimport.h" />
     <ClInclude Include="..\source\description\Nsubstanceasset.h" />
     <ClInclude Include="..\source\description\Nsubstanceasset_deprecated.h" />
@@ -446,17 +445,12 @@
     <ClInclude Include="..\source\description\SBpolynom.h" />
     <ClInclude Include="..\source\description\SBrotate.h" />
     <ClInclude Include="..\source\description\STstandard.h" />
-    <ClInclude Include="..\source\description\Sclient.h" />
-    <ClInclude Include="..\source\description\Sgroup.h" />
-    <ClInclude Include="..\source\description\Smodul.h" />
-    <ClInclude Include="..\source\description\Sserial.h" />
     <ClInclude Include="..\source\description\Talembicmorphtag.h" />
     <ClInclude Include="..\source\description\Talembictag.h" />
     <ClInclude Include="..\source\description\Tfbxexportreference.h" />
     <ClInclude Include="..\source\description\Thoudinitag.h" />
     <ClInclude Include="..\source\description\Xsubstance.h" />
     <ClInclude Include="..\source\description\allplan.h" />
-    <ClInclude Include="..\source\description\arprefs.h" />
     <ClInclude Include="..\source\description\belttag.h" />
     <ClInclude Include="..\source\description\bmamplify.h" />
     <ClInclude Include="..\source\description\bmbase.h" />
@@ -511,7 +505,6 @@
     <ClInclude Include="..\source\description\dcharupdate.h" />
     <ClInclude Include="..\source\description\dcolora.h" />
     <ClInclude Include="..\source\description\ddoc.h" />
-    <ClInclude Include="..\source\description\deltamushbase.h" />
     <ClInclude Include="..\source\description\desc_falloffentry.h" />
     <ClInclude Include="..\source\description\desc_fieldbg.h" />
     <ClInclude Include="..\source\description\desc_fieldentry.h" />
@@ -519,9 +512,7 @@
     <ClInclude Include="..\source\description\distanceblur.h" />
     <ClInclude Include="..\source\description\dlwghtopts.h" />
     <ClInclude Include="..\source\description\dmatrix.h" />
-    <ClInclude Include="..\source\description\dmline.h" />
     <ClInclude Include="..\source\description\dmodeling.h" />
-    <ClInclude Include="..\source\description\dpathlist.h" />
     <ClInclude Include="..\source\description\dpresets.h" />
     <ClInclude Include="..\source\description\dprojobjs.h" />
     <ClInclude Include="..\source\description\dpsrmatrix.h" />
@@ -558,8 +549,6 @@
     <ClInclude Include="..\source\description\fcone.h" />
     <ClInclude Include="..\source\description\fcylinder.h" />
     <ClInclude Include="..\source\description\fd3dexport.h" />
-    <ClInclude Include="..\source\description\fdecay.h" />
-    <ClInclude Include="..\source\description\fdelay.h" />
     <ClInclude Include="..\source\description\fdemimport.h" />
     <ClInclude Include="..\source\description\fdxfexport.h" />
     <ClInclude Include="..\source\description\fdxfimport.h" />
@@ -597,21 +586,17 @@
     <ClInclude Include="..\source\description\flvolumeobject.h" />
     <ClInclude Include="..\source\description\flweight.h" />
     <ClInclude Include="..\source\description\fmidi.h" />
-    <ClInclude Include="..\source\description\fobjexport.h" />
     <ClInclude Include="..\source\description\fobjexport2.h" />
-    <ClInclude Include="..\source\description\fobjimport.h" />
     <ClInclude Include="..\source\description\fobjimport2.h" />
     <ClInclude Include="..\source\description\fpython.h" />
     <ClInclude Include="..\source\description\fradial.h" />
     <ClInclude Include="..\source\description\frandom.h" />
-    <ClInclude Include="..\source\description\fribexport.h" />
     <ClInclude Include="..\source\description\fshader.h" />
     <ClInclude Include="..\source\description\fskpimport.h" />
     <ClInclude Include="..\source\description\fsound.h" />
     <ClInclude Include="..\source\description\fsphere.h" />
     <ClInclude Include="..\source\description\fstlexport.h" />
     <ClInclude Include="..\source\description\fstlimport.h" />
-    <ClInclude Include="..\source\description\ftime.h" />
     <ClInclude Include="..\source\description\ftorus.h" />
     <ClInclude Include="..\source\description\fusdexporter.h" />
     <ClInclude Include="..\source\description\fusdimporter.h" />
@@ -756,7 +741,6 @@
     <ClInclude Include="..\source\description\motionblur.h" />
     <ClInclude Include="..\source\description\moutliner.h" />
     <ClInclude Include="..\source\description\mpreview.h" />
-    <ClInclude Include="..\source\description\mrenderman.h" />
     <ClInclude Include="..\source\description\mshadowcatcher.h" />
     <ClInclude Include="..\source\description\mt_clip.h" />
     <ClInclude Include="..\source\description\mt_layer.h" />
@@ -811,7 +795,6 @@
     <ClInclude Include="..\source\description\odeflector.h" />
     <ClInclude Include="..\source\description\odeltamushdeformer.h" />
     <ClInclude Include="..\source\description\odestructor.h" />
-    <ClInclude Include="..\source\description\odirectdeltamushdeformer.h" />
     <ClInclude Include="..\source\description\odisc.h" />
     <ClInclude Include="..\source\description\odoodle.h" />
     <ClInclude Include="..\source\description\oecoffee.h" />
@@ -851,7 +834,6 @@
     <ClInclude Include="..\source\description\oforeground.h" />
     <ClInclude Include="..\source\description\oformula.h" />
     <ClInclude Include="..\source\description\ofractal.h" />
-    <ClInclude Include="..\source\description\ofracture.h" />
     <ClInclude Include="..\source\description\ofriction.h" />
     <ClInclude Include="..\source\description\ofur.h" />
     <ClInclude Include="..\source\description\ogravitation.h" />
@@ -884,7 +866,6 @@
     <ClInclude Include="..\source\description\omograph_tracer.h" />
     <ClInclude Include="..\source\description\omorphdeformer.h" />
     <ClInclude Include="..\source\description\omospline.h" />
-    <ClInclude Include="..\source\description\omotioncapture.h" />
     <ClInclude Include="..\source\description\omotiontracker.h" />
     <ClInclude Include="..\source\description\onoisefalloff.h" />
     <ClInclude Include="..\source\description\onull.h" />
@@ -976,7 +957,6 @@
     <ClInclude Include="..\source\description\osplinerectangle.h" />
     <ClInclude Include="..\source\description\osplinestar.h" />
     <ClInclude Include="..\source\description\osplinetext.h" />
-    <ClInclude Include="..\source\description\osplinetovolume.h" />
     <ClInclude Include="..\source\description\ostage.h" />
     <ClInclude Include="..\source\description\osweep.h" />
     <ClInclude Include="..\source\description\osweeplegacy.h" />
@@ -1007,13 +987,11 @@
     <ClInclude Include="..\source\description\prefs.h" />
     <ClInclude Include="..\source\description\prefsblserver.h" />
     <ClInclude Include="..\source\description\prefsbrowser.h" />
-    <ClInclude Include="..\source\description\prefscineman.h" />
     <ClInclude Include="..\source\description\prefscolor.h" />
     <ClInclude Include="..\source\description\prefscommunication.h" />
     <ClInclude Include="..\source\description\prefsdatabase.h" />
     <ClInclude Include="..\source\description\prefsfiles.h" />
     <ClInclude Include="..\source\description\prefsgoz.h" />
-    <ClInclude Include="..\source\description\prefsgpurenderer.h" />
     <ClInclude Include="..\source\description\prefshaircolor.h" />
     <ClInclude Include="..\source\description\prefshoudini.h" />
     <ClInclude Include="..\source\description\prefsimexport.h" />
@@ -1021,13 +999,11 @@
     <ClInclude Include="..\source\description\prefslinux.h" />
     <ClInclude Include="..\source\description\prefsmaterial.h" />
     <ClInclude Include="..\source\description\prefsmemory.h" />
-    <ClInclude Include="..\source\description\prefsmetricspreferences.h" />
     <ClInclude Include="..\source\description\prefsmouse.h" />
     <ClInclude Include="..\source\description\prefsnavigation.h" />
     <ClInclude Include="..\source\description\prefsnodeeditor.h" />
     <ClInclude Include="..\source\description\prefsopengl.h" />
     <ClInclude Include="..\source\description\prefspaths.h" />
-    <ClInclude Include="..\source\description\prefsphprefs.h" />
     <ClInclude Include="..\source\description\prefsplugins.h" />
     <ClInclude Include="..\source\description\prefsproman.h" />
     <ClInclude Include="..\source\description\prefsrenderer.h" />
@@ -1047,7 +1023,6 @@
     <ClInclude Include="..\source\description\semomix.h" />
     <ClInclude Include="..\source\description\sesound.h" />
     <ClInclude Include="..\source\description\sevalue.h" />
-    <ClInclude Include="..\source\description\shrenderman.h" />
     <ClInclude Include="..\source\description\shxrefopts.h" />
     <ClInclude Include="..\source\description\takebase.h" />
     <ClInclude Include="..\source\description\taligntopath.h" />
@@ -1082,7 +1057,6 @@
     <ClInclude Include="..\source\description\textag.h" />
     <ClInclude Include="..\source\description\teye.h" />
     <ClInclude Include="..\source\description\tfacepose.h" />
-    <ClInclude Include="..\source\description\tfloat.h" />
     <ClInclude Include="..\source\description\tfracturevoronoi.h" />
     <ClInclude Include="..\source\description\tgozpolygroup.h" />
     <ClInclude Include="..\source\description\tgrouppriority.h" />
@@ -1191,7 +1165,6 @@
     <ClInclude Include="..\source\description\toolmakeselect.h" />
     <ClInclude Include="..\source\description\toolmatrixextrude.h" />
     <ClInclude Include="..\source\description\toolmeasure.h" />
-    <ClInclude Include="..\source\description\toolmeshtovolume.h" />
     <ClInclude Include="..\source\description\toolmirrorbase.h" />
     <ClInclude Include="..\source\description\toolmodelingaxis.h" />
     <ClInclude Include="..\source\description\toolmodify.h" />
@@ -1219,10 +1192,7 @@
     <ClInclude Include="..\source\description\toolsculptbrushinflate.h" />
     <ClInclude Include="..\source\description\toolsculptbrushknife.h" />
     <ClInclude Include="..\source\description\toolsculptbrushmask.h" />
-    <ClInclude Include="..\source\description\toolsculptbrushmulti.h" />
     <ClInclude Include="..\source\description\toolsculptbrushpinch.h" />
-    <ClInclude Include="..\source\description\toolsculptbrushpolish.h" />
-    <ClInclude Include="..\source\description\toolsculptbrushproject.h" />
     <ClInclude Include="..\source\description\toolsculptbrushpull.h" />
     <ClInclude Include="..\source\description\toolsculptbrushrelax.h" />
     <ClInclude Include="..\source\description\toolsculptbrushrepeat.h" />
@@ -1246,7 +1216,6 @@
     <ClInclude Include="..\source\description\tooltest.h" />
     <ClInclude Include="..\source\description\tooltransfer.h" />
     <ClInclude Include="..\source\description\tooluntriangulate.h" />
-    <ClInclude Include="..\source\description\toolvolumeremesher.h" />
     <ClInclude Include="..\source\description\toolweightbase.h" />
     <ClInclude Include="..\source\description\toutliner.h" />
     <ClInclude Include="..\source\description\tp_group.h" />
@@ -1270,7 +1239,6 @@
     <ClInclude Include="..\source\description\tsds.h" />
     <ClInclude Include="..\source\description\tsplinedraw.h" />
     <ClInclude Include="..\source\description\tsplinenormal.h" />
-    <ClInclude Include="..\source\description\tspooldummy.h" />
     <ClInclude Include="..\source\description\tsticktexture.h" />
     <ClInclude Include="..\source\description\tstop.h" />
     <ClInclude Include="..\source\description\tsunexpression.h" />
@@ -1283,14 +1251,12 @@
     <ClInclude Include="..\source\description\tvertexcolor.h" />
     <ClInclude Include="..\source\description\tvertexmap.h" />
     <ClInclude Include="..\source\description\tvibrate.h" />
-    <ClInclude Include="..\source\description\tvolume.h" />
     <ClInclude Include="..\source\description\tvolumebuilder.h" />
     <ClInclude Include="..\source\description\txrefholder.h" />
     <ClInclude Include="..\source\description\uv_settings.h" />
     <ClInclude Include="..\source\description\vpambientocclusion.h" />
     <ClInclude Include="..\source\description\vpbase.h" />
     <ClInclude Include="..\source\description\vpbirender.h" />
-    <ClInclude Include="..\source\description\vpbloom.h" />
     <ClInclude Include="..\source\description\vpcaustics.h" />
     <ClInclude Include="..\source\description\vpcolormapping.h" />
     <ClInclude Include="..\source\description\vpcomic.h" />
@@ -1307,7 +1273,6 @@
     <ClInclude Include="..\source\description\vppositionpass.h" />
     <ClInclude Include="..\source\description\vppreviewhardware.h" />
     <ClInclude Include="..\source\description\vpremote.h" />
-    <ClInclude Include="..\source\description\vprenderman.h" />
     <ClInclude Include="..\source\description\vpscenemotionblur.h" />
     <ClInclude Include="..\source\description\vpsharpenfilter.h" />
     <ClInclude Include="..\source\description\vpsoftfilter.h" />

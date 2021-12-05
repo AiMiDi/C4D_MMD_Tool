@@ -486,7 +486,7 @@ public:
 	static MAXON_METHOD Result<BaseArray<const CoreNodeInstanceBaseInterface*>> GetInstancePath(const NodeHandle* handle);
 
 	/// @copydoc DefaultDoc::ToString
-	MAXON_FUNCTION String ToString(const FormatStatement* fmt) const
+	MAXON_FUNCTION String ToString(const FormatStatement* fmt = nullptr) const
 	{
 		return GetName().ToString(fmt);
 	}

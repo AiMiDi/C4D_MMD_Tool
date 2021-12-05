@@ -50,6 +50,15 @@ template <typename T> using UnderlyingType = typename std::conditional<STD_IS_RE
 		PRIVATE_MAXON_ENUM_TYPE(friend, MAXON_DECLARATION_CLASS, MAXON_ALLBUTFIRST, E, __VA_ARGS__) \
 		template <typename T> inline friend typename maxon::SFINAEHelper<maxon::String, T>::type ToString(E enumvalue, const T* fs) { return MAXON_CONCAT(PrivateToString_, MAXON_CONCAT(E, __LINE__))(maxon::UnderlyingType<E>(enumvalue), fs, (E*) nullptr); } \
 		_Pragma("warning enable 1419 1624")
+#elif defined(MAXON_COMPILER_GCC)
+#define MAXON_ENUM_ORDERED_LIST(E, ...) ; \
+	PRIVATE_MAXON_ENUM_TYPE(, MAXON_DECLARATION, MAXON_FIRSTARG, E, __VA_ARGS__)
+#define MAXON_ENUM_ORDERED_LIST_CLASS(E, ...) ; \
+	_Pragma("GCC diagnostic push") \
+	_Pragma("GCC diagnostic ignored \"-Wnon-template-friend\"") \
+	PRIVATE_MAXON_ENUM_TYPE(friend, MAXON_DECLARATION_CLASS, MAXON_ALLBUTFIRST, E, __VA_ARGS__) \
+	template <typename T> inline friend typename maxon::SFINAEHelper<maxon::String, T>::type ToString(E enumvalue, const T* fs) { return MAXON_CONCAT(PrivateToString_, MAXON_CONCAT(E, __LINE__))(maxon::UnderlyingType<E>(enumvalue), fs, (E*) nullptr); } \
+	_Pragma("GCC diagnostic pop")
 #else
 	#define MAXON_ENUM_ORDERED_LIST(E, ...) ; \
 		PRIVATE_MAXON_ENUM_TYPE(, MAXON_DECLARATION, MAXON_FIRSTARG, E, __VA_ARGS__)
@@ -58,13 +67,24 @@ template <typename T> using UnderlyingType = typename std::conditional<STD_IS_RE
 		template <typename T> inline friend typename maxon::SFINAEHelper<maxon::String, T>::type ToString(E enumvalue, const T* fs) { return MAXON_CONCAT(PrivateToString_, MAXON_CONCAT(E, __LINE__))(maxon::UnderlyingType<E>(enumvalue), fs, (E*) nullptr); }
 #endif
 
-#if defined(MAXON_COMPILER_GCC) || defined(MAXON_COMPILER_CLANG) // Clang bug 41253
+#if defined(MAXON_COMPILER_CLANG) // Clang bug 41253
+
 	struct IllegalEnumAccess;
 	#define PRIVATE_MAXON_ENUM_UNORDERED_LIST(FRIEND, E) \
 		FRIEND maxon::IllegalEnumAccess operator <(E s1, E s2); \
 		FRIEND maxon::IllegalEnumAccess operator <=(E s1, E s2); \
 		FRIEND maxon::IllegalEnumAccess operator >(E s1, E s2); \
-		FRIEND maxon::IllegalEnumAccess operator >=(E s1, E s2)
+		FRIEND maxon::IllegalEnumAccess operator >=(E s1, E s2);
+#elif defined(MAXON_COMPILER_GCC)
+	struct IllegalEnumAccess;
+	#define PRIVATE_MAXON_ENUM_UNORDERED_LIST(FRIEND, E) \
+		_Pragma("GCC diagnostic push") \
+		_Pragma("GCC diagnostic ignored \"-Wnon-template-friend\"") \
+		FRIEND maxon::IllegalEnumAccess operator <(E s1, E s2); \
+		FRIEND maxon::IllegalEnumAccess operator <=(E s1, E s2); \
+		FRIEND maxon::IllegalEnumAccess operator >(E s1, E s2); \
+		FRIEND maxon::IllegalEnumAccess operator >=(E s1, E s2); \
+		_Pragma("GCC diagnostic pop")
 #elif defined(MAXON_COMPILER_INTEL)
 	#define PRIVATE_MAXON_ENUM_UNORDERED_LIST(FRIEND, E) \
 		inline FRIEND maxon::Bool operator <(E s1, E s2) = delete; \

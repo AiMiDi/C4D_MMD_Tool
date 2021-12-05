@@ -112,7 +112,7 @@ public:
 	/// @param[in] formatStatement		Format statement for string formating.
 	/// @return												String representation of the uuid.
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD String ToString(const FormatStatement* formatStatement) const;
+	MAXON_METHOD String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Compares the uuid against another uuid.

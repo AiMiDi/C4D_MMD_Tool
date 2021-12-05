@@ -1,18 +1,18 @@
 #if 1
 namespace maxon
 {
-	namespace enum37 { enum class SPLINEMAPPER_KNOT_INTERPOLATION_TYPE
+	namespace enum38 { enum class SPLINEMAPPER_KNOT_INTERPOLATION_TYPE
 	{
 		BEZIER,	///< Bezier (aka Spline) interpolation, uses tangents settings to calculate the interpolation.
 		LINEAR,	///< Linear interpolation.
 		CUBIC		///< Cubic interpolation.
 	} ; }
-	maxon::String PrivateToString_SPLINEMAPPER_KNOT_INTERPOLATION_TYPE37(std::underlying_type<enum37::SPLINEMAPPER_KNOT_INTERPOLATION_TYPE>::type x, const maxon::FormatStatement* fmt)
+	maxon::String PrivateToString_SPLINEMAPPER_KNOT_INTERPOLATION_TYPE38(std::underlying_type<enum38::SPLINEMAPPER_KNOT_INTERPOLATION_TYPE>::type x, const maxon::FormatStatement* fmt)
 	{
-		const maxon::UInt64 values[] = {(maxon::UInt64) enum37::SPLINEMAPPER_KNOT_INTERPOLATION_TYPE::BEZIER, (maxon::UInt64) enum37::SPLINEMAPPER_KNOT_INTERPOLATION_TYPE::LINEAR, (maxon::UInt64) enum37::SPLINEMAPPER_KNOT_INTERPOLATION_TYPE::CUBIC};
+		const maxon::UInt64 values[] = {(maxon::UInt64) enum38::SPLINEMAPPER_KNOT_INTERPOLATION_TYPE::BEZIER, (maxon::UInt64) enum38::SPLINEMAPPER_KNOT_INTERPOLATION_TYPE::LINEAR, (maxon::UInt64) enum38::SPLINEMAPPER_KNOT_INTERPOLATION_TYPE::CUBIC};
 		return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SPLINEMAPPER_KNOT_INTERPOLATION_TYPE", SIZEOF(x), false, values, "BEZIER\0LINEAR\0CUBIC\0", fmt);
 	}
-	namespace enum54 { enum class SPLINEMAPPER_KNOT_FLAGS : Int
+	namespace enum55 { enum class SPLINEMAPPER_KNOT_FLAGS : Int
 	{
 		NONE            = 0,
 		BREAK_TANGENTS	= (1 << 0),	///< Break knot tangents (used only with @ref SPLINEMAPPER_KNOT_INTERPOLATION_TYPE::BEZIER interpolation type)
@@ -23,12 +23,13 @@ namespace maxon
 		KEEPVISUALANGLE	= (1 << 5), ///< Keep visual angle between knot's tangents. (used only with @ref SPLINEMAPPER_KNOT_INTERPOLATION_TYPE::BEZIER interpolation type)
 		SELECTED				= (1 << 6), ///< selected in ui
 	} ; }
-	maxon::String PrivateToString_SPLINEMAPPER_KNOT_FLAGS54(std::underlying_type<enum54::SPLINEMAPPER_KNOT_FLAGS>::type x, const maxon::FormatStatement* fmt)
+	maxon::String PrivateToString_SPLINEMAPPER_KNOT_FLAGS55(std::underlying_type<enum55::SPLINEMAPPER_KNOT_FLAGS>::type x, const maxon::FormatStatement* fmt)
 	{
-		const maxon::UInt64 values[] = {(maxon::UInt64) enum54::SPLINEMAPPER_KNOT_FLAGS::NONE, (maxon::UInt64) enum54::SPLINEMAPPER_KNOT_FLAGS::BREAK_TANGENTS, (maxon::UInt64) enum54::SPLINEMAPPER_KNOT_FLAGS::LOCK_X, (maxon::UInt64) enum54::SPLINEMAPPER_KNOT_FLAGS::LOCK_Y, (maxon::UInt64) enum54::SPLINEMAPPER_KNOT_FLAGS::LOCK_ANGLE, (maxon::UInt64) enum54::SPLINEMAPPER_KNOT_FLAGS::LOCK_LENGTH, (maxon::UInt64) enum54::SPLINEMAPPER_KNOT_FLAGS::KEEPVISUALANGLE, (maxon::UInt64) enum54::SPLINEMAPPER_KNOT_FLAGS::SELECTED};
+		const maxon::UInt64 values[] = {(maxon::UInt64) enum55::SPLINEMAPPER_KNOT_FLAGS::NONE, (maxon::UInt64) enum55::SPLINEMAPPER_KNOT_FLAGS::BREAK_TANGENTS, (maxon::UInt64) enum55::SPLINEMAPPER_KNOT_FLAGS::LOCK_X, (maxon::UInt64) enum55::SPLINEMAPPER_KNOT_FLAGS::LOCK_Y, (maxon::UInt64) enum55::SPLINEMAPPER_KNOT_FLAGS::LOCK_ANGLE, (maxon::UInt64) enum55::SPLINEMAPPER_KNOT_FLAGS::LOCK_LENGTH, (maxon::UInt64) enum55::SPLINEMAPPER_KNOT_FLAGS::KEEPVISUALANGLE, (maxon::UInt64) enum55::SPLINEMAPPER_KNOT_FLAGS::SELECTED};
 		return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SPLINEMAPPER_KNOT_FLAGS", SIZEOF(x), true, values, "NONE\0BREAK_TANGENTS\0LOCK_X\0LOCK_Y\0LOCK_ANGLE\0LOCK_LENGTH\0KEEPVISUALANGLE\0SELECTED\0", fmt);
 	}
-	namespace enum107 { enum class SPLINEMAPPER_SPLINE_TYPE
+	PRIVATE_MAXON_DECLARATION_REGISTER_DECLARATION(DT_SplineMapperKnot,, "net.maxon.datatype.splinemapperknot");
+	namespace enum131 { enum class SPLINEMAPPER_SPLINE_TYPE
 	{
 		SOFT,					///< Soft.
 		EASEIN,				///< Ease in.
@@ -37,20 +38,20 @@ namespace maxon
 		ZERO,					///< Zero angle/length.
 		UNIFY					///< Unify.
 	} ; }
-	maxon::String PrivateToString_SPLINEMAPPER_SPLINE_TYPE107(std::underlying_type<enum107::SPLINEMAPPER_SPLINE_TYPE>::type x, const maxon::FormatStatement* fmt)
+	maxon::String PrivateToString_SPLINEMAPPER_SPLINE_TYPE131(std::underlying_type<enum131::SPLINEMAPPER_SPLINE_TYPE>::type x, const maxon::FormatStatement* fmt)
 	{
-		const maxon::UInt64 values[] = {(maxon::UInt64) enum107::SPLINEMAPPER_SPLINE_TYPE::SOFT, (maxon::UInt64) enum107::SPLINEMAPPER_SPLINE_TYPE::EASEIN, (maxon::UInt64) enum107::SPLINEMAPPER_SPLINE_TYPE::EASEOUT, (maxon::UInt64) enum107::SPLINEMAPPER_SPLINE_TYPE::EASEEASE, (maxon::UInt64) enum107::SPLINEMAPPER_SPLINE_TYPE::ZERO, (maxon::UInt64) enum107::SPLINEMAPPER_SPLINE_TYPE::UNIFY};
+		const maxon::UInt64 values[] = {(maxon::UInt64) enum131::SPLINEMAPPER_SPLINE_TYPE::SOFT, (maxon::UInt64) enum131::SPLINEMAPPER_SPLINE_TYPE::EASEIN, (maxon::UInt64) enum131::SPLINEMAPPER_SPLINE_TYPE::EASEOUT, (maxon::UInt64) enum131::SPLINEMAPPER_SPLINE_TYPE::EASEEASE, (maxon::UInt64) enum131::SPLINEMAPPER_SPLINE_TYPE::ZERO, (maxon::UInt64) enum131::SPLINEMAPPER_SPLINE_TYPE::UNIFY};
 		return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SPLINEMAPPER_SPLINE_TYPE", SIZEOF(x), false, values, "SOFT\0EASEIN\0EASEOUT\0EASEEASE\0ZERO\0UNIFY\0", fmt);
 	}
-	namespace enum118 { enum class SPLINEMAPPER_RANGE_STATE
+	namespace enum142 { enum class SPLINEMAPPER_RANGE_STATE
 	{
 		NONE,
 		SET,
 		UISET
 	} ; }
-	maxon::String PrivateToString_SPLINEMAPPER_RANGE_STATE118(std::underlying_type<enum118::SPLINEMAPPER_RANGE_STATE>::type x, const maxon::FormatStatement* fmt)
+	maxon::String PrivateToString_SPLINEMAPPER_RANGE_STATE142(std::underlying_type<enum142::SPLINEMAPPER_RANGE_STATE>::type x, const maxon::FormatStatement* fmt)
 	{
-		const maxon::UInt64 values[] = {(maxon::UInt64) enum118::SPLINEMAPPER_RANGE_STATE::NONE, (maxon::UInt64) enum118::SPLINEMAPPER_RANGE_STATE::SET, (maxon::UInt64) enum118::SPLINEMAPPER_RANGE_STATE::UISET};
+		const maxon::UInt64 values[] = {(maxon::UInt64) enum142::SPLINEMAPPER_RANGE_STATE::NONE, (maxon::UInt64) enum142::SPLINEMAPPER_RANGE_STATE::SET, (maxon::UInt64) enum142::SPLINEMAPPER_RANGE_STATE::UISET};
 		return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "SPLINEMAPPER_RANGE_STATE", SIZEOF(x), false, values, "NONE\0SET\0UISET\0", fmt);
 	}
 	const maxon::Char* const SplineMapperInterface::MTable::_ids = 
@@ -76,6 +77,7 @@ namespace maxon
 		"GetKnotsRW@707fd377d5ceb8a\0" // BaseArray<SplineMapperKnot>* GetKnotsRW()
 		"SortKnots@780cdac8f1a33934\0" // void SortKnots()
 		"ClampPosition@e13826ea6fa0e899\0" // Vector2d ClampPosition(const Vector2d& position) const
+		"DescribeIO@fe3f1bd5a495cc32\0" // Result<void> DescribeIO(const DataSerializeInterface& stream)
 	"";
 	MAXON_WARNING_PUSH
 	MAXON_WARNING_DISABLE_DEPRECATED
@@ -106,6 +108,7 @@ namespace maxon
 		BaseArray<SplineMapperKnot>* GetKnotsRW() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((SplineMapperInterface*) this)->GetKnotsRW(); return nullptr;}
 		void SortKnots() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((SplineMapperInterface*) this)->SortKnots(); return maxon::PrivateLogNullptrError();}
 		Vector2d ClampPosition(const Vector2d& position) const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const SplineMapperInterface*) this)->ClampPosition(position); return maxon::PrivateIncompleteNullReturnValue<Vector2d>(maxon::NULL_RETURN_REASON::UNRESOLVED, OVERLOAD_MAX_RANK);}
+		static Result<void> DescribeIO(const DataSerializeInterface& stream) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return SplineMapperInterface::DescribeIO(stream); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
 	};
 	MAXON_WARNING_POP
 #ifdef PRIVATE_MAXON_ASSEMBLE_UNRESOLVED
@@ -133,6 +136,7 @@ namespace maxon
 		maxon::details::NullReturnType<BaseArray<SplineMapperKnot>*>::value,
 		maxon::details::NullReturnType<void>::value,
 		maxon::details::NullReturnType<Vector2d>::value,
+		maxon::details::NullReturnType<Result<void>>::value,
 		maxon::NULL_RETURN_TYPE::OTHER
 	};
 #endif
@@ -232,6 +236,11 @@ namespace maxon
 		if (maxon::details::NullReturnType<Vector2d>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_SplineMapperInterface_ClampPosition = &Hxx2::Wrapper<Hxx2::Unresolved>::_SplineMapperInterface_ClampPosition;
 		#else
 		tbl->_SplineMapperInterface_ClampPosition = &Hxx2::Wrapper<Hxx2::Unresolved>::_SplineMapperInterface_ClampPosition;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Result<void>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_SplineMapperInterface_DescribeIO = &Hxx2::Wrapper<Hxx2::Unresolved>::_SplineMapperInterface_DescribeIO;
+		#else
+		tbl->_SplineMapperInterface_DescribeIO = &Hxx2::Wrapper<Hxx2::Unresolved>::_SplineMapperInterface_DescribeIO;
 		#endif
 	#ifdef PRIVATE_MAXON_ASSEMBLE_UNRESOLVED
 		return assembler(&_interface, (maxon::Char*) tbl, _returnTypes, SIZEOF(MTable) / SIZEOF(void*));

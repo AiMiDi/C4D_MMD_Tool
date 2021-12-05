@@ -1,1 +1,1 @@
-maxon.ImagePixelBlendInterface	"net.maxon.image.interface.imagepixelblend"	G:\C4DSDK\sdk_r25\frameworks\image.framework\source\maxon\gfx_image_pixelblend.h(109,7)	ObjectInterface	GetBlendPixelHandler,GetOptimalPixelFormat	hasStaticMethods=true	
+maxon.ImagePixelBlendInterface	"net.maxon.image.interface.imagepixelblend"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\image.framework\source\maxon\gfx_image_pixelblend.h(109,7)	ObjectInterface	GetBlendPixelHandler,GetOptimalPixelFormat	hasStaticMethods=true	

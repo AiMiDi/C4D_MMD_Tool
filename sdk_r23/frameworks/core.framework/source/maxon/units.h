@@ -51,7 +51,7 @@ public:
 
 	MAXON_METHOD Bool IsEquivalent(const Dimension& other) const;
 
-	MAXON_METHOD String ToString(const FormatStatement* fs) const;
+	MAXON_METHOD String ToString(const FormatStatement* fs = nullptr) const;
 };
 
 class UnitInterface // : MAXON_INTERFACE_BASES(ObjectInterface)
@@ -80,7 +80,7 @@ public:
 
 	MAXON_METHOD Result<Unit> Reduce() const;
 
-	MAXON_METHOD String ToString(const FormatStatement* fs) const;
+	MAXON_METHOD String ToString(const FormatStatement* fs = nullptr) const;
 };
 
 #include "units1.hxx"

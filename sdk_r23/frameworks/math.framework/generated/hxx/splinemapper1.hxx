@@ -1,4 +1,5 @@
 #if 1
+constexpr inline const maxon::Char* DT_SplineMapperKnot_CppName() { return "maxon::SplineMapperKnot"; }
 class SplineMapper;
 
 struct SplineMapperInterface::Hxx1
@@ -32,6 +33,10 @@ struct SplineMapperInterface::Hxx1
 /// @param[in] position 							The position.
 /// @return														The clamped position.
 		inline typename std::conditional<S::HAS_ERROR, maxon::Result<Vector2d>, Vector2d>::type ClampPosition(const Vector2d& position) const;
+/// Describe all elements of this class for I/O operations.
+/// @param[in] stream							The stream that is used to register the class members.
+/// @return												OK on success.
+		static inline Result<void> DescribeIO(const DataSerializeInterface& stream);
 	};
 	/// Intermediate helper class for SplineMapperInterface.
 	template <typename S> class ReferenceFunctionsImpl : public ConstReferenceFunctionsImpl<S>

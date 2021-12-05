@@ -250,7 +250,7 @@ public:
 		return EraseImpl(beginIt, endIt);
 	}
 
-	String ToString(const FormatStatement* fs) const
+	String ToString(const FormatStatement* fs = nullptr) const
 	{
 		String s;
 		BufferedBaseArray<K, 10> path;

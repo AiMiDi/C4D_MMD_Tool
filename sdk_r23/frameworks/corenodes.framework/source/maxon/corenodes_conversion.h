@@ -258,7 +258,7 @@ public:
 	}
 
 	/// @copydoc DefaultDoc::ToString
-	String ToString(const FormatStatement* fs) const;
+	String ToString(const FormatStatement* fs = nullptr) const;
 
 	~ConversionSequence();
 

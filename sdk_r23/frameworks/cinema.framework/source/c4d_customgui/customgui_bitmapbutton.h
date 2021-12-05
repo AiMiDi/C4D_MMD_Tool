@@ -100,12 +100,12 @@ struct BitmapButtonCallback
 		delegate.CopyFrom(other.delegate) iferr_ignore("there can be no error handling here");
 		return *this;
 	}
-	void *data;			///< Custom data.
+	void* data = nullptr;			///< Custom data.
 
 	//----------------------------------------------------------------------------------------
 	/// Callback called when the user presses the bitmap button. Can be used to bring up a popup menu.
 	//----------------------------------------------------------------------------------------
-	void (*ShowPopup)(void *data);
+	void (*ShowPopup)(void* data) = nullptr;
 
 	maxon::Delegate<void(void* data)> delegate;
 };

@@ -506,7 +506,7 @@ template <typename T> using MacroArgType = typename MacroArgTypeHelper<T>::type;
 
 #define MAXON_OPERATOR_STRUCT(T, ...) \
 	MAXON_OPERATOR_EQUALITY_HASHCODE(T, __VA_ARGS__); \
-	maxon::String ToString(const maxon::FormatStatement* fs) const \
+	maxon::String ToString(const maxon::FormatStatement* fs = nullptr) const \
 	{ \
 		return "("_s + MAXON_MAKE_LIST(PRIVATE_MAXON_STRUCT_MEMBER_TOSTRING, ,+ ","_s +, , __VA_ARGS__) + ")"_s; \
 	} \

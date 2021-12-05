@@ -1,0 +1,21 @@
+STRINGTABLE OMMDCamera
+{
+	OMMDCamera "MMD Camera Object";
+	VMD_CAM_OBJ_ANIMATION_GRP "Animation";
+	VMD_CAM_OBJ_FRAME_ON "Frame on";
+	VMD_CAM_OBJ_INIT_CURVE_BUTTON "Init curve";
+	VMD_CAM_OBJ_REGISTER_CURVE_BUTTON "Register key frame";
+	VMD_CAM_OBJ_DELETE_CURVE_BUTTON "Delete key frame";
+	VMD_CAM_OBJ_UPDATE_CURVE_BUTTON "Update all curve";
+	VMD_CAM_OBJ_CURVE_TYPE "Curve type";
+	VMD_CAM_OBJ_SPLINE "Curve";
+	VMD_CAM_OBJ_DELETE_ALL_CURVE_BUTTON "Delete all key frame";
+
+	VMD_CAM_OBJ_XCURVE "Position X curve";
+	VMD_CAM_OBJ_YCURVE "Position Y curve";
+	VMD_CAM_OBJ_ZCURVE "Position Z curve";
+	VMD_CAM_OBJ_RCURVE "Rotation curve";
+	VMD_CAM_OBJ_DCURVE "Distance curve";
+	VMD_CAM_OBJ_VCURVE "AOV curve";
+	VMD_CAM_OBJ_ACURVE "All curve";
+}

@@ -147,7 +147,7 @@ public:
 	/// @return												Formated String of the date-time.
 	//----------------------------------------------------------------------------------------
 	String FormatTime(const Char* formatString) const;
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the hash value of this object. This value can be used for all HashSet<>/HashMap<> classes.
@@ -337,7 +337,7 @@ public:
 	/// @param[in] formatStatement		Nullptr or additional formatting instruction. See also @ref format_float.
 	/// @return												The converted result.
 	//----------------------------------------------------------------------------------------
-	String ToString(const FormatStatement* formatStatement) const;
+	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the hash value of this object. This value can be used for all HashSet<>/HashMap<> classes.

@@ -1451,7 +1451,7 @@ public:
 		return c;
 	}
 
-	String ToString(const FormatStatement* formatStatement) const { return GlobalToString(_array, formatStatement); }
+	String ToString(const FormatStatement* formatStatement = nullptr) const { return GlobalToString(_array, formatStatement); }
 
 	Int GetMemorySize() const { return _array.GetMemorySize() + (SIZEOF(ArrayImpl) - SIZEOF(ARRAY)); }
 

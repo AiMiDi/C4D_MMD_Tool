@@ -50,7 +50,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @markPrivate
 	//----------------------------------------------------------------------------------------
-	Bool InitDisplayControl(BaseSceneHook *node, BaseDocument* doc, BaseDraw* bd, const AtomArray* active);
+	Bool InitDisplayControl(BaseDocument* doc, BaseDraw* bd, const AtomArray* active);
 
 	//----------------------------------------------------------------------------------------
 	/// @markPrivate
@@ -61,6 +61,11 @@ public:
 	/// @markPrivate
 	//----------------------------------------------------------------------------------------
 	Bool DisplayControl(BaseDocument* doc, BaseObject* op, BaseObject* chainstart, BaseDraw* bd, BaseDrawHelp* bh, ControlDisplayStruct& cds) const;
+
+	//----------------------------------------------------------------------------------------
+	/// @markPrivate
+	//----------------------------------------------------------------------------------------
+	void Draw(BaseDocument* doc, BaseDraw* bd, BaseDrawHelp* bh, BaseThread* bt, SCENEHOOKDRAW flags);
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -356,6 +361,7 @@ struct LayerData
 	//----------------------------------------------------------------------------------------
 	LayerData()
 	{
+		solo = false;
 		view = true;
 		render = true;
 		manager = true;

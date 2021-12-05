@@ -849,14 +849,19 @@ Bool BaseSceneHook::DisplayControl(BaseDocument *doc, BaseObject *op, BaseObject
 	return AtCall(DisplayControl)(doc, op, chainstart, bd, bh, cds);
 }
 
-Bool BaseSceneHook::InitDisplayControl(BaseSceneHook *node, BaseDocument* doc, BaseDraw* bd, const AtomArray* active)
+Bool BaseSceneHook::InitDisplayControl(BaseDocument* doc, BaseDraw* bd, const AtomArray* active)
 {
-	return AtCall(InitDisplayControl)(node, doc, bd, active);
+	return AtCall(InitDisplayControl)(doc, bd, active);
 }
 
 void BaseSceneHook::FreeDisplayControl()
 {
 	AtCall(FreeDisplayControl)();
+}
+
+void BaseSceneHook::Draw(BaseDocument* doc, BaseDraw* bd, BaseDrawHelp* bh, BaseThread* bt, SCENEHOOKDRAW flags)
+{
+	AtCall(Draw)(doc, bd, bh, bt, flags);
 }
 
 maxon::DocumentModeControllerRef& BaseDocument::GetModeController()

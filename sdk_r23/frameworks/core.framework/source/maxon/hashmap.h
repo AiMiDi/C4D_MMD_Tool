@@ -1786,7 +1786,7 @@ public:
 			this->_next = next;
 		}
 
-		typename SFINAEHelper<String, V>::type ToString(const FormatStatement* format) const
+		typename SFINAEHelper<String, V>::type ToString(const FormatStatement* format = nullptr) const
 		{
 			return GlobalToString(this->GetKey(), format) + "->"_s + GlobalToString(this->GetValue(), format);
 		}
@@ -2366,7 +2366,7 @@ public:
 		}
 	};
 
-	typename SFINAEHelper<String, V>::type ToString(const FormatStatement* formatStatement) const
+	typename SFINAEHelper<String, V>::type ToString(const FormatStatement* formatStatement = nullptr) const
 	{
 		return BaseCollection<HashMap, EmptyClass>::ToString(formatStatement);
 	}

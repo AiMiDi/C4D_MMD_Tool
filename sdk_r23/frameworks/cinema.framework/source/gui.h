@@ -311,13 +311,13 @@ enum
 	BFH_MASK					= 24,			///< Masks out flags.
 
 	DR_MULTILINE_MONOSPACED						= 1,				///< Monospaced font.
-	DR_MULTILINE_SYNTAXCOLOR					= 2,				///< C.O.F.F.E.E. syntax highlighting.
+	DR_MULTILINE_SYNTAXCOLOR					= 2,				///< Python syntax highlighting.
 	DR_MULTILINE_STATUSBAR						= 4,				///< Display a statusbar with the cursor position.
 	DR_MULTILINE_HIGHLIGHTLINE				= 8,				///< Highlight lines.
 	DR_MULTILINE_READONLY							= 16,				///< Read-only multi-line field.
 	// DR_MULTILINE_RESERVED					= 32,
 	// DR_MULTILINE_RESERVED					= 64,
-	DR_MULTILINE_PYTHON								= 128,			///< Python syntax highlighting.
+	DR_MULTILINE_PYTHON								= 128,			///< Python line return handling.
 	DR_MULTILINE_WORDWRAP							= 256,			///< Word wrap multi-line field.
 	DR_MULTILINE_SETLOGGER						= 512,
 	DR_MULTILINE_SETPYTHONSCOPE 			= 1024,
@@ -868,7 +868,7 @@ enum
 	BFM_DRAWUSERITEM_ID	= 1, ///< @markInternal
 
 	BFM_SYNC_MESSAGE									= 'sync',			///< Sync message.
-	BFM_CORE_MESSAGE									= 'MciM',			///< Core message: (See @link page_core_messages Core Messages@endlink.)
+	BFM_CORE_MESSAGE									= 'MciM',			///< Core message: (See @link page_manual_coremessages Core Messages@endlink.)
 
 	BFM_CORE_ID							= 'MciI',			///< ::Int32 Core message ID.
 	BFM_CORE_UNIQUEID				= 'Muid',			///< ::Int32 Time stamp.

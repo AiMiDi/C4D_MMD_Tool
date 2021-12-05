@@ -1,1 +1,1 @@
-maxon.DataTypeBuilderInterface	"net.maxon.datatype.builder"	D:\C4DSDK\sdk_s24\frameworks\core.framework\source\maxon\datatype_builder.h(46,7)	Object	GetDataTypeName,RecurseDataType	hasStaticMethods=true	
+maxon.DataTypeBuilderInterface	"net.maxon.datatype.builder"	D:\C4DSDK\C4D_MMDTool\sdk_s24\frameworks\core.framework\source\maxon\datatype_builder.h(46,7)	Object	GetDataTypeName,RecurseDataType	hasStaticMethods=true	

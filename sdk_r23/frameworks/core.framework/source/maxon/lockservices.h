@@ -12,6 +12,8 @@ class ARWLock;
 struct CoreSerializerPOD;
 using CoreSerializerCallback = void (*)(void*);
 using CoreSerializerBuildWrapper = void* (*)(void* buf, void* fn, CoreSerializerCallback& callback);
+
+// This should be a multiple of CACHE_LINE_SIZE.
 static const Int MAXCORESERIALIZERJOBSIZE = 256;
 
 class LockServices

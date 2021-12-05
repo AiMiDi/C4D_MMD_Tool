@@ -336,6 +336,7 @@
 		A0F4AB3A6FEF70E052000000 /* execution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = execution.h; path = ../source/maxon/execution.h; sourceTree = SOURCE_ROOT; };
 		A0F4AB3A6FEF913516000000 /* dataformat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dataformat.cpp; path = ../source/maxon/dataformat.cpp; sourceTree = SOURCE_ROOT; };
 		A0F4AB3A6FF048FD9A000000 /* valuereceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = valuereceiver.h; path = ../source/maxon/valuereceiver.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FF07B6050000000 /* sseconversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sseconversion.h; path = ../source/maxon/utilities/sseconversion.h; sourceTree = SOURCE_ROOT; };
 		A0F4AB3A6FF36FD3C9000000 /* sse_vector_8f32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_vector_8f32.h; path = ../source/maxon/sse_vector_8f32.h; sourceTree = SOURCE_ROOT; };
 		A0F4AB3A6FF39A1A4C000000 /* sse_vector_8i32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_vector_8i32.h; path = ../source/maxon/sse_vector_8i32.h; sourceTree = SOURCE_ROOT; };
 		A0F4AB3A6FF3D5D96A000000 /* datadescriptiondefinition_conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescriptiondefinition_conversion.h; path = ../source/maxon/datadescriptiondefinition_conversion.h; sourceTree = SOURCE_ROOT; };
@@ -718,6 +719,7 @@
 				A0F4AB3A6FCDF07F9B000000 /* reuse_resource_cache.h */,
 				A0F4AB3A6F4332820F000000 /* ringbuffer.h */,
 				A0F4AB3A6F748C24BF000000 /* sprintf_safe.h */,
+				A0F4AB3A6FF07B6050000000 /* sseconversion.h */,
 				A0F4AB3A6FABBEFE2C000000 /* streamconversion_helper.h */,
 				A0F4AB3A6F2298BEED000000 /* threaded_update_helper.h */,
 				A0F4AB3A6FA39C33DC000000 /* undef_win_macros.h */,

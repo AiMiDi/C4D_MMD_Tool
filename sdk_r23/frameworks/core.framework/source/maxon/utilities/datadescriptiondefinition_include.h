@@ -158,7 +158,7 @@ Result<maxon::Bool> IncludeHelper::IsFiltered(const InternedId& id) const
 		InternedId checkid = id;
 
 		// collect the filtered strings for enums
-		String cid = id.ToString(nullptr);
+		String cid = id.ToString();
 		Int		 idx = cid.FindIndex('#');
 		if (idx != InvalidArrayIndex)
 		{

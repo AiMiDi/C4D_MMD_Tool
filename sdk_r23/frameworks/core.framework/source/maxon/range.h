@@ -248,7 +248,7 @@ public:
 
 	MAXON_OPERATOR_EQUALITY_HASHCODE(Range, _minValue, _maxValue);
 
-	typename SFINAEHelper<String, T>::type ToString(const FormatStatement* format) const
+	typename SFINAEHelper<String, T>::type ToString(const FormatStatement* format = nullptr) const
 	{
 		return "["_s + GlobalToString(_minValue, format) + ","_s + GlobalToString(_maxValue, format) + "]"_s;
 	}

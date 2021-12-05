@@ -24,6 +24,7 @@ struct SSLInterface::MTable
 	void (*_SSLInterface_ADD_thread_state) ();
 	void (*_SSLInterface_SSL_load_error_strings) ();
 	int (*_SSLInterface_SSL_library_init) ();
+	int (*_SSLInterface_OPENSSL_init_ssl) ();
 	SSL_CTX* (*_SSLInterface_SSL_CTX_new) (const SSL_METHOD* meth);
 	const SSL_METHOD* (*_SSLInterface_TLSv1_method) ();
 	const SSL_METHOD* (*_SSLInterface_TLSv1_1_method) ();
@@ -31,6 +32,7 @@ struct SSLInterface::MTable
 	const SSL_METHOD* (*_SSLInterface_SSLv3_method) ();
 	const SSL_METHOD* (*_SSLInterface_SSLv2_method) ();
 	const SSL_METHOD* (*_SSLInterface_SSLv23_method) ();
+	const SSL_METHOD* (*_SSLInterface_TLS_method) ();
 	SSL* (*_SSLInterface_SSL_new) (SSL_CTX* ctx);
 	String (*_SSLInterface_ERR_get_error_string) ();
 	unsigned long (*_SSLInterface_ERR_get_error) ();
@@ -80,6 +82,7 @@ struct SSLInterface::MTable
 		_SSLInterface_ADD_thread_state = &IMPL::_SSLInterface_ADD_thread_state;
 		_SSLInterface_SSL_load_error_strings = &IMPL::_SSLInterface_SSL_load_error_strings;
 		_SSLInterface_SSL_library_init = &IMPL::_SSLInterface_SSL_library_init;
+		_SSLInterface_OPENSSL_init_ssl = &IMPL::_SSLInterface_OPENSSL_init_ssl;
 		_SSLInterface_SSL_CTX_new = &IMPL::_SSLInterface_SSL_CTX_new;
 		_SSLInterface_TLSv1_method = &IMPL::_SSLInterface_TLSv1_method;
 		_SSLInterface_TLSv1_1_method = &IMPL::_SSLInterface_TLSv1_1_method;
@@ -87,6 +90,7 @@ struct SSLInterface::MTable
 		_SSLInterface_SSLv3_method = &IMPL::_SSLInterface_SSLv3_method;
 		_SSLInterface_SSLv2_method = &IMPL::_SSLInterface_SSLv2_method;
 		_SSLInterface_SSLv23_method = &IMPL::_SSLInterface_SSLv23_method;
+		_SSLInterface_TLS_method = &IMPL::_SSLInterface_TLS_method;
 		_SSLInterface_SSL_new = &IMPL::_SSLInterface_SSL_new;
 		_SSLInterface_ERR_get_error_string = &IMPL::_SSLInterface_ERR_get_error_string;
 		_SSLInterface_ERR_get_error = &IMPL::_SSLInterface_ERR_get_error;
@@ -143,6 +147,7 @@ struct SSLInterface::Hxx2
 		static void _SSLInterface_ADD_thread_state() { return C::ADD_thread_state(); }
 		static void _SSLInterface_SSL_load_error_strings() { return C::SSL_load_error_strings(); }
 		static int _SSLInterface_SSL_library_init() { return C::SSL_library_init(); }
+		static int _SSLInterface_OPENSSL_init_ssl() { return C::OPENSSL_init_ssl(); }
 		static SSL_CTX* _SSLInterface_SSL_CTX_new(const SSL_METHOD* meth) { return C::SSL_CTX_new(meth); }
 		static const SSL_METHOD* _SSLInterface_TLSv1_method() { return C::TLSv1_method(); }
 		static const SSL_METHOD* _SSLInterface_TLSv1_1_method() { return C::TLSv1_1_method(); }
@@ -150,6 +155,7 @@ struct SSLInterface::Hxx2
 		static const SSL_METHOD* _SSLInterface_SSLv3_method() { return C::SSLv3_method(); }
 		static const SSL_METHOD* _SSLInterface_SSLv2_method() { return C::SSLv2_method(); }
 		static const SSL_METHOD* _SSLInterface_SSLv23_method() { return C::SSLv23_method(); }
+		static const SSL_METHOD* _SSLInterface_TLS_method() { return C::TLS_method(); }
 		static SSL* _SSLInterface_SSL_new(SSL_CTX* ctx) { return C::SSL_new(ctx); }
 		static String _SSLInterface_ERR_get_error_string() { return C::ERR_get_error_string(); }
 		static unsigned long _SSLInterface_ERR_get_error() { return C::ERR_get_error(); }
@@ -203,45 +209,53 @@ MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::ERR_clear_error() -> void
 {
 	return MTable::_instance._SSLInterface_ERR_clear_error();
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::ADD_thread_state() -> void
+[[deprecated("don't use")]] MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::ADD_thread_state() -> void
 {
 	return MTable::_instance._SSLInterface_ADD_thread_state();
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSL_load_error_strings() -> void
+[[deprecated("don't use")]] MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSL_load_error_strings() -> void
 {
 	return MTable::_instance._SSLInterface_SSL_load_error_strings();
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSL_library_init() -> int
+[[deprecated("don't use")]] MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSL_library_init() -> int
 {
 	return MTable::_instance._SSLInterface_SSL_library_init();
+}
+MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::OPENSSL_init_ssl() -> int
+{
+	return MTable::_instance._SSLInterface_OPENSSL_init_ssl();
 }
 MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSL_CTX_new(const SSL_METHOD* meth) -> SSL_CTX*
 {
 	return MTable::_instance._SSLInterface_SSL_CTX_new(meth);
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::TLSv1_method() -> const SSL_METHOD*
+[[deprecated("don't use")]] MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::TLSv1_method() -> const SSL_METHOD*
 {
 	return MTable::_instance._SSLInterface_TLSv1_method();
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::TLSv1_1_method() -> const SSL_METHOD*
+[[deprecated("don't use")]] MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::TLSv1_1_method() -> const SSL_METHOD*
 {
 	return MTable::_instance._SSLInterface_TLSv1_1_method();
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::TLSv1_2_method() -> const SSL_METHOD*
+[[deprecated("don't use")]] MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::TLSv1_2_method() -> const SSL_METHOD*
 {
 	return MTable::_instance._SSLInterface_TLSv1_2_method();
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSLv3_method() -> const SSL_METHOD*
+[[deprecated("don't use")]] MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSLv3_method() -> const SSL_METHOD*
 {
 	return MTable::_instance._SSLInterface_SSLv3_method();
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSLv2_method() -> const SSL_METHOD*
+[[deprecated("don't use")]] MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSLv2_method() -> const SSL_METHOD*
 {
 	return MTable::_instance._SSLInterface_SSLv2_method();
 }
-MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSLv23_method() -> const SSL_METHOD*
+[[deprecated("don't use")]] MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSLv23_method() -> const SSL_METHOD*
 {
 	return MTable::_instance._SSLInterface_SSLv23_method();
+}
+MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::TLS_method() -> const SSL_METHOD*
+{
+	return MTable::_instance._SSLInterface_TLS_method();
 }
 MAXON_ATTRIBUTE_FORCE_INLINE auto SSLInterface::SSL_new(SSL_CTX* ctx) -> SSL*
 {
