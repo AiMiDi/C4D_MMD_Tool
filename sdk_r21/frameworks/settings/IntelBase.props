@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="Base.props" />
+  </ImportGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalOptions>/debug:inline-debug-info /Qfp-speculation:safe /Qunroll /Qsox- /Qdiag-error:589,1011,1418,2407 /Qdiag-warning:1599 /Qdiag-disable:vec,cpu-dispatch /Qdiag-disable:1,111,193,280,327,337,383,411,424,444,522,654,809,811,869,874,981,1334,1572,1899,2259,2266,2267,2268,2270,2271,2273,2536,2586,3280,3346,10369,10370,10371,11074,11075,13000,13046 /Qopt-report-embed- %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>_USE_INTEL_COMPILER;__C_PLUS_PLUS_0X__;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>MaxSpeed</Optimization>
+			<CCppSupport>Cpp17Support</CCppSupport>
+			<LanguageStandard> </LanguageStandard>
+      <MinimalRebuild>true</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <OpenMPSupport>false</OpenMPSupport>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
+      <Cpp0xSupport>true</Cpp0xSupport>
+      <WarningLevel>Level5</WarningLevel>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions3</EnableEnhancedInstructionSet>
+      <EnableAnsiAliasing>true</EnableAnsiAliasing>
+      <FloatingPointModel>Precise</FloatingPointModel>
+    </ClCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Link>
+      <InterproceduralOptimization>false</InterproceduralOptimization>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/manifest:embed %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

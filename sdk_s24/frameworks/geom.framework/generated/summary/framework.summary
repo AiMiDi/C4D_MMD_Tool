@@ -1,0 +1,3 @@
+maxon.ConvexDecompositionInterface	"net.maxon.interface.convexdecomposition"	D:\C4DSDK\sdk_s24\frameworks\geom.framework\source\maxon\convexdecomposition\convexdecomposition.h(13,7)	ObjectInterface	Cancel,Clear,Compute,FetchResults,GetProgress,GetSettings,Init,IsReady	
+maxon.DegeneratedInputErrorInterface	"net.maxon.interface.degeneratedinputerror"	D:\C4DSDK\sdk_s24\frameworks\geom.framework\source\maxon\geometryutils.h(44,7)	ErrorInterface		
+maxon.InterpolateTypeInterface	"net.maxon.geometry.interface.interpolate"	D:\C4DSDK\sdk_s24\frameworks\geom.framework\source\maxon\interpolation.h(96,7)	ObjectInterface	Average,GetInterpolateDataType,GetInterpolationClass,InterpolateInOutline,InterpolateLinear	hasStaticMethods=true	

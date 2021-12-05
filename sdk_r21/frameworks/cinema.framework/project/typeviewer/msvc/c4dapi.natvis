@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+  <!-- BaseList2D -->
+  <Type Name="BaseList2D">
+    <DisplayString>{*(String*)(((char*)this) + 696)}</DisplayString>
+  </Type>
+
+  <!-- Other BaseList2D derivatives (the ones where we want to see the Plugin ID) -->
+  <Type Name="BaseShader">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+  <Type Name="BasePlugin">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+  <Type Name="BaseSceneHook">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+  <Type Name="BaseSceneLoader">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+  <Type Name="BaseSceneSaver">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+  <Type Name="BaseTag">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+  <Type Name="BaseVideoPost">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+  <Type Name="CCurve">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+  <Type Name="CTrack">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+  <Type Name="GvNode">
+    <DisplayString>{{ {*(BaseList2D*)this}, id={*(int*)((*(int*)(((char*)this) + 72)) + 8)} }</DisplayString>
+  </Type>
+
+  <!-- BaseObject -->
+  <Type Name="BaseObject">
+    <DisplayString>{*(String*)(((char*)this) + 696)}</DisplayString>
+    <Expand>
+      <Item Name="AbsPos">*(Vector*)(((char*)this) + 1152)</Item>
+      <Item Name="AbsRot">*(Vector*)(((char*)this) + 1128)</Item>
+      <Item Name="AbsScale">*(Vector*)(((char*)this) + 1176)</Item>
+    </Expand>
+  </Type>
+
+  <!-- String -->
+  <Type Name="String">
+    <DisplayString>{ *((maxon::String*)this) }</DisplayString>
+  </Type>
+
+  <!-- Filename -->
+	<Type Name="Filename">
+    <DisplayString>{ *((maxon::Url*)this) }</DisplayString>
+	</Type>
+
+  <!-- SMinMax, LMinMax -->
+  <Type Name="SMinMax">
+    <AlternativeType Name="LMinMax"></AlternativeType>
+    <DisplayString>{{ Min={min}, Max={max} }</DisplayString>
+  </Type>
+
+  <!-- BaseTime -->
+  <Type Name="BaseTime">
+    <DisplayString>{{ {numerator/denominator} }</DisplayString>
+  </Type>
+
+  <!-- DateTime -->
+  <Type Name="DateTime">
+    <DisplayString>{{ {year}-{month}-{day}, {hour}:{minute}:{second} }</DisplayString>
+  </Type>
+
+  <!-- TriState -->
+  <Type Name="TriState&lt;*&gt;">
+    <DisplayString Condition="tri ==-1">{{ value={value} (unchanged) }</DisplayString>
+    <DisplayString Condition="tri == 0">{{ value={value} }</DisplayString>
+    <DisplayString Condition="tri == 1">{{ value={value} (Tri) }</DisplayString>
+  </Type>
+
+  <!-- CPolygon -->
+  <Type Name="CPolygon">
+    <DisplayString Condition="c == d">{{ {a}, {b}, {c} (Tri) }</DisplayString>
+    <DisplayString Condition="c != d">{{ {a}, {b}, {c}, {d} (Quad) }</DisplayString>
+    <Expand>
+      <Item Name="a">a</Item>
+      <Item Name="b">b</Item>
+      <Item Name="c">c</Item>
+      <Item Condition="c != d" Name="d">d</Item>
+      <Synthetic Condition="c == d" Name="Type">
+        <DisplayString>Triangle</DisplayString>
+      </Synthetic>
+      <Synthetic Condition="c != d" Name="Type">
+        <DisplayString>Quadrangle</DisplayString>
+      </Synthetic>
+    </Expand>
+  </Type>
+
+  <!-- BaseBitmap -->
+  <Type Name="BaseBitmap">
+    <DisplayString>{{ {*(int*)(this + 152)}x{*(int*)(this + 156)}, Bpp={*(int*)((*(int*)(((char*)this) + 48)) + 16)}, {(COLORMODE)(*(int*)(this + 168))} }</DisplayString>
+    <Expand>
+      <Item Name="Width">*(int*)(this + 152)</Item>
+      <Item Name="Height">*(int*)(this + 156)</Item>
+      <Item Name="Is Multipass">*(int*)(this + 164)</Item>
+      <Item Name="Bits per pixel">*(int*)((*(int*)(((char*)this) + 48)) + 16)</Item>
+      <Item Name="Colormode">(COLORMODE)(*(int*)(this + 168))</Item>
+    </Expand>
+  </Type>
+  
+  <!-- IconData -->
+  <Type Name="IconData">
+    <DisplayString>{{ w={w}, h={h}, x={x}, y={y}, {flags} }</DisplayString>
+  </Type>
+
+	<Type Name="DescLevel">
+		<DisplayString>{id}/{(DTYPE)dtype}/{creator}</DisplayString>
+	</Type>
+
+	<Type Name="DescID">
+		<DisplayString>{{ Count={*(Int32*)((char*)this + 0)}, { (*(DescLevel**)((char*)this + 8)), [*(Int32*)((char*)this + 0)] }</DisplayString>
+		<Expand>
+			<Item Name="Depth">*(Int32*)((char*)this + 0)</Item>
+			<ArrayItems>
+				<Size>*(Int32*)((char*)this + 0)</Size>
+				<ValuePointer>(*(DescLevel**)((char*)this + 8))</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
+</AutoVisualizer>

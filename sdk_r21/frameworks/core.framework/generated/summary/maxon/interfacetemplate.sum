@@ -1,0 +1,3 @@
+maxon.NumberBaseInterface	"net.maxon.interface.numberbase"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\interfacetemplate.h(24,7)	ObjectInterface	GenericMul	generic=true	
+maxon.NumberInterface	"net.maxon.interface.number"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\interfacetemplate.h(43,36)	NumberBaseInterface,ErrorInterface	Create,Get1,Set	singleImpl=true	template=2	generic=true	hasStaticMethods=true	
+maxon.Number2Interface	"net.maxon.interface.number2"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\interfacetemplate.h(57,29)	NumberInterface,NumberBaseInterface	Func,Get2	singleImpl=true	template=1	hasStaticMethods=true	

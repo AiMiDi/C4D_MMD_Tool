@@ -1,0 +1,1 @@
+maxon.DataDescriptionDefinitionInterface=D:\C4DSDK\C4D_MMDTool\r20_sdk\frameworks\core.framework\source\maxon\datadescriptiondefinition.h(35,7)=ObserverObjectInterface:AddEntry,Create,EraseEntry,FindEntry,GetDataDefaults,GetDataValueOrDefaults,GetEntries,GetEntry,GetEntryCount,GetInfo,MergeDescriptionDefinition,NullValuePtr,ReplaceEntry,Reset,SetInfo

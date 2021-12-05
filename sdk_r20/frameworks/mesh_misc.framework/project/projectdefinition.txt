@@ -1,0 +1,22 @@
+// Supported platforms - can be [Win32;Win64;OSX;Android;Linux;iOS]
+Platform=Win64;OSX;Linux;iOS;Android
+
+// Type of project - can be [Lib;DLL;App]
+Type=Lib
+
+// API dependencies
+APIS=core.framework
+
+// This is provided by MAXON
+maxon=true
+
+// This is a public framework (available in the SDK).
+publicframework=true
+
+// Windows 
+
+// OS X 
+
+// iOS
+
+// Linux

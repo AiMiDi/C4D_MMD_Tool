@@ -1,0 +1,1 @@
+maxon.ImagePixelBlendInterface	"net.maxon.image.interface.imagepixelblend"	D:\C4DSDK\r21_sdk\frameworks\image.framework\source\maxon\gfx_image_pixelblend.h(109,7)	ObjectInterface	GetBlendPixelHandler,GetOptimalPixelFormat	hasStaticMethods=true	

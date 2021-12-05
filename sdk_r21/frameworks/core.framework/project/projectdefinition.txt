@@ -1,0 +1,36 @@
+// Supported platforms - can be [Win32;Win64;OSX;Android;Linux;iOS]
+Platform=Win64;OSX;Linux;iOS;Android
+
+// Type of project - can be [Lib;DLL;App]
+Type=Lib
+
+// Enable unity builds for the following directories
+unity=source/maxon;
+unityExclude=cpuid.cpp;\
+			configuration.cpp;
+
+// This is provided by MAXON
+maxon=true
+
+// This is a public framework (available in the SDK).
+publicframework=true
+
+// API dependencies
+// BEFORE ADDING MORE DEPENDENCIES CHECK IF THIS CANNOT BE DONE WITH FORWARD DECLARATIONS
+// ADDING A DEPENDENCY HERE MEANS THAT DOZENS OF MODULES WILL INHERIT THIS FRAMEWORK
+APIS=
+
+// Windows 
+ExcludeFromBuild.Win=java_helper.cpp
+
+// OS X 
+ShellScript.OSX=mkdir -p ~/Library/Application\\ Support/MAXON\ncp -f ${MAXON_ROOTDIR}frameworks/core.framework/project/typeviewer/xcode/maxon.py ~/Library/Application\\ Support/MAXON/maxon.py\nperl -w ${MAXON_ROOTDIR}frameworks/core.framework/project/typeviewer/xcode/copytypeviewer.pl maxon.py ~/Library/Application\\ Support/MAXON/maxon.py\n
+ExcludeFromBuild.OSX=/win
+
+// iOS
+
+// Linux
+Exclude.Linux=/win
+
+// Android
+ExcludeFromBuild.Android=win_strptime.cpp

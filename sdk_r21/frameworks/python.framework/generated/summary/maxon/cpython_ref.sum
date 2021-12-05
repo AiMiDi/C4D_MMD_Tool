@@ -1,0 +1,11 @@
+maxon.py.CPyInterface	"net.maxon.python.interface.cpyref"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(47,7)	ObjectInterface	Decref,Disconnect,GetLibrary,GetPyObject,GetRefCount,GetTypeRef,Incref,Init	
+maxon.py.CPyTypeInterface	"net.maxon.python.interface.cpytype"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(171,7)	CPyInterface		
+maxon.py.CPyFrameInterface	"net.maxon.python.interface.cpyframe"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(197,7)	CPyInterface	GetBack,GetCode,GetLastInstruction	
+maxon.py.CPyTracebackInterface	"net.maxon.python.interface.cpytraceback"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(219,7)	CPyInterface	GetFrameRef,GetLineNumber,GetNext	
+maxon.py.CPyCodeInterface	"net.maxon.python.interface.cpycode"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(235,7)	CPyInterface	GetFilename,GetName	
+maxon.py.MPyClassInterface	"net.maxon.python.interface.mpyclass"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(250,7)	CPyInterface		
+maxon.py.MPyMemberInterface	"net.maxon.python.interface.mpymember"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(262,7)	CPyInterface		
+maxon.py.MPyFunctionInterface	"net.maxon.python.interface.mpyfunction"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(274,7)	CPyInterface	GetFunction	
+maxon.py.MPyDataTypeInterface	"net.maxon.python.interface.mpydatatype"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(288,7)	CPyInterface	GetType	
+maxon.py.MPyDataInterface	"net.maxon.python.interface.mpydata"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(302,7)	CPyInterface	GetData,GetMappingType,GetType,PrivateGetPtr	
+maxon.py.MPyCallerContextInterface	"net.maxon.python.interface.mpycallercontext"	D:\C4DSDK\r21_sdk\frameworks\python.framework\source\maxon\cpython_ref.h(322,7)	CPyInterface		

@@ -1,0 +1,29 @@
+// Supported platforms - can be [Win32;Win64;OSX;Android;Linux;iOS]
+Platform=Win64;Android;Linux;OSX
+
+// Type of project - can be [Lib;DLL;App]
+Type=Lib
+
+// API dependencies
+APIS=core.framework
+
+// This is provided by MAXON
+maxon=true
+
+// This is a public framework (available in the SDK).
+publicframework=true
+
+// Windows 
+PreBuildEvent.Debug=%(Command)\n$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor\Python36\python.exe prebuildevent.py 0
+PreBuildEvent.UnityDebug=%(Command)\n$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor\Python36\python.exe prebuildevent.py 0
+PreBuildEvent.Intel=%(Command)\n$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor\Python36\python.exe prebuildevent.py 1
+PreBuildEvent.Release=%(Command)\n$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor\Python36\python.exe prebuildevent.py 1
+
+// OS X 
+ShellScript.OSX=python prebuildevent.py
+
+// iOS
+
+// Linux
+
+// Android

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="generated">
+      <UniqueIdentifier>{BCEDCE2F-468D-93F0-0000-5284111A998F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\hxx">
+      <UniqueIdentifier>{BCEDCE2F-468D-93F0-8ACC-618A6830A19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{BCEDCE2F-468D-93F0-0000-0000CA90681B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon">
+      <UniqueIdentifier>{BCEDCE2F-468D-93F0-29DB-81C65E166B42}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <Filter>generated\hxx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\maxon\cpython.cpp">
+      <Filter>source\maxon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\maxon\cpython_ref.cpp">
+      <Filter>source\maxon</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\cpython.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\cpython27_raw.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\cpython_c4d.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\cpython_raw.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\cpython_ref.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\vm.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,2 @@
+maxon.SystemErrorInterface=D:\C4DSDK\C4D_MMDTool\r20_sdk\frameworks\core.framework\source\maxon\systemerror.h(31,7)=ErrorInterface:
+maxon.NSSystemErrorInterface=D:\C4DSDK\C4D_MMDTool\r20_sdk\frameworks\core.framework\source\maxon\systemerror.h(64,7)=ErrorInterface:GetNSError,SetNSError

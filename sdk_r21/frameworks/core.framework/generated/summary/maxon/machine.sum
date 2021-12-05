@@ -1,0 +1,1 @@
+maxon.MachineInterface	"net.maxon.interface.machine"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\machine.h(39,7)	ObserverObjectInterface	GetInterface,GetMachineInfo,GetState,GetUniqueId,ObservableMessageReceived,SetState,ToString	

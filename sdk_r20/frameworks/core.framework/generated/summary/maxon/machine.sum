@@ -1,0 +1,1 @@
+maxon.MachineInterface=D:\C4DSDK\C4D_MMDTool\r20_sdk\frameworks\core.framework\source\maxon\machine.h(39,7)=ObserverObjectInterface:GetInterface,GetMachineInfo,GetState,GetUniqueId,ObservableMessageReceived,SetState,ToString

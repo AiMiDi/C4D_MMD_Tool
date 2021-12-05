@@ -1,0 +1,11 @@
+#ifndef PREFSDATABASE_H__
+#define PREFSDATABASE_H__
+
+enum
+{
+	PREF_DATABASE_PATHS = 1000,
+
+	PREFS_DATABASE_DUMMY
+};
+
+#endif // PREFSDATABASE_H__

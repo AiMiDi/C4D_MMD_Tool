@@ -1,0 +1,45 @@
+//---Architectures---
+ARCHS = x86_64
+ONLY_ACTIVE_ARCH = YES
+SDKROOT = macosx
+
+//---Build Locations---
+SYMROOT = $(MAXON_ROOTDIR)build
+
+//---Build Options---
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+ENABLE_BITCODE = NO
+ENABLE_TESTABILITY = NO
+
+//---Code Signing--- removed as signing will be done during distill process
+//CODE_SIGN_IDENTITY = $(MAXON_CODE_SIGN_IDENTITY)
+
+//---Deployment---
+DEPLOYMENT_POSTPROCESSING = YES
+MACOSX_DEPLOYMENT_TARGET = 10.13
+COPY_PHASE_STRIP = NO
+STRIP_INSTALLED_PRODUCT = YES
+SEPARATE_STRIP = NO
+DSTROOT = .
+STRIP_STYLE = non-global
+
+//---Linking---
+DEAD_CODE_STRIPPING = YES
+PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES
+LD_DYLIB_INSTALL_NAME = /R22$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)	// dlopen identifies libs using this install name. Therefore it has to be different for major releases, otherwise the OS caching will return the wrong library depending on load order if multiple version are present.
+
+//---Search Paths---
+ALWAYS_SEARCH_USER_PATHS = NO
+USER_HEADER_SEARCH_PATHS = $(MAXON_ROOTDIR)resource $(MAXON_ROOTDIR)resource/descriptions/res $(MAXON_ROOTDIR)resource/gui_internal
+
+//---Code Generation---
+//---Language---
+#include "compiler"
+
+GCC_OPTIMIZATION_LEVEL = 3
+
+//---Preprocessing---
+GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64] = __MAC __64BIT MAXON_TARGET_RELEASE MAXON_TARGET_MACOS MAXON_TARGET_OSX MAXON_TARGET_64BIT
+
+//---Warnings---
+#include "warnings"

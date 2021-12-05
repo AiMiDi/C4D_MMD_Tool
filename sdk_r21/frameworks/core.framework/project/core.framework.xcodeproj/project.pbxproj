@@ -1,0 +1,949 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A0F4AB3A6F07F23259010000 /* datetime_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F07F23259000000 /* datetime_impl.cpp */; };
+		A0F4AB3A6F0BE44905010000 /* crc32c.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F0BE44905000000 /* crc32c.cpp */; };
+		A0F4AB3A6F1044B5E4010000 /* url.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F1044B5E4000000 /* url.cpp */; };
+		A0F4AB3A6F12764CF4010000 /* datadictionaryobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F12764CF4000000 /* datadictionaryobject.cpp */; };
+		A0F4AB3A6F16129B38010000 /* cpuid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F16129B38000000 /* cpuid.cpp */; };
+		A0F4AB3A6F1E617D06010000 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F1E617D06000000 /* string.cpp */; };
+		A0F4AB3A6F29107702010000 /* datadescriptiondatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F29107702000000 /* datadescriptiondatabase.cpp */; };
+		A0F4AB3A6F2A08E7D9010000 /* stringencoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F2A08E7D9000000 /* stringencoding.cpp */; };
+		A0F4AB3A6F2A150C20010000 /* reflection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F2A150C20000000 /* reflection.cpp */; };
+		A0F4AB3A6F2B959E82010000 /* iostreams.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F2B959E82000000 /* iostreams.cpp */; };
+		A0F4AB3A6F2CE11E72010000 /* debugglobals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F2CE11E72000000 /* debugglobals.cpp */; };
+		A0F4AB3A6F31799AE3010000 /* apibasemath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F31799AE3000000 /* apibasemath.cpp */; };
+		A0F4AB3A6F3358B4F7010000 /* lib_math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F3358B4F7000000 /* lib_math.cpp */; };
+		A0F4AB3A6F3583867F010000 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F3583867F000000 /* thread.cpp */; };
+		A0F4AB3A6F3957AB62010000 /* spinlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F3957AB62000000 /* spinlock.cpp */; };
+		A0F4AB3A6F3B053A7A010000 /* iostreams_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F3B053A7A000000 /* iostreams_helper.cpp */; };
+		A0F4AB3A6F3EA24135010000 /* datadictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F3EA24135000000 /* datadictionary.cpp */; };
+		A0F4AB3A6F406470F6010000 /* apibaseid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F406470F6000000 /* apibaseid.cpp */; };
+		A0F4AB3A6F40B6982E010000 /* multiindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F40B6982E000000 /* multiindex.cpp */; };
+		A0F4AB3A6F56F689DA010000 /* cpuyield.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F56F689DA000000 /* cpuyield.cpp */; };
+		A0F4AB3A6F57BE265B010000 /* bytesvalue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F57BE265B000000 /* bytesvalue.cpp */; };
+		A0F4AB3A6F5DDBB9EB010000 /* configuration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F5DDBB9EB000000 /* configuration.cpp */; };
+		A0F4AB3A6F6A18E559010000 /* datatype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F6A18E559000000 /* datatype.cpp */; };
+		A0F4AB3A6F6A35CCBA010000 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F6A35CCBA000000 /* timer.cpp */; };
+		A0F4AB3A6F71779782010000 /* crashhandlerglobals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F71779782000000 /* crashhandlerglobals.cpp */; };
+		A0F4AB3A6F73B644B9010000 /* timevalue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F73B644B9000000 /* timevalue.cpp */; };
+		A0F4AB3A6F7B766090010000 /* weakref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F7B766090000000 /* weakref.cpp */; };
+		A0F4AB3A6F96836DF4010000 /* general_math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6F96836DF4000000 /* general_math.cpp */; };
+		A0F4AB3A6FA9748AB2010000 /* stacktrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6FA9748AB2000000 /* stacktrace.cpp */; };
+		A0F4AB3A6FB788DD45010000 /* application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6FB788DD45000000 /* application.cpp */; };
+		A0F4AB3A6FBBBB7934010000 /* object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6FBBBB7934000000 /* object.cpp */; };
+		A0F4AB3A6FCC79170B010000 /* streamconversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6FCC79170B000000 /* streamconversion.cpp */; };
+		A0F4AB3A6FCD3419B5010000 /* generic_basearray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6FCD3419B5000000 /* generic_basearray.cpp */; };
+		A0F4AB3A6FD93CCD9F010000 /* register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6FD93CCD9F000000 /* register.cpp */; };
+		A0F4AB3A6FEF913516010000 /* dataformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0F4AB3A6FEF913516000000 /* dataformat.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A08C5CDEA3F4AB3A6F7B0000 /* libcore.framework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcore.framework.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A08C5CDEA3F4AB3A6F7B0100 /* libcore.framework_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcore.framework_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0F4AB3A6F00000000000000 /* debugbase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = debugbase.xcconfig; path = ../../../frameworks/settings/debugbase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F00000000050000 /* releasebase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = releasebase.xcconfig; path = ../../../frameworks/settings/releasebase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F00022705000000 /* secure_random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = secure_random.h; path = ../source/maxon/secure_random.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F00E8D99E000000 /* datatype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datatype.h; path = ../source/maxon/datatype.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0105F9F6000000 /* sortedarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sortedarray.h; path = ../source/maxon/sortedarray.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F02692B40000000 /* cstdliballocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cstdliballocator.h; path = ../source/maxon/cstdliballocator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0310A844000000 /* basearray_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basearray_helper.h; path = ../source/maxon/utilities/basearray_helper.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F04BC5762000000 /* basearray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basearray.h; path = ../source/maxon/basearray.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0637AA5F000000 /* cpuyield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpuyield.h; path = ../source/maxon/cpuyield.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F07D829ED000000 /* matrix2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix2d.h; path = ../source/maxon/matrix2d.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F07D912AB000000 /* matrix4d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix4d.h; path = ../source/maxon/matrix4d.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F07F23259000000 /* datetime_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datetime_impl.cpp; path = ../source/maxon/datetime_impl.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F096712E9000000 /* units.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = units.h; path = ../source/maxon/units.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0A1ECB5E000000 /* reflection_invocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reflection_invocation.h; path = ../source/maxon/reflection_invocation.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0A95A738000000 /* finally.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = finally.h; path = ../source/maxon/utilities/finally.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0B534C9A000000 /* datadescriptiondefinitiondatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescriptiondefinitiondatabase.h; path = ../source/maxon/datadescriptiondefinitiondatabase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0BE44905000000 /* crc32c.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crc32c.cpp; path = ../source/maxon/crc32c.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0C06459E000000 /* iohandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iohandler.h; path = ../source/maxon/iohandler.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0C6DEE42000000 /* parser_json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parser_json.h; path = ../source/maxon/parser_json.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0CC13A9D000000 /* register.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = register.h; path = ../source/maxon/register.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0CC73DB7000000 /* registry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = registry.h; path = ../source/maxon/registry.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0D700207000000 /* crashhandlerglobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crashhandlerglobals.h; path = ../source/maxon/crashhandlerglobals.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0DEE1ABD000000 /* hashbitset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hashbitset.h; path = ../source/maxon/hashbitset.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0E6E84F7000000 /* debugglobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debugglobals.h; path = ../source/maxon/debugglobals.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0E9EC2A4000000 /* fixedsizebitset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fixedsizebitset.h; path = ../source/maxon/fixedsizebitset.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0EB0EE63000000 /* fileformat_detectioncache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fileformat_detectioncache.h; path = ../source/maxon/fileformat_detectioncache.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0EE7DBEA000000 /* iobrowse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iobrowse.h; path = ../source/maxon/iobrowse.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0F82ADC8000000 /* registrybase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = registrybase.h; path = ../source/maxon/registrybase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F0FD75639000000 /* parallelinvoke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parallelinvoke.h; path = ../source/maxon/parallelinvoke.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F1044B5E4000000 /* url.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = url.cpp; path = ../source/maxon/url.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F10C2EBF9000000 /* rangemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rangemap.h; path = ../source/maxon/rangemap.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F10DB9426000000 /* module.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = module.h; path = ../source/maxon/module.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F110BD9C1000000 /* machine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = machine.h; path = ../source/maxon/machine.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F12764CF4000000 /* datadictionaryobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datadictionaryobject.cpp; path = ../source/maxon/datadictionaryobject.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F1363074A000000 /* objectbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = objectbase.h; path = ../source/maxon/objectbase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F140B086D000000 /* fileformat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fileformat.h; path = ../source/maxon/fileformat.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F14C22F01000000 /* file_utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = file_utilities.h; path = ../source/maxon/file_utilities.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F155E13D1000000 /* memoryallocationbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = memoryallocationbase.h; path = ../source/maxon/utilities/memoryallocationbase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F16129B38000000 /* cpuid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cpuid.cpp; path = ../source/maxon/cpuid.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F16B91B9F000000 /* parallelsort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parallelsort.h; path = ../source/maxon/parallelsort.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F1709B695000000 /* weakref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weakref.h; path = ../source/maxon/weakref.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F175C97B1000000 /* datatypefunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datatypefunctions.h; path = ../source/maxon/datatypefunctions.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F17FDA1C4000000 /* factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = factory.h; path = ../source/maxon/factory.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F180F7904000000 /* nullvalue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nullvalue.h; path = ../source/maxon/nullvalue.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F187701AA000000 /* crashreportproperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crashreportproperty.h; path = ../source/maxon/crashreportproperty.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F1933B087000000 /* block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = block.h; path = ../source/maxon/block.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F1D4376F0000000 /* taggedbaseref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = taggedbaseref.h; path = ../source/maxon/taggedbaseref.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F1E617D06000000 /* string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cpp; path = ../source/maxon/string.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F1EBFEB46000000 /* lexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lexer.h; path = ../source/maxon/lexer.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F1F918C27000000 /* lazyinitthreaded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lazyinitthreaded.h; path = ../source/maxon/lazyinitthreaded.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F21E05E0D000000 /* viewiterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = viewiterator.h; path = ../source/maxon/viewiterator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F21E32611000000 /* conditionvariable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = conditionvariable.h; path = ../source/maxon/conditionvariable.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2298BEED000000 /* threaded_update_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = threaded_update_helper.h; path = ../source/maxon/utilities/threaded_update_helper.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F22F6ED80000000 /* basebitset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basebitset.h; path = ../source/maxon/basebitset.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F248F7C7A000000 /* datadictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadictionary.h; path = ../source/maxon/datadictionary.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2652D818000000 /* datadescription_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescription_string.h; path = ../source/maxon/datadescription_string.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F26A5325C000000 /* java.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = java.h; path = ../source/maxon/java.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2772F436000000 /* idandversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = idandversion.h; path = ../source/maxon/idandversion.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F284C293D000000 /* observable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = observable.h; path = ../source/maxon/observable.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F29107702000000 /* datadescriptiondatabase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datadescriptiondatabase.cpp; path = ../source/maxon/datadescriptiondatabase.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2A08E7D9000000 /* stringencoding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = stringencoding.cpp; path = ../source/maxon/stringencoding.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2A150C20000000 /* reflection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = reflection.cpp; path = ../source/maxon/reflection.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2B4465C8000000 /* sharedref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sharedref.h; path = ../source/maxon/sharedref.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2B959E82000000 /* iostreams.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iostreams.cpp; path = ../source/maxon/iostreams.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2C038DE7000000 /* spinlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = spinlock.h; path = ../source/maxon/spinlock.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2CE11E72000000 /* debugglobals.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = debugglobals.cpp; path = ../source/maxon/debugglobals.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2CEA478B000000 /* arwlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arwlock.h; path = ../source/maxon/arwlock.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F2F0A6274000000 /* customallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = customallocator.h; path = ../source/maxon/customallocator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F309A50B5000000 /* decorator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = decorator.h; path = ../source/maxon/decorator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F31799AE3000000 /* apibasemath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apibasemath.cpp; path = ../source/maxon/utilities/apibasemath.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F317C5936000000 /* threadlocalpointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = threadlocalpointer.h; path = ../source/maxon/threadlocalpointer.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3195A6A0000000 /* java_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = java_helper.h; path = ../source/maxon/utilities/java_helper.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3358B4F7000000 /* lib_math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lib_math.cpp; path = ../source/maxon/lib_math.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F335C1DDC000000 /* branch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = branch.h; path = ../source/maxon/branch.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F342F58CE000000 /* synchronized.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = synchronized.h; path = ../source/maxon/synchronized.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F34AE045D000000 /* arraymap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arraymap.h; path = ../source/maxon/arraymap.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3583867F000000 /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = thread.cpp; path = ../source/maxon/thread.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F36C48ED8000000 /* sort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sort.h; path = ../source/maxon/sort.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F37A0B8E8000000 /* forwardref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = forwardref.h; path = ../source/maxon/forwardref.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F394AB9BB000000 /* interfacetemplate_instantiation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interfacetemplate_instantiation.h; path = ../source/maxon/interfacetemplate_instantiation.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3957AB62000000 /* spinlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = spinlock.cpp; path = ../source/maxon/spinlock.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3A44A839000000 /* object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = object.h; path = ../source/maxon/object.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3A7E79B5000000 /* uuid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uuid.h; path = ../source/maxon/uuid.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3B002617000000 /* parallelfordynamic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parallelfordynamic.h; path = ../source/maxon/parallelfordynamic.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3B053A7A000000 /* iostreams_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iostreams_helper.cpp; path = ../source/maxon/utilities/iostreams_helper.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3B7D6E3D000000 /* stackbufferallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stackbufferallocator.h; path = ../source/maxon/stackbufferallocator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3D175C95000000 /* win_type_conversions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = win_type_conversions.h; path = ../source/maxon/win_type_conversions.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3EA24135000000 /* datadictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datadictionary.cpp; path = ../source/maxon/datadictionary.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F3ED67AB5000000 /* locked_resource_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = locked_resource_map.h; path = ../source/maxon/utilities/locked_resource_map.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F406470F6000000 /* apibaseid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apibaseid.cpp; path = ../source/maxon/utilities/apibaseid.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F40ADCFD0000000 /* streamconversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = streamconversion.h; path = ../source/maxon/streamconversion.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F40B6982E000000 /* multiindex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = multiindex.cpp; path = ../source/maxon/multiindex.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F40F75324000000 /* defaultallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defaultallocator.h; path = ../source/maxon/defaultallocator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F411DB41D000000 /* hierarchyiterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hierarchyiterator.h; path = ../source/maxon/hierarchyiterator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F4187F40B000000 /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queue.h; path = ../source/maxon/queue.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F4281D159000000 /* dataformat_binary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dataformat_binary.h; path = ../source/maxon/dataformat_binary.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F4332820F000000 /* ringbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ringbuffer.h; path = ../source/maxon/utilities/ringbuffer.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F44DE1BFB000000 /* compilerdetection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = compilerdetection.h; path = ../source/maxon/utilities/compilerdetection.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F45700137000000 /* stacktrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stacktrace.h; path = ../source/maxon/stacktrace.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F472D69A8000000 /* apibasemath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apibasemath.h; path = ../source/maxon/utilities/apibasemath.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F4766843B000000 /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix.h; path = ../source/maxon/matrix.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F48169147000000 /* intfloat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = intfloat.h; path = ../source/maxon/intfloat.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F4A8D62DF000000 /* datadescriptiondefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescriptiondefinition.h; path = ../source/maxon/datadescriptiondefinition.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F4CDA2081000000 /* contiguousrangemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = contiguousrangemap.h; path = ../source/maxon/contiguousrangemap.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F4ECA1322000000 /* threadservices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = threadservices.h; path = ../source/maxon/threadservices.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F4FD988D6000000 /* threadsaferef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = threadsaferef.h; path = ../source/maxon/threadsaferef.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F50F68A58000000 /* win_com.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = win_com.h; path = ../source/maxon/win_com.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F51A38F36000000 /* reflectionbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reflectionbase.h; path = ../source/maxon/reflectionbase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F542AD4DD000000 /* parametertype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parametertype.h; path = ../source/maxon/parametertype.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F54C5B937000000 /* range.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = range.h; path = ../source/maxon/range.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F55447B3D000000 /* cpuid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpuid.h; path = ../source/maxon/cpuid.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F55CF699E000000 /* algorithms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = algorithms.h; path = ../source/maxon/algorithms.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F56D1A7EE000000 /* hierarchyobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hierarchyobject.h; path = ../source/maxon/hierarchyobject.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F56F689DA000000 /* cpuyield.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cpuyield.cpp; path = ../source/maxon/cpuyield.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F57BE265B000000 /* bytesvalue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bytesvalue.cpp; path = ../source/maxon/bytesvalue.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F58995A70000000 /* threadservicespods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = threadservicespods.h; path = ../source/maxon/threadservicespods.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F596CC536000000 /* defaultdoc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defaultdoc.h; path = ../source/maxon/utilities/defaultdoc.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F5A4AD742000000 /* movecopywrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = movecopywrapper.h; path = ../source/maxon/utilities/movecopywrapper.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F5B6A67E7000000 /* partialorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = partialorder.h; path = ../source/maxon/partialorder.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F5B84110F000000 /* sse_matrix_4f32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_matrix_4f32.h; path = ../source/maxon/sse_matrix_4f32.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F5D64E633000000 /* systemerror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = systemerror.h; path = ../source/maxon/systemerror.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F5D724C30000000 /* dataserialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dataserialize.h; path = ../source/maxon/dataserialize.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F5DDBB9EB000000 /* configuration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = configuration.cpp; path = ../source/maxon/configuration.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F61069F29000000 /* runloop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = runloop.h; path = ../source/maxon/runloop.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F6234838C000000 /* opaqueref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opaqueref.h; path = ../source/maxon/opaqueref.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F638DDC8A000000 /* application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = application.h; path = ../source/maxon/application.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F63B70D00000000 /* byteorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = byteorder.h; path = ../source/maxon/byteorder.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F6573205B000000 /* datadescription_ui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescription_ui.h; path = ../source/maxon/datadescription_ui.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F65E6751A000000 /* hybridmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hybridmap.h; path = ../source/maxon/hybridmap.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F6619FECB000000 /* datadescriptionobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescriptionobject.h; path = ../source/maxon/datadescriptionobject.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F66771229000000 /* genericfunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = genericfunction.h; path = ../source/maxon/genericfunction.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F66C22065000000 /* apibase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apibase.h; path = ../source/maxon/apibase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F67F41559000000 /* system_process.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = system_process.h; path = ../source/maxon/system_process.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F68FB5C73000000 /* weakrefservices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weakrefservices.h; path = ../source/maxon/weakrefservices.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F69BF68B8000000 /* treemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = treemap.h; path = ../source/maxon/treemap.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F6A18E559000000 /* datatype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datatype.cpp; path = ../source/maxon/datatype.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F6A35CCBA000000 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../source/maxon/timer.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F6A8CA168000000 /* datadictionaryiterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadictionaryiterator.h; path = ../source/maxon/datadictionaryiterator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F6CBAC187000000 /* datadescriptiondatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescriptiondatabase.h; path = ../source/maxon/datadescriptiondatabase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F70FFD0F2000000 /* win_tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = win_tools.h; path = ../source/maxon/win_tools.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F71779782000000 /* crashhandlerglobals.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crashhandlerglobals.cpp; path = ../source/maxon/crashhandlerglobals.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F721BF047000000 /* reflection_registration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reflection_registration.h; path = ../source/maxon/reflection_registration.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F73B644B9000000 /* timevalue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timevalue.cpp; path = ../source/maxon/timevalue.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F748C24BF000000 /* sprintf_safe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sprintf_safe.h; path = ../source/maxon/utilities/sprintf_safe.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F75477E37000000 /* sse_vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_vector.h; path = ../source/maxon/sse_vector.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F75870FE9000000 /* baselist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = baselist.h; path = ../source/maxon/baselist.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F761BAAB0000000 /* configuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = configuration.h; path = ../source/maxon/configuration.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F798EE63B000000 /* detect_win_macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = detect_win_macros.h; path = ../source/maxon/utilities/detect_win_macros.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F7A4C0148000000 /* hashmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hashmap.h; path = ../source/maxon/hashmap.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F7A8CD1CC000000 /* serializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = serializer.h; path = ../source/maxon/serializer.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F7B766090000000 /* weakref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weakref.cpp; path = ../source/maxon/weakref.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F7C30050F000000 /* observerobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = observerobject.h; path = ../source/maxon/observerobject.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F7D3FE26F000000 /* vector2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vector2d.h; path = ../source/maxon/vector2d.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F7D40CB2D000000 /* vector4d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vector4d.h; path = ../source/maxon/vector4d.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F8073F8BC000000 /* lib_math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib_math.h; path = ../source/maxon/lib_math.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F80DD3E33000000 /* interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interface.h; path = ../source/maxon/interface.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F80EED204000000 /* floatingpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = floatingpoint.h; path = ../source/maxon/floatingpoint.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F81510A7A000000 /* indexiterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = indexiterator.h; path = ../source/maxon/indexiterator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F818E7320000000 /* bytesvalue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bytesvalue.h; path = ../source/maxon/bytesvalue.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F8474B4F8000000 /* integer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = integer.h; path = ../source/maxon/integer.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F84F4A902000000 /* dynamic_tuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dynamic_tuple.h; path = ../source/maxon/dynamic_tuple.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F86BD74FA000000 /* generic_basearray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = generic_basearray.h; path = ../source/maxon/generic_basearray.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F88194E85000000 /* datadescription_category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescription_category.h; path = ../source/maxon/datadescription_category.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F894C8EE1000000 /* stringconversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringconversion.h; path = ../source/maxon/stringconversion.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F8B5B2BA6000000 /* blockarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = blockarray.h; path = ../source/maxon/blockarray.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F8B8206C1000000 /* closurejob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = closurejob.h; path = ../source/maxon/utilities/closurejob.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F8C02CCF9000000 /* general_math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = general_math.h; path = ../source/maxon/general_math.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F8CB58C44000000 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = thread.h; path = ../source/maxon/thread.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F8F6C1044000000 /* interfacebase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interfacebase.h; path = ../source/maxon/interfacebase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F917E0625000000 /* reflection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reflection.h; path = ../source/maxon/reflection.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F92AE16D8000000 /* blockbufferallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = blockbufferallocator.h; path = ../source/maxon/blockbufferallocator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F92D4B073000000 /* col.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = col.h; path = ../source/maxon/math/col.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F93DBC187000000 /* vec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vec.h; path = ../source/maxon/math/vec.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F96836DF4000000 /* general_math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = general_math.cpp; path = ../source/maxon/general_math.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F96D95019000000 /* stringresource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringresource.h; path = ../source/maxon/stringresource.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F97E53054000000 /* moduleversioninfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = moduleversioninfo.h; path = ../source/maxon/moduleversioninfo.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F99299EA4000000 /* win_strptime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = win_strptime.cpp; path = ../source/maxon/win_strptime.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F996E73AE000000 /* unicodeutils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = unicodeutils.h; path = ../source/maxon/unicodeutils.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F9A22E05B000000 /* enumflags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = enumflags.h; path = ../source/maxon/utilities/enumflags.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F9B51384A000000 /* crc32c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc32c.h; path = ../source/maxon/crc32c.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F9D1B8B2D000000 /* interfacetemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interfacetemplate.h; path = ../source/maxon/interfacetemplate.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F9DB012A5000000 /* refcount_hashmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = refcount_hashmap.h; path = ../source/maxon/refcount_hashmap.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6F9FDD788B000000 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = ../source/maxon/string.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA015FE2F000000 /* datatypebase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datatypebase.h; path = ../source/maxon/datatypebase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA0FF044B000000 /* hashmapstats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hashmapstats.h; path = ../source/maxon/hashmapstats.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA1294A1A000000 /* compare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = compare.h; path = ../source/maxon/utilities/compare.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA1F095E4000000 /* bitmanipulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bitmanipulation.h; path = ../source/maxon/bitmanipulation.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA39C33DC000000 /* undef_win_macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = undef_win_macros.h; path = ../source/maxon/utilities/undef_win_macros.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA39ED88D000000 /* resultbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = resultbase.h; path = ../source/maxon/utilities/resultbase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA496E968000000 /* urlfile_cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = urlfile_cache.h; path = ../source/maxon/urlfile_cache.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA506753D000000 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vector.h; path = ../source/maxon/vector.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA591CBA1000000 /* parser_jwt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parser_jwt.h; path = ../source/maxon/parser_jwt.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA5A54F88000000 /* debug_hardwarebreakpoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debug_hardwarebreakpoints.h; path = ../source/maxon/debug_hardwarebreakpoints.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA7BA8CB8000000 /* fileformat_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fileformat_handler.h; path = ../source/maxon/fileformat_handler.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA8BCF7D8000000 /* collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = collection.h; path = ../source/maxon/collection.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA91875F1000000 /* private_atomic_core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = private_atomic_core.h; path = ../source/maxon/private_atomic_core.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FA9748AB2000000 /* stacktrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = stacktrace.cpp; path = ../source/maxon/stacktrace.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FAAA87B29000000 /* system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = system.h; path = ../source/maxon/system.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FAB0CEE1C000000 /* bursttriemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bursttriemap.h; path = ../source/maxon/bursttriemap.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FAB0DA5EE000000 /* parallelimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parallelimage.h; path = ../source/maxon/parallelimage.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FABBEFE2C000000 /* streamconversion_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = streamconversion_helper.h; path = ../source/maxon/utilities/streamconversion_helper.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FAD50AA4A000000 /* logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = logger.h; path = ../source/maxon/logger.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FAE9FDF50000000 /* descriptionprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = descriptionprocessor.h; path = ../source/maxon/descriptionprocessor.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FAEBBF49B000000 /* dataformat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dataformat.h; path = ../source/maxon/dataformat.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FAFCE5F5A000000 /* release_title.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = release_title.h; path = ../source/maxon/release_title.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FB0151068000000 /* sse_general.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_general.h; path = ../source/maxon/sse_general.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FB17A02FF000000 /* iostreams_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iostreams_helper.h; path = ../source/maxon/utilities/iostreams_helper.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FB1D1F028000000 /* ioarchivehandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioarchivehandler.h; path = ../source/maxon/ioarchivehandler.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FB4D7B6AB000000 /* customstlallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = customstlallocator.h; path = ../source/maxon/customstlallocator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FB4DB14CC000000 /* datadescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescription.h; path = ../source/maxon/datadescription.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FB788DD45000000 /* application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = application.cpp; path = ../source/maxon/application.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FB7944FDD000000 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = entity.h; path = ../source/maxon/entity.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FB7D914B1000000 /* datadescription_data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescription_data.h; path = ../source/maxon/datadescription_data.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FB8879B18000000 /* debugdiagnostics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debugdiagnostics.h; path = ../source/maxon/utilities/debugdiagnostics.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FBBBB7934000000 /* object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = object.cpp; path = ../source/maxon/object.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FBDF3E81C000000 /* parallelfor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parallelfor.h; path = ../source/maxon/parallelfor.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC16012D5000000 /* iostream_dualinoutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iostream_dualinoutput.h; path = ../source/maxon/iostream_dualinoutput.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC1F1A4FB000000 /* genericdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = genericdata.h; path = ../source/maxon/genericdata.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC1FBA11C000000 /* jobgroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jobgroup.h; path = ../source/maxon/jobgroup.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC2534B42000000 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = error.h; path = ../source/maxon/error.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC26F9CE3000000 /* dataformat_basictypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dataformat_basictypes.h; path = ../source/maxon/dataformat_basictypes.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC3977D80000000 /* symbolification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = symbolification.h; path = ../source/maxon/symbolification.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC5668304000000 /* foreach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = foreach.h; path = ../source/maxon/foreach.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC5764ADE000000 /* lruhashmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lruhashmap.h; path = ../source/maxon/utilities/lruhashmap.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC67056BA000000 /* datadescriptiondefinitiondatabaseimpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadescriptiondefinitiondatabaseimpl.h; path = ../source/maxon/datadescriptiondefinitiondatabaseimpl.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC7C16DD5000000 /* col4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = col4.h; path = ../source/maxon/math/col4.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC8ECA87B000000 /* apibaseid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apibaseid.h; path = ../source/maxon/utilities/apibaseid.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FC9F77C1E000000 /* stringencoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringencoding.h; path = ../source/maxon/stringencoding.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCC2A253F000000 /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = ../source/maxon/timer.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCC79170B000000 /* streamconversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = streamconversion.cpp; path = ../source/maxon/streamconversion.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCD3419B5000000 /* generic_basearray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = generic_basearray.cpp; path = ../source/maxon/generic_basearray.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCDF07F9B000000 /* reuse_resource_cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reuse_resource_cache.h; path = ../source/maxon/utilities/reuse_resource_cache.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCE1B1C1A000000 /* optional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = optional.h; path = ../source/maxon/optional.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCF0AB8FF000000 /* delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = delegate.h; path = ../source/maxon/delegate.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCF63071E000000 /* dll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dll.h; path = ../source/maxon/dll.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCF7DBAFB000000 /* fid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fid.h; path = ../source/maxon/fid.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCF89336B000000 /* configurationdatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = configurationdatabase.h; path = ../source/maxon/configurationdatabase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCFB8CBB7000000 /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = job.h; path = ../source/maxon/job.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FCFDCE996000000 /* map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = map.h; path = ../source/maxon/map.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD033571C000000 /* set.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = set.h; path = ../source/maxon/set.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD05550E9000000 /* url.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = url.h; path = ../source/maxon/url.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD07CA7A9000000 /* dataformat_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dataformat_base.h; path = ../source/maxon/dataformat_base.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD12A318A000000 /* parallelforstatic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parallelforstatic.h; path = ../source/maxon/parallelforstatic.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD20930A1000000 /* iomemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iomemory.h; path = ../source/maxon/iomemory.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD39EF175000000 /* datetime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datetime.h; path = ../source/maxon/datetime.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD5216BF9000000 /* datadictionaryobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datadictionaryobject.h; path = ../source/maxon/datadictionaryobject.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD615BDE2000000 /* sse_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_helper.h; path = ../source/maxon/sse_helper.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD75911C6000000 /* sequence_utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sequence_utilities.h; path = ../source/maxon/sequence_utilities.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD78B672E000000 /* jobqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jobqueue.h; path = ../source/maxon/jobqueue.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD7B5FCE8000000 /* atomictypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = atomictypes.h; path = ../source/maxon/atomictypes.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD879BE5C000000 /* abitype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = abitype.h; path = ../source/maxon/abitype.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD93CCD9F000000 /* register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = register.cpp; path = ../generated/hxx/register.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FD94F984E000000 /* ansi_type_conversions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ansi_type_conversions.h; path = ../source/maxon/ansi_type_conversions.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FDBE2A03E000000 /* streamconversion_impl_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = streamconversion_impl_helper.h; path = ../source/maxon/streamconversion_impl_helper.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FDBEA497F000000 /* constexpr_lowercase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = constexpr_lowercase.h; path = ../source/maxon/utilities/constexpr_lowercase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FDC4E8C3E000000 /* ioconnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioconnection.h; path = ../source/maxon/ioconnection.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FDC6FF51B000000 /* datatypelib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datatypelib.h; path = ../source/maxon/datatypelib.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FDDC3C503000000 /* lockservices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lockservices.h; path = ../source/maxon/lockservices.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FDDE6FDD3000000 /* errorbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = errorbase.h; path = ../source/maxon/errorbase.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FDF1690FE000000 /* timevalue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timevalue.h; path = ../source/maxon/timevalue.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE0D19102000000 /* tuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tuple.h; path = ../source/maxon/tuple.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE2FCF666000000 /* ioenums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioenums.h; path = ../source/maxon/ioenums.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE7023ED1000000 /* fixedbufferallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fixedbufferallocator.h; path = ../source/maxon/fixedbufferallocator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE73F03B6000000 /* newobj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = newobj.h; path = ../source/maxon/utilities/newobj.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE78F3DB3000000 /* multiindex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = multiindex.h; path = ../source/maxon/multiindex.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE79C77BF000000 /* vec2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vec2.h; path = ../source/maxon/math/vec2.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE79C7F41000000 /* vec4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vec4.h; path = ../source/maxon/math/vec4.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE8D11D83000000 /* parametric_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parametric_type.h; path = ../source/maxon/parametric_type.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE8DBB5F3000000 /* crashreportservices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crashreportservices.h; path = ../source/maxon/crashreportservices.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE9196E9E000000 /* nullallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nullallocator.h; path = ../source/maxon/nullallocator.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FE93424AE000000 /* sse_vector_2f64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_vector_2f64.h; path = ../source/maxon/sse_vector_2f64.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FEB9FA7A1000000 /* iostream_pipe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iostream_pipe.h; path = ../source/maxon/iostream_pipe.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FEC9C714D000000 /* sse_vector_4f32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_vector_4f32.h; path = ../source/maxon/sse_vector_4f32.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FEC9DD5EC000000 /* sse_vector_4f64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_vector_4f64.h; path = ../source/maxon/sse_vector_4f64.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FECC6B7D0000000 /* sse_vector_4i32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_vector_4i32.h; path = ../source/maxon/sse_vector_4i32.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FEEB41B53000000 /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = array.h; path = ../source/maxon/array.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FEEE7593F000000 /* win_include.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = win_include.h; path = ../source/maxon/win_include.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FEF70E052000000 /* execution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = execution.h; path = ../source/maxon/execution.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FEF913516000000 /* dataformat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dataformat.cpp; path = ../source/maxon/dataformat.cpp; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FF048FD9A000000 /* valuereceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = valuereceiver.h; path = ../source/maxon/valuereceiver.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FF36FD3C9000000 /* sse_vector_8f32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_vector_8f32.h; path = ../source/maxon/sse_vector_8f32.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FF39A1A4C000000 /* sse_vector_8i32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_vector_8i32.h; path = ../source/maxon/sse_vector_8i32.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FF4ADB63E000000 /* lazyinit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lazyinit.h; path = ../source/maxon/lazyinit.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FF5498F6F000000 /* machineinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = machineinfo.h; path = ../source/maxon/machineinfo.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FF563C907000000 /* iostreams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iostreams.h; path = ../source/maxon/iostreams.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FF8B1B58F000000 /* sse_intrinsics_42.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sse_intrinsics_42.h; path = ../source/maxon/sse_intrinsics_42.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FF8B93DBD000000 /* crashhandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crashhandler.h; path = ../source/maxon/crashhandler.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FFBDAFEDC000000 /* baseref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = baseref.h; path = ../source/maxon/baseref.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FFFA6BBF6000000 /* pointerarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointerarray.h; path = ../source/maxon/pointerarray.h; sourceTree = SOURCE_ROOT; };
+		A0F4AB3A6FFFEFC52C000000 /* classhelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = classhelpers.h; path = ../source/maxon/utilities/classhelpers.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A0F4AB3A6F000000000F0000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A0F4AB3A6F00000000140000 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		A0F4AB3A6F00000000190000 /* configurations */ = {
+			isa = PBXGroup;
+			children = (
+				A0F4AB3A6F00000000000000 /* debugbase.xcconfig */,
+				A0F4AB3A6F00000000050000 /* releasebase.xcconfig */,
+			);
+			name = configurations;
+			sourceTree = "<group>";
+		};
+		A0F4AB3A6F000000001E0000 = {
+			isa = PBXGroup;
+			children = (
+				A0F4AB3A6F00000000190000 /* configurations */,
+				A0F4AB3A6F111A998F000000 /* generated */,
+				A0F4AB3A6F00000000140000 /* libs */,
+				A0F4AB3A6F00000000230000 /* products */,
+				A0F4AB3A6FCA90681B000000 /* source */,
+			);
+			sourceTree = "<group>";
+		};
+		A0F4AB3A6F00000000230000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A08C5CDEA3F4AB3A6F7B0000 /* libcore.framework.a */,
+				A08C5CDEA3F4AB3A6F7B0100 /* libcore.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A0F4AB3A6F111A998F000000 /* generated */ = {
+			isa = PBXGroup;
+			children = (
+				A0F4AB3A6F681C2CE8000000 /* hxx */,
+			);
+			name = generated;
+			path = ../generated;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0F4AB3A6F114C574F000000 /* maxon */ = {
+			isa = PBXGroup;
+			children = (
+				A0F4AB3A6FDD6A39C8000000 /* math */,
+				A0F4AB3A6FAD213C4A000000 /* utilities */,
+				A0F4AB3A6FD879BE5C000000 /* abitype.h */,
+				A0F4AB3A6F55CF699E000000 /* algorithms.h */,
+				A0F4AB3A6FD94F984E000000 /* ansi_type_conversions.h */,
+				A0F4AB3A6F66C22065000000 /* apibase.h */,
+				A0F4AB3A6FB788DD45000000 /* application.cpp */,
+				A0F4AB3A6F638DDC8A000000 /* application.h */,
+				A0F4AB3A6FEEB41B53000000 /* array.h */,
+				A0F4AB3A6F34AE045D000000 /* arraymap.h */,
+				A0F4AB3A6F2CEA478B000000 /* arwlock.h */,
+				A0F4AB3A6FD7B5FCE8000000 /* atomictypes.h */,
+				A0F4AB3A6F04BC5762000000 /* basearray.h */,
+				A0F4AB3A6F22F6ED80000000 /* basebitset.h */,
+				A0F4AB3A6F75870FE9000000 /* baselist.h */,
+				A0F4AB3A6FFBDAFEDC000000 /* baseref.h */,
+				A0F4AB3A6FA1F095E4000000 /* bitmanipulation.h */,
+				A0F4AB3A6F1933B087000000 /* block.h */,
+				A0F4AB3A6F8B5B2BA6000000 /* blockarray.h */,
+				A0F4AB3A6F92AE16D8000000 /* blockbufferallocator.h */,
+				A0F4AB3A6F335C1DDC000000 /* branch.h */,
+				A0F4AB3A6FAB0CEE1C000000 /* bursttriemap.h */,
+				A0F4AB3A6F63B70D00000000 /* byteorder.h */,
+				A0F4AB3A6F57BE265B000000 /* bytesvalue.cpp */,
+				A0F4AB3A6F818E7320000000 /* bytesvalue.h */,
+				A0F4AB3A6FA8BCF7D8000000 /* collection.h */,
+				A0F4AB3A6F21E32611000000 /* conditionvariable.h */,
+				A0F4AB3A6F5DDBB9EB000000 /* configuration.cpp */,
+				A0F4AB3A6F761BAAB0000000 /* configuration.h */,
+				A0F4AB3A6FCF89336B000000 /* configurationdatabase.h */,
+				A0F4AB3A6F4CDA2081000000 /* contiguousrangemap.h */,
+				A0F4AB3A6F16129B38000000 /* cpuid.cpp */,
+				A0F4AB3A6F55447B3D000000 /* cpuid.h */,
+				A0F4AB3A6F56F689DA000000 /* cpuyield.cpp */,
+				A0F4AB3A6F0637AA5F000000 /* cpuyield.h */,
+				A0F4AB3A6FF8B93DBD000000 /* crashhandler.h */,
+				A0F4AB3A6F71779782000000 /* crashhandlerglobals.cpp */,
+				A0F4AB3A6F0D700207000000 /* crashhandlerglobals.h */,
+				A0F4AB3A6F187701AA000000 /* crashreportproperty.h */,
+				A0F4AB3A6FE8DBB5F3000000 /* crashreportservices.h */,
+				A0F4AB3A6F0BE44905000000 /* crc32c.cpp */,
+				A0F4AB3A6F9B51384A000000 /* crc32c.h */,
+				A0F4AB3A6F02692B40000000 /* cstdliballocator.h */,
+				A0F4AB3A6F2F0A6274000000 /* customallocator.h */,
+				A0F4AB3A6FB4D7B6AB000000 /* customstlallocator.h */,
+				A0F4AB3A6FB4DB14CC000000 /* datadescription.h */,
+				A0F4AB3A6F29107702000000 /* datadescriptiondatabase.cpp */,
+				A0F4AB3A6F6CBAC187000000 /* datadescriptiondatabase.h */,
+				A0F4AB3A6F4A8D62DF000000 /* datadescriptiondefinition.h */,
+				A0F4AB3A6F0B534C9A000000 /* datadescriptiondefinitiondatabase.h */,
+				A0F4AB3A6FC67056BA000000 /* datadescriptiondefinitiondatabaseimpl.h */,
+				A0F4AB3A6F6619FECB000000 /* datadescriptionobject.h */,
+				A0F4AB3A6F88194E85000000 /* datadescription_category.h */,
+				A0F4AB3A6FB7D914B1000000 /* datadescription_data.h */,
+				A0F4AB3A6F2652D818000000 /* datadescription_string.h */,
+				A0F4AB3A6F6573205B000000 /* datadescription_ui.h */,
+				A0F4AB3A6F3EA24135000000 /* datadictionary.cpp */,
+				A0F4AB3A6F248F7C7A000000 /* datadictionary.h */,
+				A0F4AB3A6F6A8CA168000000 /* datadictionaryiterator.h */,
+				A0F4AB3A6F12764CF4000000 /* datadictionaryobject.cpp */,
+				A0F4AB3A6FD5216BF9000000 /* datadictionaryobject.h */,
+				A0F4AB3A6FEF913516000000 /* dataformat.cpp */,
+				A0F4AB3A6FAEBBF49B000000 /* dataformat.h */,
+				A0F4AB3A6FD07CA7A9000000 /* dataformat_base.h */,
+				A0F4AB3A6FC26F9CE3000000 /* dataformat_basictypes.h */,
+				A0F4AB3A6F4281D159000000 /* dataformat_binary.h */,
+				A0F4AB3A6F5D724C30000000 /* dataserialize.h */,
+				A0F4AB3A6F6A18E559000000 /* datatype.cpp */,
+				A0F4AB3A6F00E8D99E000000 /* datatype.h */,
+				A0F4AB3A6FA015FE2F000000 /* datatypebase.h */,
+				A0F4AB3A6F175C97B1000000 /* datatypefunctions.h */,
+				A0F4AB3A6FDC6FF51B000000 /* datatypelib.h */,
+				A0F4AB3A6FD39EF175000000 /* datetime.h */,
+				A0F4AB3A6F07F23259000000 /* datetime_impl.cpp */,
+				A0F4AB3A6F2CE11E72000000 /* debugglobals.cpp */,
+				A0F4AB3A6F0E6E84F7000000 /* debugglobals.h */,
+				A0F4AB3A6FA5A54F88000000 /* debug_hardwarebreakpoints.h */,
+				A0F4AB3A6F309A50B5000000 /* decorator.h */,
+				A0F4AB3A6F40F75324000000 /* defaultallocator.h */,
+				A0F4AB3A6FCF0AB8FF000000 /* delegate.h */,
+				A0F4AB3A6FAE9FDF50000000 /* descriptionprocessor.h */,
+				A0F4AB3A6FCF63071E000000 /* dll.h */,
+				A0F4AB3A6F84F4A902000000 /* dynamic_tuple.h */,
+				A0F4AB3A6FB7944FDD000000 /* entity.h */,
+				A0F4AB3A6FC2534B42000000 /* error.h */,
+				A0F4AB3A6FDDE6FDD3000000 /* errorbase.h */,
+				A0F4AB3A6FEF70E052000000 /* execution.h */,
+				A0F4AB3A6F17FDA1C4000000 /* factory.h */,
+				A0F4AB3A6FCF7DBAFB000000 /* fid.h */,
+				A0F4AB3A6F140B086D000000 /* fileformat.h */,
+				A0F4AB3A6F0EB0EE63000000 /* fileformat_detectioncache.h */,
+				A0F4AB3A6FA7BA8CB8000000 /* fileformat_handler.h */,
+				A0F4AB3A6F14C22F01000000 /* file_utilities.h */,
+				A0F4AB3A6FE7023ED1000000 /* fixedbufferallocator.h */,
+				A0F4AB3A6F0E9EC2A4000000 /* fixedsizebitset.h */,
+				A0F4AB3A6F80EED204000000 /* floatingpoint.h */,
+				A0F4AB3A6FC5668304000000 /* foreach.h */,
+				A0F4AB3A6F37A0B8E8000000 /* forwardref.h */,
+				A0F4AB3A6F96836DF4000000 /* general_math.cpp */,
+				A0F4AB3A6F8C02CCF9000000 /* general_math.h */,
+				A0F4AB3A6FC1F1A4FB000000 /* genericdata.h */,
+				A0F4AB3A6F66771229000000 /* genericfunction.h */,
+				A0F4AB3A6FCD3419B5000000 /* generic_basearray.cpp */,
+				A0F4AB3A6F86BD74FA000000 /* generic_basearray.h */,
+				A0F4AB3A6F0DEE1ABD000000 /* hashbitset.h */,
+				A0F4AB3A6F7A4C0148000000 /* hashmap.h */,
+				A0F4AB3A6FA0FF044B000000 /* hashmapstats.h */,
+				A0F4AB3A6F411DB41D000000 /* hierarchyiterator.h */,
+				A0F4AB3A6F56D1A7EE000000 /* hierarchyobject.h */,
+				A0F4AB3A6F65E6751A000000 /* hybridmap.h */,
+				A0F4AB3A6F2772F436000000 /* idandversion.h */,
+				A0F4AB3A6F81510A7A000000 /* indexiterator.h */,
+				A0F4AB3A6F8474B4F8000000 /* integer.h */,
+				A0F4AB3A6F80DD3E33000000 /* interface.h */,
+				A0F4AB3A6F8F6C1044000000 /* interfacebase.h */,
+				A0F4AB3A6F9D1B8B2D000000 /* interfacetemplate.h */,
+				A0F4AB3A6F394AB9BB000000 /* interfacetemplate_instantiation.h */,
+				A0F4AB3A6F48169147000000 /* intfloat.h */,
+				A0F4AB3A6FB1D1F028000000 /* ioarchivehandler.h */,
+				A0F4AB3A6F0EE7DBEA000000 /* iobrowse.h */,
+				A0F4AB3A6FDC4E8C3E000000 /* ioconnection.h */,
+				A0F4AB3A6FE2FCF666000000 /* ioenums.h */,
+				A0F4AB3A6F0C06459E000000 /* iohandler.h */,
+				A0F4AB3A6FD20930A1000000 /* iomemory.h */,
+				A0F4AB3A6F2B959E82000000 /* iostreams.cpp */,
+				A0F4AB3A6FF563C907000000 /* iostreams.h */,
+				A0F4AB3A6FC16012D5000000 /* iostream_dualinoutput.h */,
+				A0F4AB3A6FEB9FA7A1000000 /* iostream_pipe.h */,
+				A0F4AB3A6F26A5325C000000 /* java.h */,
+				A0F4AB3A6FCFB8CBB7000000 /* job.h */,
+				A0F4AB3A6FC1FBA11C000000 /* jobgroup.h */,
+				A0F4AB3A6FD78B672E000000 /* jobqueue.h */,
+				A0F4AB3A6FF4ADB63E000000 /* lazyinit.h */,
+				A0F4AB3A6F1F918C27000000 /* lazyinitthreaded.h */,
+				A0F4AB3A6F1EBFEB46000000 /* lexer.h */,
+				A0F4AB3A6F3358B4F7000000 /* lib_math.cpp */,
+				A0F4AB3A6F8073F8BC000000 /* lib_math.h */,
+				A0F4AB3A6FDDC3C503000000 /* lockservices.h */,
+				A0F4AB3A6FAD50AA4A000000 /* logger.h */,
+				A0F4AB3A6F110BD9C1000000 /* machine.h */,
+				A0F4AB3A6FF5498F6F000000 /* machineinfo.h */,
+				A0F4AB3A6FCFDCE996000000 /* map.h */,
+				A0F4AB3A6F4766843B000000 /* matrix.h */,
+				A0F4AB3A6F07D829ED000000 /* matrix2d.h */,
+				A0F4AB3A6F07D912AB000000 /* matrix4d.h */,
+				A0F4AB3A6F10DB9426000000 /* module.h */,
+				A0F4AB3A6F97E53054000000 /* moduleversioninfo.h */,
+				A0F4AB3A6F40B6982E000000 /* multiindex.cpp */,
+				A0F4AB3A6FE78F3DB3000000 /* multiindex.h */,
+				A0F4AB3A6FE9196E9E000000 /* nullallocator.h */,
+				A0F4AB3A6F180F7904000000 /* nullvalue.h */,
+				A0F4AB3A6FBBBB7934000000 /* object.cpp */,
+				A0F4AB3A6F3A44A839000000 /* object.h */,
+				A0F4AB3A6F1363074A000000 /* objectbase.h */,
+				A0F4AB3A6F284C293D000000 /* observable.h */,
+				A0F4AB3A6F7C30050F000000 /* observerobject.h */,
+				A0F4AB3A6F6234838C000000 /* opaqueref.h */,
+				A0F4AB3A6FCE1B1C1A000000 /* optional.h */,
+				A0F4AB3A6FBDF3E81C000000 /* parallelfor.h */,
+				A0F4AB3A6F3B002617000000 /* parallelfordynamic.h */,
+				A0F4AB3A6FD12A318A000000 /* parallelforstatic.h */,
+				A0F4AB3A6FAB0DA5EE000000 /* parallelimage.h */,
+				A0F4AB3A6F0FD75639000000 /* parallelinvoke.h */,
+				A0F4AB3A6F16B91B9F000000 /* parallelsort.h */,
+				A0F4AB3A6F542AD4DD000000 /* parametertype.h */,
+				A0F4AB3A6FE8D11D83000000 /* parametric_type.h */,
+				A0F4AB3A6F0C6DEE42000000 /* parser_json.h */,
+				A0F4AB3A6FA591CBA1000000 /* parser_jwt.h */,
+				A0F4AB3A6F5B6A67E7000000 /* partialorder.h */,
+				A0F4AB3A6FFFA6BBF6000000 /* pointerarray.h */,
+				A0F4AB3A6FA91875F1000000 /* private_atomic_core.h */,
+				A0F4AB3A6F4187F40B000000 /* queue.h */,
+				A0F4AB3A6F54C5B937000000 /* range.h */,
+				A0F4AB3A6F10C2EBF9000000 /* rangemap.h */,
+				A0F4AB3A6F9DB012A5000000 /* refcount_hashmap.h */,
+				A0F4AB3A6F2A150C20000000 /* reflection.cpp */,
+				A0F4AB3A6F917E0625000000 /* reflection.h */,
+				A0F4AB3A6F51A38F36000000 /* reflectionbase.h */,
+				A0F4AB3A6F0A1ECB5E000000 /* reflection_invocation.h */,
+				A0F4AB3A6F721BF047000000 /* reflection_registration.h */,
+				A0F4AB3A6F0CC13A9D000000 /* register.h */,
+				A0F4AB3A6F0CC73DB7000000 /* registry.h */,
+				A0F4AB3A6F0F82ADC8000000 /* registrybase.h */,
+				A0F4AB3A6FAFCE5F5A000000 /* release_title.h */,
+				A0F4AB3A6F61069F29000000 /* runloop.h */,
+				A0F4AB3A6F00022705000000 /* secure_random.h */,
+				A0F4AB3A6FD75911C6000000 /* sequence_utilities.h */,
+				A0F4AB3A6F7A8CD1CC000000 /* serializer.h */,
+				A0F4AB3A6FD033571C000000 /* set.h */,
+				A0F4AB3A6F2B4465C8000000 /* sharedref.h */,
+				A0F4AB3A6F36C48ED8000000 /* sort.h */,
+				A0F4AB3A6F0105F9F6000000 /* sortedarray.h */,
+				A0F4AB3A6F3957AB62000000 /* spinlock.cpp */,
+				A0F4AB3A6F2C038DE7000000 /* spinlock.h */,
+				A0F4AB3A6FB0151068000000 /* sse_general.h */,
+				A0F4AB3A6FD615BDE2000000 /* sse_helper.h */,
+				A0F4AB3A6FF8B1B58F000000 /* sse_intrinsics_42.h */,
+				A0F4AB3A6F5B84110F000000 /* sse_matrix_4f32.h */,
+				A0F4AB3A6F75477E37000000 /* sse_vector.h */,
+				A0F4AB3A6FE93424AE000000 /* sse_vector_2f64.h */,
+				A0F4AB3A6FEC9C714D000000 /* sse_vector_4f32.h */,
+				A0F4AB3A6FEC9DD5EC000000 /* sse_vector_4f64.h */,
+				A0F4AB3A6FECC6B7D0000000 /* sse_vector_4i32.h */,
+				A0F4AB3A6FF36FD3C9000000 /* sse_vector_8f32.h */,
+				A0F4AB3A6FF39A1A4C000000 /* sse_vector_8i32.h */,
+				A0F4AB3A6F3B7D6E3D000000 /* stackbufferallocator.h */,
+				A0F4AB3A6FA9748AB2000000 /* stacktrace.cpp */,
+				A0F4AB3A6F45700137000000 /* stacktrace.h */,
+				A0F4AB3A6FCC79170B000000 /* streamconversion.cpp */,
+				A0F4AB3A6F40ADCFD0000000 /* streamconversion.h */,
+				A0F4AB3A6FDBE2A03E000000 /* streamconversion_impl_helper.h */,
+				A0F4AB3A6F1E617D06000000 /* string.cpp */,
+				A0F4AB3A6F9FDD788B000000 /* string.h */,
+				A0F4AB3A6F894C8EE1000000 /* stringconversion.h */,
+				A0F4AB3A6F2A08E7D9000000 /* stringencoding.cpp */,
+				A0F4AB3A6FC9F77C1E000000 /* stringencoding.h */,
+				A0F4AB3A6F96D95019000000 /* stringresource.h */,
+				A0F4AB3A6FC3977D80000000 /* symbolification.h */,
+				A0F4AB3A6F342F58CE000000 /* synchronized.h */,
+				A0F4AB3A6FAAA87B29000000 /* system.h */,
+				A0F4AB3A6F5D64E633000000 /* systemerror.h */,
+				A0F4AB3A6F67F41559000000 /* system_process.h */,
+				A0F4AB3A6F1D4376F0000000 /* taggedbaseref.h */,
+				A0F4AB3A6F3583867F000000 /* thread.cpp */,
+				A0F4AB3A6F8CB58C44000000 /* thread.h */,
+				A0F4AB3A6F317C5936000000 /* threadlocalpointer.h */,
+				A0F4AB3A6F4FD988D6000000 /* threadsaferef.h */,
+				A0F4AB3A6F4ECA1322000000 /* threadservices.h */,
+				A0F4AB3A6F58995A70000000 /* threadservicespods.h */,
+				A0F4AB3A6F6A35CCBA000000 /* timer.cpp */,
+				A0F4AB3A6FCC2A253F000000 /* timer.h */,
+				A0F4AB3A6F73B644B9000000 /* timevalue.cpp */,
+				A0F4AB3A6FDF1690FE000000 /* timevalue.h */,
+				A0F4AB3A6F69BF68B8000000 /* treemap.h */,
+				A0F4AB3A6FE0D19102000000 /* tuple.h */,
+				A0F4AB3A6F996E73AE000000 /* unicodeutils.h */,
+				A0F4AB3A6F096712E9000000 /* units.h */,
+				A0F4AB3A6F1044B5E4000000 /* url.cpp */,
+				A0F4AB3A6FD05550E9000000 /* url.h */,
+				A0F4AB3A6FA496E968000000 /* urlfile_cache.h */,
+				A0F4AB3A6F3A7E79B5000000 /* uuid.h */,
+				A0F4AB3A6FF048FD9A000000 /* valuereceiver.h */,
+				A0F4AB3A6FA506753D000000 /* vector.h */,
+				A0F4AB3A6F7D3FE26F000000 /* vector2d.h */,
+				A0F4AB3A6F7D40CB2D000000 /* vector4d.h */,
+				A0F4AB3A6F21E05E0D000000 /* viewiterator.h */,
+				A0F4AB3A6F7B766090000000 /* weakref.cpp */,
+				A0F4AB3A6F1709B695000000 /* weakref.h */,
+				A0F4AB3A6F68FB5C73000000 /* weakrefservices.h */,
+				A0F4AB3A6F50F68A58000000 /* win_com.h */,
+				A0F4AB3A6FEEE7593F000000 /* win_include.h */,
+				A0F4AB3A6F99299EA4000000 /* win_strptime.cpp */,
+				A0F4AB3A6F70FFD0F2000000 /* win_tools.h */,
+				A0F4AB3A6F3D175C95000000 /* win_type_conversions.h */,
+			);
+			name = maxon;
+			path = ../source/maxon;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0F4AB3A6F681C2CE8000000 /* hxx */ = {
+			isa = PBXGroup;
+			children = (
+				A0F4AB3A6FD93CCD9F000000 /* register.cpp */,
+			);
+			name = hxx;
+			path = ../generated/hxx;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0F4AB3A6FAD213C4A000000 /* utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A0F4AB3A6F406470F6000000 /* apibaseid.cpp */,
+				A0F4AB3A6FC8ECA87B000000 /* apibaseid.h */,
+				A0F4AB3A6F31799AE3000000 /* apibasemath.cpp */,
+				A0F4AB3A6F472D69A8000000 /* apibasemath.h */,
+				A0F4AB3A6F0310A844000000 /* basearray_helper.h */,
+				A0F4AB3A6FFFEFC52C000000 /* classhelpers.h */,
+				A0F4AB3A6F8B8206C1000000 /* closurejob.h */,
+				A0F4AB3A6FA1294A1A000000 /* compare.h */,
+				A0F4AB3A6F44DE1BFB000000 /* compilerdetection.h */,
+				A0F4AB3A6FDBEA497F000000 /* constexpr_lowercase.h */,
+				A0F4AB3A6FB8879B18000000 /* debugdiagnostics.h */,
+				A0F4AB3A6F596CC536000000 /* defaultdoc.h */,
+				A0F4AB3A6F798EE63B000000 /* detect_win_macros.h */,
+				A0F4AB3A6F9A22E05B000000 /* enumflags.h */,
+				A0F4AB3A6F0A95A738000000 /* finally.h */,
+				A0F4AB3A6F3B053A7A000000 /* iostreams_helper.cpp */,
+				A0F4AB3A6FB17A02FF000000 /* iostreams_helper.h */,
+				A0F4AB3A6F3195A6A0000000 /* java_helper.h */,
+				A0F4AB3A6F3ED67AB5000000 /* locked_resource_map.h */,
+				A0F4AB3A6FC5764ADE000000 /* lruhashmap.h */,
+				A0F4AB3A6F155E13D1000000 /* memoryallocationbase.h */,
+				A0F4AB3A6F5A4AD742000000 /* movecopywrapper.h */,
+				A0F4AB3A6FE73F03B6000000 /* newobj.h */,
+				A0F4AB3A6FA39ED88D000000 /* resultbase.h */,
+				A0F4AB3A6FCDF07F9B000000 /* reuse_resource_cache.h */,
+				A0F4AB3A6F4332820F000000 /* ringbuffer.h */,
+				A0F4AB3A6F748C24BF000000 /* sprintf_safe.h */,
+				A0F4AB3A6FABBEFE2C000000 /* streamconversion_helper.h */,
+				A0F4AB3A6F2298BEED000000 /* threaded_update_helper.h */,
+				A0F4AB3A6FA39C33DC000000 /* undef_win_macros.h */,
+			);
+			name = utilities;
+			path = ../source/maxon/utilities;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0F4AB3A6FCA90681B000000 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				A0F4AB3A6F114C574F000000 /* maxon */,
+			);
+			name = source;
+			path = ../source;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0F4AB3A6FDD6A39C8000000 /* math */ = {
+			isa = PBXGroup;
+			children = (
+				A0F4AB3A6F92D4B073000000 /* col.h */,
+				A0F4AB3A6FC7C16DD5000000 /* col4.h */,
+				A0F4AB3A6F93DBC187000000 /* vec.h */,
+				A0F4AB3A6FE79C77BF000000 /* vec2.h */,
+				A0F4AB3A6FE79C7F41000000 /* vec4.h */,
+			);
+			name = math;
+			path = ../source/maxon/math;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A0F4AB3A6F000000002D0000 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A08C5CDEA3F4AB3A6F000000 /* core.framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0F4AB3A6F00000000460000 /* Build configuration list for PBXNativeTarget "core.framework" */;
+			buildPhases = (
+				A0F4AB3A6F00000000690000 /* Run Source Processor */,
+				A0F4AB3A6F000000006A0000 /* Run Shell Script */,
+				A0F4AB3A6F00000000320000 /* Sources */,
+				A0F4AB3A6F000000000F0000 /* Frameworks */,
+				A0F4AB3A6F000000002D0000 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = core.framework;
+			productName = core.framework;
+			productReference = A08C5CDEA3F4AB3A6F7B0000 /* libcore.framework.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A0F4AB3A6F000000003C0000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1299;
+			};
+			buildConfigurationList = A0F4AB3A6F00000000410000 /* Build configuration list for PBXProject "core.framework" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A0F4AB3A6F000000001E0000;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A08C5CDEA3F4AB3A6F000000 /* core.framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A0F4AB3A6F00000000690000 /* Run Source Processor */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Source Processor";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python ${MAXON_ROOTDIR}frameworks/settings/sourceprocessor/sourceprocessor.py \"$PROJECT_DIR/..\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A0F4AB3A6F000000006A0000 /* Run Shell Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Shell Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mkdir -p ~/Library/Application\\ Support/MAXON\ncp -f ${MAXON_ROOTDIR}frameworks/core.framework/project/typeviewer/xcode/maxon.py ~/Library/Application\\ Support/MAXON/maxon.py\nperl -w ${MAXON_ROOTDIR}frameworks/core.framework/project/typeviewer/xcode/copytypeviewer.pl maxon.py ~/Library/Application\\ Support/MAXON/maxon.py\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A0F4AB3A6F00000000320000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0F4AB3A6F07F23259010000 /* datetime_impl.cpp in Sources */,
+				A0F4AB3A6F0BE44905010000 /* crc32c.cpp in Sources */,
+				A0F4AB3A6F1044B5E4010000 /* url.cpp in Sources */,
+				A0F4AB3A6F12764CF4010000 /* datadictionaryobject.cpp in Sources */,
+				A0F4AB3A6F16129B38010000 /* cpuid.cpp in Sources */,
+				A0F4AB3A6F1E617D06010000 /* string.cpp in Sources */,
+				A0F4AB3A6F29107702010000 /* datadescriptiondatabase.cpp in Sources */,
+				A0F4AB3A6F2A08E7D9010000 /* stringencoding.cpp in Sources */,
+				A0F4AB3A6F2A150C20010000 /* reflection.cpp in Sources */,
+				A0F4AB3A6F2B959E82010000 /* iostreams.cpp in Sources */,
+				A0F4AB3A6F2CE11E72010000 /* debugglobals.cpp in Sources */,
+				A0F4AB3A6F31799AE3010000 /* apibasemath.cpp in Sources */,
+				A0F4AB3A6F3358B4F7010000 /* lib_math.cpp in Sources */,
+				A0F4AB3A6F3583867F010000 /* thread.cpp in Sources */,
+				A0F4AB3A6F3957AB62010000 /* spinlock.cpp in Sources */,
+				A0F4AB3A6F3B053A7A010000 /* iostreams_helper.cpp in Sources */,
+				A0F4AB3A6F3EA24135010000 /* datadictionary.cpp in Sources */,
+				A0F4AB3A6F406470F6010000 /* apibaseid.cpp in Sources */,
+				A0F4AB3A6F40B6982E010000 /* multiindex.cpp in Sources */,
+				A0F4AB3A6F56F689DA010000 /* cpuyield.cpp in Sources */,
+				A0F4AB3A6F57BE265B010000 /* bytesvalue.cpp in Sources */,
+				A0F4AB3A6F5DDBB9EB010000 /* configuration.cpp in Sources */,
+				A0F4AB3A6F6A18E559010000 /* datatype.cpp in Sources */,
+				A0F4AB3A6F6A35CCBA010000 /* timer.cpp in Sources */,
+				A0F4AB3A6F71779782010000 /* crashhandlerglobals.cpp in Sources */,
+				A0F4AB3A6F73B644B9010000 /* timevalue.cpp in Sources */,
+				A0F4AB3A6F7B766090010000 /* weakref.cpp in Sources */,
+				A0F4AB3A6F96836DF4010000 /* general_math.cpp in Sources */,
+				A0F4AB3A6FA9748AB2010000 /* stacktrace.cpp in Sources */,
+				A0F4AB3A6FB788DD45010000 /* application.cpp in Sources */,
+				A0F4AB3A6FBBBB7934010000 /* object.cpp in Sources */,
+				A0F4AB3A6FCC79170B010000 /* streamconversion.cpp in Sources */,
+				A0F4AB3A6FCD3419B5010000 /* generic_basearray.cpp in Sources */,
+				A0F4AB3A6FD93CCD9F010000 /* register.cpp in Sources */,
+				A0F4AB3A6FEF913516010000 /* dataformat.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A0F4AB3A6F000000004B0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A0F4AB3A6F00000000000000 /* debugbase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.core.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source ../source/maxon/math ../source/maxon/utilities $(inherited)";
+			};
+			name = Debug;
+		};
+		A0F4AB3A6F00000000500000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A0F4AB3A6F00000000050000 /* releasebase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.core.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source ../source/maxon/math ../source/maxon/utilities $(inherited)";
+			};
+			name = Release;
+		};
+		A0F4AB3A6F000000005A0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A0F4AB3A6F000000005F0000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A0F4AB3A6F00000000410000 /* Build configuration list for PBXProject "core.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0F4AB3A6F000000004B0000 /* Debug */,
+				A0F4AB3A6F00000000500000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A0F4AB3A6F00000000460000 /* Build configuration list for PBXNativeTarget "core.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0F4AB3A6F000000005A0000 /* Debug */,
+				A0F4AB3A6F000000005F0000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A0F4AB3A6F000000003C0000 /* Project object */;
+}

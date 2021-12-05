@@ -1,0 +1,10 @@
+#ifndef TOOLTEST_H__
+#define TOOLTEST_H__
+
+enum
+{
+	TESTTOOL_COMMAND = 1000,
+	TESTTOOL_DYNAMIC_LINK = 1001,
+};
+
+#endif // TOOLTEST_H__

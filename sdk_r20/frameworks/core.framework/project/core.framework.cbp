@@ -1,0 +1,1173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CodeBlocks_project_file>
+  <FileVersion major="1" minor="6" />
+  <Project>
+    <Option title="core.framework" />
+    <Option platforms="Unix;Mac;" />
+    <Option pch_mode="2" />
+    <Option compiler="gcc" />
+    <Option virtualFolders="source/maxon/math/;generated/hxx/;source/maxon/;source/maxon/utilities/;" />
+    <Build>
+      <Target title="Debug64">
+        <Option output="$(MAXON_PROJECT_DIR)core.framework_debug64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/debug64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option />
+        <Compiler>
+          <Add option="-D_DEBUG" />
+          <Add option="-DMAXON_TARGET_DEBUG" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.core.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-mssse3" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/core.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+        </Environment>
+      </Target>
+      <Target title="Release64">
+        <Option output="$(MAXON_PROJECT_DIR)core.framework_release64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/release64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.core.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-O3" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-mssse3" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/core.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+        </Environment>
+      </Target>
+      <Target title="LibDebug64">
+        <Option output="$(MAXON_PROJECT_DIR)core.framework_libdebug64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/libdebug64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option />
+        <Compiler>
+          <Add option="-D_DEBUG" />
+          <Add option="-DMAXON_TARGET_DEBUG" />
+          <Add option="-D__STANDALONEAPP" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.core.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-mssse3" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/core.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+        </Environment>
+      </Target>
+      <Target title="LibRelease64">
+        <Option output="$(MAXON_PROJECT_DIR)core.framework_librelease64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/librelease64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__STANDALONEAPP" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.core.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-mssse3" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/core.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+        </Environment>
+      </Target>
+      <Target title="DebugRPi">
+        <Option output="$(MAXON_PROJECT_DIR)core.framework_debugrpi.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/debugrpi" />
+        <Option compiler="gcc_rpi" />
+        <Option createDefFile="1" />
+        <Option />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__LINUX" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.core.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='arm-linux-gnueabihf' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/core.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+        </Environment>
+      </Target>
+      <Target title="ReleaseRPi">
+        <Option output="$(MAXON_PROJECT_DIR)core.framework_releaserpi.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/releaserpi" />
+        <Option compiler="gcc_rpi" />
+        <Option createDefFile="1" />
+        <Option />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__LINUX" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DMAXON_API" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.core.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-Werror=unused-result" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='arm-linux-gnueabihf' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/core.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+        </Environment>
+      </Target>
+    </Build>
+    <Unit filename="../generated/hxx/register.cpp">
+      <Option virtualFolder="generated/hxx/" />
+    </Unit>
+    <Unit filename="../source/maxon/abitype.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/algorithms.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/ansi_type_conversions.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/apibase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/application.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/array.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/arraymap.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/arwlock.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/ask_password.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/atomictypes.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/basearray.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/basebitset.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/baselist.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/baseref.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/bitmanipulation.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/block.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/blockarray.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/blockbufferallocator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/bursttriemap.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/byteorder.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/bytesvalue.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/bytesvalue.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/collection.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/conditionvariable.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/configuration.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/configuration.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/configurationdatabase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/contiguousrangemap.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/cpuid.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/cpuid.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/cpuyield.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/cpuyield.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/crashhandler.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/crashhandlerglobals.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/crashhandlerglobals.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/crashreportproperty.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/crashreportservices.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/crc32c.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/crc32c.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/cstdliballocator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/customallocator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/customstlallocator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescription.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescription_category.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescription_data.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescription_string.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescription_ui.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescriptiondatabase.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescriptiondatabase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescriptiondefinition.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescriptiondefinitiondatabase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescriptiondefinitiondatabaseimpl.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadescriptionobject.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadictionary.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadictionary.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadictionaryiterator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadictionaryobject.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datadictionaryobject.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/dataformat.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/dataformat.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/dataformat_base.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/dataformat_basictypes.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/dataformat_binary.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/dataserialize.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datatype.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datatype.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datatypebase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datatypefunctions.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datatypelib.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datetime.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/datetime_impl.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/debug_hardwarebreakpoints.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/debugglobals.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/debugglobals.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/decorator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/defaultallocator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/delegate.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/dll.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/dynamic_tuple.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/entity.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/error.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/errorbase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/execution.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/factory.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/fid.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/file_utilities.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/fileformat.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/fileformat_detectioncache.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/fileformat_handler.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/fixedbufferallocator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/fixedsizebitset.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/floatingpoint.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/foreach.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/forwardref.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/general_math.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/general_math.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/generic_basearray.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/generic_basearray.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/genericfunction.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/hashbitset.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/hashmap.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/hashmapstats.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/hierarchyiterator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/hierarchyobject.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/hybridmap.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/idandversion.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/indexiterator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/integer.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/interface.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/interfacebase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/ioarchivehandler.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/iobrowse.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/ioconnection.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/ioenums.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/iohandler.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/iomemory.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/iostream_dualinoutput.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/iostream_pipe.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/iostreams.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/iostreams.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/java.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/job.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/jobbarrier.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/jobgroup.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/jobqueue.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/lazyinit.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/lexer.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/lib_math.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/lib_math.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/lockservices.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/logger.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/machine.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/machineinfo.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/map.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/math/col.h">
+      <Option virtualFolder="source/maxon/math/" />
+    </Unit>
+    <Unit filename="../source/maxon/math/col4.h">
+      <Option virtualFolder="source/maxon/math/" />
+    </Unit>
+    <Unit filename="../source/maxon/math/vec.h">
+      <Option virtualFolder="source/maxon/math/" />
+    </Unit>
+    <Unit filename="../source/maxon/math/vec2.h">
+      <Option virtualFolder="source/maxon/math/" />
+    </Unit>
+    <Unit filename="../source/maxon/math/vec4.h">
+      <Option virtualFolder="source/maxon/math/" />
+    </Unit>
+    <Unit filename="../source/maxon/matrix.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/matrix2d.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/matrix4d.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/module.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/moduleversioninfo.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/multiindex.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/multiindex.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/nullallocator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/nullvalue.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/object.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/object.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/objectbase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/observable.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/observerobject.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/opaqueref.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/optional.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/parallelfor.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/parallelfordynamic.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/parallelforstatic.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/parallelimage.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/parallelinvoke.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/parallelsort.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/parametertype.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/parametric_type.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/parser_json.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/partialorder.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/pointerarray.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/private_atomic_core.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/queue.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/range.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/rangemap.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/refcount_hashmap.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/reflection.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/reflection.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/reflection_invocation.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/reflection_registration.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/reflectionbase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/register.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/registry.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/registrybase.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/release_title.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/runloop.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/secure_random.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sequence_utilities.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/serializer.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/set.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sharedref.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sort.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sortedarray.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/spinlock.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/spinlock.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sse_general.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sse_helper.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sse_intrinsics_42.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sse_vector.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sse_vector_2f64.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sse_vector_4f32.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sse_vector_4f64.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sse_vector_4i32.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/sse_vector_8f32.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/stackbufferallocator.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/stacktrace.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/stacktrace.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/streamconversion.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/streamconversion.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/streamconversion_impl_helper.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/string.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/string.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/stringconversion.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/stringencoding.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/stringencoding.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/stringresource.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/symbolification.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/synchronized.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/system.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/system_process.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/systemerror.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/taggedbaseref.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/thread.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/thread.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/threadlocalpointer.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/threadsaferef.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/threadservices.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/threadservicespods.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/timer.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/timer.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/timevalue.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/timevalue.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/treemap.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/tuple.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/unicodeutils.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/units.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/url.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/url.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/urlfile_cache.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/apibaseid.cpp">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/apibaseid.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/apibasemath.cpp">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/apibasemath.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/basearray_helper.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/classhelpers.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/closurejob.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/compare.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/compilerdetection.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/constexpr_lowercase.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/debugdiagnostics.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/defaultdoc.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/detect_win_macros.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/enumflags.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/finally.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/iostreams_helper.cpp">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/iostreams_helper.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/java_helper.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/locked_resource_map.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/lruhashmap.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/memoryallocationbase.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/movecopywrapper.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/newobj.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/resultbase.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/reuse_resource_cache.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/ringbuffer.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/sprintf_safe.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/streamconversion_helper.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/threaded_update_helper.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/utilities/undef_win_macros.h">
+      <Option virtualFolder="source/maxon/utilities/" />
+    </Unit>
+    <Unit filename="../source/maxon/uuid.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/valuereceiver.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/vector.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/vector2d.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/vector4d.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/weakref.cpp">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/weakref.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Unit filename="../source/maxon/weakrefservices.h">
+      <Option virtualFolder="source/maxon/" />
+    </Unit>
+    <Extensions>
+      <code_completion />
+      <envvars />
+      <lib_finder disable_auto="1" />
+      <debugger />
+    </Extensions>
+  </Project>
+</CodeBlocks_project_file>

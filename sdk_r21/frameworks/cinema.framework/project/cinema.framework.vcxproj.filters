@@ -1,0 +1,3945 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="generated">
+      <UniqueIdentifier>{69BF9B7D-7EB2-7FC5-0000-5284111A998F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\hxx">
+      <UniqueIdentifier>{69BF9B7D-7EB2-7FC5-8ACC-618A6830A19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{69BF9B7D-7EB2-7FC5-0000-0000CA90681B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\c4d_customgui">
+      <UniqueIdentifier>{69BF9B7D-7EB2-7FC5-C624-27B4D4F97F3D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\c4d_gv">
+      <UniqueIdentifier>{69BF9B7D-7EB2-7FC5-1194-B7055123113C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\c4d_libs">
+      <UniqueIdentifier>{69BF9B7D-7EB2-7FC5-FF43-0AF594A5D39B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\c4d_misc">
+      <UniqueIdentifier>{69BF9B7D-7EB2-7FC5-FF43-0AF594A649F9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\c4d_misc\utilities">
+      <UniqueIdentifier>{69BF9B7D-7EB2-7FC5-EB2E-1F4B96FC44E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\description">
+      <UniqueIdentifier>{69BF9B7D-7EB2-7FC5-1ADF-E7F7321309BB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <Filter>generated\hxx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_basebitmap.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_basechannel.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_basecontainer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_basedocument.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_basedraw.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_baseeffectorplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_baselist.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_basematerial.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_baseobject.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_baseplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_baseselect.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_basesound.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_basetag.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_basetime.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_bitmapfilter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_canimation.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_commandplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_ctrackplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customdatatype.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_base.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_bitmapbutton.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_datetime.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_descproperty.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_description.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_field.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_fontchooser.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_gradient.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_htmlviewer.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_hyperlink.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_iconchooser.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_inexclude.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_itemtree.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_kerning.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_linkbox.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_listview.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_listview2.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_matassign.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_matpreview.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_movieview.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_pla.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_previewimage.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_priority.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_quicktab.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_range.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_soundeffector.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_splinecontrol.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_texbox.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_texturemanager.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customgui\customgui_unitscale.cpp">
+      <Filter>source\c4d_customgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customguidata.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_customguiplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_descriptiondialog.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_falloffplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_fielddata.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_fieldplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_file.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_filterplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_gedata.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_general.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_gl.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_gui.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_gv\c4d_graphview.cpp">
+      <Filter>source\c4d_gv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_gv\c4d_operatorplugin.cpp">
+      <Filter>source\c4d_gv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_gv\c4d_particles.cpp">
+      <Filter>source\c4d_gv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_help.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_library.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_activeobjectmanager.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_aes.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_batchrender.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_birender.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_browser.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_ca.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_clipmap.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_cloud.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_collider.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_colorchooser.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_customdatatag.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_datetimeparser.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_description.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_dwgobjects.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_editortools.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_filtertree.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_hair.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_iconcollection.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_instanceobject.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_intersect.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_layershader.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_lodobject.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_modeling.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_motiontracker.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_net.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_ngon.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_noise.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_paint.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_pictureviewer.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_polygonreduction.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_prefs.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_py.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_regexpr.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_sculpt.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_sculptbrush.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_sds.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_selectionchanger.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_snd.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_splinehelp.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_substance.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_takesystem.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_tlmarker.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_token.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_viewport.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_volumebuilder.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_volumeobject.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_volumetag.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_voronoifracture.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_libs\lib_zipfile.cpp">
+      <Filter>source\c4d_libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_listview.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_materialplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_memory.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_messageplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_network.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_nodeplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_objectplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_painter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_particleobject.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_pmain.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_quaternion.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_reflection.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_resource.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_scenehookplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_shaderplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_snapplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_spc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_string.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_tagplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_thread.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_toolplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_tools.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_videopost.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\c4d_videopostplugin.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ge_ieee.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\operatingsystem.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\c4d.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basebitmap.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basechannel.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basecontainer.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basedata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basedocument.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basedraw.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_baseeffectordata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_baseeffectorplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_baselinkarray.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_baselist.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basematerial.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_baseobject.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_baseplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_baseselect.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basesound.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basetag.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_basetime.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_bitmapfilter.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_bitmapfilterstruct.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_canimation.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_colors.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_commanddata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_commandplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_ctrackdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_ctrackplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customdatatype.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customdatatypeplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_base.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_bitmapbool.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_bitmapbutton.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_datetime.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_descproperty.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_description.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_field.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_filename.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_filename_breadcrumb.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_fontchooser.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_gradient.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_htmlviewer.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_hyperlink.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_iconchooser.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_inexclude.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_itemtree.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_kerning.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_layerset.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_lensglow.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_linkbox.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_listview.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_listview2.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_longlat.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_matassign.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_matpreview.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_movieview.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_pla.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_previewimage.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_priority.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_quicktab.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_range.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_soundeffector.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_splinecontrol.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_texbox.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_texturemanager.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_texturename.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_unitscale.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customgui\customgui_vector2d.h">
+      <Filter>source\c4d_customgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customguidata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_customguiplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_descriptiondialog.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_falloffdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_falloffplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_fielddata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_fieldplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_file.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_filterdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_filterplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_gedata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_general.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_gl.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_gui.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_gv\c4d_graphview.h">
+      <Filter>source\c4d_gv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_gv\c4d_graphview_def.h">
+      <Filter>source\c4d_gv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_gv\c4d_graphview_enum.h">
+      <Filter>source\c4d_gv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_gv\c4d_operatordata.h">
+      <Filter>source\c4d_gv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_gv\c4d_operatorplugin.h">
+      <Filter>source\c4d_gv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_gv\c4d_particles.h">
+      <Filter>source\c4d_gv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_help.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_includes.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_library.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_activeobjectmanager.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_aes.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_batchrender.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_birender.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_browser.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_ca.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_clipmap.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_cloud.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_collider.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_colorchooser.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_customdatatag.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_datetimeparser.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_description.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_dwgobjects.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_dwgobjectsdef.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_editortools.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_filtertree.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_hair.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_iconcollection.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_instanceobject.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_intersect.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_layershader.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_lodobject.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_modeling.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_motiontracker.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_net.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_ngon.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_noise.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_paint.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_pictureviewer.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_polygonreduction.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_prefs.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_py.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_regexpr.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_sculpt.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_sculptbrush.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_sds.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_selectionchanger.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_snd.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_splinehelp.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_substance.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_takesystem.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_tlmarker.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_token.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_viewport.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_volumebuilder.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_volumeobject.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_volumeset.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_volumetag.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_voronoifracture.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\lib_zipfile.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_libs\sdkreferenceobjectptr.h">
+      <Filter>source\c4d_libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_listview.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_materialdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_materialplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_memory.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_messagedata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_messageplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_misc\utilities\apibasemath.h">
+      <Filter>source\c4d_misc\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_network.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_nodedata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_nodeplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_objectdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_objectplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_painter.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_particleobject.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_plugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_pmain.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_quaternion.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_raytrace.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_reflection.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_resource.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_scenehookdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_scenehookplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_shader.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_shaderdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_shaderplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_snapdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_snapplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_spc.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_string.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_tagdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_tagplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_thread.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_tooldata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_toolplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_tools.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_uuid.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_videopost.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_videopostdata.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\c4d_videopostplugin.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\CBcircular.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\CBcomposite.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\CBconic.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\CBline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\CBnurbs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\CBpolynom.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\CMsegment.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\CMstandard.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\FCollada14Export.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\FCollada14Import.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\FCollada15Export.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\FCollada15Import.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Falembicimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Fcadimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Fcatiaimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Fdwg.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Fdwgobjectvalues.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Ffbxexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Ffbximport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Figesimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Fjtimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Fsolidworksimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Fstepexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Fstepimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Nsubstanceasset.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Nsubstanceasset_deprecated.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Oalembicgenerator.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Obasecurve.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Obasegroup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Obasesurface.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Oconnector.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Ofalloff.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Ohoudinigenerator.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Omappedcurve.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Otrimmedsurface.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\SBextrude.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\SBnurbs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\SBplane.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\SBpolynom.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\SBrotate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\STstandard.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Sclient.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Sgroup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Smodul.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Sserial.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Talembicmorphtag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Talembictag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Tfbxexportreference.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Thoudinitag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Tvwdata.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\Xsubstance.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\allplan.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\belttag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmamplify.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmfill.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmflatten.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmgrab.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmgravity.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bminflate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmknife.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmpinch.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmpull.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmrepeat.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmscrape.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmsmooth.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bmwax.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bpbitmap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bplayer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bplayerbmp.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bplayerfilterbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bplayerfilterbrco.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bplayerfiltersolid.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bplayerfolder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bpspline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bpsplinegroup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bpsplineline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bpsplineprimitive.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bpsplinetext.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\bptexture.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\cachetool.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ckbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ckdata.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ckdoodle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ckmorph.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ckphfeatkeys.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ckphmask.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ckpla.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\cksound.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ckvalue.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\clothtag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\cnurbsobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\collidertag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\compositing3dtag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ctbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ctdoodle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ctmorph.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ctphfeatkeys.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ctphmask.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ctpla.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ctsound.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dbasedraw.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dblend.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dcharupdate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dcolora.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ddoc.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\desc_falloffentry.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\desc_fieldbg.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\desc_fieldentry.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dgradient.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\distanceblur.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dlwghtopts.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dmatrix.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dmline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dmodeling.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dpathlist.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dpresets.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dprojobjs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\drendersettings.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dsounddata.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dsoundprobe.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dspline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dswghtopts.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dvector.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dvector2d.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dvector4d.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dxrefadd.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dxrefmanager.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dynbinforce.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dynconstraintobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dynforce.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dyninteraction.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dynmotorobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dynrigidbodytag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dynspringobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\dynworldobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\etparameter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\f3dsexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\f3dsimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\faiexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\faiimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\falembicexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fbox.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fbvhimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fc4d.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fcapsule.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fcone.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fcylinder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fd3dexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fdecay.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fdelay.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fdemimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fdxfexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fdxfimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fedit.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fformula.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fgroup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fieldremapper.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flchannelmix.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flclamp.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flcolorize.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flcurve.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fldecay.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fldelay.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flfolder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flformula.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flgradient.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flinear.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flinvert.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flmograph.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flnoise.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flparticleobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flpolygonobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flproximity.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flpython.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flquantize.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flrangemap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flremap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flsolid.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flspline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flstandard.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flstep.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fltime.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flvolumeobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\flweight.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fmidi.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fobjexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fobjexport2.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fobjimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fobjimport2.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fpython.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fradial.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\frandom.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fribexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fskpimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fsound.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fsphere.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fstlexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fstlimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ftime.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ftorus.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fvdbexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fvdbimport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fvrml2export.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\fvrml2import.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\glow.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvabs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvadapter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvbitmap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvbool.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvbox.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvclamp.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvcmp.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvcoffee.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvcollision.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvcolorspace.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvcolortemp.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvcomment.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvcondition.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvconst.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvcross.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdegree.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdetails.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdistance.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdot.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdummy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdynamic.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdynbody.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdyncollision.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdynconstraint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdyninteraction.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdynproximity.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvdynspring.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvequ.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvfloatfunc.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvfloatmath.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvformula.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvfreeze.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvgroup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvhair.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvhair_collision.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvhair_intersection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvhair_point.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvhair_proximity.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvhair_selection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvhierarchy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvinclude.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvinv.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gviterate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvlink.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmaterial.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmath.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmatrix2hpb.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmatrix2vect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmatrixmulvect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmemory.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmix.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmograph_data.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmograph_falloff.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmograph_sampleeffector.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmograph_selection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmograph_weight.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvmonoflop.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvnearestpoint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvnearestpointonspline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvneg.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvnil.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvnoise.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvnot.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvorder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvoverride.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvpoint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvpoly.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvpython.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvrandom.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvrangemapper.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvray.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvreal2vect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvreference.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvresult.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvsound.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvspline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvspy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvswitch.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvtag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvtime.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvtrack.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvtrigger.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvtrigo.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvvect2matrix.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvvect2real.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvvectcalcmat.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvvertexcolormap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\gvweightmap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\highlights.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\hp_chronometer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\hp_particledata.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\hp_pgroup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\hp_spinconvert.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\hp_surfaceposition.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\hp_timer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\hp_velocityconvert.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\hp_volumeposition.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\if_light.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\if_particleage.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\in_interact.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\in_selfdynamic.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\kebase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\kedata.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\kemorph.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\kepla.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\kesound.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\kevalue.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\marchigrass.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\massign.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mfog.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mggridarray.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mghoneycombarray.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgirealsky.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mglineararray.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgparticle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgpoly.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgpolyaxis.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgpolyedge.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgpolypolygon.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgpolysurface.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgpolyvertex.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgpolyvolume.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgradialarray.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgspline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mgtp.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mhairmaterial.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\millum.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mmaterial.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\motionblur.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\moutliner.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mpreview.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mrenderman.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mshadowcatcher.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mt_clip.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mt_layer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mt_tag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mterrain.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\mtoonup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\netprefs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\new_tretarget.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\nposemixer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oarray.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oatomarray.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oattractor.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obackground.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obasedeform.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obaseeffector.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obaselist.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obasemogen.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obend.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obevel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obezier.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oboole.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\obulge.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocacachedeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocacamdeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocacapsulefalloff.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocacluster.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocacollisiondeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocacorrectiondeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocajiggle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocajoint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocamera.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocameshdeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocamorphdeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocamuscle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocamuscledeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocapsule.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocaskin.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocasmoothdeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocasquash.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocastep.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocasurfacedeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocharacterbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocharactercomponent.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocloud.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocloudgroup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocone.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocube.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ocylinder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\odeflector.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\odestructor.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\odisc.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\odoodle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oecoffee.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oedeformer_panel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oedelay.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oeformula.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oegroup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oeinheritance.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oenvironment.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oeplain.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oepushapart.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oepython.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oerandomize.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oereeffector.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oeshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oesound.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oesounddepreciated.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oespline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oestep.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oetarget.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oetime.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oevolume.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oexplosion.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oexplosionfx.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oextrude.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oextrudelegacy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofalloff_object.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofalloff_panel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofalloff_standard.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofalloffobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\offd.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofield.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofieldforce.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofigure.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofloor.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oforeground.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oformula.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofractal.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofracture.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofriction.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ofur.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ogravitation.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oguide.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ohair.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ohairfeather.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oheadphone.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oinstance.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\olathe.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\olathelegacy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\olayer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\olight.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\olod.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oloft.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oloftlegacy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oloudspeaker.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omeasure.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omelt.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ometaball.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omicrophone.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_cloner.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_displacer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_extrude.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_fracture.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_fracturevoronoi.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_instance.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_matrix.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_polyfx.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_splinemask.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_splinewrap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_text.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_textlegacy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omograph_tracer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omorphdeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omospline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\omotiontracker.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\onoisefalloff.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\onull.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\onurbscaps.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\onurbscapslegacy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\onurbsselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ooiltank.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_alignment.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_blurp.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_born.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_bubble.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_deflector.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_die.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_forceobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_fragment.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_freeze.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_friction.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_gravity.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_mass.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_matterwaves.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_motioninheritance.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_objectshape.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_particledata.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_particledraw.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_pgroup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_posfollow.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_repulsebounce.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_rolling.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_scale.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_size.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_spin.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_storm.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_velocity.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\op_wind.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oparticle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oparticlebase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ophtrackedobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\opivot.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oplane.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oplatonic.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\opointcreator_panel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\opointdistribution.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\opolygon.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\opolyreduction.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\opolyreduxgen.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oprimitiveaxis.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oprimitiveslice.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\opyramid.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\opython.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\orelief.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oreproject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\orotation.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osceneinstance.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osculptdisplacement.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osculptlayer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osculptlayerfolder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osculptobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osculptsurfacelayer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osds.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oshader_panel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oshatter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oshear.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oshowdisplacement.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oshrinkwrapdeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osinglepoly.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osketch.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osky.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oskyshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osniper.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osphere.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ospherify.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ospline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ospline4side.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinearc.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinecircle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinecissoid.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinecogwheel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinecontour.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinecycloid.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinedeformer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplineflower.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplineformula.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinehelix.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinenside.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplineprimitive.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplineprofile.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinerail.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinerectangle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinestar.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinetext.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osplinetovolume.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ostage.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osweep.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osweeplegacy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\osymmetry.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\otaper.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\otorus.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\otransform_panel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\otube.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oturbulence.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\otwist.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\overridebase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ovolume.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ovolumebuilder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ovolumecachelayer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ovolumefilter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ovolumesequence.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ovolumeset.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ovolumetomesh.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oweightmgr.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\owind.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\owinddeform.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oworkplane.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\owrap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oxref.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\oxrefholder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\pall.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\pbodypaint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsblserver.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsbrowser.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefscineman.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefscolor.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefscommunication.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsdatabase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsfiles.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsgpurenderer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefshaircolor.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefshoudini.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsimexport.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsinterface.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefslinux.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsmaterial.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsmemory.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsmetricspreferences.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsmouse.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsnavigation.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsopengl.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefspaths.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsphprefs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsplugins.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsproman.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsrenderer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsschemetop.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefssubstance.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefstake.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefstheme.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefstimeline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsunits.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\prefsview.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\pvfilter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\pyrocluster.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\pyroshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\sculptprefs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\sebase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\semomix.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\sesound.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\sevalue.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\shrenderman.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\shxrefopts.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\takebase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\taligntopath.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\taligntospline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tannotation.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tarchigrass.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tbaketexture.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcacheproxy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcaconstraint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcageomcache.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcaik.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcaikspline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcameramapping.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcamorph.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcaposemorph.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcarigpart.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcavs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcawcycle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcaweight.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcoffeeexpression.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcompositing.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcrane.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tctpdata.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tctpobjectdata.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tcustomdatabase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tdisplay.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tdriver.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tedgeselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\texpression.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\textag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tfloat.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tfracturevoronoi.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tgrouppriority.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tguide.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thair.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thaircollider.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thairconstraint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thairlight.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thairmaterial.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thairprefs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thairrender.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thairselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thairsplinedynamics.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\thistogram.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tignoreobj.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tinteraction.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tlmarker.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tlookatcamera.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tlregion.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tlworld.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmetaball.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmgselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmgweight.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmograph_cache.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmorph_active.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmorph_base.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmorph_target.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmorphcam.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmotionblur.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tmotioncam.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tnormal.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\todotag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\todoworld.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tool_axishelper.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tool_mggrid.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tool_mglinear.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tool_mgradial.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tool_mgselect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tool_mgweight.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tooladdpoint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolannotation.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolarrange.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolarray.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolbevel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolbridge.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolbrush.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolbrushbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolbrushmorph.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolcaalign.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolcajoint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolcamirror.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolcanaming.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolcapaint.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolcaweight.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolcenter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolclone.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolclosehole.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolcloud.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolco.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolcreatepolygon.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tooldoodle.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolduplicate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tooledgecut.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tooledgeselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolextrude.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolextrudeinner.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolfreeselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairaddroot.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairbrush.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairclump.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhaircomb.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhaircurl.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhaircut.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairdynamics.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairfreeselect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairgrowselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairliveselect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairmirror.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairmove.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairplaceguide.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairpolyselect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairpush.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairrectselect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairroot.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairrotate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairscale.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairsoftselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairstraighten.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairsymmetry.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolhairtrimmer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tooliron.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolknife.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolknifeline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolknifepath.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolknifeplane.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toollensdistortion.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toollightplacer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolliveselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolloopselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolmagnet.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolmakeselect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolmatrixextrude.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolmeasure.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolmeshtovolume.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolmirrorbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolmodelingaxis.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolmodify.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolmove.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolnormalmove.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolnormalrotate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolnormalscale.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolphongselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolpointweld.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolpolypen.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolpolyselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolrandomize.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolrectselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolrotate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolscale.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushamplify.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrusherase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushfill.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushflatten.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushgrab.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushinflate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushknife.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushmask.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushmulti.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushpinch.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushpolish.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushproject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushpull.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushrelax.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushrepeat.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushscrape.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushselect.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsculptbrushwax.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsetobject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsetsdsweight.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsetvalue.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolslide.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsmoothshift.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsoftselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsplinearc.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsplinechamfer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsplinepen.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsplineproject.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsplineround.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsplinesketch.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolsplinesmooth.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolstitchandsew.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tooltest.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tooltransfer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolvolumeremesher.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolvw.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toolweightbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\toutliner.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tp_group.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tp_particlegeometry.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tphconstraintcameraorient.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tphconstraintmask.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tphconstraintplanar.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tphconstraintpos.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tphconstraintvector.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tphong.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tphongnormal.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tpointselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tpolygonselection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tprotection.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tpython.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tquaternion.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\trestriction.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tretarget.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tsculptlinktag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tsculpttag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tsds.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tsplinedraw.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tsplinenormal.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tspooldummy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tsticktexture.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tstop.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tsunexpression.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ttargetexpression.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ttension.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ttexture.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\ttoonupprefs.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tuserdata.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tuvw.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tvertexcolor.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tvertexmap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tvibrate.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tvolume.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\tvolumebuilder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\txrefholder.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpambientocclusion.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpbirender.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpcaustics.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpcolormapping.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpcomic.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpcylinderlens.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpdenoiser.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpgisetup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpgpurenderer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vphairtrace.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpmedianfilter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpnormalpass.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpoldgi.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpphlensdistort.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vppositionpass.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vppreviewhardware.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpremote.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vprenderman.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpscenemotionblur.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpsharpenfilter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpsoftfilter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vptext.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vptonemapping.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vptoonup.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpwatermark.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vpxmbsampler.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\vstag.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xambientocclusion.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xartshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xbase.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xbeveltool.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xbitmap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xbrick.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xcelshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xchanlum.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xcheckerboard.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xcloud.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xcolor.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xcolorstripes.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xcyclone.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xearth.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xfire.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xflame.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xformula.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xgalaxy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xhair.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xhatchingshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xmarble.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xmetal.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xmg_beat.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xmg_camera.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xmg_color.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xmg_falloff.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xmg_multi.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xmosaic.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xnbm.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xnoise.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xnormalizer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xobjectcolor.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xpavement.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xphlensdistortionshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xplanet.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xrain.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xrust.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xskyshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslabanj.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslabanji.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslabanzi.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslabuffy.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslacheen.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslacolorizer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xsladanel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xsladirt.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xsladistorter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslafalloff.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslafilter.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslafresnel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslafusion.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslagradient.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslalayer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslalumas.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslamabel.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslanoise.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslanukei.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslaposterizer.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslaprojector.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslaproximal.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslaripple.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslaspline.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslatiles.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslavertexmap.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xslidetool.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xspectral.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xspotshader.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xsss.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xstar.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xstarfield.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xsunburst.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xterrainmask.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xthinfilm.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xturbulence.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xuvpeelertool.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xvariation.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xvenus.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xwater.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xwood.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\xxmbsubsurface.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\description\zmultipass.h">
+      <Filter>source\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ge_autoptr.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ge_math.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ge_prepass.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ge_sys_math.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\gui.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\matrix4.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\modelingids.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\operatingsystem.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\osx_include.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\vector4.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\windows_include.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\x4d_colors.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\x4d_filter.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\x4d_macros.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

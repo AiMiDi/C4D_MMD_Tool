@@ -1,0 +1,13 @@
+#ifndef PREFS_H__
+#define PREFS_H__
+
+enum
+{
+	PREFS_GROUP  = 999,
+	PREFS_PORT,
+	PREFS_IPADDRESS,
+	PREFS_USE_IPADDRESS,
+	PREFS_FOLDER
+};
+
+#endif // PREFS_H__

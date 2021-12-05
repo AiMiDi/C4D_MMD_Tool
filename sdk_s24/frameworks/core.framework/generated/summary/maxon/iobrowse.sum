@@ -1,0 +1,1 @@
+maxon.IoBrowseInterface	"net.maxon.interface.iobrowse"	D:\C4DSDK\sdk_s24\frameworks\core.framework\source\maxon\iobrowse.h(41,7)	ObjectInterface	GetBasePath,GetCurrentPath,GetExtraData,GetNext,GetSize,HasEntry,Init,IoGetAttributes,IoGetFlags,IoGetTime,Reset	

@@ -1,0 +1,2 @@
+maxon.SystemErrorInterface	"net.maxon.interface.systemerror"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\systemerror.h(31,7)	ErrorInterface		
+maxon.NSSystemErrorInterface	"net.maxon.interface.nsystemerror"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\systemerror.h(64,7)	ErrorInterface	GetNSError,SetNSError	

@@ -1,0 +1,18 @@
+#if 1
+#if 1
+#endif
+namespace maxon
+{
+#ifndef MAXON_REGISTRATION_EXCLUDE_INTERFACES
+	PRIVATE_MAXON_DATATYPE_REGISTER_ENUM(COMPARERESULT, "net.maxon.datatype.enum.compareresult", SIZEOF(COMPARERESULT), false, "LESS\0EQUAL\0GREATER\0INCOMPARABLE\0", const maxon::UInt64 values[] = {(maxon::UInt64) COMPARERESULT::LESS, (maxon::UInt64) COMPARERESULT::EQUAL, (maxon::UInt64) COMPARERESULT::GREATER, (maxon::UInt64) COMPARERESULT::INCOMPARABLE})
+#endif
+#ifndef MAXON_REGISTRATION_EXCLUDE_INTERFACES
+	PRIVATE_MAXON_DATATYPE_REGISTER_ENUM(EQUALITY, "net.maxon.datatype.enum.equality", SIZEOF(EQUALITY), false, "SHALLOW\0DEEP\0", const maxon::UInt64 values[] = {(maxon::UInt64) EQUALITY::SHALLOW, (maxon::UInt64) EQUALITY::DEEP})
+#endif
+#ifdef MAXON_TARGET_64BIT
+#else
+#endif
+#ifdef MAXON_TARGET_WINDOWS
+#endif
+}
+#endif

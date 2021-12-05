@@ -11,8 +11,6 @@ void mmd::OMMDCamera::Free(GeListNode* node)
 	this->interpolator_V_map.Reset();
 	this->interpolator_A_map.Reset();
 }
-
-
 Bool mmd::OMMDCamera::SplineDataCallBack(Int32 cid, const void* data)
 {
 	/* 还有其他一些回调类型，我们在这里仅使用SPLINE_CALLBACK_CORE_MESSAGE */
@@ -53,8 +51,6 @@ Bool mmd::OMMDCamera::SplineDataCallBack(Int32 cid, const void* data)
 	}
 	return(true);
 }
-
-
 inline Bool mmd::OMMDCamera::GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator)
 {
 	switch (type)
@@ -157,8 +153,6 @@ inline Bool mmd::OMMDCamera::GetInterpolator(Int32 type, Int32 frame_on, VMDInte
 	}
 	return(true);
 }
-
-
 inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator)
 {
 	iferr_scope_handler{
@@ -326,8 +320,6 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, VMDInte
 	}
 	return(true);
 }
-
-
 inline Bool mmd::OMMDCamera::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 	iferr_scope_handler{
 		MessageDialog(err.ToString(nullptr));
@@ -667,8 +659,6 @@ inline Bool mmd::OMMDCamera::RegisterKeyFrame(Int32 frame_on, GeListNode* node) 
 	this->UpdateAllInterpolator(node);
 	return true;
 }
-
-
 inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 {
 	if (node == nullptr)
@@ -888,8 +878,6 @@ inline Bool mmd::OMMDCamera::UpdateAllInterpolator(GeListNode* node)
 	}
 	return(true);
 }
-
-
 inline Bool mmd::OMMDCamera::CameraInit(GeListNode* node)
 {
 	if (node == nullptr)
@@ -925,8 +913,6 @@ inline Bool mmd::OMMDCamera::CameraInit(GeListNode* node)
 	}
 	return(true);
 }
-
-
 inline Bool mmd::OMMDCamera::InitInterpolator(GeListNode* node)
 {
 	if (node == nullptr)
@@ -952,8 +938,6 @@ inline Bool mmd::OMMDCamera::InitInterpolator(GeListNode* node)
 	bc->SetData(VMD_CAM_OBJ_SPLINE, data);
 	return(true);
 }
-
-
 inline Bool mmd::OMMDCamera::DeleteKeyFrame(Int32 frame_on, GeListNode* node) {
 	if (node == nullptr)
 	{
@@ -1058,8 +1042,6 @@ inline Bool mmd::OMMDCamera::DeleteKeyFrame(Int32 frame_on, GeListNode* node) {
 	}
 	return true;
 }
-
-
 inline Bool mmd::OMMDCamera::DeleteAllKeyFrame(GeListNode* node) {
 	if (node == nullptr)
 	{
@@ -1102,8 +1084,6 @@ inline Bool mmd::OMMDCamera::DeleteAllKeyFrame(GeListNode* node) {
 	static_cast<CameraObject*>(cam)->SetAperture(30);
 	return true;
 }
-
-
 Bool mmd::OMMDCamera::Init(GeListNode* node)
 {
 	if (node == nullptr)
@@ -1113,8 +1093,6 @@ Bool mmd::OMMDCamera::Init(GeListNode* node)
 		return(false);
 	return(true);
 }
-
-
 Bool mmd::OMMDCamera::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	if (id[0].id == VMD_CAM_OBJ_SPLINE)
@@ -1123,8 +1101,6 @@ Bool mmd::OMMDCamera::SetDParameter(GeListNode* node, const DescID& id, const Ge
 	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
-
-
 Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
@@ -1194,16 +1170,12 @@ Bool mmd::OMMDCamera::Message(GeListNode* node, Int32 type, void* data)
 	}
 	return(true);
 }
-
-
 Bool mmd::OMMDCamera::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
 {
 	if (id[0].id == VMD_CAM_OBJ_FRAME_ON)
 		return(false);
 	return(SUPER::GetDEnabling(node, id, t_data, flags, itemdesc));
 }
-
-
 Bool mmd::VMD_Cam_Draw::Draw(BaseSceneHook* node, BaseDocument* doc, BaseDraw* bd, BaseDrawHelp* bh, BaseThread* bt, SCENEHOOKDRAW flags)
 {
 	if (!node || !doc || !bd || !bh)
@@ -1235,8 +1207,6 @@ Bool mmd::VMD_Cam_Draw::Draw(BaseSceneHook* node, BaseDocument* doc, BaseDraw* b
 		return(true);
 	return(SUPER::Draw(node, doc, bd, bh, bt, flags));
 }
-
-
 EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (op == nullptr || doc == nullptr)
@@ -1398,8 +1368,6 @@ EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, Base
 	}
 	return(EXECUTIONRESULT::OK);
 }
-
-
 Bool mmd::OMMDCamera::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (list == nullptr || op == nullptr)
@@ -1409,8 +1377,6 @@ Bool mmd::OMMDCamera::AddToExecution(BaseObject* op, PriorityList* list)
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return(true);
 }
-
-
 maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Camera_settings setting)
 {
 	iferr_scope_handler{
@@ -1965,8 +1931,6 @@ maxon::Result<BaseObject*> mmd::OMMDCamera::ConversionCamera(VMD_Conversion_Came
 	doc->SetTime(BaseTime());
 	return(maxon::Result<BaseObject*>(VMD_camera));
 }
-
-
 Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
@@ -2060,8 +2024,6 @@ Bool mmd::OMMDCamera::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 	return(SUPER::Read(node, hf, level));
 }
-
-
 Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 {
 	if (!hf->WriteInt32(this->prev_frame))
@@ -2141,8 +2103,6 @@ Bool mmd::OMMDCamera::Write(GeListNode* node, HyperFile* hf)
 
 	return(SUPER::Write(node, hf));
 }
-
-
 Bool mmd::OMMDCamera::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
 {
 	iferr_scope_handler{
@@ -2374,8 +2334,6 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 	
 	return(maxon::OK);
 }
-
-
 maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 {
 	iferr_scope;
@@ -2514,8 +2472,6 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 	}
 	return(maxon::OK);
 }
-
-
 maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_settings setting)
 {
 	iferr_scope;
@@ -2707,8 +2663,6 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_CAM_ERR)));
 	}
 }
-
-
 maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_export_settings setting)
 {
 	iferr_scope;
@@ -2899,8 +2853,6 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::IntToString(this->camera_frames.GetCount()), String::FloatToString(timing.GetMilliseconds())));
 	return(maxon::OK);
 }
-
-
 maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_settings setting)
 {
 	maxon::HashMap<String, maxon::BaseList<bone_obj_tag>*>	bone_name_map;
@@ -4393,8 +4345,6 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 	MessageDialog(report);
 	return(maxon::OK);
 }
-
-
 maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_export_settings setting) {
 	iferr_scope;
 	Filename		fn;
@@ -4969,7 +4919,6 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 	return(maxon::OK);
 }
 
-
 Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::CreateLayout(void)
 {
 	SetTitle(GeLoadString(IDS_VMD_TOOL_TITLE));
@@ -5000,16 +4949,12 @@ Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::CreateLayout(void)
 	GroupEnd();
 	return(true);
 }
-
-
 Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::InitValues(void)
 {
 	SetFloat(100002, 8.5);
 	SetFloat(100004, 0);
 	return(true);
 }
-
-
 Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::Command(Int32 id, const BaseContainer& msg)
 {
 	iferr_scope_handler{
@@ -5043,8 +4988,6 @@ Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::Command(Int32 id, const BaseCont
 	}
 	return(true);
 }
-
-
 Bool mmd::VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, UChar* probe, Int32 size)
 {
 	Char	VMDVersion[30]{ 0 };
@@ -5067,8 +5010,6 @@ Bool mmd::VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, U
 	}
 	return(false);
 }
-
-
 FILEERROR mmd::VMDLoaderData::Load(BaseSceneLoader* node, const Filename& name, BaseDocument* doc, SCENEFILTER filterflags, maxon::String* error, BaseThread* bt)
 {
 	if (IsCamera)

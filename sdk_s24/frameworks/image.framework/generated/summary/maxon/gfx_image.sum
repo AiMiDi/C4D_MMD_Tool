@@ -1,0 +1,4 @@
+maxon.ImageBaseInterface	"net.maxon.image.interface.imagebase"	D:\C4DSDK\sdk_s24\frameworks\image.framework\source\maxon\gfx_image.h(137,7)	DataDictionaryObjectInterface,HierarchyObjectInterface	AddChildren,CreateSubImagePart,FreePixelHandler,GetChannelCount,GetComponent,GetHeight,GetPixelFormat,GetPixelHandler,GetWidth,InitBase,ObservableRegionChanged,SetComponent,SetPixelHandler	
+maxon.ImageTextureInterface	"net.maxon.image.interface.imagetexture"	D:\C4DSDK\sdk_s24\frameworks\image.framework\source\maxon\gfx_image.h(264,7)	ImageBaseInterface	Load,LoadTexture,Save	hasStaticMethods=true	
+maxon.ImageInterface	"net.maxon.image.interface.image"	D:\C4DSDK\sdk_s24\frameworks\image.framework\source\maxon\gfx_image.h(326,7)	ImageBaseInterface	Init	
+maxon.ImageLayerInterface	"net.maxon.image.interface.imagelayer"	D:\C4DSDK\sdk_s24\frameworks\image.framework\source\maxon\gfx_image.h(347,7)	ImageInterface		

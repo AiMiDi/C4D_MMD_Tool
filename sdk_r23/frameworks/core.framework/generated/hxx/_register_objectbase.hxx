@@ -1,0 +1,317 @@
+#if 1
+namespace maxon
+{
+/// @cond INTERNAL
+
+#ifdef MAXON_LARGE_VTABLE
+#else
+#endif
+#ifndef MAXON_TARGET_DEBUG
+#endif
+#ifdef MAXON_COMPONENT_HASHTABLE
+#endif
+#ifndef MAXON_TARGET_DEBUG
+#endif
+#ifndef MAXON_TARGET_DEBUG
+#endif
+/// @endcond
+
+#ifdef MAXON_TARGET_DEBUG
+#endif
+	namespace enum738 { enum class KIND
+		{
+			NORMAL,				///< A normal object class.
+			SINGLETON,		///< A singleton object class, i.e., a class with exactly one instance. The instance can be obtained with Create().
+			ABSTRACT			///< An abstract object class. Create() will return an UnsupportedOperationError.
+		} ; }
+	maxon::String PrivateToString_KIND738(std::underlying_type<enum738::KIND>::type x, const maxon::FormatStatement* fmt, void*)
+	{
+		const maxon::UInt64 values[] = {(maxon::UInt64) enum738::KIND::NORMAL, (maxon::UInt64) enum738::KIND::SINGLETON, (maxon::UInt64) enum738::KIND::ABSTRACT};
+		return maxon::StringInterface::PrivateEnumToString((maxon::UInt64) x, "ClassInterface::KIND", SIZEOF(x), false, values, "NORMAL\0SINGLETON\0ABSTRACT\0", fmt);
+	}
+	const maxon::Char* const ClassInterface::MTable::_ids = 
+		"Free@535fa27316b0e82d\0" // void Free(const ClassInterface* object)
+		"Alloc@97338857717114ec\0" // ClassInterface* Alloc(const maxon::SourceLocation& allocLocation, const Id& cid, KIND kind)
+		"GetId@daec66e7da84a648\0" // const Id& GetId() const
+		"GetKind@978744d15f2fd32e\0" // KIND GetKind() const
+		"GetComponents@78f046bd07d3fbd6\0" // Block<const ComponentInfo* const> GetComponents() const
+		"AddComponent@9c60b503a29da924\0" // Result<void> AddComponent(const ComponentDescriptor& component)
+		"RemoveLastComponent@780cdac8f1a33934\0" // void RemoveLastComponent()
+		"AddComponents@e497a707cb53065c\0" // Result<void> AddComponents(const Class<>& cls)
+		"Finalize@3008090429c5a175\0" // Result<void> Finalize()
+		"IsFinalized@12e73654e6d65520\0" // Bool IsFinalized() const
+		"GetImplementedInterfaces@374abe1a8b32640a\0" // const Block<const InterfaceReference* const>& GetImplementedInterfaces() const
+		"GetDataType@a6c0b400f1ac4207\0" // const DataType& GetDataType() const
+		"Create@7c798d6933e86980\0" // Result<typename maxon::details::ClassGetNonConst<REF>::type> Create() const
+		"CreatePointer@a2bc22c3fbfc213f\0" // Result<ObjectInterface*> CreatePointer() const
+		"IsSubclassOf@f7d6dadaaf705b83\0" // Bool IsSubclassOf(const Class<>& other) const
+		"ToString@a73a45c584c879d4\0" // String ToString(const FormatStatement* formatStatement) const
+		"DeleteInstance@a0e3617845eeb716\0" // void DeleteInstance(const ObjectInterface* object)
+		"DestructInstance@a0e3617845eeb716\0" // void DestructInstance(const ObjectInterface* object)
+		"CopyInstance@9eb65db2b5629957\0" // Result<void> CopyInstance(ObjectInterface* dest, const ObjectInterface* src)
+		"GetInfo@e243f1db5331a46f\0" // const ClassInfo* GetInfo() const
+		"GetOrCreateMTable@5922c8199e72ba24\0" // void* GetOrCreateMTable(ClassInfo* info, const InterfaceReference& i)
+		"AddProxyComponent@25529f081db2bbe1\0" // Result<Int> AddProxyComponent(const ComponentDescriptor& component, Bool shared)
+	"";
+	MAXON_WARNING_PUSH
+	MAXON_WARNING_DISABLE_DEPRECATED
+	class ClassInterface::Hxx2::Unresolved : public ClassInterface
+	{
+	public:
+		static const Unresolved* Get(const ClassInterface* o) { return (const Unresolved*) o; }
+		static Unresolved* Get(ClassInterface* o) { return (Unresolved*) o; }
+		static void Free(const ClassInterface* object) { if (object && maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ClassInterface::Free(object); return maxon::PrivateLogNullptrError();}
+		static ClassInterface* Alloc(const maxon::SourceLocation& allocLocation, const Id& cid, KIND kind) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ClassInterface::Alloc(allocLocation, cid, kind); return nullptr;}
+		const Id& GetId() const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const ClassInterface*) this)->GetId(); return maxon::PrivateNullReturnValue<const Id&>(maxon::NULL_RETURN_REASON::UNRESOLVED, OVERLOAD_MAX_RANK);}
+		KIND GetKind() const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const ClassInterface*) this)->GetKind(); return maxon::PrivateNullReturnValue<KIND>(maxon::NULL_RETURN_REASON::UNRESOLVED, OVERLOAD_MAX_RANK);}
+		Block<const ComponentInfo* const> GetComponents() const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const ClassInterface*) this)->GetComponents(); return maxon::PrivateNullReturnValue<Block<const ComponentInfo* const>>(maxon::NULL_RETURN_REASON::UNRESOLVED, OVERLOAD_MAX_RANK);}
+		Result<void> AddComponent(const ComponentDescriptor& component) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return ((ClassInterface*) this)->AddComponent(component); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
+		void RemoveLastComponent() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((ClassInterface*) this)->RemoveLastComponent(); return maxon::PrivateLogNullptrError();}
+		Result<void> AddComponents(const Class<>& cls) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return ((ClassInterface*) this)->AddComponents(cls); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
+		Result<void> Finalize() { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return ((ClassInterface*) this)->Finalize(); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
+		Bool IsFinalized() const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const ClassInterface*) this)->IsFinalized(); return maxon::PrivateLogNullptrError(false);}
+		const Block<const InterfaceReference* const>& GetImplementedInterfaces() const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const ClassInterface*) this)->GetImplementedInterfaces(); return maxon::PrivateNullReturnValue<const Block<const InterfaceReference* const>&>(maxon::NULL_RETURN_REASON::UNRESOLVED, OVERLOAD_MAX_RANK);}
+		const DataType& GetDataType() const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const ClassInterface*) this)->GetDataType(); return maxon::PrivateNullReturnValue<const DataType&>(maxon::NULL_RETURN_REASON::UNRESOLVED, OVERLOAD_MAX_RANK);}
+		Result<typename maxon::details::ClassGetNonConst<REF>::type> Create() const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return ((const ClassInterface*) this)->Create(); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
+		Result<ObjectInterface*> CreatePointer() const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return ((const ClassInterface*) this)->CreatePointer(); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
+		Bool IsSubclassOf(const Class<>& other) const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const ClassInterface*) this)->IsSubclassOf(other); return maxon::PrivateLogNullptrError(false);}
+		String ToString(const FormatStatement* formatStatement) const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const ClassInterface*) this)->ToString(formatStatement); return maxon::PrivateNullReturnValue<String>(maxon::NULL_RETURN_REASON::UNRESOLVED, OVERLOAD_MAX_RANK);}
+		static void DeleteInstance(const ObjectInterface* object) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ClassInterface::DeleteInstance(object); return maxon::PrivateLogNullptrError();}
+		static void DestructInstance(const ObjectInterface* object) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ClassInterface::DestructInstance(object); return maxon::PrivateLogNullptrError();}
+		static Result<void> CopyInstance(ObjectInterface* dest, const ObjectInterface* src) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return ClassInterface::CopyInstance(dest, src); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
+		const ClassInfo* GetInfo() const { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ((const ClassInterface*) this)->GetInfo(); return nullptr;}
+		static void* GetOrCreateMTable(ClassInfo* info, const InterfaceReference& i) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, true)) return ClassInterface::GetOrCreateMTable(info, i); return nullptr;}
+		Result<Int> AddProxyComponent(const ComponentDescriptor& component, Bool shared) { if (maxon::NonvirtualInterfaceReference::PrivateResolve(&_interface, false)) return ((ClassInterface*) this)->AddProxyComponent(component, shared); return maxon::PrivateGetNullReturnError(maxon::NULL_RETURN_REASON::UNRESOLVED);}
+	};
+	MAXON_WARNING_POP
+#ifdef PRIVATE_MAXON_ASSEMBLE_UNRESOLVED
+	const maxon::NULL_RETURN_TYPE ClassInterface::MTable::_returnTypes[] = 
+	{
+		maxon::NULL_RETURN_TYPE::VOID_ZERO_FREE_FUNCTION,
+		maxon::details::NullReturnType<ClassInterface*>::value,
+		maxon::details::NullReturnType<const Id&>::value,
+		maxon::details::NullReturnType<KIND>::value,
+		maxon::details::NullReturnType<Block<const ComponentInfo* const>>::value,
+		maxon::details::NullReturnType<Result<void>>::value,
+		maxon::details::NullReturnType<void>::value,
+		maxon::details::NullReturnType<Result<void>>::value,
+		maxon::details::NullReturnType<Result<void>>::value,
+		maxon::details::NullReturnType<Bool>::value,
+		maxon::details::NullReturnType<const Block<const InterfaceReference* const>&>::value,
+		maxon::details::NullReturnType<const DataType&>::value,
+		maxon::details::NullReturnType<Result<typename maxon::details::ClassGetNonConst<REF>::type>>::value,
+		maxon::details::NullReturnType<Result<ObjectInterface*>>::value,
+		maxon::details::NullReturnType<Bool>::value,
+		maxon::details::NullReturnType<String>::value,
+		maxon::details::NullReturnType<void>::value,
+		maxon::details::NullReturnType<void>::value,
+		maxon::details::NullReturnType<Result<void>>::value,
+		maxon::details::NullReturnType<const ClassInfo*>::value,
+		maxon::details::NullReturnType<void*>::value,
+		maxon::details::NullReturnType<Result<Int>>::value,
+		maxon::NULL_RETURN_TYPE::OTHER
+	};
+#endif
+	maxon::Bool ClassInterface::MTable::InitUnresolved(maxon::NonvirtualInterfaceReference::UnresolvedAssembler assembler, MTable* tbl)
+	{
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_ClassInterface_Free = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_Free;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_ClassInterface_Alloc = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_Alloc;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<const Id&>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_GetId = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetId;
+		#else
+		tbl->_ClassInterface_GetId = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetId;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<KIND>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_GetKind = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetKind;
+		#else
+		tbl->_ClassInterface_GetKind = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetKind;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Block<const ComponentInfo* const>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_GetComponents = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetComponents;
+		#else
+		tbl->_ClassInterface_GetComponents = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetComponents;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Result<void>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_AddComponent = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_AddComponent;
+		#else
+		tbl->_ClassInterface_AddComponent = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_AddComponent;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_ClassInterface_RemoveLastComponent = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_RemoveLastComponent;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Result<void>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_AddComponents = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_AddComponents;
+		#else
+		tbl->_ClassInterface_AddComponents = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_AddComponents;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Result<void>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_Finalize = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_Finalize;
+		#else
+		tbl->_ClassInterface_Finalize = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_Finalize;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_ClassInterface_IsFinalized = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_IsFinalized;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<const Block<const InterfaceReference* const>&>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_GetImplementedInterfaces = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetImplementedInterfaces;
+		#else
+		tbl->_ClassInterface_GetImplementedInterfaces = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetImplementedInterfaces;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<const DataType&>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_GetDataType = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetDataType;
+		#else
+		tbl->_ClassInterface_GetDataType = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetDataType;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Result<typename maxon::details::ClassGetNonConst<REF>::type>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_Create = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_Create;
+		#else
+		tbl->_ClassInterface_Create = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_Create;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Result<ObjectInterface*>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_CreatePointer = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_CreatePointer;
+		#else
+		tbl->_ClassInterface_CreatePointer = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_CreatePointer;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_ClassInterface_IsSubclassOf = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_IsSubclassOf;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<String>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_ToString = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_ToString;
+		#else
+		tbl->_ClassInterface_ToString = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_ToString;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_ClassInterface_DeleteInstance = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_DeleteInstance;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_ClassInterface_DestructInstance = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_DestructInstance;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Result<void>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_CopyInstance = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_CopyInstance;
+		#else
+		tbl->_ClassInterface_CopyInstance = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_CopyInstance;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_ClassInterface_GetInfo = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetInfo;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		#else
+		tbl->_ClassInterface_GetOrCreateMTable = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_GetOrCreateMTable;
+		#endif
+		#if defined(PRIVATE_MAXON_ASSEMBLE_UNRESOLVED) && !defined(MAXON_TARGET_DEBUG)
+		if (maxon::details::NullReturnType<Result<Int>>::value == maxon::NULL_RETURN_TYPE::OTHER) tbl->_ClassInterface_AddProxyComponent = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_AddProxyComponent;
+		#else
+		tbl->_ClassInterface_AddProxyComponent = &Hxx2::Wrapper<Hxx2::Unresolved>::_ClassInterface_AddProxyComponent;
+		#endif
+	#ifdef PRIVATE_MAXON_ASSEMBLE_UNRESOLVED
+		return assembler(&_interface, (maxon::Char*) tbl, _returnTypes, SIZEOF(MTable) / SIZEOF(void*));
+	#else
+		return true;
+	#endif
+	}
+	MAXON_INTERFACE_REGISTER(ClassInterface, "net.maxon.interface.class", nullptr);
+/// @cond INTERNAL
+
+#ifdef MAXON_COMPILER_MSVC
+#else
+#endif
+/// @endcond
+
+/// @cond INTERNAL
+
+/// @endcond
+
+	const maxon::Char* const ObjectInterface::MTable::_ids = 
+		"ToString@a73a45c584c879d4\0" // String ToString(const FormatStatement* formatStatement) const
+		"InitObject@7dc5a05672be487c\0" // Result<void> InitObject(const void* argument)
+		"HandleMessage@1d8b0e1ff87e05e9\0" // Result<void> HandleMessage(const InternedId& message, const void* argument)
+		"IsEqual@f4098a6fe857dc18\0" // Bool IsEqual(const maxon::ObjectInterface* other) const
+		"Compare@f29ba8ecb7052548\0" // COMPARERESULT Compare(const maxon::ObjectInterface* other) const
+		"GetHashCodeImpl@b22918402154097b\0" // HashInt GetHashCodeImpl() const
+		"GetHashValueImpl@f58a2c047b321847\0" // HashValue GetHashValueImpl() const
+/// @cond INTERNAL
+
+/// @endcond
+
+	"";
+	PRIVATE_MAXON_INTERFACE_REGISTER_VIRTUAL(ObjectInterface, ObjectInterface, , , "net.maxon.interface.object", "maxon.ObjectInterface", nullptr);
+	template <typename DUMMY> maxon::Int ObjectInterface::PrivateInstantiateNullValueHelper()
+	{
+		return 0
+		| maxon::details::InstantiateNullReturnValue<COMPARERESULT>(OVERLOAD_MAX_RANK)
+		| maxon::details::InstantiateNullReturnValue<HashInt>(OVERLOAD_MAX_RANK)
+		| maxon::details::InstantiateNullReturnValue<HashValue>(OVERLOAD_MAX_RANK)
+		| maxon::details::InstantiateNullReturnValue<String>(OVERLOAD_MAX_RANK)
+		;
+	}
+/// @cond INTERNAL
+
+#ifdef MAXON_TARGET_DEBUG
+#else
+#endif
+#ifndef MAXON_COMPONENT_HASHTABLE
+#elif defined(MAXON_TARGET_DEBUG)
+#else
+#endif
+/// @endcond
+
+	const maxon::Char* const ErrorInterface::MTable::_ids = 
+		"GetLocation@947950a432ce1615\0" // const SourceLocation& GetLocation() const
+		"SetLocation@406b5fb832b83700\0" // void SetLocation(const maxon::SourceLocation& allocLocation)
+		"GetStackTrace@2b6d45bcfc281d64\0" // Block<void* const> GetStackTrace() const
+		"SetStackTrace@bc9e649c404d9fb5\0" // void SetStackTrace(const Block<void* const>& trace)
+		"GetMessage@b8f12dfa16054f01\0" // String GetMessage() const
+		"SetMessage@cc63eccfe460c07a\0" // void SetMessage(const String& message)
+		"GetCause@53dc09360072ce8d\0" // const Error& GetCause() const
+		"SetCause@73ea1403e4ac5995\0" // void SetCause(const Error& cause)
+		"GetMachine@b82ebbea607b1146\0" // void GetMachine(MachineRef& machine) const
+		"SetMachine@9493e8cf172dd71b\0" // void SetMachine(const MachineRef& machine)
+		"PrivateGetCode@7d0e6f3d29c239e7\0" // Int PrivateGetCode() const
+		"PrivateSetCode@1f5c923ad8089ced\0" // void PrivateSetCode(Int code)
+		"PrivateSetPreallocation@fad0643859a0ec8f\0" // void PrivateSetPreallocation(ThreadReferencedError preallocation) const
+		"PrivateGetPreallocation@d5eea19beb81b471\0" // ThreadReferencedError PrivateGetPreallocation() const
+		"PrivateSetDebugError@7d622e7aaa512e7d\0" // void PrivateSetDebugError(const Error& cause) const
+	"";
+	PRIVATE_MAXON_INTERFACE_REGISTER_VIRTUAL_SINGLE_BASE(ErrorInterface, , "net.maxon.interface.error", "maxon.ErrorInterface", (ObjectInterface::PrivateGetInterface()));
+	template <typename DUMMY> maxon::Int ErrorInterface::PrivateInstantiateNullValueHelper()
+	{
+		return 0
+		| maxon::details::InstantiateNullReturnValue<Block<void* const>>(OVERLOAD_MAX_RANK)
+		| maxon::details::InstantiateNullReturnValue<String>(OVERLOAD_MAX_RANK)
+		| maxon::details::InstantiateNullReturnValue<ThreadReferencedError>(OVERLOAD_MAX_RANK)
+		| maxon::details::InstantiateNullReturnValue<const Error&>(OVERLOAD_MAX_RANK)
+		| maxon::details::InstantiateNullReturnValue<const SourceLocation&>(OVERLOAD_MAX_RANK)
+		;
+	}
+	MAXON_REGISTRY_REGISTER(Classes);
+	MAXON_REGISTRY_REGISTER(ClassTransformers);
+/// @cond INTERNAL
+
+/// @endcond
+
+#ifdef MAXON_API
+#else
+#endif
+	namespace details
+	{
+#ifdef MAXON_TARGET_MACOS
+#endif
+	}
+}
+#endif
+static maxon::details::ForceEvaluation s_forceEval_objectbase(0
+	| maxon::ObjectInterface::PrivateInstantiateNullValueHelper<maxon::Int>()
+	| maxon::ErrorInterface::PrivateInstantiateNullValueHelper<maxon::Int>()
+);

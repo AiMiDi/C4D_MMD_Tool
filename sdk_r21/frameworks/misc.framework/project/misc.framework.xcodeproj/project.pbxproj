@@ -1,0 +1,385 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A00E2B337C91176CDE010000 /* profiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A00E2B337C91176CDE000000 /* profiler.cpp */; };
+		A00E2B337CD93CCD9F010000 /* register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A00E2B337CD93CCD9F000000 /* register.cpp */; };
+		A00E2B337CF4AB3A6F010000 /* libcore.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A00E2B337CF4AB3A6F000000 /* libcore.framework.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A00E2B337CF4AB3A6F040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00E2B337CF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0000;
+			remoteInfo = core.framework;
+		};
+		A00E2B337CF4AB3A6F040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00E2B337CF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0100;
+			remoteInfo = "core.framework static library";
+		};
+		A00E2B337CF4AB3A6F050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00E2B337CF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F000000;
+			remoteInfo = core.framework;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A00E2B337C00000000000000 /* debugbase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = debugbase.xcconfig; path = ../../../frameworks/settings/debugbase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A00E2B337C00000000050000 /* releasebase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = releasebase.xcconfig; path = ../../../frameworks/settings/releasebase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A00E2B337C008F4F35000000 /* ramdisk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ramdisk.h; path = ../source/maxon/ramdisk.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C14A77933000000 /* gmlwriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gmlwriter.h; path = ../source/maxon/gmlwriter.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C2902726E000000 /* optional_scc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = optional_scc.h; path = ../source/maxon/optional_scc.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C36943750000000 /* unittest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = unittest.h; path = ../source/maxon/unittest.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C3A7D7E63000000 /* profiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = profiler.h; path = ../source/maxon/profiler.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C5CB81550000000 /* graph_basics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = graph_basics.h; path = ../source/maxon/graph_basics.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C5F267A87000000 /* progressmonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = progressmonitor.h; path = ../source/maxon/progressmonitor.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C5F41DE43000000 /* sqldatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqldatabase.h; path = ../source/maxon/sqldatabase.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C603176D0000000 /* timestamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timestamp.h; path = ../source/maxon/timestamp.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C6ADAC9BD000000 /* stringregularexpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringregularexpression.h; path = ../source/maxon/stringregularexpression.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C6BBEC3CA000000 /* ioxmlparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioxmlparser.h; path = ../source/maxon/ioxmlparser.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C6BC70988000000 /* changelist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = changelist.h; path = ../source/maxon/changelist.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C6C1646A4000000 /* subdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = subdata.h; path = ../source/maxon/subdata.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C91176CDE000000 /* profiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = profiler.cpp; path = ../source/maxon/profiler.cpp; sourceTree = SOURCE_ROOT; };
+		A00E2B337C95A20415000000 /* ruleparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ruleparser.h; path = ../source/maxon/ruleparser.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337C9B88A39C000000 /* sourcecontrol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sourcecontrol.h; path = ../source/maxon/sourcecontrol.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337CA1D33018000000 /* filemonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filemonitor.h; path = ../source/maxon/filemonitor.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337CC1A8D4CC000000 /* profiler_disabled.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = profiler_disabled.h; path = ../source/maxon/profiler_disabled.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337CCBC0D6FF000000 /* formulaparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = formulaparser.h; path = ../source/maxon/formulaparser.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337CD93CCD9F000000 /* register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = register.cpp; path = ../generated/hxx/register.cpp; sourceTree = SOURCE_ROOT; };
+		A00E2B337CDD689460000000 /* io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = io.h; path = ../source/maxon/io.h; sourceTree = SOURCE_ROOT; };
+		A00E2B337CF4AB3A6F020000 /* core.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = core.framework.xcodeproj; path = ../../../frameworks/core.framework/project/core.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A08C5CDEA30E2B337C7B0000 /* libmisc.framework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmisc.framework.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A08C5CDEA30E2B337C7B0100 /* libmisc.framework_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmisc.framework_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A00E2B337C000000000F0000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00E2B337CF4AB3A6F010000 /* libcore.framework.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A00E2B337C00000000140000 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				A00E2B337CF4AB3A6F020000 /* core.framework.xcodeproj */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		A00E2B337C00000000190000 /* configurations */ = {
+			isa = PBXGroup;
+			children = (
+				A00E2B337C00000000000000 /* debugbase.xcconfig */,
+				A00E2B337C00000000050000 /* releasebase.xcconfig */,
+			);
+			name = configurations;
+			sourceTree = "<group>";
+		};
+		A00E2B337C000000001E0000 = {
+			isa = PBXGroup;
+			children = (
+				A00E2B337C00000000190000 /* configurations */,
+				A00E2B337C111A998F000000 /* generated */,
+				A00E2B337C00000000140000 /* libs */,
+				A00E2B337C00000000230000 /* products */,
+				A00E2B337CCA90681B000000 /* source */,
+			);
+			sourceTree = "<group>";
+		};
+		A00E2B337C00000000230000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A08C5CDEA30E2B337C7B0000 /* libmisc.framework.a */,
+				A08C5CDEA30E2B337C7B0100 /* libmisc.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A00E2B337C111A998F000000 /* generated */ = {
+			isa = PBXGroup;
+			children = (
+				A00E2B337C681C2CE8000000 /* hxx */,
+			);
+			name = generated;
+			path = ../generated;
+			sourceTree = SOURCE_ROOT;
+		};
+		A00E2B337C114C574F000000 /* maxon */ = {
+			isa = PBXGroup;
+			children = (
+				A00E2B337C6BC70988000000 /* changelist.h */,
+				A00E2B337CA1D33018000000 /* filemonitor.h */,
+				A00E2B337CCBC0D6FF000000 /* formulaparser.h */,
+				A00E2B337C14A77933000000 /* gmlwriter.h */,
+				A00E2B337C5CB81550000000 /* graph_basics.h */,
+				A00E2B337CDD689460000000 /* io.h */,
+				A00E2B337C6BBEC3CA000000 /* ioxmlparser.h */,
+				A00E2B337C2902726E000000 /* optional_scc.h */,
+				A00E2B337C91176CDE000000 /* profiler.cpp */,
+				A00E2B337C3A7D7E63000000 /* profiler.h */,
+				A00E2B337CC1A8D4CC000000 /* profiler_disabled.h */,
+				A00E2B337C5F267A87000000 /* progressmonitor.h */,
+				A00E2B337C008F4F35000000 /* ramdisk.h */,
+				A00E2B337C95A20415000000 /* ruleparser.h */,
+				A00E2B337C9B88A39C000000 /* sourcecontrol.h */,
+				A00E2B337C5F41DE43000000 /* sqldatabase.h */,
+				A00E2B337C6ADAC9BD000000 /* stringregularexpression.h */,
+				A00E2B337C6C1646A4000000 /* subdata.h */,
+				A00E2B337C603176D0000000 /* timestamp.h */,
+				A00E2B337C36943750000000 /* unittest.h */,
+			);
+			name = maxon;
+			path = ../source/maxon;
+			sourceTree = SOURCE_ROOT;
+		};
+		A00E2B337C681C2CE8000000 /* hxx */ = {
+			isa = PBXGroup;
+			children = (
+				A00E2B337CD93CCD9F000000 /* register.cpp */,
+			);
+			name = hxx;
+			path = ../generated/hxx;
+			sourceTree = SOURCE_ROOT;
+		};
+		A00E2B337CCA90681B000000 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				A00E2B337C114C574F000000 /* maxon */,
+			);
+			name = source;
+			path = ../source;
+			sourceTree = SOURCE_ROOT;
+		};
+		A00E2B337CF4AB3A6F280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A00E2B337CF4AB3A6F000000 /* libcore.framework.a */,
+				A00E2B337CF4AB3A6F000100 /* libcore.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A00E2B337C000000002D0000 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A08C5CDEA30E2B337C000000 /* misc.framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A00E2B337C00000000460000 /* Build configuration list for PBXNativeTarget "misc.framework" */;
+			buildPhases = (
+				A00E2B337C00000000690000 /* Run Source Processor */,
+				A00E2B337C00000000320000 /* Sources */,
+				A00E2B337C000000000F0000 /* Frameworks */,
+				A00E2B337C000000002D0000 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A00E2B337CF4AB3A6F370000 /* PBXTargetDependency */,
+			);
+			name = misc.framework;
+			productName = misc.framework;
+			productReference = A08C5CDEA30E2B337C7B0000 /* libmisc.framework.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00E2B337C000000003C0000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1299;
+			};
+			buildConfigurationList = A00E2B337C00000000410000 /* Build configuration list for PBXProject "misc.framework" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A00E2B337C000000001E0000;
+			productRefGroup = A00E2B337C00000000230000 /* products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A00E2B337CF4AB3A6F280000 /* products */;
+					ProjectRef = A00E2B337CF4AB3A6F020000 /* core.framework.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				A08C5CDEA30E2B337C000000 /* misc.framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A00E2B337CF4AB3A6F000000 /* libcore.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework.a;
+			remoteRef = A00E2B337CF4AB3A6F040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A00E2B337CF4AB3A6F000100 /* libcore.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework_static.a;
+			remoteRef = A00E2B337CF4AB3A6F040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A00E2B337C00000000690000 /* Run Source Processor */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Source Processor";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python ${MAXON_ROOTDIR}frameworks/settings/sourceprocessor/sourceprocessor.py \"$PROJECT_DIR/..\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A00E2B337C00000000320000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00E2B337C91176CDE010000 /* profiler.cpp in Sources */,
+				A00E2B337CD93CCD9F010000 /* register.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A00E2B337CF4AB3A6F370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = core.framework;
+			targetProxy = A00E2B337CF4AB3A6F050000 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A00E2B337C000000004B0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A00E2B337C00000000000000 /* debugbase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.misc.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(inherited)";
+			};
+			name = Debug;
+		};
+		A00E2B337C00000000500000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A00E2B337C00000000050000 /* releasebase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.misc.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(inherited)";
+			};
+			name = Release;
+		};
+		A00E2B337C000000005A0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A00E2B337C000000005F0000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A00E2B337C00000000410000 /* Build configuration list for PBXProject "misc.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00E2B337C000000004B0000 /* Debug */,
+				A00E2B337C00000000500000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A00E2B337C00000000460000 /* Build configuration list for PBXNativeTarget "misc.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00E2B337C000000005A0000 /* Debug */,
+				A00E2B337C000000005F0000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A00E2B337C000000003C0000 /* Project object */;
+}

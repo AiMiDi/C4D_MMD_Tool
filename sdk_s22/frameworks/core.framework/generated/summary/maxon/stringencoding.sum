@@ -1,0 +1,2 @@
+maxon.StringEncodingInterface	"net.maxon.interface.stringencoding"	D:\C4DSDK\sdk_s22\frameworks\core.framework\source\maxon\stringencoding.h(16,7)	StreamConversionInterface		
+maxon.StringDecodingInterface	"net.maxon.interface.stringdecoding"	D:\C4DSDK\sdk_s22\frameworks\core.framework\source\maxon\stringencoding.h(26,7)	StreamConversionInterface		

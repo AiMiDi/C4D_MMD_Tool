@@ -1,0 +1,359 @@
+'''
+automatically generated build script
+Do not modify, instead edit project/projectdefinition.txt
+'''
+
+
+
+# SCons build script for the core.framework binary
+
+
+Import('globalenv')
+def create_objs(SRCS, path=""):
+    return [globalenv.Object(path + src) for src in SRCS]
+
+
+globalenv.Replace(MAXON_PROJECT_DIR=globalenv['MAXON_ROOTDIR']+'/frameworks/core.framework')
+globalenv.Replace(MAXON_PROJECT_SOURCE=globalenv['MAXON_PROJECT_DIR']+'/source')
+
+cpp_files = [
+    'generated/hxx/register.cpp',
+    'source/maxon/bytesvalue.cpp',
+    'source/maxon/configuration.cpp',
+    'source/maxon/cpuid.cpp',
+    'source/maxon/cpuyield.cpp',
+    'source/maxon/crashhandlerglobals.cpp',
+    'source/maxon/crc32c.cpp',
+    'source/maxon/datadescriptiondatabase.cpp',
+    'source/maxon/datadictionary.cpp',
+    'source/maxon/datadictionaryobject.cpp',
+    'source/maxon/dataformat.cpp',
+    'source/maxon/datatype.cpp',
+    'source/maxon/datetime_impl.cpp',
+    'source/maxon/debugglobals.cpp',
+    'source/maxon/general_math.cpp',
+    'source/maxon/generic_basearray.cpp',
+    'source/maxon/iostreams.cpp',
+    'source/maxon/lib_math.cpp',
+    'source/maxon/multiindex.cpp',
+    'source/maxon/object.cpp',
+    'source/maxon/reflection.cpp',
+    'source/maxon/spinlock.cpp',
+    'source/maxon/stacktrace.cpp',
+    'source/maxon/streamconversion.cpp',
+    'source/maxon/string.cpp',
+    'source/maxon/stringencoding.cpp',
+    'source/maxon/thread.cpp',
+    'source/maxon/timer.cpp',
+    'source/maxon/timevalue.cpp',
+    'source/maxon/url.cpp',
+    'source/maxon/utilities/apibaseid.cpp',
+    'source/maxon/utilities/apibasemath.cpp',
+    'source/maxon/utilities/iostreams_helper.cpp',
+    'source/maxon/weakref.cpp'
+]
+includedirs = [
+    globalenv['MAXON_PROJECT_DIR']+'/source',
+    globalenv['MAXON_PROJECT_DIR']+'/source/maxon/math',
+    globalenv['MAXON_PROJECT_DIR']+'/source/maxon/utilities',
+    globalenv['MAXON_PROJECT_DIR']+'/generated/hxx'
+]
+if globalenv['MAXON_BUILD_ARCH'] == 'rpi1' or globalenv['MAXON_BUILD_ARCH'] == 'rpi2':
+    includedirs.append('/usr/local/rpi/rpifs/usr/include')
+
+debug64 = globalenv.Clone()
+if globalenv['MAXON_COMPILER_LINUX'] == 'gcc' or globalenv['MAXON_COMPILER_LINUX'] == 'clang':
+    debug64.Append(CXXFLAGS=[
+        '-DMAXON_TARGET_DEBUG',
+        '-DMAXON_TARGET_64BIT',
+        '-DMAXON_TARGET_LINUX',
+        '-DMAXON_API',
+        '-DMAXON_MODULE_ID=\'"net.maxon.core.framework"\'',
+        '-fPIC',
+        '-c',
+        '-fmessage-length=0',
+        '-g',
+        '-fvisibility=hidden',
+        '-Wall',
+        '-Wno-multichar',
+        '-Wno-switch',
+        '-Wno-strict-aliasing',
+        '-Werror=char-subscripts',
+        '-Werror=sequence-point',
+        '-Werror=unused-result',
+        '-mssse3',
+        '-std=gnu++17',
+        '-Wno-invalid-offsetof',
+        '-Werror=conversion-null',
+        '-Werror=reorder',
+        '@'+globalenv['MAXON_SETTINGS_PATH']+'/linux_'+globalenv['MAXON_COMPILER_LINUX']+'_x86_debug.props'
+    ])
+if globalenv['MAXON_COMPILER_LINUX'] == 'clang':
+    debug64.Append(CXXFLAGS=['-stdlib=libc++'])
+
+if globalenv['MAXON_COMPILER_LINUX'] == 'intel':
+    debug64.Append(CXXFLAGS=[
+        '-DMAXON_TARGET_DEBUG',
+        '-DMAXON_TARGET_64BIT',
+        '-DMAXON_TARGET_LINUX',
+        '-DMAXON_API',
+        '-fPIC',
+        '-c',
+        '-std=c++11',
+        '-D_USE_INTEL_COMPILER',
+        '-D__C_PLUS_PLUS_0X__',
+        '-debug',
+        'inline-debug-info',
+        '-fp-speculationsafe',
+        '-unroll',
+        '-sox-',
+        '-diag-error:589,2407',
+        '-diag-warning:1418,1599',
+        '-diag-disable:vec,cpu-dispatch',
+        '-diag-disable:1,111,193,280,327,383,424,444,654,869,981,1572,1899,2259,2266,2267,2268,2270,2271,2273,3280,3346,10369,10370,10371,11074,11075,13000',
+        '-w3',
+        '-finline-functions',
+        '-g'
+    ])
+
+debug64.Append(LIBS=[
+])
+debug64.Append(LIBPATH=[
+])
+debug64.Append(LINKFLAGS=[
+    '-Wl,--whole-archive',
+    '-Wl,--no-whole-archive'
+])
+debug64.Append(SHLINKCOM=' -Wl,--start-group  -Wl,--end-group')
+release64 = globalenv.Clone()
+if globalenv['MAXON_COMPILER_LINUX'] == 'gcc' or globalenv['MAXON_COMPILER_LINUX'] == 'clang':
+    release64.Append(CXXFLAGS=[
+        '-DMAXON_TARGET_RELEASE',
+        '-DMAXON_TARGET_64BIT',
+        '-DMAXON_TARGET_LINUX',
+        '-DMAXON_API',
+        '-DMAXON_MODULE_ID=\'"net.maxon.core.framework"\'',
+        '-fPIC',
+        '-c',
+        '-fmessage-length=0',
+        '-g',
+        '-O3',
+        '-fvisibility=hidden',
+        '-Wall',
+        '-Wno-multichar',
+        '-Wno-switch',
+        '-Wno-strict-aliasing',
+        '-Werror=char-subscripts',
+        '-Werror=sequence-point',
+        '-Werror=unused-result',
+        '-mssse3',
+        '-std=gnu++17',
+        '-Wno-invalid-offsetof',
+        '-Werror=conversion-null',
+        '-Werror=reorder',
+        '@'+globalenv['MAXON_SETTINGS_PATH']+'/linux_'+globalenv['MAXON_COMPILER_LINUX']+'_x86_release.props'
+    ])
+if globalenv['MAXON_COMPILER_LINUX'] == 'clang':
+    release64.Append(CXXFLAGS=['-stdlib=libc++'])
+
+if globalenv['MAXON_COMPILER_LINUX'] == 'intel':
+    release64.Append(CXXFLAGS=[
+        '-DMAXON_TARGET_DEBUG',
+        '-DMAXON_TARGET_64BIT',
+        '-DMAXON_TARGET_LINUX',
+        '-DMAXON_API',
+        '-fPIC',
+        '-c',
+        '-std=c++11',
+        '-D_USE_INTEL_COMPILER',
+        '-D__C_PLUS_PLUS_0X__',
+        '-debug',
+        'inline-debug-info',
+        '-fp-speculationsafe',
+        '-unroll',
+        '-sox-',
+        '-diag-error:589,2407',
+        '-diag-warning:1418,1599',
+        '-diag-disable:vec,cpu-dispatch',
+        '-diag-disable:1,111,193,280,327,383,424,444,654,869,981,1572,1899,2259,2266,2267,2268,2270,2271,2273,3280,3346,10369,10370,10371,11074,11075,13000',
+        '-w3',
+        '-finline-functions',
+        '-g'
+    ])
+
+release64.Append(LIBS=[
+])
+release64.Append(LIBPATH=[
+])
+release64.Append(LINKFLAGS=[
+    '-Wl,--whole-archive',
+    '-Wl,--no-whole-archive'
+])
+release64.Append(SHLINKCOM=' -Wl,--start-group  -Wl,--end-group')
+libdebug64 = globalenv.Clone()
+if globalenv['MAXON_COMPILER_LINUX'] == 'gcc' or globalenv['MAXON_COMPILER_LINUX'] == 'clang':
+    libdebug64.Append(CXXFLAGS=[
+        '-DMAXON_TARGET_DEBUG',
+        '-D__STANDALONEAPP',
+        '-DMAXON_TARGET_64BIT',
+        '-DMAXON_TARGET_LINUX',
+        '-DMAXON_API',
+        '-DMAXON_MODULE_ID=\'"net.maxon.core.framework"\'',
+        '-fPIC',
+        '-c',
+        '-fmessage-length=0',
+        '-g',
+        '-fvisibility=hidden',
+        '-Wall',
+        '-Wno-multichar',
+        '-Wno-switch',
+        '-Wno-strict-aliasing',
+        '-Werror=char-subscripts',
+        '-Werror=sequence-point',
+        '-Werror=unused-result',
+        '-mssse3',
+        '-std=gnu++17',
+        '-Wno-invalid-offsetof',
+        '-Werror=conversion-null',
+        '-Werror=reorder',
+        '@'+globalenv['MAXON_SETTINGS_PATH']+'/linux_'+globalenv['MAXON_COMPILER_LINUX']+'_x86_debug.props'
+    ])
+if globalenv['MAXON_COMPILER_LINUX'] == 'clang':
+    libdebug64.Append(CXXFLAGS=['-stdlib=libc++'])
+
+if globalenv['MAXON_COMPILER_LINUX'] == 'intel':
+    libdebug64.Append(CXXFLAGS=[
+        '-DMAXON_TARGET_DEBUG',
+        '-DMAXON_TARGET_64BIT',
+        '-DMAXON_TARGET_LINUX',
+        '-DMAXON_API',
+        '-fPIC',
+        '-c',
+        '-std=c++11',
+        '-D_USE_INTEL_COMPILER',
+        '-D__C_PLUS_PLUS_0X__',
+        '-debug',
+        'inline-debug-info',
+        '-fp-speculationsafe',
+        '-unroll',
+        '-sox-',
+        '-diag-error:589,2407',
+        '-diag-warning:1418,1599',
+        '-diag-disable:vec,cpu-dispatch',
+        '-diag-disable:1,111,193,280,327,383,424,444,654,869,981,1572,1899,2259,2266,2267,2268,2270,2271,2273,3280,3346,10369,10370,10371,11074,11075,13000',
+        '-w3',
+        '-finline-functions',
+        '-g'
+    ])
+
+libdebug64.Append(LIBS=[
+])
+libdebug64.Append(LIBPATH=[
+])
+libdebug64.Append(LINKFLAGS=[
+    '-Wl,--whole-archive',
+    '-Wl,--no-whole-archive'
+])
+libdebug64.Append(SHLINKCOM=' -Wl,--start-group  -Wl,--end-group')
+librelease64 = globalenv.Clone()
+if globalenv['MAXON_COMPILER_LINUX'] == 'gcc' or globalenv['MAXON_COMPILER_LINUX'] == 'clang':
+    librelease64.Append(CXXFLAGS=[
+        '-DMAXON_TARGET_RELEASE',
+        '-D__STANDALONEAPP',
+        '-DMAXON_TARGET_64BIT',
+        '-DMAXON_TARGET_LINUX',
+        '-DMAXON_API',
+        '-DMAXON_MODULE_ID=\'"net.maxon.core.framework"\'',
+        '-fPIC',
+        '-c',
+        '-fmessage-length=0',
+        '-g',
+        '-O3',
+        '-fvisibility=hidden',
+        '-Wall',
+        '-Wno-multichar',
+        '-Wno-switch',
+        '-Wno-strict-aliasing',
+        '-Werror=char-subscripts',
+        '-Werror=sequence-point',
+        '-Werror=unused-result',
+        '-mssse3',
+        '-std=gnu++17',
+        '-Wno-invalid-offsetof',
+        '-Werror=conversion-null',
+        '-Werror=reorder',
+        '@'+globalenv['MAXON_SETTINGS_PATH']+'/linux_'+globalenv['MAXON_COMPILER_LINUX']+'_x86_debug.props'
+    ])
+if globalenv['MAXON_COMPILER_LINUX'] == 'clang':
+    librelease64.Append(CXXFLAGS=['-stdlib=libc++'])
+
+if globalenv['MAXON_COMPILER_LINUX'] == 'intel':
+    librelease64.Append(CXXFLAGS=[
+        '-DMAXON_TARGET_DEBUG',
+        '-DMAXON_TARGET_64BIT',
+        '-DMAXON_TARGET_LINUX',
+        '-DMAXON_API',
+        '-fPIC',
+        '-c',
+        '-std=c++11',
+        '-D_USE_INTEL_COMPILER',
+        '-D__C_PLUS_PLUS_0X__',
+        '-debug',
+        'inline-debug-info',
+        '-fp-speculationsafe',
+        '-unroll',
+        '-sox-',
+        '-diag-error:589,2407',
+        '-diag-warning:1418,1599',
+        '-diag-disable:vec,cpu-dispatch',
+        '-diag-disable:1,111,193,280,327,383,424,444,654,869,981,1572,1899,2259,2266,2267,2268,2270,2271,2273,3280,3346,10369,10370,10371,11074,11075,13000',
+        '-w3',
+        '-finline-functions',
+        '-g'
+    ])
+
+librelease64.Append(LIBS=[
+])
+librelease64.Append(LIBPATH=[
+])
+librelease64.Append(LINKFLAGS=[
+    '-Wl,--whole-archive',
+    '-Wl,--no-whole-archive'
+])
+librelease64.Append(SHLINKCOM=' -Wl,--start-group  -Wl,--end-group')
+
+cmdline = 'python '+globalenv['MAXON_SETTINGS_PATH']+'/sourceprocessor/sourceprocessor.py "'+globalenv['MAXON_PROJECT_DIR']+'"'
+Execute(cmdline)
+
+
+if globalenv['MAXON_BUILD_CONFIG'] == 'debug64':
+    globalenv = debug64
+    globalenv.Append(CPPPATH=includedirs)
+    binary = globalenv.StaticLibrary('core.framework_debug64.a', cpp_files)
+    if globalenv['MAXON_LINUX_STRIP_STATIC_LIB'] == True:
+        AddPostAction(binary, globalenv.stripDebug)
+
+
+if globalenv['MAXON_BUILD_CONFIG'] == 'release64':
+    globalenv = release64
+    globalenv.Append(CPPPATH=includedirs)
+    binary = globalenv.StaticLibrary('core.framework_release64.a', cpp_files)
+    if globalenv['MAXON_LINUX_STRIP_STATIC_LIB'] == True:
+        AddPostAction(binary, globalenv.stripDebug)
+
+
+if globalenv['MAXON_BUILD_CONFIG'] == 'libdebug64':
+    globalenv = libdebug64
+    globalenv.Append(CPPPATH=includedirs)
+    binary = globalenv.StaticLibrary('core.framework_libdebug64.a', cpp_files)
+    if globalenv['MAXON_LINUX_STRIP_STATIC_LIB'] == True:
+        AddPostAction(binary, globalenv.stripDebug)
+
+
+if globalenv['MAXON_BUILD_CONFIG'] == 'librelease64':
+    globalenv = librelease64
+    globalenv.Append(CPPPATH=includedirs)
+    binary = globalenv.StaticLibrary('core.framework_librelease64.a', cpp_files)
+    if globalenv['MAXON_LINUX_STRIP_STATIC_LIB'] == True:
+        AddPostAction(binary, globalenv.stripDebug)
+

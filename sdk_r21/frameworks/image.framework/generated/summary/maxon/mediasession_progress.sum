@@ -1,0 +1,1 @@
+maxon.MediaSessionProgressInterface	"net.maxon.image.interface.mediasessionprogress"	D:\C4DSDK\r21_sdk\frameworks\image.framework\source\maxon\mediasession_progress.h(19,7)	ObserverObjectInterface	AddProgressJob,InitProgress,ObservableProgressNotification,SetProgressAndCheckBreak	

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3A883A00-61CC-D50A-0009-38CB8C5CDEA3}</ProjectGuid>
+    <RootNamespace>maxon</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="./projectsettings.props" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+    <EnableASAN>false</EnableASAN>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\DebugWin64.props" />
+    <Import Project="./mesh_misc.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\ReleaseWin64.props" />
+    <Import Project="./mesh_misc.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)_obj\$(ProjectName)\$(PlatformName)_$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)_obj\$(ProjectName)\$(PlatformName)_$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.maxon.mesh_misc.framework";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <IgnoreSpecificDefaultLibraries />
+    </Lib>
+    <PostBuildEvent>
+      <Command>$(NoInherit)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.maxon.mesh_misc.framework";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <IgnoreSpecificDefaultLibraries />
+    </Lib>
+    <PostBuildEvent>
+      <Command>$(NoInherit)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp" />
+    <ClCompile Include="..\source\maxon\mesh_attribute_base.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\distancequery.h" />
+    <ClInclude Include="..\source\maxon\mesh_attribute_base.h" />
+    <ClInclude Include="..\source\maxon\mesh_attribute_utilities.h" />
+    <ClInclude Include="..\source\maxon\vertexwrapper.h" />
+    <ClInclude Include="..\source\maxon\voxelization.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="AfterClean">
+    <RemoveDir Directories="$(ProjectDir)..\generated" ContinueOnError="true" />
+    <Message Text="Removing generated folder: $(ProjectDir)..\generated" Importance="high" ContinueOnError="true" />
+  </Target>
+</Project>

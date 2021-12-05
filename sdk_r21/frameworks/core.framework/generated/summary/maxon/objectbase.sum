@@ -1,0 +1,2 @@
+maxon.ObjectInterface	"net.maxon.interface.object"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\objectbase.h(1281,7)		Compare,GetHashCodeImpl,InitObject,IsEqual,ToString	
+maxon.ErrorInterface	"net.maxon.interface.error"	D:\C4DSDK\r21_sdk\frameworks\core.framework\source\maxon\objectbase.h(1674,7)	ObjectInterface	GetCause,GetLocation,GetMachine,GetMessage,GetStackTrace,PrivateGetCode,PrivateGetPreallocation,PrivateSetCode,PrivateSetDebugError,PrivateSetPreallocation,SetCause,SetLocation,SetMachine,SetMessage,SetStackTrace	

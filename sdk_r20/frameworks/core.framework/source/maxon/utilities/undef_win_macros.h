@@ -1,0 +1,10 @@
+#undef INTERFACE
+#undef GetFirstChild
+#undef GetMessage
+#undef CreateWindow
+#undef GetObject
+#undef AddJob
+#undef GetClassInfo
+#undef PASSTHROUGH
+#undef SetPort
+#undef LoadString

@@ -1,0 +1,41 @@
+//---Architectures---
+ARCHS = x86_64
+ONLY_ACTIVE_ARCH = YES
+SDKROOT = macosx
+
+//---Build Locations---
+SYMROOT = $(MAXON_ROOTDIR)build
+
+//---Build Options---
+DEBUG_INFORMATION_FORMAT = dwarf
+ENABLE_BITCODE = NO
+ENABLE_TESTABILITY = NO
+
+//---Code Signing---
+//CODE_SIGN_IDENTITY = $(MAXON_CODE_SIGN_IDENTITY)
+
+//---Deployment---
+MACOSX_DEPLOYMENT_TARGET = 10.10
+COMBINE_HIDPI_IMAGES = YES
+COPY_PHASE_STRIP = NO
+STRIP_INSTALLED_PRODUCT = NO
+DSTROOT = .
+
+//---Linking---
+DEAD_CODE_STRIPPING = YES
+PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES
+
+//---Search Paths---
+ALWAYS_SEARCH_USER_PATHS = NO		// the ICC (12 R4) has problems with relative include paths (so YES has to be used), all other compilers work without this (NO)
+USER_HEADER_SEARCH_PATHS = $(MAXON_ROOTDIR)resource $(MAXON_ROOTDIR)resource/descriptions/res $(MAXON_ROOTDIR)resource/gui_internal
+
+//---Code Generation---
+//---Language---
+#include "compiler"
+
+//---Preprocessing---
+GCC_PREPROCESSOR_DEFINITIONS[arch=i386] = _DEBUG __MAC MAXON_TARGET_DEBUG MAXON_TARGET_MACOS MAXON_TARGET_OSX
+GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64] = _DEBUG __MAC __64BIT MAXON_TARGET_DEBUG MAXON_TARGET_MACOS MAXON_TARGET_OSX MAXON_TARGET_64BIT
+
+//---Warnings---
+#include "warnings"

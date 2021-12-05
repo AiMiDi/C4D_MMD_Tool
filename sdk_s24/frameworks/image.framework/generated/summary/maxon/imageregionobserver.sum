@@ -1,0 +1,1 @@
+maxon.ImageRegionObserverInterface	"net.maxon.nodes.interface.imageregionobserver"	D:\C4DSDK\sdk_s24\frameworks\image.framework\source\maxon\imageregionobserver.h(16,7)	ObjectInterface	OnConnect,OnDisconnect,OnRegionDirty,OnResize	

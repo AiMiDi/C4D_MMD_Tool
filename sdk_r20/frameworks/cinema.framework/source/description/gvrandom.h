@@ -1,0 +1,24 @@
+#ifndef GVRANDOM_H__
+#define GVRANDOM_H__
+
+#include "gvbase.h"
+
+enum
+{
+	GV_RANDOM_MODE									= 1000,
+		GV_RANDOM_MODE_FREE = 0,
+		GV_RANDOM_MODE_TIME,
+	GV_RANDOM_POSITIVE							= 1001,
+
+	GV_RANDOM_SEED									= 2000,
+
+	GV_RANDOM_OUTPUT_BOOL						= 3000,
+	GV_RANDOM_OUTPUT_INTEGER				= 3001,
+	GV_RANDOM_OUTPUT_REAL						= 3002,
+	GV_RANDOM_OUTPUT_VECTOR					= 3003,
+	GV_RANDOM_OUTPUT_NORMAL					= 3004,
+
+	GV_RANDOM_
+};
+
+#endif // GVRANDOM_H__
