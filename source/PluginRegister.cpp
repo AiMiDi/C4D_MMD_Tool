@@ -908,7 +908,11 @@ public:
 			std::ofstream fout(config_path);
 			fout << config;
 			maxon::UniqueRef<mmd::PMXModel> pmx_model = NewObj(mmd::PMXModel) iferr_return;
-			pmx_model->FromFileImportModel(setting_)iferr_return;
+			iferr(pmx_model->FromFileImportModel(setting_)) {
+#ifdef _DEBUG
+				MessageDialog(err.ToString(nullptr));
+#endif // _DEBUG
+			}
 			break;
 		}
 		case DLG_PMX_MOD_IMPORT_BONE:

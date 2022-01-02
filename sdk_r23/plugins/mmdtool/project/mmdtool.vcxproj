@@ -83,6 +83,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../res/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
@@ -100,6 +101,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../res/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
