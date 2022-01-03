@@ -41,9 +41,15 @@ namespace mmd {
 			button_rename_id = button_rename_id_;
 			name = name_;
 		}
-
-
 		bone_morph_data() : bone_morph_data(DescID(), DescID(), DescID(), DescID(), DescID(), DescID(), DescID(), String()) {}
+	};
+	struct bone_morph_hub_data {
+		BaseTag* bone_tag = nullptr;
+		bone_morph_data data = bone_morph_data();
+	};
+	struct mesh_morph_hub_data {
+		CAPoseMorphTag* morph_tag = nullptr;
+		CAMorph* morph = nullptr;
 	};
 	enum class OMMDModel_Root_type
 	{

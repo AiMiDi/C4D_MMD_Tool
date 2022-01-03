@@ -1,2 +1,2 @@
-maxon.DataFormatReaderInterface	"net.maxon.interface.dataformatreader"	D:\C4D_MMD_Tool\sdk_r23\frameworks\core.framework\source\maxon\dataformat.h(16,7)	DataFormatBaseReaderInterface,DataSerializeReaderInterface		
-maxon.DataFormatWriterInterface	"net.maxon.interface.dataformatwriter"	D:\C4D_MMD_Tool\sdk_r23\frameworks\core.framework\source\maxon\dataformat.h(26,7)	DataFormatBaseWriterInterface,DataSerializeWriterInterface		
+maxon.DataFormatReaderInterface	"net.maxon.interface.dataformatreader"	D:\C4DSDK\C4D_MMDTool\sdk_r23\frameworks\core.framework\source\maxon\dataformat.h(16,7)	DataFormatBaseReaderInterface,DataSerializeReaderInterface		
+maxon.DataFormatWriterInterface	"net.maxon.interface.dataformatwriter"	D:\C4DSDK\C4D_MMDTool\sdk_r23\frameworks\core.framework\source\maxon\dataformat.h(26,7)	DataFormatBaseWriterInterface,DataSerializeWriterInterface		

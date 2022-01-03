@@ -1,1 +1,1 @@
-maxon.MediaSessionInterface	"net.maxon.image.interface.mediasession"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\image.framework\source\maxon\mediasession_session.h(26,7)	ObserverObjectInterface	Close,ConnectMediaConverter,Convert,GetProgress	
+maxon.MediaSessionInterface	"net.maxon.image.interface.mediasession"	G:\C4DSDK\C4D_MMD_Tool\sdk_r21\frameworks\image.framework\source\maxon\mediasession_session.h(26,7)	ObserverObjectInterface	Close,ConnectMediaConverter,Convert,GetProgress	

@@ -5452,6 +5452,7 @@ Bool mmd::OMMDMeshRoot::SetDParameter(GeListNode* node, const DescID& id, const 
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
 
+
 /*
  * *******************
  * PMX Bone Root Object
