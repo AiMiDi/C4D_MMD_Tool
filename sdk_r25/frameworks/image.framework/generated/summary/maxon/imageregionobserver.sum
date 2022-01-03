@@ -1,1 +1,1 @@
-maxon.ImageRegionObserverInterface	"net.maxon.nodes.interface.imageregionobserver"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\image.framework\source\maxon\imageregionobserver.h(16,7)	ObjectInterface	OnConnect,OnDisconnect,OnRegionDirty,OnResize	
+maxon.ImageRegionObserverInterface	"net.maxon.nodes.interface.imageregionobserver"	G:\C4DSDK\C4D_MMD_Tool\sdk_r25\frameworks\image.framework\source\maxon\imageregionobserver.h(16,7)	ObjectInterface	OnConnect,OnDisconnect,OnRegionDirty,OnResize	

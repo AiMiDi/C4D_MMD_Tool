@@ -1,4 +1,4 @@
-#include "MMD_VPD_pose.h"
+﻿#include "MMD_VPD_pose.h"
 
 maxon::Result<void> mmd::VPD_pose::LoadFromFile(Filename& fn) {
 	iferr_scope;
@@ -24,9 +24,9 @@ maxon::Result<void> mmd::VPD_pose::LoadFromFile(Filename& fn) {
 	/* 将读取的字符转为UTF8 */
 	SJIStoUTF8(all_char_mem, all_char, all_char_length);
 	/* file_length用于判断是否到达文件尾 */
-	register const Int64 file_length = all_char.GetLength();
-	register Int64 is_read = 0;
-	register Int32 read_pos = 0;
+	const Int64 file_length = all_char.GetLength();
+	Int64 is_read = 0;
+	Int32 read_pos = 0;
 	maxon::BaseArray<String> lines;
 	while (is_read < file_length)
 	{
@@ -69,7 +69,6 @@ maxon::Result<void> mmd::VPD_pose::LoadFromFile(Filename& fn) {
 	/* get bone number */
 	lines[2].FindFirst(';', &semicolon_pos);
 	Bool is_error = false;
-	Int64 numBones = lines[2].SubStr(0, semicolon_pos).ToInt(&is_error);
 	if (is_error) 
 	{
 		return maxon::Error();
@@ -84,49 +83,49 @@ maxon::Result<void> mmd::VPD_pose::LoadFromFile(Filename& fn) {
 		lines[i].FindFirst('{', &curly_braces_pos);
 		bone_post->name = lines[i].SubStr(curly_braces_pos + 1, lines[i].GetLength() - curly_braces_pos);		
 		lines[i + 1].FindFirst(',', &comma_pos);
-		bone_post->translate.x = lines[i + 1].SubStr(1, comma_pos - 1).ToFloat(&is_error);
+		bone_post->translate.x = maxon::SafeConvert<Float32>(lines[i + 1].SubStr(1, comma_pos - 1).ToFloat(&is_error));
 		if (is_error)
 		{
 			return maxon::Error();
 		}
 		prec_comma_pos = comma_pos + 1;
 		lines[i + 1].FindFirst(',', &comma_pos, prec_comma_pos);
-		bone_post->translate.y = lines[i + 1].SubStr(prec_comma_pos, comma_pos - prec_comma_pos).ToFloat(&is_error);
+		bone_post->translate.y = maxon::SafeConvert<Float32>(lines[i + 1].SubStr(prec_comma_pos, comma_pos - prec_comma_pos).ToFloat(&is_error));
 		if (is_error)
 		{
 			return maxon::Error();
 		}
 		prec_comma_pos = comma_pos + 1;
 		lines[i + 1].FindFirst(';', &semicolon_pos, prec_comma_pos);
-		bone_post->translate.z = lines[i + 1].SubStr(prec_comma_pos, semicolon_pos - prec_comma_pos).ToFloat(&is_error);
+		bone_post->translate.z = maxon::SafeConvert<Float32>(lines[i + 1].SubStr(prec_comma_pos, semicolon_pos - prec_comma_pos).ToFloat(&is_error));
 		if (is_error)
 		{
 			return maxon::Error();
 		}
 		prec_comma_pos = 0;
 		lines[i + 2].FindFirst(',', &comma_pos);
-		bone_post->rotation.x = lines[i + 2].SubStr(1, comma_pos - 1).ToFloat(&is_error);
+		bone_post->rotation.x = maxon::SafeConvert<Float32>(lines[i + 2].SubStr(1, comma_pos - 1).ToFloat(&is_error));
 		if (is_error)
 		{
 			return maxon::Error();
 		}
 		prec_comma_pos = comma_pos + 1;
 		lines[i + 2].FindFirst(',', &comma_pos, prec_comma_pos);
-		bone_post->rotation.y = lines[i + 2].SubStr(prec_comma_pos, comma_pos - prec_comma_pos).ToFloat(&is_error);
+		bone_post->rotation.y = maxon::SafeConvert<Float32>(lines[i + 2].SubStr(prec_comma_pos, comma_pos - prec_comma_pos).ToFloat(&is_error));
 		if (is_error)
 		{
 			return maxon::Error();
 		}
 		prec_comma_pos = comma_pos + 1;
 		lines[i + 2].FindFirst(',', &comma_pos, prec_comma_pos);
-		bone_post->rotation.z = lines[i + 2].SubStr(prec_comma_pos, comma_pos - prec_comma_pos).ToFloat(&is_error);
+		bone_post->rotation.z = maxon::SafeConvert<Float32>(lines[i + 2].SubStr(prec_comma_pos, comma_pos - prec_comma_pos).ToFloat(&is_error));
 		if (is_error)
 		{
 			return maxon::Error();
 		}
 		prec_comma_pos = comma_pos + 1;
 		lines[i + 2].FindFirst(';', &semicolon_pos, prec_comma_pos);
-		bone_post->rotation.w = lines[i + 2].SubStr(prec_comma_pos, semicolon_pos - prec_comma_pos).ToFloat(&is_error);
+		bone_post->rotation.w = maxon::SafeConvert<Float32>(lines[i + 2].SubStr(prec_comma_pos, semicolon_pos - prec_comma_pos).ToFloat(&is_error));
 		if (is_error)
 		{
 			return maxon::Error();

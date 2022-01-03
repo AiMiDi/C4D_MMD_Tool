@@ -1,4 +1,4 @@
-#include "main.h"
+﻿#include "main.h"
 #include "MMD_PMX_model.h"
 #include "MMD_VMD_animation.h"
 #include "MMD_PMX_Control.h"

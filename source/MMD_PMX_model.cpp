@@ -1,4 +1,4 @@
-#include "MMD_PMX_model.h"
+﻿#include "MMD_PMX_model.h"
 #undef GetObject
 
 
@@ -1276,15 +1276,21 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					if (vertex_info_map_a_ptr == nullptr)
 					{
 						vertex_index_arr->Append(surface.a) iferr_return;
-						vertex_info_map.Insert(surface.a, point_info{ part, morph_tag, new_index }) iferr_return;
+						auto& res = vertex_info_map.InsertMultiEntry(surface.a).GetValue().GetValue();
+						res.object = part;
+						res.morph_tag = morph_tag;
+						res.point_index = new_index;
 						new_index++;
 					}
 					else {
 						point_info& point_a = vertex_info_map_a_ptr->GetValue();
 						if (point_a.object != part)
 						{
-							vertex_index_arr->Append(surface.a) iferr_return;
-							vertex_info_map.Insert(surface.a, point_info{ part, morph_tag, new_index }) iferr_return;
+							vertex_index_arr->Append(surface.a)iferr_return;
+							auto& res = vertex_info_map.InsertMultiEntry(surface.a).GetValue().GetValue();
+							res.object = part;
+							res.morph_tag = morph_tag;
+							res.point_index = new_index;
 							new_index++;
 						}
 					}
@@ -1292,7 +1298,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					if (vertex_info_map_b_ptr == nullptr)
 					{
 						vertex_index_arr->Append(surface.b) iferr_return;
-						vertex_info_map.Insert(surface.b, point_info{ part, morph_tag, new_index }) iferr_return;
+						auto& res = vertex_info_map.InsertMultiEntry(surface.b).GetValue().GetValue();
+						res.object = part;
+						res.morph_tag = morph_tag;
+						res.point_index = new_index;
 						new_index++;
 					}
 					else {
@@ -1300,7 +1309,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						if (point_b.object != part)
 						{
 							vertex_index_arr->Append(surface.b) iferr_return;
-							vertex_info_map.Insert(surface.b, point_info{ part, morph_tag, new_index }) iferr_return;
+							auto& res = vertex_info_map.InsertMultiEntry(surface.b).GetValue().GetValue();
+							res.object = part;
+							res.morph_tag = morph_tag;
+							res.point_index = new_index;
 							new_index++;
 						}
 					}
@@ -1308,7 +1320,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					if (vertex_info_map_c_ptr == nullptr)
 					{
 						vertex_index_arr->Append(surface.c) iferr_return;
-						vertex_info_map.Insert(surface.c, point_info{ part, morph_tag, new_index }) iferr_return;
+						auto& res = vertex_info_map.InsertMultiEntry(surface.c).GetValue().GetValue();
+						res.object = part;
+						res.morph_tag = morph_tag;
+						res.point_index = new_index;
 						new_index++;
 					}
 					else {
@@ -1316,7 +1331,10 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						if (point_c.object != part)
 						{
 							vertex_index_arr->Append(surface.c) iferr_return;
-							vertex_info_map.Insert(surface.c, point_info{ part, morph_tag, new_index }) iferr_return;
+							auto& res = vertex_info_map.InsertMultiEntry(surface.c).GetValue().GetValue();
+							res.object = part;
+							res.morph_tag = morph_tag;
+							res.point_index = new_index;
 							new_index++;
 						}
 					}
@@ -1891,23 +1909,28 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						auto point_info_ptr = vertex_info_map.Find(vertex_index);                                        /* 在vertex_info_map里查找原顶点在该部分中的对应顶点信息 */
 						if (point_info_ptr != nullptr)
 						{
-							point_info point_info_ = point_info_ptr->GetValue();
-							point_info_.morph_tag->ExitEdit(doc, true);
-							auto vertex_morph_ptr = tag_morph_map.Find(point_info_.morph_tag);
-							if (vertex_morph_ptr != nullptr)                                                         /* 若找不到Morph标签对应的CMorph对象的信息，则创建CMorph对象信息 */
+							while (point_info_ptr != nullptr)
 							{
-								auto name_morph_ptr = vertex_morph_ptr->GetValue()->Find(morph_data.morph_name_local);
-								if (name_morph_ptr != nullptr)
+								point_info point_info_ = point_info_ptr->GetValue();
+								point_info_.morph_tag->ExitEdit(doc, true);
+								auto vertex_morph_ptr = tag_morph_map.Find(point_info_.morph_tag);
+								if (vertex_morph_ptr != nullptr)                                                         /* 若找不到Morph标签对应的CMorph对象的信息，则创建CMorph对象信息 */
 								{
-									CAMorph* morph = name_morph_ptr->GetValue();
-									CAMorphNode* morph_node = morph->GetFirst();
-									while (!(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::POINTS) && morph_node != nullptr)
+									auto name_morph_ptr = vertex_morph_ptr->GetValue()->Find(morph_data.morph_name_local);
+									if (name_morph_ptr != nullptr)
 									{
-										morph_node = morph_node->GetNext();
+										CAMorph* morph = name_morph_ptr->GetValue();
+										CAMorphNode* morph_node = morph->GetFirst();
+										while (!(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::POINTS) && morph_node != nullptr)
+										{
+											morph_node = morph_node->GetNext();
+										}
+										morph_node->SetPoint(point_info_.point_index, Vector(vertex_morph_data_arr->operator[](offset_count_index).translation * settings.position_multiple));
 									}
-									morph_node->SetPoint(point_info_.point_index, Vector(vertex_morph_data_arr->operator[](offset_count_index).translation * settings.position_multiple));
 								}
+								point_info_ptr = point_info_ptr->GetNextWithSameKey();
 							}
+							
 						}
 						return(maxon::OK);
 					}) iferr_return;
@@ -2677,6 +2700,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				PMX_Morph_Data& morph_data = this->morph_data[morph_index];
 				switch (morph_data.morph_type)
 				{
+				// 顶点表情
 				case 1: {
 					maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data.offset_data;
 					Int32					offset_count = morph_data.offset_count;
@@ -2699,7 +2723,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					morph->SetMode(doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
 					maxon::ParallelFor::Dynamic(0, offset_count, [&morph_node, &vertex_morph_data_arr, &settings](const Int32 pointIndex)
 					{
-						morph_node->SetPoint(vertex_morph_data_arr->operator									[](pointIndex).vertex_index, Vector(vertex_morph_data_arr->operator[](pointIndex).translation * settings.position_multiple));
+						morph_node->SetPoint(vertex_morph_data_arr->operator[](pointIndex).vertex_index, Vector(vertex_morph_data_arr->operator[](pointIndex).translation * settings.position_multiple));
 					});
 					morph->SetMode(doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
 					morph_tag->UpdateMorphs();
@@ -2708,6 +2732,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					morph_tag->SetParameter(DescID(ID_CA_POSE_MODE), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
 					break;
 				}
+				// 骨骼表情
 				case 2: {
 					if (settings.import_bone)
 					{
@@ -2742,6 +2767,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					}
 					break;
 				}
+				// UV表情
 				case 3:
 				{
 					maxon::PointerArray<PMX_Morph_UV>* UV_morph_data_arr = (maxon::PointerArray<PMX_Morph_UV>*)morph_data.offset_data;

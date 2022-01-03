@@ -1,8 +1,8 @@
-#include "MMD_utility.h"
+﻿#include "MMD_utility.h"
 #include "iconv.h"
 
 namespace mmd {
-	inline maxon::Vector4d32 EulerToQuaternion(maxon::Vector& euler) {
+	inline maxon::Vector4d32 EulerToQuaternion(const maxon::Vector& euler) {
 
 		// pitch(H), roll(-P), yaw(Z)
 		const Float sx = sin(-euler.y * 0.5);
@@ -11,15 +11,13 @@ namespace mmd {
 		const Float cx = cos(-euler.y * 0.5);
 		const Float cy = cos(euler.x * 0.5);
 		const Float cz = cos(euler.z * 0.5);
-
-		const Float w = (cz * cy * cx) + (sz * sy * sx);
-		const Float x = (cz * cy * sx) + (sz * sy * cx);
-		const Float y = (sz * cy * sx) - (cz * sy * cx);
-		const Float z = (cz * sy * sx) - (sz * cy * cx);
-
-		return maxon::Vector4d32(x, y, z, w);
+		return maxon::Vector4d32(
+			maxon::SafeConvert<Float32>((cz * cy * sx) + (sz * sy * cx)), // x
+			maxon::SafeConvert<Float32>((sz * cy * sx) - (cz * sy * cx)), // y
+			maxon::SafeConvert<Float32>((cz * sy * sx) - (sz * cy * cx)), // z
+			maxon::SafeConvert<Float32>((cz * cy * cx) + (sz * sy * sx)));// w
 	}
-	inline maxon::Vector QuaternionToEuler(maxon::Vector4d32& quaternion)
+	inline maxon::Vector QuaternionToEuler(const maxon::Vector4d32& quaternion)
 	{
 		// pitch(y - axis rotation)
 		const Float sinr_cosp = 2.0 * (quaternion.w * quaternion.y + quaternion.x * quaternion.z);
@@ -71,7 +69,7 @@ namespace mmd {
 		// HPB
 		return maxon::Vector(pitch, -roll, yaw);
 	}
-	inline Bool UTF8toSJIS(String& strin, char* strout)
+	inline Bool UTF8toSJIS(const String& strin, char* strout)
 	{
 		libiconv_t cd = libiconv_open("SHIFT_JIS", "UTF-8");
 		iferr_scope_handler{

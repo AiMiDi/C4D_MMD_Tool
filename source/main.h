@@ -1,4 +1,4 @@
-#ifndef MAIN_H__
+﻿#ifndef MAIN_H__
 #define MAIN_H__
 
 /*
@@ -24,8 +24,6 @@
 #define ID_L_MMD_VMD_IMPORT	1057489
 #define ID_E_MMD_VMD_EXPORT	1057490
 
-#define BT_THREADSAFE 1
-#define BT_USE_DOUBLE_PRECISION
 
 #include <memory>
 #include <fstream>

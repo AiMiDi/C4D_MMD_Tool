@@ -1,4 +1,4 @@
-#ifndef _PMX_BONE_TAG_H_
+﻿#ifndef _PMX_BONE_TAG_H_
 #define _PMX_BONE_TAG_H_
 
 enum
