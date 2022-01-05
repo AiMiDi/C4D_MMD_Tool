@@ -1,2 +1,2 @@
-maxon.ImageChannelTypeInterface	"net.maxon.image.interface.imagechanneltype"	G:\C4DSDK\C4D_MMD_Tool\sdk_r25\frameworks\image.framework\source\maxon\gfx_image_imagechannel.h(38,7)	ObjectInterface	GetChannel,GetColorSpace,GetDefaultFillValue	
-maxon.ImageChannelInterface	"net.maxon.image.interface.imagechannel"	G:\C4DSDK\C4D_MMD_Tool\sdk_r25\frameworks\image.framework\source\maxon\gfx_image_imagechannel.h(67,7)	ObjectInterface	GetChannelBits,GetChannelType,GetDataType,IsIdenticalComponent	
+maxon.ImageChannelTypeInterface	"net.maxon.image.interface.imagechanneltype"	D:\C4D_MMD_Tool\sdk_r25\frameworks\image.framework\source\maxon\gfx_image_imagechannel.h(38,7)	ObjectInterface	GetChannel,GetColorSpace,GetDefaultFillValue	
+maxon.ImageChannelInterface	"net.maxon.image.interface.imagechannel"	D:\C4D_MMD_Tool\sdk_r25\frameworks\image.framework\source\maxon\gfx_image_imagechannel.h(67,7)	ObjectInterface	GetChannelBits,GetChannelType,GetDataType,IsIdenticalComponent	

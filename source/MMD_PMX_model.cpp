@@ -11,18 +11,24 @@ inline Bool mmd::PMXModel::ReadText(BaseFile* const file, Char& text_encoding, S
 	};
 	Int32 text_len; /* text字符串最大长度 */
 	file->ReadInt32(&text_len);
-	if (text_encoding == 0)
-	{
-		maxon::AutoMem<maxon::Utf16Char> tmp_wStr = NewMemClear(maxon::Utf16Char, text_len + 1) iferr_return;
-		file->ReadBytes(tmp_wStr, text_len);
-		out_string = String(tmp_wStr);
-		return true;
+	if (text_len > 0) {
+		if (text_encoding == 0)
+		{
+			maxon::AutoMem<maxon::Utf16Char> tmp_wStr = NewMemClear(maxon::Utf16Char, text_len + 1) iferr_return;
+			file->ReadBytes(tmp_wStr, text_len);
+			out_string = String(tmp_wStr);
+			return true;
+		}
+		else if (text_encoding == 1)
+		{
+			maxon::AutoMem<maxon::Char> tmp_Str = NewMemClear(maxon::Char, text_len + 1) iferr_return;
+			file->ReadBytes(tmp_Str, text_len);
+			out_string.SetCString(tmp_Str, -1, STRINGENCODING::UTF8);
+			return true;
+		}
 	}
-	else if (text_encoding == 1)
-	{
-		maxon::AutoMem<maxon::Char> tmp_Str = NewMemClear(maxon::Char, text_len + 1) iferr_return;
-		file->ReadBytes(tmp_Str, text_len);
-		out_string.SetCString(tmp_Str, -1, STRINGENCODING::UTF8);
+	else {
+		out_string = String();
 		return true;
 	}
 	out_string = String();
@@ -351,8 +357,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		if (bone_data_->bone_flags.External_parent_deform)
 		{
-			if (!file->Seek(model_info_.bone_index_size))
-				return(maxon::Error());
+			file->Seek(4);
 		}
 		if (bone_data_->bone_flags.IK)
 		{
@@ -1853,7 +1858,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				case 1:                                                                                                                                         /* 该表情为顶点表情 */
 				{
 					maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data.offset_data;       /* 读取表情数据储存的变换信息 */
-					Int32					offset_count = morph_data.offset_count;                                              /* 读取表情数据储存的变换信息个数 */
+					Int32 offset_count = morph_data.offset_count;                                              /* 读取表情数据储存的变换信息个数 */
 					for (Int32 offset_count_index = 0; offset_count_index < offset_count; offset_count_index++)
 					{
 						UInt32	vertex_index = vertex_morph_data_arr->operator[](offset_count_index).vertex_index;                                 /* 读取对应变换信息 */
