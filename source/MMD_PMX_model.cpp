@@ -1628,7 +1628,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				maxon::ParallelFor::Dynamic<LocalData, maxon::PARALLELFORFLAGS::INITTHREADED_FINALIZESYNC>(0, surface_count, [](LocalData& context)
 				{
 					context.localCount = 0;
-				}, [this, &part_surface_end, &part_polygon, &settings, &normal_handle, &uvw_handle, &vertex_info_map](const Int32 surface_index, LocalData& context)->maxon::Result<void>
+				}, [this, &part_surface_end, &part_polygon, &settings, &normal_handle, &uvw_handle, &vertex_info_map, &part](const Int32 surface_index, LocalData& context)->maxon::Result<void>
 				{
 					iferr_scope_handler{
 						MessageDialog(err.ToString(nullptr));
@@ -1638,8 +1638,47 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					PMX_Vertex_Data& vertex0 = this->vertex_data[surface.c];
 					PMX_Vertex_Data& vertex1 = this->vertex_data[surface.b];
 					PMX_Vertex_Data& vertex2 = this->vertex_data[surface.a];
+					Int32 vertex_a_index = 0;
+					auto vertex_a_ptr = vertex_info_map.Find(surface.c);
+					// 找到对应该part的对应的点a新顶点索引。
+					while (vertex_a_ptr != nullptr)
+					{
+						const auto& vertex_a_info = vertex_a_ptr->GetValue();
+						if (vertex_a_info.object == part)
+						{
+							vertex_a_index = vertex_a_info.point_index;
+							break;
+						}
+						vertex_a_ptr = vertex_a_ptr->GetNextWithSameKey();
+					}
+					Int32 vertex_b_index = 0;
+					auto vertex_b_ptr = vertex_info_map.Find(surface.b);
+					// 找到对应该part的对应的点b新顶点索引。
+					while (vertex_b_ptr != nullptr)
+					{
+						const auto& vertex_b_info = vertex_b_ptr->GetValue();
+						if (vertex_b_info.object == part)
+						{
+							vertex_b_index = vertex_b_info.point_index;
+							break;
+						}
+						vertex_b_ptr = vertex_b_ptr->GetNextWithSameKey();
+					}
+					Int32 vertex_c_index = 0;
+					auto vertex_c_ptr = vertex_info_map.Find(surface.a);
+					// 找到对应该part的对应的点c新顶点索引。
+					while (vertex_c_ptr != nullptr)
+					{
+						const auto& vertex_c_info = vertex_c_ptr->GetValue();
+						if (vertex_c_info.object == part)
+						{
+							vertex_c_index = vertex_c_info.point_index;
+							break;
+						}
+						vertex_c_ptr = vertex_c_ptr->GetNextWithSameKey();
+					}
 					g_spinlock.Lock();
-					part_polygon[surface_index] = CPolygon(vertex_info_map.Find(surface.c)->GetValue().point_index, vertex_info_map.Find(surface.b)->GetValue().point_index, vertex_info_map.Find(surface.a)->GetValue().point_index);
+					part_polygon[surface_index] = CPolygon(vertex_a_index, vertex_b_index, vertex_c_index);
 					g_spinlock.Unlock();
 					if (settings.import_normal)
 					{
