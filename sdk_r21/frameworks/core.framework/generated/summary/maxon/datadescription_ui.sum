@@ -1,1 +1,1 @@
-maxon.DataDescriptionUIInterface	"net.maxon.interface.datadescriptionui"	G:\C4DSDK\C4D_MMD_Tool\sdk_r21\frameworks\core.framework\source\maxon\datadescription_ui.h(412,7)	ObjectInterface	BuildPopupMenuForDescription,EvaluateCondition	hasStaticMethods=true	
+maxon.DataDescriptionUIInterface	"net.maxon.interface.datadescriptionui"	D:\C4D_MMD_Tool\sdk_r21\frameworks\core.framework\source\maxon\datadescription_ui.h(412,7)	ObjectInterface	BuildPopupMenuForDescription,EvaluateCondition	hasStaticMethods=true	

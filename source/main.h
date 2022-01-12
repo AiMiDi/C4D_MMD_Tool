@@ -24,11 +24,6 @@
 #define ID_L_MMD_VMD_IMPORT	1057489
 #define ID_E_MMD_VMD_EXPORT	1057490
 
-// Bullet
-#define BT_THREADSAFE 1 
-#ifndef BT_USE_DOUBLE_PRECISION 
-#define BT_USE_DOUBLE_PRECISION
-#endif // !BT_USE_DOUBLE_PRECISION 
 
 #include <memory>
 #include <fstream>

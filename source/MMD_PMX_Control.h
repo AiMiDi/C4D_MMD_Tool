@@ -78,8 +78,8 @@ namespace mmd {
 		friend class OMMDRigid;
 		friend class OMMDJoint;
 		Int64 name_cnt = 1;
-		BaseLink* RigidRoot = nullptr;
-		BaseLink* JointRoot = nullptr;	
+		BaseObject* RigidRoot = nullptr;
+		BaseObject* JointRoot = nullptr;
 		BaseContainer bone_items;
 		maxon::HashMap<Int32, BaseObject*> IndexToBoneMap;
 		maxon::HashMap<BaseObject*, Int32> BoneToIndexMap;
@@ -89,7 +89,6 @@ namespace mmd {
 		INSTANCEOF(OMMDBoneRoot, ObjectData)
 	public:	
 		virtual Bool Init(GeListNode* node);
-		virtual void Free(GeListNode* node);
 		virtual Bool Read(GeListNode* node, HyperFile* hf, Int32 level);
 		virtual Bool Write(GeListNode* node, HyperFile* hf);
 		virtual Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn);

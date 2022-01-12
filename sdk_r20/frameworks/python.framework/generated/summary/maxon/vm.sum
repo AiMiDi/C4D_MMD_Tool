@@ -1,4 +1,4 @@
-maxon.LibraryInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\python.framework\source\maxon\vm.h(157,7)=Object:ConsoleIsAvailable,GetFileContent,GetVsRuntimeLibrary,GetVsVersion,SetFileContent
-maxon.VmDebuggerConnectionInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\python.framework\source\maxon\vm.h(233,7)=Object:GetName,GetPath,GetShutdownScript,GetStartupScript
-maxon.VirtualMachineScopeInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\python.framework\source\maxon\vm.h(286,7)=Object:Add,ErrorHandling,Execute,Get,Init,PrivateInvoke,_PrivateInit
-maxon.VirtualMachineInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\python.framework\source\maxon\vm.h(344,7)=Object:CreateScope,EnterInteractiveMode,Execute,ExecuteModule,Free,GetAllAvailableVirtualMachineLibraries,GetBuildInfo,GetCompiler,GetCopyright,GetDocumentString,GetLibraryRef,GetName,GetVersion,Init
+maxon.LibraryInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\python.framework\source\maxon\vm.h(157,7)=Object:ConsoleIsAvailable,GetFileContent,GetVsRuntimeLibrary,GetVsVersion,SetFileContent
+maxon.VmDebuggerConnectionInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\python.framework\source\maxon\vm.h(233,7)=Object:GetName,GetPath,GetShutdownScript,GetStartupScript
+maxon.VirtualMachineScopeInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\python.framework\source\maxon\vm.h(286,7)=Object:Add,ErrorHandling,Execute,Get,Init,PrivateInvoke,_PrivateInit
+maxon.VirtualMachineInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\python.framework\source\maxon\vm.h(344,7)=Object:CreateScope,EnterInteractiveMode,Execute,ExecuteModule,Free,GetAllAvailableVirtualMachineLibraries,GetBuildInfo,GetCompiler,GetCopyright,GetDocumentString,GetLibraryRef,GetName,GetVersion,Init

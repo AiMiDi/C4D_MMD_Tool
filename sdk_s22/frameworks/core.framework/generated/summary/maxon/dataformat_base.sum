@@ -1,2 +1,2 @@
-maxon.DataFormatBaseReaderInterface	"net.maxon.interface.dataformatbasereader"	D:\C4DSDK\C4D_MMDTool\sdk_s22\frameworks\core.framework\source\maxon\dataformat_base.h(25,7)	DataDictionaryObjectInterface	CloseInput,ReadDataEOS	
-maxon.DataFormatBaseWriterInterface	"net.maxon.interface.dataformatbasewriter"	D:\C4DSDK\C4D_MMDTool\sdk_s22\frameworks\core.framework\source\maxon\dataformat_base.h(82,7)	DataDictionaryObjectInterface	CloseOutput,Flush,WriteData	
+maxon.DataFormatBaseReaderInterface	"net.maxon.interface.dataformatbasereader"	D:\C4D_MMD_Tool\sdk_s22\frameworks\core.framework\source\maxon\dataformat_base.h(25,7)	DataDictionaryObjectInterface	CloseInput,ReadDataEOS	
+maxon.DataFormatBaseWriterInterface	"net.maxon.interface.dataformatbasewriter"	D:\C4D_MMD_Tool\sdk_s22\frameworks\core.framework\source\maxon\dataformat_base.h(82,7)	DataDictionaryObjectInterface	CloseOutput,Flush,WriteData	

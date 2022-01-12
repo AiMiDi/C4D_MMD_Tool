@@ -22,6 +22,177 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 **If the plugin is installed, please check whether the latest version of C4D is installed (such as R21 is R21.207, R21.115 does not show the upgrade can be used)**
 
+## usage
+
+1. Select the corresponding version of the plugin and place it in the plugins folder under the Cinema 4D installation directory.
+
+2. Run Cinema 4D, find `MMDTool` in the menu -> Extension(Plugin) bar and click Run.
+
+### Functions 
+
+- MMD Tool
+
+  - Camera
+
+    - Camera Import
+
+      [![7KytMj.png](https://s4.ax1x.com/2022/01/12/7KytMj.png)](https://imgtu.com/i/7KytMj) 
+
+      Import camera animation from VMD camera data.
+
+      - Size
+        The magnification of the imported camera animation
+
+      - Offset
+        Import the start frame position of the camera animation.
+
+      - Import
+        Import a VMD file with camera animation according to the above settings.
+
+    - Export
+
+      [![7KyHQH.png](https://s4.ax1x.com/2022/01/12/7KyHQH.png)](https://imgtu.com/i/7KyHQH) 
+
+      Export camera animation to VMD.
+
+      - Size
+        Exported camera animation magnification.
+
+      - Offset
+        Export the starting frame position of the camera animation.
+
+      - Use rotate curve
+        Specifies the axis to convert to the entire MMD rotation curve animation, which you don't have to worry about if you choose baking.
+
+      - Export after baking
+        Exporting the baked animation can ensure the integrity of the curve.
+
+      - Export
+        Export a VMD file with camera animation according to the above settings.
+
+    - Conversion camera
+
+      [![7KyXwt.png](https://s4.ax1x.com/2022/01/12/7KyXwt.png)](https://imgtu.com/i/7KyXwt) 
+
+      Convert the default camera to a dedicated MMD camera.
+
+      - Distance
+        MMD dedicated camera distance after conversion.
+
+      - Use rotate curve
+        Specifies the axis to convert to the entire MMD rotation curve animation.
+
+      - Conversion
+        Convert the default camera to an MMD dedicated camera according to the above settings.
+
+  - Motion
+
+    - Motion Import
+
+      [![7K6Pyj.png](https://s4.ax1x.com/2022/01/12/7K6Pyj.png)](https://imgtu.com/i/7K6Pyj) 
+
+      Import VMD action data to the bones of the model.
+      If there is no PMX bone tag, import the action according to the bone name;
+      If there is a PMX bone tag, import the action according to the local bone name on the tag;
+  
+      - Size
+        The magnification of the imported bone animation.
+    - Offset
+        The start frame position of the imported bone animation.
+      -  Import motion
+      Whether to import bone actions.
+      -  Import morph
+        Whether to import emoticons.
+    - Import model info
+        Whether to import the model IK switch, and hide the information of the model.
+      - Delete previous animation
+      Whether to delete the previous animation before import.
+      - Detail report Whether to display specific information about missing bones or expressions.
+      - Import
+      Import VMD action data according to the above parameters
+  
+    - Export Motion
+
+      [![7K6mfU.png](https://s4.ax1x.com/2022/01/12/7K6mfU.png)](https://imgtu.com/i/7K6mfU) 
+  
+    Export the action data on the model to VMD.
+  
+      - Size
+      The magnification of the exported bone animation.
+    - Offset
+      Export the start frame position of the bone animation.
+      - Use rotate curve
+    Specifies the axis to convert to the entire MMD rotation curve animation, which you don't have to worry about if you choose baking.
+      -  Export motion
+      Whether to export bone actions.
+    -  Export morph
+        Whether to export expression actions.
+    - Export after baking
+      Exporting the baked animation can ensure the integrity of the curve.
+      - Export
+      Export a VMD file with bone animation according to the above settings.
+  
+    - Pose Import
+
+      
+  
+    [![7K6UpD.png](https://s4.ax1x.com/2022/01/12/7K6UpD.png)](https://imgtu.com/i/7K6UpD)
+  
+      Import VPD data into the model.
+
+      - Import
+        Import VPD pose data.
+
+  - Model
+  
+  - Import Model
+  
+    [![7K629S.png](https://s4.ax1x.com/2022/01/12/7K629S.png)](https://imgtu.com/i/7K629S) 
+  
+    Import the PMX model into the plugin.
+  
+    - Size
+        The scale factor of the imported model.
+
+      - Polygon
+        Whether to import polygons.
+
+      - Normal
+      Whether import normals.
+  
+    - UV
+        Whether to import UVs.
+
+      - Material
+      Whether to import materials.
+  
+      - Bone
+      Whether to import bones.
+  
+      - Weighs
+      Whether to import weights.
+  
+      - IK
+      Whether to import IK bones.
+  
+      - Inherit
+      Whether to import inherit bone.
+  
+      - Expression
+      Whether to import facial expression deformation.
+  
+      - Multipath
+      Whether to import the model as a separate mesh.
+  
+      - English
+      Whether to add the English name of the bone and display it in English.
+  
+      - Check English
+      Whether to manually confirm the English name of the missing bone.
+  
+      - Import
+      Import PMX model according to the above parameters.
+
 ## version 
 
 **version 0.2.0** Initial commit
@@ -50,13 +221,14 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 **version 0.3.2**
 
-​	1.Optimize the processing method of the imported model to ensure the same effect as in MMD.
+1. Optimize the processing method of the imported model to ensure the same effect as in MMD.
 
-​	2.Optimize the leg bone problem of the imported model to ensure the same effect as in MMD.
+2. Optimize the leg bone problem of the imported model to ensure the same effect as in MMD.
 
-​	3.Optimized the detection of the alpha channel of the picture, and fixed the problem that the material was incorrectly imported into the transparent channel
+3. Optimized the detection of the alpha channel of the picture, and fixed the problem that the material was incorrectly imported into the transparent channel
 
-​	4.Increased code stability and reduced accidental crashes.
+4. Increased code stability and reduced accidental crashes.
+
 
 **version 0.3.3** Introduce the YAML configuration file; rewrite and rename the English module.
 
@@ -74,93 +246,99 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 **version 0.3.8**
 
-​	1.Rewrite the bone expression part.
+1. Rewrite the bone expression part.
 
-​	2.Add UV expression import (multi-part import mode).
+2. Add UV expression import (multi-part import mode).
 
-​	3.Fix some errors of imported models.
+3. Fix some errors of imported models.
 
-​	4.Add the function of cleaning up the unconnected vertices of the imported model.
+4. Add the function of cleaning up the unconnected vertices of the imported model.
 
-​	5.Add drag and drop import of camera animation.
+5. Add drag and drop import of camera animation.
 
-​	6.Pre-loaded physics engine module support.
+6. Pre-loaded physics engine module support.
+
 
 **version 0.3.8.1** Add tool modules.
 
-​	If the model has a problem similar to the following figure after importing the action, you can try to use the tool to repair it.
+​	~~If the model has a problem similar to the following figure after importing the action, you can try to use the tool to repair it.~~
 
-​		1.Select the model.
+1. ~~Select the model.~~
 
-​		2.Click on the fix action tool button.
+2. ~~Click on the fix action tool button.~~
 
 (V0.4 has been temporarily removed)
 
 **version 0.3.9**
 
-​		1. Added support for rigidbodies and joints. (Currently not implemented in physics)
+1. Added support for rigidbodies and joints. (Currently not implemented in physics)
 
-​		2. Fix the GUI scroll bar problem.
+2. Fix the GUI scroll bar problem.
 
-​		3. Fixed an issue where animation curves could not be saved.
+3. Fixed an issue where animation curves could not be saved.
 
-​		4. Add new model management objects.
+4. Add new model management objects.
 
-​		5. Add model display filter system.
+5. Add model display filter system.
 
-​		6. Add IK enabled, model display animation import.
+6. Add IK enabled, model display animation import.
 
-​		7. Fixed some actions importing problems.
+7. Fixed some actions importing problems.
+
 
 **version 0.3.9.1**
 
-​		1. Fixed the problem of stuck animation after import.
+1. Fixed the problem of stuck animation after import.
 
-​		2. Fix some possible memory leaks.
+2. Fix some possible memory leaks.
+
 
 **version 0.4**
 
-​		1. Add the action export function
+1. Add the action export function
 
-​		2. Fix the action confusion problem after importing motion capture to make animation.
+2. Fix the action confusion problem after importing motion capture to make animation.
 
-​		3. Change the animation import to multithreaded optimization speed.
+3. Change the animation import to multithreaded optimization speed.
 
-​		4. Fix some curve problems.
+4.  Fix some curve problems.
 
-​		5. Fix known bugs
+5. Fix known bugs
 
-​		6. Fix some possible memory leaks.
+6. Fix some possible memory leaks.
+
 
 **version 0.4.1**
 
-​	1. Add camera bake export.
+1. Add camera bake export.
 
-​	2. Add motion bake export. 
+2. Add motion bake export. 
 
-​	3.Improve Ik.
+3. Improve Ik.
+
 
 **version 0.4.2**
 
-​	1. Add import pose.
+1. Add import pose.
 
-​	2. Improve the function of PMX Control.
+2. Improve the function of PMX Control.
 
-​	3. Support R25.
+3. Support R25.
+
 
 **version 0.4.3**
 
-​	1. Fixed multi-part import import weights not initializing bones.
+1. Fixed multi-part import import weights not initializing bones.
 
-​	2. Improved weight import.
+2. Improved weight import.
 
-​	3. Fix import failure caused by empty IK list.
+3. Fix import failure caused by empty IK list.
 
-## usage
+**version 0.4.4**
 
-1.Select the corresponding version of the plugin and place it in the plugins folder under the Cinema 4D installation directory.
-
-2.Run Cinema 4D, find `MMDTool` in the menu -> Extension(Plugin) bar and click Run.
+1. 修复多部分导入部分顶点的顶点表情丢失问题。
+2. 修复模型有骨骼打开外部亲的情况下，模型无法导入的问题。
+3. 兼容旧版本保存的工程。（可能会丢失部分信息，但是不影响工程打开）
 
 ## Author
 

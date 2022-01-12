@@ -1,3 +1,3 @@
-maxon.SystemProcessKilledErrorInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\system_process.h(69,7)=ErrorInterface:
-maxon.SystemProcessOperationErrorInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\system_process.h(78,7)=ErrorInterface:
-maxon.SystemProcessObjectInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\system_process.h(86,7)=ObserverObjectInterface:GetExitCode,GetLoadedDlls,GetLogFile,GetProcessHandle,GetProcessId,GetProcessUrl,GetUserData,IsRunning,KillProcess,ObservableProcessFinished,StartProcess
+maxon.SystemProcessKilledErrorInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\system_process.h(69,7)=ErrorInterface:
+maxon.SystemProcessOperationErrorInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\system_process.h(78,7)=ErrorInterface:
+maxon.SystemProcessObjectInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\system_process.h(86,7)=ObserverObjectInterface:GetExitCode,GetLoadedDlls,GetLogFile,GetProcessHandle,GetProcessId,GetProcessUrl,GetUserData,IsRunning,KillProcess,ObservableProcessFinished,StartProcess

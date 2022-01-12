@@ -1,2 +1,2 @@
-maxon.ReadArchiveInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\ioarchivehandler.h(55,7)=Object:Close,Extract,ExtractSingleFile,Open
-maxon.WriteArchiveInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\ioarchivehandler.h(100,7)=Object:Close,CloseFile,CopyFile,CreateDirectory,CreateFile,GetCompressionLevel,Open,SetCompressionLevel,WriteFile
+maxon.ReadArchiveInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\ioarchivehandler.h(55,7)=Object:Close,Extract,ExtractSingleFile,Open
+maxon.WriteArchiveInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\ioarchivehandler.h(100,7)=Object:Close,CloseFile,CopyFile,CreateDirectory,CreateFile,GetCompressionLevel,Open,SetCompressionLevel,WriteFile

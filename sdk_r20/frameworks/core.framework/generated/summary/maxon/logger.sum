@@ -1,3 +1,3 @@
-maxon.LoggerTypeInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\logger.h(83,7)=ObserverObjectInterface,DataDictionaryObjectInterface:Flush,ObservableLoggerNotify,Write
-maxon.FileLoggerTypeInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\logger.h(113,7)=LoggerTypeInterface:GetUrl,Init
-maxon.UserLoggerTypeInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\logger.h(135,7)=LoggerTypeInterface:GetCount,Iterate,Reset
+maxon.LoggerTypeInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\logger.h(83,7)=ObserverObjectInterface,DataDictionaryObjectInterface:Flush,ObservableLoggerNotify,Write
+maxon.FileLoggerTypeInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\logger.h(113,7)=LoggerTypeInterface:GetUrl,Init
+maxon.UserLoggerTypeInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\logger.h(135,7)=LoggerTypeInterface:GetCount,Iterate,Reset
