@@ -118,11 +118,11 @@ If there is a problem with selecting multiple-parts when the model is imported, 
     Export the action data on the model to VMD.
   
       - Size
-      The magnification of the exported bone animation.
+        The magnification of the exported bone animation.
     - Offset
       Export the start frame position of the bone animation.
       - Use rotate curve
-    Specifies the axis to convert to the entire MMD rotation curve animation, which you don't have to worry about if you choose baking.
+      Specifies the axis to convert to the entire MMD rotation curve animation, which you don't have to worry about if you choose baking.
       -  Export motion
       Whether to export bone actions.
     -  Export morph
@@ -336,9 +336,9 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 **version 0.4.4**
 
-1. 修复多部分导入部分顶点的顶点表情丢失问题。
-2. 修复模型有骨骼打开外部亲的情况下，模型无法导入的问题。
-3. 兼容旧版本保存的工程。（可能会丢失部分信息，但是不影响工程打开）
+1. Fix the problem of vertex expression loss of partial vertices imported by multiple parts.
+2. Fix the problem that the model cannot be imported when the external parent is opened.
+3. Compatible with projects saved by older versions. (some information may be lost, but it does not affect the opening of the project)
 
 ## Author
 
