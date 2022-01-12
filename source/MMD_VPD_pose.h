@@ -1,4 +1,4 @@
-#ifndef __MMD_VPD_POSE_H__
+﻿#ifndef __MMD_VPD_POSE_H__
 #define __MMD_VPD_POSE_H__
 
 #include "MMD_utility.h"

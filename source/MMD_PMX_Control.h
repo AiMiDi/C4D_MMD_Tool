@@ -1,4 +1,4 @@
-#ifndef __MMD_PMX_CONTROL_H__
+﻿#ifndef __MMD_PMX_CONTROL_H__
 #define __MMD_PMX_CONTROL_H__
 
 #include "MMD_utility.h"
@@ -23,14 +23,14 @@ namespace mmd {
 		DescID	button_rename_id;
 		String	name;
 		bone_morph_data(
-			DescID& grp_id_,
-			DescID& strength_id_,
-			DescID& translation_id_,
-			DescID& rotation_id_,
-			DescID& button_grp_id_,
-			DescID& button_delete_id_,
-			DescID& button_rename_id_,
-			String& name_)
+			const DescID& grp_id_,
+			const DescID& strength_id_,
+			const DescID& translation_id_,
+			const DescID& rotation_id_,
+			const DescID& button_grp_id_,
+			const DescID& button_delete_id_,
+			const DescID& button_rename_id_,
+			const String& name_)
 		{
 			grp_id = grp_id_;
 			strength_id = strength_id_;
@@ -41,9 +41,15 @@ namespace mmd {
 			button_rename_id = button_rename_id_;
 			name = name_;
 		}
-
-
 		bone_morph_data() : bone_morph_data(DescID(), DescID(), DescID(), DescID(), DescID(), DescID(), DescID(), String()) {}
+	};
+	struct bone_morph_hub_data {
+		BaseTag* bone_tag = nullptr;
+		bone_morph_data data = bone_morph_data();
+	};
+	struct mesh_morph_hub_data {
+		CAPoseMorphTag* morph_tag = nullptr;
+		CAMorph* morph = nullptr;
 	};
 	enum class OMMDModel_Root_type
 	{
@@ -72,8 +78,8 @@ namespace mmd {
 		friend class OMMDRigid;
 		friend class OMMDJoint;
 		Int64 name_cnt = 1;
-		BaseLink* RigidRoot = nullptr;
-		BaseLink* JointRoot = nullptr;	
+		BaseObject* RigidRoot = nullptr;
+		BaseObject* JointRoot = nullptr;
 		BaseContainer bone_items;
 		maxon::HashMap<Int32, BaseObject*> IndexToBoneMap;
 		maxon::HashMap<BaseObject*, Int32> BoneToIndexMap;
@@ -83,7 +89,6 @@ namespace mmd {
 		INSTANCEOF(OMMDBoneRoot, ObjectData)
 	public:	
 		virtual Bool Init(GeListNode* node);
-		virtual void Free(GeListNode* node);
 		virtual Bool Read(GeListNode* node, HyperFile* hf, Int32 level);
 		virtual Bool Write(GeListNode* node, HyperFile* hf);
 		virtual Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn);
@@ -226,7 +231,7 @@ namespace mmd {
 		/* 获取曲线值 */
 		Bool GetInterpolator(Int32 type, Int32 frame_on,mmd::VMDInterpolator& interpolator);
 		/* 设置曲线值 */
-		Bool SetInterpolator(Int32 type, Int32 frame_on, mmd::VMDInterpolator& interpolator, Bool cover = true);
+		Bool SetInterpolator(Int32 type, Int32 frame_on, const mmd::VMDInterpolator& interpolator, Bool cover = true);
 		Bool AutoRegisterKeyFrame(Int32 use_rotation = 0, GeListNode* node = nullptr);
 		/* 注册关键帧 */
 		Bool RegisterKeyFrame(Int32 frame_on, GeListNode* node = nullptr);

@@ -1,4 +1,4 @@
-#include "ImagesGUI.h"
+﻿#include "ImagesGUI.h"
 
 void ImagesGUI::DrawMsg(Int32 x1, Int32 y1, Int32 x2, Int32 y2, const BaseContainer& msg)
 {

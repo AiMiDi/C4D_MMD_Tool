@@ -1,4 +1,4 @@
-#ifndef __IMAGESGUI_H__
+﻿#ifndef __IMAGESGUI_H__
 #define __IMAGESGUI_H__
 #include "c4d.h"
 class ImagesGUI : public GeUserArea

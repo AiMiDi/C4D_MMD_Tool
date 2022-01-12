@@ -1,4 +1,4 @@
-#ifndef __MMD_UTILITY_H__
+﻿#ifndef __MMD_UTILITY_H__
 #define __MMD_UTILITY_H__
 
 #include "main.h"
@@ -79,10 +79,10 @@ namespace mmd {
 			UInt32 tmp = 0;
 			if (!file->ReadUInt32(&tmp))
 				return false;
-			this->ax = (((tmp & 0xFF) ^ 0x80) - 0x80);
-			this->bx = ((((tmp & 0xFF00) >> 8) ^ 0x80) - 0x80);
-			this->ay = ((((tmp & 0xFF0000) >> 16) ^ 0x80) - 0x80);
-			this->by = ((((tmp & 0xFF000000) >> 24) ^ 0x80) - 0x80);
+			this->ax = UChar(((tmp & 0xFF) ^ 0x80) - 0x80);
+			this->bx = UChar((((tmp & 0xFF00) >> 8) ^ 0x80) - 0x80);
+			this->ay = UChar((((tmp & 0xFF0000) >> 16) ^ 0x80) - 0x80);
+			this->by = UChar((((tmp & 0xFF000000) >> 24) ^ 0x80) - 0x80);
 			return true;
 		}
 		/* Write the bone interpolator information to the file. */
@@ -191,13 +191,14 @@ namespace mmd {
 		String	name = String();                                        /* IK name. */
 		Bool	enable = true;                                          /* Is enable. */
 		/* Constructor function */
-		VMD_IkInfo(String& name_ = String(), Bool enable_ = true) : name(name_), enable(enable_) {}
+		VMD_IkInfo(){}
+		VMD_IkInfo(const String& name_, Bool enable_ = true) : name(name_), enable(enable_) {}
 	};
 	/* MMD style model information animation */
 	struct VMD_Model
 	{
-		UInt32				frame_no;                                   /* Frame of action. */
-		Bool				show;                                       /* Is show. */
+		UInt32				frame_no = 0;                                   /* Frame of action. */
+		Bool				show = true;                                       /* Is show. */
 		maxon::PointerArray<VMD_IkInfo> IKs_Info;                       /* IKs enable information. */
 		/* Constructor function */
 		VMD_Model(UInt32 frame_no_ = 0, Bool show_ = true) :frame_no(frame_no_), show(show_) {}
@@ -792,12 +793,12 @@ namespace mmd {
 		Float32		weight = Float32();
 	};
 	/* Converts Euler rotation to quaternion rotation. */
-	extern maxon::Vector4d32 EulerToQuaternion(maxon::Vector& euler);
+	extern maxon::Vector4d32 EulerToQuaternion(const maxon::Vector& euler);
 	/* Converts quaternion rotation to Euler rotation. */
-	extern maxon::Vector QuaternionToEuler(maxon::Vector4d32& quaternion);
+	extern maxon::Vector QuaternionToEuler(const maxon::Vector4d32& quaternion);
 	/*  Converts "SHIFT_JIS" to "UTF-8". */
-	extern Bool SJIStoUTF8(char* strin, String& strout, Int64 char_length = -1);
+	extern Bool SJIStoUTF8(char* strin,String& strout, Int64 char_length = -1);
 	/*  Converts "UTF-8" to "SHIFT_JIS". */
-	extern Bool UTF8toSJIS(String& strin, char* strout);
+	extern Bool UTF8toSJIS(const String& strin, char* strout);
 }
 #endif //__MMD_UTILITY_H__
