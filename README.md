@@ -340,6 +340,8 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 2. Fix the problem that the model cannot be imported when the external parent is opened.
 3. Compatible with projects saved by older versions. (some information may be lost, but it does not affect the opening of the project)
 
+**version 0.4.4.1** Fix import normal inversion issue.
+
 ## Author
 
 AiMiDi

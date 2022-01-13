@@ -1637,11 +1637,11 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						return err;
 					};
                     CPolygon& surface = this->surface_data[surface_index + part_surface_end];
-					PMX_Vertex_Data& vertex0 = this->vertex_data[surface.c];
+					PMX_Vertex_Data& vertex0 = this->vertex_data[surface.a];
 					PMX_Vertex_Data& vertex1 = this->vertex_data[surface.b];
-					PMX_Vertex_Data& vertex2 = this->vertex_data[surface.a];
+					PMX_Vertex_Data& vertex2 = this->vertex_data[surface.c];
 					Int32 vertex_a_index = 0;
-					auto vertex_a_ptr = vertex_info_map.Find(surface.c);
+					auto vertex_a_ptr = vertex_info_map.Find(surface.a);
 					// 找到对应该part的对应的点a新顶点索引。
 					while (vertex_a_ptr != nullptr)
 					{
@@ -1667,7 +1667,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						vertex_b_ptr = vertex_b_ptr->GetNextWithSameKey();
 					}
 					Int32 vertex_c_index = 0;
-					auto vertex_c_ptr = vertex_info_map.Find(surface.a);
+					auto vertex_c_ptr = vertex_info_map.Find(surface.c);
 					// 找到对应该part的对应的点c新顶点索引。
 					while (vertex_c_ptr != nullptr)
 					{
@@ -2654,11 +2654,11 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					return err;
 				};
 				CPolygon& surface = this->surface_data[surface_index];
-				PMX_Vertex_Data& vertex0 = this->vertex_data[surface.c];
+				PMX_Vertex_Data& vertex0 = this->vertex_data[surface.a];
 				PMX_Vertex_Data& vertex1 = this->vertex_data[surface.b];
-				PMX_Vertex_Data& vertex2 = this->vertex_data[surface.a];
+				PMX_Vertex_Data& vertex2 = this->vertex_data[surface.c];
 				g_spinlock.Lock();
-				model_polygon[surface_index] = CPolygon(surface.c, surface.b, surface.a);
+				model_polygon[surface_index] = CPolygon(surface.a, surface.b, surface.c);
 				g_spinlock.Unlock();
 				if (settings.import_normal)
 				{
