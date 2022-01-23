@@ -1725,7 +1725,7 @@ Bool mmd::TMMDBone::Init(GeListNode* node)
 	bc->SetInt32(PMX_BONE_ROTATABLE, 1);
 	bc->SetInt32(PMX_BONE_VISIBLE, 1);
 	bc->SetInt32(PMX_BONE_ENABLED, 1);
-	bc->SetInt32(PMX_BONE_TAIL_INDEX, -1);
+	bc->SetInt32(PMX_BONE_TAIL_INDEX, 0);
 	bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, -1);
 	bc->SetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE, 1.0);
 	bc->SetVector(PMX_BONE_LOCAL_X, Vector(1, 0, 0));
@@ -2209,7 +2209,9 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 	{
 		if (obj == nullptr)
 			return(true);
-		if (t_data.GetBool() == 1)
+		switch (t_data.GetInt32())
+		{
+		case PMX_BONE_TAIL_IS_INDEX:
 		{
 			if (bc->GetInt32(PMX_BONE_TAIL_INDEX) == -1)
 			{
@@ -2218,15 +2220,29 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 			else {
 				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 			}
+			break;
 		}
-		this->RefreshColor(node);
+		case PMX_BONE_TAIL_POSITION:
+		{
+			if (bc->GetVector(PMX_BONE_TAIL_POSITION) == Vector())
+			{
+				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+			}
+			else {
+				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+			}
+			break;
+		}
+		default:
+			break;
+		}
 		break;
 	}
 	case PMX_BONE_TAIL_INDEX:
 	{
 		if (obj == nullptr)
 			return(true);
-		if (bc->GetBool(PMX_BONE_INDEXED_TAIL_POSITION) == true)
+		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_IS_INDEX)
 		{
 			if (t_data.GetInt32() == -1)
 			{
@@ -2236,7 +2252,22 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 			}
 		}
-		this->RefreshColor(node);
+		break;
+	}
+	case PMX_BONE_TAIL_POSITION:
+	{
+		if (obj == nullptr)
+			return(true);
+		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_POSITION)
+		{
+			if (t_data.GetVector() == Vector())
+			{
+				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+			}
+			else {
+				obj->SetParameter(DescID(ID_CA_JOINT_OBJECT_BONE_ALIGN), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+			}
+		}
 		break;
 	}
 	case PMX_BONE_NAME_IS:
