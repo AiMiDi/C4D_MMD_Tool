@@ -2192,7 +2192,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		while (motion_frame_number--)
 		{
 			/* 111 bytes */
-			mmd::VMD_Motion* motion_frame = NewObj(mmd::VMD_Motion) iferr_return;
+			mmd::VMDBoneAnimation* motion_frame = NewObj(mmd::VMDBoneAnimation) iferr_return;
 			if (motion_frame == nullptr)
 				return(maxon::Error());
 			Char bone_name[15]{ 0 };
@@ -2223,7 +2223,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		while (morph_frame_number--)
 		{
 			/* 23 bytes */
-			mmd::VMD_Morph* morph_frame = NewObj(mmd::VMD_Morph) iferr_return;
+			mmd::VMDMorphAnimation* morph_frame = NewObj(mmd::VMDMorphAnimation) iferr_return;
 			if (morph_frame == nullptr)
 				return(maxon::Error());
 			Char		morph_name[15]{ 0 };
@@ -2244,7 +2244,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		while (camera_frame_number--)
 		{
 			/* 61 bytes */
-			mmd::VMD_Camera* camera_frame = NewObj(mmd::VMD_Camera) iferr_return;
+			mmd::VMDCameraAnimation* camera_frame = NewObj(mmd::VMDCameraAnimation) iferr_return;
 			if (camera_frame == nullptr)
 				return(maxon::Error());
 			if (!file->ReadUInt32(&(camera_frame->frame_no)))
@@ -2281,10 +2281,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		while (light_frame_number--)
 		{
 			/* 28 bytes */
-			mmd::VMD_Light* light_frame = NewObj(mmd::VMD_Light) iferr_return;
+			mmd::VMDLightAnimation* light_frame = NewObj(mmd::VMDLightAnimation) iferr_return;
 			if (light_frame == nullptr)
 				return(maxon::Error());
-			if (!file->ReadBytes(light_frame, sizeof(mmd::VMD_Light)))
+			if (!file->ReadBytes(light_frame, sizeof(mmd::VMDLightAnimation)))
 				return(maxon::Error());
 			this->light_frames.AppendPtr(light_frame) iferr_return;
 		}
@@ -2296,10 +2296,10 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 		while (shadow_frame_number--)
 		{
 			/* 12 bytes */
-			mmd::VMD_Shadow* shadow_frame = NewObj(mmd::VMD_Shadow) iferr_return;
+			mmd::VMDShadowAnimation* shadow_frame = NewObj(mmd::VMDShadowAnimation) iferr_return;
 			if (shadow_frame == nullptr)
 				return(maxon::Error());
-			if (!file->ReadBytes(shadow_frame, sizeof(mmd::VMD_Shadow)))
+			if (!file->ReadBytes(shadow_frame, sizeof(mmd::VMDShadowAnimation)))
 				return(maxon::Error());
 			this->shadow_frames.AppendPtr(shadow_frame) iferr_return;
 		}
@@ -2310,7 +2310,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 			return(maxon::Error());
 		while (model_frame_number--)
 		{
-			mmd::VMD_Model* model_frame = NewObj(mmd::VMD_Model) iferr_return;
+			mmd::VMDModelControllerAnimation* model_frame = NewObj(mmd::VMDModelControllerAnimation) iferr_return;
 			if (model_frame == nullptr)
 				return(maxon::Error());
 			if (!file->ReadUInt32(&model_frame->frame_no))
@@ -2330,7 +2330,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 					return(maxon::Error());
 				String ik_name_;
 				SJIStoUTF8(ik_name, ik_name_);
-				model_frame->IKs_Info.AppendPtr(NewObj(mmd::VMD_IkInfo, ik_name_, ik_enable).GetValue()) iferr_return;
+				model_frame->IKs_Info.AppendPtr(NewObj(mmd::VMDIkControllerAnimation, ik_name_, ik_enable).GetValue()) iferr_return;
 			}
 			this->model_frames.AppendPtr(model_frame) iferr_return;
 		}
@@ -2368,7 +2368,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (motion_frame_number--)
 	{
-		mmd::VMD_Motion motion_frame = (this->motion_frames)[motion_frame_number];
+		mmd::VMDBoneAnimation motion_frame = (this->motion_frames)[motion_frame_number];
 		maxon::AutoMem<maxon::Char> bone_name = NewMemClear(maxon::Char, (motion_frame.bone_name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
 		UTF8toSJIS(motion_frame.bone_name, bone_name);
 		if (!file->WriteBytes(bone_name, 15))
@@ -2393,7 +2393,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (morph_frame_number--)
 	{
-		mmd::VMD_Morph morph_frame = (this->morph_frames)[morph_frame_number];
+		mmd::VMDMorphAnimation morph_frame = (this->morph_frames)[morph_frame_number];
 		maxon::AutoMem<maxon::Char> morph_name = NewMemClear(maxon::Char, (morph_frame.morph_name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
 		UTF8toSJIS(morph_frame.morph_name, morph_name);
 		if (!file->WriteBytes(morph_name, 15))
@@ -2408,7 +2408,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (camera_frame_number--)
 	{
-		mmd::VMD_Camera camera_frame = (this->camera_frames)[camera_frame_number];
+		mmd::VMDCameraAnimation camera_frame = (this->camera_frames)[camera_frame_number];
 		if (!file->WriteUInt32(camera_frame.frame_no))
 			return(maxon::Error());
 		if (!file->WriteFloat32(camera_frame.distance))
@@ -2439,7 +2439,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while(light_frame_number--)
 	{
-		if (!file->WriteBytes(&((this->light_frames)[light_frame_number]), sizeof(mmd::VMD_Light)))
+		if (!file->WriteBytes(&((this->light_frames)[light_frame_number]), sizeof(mmd::VMDLightAnimation)))
 			return(maxon::Error());
 	}
 	UInt32 shadow_frame_number = (UInt32)this->shadow_frames.GetCount();
@@ -2447,7 +2447,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (shadow_frame_number--)
 	{
-		if (!file->WriteBytes(&((this->shadow_frames)[shadow_frame_number]), sizeof(mmd::VMD_Shadow)))
+		if (!file->WriteBytes(&((this->shadow_frames)[shadow_frame_number]), sizeof(mmd::VMDShadowAnimation)))
 			return(maxon::Error());
 	}
 	UInt32 model_frame_number = (UInt32)this->model_frames.GetCapacityCount();
@@ -2455,7 +2455,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (model_frame_number--)
 	{
-		const mmd::VMD_Model& model_frame = (this->model_frames)[model_frame_number];
+		const mmd::VMDModelControllerAnimation& model_frame = (this->model_frames)[model_frame_number];
 		if (!file->WriteUInt32(model_frame.frame_no))
 			return(maxon::Error());
 		if (!file->WriteBool(model_frame.show))
@@ -2465,7 +2465,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 			return(maxon::Error());
 		while (ikInfoCount--)
 		{
-			VMD_IkInfo ikInfo = model_frame.IKs_Info[ikInfoCount];
+			VMDIkControllerAnimation ikInfo = model_frame.IKs_Info[ikInfoCount];
 			maxon::AutoMem<maxon::Char> ik_name_ = NewMemClear(maxon::Char, (ikInfo.name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
 			UTF8toSJIS(ikInfo.name, ik_name_);
 			if (!file->WriteBytes(ik_name_, 20))
@@ -2574,7 +2574,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 		const BaseTime kMaxTime = maxon::Max(doc->GetMaxTime(), BaseTime((this->camera_frames.End() - 1).GetPtr()->frame_no, 30.));
 		BaseTime	key_on_time = BaseTime(0, 30.);
 		Int32		key_on_frame = 0;
-		mmd::VMD_Camera now_camera_frame, next_camera_frame;
+		mmd::VMDCameraAnimation now_camera_frame, next_camera_frame;
 		const Int	camera_frame_number = this->camera_frames.GetCount();
 		for (Int camera_frame_index = 0; camera_frame_index < camera_frame_number; camera_frame_index++)
 		{
@@ -2813,7 +2813,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 		for (BaseTime time_on = BaseTime(); time_on < kEndFrame; time_on = time_on + kTimeOne)
 		{
 			StatusSetSpin();
-			mmd::VMD_Camera* camera_frame = NewObj(mmd::VMD_Camera)iferr_return;
+			mmd::VMDCameraAnimation* camera_frame = NewObj(mmd::VMDCameraAnimation)iferr_return;
 			camera_frame->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
 			camera_frame->position = Vector32(
 				maxon::SafeConvert<Float32>(camera_curve_position_x->GetValue(time_on) * setting.position_multiple),
@@ -2833,7 +2833,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 		for (Int32 frame_index = 0; frame_index < kFrameCount; frame_index++)
 		{
 			StatusSetSpin();
-			mmd::VMD_Camera* camera_frame = NewObj(mmd::VMD_Camera)iferr_return;
+			mmd::VMDCameraAnimation* camera_frame = NewObj(mmd::VMDCameraAnimation)iferr_return;
 			Int32 Frame_on = maxon::SafeConvert<Int32>(camera_curve_frame_on->GetKey(frame_index)->GetValue());
 			camera_frame->frame_no = Frame_on + maxon::SafeConvert<Int32>(setting.time_offset);
 			camera_frame->position = Vector32(
@@ -2874,8 +2874,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 	maxon::HashMap<String, maxon::BaseList<bone_obj_tag>*>	bone_name_map;
 	maxon::HashMap<String, maxon::BaseList<morph_id_tag>*>	morph_name_map;
 	maxon::HashMap<String, maxon::BaseList<BaseTag*>*>	ik_tag_map;
-	maxon::HashMap<String, maxon::BaseList<VMD_Motion>*>	MotionFrameList_map;
-	maxon::HashMap<String, maxon::BaseList<VMD_Morph>*>	MorphFrameList_map;
+	maxon::HashMap<String, maxon::BaseList<VMDBoneAnimation>*>	MotionFrameList_map;
+	maxon::HashMap<String, maxon::BaseList<VMDMorphAnimation>*>	MorphFrameList_map;
 	iferr_scope_handler{
 		MessageDialog(err.ToString(nullptr));
 		EXIT_FromFileImportMotions
@@ -3415,7 +3415,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 			auto	MotionFrame_ptr = MotionFrameList_map.Find(bone_name);
 			if (MotionFrame_ptr == nullptr)
 			{
-				maxon::BaseList<VMD_Motion>* MotionFrame = NewObj(maxon::BaseList<VMD_Motion>) iferr_return;
+				maxon::BaseList<VMDBoneAnimation>* MotionFrame = NewObj(maxon::BaseList<VMDBoneAnimation>) iferr_return;
 				MotionFrame->Append(this->motion_frames[motion_frame_index]) iferr_return;
 				MotionFrameList_map.Insert(bone_name, MotionFrame) iferr_return;
 				motion_bone_name_array.Append(bone_name)iferr_return;
@@ -3433,7 +3433,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 			auto	MorphFrame_ptr = MorphFrameList_map.Find(morph_name);
 			if (MorphFrame_ptr == nullptr)
 			{
-				maxon::BaseList<VMD_Morph>* MorphFrame = NewObj(maxon::BaseList<VMD_Morph>) iferr_return;
+				maxon::BaseList<VMDMorphAnimation>* MorphFrame = NewObj(maxon::BaseList<VMDMorphAnimation>) iferr_return;
 				MorphFrame->Append(this->morph_frames[morph_frame_index]) iferr_return;
 				MorphFrameList_map.Insert(morph_name, MorphFrame) iferr_return;
 				motion_morph_name_array.Append(morph_name)iferr_return;
@@ -3484,14 +3484,14 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 				{
 					iferr_scope;
 					String motion_bone_name = motion_bone_name_array[motion_bone_name_index];
-					mmd::VMD_Motion			MotionFrame;
-					mmd::VMD_Motion			NextMotionFrame;
+					mmd::VMDBoneAnimation			MotionFrame;
+					mmd::VMDBoneAnimation			NextMotionFrame;
 					BaseTime			MotionKeyTime = BaseTime(0, 30.);
 					Float				TimeOfTwoMotionFrames = 0.0;
 					Float				ValueOfTwoMotionFrames = 0.0;
 					BaseTime			MotionKeyTimeLeft[6] = { BaseTime(0.0, 30.) };
 					Float				MotionKeyValueLeft[6] = { 0.0 };
-					maxon::BaseList<mmd::VMD_Motion>* MotionFrameList = MotionFrameList_map.Find(motion_bone_name)->GetValue();
+					maxon::BaseList<mmd::VMDBoneAnimation>* MotionFrameList = MotionFrameList_map.Find(motion_bone_name)->GetValue();
 					auto				bone_ptr = bone_name_map.Find(motion_bone_name);
 
 					if (bone_ptr != nullptr)
@@ -3823,14 +3823,14 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 			{
 				iferr_scope;
 				String motion_bone_name = motion_bone_name_array[motion_bone_name_index];
-				mmd::VMD_Motion			MotionFrame;
-				mmd::VMD_Motion			NextMotionFrame;
+				mmd::VMDBoneAnimation			MotionFrame;
+				mmd::VMDBoneAnimation			NextMotionFrame;
 				BaseTime			MotionKeyTime = BaseTime(0, 30.);
 				Float				TimeOfTwoMotionFrames = 0.0;
 				Float				ValueOfTwoMotionFrames = 0.0;
 				BaseTime			MotionKeyTimeLeft[6] = { BaseTime(0.0, 30.) };
 				Float				MotionKeyValueLeft[6] = { 0.0 };
-			maxon::BaseList<mmd::VMD_Motion>* MotionFrameList = MotionFrameList_map.Find(motion_bone_name)->GetValue();
+			maxon::BaseList<mmd::VMDBoneAnimation>* MotionFrameList = MotionFrameList_map.Find(motion_bone_name)->GetValue();
 			auto				bone_ptr = bone_name_map.Find(motion_bone_name);
 
 			if (bone_ptr != nullptr)
@@ -4213,8 +4213,8 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 			{
 				iferr_scope;
 				String morph_motion_name = motion_morph_name_array[motion_morph_name_index];
-				mmd::VMD_Morph			MorphFrame;
-				maxon::BaseList<mmd::VMD_Morph>* MorphFrameList = (MorphFrameList_map.Find(morph_motion_name)->GetValue());
+				mmd::VMDMorphAnimation			MorphFrame;
+				maxon::BaseList<mmd::VMDMorphAnimation>* MorphFrameList = (MorphFrameList_map.Find(morph_motion_name)->GetValue());
 				auto morph_ptr = morph_name_map.Find(morph_motion_name);
 				if (morph_ptr != nullptr)
 				{
@@ -4298,7 +4298,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 		for (Int model_frame_index = 0; model_frame_index < ModelFrameNumber; model_frame_index++)
 		{
 			StatusSetSpin();
-			const mmd::VMD_Model& model_frame = this->model_frames[model_frame_index];
+			const mmd::VMDModelControllerAnimation& model_frame = this->model_frames[model_frame_index];
 			BaseTime		time = BaseTime(model_frame.frame_no + setting.time_offset, 30.);
 			CKey* ModelEditorDisplayKey = CKey::Alloc();
 			ModelEditorDisplayKey->SetTime(ModelEditorDisplayCurve, time);
@@ -4308,7 +4308,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 			ModelRenderDisplayKey->SetTime(ModelRenderDisplayCurve, time);
 			ModelRenderDisplayKey->SetValue(ModelRenderDisplayCurve, !model_frame.show);
 			ModelRenderDisplayCurve->InsertKey(ModelRenderDisplayKey);
-			for (const mmd::VMD_IkInfo& ikInfo : model_frame.IKs_Info)
+			for (const mmd::VMDIkControllerAnimation& ikInfo : model_frame.IKs_Info)
 			{
 				auto ikTagListPtr = ik_tag_map.Find(ikInfo.name);
 				if (ikTagListPtr != nullptr)
@@ -4496,7 +4496,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 					curve_rotation_z = track_rotation_z->GetCurve();
 					maxon::SetMax(kEndFrame, curve_rotation_z->GetEndTime());
 				}				
-				mmd::VMD_Motion* vmd_motion_data = nullptr;
+				mmd::VMDBoneAnimation* vmd_motion_data = nullptr;
 				const BaseTime kTimeOne = BaseTime(1, kFps);
 				if ((curve_position_x == nullptr || curve_position_y == nullptr || curve_position_z == nullptr) && (curve_rotation_x == nullptr || curve_rotation_y == nullptr || curve_rotation_z == nullptr)) 
 				{
@@ -4511,7 +4511,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 					for (BaseTime time_on = BaseTime(); time_on < kEndFrame; time_on = time_on + kTimeOne)
 					{
 						StatusSetSpin();
-						vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
+						vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 						vmd_motion_data->bone_name = bone_name;
 						vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
 						vmd_motion_data->position.x = maxon::SafeConvert<Float32>(bone_position.x);
@@ -4532,7 +4532,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 					for (BaseTime time_on = BaseTime(); time_on < kEndFrame; time_on = time_on + kTimeOne)
 					{
 						StatusSetSpin();
-						vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
+						vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 						vmd_motion_data->bone_name = bone_name;
 						vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
 						vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * setting.position_multiple);
@@ -4550,7 +4550,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 					for (BaseTime time_on = BaseTime(); time_on < kEndFrame; time_on = time_on + kTimeOne)
 					{
 						StatusSetSpin();
-						vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
+						vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 						vmd_motion_data->bone_name = bone_name;
 						vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
 						vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * setting.position_multiple);
@@ -4610,7 +4610,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						curve_rotation_z = track_rotation_z->GetCurve();
 					}
 					CKey* key = nullptr;
-					mmd::VMD_Motion* vmd_motion_data = nullptr;
+					mmd::VMDBoneAnimation* vmd_motion_data = nullptr;
 					const Int32 bone_key_count = curve_position_x->GetKeyCount();
 					if ((curve_position_x == nullptr || curve_position_y == nullptr || curve_position_z == nullptr) && (curve_rotation_x == nullptr || curve_rotation_y == nullptr || curve_rotation_z == nullptr))
 					{
@@ -4624,7 +4624,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						Vector rotation = Vector();
 						for (Int32 key_index = 0; key_index < bone_key_count; key_index++)
 						{
-							vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
+							vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 							vmd_motion_data->bone_name = bone_name;
 							key = curve_rotation_x->GetKey(key_index);
 							vmd_motion_data->frame_no = key->GetTime().GetFrame(30.);
@@ -4652,7 +4652,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						Vector4d32 bone_rotation = EulerToQuaternion(bone.obj->GetRelRot());
 						for (Int32 key_index = 0; key_index < bone_key_count; key_index++)
 						{
-							vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
+							vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 							vmd_motion_data->bone_name = bone_name;
 							key = curve_position_x->GetKey(key_index);
 							vmd_motion_data->frame_no = (UInt32)key->GetTime().GetFrame(30.);
@@ -4676,7 +4676,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						Vector rotation = Vector();
 						for (Int32 key_index = 0; key_index < bone_key_count; key_index++)
 						{
-							vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
+							vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 							vmd_motion_data->bone_name = bone_name;
 							key = curve_position_x->GetKey(key_index);
 							vmd_motion_data->frame_no = key->GetTime().GetFrame(30.);
@@ -4745,7 +4745,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						curve_rotation_z = track_rotation_z->GetCurve();
 						maxon::SetMax(kEndFrame, curve_rotation_z->GetEndTime());
 					}
-					mmd::VMD_Motion* vmd_motion_data = nullptr;
+					mmd::VMDBoneAnimation* vmd_motion_data = nullptr;
 					const BaseTime kTimeOne = BaseTime(1, kFps);
 					if ((curve_position_x == nullptr || curve_position_y == nullptr || curve_position_z == nullptr) && (curve_rotation_x == nullptr || curve_rotation_y == nullptr || curve_rotation_z == nullptr))
 					{
@@ -4760,7 +4760,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						for (BaseTime time_on = BaseTime(); time_on < kEndFrame; time_on = time_on + kTimeOne)
 						{
 							StatusSetSpin();
-							vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
+							vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 							vmd_motion_data->bone_name = bone_name;
 							vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
 							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(bone_position.x);
@@ -4781,7 +4781,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						for (BaseTime time_on = BaseTime(); time_on < kEndFrame; time_on = time_on + kTimeOne)
 						{
 							StatusSetSpin();
-							vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
+							vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 							vmd_motion_data->bone_name = bone_name;
 							vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
 							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * setting.position_multiple);
@@ -4799,7 +4799,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						for (BaseTime time_on = BaseTime(); time_on < kEndFrame; time_on = time_on + kTimeOne)
 						{
 							StatusSetSpin();
-							vmd_motion_data = NewObj(mmd::VMD_Motion)iferr_return;
+							vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 							vmd_motion_data->bone_name = bone_name;
 							vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
 							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * setting.position_multiple);
@@ -4829,7 +4829,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 				if (morph_curve != nullptr) {
 					const Int32 kMorphKeyCount = morph_curve->GetKeyCount();
 					for (Int32 key_index = 0; key_index < kMorphKeyCount; key_index++) {
-						mmd::VMD_Morph* vmd_morph_data = NewObj(mmd::VMD_Morph)iferr_return;
+						mmd::VMDMorphAnimation* vmd_morph_data = NewObj(mmd::VMDMorphAnimation)iferr_return;
 						CKey* key = morph_curve->GetKey(key_index);
 						vmd_morph_data->frame_no = maxon::SafeConvert<UInt32>(key->GetTime().GetFrame(30.) + setting.time_offset);
 						vmd_morph_data->weight = maxon::SafeConvert<Float32>(key->GetValue());
@@ -4868,7 +4868,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 
 			for (const BaseTime& time : time_set)
 			{
-				mmd::VMD_Model* model_frame = NewObj(mmd::VMD_Model)iferr_return;
+				mmd::VMDModelControllerAnimation* model_frame = NewObj(mmd::VMDModelControllerAnimation)iferr_return;
 				model_frame->frame_no = maxon::SafeConvert<UInt32>(time.GetFrame(kFps) + setting.time_offset);
 				if (ModelEditorDisplayCurve->GetValue(time) == 2) {
 					model_frame->show = false;
@@ -4877,7 +4877,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 					model_frame->show = true;
 				}
 				for (BaseTag* ikTag : ik_tag_set) {
-					mmd::VMD_IkInfo* ikInfo = NewObj(mmd::VMD_IkInfo)iferr_return;
+					mmd::VMDIkControllerAnimation* ikInfo = NewObj(mmd::VMDIkControllerAnimation)iferr_return;
 					ikTag->GetParameter(ID_CA_IK_TAG_TARGET, data, DESCFLAGS_GET::NONE);
 					ikInfo->name = data.GetBaseLink()->GetLink(doc)->GetName();
 					CTrack* IKEnableTrack = ikTag->FindCTrack(ID_CA_IK_TAG_ENABLE);
@@ -4909,11 +4909,11 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 			}
 		}
 		else {
-			mmd::VMD_Model* model_frame = NewObj(mmd::VMD_Model)iferr_return;
+			mmd::VMDModelControllerAnimation* model_frame = NewObj(mmd::VMDModelControllerAnimation)iferr_return;
 			model_frame->frame_no = maxon::SafeConvert<UInt32>(setting.time_offset);
 			model_frame->show = true;
 			for (BaseTag* ikTag : ik_tag_set) {
-				mmd::VMD_IkInfo* ikInfo = NewObj(mmd::VMD_IkInfo)iferr_return;
+				mmd::VMDIkControllerAnimation* ikInfo = NewObj(mmd::VMDIkControllerAnimation)iferr_return;
 				ikTag->GetParameter(ID_CA_IK_TAG_TARGET, data, DESCFLAGS_GET::NONE);
 				ikInfo->name = data.GetBaseLink()->GetLink(doc)->GetName();
 				ikInfo->enable = true;

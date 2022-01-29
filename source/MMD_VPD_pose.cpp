@@ -79,7 +79,7 @@ maxon::Result<void> mmd::VPD_pose::LoadFromFile(Filename& fn) {
 	const Int64 line_count = lines.GetCount();
 	for (Int64 i = 3; i < line_count; i += 4)
 	{
-		VPD_Bone* bone_post = NewObj(VPD_Bone)iferr_return;
+		VPDBoneData* bone_post = NewObj(VPDBoneData)iferr_return;
 		lines[i].FindFirst('{', &curly_braces_pos);
 		bone_post->name = lines[i].SubStr(curly_braces_pos + 1, lines[i].GetLength() - curly_braces_pos);		
 		lines[i + 1].FindFirst(',', &comma_pos);
@@ -224,7 +224,7 @@ maxon::Result<void> mmd::VPD_pose::FromFileImportPose(mmd::VPD_pose_import_setti
 		}
 	}
 	nodes.Reset();
-	for (VPD_Bone& bone_data : this->bones) {
+	for (VPDBoneData& bone_data : this->bones) {
 		auto bone_tag_list_ptr = bone_name_map.Find(bone_data.name);
 		if (bone_tag_list_ptr != nullptr) {
 			maxon::BaseList<BaseObject*>* bone_tag_list = bone_tag_list_ptr->GetValue();

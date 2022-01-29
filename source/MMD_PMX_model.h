@@ -38,21 +38,18 @@ namespace mmd {
 	{
 		MAXON_DISALLOW_COPY_AND_ASSIGN(PMXModel);
 	private:
-		PMX_Model_information				model_info;             /* 模型信息 */
-		PMX_Data_count					model_data_count;       /* 模型数据计数 */
-		maxon::PointerArray<PMX_Vertex_Data>		vertex_data;            /* 顶点数据 */
+		PMXModelInformation				model_info;             /* 模型信息 */
+		PMXDataCount					model_data_count;       /* 模型数据计数 */
+		maxon::PointerArray<PMXVertexData>		vertex_data;            /* 顶点数据 */
 		maxon::PointerArray<CPolygon>			surface_data;           /* 面数据 */
 		maxon::PointerArray<String>			texture_data;           /* 贴图数据 */
-		maxon::PointerArray<PMX_Material_Data>		material_data;          /* 材质数据 */
-		maxon::PointerArray<PMX_Bone_Data>		bone_data;              /* 骨骼数据 */
-		maxon::PointerArray<PMX_Morph_Data>		morph_data;             /* 变形数据 */
-		maxon::PointerArray<PMX_Display_Data>		display_data;           /* 表示枠数据 */
-		maxon::PointerArray<PMX_Rigid_Body_Data>	rigid_body_data;        /* 刚体数据 */
-		maxon::PointerArray<PMX_Joint_Data>		joint_data;             /* J点数据 */
+		maxon::PointerArray<PMXMaterialData>		material_data;          /* 材质数据 */
+		maxon::PointerArray<PMXBoneData>		bone_data;              /* 骨骼数据 */
+		maxon::PointerArray<PMXMorphData>		morph_data;             /* 变形数据 */
+		maxon::PointerArray<PMXDisplayData>		display_data;           /* 表示枠数据 */
+		maxon::PointerArray<PMXRigidBodyData>	rigid_body_data;        /* 刚体数据 */
+		maxon::PointerArray<PMXJointData>		joint_data;             /* J点数据 */
 
-		Bool ReadText(BaseFile* const file, Char& text_encoding , String& out_string);
-		Int32 ReadIndex(BaseFile* const file, Char& index_size);
-		UInt32 ReadUIndex(BaseFile* const file, Char& index_size);
 	public:
 		PMXModel(){}
 		~PMXModel(){}

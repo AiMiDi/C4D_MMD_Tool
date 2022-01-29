@@ -1,1 +1,1 @@
-maxon.FunctionInterface	"net.maxon.interface.function"	D:\C4D_MMD_Tool\sdk_r21\frameworks\core.framework\source\maxon\genericfunction.h(13,7)	ObjectInterface	GetConstantValue,GetFunctionType,Invoke	
+maxon.FunctionInterface	"net.maxon.interface.function"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\core.framework\source\maxon\genericfunction.h(13,7)	ObjectInterface	GetConstantValue,GetFunctionType,Invoke	

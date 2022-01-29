@@ -23,8 +23,8 @@ namespace mmd {
 		MAXON_DISALLOW_COPY_AND_ASSIGN(VPD_pose);
 	private:	
 		String model_name = String();
-		maxon::PointerArray<VPD_Bone>	bones;
-		maxon::PointerArray<VPD_Morph>	morphs;
+		maxon::PointerArray<VPDBoneData>	bones;
+		maxon::PointerArray<VPDMorphData>	morphs;
 		/* 用于从文件导入到对象 */
 		maxon::Result<void> LoadFromFile(Filename& fn);
 		/* 用于将对象保存到文件 */

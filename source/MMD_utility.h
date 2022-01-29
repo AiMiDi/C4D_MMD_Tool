@@ -4,6 +4,19 @@
 #include "main.h"
 
 namespace mmd {
+	/* Converts Euler rotation to quaternion rotation. */
+	extern maxon::Vector4d32 EulerToQuaternion(const maxon::Vector& euler);
+	/* Converts quaternion rotation to Euler rotation. */
+	extern maxon::Vector QuaternionToEuler(const maxon::Vector4d32& quaternion);
+	/*  Converts "SHIFT_JIS" to "UTF-8". */
+	extern Bool SJIStoUTF8(char* strin, String& strout, Int64 char_length = -1);
+	/*  Converts "UTF-8" to "SHIFT_JIS". */
+	extern Bool UTF8toSJIS(const String& strin, char* strout);
+
+	extern Bool ReadText(BaseFile* const file, const Char& text_encoding, String& out_string);
+	extern Int32 ReadIndex(BaseFile* const file, const Char& index_size);
+	extern UInt32 ReadUIndex(BaseFile* const file, const Char& index_size);
+
 	typedef maxon::Vec2<Float32> Vector2d32;
 	/* MMD animation */
 
@@ -136,8 +149,9 @@ namespace mmd {
 			return true;
 		}
 	};
+
 	/* MMD style bone animation. */
-	struct VMD_Motion
+	struct VMDBoneAnimation
 	{
 		String		bone_name = String();                               /* The action corresponds to the bone name. */
 		UInt32		frame_no = 0;                                       /* Frame of action. */
@@ -149,14 +163,14 @@ namespace mmd {
 		VMDInterpolator	interpolator_position_r = VMDInterpolator();    /* Rotation action interpolation. */
 	};
 	/* MMD style expression animation. */
-	struct VMD_Morph
+	struct VMDMorphAnimation
 	{
 		String	morph_name = String();                                  /* The action corresponds to the expression name. */
 		UInt32	frame_no = 0;                                           /* Frame of action. */
 		Float32 weight = 0.f;                                           /* Expression deformation strength. */
 	};
 	/* MMD风格的摄像机动画 */
-	struct VMD_Camera
+	struct VMDCameraAnimation
 	{
 		UInt32		frame_no = 0;                                       /* Frame of action. */
 		Float32		distance = 0.f;                                     /* Camera view distance. */
@@ -172,38 +186,38 @@ namespace mmd {
 		UChar		perspective = 0;                                    /* 0:on, 1:off */
 	};
 	/* MMD style lighting animation */
-	struct VMD_Light
+	struct VMDLightAnimation
 	{
 		UInt32		frame_no = 0;                                       /* Frame of action. */
 		Vector32	rgb = Vector32();                                   /* Light color. */
 		Vector32	position = Vector32();                              /* location. */
 	};
 	/* MMD style shadow animation */
-	struct VMD_Shadow
+	struct VMDShadowAnimation
 	{
 		UInt32	frame_no = 0;                                           /* Frame of action. */
 		UChar	shadowType = 0;                                         /* 0:Off 1:mode1 2:mode2 */
 		Float32 distance = 0.f;                                         /* Distance. */
 	};
 	/* MMD style IK enable information */
-	struct VMD_IkInfo
+	struct VMDIkControllerAnimation
 	{
 		String	name = String();                                        /* IK name. */
 		Bool	enable = true;                                          /* Is enable. */
 		/* Constructor function */
-		VMD_IkInfo(){}
-		VMD_IkInfo(const String& name_, Bool enable_ = true) : name(name_), enable(enable_) {}
+		VMDIkControllerAnimation(){}
+		VMDIkControllerAnimation(const String& name_, Bool enable_ = true) : name(name_), enable(enable_) {}
 	};
 	/* MMD style model information animation */
-	struct VMD_Model
+	struct VMDModelControllerAnimation
 	{
 		UInt32				frame_no = 0;                                   /* Frame of action. */
 		Bool				show = true;                                       /* Is show. */
-		maxon::PointerArray<VMD_IkInfo> IKs_Info;                       /* IKs enable information. */
+		maxon::PointerArray<VMDIkControllerAnimation> IKs_Info;                       /* IKs enable information. */
 		/* Constructor function */
-		VMD_Model(UInt32 frame_no_ = 0, Bool show_ = true) :frame_no(frame_no_), show(show_) {}
+		VMDModelControllerAnimation(UInt32 frame_no_ = 0, Bool show_ = true) :frame_no(frame_no_), show(show_) {}
         /* Copy constructor */
-		VMD_Model(const mmd::VMD_Model& src)
+		VMDModelControllerAnimation(const mmd::VMDModelControllerAnimation& src)
 		{
 			if (&src == this)
 			{
@@ -214,7 +228,7 @@ namespace mmd {
 			this->IKs_Info.CopyFrom(src.IKs_Info) iferr_ignore("err"_s);
 		}
 		/* operator= */
-		mmd::VMD_Model& operator =(const mmd::VMD_Model& src)
+		VMDModelControllerAnimation& operator =(const mmd::VMDModelControllerAnimation& src)
 		{
 			if (&src == this)
 			{
@@ -259,9 +273,8 @@ namespace mmd {
 	};
 	/* MMD model */
 
-
 	/* PMX model global information struct. */
-	struct PMX_Model_information
+	struct PMXModelInformation
 	{
 		Float32 version = 2.0f;                                      /* version */
 		Char	text_encoding = 0;                                   /* String encoding. 0 is UTF16LE encoding and 1 is UTF8 encoding. */
@@ -279,29 +292,33 @@ namespace mmd {
 		Bool	have_UV_morph = false;                               /* Is there a UV morph */
 		Bool	have_vertex_morph = false;                           /* Is there a vertex morph */
 	};
+	struct PMXWeight
+	{
+
+	};
 	/* Weight type BDEF1 structure 
 	* weight==1 */
-	struct BDEF1                                                    
+	struct PMXWeight_BDEF1 : public PMXWeight
 	{
 		Int32 bone = 0;                                            /* Bone index. */
 	};
 	/* Weight type BDEF2 structure
 	* Bone 2 weight = 1 - (Bone 1 weight) */
-	struct BDEF2                                                    
+	struct PMXWeight_BDEF2 : public PMXWeight
 	{
 		Int32	bone[2] = { 0 };                               /* Bone index. */
 		Float32 weight = 0.f;                                      /* Bone 1 weight */
 	};
 	/* Weight type BDEF4 structure 
 	* The sum of four weights is not guaranteed to equal 1 */
-	struct BDEF4                                                    
+	struct PMXWeight_BDEF4 : public PMXWeight
 	{
 		Int32	bone[4] = { 0 };                   /* Bone index. */
 		Float32 weight[4] = { 0.f };    /* Bone 1~4 weight */
 	};
 	/* Weight type SDEF structure
 	* Bone 2 weight = 1 - (Bone 1 weight) */
-	struct SDEF                                                     
+	struct PMXWeight_SDEF : public PMXWeight
 	{
 		Int32		bone[2] = { 0 };                             /* Bone index. */
 		Float32		weight = 0.f;                                    /* Bone 1 weight */
@@ -309,12 +326,12 @@ namespace mmd {
 	};
 	/* Weight type QDEF structure
 	* The sum of four weights is not guaranteed to equal 1 */
-	struct QDEF                                                     
+	struct PMXWeight_QDEF : public PMXWeight
 	{
 		Int32	bone[4] = { 0 };                /* Bone index. */
 		Float32 weight[4] = { 0.f }; /* Bone 1~4 weight */
 	};
-	struct PMX_Data_count
+	struct PMXDataCount
 	{
 		Int32 vertex_data_count = 0,
 			surface_data_count = 0,
@@ -327,7 +344,7 @@ namespace mmd {
 			joint_data_count = 0;
 	};
 	/* PMX vertex data */
-	struct PMX_Vertex_Data                  
+	struct PMXVertexData                  
 	{
 		Vector32	position = Vector32();       /* The position. */
 		Vector32	normal = Vector32();         /* The normal vector. */
@@ -337,19 +354,19 @@ namespace mmd {
 		/* Variant weight */
 		union
 		{
-			BDEF1	weight_deform_B1;
-			BDEF2	weight_deform_B2;
-			BDEF4	weight_deform_B4;
-			SDEF	weight_deform_S;
-			QDEF	weight_deform_Q;
+			PMXWeight_BDEF1	weight_deform_B1;
+			PMXWeight_BDEF2	weight_deform_B2;
+			PMXWeight_BDEF4	weight_deform_B4;
+			PMXWeight_SDEF	weight_deform_S;
+			PMXWeight_QDEF	weight_deform_Q;
 		};                              
 		Float32 edge_scale = 0.f;                /* Edge magnification */
-		PMX_Vertex_Data()
+		PMXVertexData()
 		{
 		};
 	};
 	/* Material symbol(1 byte) */
-	struct PMX_Material_Flags               
+	struct PMXMaterialFlags               
 	{
 		Bool	no_cull : 1;            /* Double sided depiction */
 		Bool	ground_shadow : 1;      /* Cast shadows on geometry */
@@ -359,7 +376,7 @@ namespace mmd {
 		Bool	vertex_colour : 1;      /* Use additional vector4d32 as the color of the vertices */
 		Bool	point_drawing : 1;      /* All three vertices are drawn */
 		Bool	line_drawing : 1;       /* Three sides are drawn */
-		PMX_Material_Flags()
+		PMXMaterialFlags()
 		{
 			this->no_cull = 0;
 			this->ground_shadow = 0;
@@ -372,7 +389,7 @@ namespace mmd {
 		}
 	};
 	/* PMX material data */
-	struct PMX_Material_Data                                       
+	struct PMXMaterialData                                       
 	{
 		String			material_name_local = String();                 /* Local material name, Japanese, Chinese, etc */
 		String			material_name_universal = String();             /* General material name, usually in English */
@@ -380,7 +397,7 @@ namespace mmd {
 		Vector32		specular_colour = Vector32();                   /* Specular (specular) color RGB */
 		Float32			specular_strength = 5.f;                        /* Specular light intensity */
 		Vector32		ambient_colour = Vector32(1);                   /* Environment color, the shadow color when the light is insufficient (i.e. the base color, which makes the shadow less black) */
-		PMX_Material_Flags	drawing_flags = PMX_Material_Flags();       /* Draw marker */
+		PMXMaterialFlags	drawing_flags = PMXMaterialFlags();       /* Draw marker */
 		Vector4d32		edge_colour = Vector4d32(0, 0, 0, 1);           /* Edge color RGBA */
 		Float32			edge_scale = 1.f;                               /* Edge scale[0, 1] */
 		Int32			texture_index = -1;                             /* Texture index */
@@ -391,15 +408,15 @@ namespace mmd {
 		Char			toon_internal = 0;                              /* toon internal index */
 		String			meta_data = String();                           /* Metadata, used for scripts and other data. */
 		Int32			surface_count = 0;                              /* Number of faces, which indicates how many faces are affected by the current material. */
-		PMX_Material_Data()
+		PMXMaterialData()
 		{
 		};
-		~PMX_Material_Data()
+		~PMXMaterialData()
 		{
 		};
 	};
 	/* Bone flags(2bytes) */
-	struct PMX_Bone_Flags                           
+	struct PMXBoneFlags                           
 	{
 		Bool	indexed_tail_position : 1;      /* The position of the tail (tip) of the bone, 0 is the relative position of the connection, and 1 is the connection sub bone */
 		Bool	Rotatable : 1;                  /* Enable rotation */
@@ -415,7 +432,7 @@ namespace mmd {
 		Bool	Physics_after_deform : 1;       /* First deform, then calculate physics */
 		Bool	External_parent_deform : 1;     /* External bony deformation */
 		Bool : 2;                               /* seize a seat */
-		PMX_Bone_Flags()
+		PMXBoneFlags()
 		{
 			this->indexed_tail_position = 0;
 			this->Rotatable = 0;
@@ -431,21 +448,21 @@ namespace mmd {
 			this->External_parent_deform = 0;
 		}
 	};
-	struct PMX_IK_links
+	struct PMXIKLinks
 	{
 		Int32		bone_index = 0;                                /* Bone index */
 		Bool		has_limits = 0;                                /* When the value is 1, the angle limit is used */
 		Vector32	limit_min = Vector32();                        /* IK angle limit minimum angle (radians) */
 		Vector32	limit_max = Vector32();                        /* IK angle limit maximum angle (radians) */
 	};
-	struct PMX_Bone_Data
+	struct PMXBoneData
 	{
 		String		bone_name_local = String();                    /* The local name of the skeleton, usually Japanese. */
 		String		bone_name_universal = String();                /* The common name of bones is usually English. */
 		Vector32	position = Vector32();                         /* Bone position */
 		Int32		parent_bone_index = 0;                         /* Bone affinity index, special: the bone affinity of the operation center is - 1 */
 		Int32		layer = 0;                                     /* Deformation stratum */
-		PMX_Bone_Flags	bone_flags = PMX_Bone_Flags();             /* Bone flags */
+		PMXBoneFlags	bone_flags = PMXBoneFlags();             /* Bone flags */
 		Vector32	tail_position = Vector32();                    /* Bone tail coordinates (valid when relative on) */
 		Int32		tail_index = 0;                                /* Bone tail index (valid when it is relatively unopened) */
 		/* 尾部位置,相对位置或连接子骨骼 */                  
@@ -459,11 +476,11 @@ namespace mmd {
 		Int32					IK_loop_count = 0;                 /* IK bone - cycle count */
 		Float32					IK_limit_radian = 0.f;             /* IK bone - unit angle */
 		Int32					IK_link_count = 0;                 /* IK bone IK chain count */
-		maxon::PointerArray<PMX_IK_links>	IK_links;
-		PMX_Bone_Data()
+		maxon::PointerArray<PMXIKLinks>	IK_links;
+		PMXBoneData()
 		{
 		};
-		PMX_Bone_Data(const PMX_Bone_Data& src)
+		PMXBoneData(const PMXBoneData& src)
 		{
 			this->bone_name_local = src.bone_name_local;
 			this->bone_name_universal = src.bone_name_universal;
@@ -486,7 +503,7 @@ namespace mmd {
 		}
 
 
-		mmd::PMX_Bone_Data& operator =(const mmd::PMX_Bone_Data& src)
+		mmd::PMXBoneData& operator =(const mmd::PMXBoneData& src)
 		{
 			if (&src == this)
 			{
@@ -513,29 +530,164 @@ namespace mmd {
 			return(*this);
 		}
 	};
-	struct PMX_Morph_group
+	class PMXMorph {
+	public:
+		virtual ~PMXMorph(){}
+		virtual void Free(PMXMorph* m){
+			DeleteObj(m);
+		}
+		virtual Bool ReadFromFile(BaseFile* file, const Char& index_size) = 0;
+	};
+	class PMXMorph_Group : public PMXMorph
 	{
+	public:
+		~PMXMorph_Group(){}
+		static maxon::Result<PMXMorph_Group*> Alloc()
+		{
+			iferr_scope;
+			PMXMorph_Group* res = NewObj(PMXMorph_Group) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		// index_size is morph index size.
+		Bool ReadFromFile(BaseFile* file,const Char& index_size) {
+			this->morph_index = ReadIndex(file, index_size);
+			if (!file->ReadFloat32(&(this->influence)))
+				return false;
+			return true;
+		}
 		Int32	morph_index = 0;                      /* Deformation index */
 		Float32 influence = 0.f;                      /* influence */
 	};
-	struct PMX_Morph_vertex
+	class PMXMorph_Vertex : public PMXMorph
 	{
+	public:
+		~PMXMorph_Vertex(){}
+		static maxon::Result<PMXMorph_Vertex*> Alloc()
+		{
+			iferr_scope;
+			PMXMorph_Vertex* res = NewObj(PMXMorph_Vertex) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		// index_size is vertex index size.
+		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
+			this->vertex_index = ReadUIndex(file, index_size);
+			if (!file->ReadVector32(&(this->translation)))
+				return false;
+			return true;
+		}
 		UInt32		vertex_index = 0;                 /* Vertex Index  */
 		Vector32	translation = Vector32();         /* move */
 	};
-	struct PMX_Morph_bone
+	class PMXMorph_Bone : public PMXMorph
 	{
+	public:
+		~PMXMorph_Bone(){}
+		static maxon::Result<PMXMorph_Bone*> Alloc()
+		{
+			iferr_scope;
+			PMXMorph_Bone* res = NewObj(PMXMorph_Bone) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		// index_size is bone index size.
+		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
+			this->bone_index = ReadIndex(file, index_size);
+			if (!file->ReadVector32(&(this->translation)))
+				return false;
+			Vector4d32 q_rotation;
+			if (!file->ReadBytes(&q_rotation, sizeof(Vector4d32)))
+				return false;	
+			this->rotation = (Vector32)QuaternionToEuler(q_rotation);
+			return true;
+		}
 		Int32		bone_index = 0;                   /* Bone index */
 		Vector32	translation = Vector32();         /* Relative position of change */
 		Vector32	rotation = Vector32();            /* Relative rotation quaternion (revolution Euler) */
 	};
-	struct PMX_Morph_UV
+	class PMXMorph_UV : public PMXMorph
 	{
+	public:
+		~PMXMorph_UV(){}
+		static maxon::Result<PMXMorph_UV*> Alloc()
+		{
+			iferr_scope;
+			PMXMorph_UV* res = NewObj(PMXMorph_UV) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		// index_size is vertex index size.
+		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
+			this->vertex_index = ReadIndex(file, index_size);
+			if (!file->ReadBytes(&(this->floats), sizeof(Vector4d32)))
+				return false;
+			return true;
+		}
 		Int32		vertex_index = 0;                 /* Vertex Index */
 		Vector4d32	floats;                           /* Influence (only x and y are useful, Z and W are 0) */
 	};
-	struct PMX_Morph_material
+	class PMXMorph_Material : public PMXMorph
 	{
+	public:
+		~PMXMorph_Material(){}
+		static maxon::Result<PMXMorph_Material*> Alloc()
+		{
+			iferr_scope;
+			PMXMorph_Material* res = NewObj(PMXMorph_Material) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		// index_size is material index size.
+		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
+			this->material_index = ReadIndex(file, index_size);
+			if (!file->ReadChar(&(this->blend_mode)))
+				return false;
+			if (!file->ReadBytes(&(this->diffuse), sizeof(Vector4d32)))
+				return false;
+			if (!file->ReadVector32(&(this->specular)))
+				return false;
+			if (!file->ReadFloat32(&(this->specularity)))
+				return false;
+			if (!file->ReadVector32(&(this->ambient)))
+				return false;
+			if (!file->ReadBytes(&(this->edge_colour), sizeof(Vector4d32)))
+				return false;
+			if (!file->ReadFloat32(&(this->edge_size)))
+				return false;
+			if (!file->ReadBytes(&(this->texture_tint), sizeof(Vector4d32)))
+				return false;
+			if (!file->ReadBytes(&(this->environment_tint), sizeof(Vector4d32)))
+				return false;
+			if (!file->ReadBytes(&(this->toon_tint), sizeof(Vector4d32)))
+				return false;
+			return true;
+		}
 		Int32		material_index = 0;               /* Material index */
 		Char		blend_mode = 0;                   /* Hybrid method */
 		Vector4d32	diffuse = Vector4d32();           /* Diffuse (diffuse) */
@@ -548,19 +700,65 @@ namespace mmd {
 		Vector4d32	environment_tint = Vector4d32();  /* Environmental tone */
 		Vector4d32	toon_tint = Vector4d32();         /* Map hue */
 	};
-	struct PMX_Morph_flip
+	class PMXMorph_Flip : public PMXMorph
 	{
+	public:
+		~PMXMorph_Flip(){}
+		static maxon::Result<PMXMorph_Flip*> Alloc()
+		{
+			iferr_scope;
+			PMXMorph_Flip* res = NewObj(PMXMorph_Flip) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		// index_size is morph index size.
+		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
+			this->morph_index = ReadIndex(file, index_size);
+			if (!file->ReadFloat32(&(this->influence)))
+				return false;
+			return true;
+		}
 		Int32	morph_index = 0;                      /* Deformation index */
-		Float32 influence = 0.;                       /* influence */
+		Float32 influence = 0.f;                       /* influence */
 	};
-	struct PMX_Morph_impulse
+	class PMXMorph_Impulse : public PMXMorph
 	{
+	public:
+		~PMXMorph_Impulse(){}
+		static maxon::Result<PMXMorph_Impulse*> Alloc()
+		{
+			iferr_scope;
+			PMXMorph_Impulse* res = NewObj(PMXMorph_Impulse) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		// index_size is rigidbody index size.
+		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
+			this->rigid_body_index = ReadIndex(file, index_size);
+			if (!file->ReadChar(&(this->local_flag)))
+				return false;
+			if (!file->ReadVector32(&(this->movement_speed)))
+				return false;
+			if (!file->ReadVector32(&(this->rotation_torque)))
+				return false;
+			return true;
+		}
 		Int32		rigid_body_index = 0;             /* Rigid body index */
 		Char		local_flag = 0;                   /* Local flag */
 		Vector32	movement_speed = Vector32();      /* Moving speed */
 		Vector32	rotation_torque = Vector32();     /* Rotational torque */
 	};
-	struct PMX_Morph_Data
+	struct PMXMorphData
 	{
 		String	morph_name_local = String();          /* Local deformation name */
 		String	morph_name_universal = String();      /* Generic deformation name */
@@ -577,80 +775,35 @@ namespace mmd {
 		 */
 		Char	morph_type = 0;
 		Int32	offset_count = 0;                    /* Number of offsets */
-		void* offset_data = nullptr;                 /* Offset data */
-		~PMX_Morph_Data()
+		maxon::BaseArray<PMXMorph*> offset_data;                 /* Offset data */
+		~PMXMorphData()
 		{
-			if (offset_data != nullptr)
+			for (auto* data : offset_data)
 			{
-				switch (this->morph_type)
-				{
-				case 0:
-				{
-					maxon::PointerArray<PMX_Morph_group>* offset_data_groups = (maxon::PointerArray<PMX_Morph_group>*)offset_data;
-					DeleteObj(offset_data_groups);
-					break;
-				}
-				case 1:
-				{
-					maxon::PointerArray<PMX_Morph_vertex>* offset_data_vertexs = (maxon::PointerArray<PMX_Morph_vertex>*)offset_data;
-					DeleteObj(offset_data_vertexs);
-					break;
-				}
-				case 2:
-				{
-					maxon::PointerArray<PMX_Morph_bone>* offset_data_bones = (maxon::PointerArray<PMX_Morph_bone>*)offset_data;
-					DeleteObj(offset_data_bones);
-					break;
-				}
-				case 3:
-				{
-					maxon::PointerArray<PMX_Morph_UV>* offset_data_UVs = (maxon::PointerArray<PMX_Morph_UV>*)offset_data;
-					DeleteObj(offset_data_UVs);
-					break;
-				}
-				case 8:
-				{
-					maxon::PointerArray<PMX_Morph_material>* offset_data_materials = (maxon::PointerArray<PMX_Morph_material>*)offset_data;
-					DeleteObj(offset_data_materials);
-					break;
-				}
-				case 9:
-				{
-					maxon::PointerArray<PMX_Morph_flip>* offset_data_flips = (maxon::PointerArray<PMX_Morph_flip>*)offset_data;
-					DeleteObj(offset_data_flips);
-					break;
-				}
-				case 10:
-				{
-					maxon::PointerArray<PMX_Morph_impulse>* offset_data_impulses = (maxon::PointerArray<PMX_Morph_impulse>*)offset_data;
-					DeleteObj(offset_data_impulses);
-					break;
-				}
-				default:
-					break;
-				}
+				if (data != nullptr)
+					data->Free(data);
 			}
 		};
 	};
 	/* Frame data */
-	struct PMX_Frame_data                                                 
+	struct PMXFrameData                                                 
 	{
 		Char	frame_type = 0;                      /* 0: index - bone, 1: index - deformation */
 		Int32	frame_data = 0;                      /* Indexes */
 	};
 	/* Display data */
-	struct PMX_Display_Data                                                 
+	struct PMXDisplayData                                                 
 	{
 		String	display_name_local = String();       /* Represents a local name */
 		String	display_name_universal = String();   /* Indicates the common name of the beam */
 		Char	special_flag = 0;                    /* 0 represents normal frame and 1 represents special frame */
 		Int32	frame_count = 0;                     /* How many frames are recorded */
-		maxon::PointerArray<PMX_Frame_data>	Frames;  /* Frame data */
-		PMX_Display_Data()
+		maxon::PointerArray<PMXFrameData>	Frames;  /* Frame data */
+		PMXDisplayData()
 		{
 		}
 
-		PMX_Display_Data(const PMX_Display_Data& src)
+		PMXDisplayData(const PMXDisplayData& src)
 		{
 			this->display_name_local = src.display_name_local;
 			this->display_name_universal = src.display_name_universal;
@@ -660,7 +813,7 @@ namespace mmd {
 		}
 	};
 	/* Non collision group mask(2 bytes) */
-	struct PMX_Rigid_body_non_collision_group 
+	struct PMXRigidBodyNonCollisionGroup 
 	{
 		Bool	G1 : 1;
 		Bool	G2 : 1;
@@ -679,7 +832,7 @@ namespace mmd {
 		Bool	G15 : 1;
 		Bool	G16 : 1;
 
-		PMX_Rigid_body_non_collision_group(
+		PMXRigidBodyNonCollisionGroup(
 			Bool G1_ = 0,
 			Bool G2_ = 0,
 			Bool G3_ = 0,
@@ -715,13 +868,13 @@ namespace mmd {
 			this->G16 = G16_;
 		}
 	};
-	struct PMX_Rigid_Body_Data
+	struct PMXRigidBodyData
 	{
 		String					rigid_body_name_local = String();                                          /* Rigid body local name */
 		String					rigid_body_name_universal = String();                                      /* Rigid body common name */
 		Int32					related_bone_index = 0;                                                    /* Associative bone index */
 		Char					group_id = 0;                                                              /* Group ID */
-		PMX_Rigid_body_non_collision_group	non_collision_group = PMX_Rigid_body_non_collision_group();    /* Collision exclusion group */
+		PMXRigidBodyNonCollisionGroup	non_collision_group = PMXRigidBodyNonCollisionGroup();    /* Collision exclusion group */
 		/*
 		 * Rigid body shape type
 		 * 0 - Ball
@@ -744,14 +897,14 @@ namespace mmd {
 		 * 2 - Physics + bone
 		 */
 		Char physics_mode = 0;
-		PMX_Rigid_Body_Data()
+		PMXRigidBodyData()
 		{
 		}
-		~PMX_Rigid_Body_Data()
+		~PMXRigidBodyData()
 		{
 		}
 	};
-	struct PMX_Joint_Data
+	struct PMXJointData
 	{
 		String	joint_name_local = String();            /* Joint point local name */
 		String	joint_name_universal = String();        /* Common name of joint point */
@@ -781,24 +934,16 @@ namespace mmd {
 		maxon::Int localCount = 0;
 	};
 	/* VPD */
-	struct VPD_Bone
+	struct VPDBoneData
 	{
 		String      name = String();
 		Vector32	translate = Vector32();
 		Vector4d32	rotation = Vector4d32();
 	};
-	struct VPD_Morph
+	struct VPDMorphData
 	{
 		String	    name = String();
 		Float32		weight = Float32();
 	};
-	/* Converts Euler rotation to quaternion rotation. */
-	extern maxon::Vector4d32 EulerToQuaternion(const maxon::Vector& euler);
-	/* Converts quaternion rotation to Euler rotation. */
-	extern maxon::Vector QuaternionToEuler(const maxon::Vector4d32& quaternion);
-	/*  Converts "SHIFT_JIS" to "UTF-8". */
-	extern Bool SJIStoUTF8(char* strin,String& strout, Int64 char_length = -1);
-	/*  Converts "UTF-8" to "SHIFT_JIS". */
-	extern Bool UTF8toSJIS(const String& strin, char* strout);
 }
 #endif //__MMD_UTILITY_H__

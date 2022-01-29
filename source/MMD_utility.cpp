@@ -125,4 +125,88 @@ namespace mmd {
 		strout.SetCString(outmen, -1, STRINGENCODING::UTF8);
 		return (true);
 	}
+	inline Bool ReadText(BaseFile* const file, const Char& text_encoding, String& out_string)
+	{
+		iferr_scope_handler{
+			MessageDialog(err.ToString(nullptr));
+			out_string = String();
+			return false;
+		};
+		Int32 text_len; /* text字符串最大长度 */
+		file->ReadInt32(&text_len);
+		if (text_len > 0) {
+			if (text_encoding == 0)
+			{
+				maxon::AutoMem<maxon::Utf16Char> tmp_wStr = NewMemClear(maxon::Utf16Char, text_len + 1) iferr_return;
+				file->ReadBytes(tmp_wStr, text_len);
+				out_string = String(tmp_wStr);
+				return true;
+			}
+			else if (text_encoding == 1)
+			{
+				maxon::AutoMem<maxon::Char> tmp_Str = NewMemClear(maxon::Char, text_len + 1) iferr_return;
+				file->ReadBytes(tmp_Str, text_len);
+				out_string.SetCString(tmp_Str, -1, STRINGENCODING::UTF8);
+				return true;
+			}
+		}
+		else {
+			out_string = String();
+			return true;
+		}
+		out_string = String();
+		return false;
+	}
+	inline Int32 ReadIndex(BaseFile* const file, const Char& index_size)
+	{
+		switch (index_size) /* 3种长度不同的Index */
+		{
+		case 1:
+		{
+			Char index;
+			file->ReadChar(&index);
+			return(index);
+		}
+		case 2:
+		{
+			Int16 index;
+			file->ReadInt16(&index);
+			return(index);
+		}
+		case 4:
+		{
+			Int32 index;
+			file->ReadInt32(&index);
+			return(index);
+		}
+		default:
+			return(-1);
+		}
+	}
+	inline UInt32 ReadUIndex(BaseFile* const file, const Char& index_size)
+	{
+		switch (index_size) /* 3种长度不同的Index */
+		{
+		case 1:
+		{
+			UChar index;
+			file->ReadUChar(&index);
+			return(index);
+		}
+		case 2:
+		{
+			UInt16 index;
+			file->ReadUInt16(&index);
+			return(index);
+		}
+		case 4:
+		{
+			UInt32 index;
+			file->ReadUInt32(&index);
+			return(index);
+		}
+		default:
+			return(0);
+		}
+	}
 }

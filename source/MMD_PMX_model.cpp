@@ -1,99 +1,14 @@
 ﻿#include "MMD_PMX_model.h"
 #undef GetObject
 
-
-inline Bool mmd::PMXModel::ReadText(BaseFile* const file, Char& text_encoding, String& out_string)
-{
-	iferr_scope_handler{
-		MessageDialog(err.ToString(nullptr));
-		out_string = String();
-		return false;
-	};
-	Int32 text_len; /* text字符串最大长度 */
-	file->ReadInt32(&text_len);
-	if (text_len > 0) {
-		if (text_encoding == 0)
-		{
-			maxon::AutoMem<maxon::Utf16Char> tmp_wStr = NewMemClear(maxon::Utf16Char, text_len + 1) iferr_return;
-			file->ReadBytes(tmp_wStr, text_len);
-			out_string = String(tmp_wStr);
-			return true;
-		}
-		else if (text_encoding == 1)
-		{
-			maxon::AutoMem<maxon::Char> tmp_Str = NewMemClear(maxon::Char, text_len + 1) iferr_return;
-			file->ReadBytes(tmp_Str, text_len);
-			out_string.SetCString(tmp_Str, -1, STRINGENCODING::UTF8);
-			return true;
-		}
-	}
-	else {
-		out_string = String();
-		return true;
-	}
-	out_string = String();
-	return false;
-}
-inline Int32 mmd::PMXModel::ReadIndex(BaseFile* const file, Char& index_size)
-{
-	switch (index_size) /* 3种长度不同的Index */
-	{
-	case 1:
-	{
-		Char index;
-		file->ReadChar(&index);
-		return(index);
-	}
-	case 2:
-	{
-		Int16 index;
-		file->ReadInt16(&index);
-		return(index);
-	}
-	case 4:
-	{
-		Int32 index;
-		file->ReadInt32(&index);
-		return(index);
-	}
-	default:
-		return(-1);
-	}
-}
-inline UInt32 mmd::PMXModel::ReadUIndex(BaseFile* const file, Char& index_size)
-{
-	switch (index_size) /* 3种长度不同的Index */
-	{
-	case 1:
-	{
-		UChar index;
-		file->ReadUChar(&index);
-		return(index);
-	}
-	case 2:
-	{
-		UInt16 index;
-		file->ReadUInt16(&index);
-		return(index);
-	}
-	case 4:
-	{
-		UInt32 index;
-		file->ReadUInt32(&index);
-		return(index);
-	}
-	default:
-		return(0);
-	}
-}
 maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 {
 	iferr_scope_handler{
 		MessageDialog(err.ToString(nullptr));
 		return err;
 	};
-	PMX_Model_information	model_info_;
-	PMX_Data_count		model_data_count_;
+	PMXModelInformation	model_info_;
+	PMXDataCount		model_data_count_;
 	Char			signature[5]{ 0 };     /* 签名,值为"PMX " */
 	if (!file->ReadBytes(signature, 4))
 		return(maxon::Error());                /* 读取签名 */
@@ -139,7 +54,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		return(maxon::Error());
 	for (Int32 i = 0; i < model_data_count_.vertex_data_count; i++)
 	{
-		PMX_Vertex_Data* vertex_data_ = NewObj(PMX_Vertex_Data) iferr_return;
+		PMXVertexData* vertex_data_ = NewObj(PMXVertexData) iferr_return;
 		if (vertex_data_ == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -160,14 +75,14 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		{
 		case 0:
 		{
-			BDEF1 weight;
+			PMXWeight_BDEF1 weight;
 			weight.bone = ReadIndex(file, model_info_.bone_index_size);
 			vertex_data_->weight_deform_B1 = weight;
 			break;
 		}
 		case 1:
 		{
-			BDEF2 weight;
+			PMXWeight_BDEF2 weight;
 			weight.bone[0] = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone[1] = ReadIndex(file, model_info_.bone_index_size);
 			if (!file->ReadFloat32(&(weight.weight)))
@@ -177,7 +92,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		case 2:
 		{
-			BDEF4 weight;
+			PMXWeight_BDEF4 weight;
 			weight.bone[0] = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone[1] = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone[2] = ReadIndex(file, model_info_.bone_index_size);
@@ -195,7 +110,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		case 3:
 		{
-			SDEF weight;
+			PMXWeight_SDEF weight;
 			weight.bone[0] = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone[1] = ReadIndex(file, model_info_.bone_index_size);
 			if (!file->ReadFloat32(&(weight.weight)))
@@ -211,7 +126,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		case 4:
 		{
-			QDEF weight;
+			PMXWeight_QDEF weight;
 			weight.bone[0] = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone[1] = ReadIndex(file, model_info_.bone_index_size);
 			weight.bone[2] = ReadIndex(file, model_info_.bone_index_size);
@@ -259,7 +174,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		return(maxon::Error());
 	for (Int32 i = 0; i < model_data_count_.material_data_count; i++)
 	{
-		PMX_Material_Data* material_data_ = NewObj(PMX_Material_Data) iferr_return;
+		PMXMaterialData* material_data_ = NewObj(PMXMaterialData) iferr_return;
 		if (material_data_ == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -278,7 +193,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 			return(maxon::Error());
 		if (!file->ReadVector32(&(material_data_->ambient_colour)))
 			return(maxon::Error());
-		if (!file->ReadBytes(&(material_data_->drawing_flags), sizeof(PMX_Material_Flags)))
+		if (!file->ReadBytes(&(material_data_->drawing_flags), sizeof(PMXMaterialFlags)))
 			return(maxon::Error());
 		if (!file->ReadBytes(&(material_data_->edge_colour), sizeof(Vector4d32)))
 			return(maxon::Error());
@@ -310,7 +225,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		return(maxon::Error());
 	for (Int32 i = 0; i < model_data_count_.bone_data_count; i++)
 	{
-		PMX_Bone_Data* bone_data_ = NewObj(PMX_Bone_Data) iferr_return;
+		PMXBoneData* bone_data_ = NewObj(PMXBoneData) iferr_return;
 		if (bone_data_ == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -326,7 +241,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		bone_data_->parent_bone_index = ReadIndex(file, model_info_.bone_index_size);
 		if (!file->ReadInt32(&(bone_data_->layer)))
 			return(maxon::Error());
-		if (!file->ReadBytes(&(bone_data_->bone_flags), sizeof(PMX_Bone_Flags)))
+		if (!file->ReadBytes(&(bone_data_->bone_flags), sizeof(PMXBoneFlags)))
 			return(maxon::Error());
 		if (bone_data_->bone_flags.indexed_tail_position == 0)
 		{
@@ -370,7 +285,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 				return(maxon::Error());
 			for (Int32 j = 0; j < bone_data_->IK_link_count; j++)
 			{
-				PMX_IK_links* IK_link = NewObj(PMX_IK_links) iferr_return;
+				PMXIKLinks* IK_link = NewObj(PMXIKLinks) iferr_return;
 				if (IK_link == nullptr)
 				{
 					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -396,7 +311,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		return(maxon::Error());
 	for (Int32 i = 0; i < model_data_count_.morph_data_count; i++)
 	{
-		PMX_Morph_Data* morph_data_ = NewObj(PMX_Morph_Data) iferr_return;
+		PMXMorphData* morph_data_ = NewObj(PMXMorphData) iferr_return;
 		if (morph_data_ == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -411,12 +326,12 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 			return(maxon::Error());
 		if (!file->ReadChar(&(morph_data_->morph_type)))
 			return(maxon::Error());
-		void* offset_data_ = nullptr;
+		/*void* offset_data_ = nullptr;
 		switch (morph_data_->morph_type)
 		{
 		case 0:
 		{
-			offset_data_ = NewObj(maxon::PointerArray<PMX_Morph_group>) iferr_return;
+			offset_data_ = NewObj(maxon::PointerArray<PMXMorph_Group>) iferr_return;
 			if (offset_data_ == nullptr)
 			{
 				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -428,7 +343,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		case 1:
 		{
-			offset_data_ = NewObj(maxon::PointerArray<PMX_Morph_vertex>) iferr_return;
+			offset_data_ = NewObj(maxon::PointerArray<PMXMorph_Vertex>) iferr_return;
 			if (offset_data_ == nullptr)
 			{
 				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -441,7 +356,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		case 2:
 		{
-			offset_data_ = NewObj(maxon::PointerArray<PMX_Morph_bone>) iferr_return;
+			offset_data_ = NewObj(maxon::PointerArray<PMXMorph_Bone>) iferr_return;
 			if (offset_data_ == nullptr)
 			{
 				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -453,7 +368,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		case 3:
 		{
-			offset_data_ = NewObj(maxon::PointerArray<PMX_Morph_UV>) iferr_return;
+			offset_data_ = NewObj(maxon::PointerArray<PMXMorph_UV>) iferr_return;
 			if (offset_data_ == nullptr)
 			{
 				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -466,7 +381,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		case 8:
 		{
-			offset_data_ = NewObj(maxon::PointerArray<PMX_Morph_material>) iferr_return;
+			offset_data_ = NewObj(maxon::PointerArray<PMXMorph_Material>) iferr_return;
 			if (offset_data_ == nullptr)
 			{
 				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -478,7 +393,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		case 9:
 		{
-			offset_data_ = NewObj(maxon::PointerArray<PMX_Morph_flip>) iferr_return;
+			offset_data_ = NewObj(maxon::PointerArray<PMXMorph_Flip>) iferr_return;
 			if (offset_data_ == nullptr)
 			{
 				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -490,7 +405,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		case 10:
 		{
-			offset_data_ = NewObj(maxon::PointerArray<PMX_Morph_impulse>) iferr_return;
+			offset_data_ = NewObj(maxon::PointerArray<PMXMorph_Impulse>) iferr_return;
 			if (offset_data_ == nullptr)
 			{
 				GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -502,7 +417,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		}
 		default:
 			break;
-		}
+		}*/
 		if (!file->ReadInt32(&(morph_data_->offset_count)))
 			return(maxon::Error());
 		for (Int32 j = 0; j < morph_data_->offset_count; j++)
@@ -511,74 +426,30 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 			{
 			case 0:
 			{
-				maxon::PointerArray<PMX_Morph_group>* offset_data_groups = (maxon::PointerArray<PMX_Morph_group>*)offset_data_;
-				PMX_Morph_group* offset_data_group_ = NewObj(PMX_Morph_group) iferr_return;
-				if (offset_data_group_ == nullptr)
-				{
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-				}
-				offset_data_group_->morph_index = ReadIndex(file, model_info_.morph_index_size);
-				if (!file->ReadFloat32(&(offset_data_group_->influence)))
-					return(maxon::Error());
-				offset_data_groups->AppendPtr(offset_data_group_) iferr_return;
+				PMXMorph_Group* offset_data_group_ = PMXMorph_Group::Alloc()iferr_return;
+				offset_data_group_->ReadFromFile(file, model_info_.morph_index_size);				
+				morph_data_->offset_data.Append(offset_data_group_) iferr_return;
 				break;
 			}
 			case 1:
 			{
-				maxon::PointerArray<PMX_Morph_vertex>* offset_data_vertexs = (maxon::PointerArray<PMX_Morph_vertex>*)offset_data_;
-				PMX_Morph_vertex* offset_data_vertex_ = NewObj(PMX_Morph_vertex) iferr_return;
-				if (offset_data_vertex_ == nullptr)
-				{
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-				}
-				offset_data_vertex_->vertex_index = ReadUIndex(file, model_info_.vertex_index_size);
-				if (!file->ReadVector32(&(offset_data_vertex_->translation)))
-					return(maxon::Error());
-				offset_data_vertexs->AppendPtr(offset_data_vertex_) iferr_return;
+				PMXMorph_Vertex* offset_data_vertex_ = PMXMorph_Vertex::Alloc() iferr_return;			
+				offset_data_vertex_->ReadFromFile(file, model_info_.vertex_index_size);			
+				morph_data_->offset_data.Append(offset_data_vertex_) iferr_return;
 				break;
 			}
 			case 2:
 			{
-				maxon::PointerArray<PMX_Morph_bone>* offset_data_bones = (maxon::PointerArray<PMX_Morph_bone>*)offset_data_;
-				PMX_Morph_bone* offset_data_bone_ = NewObj(PMX_Morph_bone) iferr_return;
-				if (offset_data_bone_ == nullptr)
-				{
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-				}
-				offset_data_bone_->bone_index = ReadIndex(file, model_info_.bone_index_size);
-				if (!file->ReadVector32(&(offset_data_bone_->translation)))
-					return(maxon::Error());
-				Vector4d32 q_rotation;
-				if (!file->ReadBytes(&q_rotation, sizeof(Vector4d32)))
-					return(maxon::Error());
-				Vector32 rotation;
-				rotation.x = -maxon::ATan2(2 * q_rotation.y * q_rotation.w + 2 * q_rotation.x * q_rotation.z, 1 - 2 * (q_rotation.x * q_rotation.x + q_rotation.y * q_rotation.y));
-				rotation.y = -maxon::ASin(2 * (q_rotation.x * q_rotation.w - q_rotation.y * q_rotation.z));
-				rotation.z = -maxon::ATan2(2 * q_rotation.z * q_rotation.w + 2 * q_rotation.x * q_rotation.y, 1 - 2 * (q_rotation.x * q_rotation.x + q_rotation.z * q_rotation.z));
-				offset_data_bone_->rotation = rotation;
-				offset_data_bones->AppendPtr(offset_data_bone_) iferr_return;
+				PMXMorph_Bone* offset_data_bone_ = PMXMorph_Bone::Alloc() iferr_return;
+				offset_data_bone_->ReadFromFile(file, model_info_.bone_index_size);				
+				morph_data_->offset_data.Append(offset_data_bone_) iferr_return;
 				break;
 			}
 			case 3:
 			{
-				maxon::PointerArray<PMX_Morph_UV>* offset_data_UVs = (maxon::PointerArray<PMX_Morph_UV>*)offset_data_;
-				PMX_Morph_UV* offset_data_UV_ = NewObj(PMX_Morph_UV) iferr_return;
-				if (offset_data_UV_ == nullptr)
-				{
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-				}
-				offset_data_UV_->vertex_index = ReadIndex(file, model_info_.vertex_index_size);
-				if (!file->ReadBytes(&(offset_data_UV_->floats), sizeof(Vector4d32)))
-					return(maxon::Error());
-				offset_data_UVs->AppendPtr(offset_data_UV_) iferr_return;
+				PMXMorph_UV* offset_data_UV_ = PMXMorph_UV::Alloc() iferr_return;
+				offset_data_UV_->ReadFromFile(file, model_info_.vertex_index_size);				
+				morph_data_->offset_data.Append(offset_data_UV_) iferr_return;
 				break;
 			}
 			case 4:
@@ -607,72 +478,23 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 			}
 			case 8:
 			{
-				maxon::PointerArray<PMX_Morph_material>* offset_data_materials = (maxon::PointerArray<PMX_Morph_material>*)offset_data_;
-				PMX_Morph_material* offset_data_material_ = NewObj(PMX_Morph_material) iferr_return;
-				if (offset_data_material_ == nullptr)
-				{
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-				}
-				offset_data_material_->material_index = ReadIndex(file, model_info_.material_index_size);
-				if (!file->ReadChar(&(offset_data_material_->blend_mode)))
-					return(maxon::Error());
-				if (!file->ReadBytes(&(offset_data_material_->diffuse), sizeof(Vector4d32)))
-					return(maxon::Error());
-				if (!file->ReadVector32(&(offset_data_material_->specular)))
-					return(maxon::Error());
-				if (!file->ReadFloat32(&(offset_data_material_->specularity)))
-					return(maxon::Error());
-				if (!file->ReadVector32(&(offset_data_material_->ambient)))
-					return(maxon::Error());
-				if (!file->ReadBytes(&(offset_data_material_->edge_colour), sizeof(Vector4d32)))
-					return(maxon::Error());
-				if (!file->ReadFloat32(&(offset_data_material_->edge_size)))
-					return(maxon::Error());
-				if (!file->ReadBytes(&(offset_data_material_->texture_tint), sizeof(Vector4d32)))
-					return(maxon::Error());
-				if (!file->ReadBytes(&(offset_data_material_->environment_tint), sizeof(Vector4d32)))
-					return(maxon::Error());
-				if (!file->ReadBytes(&(offset_data_material_->toon_tint), sizeof(Vector4d32)))
-					return(maxon::Error());
-				offset_data_materials->AppendPtr(offset_data_material_) iferr_return;
+				PMXMorph_Material* offset_data_material_ = PMXMorph_Material::Alloc()iferr_return;
+				offset_data_material_->ReadFromFile(file, model_info_.material_index_size);				
+				morph_data_->offset_data.Append(offset_data_material_) iferr_return;
 				break;
 			}
 			case 9:
 			{
-				maxon::PointerArray<PMX_Morph_flip>* offset_data_flips = (maxon::PointerArray<PMX_Morph_flip>*)offset_data_;
-				PMX_Morph_flip* offset_data_flip_ = NewObj(PMX_Morph_flip) iferr_return;
-				if (offset_data_flip_ == nullptr)
-				{
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-				}
-				offset_data_flip_->morph_index = ReadIndex(file, model_info_.morph_index_size);
-				if (!file->ReadFloat32(&(offset_data_flip_->influence)))
-					return(maxon::Error());
-				offset_data_flips->AppendPtr(offset_data_flip_) iferr_return;
+				PMXMorph_Flip* offset_data_flip_ = PMXMorph_Flip::Alloc()iferr_return;
+				offset_data_flip_->ReadFromFile(file, model_info_.morph_index_size);			
+				morph_data_->offset_data.Append(offset_data_flip_) iferr_return;
 				break;
 			}
 			case 10:
 			{
-				maxon::PointerArray<PMX_Morph_impulse>* offset_data_impulses = (maxon::PointerArray<PMX_Morph_impulse>*)offset_data_;
-				PMX_Morph_impulse* offset_data_impulse_ = NewObj(PMX_Morph_impulse) iferr_return;
-				if (offset_data_impulse_ == nullptr)
-				{
-					GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-				}
-				offset_data_impulse_->rigid_body_index = ReadIndex(file, model_info_.rigidbody_index_size);
-				if (!file->ReadChar(&(offset_data_impulse_->local_flag)))
-					return(maxon::Error());
-				if (!file->ReadVector32(&(offset_data_impulse_->movement_speed)))
-					return(maxon::Error());
-				if (!file->ReadVector32(&(offset_data_impulse_->rotation_torque)))
-					return(maxon::Error());
-				offset_data_impulses->AppendPtr(offset_data_impulse_) iferr_return;
+				PMXMorph_Impulse* offset_data_impulse_ = PMXMorph_Impulse::Alloc()iferr_return;
+				offset_data_impulse_->ReadFromFile(file, model_info_.rigidbody_index_size);
+				morph_data_->offset_data.Append(offset_data_impulse_) iferr_return;
 				break;
 			}
 			default:
@@ -684,7 +506,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 	file->ReadInt32(&(model_data_count_.display_data_count));
 	for (Int32 i = 0; i < model_data_count_.display_data_count; i++)
 	{
-		PMX_Display_Data* display_data_ = NewObj(PMX_Display_Data) iferr_return;
+		PMXDisplayData* display_data_ = NewObj(PMXDisplayData) iferr_return;
 		if (display_data_ == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -701,7 +523,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 			return(maxon::Error());
 		for (Int32 j = 0; j < display_data_->frame_count; j++)
 		{
-			PMX_Frame_data* Frame = NewObj(PMX_Frame_data) iferr_return;
+			PMXFrameData* Frame = NewObj(PMXFrameData) iferr_return;
 			if (!file->ReadChar(&(Frame->frame_type)))
 				return(maxon::Error());
 			if (Frame->frame_type == 1)           /* 1:索引 - 变形 */
@@ -719,7 +541,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 	file->ReadInt32(&(model_data_count_.rigid_body_data_count));
 	for (Int32 i = 0; i < model_data_count_.rigid_body_data_count; i++)
 	{
-		PMX_Rigid_Body_Data* rigid_body_data_ = NewObj(PMX_Rigid_Body_Data) iferr_return;
+		PMXRigidBodyData* rigid_body_data_ = NewObj(PMXRigidBodyData) iferr_return;
 		if (rigid_body_data_ == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -733,7 +555,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		rigid_body_data_->related_bone_index = ReadIndex(file, model_info_.bone_index_size);
 		if (!file->ReadChar(&(rigid_body_data_->group_id)))
 			return(maxon::Error());
-		if (!file->ReadBytes(&(rigid_body_data_->non_collision_group), sizeof(PMX_Rigid_body_non_collision_group)))
+		if (!file->ReadBytes(&(rigid_body_data_->non_collision_group), sizeof(PMXRigidBodyNonCollisionGroup)))
 			return(maxon::Error());
 		if (!file->ReadChar(&(rigid_body_data_->shape_type)))
 			return(maxon::Error());
@@ -760,7 +582,7 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 	file->ReadInt32(&(model_data_count_.joint_data_count));
 	for (Int32 i = 0; i < model_data_count_.joint_data_count; i++)
 	{
-		PMX_Joint_Data* joint_data_ = NewObj(PMX_Joint_Data) iferr_return;
+		PMXJointData* joint_data_ = NewObj(PMXJointData) iferr_return;
 		if (joint_data_ == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -913,7 +735,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			/*Create a bone object and initialize the English name conversion.*/
 			for (Int32 bone_index = 0; bone_index < kBoneDataCount; bone_index++)
 			{
-				PMX_Bone_Data& bone_data_ = this->bone_data[bone_index];
+				PMXBoneData& bone_data_ = this->bone_data[bone_index];
 				BaseObject* bone = BaseObject::Alloc(Ojoint);
 				if (bone == nullptr)
 				{
@@ -934,7 +756,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			/*Sets the parent-child relationship and position of the bone.*/
 			for (Int32 bone_index = 0; bone_index < kBoneDataCount; bone_index++)
 			{
-				PMX_Bone_Data& bone_data_ = this->bone_data[bone_index];
+				PMXBoneData& bone_data_ = this->bone_data[bone_index];
 				auto bone_ptr = bone_map.Find(bone_index);
 				if (bone_ptr == nullptr)
 				{
@@ -959,7 +781,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			// Create tag and import data.
 			for (Int32 bone_index = 0; bone_index < kBoneDataCount; bone_index++)
 			{
-				PMX_Bone_Data& bone_data_ = this->bone_data[bone_index];
+				PMXBoneData& bone_data_ = this->bone_data[bone_index];
 				auto bone_ptr = bone_map.Find(bone_index);
 				if (bone_ptr == nullptr)
 				{
@@ -1136,7 +958,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						}
 						ik_link->SetLink(IK_tag);
 						ModelRoot->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
-						for (mmd::PMX_IK_links& IK_link : bone_data_.IK_links)
+						for (mmd::PMXIKLinks& IK_link : bone_data_.IK_links)
 						{
 							if (IK_link.has_limits != true)
 								continue;
@@ -1158,7 +980,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			DescriptionCheckUpdate* msg_data = NewObj(DescriptionCheckUpdate)iferr_return;
 			msg_data->descid = NewObj(DescID,PMX_BONE_INHERIT_BONE_PARENT_LINK)iferr_return;
 			BoneRoot->MultiMessage(MULTIMSG_ROUTE::BROADCAST, MSG_DESCRIPTION_CHECKUPDATE, msg_data);
-			for (PMX_Rigid_Body_Data& rigid_body_data : this->rigid_body_data)
+			for (PMXRigidBodyData& rigid_body_data : this->rigid_body_data)
 			{
 				const Int32 bone_index = rigid_body_data.related_bone_index;
 				if (bone_index == -1)
@@ -1206,7 +1028,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 		const Int32	material_data_count = this->model_data_count.material_data_count;
 		for (Int32 material_index = 0; material_index < material_data_count; material_index++)
 		{
-			PMX_Material_Data& material_data = this->material_data[material_index];
+			PMXMaterialData& material_data = this->material_data[material_index];
 			PolygonObject* part = nullptr;
 			CAWeightTag* weight_tag = nullptr;
 			if (settings.import_polygon)
@@ -1355,7 +1177,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				{					
 					for (Int32 part_vertex_index = 0; part_vertex_index < vertex_index_arr_count; part_vertex_index++) 
 					{
-						PMX_Vertex_Data& vertex_data_ = this->vertex_data[morph_tag_info.vertex_index_arr[part_vertex_index]];
+						PMXVertexData& vertex_data_ = this->vertex_data[morph_tag_info.vertex_index_arr[part_vertex_index]];
 						switch (vertex_data_.weight_deform_type)
 						{
 						case 0:
@@ -1570,7 +1392,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					context.localCount = 0;
 				}, [this, &part_points, &settings, &weight_tag, &morph_tag_info, &joint_bone_map, &material_data,&weight_data_map](const Int32 part_vertex_index, LocalData& context)->maxon::Result<void>
 				{
-					PMX_Vertex_Data& vertex_data_ = this->vertex_data[morph_tag_info.vertex_index_arr[part_vertex_index]];
+					PMXVertexData& vertex_data_ = this->vertex_data[morph_tag_info.vertex_index_arr[part_vertex_index]];
 					part_points[part_vertex_index] = Vector(vertex_data_.position * settings.position_multiple);
 					auto weight_data_ptr = weight_data_map.Find(part_vertex_index);
 					if (weight_data_ptr != nullptr) {
@@ -1637,9 +1459,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						return err;
 					};
                     CPolygon& surface = this->surface_data[surface_index + part_surface_end];
-					PMX_Vertex_Data& vertex0 = this->vertex_data[surface.a];
-					PMX_Vertex_Data& vertex1 = this->vertex_data[surface.b];
-					PMX_Vertex_Data& vertex2 = this->vertex_data[surface.c];
+					PMXVertexData& vertex0 = this->vertex_data[surface.a];
+					PMXVertexData& vertex1 = this->vertex_data[surface.b];
+					PMXVertexData& vertex2 = this->vertex_data[surface.c];
 					Int32 vertex_a_index = 0;
 					auto vertex_a_ptr = vertex_info_map.Find(surface.a);
 					// 找到对应该part的对应的点a新顶点索引。
@@ -1902,20 +1724,18 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			for (Int32 morph_index = 0; morph_index < morph_data_count; morph_index++)                                                                       
 			{
 				// 读取对应表情数据
-				PMX_Morph_Data& morph_data = this->morph_data[morph_index];                                                                              
+				PMXMorphData& morph_data = this->morph_data[morph_index];                                                                              
 				switch (morph_data.morph_type)
 				{
 				// 顶点表情
 				case 1:                                                                                                                                  
 				{
-					// 表情数据储存的变换信息
-					maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data.offset_data; 
 					// 表情数据储存的变换信息个数
 					Int32 offset_count = morph_data.offset_count;                                              
 					for (Int32 offset_count_index = 0; offset_count_index < offset_count; offset_count_index++)
 					{
 						// 对应变换信息
-						UInt32	vertex_index = vertex_morph_data_arr->operator[](offset_count_index).vertex_index;
+						UInt32	vertex_index = static_cast<PMXMorph_Vertex*>(morph_data.offset_data[offset_count_index])->vertex_index;
 						// 在vertex_info_map里查找原顶点在该部分中的对应顶点信息
 						auto	point_info_ptr = vertex_info_map.Find(vertex_index);
 						if (point_info_ptr == nullptr)
@@ -1959,14 +1779,15 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 							}
 						}
 					}
-					maxon::ParallelFor::Dynamic(0, offset_count, [&vertex_info_map, &vertex_morph_data_arr, &tag_morph_map, &doc, &morph_data, &settings](const Int32 offset_count_index)->maxon::Result<void>
+					maxon::ParallelFor::Dynamic(0, offset_count, [&vertex_info_map, &tag_morph_map, &doc, &morph_data, &settings](const Int32 offset_count_index)->maxon::Result<void>
 					{
 							iferr_scope_handler{
 								MessageDialog(err.ToString(nullptr));
 								return err;
 						};		
+						PMXMorph_Vertex* vertex_morph_data = static_cast<PMXMorph_Vertex*>(morph_data.offset_data[offset_count_index]);
 						// 对应变换信息
-						UInt32 vertex_index = vertex_morph_data_arr->operator[](offset_count_index).vertex_index;       
+						UInt32 vertex_index = vertex_morph_data->vertex_index;
 						// 在vertex_info_map里查找原顶点在该部分中的对应顶点信息
 						auto point_info_ptr = vertex_info_map.Find(vertex_index);                                        
 						if (point_info_ptr == nullptr)
@@ -1987,7 +1808,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 							{
 								morph_node = morph_node->GetNext();
 							}
-							morph_node->SetPoint(point_info_.point_index, Vector(vertex_morph_data_arr->operator[](offset_count_index).translation * settings.position_multiple));
+							morph_node->SetPoint(point_info_.point_index, Vector(vertex_morph_data->translation * settings.position_multiple));
 							point_info_ptr = point_info_ptr->GetNextWithSameKey();
 						}
 						return(maxon::OK);
@@ -1998,16 +1819,15 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				case 2: {
 					if (settings.import_bone)
 					{
-						maxon::PointerArray<PMX_Morph_bone>* bone_morph_data_arr = (maxon::PointerArray<PMX_Morph_bone>*)morph_data.offset_data; /* 读取表情数据储存的变换信息 */
 						Int32					offset_count = morph_data.offset_count;                                      /* 读取表情数据储存的变换信息个数 */
-						maxon::ParallelFor::Dynamic(0, offset_count, [&bone_map, &bone_morph_data_arr, &bone_tag_map, &doc, &morph_data, &settings](const Int32 offset_count_index)->maxon::Result<void>
+						maxon::ParallelFor::Dynamic(0, offset_count, [&bone_map, &bone_tag_map, &doc, &morph_data, &settings](const Int32 offset_count_index)->maxon::Result<void>
 						{
 							iferr_scope_handler{
 								MessageDialog(err.ToString(nullptr));
 								return err;
 							};
-							mmd::PMX_Morph_bone bone_morph_data = bone_morph_data_arr->operator[](offset_count_index);
-							auto bone_ptr = bone_map.Find(bone_morph_data.bone_index);
+							PMXMorph_Bone* bone_morph_data = static_cast<PMXMorph_Bone*>(morph_data.offset_data[offset_count_index]);
+							auto bone_ptr = bone_map.Find(bone_morph_data->bone_index);
 							if (bone_ptr == nullptr)
 								return maxon::OK;
 							BaseObject* bone = bone_ptr->GetValue();
@@ -2020,9 +1840,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 							Int32 bone_morph_data_index = pmx_bone_tag_data->AddBondMorph(morph_data.morph_name_local);
 							if (bone_morph_data_index == -1)
 								return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-							if (!pmx_bone_tag_data->SetBondMorphTranslation(bone_morph_data_index, Vector(bone_morph_data.translation * settings.position_multiple)))
+							if (!pmx_bone_tag_data->SetBondMorphTranslation(bone_morph_data_index, Vector(bone_morph_data->translation * settings.position_multiple)))
 								return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-							if (!pmx_bone_tag_data->SetBondMorphRotation(bone_morph_data_index, Vector(bone_morph_data.rotation)))
+							if (!pmx_bone_tag_data->SetBondMorphRotation(bone_morph_data_index, Vector(bone_morph_data->rotation)))
 								return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 							return maxon::OK;
 						}) iferr_return;
@@ -2032,11 +1852,11 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				// UV表情
 				case 3:
 				{
-					maxon::PointerArray<PMX_Morph_UV>* UV_morph_data_arr = (maxon::PointerArray<PMX_Morph_UV>*)morph_data.offset_data;
 					maxon::HashMap<Int32, Vector>		vertex_floats_map;
-					for (PMX_Morph_UV& UV_morph_data : (*UV_morph_data_arr))
+					for (PMXMorph* data : morph_data.offset_data)
 					{
-						vertex_floats_map.Insert(UV_morph_data.vertex_index, Vector(UV_morph_data.floats.x, UV_morph_data.floats.y, 0)) iferr_return;
+						PMXMorph_UV* UV_morph_data = static_cast<PMXMorph_UV*>(data);
+						vertex_floats_map.Insert(UV_morph_data->vertex_index, Vector(UV_morph_data->floats.x, UV_morph_data->floats.y, 0)) iferr_return;
 					}
 					for (tag_info& tag_info_ : morph_tag_list)
 					{
@@ -2057,7 +1877,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						}
 						morph->SetMode(doc, tag_info_.morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
 						Int32 surface_data_count = morph_node->GetUVCount(0);
-						maxon::ParallelFor::Dynamic(0, surface_data_count, [&morph_node, this, &UV_morph_data_arr, &vertex_floats_map, &vertex_info_map, &tag_info_](const Int32 surface_index)
+						maxon::ParallelFor::Dynamic(0, surface_data_count, [&morph_node, this, &vertex_floats_map, &vertex_info_map, &tag_info_](const Int32 surface_index)
 						{
 							const CPolygon& surface = ToPoly(tag_info_.morph_tag->GetObject())->GetPolygonR()[surface_index];
 							UVWStruct uvw;
@@ -2091,7 +1911,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					break;
 				}
 			}
-			// 清除没有表情的变形标签，初始化表情强度，发生更新信息。
+			// 清除没有表情的变形标签，初始化表情强度，发送更新信息。
 			for (tag_info& tag_info_ : morph_tag_list)
 			{
 				if (tag_info_.morph_tag->GetMorphCount() == 1)
@@ -2198,7 +2018,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			/*Create a bone object and initialize the English name conversion.*/
 			for (Int32 bone_index = 0; bone_index < kBoneDataCount; bone_index++)
 			{
-				PMX_Bone_Data& bone_data_ = this->bone_data[bone_index];
+				PMXBoneData& bone_data_ = this->bone_data[bone_index];
 				BaseObject* bone = BaseObject::Alloc(Ojoint);
 				if (bone == nullptr)
 				{
@@ -2220,7 +2040,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			/*Sets the parent-child relationship and position of the bone.*/
 			for (Int32 bone_index = 0; bone_index < kBoneDataCount; bone_index++)
 			{
-				PMX_Bone_Data& bone_data_ = this->bone_data[bone_index];
+				PMXBoneData& bone_data_ = this->bone_data[bone_index];
 				auto bone_ptr = bone_map.Find(bone_index);
 				if (bone_ptr == nullptr)
 				{
@@ -2248,7 +2068,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			// Create tag and import data.
 			for (Int32 bone_index = 0; bone_index < kBoneDataCount; bone_index++)
 			{
-				PMX_Bone_Data& bone_data_ = this->bone_data[bone_index];
+				PMXBoneData& bone_data_ = this->bone_data[bone_index];
 				auto bone_ptr = bone_map.Find(bone_index);
 				if (bone_ptr == nullptr)
 				{
@@ -2425,7 +2245,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						}
 						ik_link->SetLink(IK_tag);
 						ModelRoot->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
-						for (mmd::PMX_IK_links& IK_link : bone_data_.IK_links)
+						for (mmd::PMXIKLinks& IK_link : bone_data_.IK_links)
 						{
 							if (IK_link.has_limits != true)
 								continue;
@@ -2447,7 +2267,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			DescriptionCheckUpdate* msg_data = NewObj(DescriptionCheckUpdate)iferr_return;
 			msg_data->descid = NewObj(DescID, PMX_BONE_INHERIT_BONE_PARENT_LINK)iferr_return;
 			BoneRoot->MultiMessage(MULTIMSG_ROUTE::BROADCAST, MSG_DESCRIPTION_CHECKUPDATE, msg_data);
-			for (PMX_Rigid_Body_Data& rigid_body_data : this->rigid_body_data)
+			for (PMXRigidBodyData& rigid_body_data : this->rigid_body_data)
 			{
 				const Int32 bone_index = rigid_body_data.related_bone_index;
 				if (bone_index != -1)
@@ -2479,7 +2299,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			maxon::HashMap<Int32, maxon::UniqueRef<maxon::HashMap<Int32,Float32>>> weight_data_map;
 			if (settings.import_weights) {
 				for (Int32 vertex_index = 0; vertex_index < vertex_data_count; vertex_index++) {
-					PMX_Vertex_Data& vertex_data_ = this->vertex_data[vertex_index];
+					PMXVertexData& vertex_data_ = this->vertex_data[vertex_index];
 					switch (vertex_data_.weight_deform_type)
 					{
 					case 0:
@@ -2582,7 +2402,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				context.localCount = 0;
 			}, [&vertex_data_count, this, &model_points, &settings, &weight_tag, &weight_data_map](const Int32 vertex_index, LocalData& context)->maxon::Result<void>
 			{
-				PMX_Vertex_Data& vertex_data_ = this->vertex_data[vertex_index];
+				PMXVertexData& vertex_data_ = this->vertex_data[vertex_index];
 				g_spinlock.Lock();
 				model_points[vertex_index] = Vector(vertex_data_.position * settings.position_multiple);
 				g_spinlock.Unlock();
@@ -2654,9 +2474,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					return err;
 				};
 				CPolygon& surface = this->surface_data[surface_index];
-				PMX_Vertex_Data& vertex0 = this->vertex_data[surface.a];
-				PMX_Vertex_Data& vertex1 = this->vertex_data[surface.b];
-				PMX_Vertex_Data& vertex2 = this->vertex_data[surface.c];
+				PMXVertexData& vertex0 = this->vertex_data[surface.a];
+				PMXVertexData& vertex1 = this->vertex_data[surface.b];
+				PMXVertexData& vertex2 = this->vertex_data[surface.c];
 				g_spinlock.Lock();
 				model_polygon[surface_index] = CPolygon(surface.a, surface.b, surface.c);
 				g_spinlock.Unlock();
@@ -2757,12 +2577,12 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			{
 				StatusSetText("Import morphs..."_s);
 				StatusSetBar(morph_index * 100 / morph_data_count);
-				PMX_Morph_Data& morph_data = this->morph_data[morph_index];
+				PMXMorphData& morph_data = this->morph_data[morph_index];
 				switch (morph_data.morph_type)
 				{
 				// 顶点表情
 				case 1: {
-					maxon::PointerArray<PMX_Morph_vertex>* vertex_morph_data_arr = (maxon::PointerArray<PMX_Morph_vertex>*)morph_data.offset_data;
+					morph_data.offset_data;
 					Int32					offset_count = morph_data.offset_count;
 					morph_tag->ExitEdit(doc, true);
 					CAMorph* morph = morph_tag->AddMorph();
@@ -2781,10 +2601,11 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						morph_node = morph_node->GetNext();
 					}
 					morph->SetMode(doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
-					maxon::ParallelFor::Dynamic(0, offset_count, [&morph_node, &vertex_morph_data_arr, &settings](const Int32 pointIndex)
+					maxon::ParallelFor::Dynamic(0, offset_count, [&morph_data, &morph_node, &settings](const Int32 pointIndex)
 					{
-						morph_node->SetPoint(vertex_morph_data_arr->operator[](pointIndex).vertex_index,
-							Vector(vertex_morph_data_arr->operator[](pointIndex).translation * settings.position_multiple));
+						mmd::PMXMorph_Vertex* vertex_morph_data = static_cast<PMXMorph_Vertex*>(morph_data.offset_data[pointIndex]);
+						morph_node->SetPoint(vertex_morph_data->vertex_index,
+							Vector(vertex_morph_data->translation * settings.position_multiple));
 					});
 					morph->SetMode(doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
 					morph_tag->UpdateMorphs();
@@ -2797,18 +2618,16 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				case 2: {
 					if (settings.import_bone)
 					{
-						// 表情数据储存的变换信息
-						maxon::PointerArray<PMX_Morph_bone>* bone_morph_data_arr = (maxon::PointerArray<PMX_Morph_bone>*)morph_data.offset_data; 
 						// 表情数据储存的变换信息个数
 						Int32 offset_count = morph_data.offset_count;                                    
-						maxon::ParallelFor::Dynamic(0, offset_count, [&bone_map, &bone_morph_data_arr, &bone_tag_map, &doc, &morph_data, &settings](const Int32 offset_count_index)->maxon::Result<void>
+						maxon::ParallelFor::Dynamic(0, offset_count, [&bone_map, &bone_tag_map, &doc, &morph_data, &settings](const Int32 offset_count_index)->maxon::Result<void>
 						{
 								iferr_scope_handler{
 									MessageDialog(err.ToString(nullptr));
 									return err;
 								};
-							mmd::PMX_Morph_bone bone_morph_data = bone_morph_data_arr->operator[](offset_count_index);
-							auto bone_ptr = bone_map.Find(bone_morph_data.bone_index);
+							mmd::PMXMorph_Bone* bone_morph_data = static_cast<PMXMorph_Bone*>(morph_data.offset_data[offset_count_index]);
+							auto bone_ptr = bone_map.Find(bone_morph_data->bone_index);
 							if (bone_ptr == nullptr)
 								return maxon::OK;
 							BaseObject* bone = bone_ptr->GetValue();
@@ -2821,9 +2640,9 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 							Int32 bone_morph_data_index = pmx_bone_tag_data->AddBondMorph(morph_data.morph_name_local);
 							if (bone_morph_data_index == -1)
 								return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-							if (!pmx_bone_tag_data->SetBondMorphTranslation(bone_morph_data_index, Vector(bone_morph_data.translation * settings.position_multiple)))
+							if (!pmx_bone_tag_data->SetBondMorphTranslation(bone_morph_data_index, Vector(bone_morph_data->translation * settings.position_multiple)))
 								return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-							if (!pmx_bone_tag_data->SetBondMorphRotation(bone_morph_data_index, Vector(bone_morph_data.rotation)))
+							if (!pmx_bone_tag_data->SetBondMorphRotation(bone_morph_data_index, Vector(bone_morph_data->rotation)))
 								return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 							return maxon::OK;
 						}) iferr_return;
@@ -2833,11 +2652,12 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 				// UV表情
 				case 3:
 				{
-					maxon::PointerArray<PMX_Morph_UV>* UV_morph_data_arr = (maxon::PointerArray<PMX_Morph_UV>*)morph_data.offset_data;
+		
 					maxon::HashMap<Int32, Vector>		vertex_floats_map;
-					for (PMX_Morph_UV& UV_morph_data : (*UV_morph_data_arr))
+					for (PMXMorph* data : morph_data.offset_data)
 					{
-						vertex_floats_map.Insert(UV_morph_data.vertex_index, Vector(UV_morph_data.floats.x, UV_morph_data.floats.y, 0)) iferr_return;
+						PMXMorph_UV* UV_morph_data = static_cast<PMXMorph_UV*>(data);
+						vertex_floats_map.Insert(UV_morph_data->vertex_index, Vector(UV_morph_data->floats.x, UV_morph_data->floats.y, 0)) iferr_return;
 					}
 					morph_tag->ExitEdit(doc, true);
 					CAMorph* morph = morph_tag->AddMorph();
@@ -2855,7 +2675,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						morph_node = morph_node->GetNext();
 					}
 					morph->SetMode(doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
-					maxon::ParallelFor::Dynamic(0, surface_data_count, [&morph_node, this, &UV_morph_data_arr, &vertex_floats_map](const Int32 surface_index)
+					maxon::ParallelFor::Dynamic(0, surface_data_count, [&morph_node, this, &vertex_floats_map](const Int32 surface_index)
 					{
 						CPolygon& surface = this->surface_data[surface_index];
 						UVWStruct uvw;
@@ -2898,7 +2718,7 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 			{
 				StatusSetText("Import materials..."_s);
 				StatusSetBar(material_index * 100 / material_data_count);
-				PMX_Material_Data& material_data = this->material_data[material_index];
+				PMXMaterialData& material_data = this->material_data[material_index];
 				Material* material = Material::Alloc();
 				if (material == nullptr)
 				{
