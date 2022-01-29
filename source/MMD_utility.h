@@ -13,9 +13,9 @@ namespace mmd {
 	/*  Converts "UTF-8" to "SHIFT_JIS". */
 	extern Bool UTF8toSJIS(const String& strin, char* strout);
 
-	extern Bool ReadText(BaseFile* const file, const Char& text_encoding, String& out_string);
-	extern Int32 ReadIndex(BaseFile* const file, const Char& index_size);
-	extern UInt32 ReadUIndex(BaseFile* const file, const Char& index_size);
+	extern Bool ReadPMXText(BaseFile* const file, const Char& text_encoding, String& out_string);
+	extern Int32 ReadPMXIndex(BaseFile* const file, const Char& index_size);
+	extern UInt32 ReadPMXUIndex(BaseFile* const file, const Char& index_size);
 
 	typedef maxon::Vec2<Float32> Vector2d32;
 	/* MMD animation */
@@ -556,7 +556,7 @@ namespace mmd {
 		}
 		// index_size is morph index size.
 		Bool ReadFromFile(BaseFile* file,const Char& index_size) {
-			this->morph_index = ReadIndex(file, index_size);
+			this->morph_index = ReadPMXIndex(file, index_size);
 			if (!file->ReadFloat32(&(this->influence)))
 				return false;
 			return true;
@@ -582,7 +582,7 @@ namespace mmd {
 		}
 		// index_size is vertex index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
-			this->vertex_index = ReadUIndex(file, index_size);
+			this->vertex_index = ReadPMXUIndex(file, index_size);
 			if (!file->ReadVector32(&(this->translation)))
 				return false;
 			return true;
@@ -608,7 +608,7 @@ namespace mmd {
 		}
 		// index_size is bone index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
-			this->bone_index = ReadIndex(file, index_size);
+			this->bone_index = ReadPMXIndex(file, index_size);
 			if (!file->ReadVector32(&(this->translation)))
 				return false;
 			Vector4d32 q_rotation;
@@ -639,7 +639,7 @@ namespace mmd {
 		}
 		// index_size is vertex index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
-			this->vertex_index = ReadIndex(file, index_size);
+			this->vertex_index = ReadPMXIndex(file, index_size);
 			if (!file->ReadBytes(&(this->floats), sizeof(Vector4d32)))
 				return false;
 			return true;
@@ -665,7 +665,7 @@ namespace mmd {
 		}
 		// index_size is material index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
-			this->material_index = ReadIndex(file, index_size);
+			this->material_index = ReadPMXIndex(file, index_size);
 			if (!file->ReadChar(&(this->blend_mode)))
 				return false;
 			if (!file->ReadBytes(&(this->diffuse), sizeof(Vector4d32)))
@@ -718,7 +718,7 @@ namespace mmd {
 		}
 		// index_size is morph index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
-			this->morph_index = ReadIndex(file, index_size);
+			this->morph_index = ReadPMXIndex(file, index_size);
 			if (!file->ReadFloat32(&(this->influence)))
 				return false;
 			return true;
@@ -744,7 +744,7 @@ namespace mmd {
 		}
 		// index_size is rigidbody index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) {
-			this->rigid_body_index = ReadIndex(file, index_size);
+			this->rigid_body_index = ReadPMXIndex(file, index_size);
 			if (!file->ReadChar(&(this->local_flag)))
 				return false;
 			if (!file->ReadVector32(&(this->movement_speed)))

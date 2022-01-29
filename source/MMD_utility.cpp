@@ -125,7 +125,7 @@ namespace mmd {
 		strout.SetCString(outmen, -1, STRINGENCODING::UTF8);
 		return (true);
 	}
-	inline Bool ReadText(BaseFile* const file, const Char& text_encoding, String& out_string)
+	inline Bool ReadPMXText(BaseFile* const file, const Char& text_encoding, String& out_string)
 	{
 		iferr_scope_handler{
 			MessageDialog(err.ToString(nullptr));
@@ -157,7 +157,7 @@ namespace mmd {
 		out_string = String();
 		return false;
 	}
-	inline Int32 ReadIndex(BaseFile* const file, const Char& index_size)
+	inline Int32 ReadPMXIndex(BaseFile* const file, const Char& index_size)
 	{
 		switch (index_size) /* 3种长度不同的Index */
 		{
@@ -183,7 +183,7 @@ namespace mmd {
 			return(-1);
 		}
 	}
-	inline UInt32 ReadUIndex(BaseFile* const file, const Char& index_size)
+	inline UInt32 ReadPMXUIndex(BaseFile* const file, const Char& index_size)
 	{
 		switch (index_size) /* 3种长度不同的Index */
 		{
