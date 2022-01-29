@@ -75,71 +75,37 @@ maxon::Result<void> mmd::PMXModel::LoadFromFile(BaseFile* const file)
 		{
 		case 0:
 		{
-			PMXWeight_BDEF1 weight;
-			weight.bone = ReadPMXIndex(file, model_info_.bone_index_size);
-			vertex_data_->weight_deform_B1 = weight;
+			PMXWeight_BDEF1* weight = PMXWeight_BDEF1::Alloc()iferr_return;
+			weight->ReadFromFile(file, model_info_.bone_index_size);
+			vertex_data_->weight_deform = weight;
 			break;
 		}
 		case 1:
 		{
-			PMXWeight_BDEF2 weight;
-			weight.bone[0] = ReadPMXIndex(file, model_info_.bone_index_size);
-			weight.bone[1] = ReadPMXIndex(file, model_info_.bone_index_size);
-			if (!file->ReadFloat32(&(weight.weight)))
-				return(maxon::Error());
-			vertex_data_->weight_deform_B2 = weight;
+			PMXWeight_BDEF2* weight = PMXWeight_BDEF2::Alloc()iferr_return;
+			weight->ReadFromFile(file, model_info_.bone_index_size);
+			vertex_data_->weight_deform = weight;
 			break;
 		}
 		case 2:
 		{
-			PMXWeight_BDEF4 weight;
-			weight.bone[0] = ReadPMXIndex(file, model_info_.bone_index_size);
-			weight.bone[1] = ReadPMXIndex(file, model_info_.bone_index_size);
-			weight.bone[2] = ReadPMXIndex(file, model_info_.bone_index_size);
-			weight.bone[3] = ReadPMXIndex(file, model_info_.bone_index_size);
-			if (!file->ReadFloat32(&(weight.weight[0])))
-				return(maxon::Error());
-			if (!file->ReadFloat32(&(weight.weight[1])))
-				return(maxon::Error());
-			if (!file->ReadFloat32(&(weight.weight[2])))
-				return(maxon::Error());
-			if (!file->ReadFloat32(&(weight.weight[3])))
-				return(maxon::Error());
-			vertex_data_->weight_deform_B4 = weight;
+			PMXWeight_BDEF4* weight = PMXWeight_BDEF4::Alloc()iferr_return;
+			weight->ReadFromFile(file, model_info_.bone_index_size);
+			vertex_data_->weight_deform = weight;
 			break;
 		}
 		case 3:
 		{
-			PMXWeight_SDEF weight;
-			weight.bone[0] = ReadPMXIndex(file, model_info_.bone_index_size);
-			weight.bone[1] = ReadPMXIndex(file, model_info_.bone_index_size);
-			if (!file->ReadFloat32(&(weight.weight)))
-				return(maxon::Error());
-			if (!file->ReadVector32(&(weight.R0)))
-				return(maxon::Error());
-			if (!file->ReadVector32(&(weight.R1)))
-				return(maxon::Error());
-			if (!file->ReadVector32(&(weight.C)))
-				return(maxon::Error());
-			vertex_data_->weight_deform_S = weight;
+			PMXWeight_SDEF* weight = PMXWeight_SDEF::Alloc()iferr_return;
+			weight->ReadFromFile(file, model_info_.bone_index_size);
+			vertex_data_->weight_deform = weight;
 			break;
 		}
 		case 4:
 		{
-			PMXWeight_QDEF weight;
-			weight.bone[0] = ReadPMXIndex(file, model_info_.bone_index_size);
-			weight.bone[1] = ReadPMXIndex(file, model_info_.bone_index_size);
-			weight.bone[2] = ReadPMXIndex(file, model_info_.bone_index_size);
-			weight.bone[3] = ReadPMXIndex(file, model_info_.bone_index_size);
-			if (!file->ReadFloat32(&(weight.weight[0])))
-				return(maxon::Error());
-			if (!file->ReadFloat32(&(weight.weight[1])))
-				return(maxon::Error());
-			if (!file->ReadFloat32(&(weight.weight[2])))
-				return(maxon::Error());
-			if (!file->ReadFloat32(&(weight.weight[3])))
-				return(maxon::Error());
-			vertex_data_->weight_deform_Q = weight;
+			PMXWeight_QDEF* weight = PMXWeight_QDEF::Alloc()iferr_return;
+			weight->ReadFromFile(file, model_info_.bone_index_size);
+			vertex_data_->weight_deform = weight;
 			break;
 		}
 		}
@@ -1095,14 +1061,15 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						case 0:
 						{	
 							Int32 weight_bone = 0;
-							auto joint_bone_ptr = joint_bone_map.Find(vertex_data_.weight_deform_B1.bone);
+							auto* weight_deform = static_cast<PMXWeight_BDEF1*>(vertex_data_.weight_deform);
+							auto joint_bone_ptr = joint_bone_map.Find(weight_deform->bone);
 							if (joint_bone_ptr)
 							{
 								weight_bone = joint_bone_ptr->GetValue();
 							}
 							else {
-								weight_bone = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_B1.bone)->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_B1.bone, weight_bone) iferr_return;
+								weight_bone = weight_tag->AddJoint(bone_map.Find(weight_deform->bone)->GetValue());
+								joint_bone_map.Insert(weight_deform->bone, weight_bone) iferr_return;
 							}
 							maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
 							weight_data->Insert(weight_bone, 1.0f)iferr_return;
@@ -1112,39 +1079,40 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						case 1:
 						{
 							Int32 weight_bone1 = 0;
-							auto joint_bone1_ptr = joint_bone_map.Find(vertex_data_.weight_deform_B2.bone[0]);
+							auto* weight_deform = static_cast<PMXWeight_BDEF2*>(vertex_data_.weight_deform);
+							auto joint_bone1_ptr = joint_bone_map.Find(weight_deform->bone[0]);
 							if (joint_bone1_ptr)
 							{
 								weight_bone1 = joint_bone1_ptr->GetValue();
 							}
 							else {
-								weight_bone1 = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_B2.bone[0])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_B2.bone[0], weight_bone1) iferr_return;
+								weight_bone1 = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[0])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[0], weight_bone1) iferr_return;
 							}
 							Int32 weight_bone2 = 0;
-							auto joint_bone2_ptr = joint_bone_map.Find(vertex_data_.weight_deform_B2.bone[1]);
+							auto joint_bone2_ptr = joint_bone_map.Find(weight_deform->bone[1]);
 							if (joint_bone2_ptr)
 							{
 								weight_bone2 = joint_bone2_ptr->GetValue();
 							}
 							else {
-								weight_bone2 = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_B2.bone[1])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_B2.bone[1], weight_bone2) iferr_return;
+								weight_bone2 = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[1])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[1], weight_bone2) iferr_return;
 							}
 							maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
 							auto weight_data1_ptr = weight_data->Find(weight_bone1);
 							if (weight_data1_ptr != nullptr) {
-								weight_data1_ptr->GetValue() += vertex_data_.weight_deform_B2.weight;
+								weight_data1_ptr->GetValue() += weight_deform->weight;
 							}
 							else {
-								weight_data->Insert(weight_bone1, vertex_data_.weight_deform_B2.weight)iferr_return;
+								weight_data->Insert(weight_bone1, weight_deform->weight)iferr_return;
 							}
 							auto weight_data2_ptr = weight_data->Find(weight_bone2);
 							if (weight_data2_ptr != nullptr) {
-								weight_data2_ptr->GetValue() += 1.f - vertex_data_.weight_deform_B2.weight;
+								weight_data2_ptr->GetValue() += 1.f - weight_deform->weight;
 							}
 							else {
-								weight_data->Insert(weight_bone2, 1.f - vertex_data_.weight_deform_B2.weight)iferr_return;
+								weight_data->Insert(weight_bone2, 1.f - weight_deform->weight)iferr_return;
 							}				
 							weight_data_map.Insert(part_vertex_index, std::move(weight_data))iferr_return;
 							break;
@@ -1152,51 +1120,52 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						case 2:
 						{
 							Int32 weight_bone[4] = { 0 };
-							auto joint_bone1_ptr = joint_bone_map.Find(vertex_data_.weight_deform_B4.bone[0]);
+							auto* weight_deform = static_cast<PMXWeight_BDEF4*>(vertex_data_.weight_deform);
+							auto joint_bone1_ptr = joint_bone_map.Find(weight_deform->bone[0]);
 							if (joint_bone1_ptr)
 							{
 								weight_bone[0] = joint_bone1_ptr->GetValue();
 							}
 							else {
-								weight_bone[0] = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_B4.bone[0])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_B4.bone[0], weight_bone[0]) iferr_return;
+								weight_bone[0] = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[0])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[0], weight_bone[0]) iferr_return;
 							}
-							auto joint_bone2_ptr = joint_bone_map.Find(vertex_data_.weight_deform_B4.bone[1]);
+							auto joint_bone2_ptr = joint_bone_map.Find(weight_deform->bone[1]);
 							if (joint_bone2_ptr)
 							{
 								weight_bone[1] = joint_bone2_ptr->GetValue();
 							}
 							else {
-								weight_bone[1] = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_B4.bone[1])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_B4.bone[1], weight_bone[1]) iferr_return;
+								weight_bone[1] = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[1])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[1], weight_bone[1]) iferr_return;
 							}
-							auto joint_bone3_ptr = joint_bone_map.Find(vertex_data_.weight_deform_B4.bone[2]);
+							auto joint_bone3_ptr = joint_bone_map.Find(weight_deform->bone[2]);
 							if (joint_bone3_ptr)
 							{
 								weight_bone[2] = joint_bone3_ptr->GetValue();
 							}
 							else {
-								weight_bone[2] = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_B4.bone[2])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_B4.bone[2], weight_bone[2])iferr_return;
+								weight_bone[2] = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[2])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[2], weight_bone[2])iferr_return;
 							}
-							auto joint_bone4_ptr = joint_bone_map.Find(vertex_data_.weight_deform_B4.bone[3]);
+							auto joint_bone4_ptr = joint_bone_map.Find(weight_deform->bone[3]);
 							if (joint_bone4_ptr)
 							{
 								weight_bone[3] = joint_bone4_ptr->GetValue();								
 							}
 							else {
-								weight_bone[3] = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_B4.bone[3])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_B4.bone[3], weight_bone[3]) iferr_return;
+								weight_bone[3] = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[3])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[3], weight_bone[3]) iferr_return;
 							}
 							maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
 							for (Int32 i = 0; i < 4; i++) {
 								Int32& weight_bone_index = weight_bone[i];
 								auto weight_data_ptr = weight_data->Find(weight_bone_index);
 								if (weight_data_ptr != nullptr) {
-									weight_data_ptr->GetValue() += vertex_data_.weight_deform_B4.weight[i];
+									weight_data_ptr->GetValue() += weight_deform->weight[i];
 								}
 								else {
-									weight_data->Insert(weight_bone_index, vertex_data_.weight_deform_B4.weight[i])iferr_return;
+									weight_data->Insert(weight_bone_index, weight_deform->weight[i])iferr_return;
 								}
 							}
 							weight_data_map.Insert(part_vertex_index, std::move(weight_data))iferr_return;
@@ -1205,39 +1174,40 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						case 3:
 						{
 							Int32 weight_bone1 = 0;
-							auto joint_bone1_ptr = joint_bone_map.Find(vertex_data_.weight_deform_S.bone[0]);
+							auto* weight_deform = static_cast<PMXWeight_SDEF*>(vertex_data_.weight_deform);
+							auto joint_bone1_ptr = joint_bone_map.Find(weight_deform->bone[0]);
 							if (joint_bone1_ptr)
 							{
 								weight_bone1 = joint_bone1_ptr->GetValue();
 							}
 							else {
-								weight_bone1 = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_S.bone[0])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_S.bone[0], weight_bone1) iferr_return;
+								weight_bone1 = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[0])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[0], weight_bone1) iferr_return;
 							}
 							Int32 weight_bone2 = 0;
-							auto joint_bone2_ptr = joint_bone_map.Find(vertex_data_.weight_deform_S.bone[1]);
+							auto joint_bone2_ptr = joint_bone_map.Find(weight_deform->bone[1]);
 							if (joint_bone2_ptr)
 							{
 								weight_bone2 = joint_bone2_ptr->GetValue();
 							}
 							else {
-								weight_bone2 = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_S.bone[1])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_S.bone[1], weight_bone2) iferr_return;
+								weight_bone2 = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[1])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[1], weight_bone2) iferr_return;
 							}
 							maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
 							auto weight_data1_ptr = weight_data->Find(weight_bone1);
 							if (weight_data1_ptr != nullptr) {
-								weight_data1_ptr->GetValue() += vertex_data_.weight_deform_S.weight;
+								weight_data1_ptr->GetValue() += weight_deform->weight;
 							}
 							else {
-								weight_data->Insert(weight_bone1, vertex_data_.weight_deform_S.weight)iferr_return;
+								weight_data->Insert(weight_bone1, weight_deform->weight)iferr_return;
 							}
 							auto weight_data2_ptr = weight_data->Find(weight_bone2);
 							if (weight_data2_ptr != nullptr) {
-								weight_data2_ptr->GetValue() += 1.f - vertex_data_.weight_deform_S.weight;
+								weight_data2_ptr->GetValue() += 1.f - weight_deform->weight;
 							}
 							else {
-								weight_data->Insert(weight_bone2, 1.f - vertex_data_.weight_deform_S.weight)iferr_return;
+								weight_data->Insert(weight_bone2, 1.f - weight_deform->weight)iferr_return;
 							}
 							weight_data_map.Insert(part_vertex_index, std::move(weight_data))iferr_return;
 							break;
@@ -1245,51 +1215,52 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 						case 4:
 						{
 							Int32 weight_bone[4] = { 0 };
-							auto joint_bone1_ptr = joint_bone_map.Find(vertex_data_.weight_deform_Q.bone[0]);
+							auto* weight_deform = static_cast<PMXWeight_QDEF*>(vertex_data_.weight_deform);
+							auto joint_bone1_ptr = joint_bone_map.Find(weight_deform->bone[0]);
 							if (joint_bone1_ptr)
 							{
 								weight_bone[0] = joint_bone1_ptr->GetValue();
 							}
 							else {
-								weight_bone[0] = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_Q.bone[0])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_Q.bone[0], weight_bone[0]) iferr_return;
+								weight_bone[0] = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[0])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[0], weight_bone[0]) iferr_return;
 							}
-							auto joint_bone2_ptr = joint_bone_map.Find(vertex_data_.weight_deform_Q.bone[1]);
+							auto joint_bone2_ptr = joint_bone_map.Find(weight_deform->bone[1]);
 							if (joint_bone2_ptr)
 							{
 								weight_bone[1] = joint_bone2_ptr->GetValue();
 							}
 							else {
-								weight_bone[1] = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_Q.bone[1])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_Q.bone[1], weight_bone[1]) iferr_return;
+								weight_bone[1] = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[1])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[1], weight_bone[1]) iferr_return;
 							}
-							auto joint_bone3_ptr = joint_bone_map.Find(vertex_data_.weight_deform_Q.bone[2]);
+							auto joint_bone3_ptr = joint_bone_map.Find(weight_deform->bone[2]);
 							if (joint_bone3_ptr)
 							{
 								weight_bone[2] = joint_bone3_ptr->GetValue();
 							}
 							else {
-								weight_bone[2] = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_Q.bone[2])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_Q.bone[2], weight_bone[2])iferr_return;
+								weight_bone[2] = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[2])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[2], weight_bone[2])iferr_return;
 							}
-							auto joint_bone4_ptr = joint_bone_map.Find(vertex_data_.weight_deform_Q.bone[3]);
+							auto joint_bone4_ptr = joint_bone_map.Find(weight_deform->bone[3]);
 							if (joint_bone4_ptr)
 							{
 								weight_bone[3] = joint_bone4_ptr->GetValue();
 							}
 							else {
-								weight_bone[3] = weight_tag->AddJoint(bone_map.Find(vertex_data_.weight_deform_Q.bone[3])->GetValue());
-								joint_bone_map.Insert(vertex_data_.weight_deform_Q.bone[3], weight_bone[3]) iferr_return;
+								weight_bone[3] = weight_tag->AddJoint(bone_map.Find(weight_deform->bone[3])->GetValue());
+								joint_bone_map.Insert(weight_deform->bone[3], weight_bone[3]) iferr_return;
 							}
 							maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
 							for (Int32 i = 0; i < 4; i++) {
 								Int32& weight_bone_index = weight_bone[i];
 								auto weight_data_ptr = weight_data->Find(weight_bone_index);
 								if (weight_data_ptr != nullptr) {
-									weight_data_ptr->GetValue() += vertex_data_.weight_deform_Q.weight[i];
+									weight_data_ptr->GetValue() += weight_deform->weight[i];
 								}
 								else {
-									weight_data->Insert(weight_bone_index, vertex_data_.weight_deform_Q.weight[i])iferr_return;
+									weight_data->Insert(weight_bone_index, weight_deform->weight[i])iferr_return;
 								}
 							}
 							weight_data_map.Insert(part_vertex_index, std::move(weight_data))iferr_return;
@@ -2217,30 +2188,31 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					case 0:
 					{
 						maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
-						weight_data->Insert(vertex_data_.weight_deform_B1.bone, 1.0f)iferr_return;
+						weight_data->Insert(static_cast<PMXWeight_BDEF1*>(vertex_data_.weight_deform)->bone, 1.0f)iferr_return;
 						weight_data_map.Insert(vertex_index, std::move(weight_data))iferr_return;
 						break;
 					}
 					case 1:
 					{
 						maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
-						for (Int32 i = 0; i < 2; i++) {
-							Int32& weight_bone_index = vertex_data_.weight_deform_B2.bone[i];
+						auto* weight_deform = static_cast<PMXWeight_BDEF2*>(vertex_data_.weight_deform);
+						for (Int32 i = 0; i < 2; i++) {						
+							Int32& weight_bone_index = weight_deform->bone[i];
 							auto weight_data_ptr = weight_data->Find(weight_bone_index);
 							if (weight_data_ptr != nullptr) {
 								if (i == 0) {
-									weight_data_ptr->GetValue() += vertex_data_.weight_deform_B2.weight;
+									weight_data_ptr->GetValue() += weight_deform->weight;
 								}
 								else {
-									weight_data_ptr->GetValue() += 1.f - vertex_data_.weight_deform_B2.weight;
+									weight_data_ptr->GetValue() += 1.f - weight_deform->weight;
 								}
 							}
 							else {
 								if (i == 0) {
-									weight_data->Insert(weight_bone_index, vertex_data_.weight_deform_B2.weight)iferr_return;
+									weight_data->Insert(weight_bone_index, weight_deform->weight)iferr_return;
 								}
 								else {
-									weight_data->Insert(weight_bone_index, 1.f - vertex_data_.weight_deform_B2.weight)iferr_return;
+									weight_data->Insert(weight_bone_index, 1.f - weight_deform->weight)iferr_return;
 								}
 							}
 						}
@@ -2250,14 +2222,15 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					case 2:
 					{
 						maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
-						for (Int32 i = 0; i < 4; i++) {
-							Int32& weight_bone_index = vertex_data_.weight_deform_B4.bone[i];
+						auto* weight_deform = static_cast<PMXWeight_BDEF4*>(vertex_data_.weight_deform);
+						for (Int32 i = 0; i < 4; i++) {					
+							Int32& weight_bone_index = weight_deform->bone[i];
 							auto weight_data_ptr = weight_data->Find(weight_bone_index);
 							if (weight_data_ptr != nullptr) {
-								weight_data_ptr->GetValue() += vertex_data_.weight_deform_B4.weight[i];
+								weight_data_ptr->GetValue() += weight_deform->weight[i];
 							}
 							else {
-								weight_data->Insert(weight_bone_index, vertex_data_.weight_deform_B4.weight[i])iferr_return;
+								weight_data->Insert(weight_bone_index, weight_deform->weight[i])iferr_return;
 							}
 						}
 						weight_data_map.Insert(vertex_index, std::move(weight_data))iferr_return;
@@ -2266,23 +2239,24 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					case 3:
 					{
 						maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
+						auto* weight_deform = static_cast<PMXWeight_SDEF*>(vertex_data_.weight_deform);
 						for (Int32 i = 0; i < 2; i++) {
-							Int32& weight_bone_index = vertex_data_.weight_deform_S.bone[i];
+							Int32& weight_bone_index = weight_deform->bone[i];
 							auto weight_data_ptr = weight_data->Find(weight_bone_index);
 							if (weight_data_ptr != nullptr) {
 								if (i == 0) {
-									weight_data_ptr->GetValue() += vertex_data_.weight_deform_S.weight;
+									weight_data_ptr->GetValue() += weight_deform->weight;
 								}
 								else {
-									weight_data_ptr->GetValue() += 1.f - vertex_data_.weight_deform_S.weight;
+									weight_data_ptr->GetValue() += 1.f - weight_deform->weight;
 								}
 							}
 							else {
 								if (i == 0) {
-									weight_data->Insert(weight_bone_index, vertex_data_.weight_deform_S.weight)iferr_return;
+									weight_data->Insert(weight_bone_index, weight_deform->weight)iferr_return;
 								}
 								else {
-									weight_data->Insert(weight_bone_index, 1.f - vertex_data_.weight_deform_S.weight)iferr_return;
+									weight_data->Insert(weight_bone_index, 1.f - weight_deform->weight)iferr_return;
 								}
 							}
 						}
@@ -2292,14 +2266,15 @@ maxon::Result<void> mmd::PMXModel::FromFileImportModel(PMX_Model_import_settings
 					case 4:
 					{
 						maxon::UniqueRef<maxon::HashMap<Int32, Float32>> weight_data = maxon::NewObjT<maxon::HashMap<Int32, Float32>>()iferr_return;
+						auto* weight_deform = static_cast<PMXWeight_QDEF*>(vertex_data_.weight_deform);
 						for (Int32 i = 0; i < 4; i++) {
-							Int32& weight_bone_index = vertex_data_.weight_deform_Q.bone[i];
+							Int32& weight_bone_index = weight_deform->bone[i];
 							auto weight_data_ptr = weight_data->Find(weight_bone_index);
 							if (weight_data_ptr != nullptr) {
-								weight_data_ptr->GetValue() += vertex_data_.weight_deform_Q.weight[i];
+								weight_data_ptr->GetValue() += weight_deform->weight[i];
 							}
 							else {
-								weight_data->Insert(weight_bone_index, vertex_data_.weight_deform_Q.weight[i])iferr_return;
+								weight_data->Insert(weight_bone_index, weight_deform->weight[i])iferr_return;
 							}
 						}
 						weight_data_map.Insert(vertex_index, std::move(weight_data))iferr_return;

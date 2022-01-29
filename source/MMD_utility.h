@@ -292,42 +292,171 @@ namespace mmd {
 		Bool	have_UV_morph = false;                               /* Is there a UV morph */
 		Bool	have_vertex_morph = false;                           /* Is there a vertex morph */
 	};
-	struct PMXWeight
+	class PMXWeight
 	{
-
+	public:
+		virtual ~PMXWeight() {}
+		virtual void Free(PMXWeight* m) {
+			DeleteObj(m);
+		}
+		//virtual Bool ReadFromFile(BaseFile* file) = 0;
 	};
 	/* Weight type BDEF1 structure 
 	* weight==1 */
-	struct PMXWeight_BDEF1 : public PMXWeight
+	class PMXWeight_BDEF1 : public PMXWeight
 	{
+	public:
+		~PMXWeight_BDEF1(){}
+		static maxon::Result<PMXWeight_BDEF1*> Alloc()
+		{
+			iferr_scope;
+			PMXWeight_BDEF1* res = NewObj(PMXWeight_BDEF1) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) {
+			this->bone = ReadPMXIndex(file, bone_index_size);
+			return true;
+		}
 		Int32 bone = 0;                                            /* Bone index. */
 	};
 	/* Weight type BDEF2 structure
 	* Bone 2 weight = 1 - (Bone 1 weight) */
-	struct PMXWeight_BDEF2 : public PMXWeight
+	class PMXWeight_BDEF2 : public PMXWeight
 	{
+	public:
+		~PMXWeight_BDEF2(){}
+		static maxon::Result<PMXWeight_BDEF2*> Alloc()
+		{
+			iferr_scope;
+			PMXWeight_BDEF2* res = NewObj(PMXWeight_BDEF2) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) {
+			this->bone[0] = ReadPMXIndex(file, bone_index_size);
+			this->bone[1] = ReadPMXIndex(file, bone_index_size);
+			if (!file->ReadFloat32(&(this->weight)))
+				return false;
+			return true;
+		}
 		Int32	bone[2] = { 0 };                               /* Bone index. */
 		Float32 weight = 0.f;                                      /* Bone 1 weight */
 	};
 	/* Weight type BDEF4 structure 
 	* The sum of four weights is not guaranteed to equal 1 */
-	struct PMXWeight_BDEF4 : public PMXWeight
+	class PMXWeight_BDEF4 : public PMXWeight
 	{
+	public:
+		~PMXWeight_BDEF4(){}
+		static maxon::Result<PMXWeight_BDEF4*> Alloc()
+		{
+			iferr_scope;
+			PMXWeight_BDEF4* res = NewObj(PMXWeight_BDEF4) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) {
+			this->bone[0] = ReadPMXIndex(file, bone_index_size);
+			this->bone[1] = ReadPMXIndex(file, bone_index_size);
+			this->bone[2] = ReadPMXIndex(file, bone_index_size);
+			this->bone[3] = ReadPMXIndex(file, bone_index_size);
+			if (!file->ReadFloat32(&(this->weight[0])))
+				return false;
+			if (!file->ReadFloat32(&(this->weight[1])))
+				return false;
+			if (!file->ReadFloat32(&(this->weight[2])))
+				return false;
+			if (!file->ReadFloat32(&(this->weight[3])))
+				return false;
+			return true;
+		}
 		Int32	bone[4] = { 0 };                   /* Bone index. */
 		Float32 weight[4] = { 0.f };    /* Bone 1~4 weight */
 	};
 	/* Weight type SDEF structure
 	* Bone 2 weight = 1 - (Bone 1 weight) */
-	struct PMXWeight_SDEF : public PMXWeight
+	class PMXWeight_SDEF : public PMXWeight
 	{
+	public:
+		~PMXWeight_SDEF(){}
+		static maxon::Result<PMXWeight_SDEF*> Alloc()
+		{
+			iferr_scope;
+			PMXWeight_SDEF* res = NewObj(PMXWeight_SDEF) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) {
+			this->bone[0] = ReadPMXIndex(file, bone_index_size);
+			this->bone[1] = ReadPMXIndex(file, bone_index_size);
+			if (!file->ReadFloat32(&(this->weight)))
+				return false;
+			if (!file->ReadVector32(&(this->R0)))
+				return false;
+			if (!file->ReadVector32(&(this->R1)))
+				return false;
+			if (!file->ReadVector32(&(this->C)))
+				return false;
+			return true;
+		}
 		Int32		bone[2] = { 0 };                             /* Bone index. */
 		Float32		weight = 0.f;                                    /* Bone 1 weight */
 		Vector32	R0 = Vector32(), R1 = Vector32(), C = Vector32(); /* R0,R1,C */
 	};
 	/* Weight type QDEF structure
 	* The sum of four weights is not guaranteed to equal 1 */
-	struct PMXWeight_QDEF : public PMXWeight
+	class PMXWeight_QDEF : public PMXWeight
 	{
+	public:
+		~PMXWeight_QDEF() {}
+		static maxon::Result<PMXWeight_QDEF*> Alloc()
+		{
+			iferr_scope;
+			PMXWeight_QDEF* res = NewObj(PMXWeight_QDEF) iferr_return;
+			if (res == nullptr)
+			{
+				GePrint(GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_MEM_ERR));
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_MEM_ERR)));
+			}
+			return res;
+		}
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) {
+			this->bone[0] = ReadPMXIndex(file, bone_index_size);
+			this->bone[1] = ReadPMXIndex(file, bone_index_size);
+			this->bone[2] = ReadPMXIndex(file, bone_index_size);
+			this->bone[3] = ReadPMXIndex(file, bone_index_size);
+			if (!file->ReadFloat32(&(this->weight[0])))
+				return false;
+			if (!file->ReadFloat32(&(this->weight[1])))
+				return false;
+			if (!file->ReadFloat32(&(this->weight[2])))
+				return false;
+			if (!file->ReadFloat32(&(this->weight[3])))
+				return false;
+			return true;
+		}
 		Int32	bone[4] = { 0 };                /* Bone index. */
 		Float32 weight[4] = { 0.f }; /* Bone 1~4 weight */
 	};
@@ -344,7 +473,7 @@ namespace mmd {
 			joint_data_count = 0;
 	};
 	/* PMX vertex data */
-	struct PMXVertexData                  
+	struct PMXVertexData
 	{
 		Vector32	position = Vector32();       /* The position. */
 		Vector32	normal = Vector32();         /* The normal vector. */
@@ -352,18 +481,14 @@ namespace mmd {
 		/* Skip the extra Vector4d32[N]  16*N */
 		Char weight_deform_type = 0;             /* Variant weight type,0=BDEF1, 1=BDEF2, 2=BDEF4, 3=SDEF, 4=QDEF */
 		/* Variant weight */
-		union
-		{
-			PMXWeight_BDEF1	weight_deform_B1;
-			PMXWeight_BDEF2	weight_deform_B2;
-			PMXWeight_BDEF4	weight_deform_B4;
-			PMXWeight_SDEF	weight_deform_S;
-			PMXWeight_QDEF	weight_deform_Q;
-		};                              
+		PMXWeight* weight_deform;
 		Float32 edge_scale = 0.f;                /* Edge magnification */
-		PMXVertexData()
-		{
-		};
+		PMXVertexData() {}
+		~PMXVertexData() {
+			if (weight_deform != nullptr) {
+				weight_deform->Free(weight_deform);
+			}
+		}
 	};
 	/* Material symbol(1 byte) */
 	struct PMXMaterialFlags               
