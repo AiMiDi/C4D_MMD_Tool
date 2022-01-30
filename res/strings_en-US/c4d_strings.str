@@ -8,7 +8,7 @@ STRINGTABLE
 	IDS_MES_SELECT_ERR "Please select an object";
 
 	IDS_MES_IMPORT_ERR "Import failed:";
-	IDS_MES_IMPORT_TYPE_ERR "File is not a vmd file";
+	IDS_MES_IMPORT_TYPE_ERR "File is not a # file";
 	IDS_MES_IMPORT_READ_ERR "Cannot read file";
 	IDS_MES_IMPORT_CAM_ERR "It's not a camera VMD file";
 	IDS_MES_IMPORT_MOD_ERR "It's not a model VMD file";

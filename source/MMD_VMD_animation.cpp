@@ -2133,25 +2133,16 @@ Bool mmd::OMMDCamera::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnod
 
 maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 {
-	iferr_scope;
-
+	iferr_scope_handler{
+#ifdef _DEBUG
+		MessageDialog(err.ToString(nullptr));
+#endif // _DEBUG	
+			return err;
+	};
 	AutoAlloc<BaseFile>	file;
-	if (file == nullptr)
-	{
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-	}
-	if (!file->Open(fn, FILEOPEN::READ, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA))
-	{
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
-		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR)));
-	}
-
+	SelectSuffixImportFile(fn, file, "vmd"_s)iferr_return;
 	Char VMD_version[30]{ 0 };
 	Char VMD_model_name[20]{ 0 };
-
 	if (!file->ReadBytes(VMD_version, 30))
 		return(maxon::Error());
 	if (!strncmp(VMD_version, "Vocaloid Motion Data", 21))
@@ -2340,8 +2331,12 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 }
 maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 {
-	iferr_scope;
-
+	iferr_scope_handler{
+#ifdef _DEBUG
+		MessageDialog(err.ToString(nullptr));
+#endif // _DEBUG	
+			return err;
+	};
 	AutoAlloc<BaseFile>	file;
 	if (file == nullptr)
 	{
@@ -2355,7 +2350,6 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR)));
 	}
-
 	const Char VMDVersion[30] = "Vocaloid Motion Data 0002\0\0\0\0";
 	if (!file->WriteBytes(VMDVersion, 30))
 		return(maxon::Error());
@@ -2478,8 +2472,12 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 }
 maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_settings setting)
 {
-	iferr_scope;
-	Filename		fn;
+	iferr_scope_handler{
+#ifdef _DEBUG
+		MessageDialog(err.ToString(nullptr));
+#endif // _DEBUG	
+			return err;
+	};
 	BaseDocument* doc;
 	if (setting.doc == nullptr)
 	{
@@ -2494,29 +2492,9 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 	else {
 		doc = setting.doc;
 	}
-	if (setting.fn == Filename())
-	{
-		if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE)))
-		{
-			return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
-		}
-	}
-	else {
-		fn = setting.fn;
-	}
-	if (!(fn.CheckSuffix("vmd"_s) || (fn.CheckSuffix("VMD"_s))))
-	{
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
-		return(maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR)));
-	}
+	Filename fn;
+	this->LoadFromFile(fn)iferr_return;
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
-	iferr(this->LoadFromFile(fn))
-	{
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
-		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR)));
-	}
 	if (this->IsCamera)
 	{
 		doc->StartUndo();
@@ -2669,7 +2647,12 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 }
 maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_export_settings setting)
 {
-	iferr_scope;
+	iferr_scope_handler{
+#ifdef _DEBUG
+		MessageDialog(err.ToString(nullptr));
+#endif // _DEBUG	
+			return err;
+	};
 	Filename		fn;
 	BaseDocument* doc = GetActiveDocument();
 	setting.position_multiple = 1.0 / setting.position_multiple;
@@ -2858,12 +2841,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 	}
 	this->ModelName = "カメラ・照明"_s;
 	this->IsCamera = true;
-	iferr(this->SaveToFile(fn))
-	{
-		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
-		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR)));
-	}
+	this->SaveToFile(fn)iferr_return;
 	timing.Stop();
 	StatusClear();
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::IntToString(this->camera_frames.GetCount()), String::FloatToString(timing.GetMilliseconds())));
@@ -2877,10 +2855,12 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 	maxon::HashMap<String, maxon::BaseList<VMDBoneAnimation>*>	MotionFrameList_map;
 	maxon::HashMap<String, maxon::BaseList<VMDMorphAnimation>*>	MorphFrameList_map;
 	iferr_scope_handler{
+#ifdef _DEBUG
 		MessageDialog(err.ToString(nullptr));
-		EXIT_FromFileImportMotions
-		return err;
-	};	
+#endif // _DEBUG	
+	EXIT_FromFileImportMotions
+			return err;
+	};
 	BaseDocument* doc = GetActiveDocument();
 	if (doc == nullptr)
 	{
@@ -2895,24 +2875,9 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	Filename fn;
-	if (!fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE)))
-	{
-		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
-	}
-	if (!(fn.CheckSuffix("vmd"_s) || (fn.CheckSuffix("VMD"_s))))
-	{
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR));
-		return(maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR)));
-	}
-	maxon::TimeValue			timing = maxon::TimeValue::GetTime();
-	iferr(this->LoadFromFile(fn))
-	{
-		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
-		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
-		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR)));
-	}
+	Filename fn;	
+	this->LoadFromFile(fn)iferr_return;
+	maxon::TimeValue timing = maxon::TimeValue::GetTime();
 	if (this->IsCamera == 1)
 	{
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
@@ -4362,7 +4327,12 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 	return(maxon::OK);
 }
 maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_export_settings setting) {
-	iferr_scope;
+	iferr_scope_handler{
+#ifdef _DEBUG
+		MessageDialog(err.ToString(nullptr));
+#endif // _DEBUG	
+			return err;
+	};
 	Filename		fn;
 	BaseDocument* doc = GetActiveDocument();
 	setting.position_multiple = 1.0 / setting.position_multiple;
@@ -4922,13 +4892,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 			this->model_frames.AppendPtr(model_frame)iferr_return;
 		}
 	}
-
-	iferr(this->SaveToFile(fn))
-	{
-		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
-		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
-		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR)));
-	}
+	this->SaveToFile(fn)iferr_return;
 	timing.Stop();
 	StatusClear();
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::IntToString(this->motion_frames.GetCount() + this->morph_frames.GetCount() + this->model_frames.GetCount()), String::FloatToString(timing.GetMilliseconds())));
@@ -4974,8 +4938,10 @@ Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::InitValues(void)
 Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::Command(Int32 id, const BaseContainer& msg)
 {
 	iferr_scope_handler{
+#ifdef _DEBUG
 		MessageDialog(err.ToString(nullptr));
-		return false;
+#endif // _DEBUG	
+			return false;
 	};
 	switch (id)
 	{
