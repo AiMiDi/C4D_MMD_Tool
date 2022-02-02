@@ -35,19 +35,22 @@ namespace mmd {
 			DeleteObj(m);
 			m = nullptr;
 		}
-		//virtual Bool ReadFromFile(BaseFile* file) = 0;
+		virtual Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) = 0;
 	};
-	/* Weight type BDEF1 structure
+	/* Weight type BDEF1 
 	* weight==1 */
 	class PMXWeight_BDEF1 : public PMXWeight
 	{
+		
 	public:
 		~PMXWeight_BDEF1() {}
 		static maxon::Result<PMXWeight_BDEF1*> Alloc();
 		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size);
-		Int32 bone = 0;                                            /* Bone index. */
+		// Bone index. 
+		Int32 bone = 0;  
+		
 	};
-	/* Weight type BDEF2 structure
+	/* Weight type BDEF2 
 	* Bone 2 weight = 1 - (Bone 1 weight) */
 	class PMXWeight_BDEF2 : public PMXWeight
 	{
@@ -58,7 +61,7 @@ namespace mmd {
 		Int32	bone[2] = { 0 };                               /* Bone index. */
 		Float32 weight = 0.f;                                      /* Bone 1 weight */
 	};
-	/* Weight type BDEF4 structure
+	/* Weight type BDEF4
 	* The sum of four weights is not guaranteed to equal 1 */
 	class PMXWeight_BDEF4 : public PMXWeight
 	{
@@ -69,7 +72,7 @@ namespace mmd {
 		Int32	bone[4] = { 0 };                   /* Bone index. */
 		Float32 weight[4] = { 0.f };    /* Bone 1~4 weight */
 	};
-	/* Weight type SDEF structure
+	/* Weight type SDEF 
 	* Bone 2 weight = 1 - (Bone 1 weight) */
 	class PMXWeight_SDEF : public PMXWeight
 	{
@@ -81,7 +84,7 @@ namespace mmd {
 		Float32		weight = 0.f;                                    /* Bone 1 weight */
 		Vector32	R0 = Vector32(), R1 = Vector32(), C = Vector32(); /* R0,R1,C */
 	};
-	/* Weight type QDEF structure
+	/* Weight type QDEF 
 	* The sum of four weights is not guaranteed to equal 1 */
 	class PMXWeight_QDEF : public PMXWeight
 	{
@@ -111,15 +114,23 @@ namespace mmd {
 		Vector32	normal = Vector32();         /* The normal vector. */
 		Vector2d32	UV = Vector2d32();           /* The UV coordinates. */
 		/* Skip the extra Vector4d32[N]  16*N */
-		Char weight_deform_type = 0;             /* Variant weight type,0=BDEF1, 1=BDEF2, 2=BDEF4, 3=SDEF, 4=QDEF */
+		enum
+		{
+			BDEF1,
+			BDEF2,
+			BDEF4, 
+			SDEF, 
+			QDEF
+		};
+		Char weight_deform_type = BDEF1;             /* Variant weight type,0=BDEF1, 1=BDEF2, 2=BDEF4, 3=SDEF, 4=QDEF */
 		/* Variant weight */
 		PMXWeight* weight_deform;
 		Float32 edge_scale = 0.f;                /* Edge magnification */
 		PMXVertexData() {}
 		~PMXVertexData() {
-			if (weight_deform != nullptr) {
-				PMXWeight::Free(weight_deform);
-			}
+			//if (weight_deform != nullptr) {
+			//	PMXWeight::Free(weight_deform);
+			//}
 		}
 	};
 	/* Material symbol(1 byte) */
@@ -496,7 +507,15 @@ namespace mmd {
 		Vector32	position_spring = Vector32();       /* Positioning spring */
 		Vector32	rotation_spring = Vector32();       /* Rotating spring */
 	};
-
+	struct tag_info
+	{
+		CAPoseMorphTag* morph_tag;    /* The tag where it is. */
+		maxon::BaseArray<Int32> vertex_index_arr;
+		maxon::HashInt GetHashCode() const
+		{
+			return MAXON_HASHCODE(this->morph_tag, this->vertex_index_arr);
+		}
+	};
 	class PMXModel
 	{
 		MAXON_DISALLOW_COPY_AND_ASSIGN(PMXModel);
@@ -540,6 +559,8 @@ namespace mmd {
 		maxon::PointerArray<PMXDisplayData>		m_display_data;           /* 表示枠数据 */
 		maxon::PointerArray<PMXRigidBodyData>	m_rigid_body_data;        /* 刚体数据 */
 		maxon::PointerArray<PMXJointData>		m_joint_data;             /* J点数据 */		
+		maxon::HashMap<Int32, BaseObject*> bone_map;
+		BaseDocument* doc = nullptr;
 		BaseObject* m_model_root = nullptr;
 		BaseObject* m_bone_root = nullptr;
 		BaseObject* m_mesh_root = nullptr;
@@ -550,8 +571,9 @@ namespace mmd {
 		PMX_Model_export_settings export_settings;
 		maxon::Result<void> LoadFromFile(Filename& fn);
 		maxon::Result<void> SaveToFile(Filename& fn);
-		maxon::Result<void> ImportBone(BaseDocument* doc,CAWeightTag* weight_tag,maxon::HashMap<Int32, BaseObject*>& bone_map);
-		maxon::Result<void> ImportMaterial(BaseDocument* doc, const String& path, const Int32& material_index, TextureTag* const texture_tag);
+		maxon::Result<void> ImportBone(CAWeightTag* weight_tag);
+		maxon::Result<void> ImportWeight(CAWeightTag* weight_tag, BaseObject* obj, const tag_info* const morph_tag_info);
+		maxon::Result<void> ImportMaterial(const String& path, const Int32& material_index, TextureTag* const texture_tag);
 		maxon::Result<void> FromFileImportMultipartModel();
 		maxon::Result<void> FromFileImportOneModel();
 		maxon::Result<void> FromDocumentExportModel(PMX_Model_export_settings& settings);
