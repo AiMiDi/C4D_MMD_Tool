@@ -825,19 +825,19 @@ namespace mmd {
 			PMX_bone_tag->SetParameter(DescID(PMX_BONE_LOCAL_IS_COORDINATE), bone_data_.bone_flags.Local_coordinate, DESCFLAGS_SET::NONE);
 			if (bone_data_.bone_flags.indexed_tail_position == 1)
 			{
-				PMX_bone_tag->SetParameter(DescID(PMX_BONE_TAIL_INDEX), bone_data_.tail_index, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(PMX_BONE_TAIL_INDEX, bone_data_.tail_index, DESCFLAGS_SET::NONE);
 			}
 			else {
-				PMX_bone_tag->SetParameter(DescID(PMX_BONE_TAIL_POSITION), (Vector)bone_data_.position * this->import_settings.position_multiple, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(PMX_BONE_TAIL_POSITION, (Vector)bone_data_.position * this->import_settings.position_multiple, DESCFLAGS_SET::NONE);
 			}
 			if (bone_data_.bone_flags.Local_coordinate)
 			{
-				PMX_bone_tag->SetParameter(DescID(PMX_BONE_LOCAL_X), (Vector)bone_data_.bone_local_X, DESCFLAGS_SET::NONE);
-				PMX_bone_tag->SetParameter(DescID(PMX_BONE_LOCAL_Z), (Vector)bone_data_.bone_local_Z, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(PMX_BONE_LOCAL_X, (Vector)bone_data_.bone_local_X, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(PMX_BONE_LOCAL_Z, (Vector)bone_data_.bone_local_Z, DESCFLAGS_SET::NONE);
 			}
 			if (bone_data_.bone_flags.Fixed_axis == 1)
 			{
-				PMX_bone_tag->SetParameter(DescID(PMX_BONE_FIXED_AXIS), (Vector)bone_data_.bone_fixed_axis, DESCFLAGS_SET::NONE);
+				PMX_bone_tag->SetParameter(PMX_BONE_FIXED_AXIS, (Vector)bone_data_.bone_fixed_axis, DESCFLAGS_SET::NONE);
 			}
 			if (this->import_settings.import_inherit)
 			{
@@ -853,8 +853,8 @@ namespace mmd {
 					auto inherit_bone_parent_link_ptr = bone_map.Find(bone_data_.inherit_bone_parent_index);
 					if (inherit_bone_parent_link_ptr != nullptr)
 						inherit_bone_parent_link->SetLink(inherit_bone_parent_link_ptr->GetValue());
-					PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE), bone_data_.inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
+					PMX_bone_tag->SetParameter(PMX_BONE_INHERIT_BONE_PARENT_LINK, inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+					PMX_bone_tag->SetParameter(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE, bone_data_.inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 				}
 				if (bone_data_.bone_flags.Inherit_rotation == 1)
 				{
@@ -868,8 +868,8 @@ namespace mmd {
 					auto inherit_bone_parent_link_ptr = bone_map.Find(bone_data_.inherit_bone_parent_index);
 					if (inherit_bone_parent_link_ptr != nullptr)
 						inherit_bone_parent_link->SetLink(inherit_bone_parent_link_ptr->GetValue());
-					PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_LINK), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
-					PMX_bone_tag->SetParameter(DescID(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE), bone_data_.inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
+					PMX_bone_tag->SetParameter(PMX_BONE_INHERIT_BONE_PARENT_LINK, inherit_bone_parent_link, DESCFLAGS_SET::NONE);
+					PMX_bone_tag->SetParameter(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE, bone_data_.inherit_bone_parent_influence, DESCFLAGS_SET::NONE);
 				}
 			}
 			if (this->import_settings.import_ik)
@@ -891,37 +891,8 @@ namespace mmd {
 					else {
 						IK_tag->SetName(bone_data_.bone_name_local);
 					}
-					/*Sets the rotation handle of the IK pole vector.*/
-					if (bone_data_.bone_name_local.Find(L"\u8db3\uff29\uff2b"_s, nullptr)) /*L"\u8db3\uff29\uff2b" is 足IK*/
-					{
-						BaseObject* IK_beging_bone_up_a = IK_beging_bone->GetUp();
-						if (IK_beging_bone_up_a == nullptr)
-							continue;
-						BaseObject* IK_beging_bone_up_b = IK_beging_bone_up_a->GetUp();
-						if (IK_beging_bone_up_b == nullptr)
-							continue;
-						BaseObject* polar_vector = BaseObject::Alloc(Onull);
-						if (polar_vector == nullptr)
-						{
-							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-							return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-						}
-						/*TODO:Localized naming*/
-						polar_vector->SetName(bone_data_.bone_name_local + ".Rotating handle");
-						polar_vector->SetFrozenPos(IK_beging_bone_up_a->GetFrozenPos() + Vector(0.0, 0.0, -this->import_settings.position_multiple));
-						doc->InsertObject(polar_vector, IK_beging_bone_up_b, IK_beging_bone_up_a);
-						BaseLink* polar_vector_link = BaseLink::Alloc();
-						if (polar_vector_link == nullptr)
-						{
-							GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-							MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-							return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-						}
-						polar_vector_link->SetLink(polar_vector);
-						IK_tag->SetParameter(DescID(ID_CA_IK_TAG_POLE), polar_vector_link, DESCFLAGS_SET::NONE);
-					}
-					IK_tag->SetParameter(DescID(ID_CA_IK_TAG_PREFERRED_WEIGHT), 1, DESCFLAGS_SET::NONE);
+					IK_tag->SetParameter(ID_CA_IK_TAG_SOLVER, ID_CA_IK_TAG_SOLVER_3D, DESCFLAGS_SET::NONE);
+					IK_tag->SetParameter(ID_CA_IK_TAG_PREFERRED_WEIGHT, 1, DESCFLAGS_SET::NONE);
 					BaseLink* target_link = BaseLink::Alloc();
 					if (target_link == nullptr)
 					{
@@ -930,7 +901,7 @@ namespace mmd {
 						return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 					}
 					target_link->SetLink(bone);
-					IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TARGET), target_link, DESCFLAGS_SET::NONE);
+					IK_tag->SetParameter(ID_CA_IK_TAG_TARGET, target_link, DESCFLAGS_SET::NONE);
 					BaseLink* tip_link = BaseLink::Alloc();
 					if (tip_link == nullptr)
 					{
@@ -939,7 +910,7 @@ namespace mmd {
 						return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
 					}
 					tip_link->SetLink(bone_map.Find(bone_data_.IK_target_index)->GetValue());
-					IK_tag->SetParameter(DescID(ID_CA_IK_TAG_TIP), tip_link, DESCFLAGS_SET::NONE);
+					IK_tag->SetParameter(ID_CA_IK_TAG_TIP, tip_link, DESCFLAGS_SET::NONE);
 					DynamicDescription* const ddesc = m_model_root->GetDynamicDescription();
 					if (ddesc == nullptr)
 						return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION));
@@ -962,18 +933,17 @@ namespace mmd {
 					m_model_root->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
 					for (mmd::PMXIKLinks& IK_link : bone_data_.IK_links)
 					{
-						if (IK_link.has_limits != true)
-							continue;
 						BaseObject* IK_link_bone = bone_map.Find(IK_link.bone_index)->GetValue();
 						if (IK_link_bone == nullptr)
 							continue;
-						IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_MAX_ROT),
-							Vector(-IK_link.limit_min.x, -IK_link.limit_min.y, IK_link.limit_min.z), DESCFLAGS_SET::NONE);
-						IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_MIN_ROT),
-							Vector(-IK_link.limit_max.x, -IK_link.limit_max.y, IK_link.limit_max.z), DESCFLAGS_SET::NONE);
-						IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_H), true, DESCFLAGS_SET::NONE);
-						IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_P), true, DESCFLAGS_SET::NONE);
-						IK_link_bone->SetParameter(DescID(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_B), true, DESCFLAGS_SET::NONE);
+						IK_link_bone->SetParameter(ID_CA_JOINT_OBJECT_JOINT_IK_PREFERRED_ROT_LINK, 0, DESCFLAGS_SET::NONE);
+						if (IK_link.has_limits != true)
+							continue;
+						IK_link_bone->SetParameter(ID_CA_JOINT_OBJECT_JOINT_IK_MIN_ROT,
+							Vector(IK_link.limit_min.x, IK_link.limit_min.y, IK_link.limit_min.z), DESCFLAGS_SET::NONE);
+						IK_link_bone->SetParameter(ID_CA_JOINT_OBJECT_JOINT_IK_MAX_ROT,
+							Vector(IK_link.limit_max.x, IK_link.limit_max.y, IK_link.limit_max.z), DESCFLAGS_SET::NONE);
+						IK_link_bone->SetParameter(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_B, 1, DESCFLAGS_SET::NONE);
 					}
 				}
 			}

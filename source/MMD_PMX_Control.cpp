@@ -1928,11 +1928,11 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 				{
 					if (tmp_lase_obj->IsInstanceOf(Ojoint)) {
 						lase_obj = tmp_lase_obj;
+						tmp_lase_obj = tmp_lase_obj->GetDownLast();
 					}
 					else {
 						tmp_lase_obj = tmp_lase_obj->GetPred();
-					}
-					tmp_lase_obj = tmp_lase_obj->GetDownLast();
+					}				
 				}
 				lase_tag = lase_obj->GetTag(ID_T_MMD_BONE);
 				if (lase_tag != nullptr)
@@ -1964,11 +1964,11 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 				{
 					if (tmp_lase_obj->IsInstanceOf(Ojoint)) {
 						lase_obj = tmp_lase_obj;
+						tmp_lase_obj = tmp_lase_obj->GetDownLast();
 					}
 					else {
 						tmp_lase_obj = tmp_lase_obj->GetPred();
-					}
-					tmp_lase_obj = tmp_lase_obj->GetDownLast();
+					}					
 				}
 				lase_tag = lase_obj->GetTag(ID_T_MMD_BONE);
 				if (lase_tag != nullptr)
