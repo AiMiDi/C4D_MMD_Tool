@@ -342,6 +342,14 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 **version 0.4.4.1** Fix import normal inversion issue.
 
+**version 0.4.5**
+
+1. Fixed an issue where saved documents could not be opened.
+2. Optimize the IK of the imported model.
+3. Add import model report.
+4. Optimize import speed and stability.
+5. Fixed import normal inversion problem for versions below R23.
+
 ## Author
 
 AiMiDi

@@ -1,1 +1,1 @@
-maxon.ObserverObjectInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\observerobject.h(24,7)=Object:AddSenderSignal,GetName,ObserverConnectNotify,ObserverDestroyed,ObserverDisconnectNotify,RemoveSenderSignal,SetName
+maxon.ObserverObjectInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\observerobject.h(24,7)=Object:AddSenderSignal,GetName,ObserverConnectNotify,ObserverDestroyed,ObserverDisconnectNotify,RemoveSenderSignal,SetName

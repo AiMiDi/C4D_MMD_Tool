@@ -752,115 +752,101 @@ public:
 		};
 		switch (id)
 		{		
-		case DLG_VPD_POSE_IMPORT_BUTTON:
-		{
-			maxon::UniqueRef<mmd::VPD_pose>	mmd_pose = NewObj(mmd::VPD_pose)iferr_return;
-			mmd_pose->FromFileImportPose(mmd::VPD_pose_import_settings())iferr_return;
-			break;
-		}
 		case DLG_VMD_CAM_IMPORT_BUTTON:
 		{
-			mmd::VMD_Camera_import_settings setting_;
-			GetFloat(DLG_VMD_CAM_IMPORT_SIZE, setting_.position_multiple);
-			GetFloat(DLG_VMD_CAM_IMPORT_OFFSET, setting_.time_offset);
-			YAML::Node config(LoadConfig());
-			config["VMD_CAM_IMPORT_SIZE"] = setting_.position_multiple;
-			config["VMD_CAM_IMPORT_OFFSET"] = setting_.time_offset;
+			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			GetFloat(DLG_VMD_CAM_IMPORT_SIZE, mmd_animation->m_camera_import_settings.position_multiple);
+			GetFloat(DLG_VMD_CAM_IMPORT_OFFSET, mmd_animation->m_camera_import_settings.time_offset);
+			YAML::Node config(std::move(LoadConfig()));
+			config["VMD_CAM_IMPORT_SIZE"] = mmd_animation->m_camera_import_settings.position_multiple;
+			config["VMD_CAM_IMPORT_OFFSET"] = mmd_animation->m_camera_import_settings.time_offset;
 			std::ofstream fout(config_path);
 			fout << config;
-			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
-			mmd_animation->FromFileImportCamera(setting_)iferr_return;
+			fout.close();
+			
+			mmd_animation->FromFileImportCamera()iferr_return;
 			break;
 		}
 		case DLG_VMD_CAM_CONVER_BUTTON:
 		{
-			mmd::VMD_Conversion_Camera_settings setting_;
-			GetFloat(DLG_VMD_CAM_CONVER_DIS, setting_.distance);
-			GetInt32(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, setting_.use_rotation);
-			YAML::Node config(LoadConfig());
-			config["VMD_CAM_CONVER_DIS"] = setting_.distance;
-			config["VMD_CAM_CONVER_ROTATION_TWEEN"] = setting_.use_rotation;
+			mmd::VMD_Conversion_Camera_settings conversion_setting;
+			GetFloat(DLG_VMD_CAM_CONVER_DIS, conversion_setting.distance);
+			GetInt32(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, conversion_setting.use_rotation);
+			YAML::Node config(std::move(LoadConfig()));
+			config["VMD_CAM_CONVER_DIS"] = conversion_setting.distance;
+			config["VMD_CAM_CONVER_ROTATION_TWEEN"] = conversion_setting.use_rotation;
 			std::ofstream fout(config_path);
 			fout << config;
-			mmd::OMMDCamera::ConversionCamera(setting_)iferr_return;
+			fout.close();
+			mmd::OMMDCamera::ConversionCamera(conversion_setting)iferr_return;
 			break;
 		}
 		case DLG_VMD_CAM_EXPORT_BUTTON:
-		{
-			mmd::VMD_Camera_export_settings setting_;
-			GetFloat(DLG_VMD_CAM_EXPORT_SIZE, setting_.position_multiple);
-			GetFloat(DLG_VMD_CAM_EXPORT_OFFSET, setting_.time_offset);
-			GetBool(DLG_VMD_CAM_EXPORT_USE_BAKE, setting_.use_bake);
-			GetInt32(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, setting_.use_rotation);
-			YAML::Node config(LoadConfig());
-			config["VMD_CAM_EXPORT_SIZE"] = setting_.position_multiple;
-			config["VMD_CAM_EXPORT_OFFSET"] = setting_.time_offset;
-			config["VMD_CAM_EXPORT_USE_BAKE"] = setting_.use_bake;
-			config["VMD_CAM_EXPORT_ROTATION_TWEEN"] = setting_.use_rotation;
+		{	
+			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			GetFloat(DLG_VMD_CAM_EXPORT_SIZE, mmd_animation->m_camera_export_settings.position_multiple);
+			GetFloat(DLG_VMD_CAM_EXPORT_OFFSET, mmd_animation->m_camera_export_settings.time_offset);
+			GetBool(DLG_VMD_CAM_EXPORT_USE_BAKE, mmd_animation->m_camera_export_settings.use_bake);
+			GetInt32(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, mmd_animation->m_camera_export_settings.use_rotation);
+			YAML::Node config(std::move(LoadConfig()));
+			config["VMD_CAM_EXPORT_SIZE"] = mmd_animation->m_camera_export_settings.position_multiple;
+			config["VMD_CAM_EXPORT_OFFSET"] = mmd_animation->m_camera_export_settings.time_offset;
+			config["VMD_CAM_EXPORT_USE_BAKE"] = mmd_animation->m_camera_export_settings.use_bake;
+			config["VMD_CAM_EXPORT_ROTATION_TWEEN"] = mmd_animation->m_camera_export_settings.use_rotation;
 			std::ofstream fout(config_path);
 			fout << config;
-			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
-			mmd_animation->FromDocumentExportCamera(setting_)iferr_return;
-			break;
-		}
-		case DLG_VMD_CAM_EXPORT_USE_BAKE:
-		{
-			Bool use_bake = true;
-			GetBool(DLG_VMD_CAM_EXPORT_USE_BAKE, use_bake);
-			if (use_bake == true) {
-				Enable(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, false);
-			}
-			else {
-				Enable(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, true);
-			}
+			fout.close();		
+			mmd_animation->FromDocumentExportCamera()iferr_return;
 			break;
 		}
 		case DLG_VMD_MOT_IMPORT_BUTTON:
 		{
-			mmd::VMD_Motions_import_settings setting_;
-			GetFloat(DLG_VMD_MOT_IMPORT_SIZE, setting_.position_multiple);
-			GetFloat(DLG_VMD_MOT_IMPORT_OFFSET, setting_.time_offset);
-			GetBool(DLG_VMD_MOT_IMPORT_MOTION, setting_.import_motion);
-			GetBool(DLG_VMD_MOT_IMPORT_MORPH, setting_.import_morph);
-			GetBool(DLG_VMD_MOT_IMPORT_MODEL_INFO, setting_.import_model_info);
-			GetBool(DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION, setting_.delete_previous_animation);
-			GetBool(DLG_VMD_MOT_IMPORT_DETAIL, setting_.detail_report);
-			YAML::Node config(LoadConfig());
-			config["VMD_MOT_IMPORT_SIZE"] = setting_.position_multiple;
-			config["VMD_MOT_IMPORT_OFFSET"] = setting_.time_offset;
-			config["VMD_MOT_IMPORT_MOTION"] = setting_.import_motion;
-			config["VMD_MOT_IMPORT_MORPH"] = setting_.import_morph;
-			config["VMD_MOT_IMPORT_MODEL_INFO"] = setting_.import_model_info;
-			config["VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION"] = setting_.delete_previous_animation;
-			config["VMD_MOT_IMPORT_DETAIL"] = setting_.detail_report;
+			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			GetFloat(DLG_VMD_MOT_IMPORT_SIZE, mmd_animation->m_motions_import_settings.position_multiple);
+			GetFloat(DLG_VMD_MOT_IMPORT_OFFSET, mmd_animation->m_motions_import_settings.time_offset);
+			GetBool(DLG_VMD_MOT_IMPORT_MOTION, mmd_animation->m_motions_import_settings.import_motion);
+			GetBool(DLG_VMD_MOT_IMPORT_MORPH, mmd_animation->m_motions_import_settings.import_morph);
+			GetBool(DLG_VMD_MOT_IMPORT_MODEL_INFO, mmd_animation->m_motions_import_settings.import_model_info);
+			GetBool(DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION, mmd_animation->m_motions_import_settings.delete_previous_animation);
+			GetBool(DLG_VMD_MOT_IMPORT_DETAIL, mmd_animation->m_motions_import_settings.detail_report);
+			YAML::Node config(std::move(LoadConfig()));
+			config["VMD_MOT_IMPORT_SIZE"] = mmd_animation->m_motions_import_settings.position_multiple;
+			config["VMD_MOT_IMPORT_OFFSET"] = mmd_animation->m_motions_import_settings.time_offset;
+			config["VMD_MOT_IMPORT_MOTION"] = mmd_animation->m_motions_import_settings.import_motion;
+			config["VMD_MOT_IMPORT_MORPH"] = mmd_animation->m_motions_import_settings.import_morph;
+			config["VMD_MOT_IMPORT_MODEL_INFO"] = mmd_animation->m_motions_import_settings.import_model_info;
+			config["VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION"] = mmd_animation->m_motions_import_settings.delete_previous_animation;
+			config["VMD_MOT_IMPORT_DETAIL"] = mmd_animation->m_motions_import_settings.detail_report;
 			std::ofstream fout(config_path);
 			fout << config;
-			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
-			mmd_animation->FromFileImportMotion(setting_)iferr_return;
+			fout.close();
+		
+			mmd_animation->FromFileImportMotion()iferr_return;
 			break;
 		}
 		case DLG_VMD_MOT_EXPORT_BUTTON:
 		{
-			mmd::VMD_Motions_export_settings setting_;
-			GetFloat(DLG_VMD_MOT_EXPORT_SIZE, setting_.position_multiple);
-			GetFloat(DLG_VMD_MOT_EXPORT_OFFSET, setting_.time_offset);
-			GetInt32(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, setting_.use_rotation);
-			GetBool(DLG_VMD_MOT_EXPORT_MOTION, setting_.export_motion);
-			GetBool(DLG_VMD_MOT_EXPORT_MORPH, setting_.export_morph);
-			GetBool(DLG_VMD_MOT_EXPORT_MODEL_INFO, setting_.export_model_info);
-			GetBool(DLG_VMD_MOT_EXPORT_USE_BAKE, setting_.use_bake);
-			YAML::Node config(LoadConfig());
-			config["VMD_MOT_EXPORT_SIZE"] = setting_.position_multiple;
-			config["VMD_MOT_EXPORT_OFFSET"] = setting_.time_offset;
-			config["VMD_MOT_EXPORT_ROTATION_TWEEN"] = setting_.use_rotation;
-			config["VMD_MOT_EXPORT_MOTION"] = setting_.export_motion;
-			config["VMD_MOT_EXPORT_MORPH"] = setting_.export_morph;
-			config["VMD_MOT_EXPORT_MODEL_INFO"] = setting_.export_model_info;
-			config["VMD_MOT_EXPORT_USE_BAKE"] = setting_.use_bake;
+			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			GetFloat(DLG_VMD_MOT_EXPORT_SIZE, mmd_animation->m_motions_export_settings.position_multiple);
+			GetFloat(DLG_VMD_MOT_EXPORT_OFFSET, mmd_animation->m_motions_export_settings.time_offset);
+			GetInt32(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, mmd_animation->m_motions_export_settings.use_rotation);
+			GetBool(DLG_VMD_MOT_EXPORT_MOTION, mmd_animation->m_motions_export_settings.export_motion);
+			GetBool(DLG_VMD_MOT_EXPORT_MORPH, mmd_animation->m_motions_export_settings.export_morph);
+			GetBool(DLG_VMD_MOT_EXPORT_MODEL_INFO, mmd_animation->m_motions_export_settings.export_model_info);
+			GetBool(DLG_VMD_MOT_EXPORT_USE_BAKE, mmd_animation->m_motions_export_settings.use_bake);
+			YAML::Node config(std::move(LoadConfig()));
+			config["VMD_MOT_EXPORT_SIZE"] = mmd_animation->m_motions_export_settings.position_multiple;
+			config["VMD_MOT_EXPORT_OFFSET"] = mmd_animation->m_motions_export_settings.time_offset;
+			config["VMD_MOT_EXPORT_ROTATION_TWEEN"] = mmd_animation->m_motions_export_settings.use_rotation;
+			config["VMD_MOT_EXPORT_MOTION"] = mmd_animation->m_motions_export_settings.export_motion;
+			config["VMD_MOT_EXPORT_MORPH"] = mmd_animation->m_motions_export_settings.export_morph;
+			config["VMD_MOT_EXPORT_MODEL_INFO"] = mmd_animation->m_motions_export_settings.export_model_info;
+			config["VMD_MOT_EXPORT_USE_BAKE"] = mmd_animation->m_motions_export_settings.use_bake;
 			std::ofstream fout(config_path);
 			fout << config;
-			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
-			mmd_animation->FromDocumentExportMotion(setting_)iferr_return;
+			fout.close();
+			
+			mmd_animation->FromDocumentExportMotion()iferr_return;
 			break;
 		}
 		case DLG_VMD_MOT_EXPORT_USE_BAKE:
@@ -877,38 +863,62 @@ public:
 		}
 		case DLG_PMX_MOD_IMPORT_BUTTON:
 		{
-			mmd::PMX_Model_import_settings setting_;
-			GetFloat(DLG_PMX_MOD_IMPORT_SIZE, setting_.position_multiple);
-			GetBool(DLG_PMX_MOD_IMPORT_POLYGON, setting_.import_polygon);
-			GetBool(DLG_PMX_MOD_IMPORT_NORMAL, setting_.import_normal);
-			GetBool(DLG_PMX_MOD_IMPORT_UV, setting_.import_uv);
-			GetBool(DLG_PMX_MOD_IMPORT_MATERIAL, setting_.import_material);
-			GetBool(DLG_PMX_MOD_IMPORT_BONE, setting_.import_bone);
-			GetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, setting_.import_weights);
-			GetBool(DLG_PMX_MOD_IMPORT_IK, setting_.import_ik);
-			GetBool(DLG_PMX_MOD_IMPORT_INHERIT, setting_.import_inherit);
-			GetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, setting_.import_expression);
-			GetBool(DLG_PMX_MOD_IMPORT_MULTIPART, setting_.import_multipart);
-			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH, setting_.import_english);
-			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, setting_.import_english_check);
-			YAML::Node config(LoadConfig());
-			config["PMX_MOD_IMPORT_SIZE"] = setting_.position_multiple;
-			config["PMX_MOD_IMPORT_POLYGON"] = setting_.import_polygon;
-			config["PMX_MOD_IMPORT_NORMAL"] = setting_.import_normal;
-			config["PMX_MOD_IMPORT_UV"] = setting_.import_uv;
-			config["PMX_MOD_IMPORT_MATERIAL"] = setting_.import_material;
-			config["PMX_MOD_IMPORT_BONE"] = setting_.import_bone;
-			config["PMX_MOD_IMPORT_WEIGHTS"] = setting_.import_weights;
-			config["PMX_MOD_IMPORT_IK"] = setting_.import_ik;
-			config["PMX_MOD_IMPORT_INHERIT"] = setting_.import_inherit;
-			config["PMX_MOD_IMPORT_EXPRESSION"] = setting_.import_expression;
-			config["PMX_MOD_IMPORT_MULTIPART"] = setting_.import_multipart;
-			config["PMX_MOD_IMPORT_ENGLISH"] = setting_.import_english;
-			config["PMX_MOD_IMPORT_ENGLISH_CHECK"] = setting_.import_english_check;
+			maxon::UniqueRef<mmd::PMXModel> pmx_model = NewObj(mmd::PMXModel) iferr_return;
+			GetFloat(DLG_PMX_MOD_IMPORT_SIZE, pmx_model->m_import_settings.position_multiple);
+			GetBool(DLG_PMX_MOD_IMPORT_POLYGON, pmx_model->m_import_settings.import_polygon);
+			GetBool(DLG_PMX_MOD_IMPORT_NORMAL, pmx_model->m_import_settings.import_normal);
+			GetBool(DLG_PMX_MOD_IMPORT_UV, pmx_model->m_import_settings.import_uv);
+			GetBool(DLG_PMX_MOD_IMPORT_MATERIAL, pmx_model->m_import_settings.import_material);
+			GetBool(DLG_PMX_MOD_IMPORT_BONE, pmx_model->m_import_settings.import_bone);
+			GetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, pmx_model->m_import_settings.import_weights);
+			GetBool(DLG_PMX_MOD_IMPORT_IK, pmx_model->m_import_settings.import_ik);
+			GetBool(DLG_PMX_MOD_IMPORT_INHERIT, pmx_model->m_import_settings.import_inherit);
+			GetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, pmx_model->m_import_settings.import_expression);
+			GetBool(DLG_PMX_MOD_IMPORT_MULTIPART, pmx_model->m_import_settings.import_multipart);
+			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH, pmx_model->m_import_settings.import_english);
+			GetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, pmx_model->m_import_settings.import_english_check);
+			YAML::Node config(std::move(LoadConfig()));
+			config["PMX_MOD_IMPORT_SIZE"] = pmx_model->m_import_settings.position_multiple;
+			config["PMX_MOD_IMPORT_POLYGON"] = pmx_model->m_import_settings.import_polygon;
+			config["PMX_MOD_IMPORT_NORMAL"] = pmx_model->m_import_settings.import_normal;
+			config["PMX_MOD_IMPORT_UV"] = pmx_model->m_import_settings.import_uv;
+			config["PMX_MOD_IMPORT_MATERIAL"] = pmx_model->m_import_settings.import_material;
+			config["PMX_MOD_IMPORT_BONE"] = pmx_model->m_import_settings.import_bone;
+			config["PMX_MOD_IMPORT_WEIGHTS"] = pmx_model->m_import_settings.import_weights;
+			config["PMX_MOD_IMPORT_IK"] = pmx_model->m_import_settings.import_ik;
+			config["PMX_MOD_IMPORT_INHERIT"] = pmx_model->m_import_settings.import_inherit;
+			config["PMX_MOD_IMPORT_EXPRESSION"] = pmx_model->m_import_settings.import_expression;
+			config["PMX_MOD_IMPORT_MULTIPART"] = pmx_model->m_import_settings.import_multipart;
+			config["PMX_MOD_IMPORT_ENGLISH"] = pmx_model->m_import_settings.import_english;
+			config["PMX_MOD_IMPORT_ENGLISH_CHECK"] = pmx_model->m_import_settings.import_english_check;
 			std::ofstream fout(config_path);
 			fout << config;
-			maxon::UniqueRef<mmd::PMXModel> pmx_model = NewObj(mmd::PMXModel) iferr_return;
-			pmx_model->FromFileImportModel(setting_)iferr_return;
+			fout.close();
+			if (pmx_model->m_import_settings.import_multipart == true) 
+			{
+				pmx_model->FromFileImportMultipartModel()iferr_return;
+			}
+			else {
+				pmx_model->FromFileImportOneModel()iferr_return;
+			}
+			break;
+		}
+		case DLG_VPD_POSE_IMPORT_BUTTON:
+		{
+			maxon::UniqueRef<mmd::VPD_pose>	mmd_pose = NewObj(mmd::VPD_pose)iferr_return;
+			mmd_pose->FromFileImportPose(mmd::VPD_pose_import_settings())iferr_return;
+			break;
+		}
+		case DLG_VMD_CAM_EXPORT_USE_BAKE:
+		{
+			Bool use_bake = true;
+			GetBool(DLG_VMD_CAM_EXPORT_USE_BAKE, use_bake);
+			if (use_bake == true) {
+				Enable(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, false);
+			}
+			else {
+				Enable(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, true);
+			}
 			break;
 		}
 		case DLG_PMX_MOD_IMPORT_BONE:

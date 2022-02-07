@@ -6,7 +6,18 @@
 #include <string>
 
 namespace mmd {
-
+	/* VPD */
+	struct VPDBoneData
+	{
+		String      name = String();
+		Vector32	translate = Vector32();
+		Vector4d32	rotation = Vector4d32();
+	};
+	struct VPDMorphData
+	{
+		String	    name = String();
+		Float32		weight = Float32();
+	};
 	struct VPD_pose_import_settings {
 		Float	position_multiple = 8.5;
 		Bool    import_motion = true;
@@ -17,23 +28,20 @@ namespace mmd {
 		Bool    export_motion = true;
 		Bool    export_morph = true;
 	};
-
 	class VPD_pose
 	{		
 		MAXON_DISALLOW_COPY_AND_ASSIGN(VPD_pose);
 	private:	
 		String model_name = String();
-		maxon::PointerArray<VPD_Bone>	bones;
-		maxon::PointerArray<VPD_Morph>	morphs;
+		maxon::PointerArray<VPDBoneData>	bones;
+		maxon::PointerArray<VPDMorphData>	morphs;
 		/* 用于从文件导入到对象 */
 		maxon::Result<void> LoadFromFile(Filename& fn);
 		/* 用于将对象保存到文件 */
 		maxon::Result<void> SaveToFile(Filename& fn);
 	public:
 		/* 构造函数 */
-		VPD_pose()
-		{
-		}
+		VPD_pose() {}
 		/* 析构函数 */
 		~VPD_pose()
 		{

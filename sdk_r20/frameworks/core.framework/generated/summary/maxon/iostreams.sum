@@ -1,7 +1,7 @@
-maxon.IoErrorInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(27,7)=ErrorInterface:GetUrl,SetUrl
-maxon.FileFormatErrorInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(99,7)=IoErrorInterface:
-maxon.UnknownFileSizeErrorInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(118,7)=ErrorInterface:
-maxon.BaseStreamInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(127,7)=DataDictionaryObjectInterface:Close,DisableBuffering,GetPosition,GetStreamLength,Seek,SeekSupported
-maxon.InputStreamInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(207,7)=BaseStreamInterface:BytesAvailable,ReadEOS,Skip
-maxon.OutputStreamInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(249,7)=BaseStreamInterface:Flush,Write
-maxon.InOutputStreamInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(273,7)=InputStreamInterface,OutputStreamInterface:
+maxon.IoErrorInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(27,7)=ErrorInterface:GetUrl,SetUrl
+maxon.FileFormatErrorInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(99,7)=IoErrorInterface:
+maxon.UnknownFileSizeErrorInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(118,7)=ErrorInterface:
+maxon.BaseStreamInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(127,7)=DataDictionaryObjectInterface:Close,DisableBuffering,GetPosition,GetStreamLength,Seek,SeekSupported
+maxon.InputStreamInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(207,7)=BaseStreamInterface:BytesAvailable,ReadEOS,Skip
+maxon.OutputStreamInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(249,7)=BaseStreamInterface:Flush,Write
+maxon.InOutputStreamInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\iostreams.h(273,7)=InputStreamInterface,OutputStreamInterface:

@@ -125,4 +125,113 @@ namespace mmd {
 		strout.SetCString(outmen, -1, STRINGENCODING::UTF8);
 		return (true);
 	}
+	inline Bool ReadPMXText(BaseFile* const file, const Char& text_encoding, String& out_string)
+	{
+		iferr_scope_handler{
+			MessageDialog(err.ToString(nullptr));
+			out_string = String();
+			return false;
+		};
+		Int32 text_len; /* text字符串最大长度 */
+		file->ReadInt32(&text_len);
+		if (text_len > 0) {
+			if (text_encoding == 0)
+			{
+				maxon::AutoMem<maxon::Utf16Char> tmp_wStr = NewMemClear(maxon::Utf16Char, text_len + 1) iferr_return;
+				file->ReadBytes(tmp_wStr, text_len);
+				out_string = String(tmp_wStr);
+				return true;
+			}
+			else if (text_encoding == 1)
+			{
+				maxon::AutoMem<maxon::Char> tmp_Str = NewMemClear(maxon::Char, text_len + 1) iferr_return;
+				file->ReadBytes(tmp_Str, text_len);
+				out_string.SetCString(tmp_Str, -1, STRINGENCODING::UTF8);
+				return true;
+			}
+		}
+		else {
+			out_string = String();
+			return true;
+		}
+		out_string = String();
+		return false;
+	}
+	inline Int32 ReadPMXIndex(BaseFile* const file, const Char& index_size)
+	{
+		switch (index_size) /* 3种长度不同的Index */
+		{
+		case 1:
+		{
+			Char index;
+			file->ReadChar(&index);
+			return(index);
+		}
+		case 2:
+		{
+			Int16 index;
+			file->ReadInt16(&index);
+			return(index);
+		}
+		case 4:
+		{
+			Int32 index;
+			file->ReadInt32(&index);
+			return(index);
+		}
+		default:
+			return(-1);
+		}
+	}
+	inline UInt32 ReadPMXUIndex(BaseFile* const file, const Char& index_size)
+	{
+		switch (index_size) /* 3种长度不同的Index */
+		{
+		case 1:
+		{
+			UChar index;
+			file->ReadUChar(&index);
+			return(index);
+		}
+		case 2:
+		{
+			UInt16 index;
+			file->ReadUInt16(&index);
+			return(index);
+		}
+		case 4:
+		{
+			UInt32 index;
+			file->ReadUInt32(&index);
+			return(index);
+		}
+		default:
+			return(0);
+		}
+	}
+	maxon::Result<void> SelectSuffixImportFile(Filename& fn, BaseFile* file, const String& suffix) {
+		if (fn == Filename() && !fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE)))
+		{
+			return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
+		}
+		if (file == nullptr)
+		{
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
+		}
+		if (!file->Open(fn, FILEOPEN::READ, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA))
+		{
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
+			return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR)));
+		}
+		if (fn.GetSuffix().ToLower().Compare(suffix) != maxon::COMPARERESULT::EQUAL)
+		{
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix));
+			return(maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix)));
+		}
+		return maxon::OK;
+	}
 }

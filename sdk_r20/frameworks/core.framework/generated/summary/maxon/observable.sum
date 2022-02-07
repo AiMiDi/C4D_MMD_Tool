@@ -1,3 +1,3 @@
-maxon.FunctionBaseInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\observable.h(296,7)=Object:Execute,GetObserver,GetObserverPointer,GetOwner,Init,Set
-maxon.CombinerInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\observable.h(345,7)=Object:CombineResult,InitCombine
-maxon.ObservableBaseInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\observable.h(414,7)=Object:AddObserver,GetObservableId,GetObserverCount,GetOwner,Init,Notify,RemoveObserver,SetInverseNotification,_intDisconnectAll
+maxon.FunctionBaseInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\observable.h(296,7)=Object:Execute,GetObserver,GetObserverPointer,GetOwner,Init,Set
+maxon.CombinerInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\observable.h(345,7)=Object:CombineResult,InitCombine
+maxon.ObservableBaseInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\observable.h(414,7)=Object:AddObserver,GetObservableId,GetObserverCount,GetOwner,Init,Notify,RemoveObserver,SetInverseNotification,_intDisconnectAll
