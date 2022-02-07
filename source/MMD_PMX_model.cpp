@@ -1714,9 +1714,16 @@ namespace mmd {
 							return err;
 						};
 						CPolygon & surface = this->m_surface_data[surface_index + part_surface_end];
+						// R23以下版本法线方向不同
+#if API_VERSION >= 23000
 						PMXVertexData & vertex0 = this->m_vertex_data[surface.a];
 						PMXVertexData & vertex1 = this->m_vertex_data[surface.b];
 						PMXVertexData & vertex2 = this->m_vertex_data[surface.c];
+#else
+						PMXVertexData& vertex0 = this->m_vertex_data[surface.c];
+						PMXVertexData& vertex1 = this->m_vertex_data[surface.b];
+						PMXVertexData& vertex2 = this->m_vertex_data[surface.a];
+#endif 
 						Int32 vertex_a_index = 0;
 						auto vertex_a_ptr = vertex_info_map.Find(surface.a);
 						// 找到对应该part的对应的点a新顶点索引。
@@ -1756,9 +1763,19 @@ namespace mmd {
 							}
 							vertex_c_ptr = vertex_c_ptr->GetNextWithSameKey();
 						}
+#if API_VERSION >= 23000
 						g_spinlock.Lock();
-						part_polygon[surface_index] = CPolygon(vertex_a_index, vertex_b_index, vertex_c_index);
+						part_polygon[surface_index].a = vertex_a_index;
+						part_polygon[surface_index].b = vertex_b_index;
+						part_polygon[surface_index].c = vertex_c_index;
 						g_spinlock.Unlock();
+#else
+						g_spinlock.Lock();
+						part_polygon[surface_index].a = vertex_c_index;
+						part_polygon[surface_index].b = vertex_b_index;
+						part_polygon[surface_index].c = vertex_a_index;
+						g_spinlock.Unlock();
+#endif 		
 						if (this->m_import_settings.import_normal)
 						{
 							Vector normal0 = (Vector)vertex0.normal;
@@ -2375,12 +2392,26 @@ namespace mmd {
 						return err;
 					};
 					CPolygon & surface = this->m_surface_data[surface_index];
-					PMXVertexData & vertex0 = this->m_vertex_data[surface.a];
-					PMXVertexData & vertex1 = this->m_vertex_data[surface.b];
-					PMXVertexData & vertex2 = this->m_vertex_data[surface.c];
+					// R23以下版本法线方向不同
+#if API_VERSION >= 23000
+					PMXVertexData& vertex0 = this->m_vertex_data[surface.a];
+					PMXVertexData& vertex1 = this->m_vertex_data[surface.b];
+					PMXVertexData& vertex2 = this->m_vertex_data[surface.c];
 					g_spinlock.Lock();
-					model_polygon[surface_index] = CPolygon(surface.a, surface.b, surface.c);
+					model_polygon[surface_index].a = surface.a;
+					model_polygon[surface_index].b = surface.b;
+					model_polygon[surface_index].c = surface.c;
 					g_spinlock.Unlock();
+#else
+					PMXVertexData& vertex0 = this->m_vertex_data[surface.c];
+					PMXVertexData& vertex1 = this->m_vertex_data[surface.b];
+					PMXVertexData& vertex2 = this->m_vertex_data[surface.a];
+					g_spinlock.Lock();
+					model_polygon[surface_index].a = surface.c;
+					model_polygon[surface_index].b = surface.b;
+					model_polygon[surface_index].c = surface.a;
+					g_spinlock.Unlock();
+#endif 
 					if (this->m_import_settings.import_normal)
 					{
 						Vector normal0 = (Vector)vertex0.normal;

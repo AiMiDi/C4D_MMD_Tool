@@ -348,6 +348,7 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 2. Optimize the IK of the imported model.
 3. Add import model report.
 4. Optimize import speed and stability.
+5. Fixed import normal inversion problem for versions below R23.
 
 ## Author
 
