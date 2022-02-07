@@ -6,35 +6,6 @@
 #include "description/TMMDBone.h"
 #include "description/OMMDCamera.h"
 
-#define EXIT_FromFileImportMotions \
-	for (auto i : bone_name_map.GetValues()) {\
-		if (i != nullptr)\
-			DeleteObj(i);\
-	}\
-	bone_name_map.Reset();\
-	for (auto i : morph_name_map.GetValues()) {\
-		if (i != nullptr)\
-			DeleteObj(i);\
-	}\
-	morph_name_map.Reset();\
-	for (auto i : ik_tag_map.GetValues()) {\
-		if (i != nullptr)\
-			DeleteObj(i);\
-	}\
-	ik_tag_map.Reset();\
-	for (auto i : MorphFrameList_map.GetValues())\
-	{\
-		if (i != nullptr)\
-			DeleteObj(i);\
-	}\
-	MorphFrameList_map.Reset();\
-	for (auto i : MotionFrameList_map.GetValues())\
-	{\
-		if (i != nullptr)\
-			DeleteObj(i);\
-	}\
-	MotionFrameList_map.Reset();
-
 namespace mmd {
 	/* MMD animation */
 
@@ -48,7 +19,7 @@ namespace mmd {
 		VMDInterpolator	interpolator_position_x = VMDInterpolator();    /* X-axis displacement action interpolation. */
 		VMDInterpolator	interpolator_position_y = VMDInterpolator();    /* Y-axis displacement action interpolation. */
 		VMDInterpolator	interpolator_position_z = VMDInterpolator();    /* Z-axis displacement action interpolation. */
-		VMDInterpolator	interpolator_position_r = VMDInterpolator();    /* Rotation action interpolation. */
+		VMDInterpolator	interpolator_rotation = VMDInterpolator();    /* Rotation action interpolation. */
 	};
 	/* MMD style expression animation. */
 	struct VMDMorphAnimation
@@ -67,7 +38,7 @@ namespace mmd {
 		VMDInterpolator	interpolator_position_x = VMDInterpolator();    /* X-axis displacement action interpolation. */
 		VMDInterpolator	interpolator_position_y = VMDInterpolator();    /* Y-axis displacement action interpolation. */
 		VMDInterpolator	interpolator_position_z = VMDInterpolator();    /* Z-axis displacement action interpolation. */
-		VMDInterpolator	interpolator_position_r = VMDInterpolator();    /* Rotation action interpolation. */
+		VMDInterpolator	interpolator_rotation = VMDInterpolator();    /* Rotation action interpolation. */
 		VMDInterpolator	interpolator_position_d = VMDInterpolator();    /* Distance action interpolation. */
 		VMDInterpolator	interpolator_position_v = VMDInterpolator();    /* View Angle motion interpolation */
 		UInt32		viewing_angle = 0;                                  /* View Angle. */
@@ -129,28 +100,29 @@ namespace mmd {
 		}
 	};
 	/* Morph information struct. */
-	struct morph_id_tag
+	struct morph_info
 	{
-		DescID	id = DescID();                                         /* Morph ID. */
+		DescID	strength_id = DescID();                                         /* Morph ID. */
 		BaseTag* tag = nullptr;                                        /* Morph tag. */
 		String name = String();                                        /* Morph name. */
 		/* operator== */
-		Bool operator ==(const morph_id_tag& other) const {
-			return (this->id == other.id && this->tag == other.tag);
+		Bool operator ==(const morph_info& other) const {
+			return (this->strength_id == other.strength_id && this->tag == other.tag);
 		}
 		/* Hash function */
 		maxon::HashInt GetHashCode() const
 		{
-			return  MAXON_HASHCODE(this->id.GetHashCode(), this->tag);
+			return  MAXON_HASHCODE(this->strength_id.GetHashCode(), this->tag);
 		}
 	};
 	/* Bone information struct. */
-	struct bone_obj_tag
+	struct bone_info
 	{
 		BaseObject* obj = nullptr;                                     /* Bone object. */
-		BaseTag* tag = nullptr;                                        /* Bone tag. */
+		BaseTag* tag = nullptr;                                    /* Bone tag. */
+		String name = String();									/* Bone name. */
 		/* operator== */
-		Bool operator ==(const bone_obj_tag& other) const {
+		Bool operator ==(const bone_info& other) const {
 			return (this->obj == other.obj && this->tag == other.tag);
 		}
 		/* Hash function */
@@ -159,43 +131,12 @@ namespace mmd {
 			return  MAXON_HASHCODE(this->obj, this->tag);
 		}
 	};
-	struct VMD_Camera_import_settings
-	{
-		Float		position_multiple = 8.5;
-		Float		time_offset = 0;
-		Filename	fn = Filename();
-		BaseDocument* doc = nullptr;
-	};
-	struct VMD_Camera_export_settings
-	{
-		Float	position_multiple = 8.5;
-		Float	time_offset = 0;
-		Int32	use_rotation = 0;
-		Bool    use_bake = true;
-	};
 	struct VMD_Conversion_Camera_settings {
 		Float		distance = 0;
 		Int32		use_rotation = 0;
 		BaseObject* str_cam = nullptr;
 	};
-	struct VMD_Motions_import_settings {
-		Float	position_multiple = 8.5;
-		Float	time_offset = 0;
-		Bool    import_motion = true;
-		Bool    import_morph = true;
-		Bool    import_model_info = true;
-		Bool	delete_previous_animation = true;
-		Bool	detail_report = false;
-	};
-	struct VMD_Motions_export_settings {
-		Float	position_multiple = 8.5;
-		Float	time_offset = 0;
-		Int32   use_rotation = 0;
-		Bool    export_motion = true;
-		Bool    export_morph = true;
-		Bool    export_model_info = true;
-		Bool    use_bake = true;
-	};
+	
 	class VMDAnimation
 	{
 		MAXON_DISALLOW_COPY_AND_ASSIGN(VMDAnimation);
@@ -272,6 +213,7 @@ namespace mmd {
 				return(a.frame_no == b.frame_no);
 			}
 		};
+		
 		/* 最初使用动作模型名称 */
 		String ModelName;
 		/* 是否为摄像机动作 */
@@ -288,36 +230,69 @@ namespace mmd {
 		VMDShadowSortedArray shadow_frames;
 		/* 灯光数据数组 */
 		VMDModelSortedArray model_frames;
+		BaseDocument* doc = nullptr;
+
 		/* 用于从文件导入到对象 */
 		maxon::Result<void> LoadFromFile(Filename& fn);
 		/* 用于将对象保存到文件 */
 		maxon::Result<void> SaveToFile(Filename& fn);
+		// 遍历场景，初始化目标对象
+		maxon::Result<void> TraverseDocument(BaseObject* select_object,
+			maxon::HashMap<String, bone_info>& bones_map,
+			maxon::HashMap<String, morph_info>& morphs_map,
+			maxon::HashMap<String, BaseTag*>& ik_tag_map);
+		// 删除先前的动画数据
+		maxon::Result<void> DeletePreviousAnimation(BaseObject* select_object,
+			maxon::HashMap<String, bone_info>& bones_map,
+			maxon::HashMap<String, morph_info>& morphs_map,
+			maxon::HashMap<String, BaseTag*>& ik_tag_map);
 	public:
+		struct
+		{
+			Float		position_multiple = 8.5;
+			Float		time_offset = 0;
+			Filename	fn = Filename();
+			BaseDocument* doc = nullptr;
+		}m_camera_import_settings;
+		struct
+		{
+			Float	position_multiple = 8.5;
+			Float	time_offset = 0;
+			Int32	use_rotation = 0;
+			Bool    use_bake = true;
+		}m_camera_export_settings;
+		struct
+		{
+			Float	position_multiple = 8.5;
+			Float	time_offset = 0;
+			Bool    import_motion = true;
+			Bool    import_morph = true;
+			Bool    import_model_info = true;
+			Bool	delete_previous_animation = true;
+			Bool	detail_report = false;
+		}m_motions_import_settings;
+		struct
+		{
+			Float	position_multiple = 8.5;
+			Float	time_offset = 0;
+			Int32   use_rotation = 0;
+			Bool    export_motion = true;
+			Bool    export_morph = true;
+			Bool    export_model_info = true;
+			Bool    use_bake = true;
+		}m_motions_export_settings;
 		/* 构造函数 */
 		VMDAnimation(){}
 		/* 析构函数 */
-		~VMDAnimation()
-		{
-			this->motion_frames.Reset();
-			/* 表情动画数据数组 */
-			this->morph_frames.Reset();
-			/* 摄像机数据数组 */
-			this->camera_frames.Reset();
-			/* 灯光数据数组 */
-			this->light_frames.Reset();
-			/* 灯光数据数组 */
-			this->shadow_frames.Reset();
-			/* 灯光数据数组 */
-			this->model_frames.Reset();
-		}
+		~VMDAnimation(){}
 		/* 从文件导入摄像机数据 */
-		maxon::Result<void> FromFileImportCamera(VMD_Camera_import_settings setting);
+		maxon::Result<void> FromFileImportCamera();
 		/* 从项目导出摄像机数据 */
-		maxon::Result<void> FromDocumentExportCamera(VMD_Camera_export_settings setting);
+		maxon::Result<void> FromDocumentExportCamera();
 		/* 从文件导入动作或表情数据 */
-		maxon::Result<void> FromFileImportMotion(VMD_Motions_import_settings setting);
+		maxon::Result<void> FromFileImportMotion();
 		/* 从项目导出动作或表情数据 */
-		maxon::Result<void> FromDocumentExportMotion(VMD_Motions_export_settings setting);
+		maxon::Result<void> FromDocumentExportMotion();	
 	};
 
 	class OMMDCamera : public ObjectData

@@ -763,8 +763,8 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		if (interpolator_r_ptr != nullptr)
 		{
 			if (cover == true) {
-				mmd::VMDInterpolator& interpolator_position_r = interpolator_r_ptr->GetValue();
-				interpolator_position_r = interpolator;
+				mmd::VMDInterpolator& interpolator_rotation = interpolator_r_ptr->GetValue();
+				interpolator_rotation = interpolator;
 			}
 		}
 		else {
@@ -810,8 +810,8 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		if (interpolator_r_ptr != nullptr)
 		{
 			if (cover == true) {
-				mmd::VMDInterpolator& interpolator_position_r = interpolator_r_ptr->GetValue();
-				interpolator_position_r = interpolator;
+				mmd::VMDInterpolator& interpolator_rotation = interpolator_r_ptr->GetValue();
+				interpolator_rotation = interpolator;
 			}
 		}
 		else {
@@ -2042,9 +2042,9 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 			auto interpolator_r_ptr = interpolator_R_map.Find(frame_on);
 			if (interpolator_r_ptr != nullptr)
 			{
-				mmd::VMDInterpolator& interpolator_position_r = interpolator_r_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_position_r.GetValue(VMDInterpolator::PartType::ax), interpolator_position_r.GetValue(VMDInterpolator::PartType::ay), 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_position_r.GetValue(VMDInterpolator::PartType::by) - 127., interpolator_position_r.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
+				mmd::VMDInterpolator& interpolator_rotation = interpolator_r_ptr->GetValue();
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_rotation.GetValue(VMDInterpolator::PartType::ax), interpolator_rotation.GetValue(VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_rotation.GetValue(VMDInterpolator::PartType::by) - 127., interpolator_rotation.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight =  Vector(20., 20., 0.);
@@ -5582,7 +5582,6 @@ Bool mmd::OMMDBoneRoot::Write(GeListNode* node, HyperFile* hf)
 	rigid_root_link->SetLink(this->RigidRoot);
 	if (!rigid_root_link->Write(hf))
 		return(false);
-	return(true);
 	AutoAlloc<BaseLink> joint_root_link;
 	if (joint_root_link == nullptr)
 		return false;

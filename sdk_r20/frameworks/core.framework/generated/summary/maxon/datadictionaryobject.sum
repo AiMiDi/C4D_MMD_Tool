@@ -1,2 +1,2 @@
-maxon.DataDictionaryObjectInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\datadictionaryobject.h(43,7)=Object:EraseData,GetData,InitIterator,IsEmpty,Reset,SetData
-maxon.DataDictionaryReferenceObjectInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\datadictionaryobject.h(252,7)=DataDictionaryObjectInterface:GetDataContainer,Init
+maxon.DataDictionaryObjectInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\datadictionaryobject.h(43,7)=Object:EraseData,GetData,InitIterator,IsEmpty,Reset,SetData
+maxon.DataDictionaryReferenceObjectInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\datadictionaryobject.h(252,7)=DataDictionaryObjectInterface:GetDataContainer,Init

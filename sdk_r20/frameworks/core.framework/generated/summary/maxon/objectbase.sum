@@ -1,2 +1,2 @@
-maxon.Object=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\objectbase.h(1282,7)=:Compare,GetHashCodeImpl,InitObject,IsEqual,ToString
-maxon.ErrorInterface=D:\C4D_MMD_Tool\sdk_r20\frameworks\core.framework\source\maxon\objectbase.h(1657,7)=Object:GetCause,GetLocation,GetMachine,GetMessage,GetStackTrace,PrivateGetCode,PrivateSetCode,SetCause,SetLocation,SetMachine,SetMessage,SetStackTrace
+maxon.Object=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\objectbase.h(1282,7)=:Compare,GetHashCodeImpl,InitObject,IsEqual,ToString
+maxon.ErrorInterface=D:\C4DSDK\C4D_MMDTool\sdk_r20\frameworks\core.framework\source\maxon\objectbase.h(1657,7)=Object:GetCause,GetLocation,GetMachine,GetMessage,GetStackTrace,PrivateGetCode,PrivateSetCode,SetCause,SetLocation,SetMachine,SetMessage,SetStackTrace

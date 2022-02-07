@@ -1,1 +1,1 @@
-maxon.ColorSpaceInterface	"net.maxon.image.interface.colorspace"	D:\C4D_MMD_Tool\sdk_r25\frameworks\image.framework\source\maxon\gfx_image_colorspace.h(20,7)	ObjectInterface	GetDefaultLinearColorProfile,GetDefaultNonlinearColorProfile	
+maxon.ColorSpaceInterface	"net.maxon.image.interface.colorspace"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\image.framework\source\maxon\gfx_image_colorspace.h(20,7)	ObjectInterface	GetDefaultLinearColorProfile,GetDefaultNonlinearColorProfile	

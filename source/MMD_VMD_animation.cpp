@@ -225,8 +225,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, const V
 		auto interpolator_r_ptr = interpolator_R_map.Find(frame_on);
 		if (interpolator_r_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_position_r = interpolator_r_ptr->GetValue();
-			interpolator_position_r = interpolator;
+			mmd::VMDInterpolator& interpolator_rotation = interpolator_r_ptr->GetValue();
+			interpolator_rotation = interpolator;
 		}
 		else {
 			interpolator_R_map.Insert(frame_on, interpolator) iferr_return;
@@ -288,8 +288,8 @@ inline Bool mmd::OMMDCamera::SetInterpolator(Int32 type, Int32 frame_on, const V
 		auto interpolator_r_ptr = interpolator_R_map.Find(frame_on);
 		if (interpolator_r_ptr != nullptr)
 		{
-			mmd::VMDInterpolator& interpolator_position_r = interpolator_r_ptr->GetValue();
-			interpolator_position_r = interpolator;
+			mmd::VMDInterpolator& interpolator_rotation = interpolator_r_ptr->GetValue();
+			interpolator_rotation = interpolator;
 		}
 		else {
 			interpolator_R_map.Insert(frame_on, interpolator) iferr_return;
@@ -1307,9 +1307,9 @@ EXECUTIONRESULT mmd::OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, Base
 			auto interpolator_r_ptr = interpolator_R_map.Find(frame_on);
 			if (interpolator_r_ptr != nullptr)
 			{
-				mmd::VMDInterpolator& interpolator_position_r = interpolator_r_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_position_r.GetValue(VMDInterpolator::PartType::ax), interpolator_position_r.GetValue(VMDInterpolator::PartType::ay), 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_position_r.GetValue(VMDInterpolator::PartType::bx) - 127., interpolator_position_r.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
+				mmd::VMDInterpolator& interpolator_rotation = interpolator_r_ptr->GetValue();
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_rotation.GetValue(VMDInterpolator::PartType::ax), interpolator_rotation.GetValue(VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_rotation.GetValue(VMDInterpolator::PartType::bx) - 127., interpolator_rotation.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -2201,7 +2201,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 				return(maxon::Error());
 			if (!motion_frame->interpolator_position_z.ReadBoneInterpolator(file))
 				return(maxon::Error());
-			if (!motion_frame->interpolator_position_r.ReadBoneInterpolator(file))
+			if (!motion_frame->interpolator_rotation.ReadBoneInterpolator(file))
 				return(maxon::Error());
 			SJIStoUTF8(bone_name, motion_frame->bone_name);
 			this->motion_frames.AppendPtr(motion_frame) iferr_return;
@@ -2252,7 +2252,7 @@ maxon::Result<void> mmd::VMDAnimation::LoadFromFile(Filename& fn)
 				return(maxon::Error());
 			if (!camera_frame->interpolator_position_z.ReadCameraInterpolator(file))
 				return(maxon::Error());
-			if (!camera_frame->interpolator_position_r.ReadCameraInterpolator(file))
+			if (!camera_frame->interpolator_rotation.ReadCameraInterpolator(file))
 				return(maxon::Error());
 			if (!camera_frame->interpolator_position_d.ReadCameraInterpolator(file))
 				return(maxon::Error());
@@ -2362,7 +2362,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (motion_frame_number--)
 	{
-		mmd::VMDBoneAnimation motion_frame = (this->motion_frames)[motion_frame_number];
+		const mmd::VMDBoneAnimation& motion_frame = this->motion_frames[motion_frame_number];
 		maxon::AutoMem<maxon::Char> bone_name = NewMemClear(maxon::Char, (motion_frame.bone_name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
 		UTF8toSJIS(motion_frame.bone_name, bone_name);
 		if (!file->WriteBytes(bone_name, 15))
@@ -2379,7 +2379,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 			return(maxon::Error());
 		if (!motion_frame.interpolator_position_z.WriteBoneInterpolator(file))
 			return(maxon::Error());
-		if (!motion_frame.interpolator_position_r.WriteBoneInterpolator(file))
+		if (!motion_frame.interpolator_rotation.WriteBoneInterpolator(file))
 			return(maxon::Error());
 	}
 	UInt32 morph_frame_number = (UInt32)this->morph_frames.GetCount();
@@ -2387,7 +2387,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (morph_frame_number--)
 	{
-		mmd::VMDMorphAnimation morph_frame = (this->morph_frames)[morph_frame_number];
+		const mmd::VMDMorphAnimation& morph_frame = this->morph_frames[morph_frame_number];
 		maxon::AutoMem<maxon::Char> morph_name = NewMemClear(maxon::Char, (morph_frame.morph_name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
 		UTF8toSJIS(morph_frame.morph_name, morph_name);
 		if (!file->WriteBytes(morph_name, 15))
@@ -2402,7 +2402,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (camera_frame_number--)
 	{
-		mmd::VMDCameraAnimation camera_frame = (this->camera_frames)[camera_frame_number];
+		const mmd::VMDCameraAnimation& camera_frame = this->camera_frames[camera_frame_number];
 		if (!file->WriteUInt32(camera_frame.frame_no))
 			return(maxon::Error());
 		if (!file->WriteFloat32(camera_frame.distance))
@@ -2417,7 +2417,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 			return(maxon::Error());
 		if (!camera_frame.interpolator_position_z.WriteCameraInterpolator(file))
 			return(maxon::Error());
-		if (!camera_frame.interpolator_position_r.WriteCameraInterpolator(file))
+		if (!camera_frame.interpolator_rotation.WriteCameraInterpolator(file))
 			return(maxon::Error());
 		if (!camera_frame.interpolator_position_d.WriteCameraInterpolator(file))
 			return(maxon::Error());
@@ -2433,7 +2433,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while(light_frame_number--)
 	{
-		if (!file->WriteBytes(&((this->light_frames)[light_frame_number]), sizeof(mmd::VMDLightAnimation)))
+		if (!file->WriteBytes(&(this->light_frames[light_frame_number]), sizeof(mmd::VMDLightAnimation)))
 			return(maxon::Error());
 	}
 	UInt32 shadow_frame_number = (UInt32)this->shadow_frames.GetCount();
@@ -2441,7 +2441,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (shadow_frame_number--)
 	{
-		if (!file->WriteBytes(&((this->shadow_frames)[shadow_frame_number]), sizeof(mmd::VMDShadowAnimation)))
+		if (!file->WriteBytes(&(this->shadow_frames[shadow_frame_number]), sizeof(mmd::VMDShadowAnimation)))
 			return(maxon::Error());
 	}
 	UInt32 model_frame_number = (UInt32)this->model_frames.GetCapacityCount();
@@ -2449,7 +2449,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 		return(maxon::Error());
 	while (model_frame_number--)
 	{
-		const mmd::VMDModelControllerAnimation& model_frame = (this->model_frames)[model_frame_number];
+		const VMDModelControllerAnimation& model_frame = this->model_frames[model_frame_number];
 		if (!file->WriteUInt32(model_frame.frame_no))
 			return(maxon::Error());
 		if (!file->WriteBool(model_frame.show))
@@ -2459,7 +2459,7 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 			return(maxon::Error());
 		while (ikInfoCount--)
 		{
-			VMDIkControllerAnimation ikInfo = model_frame.IKs_Info[ikInfoCount];
+			const VMDIkControllerAnimation& ikInfo = model_frame.IKs_Info[ikInfoCount];
 			maxon::AutoMem<maxon::Char> ik_name_ = NewMemClear(maxon::Char, (ikInfo.name.GetCStringLen(STRINGENCODING::UTF8) + 1) * 2) iferr_return;
 			UTF8toSJIS(ikInfo.name, ik_name_);
 			if (!file->WriteBytes(ik_name_, 20))
@@ -2470,7 +2470,141 @@ maxon::Result<void> mmd::VMDAnimation::SaveToFile(Filename& fn)
 	}
 	return(maxon::OK);
 }
-maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_settings setting)
+maxon::Result<void> mmd::VMDAnimation::TraverseDocument(BaseObject* select_object,maxon::HashMap<String, bone_info>& bones_map,
+	maxon::HashMap<String, morph_info>& morphs_map,maxon::HashMap<String, BaseTag*>& ik_tag_map)
+{
+	iferr_scope;
+	maxon::Queue<BaseObject*> nodes;
+	nodes.Push(select_object)iferr_return;
+	while (!nodes.IsEmpty())
+	{
+		BaseObject* node = *(nodes.Pop());
+		while (node != nullptr)
+		{
+			// 处理骨骼
+			if (node->GetType() == Ojoint)
+			{
+				String bone_name = node->GetName();
+				// 记录骨骼信息
+				bone_info& bone = bones_map.InsertMultiEntry(bone_name).GetValue().GetValue();
+				bone.obj = node;
+				bone.name = bone_name;
+				// 获取mmd_bone标签
+				BaseTag* node_bone_tag = node->GetTag(ID_T_MMD_BONE);
+				if (node_bone_tag != nullptr)
+				{
+					bone.tag = node_bone_tag;
+					// 处理骨骼表情
+					TMMDBone* pmx_bone_tag_data = node_bone_tag->GetNodeData<TMMDBone>();
+					const Int	BoneMorphCount = pmx_bone_tag_data->GetMorphCount();
+					for (Int32 index = 0; index < BoneMorphCount; index++)
+					{
+						bone_morph_data& bone_morph = pmx_bone_tag_data->GetMorph(index);
+						String morph_name = bone_morph.name;
+						// 记录表情信息
+						morph_info& morph =morphs_map.InsertMultiEntry(morph_name).GetValue().GetValue();						 
+						morph.tag = node_bone_tag;
+						morph.name = morph_name;
+						morph.strength_id = bone_morph.strength_id;
+					}
+				}
+				else {
+					bone.tag = nullptr;
+				}
+				BaseTag* node_ik_tag = node->GetTag(1019561);
+				if (node_ik_tag != nullptr)
+				{
+					ik_tag_map.InsertMultiEntry(node_ik_tag->GetName()).GetValue().SetValue(node_ik_tag);
+				}
+			}
+			// 处理表情
+			else {
+				BaseTag* const node_morph_tag = node->GetTag(Tposemorph);
+				if (node_morph_tag != nullptr)
+				{
+					CAPoseMorphTag* const	pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
+					const Int		MorphCount = pose_morph_tag->GetMorphCount();
+					for (Int32 index = 1; index < MorphCount; index++)
+					{
+						pose_morph_tag->GetMorph(index)->SetStrength(0);
+						String morph_name = pose_morph_tag->GetMorph(index)->GetName();
+						// 记录表情信息
+						morph_info& morph =morphs_map.InsertMultiEntry(morph_name).GetValue().GetValue();
+						morph.tag = node_morph_tag;
+						morph.name = morph_name;
+						morph.strength_id = pose_morph_tag->GetMorphID(index);
+					}
+				}
+			}
+			nodes.Push(node->GetDown()) iferr_return;
+			if (node != select_object)
+			{
+				node = node->GetNext();
+			}
+			else {
+				break;
+			}
+		}
+	}
+	return maxon::OK;
+}
+maxon::Result<void> mmd::VMDAnimation::DeletePreviousAnimation(BaseObject* select_object,maxon::HashMap<String, bone_info>& bones_map,
+	maxon::HashMap<String, morph_info>& morphs_map,maxon::HashMap<String, BaseTag*>& ik_tag_map)
+{
+	// 删除骨骼动画
+	if (m_motions_import_settings.import_motion) {
+		for (auto& bone : bones_map.GetValues()) {
+			// 有mmd_bone标签，调用删除动画方法
+			if (bone.tag != nullptr) {
+				bone.tag->GetNodeData<TMMDBone>()->DeleteAllKeyFrame();
+			}
+			// 没有有mmd_bone标签，删除全部动画
+			else {
+				CTrack* Track_position_x = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X));
+				CTrack::Free(Track_position_x);
+				CTrack* Track_position_y = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y));
+				CTrack::Free(Track_position_y);
+				CTrack* Track_position_z = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z));
+				CTrack::Free(Track_position_z);
+				CTrack* Track_rotation_x = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X));
+				CTrack::Free(Track_rotation_x);
+				CTrack* Track_rotation_y = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y));
+				CTrack::Free(Track_rotation_y);
+				CTrack* Track_rotation_z = bone.obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
+				CTrack::Free(Track_rotation_z);
+				bone.obj->SetRelPos(Vector(0));
+				bone.obj->SetRelRot(Vector(0));
+			}
+		}
+	}
+	// 删除表情动画
+	if (m_motions_import_settings.import_morph) {
+		for (auto& morph : morphs_map.GetValues()) {
+			CTrack* morph_track = morph.tag->FindCTrack(morph.strength_id);
+			CTrack::Free(morph_track);
+			morph.tag->SetParameter(morph.strength_id, 0, DESCFLAGS_SET::NONE);
+		}
+	}
+	// 删除模型信息动画
+	if (m_motions_import_settings.import_model_info) {
+		// 删除模型是否显示动画
+		CTrack* ModelEditorDisplayTrack = select_object->FindCTrack(ID_BASEOBJECT_VISIBILITY_EDITOR);
+		CTrack::Free(ModelEditorDisplayTrack);
+		select_object->SetParameter(ID_BASEOBJECT_VISIBILITY_EDITOR, 2, DESCFLAGS_SET::NONE);
+		CTrack* ModelRenderDisplayTrack = select_object->FindCTrack(ID_BASEOBJECT_VISIBILITY_RENDER);
+		select_object->SetParameter(ID_BASEOBJECT_VISIBILITY_RENDER, 2, DESCFLAGS_SET::NONE);
+		CTrack::Free(ModelRenderDisplayTrack);
+		// 删除IK禁用动画
+		for (auto* ik_tag : ik_tag_map.GetValues()) {
+			CTrack* ik_enable_track = ik_tag->FindCTrack(ID_CA_IK_TAG_ENABLE);
+			CTrack::Free(ik_enable_track);
+			ik_tag->SetParameter(ID_CA_IK_TAG_ENABLE, true, DESCFLAGS_SET::NONE);
+			// TODO: 删除IK旋转偏向动画
+		}
+	}
+	return maxon::OK;
+}
+maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera()
 {
 	iferr_scope_handler{
 #ifdef _DEBUG
@@ -2478,8 +2612,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 #endif // _DEBUG	
 			return err;
 	};
-	BaseDocument* doc;
-	if (setting.doc == nullptr)
+	if (m_camera_import_settings.doc == nullptr)
 	{
 		doc = GetActiveDocument();
 		if (doc == nullptr)
@@ -2490,7 +2623,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 		}
 	}
 	else {
-		doc = setting.doc;
+		doc = m_camera_import_settings.doc;
 	}
 	Filename fn;
 	this->LoadFromFile(fn)iferr_return;
@@ -2571,26 +2704,26 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 				now_camera_frame = next_camera_frame;
 				next_camera_frame = this->camera_frames[camera_frame_index + 1];
 			}
-			key_on_frame = Int32(now_camera_frame.frame_no) + maxon::SafeConvert<Int32>(setting.time_offset);
+			key_on_frame = Int32(now_camera_frame.frame_no) + maxon::SafeConvert<Int32>(m_camera_import_settings.time_offset);
 			key_on_time = BaseTime(key_on_frame, 30.);
 
 			CKey* camera_key_position_x = CKey::Alloc();      /* _position_x */
 			camera_key_position_x->SetTime(camera_curve_position_x, key_on_time);
-			camera_key_position_x->SetValue(camera_curve_position_x, now_camera_frame.position.x * setting.position_multiple);
+			camera_key_position_x->SetValue(camera_curve_position_x, now_camera_frame.position.x * m_camera_import_settings.position_multiple);
 			camera_key_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_position_x->InsertKey(camera_key_position_x);
 			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, key_on_frame,std::move(now_camera_frame.interpolator_position_x));
 
 			CKey* camera_key_position_y = CKey::Alloc();      /* _position_y */
 			camera_key_position_y->SetTime(camera_curve_position_y, key_on_time);
-			camera_key_position_y->SetValue(camera_curve_position_y, now_camera_frame.position.y * setting.position_multiple);
+			camera_key_position_y->SetValue(camera_curve_position_y, now_camera_frame.position.y * m_camera_import_settings.position_multiple);
 			camera_key_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_position_y->InsertKey(camera_key_position_y);
 			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_YCURVE, key_on_frame, std::move(now_camera_frame.interpolator_position_y));
 
 			CKey* camera_key_position_z = CKey::Alloc();      /* _position_z */
 			camera_key_position_z->SetTime(camera_curve_position_z, key_on_time);
-			camera_key_position_z->SetValue(camera_curve_position_z, now_camera_frame.position.z * setting.position_multiple);
+			camera_key_position_z->SetValue(camera_curve_position_z, now_camera_frame.position.z * m_camera_import_settings.position_multiple);
 			camera_key_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_position_z->InsertKey(camera_key_position_z);
 			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_ZCURVE, key_on_frame, std::move(now_camera_frame.interpolator_position_z));
@@ -2612,11 +2745,11 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 			camera_key_rotation_z->SetValue(camera_curve_rotation_z, now_camera_frame.rotation.z);
 			camera_key_rotation_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_rotation_z->InsertKey(camera_key_rotation_z);
-			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, key_on_frame, std::move(now_camera_frame.interpolator_position_r));
+			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_RCURVE, key_on_frame, std::move(now_camera_frame.interpolator_rotation));
 
 			CKey* camera_key_distance = CKey::Alloc();;
 			camera_key_distance->SetTime(camera_curve_distance, key_on_time);
-			camera_key_distance->SetValue(camera_curve_distance, now_camera_frame.distance * setting.position_multiple);
+			camera_key_distance->SetValue(camera_curve_distance, now_camera_frame.distance * m_camera_import_settings.position_multiple);
 			camera_key_distance->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
 			camera_curve_distance->InsertKey(camera_key_distance);
 			VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_DCURVE, key_on_frame, std::move(now_camera_frame.interpolator_position_d));
@@ -2645,7 +2778,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportCamera(VMD_Camera_import_se
 		return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_CAM_ERR)));
 	}
 }
-maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_export_settings setting)
+maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera()
 {
 	iferr_scope_handler{
 #ifdef _DEBUG
@@ -2654,8 +2787,8 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 			return err;
 	};
 	Filename		fn;
-	BaseDocument* doc = GetActiveDocument();
-	setting.position_multiple = 1.0 / setting.position_multiple;
+	doc = GetActiveDocument();
+	m_camera_export_settings.position_multiple = 1.0 / m_camera_export_settings.position_multiple;
 	if (doc == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
@@ -2677,7 +2810,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 	/*选择对象为普通摄像机则转化 */
 	if (select_object->GetType() == Ocamera)               
 	{
-		auto res = OMMDCamera::ConversionCamera(VMD_Conversion_Camera_settings{ 0., setting.use_rotation, select_object });
+		auto res = OMMDCamera::ConversionCamera(VMD_Conversion_Camera_settings{ 0., m_camera_export_settings.use_rotation, select_object });
 		camera_object_tmp.Assign(res.GetValue());
 		iferr(res.GetError()) 
 			return(maxon::Error());
@@ -2782,7 +2915,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 	CCurve* camera_curve_AOV = CameraTrackAOV->GetCurve();	
 	CCurve* camera_curve_frame_on = camera_track_frame_on->GetCurve();
 	const Int32 kFps = doc->GetFps();
-	if (setting.use_bake == true) {
+	if (m_camera_export_settings.use_bake == true) {
 		const BaseTime kEndFrame = maxon::Max(maxon::Max(maxon::Max(maxon::Max(maxon::Max(maxon::Max(maxon::Max(
 			camera_curve_position_x->GetEndTime(),
 			camera_curve_position_y->GetEndTime()),
@@ -2797,16 +2930,16 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 		{
 			StatusSetSpin();
 			mmd::VMDCameraAnimation* camera_frame = NewObj(mmd::VMDCameraAnimation)iferr_return;
-			camera_frame->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
+			camera_frame->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + m_camera_export_settings.time_offset);
 			camera_frame->position = Vector32(
-				maxon::SafeConvert<Float32>(camera_curve_position_x->GetValue(time_on) * setting.position_multiple),
-				maxon::SafeConvert<Float32>(camera_curve_position_y->GetValue(time_on) * setting.position_multiple),
-				maxon::SafeConvert<Float32>(camera_curve_position_z->GetValue(time_on) * setting.position_multiple));
+				maxon::SafeConvert<Float32>(camera_curve_position_x->GetValue(time_on) * m_camera_export_settings.position_multiple),
+				maxon::SafeConvert<Float32>(camera_curve_position_y->GetValue(time_on) * m_camera_export_settings.position_multiple),
+				maxon::SafeConvert<Float32>(camera_curve_position_z->GetValue(time_on) * m_camera_export_settings.position_multiple));
 			camera_frame->rotation = Vector32(
 				maxon::SafeConvert<Float32>(camera_curve_rotation_y->GetValue(time_on)),
 				maxon::SafeConvert<Float32>(camera_curve_rotation_x->GetValue(time_on)),
 				maxon::SafeConvert<Float32>(camera_curve_rotation_z->GetValue(time_on))); /*H(y) P(x) B(z)*/
-			camera_frame->distance = maxon::SafeConvert<Float32>(camera_curve_distance->GetValue(time_on) * setting.position_multiple);
+			camera_frame->distance = maxon::SafeConvert<Float32>(camera_curve_distance->GetValue(time_on) * m_camera_export_settings.position_multiple);
 			camera_frame->viewing_angle = maxon::SafeConvert<UInt32>(camera_curve_AOV->GetValue(time_on));
 			this->camera_frames.AppendPtr(camera_frame)iferr_return;
 		}
@@ -2818,22 +2951,22 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 			StatusSetSpin();
 			mmd::VMDCameraAnimation* camera_frame = NewObj(mmd::VMDCameraAnimation)iferr_return;
 			Int32 Frame_on = maxon::SafeConvert<Int32>(camera_curve_frame_on->GetKey(frame_index)->GetValue());
-			camera_frame->frame_no = Frame_on + maxon::SafeConvert<Int32>(setting.time_offset);
+			camera_frame->frame_no = Frame_on + maxon::SafeConvert<Int32>(m_camera_export_settings.time_offset);
 			camera_frame->position = Vector32(
-				maxon::SafeConvert<Float32>(camera_curve_position_x->GetKey(frame_index)->GetValue() * setting.position_multiple),
-				maxon::SafeConvert<Float32>(camera_curve_position_y->GetKey(frame_index)->GetValue() * setting.position_multiple),
-				maxon::SafeConvert<Float32>(camera_curve_position_z->GetKey(frame_index)->GetValue() * setting.position_multiple));
+				maxon::SafeConvert<Float32>(camera_curve_position_x->GetKey(frame_index)->GetValue() * m_camera_export_settings.position_multiple),
+				maxon::SafeConvert<Float32>(camera_curve_position_y->GetKey(frame_index)->GetValue() * m_camera_export_settings.position_multiple),
+				maxon::SafeConvert<Float32>(camera_curve_position_z->GetKey(frame_index)->GetValue() * m_camera_export_settings.position_multiple));
 			camera_frame->rotation = Vector32(
 				maxon::SafeConvert<Float32>(camera_curve_rotation_y->GetKey(frame_index)->GetValue()),
 				maxon::SafeConvert<Float32>(camera_curve_rotation_x->GetKey(frame_index)->GetValue()),
 				maxon::SafeConvert<Float32>(camera_curve_rotation_z->GetKey(frame_index)->GetValue())); /*H(y) P(x) B(z)*/
-			camera_frame->distance = maxon::SafeConvert<Float32>(camera_curve_distance->GetKey(frame_index)->GetValue() * setting.position_multiple);
+			camera_frame->distance = maxon::SafeConvert<Float32>(camera_curve_distance->GetKey(frame_index)->GetValue() * m_camera_export_settings.position_multiple);
 			camera_frame->viewing_angle = maxon::SafeConvert<UInt32>(camera_curve_AOV->GetKey(frame_index)->GetValue());
 			camera_frame->perspective = 0;
 			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_XCURVE, Frame_on, camera_frame->interpolator_position_x);
 			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_YCURVE, Frame_on, camera_frame->interpolator_position_y);
 			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_ZCURVE, Frame_on, camera_frame->interpolator_position_z);
-			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_RCURVE, Frame_on, camera_frame->interpolator_position_r);
+			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_RCURVE, Frame_on, camera_frame->interpolator_rotation);
 			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_DCURVE, Frame_on, camera_frame->interpolator_position_d);
 			VMD_camera_data->GetInterpolator(VMD_CAM_OBJ_VCURVE, Frame_on, camera_frame->interpolator_position_v);
 			this->camera_frames.AppendPtr(camera_frame)iferr_return;
@@ -2847,29 +2980,29 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportCamera(VMD_Camera_expor
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, maxon::String::IntToString(this->camera_frames.GetCount()), String::FloatToString(timing.GetMilliseconds())));
 	return(maxon::OK);
 }
-maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_settings setting)
+maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion()
 {
-	maxon::HashMap<String, maxon::BaseList<bone_obj_tag>*>	bone_name_map;
-	maxon::HashMap<String, maxon::BaseList<morph_id_tag>*>	morph_name_map;
-	maxon::HashMap<String, maxon::BaseList<BaseTag*>*>	ik_tag_map;
-	maxon::HashMap<String, maxon::BaseList<VMDBoneAnimation>*>	MotionFrameList_map;
-	maxon::HashMap<String, maxon::BaseList<VMDMorphAnimation>*>	MorphFrameList_map;
 	iferr_scope_handler{
 #ifdef _DEBUG
 		MessageDialog(err.ToString(nullptr));
 #endif // _DEBUG	
-	EXIT_FromFileImportMotions
 			return err;
 	};
-	BaseDocument* doc = GetActiveDocument();
+	maxon::HashMap<String, bone_info>	bones_map;
+	maxon::HashMap<String, morph_info>	morphs_map;
+	maxon::HashMap<String, BaseTag*>	ik_tag_map;
+	maxon::HashMap<String, maxon::BaseList<const VMDBoneAnimation*>>	motion_frame_list_map;
+	maxon::HashMap<String, maxon::BaseList<const VMDMorphAnimation*>>	morph_frame_list_map;
+
+	doc = GetActiveDocument();
 	if (doc == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + "error");
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR));
 		return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
 	}
-	BaseObject* SelectObject = doc->GetActiveObject();
-	if (SelectObject == nullptr)
+	BaseObject* select_object = doc->GetActiveObject();
+	if (select_object == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
@@ -2884,1106 +3017,119 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
 		return(maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR)));
 	}
-
-	maxon::Queue<BaseObject*> nodes;
-	nodes.Push(SelectObject) iferr_return;
+	TraverseDocument(select_object, bones_map, morphs_map, ik_tag_map)iferr_return;
 	GeData data;
-	if (setting.delete_previous_animation == true) 
+	if (m_motions_import_settings.delete_previous_animation == true) 
 	{
-		if (setting.import_motion == true && setting.import_morph == true)
-		{
-			while (!nodes.IsEmpty())
-			{
-				BaseObject* node = *(nodes.Pop());
-				while (node != nullptr)
-				{
-					if (node->GetType() == Ojoint)
-					{
-						BaseTag* node_bone_tag = node->GetTag(ID_T_MMD_BONE);
-						if (node_bone_tag != nullptr)
-						{
-							TMMDBone* pmx_bone_tag_data = node_bone_tag->GetNodeData<TMMDBone>();
-							const Int	BoneMorphCount = pmx_bone_tag_data->GetMorphCount();
-							for (Int32 index = 0; index < BoneMorphCount; index++)
-							{
-								bone_morph_data& bone_morph = pmx_bone_tag_data->GetMorph(index);
-								CTrack* morph_track = node_bone_tag->FindCTrack(bone_morph.strength_id);
-								CTrack::Free(morph_track);
-								node_bone_tag->SetParameter(bone_morph.strength_id, 0, DESCFLAGS_SET::NONE);
-								auto			morph_arr_ptr = morph_name_map.Find(bone_morph.name);
-								if (morph_arr_ptr == nullptr)
-								{
-									maxon::BaseList<morph_id_tag>* morph_arr = NewObj(maxon::BaseList<morph_id_tag>)iferr_return;
-									morph_arr->Append(morph_id_tag{ bone_morph.strength_id, node_bone_tag }) iferr_return;
-									morph_name_map.Insert(bone_morph.name, morph_arr) iferr_return;
-								}
-								else {
-									morph_arr_ptr->GetValue()->Append(morph_id_tag{ bone_morph.strength_id, node_bone_tag }) iferr_return;
-								}
-							}
-							node_bone_tag->GetParameter(DescID(PMX_BONE_NAME_LOCAL), data, DESCFLAGS_GET::NONE);
-							String	bone_name = data.GetString();
-							auto	bone_arr_ptr = bone_name_map.Find(bone_name);
-							if (bone_arr_ptr == nullptr)
-							{
-								maxon::BaseList<bone_obj_tag>* bone_arr = NewObj(maxon::BaseList<bone_obj_tag>)iferr_return;
-								bone_arr->Append(bone_obj_tag{ node, node_bone_tag }) iferr_return;
-								bone_name_map.Insert(bone_name, bone_arr) iferr_return;
-							}
-							else {
-								bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, node_bone_tag }) iferr_return;
-							}
-							pmx_bone_tag_data->DeleteAllKeyFrame();
-						}
-						else {
-							String	bone_name = node->GetName();
-							auto	bone_arr_ptr = bone_name_map.Find(bone_name);
-							if (bone_arr_ptr == nullptr)
-							{
-								maxon::BaseList<bone_obj_tag>* bone_arr = NewObj(maxon::BaseList<bone_obj_tag>)iferr_return;;
-								bone_arr->Append(bone_obj_tag{ node, nullptr }) iferr_return;
-								bone_name_map.Insert(bone_name, bone_arr) iferr_return;
-							}
-							else {
-								bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, nullptr }) iferr_return;
-							}
-							CTrack* BoneTrack_position_x = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_position_x);
-							CTrack* BoneTrack_position_y = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_position_y);
-							CTrack* BoneTrack_position_z = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_position_z);
-							CTrack* BoneTrack_rotation_x = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_rotation_x);
-							CTrack* BoneTrack_rotation_y = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_rotation_y);
-							CTrack* BoneTrack_rotation_z = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_rotation_z);
-							node->SetRelPos(Vector(0));
-							node->SetRelRot(Vector(0));
-						}
-						BaseTag* node_ik_tag = node->GetTag(1019561);
-						if (node_ik_tag != nullptr)
-						{
-							CTrack* ik_enable_track = node_ik_tag->FindCTrack(ID_CA_IK_TAG_ENABLE);
-							CTrack::Free(ik_enable_track);
-							node_ik_tag->SetParameter(ID_CA_IK_TAG_ENABLE, true, DESCFLAGS_SET::NONE);
-							String	ik_tag_name = node_ik_tag->GetName();
-							auto	ik_tag_list_ptr = ik_tag_map.Find(ik_tag_name);
-							if (ik_tag_list_ptr == nullptr)
-							{
-								maxon::BaseList<BaseTag*>* ik_tag_list = NewObj(maxon::BaseList<BaseTag*>)iferr_return;;
-								ik_tag_list->Append(node_ik_tag) iferr_return;
-								ik_tag_map.Insert(ik_tag_name, ik_tag_list) iferr_return;
-							}
-							else {
-								ik_tag_list_ptr->GetValue()->Append(node_ik_tag) iferr_return;
-							}
-						}
-					}
-					else {
-						BaseTag* const node_morph_tag = node->GetTag(Tposemorph);
-						if (node_morph_tag != nullptr)
-						{
-							CAPoseMorphTag* const	pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
-							const Int		MorphCount = pose_morph_tag->GetMorphCount();
-							for (Int32 index = 1; index < MorphCount; index++)
-							{
-								CTrack* morph_track = node_morph_tag->FindCTrack(pose_morph_tag->GetMorphID(index));
-								CTrack::Free(morph_track);
-								pose_morph_tag->GetMorph(index)->SetStrength(0);
-								String	morph_name = pose_morph_tag->GetMorph(index)->GetName();
-								auto	morph_arr_ptr = morph_name_map.Find(morph_name);
-								if (morph_arr_ptr == nullptr)
-								{
-									maxon::BaseList<morph_id_tag>* morph_arr = NewObj(maxon::BaseList<morph_id_tag>)iferr_return;
-									morph_arr->Append(morph_id_tag{ pose_morph_tag->GetMorphID(index), node_morph_tag }) iferr_return;
-									morph_name_map.Insert(morph_name, morph_arr) iferr_return;
-								}
-								else {
-									morph_arr_ptr->GetValue()->Append(morph_id_tag{ pose_morph_tag->GetMorphID(index), node_morph_tag }) iferr_return;
-								}
-							}
-						}
-					}
-					nodes.Push(node->GetDown()) iferr_return;
-					if (node != SelectObject)
-					{
-						node = node->GetNext();
-					}
-					else {
-						break;
-					}
-				}
-			}
-		}
-		else if (setting.import_motion == true && setting.import_morph == false)
-		{
-			while (!nodes.IsEmpty())
-			{
-				BaseObject* node = *(nodes.Pop());
-				while (node != nullptr)
-				{
-					if (node->GetType() == Ojoint)
-					{
-						BaseTag* node_bone_tag = node->GetTag(ID_T_MMD_BONE);
-						if (node_bone_tag != nullptr)
-						{
-							TMMDBone* pmx_bone_tag_data = node_bone_tag->GetNodeData<TMMDBone>();
-							const Int	BoneMorphCount = pmx_bone_tag_data->GetMorphCount();
-							for (Int32 index = 0; index < BoneMorphCount; index++)
-							{
-								bone_morph_data& bone_morph = pmx_bone_tag_data->GetMorph(index);
-								auto			morph_arr_ptr = morph_name_map.Find(bone_morph.name);
-								if (morph_arr_ptr == nullptr)
-								{
-									maxon::BaseList<morph_id_tag>* morph_arr = NewObj(maxon::BaseList<morph_id_tag>)iferr_return;
-									morph_arr->Append(morph_id_tag{ bone_morph.strength_id, node_bone_tag }) iferr_return;
-									morph_name_map.Insert(bone_morph.name, morph_arr) iferr_return;
-								}
-								else {
-									morph_arr_ptr->GetValue()->Append(morph_id_tag{ bone_morph.strength_id, node_bone_tag }) iferr_return;
-								}
-							}
-							node_bone_tag->GetParameter(DescID(PMX_BONE_NAME_LOCAL), data, DESCFLAGS_GET::NONE);
-							String	bone_name = data.GetString();
-							auto	bone_arr_ptr = bone_name_map.Find(bone_name);
-							if (bone_arr_ptr == nullptr)
-							{
-								maxon::BaseList<bone_obj_tag>* bone_arr = NewObj(maxon::BaseList<bone_obj_tag>)iferr_return;
-								bone_arr->Append(bone_obj_tag{ node, node_bone_tag }) iferr_return;
-								bone_name_map.Insert(bone_name, bone_arr) iferr_return;
-							}
-							else {
-								bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, node_bone_tag }) iferr_return;
-							}
-							pmx_bone_tag_data->DeleteAllKeyFrame();
-						}
-						else {
-							String	bone_name = node->GetName();
-							auto	bone_arr_ptr = bone_name_map.Find(bone_name);
-							if (bone_arr_ptr == nullptr)
-							{
-								maxon::BaseList<bone_obj_tag>* bone_arr = NewObj(maxon::BaseList<bone_obj_tag>)iferr_return;;
-								bone_arr->Append(bone_obj_tag{ node, nullptr }) iferr_return;
-								bone_name_map.Insert(bone_name, bone_arr) iferr_return;
-							}
-							else {
-								bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, nullptr }) iferr_return;
-							}
-							CTrack* BoneTrack_position_x = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_position_x);
-							CTrack* BoneTrack_position_y = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_position_y);
-							CTrack* BoneTrack_position_z = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_position_z);
-							CTrack* BoneTrack_rotation_x = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_rotation_x);
-							CTrack* BoneTrack_rotation_y = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_rotation_y);
-							CTrack* BoneTrack_rotation_z = node->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							CTrack::Free(BoneTrack_rotation_z);
-							node->SetRelPos(Vector(0));
-							node->SetRelRot(Vector(0));
-						}
-						BaseTag* node_ik_tag = node->GetTag(1019561);
-						if (node_ik_tag != nullptr)
-						{
-							CTrack* ik_enable_track = node_ik_tag->FindCTrack(ID_CA_IK_TAG_ENABLE);
-							CTrack::Free(ik_enable_track);
-							node_ik_tag->SetParameter(ID_CA_IK_TAG_ENABLE, true, DESCFLAGS_SET::NONE);
-							String	ik_tag_name = node_ik_tag->GetName();
-							auto	ik_tag_list_ptr = ik_tag_map.Find(ik_tag_name);
-							if (ik_tag_list_ptr == nullptr)
-							{
-								maxon::BaseList<BaseTag*>* ik_tag_list = NewObj(maxon::BaseList<BaseTag*>)iferr_return;;
-								ik_tag_list->Append(node_ik_tag) iferr_return;
-								ik_tag_map.Insert(ik_tag_name, ik_tag_list) iferr_return;
-							}
-							else {
-								ik_tag_list_ptr->GetValue()->Append(node_ik_tag) iferr_return;
-							}
-						}
-					}
-					else {
-						BaseTag* const node_morph_tag = node->GetTag(Tposemorph);
-						if (node_morph_tag != nullptr)
-						{
-							CAPoseMorphTag* const	pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
-							const Int		MorphCount = pose_morph_tag->GetMorphCount();
-							for (Int32 index = 1; index < MorphCount; index++)
-							{
-								String	morph_name = pose_morph_tag->GetMorph(index)->GetName();
-								auto	morph_arr_ptr = morph_name_map.Find(morph_name);
-								if (morph_arr_ptr == nullptr)
-								{
-									maxon::BaseList<morph_id_tag>* morph_arr = NewObj(maxon::BaseList<morph_id_tag>)iferr_return;
-									morph_arr->Append(morph_id_tag{ pose_morph_tag->GetMorphID(index), node_morph_tag }) iferr_return;
-									morph_name_map.Insert(morph_name, morph_arr) iferr_return;
-								}
-								else {
-									morph_arr_ptr->GetValue()->Append(morph_id_tag{ pose_morph_tag->GetMorphID(index), node_morph_tag }) iferr_return;
-								}
-							}
-						}
-					}
-					nodes.Push(node->GetDown()) iferr_return;
-					if (node != SelectObject)
-					{
-						node = node->GetNext();
-					}
-					else {
-						break;
-					}
-				}
-			}
-		}
-		else if (setting.import_motion == false && setting.import_morph == true)
-		{
-			while (!nodes.IsEmpty())
-			{
-				BaseObject* node = *(nodes.Pop());
-				while (node != nullptr)
-				{
-					if (node->GetType() == Ojoint)
-					{
-						BaseTag* node_bone_tag = node->GetTag(ID_T_MMD_BONE);
-						if (node_bone_tag != nullptr)
-						{
-							TMMDBone* pmx_bone_tag_data = node_bone_tag->GetNodeData<TMMDBone>();
-							const Int	BoneMorphCount = pmx_bone_tag_data->GetMorphCount();
-							for (Int32 index = 0; index < BoneMorphCount; index++)
-							{
-								bone_morph_data& bone_morph = pmx_bone_tag_data->GetMorph(index);
-								CTrack* morph_track = node_bone_tag->FindCTrack(bone_morph.strength_id);
-								CTrack::Free(morph_track);
-								node_bone_tag->SetParameter(bone_morph.strength_id, 0, DESCFLAGS_SET::NONE);
-								auto			morph_arr_ptr = morph_name_map.Find(bone_morph.name);
-								if (morph_arr_ptr == nullptr)
-								{
-									maxon::BaseList<morph_id_tag>* morph_arr = NewObj(maxon::BaseList<morph_id_tag>)iferr_return;
-									morph_arr->Append(morph_id_tag{ bone_morph.strength_id, node_bone_tag }) iferr_return;
-									morph_name_map.Insert(bone_morph.name, morph_arr) iferr_return;
-								}
-								else {
-									morph_arr_ptr->GetValue()->Append(morph_id_tag{ bone_morph.strength_id, node_bone_tag }) iferr_return;
-								}
-							}
-							node_bone_tag->GetParameter(DescID(PMX_BONE_NAME_LOCAL), data, DESCFLAGS_GET::NONE);
-							String	bone_name = data.GetString();
-							auto	bone_arr_ptr = bone_name_map.Find(bone_name);
-							if (bone_arr_ptr == nullptr)
-							{
-								maxon::BaseList<bone_obj_tag>* bone_arr = NewObj(maxon::BaseList<bone_obj_tag>)iferr_return;
-								bone_arr->Append(bone_obj_tag{ node, node_bone_tag }) iferr_return;
-								bone_name_map.Insert(bone_name, bone_arr) iferr_return;
-							}
-							else {
-								bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, node_bone_tag }) iferr_return;
-							}
-						}
-						else {
-							String	bone_name = node->GetName();
-							auto	bone_arr_ptr = bone_name_map.Find(bone_name);
-							if (bone_arr_ptr == nullptr)
-							{
-								maxon::BaseList<bone_obj_tag>* bone_arr = NewObj(maxon::BaseList<bone_obj_tag>)iferr_return;;
-								bone_arr->Append(bone_obj_tag{ node, nullptr }) iferr_return;
-								bone_name_map.Insert(bone_name, bone_arr) iferr_return;
-							}
-							else {
-								bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, nullptr }) iferr_return;
-							}
-						}
-						BaseTag* node_ik_tag = node->GetTag(1019561);
-						if (node_ik_tag != nullptr)
-						{
-							CTrack* ik_enable_track = node_ik_tag->FindCTrack(ID_CA_IK_TAG_ENABLE);
-							if (ik_enable_track != nullptr)
-							{
-								CTrack::Free(ik_enable_track);
-							}
-							String	ik_tag_name = node_ik_tag->GetName();
-							auto	ik_tag_list_ptr = ik_tag_map.Find(ik_tag_name);
-							if (ik_tag_list_ptr == nullptr)
-							{
-								maxon::BaseList<BaseTag*>* ik_tag_list = NewObj(maxon::BaseList<BaseTag*>)iferr_return;;
-								ik_tag_list->Append(node_ik_tag) iferr_return;
-								ik_tag_map.Insert(ik_tag_name, ik_tag_list) iferr_return;
-							}
-							else {
-								ik_tag_list_ptr->GetValue()->Append(node_ik_tag) iferr_return;
-							}
-						}
-					}
-					else {
-						BaseTag* const node_morph_tag = node->GetTag(Tposemorph);
-						if (node_morph_tag != nullptr)
-						{
-							CAPoseMorphTag* const	pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
-							const Int		MorphCount = pose_morph_tag->GetMorphCount();
-							for (Int32 index = 1; index < MorphCount; index++)
-							{
-								CTrack* morph_track = node_morph_tag->FindCTrack(pose_morph_tag->GetMorphID(index));
-								CTrack::Free(morph_track);
-								pose_morph_tag->GetMorph(index)->SetStrength(0);
-								String	morph_name = pose_morph_tag->GetMorph(index)->GetName();
-								auto	morph_arr_ptr = morph_name_map.Find(morph_name);
-								if (morph_arr_ptr == nullptr)
-								{
-									maxon::BaseList<morph_id_tag>* morph_arr = NewObj(maxon::BaseList<morph_id_tag>)iferr_return;
-									morph_arr->Append(morph_id_tag{ pose_morph_tag->GetMorphID(index), node_morph_tag }) iferr_return;
-									morph_name_map.Insert(morph_name, morph_arr) iferr_return;
-								}
-								else {
-									morph_arr_ptr->GetValue()->Append(morph_id_tag{ pose_morph_tag->GetMorphID(index), node_morph_tag }) iferr_return;
-								}
-							}
-						}
-					}
-					nodes.Push(node->GetDown()) iferr_return;
-					if (node != SelectObject)
-					{
-						node = node->GetNext();
-					}
-					else {
-						break;
-					}
-				}
-			}
-		}
-		if (setting.import_model_info == true) {
-			CTrack* ModelEditorDisplayTrack = SelectObject->FindCTrack(ID_BASEOBJECT_VISIBILITY_EDITOR);
-			CTrack::Free(ModelEditorDisplayTrack);
-			SelectObject->SetParameter(ID_BASEOBJECT_VISIBILITY_EDITOR, 2, DESCFLAGS_SET::NONE);
-			CTrack* ModelRenderDisplayTrack = SelectObject->FindCTrack(ID_BASEOBJECT_VISIBILITY_RENDER);
-			SelectObject->SetParameter(ID_BASEOBJECT_VISIBILITY_RENDER, 2, DESCFLAGS_SET::NONE);
-			CTrack::Free(ModelRenderDisplayTrack);
-		}
+		DeletePreviousAnimation(select_object, bones_map, morphs_map, ik_tag_map)iferr_return;
 	}
-	else {
-		while (!nodes.IsEmpty())
-		{
-			BaseObject* node = *(nodes.Pop());
-			while (node != nullptr)
-			{
-				if (node->GetType() == Ojoint)
-				{
-					BaseTag* node_bone_tag = node->GetTag(ID_T_MMD_BONE);
-					if (node_bone_tag != nullptr)
-					{
-						TMMDBone* pmx_bone_tag_data = node_bone_tag->GetNodeData<TMMDBone>();
-						const Int	BoneMorphCount = pmx_bone_tag_data->GetMorphCount();
-						for (Int32 index = 0; index < BoneMorphCount; index++)
-						{
-							bone_morph_data& bone_morph = pmx_bone_tag_data->GetMorph(index);
-							auto			morph_arr_ptr = morph_name_map.Find(bone_morph.name);
-							if (morph_arr_ptr == nullptr)
-							{
-								maxon::BaseList<morph_id_tag>* morph_arr = NewObj(maxon::BaseList<morph_id_tag>)iferr_return;
-								morph_arr->Append(morph_id_tag{ bone_morph.strength_id, node_bone_tag }) iferr_return;
-								morph_name_map.Insert(bone_morph.name, morph_arr) iferr_return;
-							}
-							else {
-								morph_arr_ptr->GetValue()->Append(morph_id_tag{ bone_morph.strength_id, node_bone_tag }) iferr_return;
-							}
-						}
-						node_bone_tag->GetParameter(DescID(PMX_BONE_NAME_LOCAL), data, DESCFLAGS_GET::NONE);
-						String	bone_name = data.GetString();
-						auto	bone_arr_ptr = bone_name_map.Find(bone_name);
-						if (bone_arr_ptr == nullptr)
-						{
-							maxon::BaseList<bone_obj_tag>* bone_arr = NewObj(maxon::BaseList<bone_obj_tag>)iferr_return;
-							bone_arr->Append(bone_obj_tag{ node, node_bone_tag }) iferr_return;
-							bone_name_map.Insert(bone_name, bone_arr) iferr_return;
-						}
-						else {
-							bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, node_bone_tag }) iferr_return;
-						}
-					}
-					else {
-						String	bone_name = node->GetName();
-						auto	bone_arr_ptr = bone_name_map.Find(bone_name);
-						if (bone_arr_ptr == nullptr)
-						{
-							maxon::BaseList<bone_obj_tag>* bone_arr = NewObj(maxon::BaseList<bone_obj_tag>)iferr_return;;
-							bone_arr->Append(bone_obj_tag{ node, nullptr }) iferr_return;
-							bone_name_map.Insert(bone_name, bone_arr) iferr_return;
-						}
-						else {
-							bone_arr_ptr->GetValue()->Append(bone_obj_tag{ node, nullptr }) iferr_return;
-						}
-					}
-					BaseTag* node_ik_tag = node->GetTag(1019561);
-					if (node_ik_tag != nullptr)
-					{
-						CTrack* ik_enable_track = node_ik_tag->FindCTrack(ID_CA_IK_TAG_ENABLE);
-						if (ik_enable_track != nullptr)
-						{
-							CTrack::Free(ik_enable_track);
-						}
-						String	ik_tag_name = node_ik_tag->GetName();
-						auto	ik_tag_list_ptr = ik_tag_map.Find(ik_tag_name);
-						if (ik_tag_list_ptr == nullptr)
-						{
-							maxon::BaseList<BaseTag*>* ik_tag_list = NewObj(maxon::BaseList<BaseTag*>)iferr_return;;
-							ik_tag_list->Append(node_ik_tag) iferr_return;
-							ik_tag_map.Insert(ik_tag_name, ik_tag_list) iferr_return;
-						}
-						else {
-							ik_tag_list_ptr->GetValue()->Append(node_ik_tag) iferr_return;
-						}
-					}
-				}
-				else {
-					BaseTag* const tag = node->GetTag(Tposemorph);
-					if (tag != nullptr)
-					{
-						CAPoseMorphTag* const	pose_morph_tag = static_cast<CAPoseMorphTag*>(tag);
-						const Int		MorphCount = pose_morph_tag->GetMorphCount();
-						for (Int32 index = 1; index < MorphCount; index++)
-						{
-							String	morph_name = pose_morph_tag->GetMorph(index)->GetName();
-							auto	morph_arr_ptr = morph_name_map.Find(morph_name);
-							if (morph_arr_ptr == nullptr)
-							{
-								maxon::BaseList<morph_id_tag>* morph_arr = NewObj(maxon::BaseList<morph_id_tag>)iferr_return;
-								morph_arr->Append(morph_id_tag{ pose_morph_tag->GetMorphID(index), tag }) iferr_return;
-								morph_name_map.Insert(morph_name, morph_arr) iferr_return;
-							}
-							else {
-								morph_arr_ptr->GetValue()->Append(morph_id_tag{ pose_morph_tag->GetMorphID(index), tag }) iferr_return;
-							}
-						}
-					}
-				}
-				nodes.Push(node->GetDown()) iferr_return;
-				if (node != SelectObject)
-				{
-					node = node->GetNext();
-				}
-				else {
-					break;
-				}
-			}
-		}
-	}
-	nodes.Reset();
 	maxon::BaseArray<String> motion_bone_name_array;
 	maxon::BaseArray<String> motion_morph_name_array;
 	const Int32 MotionFrameNumber = (Int32)this->motion_frames.GetCount();
-	if (setting.import_motion == true) 
+	if (m_motions_import_settings.import_motion == true) 
 	{
 		for (Int32 motion_frame_index = 0; motion_frame_index < MotionFrameNumber; motion_frame_index++)
 		{
-			String	bone_name = this->motion_frames[motion_frame_index].bone_name;
-			auto	MotionFrame_ptr = MotionFrameList_map.Find(bone_name);
-			if (MotionFrame_ptr == nullptr)
+			const auto& motion_frame_data = this->motion_frames[motion_frame_index];
+			String	bone_name = motion_frame_data.bone_name;
+			auto	motion_frame_data_ptr = motion_frame_list_map.Find(bone_name);
+			if (motion_frame_data_ptr == nullptr)
 			{
-				maxon::BaseList<VMDBoneAnimation>* MotionFrame = NewObj(maxon::BaseList<VMDBoneAnimation>) iferr_return;
-				MotionFrame->Append(this->motion_frames[motion_frame_index]) iferr_return;
-				MotionFrameList_map.Insert(bone_name, MotionFrame) iferr_return;
+				auto& motion_frame_list = motion_frame_list_map.InsertKey(bone_name)iferr_return;
+				motion_frame_list.Append(&motion_frame_data) iferr_return;
 				motion_bone_name_array.Append(bone_name)iferr_return;
 			}
 			else {
-				MotionFrame_ptr->GetValue()->Append(this->motion_frames[motion_frame_index]) iferr_return;
+				motion_frame_data_ptr->GetValue().Append(&motion_frame_data) iferr_return;
 			}
 		}
 	}
 	const Int32 MorphFrameNumber = (Int32)this->morph_frames.GetCount();
-	if (setting.import_morph == true) {
+	if (m_motions_import_settings.import_morph == true) {
 		for (Int32 morph_frame_index = 0; morph_frame_index < MorphFrameNumber; morph_frame_index++)
 		{
-			String	morph_name = this->morph_frames[morph_frame_index].morph_name;
-			auto	MorphFrame_ptr = MorphFrameList_map.Find(morph_name);
-			if (MorphFrame_ptr == nullptr)
+			const auto& morph_frame_data = this->morph_frames[morph_frame_index];
+			String	morph_name = morph_frame_data.morph_name;
+			auto	morph_frame_ptr = morph_frame_list_map.Find(morph_name);
+			if (morph_frame_ptr == nullptr)
 			{
-				maxon::BaseList<VMDMorphAnimation>* MorphFrame = NewObj(maxon::BaseList<VMDMorphAnimation>) iferr_return;
-				MorphFrame->Append(this->morph_frames[morph_frame_index]) iferr_return;
-				MorphFrameList_map.Insert(morph_name, MorphFrame) iferr_return;
+				auto& morph_frame_list = morph_frame_list_map.InsertKey(morph_name)iferr_return;
+				morph_frame_list.Append(&morph_frame_data) iferr_return;
 				motion_morph_name_array.Append(morph_name)iferr_return;
 			}
 			else {
-				MorphFrame_ptr->GetValue()->Append(this->morph_frames[morph_frame_index]) iferr_return;
+				morph_frame_ptr->GetValue().Append(&morph_frame_data) iferr_return;
 			}
 		}
 	}
 
 	doc->SetTime(BaseTime(0.));
 
-	Int32 MaxTime;
+	Int32 MaxTime = m_motions_import_settings.time_offset;
 	if (MorphFrameNumber != 0 && MotionFrameNumber != 0)
 	{
-		MaxTime = maxon::Max((doc->GetMaxTime()).GetFrame(30.), maxon::Max((Int32)this->motion_frames[MotionFrameNumber - 1].frame_no, (Int32)this->morph_frames[MorphFrameNumber - 1].frame_no));
+		MaxTime += maxon::Max((doc->GetMaxTime()).GetFrame(30.), maxon::Max((Int32)this->motion_frames.GetLast()->frame_no, (Int32)this->morph_frames.GetLast()->frame_no));
 	}
 	else if (MorphFrameNumber != 0)
 	{
-		MaxTime = maxon::Max((doc->GetMaxTime()).GetFrame(30.), (Int32)this->morph_frames[MorphFrameNumber - 1].frame_no);
+		MaxTime += maxon::Max((doc->GetMaxTime()).GetFrame(30.), (Int32)this->morph_frames.GetLast()->frame_no);
 	}
 	else if (MotionFrameNumber != 0)
 	{
-		MaxTime = maxon::Max((doc->GetMaxTime()).GetFrame(30.), (Int32)this->motion_frames[MotionFrameNumber - 1].frame_no);
+		MaxTime += maxon::Max((doc->GetMaxTime()).GetFrame(30.), (Int32)this->motion_frames.GetLast()->frame_no);
 	}
 	else {
-		MaxTime = doc->GetMaxTime().GetFrame(30.);
+		MaxTime += doc->GetMaxTime().GetFrame(30.);
 	}
 
 	/*ImportMotion*/
 	Int	insideCount = 0;
-	Int				bone_cnt = 0;
-	Int				motion_frame_bone_number = motion_bone_name_array.GetCount();
-	String			motion_frame_bone_number_S = String::IntToString(motion_frame_bone_number);
-	maxon::BaseArray<String>	not_find_bone_S;
-	if (setting.import_motion == true) {
-		if (setting.delete_previous_animation == true) {
+	Int				imported_bone_count = 0;
+	Int				motion_bone_count = motion_bone_name_array.GetCount();
+	String			motion_bone_count_string = String::IntToString(motion_bone_count);
+	maxon::BaseArray<String>	not_find_bones;
 
-			insideCount = 0;
-			maxon::ParallelFor::Dynamic<LocalData, maxon::PARALLELFORFLAGS::INITTHREADED_FINALIZESYNC>(0, motion_frame_bone_number - 1,
-				[](LocalData& context)
-				{
-					context.localCount = 0;
-				}, 
-				[&MotionFrameList_map, &bone_name_map,&setting,
-					&not_find_bone_S,&motion_frame_bone_number_S,
-					&bone_cnt,&motion_bone_name_array](const Int motion_bone_name_index, LocalData& context)->maxon::Result<void>
-				{
-					iferr_scope;
-					String motion_bone_name = motion_bone_name_array[motion_bone_name_index];
-					mmd::VMDBoneAnimation			MotionFrame;
-					mmd::VMDBoneAnimation			NextMotionFrame;
-					BaseTime			MotionKeyTime = BaseTime(0, 30.);
-					Float				TimeOfTwoMotionFrames = 0.0;
-					Float				ValueOfTwoMotionFrames = 0.0;
-					BaseTime			MotionKeyTimeLeft[6] = { BaseTime(0.0, 30.) };
-					Float				MotionKeyValueLeft[6] = { 0.0 };
-					maxon::BaseList<mmd::VMDBoneAnimation>* MotionFrameList = MotionFrameList_map.Find(motion_bone_name)->GetValue();
-					auto				bone_ptr = bone_name_map.Find(motion_bone_name);
-
-					if (bone_ptr != nullptr)
-					{
-						for (bone_obj_tag bone : *bone_ptr->GetValue())
-						{
-							if (bone.tag == nullptr)
-							{
-								if (bone.obj != nullptr)
-								{
-									bone.obj->SetQuaternionRotationMode(true, false);
-									CTrack* BoneTrack_position_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrack_position_x);
-									BoneTrack_position_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									if (BoneTrack_position_x == nullptr) {
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-									}
-									bone.obj->InsertTrackSorted(BoneTrack_position_x);
-									CTrack* BoneTrack_position_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrack_position_x);
-									BoneTrack_position_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									if (BoneTrack_position_y == nullptr) {
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-									}
-									bone.obj->InsertTrackSorted(BoneTrack_position_y);
-									CTrack* BoneTrack_position_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrack_position_x);
-									BoneTrack_position_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									if (BoneTrack_position_z == nullptr) {
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-									}
-									bone.obj->InsertTrackSorted(BoneTrack_position_z);
-									CTrack* BoneTrack_rotation_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrack_position_x);
-									BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-									if (BoneTrack_rotation_x == nullptr) {
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-									}
-									bone.obj->InsertTrackSorted(BoneTrack_rotation_x);
-									CTrack* BoneTrack_rotation_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrack_position_x);
-									BoneTrack_rotation_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-									if (BoneTrack_rotation_y == nullptr) {
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-									}
-									bone.obj->InsertTrackSorted(BoneTrack_rotation_y);
-									CTrack* BoneTrack_rotation_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									CTrack::Free(BoneTrack_position_x);
-									BoneTrack_rotation_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-									if (BoneTrack_rotation_z == nullptr) {
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-									}
-									bone.obj->InsertTrackSorted(BoneTrack_rotation_z);
-
-									CCurve* BoneCurve_position_x = BoneTrack_position_x->GetCurve();
-									CCurve* BoneCurve_position_y = BoneTrack_position_y->GetCurve();
-									CCurve* BoneCurve_position_z = BoneTrack_position_z->GetCurve();
-									CCurve* BoneCurve_rotation_x = BoneTrack_rotation_x->GetCurve();
-									CCurve* BoneCurve_rotation_y = BoneTrack_rotation_y->GetCurve();
-									CCurve* BoneCurve_rotation_z = BoneTrack_rotation_z->GetCurve();
-									Int	motion_frame_number = MotionFrameList->GetCount();
-									for (Int motion_index = 0; motion_index < motion_frame_number; motion_index++)
-									{
-										if (motion_index == 0 && motion_frame_number != 1)
-										{
-											MotionFrame = MotionFrameList->operator[](motion_index);
-											NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
-										}
-										else if (motion_index == motion_frame_number - 1)
-										{
-											MotionFrame = NextMotionFrame;
-										}
-										else {
-											MotionFrame = NextMotionFrame;
-											NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
-										}
-										TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-										MotionKeyTime = BaseTime(Float(MotionFrame.frame_no) + setting.time_offset, 30.);
-
-										Vector rotation = QuaternionToEuler(MotionFrame.rotation);
-										Vector next_rotation = QuaternionToEuler(NextMotionFrame.rotation);
-
-										CKey* MotionKey_position_x = CKey::Alloc(); /* _position_x */
-										MotionKey_position_x->SetTime(BoneCurve_position_x, MotionKeyTime);
-										MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
-										MotionKey_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-										MotionKey_position_x->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-										ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.position_multiple - MotionFrame.position.x * setting.position_multiple;
-										if (MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::by))
-										{
-											MotionKey_position_x->SetInterpolation(BoneCurve_position_x, CINTERPOLATION::LINEAR);
-										}
-										else {
-											MotionKey_position_x->SetTimeLeft(BoneCurve_position_x, MotionKeyTimeLeft[0]);
-											MotionKey_position_x->SetValueLeft(BoneCurve_position_x, MotionKeyValueLeft[0]);
-											MotionKey_position_x->SetTimeRight(BoneCurve_position_x, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-											MotionKey_position_x->SetValueRight(BoneCurve_position_x, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) / 127.0));
-										}
-										MotionKeyTimeLeft[0] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
-										MotionKeyValueLeft[0] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::by) / 127.0);
-										BoneCurve_position_x->InsertKey(MotionKey_position_x);
-
-										CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
-										MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
-										MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
-										MotionKey_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-										MotionKey_position_y->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-										ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.position_multiple - MotionFrame.position.y * setting.position_multiple;
-										if (MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::by))
-										{
-											MotionKey_position_y->SetInterpolation(BoneCurve_position_y, CINTERPOLATION::LINEAR);
-										}
-										else {
-											MotionKey_position_y->SetTimeLeft(BoneCurve_position_y, MotionKeyTimeLeft[1]);
-											MotionKey_position_y->SetValueLeft(BoneCurve_position_y, MotionKeyValueLeft[1]);
-											MotionKey_position_y->SetTimeRight(BoneCurve_position_y, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-											MotionKey_position_y->SetValueRight(BoneCurve_position_y, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) / 127.0));
-										}
-										MotionKeyTimeLeft[1] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
-										MotionKeyValueLeft[1] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::by) / 127.0);
-										BoneCurve_position_y->InsertKey(MotionKey_position_y);
-
-										CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
-										MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
-										MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
-										MotionKey_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-										MotionKey_position_z->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-										ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.position_multiple - MotionFrame.position.z * setting.position_multiple;
-										if (MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::by))
-										{
-											MotionKey_position_z->SetInterpolation(BoneCurve_position_z, CINTERPOLATION::LINEAR);
-										}
-										else {
-											MotionKey_position_z->SetTimeLeft(BoneCurve_position_z, MotionKeyTimeLeft[2]);
-											MotionKey_position_z->SetValueLeft(BoneCurve_position_z, MotionKeyValueLeft[2]);
-											MotionKey_position_z->SetTimeRight(BoneCurve_position_z, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-											MotionKey_position_z->SetValueRight(BoneCurve_position_z, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) / 127.0));
-										}
-										MotionKeyTimeLeft[2] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
-										MotionKeyValueLeft[2] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::by) / 127.0);
-										BoneCurve_position_z->InsertKey(MotionKey_position_z);
-
-										CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
-										MotionKey_rotation_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
-										MotionKey_rotation_x->SetValue(BoneCurve_rotation_x, rotation.x);
-										BoneCurve_rotation_x->InsertKey(MotionKey_rotation_x);
-
-										CKey* MotionKey_rotation_y = CKey::Alloc(); /* _rotation_y */
-										MotionKey_rotation_y->SetTime(BoneCurve_rotation_y, MotionKeyTime);
-										MotionKey_rotation_y->SetValue(BoneCurve_rotation_y, rotation.y);
-										BoneCurve_rotation_y->InsertKey(MotionKey_rotation_y);
-
-										CKey* MotionKey_rotation_z = CKey::Alloc(); /* _rotation_z */
-										MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
-										MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
-										BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
-									}
-									bone_cnt++;
-								}
-							}
-							else {
-								bone.obj->SetQuaternionRotationMode(true, false);
-								TMMDBone* tag_data = bone.tag->GetNodeData<TMMDBone>();
-								BaseContainer* bc = bone.tag->GetDataInstance();
-								const Bool	Is_physical = tag_data->IsPhysical();
-								const Bool	Is_translatable = bc->GetBool(PMX_BONE_TRANSLATABLE);
-								const Bool	Is_rotatable = bc->GetBool(PMX_BONE_ROTATABLE);
-								const Bool	Is_inherit = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION) || bc->GetBool(PMX_BONE_INHERIT_ROTATION);
-								CTrack* BoneTrack_position_x = nullptr;
-								CTrack* BoneTrack_position_y = nullptr;
-								CTrack* BoneTrack_position_z = nullptr;
-								CTrack* BoneTrack_rotation_x = nullptr;
-								CTrack* BoneTrack_rotation_y = nullptr;
-								CTrack* BoneTrack_rotation_z = nullptr;
-								CCurve* BoneCurve_position_x = nullptr;
-								CCurve* BoneCurve_position_y = nullptr;
-								CCurve* BoneCurve_position_z = nullptr;
-								CCurve* BoneCurve_rotation_x = nullptr;
-								CCurve* BoneCurve_rotation_y = nullptr;
-								CCurve* BoneCurve_rotation_z = nullptr;
-								if (!(Is_physical || Is_inherit))
-								{
-									if (Is_translatable)
-									{
-										bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrack_position_x);
-										BoneTrack_position_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-										if (BoneTrack_position_x == nullptr) {
-												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-										}
-										bone.obj->InsertTrackSorted(BoneTrack_position_x);
-										BoneTrack_position_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrack_position_y);
-										BoneTrack_position_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-										if (BoneTrack_position_y == nullptr) {
-												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-										}
-										bone.obj->InsertTrackSorted(BoneTrack_position_y);
-										BoneTrack_position_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrack_position_z);
-										BoneTrack_position_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-										if (BoneTrack_position_z == nullptr) {
-												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-										}
-										bone.obj->InsertTrackSorted(BoneTrack_position_z);
-										BoneCurve_position_x = BoneTrack_position_x->GetCurve();
-										BoneCurve_position_y = BoneTrack_position_y->GetCurve();
-										BoneCurve_position_z = BoneTrack_position_z->GetCurve();
-									}
-									if (Is_rotatable)
-									{
-										BoneTrack_rotation_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrack_rotation_x);
-										BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-										if (BoneTrack_rotation_x == nullptr) {
-												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-										}
-										bone.obj->InsertTrackSorted(BoneTrack_rotation_x);
-										BoneTrack_rotation_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrack_rotation_y);
-										BoneTrack_rotation_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-										if (BoneTrack_rotation_y == nullptr) {
-												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-										}
-										bone.obj->InsertTrackSorted(BoneTrack_rotation_y);
-										BoneTrack_rotation_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-										CTrack::Free(BoneTrack_rotation_z);
-										BoneTrack_rotation_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-										if (BoneTrack_rotation_z == nullptr) {
-												return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-										}
-										bone.obj->InsertTrackSorted(BoneTrack_rotation_z);
-										BoneCurve_rotation_x = BoneTrack_rotation_x->GetCurve();
-										BoneCurve_rotation_y = BoneTrack_rotation_y->GetCurve();
-										BoneCurve_rotation_z = BoneTrack_rotation_z->GetCurve();
-									}
-
-									Int motion_frame_number = MotionFrameList->GetCount();
-									for (Int motion_index = 0; motion_index < motion_frame_number; motion_index++)
-									{
-										if (motion_index == 0 && motion_frame_number != 1)
-										{
-											MotionFrame = MotionFrameList->operator[](motion_index);
-											NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
-										}
-										else if (motion_index == motion_frame_number - 1)
-										{
-											MotionFrame = NextMotionFrame;
-										}
-										else {
-											MotionFrame = NextMotionFrame;
-											NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
-										}
-										TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-										Int32 frame_no = Int32(MotionFrame.frame_no) + Int32(setting.time_offset);
-										MotionKeyTime = BaseTime(Float(frame_no), 30.);
-
-										if (Is_translatable)
-										{
-											CKey* MotionKey_position_x = CKey::Alloc(); /* _position_x */
-											MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
-											MotionKey_position_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
-											BoneCurve_position_x->InsertKey(MotionKey_position_x);
-											tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no,MotionFrame.interpolator_position_x);
-											CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
-											MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
-											MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
-											BoneCurve_position_y->InsertKey(MotionKey_position_y);
-											tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, MotionFrame.interpolator_position_y);
-											CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
-											MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
-											MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
-											BoneCurve_position_z->InsertKey(MotionKey_position_z);
-											tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no,  MotionFrame.interpolator_position_z);
-										}
-										if (Is_rotatable)
-										{
-											Vector rotation = QuaternionToEuler(MotionFrame.rotation);
-											CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
-											MotionKey_rotation_x->SetValue(BoneCurve_rotation_x, rotation.x);
-											MotionKey_rotation_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
-											BoneCurve_rotation_x->InsertKey(MotionKey_rotation_x);
-											CKey* MotionKey_rotation_y = CKey::Alloc(); /* _rotation_y */
-											MotionKey_rotation_y->SetValue(BoneCurve_rotation_y, rotation.y);
-											MotionKey_rotation_y->SetTime(BoneCurve_rotation_y, MotionKeyTime);
-											BoneCurve_rotation_y->InsertKey(MotionKey_rotation_y);
-											CKey* MotionKey_rotation_z = CKey::Alloc(); /* _rotation_z */
-											MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
-											MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
-											BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
-											tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no, MotionFrame.interpolator_position_r);
-										}
-									}
-									tag_data->UpdateAllInterpolator();
-									bone_cnt++;
-								}
-							}
-						}
-					}
-					else {
-						g_spinlock.Lock();
-						not_find_bone_S.Append(motion_bone_name) iferr_return;
-						g_spinlock.Unlock();
-					}
-		context.localCount++;
-		if (GeIsMainThread())
-		{
-			StatusSetText("Import motion of bone " + String::IntToString(bone_cnt) + "/" + motion_frame_bone_number_S);
-			StatusSetSpin();
-		}
-		return(maxon::OK);
-	}, [&insideCount,&motion_frame_bone_number](LocalData& context)
-	{
-		insideCount += context.localCount;
-		if (GeIsMainThread())
-			StatusSetText("Import bone " + String::IntToString(insideCount) + " of " + String::IntToString(motion_frame_bone_number));
-	}) iferr_return;
-		}
-		else {
+	if (m_motions_import_settings.import_motion == true) {
 		insideCount = 0;
-		maxon::ParallelFor::Dynamic<LocalData, maxon::PARALLELFORFLAGS::INITTHREADED_FINALIZESYNC>(0, motion_frame_bone_number - 1,
+		maxon::ParallelFor::Dynamic<LocalData, maxon::PARALLELFORFLAGS::INITTHREADED_FINALIZESYNC>(0, motion_bone_count - 1,
 			[](LocalData& context)
 			{
 				context.localCount = 0;
 			},
-			[&MotionFrameList_map, &bone_name_map, &setting,
-				&not_find_bone_S, &motion_frame_bone_number_S,
-				&bone_cnt,&motion_bone_name_array](const Int motion_bone_name_index, LocalData& context)->maxon::Result<void>
+			[this, &motion_frame_list_map, &bones_map, &not_find_bones,
+				&motion_bone_count_string,&imported_bone_count,&motion_bone_name_array]
+			(const Int motion_bone_name_index, LocalData& context)->maxon::Result<void>
 			{
 				iferr_scope;
 				String motion_bone_name = motion_bone_name_array[motion_bone_name_index];
-				mmd::VMDBoneAnimation			MotionFrame;
-				mmd::VMDBoneAnimation			NextMotionFrame;
-				BaseTime			MotionKeyTime = BaseTime(0, 30.);
-				Float				TimeOfTwoMotionFrames = 0.0;
-				Float				ValueOfTwoMotionFrames = 0.0;
-				BaseTime			MotionKeyTimeLeft[6] = { BaseTime(0.0, 30.) };
-				Float				MotionKeyValueLeft[6] = { 0.0 };
-			maxon::BaseList<mmd::VMDBoneAnimation>* MotionFrameList = MotionFrameList_map.Find(motion_bone_name)->GetValue();
-			auto				bone_ptr = bone_name_map.Find(motion_bone_name);
-
+				const mmd::VMDBoneAnimation*			motion_frame = nullptr;
+				const mmd::VMDBoneAnimation*			next_motion_frame = nullptr;
+				BaseTime			key_time = BaseTime(0, 30.);
+				Float				time_between_frame = 0.0;
+				Float				value_between_frame = 0.0;
+				BaseTime			key_time_left[3] = { BaseTime(0.0, 30.) };
+				Float				key_value_left[3] = { 0.0 };
+			auto& motion_frame_list = motion_frame_list_map.Find(motion_bone_name)->GetValue();
+			auto bone_ptr = bones_map.Find(motion_bone_name);
 			if (bone_ptr != nullptr)
 			{
-				for (bone_obj_tag bone : *bone_ptr->GetValue())
+				while (bone_ptr != nullptr)
 				{
-					if (bone.tag == nullptr)
-					{
-						if (bone.obj != nullptr)
-						{
-							bone.obj->SetQuaternionRotationMode(true, false);
-							CTrack* BoneTrack_position_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							if (BoneTrack_position_x == nullptr)
-							{
-								BoneTrack_position_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								if (BoneTrack_position_x == nullptr)
-								{
-										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-								}
-								bone.obj->InsertTrackSorted(BoneTrack_position_x);
-							}
-							CTrack* BoneTrack_position_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							if (BoneTrack_position_x == nullptr)
-							{
-								BoneTrack_position_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								if (BoneTrack_position_y == nullptr)
-								{
-										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-								}
-								bone.obj->InsertTrackSorted(BoneTrack_position_y);
-							}
-							CTrack* BoneTrack_position_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							if (BoneTrack_position_x == nullptr)
-							{
-								BoneTrack_position_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								if (BoneTrack_position_z == nullptr)
-								{
-										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-								}
-								bone.obj->InsertTrackSorted(BoneTrack_position_z);
-							}
-							CTrack* BoneTrack_rotation_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-							if (BoneTrack_position_x == nullptr)
-							{
-								BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								if (BoneTrack_rotation_x == nullptr)
-								{
-										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-								}
-								bone.obj->InsertTrackSorted(BoneTrack_rotation_x);
-							}
-							CTrack* BoneTrack_rotation_y = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-							if (BoneTrack_position_x == nullptr)
-							{
-								BoneTrack_rotation_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
-								if (BoneTrack_rotation_y == nullptr)
-								{
-										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-								}
-								bone.obj->InsertTrackSorted(BoneTrack_rotation_y);
-							}
-							CTrack* BoneTrack_rotation_z = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-							if (BoneTrack_position_x == nullptr)
-							{
-								BoneTrack_rotation_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
-								if (BoneTrack_rotation_z == nullptr)
-								{
-										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-								}
-								bone.obj->InsertTrackSorted(BoneTrack_rotation_z);
-							}
-							CCurve* BoneCurve_position_x = BoneTrack_position_x->GetCurve();
-							CCurve* BoneCurve_position_y = BoneTrack_position_y->GetCurve();
-							CCurve* BoneCurve_position_z = BoneTrack_position_z->GetCurve();
-							CCurve* BoneCurve_rotation_x = BoneTrack_rotation_x->GetCurve();
-							CCurve* BoneCurve_rotation_y = BoneTrack_rotation_y->GetCurve();
-							CCurve* BoneCurve_rotation_z = BoneTrack_rotation_z->GetCurve();
-
-							Int	motion_frame_number = MotionFrameList->GetCount();
-							for (Int motion_index = 0; motion_index < motion_frame_number; motion_index++)
-							{
-								StatusSetText("Import motion of bone " + String::IntToString(bone_cnt) + "/" + motion_frame_bone_number_S);
-								StatusSetSpin();
-								if (motion_index == 0 && motion_frame_number != 1)
-								{
-									MotionFrame = MotionFrameList->operator[](motion_index);
-									NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
-								}
-								else if (motion_index == motion_frame_number - 1)
-								{
-									MotionFrame = NextMotionFrame;
-								}
-								else {
-									MotionFrame = NextMotionFrame;
-									NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
-								}
-								TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-								MotionKeyTime = BaseTime(Float(MotionFrame.frame_no) + setting.time_offset, 30.);
-
-								Vector rotation = QuaternionToEuler(MotionFrame.rotation);
-								Vector next_rotation = QuaternionToEuler(NextMotionFrame.rotation);
-
-								CKey* MotionKey_position_x = CKey::Alloc(); /* _position_x */
-								MotionKey_position_x->SetTime(BoneCurve_position_x, MotionKeyTime);
-								MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
-								MotionKey_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-								MotionKey_position_x->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-								ValueOfTwoMotionFrames = NextMotionFrame.position.x * setting.position_multiple - MotionFrame.position.x * setting.position_multiple;
-								if (MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::by))
-								{
-									MotionKey_position_x->SetInterpolation(BoneCurve_position_x, CINTERPOLATION::LINEAR);
-								}
-								else {
-									MotionKey_position_x->SetTimeLeft(BoneCurve_position_x, MotionKeyTimeLeft[0]);
-									MotionKey_position_x->SetValueLeft(BoneCurve_position_x, MotionKeyValueLeft[0]);
-									MotionKey_position_x->SetTimeRight(BoneCurve_position_x, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-									MotionKey_position_x->SetValueRight(BoneCurve_position_x, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) / 127.0));
-								}
-								MotionKeyTimeLeft[0] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
-								MotionKeyValueLeft[0] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_x.GetValue(VMDInterpolator::PartType::by) / 127.0);
-								BoneCurve_position_x->InsertKey(MotionKey_position_x);
-
-								CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
-								MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
-								MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
-								MotionKey_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-								MotionKey_position_y->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-								ValueOfTwoMotionFrames = NextMotionFrame.position.y * setting.position_multiple - MotionFrame.position.y * setting.position_multiple;
-								if (MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::by))
-								{
-									MotionKey_position_y->SetInterpolation(BoneCurve_position_y, CINTERPOLATION::LINEAR);
-								}
-								else {
-									MotionKey_position_y->SetTimeLeft(BoneCurve_position_y, MotionKeyTimeLeft[1]);
-									MotionKey_position_y->SetValueLeft(BoneCurve_position_y, MotionKeyValueLeft[1]);
-									MotionKey_position_y->SetTimeRight(BoneCurve_position_y, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-									MotionKey_position_y->SetValueRight(BoneCurve_position_y, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) / 127.0));
-								}
-								MotionKeyTimeLeft[1] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
-								MotionKeyValueLeft[1] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_y.GetValue(VMDInterpolator::PartType::by) / 127.0);
-								BoneCurve_position_y->InsertKey(MotionKey_position_y);
-
-								CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
-								MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
-								MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
-								MotionKey_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-								MotionKey_position_z->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
-								ValueOfTwoMotionFrames = NextMotionFrame.position.z * setting.position_multiple - MotionFrame.position.z * setting.position_multiple;
-								if (MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) == 127 - MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) && MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) == 127 - MotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::by))
-								{
-									MotionKey_position_z->SetInterpolation(BoneCurve_position_z, CINTERPOLATION::LINEAR);
-								}
-								else {
-									MotionKey_position_z->SetTimeLeft(BoneCurve_position_z, MotionKeyTimeLeft[2]);
-									MotionKey_position_z->SetValueLeft(BoneCurve_position_z, MotionKeyValueLeft[2]);
-									MotionKey_position_z->SetTimeRight(BoneCurve_position_z, BaseTime(TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-									MotionKey_position_z->SetValueRight(BoneCurve_position_z, ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) / 127.0));
-								}
-								MotionKeyTimeLeft[2] = BaseTime(-TimeOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
-								MotionKeyValueLeft[2] = -ValueOfTwoMotionFrames * ((Float)NextMotionFrame.interpolator_position_z.GetValue(VMDInterpolator::PartType::by) / 127.0);
-								BoneCurve_position_z->InsertKey(MotionKey_position_z);
-
-								CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
-								MotionKey_rotation_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
-								MotionKey_rotation_x->SetValue(BoneCurve_rotation_x, rotation.x);
-								BoneCurve_rotation_x->InsertKey(MotionKey_rotation_x);
-
-								CKey* MotionKey_rotation_y = CKey::Alloc(); /* _rotation_y */
-								MotionKey_rotation_y->SetTime(BoneCurve_rotation_y, MotionKeyTime);
-								MotionKey_rotation_y->SetValue(BoneCurve_rotation_y, rotation.y);
-								BoneCurve_rotation_y->InsertKey(MotionKey_rotation_y);
-
-								CKey* MotionKey_rotation_z = CKey::Alloc(); /* _rotation_z */
-								MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
-								MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
-								BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
-							}
-							bone_cnt++;
+					bone_info& bone = bone_ptr->GetValue();
+					if (bone.obj != nullptr) {
+						Bool	Is_physical = 0;
+						Bool	Is_inherit = 0;
+						Char	Is_translatable = -1;
+						Char	Is_rotatable = -1;
+						TMMDBone* tag_data = nullptr;
+						if (bone.tag != nullptr) {
+							tag_data = bone.tag->GetNodeData<TMMDBone>();
+							BaseContainer* bc = bone.tag->GetDataInstance();
+							Is_physical = tag_data->IsPhysical();
+							Is_inherit = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION) || bc->GetBool(PMX_BONE_INHERIT_ROTATION);
+							Is_translatable = bc->GetBool(PMX_BONE_TRANSLATABLE);
+							Is_rotatable = bc->GetBool(PMX_BONE_ROTATABLE);
 						}
-					}
-					else {
-					bone.obj->SetQuaternionRotationMode(true, false);
-						TMMDBone* tag_data = bone.tag->GetNodeData<TMMDBone>();
-						BaseContainer* bc = bone.tag->GetDataInstance();
-						const Bool	Is_physical = tag_data->IsPhysical();
-						const Bool	Is_translatable = bc->GetBool(PMX_BONE_TRANSLATABLE);
-						const Bool	Is_rotatable = bc->GetBool(PMX_BONE_ROTATABLE);
-						const Bool	Is_inherit = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION) || bc->GetBool(PMX_BONE_INHERIT_ROTATION);
 						CTrack* BoneTrack_position_x = nullptr;
 						CTrack* BoneTrack_position_y = nullptr;
 						CTrack* BoneTrack_position_z = nullptr;
@@ -3998,15 +3144,15 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 						CCurve* BoneCurve_rotation_z = nullptr;
 						if (!(Is_physical || Is_inherit))
 						{
-							if (Is_translatable)
+							if (Is_translatable != 0)
 							{
-								bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
+								BoneTrack_position_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
 								if (BoneTrack_position_x == nullptr)
 								{
 									BoneTrack_position_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
 									if (BoneTrack_position_x == nullptr)
 									{
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
+										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
 									bone.obj->InsertTrackSorted(BoneTrack_position_x);
 								}
@@ -4016,7 +3162,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 									BoneTrack_position_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
 									if (BoneTrack_position_y == nullptr)
 									{
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
+										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
 									bone.obj->InsertTrackSorted(BoneTrack_position_y);
 								}
@@ -4026,7 +3172,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 									BoneTrack_position_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_POSITION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
 									if (BoneTrack_position_z == nullptr)
 									{
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
+										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
 									bone.obj->InsertTrackSorted(BoneTrack_position_z);
 								}
@@ -4034,17 +3180,17 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 								BoneCurve_position_y = BoneTrack_position_y->GetCurve();
 								BoneCurve_position_z = BoneTrack_position_z->GetCurve();
 							}
-							if (Is_rotatable)
+							if (Is_rotatable != 0)
 							{
+								// 打开四元旋转
+								bone.obj->SetQuaternionRotationMode(true, false);
 								BoneTrack_rotation_x = bone.obj->FindCTrack(DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
-								if (BoneTrack_rotation_x == nullptr)
-									BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
 								if (BoneTrack_rotation_x == nullptr)
 								{
 									BoneTrack_rotation_x = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_X, DTYPE_REAL, 0)));
 									if (BoneTrack_rotation_x == nullptr)
 									{
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
+										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
 									bone.obj->InsertTrackSorted(BoneTrack_rotation_x);
 								}
@@ -4054,7 +3200,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 									BoneTrack_rotation_y = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Y, DTYPE_REAL, 0)));
 									if (BoneTrack_rotation_y == nullptr)
 									{
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
+										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
 									bone.obj->InsertTrackSorted(BoneTrack_rotation_y);
 								}
@@ -4064,7 +3210,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 									BoneTrack_rotation_z = CTrack::Alloc(bone.obj, DescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, DTYPE_VECTOR, 0), DescLevel(VECTOR_Z, DTYPE_REAL, 0)));
 									if (BoneTrack_rotation_z == nullptr)
 									{
-											return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
+										return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 									}
 									bone.obj->InsertTrackSorted(BoneTrack_rotation_z);
 								}
@@ -4073,119 +3219,197 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 								BoneCurve_rotation_z = BoneTrack_rotation_z->GetCurve();
 							}
 
-							Int motion_frame_number = MotionFrameList->GetCount();
+							Int motion_frame_number = motion_frame_list.GetCount();
 							for (Int motion_index = 0; motion_index < motion_frame_number; motion_index++)
 							{
-								StatusSetText("Import motion of bone " + String::IntToString(bone_cnt) + "/" + motion_frame_bone_number_S);
-								StatusSetSpin();
-								if (motion_index == 0 && motion_frame_number != 1)
+								if (motion_index == 0)
 								{
-									MotionFrame = MotionFrameList->operator[](motion_index);
-									NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
+									if (motion_frame_number != 1) {
+										motion_frame = motion_frame_list[motion_index];
+										next_motion_frame = motion_frame_list[motion_index + 1];
+									}
+									else {
+										motion_frame = motion_frame_list[motion_index];
+										next_motion_frame = motion_frame;
+									}
 								}
 								else if (motion_index == motion_frame_number - 1)
 								{
-									MotionFrame = NextMotionFrame;
+									motion_frame = next_motion_frame;
 								}
 								else {
-									MotionFrame = NextMotionFrame;
-									NextMotionFrame = MotionFrameList->operator[](motion_index + 1);
+									motion_frame = next_motion_frame;
+									next_motion_frame = motion_frame_list[motion_index + 1];
 								}
-								TimeOfTwoMotionFrames = NextMotionFrame.frame_no - MotionFrame.frame_no;
-								Int32 frame_no = Int32(MotionFrame.frame_no) + maxon::SafeConvert<Int32>(setting.time_offset);
-								MotionKeyTime = BaseTime(Float(frame_no), 30.);
-
-
-								if (Is_translatable)
+								time_between_frame = motion_frame->frame_no - motion_frame->frame_no;
+								Int32 frame_no = Int32(motion_frame->frame_no) + maxon::SafeConvert<Int32>(m_motions_import_settings.time_offset);
+								key_time = BaseTime(Float(frame_no), 30.);
+								switch (Is_translatable) {
+								case -1:
 								{
-									CKey* MotionKey_position_x = CKey::Alloc(); /* _position_x */
-									MotionKey_position_x->SetValue(BoneCurve_position_x, MotionFrame.position.x * setting.position_multiple);
-									MotionKey_position_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
-									BoneCurve_position_x->InsertKey(MotionKey_position_x);
-									tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no, MotionFrame.interpolator_position_x);
-									CKey* MotionKey_position_y = CKey::Alloc(); /* _position_y */
-									MotionKey_position_y->SetValue(BoneCurve_position_y, MotionFrame.position.y * setting.position_multiple);
-									MotionKey_position_y->SetTime(BoneCurve_position_y, MotionKeyTime);
-									BoneCurve_position_y->InsertKey(MotionKey_position_y);
-									tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, MotionFrame.interpolator_position_y);
-									CKey* MotionKey_position_z = CKey::Alloc(); /* _position_z */
-									MotionKey_position_z->SetValue(BoneCurve_position_z, MotionFrame.position.z * setting.position_multiple);
-									MotionKey_position_z->SetTime(BoneCurve_position_z, MotionKeyTime);
-									BoneCurve_position_z->InsertKey(MotionKey_position_z);
-									tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no, MotionFrame.interpolator_position_z);
+									/* _position_x */
+									CKey* MotionKey_position_x = BoneCurve_position_x->AddKey(key_time);
+									MotionKey_position_x->SetValue(BoneCurve_position_x, motion_frame->position.x * m_motions_import_settings.position_multiple);
+									MotionKey_position_x->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+									MotionKey_position_x->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
+									value_between_frame = next_motion_frame->position.x * m_motions_import_settings.position_multiple - motion_frame->position.x * m_motions_import_settings.position_multiple;
+									if (motion_frame->interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) == 127 - motion_frame->interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) &&
+										motion_frame->interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) == 127 - motion_frame->interpolator_position_x.GetValue(VMDInterpolator::PartType::by))
+									{
+										MotionKey_position_x->SetInterpolation(BoneCurve_position_x, CINTERPOLATION::LINEAR);
+									}
+									else {
+										MotionKey_position_x->SetTimeLeft(BoneCurve_position_x, key_time_left[0]);
+										MotionKey_position_x->SetValueLeft(BoneCurve_position_x, key_value_left[0]);
+										MotionKey_position_x->SetTimeRight(BoneCurve_position_x, BaseTime(time_between_frame * ((Float)motion_frame->interpolator_position_x.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
+										MotionKey_position_x->SetValueRight(BoneCurve_position_x, value_between_frame * ((Float)motion_frame->interpolator_position_x.GetValue(VMDInterpolator::PartType::ay) / 127.0));
+									}
+									key_time_left[0] = BaseTime(-time_between_frame * ((Float)motion_frame->interpolator_position_x.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
+									key_value_left[0] = -value_between_frame * ((Float)motion_frame->interpolator_position_x.GetValue(VMDInterpolator::PartType::by) / 127.0);
+
+									/* _position_y */
+									CKey* MotionKey_position_y = BoneCurve_position_y->AddKey(key_time);
+									MotionKey_position_y->SetValue(BoneCurve_position_y, motion_frame->position.y * m_motions_import_settings.position_multiple);
+									MotionKey_position_y->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+									MotionKey_position_y->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
+									value_between_frame = next_motion_frame->position.y * m_motions_import_settings.position_multiple - motion_frame->position.y * m_motions_import_settings.position_multiple;
+									if (motion_frame->interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) == 127 - motion_frame->interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) &&
+										motion_frame->interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) == 127 - motion_frame->interpolator_position_y.GetValue(VMDInterpolator::PartType::by))
+									{
+										MotionKey_position_y->SetInterpolation(BoneCurve_position_y, CINTERPOLATION::LINEAR);
+									}
+									else {
+										MotionKey_position_y->SetTimeLeft(BoneCurve_position_y, key_time_left[1]);
+										MotionKey_position_y->SetValueLeft(BoneCurve_position_y, key_value_left[1]);
+										MotionKey_position_y->SetTimeRight(BoneCurve_position_y, BaseTime(time_between_frame * ((Float)motion_frame->interpolator_position_y.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
+										MotionKey_position_y->SetValueRight(BoneCurve_position_y, value_between_frame * ((Float)motion_frame->interpolator_position_y.GetValue(VMDInterpolator::PartType::ay) / 127.0));
+									}
+									key_time_left[1] = BaseTime(-time_between_frame * ((Float)motion_frame->interpolator_position_y.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
+									key_value_left[1] = -value_between_frame * ((Float)motion_frame->interpolator_position_y.GetValue(VMDInterpolator::PartType::by) / 127.0);
+
+									/* _position_z */
+									CKey* MotionKey_position_z = BoneCurve_position_z->AddKey(key_time);
+									MotionKey_position_z->SetValue(BoneCurve_position_z, motion_frame->position.z * m_motions_import_settings.position_multiple);
+									MotionKey_position_z->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+									MotionKey_position_z->ChangeNBit(NBIT::CKEY_REMOVEOVERSHOOT, NBITCONTROL::SET);
+									value_between_frame = next_motion_frame->position.z * m_motions_import_settings.position_multiple - motion_frame->position.z * m_motions_import_settings.position_multiple;
+									if (motion_frame->interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) == 127 - motion_frame->interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) &&
+										motion_frame->interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) == 127 - motion_frame->interpolator_position_z.GetValue(VMDInterpolator::PartType::by))
+									{
+										MotionKey_position_z->SetInterpolation(BoneCurve_position_z, CINTERPOLATION::LINEAR);
+									}
+									else {
+										MotionKey_position_z->SetTimeLeft(BoneCurve_position_z, key_time_left[2]);
+										MotionKey_position_z->SetValueLeft(BoneCurve_position_z, key_value_left[2]);
+										MotionKey_position_z->SetTimeRight(BoneCurve_position_z, BaseTime(time_between_frame * ((Float)motion_frame->interpolator_position_z.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
+										MotionKey_position_z->SetValueRight(BoneCurve_position_z, value_between_frame * ((Float)motion_frame->interpolator_position_z.GetValue(VMDInterpolator::PartType::ay) / 127.0));
+									}
+									key_time_left[2] = BaseTime(-time_between_frame * ((Float)motion_frame->interpolator_position_z.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.);
+									key_value_left[2] = -value_between_frame * ((Float)motion_frame->interpolator_position_z.GetValue(VMDInterpolator::PartType::by) / 127.0);
+									break;
 								}
-								if (Is_rotatable)
+								case 1:
 								{
-									Vector rotation = QuaternionToEuler(MotionFrame.rotation);
-									CKey* MotionKey_rotation_x = CKey::Alloc(); /* _rotation_x */
-									MotionKey_rotation_x->SetValue(BoneCurve_rotation_x, rotation.x);
-									MotionKey_rotation_x->SetTime(BoneCurve_rotation_x, MotionKeyTime);
-									BoneCurve_rotation_x->InsertKey(MotionKey_rotation_x);
-									CKey* MotionKey_rotation_y = CKey::Alloc(); /* _rotation_y */
-									MotionKey_rotation_y->SetValue(BoneCurve_rotation_y, rotation.y);
-									MotionKey_rotation_y->SetTime(BoneCurve_rotation_y, MotionKeyTime);
-									BoneCurve_rotation_y->InsertKey(MotionKey_rotation_y);
-									CKey* MotionKey_rotation_z = CKey::Alloc(); /* _rotation_z */
-									MotionKey_rotation_z->SetValue(BoneCurve_rotation_z, rotation.z);
-									MotionKey_rotation_z->SetTime(BoneCurve_rotation_z, MotionKeyTime);
-									BoneCurve_rotation_z->InsertKey(MotionKey_rotation_z);
-									tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no,MotionFrame.interpolator_position_r);
+									/* _position_x */
+									BoneCurve_position_x->AddKey(key_time)->SetValue(BoneCurve_position_x, motion_frame->position.x * m_motions_import_settings.position_multiple);
+									tag_data->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_no, motion_frame->interpolator_position_x);
+									/* _position_y */
+									BoneCurve_position_y->AddKey(key_time)->SetValue(BoneCurve_position_y, motion_frame->position.y * m_motions_import_settings.position_multiple);
+									tag_data->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_no, motion_frame->interpolator_position_y);
+									/* _position_z */
+									BoneCurve_position_z->AddKey(key_time)->SetValue(BoneCurve_position_z, motion_frame->position.z * m_motions_import_settings.position_multiple);
+									tag_data->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_no, motion_frame->interpolator_position_z);
+									break;
+								}
+								default:
+									break;
+								}
+								switch (Is_rotatable) {
+								case -1:
+								{
+									Vector rotation = QuaternionToEuler(motion_frame->rotation);
+									/* _rotation_x */
+									BoneCurve_rotation_x->AddKey(key_time)->SetValue(BoneCurve_rotation_x, rotation.x);
+									/* _rotation_y */
+									BoneCurve_rotation_y->AddKey(key_time)->SetValue(BoneCurve_rotation_y, rotation.y);
+									/* _rotation_z */
+									BoneCurve_rotation_z->AddKey(key_time)->SetValue(BoneCurve_rotation_z, rotation.z);
+									break;
+								}
+								case 1:
+								{
+									Vector rotation = QuaternionToEuler(motion_frame->rotation);
+									/* _rotation_x */
+									BoneCurve_rotation_x->AddKey(key_time)->SetValue(BoneCurve_rotation_x, rotation.x);
+									/* _rotation_y */
+									BoneCurve_rotation_y->AddKey(key_time)->SetValue(BoneCurve_rotation_y, rotation.y);
+									/* _rotation_z */
+									BoneCurve_rotation_z->AddKey(key_time)->SetValue(BoneCurve_rotation_z, rotation.z);
+									tag_data->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_no, motion_frame->interpolator_rotation);
+									break;
+								}
+								default:
+									break;
 								}
 							}
-							tag_data->UpdateAllInterpolator();
-							bone_cnt++;
-						}
+							if (tag_data != nullptr)
+								tag_data->UpdateAllInterpolator();
+							g_spinlock.Lock();
+							imported_bone_count++; 
+							g_spinlock.Unlock();
+						}				
 					}
-				}
+					bone_ptr = bone_ptr->GetNextWithSameKey();
+				}			
 			}
 			else {
 				g_spinlock.Lock();
-				not_find_bone_S.Append(motion_bone_name) iferr_return;
+				not_find_bones.Append(motion_bone_name) iferr_return;
 				g_spinlock.Unlock();
 			}
 			context.localCount++;
 			if (GeIsMainThread())
-			{
-				StatusSetText("Import motion of bone " + String::IntToString(bone_cnt) + "/" + motion_frame_bone_number_S);
-				StatusSetSpin();
-			}
+				StatusSetSpin();		
 			return(maxon::OK);
-	}, [&insideCount, &motion_frame_bone_number](LocalData& context)
+	}, [&insideCount, &motion_bone_count](LocalData& context)
 	{
 		insideCount += context.localCount;
-		if (GeIsMainThread())
-			StatusSetText("Import bone " + String::IntToString(insideCount) + " of " + String::IntToString(motion_frame_bone_number));
-	}) iferr_return;
+		if (GeIsMainThread()) {
+			StatusSetText("Import bone " + String::IntToString(insideCount) + "/" + String::IntToString(motion_bone_count));
+			StatusSetSpin();
 		}
+	}) iferr_return;
 	}
 	motion_bone_name_array.Reset();
 
 	/*ImportMorph*/
-	Int				morph_cnt = 0;
-	Int				motion_frame_morph_number = motion_morph_name_array.GetCount();
-	String				motion_frame_morph_number_S = String::IntToString(motion_frame_morph_number);
-	maxon::BaseArray<String>	not_find_morph_S;
-	if (setting.import_morph == true) {
+	Int				imported_morph_count = 0;
+	Int				motion_morph_count = motion_morph_name_array.GetCount();
+	String				motion_morph_count_string = String::IntToString(motion_morph_count);
+	maxon::BaseArray<String>	not_find_morphs;
+	if (m_motions_import_settings.import_morph == true) {
 
 		insideCount = 0;
-		maxon::ParallelFor::Dynamic<LocalData, maxon::PARALLELFORFLAGS::INITTHREADED_FINALIZESYNC>(0, motion_frame_morph_number - 1,
+		maxon::ParallelFor::Dynamic<LocalData, maxon::PARALLELFORFLAGS::INITTHREADED_FINALIZESYNC>(0, motion_morph_count - 1,
 			[](LocalData& context)
 			{
 				context.localCount = 0;
 			},
-			[&MorphFrameList_map, &motion_morph_name_array, &morph_name_map,
-				&morph_cnt, &not_find_morph_S, &motion_frame_morph_number_S, &setting](const Int motion_morph_name_index, LocalData& context)->maxon::Result<void>
+			[this, &morph_frame_list_map, &motion_morph_name_array, &morphs_map,
+				&imported_morph_count, &not_find_morphs, &motion_morph_count_string]
+			(const Int motion_morph_name_index, LocalData& context)->maxon::Result<void>
 			{
 				iferr_scope;
 				String morph_motion_name = motion_morph_name_array[motion_morph_name_index];
-				mmd::VMDMorphAnimation			MorphFrame;
-				maxon::BaseList<mmd::VMDMorphAnimation>* MorphFrameList = (MorphFrameList_map.Find(morph_motion_name)->GetValue());
-				auto morph_ptr = morph_name_map.Find(morph_motion_name);
+				const mmd::VMDMorphAnimation*			morph_frame;
+				auto& MorphFrameList = morph_frame_list_map.Find(morph_motion_name)->GetValue();
+				auto morph_ptr = morphs_map.Find(morph_motion_name);
 				if (morph_ptr != nullptr)
 				{
-					for (morph_id_tag& morph_id_tag_data : *morph_ptr->GetValue())
+					while (morph_ptr != nullptr)
 					{
-						DescID	morphID = morph_id_tag_data.id;
+						morph_info& morph_id_tag_data = morph_ptr->GetValue();
+						DescID	morphID = morph_id_tag_data.strength_id;
 						BaseTag* pose_morph_tag = morph_id_tag_data.tag;
 						CTrack* MorphTrack = pose_morph_tag->FindCTrack(morphID);
 						if (MorphTrack == nullptr)
@@ -4198,65 +3422,59 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 							pose_morph_tag->InsertTrackSorted(MorphTrack);
 						}
 						CCurve* MorphCurve = MorphTrack->GetCurve();
-						Int	morph_frame_number = MorphFrameList->GetCount();
+						Int	morph_frame_number = MorphFrameList.GetCount();
 						for (Int morph_index = 0; morph_index < morph_frame_number; morph_index++)
 						{
-							MorphFrame = (*MorphFrameList)[morph_index];
+							morph_frame = MorphFrameList[morph_index];
 							CKey* MorphKey = CKey::Alloc();
-							MorphKey->SetTime(MorphCurve, BaseTime(MorphFrame.frame_no + setting.time_offset, 30.));
-							MorphKey->SetValue(MorphCurve, MorphFrame.weight);
+							MorphKey->SetTime(MorphCurve, BaseTime(morph_frame->frame_no + m_motions_import_settings.time_offset, 30.));
+							MorphKey->SetValue(MorphCurve, morph_frame->weight);
 							MorphCurve->InsertKey(MorphKey);
+							g_spinlock.Lock();
+							imported_morph_count++;
+							g_spinlock.Unlock();				
 						}
-						morph_cnt++;
+						morph_ptr = morph_ptr->GetNextWithSameKey();
 					}
 				}
 				else {
 					g_spinlock.Lock();
-					not_find_morph_S.Append(morph_motion_name) iferr_return;
+					not_find_morphs.Append(morph_motion_name) iferr_return;
 					g_spinlock.Unlock();
 				}
 				context.localCount++;
 				if (GeIsMainThread())
-				{
-					StatusSetText("Import motion of morph " + String::IntToString(morph_cnt) + "/" + motion_frame_morph_number_S);
 					StatusSetSpin();
-				}
 				return(maxon::OK);
-			}, [&insideCount, &motion_frame_morph_number](LocalData& context)
+			}, [&insideCount, &motion_morph_count](LocalData& context)
 			{
 				insideCount += context.localCount;
 				if (GeIsMainThread()) {
-					StatusSetText("Import morph " + String::IntToString(insideCount) + " of " + String::IntToString(motion_frame_morph_number));
+					StatusSetText("Import morph " + String::IntToString(insideCount) + " of " + String::IntToString(motion_morph_count));
 				}
 			}) iferr_return;
 	}
 	motion_morph_name_array.Reset();
 
 	/*ImportMotion*/
-	if (setting.import_model_info == true)
+	if (m_motions_import_settings.import_model_info == true)
 	{
-		CTrack* ModelEditorDisplayTrack = SelectObject->FindCTrack(ID_BASEOBJECT_VISIBILITY_EDITOR);
+		CTrack* ModelEditorDisplayTrack = select_object->FindCTrack(ID_BASEOBJECT_VISIBILITY_EDITOR);
 		if (ModelEditorDisplayTrack == nullptr)
 		{
-			ModelEditorDisplayTrack = CTrack::Alloc(SelectObject, ID_BASEOBJECT_VISIBILITY_EDITOR);
+			ModelEditorDisplayTrack = CTrack::Alloc(select_object, ID_BASEOBJECT_VISIBILITY_EDITOR);
 			if (ModelEditorDisplayTrack == nullptr) 
-			{
-				EXIT_FromFileImportMotions
-					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-			}
-			SelectObject->InsertTrackSorted(ModelEditorDisplayTrack);
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
+			select_object->InsertTrackSorted(ModelEditorDisplayTrack);
 		}
 		CCurve* ModelEditorDisplayCurve = ModelEditorDisplayTrack->GetCurve();
-		CTrack* ModelRenderDisplayTrack = SelectObject->FindCTrack(ID_BASEOBJECT_VISIBILITY_RENDER);
+		CTrack* ModelRenderDisplayTrack = select_object->FindCTrack(ID_BASEOBJECT_VISIBILITY_RENDER);
 		if (ModelRenderDisplayTrack == nullptr)
 		{
-			ModelRenderDisplayTrack = CTrack::Alloc(SelectObject, ID_BASEOBJECT_VISIBILITY_RENDER);
+			ModelRenderDisplayTrack = CTrack::Alloc(select_object, ID_BASEOBJECT_VISIBILITY_RENDER);
 			if (ModelRenderDisplayTrack == nullptr) 
-			{
-				EXIT_FromFileImportMotions
-					return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-			}
-			SelectObject->InsertTrackSorted(ModelRenderDisplayTrack);
+				return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
+			select_object->InsertTrackSorted(ModelRenderDisplayTrack);
 		}
 		CCurve* ModelRenderDisplayCurve = ModelRenderDisplayTrack->GetCurve();
 		const Int ModelFrameNumber = this->model_frames.GetCount();
@@ -4264,7 +3482,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 		{
 			StatusSetSpin();
 			const mmd::VMDModelControllerAnimation& model_frame = this->model_frames[model_frame_index];
-			BaseTime		time = BaseTime(model_frame.frame_no + setting.time_offset, 30.);
+			BaseTime		time = BaseTime(model_frame.frame_no + m_motions_import_settings.time_offset, 30.);
 			CKey* ModelEditorDisplayKey = CKey::Alloc();
 			ModelEditorDisplayKey->SetTime(ModelEditorDisplayCurve, time);
 			ModelEditorDisplayKey->SetValue(ModelEditorDisplayCurve,!model_frame.show);
@@ -4275,27 +3493,25 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 			ModelRenderDisplayCurve->InsertKey(ModelRenderDisplayKey);
 			for (const mmd::VMDIkControllerAnimation& ikInfo : model_frame.IKs_Info)
 			{
-				auto ikTagListPtr = ik_tag_map.Find(ikInfo.name);
-				if (ikTagListPtr != nullptr)
-				{
-					maxon::BaseList<BaseTag*>* ikTagList = ikTagListPtr->GetValue();
-					for (BaseTag* ikTag : *ikTagList)
+				auto ik_tag_ptr = ik_tag_map.Find(ikInfo.name);
+				if (ik_tag_ptr != nullptr)
+				{			
+					while (ik_tag_ptr != nullptr)
 					{
-						CTrack* IKEnableTrack = ikTag->FindCTrack(ID_CA_IK_TAG_ENABLE);
+						BaseTag* ik_tag = ik_tag_ptr->GetValue();
+						CTrack* IKEnableTrack = ik_tag->FindCTrack(ID_CA_IK_TAG_ENABLE);
 						if (IKEnableTrack == nullptr) {
-							IKEnableTrack = CTrack::Alloc(ikTag, ID_CA_IK_TAG_ENABLE);
+							IKEnableTrack = CTrack::Alloc(ik_tag, ID_CA_IK_TAG_ENABLE);
 							if (IKEnableTrack == nullptr) 
-							{
-								EXIT_FromFileImportMotions
-									return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
-							}
-							ikTag->InsertTrackSorted(IKEnableTrack);
+								return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
+							ik_tag->InsertTrackSorted(IKEnableTrack);
 						}
 						CCurve* IKEnableCurve = IKEnableTrack->GetCurve();
 						CKey* IKEnableKey = CKey::Alloc();
 						IKEnableKey->SetTime(IKEnableCurve, time);
 						IKEnableKey->SetGeData(IKEnableCurve, ikInfo.enable);
 						IKEnableCurve->InsertKey(IKEnableKey);
+						ik_tag_ptr = ik_tag_ptr->GetNextWithSameKey();
 					}
 				}
 			}
@@ -4309,16 +3525,20 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 	EventAdd(EVENT::NONE);
 	doc->SetTime(BaseTime(1, 30.));
 	doc->SetTime(BaseTime(0, 30.));
-	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK, String::IntToString(bone_cnt), String::IntToString(morph_cnt), String::IntToString(motion_frame_bone_number + motion_frame_morph_number), String::FloatToString(timing.GetMilliseconds())) + "\n";
-	if (setting.detail_report == 1)
+	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK,
+		String::IntToString(imported_bone_count),
+		String::IntToString(imported_morph_count),
+		String::IntToString(motion_bone_count + motion_morph_count),
+		String::FloatToString(timing.GetMilliseconds())) + "\n";
+	if (m_motions_import_settings.detail_report == 1)
 	{
-		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_S.GetCount())) + ":\n";
-		for (String i : not_find_bone_S)
+		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bones.GetCount())) + ":\n";
+		for (String i : not_find_bones)
 		{
 			report += "\"" + i + "\" ";
 		}
-		report += "\n" + GeLoadString(IDS_MES_IMPORT_MOT_CF_MORPH, String::IntToString(not_find_morph_S.GetCount())) + ":\n";
-		for (String i : not_find_morph_S)
+		report += "\n" + GeLoadString(IDS_MES_IMPORT_MOT_CF_MORPH, String::IntToString(not_find_morphs.GetCount())) + ":\n";
+		for (String i : not_find_morphs)
 		{
 			report += "\"" + i + "\" ";
 		}
@@ -4326,7 +3546,7 @@ maxon::Result<void> mmd::VMDAnimation::FromFileImportMotion(VMD_Motions_import_s
 	MessageDialog(report);
 	return(maxon::OK);
 }
-maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_export_settings setting) {
+maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion() {
 	iferr_scope_handler{
 #ifdef _DEBUG
 		MessageDialog(err.ToString(nullptr));
@@ -4334,8 +3554,8 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 			return err;
 	};
 	Filename		fn;
-	BaseDocument* doc = GetActiveDocument();
-	setting.position_multiple = 1.0 / setting.position_multiple;
+	doc = GetActiveDocument();
+	m_motions_export_settings.position_multiple = 1.0 / m_motions_export_settings.position_multiple;
 	if (doc == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + "error");
@@ -4363,8 +3583,8 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
 	this->ModelName = select_object->GetName();
 	this->IsCamera = false;
-	maxon::HashSet<bone_obj_tag>	bone_set;
-	maxon::HashSet<morph_id_tag>	morph_set;
+	maxon::HashSet<bone_info>	bone_set;
+	maxon::HashSet<morph_info>	morph_set;
 	maxon::HashSet<BaseTag*>		ik_tag_set;
 	maxon::Queue<BaseObject*> nodes;
 	nodes.Push(select_object) iferr_return;
@@ -4385,13 +3605,13 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 					for (Int32 index = 0; index < BoneMorphCount; index++)
 					{
 						bone_morph_data& bone_morph = pmx_bone_tag_data->GetMorph(index);
-						morph_set.Insert(morph_id_tag{ bone_morph.strength_id, node_tag }) iferr_return;
+						morph_set.Insert(morph_info{ bone_morph.strength_id, node_tag }) iferr_return;
 					}
 					node_tag->GetParameter(DescID(PMX_BONE_NAME_LOCAL), data, DESCFLAGS_GET::NONE);
-					bone_set.Insert(bone_obj_tag{ node, node_tag }) iferr_return;
+					bone_set.Insert(bone_info{ node, node_tag }) iferr_return;
 				}
 				else {
-					bone_set.Insert(bone_obj_tag{ node, nullptr }) iferr_return;
+					bone_set.Insert(bone_info{ node, nullptr }) iferr_return;
 				}
 				/*The 1019561 is ik tag id.*/
 				BaseTag* node_ik_tag = node->GetTag(1019561);
@@ -4408,7 +3628,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 				/*Because the data with an index of 0 is a basic deformation, traversal starts at 1.*/
 				for (Int32 index = 1; index < kMorphCount; index++)
 				{
-					morph_set.Insert(morph_id_tag{pose_morph_tag->GetMorphID(index), tag ,pose_morph_tag->GetMorph(index)->GetName()}) iferr_return;
+					morph_set.Insert(morph_info{pose_morph_tag->GetMorphID(index), tag ,pose_morph_tag->GetMorph(index)->GetName()}) iferr_return;
 				}
 			}
 			nodes.Push(node->GetDown()) iferr_return;
@@ -4424,9 +3644,9 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 	nodes.Reset();
 	doc->SetTime(BaseTime(0.));
 	const Int32 kFps = doc->GetFps();
-	if (setting.export_motion == true) {
-		if(setting.use_bake==true){
-			for (const bone_obj_tag& bone : bone_set)
+	if (m_motions_export_settings.export_motion == true) {
+		if(m_motions_export_settings.use_bake==true){
+			for (const bone_info& bone : bone_set)
 			{
 				String  bone_name = bone.obj->GetName();		
 				CCurve* curve_position_x = nullptr;
@@ -4483,7 +3703,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						StatusSetSpin();
 						vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 						vmd_motion_data->bone_name = bone_name;
-						vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
+						vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + m_motions_export_settings.time_offset);
 						vmd_motion_data->position.x = maxon::SafeConvert<Float32>(bone_position.x);
 						vmd_motion_data->position.y = maxon::SafeConvert<Float32>(bone_position.y);
 						vmd_motion_data->position.z = maxon::SafeConvert<Float32>(bone_position.z);
@@ -4504,10 +3724,10 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						StatusSetSpin();
 						vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 						vmd_motion_data->bone_name = bone_name;
-						vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
-						vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * setting.position_multiple);
-						vmd_motion_data->position.y = maxon::SafeConvert<Float32>(curve_position_y->GetValue(time_on) * setting.position_multiple);
-						vmd_motion_data->position.z = maxon::SafeConvert<Float32>(curve_position_z->GetValue(time_on) * setting.position_multiple);
+						vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + m_motions_export_settings.time_offset);
+						vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * m_motions_export_settings.position_multiple);
+						vmd_motion_data->position.y = maxon::SafeConvert<Float32>(curve_position_y->GetValue(time_on) * m_motions_export_settings.position_multiple);
+						vmd_motion_data->position.z = maxon::SafeConvert<Float32>(curve_position_z->GetValue(time_on) * m_motions_export_settings.position_multiple);
 						vmd_motion_data->rotation = bone_rotation;
 						/*The interpolation curve is linear and the default values are used.*/
 						this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
@@ -4522,10 +3742,10 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 						StatusSetSpin();
 						vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 						vmd_motion_data->bone_name = bone_name;
-						vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
-						vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * setting.position_multiple);
-						vmd_motion_data->position.y = maxon::SafeConvert<Float32>(curve_position_y->GetValue(time_on) * setting.position_multiple);
-						vmd_motion_data->position.z = maxon::SafeConvert<Float32>(curve_position_z->GetValue(time_on) * setting.position_multiple);
+						vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + m_motions_export_settings.time_offset);
+						vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * m_motions_export_settings.position_multiple);
+						vmd_motion_data->position.y = maxon::SafeConvert<Float32>(curve_position_y->GetValue(time_on) * m_motions_export_settings.position_multiple);
+						vmd_motion_data->position.z = maxon::SafeConvert<Float32>(curve_position_z->GetValue(time_on) * m_motions_export_settings.position_multiple);
 						rotation.x = curve_rotation_x->GetValue(time_on);
 						rotation.y = curve_rotation_y->GetValue(time_on);
 						rotation.z = curve_rotation_z->GetValue(time_on);
@@ -4537,7 +3757,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 			}
 		}
 		else {
-			for (const bone_obj_tag& bone : bone_set)
+			for (const bone_info& bone : bone_set)
 			{
 				if (bone.tag != nullptr)
 				{
@@ -4611,8 +3831,8 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 							bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_x);
 							bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_y);
 							bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_z);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_r);
-							vmd_motion_data->frame_no += maxon::SafeConvert<UInt32>(setting.time_offset);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_rotation);
+							vmd_motion_data->frame_no += maxon::SafeConvert<UInt32>(m_motions_export_settings.time_offset);
 							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 						}
 					}
@@ -4626,17 +3846,17 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 							vmd_motion_data->bone_name = bone_name;
 							key = curve_position_x->GetKey(key_index);
 							vmd_motion_data->frame_no = (UInt32)key->GetTime().GetFrame(30.);
-							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(key->GetValue() * setting.position_multiple);
+							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(key->GetValue() * m_motions_export_settings.position_multiple);
 							key = curve_position_y->GetKey(key_index);
-							vmd_motion_data->position.y = maxon::SafeConvert<Float32>(key->GetValue() * setting.position_multiple);
+							vmd_motion_data->position.y = maxon::SafeConvert<Float32>(key->GetValue() * m_motions_export_settings.position_multiple);
 							key = curve_position_z->GetKey(key_index);
-							vmd_motion_data->position.z = maxon::SafeConvert<Float32>(key->GetValue() * setting.position_multiple);
+							vmd_motion_data->position.z = maxon::SafeConvert<Float32>(key->GetValue() * m_motions_export_settings.position_multiple);
 							vmd_motion_data->rotation = bone_rotation;
 							bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_x);
 							bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_y);
 							bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_z);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_r);
-							vmd_motion_data->frame_no += maxon::SafeConvert<UInt32>(setting.time_offset);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_rotation);
+							vmd_motion_data->frame_no += maxon::SafeConvert<UInt32>(m_motions_export_settings.time_offset);
 							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 						}
 					}
@@ -4650,11 +3870,11 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 							vmd_motion_data->bone_name = bone_name;
 							key = curve_position_x->GetKey(key_index);
 							vmd_motion_data->frame_no = key->GetTime().GetFrame(30.);
-							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(key->GetValue() * setting.position_multiple);
+							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(key->GetValue() * m_motions_export_settings.position_multiple);
 							key = curve_position_y->GetKey(key_index);
-							vmd_motion_data->position.y = maxon::SafeConvert<Float32>(key->GetValue() * setting.position_multiple);
+							vmd_motion_data->position.y = maxon::SafeConvert<Float32>(key->GetValue() * m_motions_export_settings.position_multiple);
 							key = curve_position_z->GetKey(key_index);
-							vmd_motion_data->position.z = maxon::SafeConvert<Float32>(key->GetValue() * setting.position_multiple);
+							vmd_motion_data->position.z = maxon::SafeConvert<Float32>(key->GetValue() * m_motions_export_settings.position_multiple);
 							key = curve_rotation_x->GetKey(key_index);
 							rotation.x = key->GetValue();
 							key = curve_rotation_y->GetKey(key_index);
@@ -4665,8 +3885,8 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 							bone_tag_data->GetInterpolator(PMX_BONE_TAG_XCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_x);
 							bone_tag_data->GetInterpolator(PMX_BONE_TAG_YCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_y);
 							bone_tag_data->GetInterpolator(PMX_BONE_TAG_ZCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_z);
-							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_position_r);
-							vmd_motion_data->frame_no += maxon::SafeConvert<UInt32>(setting.time_offset);
+							bone_tag_data->GetInterpolator(PMX_BONE_TAG_RCURVE, vmd_motion_data->frame_no, vmd_motion_data->interpolator_rotation);
+							vmd_motion_data->frame_no += maxon::SafeConvert<UInt32>(m_motions_export_settings.time_offset);
 							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
 						}
 					}
@@ -4732,7 +3952,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 							StatusSetSpin();
 							vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 							vmd_motion_data->bone_name = bone_name;
-							vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
+							vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + m_motions_export_settings.time_offset);
 							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(bone_position.x);
 							vmd_motion_data->position.y = maxon::SafeConvert<Float32>(bone_position.y);
 							vmd_motion_data->position.z = maxon::SafeConvert<Float32>(bone_position.z);
@@ -4753,10 +3973,10 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 							StatusSetSpin();
 							vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 							vmd_motion_data->bone_name = bone_name;
-							vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
-							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * setting.position_multiple);
-							vmd_motion_data->position.y = maxon::SafeConvert<Float32>(curve_position_y->GetValue(time_on) * setting.position_multiple);
-							vmd_motion_data->position.z = maxon::SafeConvert<Float32>(curve_position_z->GetValue(time_on) * setting.position_multiple);
+							vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + m_motions_export_settings.time_offset);
+							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * m_motions_export_settings.position_multiple);
+							vmd_motion_data->position.y = maxon::SafeConvert<Float32>(curve_position_y->GetValue(time_on) * m_motions_export_settings.position_multiple);
+							vmd_motion_data->position.z = maxon::SafeConvert<Float32>(curve_position_z->GetValue(time_on) * m_motions_export_settings.position_multiple);
 							vmd_motion_data->rotation = bone_rotation;
 							/*The interpolation curve is linear and the default values are used.*/
 							this->motion_frames.AppendPtr(vmd_motion_data)iferr_return;
@@ -4771,10 +3991,10 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 							StatusSetSpin();
 							vmd_motion_data = NewObj(mmd::VMDBoneAnimation)iferr_return;
 							vmd_motion_data->bone_name = bone_name;
-							vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + setting.time_offset);
-							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * setting.position_multiple);
-							vmd_motion_data->position.y = maxon::SafeConvert<Float32>(curve_position_y->GetValue(time_on) * setting.position_multiple);
-							vmd_motion_data->position.z = maxon::SafeConvert<Float32>(curve_position_z->GetValue(time_on) * setting.position_multiple);
+							vmd_motion_data->frame_no = maxon::SafeConvert<UInt32>(time_on.GetFrame(kFps) + m_motions_export_settings.time_offset);
+							vmd_motion_data->position.x = maxon::SafeConvert<Float32>(curve_position_x->GetValue(time_on) * m_motions_export_settings.position_multiple);
+							vmd_motion_data->position.y = maxon::SafeConvert<Float32>(curve_position_y->GetValue(time_on) * m_motions_export_settings.position_multiple);
+							vmd_motion_data->position.z = maxon::SafeConvert<Float32>(curve_position_z->GetValue(time_on) * m_motions_export_settings.position_multiple);
 							rotation.x = curve_rotation_x->GetValue(time_on);
 							rotation.y = curve_rotation_y->GetValue(time_on);
 							rotation.z = curve_rotation_z->GetValue(time_on);
@@ -4791,9 +4011,9 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 		}
 	}
 
-	if (setting.export_morph == true) {
-		for (const morph_id_tag& morph : morph_set) {
-			CTrack* morph_track = morph.tag->FindCTrack(morph.id);
+	if (m_motions_export_settings.export_morph == true) {
+		for (const morph_info& morph : morph_set) {
+			CTrack* morph_track = morph.tag->FindCTrack(morph.strength_id);
 			if (morph_track != nullptr) {
 				CCurve* morph_curve = morph_track->GetCurve();
 				if (morph_curve != nullptr) {
@@ -4801,7 +4021,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 					for (Int32 key_index = 0; key_index < kMorphKeyCount; key_index++) {
 						mmd::VMDMorphAnimation* vmd_morph_data = NewObj(mmd::VMDMorphAnimation)iferr_return;
 						CKey* key = morph_curve->GetKey(key_index);
-						vmd_morph_data->frame_no = maxon::SafeConvert<UInt32>(key->GetTime().GetFrame(30.) + setting.time_offset);
+						vmd_morph_data->frame_no = maxon::SafeConvert<UInt32>(key->GetTime().GetFrame(30.) + m_motions_export_settings.time_offset);
 						vmd_morph_data->weight = maxon::SafeConvert<Float32>(key->GetValue());
 						vmd_morph_data->morph_name = morph.name;
 						this->morph_frames.AppendPtr(vmd_morph_data)iferr_return;
@@ -4811,7 +4031,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 		}
 	}
 
-	if (setting.export_model_info == true)
+	if (m_motions_export_settings.export_model_info == true)
 	{
 		maxon::HashSet<MyBaseTime> time_set;
 
@@ -4839,7 +4059,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 			for (const BaseTime& time : time_set)
 			{
 				mmd::VMDModelControllerAnimation* model_frame = NewObj(mmd::VMDModelControllerAnimation)iferr_return;
-				model_frame->frame_no = maxon::SafeConvert<UInt32>(time.GetFrame(kFps) + setting.time_offset);
+				model_frame->frame_no = maxon::SafeConvert<UInt32>(time.GetFrame(kFps) + m_motions_export_settings.time_offset);
 				if (ModelEditorDisplayCurve->GetValue(time) == 2) {
 					model_frame->show = false;
 				}
@@ -4880,7 +4100,7 @@ maxon::Result<void> mmd::VMDAnimation::FromDocumentExportMotion(VMD_Motions_expo
 		}
 		else {
 			mmd::VMDModelControllerAnimation* model_frame = NewObj(mmd::VMDModelControllerAnimation)iferr_return;
-			model_frame->frame_no = maxon::SafeConvert<UInt32>(setting.time_offset);
+			model_frame->frame_no = maxon::SafeConvert<UInt32>(m_motions_export_settings.time_offset);
 			model_frame->show = true;
 			for (BaseTag* ikTag : ik_tag_set) {
 				mmd::VMDIkControllerAnimation* ikInfo = NewObj(mmd::VMDIkControllerAnimation)iferr_return;
@@ -4946,14 +4166,14 @@ Bool mmd::VMDLoaderData::VMDLoaderCameraDialog::Command(Int32 id, const BaseCont
 	switch (id)
 	{
 	case 100005:
-	{
-		mmd::VMD_Camera_import_settings setting_;
-		setting_.fn = fn;
-		setting_.doc = doc;
-		GetFloat(100002, setting_.position_multiple);
-		GetFloat(100004, setting_.time_offset);
+	{	
 		maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
-		iferr(mmd_animation ->FromFileImportCamera(setting_))
+		mmd_animation->m_camera_import_settings.fn = fn;
+		mmd_animation->m_camera_import_settings.doc = doc;
+		GetFloat(100002, mmd_animation->m_camera_import_settings.position_multiple);
+		GetFloat(100004, mmd_animation->m_camera_import_settings.time_offset);
+
+		iferr(mmd_animation ->FromFileImportCamera())
 		{
 			return(false);
 		}

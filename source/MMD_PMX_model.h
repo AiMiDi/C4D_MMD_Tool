@@ -520,34 +520,6 @@ namespace mmd {
 	{
 		MAXON_DISALLOW_COPY_AND_ASSIGN(PMXModel);
 	private:
-	struct PMX_Model_import_settings
-	{
-		Float	position_multiple;
-		Bool	import_polygon;
-		Bool	import_normal;
-		Bool	import_uv;
-		Bool	import_material;
-		Bool	import_bone;
-		Bool	import_weights;
-		Bool	import_ik;
-		Bool	import_inherit;
-		Bool	import_expression;
-		Bool	import_multipart;
-		Bool	import_english;
-		Bool	import_english_check;
-	};
-	struct PMX_Model_export_settings {
-		Float	position_multiple;
-		Bool	export_polygon;
-		Bool	export_normal;
-		Bool	export_uv;
-		Bool	export_material;
-		Bool	export_bone;
-		Bool	export_weights;
-		Bool	export_ik;
-		Bool	export_inherit;
-		Bool	export_expression;
-	};
 		PMXModelInformation				m_model_info;             /* 模型信息 */
 		PMXDataCount					m_model_data_count;       /* 模型数据计数 */
 		maxon::PointerArray<PMXVertexData>		m_vertex_data;            /* 顶点数据 */
@@ -567,8 +539,35 @@ namespace mmd {
 	public:
 		PMXModel(){}
 		~PMXModel(){}
-		PMX_Model_import_settings import_settings;
-		PMX_Model_export_settings export_settings;
+		struct
+		{
+			Float	position_multiple;
+			Bool	import_polygon;
+			Bool	import_normal;
+			Bool	import_uv;
+			Bool	import_material;
+			Bool	import_bone;
+			Bool	import_weights;
+			Bool	import_ik;
+			Bool	import_inherit;
+			Bool	import_expression;
+			Bool	import_multipart;
+			Bool	import_english;
+			Bool	import_english_check;
+		} m_import_settings;
+		struct
+		{
+			Float	position_multiple;
+			Bool	export_polygon;
+			Bool	export_normal;
+			Bool	export_uv;
+			Bool	export_material;
+			Bool	export_bone;
+			Bool	export_weights;
+			Bool	export_ik;
+			Bool	export_inherit;
+			Bool	export_expression;
+		} m_export_settings;
 		maxon::Result<void> LoadFromFile(Filename& fn);
 		maxon::Result<void> SaveToFile(Filename& fn);
 		maxon::Result<void> ImportBone(CAWeightTag* weight_tag);
@@ -576,7 +575,7 @@ namespace mmd {
 		maxon::Result<void> ImportMaterial(const String& path, const Int32& material_index, TextureTag* const texture_tag);
 		maxon::Result<void> FromFileImportMultipartModel();
 		maxon::Result<void> FromFileImportOneModel();
-		maxon::Result<void> FromDocumentExportModel(PMX_Model_export_settings& settings);
+		maxon::Result<void> FromDocumentExportModel();
 	};
 }
 #endif /* __MMD_VMD_MODEl_H__ */

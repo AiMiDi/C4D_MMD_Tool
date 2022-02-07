@@ -1,1 +1,1 @@
-maxon.ImageRegionTilesObserverInterface	"net.maxon.nodes.interface.imageregionobserver.tiles"	D:\C4D_MMD_Tool\sdk_r25\frameworks\image.framework\source\maxon\imageregionobserver_helpers.h(13,7)	ImageRegionObserverInterface	GetAndResetDirtyState,Init	
+maxon.ImageRegionTilesObserverInterface	"net.maxon.nodes.interface.imageregionobserver.tiles"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\image.framework\source\maxon\imageregionobserver_helpers.h(13,7)	ImageRegionObserverInterface	GetAndResetDirtyState,Init	

@@ -217,6 +217,28 @@
     <ClInclude Include="..\..\..\..\source\MMD_VPD_pose.h" />
     <ClInclude Include="..\..\..\..\source\NameConversion.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\res\strings_en-US\c4d_strings.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDBoneRoot.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDCamera.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJoint.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJointRoot.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDMeshRoot.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDModel.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigid.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigidRoot.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\TMMDBone.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\c4d_strings.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDBoneRoot.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDCamera.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJoint.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJointRoot.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDMeshRoot.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDModel.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigid.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigidRoot.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\TMMDBone.str" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">
     <RemoveDir Directories="$(ProjectDir)..\generated" ContinueOnError="true" />

@@ -23,13 +23,17 @@ STRINGTABLE
 	IDS_MES_CONVER_ERR "Conversion failed:";
 	IDS_MES_CONVER_TYPE_ERR "The selected object is not a camera.";
 
-	IDS_MES_IMPORT_MOT_OK "Successfully imported # bone's and # morph's # Frame(s) at # ms!";
+	IDS_MES_IMPORT_MOT_OK "Successfully imported animation: # bone's and # morph's # Frame(s) at # ms!";
 	IDS_MES_IMPORT_MOT_CF_BONE "Can't find # bone(s)";
 	IDS_MES_IMPORT_MOT_CF_MORPH "Can't find # morph(s)";
 
 	IDS_MES_INQUIRY_OVERWRITING_FILE "Do you want to overwrite the file?";
 	IDS_MES_CONFIRM_DELETE_FILE "Do you want to delete all animations of the selected model?";
 	IDS_MES_CANNOT_DELETE_DEFAULT "The default configuration file cannot be deleted!";
+
+	IDS_MES_IMPORT_MOD_OK "Successfully imported model:Name: #Comment:#English name: #English comment:#";
+	IDS_MES_IMPORT_MOD_INFO_A "Vertex Count: #Surface Count: #Texture Count: #Material Count: #";
+	IDS_MES_IMPORT_MOD_INFO_B "Bone Count: #Morph Count: #Use time: # ms";
 
 	IDS_MES_BONE_MORPH_DELETE "Do you want to delete # bone morph?";
 	IDS_MES_DELETE_ALL_ANIM "Do you want to delete all the animation data of the model?";
