@@ -1765,29 +1765,23 @@ namespace mmd {
 						}
 #if API_VERSION >= 23000
 						g_spinlock.Lock();
-						part_polygon[surface_index].a = vertex_a_index;
-						part_polygon[surface_index].b = vertex_b_index;
-						part_polygon[surface_index].c = vertex_c_index;
+						part_polygon[surface_index] = CPolygon(vertex_a_index, vertex_b_index, vertex_c_index);
 						g_spinlock.Unlock();
 #else
 						g_spinlock.Lock();
-						part_polygon[surface_index].a = vertex_c_index;
-						part_polygon[surface_index].b = vertex_b_index;
-						part_polygon[surface_index].c = vertex_a_index;
+						part_polygon[surface_index] = CPolygon(vertex_c_index, vertex_b_index, vertex_a_index);
 						g_spinlock.Unlock();
 #endif 		
 						if (this->m_import_settings.import_normal)
 						{
 							Vector normal0 = (Vector)vertex0.normal;
 							Vector normal1 = (Vector)vertex1.normal;
-							Vector normal2 = (Vector)vertex2.normal;
-							Vector normal3(0, 0, 0);
+							Vector normal2 = (Vector)vertex2.normal;	
 							normal0.Normalize();
 							normal1.Normalize();
 							normal2.Normalize();
-							normal3.Normalize();
 							g_spinlock.Lock();
-							NormalTag::Set(normal_handle, surface_index, NormalStruct(normal0, normal1, normal2, normal3));
+							NormalTag::Set(normal_handle, surface_index, NormalStruct(normal0, normal1, normal2, Vector(0, 0, 0)));
 							g_spinlock.Unlock();
 						}
 						if (this->m_import_settings.import_uv)
@@ -2398,18 +2392,14 @@ namespace mmd {
 					PMXVertexData& vertex1 = this->m_vertex_data[surface.b];
 					PMXVertexData& vertex2 = this->m_vertex_data[surface.c];
 					g_spinlock.Lock();
-					model_polygon[surface_index].a = surface.a;
-					model_polygon[surface_index].b = surface.b;
-					model_polygon[surface_index].c = surface.c;
+					model_polygon[surface_index] = CPolygon(surface.a, surface.b, surface.c);
 					g_spinlock.Unlock();
 #else
 					PMXVertexData& vertex0 = this->m_vertex_data[surface.c];
 					PMXVertexData& vertex1 = this->m_vertex_data[surface.b];
 					PMXVertexData& vertex2 = this->m_vertex_data[surface.a];
 					g_spinlock.Lock();
-					model_polygon[surface_index].a = surface.c;
-					model_polygon[surface_index].b = surface.b;
-					model_polygon[surface_index].c = surface.a;
+					model_polygon[surface_index] = CPolygon(surface.c, surface.b, surface.a);
 					g_spinlock.Unlock();
 #endif 
 					if (this->m_import_settings.import_normal)

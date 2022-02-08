@@ -350,6 +350,8 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 4. Optimize import speed and stability.
 5. Fixed import normal inversion problem for versions below R23.
 
+**version 0.4.5.1** Fixed import model surface error.
+
 ## Author
 
 AiMiDi
