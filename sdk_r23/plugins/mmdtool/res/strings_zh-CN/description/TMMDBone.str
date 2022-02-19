@@ -2,7 +2,7 @@ STRINGTABLE TMMDBone
 {
 	TMMDBone "MMD \u9aa8\u9abc\u6807\u7b7e";
 	PMX_BONE_INFO_GRP "MMD \u9aa8\u9abc\u4fe1\u606f";
-	PMX_BONE_INDEX_TEXT "    \u9aa8\u9abc\u7d22\u5f15    ";
+	PMX_BONE_INDEX_TEXT "    \u9aa8\u9abc\u7d22\u5f15   ";
 	PMX_BONE_INDEX "";
 	PMX_BONE_NAME_LOCAL "\u9aa8\u9abc\u672c\u5730\u540d\u79f0(\u548c)";
 	PMX_BONE_NAME_UNIVERSAL "\u9aa8\u9abc\u901a\u7528\u540d\u79f0(\u82f1)";

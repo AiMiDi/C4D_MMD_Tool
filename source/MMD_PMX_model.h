@@ -511,6 +511,21 @@ namespace mmd {
 	{
 		CAPoseMorphTag* morph_tag;    /* The tag where it is. */
 		maxon::BaseArray<Int32> vertex_index_arr;
+		tag_info(){}
+		MAXON_DISALLOW_COPY_AND_ASSIGN(tag_info);
+		tag_info(tag_info&& other) noexcept
+		{			
+			morph_tag = other.morph_tag;		
+			vertex_index_arr = std::move(other.vertex_index_arr);
+		}
+		tag_info& operator=(tag_info&& other) noexcept
+		{
+			if (this != &other) {
+				morph_tag = other.morph_tag;
+				vertex_index_arr = std::move(other.vertex_index_arr);
+			}
+			return *this;
+		}
 		maxon::HashInt GetHashCode() const
 		{
 			return MAXON_HASHCODE(this->morph_tag, this->vertex_index_arr);

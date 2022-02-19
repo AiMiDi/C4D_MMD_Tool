@@ -613,7 +613,7 @@ Bool mmd::TMMDBone::SplineDataCallBack(Int32 cid, const void* data)
 	}
 	return(true);
 }
-Bool mmd::TMMDBone::GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator)
+Bool mmd::TMMDBone::GetInterpolator(const Int32& type, const Int32& frame_on, VMDInterpolator& interpolator) const
 {
 	switch (type)
 	{
@@ -688,7 +688,7 @@ Bool mmd::TMMDBone::GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator&
 	}
 	return(true);
 }
-Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpolator& interpolator,Bool cover)
+Bool mmd::TMMDBone::SetInterpolator(const Int32& type, const Int32& frame_on, VMDInterpolator&& interpolator, Bool cover)
 {
 	iferr_scope_handler{
 		return false;
@@ -722,7 +722,7 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		{
 			if (cover == true) {
 				mmd::VMDInterpolator& interpolator_position_x = interpolator_x_ptr->GetValue();
-				interpolator_position_x = interpolator;
+				interpolator_position_x = std::move(interpolator);
 			}
 		}
 		else {
@@ -736,7 +736,7 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		{
 			if (cover == true) {
 				mmd::VMDInterpolator& interpolator_position_y = interpolator_y_ptr->GetValue();
-				interpolator_position_y = interpolator;
+				interpolator_position_y = std::move(interpolator);
 			}
 		}
 		else {
@@ -750,7 +750,7 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		{
 			if (cover == true) {
 				mmd::VMDInterpolator& interpolator_position_z = interpolator_z_ptr->GetValue();
-				interpolator_position_z = interpolator;
+				interpolator_position_z = std::move(interpolator);
 			}
 		}
 		else {
@@ -764,7 +764,7 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		{
 			if (cover == true) {
 				mmd::VMDInterpolator& interpolator_rotation = interpolator_r_ptr->GetValue();
-				interpolator_rotation = interpolator;
+				interpolator_rotation = std::move(interpolator);
 			}
 		}
 		else {
@@ -778,7 +778,7 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		{
 			if (cover == true) {
 				mmd::VMDInterpolator& interpolator_position_x = interpolator_x_ptr->GetValue();
-				interpolator_position_x = interpolator;
+				interpolator_position_x = std::move(interpolator);
 			}
 		}
 		else {
@@ -789,7 +789,7 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		{
 			if (cover == true) {
 				mmd::VMDInterpolator& interpolator_position_y = interpolator_y_ptr->GetValue();
-				interpolator_position_y = interpolator;
+				interpolator_position_y = std::move(interpolator);
 			}
 		}
 		else {
@@ -800,7 +800,7 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		{
 			if (cover == true) {
 				mmd::VMDInterpolator& interpolator_position_z = interpolator_z_ptr->GetValue();
-				interpolator_position_z = interpolator;
+				interpolator_position_z = std::move(interpolator);
 			}
 		}
 		else {
@@ -811,7 +811,7 @@ Bool mmd::TMMDBone::SetInterpolator(Int32 type, Int32 frame_on, const VMDInterpo
 		{
 			if (cover == true) {
 				mmd::VMDInterpolator& interpolator_rotation = interpolator_r_ptr->GetValue();
-				interpolator_rotation = interpolator;
+				interpolator_rotation = std::move(interpolator);
 			}
 		}
 		else {
@@ -1412,7 +1412,8 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 	CTrack* Track_rotation_z = obj->FindCTrack(DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z));
 	CTrack* frameTrack = tag->FindCTrack(DescID(PMX_BONE_TAG_FRAME_ON));
 
-	if (Track_position_x == nullptr || Track_position_y == nullptr || Track_position_z == nullptr || Track_rotation_x == nullptr || Track_rotation_y == nullptr || Track_rotation_z == nullptr|| frameTrack==nullptr)
+	if (Track_position_x == nullptr || Track_position_y == nullptr || Track_position_z == nullptr ||
+		Track_rotation_x == nullptr || Track_rotation_y == nullptr || Track_rotation_z == nullptr|| frameTrack==nullptr)
 	{
 		return false;
 	}
@@ -1425,33 +1426,35 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 	CCurve* Curve_rotation_z = Track_rotation_z->GetCurve();
 	CCurve* frameCurve = frameTrack->GetCurve();
 
-	if (Curve_position_x == nullptr || Curve_position_y == nullptr || Curve_position_z == nullptr || Curve_rotation_x == nullptr || Curve_rotation_y == nullptr || Curve_rotation_z == nullptr|| frameCurve==nullptr)
+	if (Curve_position_x == nullptr || Curve_position_y == nullptr || Curve_position_z == nullptr ||
+		Curve_rotation_x == nullptr || Curve_rotation_y == nullptr || Curve_rotation_z == nullptr|| frameCurve==nullptr)
 	{
 		return false;
 	}
 
 	Int32 frame_on = 0;
-	Float ValueOfTwoFrames = 0.;
-	Float TimeOfTwoFrames = 0.;
+	Float value_between_frame = 0.f;
+	BaseTime time_between_frame = BaseTime();
 	BaseTime time = BaseTime();
 	BaseTime next_time = BaseTime();
 	CKey* key = nullptr;
 	CKey* next_key = nullptr;
-	CKey* frame_next = nullptr;
+	CKey* frame_next = nullptr; 
 	maxon::HashMap<Int32, mmd::VMDInterpolator>::Entry* interpolator_ptr;
 
 	const Int32 KeyCount = frameCurve->GetKeyCount();
 	for (Int32 frame_index = 0; frame_index < KeyCount; frame_index++)
 	{
-		frame_on = maxon::SafeConvert<Int32>(frameCurve->GetKey(frame_index)->GetValue());
-		time = BaseTime(frame_on, 30.);
-		frame_next = frameCurve->FindKey(BaseTime(frame_on+1., 30.), nullptr, FINDANIM::RIGHT); /* 加0.01排除所在的那一帧 */
+		CKey* frame_key = frameCurve->GetKey(frame_index);
+		frame_on = maxon::SafeConvert<Int32>(frame_key->GetValue());
+		time = frame_key->GetTime();
+		frame_next = frameCurve->FindKey(time + BaseTime(1.,100.), nullptr, FINDANIM::RIGHT); /* 加0.1排除所在的那一帧 */
 		if (frame_next == nullptr)
 		{
 			break;
 		}
 		next_time = frame_next->GetTime();
-		TimeOfTwoFrames = next_time.GetFrame(30.) - time.GetFrame(30.);
+		time_between_frame = next_time - time;
 
 		interpolator_ptr = interpolator_X_map.Find(frame_on);
 		if (interpolator_ptr != nullptr)
@@ -1463,12 +1466,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 				next_key = Curve_position_x->FindKey(next_time);
 				if (next_key != nullptr)
 				{
-						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
-						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(Curve_position_x, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.));
-						next_key->SetValueLeft(Curve_position_x, -ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::by) / 127.0));
-						key->SetTimeRight(Curve_position_x, BaseTime(TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-						key->SetValueRight(Curve_position_x, ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ay) / 127.0));
+					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+					if (interpolator.IsLinear())
+					{
+						key->SetInterpolation(Curve_position_x, CINTERPOLATION::LINEAR);
+					}
+					else {
+						value_between_frame = next_key->GetValue() - key->GetValue();	
+						next_key->SetTimeLeft(Curve_position_x, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_position_x, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_position_x, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)) , 127.0));
+						key->SetValueRight(Curve_position_x, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+					}
 				}
 			}
 		}
@@ -1482,12 +1491,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 				next_key = Curve_position_y->FindKey(next_time);
 				if (next_key != nullptr)
 				{
-						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
-						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(Curve_position_y, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.));
-						next_key->SetValueLeft(Curve_position_y, -ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::by) / 127.0));
-						key->SetTimeRight(Curve_position_y, BaseTime(TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-						key->SetValueRight(Curve_position_y, ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ay) / 127.0));
+					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+					if (interpolator.IsLinear())
+					{
+						key->SetInterpolation(Curve_position_y, CINTERPOLATION::LINEAR);
+					}
+					else {
+						value_between_frame = next_key->GetValue() - key->GetValue();
+						next_key->SetTimeLeft(Curve_position_y, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_position_y, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_position_y, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_position_y, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+					}
 				}
 			}
 		}
@@ -1501,12 +1516,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 				next_key = Curve_position_z->FindKey(next_time);
 				if (next_key != nullptr)
 				{
-						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
-						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(Curve_position_z, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.));
-						next_key->SetValueLeft(Curve_position_z, -ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::by) / 127.0));
-						key->SetTimeRight(Curve_position_z, BaseTime(TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-						key->SetValueRight(Curve_position_z, ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ay) / 127.0));
+					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+					if (interpolator.IsLinear())
+					{
+						key->SetInterpolation(Curve_position_z, CINTERPOLATION::LINEAR);
+					}
+					else {
+						value_between_frame = next_key->GetValue() - key->GetValue();
+						next_key->SetTimeLeft(Curve_position_z, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_position_z, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_position_z, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_position_z, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+					}
 				}
 			}
 		}
@@ -1520,12 +1541,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 				next_key = Curve_rotation_x->FindKey(next_time);
 				if (next_key != nullptr)
 				{
-						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
-						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(Curve_rotation_x, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.));
-						next_key->SetValueLeft(Curve_rotation_x, -ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::by) / 127.0));
-						key->SetTimeRight(Curve_rotation_x, BaseTime(TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-						key->SetValueRight(Curve_rotation_x, ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ay) / 127.0));
+					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+					if (interpolator.IsLinear())
+					{
+						key->SetInterpolation(Curve_rotation_x, CINTERPOLATION::LINEAR);
+					}
+					else {
+						value_between_frame = next_key->GetValue() - key->GetValue();
+						next_key->SetTimeLeft(Curve_rotation_x, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_rotation_x, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_rotation_x, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_rotation_x, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+					}
 				}
 			}
 		}
@@ -1539,12 +1566,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 				next_key = Curve_rotation_y->FindKey(next_time);
 				if (next_key != nullptr)
 				{
-						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
-						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(Curve_rotation_y, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.));
-						next_key->SetValueLeft(Curve_rotation_y, -ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::by) / 127.0));
-						key->SetTimeRight(Curve_rotation_y, BaseTime(TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-						key->SetValueRight(Curve_rotation_y, ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ay) / 127.0));
+					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+					if (interpolator.IsLinear())
+					{
+						key->SetInterpolation(Curve_rotation_y, CINTERPOLATION::LINEAR);
+					}
+					else {
+						value_between_frame = next_key->GetValue() - key->GetValue();
+						next_key->SetTimeLeft(Curve_rotation_y, time_between_frame* BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_rotation_y, value_between_frame* Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_rotation_y, time_between_frame* BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_rotation_y, value_between_frame* (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+					}
 				}
 			}
 		}
@@ -1558,12 +1591,18 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 				next_key = Curve_rotation_z->FindKey(next_time);
 				if (next_key != nullptr)
 				{
-						ValueOfTwoFrames = next_key->GetValue() - key->GetValue();
-						key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
-						next_key->SetTimeLeft(Curve_rotation_z, BaseTime(-TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::bx) / 127.0), 30.));
-						next_key->SetValueLeft(Curve_rotation_z, -ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::by) / 127.0));
-						key->SetTimeRight(Curve_rotation_z, BaseTime(TimeOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ax) / 127.0), 30.));
-						key->SetValueRight(Curve_rotation_z, ValueOfTwoFrames * ((Float)interpolator.GetValue(VMDInterpolator::PartType::ay) / 127.0));
+					key->ChangeNBit(NBIT::CKEY_BREAK, NBITCONTROL::SET);
+					if (interpolator.IsLinear())
+					{
+						key->SetInterpolation(Curve_rotation_z, CINTERPOLATION::LINEAR);
+					}
+					else {
+						value_between_frame = next_key->GetValue() - key->GetValue();
+						next_key->SetTimeLeft(Curve_rotation_z, time_between_frame* BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_rotation_z, value_between_frame* Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_rotation_z, time_between_frame* BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_rotation_z, value_between_frame* (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+					}
 				}
 			}
 		}

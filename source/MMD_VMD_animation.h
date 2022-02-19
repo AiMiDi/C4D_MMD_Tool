@@ -324,9 +324,9 @@ namespace mmd {
 		/* 将普通摄像机转换为MMD摄像机 */
 		static maxon::Result<BaseObject*> ConversionCamera(VMD_Conversion_Camera_settings setting);
 		/* 获取曲线值 */
-		Bool GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator);
+		Bool GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator) const;
 		/* 设置曲线值 */
-		Bool SetInterpolator(Int32 type, Int32 frame_on,const VMDInterpolator& interpolator);
+		Bool SetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator&& interpolator);
 		/* 注册关键帧 */
 		Bool RegisterKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
 		/* 更新全部补间曲线 */

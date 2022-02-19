@@ -229,9 +229,9 @@ namespace mmd {
 		/* 用于限制SplineData的回调函数 */
 		static Bool SplineDataCallBack(Int32 cid, const void* data);
 		/* 获取曲线值 */
-		Bool GetInterpolator(Int32 type, Int32 frame_on,mmd::VMDInterpolator& interpolator);
+		Bool GetInterpolator(const Int32& type, const Int32& frame_on,VMDInterpolator& interpolator) const;
 		/* 设置曲线值 */
-		Bool SetInterpolator(Int32 type, Int32 frame_on, const mmd::VMDInterpolator& interpolator, Bool cover = true);
+		Bool SetInterpolator(const Int32& type, const Int32& frame_on, VMDInterpolator&& interpolator, Bool cover = true);
 		Bool AutoRegisterKeyFrame(Int32 use_rotation = 0, GeListNode* node = nullptr);
 		/* 注册关键帧 */
 		Bool RegisterKeyFrame(Int32 frame_on, GeListNode* node = nullptr);

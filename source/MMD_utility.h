@@ -28,19 +28,64 @@ namespace mmd {
 	class VMDInterpolator
 	{
 	private:
-		UChar ax, ay, bx, by;
+		UChar m_ax, m_ay, m_bx, m_by;
+		Bool m_isLinear;
 	public:
 		/* Partial types of interpolator data */
 		enum class PartType { ax, ay, bx, by };
 		/* Constructor function */
-		VMDInterpolator(UChar ax_ = 20U, UChar ay_ = 20U, UChar bx_ = 107U, UChar by_ = 107U) : ax(ax_), ay(ay_), bx(bx_), by(by_) {}
-		/* Sets the value of the interpolator. If the parameter is empty, set the default value. */
-		void SetValue(UChar ax_ = 20U, UChar ay_ = 20U, UChar bx_ = 107U, UChar by_ = 107U)
+		VMDInterpolator(UChar ax = 20U, UChar ay = 20U, UChar bx = 107U, UChar by = 107U) : m_ax(ax), m_ay(ay), m_bx(bx), m_by(by)
 		{
-			this->ax = ax_;
-			this->ay = ay_;
-			this->bx = bx_;
-			this->by = by_;
+			m_isLinear = m_ax == m_ay && m_bx == m_by;
+		}
+		VMDInterpolator(const VMDInterpolator& other) noexcept
+		{
+			m_ax = other.m_ax;
+			m_ay = other.m_ay;
+			m_bx = other.m_bx;
+			m_by = other.m_by;
+			m_isLinear = other.m_isLinear;
+		}
+		VMDInterpolator(VMDInterpolator&& other) noexcept
+		{
+			m_ax = std::move(other.m_ax);
+			m_ay = std::move(other.m_ay);
+			m_bx = std::move(other.m_bx);
+			m_by = std::move(other.m_by);
+			m_isLinear = std::move(other.m_isLinear);
+		}
+		VMDInterpolator& operator=(const VMDInterpolator& other) noexcept
+		{
+			m_ax = other.m_ax;
+			m_ay = other.m_ay;
+			m_bx = other.m_bx;
+			m_by = other.m_by;
+			m_isLinear = other.m_isLinear;
+			return *this;
+		}
+		VMDInterpolator& operator=(VMDInterpolator&& other) noexcept
+		{
+			if (this != &other) {
+				m_ax = std::move(other.m_ax);
+				m_ay = std::move(other.m_ay);
+				m_bx = std::move(other.m_bx);
+				m_by = std::move(other.m_by);
+				m_isLinear = std::move(other.m_isLinear);
+			}
+			return *this;
+		}
+		Bool IsLinear() const
+		{
+			return m_isLinear;
+		}
+		/* Sets the value of the interpolator. If the parameter is empty, set the default value. */
+		void SetValue(UChar ax = 20U, UChar ay = 20U, UChar bx = 107U, UChar by = 107U)
+		{
+			this->m_ax = ax;
+			this->m_ay = ay;
+			this->m_bx = bx;
+			this->m_by = by;
+			m_isLinear = m_ax == m_ay && m_bx == m_by;
 		}
 		/* Gets the interpolator value. */
 		UChar GetValue(const PartType& part) const
@@ -49,19 +94,19 @@ namespace mmd {
 			{
 			case (PartType::ax):
 			{
-				return this->ax;
+				return this->m_ax;
 			}
 			case (PartType::bx):
 			{
-				return this->bx;
+				return this->m_bx;
 			}
 			case (PartType::ay):
 			{
-				return this->ay;
+				return this->m_ay;
 			}
 			case (PartType::by):
 			{
-				return this->by;
+				return this->m_by;
 			}
 			default:
 				return UChar(-1);
@@ -70,23 +115,24 @@ namespace mmd {
 		/* Hash function */
 		maxon::HashInt GetHashCode() const
 		{
-			return  MAXON_HASHCODE(this->ax, this->ay, this->bx, this->by);
+			return  MAXON_HASHCODE(this->m_ax, this->m_ay, this->m_bx, this->m_by);
 		}
 		/* Read bone interpolator information from a file */
 		Bool ReadBoneInterpolator(BaseFile* const file)
 		{
-			if (!file->ReadUChar(&this->ax))
+			if (!file->ReadUChar(&this->m_ax))
 				return false;
 			file->Seek(3);
-			if (!file->ReadUChar(&this->ay))
+			if (!file->ReadUChar(&this->m_ay))
 				return false;
 			file->Seek(3);
-			if (!file->ReadUChar(&this->bx))
+			if (!file->ReadUChar(&this->m_bx))
 				return false;
 			file->Seek(3);
-			if (!file->ReadUChar(&this->by))
+			if (!file->ReadUChar(&this->m_by))
 				return false;
 			file->Seek(3);
+			m_isLinear = m_ax == m_ay && m_bx == m_by;
 			return true;
 		}
 		/* Read the camera interpolator information from the file. */
@@ -95,59 +141,60 @@ namespace mmd {
 			UInt32 tmp = 0;
 			if (!file->ReadUInt32(&tmp))
 				return false;
-			this->ax = UChar(((tmp & 0xFF) ^ 0x80) - 0x80);
-			this->bx = UChar((((tmp & 0xFF00) >> 8) ^ 0x80) - 0x80);
-			this->ay = UChar((((tmp & 0xFF0000) >> 16) ^ 0x80) - 0x80);
-			this->by = UChar((((tmp & 0xFF000000) >> 24) ^ 0x80) - 0x80);
+			this->m_ax = UChar(((tmp & 0xFF) ^ 0x80) - 0x80);
+			this->m_bx = UChar((((tmp & 0xFF00) >> 8) ^ 0x80) - 0x80);
+			this->m_ay = UChar((((tmp & 0xFF0000) >> 16) ^ 0x80) - 0x80);
+			this->m_by = UChar((((tmp & 0xFF000000) >> 24) ^ 0x80) - 0x80);
+			m_isLinear = m_ax == m_ay && m_bx == m_by;
 			return true;
 		}
 		/* Write the bone interpolator information to the file. */
 		Bool WriteBoneInterpolator(BaseFile* const file) const
 		{
-			if (!file->WriteUChar(this->ax))
+			if (!file->WriteUChar(this->m_ax))
 				return false;
-			if (!file->WriteUChar(this->ax))
+			if (!file->WriteUChar(this->m_ax))
 				return false;
-			if (!file->WriteUChar(this->ax))
+			if (!file->WriteUChar(this->m_ax))
 				return false;
-			if (!file->WriteUChar(this->ax))
+			if (!file->WriteUChar(this->m_ax))
 				return false;
-			if (!file->WriteUChar(this->ay))
+			if (!file->WriteUChar(this->m_ay))
 				return false;
-			if (!file->WriteUChar(this->ay))
+			if (!file->WriteUChar(this->m_ay))
 				return false;
-			if (!file->WriteUChar(this->ay))
+			if (!file->WriteUChar(this->m_ay))
 				return false;
-			if (!file->WriteUChar(this->ay))
+			if (!file->WriteUChar(this->m_ay))
 				return false;
-			if (!file->WriteUChar(this->bx))
+			if (!file->WriteUChar(this->m_bx))
 				return false;
-			if (!file->WriteUChar(this->bx))
+			if (!file->WriteUChar(this->m_bx))
 				return false;
-			if (!file->WriteUChar(this->bx))
+			if (!file->WriteUChar(this->m_bx))
 				return false;
-			if (!file->WriteUChar(this->bx))
+			if (!file->WriteUChar(this->m_bx))
 				return false;
-			if (!file->WriteUChar(this->by))
+			if (!file->WriteUChar(this->m_by))
 				return false;
-			if (!file->WriteUChar(this->by))
+			if (!file->WriteUChar(this->m_by))
 				return false;
-			if (!file->WriteUChar(this->by))
+			if (!file->WriteUChar(this->m_by))
 				return false;
-			if (!file->WriteUChar(this->by))
+			if (!file->WriteUChar(this->m_by))
 				return false;
 			return true;
 		}
 		/* Write the camera interpolator information to the file. */
 		Bool WriteCameraInterpolator(BaseFile* const file) const
 		{
-			if (!file->WriteUChar(this->ax))
+			if (!file->WriteUChar(this->m_ax))
 				return false;
-			if (!file->WriteUChar(this->bx))
+			if (!file->WriteUChar(this->m_bx))
 				return false;
-			if (!file->WriteUChar(this->ay))
+			if (!file->WriteUChar(this->m_ay))
 				return false;
-			if (!file->WriteUChar(this->by))
+			if (!file->WriteUChar(this->m_by))
 				return false;
 			return true;
 		}
