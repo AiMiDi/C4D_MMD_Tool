@@ -80,7 +80,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../res/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>26495;26439;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -100,7 +100,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../res/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DisableSpecificWarnings>26495;26439;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -186,13 +186,20 @@
     <ClCompile Include="..\..\..\..\source\BulletTest.cpp" />
     <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp" />
     <ClCompile Include="..\..\..\..\source\main.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_Control.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_model.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_utility.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_VMD_animation.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_VPD_pose.cpp" />
     <ClCompile Include="..\..\..\..\source\NameConversion.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDBoneRoot.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDJoint.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDJointRoot.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDMeshRoot.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDModel.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDRigid.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDRigidRoot.cpp" />
     <ClCompile Include="..\..\..\..\source\PluginRegister.cpp" />
+    <ClCompile Include="..\..\..\..\source\PMX.cpp" />
+    <ClCompile Include="..\..\..\..\source\TMMDBone.cpp" />
+    <ClCompile Include="..\..\..\..\source\Utility.cpp" />
+    <ClCompile Include="..\..\..\..\source\VMD.cpp" />
+    <ClCompile Include="..\..\..\..\source\VPD.cpp" />
     <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
     <ClCompile Include="..\generated\hxx\register.cpp" />
   </ItemGroup>
@@ -210,12 +217,19 @@
     <ClInclude Include="..\..\..\..\source\BulletTest.h" />
     <ClInclude Include="..\..\..\..\source\ImagesGUI.h" />
     <ClInclude Include="..\..\..\..\source\main.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_Control.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_model.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_utility.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_VMD_animation.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_VPD_pose.h" />
     <ClInclude Include="..\..\..\..\source\NameConversion.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDBoneRoot.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDJoint.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDJointRoot.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDMeshRoot.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDModel.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDRigid.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDRigidRoot.h" />
+    <ClInclude Include="..\..\..\..\source\PMX.h" />
+    <ClInclude Include="..\..\..\..\source\TMMDBone.h" />
+    <ClInclude Include="..\..\..\..\source\Utility.h" />
+    <ClInclude Include="..\..\..\..\source\VMD.h" />
+    <ClInclude Include="..\..\..\..\source\VPD.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\strings_en-US\c4d_strings.str" />

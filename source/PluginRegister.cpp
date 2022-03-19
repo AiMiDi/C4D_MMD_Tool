@@ -1,8 +1,15 @@
 ﻿#include "main.h"
-#include "MMD_PMX_model.h"
-#include "MMD_VMD_animation.h"
-#include "MMD_PMX_Control.h"
-#include "MMD_VPD_pose.h"
+#include "PMX.h"
+#include "VMD.h"
+#include "TMMDBone.h"
+#include "OMMDRigid.h"
+#include "OMMDJoint.h"
+#include "OMMDModel.h"
+#include "OMMDBoneRoot.h"
+#include "OMMDMeshRoot.h"
+#include "OMMDRigidRoot.h"
+#include "OMMDJointRoot.h"
+#include "VPD.h"
 
 #if API_VERSION >= 25000
 #define COMBO_BOX_W 253
@@ -1035,37 +1042,37 @@ Bool RegisterOMMDCamera()
 
 Bool RegisterOMMDRigid()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_RIGID, GeLoadString(IDS_O_MMD_RIGID), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDRigid::Alloc, "OMMDRigid"_s, AutoBitmap(Osphere), 0));
+	return(RegisterObjectPlugin(ID_O_MMD_RIGID, GeLoadString(IDS_O_MMD_RIGID), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDRigid::Alloc, "OMMDRigid"_s, AutoBitmap("OMMDRigid.png"_s), 0));
 }
 
 
 Bool RegisterOMMDJoint()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_JOINT, GeLoadString(IDS_O_MMD_JOINT), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDJoint::Alloc, "OMMDJoint"_s, AutoBitmap(Ocube), 0));
+	return(RegisterObjectPlugin(ID_O_MMD_JOINT, GeLoadString(IDS_O_MMD_JOINT), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDJoint::Alloc, "OMMDJoint"_s, AutoBitmap("OMMDJoint.png"_s), 0));
 }
 
 
 Bool RegisterOMMDMeshRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDMeshRoot::Alloc, "OMMDMeshRoot"_s, AutoBitmap(1022292), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDMeshRoot::Alloc, "OMMDMeshRoot"_s, AutoBitmap("OMMDMeshRoot.png"_s), 1));
 }
 
 
 Bool RegisterOMMDBoneRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDBoneRoot::Alloc, "OMMDBoneRoot"_s, AutoBitmap(1022292), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDBoneRoot::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 1));
 }
 
 
 Bool RegisterOMMDRigidRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_RIGID_ROOT, GeLoadString(IDS_O_MMD_RIGID_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDRigidRoot::Alloc, "OMMDRigidRoot"_s, AutoBitmap(1022292), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_RIGID_ROOT, GeLoadString(IDS_O_MMD_RIGID_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDRigidRoot::Alloc, "OMMDRigidRoot"_s, AutoBitmap("OMMDRigidRoot.png"_s), 1));
 }
 
 
 Bool RegisterOMMDJointRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_JOINT_ROOT, GeLoadString(IDS_O_MMD_JOINT_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDJointRoot::Alloc, "OMMDJointRoot"_s, AutoBitmap(1022292), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_JOINT_ROOT, GeLoadString(IDS_O_MMD_JOINT_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDJointRoot::Alloc, "OMMDJointRoot"_s, AutoBitmap("OMMDJointRoot.png"_s), 1));
 }
 
 
