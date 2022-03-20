@@ -1,8 +1,8 @@
 #include "BulletTest.h"
 #include <vector>
-static maxon::ThreadRefTemplate<mmd::BulletThread> g_bulletThread;
+static maxon::ThreadRefTemplate<tool::BulletThread> g_bulletThread;
 
-namespace mmd
+namespace tool
 {
 	Matrix4d InvZ(const Matrix4d& m)
 	{
@@ -229,7 +229,7 @@ namespace mmd
 		}
 
 		m_group = bc->GetInt32(RIGID_GROUP_ID);
-		PMXRigidBodyNonCollisionGroup groupMask(
+		mmd::PMXRigidBodyNonCollisionGroup groupMask(
 			bc->GetBool(RIGID_NON_COLLISION_GROUP_0),
 			bc->GetBool(RIGID_NON_COLLISION_GROUP_1),
 			bc->GetBool(RIGID_NON_COLLISION_GROUP_2),
@@ -582,7 +582,7 @@ Bool C4DBulletTest::Execute(BaseDocument* doc, GeDialog* parentManager)
 		if (!g_bulletThread)
 		{
 			/* create and start thread */
-			g_bulletThread = mmd::BulletThread::Create().GetValue();
+			g_bulletThread = tool::BulletThread::Create().GetValue();
 			iferr(g_bulletThread.Start())
 				return(false);
 		}

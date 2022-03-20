@@ -1,7 +1,7 @@
 ﻿#include "Utility.h"
 #include "iconv.h"
 
-namespace mmd {
+namespace utility {
 	inline maxon::Vector4d32 EulerToQuaternion(const maxon::Vector& euler) {
 
 		// pitch(H), roll(-P), yaw(Z)
@@ -125,6 +125,66 @@ namespace mmd {
 		strout.SetCString(outmen, -1, STRINGENCODING::UTF8);
 		return (true);
 	}
+	maxon::Result<void> SelectSuffixImportFile(Filename& fn, BaseFile* file, const String& suffix) {
+		if (fn == Filename() && !fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE)))
+		{
+			return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
+		}
+		if (file == nullptr)
+		{
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+			return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
+		}
+		if (!file->Open(fn, FILEOPEN::READ, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA))
+		{
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
+			return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR)));
+		}
+		if (fn.GetSuffix().ToLower().Compare(suffix) != maxon::COMPARERESULT::EQUAL)
+		{
+			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix));
+			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix));
+			return(maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix)));
+		}
+		return maxon::OK;
+	}
+	Bool RenameDialog::CreateLayout()
+	{
+		GroupBegin(1000, BFH_LEFT, 2, 1, ""_s, 0, 0, 10);
+		AddStaticText(10000, BFH_LEFT, 100, 10, GeLoadString(IDS_MSG_RENAME), BORDER_NONE);
+		AddEditText(10001, BFH_LEFT, 230, 10);
+		GroupEnd();
+		GroupBegin(1002, BFH_CENTER, 2, 1, ""_s, 0, 0, 20);
+		GroupSpace(50, 0);
+		AddButton(10002, BFH_LEFT, 80, 20, GeLoadString(IDS_MSG_RENAME_OK));
+		AddButton(10003, BFH_RIGHT, 80, 20, GeLoadString(IDS_MSG_RENAME_CANCEL));
+		GroupEnd();
+		return(true);
+	}
+	Bool RenameDialog::Command(Int32 id, const BaseContainer& msg)
+	{
+		switch (id)
+		{
+		case 10002:
+		{
+			GetString(10001, Rename);
+			Close();
+			break;
+		}
+		case 10003:
+		{
+			Close();
+			break;
+		}
+		default:
+			break;
+		}
+		return(true);
+	}
+}
+namespace mmd {
 	inline Bool ReadPMXText(BaseFile* const file, const Char& text_encoding, String& out_string)
 	{
 		iferr_scope_handler{
@@ -208,63 +268,5 @@ namespace mmd {
 		default:
 			return(0);
 		}
-	}
-	maxon::Result<void> SelectSuffixImportFile(Filename& fn, BaseFile* file, const String& suffix) {
-		if (fn == Filename() && !fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE)))
-		{
-			return(maxon::NullptrError(MAXON_SOURCE_LOCATION));
-		}
-		if (file == nullptr)
-		{
-			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR)));
-		}
-		if (!file->Open(fn, FILEOPEN::READ, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA))
-		{
-			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
-			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
-			return(maxon::UnexpectedError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR)));
-		}
-		if (fn.GetSuffix().ToLower().Compare(suffix) != maxon::COMPARERESULT::EQUAL)
-		{
-			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix));
-			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix));
-			return(maxon::IllegalArgumentError(MAXON_SOURCE_LOCATION, GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix)));
-		}
-		return maxon::OK;
-	}
-	Bool RenameDialog::CreateLayout()
-	{
-		GroupBegin(1000, BFH_LEFT, 2, 1, ""_s, 0, 0, 10);
-		AddStaticText(10000, BFH_LEFT, 100, 10, GeLoadString(IDS_MSG_RENAME), BORDER_NONE);
-		AddEditText(10001, BFH_LEFT, 230, 10);
-		GroupEnd();
-		GroupBegin(1002, BFH_CENTER, 2, 1, ""_s, 0, 0, 20);
-		GroupSpace(50, 0);
-		AddButton(10002, BFH_LEFT, 80, 20, GeLoadString(IDS_MSG_RENAME_OK));
-		AddButton(10003, BFH_RIGHT, 80, 20, GeLoadString(IDS_MSG_RENAME_CANCEL));
-		GroupEnd();
-		return(true);
-	}
-	Bool RenameDialog::Command(Int32 id, const BaseContainer& msg)
-	{
-		switch (id)
-		{
-		case 10002:
-		{
-			GetString(10001, Rename);
-			Close();
-			break;
-		}
-		case 10003:
-		{
-			Close();
-			break;
-		}
-		default:
-			break;
-		}
-		return(true);
 	}
 }

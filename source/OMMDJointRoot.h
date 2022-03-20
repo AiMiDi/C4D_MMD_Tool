@@ -2,7 +2,7 @@
 #include "Utility.h"
 #include "description/OMMDJointRoot.h"
 
-namespace mmd {
+namespace tool {
 	struct OMMDJointRoot_MSG
 	{
 		Int32	type = 0;

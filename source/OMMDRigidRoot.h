@@ -2,7 +2,7 @@
 #include "Utility.h"
 #include "description/OMMDRigidRoot.h"
 
-namespace mmd {
+namespace tool {
 	struct OMMDRigidRoot_MSG
 	{
 		Int32	type = 0;

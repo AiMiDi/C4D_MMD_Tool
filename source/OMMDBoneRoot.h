@@ -1,47 +1,65 @@
 #pragma once
 #include "Utility.h"
+#include "TMMDBone.h"
+#include "OMMDModel.h"
 #include "description/OMMDBoneRoot.h"
 
-namespace mmd {
-	struct OMMDBoneRoot_MSG
-	{
-		/*
-		type 0: updata BoneRoot;
-		type 1: set bone display type;
-		type 2: bone index change;
-		*/
-		Int32	type = 0;
-		Int32	DisplayType = BONE_DISPLAY_TYPE_ON;
-		BaseObject* BoneRoot = nullptr;
-		OMMDBoneRoot_MSG(Int32 type_ = 0, Int32 DisplayType_ = BONE_DISPLAY_TYPE_ON, BaseObject* BoneRoot_ = nullptr)
+namespace tool {
+	struct bone_morph_hub_data {
+		BaseTag* bone_tag = nullptr;
+		bone_morph_data* data = nullptr;
+
+		Bool SetStrength(const Float& strength)
 		{
-			type = type_;
-			DisplayType = DisplayType_;
-			BoneRoot = BoneRoot_;
+			return bone_tag->SetParameter(data->strength_id, strength, DESCFLAGS_SET::NONE);
 		}
 	};
-	struct bone_morph_hub_data {
-		const BaseTag* bone_tag = nullptr;
-		const bone_morph_data* data = nullptr;
+	/*
+type 0: updata BoneRoot;
+type 1: set bone display type;
+type 2: bone index change;
+type 3: bone morph change;
+*/
+	enum class OMMDBoneRoot_MSG_Type
+	{
+		DEFAULT,
+		SET_BONE_DISPLAY_TYPE,
+		BONEROOT_UPDATA,
+		BONE_MORPH_CHANGE
+	};
+	struct OMMDBoneRoot_MSG
+	{
+
+		OMMDBoneRoot_MSG_Type type = OMMDBoneRoot_MSG_Type::DEFAULT;
+		Int32	display_type = BONE_DISPLAY_TYPE_ON;
+		BaseObject* object = nullptr;
+		OMMDBoneRoot_MSG(
+			OMMDBoneRoot_MSG_Type type_ = OMMDBoneRoot_MSG_Type::DEFAULT,
+			Int32 display_type_ = BONE_DISPLAY_TYPE_ON,
+			BaseObject* BoneRoot_ = nullptr):
+			type(type_),
+			display_type(display_type_),
+			object(BoneRoot_){}
 	};
 	class OMMDBoneRoot : public ObjectData
 	{
 		friend class TMMDBone;
 		friend class OMMDRigid;
 		friend class OMMDJoint;
+		friend class BoneMorph;
 		Int64 name_cnt = 1;
-		BaseObject* RigidRoot = nullptr;
-		BaseObject* JointRoot = nullptr;
+		BaseObject* m_Model_ptr = nullptr;
+		BaseObject* m_RigidRoot_ptr = nullptr;
+		BaseObject* m_JointRoot_ptr = nullptr;
 		BaseContainer bone_items;
 		maxon::HashMap<Int32, BaseObject*> IndexToBoneMap;
 		maxon::HashMap<BaseObject*, Int32> BoneToIndexMap;
-		maxon::HashMap<String, bone_morph_hub_data> m_bone_morph_map;
+		maxon::HashMap<String, bone_morph_hub_data> m_bone_morph_map;		
 		OMMDBoneRoot() {}
 		~OMMDBoneRoot() {}
 		MAXON_DISALLOW_COPY_AND_ASSIGN(OMMDBoneRoot);
 		INSTANCEOF(OMMDBoneRoot, ObjectData)
 	public:
-		const maxon::HashMap<String, bone_morph_hub_data>& GetBoneMorphData() { return m_bone_morph_map; }
 		Bool Init(GeListNode* node) override;
 		Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 		Bool Write(GeListNode* node, HyperFile* hf) override;

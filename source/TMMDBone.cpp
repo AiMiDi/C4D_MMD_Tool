@@ -2,7 +2,8 @@
 #include "OMMDBoneRoot.h"
 #include "description/OMMDBoneRoot.h"
 
-inline Int32 mmd::TMMDBone::AddBondMorph(String morph_name)
+namespace tool {
+inline Int32 TMMDBone::AddBondMorph(String morph_name)
 {
 	if (morph_name.IsEmpty())
 	{
@@ -52,7 +53,7 @@ inline Int32 mmd::TMMDBone::AddBondMorph(String morph_name)
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
 	bc.SetData(DESC_PARENTGROUP, GeData{ CUSTOMDATATYPE_DESCID, button_grp_id });
 	DescID	rename_button_id = ddesc->Alloc(bc);
-	const auto& res = bone_morph_data_arr.AppendPtr(NewObj(mmd::bone_morph_data, grp_id, strength_id, translation_id, rotation_id, button_grp_id, delete_button_id, rename_button_id, morph_name).GetValue());
+	const auto& res = bone_morph_data_arr.AppendPtr(NewObj(bone_morph_data, grp_id, strength_id, translation_id, rotation_id, button_grp_id, delete_button_id, rename_button_id, morph_name).GetValue());
 	iferr(res)
 		return(-1);
 	Int32 index = (Int32)bone_morph_data_arr.GetIndex(*res.GetValue());
@@ -67,7 +68,7 @@ inline Int32 mmd::TMMDBone::AddBondMorph(String morph_name)
 	}
 	return(index);
 }
-Bool mmd::TMMDBone::SplineDataCallBack(Int32 cid, const void* data)
+Bool TMMDBone::SplineDataCallBack(Int32 cid, const void* data)
 {
 	/* 还有其他一些回调类型，我们在这里仅使用SPLINE_CALLBACK_CORE_MESSAGE */
 	if (cid == SPLINE_CALLBACK_CORE_MESSAGE)
@@ -104,7 +105,7 @@ Bool mmd::TMMDBone::SplineDataCallBack(Int32 cid, const void* data)
 	}
 	return(true);
 }
-Bool mmd::TMMDBone::GetInterpolator(const Int32& type, const Int32& frame_on, VMDInterpolator& interpolator) const
+Bool TMMDBone::GetInterpolator(const Int32& type, const Int32& frame_on, mmd::VMDInterpolator& interpolator) const
 {
 	switch (type)
 	{
@@ -179,7 +180,7 @@ Bool mmd::TMMDBone::GetInterpolator(const Int32& type, const Int32& frame_on, VM
 	}
 	return(true);
 }
-Bool mmd::TMMDBone::SetInterpolator(const Int32& type, const Int32& frame_on, VMDInterpolator&& interpolator, Bool cover)
+Bool TMMDBone::SetInterpolator(const Int32& type, const Int32& frame_on, mmd::VMDInterpolator&& interpolator, Bool cover)
 {
 	iferr_scope_handler{
 		return false;
@@ -316,7 +317,7 @@ Bool mmd::TMMDBone::SetInterpolator(const Int32& type, const Int32& frame_on, VM
 	}
 	return(true);
 }
-Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
+Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 	iferr_scope_handler{
 		return false;
 	};
@@ -495,7 +496,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			return false;
 	}
 	//最后一帧
-	if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, Curve_position_x->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+	if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, Curve_position_x->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 		return false;
 	}
 	// 循环第2到最后一个
@@ -529,7 +530,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			return false;
 	}
 	//最后一帧
-	if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, Curve_position_y->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+	if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, Curve_position_y->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 		return false;
 	}
 	// 循环第2到最后一个
@@ -562,7 +563,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			return false;
 	}
 	//最后一帧
-	if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, Curve_position_z->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+	if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, Curve_position_z->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 		return false;
 	}
 	// 循环第2到最后一个
@@ -597,7 +598,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 				return false;
 		}
 		//最后一帧
-		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_x->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_x->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 			return false;
 		}
 		// 循环第2到最后一个
@@ -631,7 +632,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 				return false;
 		}
 		//最后一帧
-		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_y->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_y->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 			return false;
 		}
 		// 循环第2到最后一个
@@ -665,7 +666,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 				return false;
 		}
 		//最后一帧
-		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_z->GetKey(frame_count)->GetTime().GetFrame(Fps), VMDInterpolator())) {
+		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_z->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 			return false;
 		}
 		// 循环第2到最后一个
@@ -690,7 +691,7 @@ Bool mmd::TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 	this->UpdateAllInterpolator(node);
 	return true;
 }
-inline Bool mmd::TMMDBone::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
+inline Bool TMMDBone::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 	iferr_scope_handler{
 		return false;
 	};
@@ -818,63 +819,63 @@ inline Bool mmd::TMMDBone::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 	switch (interpolator_type)
 	{
 	case (PMX_BONE_TAG_XCURVE): {
-		if (!this->SetInterpolator(interpolator_type, frame_on, VMDInterpolator(
+		if (!this->SetInterpolator(interpolator_type, frame_on, mmd::VMDInterpolator(
 			(UChar)spline->GetKnot(0)->vTangentRight.x, (UChar)spline->GetKnot(0)->vTangentRight.y,
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.x),
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.y))))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
 		break;
 	}
 	case (PMX_BONE_TAG_YCURVE): {
-		if (!this->SetInterpolator(interpolator_type, frame_on, VMDInterpolator(
+		if (!this->SetInterpolator(interpolator_type, frame_on, mmd::VMDInterpolator(
 			(UChar)spline->GetKnot(0)->vTangentRight.x, (UChar)spline->GetKnot(0)->vTangentRight.y,
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.x),
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.y))))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
 		break;
 	}
 	case (PMX_BONE_TAG_ZCURVE): {
-		if (!this->SetInterpolator(interpolator_type, frame_on, VMDInterpolator(
+		if (!this->SetInterpolator(interpolator_type, frame_on, mmd::VMDInterpolator(
 			(UChar)spline->GetKnot(0)->vTangentRight.x, (UChar)spline->GetKnot(0)->vTangentRight.y,
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.x),
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.y))))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
 		break;
 	}
 	case (PMX_BONE_TAG_RCURVE): {
-		if (!this->SetInterpolator(interpolator_type, frame_on, VMDInterpolator(
+		if (!this->SetInterpolator(interpolator_type, frame_on, mmd::VMDInterpolator(
 			(UChar)spline->GetKnot(0)->vTangentRight.x, (UChar)spline->GetKnot(0)->vTangentRight.y,
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.x),
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.y))))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
-		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_on, VMDInterpolator()))
+		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, frame_on, mmd::VMDInterpolator()))
 			return false;
 		break;
 	}
 	case (PMX_BONE_TAG_ACURVE): {
-		if (!this->SetInterpolator(interpolator_type, frame_on, VMDInterpolator(
+		if (!this->SetInterpolator(interpolator_type, frame_on, mmd::VMDInterpolator(
 			(UChar)spline->GetKnot(0)->vTangentRight.x, (UChar)spline->GetKnot(0)->vTangentRight.y,
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.x),
 			(UChar)127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.y))))
@@ -887,7 +888,7 @@ inline Bool mmd::TMMDBone::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 	this->UpdateAllInterpolator(node);
 	return true;
 }
-inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
+inline Bool TMMDBone::UpdateAllInterpolator(GeListNode* node)
 {
 	if (obj == nullptr)
 	{
@@ -950,7 +951,7 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		interpolator_ptr = interpolator_X_map.Find(frame_on);
 		if (interpolator_ptr != nullptr)
 		{
-			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
+			const mmd::VMDInterpolator& interpolator = interpolator_ptr->GetValue();
 			key = Curve_position_x->FindKey(time);
 			if (key != nullptr)
 			{
@@ -964,10 +965,10 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 					}
 					else {
 						value_between_frame = next_key->GetValue() - key->GetValue();
-						next_key->SetTimeLeft(Curve_position_x, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
-						next_key->SetValueLeft(Curve_position_x, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
-						key->SetTimeRight(Curve_position_x, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
-						key->SetValueRight(Curve_position_x, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+						next_key->SetTimeLeft(Curve_position_x, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_position_x, value_between_frame * Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_position_x, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_position_x, value_between_frame * (Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ay)) / 127.0));
 					}
 				}
 			}
@@ -975,7 +976,7 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		interpolator_ptr = interpolator_Y_map.Find(frame_on);
 		if (interpolator_ptr != nullptr)
 		{
-			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
+			const mmd::VMDInterpolator& interpolator = interpolator_ptr->GetValue();
 			key = Curve_position_y->FindKey(time);
 			if (key != nullptr)
 			{
@@ -989,10 +990,10 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 					}
 					else {
 						value_between_frame = next_key->GetValue() - key->GetValue();
-						next_key->SetTimeLeft(Curve_position_y, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
-						next_key->SetValueLeft(Curve_position_y, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
-						key->SetTimeRight(Curve_position_y, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
-						key->SetValueRight(Curve_position_y, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+						next_key->SetTimeLeft(Curve_position_y, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_position_y, value_between_frame * Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_position_y, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_position_y, value_between_frame * (Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ay)) / 127.0));
 					}
 				}
 			}
@@ -1000,7 +1001,7 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		interpolator_ptr = interpolator_Z_map.Find(frame_on);
 		if (interpolator_ptr != nullptr)
 		{
-			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
+			const mmd::VMDInterpolator& interpolator = interpolator_ptr->GetValue();
 			key = Curve_position_z->FindKey(time);
 			if (key != nullptr)
 			{
@@ -1014,10 +1015,10 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 					}
 					else {
 						value_between_frame = next_key->GetValue() - key->GetValue();
-						next_key->SetTimeLeft(Curve_position_z, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
-						next_key->SetValueLeft(Curve_position_z, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
-						key->SetTimeRight(Curve_position_z, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
-						key->SetValueRight(Curve_position_z, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+						next_key->SetTimeLeft(Curve_position_z, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_position_z, value_between_frame * Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_position_z, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_position_z, value_between_frame * (Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ay)) / 127.0));
 					}
 				}
 			}
@@ -1025,7 +1026,7 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		interpolator_ptr = interpolator_R_map.Find(frame_on);
 		if (interpolator_ptr != nullptr)
 		{
-			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
+			const mmd::VMDInterpolator& interpolator = interpolator_ptr->GetValue();
 			key = Curve_rotation_x->FindKey(time);
 			if (key != nullptr)
 			{
@@ -1039,10 +1040,10 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 					}
 					else {
 						value_between_frame = next_key->GetValue() - key->GetValue();
-						next_key->SetTimeLeft(Curve_rotation_x, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
-						next_key->SetValueLeft(Curve_rotation_x, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
-						key->SetTimeRight(Curve_rotation_x, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
-						key->SetValueRight(Curve_rotation_x, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+						next_key->SetTimeLeft(Curve_rotation_x, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_rotation_x, value_between_frame * Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_rotation_x, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_rotation_x, value_between_frame * (Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ay)) / 127.0));
 					}
 				}
 			}
@@ -1050,7 +1051,7 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		interpolator_ptr = interpolator_R_map.Find(frame_on);
 		if (interpolator_ptr != nullptr)
 		{
-			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
+			const mmd::VMDInterpolator& interpolator = interpolator_ptr->GetValue();
 			key = Curve_rotation_y->FindKey(time);
 			if (key != nullptr)
 			{
@@ -1064,10 +1065,10 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 					}
 					else {
 						value_between_frame = next_key->GetValue() - key->GetValue();
-						next_key->SetTimeLeft(Curve_rotation_y, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
-						next_key->SetValueLeft(Curve_rotation_y, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
-						key->SetTimeRight(Curve_rotation_y, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
-						key->SetValueRight(Curve_rotation_y, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+						next_key->SetTimeLeft(Curve_rotation_y, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_rotation_y, value_between_frame * Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_rotation_y, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_rotation_y, value_between_frame * (Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ay)) / 127.0));
 					}
 				}
 			}
@@ -1075,7 +1076,7 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		interpolator_ptr = interpolator_R_map.Find(frame_on);
 		if (interpolator_ptr != nullptr)
 		{
-			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
+			const mmd::VMDInterpolator& interpolator = interpolator_ptr->GetValue();
 			key = Curve_rotation_z->FindKey(time);
 			if (key != nullptr)
 			{
@@ -1089,10 +1090,10 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 					}
 					else {
 						value_between_frame = next_key->GetValue() - key->GetValue();
-						next_key->SetTimeLeft(Curve_rotation_z, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::bx) - 127.0), 127.0));
-						next_key->SetValueLeft(Curve_rotation_z, value_between_frame * Float(interpolator.GetValue(VMDInterpolator::PartType::by) - 127) / 127.0);
-						key->SetTimeRight(Curve_rotation_z, time_between_frame * BaseTime(Float(interpolator.GetValue(VMDInterpolator::PartType::ax)), 127.0));
-						key->SetValueRight(Curve_rotation_z, value_between_frame * (Float(interpolator.GetValue(VMDInterpolator::PartType::ay)) / 127.0));
+						next_key->SetTimeLeft(Curve_rotation_z, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::bx) - 127.0), 127.0));
+						next_key->SetValueLeft(Curve_rotation_z, value_between_frame * Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::by) - 127) / 127.0);
+						key->SetTimeRight(Curve_rotation_z, time_between_frame * BaseTime(Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ax)), 127.0));
+						key->SetValueRight(Curve_rotation_z, value_between_frame * (Float(interpolator.GetValue(mmd::VMDInterpolator::PartType::ay)) / 127.0));
 					}
 				}
 			}
@@ -1100,7 +1101,7 @@ inline Bool mmd::TMMDBone::UpdateAllInterpolator(GeListNode* node)
 	}
 	return(true);
 }
-inline Bool mmd::TMMDBone::DeleteKeyFrame(Int32 frame_on, GeListNode* node) {
+inline Bool TMMDBone::DeleteKeyFrame(Int32 frame_on, GeListNode* node) {
 	if (obj == nullptr)
 	{
 		return(false);
@@ -1181,7 +1182,7 @@ inline Bool mmd::TMMDBone::DeleteKeyFrame(Int32 frame_on, GeListNode* node) {
 	}
 	return true;
 }
-inline Bool  mmd::TMMDBone::DeleteAllKeyFrame(GeListNode* node) {
+inline Bool  TMMDBone::DeleteAllKeyFrame(GeListNode* node) {
 	if (obj == nullptr)
 	{
 		return(false);
@@ -1213,7 +1214,7 @@ inline Bool  mmd::TMMDBone::DeleteAllKeyFrame(GeListNode* node) {
 	obj->SetRelRot(Vector());
 	return true;
 }
-inline Bool mmd::TMMDBone::InitInterpolator(GeListNode* node)
+inline Bool TMMDBone::InitInterpolator(GeListNode* node)
 {
 	if (node == nullptr)
 	{
@@ -1227,7 +1228,7 @@ inline Bool mmd::TMMDBone::InitInterpolator(GeListNode* node)
 		spline->AdaptRange(0.0, 127.0, 127.0, 0.0, 127.0, 127.0);
 		spline->InsertKnot(0.0, 0.0, FLAG_KNOT_LOCK_X | FLAG_KNOT_LOCK_Y);
 		spline->InsertKnot(127.0, 127.0, FLAG_KNOT_LOCK_X | FLAG_KNOT_LOCK_Y);
-		spline->SetUserCallback(mmd::TMMDBone::SplineDataCallBack, nullptr);
+		spline->SetUserCallback(TMMDBone::SplineDataCallBack, nullptr);
 		CustomSplineKnot* a = spline->GetKnot(0);
 		CustomSplineKnot* b = spline->GetKnot(spline->GetKnotCount() - 1);
 		a->interpol = CustomSplineKnotInterpolation::CustomSplineKnotInterpolationBezier;
@@ -1238,7 +1239,7 @@ inline Bool mmd::TMMDBone::InitInterpolator(GeListNode* node)
 	bc->SetData(PMX_BONE_TAG_SPLINE, data);
 	return(true);
 }
-Bool mmd::TMMDBone::Init(GeListNode* node)
+Bool TMMDBone::Init(GeListNode* node)
 {
 	if (node == nullptr)
 		return(false);
@@ -1275,7 +1276,7 @@ Bool mmd::TMMDBone::Init(GeListNode* node)
 		return(false);
 	return(true);
 }
-Bool mmd::TMMDBone::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
+Bool TMMDBone::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
 {
 	if (id[0].id == PMX_BONE_TAG_FRAME_ON)
 	{
@@ -1369,7 +1370,7 @@ Bool mmd::TMMDBone::GetDEnabling(GeListNode* node, const DescID& id, const GeDat
 	}
 	return(SUPER::GetDEnabling(node, id, t_data, flags, itemdesc));
 }
-EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
+EXECUTIONRESULT TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (tag == nullptr || op == nullptr)
 	{
@@ -1475,9 +1476,9 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 		else {
 			if (pred_obj == nullptr)
 			{
-				if (this->BoneRoot == nullptr) {
-					this->BoneRoot = up_obj;
-					op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, 1, 0, up_obj).GetValue());
+				if (this->m_BoneRoot_ptr == nullptr) {
+					this->m_BoneRoot_ptr = up_obj;
+					op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONEROOT_UPDATA, 0, up_obj).GetValue());
 				}
 				bc->SetString(PMX_BONE_INDEX, "0"_s);
 			}
@@ -1510,13 +1511,13 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 		}
 	}
 	else {
-		this->BoneRoot = nullptr;
-		op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, 1, 0, nullptr).GetValue());
+		this->m_BoneRoot_ptr = nullptr;
+		op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONEROOT_UPDATA, 0, nullptr).GetValue());
 		bc->SetString(PMX_BONE_INDEX, "0"_s);
 	}
 	Int32 now_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
-	if (now_index != pred_index && this->BoneRoot != nullptr) {
-		this->BoneRoot->Message(ID_T_MMD_BONE, nullptr);
+	if (now_index != pred_index && this->m_BoneRoot_ptr != nullptr) {
+		this->m_BoneRoot_ptr->Message(ID_T_MMD_BONE, nullptr);
 	}
 	Int32	frame_on = bc->GetInt32(PMX_BONE_TAG_FRAME_ON);
 	Int32	curve_type = bc->GetInt32(PMX_BONE_TAG_CURVE_TYPE);
@@ -1531,8 +1532,8 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 			if (interpolator_x_ptr != nullptr)
 			{
 				mmd::VMDInterpolator& xCurve = interpolator_x_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(xCurve.GetValue(VMDInterpolator::PartType::ax), xCurve.GetValue(VMDInterpolator::PartType::ay), 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(xCurve.GetValue(VMDInterpolator::PartType::by) - 127., xCurve.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
+				spline->GetKnot(0)->vTangentRight = Vector(xCurve.GetValue(mmd::VMDInterpolator::PartType::ax), xCurve.GetValue(mmd::VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(xCurve.GetValue(mmd::VMDInterpolator::PartType::by) - 127., xCurve.GetValue(mmd::VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1545,8 +1546,8 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 			if (interpolator_y_ptr != nullptr)
 			{
 				mmd::VMDInterpolator& yCurve = interpolator_y_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(yCurve.GetValue(VMDInterpolator::PartType::ax), yCurve.GetValue(VMDInterpolator::PartType::ay), 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(yCurve.GetValue(VMDInterpolator::PartType::by) - 127., yCurve.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
+				spline->GetKnot(0)->vTangentRight = Vector(yCurve.GetValue(mmd::VMDInterpolator::PartType::ax), yCurve.GetValue(mmd::VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(yCurve.GetValue(mmd::VMDInterpolator::PartType::by) - 127., yCurve.GetValue(mmd::VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1559,8 +1560,8 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 			if (interpolator_z_ptr != nullptr)
 			{
 				mmd::VMDInterpolator& zCurve = interpolator_z_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(zCurve.GetValue(VMDInterpolator::PartType::ax), zCurve.GetValue(VMDInterpolator::PartType::ay), 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(zCurve.GetValue(VMDInterpolator::PartType::by) - 127., zCurve.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
+				spline->GetKnot(0)->vTangentRight = Vector(zCurve.GetValue(mmd::VMDInterpolator::PartType::ax), zCurve.GetValue(mmd::VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(zCurve.GetValue(mmd::VMDInterpolator::PartType::by) - 127., zCurve.GetValue(mmd::VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1573,8 +1574,8 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 			if (interpolator_r_ptr != nullptr)
 			{
 				mmd::VMDInterpolator& interpolator_rotation = interpolator_r_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(interpolator_rotation.GetValue(VMDInterpolator::PartType::ax), interpolator_rotation.GetValue(VMDInterpolator::PartType::ay), 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_rotation.GetValue(VMDInterpolator::PartType::by) - 127., interpolator_rotation.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
+				spline->GetKnot(0)->vTangentRight = Vector(interpolator_rotation.GetValue(mmd::VMDInterpolator::PartType::ax), interpolator_rotation.GetValue(mmd::VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(interpolator_rotation.GetValue(mmd::VMDInterpolator::PartType::by) - 127., interpolator_rotation.GetValue(mmd::VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1587,8 +1588,8 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 			if (interpolator_a_ptr != nullptr)
 			{
 				mmd::VMDInterpolator& aCurve = interpolator_a_ptr->GetValue();
-				spline->GetKnot(0)->vTangentRight = Vector(aCurve.GetValue(VMDInterpolator::PartType::ax), aCurve.GetValue(VMDInterpolator::PartType::ay), 0.);
-				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(aCurve.GetValue(VMDInterpolator::PartType::by) - 127., aCurve.GetValue(VMDInterpolator::PartType::by) - 127., 0.);
+				spline->GetKnot(0)->vTangentRight = Vector(aCurve.GetValue(mmd::VMDInterpolator::PartType::ax), aCurve.GetValue(mmd::VMDInterpolator::PartType::ay), 0.);
+				spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft = Vector(aCurve.GetValue(mmd::VMDInterpolator::PartType::by) - 127., aCurve.GetValue(mmd::VMDInterpolator::PartType::by) - 127., 0.);
 			}
 			else {
 				spline->GetKnot(0)->vTangentRight = Vector(20., 20., 0.);
@@ -1655,7 +1656,7 @@ EXECUTIONRESULT mmd::TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObje
 
 	return(EXECUTIONRESULT::OK);
 }
-Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
+Bool TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
 	if (bc == nullptr)
@@ -1666,7 +1667,7 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 	{
 	case PMX_BONE_TAG_SPLINE:
 	{
-		((SplineData*)t_data.GetCustomDataType(CUSTOMDATATYPE_SPLINE))->SetUserCallback(mmd::TMMDBone::SplineDataCallBack, nullptr);
+		((SplineData*)t_data.GetCustomDataType(CUSTOMDATATYPE_SPLINE))->SetUserCallback(TMMDBone::SplineDataCallBack, nullptr);
 		break;
 	}
 	case PMX_BONE_ROTATABLE:
@@ -1844,11 +1845,11 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
 	{
 		if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_LINK, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
-			if (this->BoneRoot != nullptr) {
+			if (this->m_BoneRoot_ptr != nullptr) {
 				BaseLink* inherit_bone_parent_link = t_data.GetBaseLink();
 				if (inherit_bone_parent_link != nullptr) {
 					inherit_bone_parent = static_cast<BaseObject*>(inherit_bone_parent_link->GetLink(GetActiveDocument()));
-					auto inherit_bone_parent_index_ptr = this->BoneRoot->GetNodeData<OMMDBoneRoot>()->BoneToIndexMap.Find(inherit_bone_parent);
+					auto inherit_bone_parent_index_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->BoneToIndexMap.Find(inherit_bone_parent);
 					if (inherit_bone_parent_index_ptr != nullptr) {
 						bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index_ptr->GetValue());
 					}
@@ -1860,9 +1861,9 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
 	{
 		if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_INDEX, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
-			if (this->BoneRoot != nullptr) {
+			if (this->m_BoneRoot_ptr != nullptr) {
 				Int32 inherit_bone_parent_index = t_data.GetInt32();
-				auto inherit_bone_parent_link_ptr = this->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(inherit_bone_parent_index);
+				auto inherit_bone_parent_link_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(inherit_bone_parent_index);
 				if (inherit_bone_parent_link_ptr != nullptr) {
 					BaseLink* inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
 					if (inherit_bone_parent_link == nullptr) {
@@ -1900,7 +1901,7 @@ Bool mmd::TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeDa
 	}
 	return(SUPER::SetDParameter(node, id, t_data, flags));
 }
-inline Bool mmd::TMMDBone::RefreshColor(GeListNode* node, BaseObject* op)
+inline Bool TMMDBone::RefreshColor(GeListNode* node, BaseObject* op)
 {
 	if (op == nullptr)
 	{
@@ -1954,7 +1955,7 @@ inline Bool mmd::TMMDBone::RefreshColor(GeListNode* node, BaseObject* op)
 	}
 	return(true);
 }
-Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
+Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
 		return(true);
@@ -2115,11 +2116,11 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 		case PMX_BONE_INHERIT_BONE_PARENT_LINK:
 		{
 			if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_LINK, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
-				if (this->BoneRoot != nullptr) {
+				if (this->m_BoneRoot_ptr != nullptr) {
 					BaseLink* inherit_bone_parent_link = bc->GetBaseLink(id);
 					if (inherit_bone_parent_link != nullptr) {
 						inherit_bone_parent = static_cast<BaseObject*>(inherit_bone_parent_link->GetLink(GetActiveDocument()));
-						auto inherit_bone_parent_index_ptr = this->BoneRoot->GetNodeData<OMMDBoneRoot>()->BoneToIndexMap.Find(inherit_bone_parent);
+						auto inherit_bone_parent_index_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->BoneToIndexMap.Find(inherit_bone_parent);
 						if (inherit_bone_parent_index_ptr != nullptr) {
 							bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index_ptr->GetValue());
 						}
@@ -2131,9 +2132,9 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 		case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
 		{
 			if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_INDEX, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
-				if (this->BoneRoot != nullptr) {
+				if (this->m_BoneRoot_ptr != nullptr) {
 					Int32 inherit_bone_parent_index = bc->GetInt32(id);
-					auto inherit_bone_parent_link_ptr = this->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(inherit_bone_parent_index);
+					auto inherit_bone_parent_link_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(inherit_bone_parent_index);
 					if (inherit_bone_parent_link_ptr != nullptr) {
 						BaseLink* inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
 						if (inherit_bone_parent_link == nullptr) {
@@ -2218,7 +2219,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 					}
 					if (dc->_descId == id.button_rename_id)
 					{
-						RenameDialog dlg;
+						utility::RenameDialog dlg;
 						dlg.Open(DLG_TYPE::MODAL, 99999, -1, -1, 0, 0);
 						if (!dlg.Rename.IsEmpty())
 						{
@@ -2319,9 +2320,9 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 		{
 			switch (msg->type)
 			{
-			case 0:
+			case OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE:
 			{
-				switch (msg->DisplayType)
+				switch (msg->display_type)
 				{
 				case BONE_DISPLAY_TYPE_MOVABLE:
 				{
@@ -2395,9 +2396,9 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 				}
 				break;
 			}
-			case 1:
+			case OMMDBoneRoot_MSG_Type::BONEROOT_UPDATA:
 			{
-				this->BoneRoot = msg->BoneRoot;
+				this->m_BoneRoot_ptr = msg->object;
 				if (obj != nullptr) {
 					GeData		Ge_data;
 					BaseObject* up_obj = obj->GetUp();
@@ -2455,8 +2456,8 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 						bc->SetString(PMX_BONE_INDEX, "0"_s);
 					}
 					Int32 now_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
-					if (now_index != pred_index && this->BoneRoot != nullptr)
-						this->BoneRoot->Message(ID_T_MMD_BONE, nullptr);
+					if (now_index != pred_index && this->m_BoneRoot_ptr != nullptr)
+						this->m_BoneRoot_ptr->Message(ID_T_MMD_BONE, nullptr);
 				}
 				break;
 			}
@@ -2472,7 +2473,7 @@ Bool mmd::TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 	}
 	return(true);
 }
-Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level)
+Bool TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
 		return(false);
@@ -2484,7 +2485,7 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return false;
 		if (!bone_root_link->Read(hf))
 			return(false);
-		this->BoneRoot = static_cast<BaseObject*>(bone_root_link->ForceGetLink());
+		this->m_BoneRoot_ptr = static_cast<BaseObject*>(bone_root_link->ForceGetLink());
 	}
 	if (!hf->ReadInt32(&this->bone_morph_name_index))
 		return(false);
@@ -2602,12 +2603,12 @@ Bool mmd::TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	}
 	return(SUPER::Read(node, hf, level));
 }
-Bool mmd::TMMDBone::Write(GeListNode* node, HyperFile* hf)
+Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 {
 	AutoAlloc<BaseLink> bone_root_link;
 	if (bone_root_link == nullptr)
 		return false;
-	bone_root_link->SetLink(this->BoneRoot);
+	bone_root_link->SetLink(this->m_BoneRoot_ptr);
 	if (!bone_root_link->Write(hf))
 		return(false);
 	if (!hf->WriteInt32(this->bone_morph_name_index))
@@ -2704,7 +2705,7 @@ Bool mmd::TMMDBone::Write(GeListNode* node, HyperFile* hf)
 	}
 	return(SUPER::Write(node, hf));
 }
-void mmd::TMMDBone::Free(GeListNode* node)
+void TMMDBone::Free(GeListNode* node)
 {
 	this->interpolator_X_map.Reset();
 	this->interpolator_Y_map.Reset();
@@ -2712,4 +2713,5 @@ void mmd::TMMDBone::Free(GeListNode* node)
 	this->interpolator_R_map.Reset();
 	this->interpolator_A_map.Reset();
 	this->bone_morph_data_arr.Reset();
+}
 }

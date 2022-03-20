@@ -18,6 +18,8 @@ namespace mmd {
 		String	    name = String();
 		Float32		weight = Float32();
 	};
+}
+namespace tool {
 	struct VPD_pose_import_settings {
 		Float	position_multiple = 8.5;
 		Bool    import_motion = true;
@@ -33,8 +35,8 @@ namespace mmd {
 		MAXON_DISALLOW_COPY_AND_ASSIGN(VPD_pose);
 	private:	
 		String model_name = String();
-		maxon::PointerArray<VPDBoneData>	bones;
-		maxon::PointerArray<VPDMorphData>	morphs;
+		maxon::PointerArray<mmd::VPDBoneData>	bones;
+		maxon::PointerArray<mmd::VPDMorphData>	morphs;
 		/* 用于从文件导入到对象 */
 		maxon::Result<void> LoadFromFile(Filename& fn);
 		/* 用于将对象保存到文件 */

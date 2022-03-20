@@ -236,6 +236,57 @@
     <ClInclude Include="..\..\..\..\source\VPD.h" />
     <ClInclude Include="..\..\..\..\source\NameConversion.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\..\..\res\description\OMMDBoneRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\description\OMMDCamera.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\description\OMMDJoint.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\description\OMMDJointRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\description\OMMDMeshRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\description\OMMDModel.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\description\OMMDRigid.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\description\OMMDRigidRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\description\TMMDBone.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\res\strings_en-US\c4d_strings.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDBoneRoot.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDCamera.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJoint.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJointRoot.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDMeshRoot.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDModel.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigid.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigidRoot.str" />
+    <None Include="..\..\..\..\res\strings_en-US\description\TMMDBone.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\c4d_strings.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDBoneRoot.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDCamera.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJoint.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJointRoot.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDMeshRoot.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDModel.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigid.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigidRoot.str" />
+    <None Include="..\..\..\..\res\strings_zh-CN\description\TMMDBone.str" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">
     <RemoveDir Directories="$(ProjectDir)..\generated" ContinueOnError="true" />

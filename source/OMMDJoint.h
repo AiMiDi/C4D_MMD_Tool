@@ -3,7 +3,7 @@
 #include "description/OMMDJoint.h"
 #include "description/OMMDJointRoot.h"
 
-namespace mmd {
+namespace tool {
 	class OMMDJoint : public ObjectData
 	{
 	private:

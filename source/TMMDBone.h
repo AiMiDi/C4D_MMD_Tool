@@ -2,7 +2,7 @@
 #include "Utility.h"
 #include "description/TMMDBone.h"
 
-namespace mmd {
+namespace tool {
 	struct bone_morph_data
 	{
 		DescID	grp_id;
@@ -54,7 +54,7 @@ namespace mmd {
 		/* 赋予亲骨骼对象 */
 		BaseObject* inherit_bone_parent = nullptr;
 		/* 骨骼根对象 */
-		BaseObject* BoneRoot = nullptr;
+		BaseObject* m_BoneRoot_ptr = nullptr;
 		/* 是否是物理骨骼 */
 		Bool	Is_physical = false;
 		/* 用于处理骨骼表情 */
@@ -73,9 +73,9 @@ namespace mmd {
 		/* 用于限制SplineData的回调函数 */
 		static Bool SplineDataCallBack(Int32 cid, const void* data);
 		/* 获取曲线值 */
-		Bool GetInterpolator(const Int32& type, const Int32& frame_on, VMDInterpolator& interpolator) const;
+		Bool GetInterpolator(const Int32& type, const Int32& frame_on, mmd::VMDInterpolator& interpolator) const;
 		/* 设置曲线值 */
-		Bool SetInterpolator(const Int32& type, const Int32& frame_on, VMDInterpolator&& interpolator, Bool cover = true);
+		Bool SetInterpolator(const Int32& type, const Int32& frame_on, mmd::VMDInterpolator&& interpolator, Bool cover = true);
 		Bool AutoRegisterKeyFrame(Int32 use_rotation = 0, GeListNode* node = nullptr);
 		/* 注册关键帧 */
 		Bool RegisterKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
@@ -107,7 +107,7 @@ namespace mmd {
 		}
 		void SetRootObject(BaseObject* obj_)
 		{
-			this->BoneRoot = obj_;
+			this->m_BoneRoot_ptr = obj_;
 		}
 		Bool SetBondMorphTranslation(Int32 id, Vector translation)
 		{
@@ -129,7 +129,7 @@ namespace mmd {
 		{
 			return(bone_morph_data_arr.GetCount());
 		}
-		const bone_morph_data* GetMorph(Int32 index)
+		bone_morph_data* GetMorph(Int32 index)
 		{
 			if (index >= bone_morph_data_arr.GetCount()) 
 			{

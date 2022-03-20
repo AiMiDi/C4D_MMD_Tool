@@ -16,10 +16,10 @@ namespace mmd {
 		UInt32		frame_no = 0;                                       /* Frame of action. */
 		Vector32	position = Vector32();                              /* The action corresponds to the bone position. */
 		Vector4d32	rotation = Vector4d32();                            /* The action corresponds to the rotation of the bone (quad). */
-		VMDInterpolator	interpolator_position_x = VMDInterpolator();    /* X-axis displacement action interpolation. */
-		VMDInterpolator	interpolator_position_y = VMDInterpolator();    /* Y-axis displacement action interpolation. */
-		VMDInterpolator	interpolator_position_z = VMDInterpolator();    /* Z-axis displacement action interpolation. */
-		VMDInterpolator	interpolator_rotation = VMDInterpolator();    /* Rotation action interpolation. */
+		mmd::VMDInterpolator interpolator_position_x = mmd::VMDInterpolator();    /* X-axis displacement action interpolation. */
+		mmd::VMDInterpolator interpolator_position_y = mmd::VMDInterpolator();    /* Y-axis displacement action interpolation. */
+		mmd::VMDInterpolator interpolator_position_z = mmd::VMDInterpolator();    /* Z-axis displacement action interpolation. */
+		mmd::VMDInterpolator interpolator_rotation = mmd::VMDInterpolator();    /* Rotation action interpolation. */
 	};
 	/* MMD style expression animation. */
 	struct VMDMorphAnimation
@@ -35,12 +35,12 @@ namespace mmd {
 		Float32		distance = 0.f;                                     /* Camera view distance. */
 		Vector32	position = Vector32();                              /* View position of the camera. */
 		Vector32	rotation = Vector32();                              /* Camera view rotation (Euler Angle of x and Y reversal) */
-		VMDInterpolator	interpolator_position_x = VMDInterpolator();    /* X-axis displacement action interpolation. */
-		VMDInterpolator	interpolator_position_y = VMDInterpolator();    /* Y-axis displacement action interpolation. */
-		VMDInterpolator	interpolator_position_z = VMDInterpolator();    /* Z-axis displacement action interpolation. */
-		VMDInterpolator	interpolator_rotation = VMDInterpolator();    /* Rotation action interpolation. */
-		VMDInterpolator	interpolator_position_d = VMDInterpolator();    /* Distance action interpolation. */
-		VMDInterpolator	interpolator_position_v = VMDInterpolator();    /* View Angle motion interpolation */
+		mmd::VMDInterpolator interpolator_position_x = mmd::VMDInterpolator();    /* X-axis displacement action interpolation. */
+		mmd::VMDInterpolator interpolator_position_y = mmd::VMDInterpolator();    /* Y-axis displacement action interpolation. */
+		mmd::VMDInterpolator interpolator_position_z = mmd::VMDInterpolator();    /* Z-axis displacement action interpolation. */
+		mmd::VMDInterpolator interpolator_rotation = mmd::VMDInterpolator();    /* Rotation action interpolation. */
+		mmd::VMDInterpolator interpolator_position_d = mmd::VMDInterpolator();    /* Distance action interpolation. */
+		mmd::VMDInterpolator interpolator_position_v = mmd::VMDInterpolator();    /* View Angle motion interpolation */
 		UInt32		viewing_angle = 0;                                  /* View Angle. */
 		UChar		perspective = 0;                                    /* 0:on, 1:off */
 	};
@@ -76,7 +76,7 @@ namespace mmd {
 		/* Constructor function */
 		VMDModelControllerAnimation(UInt32 frame_no_ = 0, Bool show_ = true) :frame_no(frame_no_), show(show_) {}
 		/* Copy constructor */
-		VMDModelControllerAnimation(const mmd::VMDModelControllerAnimation& src)
+		VMDModelControllerAnimation(const VMDModelControllerAnimation& src)
 		{
 			if (&src == this)
 			{
@@ -87,7 +87,7 @@ namespace mmd {
 			this->IKs_Info.CopyFrom(src.IKs_Info) iferr_ignore("err"_s);
 		}
 		/* operator= */
-		VMDModelControllerAnimation& operator =(const mmd::VMDModelControllerAnimation& src)
+		VMDModelControllerAnimation& operator =(const VMDModelControllerAnimation& src)
 		{
 			if (&src == this)
 			{
@@ -99,6 +99,8 @@ namespace mmd {
 			return(*this);
 		}
 	};
+}
+namespace tool {
 	/* Morph information struct. */
 	struct morph_info
 	{
@@ -141,74 +143,74 @@ namespace mmd {
 	{
 		MAXON_DISALLOW_COPY_AND_ASSIGN(VMDAnimation);
 	private:
-		class VMDMotionSortedArray : public maxon::SortedArray<VMDMotionSortedArray, maxon::PointerArray<VMDBoneAnimation> >
+		class VMDMotionSortedArray : public maxon::SortedArray<VMDMotionSortedArray, maxon::PointerArray<mmd::VMDBoneAnimation> >
 		{
 		public:
-			static Bool LessThan(const VMDBoneAnimation& a, const VMDBoneAnimation& b)
+			static Bool LessThan(const mmd::VMDBoneAnimation& a, const mmd::VMDBoneAnimation& b)
 			{
 				return(a.frame_no < b.frame_no);
 			}
-			static Bool IsEqual(const VMDBoneAnimation& a, const VMDBoneAnimation& b)
+			static Bool IsEqual(const mmd::VMDBoneAnimation& a, const mmd::VMDBoneAnimation& b)
 			{
 				return(a.frame_no == b.frame_no);
 			}
 		};
-		class VMDMorphSortedArray : public maxon::SortedArray<VMDMorphSortedArray, maxon::PointerArray<VMDMorphAnimation> >
+		class VMDMorphSortedArray : public maxon::SortedArray<VMDMorphSortedArray, maxon::PointerArray<mmd::VMDMorphAnimation> >
 		{
 		public:
-			static Bool LessThan(const VMDMorphAnimation& a, const VMDMorphAnimation& b)
+			static Bool LessThan(const mmd::VMDMorphAnimation& a, const mmd::VMDMorphAnimation& b)
 			{
 				return(a.frame_no < b.frame_no);
 			}
-			static Bool IsEqual(const VMDMorphAnimation& a, const VMDMorphAnimation& b)
+			static Bool IsEqual(const mmd::VMDMorphAnimation& a, const mmd::VMDMorphAnimation& b)
 			{
 				return(a.frame_no == b.frame_no);
 			}
 		};
-		class VMDCameraSortedArray : public maxon::SortedArray<VMDCameraSortedArray, maxon::PointerArray<VMDCameraAnimation> >
+		class VMDCameraSortedArray : public maxon::SortedArray<VMDCameraSortedArray, maxon::PointerArray<mmd::VMDCameraAnimation> >
 		{
 		public:
-			static Bool LessThan(const VMDCameraAnimation& a, const VMDCameraAnimation& b)
+			static Bool LessThan(const mmd::VMDCameraAnimation& a, const mmd::VMDCameraAnimation& b)
 			{
 				return(a.frame_no < b.frame_no);
 			}
-			static Bool IsEqual(const VMDCameraAnimation& a, const VMDCameraAnimation& b)
+			static Bool IsEqual(const mmd::VMDCameraAnimation& a, const mmd::VMDCameraAnimation& b)
 			{
 				return(a.frame_no == b.frame_no);
 			}
 		};
-		class VMDLightSortedArray : public maxon::SortedArray<VMDLightSortedArray, maxon::PointerArray<VMDLightAnimation> >
+		class VMDLightSortedArray : public maxon::SortedArray<VMDLightSortedArray, maxon::PointerArray<mmd::VMDLightAnimation> >
 		{
 		public:
-			static Bool LessThan(const VMDLightAnimation& a, const VMDLightAnimation& b)
+			static Bool LessThan(const mmd::VMDLightAnimation& a, const mmd::VMDLightAnimation& b)
 			{
 				return(a.frame_no < b.frame_no);
 			}
-			static Bool IsEqual(const VMDLightAnimation& a, const VMDLightAnimation& b)
+			static Bool IsEqual(const mmd::VMDLightAnimation& a, const mmd::VMDLightAnimation& b)
 			{
 				return(a.frame_no == b.frame_no);
 			}
 		};
-		class VMDShadowSortedArray : public maxon::SortedArray<VMDShadowSortedArray, maxon::PointerArray<VMDShadowAnimation> >
+		class VMDShadowSortedArray : public maxon::SortedArray<VMDShadowSortedArray, maxon::PointerArray<mmd::VMDShadowAnimation> >
 		{
 		public:
-			static Bool LessThan(const VMDShadowAnimation& a, const VMDShadowAnimation& b)
+			static Bool LessThan(const mmd::VMDShadowAnimation& a, const mmd::VMDShadowAnimation& b)
 			{
 				return(a.frame_no < b.frame_no);
 			}
-			static Bool IsEqual(const VMDShadowAnimation& a, const VMDShadowAnimation& b)
+			static Bool IsEqual(const mmd::VMDShadowAnimation& a, const mmd::VMDShadowAnimation& b)
 			{
 				return(a.frame_no == b.frame_no);
 			}
 		};
-		class VMDModelSortedArray : public maxon::SortedArray<VMDModelSortedArray, maxon::PointerArray<VMDModelControllerAnimation> >
+		class VMDModelSortedArray : public maxon::SortedArray<VMDModelSortedArray, maxon::PointerArray<mmd::VMDModelControllerAnimation> >
 		{
 		public:
-			static Bool LessThan(const VMDModelControllerAnimation& a, const VMDModelControllerAnimation& b)
+			static Bool LessThan(const mmd::VMDModelControllerAnimation& a, const mmd::VMDModelControllerAnimation& b)
 			{
 				return(a.frame_no < b.frame_no);
 			}
-			static Bool IsEqual(const VMDModelControllerAnimation& a, const VMDModelControllerAnimation& b)
+			static Bool IsEqual(const mmd::VMDModelControllerAnimation& a, const mmd::VMDModelControllerAnimation& b)
 			{
 				return(a.frame_no == b.frame_no);
 			}
@@ -299,13 +301,13 @@ namespace mmd {
 	{
 	private:
 		/* 使用Map储存补间曲线数据 */
-		maxon::HashMap<Int32, VMDInterpolator>	interpolator_X_map;
-		maxon::HashMap<Int32, VMDInterpolator>	interpolator_Y_map;
-		maxon::HashMap<Int32, VMDInterpolator>	interpolator_Z_map;
-		maxon::HashMap<Int32, VMDInterpolator>	interpolator_R_map;
-		maxon::HashMap<Int32, VMDInterpolator>	interpolator_D_map;
-		maxon::HashMap<Int32, VMDInterpolator>	interpolator_V_map;
-		maxon::HashMap<Int32, VMDInterpolator>	interpolator_A_map;
+		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_X_map;
+		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_Y_map;
+		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_Z_map;
+		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_R_map;
+		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_D_map;
+		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_V_map;
+		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_A_map;
 		/* 析构函数 */
 		~OMMDCamera()
 		{
@@ -324,9 +326,9 @@ namespace mmd {
 		/* 将普通摄像机转换为MMD摄像机 */
 		static maxon::Result<BaseObject*> ConversionCamera(VMD_Conversion_Camera_settings setting);
 		/* 获取曲线值 */
-		Bool GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator) const;
+		Bool GetInterpolator(Int32 type, Int32 frame_on, mmd::VMDInterpolator& interpolator) const;
 		/* 设置曲线值 */
-		Bool SetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator&& interpolator);
+		Bool SetInterpolator(Int32 type, Int32 frame_on, mmd::VMDInterpolator&& interpolator);
 		/* 注册关键帧 */
 		Bool RegisterKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
 		/* 更新全部补间曲线 */

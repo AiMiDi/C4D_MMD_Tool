@@ -3,8 +3,8 @@
 
 #include "main.h"
 
-namespace mmd {
-	typedef maxon::Vec2<Float32> Vector2d32;
+typedef maxon::Vec2<Float32> Vector2d32;
+namespace utility {
 	struct LocalData : public maxon::ParallelFor::BreakContext
 	{
 		maxon::Int localCount = 0;
@@ -19,11 +19,24 @@ namespace mmd {
 	/*  Converts "UTF-8" to "SHIFT_JIS". */
 	extern Bool UTF8toSJIS(const String& strin, char* strout);
 
+
+	extern maxon::Result<void> SelectSuffixImportFile(Filename& fn, BaseFile* file, const String& suffix);
+	
+
+	class RenameDialog : public GeDialog
+	{
+		Bool CreateLayout();
+		Bool Command(Int32 id, const BaseContainer& msg);
+	public:
+		String Rename;
+		RenameDialog() {}
+		~RenameDialog() {}
+	};
+}
+namespace mmd {
 	extern Bool ReadPMXText(BaseFile* const file, const Char& text_encoding, String& out_string);
 	extern Int32 ReadPMXIndex(BaseFile* const file, const Char& index_size);
 	extern UInt32 ReadPMXUIndex(BaseFile* const file, const Char& index_size);
-	extern maxon::Result<void> SelectSuffixImportFile(Filename& fn, BaseFile* file, const String& suffix);
-	
 	/* MMD style interpolator. */
 	class VMDInterpolator
 	{
@@ -254,15 +267,6 @@ namespace mmd {
 			this->G15 = G15_;
 			this->G16 = G16_;
 		}
-	};
-	class RenameDialog : public GeDialog
-	{
-		Bool CreateLayout();
-		Bool Command(Int32 id, const BaseContainer& msg);
-	public:
-		String Rename;
-		RenameDialog() {}
-		~RenameDialog() {}
 	};
 }
 #endif //__MMD_UTILITY_H__

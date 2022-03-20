@@ -3,7 +3,7 @@
 #include "OMMDRigidRoot.h"
 #include "description/OMMDRigid.h"
 
-namespace mmd {
+namespace tool {
 	struct OMMDRigid_MSG
 	{
 		Int32		pred_index = 0;

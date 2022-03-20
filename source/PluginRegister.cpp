@@ -761,7 +761,7 @@ public:
 		{		
 		case DLG_VMD_CAM_IMPORT_BUTTON:
 		{
-			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			maxon::UniqueRef<tool::VMDAnimation>	mmd_animation = NewObj(tool::VMDAnimation)iferr_return;
 			GetFloat(DLG_VMD_CAM_IMPORT_SIZE, mmd_animation->m_camera_import_settings.position_multiple);
 			GetFloat(DLG_VMD_CAM_IMPORT_OFFSET, mmd_animation->m_camera_import_settings.time_offset);
 			YAML::Node config(std::move(LoadConfig()));
@@ -776,7 +776,7 @@ public:
 		}
 		case DLG_VMD_CAM_CONVER_BUTTON:
 		{
-			mmd::VMD_Conversion_Camera_settings conversion_setting;
+			tool::VMD_Conversion_Camera_settings conversion_setting;
 			GetFloat(DLG_VMD_CAM_CONVER_DIS, conversion_setting.distance);
 			GetInt32(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, conversion_setting.use_rotation);
 			YAML::Node config(std::move(LoadConfig()));
@@ -785,12 +785,12 @@ public:
 			std::ofstream fout(config_path);
 			fout << config;
 			fout.close();
-			mmd::OMMDCamera::ConversionCamera(conversion_setting)iferr_return;
+			tool::OMMDCamera::ConversionCamera(conversion_setting)iferr_return;
 			break;
 		}
 		case DLG_VMD_CAM_EXPORT_BUTTON:
 		{	
-			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			maxon::UniqueRef<tool::VMDAnimation>	mmd_animation = NewObj(tool::VMDAnimation)iferr_return;
 			GetFloat(DLG_VMD_CAM_EXPORT_SIZE, mmd_animation->m_camera_export_settings.position_multiple);
 			GetFloat(DLG_VMD_CAM_EXPORT_OFFSET, mmd_animation->m_camera_export_settings.time_offset);
 			GetBool(DLG_VMD_CAM_EXPORT_USE_BAKE, mmd_animation->m_camera_export_settings.use_bake);
@@ -808,7 +808,7 @@ public:
 		}
 		case DLG_VMD_MOT_IMPORT_BUTTON:
 		{
-			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			maxon::UniqueRef<tool::VMDAnimation>	mmd_animation = NewObj(tool::VMDAnimation)iferr_return;
 			GetFloat(DLG_VMD_MOT_IMPORT_SIZE, mmd_animation->m_motions_import_settings.position_multiple);
 			GetFloat(DLG_VMD_MOT_IMPORT_OFFSET, mmd_animation->m_motions_import_settings.time_offset);
 			GetBool(DLG_VMD_MOT_IMPORT_MOTION, mmd_animation->m_motions_import_settings.import_motion);
@@ -833,7 +833,7 @@ public:
 		}
 		case DLG_VMD_MOT_EXPORT_BUTTON:
 		{
-			maxon::UniqueRef<mmd::VMDAnimation>	mmd_animation = NewObj(mmd::VMDAnimation)iferr_return;
+			maxon::UniqueRef<tool::VMDAnimation>	mmd_animation = NewObj(tool::VMDAnimation)iferr_return;
 			GetFloat(DLG_VMD_MOT_EXPORT_SIZE, mmd_animation->m_motions_export_settings.position_multiple);
 			GetFloat(DLG_VMD_MOT_EXPORT_OFFSET, mmd_animation->m_motions_export_settings.time_offset);
 			GetInt32(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, mmd_animation->m_motions_export_settings.use_rotation);
@@ -870,7 +870,7 @@ public:
 		}
 		case DLG_PMX_MOD_IMPORT_BUTTON:
 		{
-			maxon::UniqueRef<mmd::PMXModel> pmx_model = NewObj(mmd::PMXModel) iferr_return;
+			maxon::UniqueRef<tool::PMXModel> pmx_model = NewObj(tool::PMXModel) iferr_return;
 			GetFloat(DLG_PMX_MOD_IMPORT_SIZE, pmx_model->m_import_settings.position_multiple);
 			GetBool(DLG_PMX_MOD_IMPORT_POLYGON, pmx_model->m_import_settings.import_polygon);
 			GetBool(DLG_PMX_MOD_IMPORT_NORMAL, pmx_model->m_import_settings.import_normal);
@@ -912,8 +912,8 @@ public:
 		}
 		case DLG_VPD_POSE_IMPORT_BUTTON:
 		{
-			maxon::UniqueRef<mmd::VPD_pose>	mmd_pose = NewObj(mmd::VPD_pose)iferr_return;
-			mmd_pose->FromFileImportPose(mmd::VPD_pose_import_settings())iferr_return;
+			maxon::UniqueRef<tool::VPD_pose>	mmd_pose = NewObj(tool::VPD_pose)iferr_return;
+			mmd_pose->FromFileImportPose(tool::VPD_pose_import_settings())iferr_return;
 			break;
 		}
 		case DLG_VMD_CAM_EXPORT_USE_BAKE:
@@ -1024,55 +1024,55 @@ public:
 
 Bool RegisterOMMDModelObject()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_MODEL, GeLoadString(IDS_O_MMD_MODEL), OBJECT_CALL_ADDEXECUTION, mmd::OMMDModel::Alloc, "OMMDModel"_s, AutoBitmap(1021433), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_MODEL, GeLoadString(IDS_O_MMD_MODEL), OBJECT_CALL_ADDEXECUTION, tool::OMMDModel::Alloc, "OMMDModel"_s, AutoBitmap(1021433), 1));
 }
 
 
 Bool RegisterTMMDBone()
 {
-	return(RegisterTagPlugin(ID_T_MMD_BONE, GeLoadString(IDS_T_MMD_BONE), TAG_VISIBLE | TAG_EXPRESSION, mmd::TMMDBone::Alloc, "TMMDBone"_s, AutoBitmap("TMMDBone.png"_s), 1));
+	return(RegisterTagPlugin(ID_T_MMD_BONE, GeLoadString(IDS_T_MMD_BONE), TAG_VISIBLE | TAG_EXPRESSION, tool::TMMDBone::Alloc, "TMMDBone"_s, AutoBitmap("TMMDBone.png"_s), 1));
 }
 
 
 Bool RegisterOMMDCamera()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_CAMERA, GeLoadString(IDS_O_MMD_CAMERA), OBJECT_CALL_ADDEXECUTION, mmd::OMMDCamera::Alloc, "OMMDCamera"_s, AutoBitmap("OMMDCamera.png"_s), 0));
+	return(RegisterObjectPlugin(ID_O_MMD_CAMERA, GeLoadString(IDS_O_MMD_CAMERA), OBJECT_CALL_ADDEXECUTION, tool::OMMDCamera::Alloc, "OMMDCamera"_s, AutoBitmap("OMMDCamera.png"_s), 0));
 }
 
 
 Bool RegisterOMMDRigid()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_RIGID, GeLoadString(IDS_O_MMD_RIGID), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDRigid::Alloc, "OMMDRigid"_s, AutoBitmap("OMMDRigid.png"_s), 0));
+	return(RegisterObjectPlugin(ID_O_MMD_RIGID, GeLoadString(IDS_O_MMD_RIGID), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, tool::OMMDRigid::Alloc, "OMMDRigid"_s, AutoBitmap("OMMDRigid.png"_s), 0));
 }
 
 
 Bool RegisterOMMDJoint()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_JOINT, GeLoadString(IDS_O_MMD_JOINT), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDJoint::Alloc, "OMMDJoint"_s, AutoBitmap("OMMDJoint.png"_s), 0));
+	return(RegisterObjectPlugin(ID_O_MMD_JOINT, GeLoadString(IDS_O_MMD_JOINT), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, tool::OMMDJoint::Alloc, "OMMDJoint"_s, AutoBitmap("OMMDJoint.png"_s), 0));
 }
 
 
 Bool RegisterOMMDMeshRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDMeshRoot::Alloc, "OMMDMeshRoot"_s, AutoBitmap("OMMDMeshRoot.png"_s), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, tool::OMMDMeshRoot::Alloc, "OMMDMeshRoot"_s, AutoBitmap("OMMDMeshRoot.png"_s), 1));
 }
 
 
 Bool RegisterOMMDBoneRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDBoneRoot::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, tool::OMMDBoneRoot::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 1));
 }
 
 
 Bool RegisterOMMDRigidRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_RIGID_ROOT, GeLoadString(IDS_O_MMD_RIGID_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDRigidRoot::Alloc, "OMMDRigidRoot"_s, AutoBitmap("OMMDRigidRoot.png"_s), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_RIGID_ROOT, GeLoadString(IDS_O_MMD_RIGID_ROOT), PLUGINFLAG_HIDEPLUGINMENU, tool::OMMDRigidRoot::Alloc, "OMMDRigidRoot"_s, AutoBitmap("OMMDRigidRoot.png"_s), 1));
 }
 
 
 Bool RegisterOMMDJointRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_JOINT_ROOT, GeLoadString(IDS_O_MMD_JOINT_ROOT), PLUGINFLAG_HIDEPLUGINMENU, mmd::OMMDJointRoot::Alloc, "OMMDJointRoot"_s, AutoBitmap("OMMDJointRoot.png"_s), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_JOINT_ROOT, GeLoadString(IDS_O_MMD_JOINT_ROOT), PLUGINFLAG_HIDEPLUGINMENU, tool::OMMDJointRoot::Alloc, "OMMDJointRoot"_s, AutoBitmap("OMMDJointRoot.png"_s), 1));
 }
 
 
@@ -1097,7 +1097,7 @@ Bool RegisterOMMDJointRoot()
 
 Bool RegisterVMDCamDrawSceneHook()
 {
-	return(RegisterSceneHookPlugin(ID_S_MMD_CAM_DRAW, "VMD Cam Draw"_s, 0, mmd::VMD_Cam_Draw::Alloc, EXECUTIONPRIORITY_GENERATOR, 0));
+	return(RegisterSceneHookPlugin(ID_S_MMD_CAM_DRAW, "VMD Cam Draw"_s, 0, tool::VMD_Cam_Draw::Alloc, EXECUTIONPRIORITY_GENERATOR, 0));
 }
 
 
@@ -1109,5 +1109,5 @@ Bool RegisterMMDTool()
 
 Bool RegisterVMDImport()
 {
-	return(RegisterSceneLoaderPlugin(ID_L_MMD_VMD_IMPORT, "VMD(.vmd)"_s, 0, mmd::VMDLoaderData::Alloc, "VMD import"_s));
+	return(RegisterSceneLoaderPlugin(ID_L_MMD_VMD_IMPORT, "VMD(.vmd)"_s, 0, tool::VMDLoaderData::Alloc, "VMD import"_s));
 }
