@@ -97,7 +97,7 @@ namespace tool {
 		}
 		settings = description->GetParameterI(RIGID_RELATED_BONE_INDEX, nullptr);
 		if (settings != nullptr) {
-			settings->SetContainer(DESC_CYCLE, this->RigidRoot->GetNodeData<OMMDRigidRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->bone_items);
+			settings->SetContainer(DESC_CYCLE, this->RigidRoot->GetNodeData<OMMDRigidRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->m_bone_items);
 		}
 		flags |= DESCFLAGS_DESC::LOADED;
 		return(SUPER::GetDDescription(node, description, flags));
@@ -347,7 +347,7 @@ namespace tool {
 		}
 		case RIGID_RELATED_BONE_INDEX:
 		{
-			auto related_bone_ptr = this->RigidRoot->GetNodeData<OMMDRigidRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(t_data.GetInt32());
+			auto related_bone_ptr = this->RigidRoot->GetNodeData<OMMDRigidRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->m_IndexToBone_map.Find(t_data.GetInt32());
 			if (related_bone_ptr != nullptr)
 			{
 				related_bone = related_bone_ptr->GetValue();
@@ -1042,7 +1042,7 @@ namespace tool {
 			}
 			case RIGID_RELATED_BONE_INDEX:
 			{
-				auto related_bone_ptr = this->RigidRoot->GetNodeData<OMMDRigidRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(bc->GetInt32(RIGID_RELATED_BONE_INDEX));
+				auto related_bone_ptr = this->RigidRoot->GetNodeData<OMMDRigidRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->m_IndexToBone_map.Find(bc->GetInt32(RIGID_RELATED_BONE_INDEX));
 				if (related_bone_ptr != nullptr)
 				{
 					related_bone = related_bone_ptr->GetValue();

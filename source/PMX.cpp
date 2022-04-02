@@ -272,6 +272,15 @@ namespace mmd {
 	}
 }
 namespace tool {
+	maxon::Result<String> PMXModel::GetMorphName(const Int32& index) const
+	{
+		if (index < 0 || index >= m_morph_data.GetCount()) {
+			return maxon::Error();
+		}
+		else {
+			return m_morph_data[index].morph_name_local;
+		}
+	}
 	maxon::Result<void> PMXModel::LoadFromFile(Filename& fn)
 	{
 		iferr_scope_handler{
@@ -1873,7 +1882,7 @@ namespace tool {
 				mmd::PMXMorphData& morph_data = this->m_morph_data[morph_index];
 				switch (morph_data.morph_type)
 				{
-					// 顶点表情
+				// 顶点表情
 				case mmd::PMXMorphData::VERTEX:
 				{
 					// 表情数据储存的变换信息个数
@@ -1998,7 +2007,7 @@ namespace tool {
 					}
 					break;
 				}
-									   // UV表情
+				// UV表情
 				case mmd::PMXMorphData::UV:
 				{
 					maxon::HashMap<Int32, Vector>		vertex_floats_map;
@@ -2054,6 +2063,12 @@ namespace tool {
 						morph->SetStrength(0);
 						tag_info_.morph_tag->SetParameter(DescID(ID_CA_POSE_MODE), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
 					}
+					break;
+				}
+				case mmd::PMXMorphData::GROUP:
+				case mmd::PMXMorphData::FLIP:
+				{
+					ModelRootData->ImportGroupAndFlipMorph(this, morph_data);
 					break;
 				}
 				default:
@@ -2616,6 +2631,12 @@ namespace tool {
 					morph_tag->Message(MSG_UPDATE);
 					morph->SetStrength(0);
 					morph_tag->SetParameter(DescID(ID_CA_POSE_MODE), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
+					break;
+				}
+				case mmd::PMXMorphData::GROUP:
+				case mmd::PMXMorphData::FLIP:
+				{
+					ModelRootData->ImportGroupAndFlipMorph(this, morph_data);
 					break;
 				}
 				default:

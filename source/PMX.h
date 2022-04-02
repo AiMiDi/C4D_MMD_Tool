@@ -308,6 +308,7 @@ namespace mmd {
 	};
 	class PMXMorph_Group : public PMXMorph
 	{
+		friend class OMMDModel;
 	public:
 		~PMXMorph_Group() {}
 		static maxon::Result<PMXMorph_Group*> Alloc();
@@ -368,6 +369,7 @@ namespace mmd {
 	};
 	class PMXMorph_Flip : public PMXMorph
 	{
+		friend class OMMDModel;
 	public:
 		~PMXMorph_Flip() {}
 		static maxon::Result<PMXMorph_Flip*> Alloc();
@@ -588,6 +590,7 @@ namespace tool {
 			Bool	export_inherit;
 			Bool	export_expression;
 		} m_export_settings;
+		maxon::Result<String> GetMorphName(const Int32& index) const;
 		maxon::Result<void> LoadFromFile(Filename& fn);
 		maxon::Result<void> SaveToFile(Filename& fn);
 		maxon::Result<void> ImportBone(CAWeightTag* weight_tag);

@@ -111,8 +111,8 @@ public:
 	virtual Bool CreateLayout(void)
 	{
 		SetTitle(GeLoadString(IDS_VMD_TOOL_TITLE));
-		Images = new ImagesGUI("mmd_tool_title.png"_s, 300, 78);
-		C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(78));
+		Images = new ImagesGUI("mmd_tool_title.png"_s, 300, 95);
+		C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(95));
 		if (userAreaGadget != nullptr)
 			this->AttachUserArea((*Images), userAreaGadget);
 		ScrollGroupBegin(1200, BFH_CENTER, SCROLLGROUP_VERT | SCROLLGROUP_AUTOHORIZ | SCROLLGROUP_AUTOVERT, 0, 210);
@@ -1024,7 +1024,7 @@ public:
 
 Bool RegisterOMMDModelObject()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_MODEL, GeLoadString(IDS_O_MMD_MODEL), OBJECT_CALL_ADDEXECUTION, tool::OMMDModel::Alloc, "OMMDModel"_s, AutoBitmap(1021433), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_MODEL, GeLoadString(IDS_O_MMD_MODEL), OBJECT_CALL_ADDEXECUTION, tool::OMMDModel::Alloc, "OMMDModel"_s, AutoBitmap(1021433), 2));
 }
 
 
@@ -1054,13 +1054,13 @@ Bool RegisterOMMDJoint()
 
 Bool RegisterOMMDMeshRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, tool::OMMDMeshRoot::Alloc, "OMMDMeshRoot"_s, AutoBitmap("OMMDMeshRoot.png"_s), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, tool::OMMDMeshRoot::Alloc, "OMMDMeshRoot"_s, AutoBitmap("OMMDMeshRoot.png"_s), 2));
 }
 
 
 Bool RegisterOMMDBoneRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, tool::OMMDBoneRoot::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 1));
+	return(RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, tool::OMMDBoneRoot::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 2));
 }
 
 

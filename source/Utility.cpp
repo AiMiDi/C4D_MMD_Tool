@@ -152,6 +152,7 @@ namespace utility {
 	}
 	Bool RenameDialog::CreateLayout()
 	{
+		SetTitle(GeLoadString(IDS_MORPH_RENAME));
 		GroupBegin(1000, BFH_LEFT, 2, 1, ""_s, 0, 0, 10);
 		AddStaticText(10000, BFH_LEFT, 100, 10, GeLoadString(IDS_MSG_RENAME), BORDER_NONE);
 		AddEditText(10001, BFH_LEFT, 230, 10);

@@ -33,6 +33,48 @@ namespace tool {
 			name = name_;
 		}
 		bone_morph_data() : bone_morph_data(DescID(), DescID(), DescID(), DescID(), DescID(), DescID(), DescID(), String()) {}
+
+		Bool Write(HyperFile* hf)
+		{
+			if (!grp_id.Write(hf))
+				return false;
+			if (!strength_id.Write(hf))
+				return false;
+			if (!translation_id.Write(hf))
+				return false;
+			if (!rotation_id.Write(hf))
+				return false;
+			if (!button_grp_id.Write(hf))
+				return false;
+			if (!button_delete_id.Write(hf))
+				return false;
+			if (!button_rename_id.Write(hf))
+				return false;
+			if (!hf->WriteString(name))
+				return false;
+			return true;
+		}
+
+		Bool Read(HyperFile* hf)
+		{
+			if (!grp_id.Read(hf))
+				return false;
+			if (!strength_id.Read(hf))
+				return false;
+			if (!translation_id.Read(hf))
+				return false;
+			if (!rotation_id.Read(hf))
+				return false;
+			if (!button_grp_id.Read(hf))
+				return false;
+			if (!button_delete_id.Read(hf))
+				return false;
+			if (!button_rename_id.Read(hf))
+				return false;
+			if (!hf->ReadString(&name))
+				return false;
+			return true;
+		}
 	};
 	class TMMDBone : public TagData
 	{
@@ -88,14 +130,14 @@ namespace tool {
 		/* 删除全部曲线 */
 		Bool DeleteAllKeyFrame(GeListNode* node = nullptr);
 		/* 接收Message时调用，用于处理事件 */
-		virtual Bool Message(GeListNode* node, Int32 type, void* data);
-		virtual Bool Init(GeListNode* node);
+		Bool Message(GeListNode* node, Int32 type, void* data) override;
+		Bool Init(GeListNode* node) override;
 		/* 设置参数时调用，用于调用SplineData的回调函数 */
-		virtual Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags);
-		virtual Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc);
-		virtual EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags);
-		virtual Bool Read(GeListNode* node, HyperFile* hf, Int32 level);
-		virtual Bool Write(GeListNode* node, HyperFile* hf);
+		Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
+		Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) override;
+		EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
+		Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
+		Bool Write(GeListNode* node, HyperFile* hf) override;
 		static NodeData* Alloc()
 		{
 			return(NewObjClear(TMMDBone));

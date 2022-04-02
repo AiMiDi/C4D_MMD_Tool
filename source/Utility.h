@@ -25,12 +25,21 @@ namespace utility {
 
 	class RenameDialog : public GeDialog
 	{
-		Bool CreateLayout();
-		Bool Command(Int32 id, const BaseContainer& msg);
+		Bool CreateLayout() override;
+		Bool Command(Int32 id, const BaseContainer& msg) override;
 	public:
 		String Rename;
 		RenameDialog() {}
 		~RenameDialog() {}
+	};
+}
+namespace tool {
+	enum class DescType
+	{
+		REAL_STRENGTH,
+		BUTTON_EDITOR,
+		BUTTON_DELETE,
+		BUTTON_RENAME
 	};
 }
 namespace mmd {

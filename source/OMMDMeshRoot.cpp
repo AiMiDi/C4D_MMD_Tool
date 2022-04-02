@@ -23,7 +23,74 @@ namespace tool {
 		}
 		return true;
 	}
-
+	Bool OMMDMeshRoot::Read(GeListNode* node, HyperFile* hf, Int32 level)
+	{
+		if (level >= 2) {
+			AutoAlloc<BaseLink> Model_link;
+			if (!Model_link->Read(hf))
+				return false;
+			if (Model_link == nullptr)
+				return false;
+			this->m_Model_ptr = static_cast<BaseObject*>(Model_link->ForceGetLink());
+			Int64 data_countA = 0;
+			if (!hf->ReadInt64(&data_countA))
+				return false;
+			for (Int64 i = 0; i < data_countA; ++i)
+			{
+				String name;
+				if (!hf->ReadString(&name))
+					return false;
+				auto& data = m_MorphData_map.InsertKey(std::move(name)).GetValue();
+				Int64 data_countB = 0;
+				if (!hf->ReadInt64(&data_countB))
+					return false;
+				for (Int64 j = 0; j < data_countB; ++j)
+				{
+					mesh_morph_hub_data& mesh_morph_data = data.Append().GetValue();
+					if (!mesh_morph_data.Read(hf))
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+	Bool OMMDMeshRoot::Write(GeListNode* node, HyperFile* hf)
+	{
+		// level >= 2
+		AutoAlloc<BaseLink> Model_link;
+		if (Model_link == nullptr)
+			return false;
+		Model_link->SetLink(this->m_Model_ptr);
+		if (!Model_link->Write(hf))
+			return false;
+		if (!hf->WriteInt64(this->m_MorphData_map.GetCount()))
+			return false;
+		for (auto& i : m_MorphData_map)
+		{
+			if (!hf->WriteString(i.GetKey()))
+				return false;
+			auto& data = i.GetValue();
+			if (!hf->WriteInt64(data.GetCount()))
+				return false;
+			for (auto& j : data)
+			{
+				if (!j.Write(hf))
+					return false;
+			}
+		}
+		return true;
+	}
+	Bool OMMDMeshRoot::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
+	{
+		OMMDMeshRoot* dest_object = static_cast<OMMDMeshRoot*>(dest);
+		dest_object->m_Model_ptr = m_Model_ptr;
+		for (auto& i : m_MorphData_map)
+		{
+			iferr(dest_object->m_MorphData_map.InsertKey(i.GetKey()).GetValue().CopyFrom(i.GetValue()))
+				return false;
+		}
+		return true;
+	}
 	Bool OMMDMeshRoot::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 	{
 		BaseObject* op = static_cast<BaseObject*>(node);
@@ -123,6 +190,7 @@ namespace tool {
 		iferr_scope_handler{ return EXECUTIONRESULT::OK; };
 		Bool need_update_morph = false;
 		maxon::Queue<BaseObject*> nodes;
+		maxon::HashSet<String> morph_name_list;
 		nodes.Push(op)iferr_return;
 		while (!nodes.IsEmpty())
 		{
@@ -140,18 +208,25 @@ namespace tool {
 						{
 							auto* morph = pose_morph_tag->GetMorph(index);
 							String morph_name = morph->GetName();
+							morph_name_list.Insert(morph_name)iferr_return;
 							DescID morph_id = pose_morph_tag->GetMorphID(index);
-							auto mesh_morph_map_ptr = m_mesh_morph_map.Find(morph_name);
-							while (mesh_morph_map_ptr != nullptr)
+							maxon::BaseList<mesh_morph_hub_data>* mesh_morph_list = nullptr;
+							auto mesh_morph_map_ptr = m_MorphData_map.Find(morph_name);
+							if (mesh_morph_map_ptr != nullptr)
 							{
-								if (mesh_morph_map_ptr->GetValue().morph_strength_id == morph_id)
-									goto NEXT_MORPH;
-								mesh_morph_map_ptr = mesh_morph_map_ptr->GetNextWithSameKey();
+								mesh_morph_list = &mesh_morph_map_ptr->GetValue();
+								for (auto& morph_data : *mesh_morph_list) {
+									if (morph_data.morph_tag == pose_morph_tag && morph_data.strength_id == morph_id)
+										goto NEXT_MORPH;
+								}
+							}
+							else {
+								mesh_morph_list = &m_MorphData_map.InsertEntry(morph_name).GetValue().GetValue();
 							}
 							need_update_morph = true;
-							auto& morph_data = m_mesh_morph_map.InsertMultiEntry(morph_name).GetValue().GetValue();
+							auto& morph_data = mesh_morph_list->Append()iferr_return;
 							morph_data.morph_tag = pose_morph_tag;
-							morph_data.morph_strength_id = morph_id;
+							morph_data.strength_id = morph_id;
 						NEXT_MORPH:
 							continue;
 						}
@@ -165,6 +240,14 @@ namespace tool {
 				else {
 					break;
 				}
+			}
+		}
+		// 去除已经删除的表情
+		for (auto name_it = m_MorphData_map.GetKeys().begin(); name_it != m_MorphData_map.GetKeys().end(); ++name_it) {
+			auto& name = *name_it;
+			if (morph_name_list.Find(name) == nullptr) {
+				m_MorphData_map.Erase(name)iferr_return;
+				need_update_morph = true;		
 			}
 		}
 		if (need_update_morph == true) {

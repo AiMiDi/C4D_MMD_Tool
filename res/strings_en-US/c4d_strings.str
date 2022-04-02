@@ -125,11 +125,12 @@ STRINGTABLE
 	IDS_NAME_CONVER_NEW_ADD "New";
 	IDS_NAME_CONVER_NEW_INCREMENT_ADD "New increment";
 
-	IDS_BONE_TRANSLATION "Bone translation";
-	IDS_BONE_ROTATION "Bone rotation";
-	IDS_BONE_DELETE "Delete morph";
-	IDS_BONE_RENAME "Rename morph";
-
+	IDS_MORPH_BONE_TRANSLATION "Bone translation";
+	IDS_MORPH_BONE_ROTATION "Bone rotation";
+	IDS_MORPH_DELETE "Delete morph";
+	IDS_MORPH_RENAME "Rename morph";
+	IDS_MORPH_EDITOR "Editor morph";
+	IDS_DELETE "Delete";
 	IDS_MSG_RENAME "Rename morph:";
 	IDS_MSG_RENAME_OK "OK";
 	IDS_MSG_RENAME_CANCEL "Cancel";

@@ -30,12 +30,12 @@ inline Int32 TMMDBone::AddBondMorph(String morph_name)
 	bc.SetData(DESC_PARENTGROUP, GeData{ CUSTOMDATATYPE_DESCID, grp_id });
 	DescID strength_id = ddesc->Alloc(bc);
 	bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_BONE_TRANSLATION));
+	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_TRANSLATION));
 	bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
 	bc.SetData(DESC_PARENTGROUP, GeData{ CUSTOMDATATYPE_DESCID, grp_id });
 	DescID translation_id = ddesc->Alloc(bc);
 	bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_BONE_ROTATION));
+	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_ROTATION));
 	bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
 	bc.SetData(DESC_PARENTGROUP, GeData{ CUSTOMDATATYPE_DESCID, grp_id });
 	DescID rotation_id = ddesc->Alloc(bc);
@@ -44,12 +44,12 @@ inline Int32 TMMDBone::AddBondMorph(String morph_name)
 	bc.SetData(DESC_PARENTGROUP, GeData{ CUSTOMDATATYPE_DESCID, grp_id });
 	DescID button_grp_id = ddesc->Alloc(bc);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_BONE_DELETE));
+	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
 	bc.SetData(DESC_PARENTGROUP, GeData{ CUSTOMDATATYPE_DESCID, button_grp_id });
 	DescID delete_button_id = ddesc->Alloc(bc);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_BONE_RENAME));
+	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
 	bc.SetData(DESC_PARENTGROUP, GeData{ CUSTOMDATATYPE_DESCID, button_grp_id });
 	DescID	rename_button_id = ddesc->Alloc(bc);
@@ -1849,7 +1849,7 @@ Bool TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeData& t
 				BaseLink* inherit_bone_parent_link = t_data.GetBaseLink();
 				if (inherit_bone_parent_link != nullptr) {
 					inherit_bone_parent = static_cast<BaseObject*>(inherit_bone_parent_link->GetLink(GetActiveDocument()));
-					auto inherit_bone_parent_index_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->BoneToIndexMap.Find(inherit_bone_parent);
+					auto inherit_bone_parent_index_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->m_BoneToIndex_map.Find(inherit_bone_parent);
 					if (inherit_bone_parent_index_ptr != nullptr) {
 						bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index_ptr->GetValue());
 					}
@@ -1863,7 +1863,7 @@ Bool TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeData& t
 		if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_INDEX, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
 			if (this->m_BoneRoot_ptr != nullptr) {
 				Int32 inherit_bone_parent_index = t_data.GetInt32();
-				auto inherit_bone_parent_link_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(inherit_bone_parent_index);
+				auto inherit_bone_parent_link_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->m_IndexToBone_map.Find(inherit_bone_parent_index);
 				if (inherit_bone_parent_link_ptr != nullptr) {
 					BaseLink* inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
 					if (inherit_bone_parent_link == nullptr) {
@@ -2120,7 +2120,7 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 					BaseLink* inherit_bone_parent_link = bc->GetBaseLink(id);
 					if (inherit_bone_parent_link != nullptr) {
 						inherit_bone_parent = static_cast<BaseObject*>(inherit_bone_parent_link->GetLink(GetActiveDocument()));
-						auto inherit_bone_parent_index_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->BoneToIndexMap.Find(inherit_bone_parent);
+						auto inherit_bone_parent_index_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->m_BoneToIndex_map.Find(inherit_bone_parent);
 						if (inherit_bone_parent_index_ptr != nullptr) {
 							bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index_ptr->GetValue());
 						}
@@ -2134,7 +2134,7 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 			if (node->GetEnabling(PMX_BONE_INHERIT_BONE_PARENT_INDEX, GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
 				if (this->m_BoneRoot_ptr != nullptr) {
 					Int32 inherit_bone_parent_index = bc->GetInt32(id);
-					auto inherit_bone_parent_link_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(inherit_bone_parent_index);
+					auto inherit_bone_parent_link_ptr = this->m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->m_IndexToBone_map.Find(inherit_bone_parent_index);
 					if (inherit_bone_parent_link_ptr != nullptr) {
 						BaseLink* inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
 						if (inherit_bone_parent_link == nullptr) {
@@ -2192,15 +2192,24 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 					Int32 button_on_id = button_on_id_ptr->GetValue();
 					if (button_on_id == -1)
 						return(true);
-					bone_morph_data& id = bone_morph_data_arr[button_on_id];
-					if (dc->_descId == id.button_delete_id)
+					bone_morph_data& data = bone_morph_data_arr[button_on_id];
+					if (dc->_descId == data.button_delete_id)
 					{
-						if (QuestionDialog(IDS_MES_BONE_MORPH_DELETE, id.name))
+						if (QuestionDialog(IDS_MES_BONE_MORPH_DELETE, data.name))
 						{
-							ddesc->Remove(id.grp_id);
-							ddesc->Remove(id.button_grp_id);
+							ddesc->Remove(data.button_delete_id);
+							ddesc->Remove(data.button_rename_id);
+							ddesc->Remove(data.button_grp_id);
+							ddesc->Remove(data.rotation_id);
+							ddesc->Remove(data.translation_id);
+							ddesc->Remove(data.strength_id);							
+							ddesc->Remove(data.grp_id);
 							iferr(bone_morph_data_arr.Erase(button_on_id))
 								return(true);
+							iferr(button_id_map.Erase(data.button_delete_id))
+								return true;
+							iferr(button_id_map.Erase(data.button_rename_id))
+								return true;
 							for (auto& i : button_id_map.GetKeys())
 							{
 								Int32* index = button_id_map.FindValue(i);
@@ -2209,31 +2218,31 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 									(*index)--;
 								}
 							}
-							if (GeIsMainThread())
-							{
-								SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); /* Refresh the AM to see the changes in real time */
-								EventAdd();
+							::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); /* Refresh the AM to see the changes in real time */
+							if (::GeIsMainThread())
+							{		
+								::EventAdd();
 							}
 						}
 						return(true);
 					}
-					if (dc->_descId == id.button_rename_id)
+					if (dc->_descId == data.button_rename_id)
 					{
 						utility::RenameDialog dlg;
 						dlg.Open(DLG_TYPE::MODAL, 99999, -1, -1, 0, 0);
 						if (!dlg.Rename.IsEmpty())
 						{
-							BaseContainer descbc = *ddesc->Find(id.grp_id);
+							BaseContainer descbc = *ddesc->Find(data.grp_id);
 							descbc.SetString(DESC_NAME, dlg.Rename);
-							ddesc->Set(id.grp_id, descbc, nullptr);
-							descbc = *ddesc->Find(id.strength_id);
+							ddesc->Set(data.grp_id, descbc, nullptr);
+							descbc = *ddesc->Find(data.strength_id);
 							descbc.SetString(DESC_NAME, dlg.Rename);
-							ddesc->Set(id.strength_id, descbc, nullptr);
-							id.name = dlg.Rename;
-							if (GeIsMainThread())
-							{
-								SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); /* Refresh the AM to see the changes in real time */
-								EventAdd();
+							ddesc->Set(data.strength_id, descbc, nullptr);
+							data.name = dlg.Rename;
+							::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); /* Refresh the AM to see the changes in real time */
+							if (::GeIsMainThread())
+							{							
+								::EventAdd();
 							}
 						}
 						return(true);
@@ -2241,59 +2250,61 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 				}
 			}
 		}
-		switch (dc->_descId[0].id)
-		{
-		case PMX_BONE_TAG_INIT_CURVE_BUTTON:
-		{
-			this->InitInterpolator(node);
-			break;
-		}
-		case PMX_BONE_TAG_REGISTER_CURVE_BUTTON:
-		{
-			BaseTime time = GetActiveDocument()->GetTime();
-			this->RegisterKeyFrame(time.GetFrame(30.), node);
-			doc->SetTime(BaseTime());
-			doc->SetTime(time);
-			break;
-		}
-		case PMX_BONE_TAG_UPDATE_CURVE_BUTTON:
-		{
-			this->UpdateAllInterpolator(node);
-			break;
-		}
-		case PMX_BONE_TAG_DELETE_CURVE_BUTTON:
-		{
-			if (QuestionDialog(IDS_MES_DELETE_BONE_CURVE))
+		else {
+			switch (dc->_descId[0].id)
+			{
+			case PMX_BONE_TAG_INIT_CURVE_BUTTON:
+			{
+				this->InitInterpolator(node);
+				break;
+			}
+			case PMX_BONE_TAG_REGISTER_CURVE_BUTTON:
 			{
 				BaseTime time = GetActiveDocument()->GetTime();
-				this->DeleteKeyFrame(time.GetFrame(30.), node);
-				this->InitInterpolator(node);
+				this->RegisterKeyFrame(time.GetFrame(30.), node);
 				doc->SetTime(BaseTime());
 				doc->SetTime(time);
+				break;
 			}
-			break;
-		}
-		case PMX_BONE_TAG_DELETE_ALL_CURVE_BUTTON:
-		{
-			if (QuestionDialog(IDS_MES_DELETE_BONE_ALL_CURVE))
+			case PMX_BONE_TAG_UPDATE_CURVE_BUTTON:
 			{
-				this->DeleteAllKeyFrame(node);
-				this->InitInterpolator(node);
-				doc->SetTime(BaseTime(1));
-				doc->SetTime(BaseTime());
+				this->UpdateAllInterpolator(node);
+				break;
 			}
-			break;
-		}
-		case PMX_BONE_MORPH_ADD_BUTTON:
-		{
-			GeData Ge_data;
-			node->GetParameter(DescID(PMX_BONE_MORPH_ADD_NAME), Ge_data, DESCFLAGS_GET::NONE);
-			String morph_name = Ge_data.GetString();
-			this->AddBondMorph(morph_name);
-			break;
-		}
-		default:
-			break;
+			case PMX_BONE_TAG_DELETE_CURVE_BUTTON:
+			{
+				if (QuestionDialog(IDS_MES_DELETE_BONE_CURVE))
+				{
+					BaseTime time = GetActiveDocument()->GetTime();
+					this->DeleteKeyFrame(time.GetFrame(30.), node);
+					this->InitInterpolator(node);
+					doc->SetTime(BaseTime());
+					doc->SetTime(time);
+				}
+				break;
+			}
+			case PMX_BONE_TAG_DELETE_ALL_CURVE_BUTTON:
+			{
+				if (QuestionDialog(IDS_MES_DELETE_BONE_ALL_CURVE))
+				{
+					this->DeleteAllKeyFrame(node);
+					this->InitInterpolator(node);
+					doc->SetTime(BaseTime(1));
+					doc->SetTime(BaseTime());
+				}
+				break;
+			}
+			case PMX_BONE_MORPH_ADD_BUTTON:
+			{
+				GeData Ge_data;
+				node->GetParameter(DescID(PMX_BONE_MORPH_ADD_NAME), Ge_data, DESCFLAGS_GET::NONE);
+				String morph_name = Ge_data.GetString();
+				this->AddBondMorph(morph_name);
+				break;
+			}
+			default:
+				break;
+			}
 		}
 		break;
 	}
@@ -2478,7 +2489,7 @@ Bool TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	iferr_scope_handler{
 		return(false);
 	};
-	if (level == 1)
+	if (level >= 1)
 	{
 		AutoAlloc<BaseLink> bone_root_link;
 		if (bone_root_link == nullptr)
@@ -2577,38 +2588,27 @@ Bool TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return(false);
 		this->button_id_map.Insert(TempID, TempIndex) iferr_return;
 	}
-	bone_morph_data TempData;
+	
 	CountTemp = 0;
 	if (!hf->ReadInt32(&CountTemp))
 		return(false);
 	for (Int32 i = 0; i < CountTemp; i++)
 	{
-		if (!TempData.grp_id.Read(hf))
-			return(false);
-		if (!TempData.strength_id.Read(hf))
-			return(false);
-		if (!TempData.translation_id.Read(hf))
-			return(false);
-		if (!TempData.rotation_id.Read(hf))
-			return(false);
-		if (!TempData.button_grp_id.Read(hf))
-			return(false);
-		if (!TempData.button_delete_id.Read(hf))
-			return(false);
-		if (!TempData.button_rename_id.Read(hf))
-			return(false);
-		if (!hf->ReadString(&TempData.name))
-			return(false);
-		this->bone_morph_data_arr.Append(TempData) iferr_return;
+		bone_morph_data* TempData = NewObj(bone_morph_data)iferr_return;
+		this->bone_morph_data_arr.AppendPtr(TempData) iferr_return;
+		if (!TempData->Read(hf))
+			return(false);	
 	}
 	return(SUPER::Read(node, hf, level));
 }
 Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 {
+	// level >= 1
 	AutoAlloc<BaseLink> bone_root_link;
 	if (bone_root_link == nullptr)
 		return false;
 	bone_root_link->SetLink(this->m_BoneRoot_ptr);
+	// level >= 0
 	if (!bone_root_link->Write(hf))
 		return(false);
 	if (!hf->WriteInt32(this->bone_morph_name_index))
@@ -2624,61 +2624,61 @@ Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 	Int32 CountTemp = (Int32)this->interpolator_X_map.GetCount();
 	if (!hf->WriteInt32(CountTemp))
 		return(false);
-	for (auto i : this->interpolator_X_map.GetKeys())
+	for (auto& i : this->interpolator_X_map)
 	{
-		if (!hf->WriteInt32(i))
+		if (!hf->WriteInt32(i.GetKey()))
 			return(false);
-		if (!hf->WriteMemory(&this->interpolator_X_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
+		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
 	CountTemp = (Int32)this->interpolator_Y_map.GetCount();
 	if (!hf->WriteInt32(CountTemp))
 		return(false);
-	for (auto i : this->interpolator_Y_map.GetKeys())
+	for (auto& i : this->interpolator_Y_map)
 	{
-		if (!hf->WriteInt32(i))
+		if (!hf->WriteInt32(i.GetKey()))
 			return(false);
-		if (!hf->WriteMemory(&this->interpolator_Y_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
+		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
 	CountTemp = (Int32)this->interpolator_Z_map.GetCount();
 	if (!hf->WriteInt32(CountTemp))
 		return(false);
-	for (auto i : this->interpolator_Z_map.GetKeys())
+	for (auto& i : this->interpolator_Z_map)
 	{
-		if (!hf->WriteInt32(i))
+		if (!hf->WriteInt32(i.GetKey()))
 			return(false);
-		if (!hf->WriteMemory(&this->interpolator_Z_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
+		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
 	CountTemp = (Int32)this->interpolator_R_map.GetCount();
 	if (!hf->WriteInt32(CountTemp))
 		return(false);
-	for (auto i : this->interpolator_R_map.GetKeys())
+	for (auto& i : this->interpolator_R_map)
 	{
-		if (!hf->WriteInt32(i))
+		if (!hf->WriteInt32(i.GetKey()))
 			return(false);
-		if (!hf->WriteMemory(&this->interpolator_R_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
+		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
 	CountTemp = (Int32)this->interpolator_A_map.GetCount();
 	if (!hf->WriteInt32(CountTemp))
 		return(false);
-	for (auto i : this->interpolator_A_map.GetKeys())
+	for (auto& i : this->interpolator_A_map)
 	{
-		if (!hf->WriteInt32(i))
+		if (!hf->WriteInt32(i.GetKey()))
 			return(false);
-		if (!hf->WriteMemory(&this->interpolator_A_map.Find(i)->GetValue(), sizeof(mmd::VMDInterpolator)))
+		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
 	CountTemp = (Int32)this->button_id_map.GetCount();
 	if (!hf->WriteInt32(CountTemp))
 		return(false);
-	for (auto i : this->button_id_map.GetKeys())
+	for (auto& i : this->button_id_map)
 	{
-		if (!i.Write(hf))
+		if (!const_cast<DescID&>(i.GetKey()).Write(hf))
 			return(false);
-		if (!hf->WriteInt32(this->button_id_map.Find(i)->GetValue()))
+		if (!hf->WriteInt32(i.GetValue()))
 			return(false);
 	}
 	CountTemp = (Int32)this->bone_morph_data_arr.GetCount();
@@ -2686,21 +2686,7 @@ Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 		return(false);
 	for (bone_morph_data& i : this->bone_morph_data_arr)
 	{
-		if (!i.grp_id.Write(hf))
-			return(false);
-		if (!i.strength_id.Write(hf))
-			return(false);
-		if (!i.translation_id.Write(hf))
-			return(false);
-		if (!i.rotation_id.Write(hf))
-			return(false);
-		if (!i.button_grp_id.Write(hf))
-			return(false);
-		if (!i.button_delete_id.Write(hf))
-			return(false);
-		if (!i.button_rename_id.Write(hf))
-			return(false);
-		if (!hf->WriteString(i.name))
+		if (!i.Write(hf))
 			return(false);
 	}
 	return(SUPER::Write(node, hf));

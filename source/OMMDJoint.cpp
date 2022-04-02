@@ -45,7 +45,7 @@ namespace tool {
 		}
 		settings = description->GetParameterI(JOINT_ATTITUDE_USE_BONE_INDEX, nullptr);
 		if (settings != nullptr) {
-			settings->SetContainer(DESC_CYCLE, this->JointRoot->GetNodeData<OMMDJointRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->bone_items);
+			settings->SetContainer(DESC_CYCLE, this->JointRoot->GetNodeData<OMMDJointRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->m_bone_items);
 		}
 		flags |= DESCFLAGS_DESC::LOADED;
 		return(SUPER::GetDDescription(node, description, flags));
@@ -543,7 +543,7 @@ namespace tool {
 			}
 			case JOINT_ATTITUDE_USE_BONE_BUTTON:
 			{
-				auto bone_ptr = this->JointRoot->GetNodeData<OMMDJointRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->IndexToBoneMap.Find(bc->GetInt32(JOINT_ATTITUDE_USE_BONE_INDEX));
+				auto bone_ptr = this->JointRoot->GetNodeData<OMMDJointRoot>()->BoneRoot->GetNodeData<OMMDBoneRoot>()->m_IndexToBone_map.Find(bc->GetInt32(JOINT_ATTITUDE_USE_BONE_INDEX));
 				if (bone_ptr != nullptr) {
 					static_cast<BaseObject*>(node)->SetAbsPos(bone_ptr->GetValue()->GetAbsPos());
 				}
