@@ -424,10 +424,11 @@ namespace tool {
 		auto& morph_name_map = model->GetMorphNameMap();
 		auto& morph_arr = model->GetMorphData();
 		for (auto& data : m_data) {
-			auto* morph_ptr = morph_name_map.Find(data.GetKey());
+			auto& morph_name = data.GetKey();
+			auto* morph_ptr = morph_name_map.Find(morph_name);
 			if (morph_ptr == nullptr) {
 				for (auto& morph : morph_arr) {
-					morph.DeleteSubMorph(data.GetKey());
+					morph.DeleteSubMorph(morph_name);
 				}
 				return;
 			}
@@ -442,10 +443,11 @@ namespace tool {
 		auto& morph_name_map = model->GetMorphNameMap();
 		auto& morph_arr = model->GetMorphData();
 		for (auto& data : m_data) {
-			auto* morph_ptr = morph_name_map.Find(data.GetKey());
+			auto& morph_name = data.GetKey();
+			auto* morph_ptr = morph_name_map.Find(morph_name);
 			if (morph_ptr == nullptr) {
 				for (auto& morph : morph_arr) {
-					morph.DeleteSubMorph(data.GetKey());
+					morph.DeleteSubMorph(morph_name);
 				}
 				return;
 			}
@@ -1023,6 +1025,7 @@ namespace tool {
 	Bool OMMDModel::ReadMorph(HyperFile* hf)
 	{
 		iferr_scope_handler{ return nullptr; };
+		AddMorphHelper add_helper = BeginMorphChange();
 		Int data_count = 0;
 		if (!hf->ReadInt64(&data_count))
 			return false;
@@ -1142,7 +1145,7 @@ namespace tool {
 			morph->AddMorphToModel(this, name);
 		}
 	}
-	inline Bool OMMDModel::UpdataRoot(BaseObject* op)
+	Bool OMMDModel::UpdataRoot(BaseObject* op)
 	{
 		if (op == nullptr)
 			op = static_cast<BaseObject*>(Get());
@@ -1179,7 +1182,7 @@ namespace tool {
 			else {
 				this->m_JointRoot_ptr = JointRoot_;
 			}
-			m_initializ = false;
+			m_root_initializ = false;
 		}
 		if (m_RigidRoot_ptr == nullptr) {
 			if (RigidRoot_ == nullptr)
@@ -1191,7 +1194,7 @@ namespace tool {
 			else {
 				this->m_RigidRoot_ptr = RigidRoot_;
 			}
-			m_initializ = false;
+			m_root_initializ = false;
 		}
 		if (m_BoneRoot_ptr == nullptr) {
 			if (BoneRoot_ == nullptr)
@@ -1203,7 +1206,7 @@ namespace tool {
 			else {
 				this->m_BoneRoot_ptr = BoneRoot_;
 			}
-			m_initializ = false;
+			m_root_initializ = false;
 		}
 		if (m_MeshRoot_ptr == nullptr) {
 			if (MeshRoot_ == nullptr)
@@ -1215,9 +1218,9 @@ namespace tool {
 			else {
 				this->m_MeshRoot_ptr = MeshRoot_;
 			}
-			m_initializ = false;
+			m_root_initializ = false;
 		}
-		if (m_initializ == false) {
+		if (m_root_initializ == false) {
 			this->m_MeshRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
 				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::Model, op });
 			this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
@@ -1234,7 +1237,7 @@ namespace tool {
 				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::BoneRoot, this->m_BoneRoot_ptr });
 			this->m_JointRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
 				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::RigidRoot, this->m_RigidRoot_ptr });
-			m_initializ = true;
+			m_root_initializ = true;
 		}
 		return true;
 	}
@@ -1246,6 +1249,13 @@ namespace tool {
 		}
 		if (UpdataRoot(op) == false)
 			return(EXECUTIONRESULT::OK);
+		if (*m_updateable.Read() == true && *m_morph_initializ.Read() == true)
+		{
+			for (auto& morph : m_morph_arr)
+			{
+				morph.UpdataMorphOfModel(this);
+			}
+		}
 		return(EXECUTIONRESULT::OK);
 	}
 	Int32 OMMDModel::ImportGroupAndFlipMorph(PMXModel* pmx_model, mmd::PMXMorphData& pmx_morph)
@@ -1318,7 +1328,7 @@ namespace tool {
 		{
 			return(true);
 		}
-		list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
+		list->Add(op, EXECUTIONPRIORITY_EXPRESSION - 1, EXECUTIONFLAGS::NONE);
 		return(true);
 	}
 	Bool OMMDModel::GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags)
@@ -1346,14 +1356,17 @@ namespace tool {
 	}
 	Bool OMMDModel::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 	{
-		auto* id_ptr = m_DescID_map.Find(id);
-		if (id_ptr)
+	/*	if (*m_updateable.Read() == true)
 		{
-			auto& data = id_ptr->GetValue();
-			if (data.first == DescType::REAL_STRENGTH) {
-				m_morph_arr[data.second].UpdataMorphOfModel(this);
+			auto* id_ptr = m_DescID_map.Find(id);
+			if (id_ptr)
+			{
+				auto& data = id_ptr->GetValue();
+				if (data.first == DescType::REAL_STRENGTH) {
+					m_morph_arr[data.second].UpdataMorphOfModel(this);
+				}
 			}
-		}
+		}*/
 		return SUPER::SetDParameter(node, id, t_data, flags);
 	}
 	Bool OMMDModel::Message(GeListNode* node, Int32 type, void* data)
@@ -1365,7 +1378,9 @@ namespace tool {
 		{
 			OMMDMeshRoot_MSG* msg = static_cast<OMMDMeshRoot_MSG*>(data);
 			if (msg->type == OMMDMeshRoot_MSG_Type::MESH_MORPH_CHANGE) {
-				RefreshMorph();
+				*m_morph_initializ.Write() = false;
+				this->RefreshMorph();
+				*m_morph_initializ.Write() = true;
 			}
 			break;
 		}
@@ -1373,7 +1388,9 @@ namespace tool {
 		{
 			OMMDBoneRoot_MSG* msg = static_cast<OMMDBoneRoot_MSG*>(data);
 			if (msg->type == OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE) {
-				RefreshMorph();
+				*m_morph_initializ.Write() = false;
+				this->RefreshMorph();
+				*m_morph_initializ.Write() = true;
 			}
 			break;
 		}
@@ -1711,18 +1728,21 @@ namespace tool {
 			}
 			break;
 		}
-		case MSG_DESCRIPTION_CHECKUPDATE:
+		/*case MSG_DESCRIPTION_CHECKUPDATE:
 		{
-			auto* id_ptr = m_DescID_map.Find(*static_cast<DescriptionCheckUpdate*>(data)->descid);
-			if (id_ptr)
+			if (*m_updateable.Read() == true)
 			{
-				auto& descid_data = id_ptr->GetValue();
-				if (descid_data.first == DescType::REAL_STRENGTH) {
-					m_morph_arr[descid_data.second].UpdataMorphOfModel(this);
+				auto* id_ptr = m_DescID_map.Find(*static_cast<DescriptionCheckUpdate*>(data)->descid);
+				if (id_ptr)
+				{
+					auto& descid_data = id_ptr->GetValue();
+					if (descid_data.first == DescType::REAL_STRENGTH) {
+						m_morph_arr[descid_data.second].UpdataMorphOfModel(this);
+					}
 				}
 			}
 			break;
-		}
+		}*/
 
 		default:
 			break;

@@ -3,6 +3,7 @@
 
 #include "Utility.h"
 #include "TMMDBone.h"
+#include "OMMDModel.h"
 #include "description/TMMDBone.h"
 #include "description/OMMDCamera.h"
 
@@ -105,16 +106,16 @@ namespace tool {
 	struct morph_info
 	{
 		DescID	strength_id = DescID();                                         /* Morph ID. */
-		BaseTag* tag = nullptr;                                        /* Morph tag. */
+		BaseList2D* node = nullptr;                                        /* Morph tag. */
 		String name = String();                                        /* Morph name. */
 		/* operator== */
 		Bool operator ==(const morph_info& other) const {
-			return (this->strength_id == other.strength_id && this->tag == other.tag);
+			return (this->strength_id == other.strength_id && this->node == other.node);
 		}
 		/* Hash function */
 		maxon::HashInt GetHashCode() const
 		{
-			return  MAXON_HASHCODE(this->strength_id.GetHashCode(), this->tag);
+			return  MAXON_HASHCODE(this->strength_id.GetHashCode(), this->node);
 		}
 	};
 	/* Bone information struct. */
@@ -308,10 +309,7 @@ namespace tool {
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_D_map;
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_V_map;
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_A_map;
-		/* 析构函数 */
-		~OMMDCamera()
-		{
-		}
+
 		/* 储存前一帧，以确定更新状态 */
 		Int32 prev_frame = -1;
 		/* 储存上一种曲线类型，以确定更新状态 */
@@ -333,6 +331,8 @@ namespace tool {
 		Bool RegisterKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
 		/* 更新全部补间曲线 */
 		Bool UpdateAllInterpolator(GeListNode* node = nullptr);
+		/* 析构函数 */
+		~OMMDCamera() {}
 		/* 获取对象管理的摄像机对象 */
 		BaseObject* GetCamera()
 		{

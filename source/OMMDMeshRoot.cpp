@@ -243,7 +243,8 @@ namespace tool {
 			}
 		}
 		// 去除已经删除的表情
-		for (auto name_it = m_MorphData_map.GetKeys().begin(); name_it != m_MorphData_map.GetKeys().end(); ++name_it) {
+		for (auto name_it = m_MorphData_map.GetKeys().begin(); name_it != m_MorphData_map.GetKeys().end(); ++name_it)
+		{
 			auto& name = *name_it;
 			if (morph_name_list.Find(name) == nullptr) {
 				m_MorphData_map.Erase(name)iferr_return;

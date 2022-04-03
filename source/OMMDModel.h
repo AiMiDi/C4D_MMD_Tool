@@ -65,6 +65,7 @@ namespace tool {
 		Bool IsMeshMorph() { return m_type == MorphType::MESH; }
 		Bool IsBoneMorph() { return m_type == MorphType::BONE; }
 		MorphType& GetType() { return m_type; }
+		DescID GetStrengthDescID() { return m_strength_id; }
 		bool operator==(const IMorph& other) const { return m_name == other.m_name; }
 		virtual void RenameMorph(OMMDModel* model, const String& name);
 		virtual void UpdataMorphOfModel(OMMDModel* model) = 0;
@@ -220,9 +221,11 @@ namespace tool {
 
 	class OMMDModel : public ObjectData
 	{
-
+	private:	
+		maxon::Synchronized<Bool> m_updateable;
+		maxon::Synchronized<Bool> m_morph_initializ;
+		Bool m_root_initializ = false;
 		Int32 m_morph_named_number = 0;
-		Bool m_initializ = false;
 		BaseObject* m_MeshRoot_ptr = nullptr;
 		BaseObject* m_BoneRoot_ptr = nullptr;
 		BaseObject* m_RigidRoot_ptr = nullptr;
@@ -230,11 +233,32 @@ namespace tool {
 		maxon::HashMap<DescID, maxon::Pair<DescType, Int32>> m_DescID_map;
 		maxon::HashMap<String, Int32> m_morph_name_map;
 		maxon::PointerArray<IMorph> m_morph_arr;
-		OMMDModel() {}
-		~OMMDModel() {}
+	private:
+		OMMDModel() 
+		{ 
+			*m_updateable.Write() = true;
+			*m_morph_initializ.Write() = false;
+		}
+		void RefreshMorph();
 		MAXON_DISALLOW_COPY_AND_ASSIGN(OMMDModel);
 		INSTANCEOF(OMMDModel, ObjectData)
 	public:
+		class AddMorphHelper
+		{
+			OMMDModel* m_model = nullptr;		
+		public:
+			AddMorphHelper(OMMDModel* model) :m_model(model)
+			{
+				*m_model->m_updateable.Write() = false;
+				*m_model->m_morph_initializ.Write() = false;
+			}
+			~AddMorphHelper()
+			{
+				*m_model->m_updateable.Write() = true;
+			}
+		};
+	public:
+		~OMMDModel() {}
 		Bool Init(GeListNode* node) override;
 		Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 		Bool Write(GeListNode* node, HyperFile* hf) override;
@@ -250,27 +274,32 @@ namespace tool {
 
 		Bool ReadMorph(HyperFile* hf);
 		Bool WriteMorph(HyperFile* hf);
-		Bool CopyMorph(OMMDModel* dst);
-		void RefreshMorph();
+		Bool CopyMorph(OMMDModel* dst);	
+		AddMorphHelper BeginMorphChange()
+		{
+			return AddMorphHelper(this);
+		}
 		Int32 ImportGroupAndFlipMorph(PMXModel* pmx_model, mmd::PMXMorphData& pmx_morph);
-		Bool UpdataRoot(BaseObject* op = nullptr);
-		Bool CreateRoot();
-		String GetMorphNamedNumber() 
-		{ 
+
+		String GetMorphNamedNumber()
+		{
 			return String::IntToString(m_morph_named_number++);
 		}
-		maxon::PointerArray<IMorph>& GetMorphData() 
-		{ 
-			return m_morph_arr; 
+		maxon::PointerArray<IMorph>& GetMorphData()
+		{
+			return m_morph_arr;
 		}
-		maxon::HashMap<String, Int32>& GetMorphNameMap() 
-		{ 
-			return m_morph_name_map; 
+		maxon::HashMap<String, Int32>& GetMorphNameMap()
+		{
+			return m_morph_name_map;
 		}
-		maxon::HashMap<DescID, maxon::Pair<DescType, Int32>>& GetDescIDMap() 
+		maxon::HashMap<DescID, maxon::Pair<DescType, Int32>>& GetDescIDMap()
 		{
 			return m_DescID_map;
 		}
+
+		Bool UpdataRoot(BaseObject* op = nullptr);
+		Bool CreateRoot();
 		BaseObject* GetRootObject(ToolObjectType type_)
 		{
 			switch (type_)
@@ -287,6 +316,7 @@ namespace tool {
 				return nullptr;
 			}
 		}
+
 		static NodeData* Alloc()
 		{
 			return(NewObjClear(OMMDModel));

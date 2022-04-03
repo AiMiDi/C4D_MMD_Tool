@@ -1001,8 +1001,12 @@ class MMDTool : public CommandData
 	MMDToolDialog mmd_tool_dialog;
 
 public:
+	Bool RestoreLayout(void* secret) override
+	{
+		return mmd_tool_dialog.RestoreLayout(ID_MMD_TOOL, 0, secret);
+	}
 #if API_VERSION >= 21000
-	virtual Bool Execute(BaseDocument* doc, GeDialog* parentManager)
+	Bool Execute(BaseDocument* doc, GeDialog* parentManager) override
 	{
 		if (mmd_tool_dialog.IsOpen() == false)
 			mmd_tool_dialog.Open(DLG_TYPE::ASYNC, ID_MMD_TOOL);
@@ -1011,7 +1015,7 @@ public:
 		return(true);
 	}
 #else
-	virtual Bool Execute(BaseDocument* doc)
+	Bool Execute(BaseDocument* doc) override
 	{
 		if (mmd_tool_dialog.IsOpen() == false)
 			mmd_tool_dialog.Open(DLG_TYPE::ASYNC, ID_MMD_TOOL);

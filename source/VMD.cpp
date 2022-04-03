@@ -2528,6 +2528,18 @@ maxon::Result<void> VMDAnimation::TraverseDocument(BaseObject* select_object,max
 	maxon::HashMap<String, morph_info>& morphs_map,maxon::HashMap<String, BaseTag*>& ik_tag_map)
 {
 	iferr_scope;
+	OMMDModel* mmd_model = nullptr;
+	if (select_object->IsInstanceOf(ID_O_MMD_MODEL))
+	{
+		mmd_model = select_object->GetNodeData<OMMDModel>();
+	}
+	if (mmd_model != nullptr) {
+		auto& morph_data = mmd_model->GetMorphData();
+		for (auto& morph : morph_data)
+		{
+			morphs_map.Insert(morph.GetName(), morph_info{ morph.GetStrengthDescID(), select_object })iferr_return;
+		}
+	}
 	maxon::Queue<BaseObject*> nodes;
 	nodes.Push(select_object)iferr_return;
 	while (!nodes.IsEmpty())
@@ -2559,7 +2571,7 @@ maxon::Result<void> VMDAnimation::TraverseDocument(BaseObject* select_object,max
 						String morph_name = bone_morph->name;
 						// 记录表情信息
 						auto& morph =morphs_map.InsertMultiEntry(morph_name).GetValue().GetValue();						 
-						morph.tag = node_bone_tag;
+						morph.node = node_bone_tag;
 						morph.name = morph_name;
 						morph.strength_id = bone_morph->strength_id;
 					}
@@ -2575,20 +2587,22 @@ maxon::Result<void> VMDAnimation::TraverseDocument(BaseObject* select_object,max
 			}
 			// 处理表情
 			else {
-				BaseTag* const node_morph_tag = node->GetTag(Tposemorph);
-				if (node_morph_tag != nullptr)
+				if (mmd_model == nullptr)
 				{
-					CAPoseMorphTag* const	pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
-					const Int		MorphCount = pose_morph_tag->GetMorphCount();
-					for (Int32 index = 1; index < MorphCount; index++)
+					BaseTag* const node_morph_tag = node->GetTag(Tposemorph);
+					if (node_morph_tag != nullptr)
 					{
-						pose_morph_tag->GetMorph(index)->SetStrength(0);
-						String morph_name = pose_morph_tag->GetMorph(index)->GetName();
-						// 记录表情信息
-						morph_info& morph =morphs_map.InsertMultiEntry(morph_name).GetValue().GetValue();
-						morph.tag = node_morph_tag;
-						morph.name = morph_name;
-						morph.strength_id = pose_morph_tag->GetMorphID(index);
+						CAPoseMorphTag* const	pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
+						const Int		MorphCount = pose_morph_tag->GetMorphCount();
+						for (Int32 index = 1; index < MorphCount; index++)
+						{
+							pose_morph_tag->GetMorph(index)->SetStrength(0);
+							String morph_name = pose_morph_tag->GetMorph(index)->GetName();
+							// 记录表情信息
+							morph_info& morph = morphs_map.InsertMultiEntry(std::move(morph_name)).GetValue().GetValue();
+							morph.node = node_morph_tag;
+							morph.strength_id = pose_morph_tag->GetMorphID(index);
+						}
 					}
 				}
 			}
@@ -2636,9 +2650,9 @@ maxon::Result<void> VMDAnimation::DeletePreviousAnimation(BaseObject* select_obj
 	// 删除表情动画
 	if (m_motions_import_settings.import_morph) {
 		for (auto& morph : morphs_map.GetValues()) {
-			CTrack* morph_track = morph.tag->FindCTrack(morph.strength_id);
+			CTrack* morph_track = morph.node->FindCTrack(morph.strength_id);
 			CTrack::Free(morph_track);
-			morph.tag->SetParameter(morph.strength_id, 0, DESCFLAGS_SET::NONE);
+			morph.node->SetParameter(morph.strength_id, 0, DESCFLAGS_SET::NONE);
 		}
 	}
 	// 删除模型信息动画
@@ -3457,7 +3471,7 @@ maxon::Result<void> VMDAnimation::FromFileImportMotion()
 			{
 				iferr_scope;
 				String morph_motion_name = motion_morph_name_array[motion_morph_name_index];
-				const mmd::VMDMorphAnimation*			morph_frame;
+				const mmd::VMDMorphAnimation* morph_frame;
 				auto& MorphFrameList = morph_frame_list_map.Find(morph_motion_name)->GetValue();
 				auto morph_ptr = morphs_map.Find(morph_motion_name);
 				if (morph_ptr != nullptr)
@@ -3466,16 +3480,16 @@ maxon::Result<void> VMDAnimation::FromFileImportMotion()
 					{
 						morph_info& morph_id_tag_data = morph_ptr->GetValue();
 						DescID	morphID = morph_id_tag_data.strength_id;
-						BaseTag* pose_morph_tag = morph_id_tag_data.tag;
-						CTrack* MorphTrack = pose_morph_tag->FindCTrack(morphID);
+						BaseList2D* node = morph_id_tag_data.node;
+						CTrack* MorphTrack = node->FindCTrack(morphID);
 						if (MorphTrack == nullptr)
 						{
-							MorphTrack = CTrack::Alloc(pose_morph_tag, morphID);
+							MorphTrack = CTrack::Alloc(node, morphID);
 							if (MorphTrack == nullptr)
 							{
 								return(maxon::OutOfMemoryError(MAXON_SOURCE_LOCATION));
 							}
-							pose_morph_tag->InsertTrackSorted(MorphTrack);
+							node->InsertTrackSorted(MorphTrack);
 						}
 						CCurve* MorphCurve = MorphTrack->GetCurve();
 						Int	morph_frame_number = MorphFrameList.GetCount();
@@ -4071,7 +4085,7 @@ maxon::Result<void> VMDAnimation::FromDocumentExportMotion() {
 
 	if (m_motions_export_settings.export_morph == true) {
 		for (const morph_info& morph : morph_set) {
-			CTrack* morph_track = morph.tag->FindCTrack(morph.strength_id);
+			CTrack* morph_track = morph.node->FindCTrack(morph.strength_id);
 			if (morph_track != nullptr) {
 				CCurve* morph_curve = morph_track->GetCurve();
 				if (morph_curve != nullptr) {

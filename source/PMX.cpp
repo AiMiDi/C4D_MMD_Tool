@@ -1875,6 +1875,7 @@ namespace tool {
 			// 记录每个Morph标签所有的CMorph对象，并且可以通过名字来查找它
 			maxon::HashMap<BaseObject*, CAPoseMorphTag*> bone_tag_map;
 			maxon::HashMap<CAPoseMorphTag*, maxon::HashMap<String, CAMorph*>>	tag_morph_map;
+			OMMDModel::AddMorphHelper add_helper = ModelRootData->BeginMorphChange();
 			// 遍历每个表情
 			for (Int32 morph_index = 0; morph_index < morph_data_count; morph_index++)
 			{
@@ -2498,10 +2499,9 @@ namespace tool {
 			base_morph->Store(doc, morph_tag, CAMORPH_DATA_FLAGS::ASTAG);
 			morph_tag->UpdateMorphs();
 			morph_tag->Message(MSG_UPDATE);
-
+			OMMDModel::AddMorphHelper add_helper = ModelRootData->BeginMorphChange();
 			/* Get the morph data count. */
 			Int32 morph_data_count = this->m_model_data_count.morph_data_count;
-
 			for (Int32 morph_index = 0; morph_index < morph_data_count; morph_index++)
 			{
 				StatusSetText("Import morphs..."_s);
