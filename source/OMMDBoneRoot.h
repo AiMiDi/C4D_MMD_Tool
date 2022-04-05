@@ -5,41 +5,7 @@
 #include "description/OMMDBoneRoot.h"
 
 namespace tool {
-	struct bone_morph_hub_data {
-		BaseTag* bone_tag = nullptr;
-		DescID strength_id;
-
-		Bool SetStrength(const Float& strength)
-		{
-			return bone_tag->SetParameter(strength_id, strength, DESCFLAGS_SET::NONE);
-		}
-
-		Bool Write(HyperFile* hf) 
-		{
-			AutoAlloc<BaseLink> bone_tag_link;
-			if (bone_tag_link == nullptr)
-				return false;
-			bone_tag_link->SetLink(bone_tag);
-			if (!bone_tag_link->Write(hf))
-				return false;
-			if (!strength_id.Write(hf))
-				return false;
-			return true;
-		}
-
-		Bool Read(HyperFile* hf)
-		{
-			AutoAlloc<BaseLink> bone_tag_link;
-			if (bone_tag_link == nullptr)
-				return false;
-			if (!bone_tag_link->Read(hf))
-				return false;
-			bone_tag = static_cast<BaseTag*>(bone_tag_link->ForceGetLink());
-			if (!strength_id.Read(hf))
-				return false;
-			return true;
-		}
-	};
+	
 	/*
 type 0: updata BoneRoot;
 type 1: set bone display type;
@@ -98,6 +64,7 @@ type 3: bone morph change;
 		{
 			return(NewObjClear(OMMDBoneRoot));
 		}
+		void RefreshMorphMap(BaseObject* op);
 		maxon::HashMap<String, maxon::BaseList<bone_morph_hub_data>>& GetBoneMorphMap() { return m_MorphData_map; }
 	};
 }

@@ -1041,22 +1041,22 @@ namespace tool {
 			{
 			case tool::MorphType::GROUP:
 			{
-				res = NewObj(GroupMorph)iferr_return;
+				res = NewObj(GroupMorph).GetValue();
 				break;
 			}
 			case tool::MorphType::FLIP:
 			{
-				res = NewObj(FlipMorph)iferr_return;
+				res = NewObj(FlipMorph).GetValue();
 				break;
 			}
 			case tool::MorphType::MESH:
 			{
-				res = NewObj(MeshMorph)iferr_return;
+				res = NewObj(MeshMorph).GetValue();
 				break;
 			}
 			case tool::MorphType::BONE:
 			{
-				res = NewObj(BoneMorph)iferr_return;
+				res = NewObj(BoneMorph).GetValue();
 				break;
 			}
 			default:
@@ -1122,8 +1122,8 @@ namespace tool {
 	void OMMDModel::RefreshMorph()
 	{
 		iferr_scope_handler{ return; };
-		Int32 morph_count = m_morph_arr.GetCount();
-		for (Int32 morph_index = 0; morph_index < morph_count; ++morph_index)
+		Int64 morph_count = m_morph_arr.GetCount();
+		for (Int64 morph_index = 0; morph_index < morph_count; ++morph_index)
 		{
 			auto& morph = m_morph_arr[morph_index];
 			if (morph.IsMeshMorph() || morph.IsBoneMorph()) {
@@ -1221,22 +1221,30 @@ namespace tool {
 			m_root_initializ = false;
 		}
 		if (m_root_initializ == false) {
-			this->m_MeshRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
-				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::Model, op });
-			this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
-				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::RigidRoot, this->m_RigidRoot_ptr });
-			this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
-				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::JointRoot, this->m_JointRoot_ptr });
-			this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
-				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::Model, op });
-			this->m_RigidRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
-				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::BoneRoot, this->m_BoneRoot_ptr });
-			this->m_RigidRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
-				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::JointRoot, this->m_JointRoot_ptr });
-			this->m_JointRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
-				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::BoneRoot, this->m_BoneRoot_ptr });
-			this->m_JointRoot_ptr->Message(ID_O_MMD_MODEL, &OMMDModel_MSG{
-				OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::RigidRoot, this->m_RigidRoot_ptr });
+			const maxon::StrongRef<OMMDModel_MSG> MeshRoot_msg(
+				NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::Model, op).GetValue());
+			this->m_MeshRoot_ptr->Message(ID_O_MMD_MODEL, MeshRoot_msg);
+			const maxon::StrongRef<OMMDModel_MSG> BoneRoot_msgA(
+				NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::RigidRoot, this->m_RigidRoot_ptr).GetValue());
+			this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, BoneRoot_msgA);
+			const maxon::StrongRef<OMMDModel_MSG> BoneRoot_msgB(
+				NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::JointRoot, this->m_JointRoot_ptr).GetValue());
+			this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, BoneRoot_msgB);
+			const maxon::StrongRef<OMMDModel_MSG> BoneRoot_msgC(
+				NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::Model, op).GetValue());
+			this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, BoneRoot_msgC);
+			const maxon::StrongRef<OMMDModel_MSG> RigidRoot_msgA(
+				NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::BoneRoot, this->m_BoneRoot_ptr).GetValue());
+			this->m_RigidRoot_ptr->Message(ID_O_MMD_MODEL, RigidRoot_msgA);
+			const maxon::StrongRef<OMMDModel_MSG> RigidRoot_msgB(
+				NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::JointRoot, this->m_JointRoot_ptr).GetValue());
+			this->m_RigidRoot_ptr->Message(ID_O_MMD_MODEL, RigidRoot_msgB);
+			const maxon::StrongRef<OMMDModel_MSG> JointRoot_msgA(
+				NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::BoneRoot, this->m_BoneRoot_ptr).GetValue());
+			this->m_JointRoot_ptr->Message(ID_O_MMD_MODEL, JointRoot_msgA);
+			const maxon::StrongRef<OMMDModel_MSG> JointRoot_msgB(
+				NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::RigidRoot, this->m_RigidRoot_ptr).GetValue());
+			this->m_JointRoot_ptr->Message(ID_O_MMD_MODEL, JointRoot_msgB);
 			m_root_initializ = true;
 		}
 		return true;

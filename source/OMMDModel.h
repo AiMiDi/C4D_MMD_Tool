@@ -23,8 +23,8 @@ namespace tool {
 
 	class EditorSubMorphDialog : public GeDialog
 	{
-		IMorph* m_morph = nullptr;
 		OMMDModel* m_model = nullptr;
+		IMorph* m_morph = nullptr;	
 		ImagesGUI* m_images = nullptr;
 		SimpleListView m_listview;
 		maxon::HashSet<Int32> m_delete_button_id_set;
@@ -40,19 +40,15 @@ namespace tool {
 
 	class IMorph {
 	protected:
-		DescID m_strength_id;
+		DescID m_strength_id = DescID();
 		String m_name = String();
 		MorphType m_type = MorphType::DEFAULT;
 	public:
 		virtual ~IMorph() {}
 		IMorph(const IMorph&) = delete;
-		IMorph(DescID grp_id_ = DescID(),
-			DescID strength_id_ = DescID(),
-			String name_ = String(),
-			MorphType type_= MorphType::DEFAULT):
-			m_strength_id(strength_id_),
-			m_name(name_),
-			m_type(type_){}	
+		IMorph(const MorphType& type_): m_type(type_) {}
+		IMorph(DescID strength_id_,String name_, const MorphType& type_):
+			m_strength_id(strength_id_),m_name(name_),m_type(type_){}	
 		IMorph(IMorph&& other) noexcept :
 			m_strength_id(std::move(other.m_strength_id)),
 			m_name(std::move(other.m_name)),
@@ -82,25 +78,26 @@ namespace tool {
 	};
 	class GroupMorph : public IMorph
 	{
-		DescID m_grp_id;
-		DescID m_button_grp_id;
-		DescID m_button_editor_id;
-		DescID m_button_delete_id;
-		DescID m_button_rename_id;	
+		DescID m_grp_id = DescID();
+		DescID m_button_grp_id = DescID();
+		DescID m_button_editor_id = DescID();
+		DescID m_button_delete_id = DescID();
+		DescID m_button_rename_id = DescID();	
 
 		maxon::HashMap<String, Float> m_data;	
 	public:
 		~GroupMorph() {}
+		GroupMorph() : IMorph(MorphType::GROUP) {}
 		GroupMorph(const GroupMorph&) = delete;
-		GroupMorph(DescID grp_id_ = DescID(),
-			DescID strength_id_ = DescID(),
-			DescID button_grp_id_ = DescID(),
-			DescID button_editor_id_ = DescID(),
-			DescID button_delete_id_ = DescID(),
-			DescID button_rename_id_ = DescID(),
-			DescID power_id_ = DescID(),
-			String name_ = String()):
-			IMorph(grp_id_, strength_id_, name_, MorphType::GROUP),
+		GroupMorph(DescID grp_id_,
+			DescID strength_id_,
+			DescID button_grp_id_,
+			DescID button_editor_id_,
+			DescID button_delete_id_,
+			DescID button_rename_id_ ,
+			DescID power_id_,
+			String name_):
+			IMorph(strength_id_, name_, MorphType::GROUP),
 			m_grp_id(grp_id_),
 			m_button_grp_id(button_grp_id_),
 			m_button_editor_id(button_editor_id_),
@@ -128,24 +125,25 @@ namespace tool {
 	};
 	class FlipMorph : public IMorph
 	{
-		DescID m_grp_id;
-		DescID m_button_grp_id;
-		DescID m_button_editor_id;
-		DescID m_button_delete_id;
-		DescID m_button_rename_id;	
+		DescID m_grp_id = DescID();
+		DescID m_button_grp_id = DescID();
+		DescID m_button_editor_id = DescID();
+		DescID m_button_delete_id = DescID();
+		DescID m_button_rename_id = DescID();	
 		maxon::HashMap<String, Float> m_data;		
 	public:
 		~FlipMorph() {}
 		FlipMorph(const FlipMorph&) = delete;
-		FlipMorph(DescID grp_id_ = DescID(),
-			DescID strength_id_ = DescID(),
-			DescID button_grp_id_ = DescID(),
-			DescID power_id_ = DescID(),
-			DescID button_editor_id_ = DescID(),
-			DescID button_delete_id_ = DescID(),
-			DescID button_rename_id_ = DescID(),
-			String name_ = String()) :
-			IMorph(grp_id_, strength_id_, name_, MorphType::FLIP),
+		FlipMorph() : IMorph(MorphType::FLIP) {}
+		FlipMorph(DescID grp_id_,
+			DescID strength_id_,
+			DescID button_grp_id_,
+			DescID power_id_ ,
+			DescID button_editor_id_,
+			DescID button_delete_id_,
+			DescID button_rename_id_,
+			String name_) :
+			IMorph(strength_id_, name_, MorphType::FLIP),
 			m_grp_id(grp_id_),
 			m_button_grp_id(button_grp_id_),
 			m_button_editor_id(button_editor_id_),
@@ -174,10 +172,9 @@ namespace tool {
 	class MeshMorph : public IMorph
 	{
 	public:
-		MeshMorph(DescID grp_id_ = DescID(),
-			DescID strength_id_ = DescID(),
-			String name_ = String()):
-			IMorph(grp_id_, strength_id_, name_, MorphType::MESH) {}
+		MeshMorph() : IMorph(MorphType::MESH) {}
+		MeshMorph(DescID strength_id_,String name_):
+			IMorph(strength_id_, name_, MorphType::MESH) {}
 		~MeshMorph() {}
 		virtual void UpdataMorphOfModel(OMMDModel* model);
 		virtual Int32 AddMorphToModel(OMMDModel* model, String morph_name = String());
@@ -186,10 +183,9 @@ namespace tool {
 	class BoneMorph : public IMorph
 	{
 	public:
-		BoneMorph(DescID grp_id_ = DescID(),
-			DescID strength_id_ = DescID(),
-			String name_ = String()):
-			IMorph(grp_id_, strength_id_, name_, MorphType::BONE) {}
+		BoneMorph() : IMorph(MorphType::BONE) {}
+		BoneMorph(DescID strength_id_,String name_):
+			IMorph(strength_id_, name_, MorphType::BONE) {}
 		~BoneMorph() {}
 		virtual void UpdataMorphOfModel(OMMDModel* model);
 		virtual Int32 AddMorphToModel(OMMDModel* model, String morph_name = String());

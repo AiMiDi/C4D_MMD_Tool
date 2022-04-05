@@ -185,9 +185,9 @@ namespace tool {
 		}
 		return SUPER::Message(node, type, data);
 	}
-
-	EXECUTIONRESULT OMMDMeshRoot::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) {
-		iferr_scope_handler{ return EXECUTIONRESULT::OK; };
+	inline void OMMDMeshRoot::RefreshMorphMap(BaseObject* op)
+	{
+		iferr_scope_handler{ return; };
 		Bool need_update_morph = false;
 		maxon::Queue<BaseObject*> nodes;
 		maxon::HashSet<String> morph_name_list;
@@ -256,6 +256,9 @@ namespace tool {
 				m_Model_ptr->Message(ID_O_MMD_MESH_ROOT, NewObj(OMMDMeshRoot_MSG, OMMDMeshRoot_MSG_Type::MESH_MORPH_CHANGE).GetValue());
 			}
 		}
+	}
+	EXECUTIONRESULT OMMDMeshRoot::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) {	
+		RefreshMorphMap(op);
 		return EXECUTIONRESULT::OK;
 	}
 

@@ -959,10 +959,12 @@ namespace tool {
 				}
 			}
 		}
-		m_bone_root->Message(ID_T_MMD_BONE);
-		DescriptionCheckUpdate* msg_data = NewObj(DescriptionCheckUpdate)iferr_return;
-		msg_data->descid = NewObj(DescID, PMX_BONE_INHERIT_BONE_PARENT_LINK)iferr_return;
-		m_bone_root->MultiMessage(MULTIMSG_ROUTE::BROADCAST, MSG_DESCRIPTION_CHECKUPDATE, msg_data);
+		const maxon::StrongRef<TMMDBone_MSG> bone_root_msgA(NewObj(TMMDBone_MSG, TMMDBone_MSG_Type::BONE_INDEX_CHANGE).GetValue());
+		m_bone_root->Message(ID_T_MMD_BONE, bone_root_msgA);
+		const maxon::StrongRef<DescriptionCheckUpdate> bone_root_msgB(NewObj(DescriptionCheckUpdate).GetValue());
+		const maxon::StrongRef<DescID> bone_root_msgB_descid(NewObj(DescID, PMX_BONE_INHERIT_BONE_PARENT_LINK).GetValue());
+		bone_root_msgB->descid = bone_root_msgB_descid;
+		m_bone_root->MultiMessage(MULTIMSG_ROUTE::BROADCAST, MSG_DESCRIPTION_CHECKUPDATE, bone_root_msgB);
 		for (mmd::PMXRigidBodyData& rigid_body_data : this->m_rigid_body_data)
 		{
 			const Int32 bone_index = rigid_body_data.related_bone_index;

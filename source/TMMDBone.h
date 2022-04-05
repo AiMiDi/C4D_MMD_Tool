@@ -5,34 +5,25 @@
 namespace tool {
 	struct bone_morph_data
 	{
-		DescID	grp_id;
-		DescID	strength_id;
-		DescID	translation_id;
-		DescID	rotation_id;
-		DescID	button_grp_id;
-		DescID	button_delete_id;
-		DescID	button_rename_id;
-		String	name;
-		bone_morph_data(
-			const DescID& grp_id_,
-			const DescID& strength_id_,
-			const DescID& translation_id_,
-			const DescID& rotation_id_,
-			const DescID& button_grp_id_,
-			const DescID& button_delete_id_,
-			const DescID& button_rename_id_,
-			const String& name_)
-		{
-			grp_id = grp_id_;
-			strength_id = strength_id_;
-			translation_id = translation_id_;
-			rotation_id = rotation_id_;
-			button_grp_id = button_grp_id_;
-			button_delete_id = button_delete_id_;
-			button_rename_id = button_rename_id_;
-			name = name_;
-		}
-		bone_morph_data() : bone_morph_data(DescID(), DescID(), DescID(), DescID(), DescID(), DescID(), DescID(), String()) {}
+		DescID	grp_id = DescID();
+		DescID	strength_id = DescID();
+		DescID	translation_id = DescID();
+		DescID	rotation_id = DescID();
+		DescID	button_grp_id = DescID();
+		DescID	button_delete_id = DescID();
+		DescID	button_rename_id = DescID();
+		String	name = String();		
+		bone_morph_data() {}
+		bone_morph_data(const bone_morph_data&) = delete;
+		bone_morph_data(bone_morph_data&& other) noexcept :
+			grp_id(std::move(other.grp_id)),
+			strength_id(std::move(other.strength_id)),
+			translation_id(std::move(other.translation_id)),
+			rotation_id(std::move(other.rotation_id)),
+			button_grp_id(std::move(other.button_grp_id)),
+			button_delete_id(std::move(other.button_delete_id)),
+			button_rename_id(std::move(other.button_rename_id)),
+			name(std::move(other.name)) {}
 
 		Bool Write(HyperFile* hf)
 		{
@@ -75,6 +66,30 @@ namespace tool {
 				return false;
 			return true;
 		}
+	};
+	enum class TMMDBone_MSG_Type
+	{
+		DEFAULT,
+		BONE_INDEX_CHANGE,
+		BONE_MORPH_ADD,
+		BONE_MORPH_DELETE,
+		BONE_MORPH_RENAME
+	};
+	struct TMMDBone_MSG
+	{
+		TMMDBone_MSG_Type type = TMMDBone_MSG_Type::DEFAULT;
+		String	name;	
+		String	name_old;
+		bone_morph_hub_data morph_hub_data;
+		// BONE_INDEX_CHANGE
+		TMMDBone_MSG(const TMMDBone_MSG_Type& type_) :
+			type(type_), name(), name_old(), morph_hub_data() {}
+		// BONE_MORPH_ADD and BONE_MORPH_DELETE
+		TMMDBone_MSG(const TMMDBone_MSG_Type& type_, const String& name_, const DescID& strength_id_, BaseTag* tag_) :
+			type(type_), name(name_), name_old(), morph_hub_data(tag_, strength_id_) {}
+		// BONE_MORPH_RENAME
+		TMMDBone_MSG(const TMMDBone_MSG_Type& type_, const String& name_, const DescID& strength_id_, BaseTag* tag_, const String& name_old) :
+			type(type_), name(name_), name_old(name_old), morph_hub_data(tag_, strength_id_) {}
 	};
 	class TMMDBone : public TagData
 	{

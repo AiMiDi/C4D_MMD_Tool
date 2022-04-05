@@ -242,45 +242,139 @@ namespace tool {
 		}
 		case ID_T_MMD_BONE:
 		{
-			BaseObject* op = static_cast<BaseObject*>(node);
-			this->m_bone_items.FlushAll();
-			this->m_bone_items.SetString(-1, "-"_s);
-			this->m_IndexToBone_map.Reset();
-			this->m_BoneToIndex_map.Reset();
-			maxon::Queue<BaseObject*> nodes;
-			GeData ge_data;
-			Int32 bone_index = 0;
-			BaseTag* node_bone_tag = nullptr;
-			iferr(nodes.Push(op)) return(true);
-			while (!nodes.IsEmpty())
+			TMMDBone_MSG* msg = static_cast<TMMDBone_MSG*>(data);
+			Bool need_update_morph = false;
+
+			switch (msg->type)
 			{
-				BaseObject* node_ = *(nodes.Pop());
-				while (node_ != nullptr)
+			case TMMDBone_MSG_Type::BONE_INDEX_CHANGE:
+			{
+				BaseObject* op = static_cast<BaseObject*>(node);
+				this->m_bone_items.FlushAll();
+				this->m_bone_items.SetString(-1, "-"_s);
+				this->m_IndexToBone_map.Reset();
+				this->m_BoneToIndex_map.Reset();
+				maxon::Queue<BaseObject*> nodes;
+				GeData ge_data;
+				Int32 bone_index = 0;
+				BaseTag* node_bone_tag = nullptr;
+				iferr(nodes.Push(op)) return(true);
+				while (!nodes.IsEmpty())
 				{
-					if (node_->GetType() == Ojoint)
+					BaseObject* node_ = *(nodes.Pop());
+					while (node_ != nullptr)
 					{
-						node_bone_tag = node_->GetTag(ID_T_MMD_BONE);
-						if (node_bone_tag != nullptr)
+						if (node_->GetType() == Ojoint)
 						{
-							node_bone_tag->GetParameter(PMX_BONE_INDEX, ge_data, DESCFLAGS_GET::NONE);
-							bone_index = ge_data.GetString().ToInt32(nullptr);
-							this->m_bone_items.SetString(bone_index, node_->GetName());
-							this->m_IndexToBone_map.Insert(bone_index, node_)iferr_return;
-							this->m_BoneToIndex_map.Insert(node_, bone_index)iferr_return;
+							node_bone_tag = node_->GetTag(ID_T_MMD_BONE);
+							if (node_bone_tag != nullptr)
+							{
+								node_bone_tag->GetParameter(PMX_BONE_INDEX, ge_data, DESCFLAGS_GET::NONE);
+								bone_index = ge_data.GetString().ToInt32(nullptr);
+								this->m_bone_items.SetString(bone_index, node_->GetName());
+								this->m_IndexToBone_map.Insert(bone_index, node_)iferr_return;
+								this->m_BoneToIndex_map.Insert(node_, bone_index)iferr_return;
+							}
+						}
+						iferr(nodes.Push(node_->GetDown()))
+							return(true);
+						if (node_ != op)
+						{
+							node_ = node_->GetNext();
+						}
+						else {
+							break;
 						}
 					}
-					iferr(nodes.Push(node_->GetDown()))
-						return(true);
-					if (node_ != op)
-					{
-						node_ = node_->GetNext();
-					}
-					else {
-						break;
+				}
+				nodes.Reset();
+				break;
+			}
+			case TMMDBone_MSG_Type::BONE_MORPH_ADD:
+			{
+				maxon::BaseList<bone_morph_hub_data>* bone_morph_list = nullptr;
+				auto bone_morph_map_ptr = m_MorphData_map.Find(msg->name);
+				if (bone_morph_map_ptr != nullptr)
+				{
+					bone_morph_list = &bone_morph_map_ptr->GetValue();
+					for (auto& morph_hub_data : *bone_morph_list) {
+						if (morph_hub_data == msg->morph_hub_data)
+							goto EXIT;
 					}
 				}
+				else {
+					bone_morph_list = &m_MorphData_map.InsertEntry(msg->name).GetValue().GetValue();
+				}
+				bone_morph_list->Append(msg->morph_hub_data)iferr_return;
+				need_update_morph = true;
+				break;
 			}
-			nodes.Reset();
+			case TMMDBone_MSG_Type::BONE_MORPH_DELETE:
+			{
+				auto* bone_morph_map_ptr = m_MorphData_map.Find(msg->name);
+				if (bone_morph_map_ptr != nullptr)
+				{
+					maxon::BaseList<bone_morph_hub_data>& bone_morph_list = bone_morph_map_ptr->GetValue();
+					for (auto& morph_hub_data_it = bone_morph_list.Begin(); morph_hub_data_it != bone_morph_list.End(); ++morph_hub_data_it) {
+						if (*morph_hub_data_it == msg->morph_hub_data)
+						{
+							morph_hub_data_it = bone_morph_list.Erase(morph_hub_data_it);
+							need_update_morph = true;
+							break;
+						}
+					}
+					if (bone_morph_list.IsEmpty())
+					{
+						m_MorphData_map.Erase(msg->name)iferr_return;
+					}
+				}		
+				break;
+			}
+			case TMMDBone_MSG_Type::BONE_MORPH_RENAME:
+			{
+				auto* old_bone_morph_map_ptr = m_MorphData_map.Find(msg->name_old);
+				if (old_bone_morph_map_ptr != nullptr)
+				{
+					maxon::BaseList<bone_morph_hub_data>& old_bone_morph_list = old_bone_morph_map_ptr->GetValue();
+					for (auto& morph_hub_data_it = old_bone_morph_list.Begin(); morph_hub_data_it != old_bone_morph_list.End(); ++morph_hub_data_it) {
+						auto& morph_hub_data = *morph_hub_data_it;
+						if (morph_hub_data == msg->morph_hub_data)
+						{
+							maxon::BaseList<bone_morph_hub_data>* new_bone_morph_list = nullptr;
+							auto* new_bone_morph_map_ptr = m_MorphData_map.Find(msg->name);
+							if (new_bone_morph_map_ptr != nullptr)
+							{
+								new_bone_morph_list = &new_bone_morph_map_ptr->GetValue();
+								for (auto& new_morph_data : *new_bone_morph_list) {
+									if (new_morph_data == msg->morph_hub_data)
+										goto EXIT;
+								}
+							}
+							else {
+								new_bone_morph_list = &m_MorphData_map.InsertEntry(msg->name).GetValue().GetValue();
+							}
+							new_bone_morph_list->Append(std::move(*morph_hub_data_it))iferr_return;
+							morph_hub_data_it = old_bone_morph_list.Erase(morph_hub_data_it);
+							need_update_morph = true;
+							break;
+						}
+					}
+					if (old_bone_morph_list.IsEmpty()) 
+					{
+						m_MorphData_map.Erase(msg->name_old)iferr_return;
+					}
+				}
+				break;
+			}
+			default:
+				break;
+			}
+		EXIT:
+			if (need_update_morph == true) {
+				if (m_Model_ptr != nullptr) {
+					m_Model_ptr->Message(ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE).GetValue());
+				}
+			}
 			break;
 		}
 		case ID_O_MMD_MODEL:
@@ -318,9 +412,9 @@ namespace tool {
 		}
 		return SUPER::Message(node, type, data);
 	}
-	EXECUTIONRESULT OMMDBoneRoot::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
+	inline void OMMDBoneRoot::RefreshMorphMap(BaseObject* op)
 	{
-		iferr_scope_handler{ return EXECUTIONRESULT::OK; };
+		iferr_scope_handler{ return; };
 		Bool need_update_morph = false;
 		maxon::Queue<BaseObject*> nodes;
 		maxon::HashSet<String> morph_name_list;
@@ -387,6 +481,10 @@ namespace tool {
 				m_Model_ptr->Message(ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE).GetValue());
 			}
 		}
+	}
+	EXECUTIONRESULT OMMDBoneRoot::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
+	{
+		//RefreshMorphMap(op);
 		return EXECUTIONRESULT::OK;
 	}
 	Bool OMMDBoneRoot::AddToExecution(BaseObject* op, PriorityList* list)

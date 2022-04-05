@@ -516,7 +516,7 @@ namespace mmd {
 namespace tool {
 	struct tag_info
 	{
-		CAPoseMorphTag* morph_tag;    /* The tag where it is. */
+		CAPoseMorphTag* morph_tag = nullptr;    /* The tag where it is. */
 		maxon::BaseArray<Int32> vertex_index_arr;
 		tag_info(){}
 		MAXON_DISALLOW_COPY_AND_ASSIGN(tag_info);

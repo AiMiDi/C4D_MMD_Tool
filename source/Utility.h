@@ -41,6 +41,128 @@ namespace tool {
 		BUTTON_DELETE,
 		BUTTON_RENAME
 	};
+	struct bone_morph_hub_data {
+		BaseTag* bone_tag;
+		DescID strength_id;
+
+		bone_morph_hub_data() : bone_tag(nullptr), strength_id() {}
+		bone_morph_hub_data(BaseTag* bone_tag_, const DescID& strength_id_) : bone_tag(bone_tag_), strength_id(strength_id_) {}
+		bone_morph_hub_data(const bone_morph_hub_data& other) : bone_tag(other.bone_tag), strength_id(other.strength_id) {}
+		bone_morph_hub_data(bone_morph_hub_data&& other) noexcept : bone_tag(std::move(other.bone_tag)), strength_id(std::move(other.strength_id)) {}
+
+		Bool operator==(const bone_morph_hub_data& d) const
+		{
+			return d.bone_tag == bone_tag && d.strength_id == strength_id;
+		}
+		Bool operator!=(const bone_morph_hub_data& d) const
+		{
+			return d.bone_tag != bone_tag && d.strength_id != strength_id;
+		}
+
+		const bone_morph_hub_data& operator=(const bone_morph_hub_data& other)
+		{
+			if (*this != other)
+			{
+				bone_tag = other.bone_tag;
+				strength_id = other.strength_id;
+			}
+			return *this;
+		}
+
+		Bool SetStrength(const Float& strength)
+		{
+			return bone_tag->SetParameter(strength_id, strength, DESCFLAGS_SET::NONE);
+		}
+
+		Bool Write(HyperFile* hf)
+		{
+			AutoAlloc<BaseLink> bone_tag_link;
+			if (bone_tag_link == nullptr)
+				return false;
+			bone_tag_link->SetLink(bone_tag);
+			if (!bone_tag_link->Write(hf))
+				return false;
+			if (!strength_id.Write(hf))
+				return false;
+			return true;
+		}
+
+		Bool Read(HyperFile* hf)
+		{
+			AutoAlloc<BaseLink> bone_tag_link;
+			if (bone_tag_link == nullptr)
+				return false;
+			if (!bone_tag_link->Read(hf))
+				return false;
+			bone_tag = static_cast<BaseTag*>(bone_tag_link->ForceGetLink());
+			if (!strength_id.Read(hf))
+				return false;
+			return true;
+		}
+	};
+	struct mesh_morph_hub_data {
+		CAPoseMorphTag* morph_tag = nullptr;
+		DescID strength_id;
+
+		mesh_morph_hub_data() : morph_tag(nullptr), strength_id() {}
+		mesh_morph_hub_data(BaseTag* bone_tag_, const DescID& strength_id_) : morph_tag(morph_tag), strength_id(strength_id_) {}
+		mesh_morph_hub_data(const mesh_morph_hub_data& other) : morph_tag(other.morph_tag), strength_id(other.strength_id) {}
+		mesh_morph_hub_data(mesh_morph_hub_data&& other) noexcept : morph_tag(std::move(other.morph_tag)), strength_id(std::move(other.strength_id)) {}
+
+		Bool operator==(const mesh_morph_hub_data& d) const
+		{
+			return d.morph_tag == morph_tag && d.strength_id == strength_id;
+		}
+		Bool operator!=(const mesh_morph_hub_data& d) const
+		{
+			return d.morph_tag != morph_tag && d.strength_id != strength_id;
+		}
+
+		const mesh_morph_hub_data& operator=(const mesh_morph_hub_data& other)
+		{
+			if (*this != other)
+			{
+				morph_tag = other.morph_tag;
+				strength_id = other.strength_id;
+			}
+			return *this;
+		}
+		Bool SetStrength(const Float& strength)
+		{
+			if (morph_tag->GetMode() == ID_CA_POSE_MODE_ANIMATE) {
+				return morph_tag->SetParameter(strength_id, strength, DESCFLAGS_SET::NONE);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		Bool Write(HyperFile* hf)
+		{
+			AutoAlloc<BaseLink> morph_tag_link;
+			if (morph_tag_link == nullptr)
+				return false;
+			morph_tag_link->SetLink(morph_tag);
+			if (!morph_tag_link->Write(hf))
+				return false;
+			if (!strength_id.Write(hf))
+				return false;
+			return true;
+		}
+
+		Bool Read(HyperFile* hf)
+		{
+			AutoAlloc<BaseLink> morph_tag_link;
+			if (morph_tag_link == nullptr)
+				return false;
+			if (!morph_tag_link->Read(hf))
+				return false;
+			morph_tag = static_cast<CAPoseMorphTag*>(morph_tag_link->ForceGetLink());
+			if (!strength_id.Read(hf))
+				return false;
+			return true;
+		}
+	};
 }
 namespace mmd {
 	extern Bool ReadPMXText(BaseFile* const file, const Char& text_encoding, String& out_string);
