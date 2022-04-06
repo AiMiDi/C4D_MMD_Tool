@@ -604,7 +604,7 @@ Bool C4DBulletTest::Execute(BaseDocument* doc)
 		if (!g_bulletThread)
 		{
 			/* create and start thread */
-			g_bulletThread = mmd::BulletThread::Create().GetValue();
+			g_bulletThread = tool::BulletThread::Create().GetValue();
 			iferr(g_bulletThread.Start())
 				return(false);
 		}

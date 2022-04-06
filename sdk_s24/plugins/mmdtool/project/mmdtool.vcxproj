@@ -185,39 +185,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\source\BulletTest.cpp" />
-    <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp" />
-    <ClCompile Include="..\..\..\..\source\main.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_Control.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_model.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_utility.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_VMD_animation.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_VPD_pose.cpp" />
-    <ClCompile Include="..\..\..\..\source\NameConversion.cpp" />
-    <ClCompile Include="..\..\..\..\source\PluginRegister.cpp" />
     <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
     <ClCompile Include="..\generated\hxx\register.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\res\c4d_symbols.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDBoneRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDCamera.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJoint.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJointRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDMeshRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDModel.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigid.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigidRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\TMMDBone.h" />
-    <ClInclude Include="..\..\..\..\source\BulletTest.h" />
-    <ClInclude Include="..\..\..\..\source\ImagesGUI.h" />
-    <ClInclude Include="..\..\..\..\source\main.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_Control.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_model.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_utility.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_VMD_animation.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_VPD_pose.h" />
-    <ClInclude Include="..\..\..\..\source\NameConversion.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

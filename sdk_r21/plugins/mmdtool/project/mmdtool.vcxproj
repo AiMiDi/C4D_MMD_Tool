@@ -80,7 +80,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>26495;26439;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -100,7 +100,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DisableSpecificWarnings>26495;26439;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -204,16 +204,16 @@
     <ClCompile Include="..\generated\hxx\register.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\res\c4d_symbols.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDBoneRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDCamera.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJoint.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJointRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDMeshRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDModel.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigid.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigidRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\TMMDBone.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDCamera.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJoint.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigid.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h" />
     <ClInclude Include="..\..\..\..\source\BulletTest.h" />
     <ClInclude Include="..\..\..\..\source\ImagesGUI.h" />
     <ClInclude Include="..\..\..\..\source\main.h" />
@@ -230,28 +230,6 @@
     <ClInclude Include="..\..\..\..\source\Utility.h" />
     <ClInclude Include="..\..\..\..\source\VMD.h" />
     <ClInclude Include="..\..\..\..\source\VPD.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\res\strings_en-US\c4d_strings.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDBoneRoot.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDCamera.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJoint.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJointRoot.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDMeshRoot.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDModel.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigid.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigidRoot.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\TMMDBone.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\c4d_strings.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDBoneRoot.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDCamera.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJoint.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJointRoot.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDMeshRoot.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDModel.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigid.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigidRoot.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\TMMDBone.str" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

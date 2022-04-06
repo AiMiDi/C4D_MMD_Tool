@@ -81,7 +81,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -100,7 +100,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -209,16 +209,34 @@
     <ClCompile Include="..\generated\hxx\register.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\res\c4d_symbols.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDBoneRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDCamera.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJoint.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJointRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDMeshRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDModel.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigid.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigidRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\TMMDBone.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDCamera.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJoint.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigid.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\..\..\..\source\BulletTest.h" />
     <ClInclude Include="..\..\..\..\source\ImagesGUI.h" />
     <ClInclude Include="..\..\..\..\source\main.h" />
@@ -237,55 +255,95 @@
     <ClInclude Include="..\..\..\..\source\NameConversion.h" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\..\..\res\description\OMMDBoneRoot.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\description\OMMDCamera.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\description\OMMDJoint.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\description\OMMDJointRoot.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\description\OMMDMeshRoot.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\description\OMMDModel.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\description\OMMDRigid.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\description\OMMDRigidRoot.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\description\TMMDBone.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Resource>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDCamera.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDJoint.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDModel.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDRigid.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\description\TMMDBone.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\res\strings_en-US\c4d_strings.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDBoneRoot.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDCamera.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJoint.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJointRoot.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDMeshRoot.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDModel.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigid.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigidRoot.str" />
-    <None Include="..\..\..\..\res\strings_en-US\description\TMMDBone.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\c4d_strings.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDBoneRoot.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDCamera.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJoint.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJointRoot.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDMeshRoot.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDModel.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigid.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigidRoot.str" />
-    <None Include="..\..\..\..\res\strings_zh-CN\description\TMMDBone.str" />
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\c4d_strings.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDBoneRoot.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDCamera.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDJoint.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDJointRoot.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDMeshRoot.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDModel.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDRigid.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDRigidRoot.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\TMMDBone.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\c4d_strings.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDBoneRoot.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDCamera.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDJoint.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDJointRoot.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDMeshRoot.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDModel.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDRigid.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDRigidRoot.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\TMMDBone.str">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

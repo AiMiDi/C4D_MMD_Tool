@@ -271,6 +271,7 @@ namespace tool {
 			Bool    import_motion = true;
 			Bool    import_morph = true;
 			Bool    import_model_info = true;
+			Bool	ignore_physical = true;
 			Bool	delete_previous_animation = true;
 			Bool	detail_report = false;
 		}m_motions_import_settings;

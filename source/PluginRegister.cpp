@@ -51,6 +51,7 @@ enum
 	DLG_VMD_MOT_IMPORT_MOTION,
 	DLG_VMD_MOT_IMPORT_MORPH,
 	DLG_VMD_MOT_IMPORT_MODEL_INFO,
+	DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL,
 	DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION,
 	DLG_VMD_MOT_IMPORT_DETAIL,
 	DLG_VMD_MOT_IMPORT_BUTTON,
@@ -200,6 +201,7 @@ public:
 		AddCheckbox(DLG_VMD_MOT_IMPORT_MOTION, BFH_LEFT, 180, 13, GeLoadString(IDS_VMD_MOT_IMPORT_MOTION));
 		AddCheckbox(DLG_VMD_MOT_IMPORT_MORPH, BFH_LEFT, 180, 13, GeLoadString(IDS_VMD_MOT_IMPORT_MORPH));
 		AddCheckbox(DLG_VMD_MOT_IMPORT_MODEL_INFO, BFH_LEFT, 180, 13, GeLoadString(IDS_VMD_MOT_IMPORT_MODEL_INFO));
+		AddCheckbox(DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL, BFH_LEFT, 180, 13, GeLoadString(IDS_VMD_MOT_IMPORT_IGNORE_PHYSICAL));
 		AddCheckbox(DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION, BFH_LEFT, 180, 13, GeLoadString(IDS_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION));
 		AddCheckbox(DLG_VMD_MOT_IMPORT_DETAIL, BFH_LEFT, 180, 13, GeLoadString(IDS_VMD_MOT_IMPORT_DETAIL));
 		GroupEnd();
@@ -348,6 +350,7 @@ public:
 			SetBool(DLG_VMD_MOT_IMPORT_MOTION, true);
 			SetBool(DLG_VMD_MOT_IMPORT_MORPH, true);
 			SetBool(DLG_VMD_MOT_IMPORT_MODEL_INFO, true);
+			SetBool(DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL, true);
 			SetBool(DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION, true);
 			SetBool(DLG_VMD_MOT_IMPORT_DETAIL, false);
 			SetFloat(DLG_VMD_MOT_EXPORT_SIZE, 8.5, 0, 100);
@@ -497,6 +500,14 @@ public:
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_IMPORT_MODEL_INFO, true);
 			config["VMD_MOT_IMPORT_MODEL_INFO"] = true;
+			updata = true;
+		}
+		try {
+			SetBool(DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL, config["VMD_MOT_IMPORT_IGNORE_PHYSICAL"].as<bool>());
+		}
+		catch (YAML::BadConversion) {
+			SetBool(DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL, true);
+			config["VMD_MOT_IMPORT_IGNORE_PHYSICAL"] = true;
 			updata = true;
 		}
 		try {
@@ -814,6 +825,7 @@ public:
 			GetBool(DLG_VMD_MOT_IMPORT_MOTION, mmd_animation->m_motions_import_settings.import_motion);
 			GetBool(DLG_VMD_MOT_IMPORT_MORPH, mmd_animation->m_motions_import_settings.import_morph);
 			GetBool(DLG_VMD_MOT_IMPORT_MODEL_INFO, mmd_animation->m_motions_import_settings.import_model_info);
+			GetBool(DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL, mmd_animation->m_motions_import_settings.ignore_physical);
 			GetBool(DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION, mmd_animation->m_motions_import_settings.delete_previous_animation);
 			GetBool(DLG_VMD_MOT_IMPORT_DETAIL, mmd_animation->m_motions_import_settings.detail_report);
 			YAML::Node config(std::move(LoadConfig()));
@@ -822,6 +834,7 @@ public:
 			config["VMD_MOT_IMPORT_MOTION"] = mmd_animation->m_motions_import_settings.import_motion;
 			config["VMD_MOT_IMPORT_MORPH"] = mmd_animation->m_motions_import_settings.import_morph;
 			config["VMD_MOT_IMPORT_MODEL_INFO"] = mmd_animation->m_motions_import_settings.import_model_info;
+			config["VMD_MOT_IMPORT_IGNORE_PHYSICAL"] = mmd_animation->m_motions_import_settings.ignore_physical;
 			config["VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION"] = mmd_animation->m_motions_import_settings.delete_previous_animation;
 			config["VMD_MOT_IMPORT_DETAIL"] = mmd_animation->m_motions_import_settings.detail_report;
 			std::ofstream fout(config_path);

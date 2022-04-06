@@ -13,12 +13,6 @@
     <Filter Include="source">
       <UniqueIdentifier>{8800E4E7-0D26-2958-0000-0000CA90681B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\cn">
-      <UniqueIdentifier>{8f7b4ad0-a5bf-46a1-bb93-37ca29351c63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res\en">
-      <UniqueIdentifier>{6bdcb2cb-4ec3-4991-bdfc-60b61efcb370}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -80,36 +74,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\res\description\OMMDBoneRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDCamera.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDJoint.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDJointRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDMeshRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDModel.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigid.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigidRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\TMMDBone.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\c4d_symbols.h">
-      <Filter>res</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\source\OMMDJointRoot.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -158,67 +122,35 @@
     <ClInclude Include="..\..\..\..\source\OMMDJoint.h">
       <Filter>source</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\res\strings_zh-CN\c4d_strings.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDModel.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigid.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDRigidRoot.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_zh-CN\description\TMMDBone.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDBoneRoot.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDCamera.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJoint.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDJointRoot.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_zh-CN\description\OMMDMeshRoot.str">
-      <Filter>res\cn</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\c4d_strings.str">
-      <Filter>res\en</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\description\TMMDBone.str">
-      <Filter>res\en</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDBoneRoot.str">
-      <Filter>res\en</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDCamera.str">
-      <Filter>res\en</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJoint.str">
-      <Filter>res\en</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDJointRoot.str">
-      <Filter>res\en</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDMeshRoot.str">
-      <Filter>res\en</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDModel.str">
-      <Filter>res\en</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigid.str">
-      <Filter>res\en</Filter>
-    </None>
-    <None Include="..\..\..\..\res\strings_en-US\description\OMMDRigidRoot.str">
-      <Filter>res\en</Filter>
-    </None>
+    <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigid.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDCamera.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJoint.h">
+      <Filter>res</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

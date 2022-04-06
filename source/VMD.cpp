@@ -3195,7 +3195,7 @@ maxon::Result<void> VMDAnimation::FromFileImportMotion()
 						if (bone.tag != nullptr) {
 							tag_data = bone.tag->GetNodeData<TMMDBone>();
 							BaseContainer* bc = bone.tag->GetDataInstance();
-							Is_physical = tag_data->IsPhysical();
+							Is_physical = tag_data->IsPhysical() && m_motions_import_settings.ignore_physical;
 							Is_inherit = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION) || bc->GetBool(PMX_BONE_INHERIT_ROTATION);
 							Is_translatable = bc->GetBool(PMX_BONE_TRANSLATABLE);
 							Is_rotatable = bc->GetBool(PMX_BONE_ROTATABLE);
@@ -3206,6 +3206,7 @@ maxon::Result<void> VMDAnimation::FromFileImportMotion()
 						CTrack* BoneTrack_rotation_x = nullptr;
 						CTrack* BoneTrack_rotation_y = nullptr;
 						CTrack* BoneTrack_rotation_z = nullptr;
+
 						CCurve* BoneCurve_position_x = nullptr;
 						CCurve* BoneCurve_position_y = nullptr;
 						CCurve* BoneCurve_position_z = nullptr;

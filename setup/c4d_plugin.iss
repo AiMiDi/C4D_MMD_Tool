@@ -36,7 +36,7 @@ PrivilegesRequired=admin
 LicenseFile=LICENSE.rtf
 SetupIconFile=Icon.ico
 WizardSmallImageFile=WizardSmallImageFile.bmp
-;WizardImageFile=WizardImageFile.bmp
+WizardImageFile=WizardImageFile.bmp
 
 
 [Languages]
@@ -88,12 +88,12 @@ Source: "..\release\R23\*"; DestDir: "{code:R23Dir|plugins/{#MyDirName}}"; Compo
 Source: "..\release\S24\*"; DestDir: "{code:S24Dir|plugins/{#MyDirName}}"; Components:S24; Flags: ignoreversion createallsubdirs recursesubdirs; 
 Source: "..\release\R25\*"; DestDir: "{code:R25Dir|plugins/{#MyDirName}}"; Components:R25; Flags: ignoreversion createallsubdirs recursesubdirs; 
 
-Source: "..\res\*"; DestDir: "{code:R20Dir|plugins\{#MyDirName}\res}"; Components:R20; Flags: ignoreversion createallsubdirs recursesubdirs; 
-Source: "..\res\*"; DestDir: "{code:R21Dir|plugins\{#MyDirName}\res}"; Components:R21; Flags: ignoreversion createallsubdirs recursesubdirs; 
-Source: "..\res\*"; DestDir: "{code:S22Dir|plugins\{#MyDirName}\res}"; Components:S22; Flags: ignoreversion createallsubdirs recursesubdirs; 
-Source: "..\res\*"; DestDir: "{code:R23Dir|plugins\{#MyDirName}\res}"; Components:R23; Flags: ignoreversion createallsubdirs recursesubdirs; 
-Source: "..\res\*"; DestDir: "{code:S24Dir|plugins\{#MyDirName}\res}"; Components:S24; Flags: ignoreversion createallsubdirs recursesubdirs; 
-Source: "..\res\*"; DestDir: "{code:R25Dir|plugins\{#MyDirName}\res}"; Components:R25; Flags: ignoreversion createallsubdirs recursesubdirs; 
+Source: "..\res\R20-S24\*"; DestDir: "{code:R20Dir|plugins\{#MyDirName}\res}"; Components:R20; Flags: ignoreversion createallsubdirs recursesubdirs; 
+Source: "..\res\R20-S24\*"; DestDir: "{code:R21Dir|plugins\{#MyDirName}\res}"; Components:R21; Flags: ignoreversion createallsubdirs recursesubdirs; 
+Source: "..\res\R20-S24\*"; DestDir: "{code:S22Dir|plugins\{#MyDirName}\res}"; Components:S22; Flags: ignoreversion createallsubdirs recursesubdirs; 
+Source: "..\res\R20-S24\*"; DestDir: "{code:R23Dir|plugins\{#MyDirName}\res}"; Components:R23; Flags: ignoreversion createallsubdirs recursesubdirs; 
+Source: "..\res\R20-S24\*"; DestDir: "{code:S24Dir|plugins\{#MyDirName}\res}"; Components:S24; Flags: ignoreversion createallsubdirs recursesubdirs; 
+Source: "..\res\S24_up\*"; DestDir: "{code:R25Dir|plugins\{#MyDirName}\res}"; Components:R25; Flags: ignoreversion createallsubdirs recursesubdirs; 
 
 ;Source: "..\README.pdf"; DestDir: "{autopf}\{#MyAppName}"; Flags: ignoreversion createallsubdirs recursesubdirs isreadme; 
 ;Source: "..\README_zh.pdf"; DestDir: "{autopf}\{#MyAppName}"; Flags: ignoreversion createallsubdirs recursesubdirs isreadme; 
