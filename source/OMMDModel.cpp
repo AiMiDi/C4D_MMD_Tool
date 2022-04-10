@@ -949,6 +949,7 @@ namespace tool {
 			}
 			if (!ReadMorph(hf))
 				return false;
+			*m_morph_initializ.Write() = true;
 		}
 		return true;
 	}

@@ -164,49 +164,63 @@ namespace tool {
 			{
 				op->SetEditorMode(MODE_UNDEF);
 				op->SetRenderMode(MODE_UNDEF);
-				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ON).GetValue());
+				const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(
+					NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ON).GetValue());
+				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 				break;
 			}
 			case BONE_DISPLAY_TYPE_OFF:
 			{
 				op->SetEditorMode(MODE_OFF);
 				op->SetRenderMode(MODE_OFF);
-				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF).GetValue());
+				const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(
+					NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF).GetValue());
+				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 				break;
 			}
 			case BONE_DISPLAY_TYPE_MOVABLE:
 			{
 				op->SetEditorMode(MODE_UNDEF);
 				op->SetRenderMode(MODE_UNDEF);
-				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_MOVABLE).GetValue());
+				const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(
+					NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_MOVABLE).GetValue());
+				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 				break;
 			}
 			case BONE_DISPLAY_TYPE_VISIBLE:
 			{
 				op->SetEditorMode(MODE_UNDEF);
 				op->SetRenderMode(MODE_UNDEF);
-				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_VISIBLE).GetValue());
+				const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(
+					NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_VISIBLE).GetValue());
+				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 				break;
 			}
 			case BONE_DISPLAY_TYPE_ROTATABLE:
 			{
 				op->SetEditorMode(MODE_UNDEF);
 				op->SetRenderMode(MODE_UNDEF);
-				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ROTATABLE).GetValue());
+				const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(
+					NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ROTATABLE).GetValue());
+				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 				break;
 			}
 			case BONE_DISPLAY_TYPE_ENABLED:
 			{
 				op->SetEditorMode(MODE_UNDEF);
 				op->SetRenderMode(MODE_UNDEF);
-				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ENABLED).GetValue());
+				const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(
+					NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ENABLED).GetValue());
+				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 				break;
 			}
 			case BONE_DISPLAY_TYPE_IK:
 			{
 				op->SetEditorMode(MODE_UNDEF);
 				op->SetRenderMode(MODE_UNDEF);
-				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_IK).GetValue());
+				const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(
+					NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_IK).GetValue());
+				node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 				break;
 			}
 			default:
@@ -315,7 +329,7 @@ namespace tool {
 				if (bone_morph_map_ptr != nullptr)
 				{
 					maxon::BaseList<bone_morph_hub_data>& bone_morph_list = bone_morph_map_ptr->GetValue();
-					for (auto& morph_hub_data_it = bone_morph_list.Begin(); morph_hub_data_it != bone_morph_list.End(); ++morph_hub_data_it) {
+					for (auto morph_hub_data_it = bone_morph_list.Begin(); morph_hub_data_it != bone_morph_list.End(); ++morph_hub_data_it) {
 						if (*morph_hub_data_it == msg->morph_hub_data)
 						{
 							morph_hub_data_it = bone_morph_list.Erase(morph_hub_data_it);
@@ -336,7 +350,7 @@ namespace tool {
 				if (old_bone_morph_map_ptr != nullptr)
 				{
 					maxon::BaseList<bone_morph_hub_data>& old_bone_morph_list = old_bone_morph_map_ptr->GetValue();
-					for (auto& morph_hub_data_it = old_bone_morph_list.Begin(); morph_hub_data_it != old_bone_morph_list.End(); ++morph_hub_data_it) {
+					for (auto morph_hub_data_it = old_bone_morph_list.Begin(); morph_hub_data_it != old_bone_morph_list.End(); ++morph_hub_data_it) {
 						auto& morph_hub_data = *morph_hub_data_it;
 						if (morph_hub_data == msg->morph_hub_data)
 						{
@@ -372,7 +386,9 @@ namespace tool {
 		EXIT:
 			if (need_update_morph == true) {
 				if (m_Model_ptr != nullptr) {
-					m_Model_ptr->Message(ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE).GetValue());
+					const maxon::StrongRef<OMMDBoneRoot_MSG> Model_msg(
+						NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE).GetValue());
+					m_Model_ptr->Message(ID_O_MMD_BONE_ROOT, Model_msg);
 				}
 			}
 			break;
@@ -449,9 +465,7 @@ namespace tool {
 							else {
 								bone_morph_list = &m_MorphData_map.InsertEntry(morph_name).GetValue().GetValue();
 							}
-							auto& morph_data = bone_morph_list->Append()iferr_return;
-							morph_data.bone_tag = node_morph_tag;
-							morph_data.strength_id = morph->strength_id;
+							bone_morph_list->Append(bone_morph_hub_data{ node_morph_tag, morph->strength_id })iferr_return;
 							need_update_morph = true;
 						NEXT_MORPH:
 							continue;
@@ -478,7 +492,9 @@ namespace tool {
 		}
 		if (need_update_morph == true) {
 			if (m_Model_ptr != nullptr) {
-				m_Model_ptr->Message(ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE).GetValue());
+				const maxon::StrongRef<OMMDBoneRoot_MSG> Model_msg(
+					NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE).GetValue());
+				m_Model_ptr->Message(ID_O_MMD_BONE_ROOT, Model_msg);
 			}
 		}
 	}

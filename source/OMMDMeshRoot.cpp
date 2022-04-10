@@ -216,7 +216,7 @@ namespace tool {
 							{
 								mesh_morph_list = &mesh_morph_map_ptr->GetValue();
 								for (auto& morph_data : *mesh_morph_list) {
-									if (morph_data.morph_tag == pose_morph_tag && morph_data.strength_id == morph_id)
+									if (morph_data.morph_tag->ForceGetLink() == pose_morph_tag && morph_data.strength_id == morph_id)
 										goto NEXT_MORPH;
 								}
 							}
@@ -224,9 +224,7 @@ namespace tool {
 								mesh_morph_list = &m_MorphData_map.InsertEntry(morph_name).GetValue().GetValue();
 							}
 							need_update_morph = true;
-							auto& morph_data = mesh_morph_list->Append()iferr_return;
-							morph_data.morph_tag = pose_morph_tag;
-							morph_data.strength_id = morph_id;
+							mesh_morph_list->Append(mesh_morph_hub_data{ pose_morph_tag, morph_id })iferr_return;
 						NEXT_MORPH:
 							continue;
 						}
@@ -253,7 +251,9 @@ namespace tool {
 		}
 		if (need_update_morph == true) {
 			if (m_Model_ptr != nullptr) {
-				m_Model_ptr->Message(ID_O_MMD_MESH_ROOT, NewObj(OMMDMeshRoot_MSG, OMMDMeshRoot_MSG_Type::MESH_MORPH_CHANGE).GetValue());
+				const maxon::StrongRef<OMMDMeshRoot_MSG> Model_msg(
+					NewObj(OMMDMeshRoot_MSG, OMMDMeshRoot_MSG_Type::MESH_MORPH_CHANGE).GetValue());
+				m_Model_ptr->Message(ID_O_MMD_MESH_ROOT, Model_msg);
 			}
 		}
 	}

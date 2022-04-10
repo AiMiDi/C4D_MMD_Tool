@@ -1483,7 +1483,9 @@ EXECUTIONRESULT TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* o
 			{
 				if (this->m_BoneRoot_ptr == nullptr) {
 					this->m_BoneRoot_ptr = up_obj;
-					op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONEROOT_UPDATA, 0, up_obj).GetValue());
+					const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(
+						NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONEROOT_UPDATA, 0, up_obj).GetValue());
+					op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 				}
 				bc->SetString(PMX_BONE_INDEX, "0"_s);
 			}
@@ -1517,7 +1519,9 @@ EXECUTIONRESULT TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* o
 	}
 	else {
 		this->m_BoneRoot_ptr = nullptr;
-		op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONEROOT_UPDATA, 0, nullptr).GetValue());
+		const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(
+			NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONEROOT_UPDATA, 0, nullptr).GetValue());
+		op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 		bc->SetString(PMX_BONE_INDEX, "0"_s);
 	}
 	Int32 now_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
@@ -2197,21 +2201,21 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 				Int32 button_on_id = button_on_id_ptr->GetValue();
 				if (button_on_id == -1)
 					return(true);
-				bone_morph_data& data = bone_morph_data_arr[button_on_id];
-				if (dc->_descId == data.button_delete_id)
+				bone_morph_data& morph_data = bone_morph_data_arr[button_on_id];
+				if (dc->_descId == morph_data.button_delete_id)
 				{
-					if (QuestionDialog(IDS_MES_BONE_MORPH_DELETE, data.name))
+					if (QuestionDialog(IDS_MES_BONE_MORPH_DELETE, morph_data.name))
 					{
-						ddesc->Remove(data.button_delete_id);
-						ddesc->Remove(data.button_rename_id);
-						ddesc->Remove(data.button_grp_id);
-						ddesc->Remove(data.rotation_id);
-						ddesc->Remove(data.translation_id);
-						ddesc->Remove(data.strength_id);
-						ddesc->Remove(data.grp_id);			
-						iferr(button_id_map.Erase(data.button_delete_id))
+						ddesc->Remove(morph_data.button_delete_id);
+						ddesc->Remove(morph_data.button_rename_id);
+						ddesc->Remove(morph_data.button_grp_id);
+						ddesc->Remove(morph_data.rotation_id);
+						ddesc->Remove(morph_data.translation_id);
+						ddesc->Remove(morph_data.strength_id);
+						ddesc->Remove(morph_data.grp_id);			
+						iferr(button_id_map.Erase(morph_data.button_delete_id))
 							return true;
-						iferr(button_id_map.Erase(data.button_rename_id))
+						iferr(button_id_map.Erase(morph_data.button_rename_id))
 							return true;
 						for (auto& i : button_id_map.GetKeys())
 						{
@@ -2222,7 +2226,7 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 							}
 						}
 						// BONE_MORPH_DELETE
-						const maxon::StrongRef<TMMDBone_MSG> msg(NewObj(TMMDBone_MSG, TMMDBone_MSG_Type::BONE_MORPH_DELETE, data.name, data.strength_id, static_cast<BaseTag*>(Get())).GetValue());
+						const maxon::StrongRef<TMMDBone_MSG> msg(NewObj(TMMDBone_MSG, TMMDBone_MSG_Type::BONE_MORPH_DELETE, morph_data.name, morph_data.strength_id, static_cast<BaseTag*>(Get())).GetValue());
 						this->m_BoneRoot_ptr->Message(ID_T_MMD_BONE, msg);	
 						iferr(bone_morph_data_arr.Erase(button_on_id))
 							return(true);
@@ -2234,22 +2238,23 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 					}
 					return(true);
 				}
-				if (dc->_descId == data.button_rename_id)
+				if (dc->_descId == morph_data.button_rename_id)
 				{
 					utility::RenameDialog dlg;
 					dlg.Open(DLG_TYPE::MODAL, 99999, -1, -1, 0, 0);
 					if (!dlg.Rename.IsEmpty())
 					{
-						BaseContainer descbc = *ddesc->Find(data.grp_id);
+						BaseContainer descbc = *ddesc->Find(morph_data.grp_id);
 						descbc.SetString(DESC_NAME, dlg.Rename);
-						ddesc->Set(data.grp_id, descbc, nullptr);
-						descbc = *ddesc->Find(data.strength_id);
+						ddesc->Set(morph_data.grp_id, descbc, nullptr);
+						descbc = *ddesc->Find(morph_data.strength_id);
 						descbc.SetString(DESC_NAME, dlg.Rename);
-						ddesc->Set(data.strength_id, descbc, nullptr);
+						ddesc->Set(morph_data.strength_id, descbc, nullptr);
 						// BONE_MORPH_RENAME
-						const maxon::StrongRef<TMMDBone_MSG> msg(NewObj(TMMDBone_MSG, TMMDBone_MSG_Type::BONE_MORPH_RENAME, dlg.Rename, data.strength_id, static_cast<BaseTag*>(Get()),data.name).GetValue());
+						const maxon::StrongRef<TMMDBone_MSG> msg(
+							NewObj(TMMDBone_MSG, TMMDBone_MSG_Type::BONE_MORPH_RENAME, dlg.Rename, morph_data.strength_id, static_cast<BaseTag*>(Get()),morph_data.name).GetValue());
 						this->m_BoneRoot_ptr->Message(ID_T_MMD_BONE, msg);
-						data.name = std::move(dlg.Rename);
+						morph_data.name = std::move(dlg.Rename);
 						::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); /* Refresh the AM to see the changes in real time */
 						if (::GeIsMainThread())
 						{
