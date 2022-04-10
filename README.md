@@ -352,6 +352,13 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 **version 0.4.5.1** Fixed import model surface error.
 
+**version 0.4.6**
+
+1. A new expression hub panel is added to manage all expressions.
+2. Added support and editing for group and flip expressions.
+3. Motion import adds the option to ignore physical bones.
+4. New icon.（The logo icon is temporary and the logo icon may be changed again）
+
 ## Author
 
 AiMiDi
