@@ -65,10 +65,10 @@
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.xdl64</TargetExt>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MMDTool_S24</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MMDTool</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.xdl64</TargetExt>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\S24\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>..\..\..\..\lib\yaml_cpp\include;..\..\..\..\lib\bullet\include;..\..\..\..\lib\libiconv-1.16\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
@@ -185,39 +185,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\source\BulletTest.cpp" />
-    <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp" />
-    <ClCompile Include="..\..\..\..\source\main.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_Control.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_model.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_utility.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_VMD_animation.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_VPD_pose.cpp" />
-    <ClCompile Include="..\..\..\..\source\NameConversion.cpp" />
-    <ClCompile Include="..\..\..\..\source\PluginRegister.cpp" />
     <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
     <ClCompile Include="..\generated\hxx\register.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\res\c4d_symbols.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDBoneRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDCamera.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJoint.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJointRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDMeshRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDModel.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigid.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigidRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\TMMDBone.h" />
-    <ClInclude Include="..\..\..\..\source\BulletTest.h" />
-    <ClInclude Include="..\..\..\..\source\ImagesGUI.h" />
-    <ClInclude Include="..\..\..\..\source\main.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_Control.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_model.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_utility.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_VMD_animation.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_VPD_pose.h" />
-    <ClInclude Include="..\..\..\..\source\NameConversion.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

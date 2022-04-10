@@ -13,6 +13,21 @@
     <Filter Include="source">
       <UniqueIdentifier>{df9823f5-50a0-4aec-a328-3c42b1bf3aac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\MMD">
+      <UniqueIdentifier>{eea2716c-87f7-4e9e-bf69-d8a4bea881a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\TOOL">
+      <UniqueIdentifier>{f519d446-f1da-4bc1-9e75-cd1bafff42e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\description">
+      <UniqueIdentifier>{f8755a47-71c7-4ff7-a95e-8bd22ce29ca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\strings_zh-CN">
+      <UniqueIdentifier>{6e8f0999-c6df-43b2-8d28-fb1d5358b4ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\strings_en-US">
+      <UniqueIdentifier>{2cbdfb1c-79e0-43c3-80c6-e22e03f39101}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -21,13 +36,7 @@
     <ClCompile Include="..\generated\hxx\register.cpp">
       <Filter>generated\hxx</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\source\MMD_utility.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\source\MMD_VMD_animation.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\source\MMD_VPD_pose.cpp">
+    <ClCompile Include="..\..\..\..\source\Utility.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\source\NameConversion.cpp">
@@ -45,24 +54,42 @@
     <ClCompile Include="..\..\..\..\source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_Control.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="..\..\..\..\source\PMX.cpp">
+      <Filter>source\MMD</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_model.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="..\..\..\..\source\VPD.cpp">
+      <Filter>source\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\VMD.cpp">
+      <Filter>source\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\OMMDRigid.cpp">
+      <Filter>source\TOOL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\OMMDRigidRoot.cpp">
+      <Filter>source\TOOL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\TMMDBone.cpp">
+      <Filter>source\TOOL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\OMMDBoneRoot.cpp">
+      <Filter>source\TOOL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\OMMDJoint.cpp">
+      <Filter>source\TOOL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\OMMDJointRoot.cpp">
+      <Filter>source\TOOL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\OMMDMeshRoot.cpp">
+      <Filter>source\TOOL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\source\OMMDModel.cpp">
+      <Filter>source\TOOL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_model.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\source\MMD_utility.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\source\MMD_VMD_animation.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\source\MMD_VPD_pose.h">
+    <ClInclude Include="..\..\..\..\source\Utility.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\NameConversion.h">
@@ -77,38 +104,159 @@
     <ClInclude Include="..\..\..\..\source\main.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_Control.h">
-      <Filter>source</Filter>
+    <ClInclude Include="..\..\..\..\source\PMX.h">
+      <Filter>source\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\res\c4d_symbols.h">
+    <ClInclude Include="..\..\..\..\source\VMD.h">
+      <Filter>source\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\VPD.h">
+      <Filter>source\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\OMMDRigid.h">
+      <Filter>source\TOOL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\OMMDRigidRoot.h">
+      <Filter>source\TOOL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\TMMDBone.h">
+      <Filter>source\TOOL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\OMMDBoneRoot.h">
+      <Filter>source\TOOL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\OMMDJoint.h">
+      <Filter>source\TOOL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\OMMDJointRoot.h">
+      <Filter>source\TOOL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\OMMDMeshRoot.h">
+      <Filter>source\TOOL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\OMMDModel.h">
+      <Filter>source\TOOL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigid.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDCamera.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJoint.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h">
       <Filter>res</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDBoneRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDCamera.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDJoint.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDJointRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDMeshRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDModel.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigid.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigidRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\description\TMMDBone.h">
-      <Filter>res</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.res">
+      <Filter>res\description</Filter>
+    </Resource>
+    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDModel.res">
+      <Filter>res\description</Filter>
+    </Resource>
+    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDRigid.res">
+      <Filter>res\description</Filter>
+    </Resource>
+    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.res">
+      <Filter>res\description</Filter>
+    </Resource>
+    <Resource Include="..\..\..\..\res\R20-S24\description\TMMDBone.res">
+      <Filter>res\description</Filter>
+    </Resource>
+    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDCamera.res">
+      <Filter>res\description</Filter>
+    </Resource>
+    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDJoint.res">
+      <Filter>res\description</Filter>
+    </Resource>
+    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.res">
+      <Filter>res\description</Filter>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\c4d_strings.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDModel.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDRigid.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDRigidRoot.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\TMMDBone.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDBoneRoot.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDCamera.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDJoint.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDJointRoot.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\OMMDMeshRoot.str">
+      <Filter>res\strings_zh-CN</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDModel.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDRigid.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDRigidRoot.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\TMMDBone.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDBoneRoot.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDCamera.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDJoint.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDJointRoot.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\OMMDMeshRoot.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\c4d_strings.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.res">
+      <Filter>res\description</Filter>
+    </None>
   </ItemGroup>
 </Project>

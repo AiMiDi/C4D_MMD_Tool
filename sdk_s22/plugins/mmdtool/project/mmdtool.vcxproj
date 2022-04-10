@@ -63,10 +63,10 @@
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.xdl64</TargetExt>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MMDTool_S22</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MMDTool</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.xdl64</TargetExt>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\S22</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>..\..\..\..\lib\yaml_cpp\include;..\..\..\..\lib\bullet\include;..\..\..\..\lib\libiconv-1.16\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
@@ -79,7 +79,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../res/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../res/R20-S24/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -96,7 +96,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res;../../../../res/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../res/R20-S24/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -178,36 +178,50 @@
     <ClCompile Include="..\..\..\..\source\BulletTest.cpp" />
     <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp" />
     <ClCompile Include="..\..\..\..\source\main.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_Control.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_PMX_model.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_utility.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_VMD_animation.cpp" />
-    <ClCompile Include="..\..\..\..\source\MMD_VPD_pose.cpp" />
     <ClCompile Include="..\..\..\..\source\NameConversion.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDBoneRoot.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDJoint.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDJointRoot.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDMeshRoot.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDModel.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDRigid.cpp" />
+    <ClCompile Include="..\..\..\..\source\OMMDRigidRoot.cpp" />
     <ClCompile Include="..\..\..\..\source\PluginRegister.cpp" />
+    <ClCompile Include="..\..\..\..\source\PMX.cpp" />
+    <ClCompile Include="..\..\..\..\source\TMMDBone.cpp" />
+    <ClCompile Include="..\..\..\..\source\Utility.cpp" />
+    <ClCompile Include="..\..\..\..\source\VMD.cpp" />
+    <ClCompile Include="..\..\..\..\source\VPD.cpp" />
     <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
     <ClCompile Include="..\generated\hxx\register.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\res\c4d_symbols.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDBoneRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDCamera.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJoint.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDJointRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDMeshRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDModel.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigid.h" />
-    <ClInclude Include="..\..\..\..\res\description\OMMDRigidRoot.h" />
-    <ClInclude Include="..\..\..\..\res\description\TMMDBone.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDCamera.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJoint.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigid.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h" />
     <ClInclude Include="..\..\..\..\source\BulletTest.h" />
     <ClInclude Include="..\..\..\..\source\ImagesGUI.h" />
     <ClInclude Include="..\..\..\..\source\main.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_Control.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_PMX_model.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_utility.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_VMD_animation.h" />
-    <ClInclude Include="..\..\..\..\source\MMD_VPD_pose.h" />
     <ClInclude Include="..\..\..\..\source\NameConversion.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDBoneRoot.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDJoint.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDJointRoot.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDMeshRoot.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDModel.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDRigid.h" />
+    <ClInclude Include="..\..\..\..\source\OMMDRigidRoot.h" />
+    <ClInclude Include="..\..\..\..\source\PMX.h" />
+    <ClInclude Include="..\..\..\..\source\TMMDBone.h" />
+    <ClInclude Include="..\..\..\..\source\Utility.h" />
+    <ClInclude Include="..\..\..\..\source\VMD.h" />
+    <ClInclude Include="..\..\..\..\source\VPD.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

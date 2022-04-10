@@ -59,6 +59,7 @@
 #include "lib_ngon.h"
 #include "c4d_baseobject.h"
 #include "tprotection.h"
+#include "ckvalue.h"
 #include "ImagesGUI.h"
 
 #if API_VERSION >= 21000
