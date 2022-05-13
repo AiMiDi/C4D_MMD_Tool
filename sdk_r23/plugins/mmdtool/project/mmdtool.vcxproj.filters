@@ -169,32 +169,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDModel.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDRigid.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\TMMDBone.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDCamera.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDJoint.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\c4d_strings.str">
       <Filter>res\strings_zh-CN</Filter>
     </None>
@@ -258,5 +232,14 @@
     <None Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.res">
       <Filter>res\description</Filter>
     </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDCamera.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDJoint.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDModel.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDRigid.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\TMMDBone.res" />
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

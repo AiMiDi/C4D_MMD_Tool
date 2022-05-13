@@ -282,6 +282,7 @@
     <None Include="..\..\..\..\res\R20-S24\description\TMMDBone.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\R20-S24\strings_en-US\c4d_strings.str">

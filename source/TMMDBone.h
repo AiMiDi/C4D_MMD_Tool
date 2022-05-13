@@ -121,8 +121,8 @@ namespace tool {
 		/* 储存骨骼表情数据 */
 		maxon::PointerArray<bone_morph_data> bone_morph_data_arr;
 		TMMDBone() {}
-		~TMMDBone() {}
-		MAXON_DISALLOW_COPY_AND_ASSIGN(TMMDBone);
+		~TMMDBone() override {}
+		MAXON_DISALLOW_COPY_AND_ASSIGN(TMMDBone)
 		INSTANCEOF(TMMDBone, TagData)
 	public:
 		Int32 AddBondMorph(String morph_name);
@@ -157,7 +157,7 @@ namespace tool {
 		{
 			return(NewObjClear(TMMDBone));
 		}
-		virtual void Free(GeListNode* node);
+		void Free(GeListNode* node) override;
 		void SetObj(BaseObject* obj_)
 		{
 			this->obj = obj_;

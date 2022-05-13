@@ -162,7 +162,7 @@ namespace tool {
 		{
 		case ID_O_MMD_MODEL:
 		{
-			OMMDModel_MSG* msg = static_cast<OMMDModel_MSG*>(data);
+			auto* msg = static_cast<OMMDModel_MSG*>(data);
 			if (msg != nullptr)
 			{
 				if (msg->msg_type == OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA) {
@@ -173,6 +173,11 @@ namespace tool {
 						this->m_Model_ptr = msg->object;
 						break;
 					}
+					case ToolObjectType::DEFAULT: break;
+					case ToolObjectType::MeshRoot: break;
+					case ToolObjectType::BoneRoot: break;
+					case ToolObjectType::RigidRoot: break;
+					case ToolObjectType::JointRoot: break;
 					default:
 						break;
 					}
@@ -202,8 +207,23 @@ namespace tool {
 					BaseTag* const node_morph_tag = node->GetTag(Tposemorph);
 					if (node_morph_tag != nullptr)
 					{
-						CAPoseMorphTag* const	pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
-						const Int morph_count = pose_morph_tag->GetMorphCount();
+						const auto pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
+						const Int32 morph_mode = pose_morph_tag->GetMode();
+						const Int32 morph_count = pose_morph_tag->GetMorphCount();
+						const auto morph_previous_model_ptr = m_tag_mode_map.Find(pose_morph_tag);
+						if(morph_previous_model_ptr!=nullptr)
+						{
+							if(morph_mode == morph_previous_model_ptr->GetValue() || morph_mode == ID_CA_POSE_MODE_EDIT)
+							{
+								morph_previous_model_ptr->SetValue(morph_mode);
+								goto NEXT_MORPH_TAG;
+							}
+							morph_previous_model_ptr->SetValue(morph_mode);
+						}
+						else
+						{
+							m_tag_mode_map.Insert(node_morph_tag, morph_mode)iferr_return;
+						}
 						for (Int32 index = 1; index < morph_count; index++)
 						{
 							auto* morph = pose_morph_tag->GetMorph(index);
@@ -225,11 +245,11 @@ namespace tool {
 							}
 							need_update_morph = true;
 							mesh_morph_list->Append(mesh_morph_hub_data{ pose_morph_tag, morph_id })iferr_return;
-						NEXT_MORPH:
-							continue;
+						NEXT_MORPH:;
 						}
 					}
 				}
+				NEXT_MORPH_TAG:
 				nodes.Push(node->GetDown()) iferr_return;
 				if (node != op)
 				{
@@ -240,7 +260,7 @@ namespace tool {
 				}
 			}
 		}
-		// 去除已经删除的表情
+		// 绉婚櫎宸插垹闄ょ殑琛ㄦ儏
 		for (auto name_it = m_MorphData_map.GetKeys().begin(); name_it != m_MorphData_map.GetKeys().end(); ++name_it)
 		{
 			auto& name = *name_it;
@@ -257,7 +277,16 @@ namespace tool {
 			}
 		}
 	}
-	EXECUTIONRESULT OMMDMeshRoot::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) {	
+	EXECUTIONRESULT OMMDMeshRoot::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) {
+		// Temp
+		if (m_Model_ptr == nullptr) 
+		{
+			BaseObject* up_object = op->GetUp();
+			if (up_object->IsInstanceOf(ID_O_MMD_MODEL))
+			{
+				m_Model_ptr = up_object;
+			}
+		}
 		RefreshMorphMap(op);
 		return EXECUTIONRESULT::OK;
 	}
@@ -267,7 +296,7 @@ namespace tool {
 		{
 			return(true);
 		}
-		list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
+		list->Add(op, EXECUTIONPRIORITY_EXPRESSION - 2, EXECUTIONFLAGS::NONE);
 		return(true);
 	}
 }

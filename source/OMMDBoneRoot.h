@@ -58,13 +58,10 @@ type 3: bone morph change;
 		Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) override;
 		Bool Message(GeListNode* node, Int32 type, void* data) override;
 		Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
-		EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
-		Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 		static NodeData* Alloc()
 		{
 			return(NewObjClear(OMMDBoneRoot));
 		}
-		void RefreshMorphMap(BaseObject* op);
 		maxon::HashMap<String, maxon::BaseList<bone_morph_hub_data>>& GetBoneMorphMap() { return m_MorphData_map; }
 	};
 }

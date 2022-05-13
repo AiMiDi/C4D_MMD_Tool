@@ -17,10 +17,11 @@ namespace tool {
 	{
 		BaseTag* m_displayTag = nullptr;
 		BaseObject* m_Model_ptr = nullptr;
+		maxon::HashMap<BaseTag*, Int32> m_tag_mode_map;
 		maxon::HashMap<String, maxon::BaseList<mesh_morph_hub_data>> m_MorphData_map;
 		OMMDMeshRoot() {}
-		~OMMDMeshRoot() {}
-		MAXON_DISALLOW_COPY_AND_ASSIGN(OMMDMeshRoot);
+		~OMMDMeshRoot() override {}
+		MAXON_DISALLOW_COPY_AND_ASSIGN(OMMDMeshRoot)
 		INSTANCEOF(OMMDMeshRoot, ObjectData)
 	public:
 		Bool Init(GeListNode* node) override;

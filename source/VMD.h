@@ -143,7 +143,7 @@ namespace tool {
 	class VMDAnimation
 	{
 		MAXON_DISALLOW_COPY_AND_ASSIGN(VMDAnimation);
-	private:
+
 		class VMDMotionSortedArray : public maxon::SortedArray<VMDMotionSortedArray, maxon::PointerArray<mmd::VMDBoneAnimation> >
 		{
 		public:
@@ -301,7 +301,6 @@ namespace tool {
 
 	class OMMDCamera : public ObjectData
 	{
-	private:
 		/* 使用Map储存补间曲线数据 */
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_X_map;
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_Y_map;
@@ -333,7 +332,7 @@ namespace tool {
 		/* 更新全部补间曲线 */
 		Bool UpdateAllInterpolator(GeListNode* node = nullptr);
 		/* 析构函数 */
-		~OMMDCamera() {}
+		~OMMDCamera() override {}
 		/* 获取对象管理的摄像机对象 */
 		BaseObject* GetCamera()
 		{
@@ -348,22 +347,22 @@ namespace tool {
 		/* 删除全部曲线 */
 		Bool DeleteAllKeyFrame(GeListNode* node = nullptr);
 		/* 对象初始化 */
-		virtual Bool Init(GeListNode* node = nullptr);
+		Bool Init(GeListNode* node = nullptr) override;
 		/* 设置参数时调用，用于调用SplineData的回调函数 */
-		virtual Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags);
+		Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 		/* 禁用与启用参数 */
-		virtual Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc);
+		Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) override;
 		/* 接收Message时调用，用于处理事件 */
-		virtual Bool Message(GeListNode* node, Int32 type, void* data);
-		virtual Bool Read(GeListNode* node, HyperFile* hf, Int32 level);
-		virtual Bool Write(GeListNode* node, HyperFile* hf);
-		virtual Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn);
+		Bool Message(GeListNode* node, Int32 type, void* data) override;
+		Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
+		Bool Write(GeListNode* node, HyperFile* hf) override;
+		Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) override;
 		/* 实时调用 */
-		virtual EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags);
+		EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 		/* 将实时调用添加入优先级列表 */
-		virtual Bool AddToExecution(BaseObject* op, PriorityList* list);
+		Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 		/*删除函数 */
-		virtual void Free(GeListNode* node);
+		void Free(GeListNode* node) override;
 		/* 生成函数 */
 		static NodeData* Alloc()
 		{

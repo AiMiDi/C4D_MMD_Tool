@@ -1,5 +1,5 @@
-﻿#ifndef MAIN_H__
-#define MAIN_H__
+﻿#ifndef MAIN_H_
+#define MAIN_H_
 
 /*
  * #define ID_VMD_MOTION_TAG 1056979
@@ -25,42 +25,42 @@
 #define ID_E_MMD_VMD_EXPORT	1057490
 
 
-#include <memory>
 #include <fstream>
+#include <memory>
 #include "c4d.h"
+#include "c4d_baseobject.h"
+#include "c4d_objectdata.h"
 #include "c4d_plugin.h"
-#include "ge_prepass.h"
+#include "c4d_scenehookdata.h"
 #include "c4d_symbols.h"
-#include "maxon/sortedarray.h"
-#include "maxon/pointerarray.h"
-#include "maxon/queue.h"
-#include "maxon/baselist.h"
-#include "maxon/timevalue.h"
-#include "maxon/quaternion.h"
-#include "customgui_splinecontrol.h"
-#include "operatingsystem.h"
+#include "c4d_tagdata.h"
+#include "ckvalue.h"
 #include "customgui_priority.h"
 #include "customgui_splinecontrol.h"
-#include "c4d_objectdata.h"
-#include "c4d_tagdata.h"
-#include "c4d_scenehookdata.h"
+#include "customgui_splinecontrol.h"
+#include "ge_prepass.h"
+#include "ImagesGUI.h"
+#include "lib_ca.h"
+#include "lib_ca.h"
 #include "lib_description.h"
-#include "lib_ca.h"
-#include "tcaposemorph.h"
-#include "xcolor.h"
-#include "ocajoint.h"
-#include "tcaik.h"
-#include "tcaconstraint.h"
-#include "maxon/synchronized.h"
-#include "tcaweight.h"
-#include "maxon/apibase.h"
-#include "lib_ca.h"
 #include "lib_modeling.h"
 #include "lib_ngon.h"
-#include "c4d_baseobject.h"
+#include "ocajoint.h"
+#include "operatingsystem.h"
+#include "tcaconstraint.h"
+#include "tcaik.h"
+#include "tcaposemorph.h"
+#include "tcaweight.h"
 #include "tprotection.h"
-#include "ckvalue.h"
-#include "ImagesGUI.h"
+#include "xcolor.h"
+#include "maxon/apibase.h"
+#include "maxon/baselist.h"
+#include "maxon/pointerarray.h"
+#include "maxon/quaternion.h"
+#include "maxon/queue.h"
+#include "maxon/sortedarray.h"
+#include "maxon/synchronized.h"
+#include "maxon/timevalue.h"
 
 #if API_VERSION >= 21000
 #include "customgui_iconchooser.h"
@@ -131,4 +131,4 @@ Bool RegisterOMMDJointRoot();
 
 static maxon::Spinlock g_spinlock;
 
-#endif /* MAIN_H__ */
+#endif /* MAIN_H_ */

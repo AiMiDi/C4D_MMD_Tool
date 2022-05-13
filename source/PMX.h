@@ -33,7 +33,8 @@ namespace mmd {
 	class PMXWeight
 	{
 	public:
-		virtual ~PMXWeight() {}
+		virtual ~PMXWeight() = default;
+
 		static void Free(PMXWeight*& m) {
 			DeleteObj(m);
 			m = nullptr;
@@ -42,73 +43,73 @@ namespace mmd {
 	};
 	/* Weight type BDEF1
 	* weight==1 */
-	class PMXWeight_BDEF1 : public PMXWeight
+	class PMXWeight_BDEF1 final : public PMXWeight
 	{
 
 	public:
-		~PMXWeight_BDEF1() {}
+		~PMXWeight_BDEF1() override {}
 		static maxon::Result<PMXWeight_BDEF1*> Alloc();
-		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size);
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) override;
 		// Bone index. 
 		Int32 bone = 0;
 
 	};
 	/* Weight type BDEF2
 	* Bone 2 weight = 1 - (Bone 1 weight) */
-	class PMXWeight_BDEF2 : public PMXWeight
+	class PMXWeight_BDEF2 final : public PMXWeight
 	{
 	public:
-		~PMXWeight_BDEF2() {}
+		~PMXWeight_BDEF2() override {}
 		static maxon::Result<PMXWeight_BDEF2*> Alloc();
-		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size);
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) override;
 		Int32	bone[2] = { 0 };                               /* Bone index. */
 		Float32 weight = 0.f;                                      /* Bone 1 weight */
 	};
 	/* Weight type BDEF4
 	* The sum of four weights is not guaranteed to equal 1 */
-	class PMXWeight_BDEF4 : public PMXWeight
+	class PMXWeight_BDEF4 final : public PMXWeight
 	{
 	public:
-		~PMXWeight_BDEF4() {}
+		~PMXWeight_BDEF4() override {}
 		static maxon::Result<PMXWeight_BDEF4*> Alloc();
-		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size);
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) override;
 		Int32	bone[4] = { 0 };                   /* Bone index. */
 		Float32 weight[4] = { 0.f };    /* Bone 1~4 weight */
 	};
 	/* Weight type SDEF
 	* Bone 2 weight = 1 - (Bone 1 weight) */
-	class PMXWeight_SDEF : public PMXWeight
+	class PMXWeight_SDEF final : public PMXWeight
 	{
 	public:
-		~PMXWeight_SDEF() {}
+		~PMXWeight_SDEF() override {}
 		static maxon::Result<PMXWeight_SDEF*> Alloc();
-		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size);
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) override;
 		Int32		bone[2] = { 0 };                             /* Bone index. */
 		Float32		weight = 0.f;                                    /* Bone 1 weight */
 		Vector32	R0 = Vector32(), R1 = Vector32(), C = Vector32(); /* R0,R1,C */
 	};
 	/* Weight type QDEF
 	* The sum of four weights is not guaranteed to equal 1 */
-	class PMXWeight_QDEF : public PMXWeight
+	class PMXWeight_QDEF final : public PMXWeight
 	{
 	public:
-		~PMXWeight_QDEF() {}
+		~PMXWeight_QDEF() override {}
 		static maxon::Result<PMXWeight_QDEF*> Alloc();
-		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size);
+		Bool ReadFromFile(BaseFile* file, const Char& bone_index_size) override;
 		Int32	bone[4] = { 0 };                /* Bone index. */
 		Float32 weight[4] = { 0.f }; /* Bone 1~4 weight */
 	};
 	struct PMXDataCount
 	{
-		Int32 vertex_data_count = 0,
-			surface_data_count = 0,
-			texture_data_count = 0,
-			material_data_count = 0,
-			bone_data_count = 0,
-			morph_data_count = 0,
-			display_data_count = 0,
-			rigid_body_data_count = 0,
-			joint_data_count = 0;
+		Int32 vertex_data_count = 0;
+		Int32 surface_data_count = 0;
+		Int32 texture_data_count = 0;
+		Int32 material_data_count = 0;
+		Int32 bone_data_count = 0;
+		Int32 morph_data_count = 0;
+		Int32 display_data_count = 0;
+		Int32 rigid_body_data_count = 0;
+		Int32 joint_data_count = 0;
 	};
 	/* PMX vertex data */
 	struct PMXVertexData
@@ -127,14 +128,11 @@ namespace mmd {
 		};
 		Char weight_deform_type = BDEF1;             /* Variant weight type,0=BDEF1, 1=BDEF2, 2=BDEF4, 3=SDEF, 4=QDEF */
 		/* Variant weight */
-		PMXWeight* weight_deform;
+		PMXWeight* weight_deform = nullptr;
 		Float32 edge_scale = 0.f;                /* Edge magnification */
-		PMXVertexData() {}
-		~PMXVertexData() {
-			//if (weight_deform != nullptr) {
-			//	PMXWeight::Free(weight_deform);
-			//}
-		}
+		PMXVertexData();
+
+		~PMXVertexData();
 	};
 	/* Material symbol(1 byte) */
 	struct PMXMaterialFlags
@@ -147,17 +145,7 @@ namespace mmd {
 		Bool	vertex_colour : 1;      /* Use additional vector4d32 as the color of the vertices */
 		Bool	point_drawing : 1;      /* All three vertices are drawn */
 		Bool	line_drawing : 1;       /* Three sides are drawn */
-		PMXMaterialFlags()
-		{
-			this->no_cull = 0;
-			this->ground_shadow = 0;
-			this->draw_shadow = 0;
-			this->Receive_shadow = 0;
-			this->has_edge = 0;
-			this->vertex_colour = 0;
-			this->point_drawing = 0;
-			this->line_drawing = 0;
-		}
+		PMXMaterialFlags();
 	};
 	/* PMX material data */
 	struct PMXMaterialData
@@ -179,8 +167,8 @@ namespace mmd {
 		Char			toon_internal = 0;                              /* toon internal index */
 		String			meta_data = String();                           /* Metadata, used for scripts and other data. */
 		Int32			surface_count = 0;                              /* Number of faces, which indicates how many faces are affected by the current material. */
-		PMXMaterialData() {}
-		~PMXMaterialData() {}
+		PMXMaterialData();
+		~PMXMaterialData();
 	};
 	/* Bone flags(2bytes) */
 	struct PMXBoneFlags
@@ -199,21 +187,7 @@ namespace mmd {
 		Bool	Physics_after_deform : 1;       /* First deform, then calculate physics */
 		Bool	External_parent_deform : 1;     /* External bony deformation */
 		Bool : 2;                               /* seize a seat */
-		PMXBoneFlags()
-		{
-			this->indexed_tail_position = 0;
-			this->Rotatable = 0;
-			this->Translatable = 0;
-			this->Is_visible = 0;
-			this->Enabled = 0;
-			this->IK = 0;
-			this->Inherit_rotation = 0;
-			this->Inherit_translation = 0;
-			this->Fixed_axis = 0;
-			this->Local_coordinate = 0;
-			this->Physics_after_deform = 0;
-			this->External_parent_deform = 0;
-		}
+		PMXBoneFlags();
 	};
 	struct PMXIKLinks
 	{
@@ -244,93 +218,43 @@ namespace mmd {
 		Float32					IK_limit_radian = 0.f;             /* IK bone - unit angle */
 		Int32					IK_link_count = 0;                 /* IK bone IK chain count */
 		maxon::PointerArray<PMXIKLinks>	IK_links;
-		PMXBoneData()
-		{
-		};
-		PMXBoneData(const PMXBoneData& src)
-		{
-			this->bone_name_local = src.bone_name_local;
-			this->bone_name_universal = src.bone_name_universal;
-			this->position = src.position;
-			this->parent_bone_index = src.parent_bone_index;
-			this->layer = src.layer;
-			this->bone_flags = src.bone_flags;
-			this->tail_position = src.tail_position;
-			this->tail_index = src.tail_index;
-			this->inherit_bone_parent_index = src.inherit_bone_parent_index;
-			this->inherit_bone_parent_influence = src.inherit_bone_parent_influence;
-			this->bone_fixed_axis = src.bone_fixed_axis;
-			this->bone_local_X = src.bone_local_X;
-			this->bone_local_Z = src.bone_local_Z;
-			this->IK_target_index = src.IK_target_index;
-			this->IK_loop_count = src.IK_loop_count;
-			this->IK_limit_radian = src.IK_limit_radian;
-			this->IK_link_count = src.IK_link_count;
-			this->IK_links.CopyFrom(src.IK_links) iferr_ignore("err"_s);
-		}
+		PMXBoneData();
+		PMXBoneData(const PMXBoneData& src);
 
 
-		mmd::PMXBoneData& operator =(const mmd::PMXBoneData& src)
-		{
-			if (&src == this)
-			{
-				return(*this);
-			}
-			this->bone_name_local = src.bone_name_local;
-			this->bone_name_universal = src.bone_name_universal;
-			this->position = src.position;
-			this->parent_bone_index = src.parent_bone_index;
-			this->layer = src.layer;
-			this->bone_flags = src.bone_flags;
-			this->tail_position = src.tail_position;
-			this->tail_index = src.tail_index;
-			this->inherit_bone_parent_index = src.inherit_bone_parent_index;
-			this->inherit_bone_parent_influence = src.inherit_bone_parent_influence;
-			this->bone_fixed_axis = src.bone_fixed_axis;
-			this->bone_local_X = src.bone_local_X;
-			this->bone_local_Z = src.bone_local_Z;
-			this->IK_target_index = src.IK_target_index;
-			this->IK_loop_count = src.IK_loop_count;
-			this->IK_limit_radian = src.IK_limit_radian;
-			this->IK_link_count = src.IK_link_count;
-			this->IK_links.CopyFrom(src.IK_links) iferr_ignore("err"_s);
-			return(*this);
-		}
+		mmd::PMXBoneData& operator =(const mmd::PMXBoneData& src);
 	};
 	class PMXMorph {
 	public:
-		virtual ~PMXMorph() {}
-		static void Free(PMXMorph*& m) {
-			DeleteObj(m);
-			m = nullptr;
-		}
+		virtual ~PMXMorph();
+		static void Free(PMXMorph*& m);
 		virtual Bool ReadFromFile(BaseFile* file, const Char& index_size) = 0;
 	};
-	class PMXMorph_Group : public PMXMorph
+	class PMXMorph_Group final : public PMXMorph
 	{
 		friend class OMMDModel;
 	public:
-		~PMXMorph_Group() {}
+		~PMXMorph_Group() override;
 		static maxon::Result<PMXMorph_Group*> Alloc();
 		// index_size is morph index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) override;
 		Int32	morph_index = 0;                      /* Deformation index */
 		Float32 influence = 0.f;                      /* influence */
 	};
-	class PMXMorph_Vertex : public PMXMorph
+	class PMXMorph_Vertex final : public PMXMorph
 	{
 	public:
-		~PMXMorph_Vertex() {}
+		~PMXMorph_Vertex() override;
 		static maxon::Result<PMXMorph_Vertex*> Alloc();
 		// index_size is vertex index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) override;
 		UInt32		vertex_index = 0;                 /* Vertex Index  */
 		Vector32	translation = Vector32();         /* move */
 	};
-	class PMXMorph_Bone : public PMXMorph
+	class PMXMorph_Bone final : public PMXMorph
 	{
 	public:
-		~PMXMorph_Bone() {}
+		~PMXMorph_Bone() override;
 		static maxon::Result<PMXMorph_Bone*> Alloc();
 		// index_size is bone index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) override;
@@ -338,20 +262,20 @@ namespace mmd {
 		Vector32	translation = Vector32();         /* Relative position of change */
 		Vector32	rotation = Vector32();            /* Relative rotation quaternion (revolution Euler) */
 	};
-	class PMXMorph_UV : public PMXMorph
+	class PMXMorph_UV final : public PMXMorph
 	{
 	public:
-		~PMXMorph_UV() {}
+		~PMXMorph_UV() override;
 		static maxon::Result<PMXMorph_UV*> Alloc();
 		// index_size is vertex index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) override;
 		Int32		vertex_index = 0;                 /* Vertex Index */
 		Vector4d32	floats;                           /* Influence (only x and y are useful, Z and W are 0) */
 	};
-	class PMXMorph_Material : public PMXMorph
+	class PMXMorph_Material final : public PMXMorph
 	{
 	public:
-		~PMXMorph_Material() {}
+		~PMXMorph_Material() override;
 		static maxon::Result<PMXMorph_Material*> Alloc();
 		// index_size is material index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) override;
@@ -367,21 +291,21 @@ namespace mmd {
 		Vector4d32	environment_tint = Vector4d32();  /* Environmental tone */
 		Vector4d32	toon_tint = Vector4d32();         /* Map hue */
 	};
-	class PMXMorph_Flip : public PMXMorph
+	class PMXMorph_Flip final : public PMXMorph
 	{
 		friend class OMMDModel;
 	public:
-		~PMXMorph_Flip() {}
+		~PMXMorph_Flip() override;
 		static maxon::Result<PMXMorph_Flip*> Alloc();
 		// index_size is morph index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) override;
 		Int32	morph_index = 0;                      /* Deformation index */
 		Float32 influence = 0.f;                       /* influence */
 	};
-	class PMXMorph_Impulse : public PMXMorph
+	class PMXMorph_Impulse final : public PMXMorph
 	{
 	public:
-		~PMXMorph_Impulse() {}
+		~PMXMorph_Impulse() override;
 		static maxon::Result<PMXMorph_Impulse*> Alloc();
 		// index_size is rigidbody index size.
 		Bool ReadFromFile(BaseFile* file, const Char& index_size) override;
@@ -414,14 +338,7 @@ namespace mmd {
 		Char	morph_type = GROUP;
 		Int32	offset_count = 0;                    /* Number of offsets */
 		maxon::BaseArray<PMXMorph*> offset_data;                 /* Offset data */
-		~PMXMorphData()
-		{
-			for (auto* data : offset_data)
-			{
-				if (data != nullptr)
-					PMXMorph::Free(data);
-			}
-		};
+		~PMXMorphData();
 	};
 	/* Frame data */
 	struct PMXFrameData
@@ -437,18 +354,9 @@ namespace mmd {
 		Char	special_flag = 0;                    /* 0 represents normal frame and 1 represents special frame */
 		Int32	frame_count = 0;                     /* How many frames are recorded */
 		maxon::PointerArray<PMXFrameData>	Frames;  /* Frame data */
-		PMXDisplayData()
-		{
-		}
+		PMXDisplayData();
 
-		PMXDisplayData(const PMXDisplayData& src)
-		{
-			this->display_name_local = src.display_name_local;
-			this->display_name_universal = src.display_name_universal;
-			this->special_flag = src.special_flag;
-			this->frame_count = src.frame_count;
-			this->Frames.CopyFrom(src.Frames) iferr_ignore("err"_s);
-		}
+		PMXDisplayData(const PMXDisplayData& src);
 	};
 
 	struct PMXRigidBodyData
@@ -480,12 +388,9 @@ namespace mmd {
 		 * 2 - Physics + bone
 		 */
 		Char physics_mode = 0;
-		PMXRigidBodyData()
-		{
-		}
-		~PMXRigidBodyData()
-		{
-		}
+
+		PMXRigidBodyData();
+		~PMXRigidBodyData();
 	};
 	struct PMXJointData
 	{
@@ -516,32 +421,19 @@ namespace mmd {
 namespace tool {
 	struct tag_info
 	{
-		CAPoseMorphTag* morph_tag = nullptr;    /* The tag where it is. */
+		MAXON_DISALLOW_COPY_AND_ASSIGN(tag_info)
+		CAPoseMorphTag* morph_tag = nullptr;    
 		maxon::BaseArray<Int32> vertex_index_arr;
-		tag_info(){}
-		MAXON_DISALLOW_COPY_AND_ASSIGN(tag_info);
-		tag_info(tag_info&& other) noexcept
-		{			
-			morph_tag = other.morph_tag;		
-			vertex_index_arr = std::move(other.vertex_index_arr);
-		}
-		tag_info& operator=(tag_info&& other) noexcept
-		{
-			if (this != &other) {
-				morph_tag = other.morph_tag;
-				vertex_index_arr = std::move(other.vertex_index_arr);
-			}
-			return *this;
-		}
-		maxon::HashInt GetHashCode() const
-		{
-			return MAXON_HASHCODE(this->morph_tag, this->vertex_index_arr);
-		}
+
+		tag_info();
+		tag_info(tag_info&& other) noexcept;
+
+		tag_info& operator=(tag_info&& other) noexcept;
+		maxon::HashInt GetHashCode() const;
 	};
 	class PMXModel
 	{
-		MAXON_DISALLOW_COPY_AND_ASSIGN(PMXModel);
-	private:
+		MAXON_DISALLOW_COPY_AND_ASSIGN(PMXModel)
 		mmd::PMXModelInformation				m_model_info;             /* 模型信息 */
 		mmd::PMXDataCount					m_model_data_count;       /* 模型数据计数 */
 		maxon::PointerArray<mmd::PMXVertexData>		m_vertex_data;            /* 顶点数据 */
@@ -559,37 +451,38 @@ namespace tool {
 		BaseObject* m_bone_root = nullptr;
 		BaseObject* m_mesh_root = nullptr;
 	public:
-		PMXModel(){}
-		~PMXModel(){}
+		PMXModel();
+		~PMXModel();
+
 		struct
 		{
-			Float	position_multiple;
-			Bool	import_polygon;
-			Bool	import_normal;
-			Bool	import_uv;
-			Bool	import_material;
-			Bool	import_bone;
-			Bool	import_weights;
-			Bool	import_ik;
-			Bool	import_inherit;
-			Bool	import_expression;
-			Bool	import_multipart;
-			Bool	import_english;
-			Bool	import_english_check;
-		} m_import_settings;
+			Float	position_multiple{};
+			Bool	import_polygon{};
+			Bool	import_normal{};
+			Bool	import_uv{};
+			Bool	import_material{};
+			Bool	import_bone{};
+			Bool	import_weights{};
+			Bool	import_ik{};
+			Bool	import_inherit{};
+			Bool	import_expression{};
+			Bool	import_multipart{};
+			Bool	import_english{};
+			Bool	import_english_check{};
+		} m_import_settings{};
 		struct
 		{
-			Float	position_multiple;
-			Bool	export_polygon;
-			Bool	export_normal;
-			Bool	export_uv;
-			Bool	export_material;
-			Bool	export_bone;
-			Bool	export_weights;
-			Bool	export_ik;
-			Bool	export_inherit;
-			Bool	export_expression;
-		} m_export_settings;
+			Float	position_multiple{};
+			Bool	export_polygon{};
+			Bool	export_normal{};
+			Bool	export_uv{};
+			Bool	export_material{};
+			Bool	export_bone{};
+			Bool	export_weights{};
+			Bool	export_ik{};
+			Bool	export_inherit{};
+			Bool	export_expression{};
+		} m_export_settings{};
 		maxon::Result<String> GetMorphName(const Int32& index) const;
 		maxon::Result<void> LoadFromFile(Filename& fn);
 		maxon::Result<void> SaveToFile(Filename& fn);

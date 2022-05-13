@@ -10,7 +10,7 @@ inline Int32 TMMDBone::AddBondMorph(String morph_name)
 		morph_name = "morph_" + String::IntToString(bone_morph_name_index);
 		bone_morph_name_index++;
 	}
-	BaseTag* pmx_bone_tag = (BaseTag*)Get();
+	BaseTag* pmx_bone_tag = static_cast<BaseTag*>(Get());
 	DynamicDescription* const	ddesc = pmx_bone_tag->GetDynamicDescription();
 	if (ddesc == nullptr)
 		return(-1);
@@ -56,8 +56,8 @@ inline Int32 TMMDBone::AddBondMorph(String morph_name)
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
 	bc.SetData(DESC_PARENTGROUP, GeData{ CUSTOMDATATYPE_DESCID, data->button_grp_id });
-	data->button_rename_id = ddesc->Alloc(bc);	
-	Int32 index = (Int32)bone_morph_data_arr.GetIndex(*data);
+	data->button_rename_id = ddesc->Alloc(bc);
+	const Int32 index = static_cast<Int32>(bone_morph_data_arr.GetIndex(*data));
 	iferr(button_id_map.Insert(data->button_delete_id, index))
 		return(-1);
 	iferr(button_id_map.Insert(data->button_rename_id, index))
@@ -82,7 +82,7 @@ Bool TMMDBone::SplineDataCallBack(Int32 cid, const void* data)
 			return(true);
 
 		/* 数据信息... */
-		SplineData* splineData = ((SplineDataCallbackCoreMessage*)data)->pGUI->GetSplineData();
+		SplineData* splineData = (static_cast<const SplineDataCallbackCoreMessage*>(data))->pGUI->GetSplineData();
 		if (splineData == nullptr)
 			return(true);
 
@@ -318,7 +318,6 @@ Bool TMMDBone::SetInterpolator(const Int32& type, const Int32& frame_on, mmd::VM
 	}
 	default:
 		return(false);
-		break;
 	}
 	return(true);
 }
@@ -513,7 +512,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
 		ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 		TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-		KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
+		KeyLeftX = NextKeyLeftX;
+		KeyLeftY = NextKeyLeftY;
+		KeyRightX = NextKeyRightX;
+		KeyRightY = NextKeyRightY;
 		Curve_position_x->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
@@ -547,7 +549,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
 		ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 		TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-		KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
+		KeyLeftX = NextKeyLeftX;
+		KeyLeftY = NextKeyLeftY;
+		KeyRightX = NextKeyRightX;
+		KeyRightY = NextKeyRightY;
 		Curve_position_y->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
@@ -580,7 +585,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
 		ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 		TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-		KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
+		KeyLeftX = NextKeyLeftX;
+		KeyLeftY = NextKeyLeftY;
+		KeyRightX = NextKeyRightX;
+		KeyRightY = NextKeyRightY;
 		Curve_position_z->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
@@ -615,7 +623,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
 			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 			TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
+			KeyLeftX = NextKeyLeftX;
+			KeyLeftY = NextKeyLeftY;
+			KeyRightX = NextKeyRightX;
+			KeyRightY = NextKeyRightY;
 			Curve_rotation_x->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
@@ -649,7 +660,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
 			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 			TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
+			KeyLeftX = NextKeyLeftX;
+			KeyLeftY = NextKeyLeftY;
+			KeyRightX = NextKeyRightX;
+			KeyRightY = NextKeyRightY;
 			Curve_rotation_y->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
@@ -683,7 +697,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
 			ValueOfTwoFrames = next_key->GetValue() - now_key->GetValue();
 			TimeOfTwoFrames = next_key->GetTime().GetFrame(Fps) - now_key_frame;
-			KeyLeftX = NextKeyLeftX, KeyLeftY = NextKeyLeftY, KeyRightX = NextKeyRightX, KeyRightY = NextKeyRightY;
+			KeyLeftX = NextKeyLeftX;
+			KeyLeftY = NextKeyLeftY;
+			KeyRightX = NextKeyRightX;
+			KeyRightY = NextKeyRightY;
 			Curve_rotation_z->GetTangents(key_index + 1, &NextKeyLeftY, &NextKeyRightY, &NextKeyLeftX, &NextKeyRightX);
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
@@ -759,42 +776,42 @@ inline Bool TMMDBone::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 
 	CKey* Key_position_x = Curve_position_x->FindKey(time);
 	if (Key_position_x == nullptr) {
-		Key_position_x = Curve_position_x->AddKey(time);
+		Curve_position_x->AddKey(time);
 	}
 	else {
 		Key_position_x->SetValue(Curve_position_x, RelPos.x);
 	}
 	CKey* Key_position_y = Curve_position_y->FindKey(time);
 	if (Key_position_y == nullptr) {
-		Key_position_y = Curve_position_y->AddKey(time);
+		Curve_position_y->AddKey(time);
 	}
 	else {
 		Key_position_y->SetValue(Curve_position_y, RelPos.y);
 	}
 	CKey* Key_position_z = Curve_position_z->FindKey(time);
 	if (Key_position_z == nullptr) {
-		Key_position_z = Curve_position_z->AddKey(time);
+		Curve_position_z->AddKey(time);
 	}
 	else {
 		Key_position_z->SetValue(Curve_position_z, RelPos.z);
 	}
 	CKey* Key_rotation_x = Curve_rotation_x->FindKey(time);
 	if (Key_rotation_x == nullptr) {
-		Key_rotation_x = Curve_rotation_x->AddKey(time);
+		Curve_rotation_x->AddKey(time);
 	}
 	else {
 		Key_rotation_x->SetValue(Curve_rotation_x, RelRot.x);
 	}
 	CKey* Key_rotation_y = Curve_rotation_y->FindKey(time);
 	if (Key_rotation_y == nullptr) {
-		Key_rotation_y = Curve_rotation_y->AddKey(time);
+		Curve_rotation_y->AddKey(time);
 	}
 	else {
 		Key_rotation_y->SetValue(Curve_rotation_y, RelRot.y);
 	}
 	CKey* Key_rotation_z = Curve_rotation_z->FindKey(time);
 	if (Key_rotation_z == nullptr) {
-		Key_rotation_z = Curve_rotation_z->AddKey(time);
+		Curve_rotation_z->AddKey(time);
 	}
 	else {
 		Key_rotation_z->SetValue(Curve_rotation_z, RelRot.z);
@@ -930,22 +947,20 @@ inline Bool TMMDBone::UpdateAllInterpolator(GeListNode* node)
 	}
 
 	Int32 frame_on = 0;
-	Float value_between_frame = 0.f;
+	Float value_between_frame;
 	BaseTime time_between_frame = BaseTime();
 	BaseTime time = BaseTime();
 	BaseTime next_time = BaseTime();
-	CKey* key = nullptr;
-	CKey* next_key = nullptr;
-	CKey* frame_next = nullptr;
-	maxon::HashMap<Int32, mmd::VMDInterpolator>::Entry* interpolator_ptr;
+	CKey* key;
+	CKey* next_key;
 
 	const Int32 KeyCount = frameCurve->GetKeyCount();
 	for (Int32 frame_index = 0; frame_index < KeyCount; frame_index++)
 	{
-		CKey* frame_key = frameCurve->GetKey(frame_index);
+		const CKey* frame_key = frameCurve->GetKey(frame_index);
 		frame_on = maxon::SafeConvert<Int32>(frame_key->GetValue());
 		time = frame_key->GetTime();
-		frame_next = frameCurve->FindKey(time + BaseTime(1., 100.), nullptr, FINDANIM::RIGHT); /* 加0.1排除所在的那一帧 */
+		const CKey* frame_next = frameCurve->FindKey(time + BaseTime(1., 100.), nullptr, FINDANIM::RIGHT); /* 加0.1排除所在的那一帧 */
 		if (frame_next == nullptr)
 		{
 			break;
@@ -953,7 +968,7 @@ inline Bool TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		next_time = frame_next->GetTime();
 		time_between_frame = next_time - time;
 
-		interpolator_ptr = interpolator_X_map.Find(frame_on);
+		maxon::HashMap<Int32, mmd::VMDInterpolator>::Entry* interpolator_ptr = interpolator_X_map.Find(frame_on);
 		if (interpolator_ptr != nullptr)
 		{
 			const mmd::VMDInterpolator& interpolator = interpolator_ptr->GetValue();
@@ -1428,12 +1443,12 @@ EXECUTIONRESULT TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* o
 	GeData		Ge_data;
 	BaseObject* up_obj = op->GetUp();
 	BaseObject* pred_obj = op->GetPred();
-	BaseTag* lase_tag = nullptr;
-	BaseObject* lase_obj = nullptr;
-	BaseObject* tmp_lase_obj = nullptr;
-	Int32		pred_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
+	const Int32	pred_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
 	if (up_obj != nullptr)
 	{
+		BaseObject* tmp_lase_obj;
+		BaseObject* lase_obj;
+		BaseTag* lase_tag;
 		if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
 		{
 			tag->SetParameter(DescID(PMX_BONE_PARENT_BONE_NAME), up_obj->GetName(), DESCFLAGS_SET::NONE);
@@ -1678,7 +1693,7 @@ Bool TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeData& t
 	{
 	case PMX_BONE_TAG_SPLINE:
 	{
-		((SplineData*)t_data.GetCustomDataType(CUSTOMDATATYPE_SPLINE))->SetUserCallback(TMMDBone::SplineDataCallBack, nullptr);
+		static_cast<SplineData*>(t_data.GetCustomDataType(CUSTOMDATATYPE_SPLINE))->SetUserCallback(TMMDBone::SplineDataCallBack, nullptr);
 		break;
 	}
 	case PMX_BONE_ROTATABLE:
@@ -1828,18 +1843,6 @@ Bool TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeData& t
 		break;
 	}
 	case PMX_BONE_NAME_UNIVERSAL:
-	{
-		if (obj == nullptr)
-			return(true);
-		if (bc->GetInt32(PMX_BONE_NAME_IS) == 1)
-		{
-			obj->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
-		}
-		else {
-			obj->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
-		}
-		break;
-	}
 	case PMX_BONE_NAME_LOCAL:
 	{
 		if (obj == nullptr)
@@ -1888,20 +1891,8 @@ Bool TMMDBone::SetDParameter(GeListNode* node, const DescID& id, const GeData& t
 		break;
 	}
 	case PMX_BONE_IS_IK:
-	{
-		this->RefreshColor(node);
-		break;
-	}
 	case PMX_BONE_IS_FIXED_AXIS:
-	{
-		this->RefreshColor(node);
-		break;
-	}
 	case PMX_BONE_INHERIT_ROTATION:
-	{
-		this->RefreshColor(node);
-		break;
-	}
 	case PMX_BONE_INHERIT_TRANSLATION:
 	{
 		this->RefreshColor(node);
@@ -2099,18 +2090,6 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 			break;
 		}
 		case PMX_BONE_NAME_UNIVERSAL:
-		{
-			if (obj == nullptr)
-				return(true);
-			if (bc->GetInt32(PMX_BONE_NAME_IS) == 1)
-			{
-				obj->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
-			}
-			else {
-				obj->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
-			}
-			break;
-		}
 		case PMX_BONE_NAME_LOCAL:
 		{
 			if (obj == nullptr)
@@ -2159,20 +2138,8 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 			break;
 		}
 		case PMX_BONE_IS_IK:
-		{
-			this->RefreshColor(node);
-			break;
-		}
 		case PMX_BONE_IS_FIXED_AXIS:
-		{
-			this->RefreshColor(node);
-			break;
-		}
 		case PMX_BONE_INHERIT_ROTATION:
-		{
-			this->RefreshColor(node);
-			break;
-		}
 		case PMX_BONE_INHERIT_TRANSLATION:
 		{
 			this->RefreshColor(node);
@@ -2341,8 +2308,7 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 	}
 	case  ID_O_MMD_BONE_ROOT:
 	{
-		OMMDBoneRoot_MSG* msg = static_cast<OMMDBoneRoot_MSG*>(data);
-		if (msg != nullptr && bc != nullptr)
+		if (const auto* msg = static_cast<OMMDBoneRoot_MSG*>(data); msg != nullptr && bc != nullptr)
 		{
 			switch (msg->type)
 			{
@@ -2487,10 +2453,11 @@ Bool TMMDBone::Message(GeListNode* node, Int32 type, void* data)
 				}
 				break;
 			}
+			case OMMDBoneRoot_MSG_Type::DEFAULT: 
+			case OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE: 
 			default:
 				break;
 			}
-
 		}
 		break;
 	}
@@ -2523,91 +2490,90 @@ Bool TMMDBone::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return(false);
 	if (!hf->ReadVector64(&this->prev_rotation))
 		return(false);
-	Int32	CountTemp = 0;
-	Int32 TempIndex = 0;
+	Int32 count_temp = 0;
+	Int32 temp_index = 0;
 	Int	size = sizeof(mmd::VMDInterpolator);
-	CountTemp = 0;
-	if (!hf->ReadInt32(&CountTemp))
+	if (!hf->ReadInt32(&count_temp))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count_temp; i++)
 	{
 		void* data;
-		TempIndex = 0;
-		if (!hf->ReadInt32(&TempIndex))
+		temp_index = 0;
+		if (!hf->ReadInt32(&temp_index))
 			return(false);
 		if (!hf->ReadMemory(&data, &size))
 			return(false);
-		this->interpolator_X_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
+		this->interpolator_X_map.Insert(temp_index, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	CountTemp = 0;
-	if (!hf->ReadInt32(&CountTemp))
+	count_temp = 0;
+	if (!hf->ReadInt32(&count_temp))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count_temp; i++)
 	{
 		void* data;
-		TempIndex = 0;
-		if (!hf->ReadInt32(&TempIndex))
+		temp_index = 0;
+		if (!hf->ReadInt32(&temp_index))
 			return(false);
 		if (!hf->ReadMemory(&data, &size))
 			return(false);
-		this->interpolator_Y_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
+		this->interpolator_Y_map.Insert(temp_index, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	if (!hf->ReadInt32(&CountTemp))
+	if (!hf->ReadInt32(&count_temp))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count_temp; i++)
 	{
 		void* data;
-		TempIndex = 0;
-		if (!hf->ReadInt32(&TempIndex))
+		temp_index = 0;
+		if (!hf->ReadInt32(&temp_index))
 			return(false);
 		if (!hf->ReadMemory(&data, &size))
 			return(false);
-		this->interpolator_Z_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
+		this->interpolator_Z_map.Insert(temp_index, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	CountTemp = 0;
-	if (!hf->ReadInt32(&CountTemp))
+	count_temp = 0;
+	if (!hf->ReadInt32(&count_temp))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count_temp; i++)
 	{
 		void* data;
-		TempIndex = 0;
-		if (!hf->ReadInt32(&TempIndex))
+		temp_index = 0;
+		if (!hf->ReadInt32(&temp_index))
 			return(false);
 		if (!hf->ReadMemory(&data, &size))
 			return(false);
-		this->interpolator_R_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
+		this->interpolator_R_map.Insert(temp_index, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
-	CountTemp = 0;
-	if (!hf->ReadInt32(&CountTemp))
+	count_temp = 0;
+	if (!hf->ReadInt32(&count_temp))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count_temp; i++)
 	{
 		void* data;
-		TempIndex = 0;
-		if (!hf->ReadInt32(&TempIndex))
+		temp_index = 0;
+		if (!hf->ReadInt32(&temp_index))
 			return(false);
 		if (!hf->ReadMemory(&data, &size))
 			return(false);
-		this->interpolator_A_map.Insert(TempIndex, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
+		this->interpolator_A_map.Insert(temp_index, std::move(*static_cast<mmd::VMDInterpolator*>(data))) iferr_return;
 	}
 	DescID TempID;
-	CountTemp = 0;
-	if (!hf->ReadInt32(&CountTemp))
+	count_temp = 0;
+	if (!hf->ReadInt32(&count_temp))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count_temp; i++)
 	{
 		if (!TempID.Read(hf))
 			return(false);
-		TempIndex = 0;
-		if (!hf->ReadInt32(&TempIndex))
+		temp_index = 0;
+		if (!hf->ReadInt32(&temp_index))
 			return(false);
-		this->button_id_map.Insert(TempID, TempIndex) iferr_return;
+		this->button_id_map.Insert(TempID, temp_index) iferr_return;
 	}
 	
-	CountTemp = 0;
-	if (!hf->ReadInt32(&CountTemp))
+	count_temp = 0;
+	if (!hf->ReadInt32(&count_temp))
 		return(false);
-	for (Int32 i = 0; i < CountTemp; i++)
+	for (Int32 i = 0; i < count_temp; i++)
 	{
 		bone_morph_data* TempData = NewObj(bone_morph_data)iferr_return;
 		this->bone_morph_data_arr.AppendPtr(TempData) iferr_return;
@@ -2636,8 +2602,8 @@ Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 		return(false);
 	if (!hf->WriteVector64(this->prev_rotation))
 		return(false);
-	Int32 CountTemp = (Int32)this->interpolator_X_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	Int32 count_temp = static_cast<Int32>(this->interpolator_X_map.GetCount());
+	if (!hf->WriteInt32(count_temp))
 		return(false);
 	for (auto& i : this->interpolator_X_map)
 	{
@@ -2646,8 +2612,8 @@ Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = (Int32)this->interpolator_Y_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count_temp = static_cast<Int32>(this->interpolator_Y_map.GetCount());
+	if (!hf->WriteInt32(count_temp))
 		return(false);
 	for (auto& i : this->interpolator_Y_map)
 	{
@@ -2656,8 +2622,8 @@ Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = (Int32)this->interpolator_Z_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count_temp = static_cast<Int32>(this->interpolator_Z_map.GetCount());
+	if (!hf->WriteInt32(count_temp))
 		return(false);
 	for (auto& i : this->interpolator_Z_map)
 	{
@@ -2666,8 +2632,8 @@ Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = (Int32)this->interpolator_R_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count_temp = static_cast<Int32>(this->interpolator_R_map.GetCount());
+	if (!hf->WriteInt32(count_temp))
 		return(false);
 	for (auto& i : this->interpolator_R_map)
 	{
@@ -2676,8 +2642,8 @@ Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = (Int32)this->interpolator_A_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count_temp = static_cast<Int32>(this->interpolator_A_map.GetCount());
+	if (!hf->WriteInt32(count_temp))
 		return(false);
 	for (auto& i : this->interpolator_A_map)
 	{
@@ -2686,8 +2652,8 @@ Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteMemory(&i.GetValue(), sizeof(mmd::VMDInterpolator)))
 			return(false);
 	}
-	CountTemp = (Int32)this->button_id_map.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count_temp = static_cast<Int32>(this->button_id_map.GetCount());
+	if (!hf->WriteInt32(count_temp))
 		return(false);
 	for (auto& i : this->button_id_map)
 	{
@@ -2696,8 +2662,8 @@ Bool TMMDBone::Write(GeListNode* node, HyperFile* hf)
 		if (!hf->WriteInt32(i.GetValue()))
 			return(false);
 	}
-	CountTemp = (Int32)this->bone_morph_data_arr.GetCount();
-	if (!hf->WriteInt32(CountTemp))
+	count_temp = static_cast<Int32>(this->bone_morph_data_arr.GetCount());
+	if (!hf->WriteInt32(count_temp))
 		return(false);
 	for (bone_morph_data& i : this->bone_morph_data_arr)
 	{

@@ -336,9 +336,7 @@ namespace tool {
 		if (node->GetParameter(m_strength_id, ge_data, DESCFLAGS_GET::NONE) == false) {
 			return 0.0;
 		}
-		else {
-			return ge_data.GetFloat();
-		}
+		return ge_data.GetFloat();
 	}
 	inline Bool IMorph::SetStrength(GeListNode* node, const Float& strength)
 	{
@@ -690,10 +688,10 @@ namespace tool {
 		auto& morph_arr = model->GetMorphData();
 		auto& morph_name_map = model->GetMorphNameMap();
 		auto& DescID_map = model->GetDescIDMap();
-		Int32 index = morph_arr.FindIndex(*this);
+		const Int32 index = morph_arr.FindIndex(*this);
 		if (index == -1)
 			return;	
-		DynamicDescription* const ddesc = static_cast<BaseObject*>(model->Get())->GetDynamicDescription();
+		DynamicDescription* const ddesc = model->Get()->GetDynamicDescription();
 		if (ddesc == nullptr)
 			return;
 		ddesc->Remove(this->m_button_editor_id);
@@ -742,10 +740,10 @@ namespace tool {
 		auto& morph_arr = model->GetMorphData();
 		auto& morph_name_map = model->GetMorphNameMap();
 		auto& DescID_map = model->GetDescIDMap();
-		Int32 index = morph_arr.FindIndex(*this);
+		const Int32 index = morph_arr.FindIndex(*this);
 		if (index == -1)
 			return;
-		DynamicDescription* const ddesc = static_cast<BaseObject*>(model->Get())->GetDynamicDescription();
+		DynamicDescription* const ddesc = model->Get()->GetDynamicDescription();
 		if (ddesc == nullptr)
 			return;
 		ddesc->Remove(this->m_button_editor_id);
@@ -794,7 +792,7 @@ namespace tool {
 		auto& morph_arr = model->GetMorphData();
 		auto& morph_name_map = model->GetMorphNameMap();
 		auto& DescID_map = model->GetDescIDMap();
-		Int32 index = morph_arr.FindIndex(*this);
+		const Int32 index = morph_arr.FindIndex(*this);
 		if (index == -1)
 			return;
 		DynamicDescription* const ddesc = static_cast<BaseObject*>(model->Get())->GetDynamicDescription();
@@ -827,10 +825,10 @@ namespace tool {
 		auto& morph_arr = model->GetMorphData();
 		auto& morph_name_map = model->GetMorphNameMap();
 		auto& DescID_map = model->GetDescIDMap();
-		Int32 index = morph_arr.FindIndex(*this);
+		const Int32 index = morph_arr.FindIndex(*this);
 		if (index == -1)
 			return;
-		DynamicDescription* const ddesc = static_cast<BaseObject*>(model->Get())->GetDynamicDescription();
+		DynamicDescription* const ddesc = model->Get()->GetDynamicDescription();
 		if (ddesc == nullptr)
 			return;
 		ddesc->Remove(this->m_strength_id);
@@ -1060,6 +1058,7 @@ namespace tool {
 				res = NewObj(BoneMorph).GetValue();
 				break;
 			}
+			case MorphType::DEFAULT: 
 			default:
 				break;
 			}
@@ -1111,6 +1110,7 @@ namespace tool {
 				new_morph = NewObj(BoneMorph)iferr_return;
 				break;
 			}
+			case MorphType::DEFAULT: 
 			default:
 				break;
 			}
@@ -1258,7 +1258,12 @@ namespace tool {
 		}
 		if (UpdataRoot(op) == false)
 			return(EXECUTIONRESULT::OK);
-		if (*m_updateable.Read() == true && *m_morph_initializ.Read() == true)
+		if(*m_morph_initializ.Read() == false)
+		{
+			this->RefreshMorph();
+			*m_morph_initializ.Write() = true;
+		}
+		if (*m_updateable.Read() == true)
 		{
 			for (auto& morph : m_morph_arr)
 			{
@@ -1267,10 +1272,10 @@ namespace tool {
 		}
 		return(EXECUTIONRESULT::OK);
 	}
-	Int32 OMMDModel::ImportGroupAndFlipMorph(PMXModel* pmx_model, mmd::PMXMorphData& pmx_morph)
+	Int32 OMMDModel::ImportGroupAndFlipMorph(const PMXModel* pmx_model, mmd::PMXMorphData& pmx_morph)
 	{
 		iferr_scope_handler{ return -1; };
-		IMorph* morph = nullptr;
+		IMorph* morph;
 		switch (pmx_morph.morph_type)
 		{
 		case mmd::PMXMorphData::GROUP:
@@ -1278,8 +1283,9 @@ namespace tool {
 			morph = NewObj(GroupMorph)iferr_return;
 			for (auto* data : pmx_morph.offset_data)
 			{
-				auto* pmx_sub_morph = static_cast<mmd::PMXMorph_Group*>(data);
-				morph->AddSubMorphNoCheck(this, pmx_model->GetMorphName(pmx_sub_morph->morph_index).GetValue(), pmx_sub_morph->influence);
+				const auto* pmx_sub_morph = dynamic_cast<mmd::PMXMorph_Group*>(data);
+				morph->AddSubMorphNoCheck(this, pmx_model->GetMorphName(pmx_sub_morph->morph_index).GetValue(),
+				                          pmx_sub_morph->influence);
 			}
 			return morph->AddMorphToModel(this, pmx_morph.morph_name_local);
 		}
@@ -1288,8 +1294,9 @@ namespace tool {
 			morph = NewObj(FlipMorph)iferr_return;
 			for (auto* data : pmx_morph.offset_data)
 			{
-				auto* pmx_sub_morph = static_cast<mmd::PMXMorph_Flip*>(data);
-				morph->AddSubMorphNoCheck(this, pmx_model->GetMorphName(pmx_sub_morph->morph_index).GetValue(), pmx_sub_morph->influence);
+				const auto* pmx_sub_morph = dynamic_cast<mmd::PMXMorph_Flip*>(data);
+				morph->AddSubMorphNoCheck(this, pmx_model->GetMorphName(pmx_sub_morph->morph_index).GetValue(),
+				                          pmx_sub_morph->influence);
 			}
 			return morph->AddMorphToModel(this, pmx_morph.morph_name_local);
 		}
@@ -1363,21 +1370,6 @@ namespace tool {
 
 		return(SUPER::GetDDescription(node, description, flags));
 	}
-	Bool OMMDModel::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
-	{
-	/*	if (*m_updateable.Read() == true)
-		{
-			auto* id_ptr = m_DescID_map.Find(id);
-			if (id_ptr)
-			{
-				auto& data = id_ptr->GetValue();
-				if (data.first == DescType::REAL_STRENGTH) {
-					m_morph_arr[data.second].UpdataMorphOfModel(this);
-				}
-			}
-		}*/
-		return SUPER::SetDParameter(node, id, t_data, flags);
-	}
 	Bool OMMDModel::Message(GeListNode* node, Int32 type, void* data)
 	{
 		iferr_scope_handler{ return SUPER::Message(node,type,data); };
@@ -1388,8 +1380,6 @@ namespace tool {
 			OMMDMeshRoot_MSG* msg = static_cast<OMMDMeshRoot_MSG*>(data);
 			if (msg->type == OMMDMeshRoot_MSG_Type::MESH_MORPH_CHANGE) {
 				*m_morph_initializ.Write() = false;
-				this->RefreshMorph();
-				*m_morph_initializ.Write() = true;
 			}
 			break;
 		}
@@ -1398,8 +1388,6 @@ namespace tool {
 			OMMDBoneRoot_MSG* msg = static_cast<OMMDBoneRoot_MSG*>(data);
 			if (msg->type == OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE) {
 				*m_morph_initializ.Write() = false;
-				this->RefreshMorph();
-				*m_morph_initializ.Write() = true;
 			}
 			break;
 		}
@@ -1439,6 +1427,8 @@ namespace tool {
 						}
 						break;
 					}
+					case DescType::REAL_STRENGTH: 
+						break;
 					default:
 						break;
 					}
@@ -1474,7 +1464,7 @@ namespace tool {
 						MessageDialog("error"_s);
 						return(true);
 					}
-					BaseObject* op = static_cast<BaseObject*>(node);
+					auto* op = static_cast<BaseObject*>(node);
 					if (op == nullptr)
 					{
 						GePrint(GeLoadString(IDS_MES_SELECT_ERR));
@@ -1737,25 +1727,10 @@ namespace tool {
 			}
 			break;
 		}
-		/*case MSG_DESCRIPTION_CHECKUPDATE:
-		{
-			if (*m_updateable.Read() == true)
-			{
-				auto* id_ptr = m_DescID_map.Find(*static_cast<DescriptionCheckUpdate*>(data)->descid);
-				if (id_ptr)
-				{
-					auto& descid_data = id_ptr->GetValue();
-					if (descid_data.first == DescType::REAL_STRENGTH) {
-						m_morph_arr[descid_data.second].UpdataMorphOfModel(this);
-					}
-				}
-			}
-			break;
-		}*/
 
 		default:
 			break;
 		}
-		return(true);
+		return SUPER::Message(node, type, data);
 	}
 }
