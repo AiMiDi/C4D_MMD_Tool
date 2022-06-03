@@ -1,0 +1,108 @@
+pre
+{
+        padding: 4px 6px;
+        margin: 4px 8px 4px 2px;
+		background-color: #FAFBFD;
+		border: 1px solid #B8C5E0;
+}
+
+
+dl
+{
+        padding: 0 0 0 10px;
+}
+
+dt
+{
+		font-weight: bold;
+}
+
+/* dl.note, dl.warning, dl.attention, dl.pre, dl.post, dl.invariant, dl.deprecated, dl.todo, dl.test, dl.bug */
+dl.section
+{
+	margin-left: 0px;
+	padding-left: 0px;
+}
+
+dl.note
+{
+        margin-left:-7px;
+        padding-left: 3px;
+        border-left:4px solid;
+        border-color: #D0C000;
+}
+
+dl.warning, dl.attention
+{
+        margin-left:-7px;
+        padding-left: 3px;
+        border-left:4px solid;
+        border-color: #FF0000;
+}
+
+dl.todo
+{
+        margin-left:-7px;
+        padding-left: 3px;
+        border-left:4px solid;
+        border-color: #00C0E0;
+}
+
+
+dl.section dd
+{
+		margin-bottom: 6px;
+}
+
+table.doxtable
+{
+		border-collapse:collapse;
+        margin-top: 4px;
+        margin-bottom: 4px;
+}
+
+table.doxtable td, table.doxtable th
+{
+		border: 1px solid #212F4C;
+		padding: 3px 7px 2px;
+}
+
+.paramname
+{
+	color: #602020;
+	white-space: nowrap;
+}
+
+.params, .return, .tparams, .see
+{
+        margin-left: 0px;
+        padding-left: 0px;
+}       
+
+.params .paramname
+{
+        font-weight: bold;
+        vertical-align: top;
+}
+        
+.params .paramdir
+{
+        font-family: "courier new",courier,monospace;
+        vertical-align: top;
+}
+
+.tparams .paramname
+{
+        font-weight: bold;
+        vertical-align: top;
+}
+
+a
+{
+	text-decoration: none;
+}
+
+a:hover
+{
+	text-decoration: underline;
+}

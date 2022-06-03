@@ -1,0 +1,417 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A06542540E54E9341B010000 /* mesh_attribute_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A06542540E54E9341B000000 /* mesh_attribute_base.cpp */; };
+		A06542540EBB14C5CC010000 /* libgeom.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A06542540EBB14C5CC000000 /* libgeom.framework.a */; };
+		A06542540ED93CCD9F010000 /* register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A06542540ED93CCD9F000000 /* register.cpp */; };
+		A06542540EF4AB3A6F010000 /* libcore.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A06542540EF4AB3A6F000000 /* libcore.framework.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A06542540EBB14C5CC040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A06542540EBB14C5CC020000 /* geom.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3BB14C5CC7B0000;
+			remoteInfo = geom.framework;
+		};
+		A06542540EBB14C5CC040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A06542540EBB14C5CC020000 /* geom.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3BB14C5CC7B0100;
+			remoteInfo = "geom.framework static library";
+		};
+		A06542540EBB14C5CC050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A06542540EBB14C5CC020000 /* geom.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3BB14C5CC000000;
+			remoteInfo = geom.framework;
+		};
+		A06542540EF4AB3A6F040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A06542540EF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0000;
+			remoteInfo = core.framework;
+		};
+		A06542540EF4AB3A6F040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A06542540EF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0100;
+			remoteInfo = "core.framework static library";
+		};
+		A06542540EF4AB3A6F050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A06542540EF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F000000;
+			remoteInfo = core.framework;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A06542540E00000000000000 /* debugbase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = debugbase.xcconfig; path = ../../../frameworks/settings/debugbase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A06542540E00000000050000 /* releasebase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = releasebase.xcconfig; path = ../../../frameworks/settings/releasebase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A06542540E35A1F0E0000000 /* mesh_attribute_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mesh_attribute_base.h; path = ../source/maxon/mesh_attribute_base.h; sourceTree = SOURCE_ROOT; };
+		A06542540E3C89A86D000000 /* distancequery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = distancequery.h; path = ../source/maxon/distancequery.h; sourceTree = SOURCE_ROOT; };
+		A06542540E54E9341B000000 /* mesh_attribute_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mesh_attribute_base.cpp; path = ../source/maxon/mesh_attribute_base.cpp; sourceTree = SOURCE_ROOT; };
+		A06542540E72F88918000000 /* voxelization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = voxelization.h; path = ../source/maxon/voxelization.h; sourceTree = SOURCE_ROOT; };
+		A06542540E7BDF2DE9000000 /* vertexwrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vertexwrapper.h; path = ../source/maxon/vertexwrapper.h; sourceTree = SOURCE_ROOT; };
+		A06542540EB6BB3B4F000000 /* mesh_attribute_utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mesh_attribute_utilities.h; path = ../source/maxon/mesh_attribute_utilities.h; sourceTree = SOURCE_ROOT; };
+		A06542540EBB14C5CC020000 /* geom.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = geom.framework.xcodeproj; path = ../../../frameworks/geom.framework/project/geom.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A06542540EC50CEB48000000 /* polygroup_tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = polygroup_tag.h; path = ../source/maxon/polygroup_tag.h; sourceTree = SOURCE_ROOT; };
+		A06542540ED93CCD9F000000 /* register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = register.cpp; path = ../generated/hxx/register.cpp; sourceTree = SOURCE_ROOT; };
+		A06542540EF4AB3A6F020000 /* core.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = core.framework.xcodeproj; path = ../../../frameworks/core.framework/project/core.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A08C5CDEA36542540E7B0000 /* libmesh_misc.framework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmesh_misc.framework.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A08C5CDEA36542540E7B0100 /* libmesh_misc.framework_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmesh_misc.framework_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A06542540E000000000F0000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A06542540EBB14C5CC010000 /* libgeom.framework.a in Frameworks */,
+				A06542540EF4AB3A6F010000 /* libcore.framework.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A06542540E00000000140000 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				A06542540EF4AB3A6F020000 /* core.framework.xcodeproj */,
+				A06542540EBB14C5CC020000 /* geom.framework.xcodeproj */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		A06542540E00000000190000 /* configurations */ = {
+			isa = PBXGroup;
+			children = (
+				A06542540E00000000000000 /* debugbase.xcconfig */,
+				A06542540E00000000050000 /* releasebase.xcconfig */,
+			);
+			name = configurations;
+			sourceTree = "<group>";
+		};
+		A06542540E000000001E0000 = {
+			isa = PBXGroup;
+			children = (
+				A06542540E00000000190000 /* configurations */,
+				A06542540E111A998F000000 /* generated */,
+				A06542540E00000000140000 /* libs */,
+				A06542540E00000000230000 /* products */,
+				A06542540ECA90681B000000 /* source */,
+			);
+			sourceTree = "<group>";
+		};
+		A06542540E00000000230000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A08C5CDEA36542540E7B0000 /* libmesh_misc.framework.a */,
+				A08C5CDEA36542540E7B0100 /* libmesh_misc.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A06542540E111A998F000000 /* generated */ = {
+			isa = PBXGroup;
+			children = (
+				A06542540E681C2CE8000000 /* hxx */,
+			);
+			name = generated;
+			path = ../generated;
+			sourceTree = SOURCE_ROOT;
+		};
+		A06542540E114C574F000000 /* maxon */ = {
+			isa = PBXGroup;
+			children = (
+				A06542540E3C89A86D000000 /* distancequery.h */,
+				A06542540E54E9341B000000 /* mesh_attribute_base.cpp */,
+				A06542540E35A1F0E0000000 /* mesh_attribute_base.h */,
+				A06542540EB6BB3B4F000000 /* mesh_attribute_utilities.h */,
+				A06542540EC50CEB48000000 /* polygroup_tag.h */,
+				A06542540E7BDF2DE9000000 /* vertexwrapper.h */,
+				A06542540E72F88918000000 /* voxelization.h */,
+			);
+			name = maxon;
+			path = ../source/maxon;
+			sourceTree = SOURCE_ROOT;
+		};
+		A06542540E681C2CE8000000 /* hxx */ = {
+			isa = PBXGroup;
+			children = (
+				A06542540ED93CCD9F000000 /* register.cpp */,
+			);
+			name = hxx;
+			path = ../generated/hxx;
+			sourceTree = SOURCE_ROOT;
+		};
+		A06542540EBB14C5CC280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A06542540EBB14C5CC000000 /* libgeom.framework.a */,
+				A06542540EBB14C5CC000100 /* libgeom.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A06542540ECA90681B000000 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				A06542540E114C574F000000 /* maxon */,
+			);
+			name = source;
+			path = ../source;
+			sourceTree = SOURCE_ROOT;
+		};
+		A06542540EF4AB3A6F280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A06542540EF4AB3A6F000000 /* libcore.framework.a */,
+				A06542540EF4AB3A6F000100 /* libcore.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A06542540E000000002D0000 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A08C5CDEA36542540E000000 /* mesh_misc.framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A06542540E00000000460000 /* Build configuration list for PBXNativeTarget "mesh_misc.framework" */;
+			buildPhases = (
+				A06542540E00000000690000 /* Run Source Processor */,
+				A06542540E00000000320000 /* Sources */,
+				A06542540E000000000F0000 /* Frameworks */,
+				A06542540E000000002D0000 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A06542540EF4AB3A6F370000 /* PBXTargetDependency */,
+				A06542540EBB14C5CC370000 /* PBXTargetDependency */,
+			);
+			name = mesh_misc.framework;
+			productName = mesh_misc.framework;
+			productReference = A08C5CDEA36542540E7B0000 /* libmesh_misc.framework.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A06542540E000000003C0000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1299;
+			};
+			buildConfigurationList = A06542540E00000000410000 /* Build configuration list for PBXProject "mesh_misc.framework" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A06542540E000000001E0000;
+			productRefGroup = A06542540E00000000230000 /* products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A06542540EF4AB3A6F280000 /* products */;
+					ProjectRef = A06542540EF4AB3A6F020000 /* core.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A06542540EBB14C5CC280000 /* products */;
+					ProjectRef = A06542540EBB14C5CC020000 /* geom.framework.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				A08C5CDEA36542540E000000 /* mesh_misc.framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A06542540EBB14C5CC000000 /* libgeom.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libgeom.framework.a;
+			remoteRef = A06542540EBB14C5CC040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A06542540EBB14C5CC000100 /* libgeom.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libgeom.framework_static.a;
+			remoteRef = A06542540EBB14C5CC040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A06542540EF4AB3A6F000000 /* libcore.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework.a;
+			remoteRef = A06542540EF4AB3A6F040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A06542540EF4AB3A6F000100 /* libcore.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework_static.a;
+			remoteRef = A06542540EF4AB3A6F040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A06542540E00000000690000 /* Run Source Processor */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Source Processor";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python ${MAXON_ROOTDIR}frameworks/settings/sourceprocessor/sourceprocessor.py \"$PROJECT_DIR/..\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A06542540E00000000320000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A06542540E54E9341B010000 /* mesh_attribute_base.cpp in Sources */,
+				A06542540ED93CCD9F010000 /* register.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A06542540EBB14C5CC370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = geom.framework;
+			targetProxy = A06542540EBB14C5CC050000 /* PBXContainerItemProxy */;
+		};
+		A06542540EF4AB3A6F370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = core.framework;
+			targetProxy = A06542540EF4AB3A6F050000 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A06542540E000000004B0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A06542540E00000000000000 /* debugbase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.mesh_misc.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/geom.framework/source/** $(MAXON_ROOTDIR)frameworks/geom.framework/generated/hxx $(inherited)";
+			};
+			name = Debug;
+		};
+		A06542540E00000000500000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A06542540E00000000050000 /* releasebase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.mesh_misc.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/geom.framework/source/** $(MAXON_ROOTDIR)frameworks/geom.framework/generated/hxx $(inherited)";
+			};
+			name = Release;
+		};
+		A06542540E000000005A0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A06542540E000000005F0000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A06542540E00000000410000 /* Build configuration list for PBXProject "mesh_misc.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A06542540E000000004B0000 /* Debug */,
+				A06542540E00000000500000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A06542540E00000000460000 /* Build configuration list for PBXNativeTarget "mesh_misc.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A06542540E000000005A0000 /* Debug */,
+				A06542540E000000005F0000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A06542540E000000003C0000 /* Project object */;
+}

@@ -39,7 +39,6 @@
 #include "customgui_splinecontrol.h"
 #include "customgui_splinecontrol.h"
 #include "ge_prepass.h"
-#include "ImagesGUI.h"
 #include "lib_ca.h"
 #include "lib_ca.h"
 #include "lib_description.h"

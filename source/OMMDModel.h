@@ -1,4 +1,5 @@
 #pragma once
+#include "ImagesGUI.hpp"
 #include "PMX.h"
 #include "Utility.h"
 #include "description/OMMDModel.h"

@@ -1,0 +1,600 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A09DB5874B0E2B337C010000 /* libmisc.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A09DB5874B0E2B337C000000 /* libmisc.framework.a */; };
+		A09DB5874B2E184480010000 /* libasset.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A09DB5874B2E184480000000 /* libasset.framework.a */; };
+		A09DB5874BA8336F01010000 /* libnodes.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A09DB5874BA8336F01000000 /* libnodes.framework.a */; };
+		A09DB5874BD93CCD9F010000 /* register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A09DB5874BD93CCD9F000000 /* register.cpp */; };
+		A09DB5874BF4AB3A6F010000 /* libcore.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A09DB5874BF4AB3A6F000000 /* libcore.framework.a */; };
+		A09DB5874BFC123D5E010000 /* libgraph.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A09DB5874BFC123D5E000000 /* libgraph.framework.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A09DB5874B0E2B337C040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874B0E2B337C020000 /* misc.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA30E2B337C7B0000;
+			remoteInfo = misc.framework;
+		};
+		A09DB5874B0E2B337C040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874B0E2B337C020000 /* misc.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA30E2B337C7B0100;
+			remoteInfo = "misc.framework static library";
+		};
+		A09DB5874B0E2B337C050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874B0E2B337C020000 /* misc.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA30E2B337C000000;
+			remoteInfo = misc.framework;
+		};
+		A09DB5874B2E184480040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874B2E184480020000 /* asset.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA32E1844807B0000;
+			remoteInfo = asset.framework;
+		};
+		A09DB5874B2E184480040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874B2E184480020000 /* asset.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA32E1844807B0100;
+			remoteInfo = "asset.framework static library";
+		};
+		A09DB5874B2E184480050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874B2E184480020000 /* asset.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA32E184480000000;
+			remoteInfo = asset.framework;
+		};
+		A09DB5874BA8336F01040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874BA8336F01020000 /* nodes.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3A8336F017B0000;
+			remoteInfo = nodes.framework;
+		};
+		A09DB5874BA8336F01040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874BA8336F01020000 /* nodes.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3A8336F017B0100;
+			remoteInfo = "nodes.framework static library";
+		};
+		A09DB5874BA8336F01050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874BA8336F01020000 /* nodes.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3A8336F01000000;
+			remoteInfo = nodes.framework;
+		};
+		A09DB5874BF4AB3A6F040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874BF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0000;
+			remoteInfo = core.framework;
+		};
+		A09DB5874BF4AB3A6F040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874BF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F7B0100;
+			remoteInfo = "core.framework static library";
+		};
+		A09DB5874BF4AB3A6F050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874BF4AB3A6F020000 /* core.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3F4AB3A6F000000;
+			remoteInfo = core.framework;
+		};
+		A09DB5874BFC123D5E040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874BFC123D5E020000 /* graph.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3FC123D5E7B0000;
+			remoteInfo = graph.framework;
+		};
+		A09DB5874BFC123D5E040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874BFC123D5E020000 /* graph.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3FC123D5E7B0100;
+			remoteInfo = "graph.framework static library";
+		};
+		A09DB5874BFC123D5E050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A09DB5874BFC123D5E020000 /* graph.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3FC123D5E000000;
+			remoteInfo = graph.framework;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A08C5CDEA39DB5874B7B0000 /* libneutron.framework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libneutron.framework.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A08C5CDEA39DB5874B7B0100 /* libneutron.framework_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libneutron.framework_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A09DB5874B00000000000000 /* debugbase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = debugbase.xcconfig; path = ../../../frameworks/settings/debugbase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A09DB5874B00000000050000 /* releasebase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = releasebase.xcconfig; path = ../../../frameworks/settings/releasebase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A09DB5874B0C66771D000000 /* nodes_distributionbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nodes_distributionbase.h; path = ../source/maxon/nodes_distributionbase.h; sourceTree = SOURCE_ROOT; };
+		A09DB5874B0E2B337C020000 /* misc.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = misc.framework.xcodeproj; path = ../../../frameworks/misc.framework/project/misc.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A09DB5874B2E184480020000 /* asset.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = asset.framework.xcodeproj; path = ../../../frameworks/asset.framework/project/asset.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A09DB5874B57226E2E000000 /* neutron_ids.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = neutron_ids.h; path = ../source/maxon/neutron_ids.h; sourceTree = SOURCE_ROOT; };
+		A09DB5874B6A309886000000 /* nodes_dataimport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nodes_dataimport.h; path = ../source/maxon/definitions/nodes_dataimport.h; sourceTree = SOURCE_ROOT; };
+		A09DB5874B810FEC8F000000 /* neutron_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = neutron_base.h; path = ../source/maxon/neutron_base.h; sourceTree = SOURCE_ROOT; };
+		A09DB5874B9002F89C000000 /* nodes_distributionparametric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nodes_distributionparametric.h; path = ../source/maxon/nodes_distributionparametric.h; sourceTree = SOURCE_ROOT; };
+		A09DB5874BA8336F01020000 /* nodes.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = nodes.framework.xcodeproj; path = ../../../frameworks/nodes.framework/project/nodes.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A09DB5874BAD5E3D58000000 /* nodes_neutron.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nodes_neutron.h; path = ../source/maxon/definitions/nodes_neutron.h; sourceTree = SOURCE_ROOT; };
+		A09DB5874BCACA0D90000000 /* nodes_modeling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nodes_modeling.h; path = ../source/maxon/definitions/nodes_modeling.h; sourceTree = SOURCE_ROOT; };
+		A09DB5874BD93CCD9F000000 /* register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = register.cpp; path = ../generated/hxx/register.cpp; sourceTree = SOURCE_ROOT; };
+		A09DB5874BDAA06215000000 /* nodes_distributionparticles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nodes_distributionparticles.h; path = ../source/maxon/nodes_distributionparticles.h; sourceTree = SOURCE_ROOT; };
+		A09DB5874BF4AB3A6F020000 /* core.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = core.framework.xcodeproj; path = ../../../frameworks/core.framework/project/core.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A09DB5874BFC123D5E020000 /* graph.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = graph.framework.xcodeproj; path = ../../../frameworks/graph.framework/project/graph.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A09DB5874B000000000F0000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A09DB5874B0E2B337C010000 /* libmisc.framework.a in Frameworks */,
+				A09DB5874B2E184480010000 /* libasset.framework.a in Frameworks */,
+				A09DB5874BA8336F01010000 /* libnodes.framework.a in Frameworks */,
+				A09DB5874BF4AB3A6F010000 /* libcore.framework.a in Frameworks */,
+				A09DB5874BFC123D5E010000 /* libgraph.framework.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A09DB5874B00000000140000 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874B2E184480020000 /* asset.framework.xcodeproj */,
+				A09DB5874BF4AB3A6F020000 /* core.framework.xcodeproj */,
+				A09DB5874BFC123D5E020000 /* graph.framework.xcodeproj */,
+				A09DB5874B0E2B337C020000 /* misc.framework.xcodeproj */,
+				A09DB5874BA8336F01020000 /* nodes.framework.xcodeproj */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		A09DB5874B00000000190000 /* configurations */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874B00000000000000 /* debugbase.xcconfig */,
+				A09DB5874B00000000050000 /* releasebase.xcconfig */,
+			);
+			name = configurations;
+			sourceTree = "<group>";
+		};
+		A09DB5874B000000001E0000 = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874B00000000190000 /* configurations */,
+				A09DB5874B111A998F000000 /* generated */,
+				A09DB5874B00000000140000 /* libs */,
+				A09DB5874B00000000230000 /* products */,
+				A09DB5874BCA90681B000000 /* source */,
+			);
+			sourceTree = "<group>";
+		};
+		A09DB5874B00000000230000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A08C5CDEA39DB5874B7B0000 /* libneutron.framework.a */,
+				A08C5CDEA39DB5874B7B0100 /* libneutron.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A09DB5874B0E2B337C280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874B0E2B337C000000 /* libmisc.framework.a */,
+				A09DB5874B0E2B337C000100 /* libmisc.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A09DB5874B111A998F000000 /* generated */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874B681C2CE8000000 /* hxx */,
+			);
+			name = generated;
+			path = ../generated;
+			sourceTree = SOURCE_ROOT;
+		};
+		A09DB5874B114C574F000000 /* maxon */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874BB82BAAC0000000 /* definitions */,
+				A09DB5874B810FEC8F000000 /* neutron_base.h */,
+				A09DB5874B57226E2E000000 /* neutron_ids.h */,
+				A09DB5874B0C66771D000000 /* nodes_distributionbase.h */,
+				A09DB5874B9002F89C000000 /* nodes_distributionparametric.h */,
+				A09DB5874BDAA06215000000 /* nodes_distributionparticles.h */,
+			);
+			name = maxon;
+			path = ../source/maxon;
+			sourceTree = SOURCE_ROOT;
+		};
+		A09DB5874B2E184480280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874B2E184480000000 /* libasset.framework.a */,
+				A09DB5874B2E184480000100 /* libasset.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A09DB5874B681C2CE8000000 /* hxx */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874BD93CCD9F000000 /* register.cpp */,
+			);
+			name = hxx;
+			path = ../generated/hxx;
+			sourceTree = SOURCE_ROOT;
+		};
+		A09DB5874BA8336F01280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874BA8336F01000000 /* libnodes.framework.a */,
+				A09DB5874BA8336F01000100 /* libnodes.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A09DB5874BB82BAAC0000000 /* definitions */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874B6A309886000000 /* nodes_dataimport.h */,
+				A09DB5874BCACA0D90000000 /* nodes_modeling.h */,
+				A09DB5874BAD5E3D58000000 /* nodes_neutron.h */,
+			);
+			name = definitions;
+			path = ../source/maxon/definitions;
+			sourceTree = SOURCE_ROOT;
+		};
+		A09DB5874BCA90681B000000 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874B114C574F000000 /* maxon */,
+			);
+			name = source;
+			path = ../source;
+			sourceTree = SOURCE_ROOT;
+		};
+		A09DB5874BF4AB3A6F280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874BF4AB3A6F000000 /* libcore.framework.a */,
+				A09DB5874BF4AB3A6F000100 /* libcore.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A09DB5874BFC123D5E280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A09DB5874BFC123D5E000000 /* libgraph.framework.a */,
+				A09DB5874BFC123D5E000100 /* libgraph.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A09DB5874B000000002D0000 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A08C5CDEA39DB5874B000000 /* neutron.framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A09DB5874B00000000460000 /* Build configuration list for PBXNativeTarget "neutron.framework" */;
+			buildPhases = (
+				A09DB5874B00000000690000 /* Run Source Processor */,
+				A09DB5874B00000000320000 /* Sources */,
+				A09DB5874B000000000F0000 /* Frameworks */,
+				A09DB5874B000000002D0000 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A09DB5874B2E184480370000 /* PBXTargetDependency */,
+				A09DB5874BF4AB3A6F370000 /* PBXTargetDependency */,
+				A09DB5874BFC123D5E370000 /* PBXTargetDependency */,
+				A09DB5874B0E2B337C370000 /* PBXTargetDependency */,
+				A09DB5874BA8336F01370000 /* PBXTargetDependency */,
+			);
+			name = neutron.framework;
+			productName = neutron.framework;
+			productReference = A08C5CDEA39DB5874B7B0000 /* libneutron.framework.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A09DB5874B000000003C0000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1299;
+			};
+			buildConfigurationList = A09DB5874B00000000410000 /* Build configuration list for PBXProject "neutron.framework" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A09DB5874B000000001E0000;
+			productRefGroup = A09DB5874B00000000230000 /* products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A09DB5874B2E184480280000 /* products */;
+					ProjectRef = A09DB5874B2E184480020000 /* asset.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A09DB5874BF4AB3A6F280000 /* products */;
+					ProjectRef = A09DB5874BF4AB3A6F020000 /* core.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A09DB5874BFC123D5E280000 /* products */;
+					ProjectRef = A09DB5874BFC123D5E020000 /* graph.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A09DB5874B0E2B337C280000 /* products */;
+					ProjectRef = A09DB5874B0E2B337C020000 /* misc.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A09DB5874BA8336F01280000 /* products */;
+					ProjectRef = A09DB5874BA8336F01020000 /* nodes.framework.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				A08C5CDEA39DB5874B000000 /* neutron.framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A09DB5874B0E2B337C000000 /* libmisc.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmisc.framework.a;
+			remoteRef = A09DB5874B0E2B337C040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A09DB5874B0E2B337C000100 /* libmisc.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmisc.framework_static.a;
+			remoteRef = A09DB5874B0E2B337C040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A09DB5874B2E184480000000 /* libasset.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libasset.framework.a;
+			remoteRef = A09DB5874B2E184480040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A09DB5874B2E184480000100 /* libasset.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libasset.framework_static.a;
+			remoteRef = A09DB5874B2E184480040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A09DB5874BA8336F01000000 /* libnodes.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libnodes.framework.a;
+			remoteRef = A09DB5874BA8336F01040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A09DB5874BA8336F01000100 /* libnodes.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libnodes.framework_static.a;
+			remoteRef = A09DB5874BA8336F01040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A09DB5874BF4AB3A6F000000 /* libcore.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework.a;
+			remoteRef = A09DB5874BF4AB3A6F040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A09DB5874BF4AB3A6F000100 /* libcore.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcore.framework_static.a;
+			remoteRef = A09DB5874BF4AB3A6F040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A09DB5874BFC123D5E000000 /* libgraph.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libgraph.framework.a;
+			remoteRef = A09DB5874BFC123D5E040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A09DB5874BFC123D5E000100 /* libgraph.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libgraph.framework_static.a;
+			remoteRef = A09DB5874BFC123D5E040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A09DB5874B00000000690000 /* Run Source Processor */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Source Processor";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python ${MAXON_ROOTDIR}frameworks/settings/sourceprocessor/sourceprocessor.py \"$PROJECT_DIR/..\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A09DB5874B00000000320000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A09DB5874BD93CCD9F010000 /* register.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A09DB5874B0E2B337C370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = misc.framework;
+			targetProxy = A09DB5874B0E2B337C050000 /* PBXContainerItemProxy */;
+		};
+		A09DB5874B2E184480370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = asset.framework;
+			targetProxy = A09DB5874B2E184480050000 /* PBXContainerItemProxy */;
+		};
+		A09DB5874BA8336F01370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = nodes.framework;
+			targetProxy = A09DB5874BA8336F01050000 /* PBXContainerItemProxy */;
+		};
+		A09DB5874BF4AB3A6F370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = core.framework;
+			targetProxy = A09DB5874BF4AB3A6F050000 /* PBXContainerItemProxy */;
+		};
+		A09DB5874BFC123D5E370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = graph.framework;
+			targetProxy = A09DB5874BFC123D5E050000 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A09DB5874B000000004B0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A09DB5874B00000000000000 /* debugbase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.neutron.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source ../source/maxon/definitions $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/asset.framework/source/** $(MAXON_ROOTDIR)frameworks/asset.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/graph.framework/source/** $(MAXON_ROOTDIR)frameworks/graph.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/misc.framework/source/** $(MAXON_ROOTDIR)frameworks/misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/nodes.framework/source/** $(MAXON_ROOTDIR)frameworks/nodes.framework/generated/hxx $(inherited)";
+			};
+			name = Debug;
+		};
+		A09DB5874B00000000500000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A09DB5874B00000000050000 /* releasebase.xcconfig */;
+			buildSettings = {
+				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXECUTABLE_PREFIX = lib;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					MAXON_API,
+					"MAXON_MODULE_ID=\\\"net.maxon.neutron.framework\\\"",
+				);
+				MAXON_ROOTDIR = ../../../;
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx ../source ../source/maxon/definitions $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/asset.framework/source/** $(MAXON_ROOTDIR)frameworks/asset.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/graph.framework/source/** $(MAXON_ROOTDIR)frameworks/graph.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/misc.framework/source/** $(MAXON_ROOTDIR)frameworks/misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/nodes.framework/source/** $(MAXON_ROOTDIR)frameworks/nodes.framework/generated/hxx $(inherited)";
+			};
+			name = Release;
+		};
+		A09DB5874B000000005A0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A09DB5874B000000005F0000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				KEEP_PRIVATE_EXTERNS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A09DB5874B00000000410000 /* Build configuration list for PBXProject "neutron.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A09DB5874B000000004B0000 /* Debug */,
+				A09DB5874B00000000500000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A09DB5874B00000000460000 /* Build configuration list for PBXNativeTarget "neutron.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A09DB5874B000000005A0000 /* Debug */,
+				A09DB5874B000000005F0000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A09DB5874B000000003C0000 /* Project object */;
+}

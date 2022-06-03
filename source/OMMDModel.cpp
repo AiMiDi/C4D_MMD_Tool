@@ -7,8 +7,8 @@ namespace tool {
 	Bool EditorSubMorphDialog::CreateLayout() 
 	{
 		SetTitle(GeLoadString(IDS_MORPH_EDITOR));
-		m_images = new ImagesGUI("mmd_tool_title.png"_s, 300, 78);
-		C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(78));
+		m_images = new ImagesGUI("mmd_tool_title.png"_s, 300, 95);
+		C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(95));
 		if (userAreaGadget != nullptr)
 			this->AttachUserArea((*m_images), userAreaGadget);
 		GroupBegin(1000, BFH_CENTER, 3, 1, ""_s, 0, 0, 150);
@@ -489,7 +489,7 @@ namespace tool {
 	{
 		if (morph_name.IsEmpty())
 		{
-			morph_name = "group_morph_" + model->GetMorphNamedNumber();
+			morph_name = "[Group morph]" + model->GetMorphNamedNumber();
 		}
 		DynamicDescription* const ddesc = static_cast<BaseObject*>(model->Get())->GetDynamicDescription();
 		if (ddesc == nullptr)
@@ -553,7 +553,7 @@ namespace tool {
 	{
 		if (morph_name.IsEmpty())
 		{
-			morph_name = "filp_morph_" + model->GetMorphNamedNumber();
+			morph_name = "[Filp morph]" + model->GetMorphNamedNumber();
 		}
 		DynamicDescription* const	ddesc = static_cast<BaseObject*>(model->Get())->GetDynamicDescription();
 		if (ddesc == nullptr)
@@ -617,7 +617,7 @@ namespace tool {
 	{
 		if (morph_name.IsEmpty())
 		{
-			morph_name = "filp_morph_" + model->GetMorphNamedNumber();
+			morph_name = "[Mesh morph]" + model->GetMorphNamedNumber();
 		}
 		DynamicDescription* const	ddesc = static_cast<BaseObject*>(model->Get())->GetDynamicDescription();
 		if (ddesc == nullptr)
@@ -652,7 +652,7 @@ namespace tool {
 	{
 		if (morph_name.IsEmpty())
 		{
-			morph_name = "filp_morph_" + model->GetMorphNamedNumber();
+			morph_name = "[Bone morph]" + model->GetMorphNamedNumber();
 		}
 		DynamicDescription* const	ddesc = static_cast<BaseObject*>(model->Get())->GetDynamicDescription();
 		if (ddesc == nullptr)

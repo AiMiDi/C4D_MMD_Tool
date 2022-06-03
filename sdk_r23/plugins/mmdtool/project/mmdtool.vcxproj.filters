@@ -48,9 +48,6 @@
     <ClCompile Include="..\..\..\..\source\BulletTest.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -96,9 +93,6 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\BulletTest.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\source\ImagesGUI.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\main.h">
@@ -166,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h">
       <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\ImagesGUI.hpp">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

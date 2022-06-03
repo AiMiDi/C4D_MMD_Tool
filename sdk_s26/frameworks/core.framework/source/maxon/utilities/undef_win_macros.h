@@ -1,0 +1,16 @@
+#undef DELETE
+#undef INTERFACE
+#undef RELATIVE
+#undef ERROR
+#undef GetFirstChild
+#undef GetMessage
+#undef CreateWindow
+#undef GetObject
+#undef AddJob
+#undef GetClassInfo
+#undef PASSTHROUGH
+#undef SetPort
+#undef LoadString
+#undef LoadImage
+#undef DrawText
+#undef OFFSET

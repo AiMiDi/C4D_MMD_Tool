@@ -210,6 +210,10 @@ namespace tool {
 						const auto pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
 						const Int32 morph_mode = pose_morph_tag->GetMode();
 						const Int32 morph_count = pose_morph_tag->GetMorphCount();
+						for (Int32 index = 1; index < morph_count; index++)
+						{
+							morph_name_list.Insert(pose_morph_tag->GetMorph(index)->GetName())iferr_return;
+						}
 						const auto morph_previous_model_ptr = m_tag_mode_map.Find(pose_morph_tag);
 						if(morph_previous_model_ptr!=nullptr)
 						{
@@ -228,10 +232,9 @@ namespace tool {
 						{
 							auto* morph = pose_morph_tag->GetMorph(index);
 							String morph_name = morph->GetName();
-							morph_name_list.Insert(morph_name)iferr_return;
 							DescID morph_id = pose_morph_tag->GetMorphID(index);
-							maxon::BaseList<mesh_morph_hub_data>* mesh_morph_list = nullptr;
-							auto mesh_morph_map_ptr = m_MorphData_map.Find(morph_name);
+							maxon::BaseList<mesh_morph_hub_data>* mesh_morph_list;
+							const auto mesh_morph_map_ptr = m_MorphData_map.Find(morph_name);
 							if (mesh_morph_map_ptr != nullptr)
 							{
 								mesh_morph_list = &mesh_morph_map_ptr->GetValue();
@@ -261,12 +264,14 @@ namespace tool {
 			}
 		}
 		// 移除已删除的表情
-		for (auto name_it = m_MorphData_map.GetKeys().begin(); name_it != m_MorphData_map.GetKeys().end(); ++name_it)
-		{
-			auto& name = *name_it;
-			if (morph_name_list.Find(name) == nullptr) {
-				m_MorphData_map.Erase(name)iferr_return;
-				need_update_morph = true;		
+		if (m_MorphData_map.GetCount() > morph_name_list.GetCount()) {
+			for (auto name_it = m_MorphData_map.GetKeys().begin(); name_it != m_MorphData_map.GetKeys().end(); ++name_it)
+			{
+				auto& name = *name_it;
+				if (morph_name_list.Find(name) == nullptr) {
+					m_MorphData_map.Erase(name)iferr_return;
+					need_update_morph = true;
+				}
 			}
 		}
 		if (need_update_morph == true) {

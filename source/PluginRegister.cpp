@@ -1,6 +1,7 @@
 ﻿#include "main.h"
 #include "PMX.h"
 #include "VMD.h"
+#include "VPD.h"
 #include "TMMDBone.h"
 #include "OMMDRigid.h"
 #include "OMMDJoint.h"
@@ -9,7 +10,8 @@
 #include "OMMDMeshRoot.h"
 #include "OMMDRigidRoot.h"
 #include "OMMDJointRoot.h"
-#include "VPD.h"
+#include "ImagesGUI.hpp"
+#include "yaml-cpp/yaml.h"
 
 #if API_VERSION >= 25000
 #define COMBO_BOX_W 253

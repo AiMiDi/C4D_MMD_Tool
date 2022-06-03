@@ -1,0 +1,3 @@
+maxon.FunctionBaseInterface	"net.maxon.interface.functionbase"	D:\C4DSDK\C4D_MMDTool\sdk_s26\frameworks\core.framework\source\maxon\observable.h(301,7)	ObjectInterface	Execute,GetObserver,GetObserverPointer,GetOwner,Init,Set	
+maxon.CombinerInterface	"net.maxon.interface.combiner"	D:\C4DSDK\C4D_MMDTool\sdk_s26\frameworks\core.framework\source\maxon\observable.h(350,7)	ObjectInterface	CombineResult,InitCombine	
+maxon.ObservableBaseInterface	"net.maxon.interface.observablebase"	D:\C4DSDK\C4D_MMDTool\sdk_s26\frameworks\core.framework\source\maxon\observable.h(421,7)	ObjectInterface	AddObserver,GetObservableId,GetObserverCount,GetOwner,Init,Notify,RemoveObserver,SetInverseNotification,_intDisconnectAll	

@@ -1,0 +1,4464 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CodeBlocks_project_file>
+  <FileVersion major="1" minor="6" />
+  <Project>
+    <Option title="cinema.framework" />
+    <Option platforms="Unix;Mac;" />
+    <Option pch_mode="2" />
+    <Option compiler="gcc" />
+    <Option virtualFolders="source/description/;generated/hxx/;source/;source/c4d_customgui/;source/c4d_gv/;source/c4d_libs/;source/c4d_misc/utilities/;" />
+    <Build>
+      <Target title="Debug64">
+        <Option output="$(MAXON_PROJECT_DIR)cinema.framework_debug64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/debug64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_debug64.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_debug64.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_debug64.a;" />
+        <Compiler>
+          <Add option="-D_DEBUG" />
+          <Add option="-DMAXON_TARGET_DEBUG" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DUSE_API_MAXON" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.c4d.cinema.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-mavx" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_debug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_debug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_debug64.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/cinema.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="Release64">
+        <Option output="$(MAXON_PROJECT_DIR)cinema.framework_release64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/release64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_release64.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_release64.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_release64.a;" />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DUSE_API_MAXON" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.c4d.cinema.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-O3" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-mavx" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_release64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_release64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_release64.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/cinema.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="LibDebug64">
+        <Option output="$(MAXON_PROJECT_DIR)cinema.framework_libdebug64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/libdebug64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_libdebug64.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_libdebug64.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_libdebug64.a;" />
+        <Compiler>
+          <Add option="-D_DEBUG" />
+          <Add option="-DMAXON_TARGET_DEBUG" />
+          <Add option="-D__STANDALONEAPP" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DUSE_API_MAXON" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.c4d.cinema.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-mavx" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_libdebug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_libdebug64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_libdebug64.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/cinema.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="LibRelease64">
+        <Option output="$(MAXON_PROJECT_DIR)cinema.framework_librelease64.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/librelease64" />
+        <Option compiler="gcc" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_librelease64.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_librelease64.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_librelease64.a;" />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__STANDALONEAPP" />
+          <Add option="-D__LINUX" />
+          <Add option="-D__64BIT" />
+          <Add option="-DMAXON_TARGET_64BIT" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DUSE_API_MAXON" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.c4d.cinema.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-mavx" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_librelease64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_librelease64.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_librelease64.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='x86_64-linux-gnu' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/cinema.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="DebugRPi">
+        <Option output="$(MAXON_PROJECT_DIR)cinema.framework_debugrpi.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/debugrpi" />
+        <Option compiler="gcc_rpi" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_debugrpi.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_debugrpi.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_debugrpi.a;" />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__LINUX" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DUSE_API_MAXON" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.c4d.cinema.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_debugrpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_debugrpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_debugrpi.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='arm-linux-gnueabihf' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/cinema.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+      <Target title="ReleaseRPi">
+        <Option output="$(MAXON_PROJECT_DIR)cinema.framework_releaserpi.a" prefix_auto="0" extension_auto="0" />
+        <Option type="2" />
+        <Option object_output=".objs/releaserpi" />
+        <Option compiler="gcc_rpi" />
+        <Option createDefFile="1" />
+        <Option external_deps="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_releaserpi.a;$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_releaserpi.a;$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_releaserpi.a;" />
+        <Compiler>
+          <Add option="-DMAXON_TARGET_RELEASE" />
+          <Add option="-D__LINUX" />
+          <Add option="-DMAXON_TARGET_LINUX" />
+          <Add option="-DUSE_API_MAXON" />
+          <Add option='-DMAXON_MODULE_ID=\&apos;&quot;net.maxon.c4d.cinema.framework&quot;\&apos;' />
+          <Add option="-std=gnu++17" />
+          <Add option="-fPIC" />
+          <Add option="-c" />
+          <Add option="-fmessage-length=0" />
+          <Add option="-g" />
+          <Add option="-fvisibility=hidden" />
+          <Add option="-MMD" />
+          <Add option="-MP" />
+          <Add option="-Wall" />
+          <Add option="-Wno-multichar" />
+          <Add option="-Wno-invalid-offsetof" />
+          <Add option="-Wno-switch" />
+          <Add option="-Wno-strict-aliasing" />
+          <Add option="-Werror=conversion-null" />
+          <Add option="-Werror=char-subscripts" />
+          <Add option="-Werror=reorder" />
+          <Add option="-Werror=sequence-point" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_customgui/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_gv/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_libs/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/c4d_misc/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)source/description/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_PROJECT_DIR)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/math/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)source/maxon/utilities/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_CORE.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)source/maxon/convexdecomposition/&quot;" />
+          <Add option="-iquote&quot;$(MAXON_GEOM.FRAMEWORK_ROOT_PATH)generated/hxx/&quot;" />
+        </Compiler>
+        <Linker>
+          <Add option="-Wl,--whole-archive" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/mesh_misc.framework/mesh_misc.framework_releaserpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/core.framework/core.framework_releaserpi.a" />
+          <Add option="$(MAXON_ROOTDIR)frameworks/geom.framework/geom.framework_releaserpi.a" />
+          <Add option="-Wl,--no-whole-archive" />
+        </Linker>
+        <ExtraCommands>
+          <Add before='python $(MAXON_SETTINGS_PATH)sourceprocessor/sourceprocessor.py &quot;$(MAXON_PROJECT_DIR)&quot; ' />
+        </ExtraCommands>
+        <Environment>
+          <Variable name="MAXON_ARCHITECTURE" value='arm-linux-gnueabihf' />
+          <Variable name="MAXON_ROOTDIR" value='$(WORKSPACE_DIR)/../../' />
+          <Variable name="MAXON_BIN_PATH" value='$(MAXON_ROOTDIR)' />
+          <Variable name="MAXON_FRAMEWORKS_PATH" value='$(MAXON_ROOTDIR)frameworks/' />
+          <Variable name="MAXON_SETTINGS_PATH" value='$(MAXON_FRAMEWORKS_PATH)settings/' />
+          <Variable name="MAXON_PROJECT_DIR" value='$(MAXON_ROOTDIR)frameworks/cinema.framework/' />
+          <Variable name="MAXON_PROJECT_SOURCE" value='$(MAXON_PROJECT_DIR)source/' />
+          <Variable name="MAXON_MESH_MISC.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)mesh_misc.framework/' />
+          <Variable name="MAXON_CORE.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)core.framework/' />
+          <Variable name="MAXON_GEOM.FRAMEWORK_ROOT_PATH" value='$(MAXON_FRAMEWORKS_PATH)geom.framework/' />
+        </Environment>
+      </Target>
+    </Build>
+    <Unit filename="../generated/hxx/register.cpp">
+      <Option virtualFolder="generated/hxx/" />
+    </Unit>
+    <Unit filename="../source/c4d.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basebitmap.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basebitmap.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basechannel.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basechannel.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basecontainer.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basecontainer.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basedata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basedocument.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basedocument.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basedraw.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basedraw.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baseeffectordata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baseeffectorplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baseeffectorplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baselinkarray.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baselist.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baselist.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basematerial.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basematerial.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baseobject.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baseobject.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baseplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baseplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baseselect.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_baseselect.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basesound.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basesound.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basetag.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basetag.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basetime.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_basetime.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_bitmapfilter.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_bitmapfilter.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_bitmapfilterstruct.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_canimation.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_canimation.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_colors.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_commanddata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_commandplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_commandplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_ctrackdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_ctrackplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_ctrackplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_customdatatype.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_customdatatype.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_customdatatypeplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_base.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_base.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_bitmapbool.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_bitmapbutton.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_bitmapbutton.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_datetime.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_datetime.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_descproperty.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_descproperty.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_description.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_description.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_field.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_field.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_filename.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_filename_breadcrumb.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_fontchooser.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_fontchooser.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_gradient.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_gradient.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_htmlviewer.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_htmlviewer.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_hyperlink.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_hyperlink.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_iconchooser.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_iconchooser.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_inexclude.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_inexclude.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_itemtree.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_itemtree.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_kerning.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_kerning.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_layerset.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_lensglow.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_linkbox.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_linkbox.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_listview.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_listview.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_listview2.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_listview2.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_longlat.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_matassign.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_matassign.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_matpreview.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_matpreview.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_movieview.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_movieview.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_pla.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_pla.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_previewimage.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_previewimage.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_priority.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_priority.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_quicktab.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_quicktab.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_range.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_range.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_soundeffector.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_soundeffector.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_splinecontrol.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_splinecontrol.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_texbox.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_texbox.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_texturemanager.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_texturemanager.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_texturename.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_unitscale.cpp">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_unitscale.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customgui/customgui_vector2d.h">
+      <Option virtualFolder="source/c4d_customgui/" />
+    </Unit>
+    <Unit filename="../source/c4d_customguidata.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_customguidata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_customguiplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_customguiplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_data_datatype.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_descriptiondialog.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_descriptiondialog.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_falloffdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_falloffplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_falloffplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_fielddata.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_fielddata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_fieldplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_fieldplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_file.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_file.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_filterdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_filterplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_filterplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_gedata.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_gedata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_general.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_general.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_gui.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_gui.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_gv/c4d_graphview.cpp">
+      <Option virtualFolder="source/c4d_gv/" />
+    </Unit>
+    <Unit filename="../source/c4d_gv/c4d_graphview.h">
+      <Option virtualFolder="source/c4d_gv/" />
+    </Unit>
+    <Unit filename="../source/c4d_gv/c4d_graphview_def.h">
+      <Option virtualFolder="source/c4d_gv/" />
+    </Unit>
+    <Unit filename="../source/c4d_gv/c4d_graphview_enum.h">
+      <Option virtualFolder="source/c4d_gv/" />
+    </Unit>
+    <Unit filename="../source/c4d_gv/c4d_operatordata.h">
+      <Option virtualFolder="source/c4d_gv/" />
+    </Unit>
+    <Unit filename="../source/c4d_gv/c4d_operatorplugin.cpp">
+      <Option virtualFolder="source/c4d_gv/" />
+    </Unit>
+    <Unit filename="../source/c4d_gv/c4d_operatorplugin.h">
+      <Option virtualFolder="source/c4d_gv/" />
+    </Unit>
+    <Unit filename="../source/c4d_gv/c4d_particles.cpp">
+      <Option virtualFolder="source/c4d_gv/" />
+    </Unit>
+    <Unit filename="../source/c4d_gv/c4d_particles.h">
+      <Option virtualFolder="source/c4d_gv/" />
+    </Unit>
+    <Unit filename="../source/c4d_help.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_help.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_includes.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_library.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_library.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_activeobjectmanager.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_activeobjectmanager.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_aes.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_aes.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_batchrender.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_batchrender.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_birender.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_birender.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_browser.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_browser.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_ca.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_ca.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_clipmap.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_clipmap.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_cloud.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_cloud.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_collider.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_collider.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_colorchooser.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_colorchooser.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_customdatatag.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_customdatatag.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_datetimeparser.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_datetimeparser.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_description.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_description.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_dwgobjects.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_dwgobjects.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_dwgobjectsdef.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_editortools.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_editortools.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_filtertree.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_filtertree.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_hair.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_hair.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_iconcollection.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_iconcollection.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_instanceobject.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_instanceobject.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_intersect.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_intersect.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_layershader.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_layershader.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_lodobject.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_lodobject.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_modeling.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_modeling.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_motiontracker.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_motiontracker.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_net.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_net.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_ngon.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_ngon.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_noise.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_noise.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_paint.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_paint.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_pictureviewer.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_pictureviewer.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_polygonreduction.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_polygonreduction.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_prefs.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_prefs.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_py.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_py.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_regexpr.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_regexpr.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_sculpt.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_sculpt.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_sculptbrush.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_sculptbrush.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_sds.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_sds.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_selectionchanger.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_selectionchanger.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_snd.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_snd.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_splinehelp.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_splinehelp.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_substance.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_substance.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_takesystem.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_takesystem.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_tlmarker.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_tlmarker.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_token.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_token.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_viewport.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_viewport.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_volumebuilder.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_volumebuilder.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_volumeobject.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_volumeobject.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_volumeset.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_voronoifracture.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_voronoifracture.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_zipfile.cpp">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/lib_zipfile.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_libs/sdkreferenceobjectptr.h">
+      <Option virtualFolder="source/c4d_libs/" />
+    </Unit>
+    <Unit filename="../source/c4d_listview.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_listview.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_materialdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_materialplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_materialplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_memory.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_memory.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_messagedata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_messageplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_messageplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_misc/utilities/apibasemath.h">
+      <Option virtualFolder="source/c4d_misc/utilities/" />
+    </Unit>
+    <Unit filename="../source/c4d_motiontransfer.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_motiontransfer.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_network.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_network.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_nodedata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_nodeplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_nodeplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_objectdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_objectplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_objectplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_painter.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_painter.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_particleobject.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_particleobject.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_plugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_pmain.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_pmain.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_quaternion.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_quaternion.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_raytrace.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_reflection.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_reflection.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_resource.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_resource.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_scenehookdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_scenehookplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_scenehookplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_shader.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_shaderdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_shaderplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_shaderplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_snapdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_snapplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_snapplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_spc.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_spc.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_string.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_string.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_tagdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_tagplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_tagplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_thread.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_thread.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_tooldata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_toolplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_toolplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_tools.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_tools.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_uuid.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_videopost.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_videopost.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_videopostdata.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_videopostplugin.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/c4d_videopostplugin.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/description/CBcircular.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/CBcomposite.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/CBconic.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/CBline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/CBnurbs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/CBpolynom.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/CMsegment.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/CMstandard.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/FCollada14Export.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/FCollada14Import.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/FCollada15Export.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/FCollada15Import.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Falembicimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Fcadimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Fcatiaimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Fdwg.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Fdwgobjectvalues.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Ffbxexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Ffbximport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Figesimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Fjtimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Fsolidworksimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Fstepimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Nsubstanceasset.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Nsubstanceasset_deprecated.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Oalembicgenerator.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Obasecurve.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Obasegroup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Obasesurface.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Oconnector.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Ofalloff.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Omappedcurve.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Otrimmedsurface.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/SBextrude.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/SBnurbs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/SBplane.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/SBpolynom.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/SBrotate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/STstandard.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Talembicmorphtag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Talembictag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Tfbxexportreference.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/Xsubstance.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/allplan.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/belttag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmamplify.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmfill.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmflatten.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmgrab.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmgravity.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bminflate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmknife.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmpinch.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmpull.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmrepeat.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmscrape.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmsmooth.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bmwax.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bpbitmap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bplayer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bplayerbmp.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bplayerfilterbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bplayerfilterbrco.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bplayerfiltersolid.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bplayerfolder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bpspline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bpsplinegroup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bpsplineline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bpsplineprimitive.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bpsplinetext.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/bptexture.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/cachetool.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ckbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ckdata.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ckdoodle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ckmorph.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ckphfeatkeys.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ckphmask.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ckpla.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/cksound.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ckvalue.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/clothtag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/cnurbsobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/collidertag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/compositing3dtag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ctbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ctdoodle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ctmorph.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ctphfeatkeys.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ctphmask.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ctpla.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ctsound.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dbasedraw.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dblend.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dcharupdate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dcolora.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ddoc.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/desc_falloffentry.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/desc_fieldbg.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/desc_fieldentry.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dgradient.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/distanceblur.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dlwghtopts.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dmatrix.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dmodeling.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dpresets.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dprojobjs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dpsrmatrix.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/drendersettings.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/drsfile.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/drsposteffects.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dsounddata.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dsoundprobe.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dspline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dswghtopts.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dvector.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dvector2d.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dvector4d.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dxrefadd.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dxrefmanager.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dynbinforce.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dynconstraintobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dynforce.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dyninteraction.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dynmotorobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dynrigidbodyhiddentag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dynrigidbodytag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dynspringobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/dynworldobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/etparameter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/f3dsexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/f3dsimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/faiexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/faiimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/falembicexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fbox.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fbvhimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fc4d.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fc4dexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fcapsule.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fcone.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fcylinder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fd3dexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fdemimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fdxfexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fdxfimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fedit.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fforgerioloader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fforgeriosaver.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fformula.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fgltfexporter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fgroup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fieldremapper.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flchannelmix.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flclamp.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flcolorize.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flcurve.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fldecay.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fldelay.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flfolder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flformula.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flgradient.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flinear.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flinvert.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flmograph.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flnoise.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flparticleobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flpolygonobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flproximity.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flpython.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flquantize.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flrangemap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flremap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flsolid.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flspline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flstandard.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flstep.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fltime.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flvolumeobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/flweight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fobjexport2.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fobjimport2.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fpython.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fradial.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/frandom.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fskpimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fsound.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fsphere.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fstlexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fstlimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fsvgimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ftorus.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fusdexporter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fusdimporter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fvdbexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fvdbimport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fvrml2export.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/fvrml2import.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/glow.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvabs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvadapter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvbitmap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvbool.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvbox.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvclamp.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvcmp.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvcoffee.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvcollision.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvcolorspace.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvcolortemp.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvcomment.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvcondition.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvconst.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvcross.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdegree.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdetails.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdistance.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdot.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdummy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdynamic.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdynbody.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdyncollision.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdynconstraint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdyninteraction.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdynproximity.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvdynspring.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvequ.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvfloatfunc.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvfloatmath.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvformula.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvfreeze.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvgroup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvhair.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvhair_collision.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvhair_intersection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvhair_point.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvhair_proximity.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvhair_selection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvhierarchy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvinclude.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvinv.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gviterate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvlink.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmaterial.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmath.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmatrix2hpb.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmatrix2vect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmatrixmulvect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmemory.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmix.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmograph_data.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmograph_falloff.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmograph_sampleeffector.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmograph_selection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmograph_weight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvmonoflop.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvnearestpoint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvnearestpointonspline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvneg.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvnil.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvnoise.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvnot.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvorder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvoscboolcontroller.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvoscfloatcontroller.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvoscvector2dcontroller.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvoverride.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvpoint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvpoly.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvpython.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvrandom.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvrangemapper.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvray.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvreal2vect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvreference.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvresult.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvsound.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvspline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvspy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvswitch.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvtag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvtime.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvtrack.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvtrigger.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvtrigo.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvvect2matrix.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvvect2real.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvvectcalcmat.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvvertexcolormap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/gvweightmap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/highlights.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/hp_chronometer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/hp_particledata.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/hp_pgroup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/hp_spinconvert.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/hp_surfaceposition.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/hp_timer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/hp_velocityconvert.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/hp_volumeposition.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/if_light.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/if_particleage.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/in_interact.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/in_selfdynamic.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/kebase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/kedata.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/kemorph.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/kepla.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/kesound.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/kevalue.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/marchigrass.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/massign.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mfog.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mggridarray.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mghoneycombarray.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgirealsky.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mglineararray.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgparticle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgpoly.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgpolyaxis.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgpolyedge.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgpolypolygon.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgpolysurface.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgpolyvertex.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgpolyvolume.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgradialarray.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgspline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mgtp.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mhairmaterial.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/millum.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mmaterial.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/motionblur.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/moutliner.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mpreview.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mprotonbxdf.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mshadowcatcher.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mt_clip.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mt_layer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mt_tag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mterrain.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/mtoonup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/netprefs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/neutrondeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/neutrongenerator.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/neutronprimitivegenerator.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/neutronscenehook.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/neutronscenetag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/neutronsplineprimitivegenerator.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/nposemixer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oarray.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oartsmart.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oatomarray.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oattractor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obackground.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obasedeform.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obaseeffector.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obaselist.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obasemogen.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obend.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obevel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obezier.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obodycapture.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oboole.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/obulge.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocacachedeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocacamdeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocacapsulefalloff.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocacluster.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocacollisiondeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocacorrectiondeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocajiggle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocajoint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocamera.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocameshdeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocamorphdeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocamuscle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocamuscledeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocapsule.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocaskin.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocasmoothdeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocasquash.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocastep.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocasurfacedeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocharacterbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocharactercomponent.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocloud.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocloudgroup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocone.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocube.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ocylinder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/odatacapture.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/odeflector.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/odeltamushdeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/odestructor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/odisc.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/odoodle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oecoffee.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oedeformer_panel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oedelay.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oeformula.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oegroup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oeinheritance.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oenvironment.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oeplain.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oepushapart.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oepython.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oerandomize.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oereeffector.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oeshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oesound.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oesounddepreciated.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oespline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oestep.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oetarget.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oetime.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oevolume.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oexplosion.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oexplosionfx.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oextrude.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oextrudelegacy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofacecapture.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofalloff_object.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofalloff_panel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofalloff_standard.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofalloffobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/offd.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofield.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofieldforce.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofigure.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofloor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oforeground.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oformula.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofractal.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofriction.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ofur.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ogravitation.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oguide.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ohair.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ohairfeather.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oinstance.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/olathe.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/olathelegacy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/olayer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/olight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/olod.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oloft.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oloftlegacy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omeasure.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omelt.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ometaball.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_cloner.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_displacer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_extrude.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_fracture.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_fracturevoronoi.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_instance.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_matrix.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_polyfx.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_splinemask.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_splinewrap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_text.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_textlegacy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omograph_tracer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omorphdeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omospline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/omotiontracker.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/onoisefalloff.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/onull.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/onurbscaps.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/onurbscapslegacy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/onurbsselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ooiltank.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_alignment.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_blurp.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_born.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_bubble.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_deflector.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_die.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_forceobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_fragment.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_freeze.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_friction.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_gravity.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_mass.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_matterwaves.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_motioninheritance.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_objectshape.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_particledata.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_particledraw.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_pgroup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_posfollow.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_repulsebounce.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_rolling.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_scale.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_size.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_spin.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_storm.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_velocity.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/op_wind.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oparticle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oparticlebase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/opbdscene.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/opbdsimulations.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ophtrackedobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/opivot.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oplane.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oplatonic.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/opointcreator_panel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/opolygon.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/opolyreduction.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/opolyreduxgen.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oprimitiveaxis.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oprimitiveslice.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oprotonlightblocker.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oprotonphysicalsky.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/opyramid.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/opython.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/orelief.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oremesh.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oreproject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/orotation.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/orscamera.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/orslight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oscatterplacement.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osceneinstance.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osculptdisplacement.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osculptlayer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osculptlayerfolder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osculptobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osculptsurfacelayer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osds.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oshader_panel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oshatter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oshear.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oshowdisplacement.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oshrinkwrapdeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osinglepoly.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osketch.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osky.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oskyshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osniper.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osphere.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ospherify.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ospline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ospline4side.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinearc.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinecircle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinecissoid.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinecogwheel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinecontour.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinecycloid.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinedeformer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplineflower.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplineformula.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinehelix.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinenside.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplineprimitive.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplineprofile.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinerail.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinerectangle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinestar.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osplinetext.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ostage.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osweep.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osweeplegacy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/osymmetry.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/otaper.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/otorus.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/otransform_panel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/otube.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oturbulence.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/otwist.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/overridebase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ovolume.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ovolumebuilder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ovolumecachelayer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ovolumefilter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ovolumesequence.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ovolumeset.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ovolumetomesh.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oweightmgr.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/owind.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/owinddeform.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oworkplane.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/owrap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oxref.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/oxrefholder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/pall.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/pbodypaint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsblserver.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsbrowser.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefscodeexchange.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefscolor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefscommunication.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsextensions.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsfiles.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsforger.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsgoz.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefshaircolor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsimexport.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsinterface.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefslinux.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefslivelink.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsmaterial.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsmemory.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsmouse.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsnavigation.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsnodeeditor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsopengl.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsplugins.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsproman.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsrenderer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsschemetop.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefssubstance.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefstake.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefstheme.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefstimeline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsunits.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsuvcolor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/prefsview.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/pvfilter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/pyrocluster.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/pyroshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/sculptprefs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/sebase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/semomix.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/sesound.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/sevalue.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/shxrefopts.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/simulationscenetag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/takebase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/taligntopath.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/taligntospline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tannotation.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tarchigrass.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tbaketexture.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcaanimationmodifier.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcacheproxy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcaconstraint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcageomcache.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcaik.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcaikspline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcameramapping.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcamorph.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcaposemorph.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcarigpart.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcavs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcawcycle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcaweight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcharacterdef.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcharactersolver.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcoffeeexpression.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcompositing.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcrane.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcustomdatabase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tcvartsmart.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tdeltamush.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tdisplay.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tdriver.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tedgeselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/texpression.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/textag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/teye.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tfacepose.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tfracturevoronoi.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tgozpolygroup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tgrouppriority.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tguide.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thair.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thaircollider.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thairconstraint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thairlight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thairmaterial.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thairprefs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thairrender.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thairselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thairsplinedynamics.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/thistogram.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tignoreobj.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tinteraction.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tlmarker.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tlookatcamera.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tlregion.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tlworld.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmetaball.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmgselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmgweight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmograph_cache.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmorph_active.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmorph_base.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmorph_target.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmorphcam.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmotionblur.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tmotioncam.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tnormal.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/todotag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/todoworld.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tool_axishelper.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tool_mggrid.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tool_mglinear.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tool_mgradial.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tool_mgselect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tool_mgweight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooladdpoint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolannotation.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolarrange.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolarray.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolbevel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolbodypart.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolbridge.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolbrush.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolbrushbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolbrushmorph.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcaalign.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcajoint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcamirror.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcanaming.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcapaint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcaweight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcenter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcharacterdef.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolclone.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolclosehole.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcloud.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolcreatepolygon.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooldoodle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolduplicate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooledgecut.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooledgeselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooledgesmooth.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolemulation.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolevenspacing.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolextrude.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolextrudeinner.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolfillselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolfitcircle.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolflatten.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolfreeselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairaddroot.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairbrush.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairclump.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhaircomb.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhaircurl.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhaircut.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairdynamics.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairfreeselect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairgrowselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairliveselect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairmirror.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairmove.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairplaceguide.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairpolyselect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairpush.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairrectselect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairroot.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairrotate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairscale.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairsoftselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairstraighten.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairsymmetry.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolhairtrimmer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooliron.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolknife.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolknifeline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolknifepath.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolknifeplane.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toollensdistortion.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toollightplacer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolliveselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolloopselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolloopselectionlegacy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolmagnet.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolmakeselect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolmatrixextrude.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolmeasure.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolmirrorbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolmodelingaxis.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolmodify.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolmove.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolnormalmove.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolnormalrotate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolnormalscale.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooloutlineselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolpath.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolphongselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolpointweld.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolpolypen.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolpolyselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolrandomize.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolrayplacement.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolrectselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolringselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolrotate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolscale.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolscatterplacement.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushamplify.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrusherase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushfill.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushflatten.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushgrab.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushinflate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushknife.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushmask.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushpinch.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushpull.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushrelax.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushrepeat.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushscrape.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushselect.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsculptbrushwax.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsetedgeflow.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsetedgeslinear.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsetobject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsetsdsweight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsetvalue.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolslide.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsmoothshift.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsoftselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsplinearc.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsplinechamfer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsplinepen.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsplineproject.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsplineround.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsplinesketch.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolsplinesmooth.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolstitchandsew.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooltest.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooltransfer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooltween.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tooluntriangulate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toolweightbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tosccontroller.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/toutliner.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tp_group.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tp_particlegeometry.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tpbdconstraint.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tphconstraintcameraorient.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tphconstraintmask.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tphconstraintplanar.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tphconstraintpos.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tphconstraintvector.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tphong.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tphongnormal.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tpointselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tpolygonselection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tprotection.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tprotonobjectlight.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tpython.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tquaternion.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/trestriction.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tretarget.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/trscamera.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tsculptlinktag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tsculpttag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tsds.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tsplinedraw.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tsplinenormal.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tsticktexture.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tstop.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tsunexpression.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ttargetexpression.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ttension.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ttexture.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/ttoonupprefs.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tuserdata.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tuvw.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tvertexcolor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tvertexmap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tvibrate.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/tvolumebuilder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/txrefholder.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/uv_settings.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpambientocclusion.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpbirender.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpcaustics.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpcolormapping.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpcomic.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpcpurenderer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpcylinderlens.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpdenoiser.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpgisetup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpgpurenderer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vphairtrace.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpmagicbulletlooks.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpmedianfilter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpnormalpass.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpoldgi.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpphlensdistort.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vppositionpass.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vppreviewhardware.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpremote.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpscenemotionblur.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpsharpenfilter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpsoftfilter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vptext.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vptonemapping.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vptoonup.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpwatermark.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vpxmbsampler.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/vstag.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xambientocclusion.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xartshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xbase.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xbeveltool.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xbitmap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xbrick.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xcelshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xchanlum.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xcheckerboard.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xcloud.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xcolor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xcolorstripes.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xcyclone.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xearth.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xfaceshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xfire.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xflame.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xformula.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xgalaxy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xhair.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xhatchingshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xmarble.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xmetal.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xmg_beat.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xmg_camera.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xmg_color.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xmg_falloff.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xmg_multi.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xmosaic.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xnbm.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xnoise.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xnormalizer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xobjectcolor.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xocio.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xpavement.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xphlensdistortionshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xplanet.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xrain.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xrust.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xskyshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslabanj.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslabanji.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslabanzi.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslabuffy.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslacheen.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslacolorizer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xsladanel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xsladirt.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xsladistorter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslafalloff.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslafilter.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslafresnel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslafusion.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslagradient.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslalayer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslalumas.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslamabel.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslanoise.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslanukei.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslaposterizer.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslaprojector.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslaproximal.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslaripple.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslaspline.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslatiles.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslavertexmap.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xslidetool.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xspectral.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xspotshader.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xsss.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xstar.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xstarfield.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xsunburst.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xterrainmask.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xthinfilm.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xturbulence.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xuvpeelertool.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xvariation.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xvenus.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xwater.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xwood.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/xxmbsubsurface.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/description/zmultipass.h">
+      <Option virtualFolder="source/description/" />
+    </Unit>
+    <Unit filename="../source/ge_autoptr.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/ge_ieee.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/ge_math.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/ge_prepass.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/ge_sys_math.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/gui.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/matrix4.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/modelingids.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/operatingsystem.cpp">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/operatingsystem.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/osx_include.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/vector4.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/windows_include.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/x4d_colors.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/x4d_filter.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Unit filename="../source/x4d_macros.h">
+      <Option virtualFolder="source/" />
+    </Unit>
+    <Extensions>
+      <code_completion />
+      <envvars />
+      <lib_finder disable_auto="1" />
+      <debugger />
+    </Extensions>
+  </Project>
+</CodeBlocks_project_file>
