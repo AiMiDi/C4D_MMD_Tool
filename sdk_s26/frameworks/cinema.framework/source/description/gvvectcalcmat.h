@@ -1,0 +1,20 @@
+#ifndef GVVECTCALCMAT_H__
+#define GVVECTCALCMAT_H__
+
+#include "gvbase.h"
+
+enum
+{
+	GV_VECTCALCMAT_TYPE				= 1000,
+		TYPE_XAXIS = 0,
+		TYPE_YAXIS,
+		TYPE_ZAXIS,
+
+	GV_VECTCALCMAT_INPUT			= 2000,
+
+	GV_VECTCALCMAT_OUTPUT			= 3000,
+
+	GV_VECTCALCMAT_
+};
+
+#endif // GVVECTCALCMAT_H__

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StepFilter xmlns="http://schemas.microsoft.com/vstudio/debugger/natstepfilter/2010">
+  <Function><Name>maxon::.*ConstPtr::ConstPtr.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*ConstPtr::~ConstPtr.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*Ptr::Ptr.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*Ptr::~Ptr.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*StringInterface::GetAndHashConstString.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::StringTemplate&lt;maxon::StringInterface,maxon::String,unsigned short&gt;::GetAndCacheConstString*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*operator maxon::Object</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*::Reference</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*::Ptr</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::MemoryAllocLocation::MemoryAllocLocation</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::String::String</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::CString::CString</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*::Reference::operator maxon::Object.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*::Ptr::operator.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>std::.*_Get()</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*::ConversionFunctions.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::Cast.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::Object::Reference::.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*::Super</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::ObjectReference.*::GetUnchecked</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::RefBase.*::GetPointer</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::.*::Super&lt;maxon::.*&gt;.*</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::DirectRef.*::GetPointer</Name><Action>NoStepInto</Action></Function>
+  <Function><Name>maxon::CheckFlag*</Name><Action>NoStepInto</Action></Function>
+</StepFilter>

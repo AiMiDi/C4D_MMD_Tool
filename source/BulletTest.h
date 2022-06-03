@@ -1,12 +1,14 @@
 ﻿#ifndef __C4DBULLETTEST__H__
-#include "MMD_utility.h"
-#include "MMD_PMX_Control.h"
+#include "Utility.h"
+#include "TMMDBone.h"
+#include "OMMDRigid.h"
+#include "OMMDJoint.h"
 #include "btBulletDynamicsCommon.h"
 
 #define MatToGLMat( m ) Matrix4d( Vector4d( m.sqmat.v1 ), Vector4d( m.sqmat.v2 ), Vector4d( m.sqmat.v3 ), Vector4d( m.off ) )
 #define GLMatToMat( m ) Matrix( Vector( m.v4 ), Vector( m.v1 ), Vector( m.v2 ), Vector( m.v3 ) )
 
-namespace mmd
+namespace tool
 {
 
 	Matrix4d InvZ(const Matrix4d& m);

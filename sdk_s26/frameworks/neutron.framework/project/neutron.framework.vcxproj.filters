@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="generated">
+      <UniqueIdentifier>{77B3174B-5BA4-1747-0000-5284111A998F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\hxx">
+      <UniqueIdentifier>{77B3174B-5BA4-1747-8ACC-618A6830A19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{77B3174B-5BA4-1747-0000-0000CA90681B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon">
+      <UniqueIdentifier>{77B3174B-5BA4-1747-29DB-81C65E166B42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon\definitions">
+      <UniqueIdentifier>{77B3174B-5BA4-1747-DEDC-9E6DA00A7BE6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <Filter>generated\hxx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\definitions\nodes_dataimport.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_modeling.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\definitions\nodes_neutron.h">
+      <Filter>source\maxon\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\neutron_base.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\neutron_ids.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodes_distributionbase.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodes_distributionparametric.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodes_distributionparticles.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,2 @@
+@frameworks/settings/linux_gcc_x86_base.props -O3 -std=gnu++17 -Wno-invalid-offsetof -Werror=conversion-null -Werror=reorder
+
