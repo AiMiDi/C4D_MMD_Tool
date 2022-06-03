@@ -4,7 +4,7 @@
 #define MyDirName "C4D_MMDTool"
 #define MyAppName "MMD Tool For C4D"
 #define MyAppName_ "MMD_Tool_For_C4D"
-#define MyAppVersion "0.4.6"
+#define MyAppVersion "0.4.6.1"
 #define MyAppPublisher "AiMiDi"
 #define MyAppURL "https://github.com/AiMiDi/C4D_MMD_Tool"
 #define MyAppExeName "D5_Converter.exe"
@@ -78,6 +78,7 @@ Name: S22; Description:"Maxon Cinema 4D S22";
 Name: R23; Description:"Maxon Cinema 4D R23";
 Name: S24; Description:"Maxon Cinema 4D S24";
 Name: R25; Description:"Maxon Cinema 4D R25";
+Name: S26; Description:"Maxon Cinema 4D S26";
 
 [Files]
 ;Source: ISTask.dll; DestDir: {app}; Flags: ignoreversion solidbreak uninsrestartdelete
@@ -87,6 +88,7 @@ Source: "..\release\S22\*"; DestDir: "{code:S22Dir|plugins/{#MyDirName}}"; Compo
 Source: "..\release\R23\*"; DestDir: "{code:R23Dir|plugins/{#MyDirName}}"; Components:R23; Flags: ignoreversion createallsubdirs recursesubdirs; 
 Source: "..\release\S24\*"; DestDir: "{code:S24Dir|plugins/{#MyDirName}}"; Components:S24; Flags: ignoreversion createallsubdirs recursesubdirs; 
 Source: "..\release\R25\*"; DestDir: "{code:R25Dir|plugins/{#MyDirName}}"; Components:R25; Flags: ignoreversion createallsubdirs recursesubdirs; 
+Source: "..\release\S26\*"; DestDir: "{code:S26Dir|plugins/{#MyDirName}}"; Components:S26; Flags: ignoreversion createallsubdirs recursesubdirs; 
 
 Source: "..\res\R20-S24\*"; DestDir: "{code:R20Dir|plugins\{#MyDirName}\res}"; Components:R20; Flags: ignoreversion createallsubdirs recursesubdirs; 
 Source: "..\res\R20-S24\*"; DestDir: "{code:R21Dir|plugins\{#MyDirName}\res}"; Components:R21; Flags: ignoreversion createallsubdirs recursesubdirs; 
@@ -94,6 +96,7 @@ Source: "..\res\R20-S24\*"; DestDir: "{code:S22Dir|plugins\{#MyDirName}\res}"; C
 Source: "..\res\R20-S24\*"; DestDir: "{code:R23Dir|plugins\{#MyDirName}\res}"; Components:R23; Flags: ignoreversion createallsubdirs recursesubdirs; 
 Source: "..\res\R20-S24\*"; DestDir: "{code:S24Dir|plugins\{#MyDirName}\res}"; Components:S24; Flags: ignoreversion createallsubdirs recursesubdirs; 
 Source: "..\res\S24_up\*"; DestDir: "{code:R25Dir|plugins\{#MyDirName}\res}"; Components:R25; Flags: ignoreversion createallsubdirs recursesubdirs; 
+Source: "..\res\S24_up\*"; DestDir: "{code:S26Dir|plugins\{#MyDirName}\res}"; Components:S26; Flags: ignoreversion createallsubdirs recursesubdirs; 
 
 ;Source: "..\README.pdf"; DestDir: "{autopf}\{#MyAppName}"; Flags: ignoreversion createallsubdirs recursesubdirs isreadme; 
 ;Source: "..\README_zh.pdf"; DestDir: "{autopf}\{#MyAppName}"; Flags: ignoreversion createallsubdirs recursesubdirs isreadme; 
@@ -106,6 +109,7 @@ Type: filesandordirs; Name: "{code:S22Dir|plugins/{#MyDirName}}"; Components:S22
 Type: filesandordirs; Name: "{code:R23Dir|plugins/{#MyDirName}}"; Components:R23;
 Type: filesandordirs; Name: "{code:S24Dir|plugins/{#MyDirName}}"; Components:S24;
 Type: filesandordirs; Name: "{code:R25Dir|plugins/{#MyDirName}}"; Components:R25;
+Type: filesandordirs; Name: "{code:S26Dir|plugins/{#MyDirName}}"; Components:S26;
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{code:R20Dir|plugins/{#MyDirName}}"
@@ -114,6 +118,7 @@ Type: filesandordirs; Name: "{code:S22Dir|plugins/{#MyDirName}}"
 Type: filesandordirs; Name: "{code:R23Dir|plugins/{#MyDirName}}"
 Type: filesandordirs; Name: "{code:S24Dir|plugins/{#MyDirName}}"
 Type: filesandordirs; Name: "{code:R25Dir|plugins/{#MyDirName}}"
+Type: filesandordirs; Name: "{code:S26Dir|plugins/{#MyDirName}}"
 
 [Registry]
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
@@ -127,9 +132,9 @@ var
   tmpStr:String;
   PathSelectionPage: TwizardPage;
   PathSelectionPageID,ControlTop,EditLeft,EditeWidth,ButtonLeft: Integer;
-  R20Label,R21Label,S22Label,R23Label,S24Label,R25Label:TLabel;
-  R20Edit,R21Edit,S22Edit,R23Edit,S24Edit,R25Edit:TEdit;
-  R20Button,R21Button,S22Button,R23Button,S24Button,R25Button:TButton;
+  R20Label,R21Label,S22Label,R23Label,S24Label,R25Label,S26Label:TLabel;
+  R20Edit,R21Edit,S22Edit,R23Edit,S24Edit,R25Edit,S26Edit:TEdit;
+  R20Button,R21Button,S22Button,R23Button,S24Button,R25Button,S26Button:TButton;
 
 function R20Dir(SubDir:String):String;
 begin
@@ -172,6 +177,13 @@ begin
     Result := R25Edit.Text
   else
     Result := R25Edit.Text + '\'+ SubDir;
+end;
+function S26Dir(SubDir:String):String;
+begin
+  if SubDir = '' then
+    Result := S26Edit.Text
+  else
+    Result := S26Edit.Text + '\'+ SubDir;
 end;
 
 procedure ClickR20Button(Sender: TObject);
@@ -222,6 +234,14 @@ begin
   R25Edit.Text := tmpStr;
   end;
 end;
+procedure ClickS26Button(Sender: TObject);
+begin
+  tmpStr := S26Edit.Text;    
+  if BrowseForFolder('Maxon Cinema 4D S26',tmpStr , True) then
+  begin
+  S26Edit.Text := tmpStr;
+  end;
+end;
 
 procedure InitializeWizard();
 var
@@ -264,6 +284,10 @@ begin
   R25Label.Parent:=PathSelectionPage.Surface;
   R25Label.Top:=ControlTop*6;
   R25Label.Caption:='Maxon Cinema 4D R25'; 
+  S26Label:=TLabel.Create(PathSelectionPage);
+  S26Label.Parent:=PathSelectionPage.Surface;
+  S26Label.Top:=ControlTop*7;
+  S26Label.Caption:='Maxon Cinema 4D S26'; 
 
   R20Edit:=TEdit.Create(PathSelectionPage);
   R20Edit.Parent:=PathSelectionPage.Surface;
@@ -295,6 +319,11 @@ begin
   R25Edit.Top:=ControlTop*6-1;
   R25Edit.Left:=EditLeft; 
   R25Edit.Width:=EditeWidth;
+  S26Edit:=TEdit.Create(PathSelectionPage);
+  S26Edit.Parent:=PathSelectionPage.Surface;
+  S26Edit.Top:=ControlTop*7-1;
+  S26Edit.Left:=EditLeft; 
+  S26Edit.Width:=EditeWidth;
 
   R20Button:=TButton.Create(PathSelectionPage);
   R20Button.Parent:=PathSelectionPage.Surface;
@@ -332,6 +361,12 @@ begin
   R25Button.Left:=ButtonLeft;
   R25Button.Caption:=SetupMessage(msgButtonWizardBrowse);
   R25Button.OnClick:=@ClickR25Button;
+  S26Button:=TButton.Create(PathSelectionPage);
+  S26Button.Parent:=PathSelectionPage.Surface;
+  S26Button.Top:=ControlTop*7-1;
+  S26Button.Left:=ButtonLeft;
+  S26Button.Caption:=SetupMessage(msgButtonWizardBrowse);
+  S26Button.OnClick:=@ClickS26Button;
 
   if IsWin64 then
   begin   
@@ -405,6 +440,16 @@ begin
         WizardSelectComponents('!R25');
         R25Edit.Text := '';
       end;
+      if RegQueryStringValue(HKLM64, 'SOFTWARE\Maxon\Maxon Cinema 4D R26', 'Location', tmpStr) then
+      begin 
+        WizardSelectComponents('S26');
+        S26Edit.Text := tmpStr;
+      end 
+      else
+      begin
+        WizardSelectComponents('!S26');
+        S26Edit.Text := '';
+      end;
   end else 
  begin   
       if RegQueryStringValue(HKLM, 'SOFTWARE\MAXON Installer', 'Last Installation', tmpStr) then
@@ -476,6 +521,16 @@ begin
       begin
         WizardSelectComponents('!R25');
         R25Edit.Text := '';
+      end;
+      if RegQueryStringValue(HKLM64, 'SOFTWARE\Maxon\Maxon Cinema 4D R26', 'Location', tmpStr) then
+      begin 
+        WizardSelectComponents('S26');
+        S26Edit.Text := tmpStr;
+      end 
+      else
+      begin
+        WizardSelectComponents('!S26');
+        S26Edit.Text := '';
       end;
   end;
 end;
@@ -557,6 +612,8 @@ function NextButtonClick(CurPageID:Integer): Boolean;
       WizardSelectComponents('!S24'); 
     if R25Edit.Text = '' then
       WizardSelectComponents('!R25'); 
+    if S26Edit.Text = '' then
+      WizardSelectComponents('!S26'); 
     end;
     result:=true;
   end;

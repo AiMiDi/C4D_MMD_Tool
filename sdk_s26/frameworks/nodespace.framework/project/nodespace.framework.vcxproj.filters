@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="generated">
+      <UniqueIdentifier>{876D8A6F-63D4-F5D0-0000-5284111A998F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\hxx">
+      <UniqueIdentifier>{876D8A6F-63D4-F5D0-8ACC-618A6830A19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{876D8A6F-63D4-F5D0-0000-0000CA90681B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon">
+      <UniqueIdentifier>{876D8A6F-63D4-F5D0-29DB-81C65E166B42}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <Filter>generated\hxx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\datadescription_node_bundles.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\datadescription_node_spaces.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nimbusbase.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\node_spaces.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\node_undo.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodematerialexchange.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodematerialimport.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\previewimageprovider.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\previewimagesubscription.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

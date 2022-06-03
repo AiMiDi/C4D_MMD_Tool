@@ -66,7 +66,7 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MMDTool</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.xdl64</TargetExt>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\S22</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\S22\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>..\..\..\..\lib\yaml_cpp\include;..\..\..\..\lib\bullet\include;..\..\..\..\lib\libiconv-1.16\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
@@ -176,7 +176,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\BulletTest.cpp" />
-    <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp" />
     <ClCompile Include="..\..\..\..\source\main.cpp" />
     <ClCompile Include="..\..\..\..\source\NameConversion.cpp" />
     <ClCompile Include="..\..\..\..\source\OMMDBoneRoot.cpp" />
@@ -207,7 +206,7 @@
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.h" />
     <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h" />
     <ClInclude Include="..\..\..\..\source\BulletTest.h" />
-    <ClInclude Include="..\..\..\..\source\ImagesGUI.h" />
+    <ClInclude Include="..\..\..\..\source\ImagesGUI.hpp" />
     <ClInclude Include="..\..\..\..\source\main.h" />
     <ClInclude Include="..\..\..\..\source\NameConversion.h" />
     <ClInclude Include="..\..\..\..\source\OMMDBoneRoot.h" />

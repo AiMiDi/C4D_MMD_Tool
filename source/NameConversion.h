@@ -8,7 +8,7 @@
 #define _HAS_EXCEPTIONS 1
 #endif _HAS_EXCEPTIONS
 
-#include "yaml-cpp/yaml.h"
+#include "ImagesGUI.hpp"
 #include "NameConversion.h"
 
 #define ID_MMD_TOOL 1056563

@@ -1,0 +1,15 @@
+#if 1
+#ifdef __API_INTERN__
+#else
+#endif
+#ifdef CINEWARE_NAMESPACE_ENABLE
+CINEWARE_NAMESPACE_BEGIN
+#endif
+PRIVATE_MAXON_DECLARATION_REGISTER_DECLARATION(DT_GeData,, "net.maxon.data.gedata");
+#if 1
+#else
+#endif
+#ifdef CINEWARE_NAMESPACE_ENABLE
+CINEWARE_NAMESPACE_END
+#endif
+#endif

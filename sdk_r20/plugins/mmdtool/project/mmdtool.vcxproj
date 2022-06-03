@@ -94,6 +94,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../res/R20-S24/description;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
@@ -156,7 +157,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\BulletTest.cpp" />
-    <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp" />
     <ClCompile Include="..\..\..\..\source\main.cpp" />
     <ClCompile Include="..\..\..\..\source\NameConversion.cpp" />
     <ClCompile Include="..\..\..\..\source\OMMDBoneRoot.cpp" />
@@ -186,7 +186,7 @@
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.h" />
     <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h" />
     <ClInclude Include="..\..\..\..\source\BulletTest.h" />
-    <ClInclude Include="..\..\..\..\source\ImagesGUI.h" />
+    <ClInclude Include="..\..\..\..\source\ImagesGUI.hpp" />
     <ClInclude Include="..\..\..\..\source\main.h" />
     <ClInclude Include="..\..\..\..\source\NameConversion.h" />
     <ClInclude Include="..\..\..\..\source\OMMDBoneRoot.h" />

@@ -1,0 +1,5 @@
+// 提示文件帮助 Visual Studio IDE 解释 Visual C++ 标识符,
+// 如函数和宏的名称。
+// 有关详细信息，请参见 https://go.microsoft.com/fwlink/?linkid=865984
+#define MAXON_SOURCE_LOCATION maxon::SourceLocation(__FILE__, __LINE__)
+#define MAXON_SOURCE_LOCATION []() -> const maxon::SourceLocation& { struct SourceLocationFile { const char* value = __FILE__; }; return maxon::SourceLocationOnly<SourceLocationFile, __LINE__>::value; }()

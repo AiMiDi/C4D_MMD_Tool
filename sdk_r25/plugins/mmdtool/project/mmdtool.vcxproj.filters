@@ -60,9 +60,6 @@
     <ClCompile Include="..\..\..\..\source\BulletTest.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -140,9 +137,6 @@
     <ClInclude Include="..\..\..\..\source\BulletTest.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\source\ImagesGUI.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\source\main.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -150,6 +144,9 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\OMMDBoneRoot.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\ImagesGUI.hpp">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

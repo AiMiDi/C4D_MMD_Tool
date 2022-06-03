@@ -48,9 +48,6 @@
     <ClCompile Include="..\..\..\..\source\BulletTest.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -96,9 +93,6 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\BulletTest.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\source\ImagesGUI.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\main.h">
@@ -167,32 +161,9 @@
     <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h">
       <Filter>res</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDModel.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDRigid.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\TMMDBone.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDCamera.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDJoint.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
+    <ClInclude Include="..\..\..\..\source\ImagesGUI.hpp">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\c4d_strings.str">
@@ -258,5 +229,14 @@
     <None Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.res">
       <Filter>res\description</Filter>
     </None>
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDCamera.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDJoint.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDModel.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDRigid.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.res" />
+    <None Include="..\..\..\..\res\R20-S24\description\TMMDBone.res" />
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

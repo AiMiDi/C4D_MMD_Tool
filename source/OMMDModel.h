@@ -1,8 +1,8 @@
 #pragma once
-#include "Utility.h"
-#include "TMMDBone.h"
-#include "description/OMMDModel.h"
+#include "ImagesGUI.hpp"
 #include "PMX.h"
+#include "Utility.h"
+#include "description/OMMDModel.h"
 
 namespace mmd {
 	struct PMXMorphData;
@@ -34,7 +34,7 @@ namespace tool {
 		Bool Command(Int32 id, const BaseContainer& msg) override;
 	public:
 		EditorSubMorphDialog(OMMDModel* model, IMorph* morph) : m_model(model), m_morph(morph){}
-		~EditorSubMorphDialog() { delete m_images; }
+		~EditorSubMorphDialog() override { delete m_images; }
 	};
 
 
@@ -47,7 +47,7 @@ namespace tool {
 		virtual ~IMorph() {}
 		IMorph(const IMorph&) = delete;
 		IMorph(const MorphType& type_): m_type(type_) {}
-		IMorph(DescID strength_id_,String name_, const MorphType& type_):
+		IMorph(const DescID& strength_id_, const String& name_, const MorphType& type_):
 			m_strength_id(strength_id_),m_name(name_),m_type(type_){}	
 		IMorph(IMorph&& other) noexcept :
 			m_strength_id(std::move(other.m_strength_id)),
@@ -67,16 +67,16 @@ namespace tool {
 		virtual void UpdataMorphOfModel(OMMDModel* model) = 0;
 		virtual Int32 AddMorphToModel(OMMDModel* model, String morph_name = String()) = 0;
 		virtual void DeleteMorphOfModel(OMMDModel* model) = 0;
-		virtual void AddSubMorph(OMMDModel* model, String name, Float influence) {};
-		virtual void AddSubMorphNoCheck(OMMDModel* model, String name, Float influence) {};
-		virtual void DeleteSubMorph(const String& name) {};
-		virtual void RenameSubMorph(const String& old_name, const String& new_name) {};
-		virtual maxon::HashMap<String, Float>* GetSubMorphData() { return nullptr; };
+		virtual void AddSubMorph(OMMDModel* model, String name, Float influence) {}
+		virtual void AddSubMorphNoCheck(OMMDModel* model, String name, Float influence) {}
+		virtual void DeleteSubMorph(const String& name) {}
+		virtual void RenameSubMorph(const String& old_name, const String& new_name) {}
+		virtual maxon::HashMap<String, Float>* GetSubMorphData() { return nullptr; }
 		virtual Bool Read(HyperFile* hf);
 		virtual Bool Write(HyperFile* hf);
 		virtual Bool CopyTo(IMorph* dest);
 	};
-	class GroupMorph : public IMorph
+	class GroupMorph final : public IMorph
 	{
 		DescID m_grp_id = DescID();
 		DescID m_button_grp_id = DescID();
@@ -86,23 +86,22 @@ namespace tool {
 
 		maxon::HashMap<String, Float> m_data;	
 	public:
-		~GroupMorph() {}
+		~GroupMorph() override = default;
 		GroupMorph() : IMorph(MorphType::GROUP) {}
 		GroupMorph(const GroupMorph&) = delete;
-		GroupMorph(DescID grp_id_,
-			DescID strength_id_,
-			DescID button_grp_id_,
-			DescID button_editor_id_,
-			DescID button_delete_id_,
-			DescID button_rename_id_ ,
-			DescID power_id_,
-			String name_):
+		GroupMorph(const DescID& grp_id_,
+			const DescID& strength_id_,
+			const DescID& button_grp_id_,
+			const DescID& button_editor_id_,
+			const DescID& button_delete_id_,
+			const DescID& button_rename_id_,
+			const String& name_) :
 			IMorph(strength_id_, name_, MorphType::GROUP),
 			m_grp_id(grp_id_),
 			m_button_grp_id(button_grp_id_),
 			m_button_editor_id(button_editor_id_),
 			m_button_delete_id(button_delete_id_),
-			m_button_rename_id(button_rename_id_){}
+			m_button_rename_id(button_rename_id_) {}
 		GroupMorph(GroupMorph&& other) noexcept:
 			IMorph(std::move(other)),
 			m_grp_id(std::move(other.m_grp_id)),
@@ -110,9 +109,10 @@ namespace tool {
 			m_button_delete_id(std::move(other.m_button_delete_id)),
 			m_button_rename_id(std::move(other.m_button_rename_id)),
 			m_data(std::move(other.m_data)){}
-		virtual void UpdataMorphOfModel(OMMDModel* model);
-		virtual Int32 AddMorphToModel(OMMDModel* model, String morph_name = String());
-		virtual void DeleteMorphOfModel(OMMDModel* model);
+
+		void UpdataMorphOfModel(OMMDModel* model) override;
+		Int32 AddMorphToModel(OMMDModel* model, String morph_name = String()) override;
+		void DeleteMorphOfModel(OMMDModel* model) override;
 		void RenameMorph(OMMDModel* model, const String& name) override;
 		void AddSubMorph(OMMDModel* model, String name, Float influence) override;
 		void AddSubMorphNoCheck(OMMDModel* model, String name, Float influence) override;
@@ -121,9 +121,9 @@ namespace tool {
 		Bool Read(HyperFile* hf) override;
 		Bool Write(HyperFile* hf) override;
 		Bool CopyTo(IMorph* dest) override;
-		maxon::HashMap<String, Float>* GetSubMorphData() override { return &m_data; };
+		maxon::HashMap<String, Float>* GetSubMorphData() override { return &m_data; }
 	};
-	class FlipMorph : public IMorph
+	class FlipMorph final : public IMorph
 	{
 		DescID m_grp_id = DescID();
 		DescID m_button_grp_id = DescID();
@@ -132,23 +132,22 @@ namespace tool {
 		DescID m_button_rename_id = DescID();	
 		maxon::HashMap<String, Float> m_data;		
 	public:
-		~FlipMorph() {}
+		~FlipMorph() override = default;
 		FlipMorph(const FlipMorph&) = delete;
 		FlipMorph() : IMorph(MorphType::FLIP) {}
-		FlipMorph(DescID grp_id_,
-			DescID strength_id_,
-			DescID button_grp_id_,
-			DescID power_id_ ,
-			DescID button_editor_id_,
-			DescID button_delete_id_,
-			DescID button_rename_id_,
-			String name_) :
+		FlipMorph(const DescID& grp_id_,
+			const DescID& strength_id_,
+			const DescID& button_grp_id_,
+			const DescID& button_editor_id_,
+			const DescID& button_delete_id_,
+			const DescID& button_rename_id_,
+			const String& name_) :
 			IMorph(strength_id_, name_, MorphType::FLIP),
 			m_grp_id(grp_id_),
 			m_button_grp_id(button_grp_id_),
 			m_button_editor_id(button_editor_id_),
 			m_button_delete_id(button_delete_id_),
-			m_button_rename_id(button_rename_id_){}
+			m_button_rename_id(button_rename_id_) {}
 		FlipMorph(FlipMorph&& other) noexcept :
 			IMorph(std::move(other)),
 			m_grp_id(std::move(other.m_grp_id)),
@@ -156,9 +155,10 @@ namespace tool {
 			m_button_delete_id(std::move(other.m_button_delete_id)),
 			m_button_rename_id(std::move(other.m_button_rename_id)),
 			m_data(std::move(other.m_data)) {}
-		virtual void UpdataMorphOfModel(OMMDModel* model);
-		virtual Int32 AddMorphToModel(OMMDModel* model, String morph_name = String());
-		virtual void DeleteMorphOfModel(OMMDModel* model);
+
+		void UpdataMorphOfModel(OMMDModel* model) override;
+		Int32 AddMorphToModel(OMMDModel* model, String morph_name = String()) override;
+		void DeleteMorphOfModel(OMMDModel* model) override;
 		void RenameMorph(OMMDModel* model, const String& name) override;
 		void AddSubMorph(OMMDModel* model,String name, Float influence) override;
 		void AddSubMorphNoCheck(OMMDModel* model, String name, Float influence) override;
@@ -167,29 +167,29 @@ namespace tool {
 		Bool Read(HyperFile* hf) override;
 		Bool Write(HyperFile* hf) override;
 		Bool CopyTo(IMorph* dest) override;
-		maxon::HashMap<String, Float>* GetSubMorphData() override { return &m_data; };
+		maxon::HashMap<String, Float>* GetSubMorphData() override { return &m_data; }
 	};
-	class MeshMorph : public IMorph
+	class MeshMorph final : public IMorph
 	{
 	public:
 		MeshMorph() : IMorph(MorphType::MESH) {}
-		MeshMorph(DescID strength_id_,String name_):
+		MeshMorph(const DescID& strength_id_, const String& name_):
 			IMorph(strength_id_, name_, MorphType::MESH) {}
-		~MeshMorph() {}
-		virtual void UpdataMorphOfModel(OMMDModel* model);
-		virtual Int32 AddMorphToModel(OMMDModel* model, String morph_name = String());
-		virtual void DeleteMorphOfModel(OMMDModel* model);
+		~MeshMorph() override = default;
+		void UpdataMorphOfModel(OMMDModel* model) override;
+		Int32 AddMorphToModel(OMMDModel* model, String morph_name = String()) override;
+		void DeleteMorphOfModel(OMMDModel* model) override;
 	};
-	class BoneMorph : public IMorph
+	class BoneMorph final : public IMorph
 	{
 	public:
 		BoneMorph() : IMorph(MorphType::BONE) {}
-		BoneMorph(DescID strength_id_,String name_):
+		BoneMorph(const DescID& strength_id_, const String& name_):
 			IMorph(strength_id_, name_, MorphType::BONE) {}
-		~BoneMorph() {}
-		virtual void UpdataMorphOfModel(OMMDModel* model);
-		virtual Int32 AddMorphToModel(OMMDModel* model, String morph_name = String());
-		virtual void DeleteMorphOfModel(OMMDModel* model);
+		~BoneMorph() override = default;
+		void UpdataMorphOfModel(OMMDModel* model) override;
+		Int32 AddMorphToModel(OMMDModel* model, String morph_name = String()) override;
+		void DeleteMorphOfModel(OMMDModel* model) override;
 	};
 	enum class ToolObjectType
 	{
@@ -236,7 +236,7 @@ namespace tool {
 			*m_morph_initializ.Write() = false;
 		}
 		void RefreshMorph();
-		MAXON_DISALLOW_COPY_AND_ASSIGN(OMMDModel);
+		MAXON_DISALLOW_COPY_AND_ASSIGN(OMMDModel)
 		INSTANCEOF(OMMDModel, ObjectData)
 	public:
 		class AddMorphHelper
@@ -254,13 +254,12 @@ namespace tool {
 			}
 		};
 	public:
-		~OMMDModel() {}
+		~OMMDModel() override {}
 		Bool Init(GeListNode* node) override;
 		Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 		Bool Write(GeListNode* node, HyperFile* hf) override;
 		Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) override;
 		Bool GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags) override;
-		Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 		/* 实时调用 */
 		EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 		/* 将实时调用添加入优先级列表 */
@@ -275,7 +274,7 @@ namespace tool {
 		{
 			return AddMorphHelper(this);
 		}
-		Int32 ImportGroupAndFlipMorph(PMXModel* pmx_model, mmd::PMXMorphData& pmx_morph);
+		Int32 ImportGroupAndFlipMorph(const PMXModel* pmx_model, mmd::PMXMorphData& pmx_morph);
 
 		String GetMorphNamedNumber()
 		{
@@ -296,7 +295,7 @@ namespace tool {
 
 		Bool UpdataRoot(BaseObject* op = nullptr);
 		Bool CreateRoot();
-		BaseObject* GetRootObject(ToolObjectType type_)
+		BaseObject* GetRootObject(ToolObjectType type_) const
 		{
 			switch (type_)
 			{
@@ -308,6 +307,8 @@ namespace tool {
 				return this->m_RigidRoot_ptr;
 			case ToolObjectType::JointRoot:
 				return this->m_JointRoot_ptr;
+			case ToolObjectType::DEFAULT:
+			case ToolObjectType::Model: 
 			default:
 				return nullptr;
 			}

@@ -1,0 +1,10 @@
+#ifndef TOOLEDGESMOOTH_H__
+#define TOOLEDGESMOOTH_H__
+
+enum
+{
+	MDATA_EDGESMOOTH_STEPS               = 1100, //LONG
+    MDATA_EDGESMOOTH_SELECTOUTLINE       = 1101, //BOOL
+};
+
+#endif // TOOLEDGESMOOTH_H__

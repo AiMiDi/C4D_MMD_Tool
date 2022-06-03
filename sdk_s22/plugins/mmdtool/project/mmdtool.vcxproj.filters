@@ -21,9 +21,6 @@
     <ClCompile Include="..\generated\hxx\register.cpp">
       <Filter>generated\hxx</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\source\OMMDMeshRoot.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\source\OMMDModel.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -54,9 +51,6 @@
     <ClCompile Include="..\..\..\..\source\BulletTest.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\source\ImagesGUI.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -72,6 +66,9 @@
     <ClCompile Include="..\..\..\..\source\OMMDJointRoot.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\source\OMMDMeshRoot.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h">
@@ -80,32 +77,29 @@
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigid.h">
       <Filter>res</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDCamera.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJoint.h">
-      <Filter>res</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.h">
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
       <Filter>res</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.h">
       <Filter>res</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.h">
       <Filter>res</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\source\OMMDJointRoot.h">
-      <Filter>source</Filter>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJoint.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDCamera.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.h">
+      <Filter>res</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\OMMDMeshRoot.h">
       <Filter>source</Filter>
@@ -137,7 +131,7 @@
     <ClInclude Include="..\..\..\..\source\BulletTest.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\source\ImagesGUI.h">
+    <ClInclude Include="..\..\..\..\source\ImagesGUI.hpp">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\main.h">
@@ -150,6 +144,9 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\source\OMMDJoint.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\source\OMMDJointRoot.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

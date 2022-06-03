@@ -8,3 +8,7 @@ sdk_r25/frameworks/
 setup/Output/
 
 sdk_r23/plugins/mmdtool/res/
+
+sdk_s26/plugins/project/.vs/
+
+sdk_s26/plugins/project/_obj/

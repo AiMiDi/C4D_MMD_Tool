@@ -118,6 +118,115 @@ namespace mmd {
 		return true;
 	}
 
+	PMXVertexData::PMXVertexData()
+	{}
+
+	PMXVertexData::~PMXVertexData()
+	{
+		//if (weight_deform != nullptr) {
+		//	PMXWeight::Free(weight_deform);
+		//}
+	}
+
+	PMXMaterialFlags::PMXMaterialFlags()
+	{
+		this->no_cull = 0;
+		this->ground_shadow = 0;
+		this->draw_shadow = 0;
+		this->Receive_shadow = 0;
+		this->has_edge = 0;
+		this->vertex_colour = 0;
+		this->point_drawing = 0;
+		this->line_drawing = 0;
+	}
+
+	PMXMaterialData::PMXMaterialData()
+	{}
+
+	PMXMaterialData::~PMXMaterialData()
+	{}
+
+	PMXBoneFlags::PMXBoneFlags()
+	{
+		this->indexed_tail_position = 0;
+		this->Rotatable = 0;
+		this->Translatable = 0;
+		this->Is_visible = 0;
+		this->Enabled = 0;
+		this->IK = 0;
+		this->Inherit_rotation = 0;
+		this->Inherit_translation = 0;
+		this->Fixed_axis = 0;
+		this->Local_coordinate = 0;
+		this->Physics_after_deform = 0;
+		this->External_parent_deform = 0;
+	}
+
+	PMXBoneData::PMXBoneData()
+	{
+	}
+
+	PMXBoneData::PMXBoneData(const PMXBoneData& src)
+	{
+		this->bone_name_local = src.bone_name_local;
+		this->bone_name_universal = src.bone_name_universal;
+		this->position = src.position;
+		this->parent_bone_index = src.parent_bone_index;
+		this->layer = src.layer;
+		this->bone_flags = src.bone_flags;
+		this->tail_position = src.tail_position;
+		this->tail_index = src.tail_index;
+		this->inherit_bone_parent_index = src.inherit_bone_parent_index;
+		this->inherit_bone_parent_influence = src.inherit_bone_parent_influence;
+		this->bone_fixed_axis = src.bone_fixed_axis;
+		this->bone_local_X = src.bone_local_X;
+		this->bone_local_Z = src.bone_local_Z;
+		this->IK_target_index = src.IK_target_index;
+		this->IK_loop_count = src.IK_loop_count;
+		this->IK_limit_radian = src.IK_limit_radian;
+		this->IK_link_count = src.IK_link_count;
+		this->IK_links.CopyFrom(src.IK_links) iferr_ignore("err"_s);
+	}
+
+	mmd::PMXBoneData& PMXBoneData::operator=(const mmd::PMXBoneData& src)
+	{
+		if (&src == this)
+		{
+			return(*this);
+		}
+		this->bone_name_local = src.bone_name_local;
+		this->bone_name_universal = src.bone_name_universal;
+		this->position = src.position;
+		this->parent_bone_index = src.parent_bone_index;
+		this->layer = src.layer;
+		this->bone_flags = src.bone_flags;
+		this->tail_position = src.tail_position;
+		this->tail_index = src.tail_index;
+		this->inherit_bone_parent_index = src.inherit_bone_parent_index;
+		this->inherit_bone_parent_influence = src.inherit_bone_parent_influence;
+		this->bone_fixed_axis = src.bone_fixed_axis;
+		this->bone_local_X = src.bone_local_X;
+		this->bone_local_Z = src.bone_local_Z;
+		this->IK_target_index = src.IK_target_index;
+		this->IK_loop_count = src.IK_loop_count;
+		this->IK_limit_radian = src.IK_limit_radian;
+		this->IK_link_count = src.IK_link_count;
+		this->IK_links.CopyFrom(src.IK_links) iferr_ignore("err"_s);
+		return(*this);
+	}
+
+	PMXMorph::~PMXMorph()
+	{}
+
+	void PMXMorph::Free(PMXMorph*& m)
+	{
+		DeleteObj(m);
+		m = nullptr;
+	}
+
+	PMXMorph_Group::~PMXMorph_Group()
+	{}
+
 	inline maxon::Result<PMXMorph_Group*> PMXMorph_Group::Alloc()
 	{
 		iferr_scope;
@@ -136,6 +245,10 @@ namespace mmd {
 			return false;
 		return true;
 	}
+
+	PMXMorph_Vertex::~PMXMorph_Vertex()
+	{}
+
 	inline maxon::Result<PMXMorph_Vertex*> PMXMorph_Vertex::Alloc()
 	{
 		iferr_scope;
@@ -154,6 +267,10 @@ namespace mmd {
 			return false;
 		return true;
 	}
+
+	PMXMorph_Bone::~PMXMorph_Bone()
+	{}
+
 	inline maxon::Result<PMXMorph_Bone*> PMXMorph_Bone::Alloc()
 	{
 		iferr_scope;
@@ -176,6 +293,10 @@ namespace mmd {
 		this->rotation = (Vector32)utility::QuaternionToEuler(q_rotation);
 		return true;
 	}
+
+	PMXMorph_UV::~PMXMorph_UV()
+	{}
+
 	inline maxon::Result<PMXMorph_UV*> PMXMorph_UV::Alloc()
 	{
 		iferr_scope;
@@ -194,6 +315,10 @@ namespace mmd {
 			return false;
 		return true;
 	}
+
+	PMXMorph_Material::~PMXMorph_Material()
+	{}
+
 	inline maxon::Result<PMXMorph_Material*> PMXMorph_Material::Alloc()
 	{
 		iferr_scope;
@@ -230,6 +355,10 @@ namespace mmd {
 			return false;
 		return true;
 	}
+
+	PMXMorph_Flip::~PMXMorph_Flip()
+	{}
+
 	inline maxon::Result<PMXMorph_Flip*> PMXMorph_Flip::Alloc()
 	{
 		iferr_scope;
@@ -248,6 +377,10 @@ namespace mmd {
 			return false;
 		return true;
 	}
+
+	PMXMorph_Impulse::~PMXMorph_Impulse()
+	{}
+
 	inline maxon::Result<PMXMorph_Impulse*> PMXMorph_Impulse::Alloc()
 	{
 		iferr_scope;
@@ -270,8 +403,67 @@ namespace mmd {
 			return false;
 		return true;
 	}
+
+	PMXMorphData::~PMXMorphData()
+	{
+		for (auto* data : offset_data)
+		{
+			if (data != nullptr)
+				PMXMorph::Free(data);
+		}
+	}
+
+	PMXDisplayData::PMXDisplayData()
+	{
+	}
+
+	PMXDisplayData::PMXDisplayData(const PMXDisplayData& src)
+	{
+		this->display_name_local = src.display_name_local;
+		this->display_name_universal = src.display_name_universal;
+		this->special_flag = src.special_flag;
+		this->frame_count = src.frame_count;
+		this->Frames.CopyFrom(src.Frames) iferr_ignore("err"_s);
+	}
+
+	PMXRigidBodyData::PMXRigidBodyData()
+	{
+	}
+
+	PMXRigidBodyData::~PMXRigidBodyData()
+	{
+	}
 }
 namespace tool {
+	tag_info::tag_info()
+	{}
+
+	tag_info::tag_info(tag_info&& other) noexcept
+	{			
+		morph_tag = other.morph_tag;		
+		vertex_index_arr = std::move(other.vertex_index_arr);
+	}
+
+	tag_info& tag_info::operator=(tag_info&& other) noexcept
+	{
+		if (this != &other) {
+			morph_tag = other.morph_tag;
+			vertex_index_arr = std::move(other.vertex_index_arr);
+		}
+		return *this;
+	}
+
+	maxon::HashInt tag_info::GetHashCode() const
+	{
+		return MAXON_HASHCODE(this->morph_tag, this->vertex_index_arr);
+	}
+
+	PMXModel::PMXModel()
+	{}
+
+	PMXModel::~PMXModel()
+	{}
+
 	maxon::Result<String> PMXModel::GetMorphName(const Int32& index) const
 	{
 		if (index < 0 || index >= m_morph_data.GetCount()) {

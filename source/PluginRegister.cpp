@@ -1,6 +1,7 @@
 ﻿#include "main.h"
 #include "PMX.h"
 #include "VMD.h"
+#include "VPD.h"
 #include "TMMDBone.h"
 #include "OMMDRigid.h"
 #include "OMMDJoint.h"
@@ -9,7 +10,8 @@
 #include "OMMDMeshRoot.h"
 #include "OMMDRigidRoot.h"
 #include "OMMDJointRoot.h"
-#include "VPD.h"
+#include "ImagesGUI.hpp"
+#include "yaml-cpp/yaml.h"
 
 #if API_VERSION >= 25000
 #define COMBO_BOX_W 253
@@ -300,7 +302,7 @@ public:
 		catch (YAML::BadFile) {
 			GePrint("Failed to load the YAML file!"_s);
 			YAML::Node	node;
-			std::ofstream	fout(config_path);
+			std::ofstream fout(config_path);
 			node["VMD_CAM_IMPORT_SIZE"] = 8.5;
 			node["VMD_CAM_IMPORT_OFFSET"] = 0;
 			node["VMD_CAM_EXPORT_SIZE"] = 8.5;
@@ -383,7 +385,7 @@ public:
 		YAML::Node	config(LoadConfig());
 		Bool		updata = false;
 		try {
-			SetFloat(DLG_VMD_CAM_IMPORT_SIZE, config["VMD_CAM_IMPORT_SIZE"].as<float>(), 0, 100);
+			SetFloat(DLG_VMD_CAM_IMPORT_SIZE, config["VMD_CAM_IMPORT_SIZE"].as<Float>(), 0, 100);
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_VMD_CAM_IMPORT_SIZE, 8.5, 0, 100);
@@ -391,7 +393,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetFloat(DLG_VMD_CAM_IMPORT_OFFSET, config["VMD_CAM_IMPORT_OFFSET"].as<float>());
+			SetFloat(DLG_VMD_CAM_IMPORT_OFFSET, config["VMD_CAM_IMPORT_OFFSET"].as<Float>());
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_VMD_CAM_IMPORT_OFFSET, 0);
@@ -399,7 +401,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetFloat(DLG_VMD_CAM_EXPORT_SIZE, config["VMD_CAM_EXPORT_SIZE"].as<float>(), 0, 100);
+			SetFloat(DLG_VMD_CAM_EXPORT_SIZE, config["VMD_CAM_EXPORT_SIZE"].as<Float>(), 0, 100);
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_VMD_CAM_EXPORT_SIZE, 8.5, 0, 100);
@@ -407,7 +409,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetFloat(DLG_VMD_CAM_EXPORT_OFFSET, config["VMD_CAM_EXPORT_OFFSET"].as<float>());
+			SetFloat(DLG_VMD_CAM_EXPORT_OFFSET, config["VMD_CAM_EXPORT_OFFSET"].as<Float>());
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_VMD_CAM_EXPORT_OFFSET, 0);
@@ -415,7 +417,7 @@ public:
 			updata = true;
 		}
 		try {
-			Bool use_bake = config["VMD_CAM_EXPORT_USE_BAKE"].as<bool>();
+			Bool use_bake = config["VMD_CAM_EXPORT_USE_BAKE"].as<Bool>();
 			SetBool(DLG_VMD_CAM_EXPORT_USE_BAKE, use_bake);
 			if (use_bake == true) {
 				Enable(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, false);
@@ -431,7 +433,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetInt32(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, config["VMD_CAM_EXPORT_ROTATION_TWEEN"].as<int>());
+			SetInt32(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, config["VMD_CAM_EXPORT_ROTATION_TWEEN"].as<Int32>());
 		}
 		catch (YAML::BadConversion) {
 			SetInt32(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 0);
@@ -439,7 +441,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetFloat(DLG_VMD_CAM_CONVER_DIS, config["VMD_CAM_CONVER_DIS"].as<float>());
+			SetFloat(DLG_VMD_CAM_CONVER_DIS, config["VMD_CAM_CONVER_DIS"].as<Float>());
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_VMD_CAM_CONVER_DIS, 0);
@@ -447,7 +449,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetInt32(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, config["VMD_CAM_CONVER_ROTATION_TWEEN"].as<int>());
+			SetInt32(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, config["VMD_CAM_CONVER_ROTATION_TWEEN"].as<Int32>());
 		}
 		catch (YAML::BadConversion) {
 			SetInt32(DLG_VMD_CAM_CONVER_ROTATION_TWEEN, 0);
@@ -455,7 +457,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetFloat(DLG_VMD_MOT_IMPORT_SIZE, config["VMD_MOT_IMPORT_SIZE"].as<float>(), 0, 100);
+			SetFloat(DLG_VMD_MOT_IMPORT_SIZE, config["VMD_MOT_IMPORT_SIZE"].as<Float>(), 0, 100);
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_VMD_MOT_IMPORT_SIZE, 8.5, 0, 100);
@@ -463,7 +465,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetFloat(DLG_VMD_MOT_IMPORT_OFFSET, config["VMD_MOT_IMPORT_OFFSET"].as<float>());
+			SetFloat(DLG_VMD_MOT_IMPORT_OFFSET, config["VMD_MOT_IMPORT_OFFSET"].as<Float>());
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_VMD_MOT_IMPORT_OFFSET, 0);
@@ -471,7 +473,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetInt32(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, config["VMD_MOT_EXPORT_ROTATION_TWEEN"].as<int>());
+			SetInt32(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, config["VMD_MOT_EXPORT_ROTATION_TWEEN"].as<Int32>());
 		}
 		catch (YAML::BadConversion) {
 			SetInt32(DLG_VMD_CAM_EXPORT_ROTATION_TWEEN, 0);
@@ -479,7 +481,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_VMD_MOT_IMPORT_MOTION, config["VMD_MOT_IMPORT_MOTION"].as<bool>());
+			SetBool(DLG_VMD_MOT_IMPORT_MOTION, config["VMD_MOT_IMPORT_MOTION"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_IMPORT_MOTION, true);
@@ -487,7 +489,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_VMD_MOT_IMPORT_MORPH, config["VMD_MOT_IMPORT_MORPH"].as<bool>());
+			SetBool(DLG_VMD_MOT_IMPORT_MORPH, config["VMD_MOT_IMPORT_MORPH"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_IMPORT_MORPH, true);
@@ -495,7 +497,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_VMD_MOT_IMPORT_MODEL_INFO, config["VMD_MOT_IMPORT_MODEL_INFO"].as<bool>());
+			SetBool(DLG_VMD_MOT_IMPORT_MODEL_INFO, config["VMD_MOT_IMPORT_MODEL_INFO"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_IMPORT_MODEL_INFO, true);
@@ -503,7 +505,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL, config["VMD_MOT_IMPORT_IGNORE_PHYSICAL"].as<bool>());
+			SetBool(DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL, config["VMD_MOT_IMPORT_IGNORE_PHYSICAL"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL, true);
@@ -511,7 +513,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION, config["VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION"].as<bool>());
+			SetBool(DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION, config["VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION, true);
@@ -519,7 +521,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_VMD_MOT_IMPORT_DETAIL, config["VMD_MOT_IMPORT_DETAIL"].as<bool>());
+			SetBool(DLG_VMD_MOT_IMPORT_DETAIL, config["VMD_MOT_IMPORT_DETAIL"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_IMPORT_DETAIL, false);
@@ -527,7 +529,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetFloat(DLG_VMD_MOT_EXPORT_SIZE, config["VMD_MOT_EXPORT_SIZE"].as<float>(), 0, 100);
+			SetFloat(DLG_VMD_MOT_EXPORT_SIZE, config["VMD_MOT_EXPORT_SIZE"].as<Float>(), 0, 100);
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_VMD_MOT_EXPORT_SIZE, 8.5, 0, 100);
@@ -535,7 +537,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetFloat(DLG_VMD_MOT_EXPORT_OFFSET, config["VMD_MOT_EXPORT_OFFSET"].as<float>());
+			SetFloat(DLG_VMD_MOT_EXPORT_OFFSET, config["VMD_MOT_EXPORT_OFFSET"].as<Float>());
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_VMD_MOT_EXPORT_OFFSET, 0);
@@ -543,7 +545,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_VMD_MOT_EXPORT_MOTION, config["VMD_MOT_EXPORT_MOTION"].as<bool>());
+			SetBool(DLG_VMD_MOT_EXPORT_MOTION, config["VMD_MOT_EXPORT_MOTION"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_EXPORT_MOTION, true);
@@ -551,7 +553,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_VMD_MOT_EXPORT_MORPH, config["VMD_MOT_EXPORT_MORPH"].as<bool>());
+			SetBool(DLG_VMD_MOT_EXPORT_MORPH, config["VMD_MOT_EXPORT_MORPH"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_EXPORT_MORPH, true);
@@ -559,7 +561,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_VMD_MOT_EXPORT_MODEL_INFO, config["VMD_MOT_EXPORT_MODEL_INFO"].as<bool>());
+			SetBool(DLG_VMD_MOT_EXPORT_MODEL_INFO, config["VMD_MOT_EXPORT_MODEL_INFO"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_VMD_MOT_EXPORT_MODEL_INFO, true);
@@ -567,7 +569,7 @@ public:
 			updata = true;
 		}
 		try {
-			Bool use_bake = config["VMD_MOT_EXPORT_USE_BAKE"].as<bool>();
+			Bool use_bake = config["VMD_MOT_EXPORT_USE_BAKE"].as<Bool>();
 			SetBool(DLG_VMD_MOT_EXPORT_USE_BAKE, use_bake);
 			if (use_bake == true) {
 				Enable(DLG_VMD_MOT_EXPORT_ROTATION_TWEEN, false);
@@ -583,7 +585,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetFloat(DLG_PMX_MOD_IMPORT_SIZE, config["PMX_MOD_IMPORT_SIZE"].as<float>(), 0, 100);
+			SetFloat(DLG_PMX_MOD_IMPORT_SIZE, config["PMX_MOD_IMPORT_SIZE"].as<Float>(), 0, 100);
 		}
 		catch (YAML::BadConversion) {
 			SetFloat(DLG_PMX_MOD_IMPORT_SIZE, 8.5, 0, 100);
@@ -591,7 +593,7 @@ public:
 			updata = true;
 		}
 		try {
-			Bool import_polygon = config["PMX_MOD_IMPORT_POLYGON"].as<bool>();
+			Bool import_polygon = config["PMX_MOD_IMPORT_POLYGON"].as<Bool>();
 			SetBool(DLG_PMX_MOD_IMPORT_POLYGON, import_polygon);
 			if (import_polygon == false)
 			{
@@ -629,7 +631,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_PMX_MOD_IMPORT_NORMAL, config["PMX_MOD_IMPORT_NORMAL"].as<bool>());
+			SetBool(DLG_PMX_MOD_IMPORT_NORMAL, config["PMX_MOD_IMPORT_NORMAL"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_PMX_MOD_IMPORT_NORMAL, true);
@@ -637,7 +639,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_PMX_MOD_IMPORT_UV, config["PMX_MOD_IMPORT_UV"].as<bool>());
+			SetBool(DLG_PMX_MOD_IMPORT_UV, config["PMX_MOD_IMPORT_UV"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_PMX_MOD_IMPORT_UV, true);
@@ -645,7 +647,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_PMX_MOD_IMPORT_MATERIAL, config["PMX_MOD_IMPORT_MATERIAL"].as<bool>());
+			SetBool(DLG_PMX_MOD_IMPORT_MATERIAL, config["PMX_MOD_IMPORT_MATERIAL"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_PMX_MOD_IMPORT_MATERIAL, true);
@@ -653,7 +655,7 @@ public:
 			updata = true;
 		}
 		try {
-			Bool import_bone = config["PMX_MOD_IMPORT_BONE"].as<bool>();
+			Bool import_bone = config["PMX_MOD_IMPORT_BONE"].as<Bool>();
 			SetBool(DLG_PMX_MOD_IMPORT_BONE, import_bone);	
 			if (import_bone == false)
 			{
@@ -685,7 +687,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, config["PMX_MOD_IMPORT_WEIGHTS"].as<bool>());
+			SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, config["PMX_MOD_IMPORT_WEIGHTS"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_PMX_MOD_IMPORT_WEIGHTS, true);
@@ -693,7 +695,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_PMX_MOD_IMPORT_IK, config["PMX_MOD_IMPORT_IK"].as<bool>());
+			SetBool(DLG_PMX_MOD_IMPORT_IK, config["PMX_MOD_IMPORT_IK"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_PMX_MOD_IMPORT_IK, true);
@@ -701,7 +703,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_PMX_MOD_IMPORT_INHERIT, config["PMX_MOD_IMPORT_INHERIT"].as<bool>());
+			SetBool(DLG_PMX_MOD_IMPORT_INHERIT, config["PMX_MOD_IMPORT_INHERIT"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_PMX_MOD_IMPORT_INHERIT, true);
@@ -709,7 +711,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, config["PMX_MOD_IMPORT_EXPRESSION"].as<bool>());
+			SetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, config["PMX_MOD_IMPORT_EXPRESSION"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_PMX_MOD_IMPORT_EXPRESSION, true);
@@ -717,7 +719,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_PMX_MOD_IMPORT_MULTIPART, config["PMX_MOD_IMPORT_MULTIPART"].as<bool>());
+			SetBool(DLG_PMX_MOD_IMPORT_MULTIPART, config["PMX_MOD_IMPORT_MULTIPART"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_PMX_MOD_IMPORT_MULTIPART, true);
@@ -725,7 +727,7 @@ public:
 			updata = true;
 		}
 		try {
-			SetBool(DLG_PMX_MOD_IMPORT_ENGLISH, config["PMX_MOD_IMPORT_ENGLISH"].as<bool>());
+			SetBool(DLG_PMX_MOD_IMPORT_ENGLISH, config["PMX_MOD_IMPORT_ENGLISH"].as<Bool>());
 		}
 		catch (YAML::BadConversion) {
 			SetBool(DLG_PMX_MOD_IMPORT_ENGLISH, false);
@@ -733,7 +735,7 @@ public:
 			updata = true;
 		}
 		try {
-			Bool import_english = config["PMX_MOD_IMPORT_ENGLISH_CHECK"].as<bool>();
+			Bool import_english = config["PMX_MOD_IMPORT_ENGLISH_CHECK"].as<Bool>();
 			SetBool(DLG_PMX_MOD_IMPORT_ENGLISH_CHECK, import_english);
 			if (import_english == false)
 			{
@@ -1077,7 +1079,7 @@ Bool RegisterOMMDMeshRoot()
 
 Bool RegisterOMMDBoneRoot()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, tool::OMMDBoneRoot::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 2));
+	return(RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU, tool::OMMDBoneRoot::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 2));
 }
 
 

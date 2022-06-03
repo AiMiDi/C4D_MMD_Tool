@@ -1,0 +1,24 @@
+STRINGTABLE OMMDModel
+{
+	OMMDModel "MMD Model Tag";
+	MODEL_INFO_GRP "MMD Model info";
+	MODEL_NAME_LOCAL "Local model name";
+	MODEL_NAME_UNIVERSAL "Universal model name";
+	COMMENTS_LOCAL "Local comments";
+	COMMENTS_UNIVERSAL "Universal comments";
+	PMX_VERSION "Version";
+	MODEL_FUNCTION_GRP "Function";
+	MODEL_DEL_ANIM_BUTTON "Delete all animation";
+	MODEL_DEL_BONE_ANIM_BUTTON "Delete all bone animation";
+	MODEL_DEL_MORPH_ANIM_BUTTON "Delete all morph animation";
+	MODEL_IK_GRP "IK";
+		MODEL_MORPH_GRP "Morph";
+		MODEL_MORPH_GROUP_GRP "Group morph";
+			MODEL_MORPH_GROUP_ADD_NAME "Add group morph name";
+			MODEL_MORPH_GROUP_ADD_BUTTON "Add group morph";
+		MODEL_MORPH_FLIP_GRP "Flip morph";
+			MODEL_MORPH_FLIP_ADD_NAME "Add flip morph name";
+			MODEL_MORPH_FLIP_ADD_BUTTON "Add flip morph";
+		MODEL_MORPH_MESH_GRP "Vertex morph";
+		MODEL_MORPH_BONE_GRP "Bone morph";
+}
