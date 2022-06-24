@@ -188,26 +188,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\source\BulletTest.cpp" />
-    <ClCompile Include="..\..\..\..\source\main.cpp" />
-    <ClCompile Include="..\..\..\..\source\OMMDBoneRoot.cpp" />
-    <ClCompile Include="..\..\..\..\source\OMMDJoint.cpp" />
-    <ClCompile Include="..\..\..\..\source\OMMDJointRoot.cpp" />
-    <ClCompile Include="..\..\..\..\source\OMMDMeshRoot.cpp" />
-    <ClCompile Include="..\..\..\..\source\OMMDModel.cpp" />
-    <ClCompile Include="..\..\..\..\source\OMMDRigid.cpp" />
-    <ClCompile Include="..\..\..\..\source\OMMDRigidRoot.cpp" />
-    <ClCompile Include="..\..\..\..\source\PMX.cpp" />
-    <ClCompile Include="..\..\..\..\source\TMMDBone.cpp" />
-    <ClCompile Include="..\..\..\..\source\Utility.cpp" />
-    <ClCompile Include="..\..\..\..\source\VMD.cpp" />
-    <ClCompile Include="..\..\..\..\source\VPD.cpp" />
-    <ClCompile Include="..\..\..\..\source\NameConversion.cpp" />
-    <ClCompile Include="..\..\..\..\source\PluginRegister.cpp" />
     <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
     <ClCompile Include="..\generated\hxx\register.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\refactoring\main.h" />
     <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h" />
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -236,49 +221,9 @@
     <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\source\BulletTest.h" />
-    <ClInclude Include="..\..\..\..\source\ImagesGUI.hpp" />
-    <ClInclude Include="..\..\..\..\source\main.h" />
-    <ClInclude Include="..\..\..\..\source\OMMDBoneRoot.h" />
-    <ClInclude Include="..\..\..\..\source\OMMDJoint.h" />
-    <ClInclude Include="..\..\..\..\source\OMMDJointRoot.h" />
-    <ClInclude Include="..\..\..\..\source\OMMDMeshRoot.h" />
-    <ClInclude Include="..\..\..\..\source\OMMDModel.h" />
-    <ClInclude Include="..\..\..\..\source\OMMDRigid.h" />
-    <ClInclude Include="..\..\..\..\source\OMMDRigidRoot.h" />
-    <ClInclude Include="..\..\..\..\source\PMX.h" />
-    <ClInclude Include="..\..\..\..\source\TMMDBone.h" />
-    <ClInclude Include="..\..\..\..\source\Utility.h" />
-    <ClInclude Include="..\..\..\..\source\VMD.h" />
-    <ClInclude Include="..\..\..\..\source\VPD.h" />
-    <ClInclude Include="..\..\..\..\source\NameConversion.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="..\..\..\..\res\R20-S24\description\OMMDCamera.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="..\..\..\..\res\R20-S24\description\OMMDJoint.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="..\..\..\..\res\R20-S24\description\OMMDJointRoot.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="..\..\..\..\res\R20-S24\description\OMMDMeshRoot.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="..\..\..\..\res\R20-S24\description\OMMDModel.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="..\..\..\..\res\R20-S24\description\OMMDRigid.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="..\..\..\..\res\R20-S24\description\OMMDRigidRoot.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="..\..\..\..\res\R20-S24\description\TMMDBone.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
     <None Include="cpp.hint" />
