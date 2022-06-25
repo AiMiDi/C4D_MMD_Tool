@@ -188,11 +188,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\refactoring\config_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\register_entity.cpp" />
     <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
     <ClCompile Include="..\generated\hxx\register.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\refactoring\main.h" />
+    <ClInclude Include="..\..\..\..\refactoring\config_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />
+    <ClInclude Include="..\..\..\..\refactoring\register_entity.h" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h" />
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

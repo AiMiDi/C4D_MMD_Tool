@@ -1,0 +1,111 @@
+/**************************************************************************
+
+Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Author:			Aimidi
+Date:			2022/6/25
+File:			config_manager.h
+Description:	Manager of plugin configuration
+
+**************************************************************************/
+
+#ifndef _CONFIG_MANAGER_H_
+#define _CONFIG_MANAGER_H_
+
+#include <any>
+
+#include "c4d.h"
+#include "yaml-cpp/yaml.h"
+
+#define FLOAT_TYPE typeid(float)
+
+enum
+{
+	DLG_VMD_CAM_IMPORT_TITLE = 10000,
+	DLG_VMD_CAM_IMPORT_SIZE,
+	DLG_VMD_CAM_IMPORT_SIZE_NAME,
+	DLG_VMD_CAM_IMPORT_OFFSET,
+	DLG_VMD_CAM_IMPORT_OFFSET_NAME,
+	DLG_VMD_CAM_IMPORT_BUTTON,
+
+	DLG_VMD_CAM_EXPORT_TITLE,
+	DLG_VMD_CAM_EXPORT_SIZE,
+	DLG_VMD_CAM_EXPORT_SIZE_NAME,
+	DLG_VMD_CAM_EXPORT_OFFSET,
+	DLG_VMD_CAM_EXPORT_OFFSET_NAME,
+	DLG_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME,
+	DLG_VMD_CAM_EXPORT_ROTATION_TWEEN,
+	DLG_VMD_CAM_EXPORT_USE_BAKE,
+	DLG_VMD_CAM_EXPORT_BUTTON,
+
+	DLG_VMD_CAM_CONVER_DIS_NAME,
+	DLG_VMD_CAM_CONVER_DIS,
+	DLG_VMD_CAM_CONVER_ROTATION_TWEEN_NAME,
+	DLG_VMD_CAM_CONVER_ROTATION_TWEEN,
+	DLG_VMD_CAM_CONVER_BUTTON,
+
+
+	DLG_VMD_MOT_IMPORT_SIZE_NAME,
+	DLG_VMD_MOT_IMPORT_SIZE,
+	DLG_VMD_MOT_IMPORT_OFFSET_NAME,
+	DLG_VMD_MOT_IMPORT_OFFSET,
+	DLG_VMD_MOT_IMPORT_MOTION,
+	DLG_VMD_MOT_IMPORT_MORPH,
+	DLG_VMD_MOT_IMPORT_MODEL_INFO,
+	DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL,
+	DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION,
+	DLG_VMD_MOT_IMPORT_DETAIL,
+	DLG_VMD_MOT_IMPORT_BUTTON,
+
+	DLG_VMD_MOT_EXPORT_SIZE_NAME,
+	DLG_VMD_MOT_EXPORT_SIZE,
+	DLG_VMD_MOT_EXPORT_OFFSET_NAME,
+	DLG_VMD_MOT_EXPORT_OFFSET,
+	DLG_VMD_MOT_EXPORT_MOTION,
+	DLG_VMD_MOT_EXPORT_MORPH,
+	DLG_VMD_MOT_EXPORT_MODEL_INFO,
+	DLG_VMD_MOT_EXPORT_USE_BAKE,
+	DLG_VMD_MOT_EXPORT_ROTATION_TWEEN_NAME,
+	DLG_VMD_MOT_EXPORT_ROTATION_TWEEN,
+	DLG_VMD_MOT_EXPORT_BUTTON,
+
+	DLG_VPD_POSE_IMPORT_BUTTON,
+
+	DLG_PMX_MOD_IMPORT_SIZE_NAME,
+	DLG_PMX_MOD_IMPORT_SIZE,
+	DLG_PMX_MOD_IMPORT_POLYGON,     /* 多边形Polygon */
+	DLG_PMX_MOD_IMPORT_NORMAL,      /* 法线Normal */
+	DLG_PMX_MOD_IMPORT_UV,          /* UV */
+	DLG_PMX_MOD_IMPORT_MATERIAL,    /* 材质Material */
+	DLG_PMX_MOD_IMPORT_BONE,        /* 骨骼Bone */
+	DLG_PMX_MOD_IMPORT_WEIGHTS,     /* 权重Weights */
+	DLG_PMX_MOD_IMPORT_IK,          /* IK */
+	DLG_PMX_MOD_IMPORT_INHERIT,     /* 付予Inherit */
+	DLG_PMX_MOD_IMPORT_EXPRESSION,  /* 表情Expression */
+	DLG_PMX_MOD_IMPORT_MULTIPART,   /* 分部分Multipart */
+	DLG_PMX_MOD_IMPORT_ENGLISH,
+	DLG_PMX_MOD_IMPORT_ENGLISH_CHECK,
+	DLG_PMX_MOD_IMPORT_BUTTON,
+};
+
+namespace c4d_mmd_tool_config
+{
+	static std::vector<std::vector<std::any>> init_config{
+		{{"DLG_VMD_CAM_IMPORT_TITLE"},{8.5f}},
+		{},
+		{},
+
+	};
+}
+
+class ConfigManager
+{
+	YAML::Node m_config;
+
+	static constexpr const char* getDialogElementName(const Int32 id);
+public:
+	ConfigManager();
+};
+
+
+
+#endif
