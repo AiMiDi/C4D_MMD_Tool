@@ -11,12 +11,15 @@ Description:	Manager of plugin configuration
 #ifndef _CONFIG_MANAGER_H_
 #define _CONFIG_MANAGER_H_
 
-#include <any>
-
+#include <optional>
+#include <variant>
+#include <tuple>
 #include "c4d.h"
 #include "yaml-cpp/yaml.h"
 
-#define FLOAT_TYPE typeid(float)
+
+typedef std::variant<bool, int, float> config_types;
+typedef std::tuple<const char*, config_types> confin_inital_value;
 
 enum
 {
@@ -87,25 +90,64 @@ enum
 	DLG_PMX_MOD_IMPORT_BUTTON,
 };
 
-namespace c4d_mmd_tool_config
-{
-	static std::vector<std::vector<std::any>> init_config{
-		{{"DLG_VMD_CAM_IMPORT_TITLE"},{8.5f}},
-		{},
-		{},
-
-	};
-}
-
+/**
+ * \brief CMT configuration Manager. Responsible for saving GUI configuration.
+ */
 class ConfigManager
 {
+	/**
+	 * \brief Configuration file path.
+	 */
+	const std::string m_config_path{
+		(GeGetPluginResourcePath() + Filename("config.yaml")).GetString().GetCStringCopy(STRINGENCODING::UTF8)
+	};
+	/**
+	 * \brief Configuration YAML root node.
+	 */
 	YAML::Node m_config;
-
-	static constexpr const char* getDialogElementName(const Int32 id);
+	~ConfigManager() = default;
 public:
-	ConfigManager();
+	ConfigManager() = default;
+
+	/**
+	 * \brief Get ConfigManager instance.
+	 * \return ConfigManager instance.
+	 */
+	static ConfigManager& Get()
+	{
+		static ConfigManager instance;
+		return instance;
+	}
+	/**
+	 * \brief Get configuration entry value. If the configuration entry does not exist, it is generated according to the default value.
+	 * \tparam T configuration entry value type.
+	 * \param id configuration entry id.
+	 * \return configuration entry value.
+	 */
+	template <class T>
+	static T GetConfig(Int32 id);
+	/**
+	 * \brief Set configuration entry value.
+	 * \tparam T configuration entry value type.
+	 * \param id configuration entry id.
+	 * \param value configuration entry value.
+	 * \return If the configuration entry exists and the setting is successful, it returns true, and the rest is false.
+	 */
+	template <class T>
+	static bool SetConfig(Int32 id,const T& value);
+	/**
+	 * \brief Set the configuration entry to the default value.
+	 * \param id configuration entry id.
+	 */
+	static void InitConfig(Int32 id);
+	/**
+	 * \brief Initialization ConfigManager.
+	 */
+	static void InitConfigManager();
+	/**
+	 * \brief Save the configuration file.
+	 */
+	static void SaveConfig();
 };
-
-
 
 #endif

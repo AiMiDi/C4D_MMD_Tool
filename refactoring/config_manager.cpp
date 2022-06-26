@@ -9,128 +9,176 @@ Description:	Manager of plugin configuration
 **************************************************************************/
 
 #include "config_manager.h"
+
 #include <fstream>
 
-const char* ConfigManager::getDialogElementName(const Int32 id)
-{
-	const char* dialog_elements_LUT[64] = {
-"DLG_VMD_CAM_IMPORT_TITLE",
-"DLG_VMD_CAM_IMPORT_SIZE",
-"DLG_VMD_CAM_IMPORT_SIZE_NAME",
-"DLG_VMD_CAM_IMPORT_OFFSET",
-"DLG_VMD_CAM_IMPORT_OFFSET_NAME",
-"DLG_VMD_CAM_IMPORT_BUTTON",
-"DLG_VMD_CAM_EXPORT_TITLE",
-"DLG_VMD_CAM_EXPORT_SIZE",
-"DLG_VMD_CAM_EXPORT_SIZE_NAME",
-"DLG_VMD_CAM_EXPORT_OFFSET",
-"DLG_VMD_CAM_EXPORT_OFFSET_NAME",
-"DLG_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME",
-"DLG_VMD_CAM_EXPORT_ROTATION_TWEEN",
-"DLG_VMD_CAM_EXPORT_USE_BAKE",
-"DLG_VMD_CAM_EXPORT_BUTTON",
-"DLG_VMD_CAM_CONVER_DIS_NAME",
-"DLG_VMD_CAM_CONVER_DIS",
-"DLG_VMD_CAM_CONVER_ROTATION_TWEEN_NAME",
-"DLG_VMD_CAM_CONVER_ROTATION_TWEEN",
-"DLG_VMD_CAM_CONVER_BUTTON",
-"DLG_VMD_MOT_IMPORT_SIZE_NAME",
-"DLG_VMD_MOT_IMPORT_SIZE",
-"DLG_VMD_MOT_IMPORT_OFFSET_NAME",
-"DLG_VMD_MOT_IMPORT_OFFSET",
-"DLG_VMD_MOT_IMPORT_MOTION",
-"DLG_VMD_MOT_IMPORT_MORPH",
-"DLG_VMD_MOT_IMPORT_MODEL_INFO",
-"DLG_VMD_MOT_IMPORT_IGNORE_PHYSICAL",
-"DLG_VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION",
-"DLG_VMD_MOT_IMPORT_DETAIL",
-"DLG_VMD_MOT_IMPORT_BUTTON",
-"DLG_VMD_MOT_EXPORT_SIZE_NAME",
-"DLG_VMD_MOT_EXPORT_SIZE",
-"DLG_VMD_MOT_EXPORT_OFFSET_NAME",
-"DLG_VMD_MOT_EXPORT_OFFSET",
-"DLG_VMD_MOT_EXPORT_MOTION",
-"DLG_VMD_MOT_EXPORT_MORPH",
-"DLG_VMD_MOT_EXPORT_MODEL_INFO",
-"DLG_VMD_MOT_EXPORT_USE_BAKE",
-"DLG_VMD_MOT_EXPORT_ROTATION_TWEEN_NAME",
-"DLG_VMD_MOT_EXPORT_ROTATION_TWEEN",
-"DLG_VMD_MOT_EXPORT_BUTTON",
-"DLG_VPD_POSE_IMPORT_BUTTON",
-"DLG_PMX_MOD_IMPORT_SIZE_NAME",
-"DLG_PMX_MOD_IMPORT_SIZE",
-"DLG_PMX_MOD_IMPORT_POLYGON",
-"DLG_PMX_MOD_IMPORT_NORMAL",
-"DLG_PMX_MOD_IMPORT_UV",
-"DLG_PMX_MOD_IMPORT_MATERIAL",
-"DLG_PMX_MOD_IMPORT_BONE",
-"DLG_PMX_MOD_IMPORT_WEIGHTS",
-"DLG_PMX_MOD_IMPORT_IK",
-"DLG_PMX_MOD_IMPORT_INHERIT",
-"DLG_PMX_MOD_IMPORT_EXPRESSION",
-"DLG_PMX_MOD_IMPORT_MULTIPART",
-"DLG_PMX_MOD_IMPORT_ENGLISH",
-"DLG_PMX_MOD_IMPORT_ENGLISH_CHECK",
-"DLG_PMX_MOD_IMPORT_BUTTON",
-"",
-"",
-"",
-"",
-"",
-""
-	};
-	return dialog_elements_LUT[id - 10000];
-}
+static std::optional<confin_inital_value> g_init_config_LUT[64]{
+{},// DLG_VMD_CAM_IMPORT_TITLE
+{{{"VMD_CAM_IMPORT_SIZE"},{8.5f}}},
+{},// DLG_VMD_CAM_IMPORT_SIZE_NAME
+{{{"VMD_CAM_IMPORT_OFFSET"},{0.f}}},
+{},// DLG_VMD_CAM_IMPORT_OFFSET_NAME
+{},// DLG_VMD_CAM_IMPORT_BUTTON
 
-ConfigManager::ConfigManager()
-{
-	std::string config_path((GeGetPluginResourcePath() + Filename("config.yaml")).GetString().GetCStringCopy(STRINGENCODING::UTF8));
-	try {
-		m_config = YAML::LoadFile(config_path);
-	}
-	catch (YAML::BadFile e) {
-		GePrint("Failed to load the YAML file!"_s);
-		m_config = {};
-		
+{},// DLG_VMD_CAM_EXPORT_TITLE
+{{{"VMD_CAM_EXPORT_SIZE"},{8.5f}}},
+{},// DLG_VMD_CAM_EXPORT_SIZE_NAME
+{{{"VMD_CAM_EXPORT_OFFSET"},{0.f}}},
+{},// DLG_VMD_CAM_EXPORT_OFFSET_NAME
+{},// DLG_VMD_CAM_EXPORT_ROTATION_TWEEN_NAME
+{{{"VMD_CAM_EXPORT_ROTATION_TWEEN"},{0}}},
+{{{"VMD_CAM_EXPORT_USE_BAKE"},{true}}},
+{},// DLG_VMD_CAM_EXPORT_BUTTON
 
-		m_config[getDialogElementName(DLG_VMD_CAM_IMPORT_SIZE)] = 8.5;
-		m_config["VMD_CAM_IMPORT_OFFSET"] = 0;
-		m_config["VMD_CAM_EXPORT_SIZE"] = 8.5;
-		m_config["VMD_CAM_EXPORT_OFFSET"] = 0;
-		m_config["VMD_CAM_EXPORT_USE_BAKE"] = true;
-		m_config["VMD_CAM_EXPORT_ROTATION_TWEEN"] = 0;
-		m_config["VMD_CAM_CONVER_DIS"] = 0;
-		m_config["VMD_CAM_CONVER_ROTATION_TWEEN"] = 0;
-		m_config["VMD_MOT_IMPORT_SIZE"] = 8.5;
-		m_config["VMD_MOT_IMPORT_OFFSET"] = 0;
-		m_config["VMD_MOT_IMPORT_MOTION"] = true;
-		m_config["VMD_MOT_IMPORT_MORPH"] = true;
-		m_config["VMD_MOT_IMPORT_MODEL_INFO"] = true;
-		m_config["VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION"] = true;
-		m_config["VMD_MOT_IMPORT_DETAIL"] = false;
-		m_config["VMD_MOT_EXPORT_SIZE"] = 8.5;
-		m_config["VMD_MOT_EXPORT_OFFSET"] = 0;
-		m_config["VMD_MOT_EXPORT_ROTATION_TWEEN"] = 0;
-		m_config["VMD_MOT_EXPORT_MOTION"] = true;
-		m_config["VMD_MOT_EXPORT_MORPH"] = true;
-		m_config["VMD_MOT_EXPORT_MODEL_INFO"] = true;
-		m_config["VMD_MOT_EXPORT_USE_BAKE"] = true;
-		m_config["PMX_MOD_IMPORT_SIZE"] = 8.5;
-		m_config["PMX_MOD_IMPORT_POLYGON"] = true;
-		m_config["PMX_MOD_IMPORT_NORMAL"] = true;
-		m_config["PMX_MOD_IMPORT_UV"] = true;
-		m_config["PMX_MOD_IMPORT_MATERIAL"] = true;
-		m_config["PMX_MOD_IMPORT_BONE"] = true;
-		m_config["PMX_MOD_IMPORT_WEIGHTS"] = true;
-		m_config["PMX_MOD_IMPORT_IK"] = true;
-		m_config["PMX_MOD_IMPORT_INHERIT"] = true;
-		m_config["PMX_MOD_IMPORT_EXPRESSION"] = true;
-		m_config["PMX_MOD_IMPORT_MULTIPART"] = true;
-		m_config["PMX_MOD_IMPORT_ENGLISH"] = false;
-		m_config["PMX_MOD_IMPORT_ENGLISH_CHECK"] = false;
-		std::ofstream fout(config_path);
-		if (fout.is_open()) {
-			fout << m_config;
+{},// DLG_VMD_CAM_CONVER_DIS_NAME
+{{{"VMD_CAM_CONVER_DIS"},{0.f}}},
+{},// DLG_VMD_CAM_CONVER_ROTATION_TWEEN_NAME
+{{{"VMD_CAM_CONVER_ROTATION_TWEEN"},{0}}},
+{},// DLG_VMD_CAM_CONVER_BUTTON
+
+{},// DLG_VMD_MOT_IMPORT_SIZE_NAME
+{{{"VMD_MOT_IMPORT_SIZE"},{8.5f}}},
+{},// DLG_VMD_MOT_IMPORT_OFFSET_NAME
+{{{"VMD_MOT_IMPORT_OFFSET"},{0.f}}},
+{{{"VMD_MOT_IMPORT_MOTION"},{true}}},
+{{{"VMD_MOT_IMPORT_MORPH"},{true}}},
+{{{"VMD_MOT_IMPORT_MODEL_INFO"},{true}}},
+{{{"VMD_MOT_IMPORT_IGNORE_PHYSICAL"},{true}}},
+{{{"VMD_MOT_IMPORT_DELETE_PREVIOUS_ANIMATION"},{true}}},
+{{{"VMD_MOT_IMPORT_DETAIL"},{false}}},
+{},// DLG_VMD_MOT_IMPORT_BUTTON
+
+{},// DLG_VMD_MOT_EXPORT_SIZE_NAME
+{{{"VMD_MOT_EXPORT_SIZE"},{8.5f}}},
+{},// DLG_VMD_MOT_EXPORT_OFFSET_NAME
+{{{"VMD_MOT_EXPORT_OFFSET"},{0.f}}},
+{{{"VMD_MOT_EXPORT_MOTION"},{true}}},
+{{{"VMD_MOT_EXPORT_MORPH"},{true}}},
+{{{"VMD_MOT_EXPORT_MODEL_INFO"},{true}}},
+{{{"VMD_MOT_EXPORT_USE_BAKE"},{true}}},
+{},// DLG_VMD_MOT_EXPORT_ROTATION_TWEEN_NAME
+{{{"VMD_MOT_EXPORT_ROTATION_TWEEN"},{0}}},
+{},// DLG_VMD_MOT_EXPORT_BUTTON
+
+{},// DLG_VPD_POSE_IMPORT_BUTTON
+
+{},// DLG_PMX_MOD_IMPORT_SIZE_NAME
+{{{"PMX_MOD_IMPORT_SIZE"},{8.5f}}},
+{{{"PMX_MOD_IMPORT_POLYGON"},{true}}},
+{{{"PMX_MOD_IMPORT_NORMAL"},{true}}},
+{{{"PMX_MOD_IMPORT_UV"},{true}}},
+{{{"PMX_MOD_IMPORT_MATERIAL"},{true}}},
+{{{"PMX_MOD_IMPORT_BONE"},{}}},
+{{{"PMX_MOD_IMPORT_WEIGHTS"},{true}}},
+{{{"PMX_MOD_IMPORT_IK"},{true}}},
+{{{"PMX_MOD_IMPORT_INHERIT"},{true}}},
+{{{"PMX_MOD_IMPORT_EXPRESSION"},{true}}},
+{{{"PMX_MOD_IMPORT_MULTIPART"},{true}}},
+{{{"PMX_MOD_IMPORT_ENGLISH"},{false}}},
+{{{"PMX_MOD_IMPORT_ENGLISH_CHECK"},{false}}},
+{}, // DLG_PMX_MOD_IMPORT_BUTTON
+
+{},
+{},
+{},
+{},
+{},
+{}
+};
+
+template<class T>
+T ConfigManager::GetConfig(Int32 id)
+{
+	id -= 10000;
+	if (id > 0 && id < 64)
+	{
+		const auto& config_item = g_init_config_LUT[id];
+		auto& [config_name, config_value] = config_item.value();
+		try {
+			return Get().m_config[config_name].as<T>();
+		}
+		catch (YAML::BadConversion) {
+			T& res = std::get<T>(config_value);
+			Get().m_config[config_name] = res;
+			return res;
 		}
 	}
+	return {};
+}
+
+template <class T>
+bool ConfigManager::SetConfig(Int32 id, const T& value)
+{
+	id -= 10000;
+	if (id > 0 && id < 64)
+	{
+		const auto& config_item = g_init_config_LUT[id];
+		auto& [config_name, config_value] = config_item.value();
+		Get().m_config[config_name] = value;
+		return true;
+	}
+	return false;
+}
+
+void ConfigManager::InitConfig(Int32 id)
+{
+	id -= 10000;
+	if (id > 0 && id < 64) 
+	{
+		if (const auto& config_item = g_init_config_LUT[id]; config_item.has_value())
+		{
+			switch (auto& [config_name, config_value] = config_item.value(); config_value.index())
+			{
+				// bool
+			case 0:
+			{
+				Get().m_config[config_name] = std::get<bool>(config_value);
+				break;
+			}
+			// int
+			case 1:
+			{
+				Get().m_config[config_name] = std::get<int>(config_value);
+				break;
+			}
+			// float
+			case 2:
+			{
+				Get().m_config[config_name] = std::get<float>(config_value);
+				break;
+			}
+			default: break;
+			}
+		}
+	}
+}
+
+void ConfigManager::InitConfigManager()
+{
+	auto& config = Get().m_config;
+	try {
+		config = YAML::LoadFile(Get().m_config_path);
+	}
+	catch (YAML::BadFile) {
+		GePrint("Failed to load the YAML file!"_s);
+		config = {};
+		for (int config_id = 10000; config_id < 10063; ++config_id)
+		{
+			InitConfig(config_id);
+		}
+		std::ofstream fout(Get().m_config_path);
+		if (fout.is_open()) {
+			fout << config;
+		}
+		fout.close();
+	}
+}
+
+void ConfigManager::SaveConfig()
+{
+	std::ofstream fout(Get().m_config_path);
+	if (fout.is_open()) {
+		fout << Get().m_config;
+	}
+	fout.close();
 }

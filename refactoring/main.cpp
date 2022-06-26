@@ -10,6 +10,7 @@ Description:	Entrance of the plugin
 
 #include <c4d.h>
 
+#include "config_manager.h"
 #include "register_entity.h"
 
 Bool PluginStart()
@@ -18,10 +19,13 @@ Bool PluginStart()
 	{
 		return false;
 	}
+	ConfigManager::InitConfigManager();
+	return true;
 }
 
 void PluginEnd()
 {
+	ConfigManager::SaveConfig();
 }
 
 Bool PluginMessage(Int32 id, void* data)
@@ -36,8 +40,8 @@ Bool PluginMessage(Int32 id, void* data)
 			return(false);
 		}
 		return(true);
-		break;
 	}
+	default: ;
 	}
 
 	return(false);
