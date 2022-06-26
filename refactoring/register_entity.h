@@ -11,7 +11,7 @@ Description:	Entrance all the resource
 #ifndef _REGISTER_RNTITY_H_
 #define _REGISTER_RNTITY_H_
 
-#include <c4d.h>
+#include "pch.h"
 
 namespace cmt_register
 {

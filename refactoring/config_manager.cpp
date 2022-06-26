@@ -8,9 +8,8 @@ Description:	Manager of plugin configuration
 
 **************************************************************************/
 
+#include "pch.h"
 #include "config_manager.h"
-
-#include <fstream>
 
 static std::optional<confin_inital_value> g_init_config_LUT[64]{
 {},// DLG_VMD_CAM_IMPORT_TITLE

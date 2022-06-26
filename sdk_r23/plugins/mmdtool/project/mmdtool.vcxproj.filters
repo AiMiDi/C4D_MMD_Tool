@@ -42,6 +42,9 @@
     <ClCompile Include="..\..\..\..\refactoring\config_manager.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -84,6 +87,9 @@
       <Filter>source\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\config_manager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\pch.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

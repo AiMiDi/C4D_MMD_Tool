@@ -8,10 +8,9 @@ Description:	Entrance of the plugin
 
 **************************************************************************/
 
-#include <c4d.h>
-
-#include "config_manager.h"
+#include "pch.h"
 #include "register_entity.h"
+#include "config_manager.h"
 
 Bool PluginStart()
 {

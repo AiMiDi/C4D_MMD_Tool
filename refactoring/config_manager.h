@@ -11,12 +11,7 @@ Description:	Manager of plugin configuration
 #ifndef _CONFIG_MANAGER_H_
 #define _CONFIG_MANAGER_H_
 
-#include <optional>
-#include <variant>
-#include <tuple>
-#include "c4d.h"
-#include "yaml-cpp/yaml.h"
-
+#include "pch.h"
 
 typedef std::variant<bool, int, float> config_types;
 typedef std::tuple<const char*, config_types> confin_inital_value;
