@@ -11,7 +11,16 @@ Description:	Manager of plugin configuration
 #include "pch.h"
 #include "config_manager.h"
 
-static std::optional<confin_inital_value> g_init_config_LUT[64]{
+typedef std::variant<bool, int, float> config_types;
+typedef std::tuple<const char*, config_types> confin_inital_value;
+typedef std::optional<confin_inital_value> confin_inital_item;
+
+static constexpr auto g_init_config_table_size = 64;
+
+/**
+ * \brief Configuration entry initial value table.
+ */
+static confin_inital_item g_init_config_table[g_init_config_table_size]{
 {},// DLG_VMD_CAM_IMPORT_TITLE
 {{{"VMD_CAM_IMPORT_SIZE"},{8.5f}}},
 {},// DLG_VMD_CAM_IMPORT_SIZE_NAME
@@ -89,9 +98,9 @@ template<class T>
 T ConfigManager::GetConfig(Int32 id)
 {
 	id -= 10000;
-	if (id > 0 && id < 64)
+	if (id > 0 && id < g_init_config_table_size)
 	{
-		const auto& config_item = g_init_config_LUT[id];
+		const auto& config_item = g_init_config_table[id];
 		auto& [config_name, config_value] = config_item.value();
 		try {
 			return Get().m_config[config_name].as<T>();
@@ -109,9 +118,9 @@ template <class T>
 bool ConfigManager::SetConfig(Int32 id, const T& value)
 {
 	id -= 10000;
-	if (id > 0 && id < 64)
+	if (id > 0 && id < g_init_config_table_size)
 	{
-		const auto& config_item = g_init_config_LUT[id];
+		const auto& config_item = g_init_config_table[id];
 		auto& [config_name, config_value] = config_item.value();
 		Get().m_config[config_name] = value;
 		return true;
@@ -122,9 +131,9 @@ bool ConfigManager::SetConfig(Int32 id, const T& value)
 void ConfigManager::InitConfig(Int32 id)
 {
 	id -= 10000;
-	if (id > 0 && id < 64) 
+	if (id > 0 && id < g_init_config_table_size)
 	{
-		if (const auto& config_item = g_init_config_LUT[id]; config_item.has_value())
+		if (const auto& config_item = g_init_config_table[id]; config_item.has_value())
 		{
 			switch (auto& [config_name, config_value] = config_item.value(); config_value.index())
 			{
