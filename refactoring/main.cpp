@@ -1,7 +1,7 @@
 /**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
-Author:			walter white
+Author:			Aimidi/walter white
 Date:			2022/6/21
 File:			main.h
 Description:	Entrance of the plugin
@@ -16,10 +16,10 @@ Bool PluginStart()
 {
 	if (!cmt_register::RigisterPlugin())
 	{
-		return false;
+		return FALSE;
 	}
 	ConfigManager::InitConfigManager();
-	return true;
+	return TRUE;
 }
 
 void PluginEnd()
@@ -36,12 +36,12 @@ Bool PluginMessage(Int32 id, void* data)
 		if (!g_resource.Init())
 		{
 			//	no resource
-			return(false);
+			return(FALSE);
 		}
-		return(true);
+		return(TRUE);
 	}
 	default: ;
 	}
 
-	return(false);
+	return(FALSE);
 }

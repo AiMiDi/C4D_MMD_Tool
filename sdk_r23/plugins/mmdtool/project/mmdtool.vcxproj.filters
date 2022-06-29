@@ -25,6 +25,15 @@
     <Filter Include="source\utils">
       <UniqueIdentifier>{09e54095-5349-4c6f-8927-51ad43fef86f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\module">
+      <UniqueIdentifier>{df3c1df2-82ba-4dda-8383-077c81bb6106}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\module\MMD">
+      <UniqueIdentifier>{965f55d6-e953-4de5-a118-a5dc8cd31deb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\module\ui">
+      <UniqueIdentifier>{763d99e3-66fa-423c-a912-35256eed4549}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -44,6 +53,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp">
+      <Filter>source\module\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +106,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\pch.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.hpp">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.hpp">
+      <Filter>source\module\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
