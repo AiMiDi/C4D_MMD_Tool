@@ -71,17 +71,17 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\R23\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\..\..\lib\yaml_cpp\include;..\..\..\..\lib\bullet\include;..\..\..\..\lib\libiconv-1.16\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\..\..\lib\yaml_cpp\include;..\..\..\..\lib\bullet\include;..\..\..\..\lib\libiconv-1.16\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../refactoring;../../../../lib/yaml_cpp/include;../../../../lib/bullet/include;../../../../lib/libiconv-1.16/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -103,7 +103,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../refactoring;../../../../lib/yaml_cpp/include;../../../../lib/bullet/include;../../../../lib/libiconv-1.16/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -211,11 +211,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\config_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.hpp" />
-    <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\pch.h" />
     <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\code_conversion_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h" />
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.h">

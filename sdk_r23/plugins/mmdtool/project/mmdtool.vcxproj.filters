@@ -107,11 +107,23 @@
     <ClInclude Include="..\..\..\..\refactoring\pch.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.hpp">
+    <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.hpp">
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h">
       <Filter>source\module\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\code_conversion_util.hpp">
+      <Filter>source\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

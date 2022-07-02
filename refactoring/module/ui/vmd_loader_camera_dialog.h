@@ -11,12 +11,25 @@ Description:	vmd data loader dialog
 #ifndef _VMD_LOADER_DATA_DIALOG_H_
 #define _VMD_LOADER_DATA_DIALOG_H_
 
-#include <c4d_gui.h>
+#include "pch.h"
 
 class VMDLoaderCameraDialog : public GeDialog
 {
-private:
+	ImagesUserArea* m_images = nullptr;
+	Filename	m_filename;
+	BaseDocument* m_document = nullptr;
+	INSTANCEOF(VMDLoaderCameraDialog, GeDialog)
+public:
+	VMDLoaderCameraDialog(const Filename& fn, BaseDocument* doc) : m_filename(fn), m_document(doc){}
 
+	~VMDLoaderCameraDialog() override
+	{
+		DeleteObj(m_images);
+	}
+
+	Bool CreateLayout() override;
+	Bool InitValues() override;
+	Bool Command(Int32 id, const BaseContainer& msg) override;
 };
 
 #endif // !_VMD_LOADER_DATA_DIALOG_H_
