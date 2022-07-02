@@ -193,7 +193,10 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\refactoring\config_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vpd_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -211,7 +214,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\config_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vpd_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\pch.h" />
     <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />

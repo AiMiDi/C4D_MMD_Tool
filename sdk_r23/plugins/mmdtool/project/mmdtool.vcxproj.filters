@@ -34,6 +34,9 @@
     <Filter Include="source\module\ui">
       <UniqueIdentifier>{763d99e3-66fa-423c-a912-35256eed4549}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\module\tools">
+      <UniqueIdentifier>{2e601a9e-e79a-4683-8ce1-7d707658f31b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -54,11 +57,20 @@
     <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.cpp">
-      <Filter>source\module\MMD</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp">
       <Filter>source\module\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.cpp">
+      <Filter>source\module\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vpd_data.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_data.cpp">
+      <Filter>source\module\MMD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,9 +122,6 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_loader_data.h">
-      <Filter>source\module\MMD</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h">
       <Filter>source\module\ui</Filter>
     </ClInclude>
@@ -124,6 +133,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\utils\code_conversion_util.hpp">
       <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.h">
+      <Filter>source\module\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vpd_data.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data.h">
+      <Filter>source\module\MMD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

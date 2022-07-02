@@ -13,6 +13,7 @@
 #include <c4d_filterdata.h>
 #include <c4d_gui.h>
 #include <c4d_string.h>
+#include "maxon/pointerarray.h"
 
 // The third party
 #include "yaml-cpp/yaml.h"

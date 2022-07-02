@@ -19,7 +19,7 @@ class code_conversion
 	libiconv_t m_U8toJIS_conv;
 	std::vector<Char> m_buffer;
 public:
-	/**
+		/**
 		 * \brief Converts a UTF8 string to an SHIFT-JIS string.
 		 * \param strin Source UTF8 string
 		 * \param strout Result SHIFT-JIS string
@@ -28,7 +28,7 @@ public:
 		static size_t UTF8toSJIS(const String& strin, char* strout)
 		{
 			iferr_scope_handler{
-				return false;
+				return -1;
 			};
 			size_t length_i = strin.GetCStringLen(STRINGENCODING::UTF8) + 1ull;
 			size_t length_o = length_i * 2;
@@ -40,8 +40,26 @@ public:
 			length_o = libiconv(Get().m_JIStoU8_conv, &inbuf, &length_i, &outbuf, &length_o);
 			return length_o;
 		}
-
-	/**
+		/**
+		 * \brief Converts a UTF8 string to an SHIFT-JIS string.
+		 * \param strin Source UTF8 string
+	 	 * \param strout Result SHIFT-JIS string
+		 * \return Result SHIFT-JIS string length
+		 */
+		static size_t UTF8toSJIS(std::string& strin, std::string& strout)
+		{
+			iferr_scope_handler{
+				return -1;
+			};
+			size_t length_i = strin.length() + 1ull;
+			size_t length_o = length_i * 2;
+			Get().m_buffer.reserve(length_i);
+			char* outbuf = strout.data();
+			char* inbuf = strin.data();
+			length_o = libiconv(Get().m_JIStoU8_conv, &inbuf, &length_i, &outbuf, &length_o);
+			return length_o;
+		}
+		/**
 		 * \brief Converts a SHIFT-JIS string to an UTF8 string.
 		 * \param strin Source SHIFT-JIS string
 		 * \param strin_length Source SHIFT-JIS string length
@@ -70,15 +88,38 @@ public:
 			}
 			size_t length_o = length_i * 2;
 			Get().m_buffer.reserve(length_o);
-			char* outmen =Get().m_buffer.data();
+			char* outmen = Get().m_buffer.data();
 			char* outbuf = outmen;
-			if (length_o = libiconv(Get().m_U8toJIS_conv, &strin, &length_i, &outbuf, &length_o); length_o == static_cast<size_t>(-1))
+			char* inbuf = strin;
+			if (length_o = libiconv(Get().m_U8toJIS_conv, &inbuf, &length_i, &outbuf, &length_o); length_o == static_cast<size_t>(-1))
 			{
 				return String{};
 			}
 			String res;
 			res.SetCString(outmen, static_cast<Int>(length_o), STRINGENCODING::UTF8);
 			return res;
+		}
+		/**
+		 * \brief Converts a SHIFT-JIS string to an UTF8 string.
+		 * \param strin Source SHIFT-JIS string
+		 * \return Result UTF8 string
+		 */
+		static std::string SJIStoUTF8(std::string& strin)
+		{
+			iferr_scope_handler{
+				return std::string{};
+			};
+			size_t length_i = strin.length();
+			size_t length_o = length_i * 2;
+			Get().m_buffer.reserve(length_o);
+			char* outmen = Get().m_buffer.data();
+			char* outbuf = outmen;
+			char* inbuf = strin.data();
+			if (length_o = libiconv(Get().m_U8toJIS_conv, &inbuf, &length_i, &outbuf, &length_o); length_o == static_cast<size_t>(-1))
+			{
+				return std::string{};
+			}
+			return std::string{ outmen, length_o };
 		}
 private:
 	code_conversion() :
