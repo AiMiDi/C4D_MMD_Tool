@@ -22,8 +22,7 @@ public:
 	enum class PartType { ax, ay, bx, by };
 	/* Constructor function */
 	VMDInterpolator(const UChar ax = 20U, const UChar ay = 20U, const UChar bx = 107U, const UChar by = 107U);
-
-	VMDInterpolator(const VMDInterpolator& other) noexcept;
+	VMDInterpolator(const VMDInterpolator&) noexcept = default;
 
 	[[nodiscard]] Bool IsLinear() const;
 	/* Sets the value of the interpolator. If the parameter is empty, set the default value. */
@@ -149,22 +148,50 @@ struct VMDIkControllerAnimation
 	VMDIkControllerAnimation(String name_, const Bool enable_ = true) : name(std::move(name_)), enable(enable_) {}
 };
 /* MMD style model information animation */
-struct VMDModelControllerAnimation
+class VMDModelControllerAnimation
 {
-	UInt32				frame_no = 0;                                   /* Frame of action. */
-	Bool				show = true;                                    /* Is show. */
-	maxon::PointerArray<VMDIkControllerAnimation> IKs_Info;             /* IKs enable information. */
-
+	UInt32				m_frame_on = 0;                                   /* Frame of action. */
+	Bool				m_show = true;                                    /* Is m_show. */
+	maxon::PointerArray<VMDIkControllerAnimation> m_IK_Info_array;        /* IKs enable information. */
+public:
 	/* Constructor function */
-	VMDModelControllerAnimation(const UInt32 frame_no_ = 0, const Bool show_ = true) :frame_no(frame_no_), show(show_) {}
+	VMDModelControllerAnimation(const UInt32 frame_no, const Bool show) :m_frame_on(frame_no), m_show(show) {}
 	/* Copy constructor */
 	VMDModelControllerAnimation(const VMDModelControllerAnimation& src);
 	/* Move constructor */
 	VMDModelControllerAnimation(VMDModelControllerAnimation&& src) noexcept;
-	/* operator= */
+	/* operator= Copy*/
 	VMDModelControllerAnimation& operator =(const VMDModelControllerAnimation& src);
-
+	/* operator= Move*/
 	VMDModelControllerAnimation& operator =(VMDModelControllerAnimation&& src) noexcept;
+
+	Bool ReadFormFile(const BaseFile* file)
+	{
+		if(!file)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	Bool WriteToFile(const BaseFile* file)
+	{
+		if (!file)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	[[nodiscard]] UInt32 GetFrameOn() const
+	{
+		return m_frame_on;
+	}
+
+	[[nodiscard]] Bool IsShow() const
+	{
+		return m_show;
+	}
 };
 
 #endif // !_VMD_DATA_H_

@@ -15,20 +15,6 @@ VMDInterpolator::VMDInterpolator(const UChar ax, const UChar ay, const UChar bx,
 {
 	m_isLinear = m_ax == m_ay && m_bx == m_by;
 }
-
-VMDInterpolator::VMDInterpolator(const VMDInterpolator& other) noexcept
-{
-	if (&other == this)
-	{
-		return;
-	}
-	m_ax = other.m_ax;
-	m_ay = other.m_ay;
-	m_bx = other.m_bx;
-	m_by = other.m_by;
-	m_isLinear = other.m_isLinear;
-}
-
 Bool VMDInterpolator::IsLinear() const
 {
 	return m_isLinear;
@@ -105,9 +91,9 @@ VMDModelControllerAnimation::VMDModelControllerAnimation(const VMDModelControlle
 	{
 		return;
 	}
-	this->frame_no = src.frame_no;
-	this->show = src.show;
-	this->IKs_Info.CopyFrom(src.IKs_Info) iferr_ignore();
+	this->m_frame_on = src.m_frame_on;
+	this->m_show = src.m_show;
+	this->m_IK_Info_array.CopyFrom(src.m_IK_Info_array) iferr_ignore();
 }
 
 VMDModelControllerAnimation::VMDModelControllerAnimation(VMDModelControllerAnimation&& src) noexcept
@@ -116,9 +102,9 @@ VMDModelControllerAnimation::VMDModelControllerAnimation(VMDModelControllerAnima
 	{
 		return;
 	}
-	this->frame_no = src.frame_no;
-	this->show = src.show;
-	this->IKs_Info = std::move(src.IKs_Info);
+	this->m_frame_on = src.m_frame_on;
+	this->m_show = src.m_show;
+	this->m_IK_Info_array = std::move(src.m_IK_Info_array);
 }
 
 VMDModelControllerAnimation& VMDModelControllerAnimation::operator=(const VMDModelControllerAnimation& src)
@@ -127,9 +113,9 @@ VMDModelControllerAnimation& VMDModelControllerAnimation::operator=(const VMDMod
 	{
 		return(*this);
 	}
-	this->frame_no = src.frame_no;
-	this->show = src.show;
-	this->IKs_Info.CopyFrom(src.IKs_Info) iferr_ignore();
+	this->m_frame_on = src.m_frame_on;
+	this->m_show = src.m_show;
+	this->m_IK_Info_array.CopyFrom(src.m_IK_Info_array) iferr_ignore();
 	return(*this);
 }
 
@@ -139,8 +125,8 @@ VMDModelControllerAnimation& VMDModelControllerAnimation::operator=(VMDModelCont
 	{
 		return(*this);
 	}
-	this->frame_no = src.frame_no;
-	this->show = src.show;
-	this->IKs_Info = std::move(src.IKs_Info);
+	this->m_frame_on = src.m_frame_on;
+	this->m_show = src.m_show;
+	this->m_IK_Info_array = std::move(src.m_IK_Info_array);
 	return(*this);
 }
