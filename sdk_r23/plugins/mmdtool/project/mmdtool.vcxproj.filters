@@ -72,6 +72,15 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_data.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller_animation.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller_animation.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -144,6 +153,15 @@
       <Filter>source\module\MMD</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller_animation.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller_animation.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
   </ItemGroup>

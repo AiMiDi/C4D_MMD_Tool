@@ -167,7 +167,7 @@ void ConfigManager::InitConfigManager()
 	try {
 		config = YAML::LoadFile(Get().m_config_path);
 	}
-	catch (YAML::BadFile) {
+	catch (YAML::BadFile&) {
 		GePrint("Failed to load the YAML file!"_s);
 		config = {};
 		for (int config_id = 10000; config_id < 10063; ++config_id)
