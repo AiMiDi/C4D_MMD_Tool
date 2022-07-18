@@ -20,6 +20,7 @@ struct VMDIkControllerAnimation
 	// Is IK enable
 	Bool	m_IK_enable;
 
+	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDIkControllerAnimation)
 	/**
 	 * \brief Constructor function
 	 * \param name IK name
@@ -27,10 +28,6 @@ struct VMDIkControllerAnimation
 	 */
 	explicit VMDIkControllerAnimation(String name = {}, const Bool enable = true) :
 		m_IK_name(std::move(name)),m_IK_enable(enable) {}
-	/**
-	 * \brief Copy constructor
-	 */
-	VMDIkControllerAnimation(const VMDIkControllerAnimation&) = default;
 	/**
 	 * \brief Move constructor
 	 */
@@ -40,15 +37,10 @@ struct VMDIkControllerAnimation
 	 */
 	~VMDIkControllerAnimation() = default;
 	/**
-	 * \brief Copy operator=
-	 * \return Result reference
-	 */
-	VMDIkControllerAnimation& operator =(const VMDIkControllerAnimation&) = default;
-	/**
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	VMDIkControllerAnimation& operator =(VMDIkControllerAnimation&&) noexcept = default;
+	VMDIkControllerAnimation& operator =(VMDIkControllerAnimation&&) noexcept;
 	/**
 	 * \brief Read from a vmd file
 	 * \param file vmd file

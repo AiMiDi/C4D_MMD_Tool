@@ -12,58 +12,97 @@ Description:	vmd file data
 #define _VMD_DATA_H_
 
 #include "pch.h"
-#include "vmd_interpolator.h"
 
-/* MMD style bone animation. */
-struct VMDBoneAnimation
-{
-	String			bone_name{};                  /* The action corresponds to the bone name. */
-	UInt32			frame_no = 0;                 /* Frame of action. */
-	Vector32		position{};                   /* The action corresponds to the bone position. */
-	Vector4d32		rotation{};                   /* The action corresponds to the rotation of the bone (quad). */
-	VMDInterpolator interpolator_position_x{};    /* X-axis displacement action interpolation. */
-	VMDInterpolator interpolator_position_y{};    /* Y-axis displacement action interpolation. */
-	VMDInterpolator interpolator_position_z{};    /* Z-axis displacement action interpolation. */
-	VMDInterpolator interpolator_rotation  {};    /* Rotation action interpolation. */
-};
-/* MMD style expression animation. */
-struct VMDMorphAnimation
-{
-	String	morph_name{};                          /* The action corresponds to the expression name. */
-	UInt32	frame_no = 0;                          /* Frame of action. */
-	Float32 weight = 0.f;                          /* Expression deformation strength. */
-};
-/* MMD风格的摄像机动画 */
-struct VMDCameraAnimation
-{
-	UInt32		frame_no = 0;                     /* Frame of action. */
-	Float32		distance = 0.f;                   /* Camera view distance. */
-	Vector32	position{};						  /* View position of the camera. */
-	Vector32	rotation{};						  /* Camera view rotation (Euler Angle of x and Y reversal) */
-	VMDInterpolator interpolator_position_x{};    /* X-axis displacement action interpolation. */
-	VMDInterpolator interpolator_position_y{};    /* Y-axis displacement action interpolation. */
-	VMDInterpolator interpolator_position_z{};    /* Z-axis displacement action interpolation. */
-	VMDInterpolator interpolator_rotation  {};    /* Rotation action interpolation. */
-	VMDInterpolator interpolator_position_d{};    /* Distance action interpolation. */
-	VMDInterpolator interpolator_position_v{};    /* View Angle motion interpolation */
-	UInt32		viewing_angle = 0;                /* View Angle. */
-	UChar		perspective = 0;                  /* 0:on, 1:off */
-};
-/* MMD style lighting animation */
-struct VMDLightAnimation
-{
-	UInt32		frame_no = 0;                                       /* Frame of action. */
-	Vector32	rgb{};                                   /* Light color. */
-	Vector32	position{};                              /* location. */
-};
-/* MMD style shadow animation */
-struct VMDShadowAnimation
-{
-	UInt32	frame_no = 0;                                           /* Frame of action. */
-	UChar	shadowType = 0;                                         /* 0:Off 1:mode1 2:mode2 */
-	Float32 distance = 0.f;                                         /* Distance. */
-};
+#include "vmd_bone_animation.h"
+#include "vmd_camera_animation.h"
+#include "vmd_light_animation.h"
+#include "vmd_model_controller_animation.h"
+#include "vmd_morph_animation.h"
+#include "vmd_shadow_animation.h"
+#include "maxon/sortedarray.h"
 
 
+/**
+ * \brief VMD animation data sort array template class
+ * \tparam T VMD data element class
+ */
+template<class T>
+class VMDAnimationSortedArray : public maxon::SortedArray<VMDAnimationSortedArray<T>, maxon::BaseArray<T>, maxon::BASESORTFLAGS::NONE, true>
+{
+public:
+	/**
+	 * \brief Less than the comparison function, which is used to sort
+	 * \return The first instance is less than the second instance and returns TRUE, and the other is FALSE
+	 */
+	static Bool LessThan(const T&, const T&);
+	/**
+	 * \brief Equal to the comparison function, which is used to sort
+	 * \return TRUE is returned when two instances are equal, and the other is FALSE
+	 */
+	static Bool IsEqual(const T&, const T&);
+	/**
+	 * \brief Read from a vmd file
+	 * \param file file vmd file
+	 * \return Successful TRUE, other FALSE.
+	 */
+	Bool ReadFormFile(BaseFile* file);
+	/**
+	 * \brief Write to vmd file
+	 * \param file file vmd file
+	 * \return Successful TRUE, other FALSE.
+	 */
+	Bool WriteToFile(BaseFile* file) const;
+};
+
+class VMDAnimation
+{
+	String m_model_name;
+	bool m_is_camera = false;
+	VMDAnimationSortedArray<VMDBoneAnimation> m_motion_frames;
+	VMDAnimationSortedArray<VMDMorphAnimation> m_morph_frames;
+	VMDAnimationSortedArray<VMDCameraAnimation> m_camera_frames;
+	VMDAnimationSortedArray<VMDLightAnimation> m_light_frames;
+	VMDAnimationSortedArray<VMDShadowAnimation> m_shadow_frames;
+	VMDAnimationSortedArray<VMDModelControllerAnimation> m_model_frames;
+public:
+	/**
+	 * \brief  Constructor function
+	 */
+	explicit VMDAnimation(String model_name = {}, bool is_camera = false);
+	/**
+	 * \brief Copy constructor
+	 */
+	VMDAnimation(const VMDAnimation&) = delete;
+	/**
+	 * \brief Move constructor
+	 */
+	VMDAnimation(VMDAnimation&&) noexcept;
+	/**
+	 * \brief Copy operator=
+	 * \return Result reference
+	 */
+	VMDAnimation& operator =(const VMDAnimation&) = delete;
+	/**
+	 * \brief Move operator=
+	 * \return Result reference
+	 */
+	VMDAnimation& operator =(VMDAnimation&&) noexcept;
+	/**
+	 * \brief Destructor function
+	 */
+	~VMDAnimation() = default;
+	/**
+	 * \brief Read from a vmd file
+	 * \param fn Optionally, passing in an empty file name allows the user to choose otherwise use the passed file name.
+	 * \return Successful TRUE, other FALSE.
+	 */
+	Bool LoadFromFile(Filename& fn);
+	/**
+	 * \brief Write to vmd file
+	 * \param fn Optionally, passing in an empty file name allows the user to choose otherwise use the passed file name.
+	 * \return Successful TRUE, other FALSE.
+	 */
+	Bool SaveToFile(Filename& fn) const;
+};
 
 #endif // !_VMD_DATA_H_

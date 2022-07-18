@@ -64,7 +64,7 @@ Bool VPDFile::LoadFromFile(const Filename& fn) {
 			lines.Append(line)iferr_return;
 		}
 	}
-	if (lines.IsEmpty() || lines[0].compare(0, 24,"Vocaloid Pose Data file") != 0)
+	if (lines.IsEmpty() || lines[0].compare(0, 24,R"(Vocaloid Pose Data file)") != 0)
 	{
 		MessageDialog("VPD File Format Error."_s);
 		return FALSE;
@@ -82,28 +82,28 @@ Bool VPDFile::LoadFromFile(const Filename& fn) {
 	const Int64 line_count = lines.GetCount();
 	for (Int64 i = 3; i < line_count; i += 4)
 	{
-		VPDBoneData& bone_post = this->m_bones.Append()iferr_return;
+		auto& [name, translate, rotation] = this->m_bones.Append()iferr_return;
 		const size_t curly_braces_pos = lines[i].find_first_of('{');
-		bone_post.name = lines[i].substr(curly_braces_pos + 1, lines[i].length() - curly_braces_pos).data();
+		name = lines[i].substr(curly_braces_pos + 1, lines[i].length() - curly_braces_pos).data();
 		size_t comma_pos = lines[i + 1].find_first_of(',');
-		bone_post.translate.x = std::stof(lines[i + 1].substr(1, comma_pos - 1).data());
+		translate.x = std::stof(lines[i + 1].substr(1, comma_pos - 1).data());
 		size_t prec_comma_pos = comma_pos + 1;
 		comma_pos = lines[i + 1].find_first_of(',', prec_comma_pos);
-		bone_post.translate.y = std::stof(lines[i + 1].substr(prec_comma_pos, comma_pos - prec_comma_pos).data());
+		translate.y = std::stof(lines[i + 1].substr(prec_comma_pos, comma_pos - prec_comma_pos).data());
 		prec_comma_pos = comma_pos + 1;
 		semicolon_pos = lines[i + 1].find_first_of(';', prec_comma_pos);
-		bone_post.translate.z = std::stof(lines[i + 1].substr(prec_comma_pos, semicolon_pos - prec_comma_pos).data());
+		translate.z = std::stof(lines[i + 1].substr(prec_comma_pos, semicolon_pos - prec_comma_pos).data());
 		comma_pos = lines[i + 2].find_first_of(',');
-		bone_post.rotation.x = std::stof(lines[i + 2].substr(1, comma_pos - 1).data());
+		rotation.x = std::stof(lines[i + 2].substr(1, comma_pos - 1).data());
 		prec_comma_pos = comma_pos + 1;
 		comma_pos = lines[i + 2].find_first_of(',', prec_comma_pos);
-		bone_post.rotation.y = std::stof(lines[i + 2].substr(prec_comma_pos, comma_pos - prec_comma_pos).data());
+		rotation.y = std::stof(lines[i + 2].substr(prec_comma_pos, comma_pos - prec_comma_pos).data());
 		prec_comma_pos = comma_pos + 1;
 		comma_pos = lines[i + 2].find_first_of(',', prec_comma_pos);
-		bone_post.rotation.z = std::stof(lines[i + 2].substr(prec_comma_pos, comma_pos - prec_comma_pos).data());
+		rotation.z = std::stof(lines[i + 2].substr(prec_comma_pos, comma_pos - prec_comma_pos).data());
 		prec_comma_pos = comma_pos + 1;
 		semicolon_pos = lines[i + 2].find_first_of(';', prec_comma_pos);
-		bone_post.rotation.w = std::stof(lines[i + 2].substr(prec_comma_pos, semicolon_pos - prec_comma_pos).data());
+		rotation.w = std::stof(lines[i + 2].substr(prec_comma_pos, semicolon_pos - prec_comma_pos).data());
 	}
 	return TRUE;
 }

@@ -196,10 +196,15 @@
     <ClCompile Include="..\..\..\..\refactoring\config_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller_animation.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_light_animation.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller_animation.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_morph_animation.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_shadow_animation.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vpd_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
@@ -223,10 +228,16 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\config_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data_element.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller_animation.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_light_animation.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller_animation.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_morph_animation.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_shadow_animation.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vpd_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
@@ -271,7 +282,6 @@
     <None Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\R20-S24\strings_en-US\c4d_strings.str">

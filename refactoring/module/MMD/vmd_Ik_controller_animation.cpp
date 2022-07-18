@@ -11,9 +11,20 @@ Description:	MMD style IK enable information animation
 #include "pch.h"
 #include "vmd_Ik_controller_animation.h"
 
-inline VMDIkControllerAnimation::VMDIkControllerAnimation(VMDIkControllerAnimation&& other) noexcept:
-	m_IK_name(std::move(other.m_IK_name)), m_IK_enable(other.m_IK_enable)
+VMDIkControllerAnimation::VMDIkControllerAnimation(VMDIkControllerAnimation&& src) noexcept:
+	m_IK_name(std::move(src.m_IK_name)), m_IK_enable(src.m_IK_enable)
 {}
+
+VMDIkControllerAnimation& VMDIkControllerAnimation::operator=(VMDIkControllerAnimation&& src) noexcept
+{
+	if (&src == this)
+	{
+		return *this;
+	}
+	m_IK_name = std::move(src.m_IK_name);
+	m_IK_enable = src.m_IK_enable;
+	return *this;
+}
 
 Bool VMDIkControllerAnimation::ReadFormVMDFile(BaseFile* const file)
 {
@@ -25,7 +36,7 @@ Bool VMDIkControllerAnimation::ReadFormVMDFile(BaseFile* const file)
 	{
 		return FALSE;
 	}
-	Char	ik_name[20]{ 0 };
+	Char ik_name[20]{ '\0'};
 	if (!file->ReadBytes(ik_name, 20))
 		return FALSE;
 	if (!file->ReadBool(&m_IK_enable))

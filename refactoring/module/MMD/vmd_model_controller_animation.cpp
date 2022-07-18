@@ -12,37 +12,20 @@ Description:	MMD style model information animation
 #include "vmd_model_controller_animation.h"
 
 
-inline VMDModelControllerAnimation::VMDModelControllerAnimation(const VMDModelControllerAnimation& src) :
-m_frame_on(src.m_frame_on), m_show(src.m_show)
-{
-	m_IK_Info_array.CopyFrom(src.m_IK_Info_array) iferr_ignore();
-}
+VMDModelControllerAnimation::VMDModelControllerAnimation(VMDModelControllerAnimation&& src) noexcept:
+VMDDataElement(src.m_frame_on),m_show(src.m_show), m_IK_Info_array(std::move(src.m_IK_Info_array)){}
 
-inline VMDModelControllerAnimation::VMDModelControllerAnimation(VMDModelControllerAnimation&& src) noexcept:
-m_frame_on(src.m_frame_on),m_show(src.m_show), m_IK_Info_array(std::move(src.m_IK_Info_array)){}
 
-inline VMDModelControllerAnimation& VMDModelControllerAnimation::operator=(const VMDModelControllerAnimation& src)
+VMDModelControllerAnimation& VMDModelControllerAnimation::operator=(VMDModelControllerAnimation&& src) noexcept
 {
 	if (&src == this)
 	{
 		return *this;
 	}
-	this->m_frame_on = src.m_frame_on;
-	this->m_show = src.m_show;
-	this->m_IK_Info_array.CopyFrom(src.m_IK_Info_array) iferr_ignore();
-	return(*this);
-}
-
-inline VMDModelControllerAnimation& VMDModelControllerAnimation::operator=(VMDModelControllerAnimation&& src) noexcept
-{
-	if (&src == this)
-	{
-		return *this;
-	}
-	this->m_frame_on = src.m_frame_on;
-	this->m_show = src.m_show;
-	this->m_IK_Info_array = std::move(src.m_IK_Info_array);
-	return(*this);
+	m_frame_on = src.m_frame_on;
+	m_show = src.m_show;
+	m_IK_Info_array = std::move(src.m_IK_Info_array);
+	return *this;
 }
 
 Bool VMDModelControllerAnimation::ReadFormFile(BaseFile* file)
@@ -51,10 +34,7 @@ Bool VMDModelControllerAnimation::ReadFormFile(BaseFile* file)
 	{
 		return FALSE;
 	};
-	if (!file)
-	{
-		return FALSE;
-	}
+	assert(file != nullptr);
 	if (!file->ReadUInt32(&m_frame_on))
 		return FALSE;
 	if (!file->ReadBool(&m_show))
@@ -77,10 +57,7 @@ Bool VMDModelControllerAnimation::WriteToFile(BaseFile* file) const
 	{
 		return FALSE;
 	};
-	if (!file)
-	{
-		return false;
-	}
+	assert(file != nullptr);
 	if (!file->WriteUInt32(m_frame_on))
 		return FALSE;
 	if (!file->WriteBool(m_show))

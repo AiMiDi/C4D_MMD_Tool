@@ -30,33 +30,46 @@ namespace filename_util
 		return FALSE;
 	}
 	/**
-	 * \brief Opens the file with the specified suffix.
+	 * \brief Open the file with the specified suffix.
 	 * \param fn Optionally, passing in an empty file name allows the user to choose otherwise to check the passed file name.
 	 * \param file Output, the open suffix matches the file object.
 	 * \param suffix Suffix to match
 	 * \return The suffix of the file name matches and the file is successfully opened and returns TRUE, otherwise it returns FALSE.
 	 */
 	inline Bool SelectSuffixImportFile(Filename& fn, BaseFile* file, const String& suffix) {
+		assert(file != nullptr);
 		if (!fn.IsPopulated() && !fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::LOAD, GeLoadString(IDS_MES_OPENFILE)))
 		{
 			return FALSE;
 		}
-		if (file == nullptr)
-		{
-			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			return FALSE;
-		}
 		if (!file->Open(fn, FILEOPEN::READ, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA))
 		{
-			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 			return FALSE;
 		}
 		if (CheckSuffix(fn, suffix))
 		{
-			GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix));
 			MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_TYPE_ERR, suffix));
+			return FALSE;
+		}
+		return TRUE;
+	}
+	/**
+	 * \brief Save the file with the specified suffix.
+	 * \param fn Optionally, passing in an empty file name allows the user to choose otherwise to check the passed file name.
+	 * \param file Output, the open suffix matches the file object.
+	 * \param suffix Suffix to match
+	 * \return The suffix of the file name matches and the file is successfully opened and returns TRUE, otherwise it returns FALSE.
+	 */
+	inline Bool SelectSuffixExportFile(Filename& fn, BaseFile* file, const String& suffix) {
+		assert(file != nullptr);
+		if (!fn.IsPopulated() && !fn.FileSelect(FILESELECTTYPE::ANYTHING, FILESELECT::SAVE, GeLoadString(IDS_MES_SAVEFILE), suffix))
+		{
+			return FALSE;
+		}
+		if (!file->Open(fn, FILEOPEN::WRITE, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA))
+		{
+			MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 			return FALSE;
 		}
 		return TRUE;

@@ -11,23 +11,66 @@ Description:	MMD style animation interpolator
 #include "pch.h"
 #include "vmd_interpolator.h"
 
-UChar VMDInterpolator::GetValue(const PartType& part) const
+VMDInterpolator::VMDInterpolator(const UChar ax, const UChar ay, const UChar bx, const UChar by):
+	m_ax(ax), m_ay(ay), m_bx(bx), m_by(by)
 {
-	switch (part)
-	{
-	case PartType::ax:
-		return this->m_ax;
-	case PartType::bx:
-		return this->m_bx;
-	case PartType::ay:
-		return this->m_ay;
-	case PartType::by:
-		return this->m_by;
-	}
-	return static_cast<UChar>(-1);
+	m_isLinear = m_ax == m_ay && m_bx == m_by;
 }
 
-Bool VMDInterpolator::ReadBoneInterpolator(BaseFile* const file)
+VMDInterpolator::VMDInterpolator(VMDInterpolator&& src) noexcept
+{
+	memmove_s(this, sizeof VMDInterpolator, &src, sizeof VMDInterpolator);
+}
+
+VMDInterpolator& VMDInterpolator::operator=(VMDInterpolator&& src) noexcept
+{
+	if (&src == this)
+	{
+		return *this;
+	}
+	memmove_s(this, sizeof VMDInterpolator, &src, sizeof VMDInterpolator);
+	return *this;
+}
+
+BaseTime VMDInterpolator::GetTimeRight() const
+{
+	return BaseTime{ static_cast<Float>(m_ax) / 127.0,127.0 };
+}
+
+Float VMDInterpolator::GetValueRight() const
+{
+	return static_cast<Float>(m_ay) / 127.0;
+}
+
+BaseTime VMDInterpolator::GetTimeLeft() const
+{
+	return BaseTime{ static_cast<Float>(m_bx - 127) / 127.0,127.0 };
+}
+
+Float VMDInterpolator::GetValueLeft() const
+{
+	return static_cast<Float>(m_by - 127)/127.0;
+}
+
+void VMDInterpolator::SetInterpolator(const SplineData* spline)
+{
+	m_ax = maxon::SafeConvert<UChar>(spline->GetKnot(0)->vTangentRight.x);
+	m_ay = maxon::SafeConvert<UChar>(spline->GetKnot(0)->vTangentRight.y);
+	m_bx = 127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.x);
+	m_by = 127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.y);
+}
+
+Bool VMDInterpolator::IsLinear() const
+{
+	return m_isLinear;
+}
+
+maxon::HashInt VMDInterpolator::GetHashCode() const
+{
+	return MAXON_HASHCODE(this->m_ax, this->m_ay, this->m_bx, this->m_by);
+}
+
+Bool VMDBoneInterpolator::ReadInterpolator(BaseFile* const file)
 {
 	if (!file->ReadUChar(&this->m_ax))
 		return false;
@@ -45,7 +88,44 @@ Bool VMDInterpolator::ReadBoneInterpolator(BaseFile* const file)
 	return true;
 }
 
-Bool VMDInterpolator::ReadCameraInterpolator(BaseFile* const file)
+Bool VMDBoneInterpolator::WriteInterpolator(BaseFile* const file) const
+{
+	if (!file->WriteUChar(m_ax))
+		return false;
+	if (!file->WriteUChar(m_ax))
+		return false;
+	if (!file->WriteUChar(m_ax))
+		return false;
+	if (!file->WriteUChar(m_ax))
+		return false;
+	if (!file->WriteUChar(m_ay))
+		return false;
+	if (!file->WriteUChar(m_ay))
+		return false;
+	if (!file->WriteUChar(m_ay))
+		return false;
+	if (!file->WriteUChar(m_ay))
+		return false;
+	if (!file->WriteUChar(m_bx))
+		return false;
+	if (!file->WriteUChar(m_bx))
+		return false;
+	if (!file->WriteUChar(m_bx))
+		return false;
+	if (!file->WriteUChar(m_bx))
+		return false;
+	if (!file->WriteUChar(m_by))
+		return false;
+	if (!file->WriteUChar(m_by))
+		return false;
+	if (!file->WriteUChar(m_by))
+		return false;
+	if (!file->WriteUChar(m_by))
+		return false;
+	return true;
+}
+
+Bool VMDCameraInterpolator::ReadInterpolator(BaseFile* const file)
 {
 	UInt32 tmp = 0;
 	if (!file->ReadUInt32(&tmp))
@@ -58,44 +138,7 @@ Bool VMDInterpolator::ReadCameraInterpolator(BaseFile* const file)
 	return true;
 }
 
-Bool VMDInterpolator::WriteBoneInterpolator(BaseFile* const file) const
-{
-	if (!file->WriteUChar(m_ax))
-		return false;
-	if (!file->WriteUChar(m_ax))
-		return false;
-	if (!file->WriteUChar(m_ax))
-		return false;
-	if (!file->WriteUChar(m_ax))
-		return false;
-	if (!file->WriteUChar(m_ay))
-		return false;
-	if (!file->WriteUChar(m_ay))
-		return false;
-	if (!file->WriteUChar(m_ay))
-		return false;
-	if (!file->WriteUChar(m_ay))
-		return false;
-	if (!file->WriteUChar(m_bx))
-		return false;
-	if (!file->WriteUChar(m_bx))
-		return false;
-	if (!file->WriteUChar(m_bx))
-		return false;
-	if (!file->WriteUChar(m_bx))
-		return false;
-	if (!file->WriteUChar(m_by))
-		return false;
-	if (!file->WriteUChar(m_by))
-		return false;
-	if (!file->WriteUChar(m_by))
-		return false;
-	if (!file->WriteUChar(m_by))
-		return false;
-	return true;
-}
-
-Bool VMDInterpolator::WriteCameraInterpolator(BaseFile* const file) const
+Bool VMDCameraInterpolator::WriteInterpolator(BaseFile* const file) const
 {
 	if (!file->WriteUChar(m_ax))
 		return false;

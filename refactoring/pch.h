@@ -6,6 +6,7 @@
 #include <fstream>
 #include <tuple>
 #include <vector>
+#include <cassert>
 
 // C4D
 #include <c4d.h>

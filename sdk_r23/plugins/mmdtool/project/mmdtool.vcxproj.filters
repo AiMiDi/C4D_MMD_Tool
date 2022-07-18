@@ -81,6 +81,21 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller_animation.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_shadow_animation.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_light_animation.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_morph_animation.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -164,6 +179,24 @@
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller_animation.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_light_animation.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_morph_animation.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_shadow_animation.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data_element.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\c4d_strings.str">
@@ -229,6 +262,5 @@
     <None Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.res">
       <Filter>res\description</Filter>
     </None>
-    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
