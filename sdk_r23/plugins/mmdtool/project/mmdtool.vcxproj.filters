@@ -37,6 +37,9 @@
     <Filter Include="source\module\tools">
       <UniqueIdentifier>{2e601a9e-e79a-4683-8ce1-7d707658f31b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="res\dialogs">
+      <UniqueIdentifier>{64a74702-1da7-4200-b4e7-d0e0e9ead4b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -49,9 +52,6 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\main.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\config_manager.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
@@ -96,6 +96,12 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_morph_animation.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp">
+      <Filter>source\module\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\cmt_tool_config_manager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -137,7 +143,7 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\config_manager.h">
+    <ClInclude Include="..\..\..\..\refactoring\cmt_tool_config_manager.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\pch.h">
@@ -196,6 +202,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data_element.h">
       <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h">
+      <Filter>source\module\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +273,15 @@
     </None>
     <None Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.res">
       <Filter>res\description</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\dialogs\DLG_CMT_TOOL.res">
+      <Filter>res\dialogs</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\dialogs\DLG_CMT_TOOL.str">
+      <Filter>res\strings_en-US</Filter>
+    </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\dialogs\DLG_CMT_TOOL.str">
+      <Filter>res\strings_zh-CN</Filter>
     </None>
   </ItemGroup>
 </Project>

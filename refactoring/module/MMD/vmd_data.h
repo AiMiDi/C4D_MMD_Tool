@@ -56,6 +56,7 @@ public:
 
 class VMDAnimation
 {
+	inline static String m_camera_name;
 	String m_model_name;
 	bool m_is_camera = false;
 	VMDAnimationSortedArray<VMDBoneAnimation> m_motion_frames;
@@ -103,6 +104,10 @@ public:
 	 * \return Successful TRUE, other FALSE.
 	 */
 	Bool SaveToFile(Filename& fn) const;
+	static void Init()
+	{
+		m_camera_name = L"カメラ・照明"_s;
+	}
 };
 
 #endif // !_VMD_DATA_H_

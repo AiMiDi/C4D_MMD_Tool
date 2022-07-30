@@ -13,6 +13,12 @@ Description:	Time Utils with hash
 
 #include "pch.h"
 
+#if API_VERSION < 23000
+namespace maxon {
+    using HashInt = UInt;
+}
+#endif
+
 //  HashTime
 class HashTime : BaseTime
 {
@@ -22,11 +28,7 @@ public:
         return MAXON_HASHCODE(this->GetNumerator(), this->GetDenominator());
     }
 
-	explicit HashTime(const BaseTime& time)
-    {
-        this->SetDenominator(time.GetDenominator());
-        this->SetNumerator(time.GetNumerator());
-    }
+    explicit HashTime(const BaseTime& time) : BaseTime(time){}
 };
 
 #endif // !_TIME_UTIL_H_

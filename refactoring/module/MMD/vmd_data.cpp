@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -10,8 +10,6 @@ Description:	vmd file data
 
 #include "pch.h"
 #include "vmd_data.h"
-
-static const String g_camera_name = R"(カメラ・照明)";
 
 template <class T>
 Bool VMDAnimationSortedArray<T>::LessThan(const T& a, const T& b)
@@ -60,7 +58,7 @@ VMDAnimation::VMDAnimation(String model_name, const bool is_camera):m_model_name
 	if(m_is_camera)
 	{
 		// カメラ・照明
-		model_name = g_camera_name;
+		model_name = m_camera_name;
 	}
 }
 
@@ -108,7 +106,7 @@ Bool VMDAnimation::LoadFromFile(Filename& fn)
 			return FALSE;
 		m_model_name = code_conversion::SJIStoUTF8(VMD_model_name);
 		// カメラ・照明
-		if (m_model_name.LexComparePart(g_camera_name, 12, 0) == 0)
+		if (m_model_name.LexComparePart(m_camera_name, 12, 0) == 0)
 		{
 			m_is_camera = true;
 		}
@@ -121,7 +119,7 @@ Bool VMDAnimation::LoadFromFile(Filename& fn)
 		if (!file->ReadBytes(VMD_model_name, 10))
 			return FALSE;
 		m_model_name = code_conversion::SJIStoUTF8(VMD_model_name);
-		if (m_model_name.LexComparePart(g_camera_name, 12, 0) == 0)
+		if (m_model_name.LexComparePart(m_camera_name, 12, 0) == 0)
 		{
 			m_is_camera = true;
 		}

@@ -193,7 +193,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\refactoring\config_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\cmt_tool_config_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.cpp" />
@@ -207,6 +207,7 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_shadow_animation.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vpd_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -226,7 +227,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\refactoring\config_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />
+    <ClInclude Include="..\..\..\..\refactoring\cmt_tool_config_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.h" />
@@ -240,6 +242,7 @@
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_shadow_animation.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vpd_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\pch.h" />
     <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />
@@ -282,6 +285,7 @@
     <None Include="..\..\..\..\res\R20-S24\description\OMMDBoneRoot.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\dialogs\DLG_CMT_TOOL.str" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\R20-S24\strings_en-US\c4d_strings.str">
@@ -314,6 +318,7 @@
     <None Include="..\..\..\..\res\R20-S24\strings_en-US\description\TMMDBone.str">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="..\..\..\..\res\R20-S24\strings_en-US\dialogs\DLG_CMT_TOOL.str" />
     <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\c4d_strings.str">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -343,6 +348,11 @@
     </None>
     <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\description\TMMDBone.str">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\res\R20-S24\dialogs\DLG_CMT_TOOL.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

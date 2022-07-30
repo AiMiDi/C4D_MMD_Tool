@@ -10,7 +10,8 @@ Description:	Entrance of the plugin
 
 #include "pch.h"
 #include "register_entity.h"
-#include "config_manager.h"
+#include "cmt_tool_config_manager.h"
+#include "module/MMD/vmd_data.h"
 
 Bool PluginStart()
 {
@@ -18,13 +19,14 @@ Bool PluginStart()
 	{
 		return FALSE;
 	}
-	ConfigManager::InitConfigManager();
+	VMDAnimation::Init();
+	CMTToolConfigManager::InitConfigManager();
 	return TRUE;
 }
 
 void PluginEnd()
 {
-	ConfigManager::SaveConfig();
+	CMTToolConfigManager::SaveConfig();
 }
 
 Bool PluginMessage(Int32 id, void* data)
