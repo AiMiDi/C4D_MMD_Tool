@@ -11,18 +11,21 @@ Description:	CMT tools main dialog.
 #include "pch.h"
 #include "cmt_tools_dialog.h"
 #include "cmt_tools_setting.h"
-#include "cmt_tool_config_manager.h"
+#include "cmt_tools_config_manager.h"
+#include "cmt_tools_manager.h"
 
 void CMTToolDialog::GetItem(const Int32 id, Float& value) const
 {
 	GetFloat(id, value);
 	CMTToolConfigManager::SetConfig(id, value);
 }
+
 void CMTToolDialog::GetItem(const Int32 id, Int32& value) const
 {
 	GetInt32(id, value);
 	CMTToolConfigManager::SetConfig(id, value);
 }
+
 void CMTToolDialog::GetItem(const Int32 id, Bool& value) const
 {
 	GetBool(id, value);
@@ -62,6 +65,10 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		cmt_tools_setting::CameraImport setting;
 		GetItem(DIG_CMT_TOOL_CAMERA_IMPORT_SIZE, setting.position_multiple);
 		GetItem(DIG_CMT_TOOL_CAMERA_IMPORT_OFFSET, setting.time_offset);
+		if(!tools_manager::ImportVMDCamera(setting))
+		{
+			
+		}
 		break;
 	}
 	case DIG_CMT_TOOL_CAMERA_CONV_BUTTON:
@@ -94,7 +101,7 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	}
 	case DIG_CMT_TOOL_MOTION_IMPORT_BUTTON:
 	{
-		cmt_tools_setting::MotionsImport setting;
+		cmt_tools_setting::MotionImport setting;
 		GetItem(DIG_CMT_TOOL_MOTION_IMPORT_SIZE, setting.position_multiple);
 		GetItem(DIG_CMT_TOOL_MOTION_IMPORT_OFFSET, setting.time_offset);
 		GetItem(DIG_CMT_TOOL_MOTION_IMPORT_MOTION, setting.import_motion);
@@ -119,7 +126,7 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	}
 	case DIG_CMT_TOOL_MOTION_EXPORT_BUTTON:
 	{
-		cmt_tools_setting::MotionsExport setting;
+		cmt_tools_setting::MotionExport setting;
 		GetItem(DIG_CMT_TOOL_MOTION_EXPORT_SIZE, setting.position_multiple);
 		GetItem(DIG_CMT_TOOL_MOTION_EXPORT_OFFSET, setting.time_offset);
 		GetItem(DIG_CMT_TOOL_MOTION_EXPORT_ROTATION_TWEEN, setting.use_rotation);

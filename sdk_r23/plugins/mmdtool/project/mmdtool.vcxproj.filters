@@ -99,7 +99,13 @@
     <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp">
       <Filter>source\module\ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\cmt_tool_config_manager.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\cmt_tools_config_manager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\cmt_tools_manager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\cmt_scene_manager.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,7 +149,7 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\cmt_tool_config_manager.h">
+    <ClInclude Include="..\..\..\..\refactoring\cmt_tools_config_manager.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\pch.h">
@@ -207,6 +213,12 @@
       <Filter>source\module\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\cmt_tools_manager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\cmt_scene_manager.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

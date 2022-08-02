@@ -34,7 +34,7 @@ namespace cmt_tools_setting
 		Int32		use_rotation = 0;
 		BaseObject* str_cam = nullptr;
 	};
-	struct MotionsImport
+	struct MotionImport
 	{
 		Float	position_multiple = 8.5;
 		Float	time_offset = 0;
@@ -45,7 +45,7 @@ namespace cmt_tools_setting
 		Bool	delete_previous_animation = true;
 		Bool	detail_report = false;
 	};
-	struct MotionsExport
+	struct MotionExport
 	{
 		Float	position_multiple = 8.5;
 		Float	time_offset = 0;

@@ -9,7 +9,7 @@ Description:	Manager of plugin configuration
 **************************************************************************/
 
 #include "pch.h"
-#include "cmt_tool_config_manager.h"
+#include "cmt_tools_config_manager.h"
 
 void CMTToolConfigManager::InitDialog(GeDialog* dlg)
 {
