@@ -15,12 +15,12 @@ Description:	tools manager
 
 namespace tools_manager 
 {
-	static bool ImportVMDCamera(const cmt_tools_setting::CameraImport&);
-	static bool ExportVMDCamera(const cmt_tools_setting::CameraExport&);
-	static bool ImportVMDMotion(const cmt_tools_setting::MotionImport&);
-	static bool ExportVMDMotion(const cmt_tools_setting::MotionExport&);
-	static bool ImportPMXModel (const cmt_tools_setting::ModelImport&);
-	static bool ExportPMXModel (const cmt_tools_setting::ModelExport&);
+	bool ImportVMDCamera(const cmt_tools_setting::CameraImport& setting);
+	bool ExportVMDCamera(const cmt_tools_setting::CameraExport& setting);
+	bool ImportVMDMotion(const cmt_tools_setting::MotionImport& setting);
+	bool ExportVMDMotion(const cmt_tools_setting::MotionExport& setting);
+	bool ImportPMXModel (const cmt_tools_setting::ModelImport&  setting);
+	bool ExportPMXModel (const cmt_tools_setting::ModelExport&  setting);
 }
 
 #endif // !_CMT_TOOLS_MANAGER_H_

@@ -19,7 +19,7 @@ Description:	vmd file data
 #include "vmd_model_controller_animation.h"
 #include "vmd_morph_animation.h"
 #include "vmd_shadow_animation.h"
-
+#include "maxon/sortedarray.h"
 
 /**
  * \brief VMD animation data sort array template class
@@ -28,17 +28,21 @@ Description:	vmd file data
 template<class T>
 class VMDAnimationArray : public maxon::BaseArray<T>
 {
+	class VMDAnimationSort : public maxon::ParallelSort<VMDAnimationSort>
+	{
+	public:
+		/**
+		 * \brief Less than the comparison function, which is used to sort
+		 * \return The first instance is less than the second instance and returns TRUE, and the other is FALSE
+		 */
+		static Bool LessThan(const T&, const T&);
+		/**
+		 * \brief Equal to the comparison function, which is used to sort
+		 * \return TRUE is returned when two instances are equal, and the other is FALSE
+		 */
+		static Bool IsEqual(const T&, const T&);
+	};
 public:
-	/**
-	 * \brief Less than the comparison function, which is used to sort
-	 * \return The first instance is less than the second instance and returns TRUE, and the other is FALSE
-	 */
-	static Bool LessThan(const T&, const T&);
-	/**
-	 * \brief Equal to the comparison function, which is used to sort
-	 * \return TRUE is returned when two instances are equal, and the other is FALSE
-	 */
-	static Bool IsEqual(const T&, const T&);
 	/**
 	 * \brief Read from a vmd file
 	 * \param file file vmd file

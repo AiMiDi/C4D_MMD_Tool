@@ -12,13 +12,13 @@ Description:	vmd file data
 #include "vmd_data.h"
 
 template <class T>
-Bool VMDAnimationArray<T>::LessThan(const T& a, const T& b)
+Bool VMDAnimationArray<T>::VMDAnimationSort::LessThan(const T& a, const T& b)
 {
 	return a < b;
 }
 
 template <class T>
-Bool VMDAnimationArray<T>::IsEqual(const T& a, const T& b)
+Bool VMDAnimationArray<T>::VMDAnimationSort::IsEqual(const T& a, const T& b)
 {
 	return a == b;
 }
@@ -39,6 +39,8 @@ Bool VMDAnimationArray<T>::ReadFormFile(BaseFile* file)
 				return FALSE;
 		}
 	}
+	VMDAnimationSort sorter;
+	sorter.Sort(*this);
 	return TRUE;
 }
 
