@@ -19,7 +19,6 @@ Description:	vmd file data
 #include "vmd_model_controller_animation.h"
 #include "vmd_morph_animation.h"
 #include "vmd_shadow_animation.h"
-#include "maxon/sortedarray.h"
 
 
 /**
@@ -27,7 +26,7 @@ Description:	vmd file data
  * \tparam T VMD data element class
  */
 template<class T>
-class VMDAnimationSortedArray : public maxon::SortedArray<VMDAnimationSortedArray<T>, maxon::BaseArray<T>, maxon::BASESORTFLAGS::NONE, true>
+class VMDAnimationArray : public maxon::BaseArray<T>
 {
 public:
 	/**
@@ -59,12 +58,12 @@ class VMDAnimation
 	inline static String m_camera_name;
 	String m_model_name;
 	bool m_is_camera = false;
-	VMDAnimationSortedArray<VMDBoneAnimation> m_motion_frames;
-	VMDAnimationSortedArray<VMDMorphAnimation> m_morph_frames;
-	VMDAnimationSortedArray<VMDCameraAnimation> m_camera_frames;
-	VMDAnimationSortedArray<VMDLightAnimation> m_light_frames;
-	VMDAnimationSortedArray<VMDShadowAnimation> m_shadow_frames;
-	VMDAnimationSortedArray<VMDModelControllerAnimation> m_model_frames;
+	VMDAnimationArray<VMDBoneAnimation> m_motion_frames;
+	VMDAnimationArray<VMDMorphAnimation> m_morph_frames;
+	VMDAnimationArray<VMDCameraAnimation> m_camera_frames;
+	VMDAnimationArray<VMDLightAnimation> m_light_frames;
+	VMDAnimationArray<VMDShadowAnimation> m_shadow_frames;
+	VMDAnimationArray<VMDModelControllerAnimation> m_model_frames;
 public:
 	/**
 	 * \brief  Constructor function

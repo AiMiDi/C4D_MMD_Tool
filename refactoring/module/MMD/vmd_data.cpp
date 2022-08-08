@@ -12,22 +12,24 @@ Description:	vmd file data
 #include "vmd_data.h"
 
 template <class T>
-Bool VMDAnimationSortedArray<T>::LessThan(const T& a, const T& b)
+Bool VMDAnimationArray<T>::LessThan(const T& a, const T& b)
 {
 	return a < b;
 }
 
 template <class T>
-Bool VMDAnimationSortedArray<T>::IsEqual(const T& a, const T& b)
+Bool VMDAnimationArray<T>::IsEqual(const T& a, const T& b)
 {
 	return a == b;
 }
 
 template <class T>
-Bool VMDAnimationSortedArray<T>::ReadFormFile(BaseFile* file)
+Bool VMDAnimationArray<T>::ReadFormFile(BaseFile* file)
 {
 	UInt32 frame_number = 0;
 	if (!file->ReadUInt32(&frame_number))
+		return FALSE;
+	iferr(this->Resize(frame_number))
 		return FALSE;
 	while (--frame_number)
 	{
@@ -41,7 +43,7 @@ Bool VMDAnimationSortedArray<T>::ReadFormFile(BaseFile* file)
 }
 
 template <class T>
-Bool VMDAnimationSortedArray<T>::WriteToFile(BaseFile* file) const
+Bool VMDAnimationArray<T>::WriteToFile(BaseFile* file) const
 {
 	auto frame_number = static_cast<UInt32>(this->GetCount());
 	if (!file->WriteUInt32(frame_number))
