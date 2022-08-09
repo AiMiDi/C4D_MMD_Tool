@@ -15,6 +15,7 @@ class PMXWeight
 {
 public:
 	virtual ~PMXWeight() = default;
+	static PMXWeight* Alloc(const int& type);
 	static void Free(PMXWeight*& m)
 	{
 		DeleteObj(m);

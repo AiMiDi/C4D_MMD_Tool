@@ -12,6 +12,28 @@ Description:	pmx weight data
 #include "pmx_weight.h"
 #include "pmx_reader.hpp"
 
+PMXWeight* PMXWeight::Alloc(const int& type)
+{
+	switch (type)
+	{
+	case 0:
+		return NewObj(PMXWeight_BDEF1).GetValue();
+	case 1:
+		return NewObj(PMXWeight_BDEF2).GetValue();
+	case 2:
+		return NewObj(PMXWeight_BDEF4).GetValue();
+	case 3:
+		return NewObj(PMXWeight_SDEF).GetValue();
+	case 4:
+		return NewObj(PMXWeight_QDEF).GetValue();
+	default:
+	{
+		DebugStop("PMXWeight::Alloc type error!"_s);
+		return nullptr;
+	}
+	}
+}
+
 inline Bool PMXWeight_BDEF1::ReadFromFile(BaseFile* file, const Char& bone_index_size) {
 	this->bone = ReadPMXIndex(file, bone_index_size);
 	return true;
