@@ -196,6 +196,7 @@
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_config_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_weight.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_data.cpp" />
@@ -232,6 +233,8 @@
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_config_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_reader.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_weight.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data.h" />
