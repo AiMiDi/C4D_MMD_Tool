@@ -64,7 +64,7 @@ public:
 	 * \param file vmd file
 	 * \return Successful TRUE, other FALSE.
 	 */
-	Bool ReadFormFile(BaseFile* file) override;
+	Bool ReadFromFile(BaseFile* file) override;
 	/**
 	 * \brief Write to vmd file
 	 * \param file vmd file

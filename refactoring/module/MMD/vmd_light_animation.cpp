@@ -33,7 +33,7 @@ VMDLightAnimation& VMDLightAnimation::operator=(VMDLightAnimation&& src) noexcep
 	return *this;
 }
 
-Bool VMDLightAnimation::ReadFormFile(BaseFile* file)
+Bool VMDLightAnimation::ReadFromFile(BaseFile* file)
 {
 	assert(file != nullptr);
 	if (!file->ReadUInt32(&m_frame_on))

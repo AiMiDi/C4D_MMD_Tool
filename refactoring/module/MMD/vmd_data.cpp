@@ -33,7 +33,7 @@ Bool VMDAnimationArray<T>::ReadFormFile(BaseFile* file)
 		return FALSE;
 	while (--frame_number)
 	{
-		if (T frame{}; frame.ReadFormFile(file))
+		if (T frame{}; frame.ReadFromFile(file))
 		{
 			iferr(this->Append(std::move(frame)))
 				return FALSE;

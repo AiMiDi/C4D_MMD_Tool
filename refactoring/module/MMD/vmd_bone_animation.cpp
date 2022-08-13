@@ -59,7 +59,7 @@ VMDBoneAnimation& VMDBoneAnimation::operator=(VMDBoneAnimation&& src) noexcept
 	return *this;
 }
 
-Bool VMDBoneAnimation::ReadFormFile(BaseFile* file)
+Bool VMDBoneAnimation::ReadFromFile(BaseFile* file)
 {
 	assert(file != nullptr);
 	Char bone_name[15]{ 0 };

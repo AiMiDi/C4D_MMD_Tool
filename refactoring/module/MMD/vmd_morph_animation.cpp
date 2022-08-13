@@ -29,7 +29,7 @@ VMDMorphAnimation& VMDMorphAnimation::operator=(VMDMorphAnimation&& src) noexcep
 	return *this;
 }
 
-Bool VMDMorphAnimation::ReadFormFile(BaseFile* file)
+Bool VMDMorphAnimation::ReadFromFile(BaseFile* file)
 {
 	assert(file != nullptr);
 	Char morph_name[15] = { '\0' };

@@ -12,14 +12,15 @@ Description:	MMD style IK enable information animation
 #define _VMD_IK_CONTROLLER_ANIMATION_
 
 #include "pch.h"
+#include "mmd_base.hpp"
 
-struct VMDIkControllerAnimation
+class VMDIkControllerAnimation final : public MMDDataBase
 {
 	// IK name
 	String	m_IK_name;
 	// Is IK enable
 	Bool	m_IK_enable;
-
+public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDIkControllerAnimation)
 	/**
 	 * \brief Constructor function
@@ -35,7 +36,7 @@ struct VMDIkControllerAnimation
 	/**
 	 * \brief Destructor function
 	 */
-	~VMDIkControllerAnimation() = default;
+	~VMDIkControllerAnimation() override = default;
 	/**
 	 * \brief Move operator=
 	 * \return Result reference
@@ -46,13 +47,13 @@ struct VMDIkControllerAnimation
 	 * \param file vmd file
 	 * \return Successful TRUE, other FALSE
 	 */
-	Bool ReadFormVMDFile(BaseFile* file);
+	Bool ReadFromFile(BaseFile* file) override;
 	/**
 	 * \brief Write to vmd file
 	 * \param file vmd file
 	 * \return Successful TRUE, other FALSE
 	 */
-	Bool WriteToVMDFile(BaseFile* file) const;
+	Bool WriteToFile(BaseFile* file) const override;
 };
 
 #endif //!_VMD_IK_CONTROLLER_ANIMATION_

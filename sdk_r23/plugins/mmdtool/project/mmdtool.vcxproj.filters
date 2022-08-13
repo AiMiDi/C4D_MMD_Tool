@@ -111,6 +111,9 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_weight.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -191,9 +194,6 @@
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller_animation.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller_animation.h">
-      <Filter>source\module\MMD</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
@@ -228,6 +228,15 @@
       <Filter>source\module\MMD</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_reader.hpp">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_base.hpp">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller_animation.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
   </ItemGroup>
@@ -304,5 +313,6 @@
     <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\dialogs\DLG_CMT_TOOL.str">
       <Filter>res\strings_zh-CN</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

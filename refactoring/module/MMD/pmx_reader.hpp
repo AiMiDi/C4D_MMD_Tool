@@ -13,84 +13,108 @@ Description:	PMX data reader
 
 #include "pch.h"
 
-inline Bool ReadPMXText(BaseFile* const file, const Char& text_encoding, String& out_string)
+
+class PMXTextReader
 {
-	// text字符串最大长度
-	Int32 text_length = 0;
-	file->ReadInt32(&text_length);
-	if (text_length > 0) {
-		if (text_encoding == 0)
-		{
-			std::basic_string<char16_t> tmp_wstring(text_length, 0);
-			file->ReadBytes(tmp_wstring.data(), text_length);
-			out_string = String(tmp_wstring.data(), text_length);
+	Char m_text_encoding;
+public:
+	explicit PMXTextReader(const Char& text_encoding):m_text_encoding(text_encoding){}
+	bool operator()(BaseFile* const file, String& out_string) const
+	{
+		// text字符串最大长度
+		Int32 text_length = 0;
+		file->ReadInt32(&text_length);
+		if (text_length > 0) {
+			if (m_text_encoding == 0)
+			{
+				std::basic_string<char16_t> tmp_wstring(text_length, 0);
+				file->ReadBytes(tmp_wstring.data(), text_length);
+				out_string = String(tmp_wstring.data(), text_length);
+				return true;
+			}
+			else if (m_text_encoding == 1)
+			{
+				std::string tmp_string(text_length, 0);
+				file->ReadBytes(tmp_string.data(), text_length);
+				out_string.SetCString(tmp_string.data(), text_length, STRINGENCODING::UTF8);
+				return true;
+			}
+		}
+		else {
+			out_string = String{};
 			return true;
 		}
-		else if (text_encoding == 1)
-		{
-			std::string tmp_string(text_length, 0);
-			file->ReadBytes(tmp_string.data(), text_length);
-			out_string.SetCString(tmp_string.data(), text_length, STRINGENCODING::UTF8);
-			return true;
-		}
-	}
-	else {
 		out_string = String{};
-		return true;
+		return false;
 	}
-	out_string = String{};
-	return false;
-}
-inline Int32 ReadPMXIndex(BaseFile* const file, const Char& index_size)
+};
+
+class PMXIndexReader
 {
-	switch (index_size) /* 3种长度不同的Index */
+	Char m_index_size;
+public:
+	explicit PMXIndexReader(const Char& index_size) :m_index_size(index_size) {}
+	Int32 operator()(BaseFile* const file) const
 	{
-	case 1:
-	{
-		Char index;
-		file->ReadChar(&index);
-		return(index);
+		// 3种长度不同的Index
+		switch (m_index_size)
+		{
+		case 1:
+		{
+			Char index;
+			file->ReadChar(&index);
+			return index;
+		}
+		case 2:
+		{
+			Int16 index;
+			file->ReadInt16(&index);
+			return index;
+		}
+		case 4:
+		{
+			Int32 index;
+			file->ReadInt32(&index);
+			return index;
+		}
+		default:
+			return -1;
+		}
 	}
-	case 2:
-	{
-		Int16 index;
-		file->ReadInt16(&index);
-		return(index);
-	}
-	case 4:
-	{
-		Int32 index;
-		file->ReadInt32(&index);
-		return(index);
-	}
-	default:
-		return(-1);
-	}
-}
-inline UInt32 ReadPMXUIndex(BaseFile* const file, const Char& index_size)
+};
+
+class PMXUIndexReader
 {
-	switch (index_size) /* 3种长度不同的Index */
+	Char m_index_size;
+public:
+	explicit PMXUIndexReader(const Char& index_size) :m_index_size(index_size) {}
+	UInt32 operator()(BaseFile* const file) const
 	{
-	case 1:
-	{
-		UChar index;
-		file->ReadUChar(&index);
-		return(index);
+		// 3种长度不同的Index
+		switch (m_index_size) 
+		{
+		case 1:
+		{
+			UChar index;
+			file->ReadUChar(&index);
+			return index;
+		}
+		case 2:
+		{
+			UInt16 index;
+			file->ReadUInt16(&index);
+			return index;
+		}
+		case 4:
+		{
+			UInt32 index;
+			file->ReadUInt32(&index);
+			return index;
+		}
+		default:
+			return(0);
+		}
 	}
-	case 2:
-	{
-		UInt16 index;
-		file->ReadUInt16(&index);
-		return(index);
-	}
-	case 4:
-	{
-		UInt32 index;
-		file->ReadUInt32(&index);
-		return(index);
-	}
-	default:
-		return(0);
-	}
-}
+};
+
 #endif // !_PMX_READER_H_

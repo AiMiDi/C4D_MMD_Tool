@@ -28,7 +28,7 @@ VMDModelControllerAnimation& VMDModelControllerAnimation::operator=(VMDModelCont
 	return *this;
 }
 
-Bool VMDModelControllerAnimation::ReadFormFile(BaseFile* file)
+Bool VMDModelControllerAnimation::ReadFromFile(BaseFile* file)
 {
 	iferr_scope_handler
 	{
@@ -45,7 +45,7 @@ Bool VMDModelControllerAnimation::ReadFormFile(BaseFile* file)
 	m_IK_Info_array.Resize(ik_info_number)iferr_return;
 	for (UInt32 ik_info_index = 0; ik_info_index < ik_info_number; ++ik_info_index)
 	{
-		if (!m_IK_Info_array[ik_info_index].ReadFormVMDFile(file))
+		if (!m_IK_Info_array[ik_info_index].ReadFromFile(file))
 			return FALSE;
 	}
 	return TRUE;
@@ -67,7 +67,7 @@ Bool VMDModelControllerAnimation::WriteToFile(BaseFile* file) const
 		return FALSE;
 	while (ikInfoCount--)
 	{
-		if (!m_IK_Info_array[ikInfoCount].WriteToVMDFile(file))
+		if (!m_IK_Info_array[ikInfoCount].WriteToFile(file))
 			return FALSE;
 	}
 	return TRUE;

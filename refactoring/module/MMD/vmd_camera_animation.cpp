@@ -63,7 +63,7 @@ VMDCameraAnimation& VMDCameraAnimation::operator=(VMDCameraAnimation&& src) noex
 	return *this;
 }
 
-Bool VMDCameraAnimation::ReadFormFile(BaseFile* file)
+Bool VMDCameraAnimation::ReadFromFile(BaseFile* file)
 {
 	assert(file != nullptr);
 	if (!file->ReadUInt32(&m_frame_on))

@@ -11,8 +11,9 @@ Description:
 #define _VMD_ELEMENT_H_
 
 #include "pch.h"
+#include "mmd_base.hpp"
 
-class VMDDataElement
+class VMDDataElement : public MMDDataBase
 {
 protected:
 	UInt32 m_frame_on = 0U;
@@ -53,19 +54,7 @@ public:
 	/**
 	 * \brief Destructor function
 	 */
-	virtual ~VMDDataElement() = default;
-	/**
-	 * \brief Read from a vmd file
-	 * \param file vmd file
-	 * \return Successful TRUE, other FALSE.
-	 */
-	virtual Bool ReadFormFile(BaseFile* file) = 0;
-	/**
-	 * \brief Write to vmd file
-	 * \param file vmd file
-	 * \return Successful TRUE, other FALSE.
-	 */
-	virtual Bool WriteToFile(BaseFile* file) const = 0;
+	~VMDDataElement() override = default;
 };
 
 

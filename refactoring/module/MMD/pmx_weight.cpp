@@ -12,20 +12,20 @@ Description:	pmx weight data
 #include "pmx_weight.h"
 #include "pmx_reader.hpp"
 
-PMXWeight* PMXWeight::Alloc(const int& type)
+PMXWeight* PMXWeight::Alloc(const int& type, const PMXIndexReader& index_reader)
 {
 	switch (type)
 	{
 	case 0:
-		return NewObj(PMXWeight_BDEF1).GetValue();
+		return NewObj(PMXWeight_BDEF1, index_reader).GetValue();
 	case 1:
-		return NewObj(PMXWeight_BDEF2).GetValue();
+		return NewObj(PMXWeight_BDEF2, index_reader).GetValue();
 	case 2:
-		return NewObj(PMXWeight_BDEF4).GetValue();
+		return NewObj(PMXWeight_BDEF4, index_reader).GetValue();
 	case 3:
-		return NewObj(PMXWeight_SDEF).GetValue();
+		return NewObj(PMXWeight_SDEF, index_reader).GetValue();
 	case 4:
-		return NewObj(PMXWeight_QDEF).GetValue();
+		return NewObj(PMXWeight_QDEF, index_reader).GetValue();
 	default:
 	{
 		DebugStop("PMXWeight::Alloc type error!"_s);
@@ -34,22 +34,22 @@ PMXWeight* PMXWeight::Alloc(const int& type)
 	}
 }
 
-inline Bool PMXWeight_BDEF1::ReadFromFile(BaseFile* file, const Char& bone_index_size) {
-	this->bone = ReadPMXIndex(file, bone_index_size);
+inline Bool PMXWeight_BDEF1::ReadFromFile(BaseFile* file) {
+	this->bone = m_index_reader(file);
 	return true;
 }
-inline Bool PMXWeight_BDEF2::ReadFromFile(BaseFile* file, const Char& bone_index_size) {
-	this->bone[0] = ReadPMXIndex(file, bone_index_size);
-	this->bone[1] = ReadPMXIndex(file, bone_index_size);
+inline Bool PMXWeight_BDEF2::ReadFromFile(BaseFile* file) {
+	this->bone[0] = m_index_reader(file);
+	this->bone[1] = m_index_reader(file);
 	if (!file->ReadFloat32(&(this->weight)))
 		return false;
 	return true;
 }
-inline Bool PMXWeight_BDEF4::ReadFromFile(BaseFile* file, const Char& bone_index_size) {
-	this->bone[0] = ReadPMXIndex(file, bone_index_size);
-	this->bone[1] = ReadPMXIndex(file, bone_index_size);
-	this->bone[2] = ReadPMXIndex(file, bone_index_size);
-	this->bone[3] = ReadPMXIndex(file, bone_index_size);
+inline Bool PMXWeight_BDEF4::ReadFromFile(BaseFile* file) {
+	this->bone[0] = m_index_reader(file);
+	this->bone[1] = m_index_reader(file);
+	this->bone[2] = m_index_reader(file);
+	this->bone[3] = m_index_reader(file);
 	if (!file->ReadFloat32(&(this->weight[0])))
 		return false;
 	if (!file->ReadFloat32(&(this->weight[1])))
@@ -60,9 +60,9 @@ inline Bool PMXWeight_BDEF4::ReadFromFile(BaseFile* file, const Char& bone_index
 		return false;
 	return true;
 }
-inline Bool PMXWeight_SDEF::ReadFromFile(BaseFile* file, const Char& bone_index_size) {
-	this->bone[0] = ReadPMXIndex(file, bone_index_size);
-	this->bone[1] = ReadPMXIndex(file, bone_index_size);
+inline Bool PMXWeight_SDEF::ReadFromFile(BaseFile* file) {
+	this->bone[0] = m_index_reader(file);
+	this->bone[1] = m_index_reader(file);
 	if (!file->ReadFloat32(&(this->weight)))
 		return false;
 	if (!file->ReadVector32(&(this->R0)))
@@ -73,11 +73,11 @@ inline Bool PMXWeight_SDEF::ReadFromFile(BaseFile* file, const Char& bone_index_
 		return false;
 	return true;
 }
-inline Bool PMXWeight_QDEF::ReadFromFile(BaseFile* file, const Char& bone_index_size) {
-	this->bone[0] = ReadPMXIndex(file, bone_index_size);
-	this->bone[1] = ReadPMXIndex(file, bone_index_size);
-	this->bone[2] = ReadPMXIndex(file, bone_index_size);
-	this->bone[3] = ReadPMXIndex(file, bone_index_size);
+inline Bool PMXWeight_QDEF::ReadFromFile(BaseFile* file) {
+	this->bone[0] = m_index_reader(file);
+	this->bone[1] = m_index_reader(file);
+	this->bone[2] = m_index_reader(file);
+	this->bone[3] = m_index_reader(file);
 	if (!file->ReadFloat32(&(this->weight[0])))
 		return false;
 	if (!file->ReadFloat32(&(this->weight[1])))

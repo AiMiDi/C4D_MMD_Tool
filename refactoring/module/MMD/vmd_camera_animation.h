@@ -16,7 +16,7 @@ Description:
 #include "vmd_data_element.h"
 #include "vmd_interpolator.h"
 
-/* MMD风格的摄像机动画 */
+/* MMD椋庢牸鐨勬憚鍍忔満鍔ㄧ敾 */
 class VMDCameraAnimation final : public VMDDataElement
 {
 	// Camera view distance
@@ -76,7 +76,7 @@ public:
 	 * \param file vmd file
 	 * \return Successful TRUE, other FALSE.
 	 */
-	Bool ReadFormFile(BaseFile* file) override;
+	Bool ReadFromFile(BaseFile* file) override;
 	/**
 	 * \brief Write to vmd file
 	 * \param file vmd file

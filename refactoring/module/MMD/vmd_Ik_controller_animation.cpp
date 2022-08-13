@@ -26,7 +26,7 @@ VMDIkControllerAnimation& VMDIkControllerAnimation::operator=(VMDIkControllerAni
 	return *this;
 }
 
-Bool VMDIkControllerAnimation::ReadFormVMDFile(BaseFile* const file)
+Bool VMDIkControllerAnimation::ReadFromFile(BaseFile* const file)
 {
 	iferr_scope_handler
 	{
@@ -45,7 +45,7 @@ Bool VMDIkControllerAnimation::ReadFormVMDFile(BaseFile* const file)
 	return TRUE;
 }
 
-Bool VMDIkControllerAnimation::WriteToVMDFile(BaseFile* const file) const
+Bool VMDIkControllerAnimation::WriteToFile(BaseFile* const file) const
 {
 	iferr_scope_handler
 	{

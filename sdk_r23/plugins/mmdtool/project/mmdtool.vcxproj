@@ -196,6 +196,7 @@
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_config_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_weight.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.cpp" />
@@ -232,8 +233,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_config_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_base.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_reader.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_weight.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.h" />
@@ -293,6 +296,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
     <None Include="..\..\..\..\res\R20-S24\strings_zh-CN\dialogs\DLG_CMT_TOOL.str" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\R20-S24\strings_en-US\c4d_strings.str">

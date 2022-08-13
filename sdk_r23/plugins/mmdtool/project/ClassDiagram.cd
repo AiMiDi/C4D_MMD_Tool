@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="VMDCameraAnimation">
+    <Position X="6.25" Y="7.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgCAAoQMgCAAAAQAAABABAAAEAAAgAAEAAQA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_camera_animation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDDataElement">
+    <Position X="14.5" Y="3.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAUAgAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_data_element.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMDDataBase">
+    <Position X="27" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAQAAAAAAAAAAAAAAAAAEEAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\mmd_base.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDCameraInterpolator">
+    <Position X="12.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_interpolator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDInterpolator">
+    <Position X="13.5" Y="10.75" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAoRAAAAgAAAAAAAAAAABAAYIAAAEYgBAAAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_interpolator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDBoneInterpolator">
+    <Position X="17.25" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_interpolator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDBoneAnimation">
+    <Position X="9.5" Y="7.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAoQEgAAABAACAAAAAABAEAAAgAAEAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_bone_animation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDLightAnimation">
+    <Position X="22.5" Y="7.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAACAAAQAAgAAAAAAAAAAAAAAEAAAhAAAAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_light_animation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDMorphAnimation">
+    <Position X="16.75" Y="7.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAQABAAAAAAAAAQAAAAAEAAAgAAAAAAQ=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_morph_animation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDShadowAnimation">
+    <Position X="19.5" Y="7.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AgAQAAAAAAAAAQAAAAAAAQAAAAAAAAAGAAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_shadow_animation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDIkControllerAnimation">
+    <Position X="29.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAQAAAAAAAAAEAAAAAAAEAAAgBAAAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_Ik_controller_animation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDModelControllerAnimation">
+    <Position X="12.75" Y="7.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAQAAAIAAAAAAAAAAAAAEAACwAAAAAAA=</HashCode>
+      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_model_controller_animation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

@@ -29,7 +29,7 @@ VMDShadowAnimation& VMDShadowAnimation::operator=(VMDShadowAnimation&& src) noex
 	return *this;
 }
 
-Bool VMDShadowAnimation::ReadFormFile(BaseFile* file)
+Bool VMDShadowAnimation::ReadFromFile(BaseFile* file)
 {
 	assert(file != nullptr);
 	if (!file->ReadUInt32(&m_frame_on))
