@@ -32,7 +32,7 @@ public:
 				out_string = String(tmp_wstring.data(), text_length);
 				return true;
 			}
-			else if (m_text_encoding == 1)
+			if (m_text_encoding == 1)
 			{
 				std::string tmp_string(text_length, 0);
 				file->ReadBytes(tmp_string.data(), text_length);

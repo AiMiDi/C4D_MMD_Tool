@@ -12,7 +12,7 @@ Description:	pmx weight data
 #include "pmx_weight.h"
 #include "pmx_reader.hpp"
 
-PMXWeight* PMXWeight::Alloc(const int& type, const PMXIndexReader& index_reader)
+PMXWeight* PMXWeight::Alloc(const Char& type, const PMXIndexReader& index_reader)
 {
 	switch (type)
 	{

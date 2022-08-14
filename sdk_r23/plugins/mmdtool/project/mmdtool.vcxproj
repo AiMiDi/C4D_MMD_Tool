@@ -229,12 +229,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="pmx_model_info_data.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_config_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_base.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_model_info_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_reader.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_weight.h" />

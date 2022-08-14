@@ -11,9 +11,10 @@ Description:	pmx vertex data
 #define _PMX_VERTEX_DATA_H_
 
 #include "mmd_base.hpp"
+#include "pmx_model_info_data.h"
 #include "pmx_weight.h"
 
-class PMXVertexData : public MMDDataBase
+class PMXVertexData final : public MMDDataBase
 {
 	// The position
 	Vector32 m_position{};
@@ -37,8 +38,9 @@ class PMXVertexData : public MMDDataBase
 	std::unique_ptr<PMXWeight> m_weight_deform;
 	// Edge magnification 
 	Float32 m_edge_scale = 0.f;
+	const PMXModelInfoData& m_model_info;
 public:
-	PMXVertexData() = default;
+	PMXVertexData(const PMXModelInfoData& model_info) :m_model_info(model_info) {}
 	~PMXVertexData() override = default;
 
 	Bool ReadFromFile(BaseFile* file) override;

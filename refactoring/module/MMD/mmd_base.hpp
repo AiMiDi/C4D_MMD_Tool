@@ -32,7 +32,7 @@ public:
 	*/
 	virtual Bool ReadFromFile(BaseFile* file)
 	{
-		DebugStop("Not overloaded MMDDataBase: : ReadFromFile ()"_s);
+		DebugStop("Not overloaded MMDDataBase::ReadFromFile()"_s);
 		return false;
 	}
 	/**
@@ -42,7 +42,7 @@ public:
 	 */
 	virtual Bool WriteToFile(BaseFile* file) const
 	{
-		DebugStop("Not overloaded MMDDataBase::WriteToFile ()"_s);
+		DebugStop("Not overloaded MMDDataBase::WriteToFile()"_s);
 		return false;
 	}
 };
