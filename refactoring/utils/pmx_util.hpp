@@ -3,16 +3,15 @@
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			walter white/Aimidi
 Date:			2022/8/10
-File:			pmx_reader.hpp
-Description:	PMX data reader
+File:			pmx_util.hpp
+Description:	PMX util
 
 **************************************************************************/
 
-#ifndef _PMX_READER_H_
-#define _PMX_READER_H_
+#ifndef _PMX_UTIL_H_
+#define _PMX_UTIL_H_
 
 #include "pch.h"
-
 
 class PMXTextReader
 {
@@ -54,7 +53,7 @@ class PMXIndexReader
 	Char m_index_size;
 public:
 	explicit PMXIndexReader(const Char& index_size) :m_index_size(index_size) {}
-	Int32 operator()(BaseFile* const file) const
+	bool operator()(BaseFile* const file, Int32& out_index) const
 	{
 		// 3种长度不同的Index
 		switch (m_index_size)
@@ -63,23 +62,28 @@ public:
 		{
 			Char index;
 			file->ReadChar(&index);
-			return index;
+			out_index = index == -1 ? -1 : static_cast<UChar>(index);
+			break;
 		}
 		case 2:
 		{
 			Int16 index;
 			file->ReadInt16(&index);
-			return index;
+			out_index = index;
+			break;
 		}
 		case 4:
 		{
 			Int32 index;
 			file->ReadInt32(&index);
-			return index;
+			out_index = index;
+			break;
 		}
 		default:
-			return -1;
+			out_index = -1;
+			return false;
 		}
+		return true;
 	}
 };
 
@@ -88,7 +92,7 @@ class PMXUIndexReader
 	Char m_index_size;
 public:
 	explicit PMXUIndexReader(const Char& index_size) :m_index_size(index_size) {}
-	UInt32 operator()(BaseFile* const file) const
+	bool operator()(BaseFile* const file, UInt32& out_index) const
 	{
 		// 3种长度不同的Index
 		switch (m_index_size) 
@@ -97,24 +101,30 @@ public:
 		{
 			UChar index;
 			file->ReadUChar(&index);
-			return index;
+			out_index = index;
+			break;
 		}
 		case 2:
 		{
 			UInt16 index;
 			file->ReadUInt16(&index);
-			return index;
+			out_index = index;
+			break;
 		}
 		case 4:
 		{
 			UInt32 index;
 			file->ReadUInt32(&index);
-			return index;
+			out_index = index;
+			break;
 		}
 		default:
-			return(0);
+			out_index = 0;
+			return false;
 		}
+		return true;
 	}
 };
 
-#endif // !_PMX_READER_H_
+#endif // !_PMX_UTIL_H_
+

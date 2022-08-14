@@ -13,8 +13,6 @@ Description:	pmx file data
 
 #include "pch.h"
 
-
-
 struct PMXDataCount
 {
 	Int32 vertex_data_count = 0;
@@ -27,6 +25,5 @@ struct PMXDataCount
 	Int32 rigid_body_data_count = 0;
 	Int32 joint_data_count = 0;
 };
-
 
 #endif // !_PMX_DATA_H_

@@ -21,7 +21,7 @@ class PMXVertexData final : public MMDDataBase
 	// The normal vector
 	Vector32 m_normal{};
 	// The UV coordinates. 
-	maxon::Vector2d32 m_UV = maxon::Vector2d32();          
+	maxon::Vector2d32 m_UV{};          
 	// Skip the extra Vector4d32[N]  16*N
 	enum
 	{
@@ -35,14 +35,13 @@ class PMXVertexData final : public MMDDataBase
 	// Variant weight type, 0=BDEF1, 1=BDEF2, 2=BDEF4, 3=SDEF, 4=QDEF
 	Char m_weight_deform_type = DEFAULT;
 	// Variant weight 
-	std::unique_ptr<PMXWeight> m_weight_deform;
+	std::unique_ptr<PMXWeight> m_weight_deform{nullptr};
 	// Edge magnification 
 	Float32 m_edge_scale = 0.f;
 	const PMXModelInfoData& m_model_info;
 public:
-	PMXVertexData(const PMXModelInfoData& model_info) :m_model_info(model_info) {}
+	explicit PMXVertexData(const PMXModelInfoData& model_info) :m_model_info(model_info) {}
 	~PMXVertexData() override = default;
-
 	Bool ReadFromFile(BaseFile* file) override;
 };
 #endif // !PMX_VERTEX_DATA

@@ -20,7 +20,7 @@ Bool PluginStart()
 	{
 		return FALSE;
 	}
-	VMDAnimation::Init();
+	VMDData::Init();
 	CMTToolConfigManager::InitConfigManager();
 	return TRUE;
 }

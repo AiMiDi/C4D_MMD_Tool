@@ -10,7 +10,6 @@ Description:	pmx weight data
 
 #include "pch.h"
 #include "pmx_weight.h"
-#include "pmx_reader.hpp"
 
 PMXWeight* PMXWeight::Alloc(const Char& type, const PMXIndexReader& index_reader)
 {
@@ -34,57 +33,75 @@ PMXWeight* PMXWeight::Alloc(const Char& type, const PMXIndexReader& index_reader
 	}
 }
 
-inline Bool PMXWeight_BDEF1::ReadFromFile(BaseFile* file) {
-	this->bone = m_index_reader(file);
-	return true;
+inline Bool PMXWeight_BDEF1::ReadFromFile(BaseFile* file)
+{
+	if(!m_bone_index_reader(file, bone))
+		return FALSE;
+	return TRUE;
 }
-inline Bool PMXWeight_BDEF2::ReadFromFile(BaseFile* file) {
-	this->bone[0] = m_index_reader(file);
-	this->bone[1] = m_index_reader(file);
+inline Bool PMXWeight_BDEF2::ReadFromFile(BaseFile* file)
+{
+	if(!m_bone_index_reader(file, bone[0]))
+		return FALSE;
+	if(!m_bone_index_reader(file, bone[1]))
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight)))
-		return false;
-	return true;
+		return FALSE;
+	return TRUE;
 }
-inline Bool PMXWeight_BDEF4::ReadFromFile(BaseFile* file) {
-	this->bone[0] = m_index_reader(file);
-	this->bone[1] = m_index_reader(file);
-	this->bone[2] = m_index_reader(file);
-	this->bone[3] = m_index_reader(file);
+inline Bool PMXWeight_BDEF4::ReadFromFile(BaseFile* file)
+{
+	if(!m_bone_index_reader(file, bone[0]))
+		return FALSE;
+	if(!m_bone_index_reader(file, bone[1]))
+		return FALSE;
+	if(!m_bone_index_reader(file, bone[2]))
+		return FALSE;
+	if(!m_bone_index_reader(file, bone[3]))
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight[0])))
-		return false;
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight[1])))
-		return false;
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight[2])))
-		return false;
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight[3])))
-		return false;
-	return true;
+		return FALSE;
+	return TRUE;
 }
-inline Bool PMXWeight_SDEF::ReadFromFile(BaseFile* file) {
-	this->bone[0] = m_index_reader(file);
-	this->bone[1] = m_index_reader(file);
+inline Bool PMXWeight_SDEF::ReadFromFile(BaseFile* file)
+{
+	if(!m_bone_index_reader(file, bone[0]))
+		return FALSE;
+	if(!m_bone_index_reader(file, bone[1]))
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight)))
-		return false;
+		return FALSE;
 	if (!file->ReadVector32(&(this->R0)))
-		return false;
+		return FALSE;
 	if (!file->ReadVector32(&(this->R1)))
-		return false;
+		return FALSE;
 	if (!file->ReadVector32(&(this->C)))
-		return false;
-	return true;
+		return FALSE;
+	return TRUE;
 }
-inline Bool PMXWeight_QDEF::ReadFromFile(BaseFile* file) {
-	this->bone[0] = m_index_reader(file);
-	this->bone[1] = m_index_reader(file);
-	this->bone[2] = m_index_reader(file);
-	this->bone[3] = m_index_reader(file);
+inline Bool PMXWeight_QDEF::ReadFromFile(BaseFile* file)
+{
+	 if(!m_bone_index_reader(file,bone[0]))
+		return FALSE;
+	 if(!m_bone_index_reader(file,bone[1]))
+		return FALSE;
+	 if(!m_bone_index_reader(file,bone[2]))
+		return FALSE;
+	 if(!m_bone_index_reader(file,bone[3]))
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight[0])))
-		return false;
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight[1])))
-		return false;
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight[2])))
-		return false;
+		return FALSE;
 	if (!file->ReadFloat32(&(this->weight[3])))
-		return false;
-	return true;
+		return FALSE;
+	return TRUE;
 }

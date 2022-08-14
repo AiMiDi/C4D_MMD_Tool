@@ -11,21 +11,16 @@ Description:	pmx weight data
 #ifndef _PMX_WEIGHT_H_
 #define _PMX_WEIGHT_H_
 #include "mmd_base.hpp"
-#include "pmx_reader.hpp"
+#include "utils/pmx_util.hpp"
 
 class PMXWeight : public MMDDataBase
 {
 protected:
-	const PMXIndexReader& m_index_reader;
-	explicit PMXWeight(const PMXIndexReader& index_reader) : m_index_reader(index_reader) {}
-	~PMXWeight() override = default;
+	const PMXIndexReader& m_bone_index_reader;
+	explicit PMXWeight(const PMXIndexReader& index_reader) : m_bone_index_reader(index_reader) {}
 public:
+	~PMXWeight() override = default;
 	static PMXWeight* Alloc(const Char& type, const PMXIndexReader& index_reader);
-	static void Free(PMXWeight*& m)
-	{
-		DeleteObj(m);
-		m = nullptr;
-	}
 };
 /**
  * \brief Weight type BDEF1 (weight==1)
@@ -38,8 +33,6 @@ public:
 	explicit PMXWeight_BDEF1(const PMXIndexReader& index_reader): PMXWeight(index_reader){}
 	~PMXWeight_BDEF1() override = default;
 	Bool ReadFromFile(BaseFile* file) override;
-	
-
 };
 /**
  * \brief Weight type BDEF2 (Bone2 weight = 1 - Bone1 weight)
@@ -54,7 +47,6 @@ public:
 	explicit PMXWeight_BDEF2(const PMXIndexReader& index_reader) : PMXWeight(index_reader) {}
 	~PMXWeight_BDEF2() override = default;
 	Bool ReadFromFile(BaseFile* file) override;
-                              
 };
 /**
  * \brief Weight type BDEF4 (The sum of four weights is not guaranteed to equal 1)
@@ -81,7 +73,7 @@ class PMXWeight_SDEF final : public PMXWeight
 	// Bone 1 weight
 	Float32		weight = 0.f;
 	// R0,R1,C
-	Vector32	R0{}, R1 = {}, C{};
+	Vector32	R0{}, R1{}, C{};
 public:
 	explicit PMXWeight_SDEF(const PMXIndexReader& index_reader) : PMXWeight(index_reader) {}
 	~PMXWeight_SDEF() override = default;
@@ -101,7 +93,6 @@ public:
 	explicit PMXWeight_QDEF(const PMXIndexReader& index_reader) : PMXWeight(index_reader) {}
 	~PMXWeight_QDEF() override = default;
 	Bool ReadFromFile(BaseFile* file) override;
-
 };
 
 #endif

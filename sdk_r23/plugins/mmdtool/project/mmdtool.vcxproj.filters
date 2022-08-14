@@ -117,6 +117,9 @@
     <ClCompile Include="pmx_model_info_data.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\PMXMaterialData.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -230,9 +233,6 @@
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_weight.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_reader.hpp">
-      <Filter>source\module\MMD</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
@@ -243,6 +243,12 @@
       <Filter>source\module\MMD</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_model_info_data.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\PMXMaterialData.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
   </ItemGroup>

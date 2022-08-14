@@ -13,7 +13,7 @@ Description:	pmx model information data
 
 #include "pch.h"
 #include "mmd_base.hpp"
-#include "pmx_reader.hpp"
+#include "utils/pmx_util.hpp"
 
 /**
  * \brief PMX model global information struct
@@ -21,19 +21,19 @@ Description:	pmx model information data
 class PMXModelInfoData final : public MMDDataBase
 {
 	// String encoding. 0 is UTF16LE encoding and 1 is UTF8 encoding
-	Char	text_encoding = 0;
+	Char	m_text_encoding = 0;
 	// Vertex index size
-	Char	vertex_index_size = 0;
-	//  Texture index size
-	Char	texture_index_size = 0;
+	Char	m_vertex_index_size = 0;
+	// Texture index size
+	Char	m_texture_index_size = 0;
 	// Material index size 
-	Char	material_index_size = 0;
-	// Bone index size 
-	Char	bone_index_size = 0;
+	Char	m_material_index_size = 0;
+	// Bone index size
+	Char	m_bone_index_size = 0;
 	// Morph index size 
-	Char	morph_index_size = 0;
+	Char	m_morph_index_size = 0;
 	// Rigid-body index size 
-	Char	rigidbody_index_size = 0;
+	Char	m_rigidbody_index_size = 0;
 public:
 	PMXTextReader m_text_reader;
 	PMXUIndexReader m_vertex_index_reader;

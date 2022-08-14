@@ -57,7 +57,7 @@ public:
 	Bool WriteToFile(BaseFile* file) const;
 };
 
-class VMDAnimation
+class VMDData
 {
 	inline static String m_camera_name;
 	String m_model_name;
@@ -72,29 +72,29 @@ public:
 	/**
 	 * \brief  Constructor function
 	 */
-	explicit VMDAnimation(String model_name = {}, bool is_camera = false);
+	explicit VMDData(String model_name = {}, bool is_camera = false);
 	/**
 	 * \brief Copy constructor
 	 */
-	VMDAnimation(const VMDAnimation&) = delete;
+	VMDData(const VMDData&) = delete;
 	/**
 	 * \brief Move constructor
 	 */
-	VMDAnimation(VMDAnimation&&) noexcept;
+	VMDData(VMDData&&) noexcept;
 	/**
 	 * \brief Copy operator=
 	 * \return Result reference
 	 */
-	VMDAnimation& operator =(const VMDAnimation&) = delete;
+	VMDData& operator =(const VMDData&) = delete;
 	/**
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	VMDAnimation& operator =(VMDAnimation&&) noexcept;
+	VMDData& operator =(VMDData&&) noexcept;
 	/**
 	 * \brief Destructor function
 	 */
-	~VMDAnimation() = default;
+	~VMDData() = default;
 	/**
 	 * \brief Read from a vmd file
 	 * \param fn Optionally, passing in an empty file name allows the user to choose otherwise use the passed file name.

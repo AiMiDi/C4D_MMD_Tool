@@ -17,7 +17,7 @@ namespace tools_manager
 	bool ImportVMDCamera(const cmt_tools_setting::CameraImport& setting)
 	{
 		Filename vmd_fn;
-		VMDAnimation vmd_animation;
+		VMDData vmd_animation;
 		vmd_animation.LoadFromFile(vmd_fn);
 		return true;
 	}
@@ -25,7 +25,7 @@ namespace tools_manager
 	bool ExportVMDCamera(const cmt_tools_setting::CameraExport& setting)
 	{
 		Filename vmd_fn;
-		VMDAnimation vmd_animation;
+		VMDData vmd_animation;
 		vmd_animation.SaveToFile(vmd_fn);
 		return true;
 	}

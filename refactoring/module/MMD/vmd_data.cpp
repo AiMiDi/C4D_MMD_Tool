@@ -57,7 +57,7 @@ Bool VMDAnimationArray<T>::WriteToFile(BaseFile* file) const
 	return TRUE;
 }
 
-VMDAnimation::VMDAnimation(String model_name, const bool is_camera):m_model_name(std::move(model_name)), m_is_camera(is_camera)
+VMDData::VMDData(String model_name, const bool is_camera):m_model_name(std::move(model_name)), m_is_camera(is_camera)
 {
 	if(m_is_camera)
 	{
@@ -66,7 +66,7 @@ VMDAnimation::VMDAnimation(String model_name, const bool is_camera):m_model_name
 	}
 }
 
-VMDAnimation::VMDAnimation(VMDAnimation&& src) noexcept:
+VMDData::VMDData(VMDData&& src) noexcept:
 	m_motion_frames(std::move(src.m_motion_frames)),
 	m_morph_frames(std::move(src.m_morph_frames)),
 	m_camera_frames(std::move(src.m_camera_frames)),
@@ -75,7 +75,7 @@ VMDAnimation::VMDAnimation(VMDAnimation&& src) noexcept:
 	m_model_frames(std::move(src.m_model_frames))
 {}
 
-VMDAnimation& VMDAnimation::operator=(VMDAnimation&& src) noexcept
+VMDData& VMDData::operator=(VMDData&& src) noexcept
 {
 	if (&src == this)
 	{
@@ -90,7 +90,7 @@ VMDAnimation& VMDAnimation::operator=(VMDAnimation&& src) noexcept
 	return *this;
 }
 
-Bool VMDAnimation::LoadFromFile(Filename& fn)
+Bool VMDData::LoadFromFile(Filename& fn)
 {
 	iferr_scope_handler{
 #ifdef _DEBUG
@@ -151,7 +151,7 @@ Bool VMDAnimation::LoadFromFile(Filename& fn)
 	return TRUE;
 }
 
-Bool VMDAnimation::SaveToFile(Filename& fn) const
+Bool VMDData::SaveToFile(Filename& fn) const
 {
 	iferr_scope_handler{
 #ifdef _DEBUG
