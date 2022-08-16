@@ -5,4 +5,5 @@
 	path = dependency/bullet3
 	url = https://github.com/bulletphysics/bullet3.git
 [submodule "dependency/libiconv"]
-	url = https://github.com/AiMiDi/libiconv_cmake.git
+	path = dependency/libiconv
+	url =https://github.com/AiMiDi/libiconv_cmake.git
