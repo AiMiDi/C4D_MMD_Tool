@@ -1,0 +1,3 @@
+[submodule "dependency/libiconv"]
+	path = dependency/libiconv
+	url = https://github.com/AiMiDi/libiconv_cmake.git
