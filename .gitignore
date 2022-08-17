@@ -14,3 +14,5 @@ sdk_s26/plugins/project/.vs/
 sdk_s26/plugins/project/_obj/
 
 *.xdl64
+
+.vs/
