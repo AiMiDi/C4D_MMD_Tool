@@ -72,17 +72,19 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>../../../../dependency/install/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>../../../../dependency/install/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../refactoring;../../../../lib/yaml_cpp/include;../../../../lib/bullet/include;../../../../lib/libiconv-1.16/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -92,7 +94,7 @@
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>..\..\..\..\lib\libiconv-1.16\lib\Debug\iconv.lib;..\..\..\..\lib\yaml_cpp\lib\Debug\yaml-cppd.lib;..\..\..\..\lib\bullet\lib\BulletDynamics_vs2010_x64_debug.lib;..\..\..\..\lib\bullet\lib\BulletCollision_vs2010_x64_debug.lib;..\..\..\..\lib\bullet\lib\LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>iconv_Debug.lib;yaml-cpp_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -103,8 +105,8 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../refactoring;../../../../lib/yaml_cpp/include;../../../../lib/bullet/include;../../../../lib/libiconv-1.16/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1; BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -112,7 +114,7 @@
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>..\..\..\..\lib\libiconv-1.16\lib\Release\iconv.lib;..\..\..\..\lib\yaml_cpp\lib\Release\yaml-cpp.lib;..\..\..\..\lib\bullet\lib\LinearMath_vs2010_x64_release.lib;..\..\..\..\lib\bullet\lib\BulletCollision_vs2010_x64_release.lib;..\..\..\..\lib\bullet\lib\BulletDynamics_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>iconv.lib;yaml-cpp.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -197,6 +199,7 @@
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\PMXMaterialData.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_model_info_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_weight.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.cpp" />
@@ -230,7 +233,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="pmx_model_info_data.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />

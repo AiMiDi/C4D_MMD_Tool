@@ -114,10 +114,10 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
-    <ClCompile Include="pmx_model_info_data.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\PMXMaterialData.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\PMXMaterialData.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_model_info_data.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
   </ItemGroup>

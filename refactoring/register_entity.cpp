@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "register_entity.h"
 #include "module/ui/cmt_tools_dialog.h"
 #include "module/tools/vmd_loader_data.h"

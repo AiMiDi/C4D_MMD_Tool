@@ -17,7 +17,15 @@ class PMXTextReader
 {
 	Char m_text_encoding;
 public:
-	explicit PMXTextReader(const Char& text_encoding):m_text_encoding(text_encoding){}
+	explicit PMXTextReader(const Char& text_encoding = 0):m_text_encoding(text_encoding)
+	{
+		assert(text_encoding == 0 || text_encoding == 1);
+	}
+	void SetTextEncoding(const Char& text_encoding = 0)
+	{
+		assert(text_encoding == 0 || text_encoding == 1);
+		m_text_encoding = text_encoding;
+	}
 	bool operator()(BaseFile* const file, String& out_string) const
 	{
 		// text字符串最大长度
@@ -52,7 +60,15 @@ class PMXIndexReader
 {
 	Char m_index_size;
 public:
-	explicit PMXIndexReader(const Char& index_size) :m_index_size(index_size) {}
+	explicit PMXIndexReader(const Char& index_size = 4) :m_index_size(index_size)
+	{
+		assert(m_index_size == 1 || m_index_size == 2 || m_index_size == 4);
+	}
+	void SetIndexSize(const Char& index_size = 4)
+	{
+		assert(m_index_size == 1 || m_index_size == 2 || m_index_size == 4);
+		m_index_size = index_size;
+	}
 	bool operator()(BaseFile* const file, Int32& out_index) const
 	{
 		// 3种长度不同的Index
@@ -91,7 +107,15 @@ class PMXUIndexReader
 {
 	Char m_index_size;
 public:
-	explicit PMXUIndexReader(const Char& index_size) :m_index_size(index_size) {}
+	explicit PMXUIndexReader(const Char& index_size = 4) : m_index_size(index_size)
+	{
+		assert(m_index_size == 1 || m_index_size == 2 || m_index_size == 4);
+	}
+	void SetIndexSize(const Char& index_size = 4)
+	{
+		assert(m_index_size == 1 || m_index_size == 2 || m_index_size == 4);
+		m_index_size = index_size;
+	}
 	bool operator()(BaseFile* const file, UInt32& out_index) const
 	{
 		// 3种长度不同的Index

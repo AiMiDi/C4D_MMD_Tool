@@ -37,7 +37,7 @@ public:
 			char* input_men = Get().m_buffer.data();
 			input_string.GetCString(input_men, static_cast<Int>(input_length), STRINGENCODING::UTF8);
 			char* output_buffer = output_string.data();
-			char* input_buffer = input_men;
+			const char* input_buffer = input_men;
 			output_length = libiconv(Get().m_JIStoU8_conv, &input_buffer, &input_length, &output_buffer, &output_length);
 			output_string.resize(output_length, 0);
 			return output_string;
@@ -58,7 +58,7 @@ public:
 			Get().m_buffer.reserve(input_length);
 			output_string.resize(output_length);
 			char* output_buffer = output_string.data();
-			char* input_buffer = input_string.data();
+			const char* input_buffer = input_string.data();
 			output_length = libiconv(Get().m_JIStoU8_conv, &input_buffer, &input_length, &output_buffer, &output_length);
 			output_string.resize(output_length, 0);
 			return output_string;
@@ -95,7 +95,7 @@ public:
 			Get().m_buffer.reserve(output_length);
 			char* output_men = Get().m_buffer.data();
 			char* output_buffer = output_men;
-			char* input_buffer = input_string;
+			const char* input_buffer = input_string;
 			if (output_length = libiconv(Get().m_U8toJIS_conv, &input_buffer, &input_length, &output_buffer, &output_length); output_length == static_cast<size_t>(-1))
 			{
 				return output_string;
@@ -119,7 +119,7 @@ public:
 			Get().m_buffer.reserve(output_length);
 			char* output_men = Get().m_buffer.data();
 			char* output_buffer = output_men;
-			char* input_buffer = input_string.data();
+			const char* input_buffer = input_string.data();
 			if (output_length = libiconv(Get().m_U8toJIS_conv, &input_buffer, &input_length, &output_buffer, &output_length); output_length == static_cast<size_t>(-1))
 			{
 				return output_string;

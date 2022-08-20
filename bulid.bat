@@ -1,3 +1,4 @@
+./init.bat
 "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\devenv.com" sdk_r20\plugins\project\plugins.sln /Build "Release"
 "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\devenv.com" sdk_r21\plugins\project\plugins.sln /Build "Release"
 "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\devenv.com" sdk_s22\plugins\project\plugins.sln /Build "Release"
