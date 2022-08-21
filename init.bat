@@ -1,3 +1,4 @@
+git submodule update --init --recursive
 cd ./dependency/bullet3 
 mkdir build 
 cd build
