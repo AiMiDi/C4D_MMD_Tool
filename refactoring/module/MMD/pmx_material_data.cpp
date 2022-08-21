@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "PMXMaterialData.h"
+#include "pmx_material_data.h"
 
 Bool PMXMaterialData::ReadFromFile(BaseFile* file)
 {
