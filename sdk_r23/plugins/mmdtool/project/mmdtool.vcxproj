@@ -99,6 +99,10 @@
     <Manifest>
       <AdditionalManifestFiles />
     </Manifest>
+    <PreBuildEvent>
+      <Command>cd ../../../..
+./init.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -119,6 +123,10 @@
     <Manifest>
       <AdditionalManifestFiles />
     </Manifest>
+    <PreBuildEvent>
+      <Command>cd ../../../..
+./init.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\cinema.framework\project\cinema.framework.vcxproj">

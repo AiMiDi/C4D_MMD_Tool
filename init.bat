@@ -2,7 +2,7 @@ git submodule update --init --recursive
 cd ./dependency/bullet3 
 mkdir build 
 cd build
-cmake ..  -D INSTALL_LIBS=ON -D USE_DOUBLE_PRECISION
+cmake ..  -D INSTALL_LIBS=ON -D USE_DOUBLE_PRECISION=ON
 cmake --build . --config Debug -j
 cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j
