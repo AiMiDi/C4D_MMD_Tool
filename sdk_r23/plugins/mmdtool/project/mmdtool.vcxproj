@@ -206,6 +206,7 @@
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_config_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_material_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_bone_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_model_info_data.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_config_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_base.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_material_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_bone_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_model_info_data.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_vertex_data.h" />
