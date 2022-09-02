@@ -19,7 +19,7 @@ VMDCameraAnimation::VMDCameraAnimation(const UInt32 frame_no, const Float32 dist
                                        VMDCameraInterpolator interpolator_rotation,
                                        VMDCameraInterpolator interpolator_position_d,
                                        VMDCameraInterpolator interpolator_position_v) :
-	VMDDataElement(frame_no),
+	VMDAnimationElement(frame_no),
 	m_distance(distance),
 	m_position(position),
 	m_rotation(rotation),
@@ -31,7 +31,7 @@ VMDCameraAnimation::VMDCameraAnimation(const UInt32 frame_no, const Float32 dist
 	m_interpolator_position_v(std::move(interpolator_position_v)){}
 
 VMDCameraAnimation::VMDCameraAnimation(VMDCameraAnimation&& src) noexcept :
-	VMDDataElement(src.m_frame_on),
+	VMDAnimationElement(src.m_frame_num),
 	m_distance(src.m_distance),
 	m_interpolator_position_x(std::move(src.m_interpolator_position_x)),
 	m_interpolator_position_y(std::move(src.m_interpolator_position_y)),
@@ -50,7 +50,7 @@ VMDCameraAnimation& VMDCameraAnimation::operator=(VMDCameraAnimation&& src) noex
 	{
 		return *this;
 	}
-	m_frame_on = src.m_frame_on;
+	m_frame_num = src.m_frame_num;
 	m_distance = src.m_distance;
 	memmove_s(&m_position, sizeof Vector32, &src.m_position, sizeof Vector32);
 	memmove_s(&m_rotation, sizeof Vector32, &src.m_rotation, sizeof Vector32);
@@ -66,7 +66,7 @@ VMDCameraAnimation& VMDCameraAnimation::operator=(VMDCameraAnimation&& src) noex
 Bool VMDCameraAnimation::ReadFromFile(BaseFile* file)
 {
 	assert(file != nullptr);
-	if (!file->ReadUInt32(&m_frame_on))
+	if (!file->ReadUInt32(&m_frame_num))
 		return FALSE;
 	if (!file->ReadFloat32(&m_distance))
 		return FALSE;
@@ -96,7 +96,7 @@ Bool VMDCameraAnimation::ReadFromFile(BaseFile* file)
 Bool VMDCameraAnimation::WriteToFile(BaseFile* file) const
 {
 	assert(file != nullptr);
-	if (!file->WriteUInt32(m_frame_on))
+	if (!file->WriteUInt32(m_frame_num))
 		return FALSE;
 	if (!file->WriteFloat32(m_distance))
 		return FALSE;

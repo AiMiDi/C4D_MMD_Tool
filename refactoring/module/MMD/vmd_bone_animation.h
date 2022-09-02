@@ -16,7 +16,7 @@ Description:	MMD style bone animation
 #include "vmd_data_element.h"
 #include "vmd_interpolator.h"
 
-class VMDBoneAnimation final : public VMDDataElement
+class VMDBoneAnimation final : public VMDAnimationElement
 {
 	// The action corresponds to the bone name
 	String			m_bone_name;

@@ -20,7 +20,7 @@ VMDBoneAnimation::VMDBoneAnimation(
 	VMDBoneInterpolator interpolator_position_y,
 	VMDBoneInterpolator interpolator_position_z,
 	VMDBoneInterpolator interpolator_rotation):
-	VMDDataElement(frame_no),
+	VMDAnimationElement(frame_no),
 	m_bone_name(std::move(bone_name)),
 	m_position(position),
 	m_rotation(rotation),
@@ -31,7 +31,7 @@ VMDBoneAnimation::VMDBoneAnimation(
 {}
 
 VMDBoneAnimation::VMDBoneAnimation(VMDBoneAnimation&& src) noexcept :
-	VMDDataElement(src.m_frame_on),
+	VMDAnimationElement(src.m_frame_num),
 	m_bone_name(std::move(src.m_bone_name)),
 	m_interpolator_position_x(std::move(src.m_interpolator_position_x)),
 	m_interpolator_position_y(std::move(src.m_interpolator_position_y)),
@@ -49,7 +49,7 @@ VMDBoneAnimation& VMDBoneAnimation::operator=(VMDBoneAnimation&& src) noexcept
 		return *this;
 	}
 	m_bone_name = std::move(src.m_bone_name);
-	m_frame_on = src.m_frame_on;
+	m_frame_num = src.m_frame_num;
 	memmove_s(&m_position, sizeof Vector32, &src.m_position, sizeof Vector32);
 	memmove_s(&m_rotation, sizeof Vector32, &src.m_rotation, sizeof Vector32);
 	m_interpolator_position_x = std::move(src.m_interpolator_position_x);
@@ -66,7 +66,7 @@ Bool VMDBoneAnimation::ReadFromFile(BaseFile* file)
 	if (!file->ReadBytes(bone_name, 15))
 		return FALSE;
 	m_bone_name = code_conversion::SJIStoUTF8(bone_name);
-	if (!file->ReadUInt32(&m_frame_on))
+	if (!file->ReadUInt32(&m_frame_num))
 		return FALSE;
 	if (!file->ReadVector32(&m_position))
 		return FALSE;
@@ -91,7 +91,7 @@ Bool VMDBoneAnimation::WriteToFile(BaseFile* file) const
 	bone_name.resize(15, '\0');
 	if (!file->WriteBytes(bone_name.data(), 15))
 		return FALSE;
-	if (!file->WriteUInt32(m_frame_on))
+	if (!file->WriteUInt32(m_frame_num))
 		return FALSE;
 	if (!file->WriteVector32(m_position))
 		return FALSE;

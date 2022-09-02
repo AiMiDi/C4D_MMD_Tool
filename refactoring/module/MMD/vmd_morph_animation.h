@@ -15,27 +15,37 @@ Description:	MMD style expression animation
 
 #include "vmd_data_element.h"
 
-class VMDMorphAnimation final : public VMDDataElement
+struct VMDMorphData
 {
+public:
 	// The action corresponds to the expression name
-	String	m_morph_name;
+	String	morph_name;
 	// Expression deformation strength
-	Float32 m_weight;
+	Float32 weight;
+public:
+	explicit VMDMorphData(String morph_name = {}, const Float32& weight = 0.f) :
+		morph_name(std::move(morph_name)), weight(weight){}
+};
+
+class VMDMorphAnimation final : public VMDAnimationElement
+{
+	std::unique_ptr<VMDMorphData> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDMorphAnimation)
 	/**
 	 * \brief  Constructor function
 	 */
-	explicit VMDMorphAnimation(UInt32 frame_on = 0, String morph_name = {}, Float32 weight = 0.f);
+	explicit VMDMorphAnimation(const UInt32& frame_on = 0,const String& morph_name = {},const Float32& weight = 0.f) :
+	VMDAnimationElement(frame_on), m_data(std::make_unique<VMDMorphData>(morph_name, weight)) {}
 	/**
 	 * \brief Move constructor
 	 */
-	VMDMorphAnimation(VMDMorphAnimation&&) noexcept;
+	VMDMorphAnimation(VMDMorphAnimation&&) noexcept = default;
 	/**
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	VMDMorphAnimation& operator =(VMDMorphAnimation&&) noexcept;
+	VMDMorphAnimation& operator =(VMDMorphAnimation&&) noexcept = default;
 	/**
 	 * \brief Destructor function
 	 */

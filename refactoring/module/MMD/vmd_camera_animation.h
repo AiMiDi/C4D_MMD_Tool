@@ -17,7 +17,7 @@ Description:
 #include "vmd_interpolator.h"
 
 /* MMD风格的摄像机动画 */
-class VMDCameraAnimation final : public VMDDataElement
+class VMDCameraAnimation final : public VMDAnimationElement
 {
 	// Camera view distance
 	Float32		m_distance = 0.f;

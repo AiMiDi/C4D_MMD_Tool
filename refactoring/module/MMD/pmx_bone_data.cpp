@@ -14,17 +14,17 @@ Description:	pmx bone data
 PMXBoneFlags::PMXBoneFlags()
 {
 	indexed_tail_position = false;
-	Rotatable = true;
-	Translatable = false;
-	Is_visible = true;
-	Enabled = true;
-	IK = false;
-	Inherit_rotation = false;
-	Inherit_translation = false;
-	Fixed_axis = false;
-	Local_coordinate = false;
-	Physics_after_deform = false;
-	External_parent_deform = false;
+	rotatable = true;
+	translatable = false;
+	is_visible = true;
+	enabled = true;
+	is_IK = false;
+	inherit_rotation = false;
+	inherit_translation = false;
+	fixed_axis = false;
+	local_coordinate = false;
+	physics_after_deform = false;
+	external_parent_deform = false;
 }
 
 Bool PMXBoneData::ReadFromFile(BaseFile* file)

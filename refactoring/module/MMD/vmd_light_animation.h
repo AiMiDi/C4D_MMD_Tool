@@ -15,7 +15,7 @@ Description:	MMD style lighting animation
 
 #include "vmd_data_element.h"
 
-class VMDLightAnimation final : public VMDDataElement
+class VMDLightAnimation final : public VMDAnimationElement
 {
 	// Light color
 	Vector32	m_rgb;

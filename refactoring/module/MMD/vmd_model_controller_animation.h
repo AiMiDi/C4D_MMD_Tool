@@ -18,12 +18,21 @@ Description:	MMD style model information animation
 
 typedef maxon::BaseArray<VMDIkControllerAnimation> VMDIkControllerArray;
 
-class VMDModelControllerAnimation final : public VMDDataElement
+struct VMDModelControllerData
 {
+public:
 	// Is model show
-	Bool				 m_show;
+	Bool				 show;
 	// IKs enable information
-	VMDIkControllerArray m_IK_Info_array;
+	VMDIkControllerArray IK_Info_array;
+public:
+	explicit VMDModelControllerData(const Bool& show = true):
+		show(show){}
+};
+
+class VMDModelControllerAnimation final : public VMDAnimationElement
+{
+	std::unique_ptr<VMDModelControllerData> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDModelControllerAnimation)
 	/**
@@ -31,17 +40,17 @@ public:
 	 * \param frame_no Frame of action
 	 * \param show Is model show
 	 */
-	explicit VMDModelControllerAnimation(const UInt32 frame_no = 0U, const Bool show = true):
-	VMDDataElement(frame_no), m_show(show){}
+	explicit VMDModelControllerAnimation(const UInt32& frame_no = 0U, const Bool& show = true) :
+	VMDAnimationElement(frame_no), m_data(std::make_unique<VMDModelControllerData>(show)){}
 	/**
 	 * \brief Move constructor
 	 */
-	VMDModelControllerAnimation(VMDModelControllerAnimation&&) noexcept;
+	VMDModelControllerAnimation(VMDModelControllerAnimation&&) noexcept = default;
 	/**
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	VMDModelControllerAnimation& operator =(VMDModelControllerAnimation&&) noexcept;
+	VMDModelControllerAnimation& operator =(VMDModelControllerAnimation&&) noexcept = default;
 	/**
 	 * \brief Destructor function
 	 */

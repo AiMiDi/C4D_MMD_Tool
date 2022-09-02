@@ -12,31 +12,42 @@ Description:	MMD style shadow animation
 #define _VMD_SHADOW_ANIMATION_H_
 
 #include "pch.h"
-
 #include "vmd_data_element.h"
 
-class VMDShadowAnimation final : public VMDDataElement
+struct VMDShadowData
 {
+public:
+	/**
+	 * \brief  Constructor function
+	 */
+	explicit VMDShadowData(const UChar& shadow_type = 0U, const Float32& distance = 0.f) :
+	shadow_type(shadow_type), distance(distance) {}
+public:
+	// 0:Off 1:mode1 2:mode2
+	UChar	shadow_type;
 	// Distance
-	UChar	m_shadow_type{};
-	// 0:Off 1:mode1 2:mode2 
-	Float32 m_distance{};
+	Float32 distance;
+};
+
+class VMDShadowAnimation final : public VMDAnimationElement
+{
+	std::unique_ptr<VMDShadowData> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDShadowAnimation)
 	/**
 	 * \brief  Constructor function
 	 */
-	explicit VMDShadowAnimation(const UInt32 frame_on = 0U, const UChar shadow_type = 0U, const Float32 distance = 0.f) :
-		VMDDataElement(frame_on), m_shadow_type(shadow_type), m_distance(distance) {}
+	explicit VMDShadowAnimation(const UInt32& frame_on = 0U, const UChar& shadow_type = 0U, const Float32& distance = 0.f) :
+	VMDAnimationElement(frame_on), m_data(std::make_unique<VMDShadowData>(shadow_type, distance)){}
 	/**
 	 * \brief Move constructor
 	 */
-	VMDShadowAnimation(VMDShadowAnimation&&) noexcept;
+	VMDShadowAnimation(VMDShadowAnimation&&) noexcept = default;
 	/**
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	VMDShadowAnimation& operator =(VMDShadowAnimation&&) noexcept;
+	VMDShadowAnimation& operator =(VMDShadowAnimation&&) noexcept = default;
 	/**
 	 * \brief Destructor function
 	 */

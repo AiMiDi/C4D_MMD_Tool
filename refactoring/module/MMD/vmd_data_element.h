@@ -13,48 +13,53 @@ Description:
 #include "pch.h"
 #include "mmd_base.hpp"
 
-class VMDDataElement : public MMDDataBase
+class VMDAnimationElement : public MMDDataBase
 {
 protected:
-	UInt32 m_frame_on = 0U;
+	UInt32 m_frame_num = 0U;
 public:
+	/**
+	 * \brief  Constructor function
+	 */
+	explicit VMDAnimationElement(const UInt32& frame_no = 0U) :m_frame_num(frame_no) {}
+
+	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDAnimationElement)
+	/**
+	 * \brief Move constructor
+	 */
+	VMDAnimationElement(VMDAnimationElement&&) noexcept = default;
+	/**
+	 * \brief Move operator=
+	 * \return Result reference
+	 */
+	VMDAnimationElement& operator =(VMDAnimationElement&&) noexcept = default;
+	/**
+	 * \brief Destructor function
+	 */
+	~VMDAnimationElement() override = default;
+public:
+	[[nodiscard]] UInt32 GetFrameNum() const
+	{
+		return m_frame_num;
+	}
 	/**
 	 * \brief Equality operator, Sort by frame order
 	 * \param other Another instance
 	 * \return TRUE is returned if it is equal to another instance, and the other is FALSE
 	 */
-	bool operator ==(const VMDDataElement& other) const
+	bool operator ==(const VMDAnimationElement& other) const
 	{
-		return m_frame_on == other.m_frame_on;
+		return m_frame_num == other.m_frame_num;
 	}
 	/**
 	 * \brief Less than operator, Sort by frame order
 	 * \param other Another instance
 	 * \return TRUE is returned if it is less than another instance, and the other is FALSE
 	 */
-	bool operator <(const VMDDataElement& other) const
+	bool operator <(const VMDAnimationElement& other) const
 	{
-		return m_frame_on < other.m_frame_on;
+		return m_frame_num < other.m_frame_num;
 	}
-	/**
-	 * \brief  Constructor function
-	 */
-	explicit VMDDataElement(const UInt32 frame_no = 0U) :m_frame_on(frame_no) {}
-
-	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDDataElement)
-	/**
-	 * \brief Move constructor
-	 */
-	VMDDataElement(VMDDataElement&&) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	VMDDataElement& operator =(VMDDataElement&&) noexcept = default;
-	/**
-	 * \brief Destructor function
-	 */
-	~VMDDataElement() override = default;
 };
 
 
