@@ -16,7 +16,7 @@ Description:	MMD style bone animation
 #include "vmd_data_element.h"
 #include "vmd_interpolator.h"
 
-class VMDBoneAnimation final : public VMDAnimationElement
+struct VMDBoneData
 {
 	// The action corresponds to the bone name
 	String			m_bone_name;
@@ -32,29 +32,57 @@ class VMDBoneAnimation final : public VMDAnimationElement
 	VMDBoneInterpolator m_interpolator_position_z;
 	// Rotation action interpolation
 	VMDBoneInterpolator m_interpolator_rotation;
+
+
+	explicit VMDBoneData(
+		const String				&bone_name = {},
+		const Vector32				&position = {},
+		const Vector4d32			&rotation = {},
+		const VMDBoneInterpolator	&interpolator_position_x = {},
+		const VMDBoneInterpolator	&interpolator_position_y = {},
+		const VMDBoneInterpolator	&interpolator_position_z = {},
+		const VMDBoneInterpolator	&interpolator_rotation = {}) :
+		m_bone_name(std::move(bone_name)),
+		m_position(position),
+		m_rotation(rotation),
+		m_interpolator_position_x(std::move(interpolator_position_x)),
+		m_interpolator_position_y(std::move(interpolator_position_y)),
+		m_interpolator_position_z(std::move(interpolator_position_z)),
+		m_interpolator_rotation(std::move(interpolator_rotation)) {}
+};
+
+class VMDBoneAnimation final : public VMDAnimationElement
+{
+	typedef VMDBoneData data_type;
+	std::unique_ptr<data_type> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDBoneAnimation)
 	/**
 	 * \brief  Constructor function
 	 */
+	explicit VMDBoneAnimation() :VMDAnimationElement(), m_data(std::make_unique<data_type>()) {}
+
 	explicit VMDBoneAnimation(
-		String		bone_name = {},
-		UInt32		frame_no = 0U,
-		Vector32	position = {},
-		Vector4d32	rotation = {},
-		VMDBoneInterpolator interpolator_position_x = {},
-		VMDBoneInterpolator interpolator_position_y = {},
-		VMDBoneInterpolator interpolator_position_z = {},
-		VMDBoneInterpolator interpolator_rotation = {});
+		const UInt32				&frame_no, 
+		const String				&bone_name = {},
+		const Vector32				&position = {},
+		const Vector4d32			&rotation = {},
+		const VMDBoneInterpolator	&interpolator_position_x = {},
+		const VMDBoneInterpolator	&interpolator_position_y = {},
+		const VMDBoneInterpolator	&interpolator_position_z = {},
+		const VMDBoneInterpolator	&interpolator_rotation = {}) :
+		VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(bone_name, position, rotation, interpolator_position_x, interpolator_position_y, interpolator_position_z, interpolator_rotation)) {}
+
+	explicit VMDBoneAnimation(const UInt32& frame_no, const data_type& data) : VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(data)) {}
 	/**
 	 * \brief Move constructor
 	 */
-	VMDBoneAnimation(VMDBoneAnimation&&) noexcept;
+	VMDBoneAnimation(VMDBoneAnimation&&) noexcept = default;
 	/**
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	VMDBoneAnimation& operator =(VMDBoneAnimation&&) noexcept;
+	VMDBoneAnimation& operator =(VMDBoneAnimation&&) noexcept = default;
 	/**
 	 * \brief Destructor function
 	 */

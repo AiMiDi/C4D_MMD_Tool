@@ -29,17 +29,20 @@ struct VMDLightData
 
 class VMDLightAnimation final : public VMDAnimationElement
 {
-	std::unique_ptr<VMDLightData> m_data;
+	typedef VMDLightData data_type;
+	std::unique_ptr<data_type> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDLightAnimation)
 	/**
 	 * \brief  Constructor function
 	 */
-	explicit VMDLightAnimation(const UInt32 frame_no = 0, const Vector32 rgb = {}, const Vector32 position = {}):
-		VMDAnimationElement(frame_no), m_data(std::make_unique<VMDLightData>(rgb, position)) {}
+	explicit VMDLightAnimation() : VMDAnimationElement(), m_data(std::make_unique<data_type>()) {}
 
-	explicit VMDLightAnimation(const UInt32 frame_no = 0, const std::unique_ptr<VMDLightData> data = nullptr) :
-		VMDAnimationElement(frame_no), m_data(data == nullptr ? nullptr : std::unique_ptr<VMDLightData>(new VMDLightData(data->m_rgb, data->m_position))) {}
+	explicit VMDLightAnimation(const UInt32 &frame_no, const Vector32 &rgb = {}, const Vector32 &position = {}):
+		VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(rgb, position)) {}
+
+	explicit VMDLightAnimation(const UInt32 &frame_no, const data_type &data) :
+		VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(data)) {}
 
 	/**
 	 * \brief Move constructor

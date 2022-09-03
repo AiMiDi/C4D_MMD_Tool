@@ -21,13 +21,14 @@ struct VMDControllerData
 	// Is IK enable
 	Bool	m_IK_enable;
 
-	explicit VMDControllerData(String name = {}, const Bool enable = true) :
+	explicit VMDControllerData(const String &name = {}, const Bool &enable = true) :
 		m_IK_name{ name }, m_IK_enable{ enable } {}
 };
 
 class VMDIkControllerAnimation final : public MMDDataBase
 {
-	std::unique_ptr<VMDControllerData> m_data;
+	typedef VMDControllerData data_type;
+	std::unique_ptr<data_type> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDIkControllerAnimation)
 	/**
@@ -35,11 +36,13 @@ public:
 	 * \param name IK name
 	 * \param enable Is IK enable
 	 */
-	explicit VMDIkControllerAnimation(const String name = {}, const Bool enable = true) :
-		m_data{ std::make_unique<VMDControllerData>(name, enable) } {}
+	explicit VMDIkControllerAnimation() : m_data(std::make_unique<data_type>()) {}
 
-	explicit VMDIkControllerAnimation(const std::unique_ptr<VMDControllerData> data = nullptr) :
-		m_data(data == nullptr ? nullptr : std::unique_ptr<VMDControllerData>(new VMDControllerData(data->m_IK_name, data->m_IK_enable))) {}
+	explicit VMDIkControllerAnimation(const String &name = {}, const Bool &enable = true) :
+		m_data(std::make_unique<data_type>(name, enable)) {}
+
+	explicit VMDIkControllerAnimation(const data_type &data) :
+		m_data(std::make_unique<data_type>(data)) {}
 	/**
 	 * \brief Move constructor
 	 */

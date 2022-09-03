@@ -16,8 +16,7 @@ Description:
 #include "vmd_data_element.h"
 #include "vmd_interpolator.h"
 
-/* MMD风格的摄像机动画 */
-class VMDCameraAnimation final : public VMDAnimationElement
+struct VMDcameraData
 {
 	// Camera view distance
 	Float32		m_distance = 0.f;
@@ -32,7 +31,7 @@ class VMDCameraAnimation final : public VMDAnimationElement
 	// Z-axis displacement action interpolation
 	VMDCameraInterpolator m_interpolator_position_z{};
 	// Rotation action interpolation
-	VMDCameraInterpolator m_interpolator_rotation	 {};
+	VMDCameraInterpolator m_interpolator_rotation{};
 	// Distance action interpolation
 	VMDCameraInterpolator m_interpolator_position_d{};
 	// View Angle motion interpolation
@@ -41,32 +40,66 @@ class VMDCameraAnimation final : public VMDAnimationElement
 	UInt32		m_viewing_angle = 0U;
 	// 0:on, 1:off
 	UChar		m_perspective = 0U;
+
+
+	explicit VMDcameraData(
+		const Float32& distance = 0.f,
+		const Vector32& position = {},
+		const Vector4d32& rotation = {},
+		const VMDCameraInterpolator& interpolator_position_x = {},
+		const VMDCameraInterpolator& interpolator_position_y = {},
+		const VMDCameraInterpolator& interpolator_position_z = {},
+		const VMDCameraInterpolator& interpolator_rotation = {},
+		const VMDCameraInterpolator& interpolator_position_d = {},
+		const VMDCameraInterpolator& interpolator_position_v = {}) :
+		m_distance(distance),
+		m_position(position),
+		m_rotation(rotation),
+		m_interpolator_position_x(interpolator_position_x),
+		m_interpolator_position_y(interpolator_position_y),
+		m_interpolator_position_z(interpolator_position_z),
+		m_interpolator_rotation(interpolator_rotation),
+		m_interpolator_position_d(interpolator_position_d),
+		m_interpolator_position_v(interpolator_position_v) {}
+};
+
+/* MMD风格的摄像机动画 */
+class VMDCameraAnimation final : public VMDAnimationElement
+{
+	typedef VMDcameraData data_type;
+	std::unique_ptr<data_type> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDCameraAnimation)
 	/**
 	 * \brief  Constructor function
 	 */
+	explicit VMDCameraAnimation() : VMDAnimationElement(), m_data(std::make_unique<data_type>()) {}
+
 	explicit VMDCameraAnimation(
-		UInt32		frame_no = 0U,
-		Float32		distance = 0.f,
-		Vector32	position = {},
-		Vector4d32	rotation = {},
-		VMDCameraInterpolator interpolator_position_x = {},
-		VMDCameraInterpolator interpolator_position_y = {},
-		VMDCameraInterpolator interpolator_position_z = {},
-		VMDCameraInterpolator interpolator_rotation = {},
-		VMDCameraInterpolator interpolator_position_d = {},
-		VMDCameraInterpolator interpolator_position_v = {});
+		const UInt32& frame_no,
+		const Float32& distance = 0.f,
+		const Vector32& position = {},
+		const Vector4d32& rotation = {},
+		const VMDCameraInterpolator& interpolator_position_x = {},
+		const VMDCameraInterpolator& interpolator_position_y = {},
+		const VMDCameraInterpolator& interpolator_position_z = {},
+		const VMDCameraInterpolator& interpolator_rotation = {},
+		const VMDCameraInterpolator& interpolator_position_d = {},
+		const VMDCameraInterpolator& interpolator_position_v = {}) :
+		VMDAnimationElement(frame_no),
+		m_data(std::make_unique<data_type>(distance, position, rotation, interpolator_position_x, interpolator_position_y, interpolator_position_z, interpolator_rotation, interpolator_position_d, interpolator_position_v)) {}
+
+	explicit VMDCameraAnimation(const UInt32& frame_no, const data_type& data) : VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(data)) {}
 
 	/**
 	 * \brief Move constructor
 	 */
-	VMDCameraAnimation(VMDCameraAnimation&&) noexcept;
+	VMDCameraAnimation(VMDCameraAnimation&&) noexcept = default;
 	/**
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	VMDCameraAnimation& operator =(VMDCameraAnimation&&) noexcept;
+	VMDCameraAnimation& operator =(VMDCameraAnimation&&) noexcept = default;
 	/**
 	 * \brief Destructor function
 	 */

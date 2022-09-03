@@ -26,13 +26,14 @@ struct VMDModelControllerData
 	VMDIkControllerArray IK_Info_array;
 
 
-	explicit VMDModelControllerData(const Bool& show = true):
+	explicit VMDModelControllerData(const Bool &show = true):
 		show(show){}
 };
 
 class VMDModelControllerAnimation final : public VMDAnimationElement
 {
-	std::unique_ptr<VMDModelControllerData> m_data;
+	typedef VMDModelControllerData data_type;
+	std::unique_ptr<data_type> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDModelControllerAnimation)
 	/**
@@ -40,11 +41,13 @@ public:
 	 * \param frame_no Frame of action
 	 * \param show Is model show
 	 */
-	explicit VMDModelControllerAnimation(const UInt32& frame_no = 0U, const Bool& show = true) :
-	VMDAnimationElement(frame_no), m_data(std::make_unique<VMDModelControllerData>(show)){}
+	explicit VMDModelControllerAnimation() : VMDAnimationElement(), m_data(std::make_unique<data_type>()) {}
 
-	explicit VMDModelControllerAnimation(const UInt32& frame_no = 0U, const std::unique_ptr<VMDModelControllerData> data = nullptr) :
-		VMDAnimationElement(frame_no), m_data(std::unique_ptr<VMDModelControllerData>(data == nullptr ? nullptr : new VMDModelControllerData(data->show))) {}
+	explicit VMDModelControllerAnimation(const UInt32& frame_no, const Bool &show = true) :
+	VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(show)){}
+
+	explicit VMDModelControllerAnimation(const UInt32& frame_no, const data_type data) :
+		VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(data)) {}
 	/**
 	 * \brief Move constructor
 	 */
