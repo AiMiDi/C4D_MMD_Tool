@@ -17,12 +17,12 @@ Description:	MMD style expression animation
 
 struct VMDMorphData
 {
-public:
 	// The action corresponds to the expression name
 	String	morph_name;
 	// Expression deformation strength
 	Float32 weight;
-public:
+
+
 	explicit VMDMorphData(String morph_name = {}, const Float32& weight = 0.f) :
 		morph_name(std::move(morph_name)), weight(weight){}
 };
@@ -37,6 +37,9 @@ public:
 	 */
 	explicit VMDMorphAnimation(const UInt32& frame_on = 0,const String& morph_name = {},const Float32& weight = 0.f) :
 	VMDAnimationElement(frame_on), m_data(std::make_unique<VMDMorphData>(morph_name, weight)) {}
+
+	explicit VMDMorphAnimation(const UInt32& frame_on = 0, const std::unique_ptr<VMDMorphData> data = nullptr) :
+		VMDAnimationElement(frame_on), m_data(std::unique_ptr<VMDMorphData>(data == nullptr ? nullptr : new VMDMorphData(data->morph_name, data->weight))) {}
 	/**
 	 * \brief Move constructor
 	 */

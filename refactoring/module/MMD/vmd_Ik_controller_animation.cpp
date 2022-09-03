@@ -11,20 +11,6 @@ Description:	MMD style IK enable information animation
 #include "pch.h"
 #include "vmd_Ik_controller_animation.h"
 
-VMDIkControllerAnimation::VMDIkControllerAnimation(VMDIkControllerAnimation&& src) noexcept:
-	m_IK_name(std::move(src.m_IK_name)), m_IK_enable(src.m_IK_enable)
-{}
-
-VMDIkControllerAnimation& VMDIkControllerAnimation::operator=(VMDIkControllerAnimation&& src) noexcept
-{
-	if (&src == this)
-	{
-		return *this;
-	}
-	m_IK_name = std::move(src.m_IK_name);
-	m_IK_enable = src.m_IK_enable;
-	return *this;
-}
 
 Bool VMDIkControllerAnimation::ReadFromFile(BaseFile* const file)
 {
@@ -39,9 +25,9 @@ Bool VMDIkControllerAnimation::ReadFromFile(BaseFile* const file)
 	Char ik_name[20]{ '\0'};
 	if (!file->ReadBytes(ik_name, 20))
 		return FALSE;
-	if (!file->ReadBool(&m_IK_enable))
+	if (!file->ReadBool(&m_data->m_IK_enable))
 		return FALSE;
-	m_IK_name = code_conversion::SJIStoUTF8(ik_name);
+	m_data->m_IK_name = code_conversion::SJIStoUTF8(ik_name);
 	return TRUE;
 }
 
@@ -55,10 +41,10 @@ Bool VMDIkControllerAnimation::WriteToFile(BaseFile* const file) const
 	{
 		return false;
 	}
-	const std::string ik_name = code_conversion::UTF8toSJIS(m_IK_name);
+	const std::string ik_name = code_conversion::UTF8toSJIS(m_data->m_IK_name);
 	if (!file->WriteBytes(ik_name.data(), 20))
 		return FALSE;
-	if (!file->WriteUChar(m_IK_enable))
+	if (!file->WriteUChar(m_data->m_IK_enable))
 		return FALSE;
 	return TRUE;
 }

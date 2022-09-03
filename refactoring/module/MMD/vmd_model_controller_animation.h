@@ -20,12 +20,12 @@ typedef maxon::BaseArray<VMDIkControllerAnimation> VMDIkControllerArray;
 
 struct VMDModelControllerData
 {
-public:
 	// Is model show
 	Bool				 show;
 	// IKs enable information
 	VMDIkControllerArray IK_Info_array;
-public:
+
+
 	explicit VMDModelControllerData(const Bool& show = true):
 		show(show){}
 };
@@ -42,6 +42,9 @@ public:
 	 */
 	explicit VMDModelControllerAnimation(const UInt32& frame_no = 0U, const Bool& show = true) :
 	VMDAnimationElement(frame_no), m_data(std::make_unique<VMDModelControllerData>(show)){}
+
+	explicit VMDModelControllerAnimation(const UInt32& frame_no = 0U, const std::unique_ptr<VMDModelControllerData> data = nullptr) :
+		VMDAnimationElement(frame_no), m_data(std::unique_ptr<VMDModelControllerData>(data == nullptr ? nullptr : new VMDModelControllerData(data->show))) {}
 	/**
 	 * \brief Move constructor
 	 */

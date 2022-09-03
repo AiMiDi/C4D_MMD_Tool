@@ -14,12 +14,20 @@ Description:	MMD style IK enable information animation
 #include "pch.h"
 #include "mmd_base.hpp"
 
-class VMDIkControllerAnimation final : public MMDDataBase
+struct VMDControllerData
 {
 	// IK name
 	String	m_IK_name;
 	// Is IK enable
 	Bool	m_IK_enable;
+
+	explicit VMDControllerData(String name = {}, const Bool enable = true) :
+		m_IK_name{ name }, m_IK_enable{ enable } {}
+};
+
+class VMDIkControllerAnimation final : public MMDDataBase
+{
+	std::unique_ptr<VMDControllerData> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDIkControllerAnimation)
 	/**
@@ -27,12 +35,15 @@ public:
 	 * \param name IK name
 	 * \param enable Is IK enable
 	 */
-	explicit VMDIkControllerAnimation(String name = {}, const Bool enable = true) :
-		m_IK_name(std::move(name)),m_IK_enable(enable) {}
+	explicit VMDIkControllerAnimation(const String name = {}, const Bool enable = true) :
+		m_data{ std::make_unique<VMDControllerData>(name, enable) } {}
+
+	explicit VMDIkControllerAnimation(const std::unique_ptr<VMDControllerData> data = nullptr) :
+		m_data(data == nullptr ? nullptr : std::unique_ptr<VMDControllerData>(new VMDControllerData(data->m_IK_name, data->m_IK_enable))) {}
 	/**
 	 * \brief Move constructor
 	 */
-	VMDIkControllerAnimation(VMDIkControllerAnimation&&) noexcept;
+	VMDIkControllerAnimation(VMDIkControllerAnimation&&) noexcept = default;
 	/**
 	 * \brief Destructor function
 	 */
@@ -41,7 +52,7 @@ public:
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	VMDIkControllerAnimation& operator =(VMDIkControllerAnimation&&) noexcept;
+	VMDIkControllerAnimation& operator =(VMDIkControllerAnimation&&) noexcept = default;
 	/**
 	 * \brief Read from a vmd file
 	 * \param file vmd file

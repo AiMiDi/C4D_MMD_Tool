@@ -44,10 +44,8 @@ public:
 	 * \brief  Constructor function
 	 * 这里我们需要新增通过结构体的指针传递进来进行构造的函数
 	 */
-	explicit VMDShadowAnimation(const std::unique_ptr<VMDShadowData> data)
-	{
-		m_data = std::unique_ptr<VMDShadowData>(new VMDShadowData(data->shadow_type, data->distance));
-	}
+	explicit VMDShadowAnimation(const UInt32& frame_on = 0U, const std::unique_ptr<VMDShadowData> data = nullptr) :
+		VMDAnimationElement(frame_on), m_data(std::unique_ptr<VMDShadowData>(data == nullptr ? nullptr : new VMDShadowData(data->shadow_type, data->distance))) {}
 	/**
 	 * \brief Move constructor
 	 */

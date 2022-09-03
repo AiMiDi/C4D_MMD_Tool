@@ -15,27 +15,41 @@ Description:	MMD style lighting animation
 
 #include "vmd_data_element.h"
 
-class VMDLightAnimation final : public VMDAnimationElement
+struct VMDLightData
 {
 	// Light color
 	Vector32	m_rgb;
 	// location
 	Vector32	m_position;
+
+
+	explicit VMDLightData(const Vector32& rgb = {}, const Vector32& pos = {}) :
+		m_rgb(rgb), m_position(pos) {}
+};
+
+class VMDLightAnimation final : public VMDAnimationElement
+{
+	std::unique_ptr<VMDLightData> m_data;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDLightAnimation)
 	/**
 	 * \brief  Constructor function
 	 */
-	explicit VMDLightAnimation(UInt32 frame_no = 0, Vector32 rgb = {}, Vector32 position = {});
+	explicit VMDLightAnimation(const UInt32 frame_no = 0, const Vector32 rgb = {}, const Vector32 position = {}):
+		VMDAnimationElement(frame_no), m_data(std::make_unique<VMDLightData>(rgb, position)) {}
+
+	explicit VMDLightAnimation(const UInt32 frame_no = 0, const std::unique_ptr<VMDLightData> data = nullptr) :
+		VMDAnimationElement(frame_no), m_data(data == nullptr ? nullptr : std::unique_ptr<VMDLightData>(new VMDLightData(data->m_rgb, data->m_position))) {}
+
 	/**
 	 * \brief Move constructor
 	 */
-	VMDLightAnimation(VMDLightAnimation&&) noexcept;
+	VMDLightAnimation(VMDLightAnimation&&) noexcept = default;
 	/**
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	VMDLightAnimation& operator =(VMDLightAnimation&&) noexcept;
+	VMDLightAnimation& operator =(VMDLightAnimation&&) noexcept = default;
 	/**
 	 * \brief Destructor function
 	 */
