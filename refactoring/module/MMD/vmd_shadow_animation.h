@@ -16,17 +16,18 @@ Description:	MMD style shadow animation
 
 struct VMDShadowData
 {
-public:
+	// 0:Off 1:mode1 2:mode2
+	UChar	shadow_type;
+	// Distance
+	Float32 distance;
+
+
 	/**
 	 * \brief  Constructor function
 	 */
 	explicit VMDShadowData(const UChar& shadow_type = 0U, const Float32& distance = 0.f) :
 	shadow_type(shadow_type), distance(distance) {}
-public:
-	// 0:Off 1:mode1 2:mode2
-	UChar	shadow_type;
-	// Distance
-	Float32 distance;
+
 };
 
 class VMDShadowAnimation final : public VMDAnimationElement
@@ -39,6 +40,14 @@ public:
 	 */
 	explicit VMDShadowAnimation(const UInt32& frame_on = 0U, const UChar& shadow_type = 0U, const Float32& distance = 0.f) :
 	VMDAnimationElement(frame_on), m_data(std::make_unique<VMDShadowData>(shadow_type, distance)){}
+	/**
+	 * \brief  Constructor function
+	 * 这里我们需要新增通过结构体的指针传递进来进行构造的函数
+	 */
+	explicit VMDShadowAnimation(const std::unique_ptr<VMDShadowData> data)
+	{
+		m_data = std::unique_ptr<VMDShadowData>(new VMDShadowData(data->shadow_type, data->distance));
+	}
 	/**
 	 * \brief Move constructor
 	 */
