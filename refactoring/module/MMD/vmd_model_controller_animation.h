@@ -24,10 +24,23 @@ struct VMDModelControllerData
 	Bool				 show;
 	// IKs enable information
 	VMDIkControllerArray IK_Info_array;
-
-
+	/**
+	 * \brief  Constructor function
+	 * \param show Is model show
+	 */
 	explicit VMDModelControllerData(const Bool &show = true):
 		show(show){}
+
+	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDModelControllerData)
+	/**
+	 * \brief Move constructor
+	 */
+	VMDModelControllerData(VMDModelControllerData&& src) noexcept : MAXON_MOVE_MEMBERS(show, IK_Info_array){}
+	/**
+	 * \brief Move operator=
+	 * \return Result reference
+	 */
+	VMDModelControllerData& operator =(VMDModelControllerData&&) noexcept = default;
 };
 
 class VMDModelControllerAnimation final : public VMDAnimationElement
@@ -37,17 +50,23 @@ class VMDModelControllerAnimation final : public VMDAnimationElement
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDModelControllerAnimation)
 	/**
-	 * \brief  Constructor function
-	 * \param frame_no Frame of action
-	 * \param show Is model show
+	 * \brief Default constructor function
 	 */
 	explicit VMDModelControllerAnimation() : VMDAnimationElement(), m_data(std::make_unique<data_type>()) {}
-
-	explicit VMDModelControllerAnimation(const UInt32& frame_no, const Bool &show = true) :
-	VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(show)){}
-
-	explicit VMDModelControllerAnimation(const UInt32& frame_no, const data_type data) :
-		VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(data)) {}
+	/**
+	 * \brief  Constructor function
+	 * \param frame_num Frame of action
+	 * \param show Is model show
+	 */
+	explicit VMDModelControllerAnimation(const UInt32& frame_num, const Bool &show = true) :
+	VMDAnimationElement(frame_num), m_data(std::make_unique<data_type>(show)){}
+	/**
+	 * \brief Constructor function
+	 * \param frame_num Frame of action
+	 * \param data Internal data
+	 */
+	explicit VMDModelControllerAnimation(const UInt32& frame_num, data_type&& data) :
+		VMDAnimationElement(frame_num), m_data(std::make_unique<data_type>(std::move(data))) {}
 	/**
 	 * \brief Move constructor
 	 */

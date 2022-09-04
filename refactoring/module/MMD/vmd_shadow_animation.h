@@ -21,13 +21,13 @@ struct VMDShadowData
 	// Distance
 	Float32 distance;
 
-
 	/**
-	 * \brief  Constructor function
+	 * \brief Constructor function
+	 * \param shadow_type 0:Off 1:mode1 2:mode2
+	 * \param distance Shadow distance
 	 */
 	explicit VMDShadowData(const UChar &shadow_type = 0U, const Float32 &distance = 0.f) :
 	shadow_type(shadow_type), distance(distance) {}
-
 };
 
 class VMDShadowAnimation final : public VMDAnimationElement
@@ -37,18 +37,24 @@ class VMDShadowAnimation final : public VMDAnimationElement
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDShadowAnimation)
 	/**
-	 * \brief  Constructor function
+	 * \brief Default constructor function
 	 */
 	explicit VMDShadowAnimation() : VMDAnimationElement(), m_data(std::make_unique<data_type>()) {}
-
-	explicit VMDShadowAnimation(const UInt32 &frame_on, const UChar &shadow_type = 0U, const Float32 &distance = 0.f) :
-	VMDAnimationElement(frame_on), m_data(std::make_unique<data_type>(shadow_type, distance)){}
 	/**
-	 * \brief  Constructor function
-	 * 这里我们需要新增通过结构体的指针传递进来进行构造的函数
+	 * \brief Constructor function
+	 * \param frame_num Frame of action
+	 * \param shadow_type 0:Off 1:mode1 2:mode2
+	 * \param distance Shadow distance
 	 */
-	explicit VMDShadowAnimation(const UInt32 &frame_on, const data_type &data) :
-		VMDAnimationElement(frame_on), m_data(std::make_unique<data_type>(data)) {}
+	explicit VMDShadowAnimation(const UInt32 &frame_num, const UChar &shadow_type = 0U, const Float32 &distance = 0.f) :
+	VMDAnimationElement(frame_num), m_data(std::make_unique<data_type>(shadow_type, distance)){}
+	/**
+	 * \brief Constructor function
+	 * \param frame_num Frame of action
+	 * \param data Internal data
+	 */
+	explicit VMDShadowAnimation(const UInt32 &frame_num, const data_type &data) :
+		VMDAnimationElement(frame_num), m_data(std::make_unique<data_type>(data)) {}
 	/**
 	 * \brief Move constructor
 	 */

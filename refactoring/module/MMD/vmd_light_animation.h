@@ -18,13 +18,16 @@ Description:	MMD style lighting animation
 struct VMDLightData
 {
 	// Light color
-	Vector32	m_rgb;
+	Vector32	light_color;
 	// location
-	Vector32	m_position;
-
-
-	explicit VMDLightData(const Vector32& rgb = {}, const Vector32& pos = {}) :
-		m_rgb(rgb), m_position(pos) {}
+	Vector32	light_position;
+	/**
+	 * \brief Constructor function
+	 * \param light_color Light color
+	 * \param light_position Location
+	 */
+	explicit VMDLightData(const Vector32& light_color = {}, const Vector32& light_position = {}) :
+		light_color(light_color), light_position(light_position) {}
 };
 
 class VMDLightAnimation final : public VMDAnimationElement
@@ -34,16 +37,24 @@ class VMDLightAnimation final : public VMDAnimationElement
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDLightAnimation)
 	/**
-	 * \brief  Constructor function
+	 * \brief Default constructor function
 	 */
 	explicit VMDLightAnimation() : VMDAnimationElement(), m_data(std::make_unique<data_type>()) {}
-
-	explicit VMDLightAnimation(const UInt32 &frame_no, const Vector32 &rgb = {}, const Vector32 &position = {}):
-		VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(rgb, position)) {}
-
-	explicit VMDLightAnimation(const UInt32 &frame_no, const data_type &data) :
-		VMDAnimationElement(frame_no), m_data(std::make_unique<data_type>(data)) {}
-
+	/**
+	 * \brief Constructor function
+	 * \param frame_num Frame of action
+	 * \param light_color Light color
+	 * \param light_position Location
+	 */
+	explicit VMDLightAnimation(const UInt32 &frame_num, const Vector32 &light_color = {}, const Vector32 &light_position = {}):
+		VMDAnimationElement(frame_num), m_data(std::make_unique<data_type>(light_color, light_position)) {}
+	/**
+	 * \brief Constructor function
+	 * \param frame_num Frame of action
+	 * \param data Internal data
+	 */
+	explicit VMDLightAnimation(const UInt32 &frame_num, const data_type &data) :
+		VMDAnimationElement(frame_num), m_data(std::make_unique<data_type>(data)) {}
 	/**
 	 * \brief Move constructor
 	 */

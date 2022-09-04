@@ -18,12 +18,11 @@ class VMDAnimationElement : public MMDDataBase
 protected:
 	UInt32 m_frame_num = 0U;
 public:
+	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDAnimationElement)
 	/**
 	 * \brief  Constructor function
 	 */
 	explicit VMDAnimationElement(const UInt32& frame_no = 0U) :m_frame_num(frame_no) {}
-
-	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDAnimationElement)
 	/**
 	 * \brief Move constructor
 	 */
