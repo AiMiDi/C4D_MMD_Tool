@@ -1,0 +1,44 @@
+﻿  Source processor
+  Loading generator module cppgenerator from ..\..\..\frameworks\settings\sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from ..\..\..\frameworks\settings\sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from ..\..\..\frameworks\settings\sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from ..\..\..\frameworks\settings\sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework...
+  register.cpp
+  application.cpp
+  bytesvalue.cpp
+  configuration.cpp
+  cpuid.cpp
+  cpuyield.cpp
+  crashhandlerglobals.cpp
+  crc32c.cpp
+  datadescriptiondatabase.cpp
+  datadictionary.cpp
+  datadictionaryobject.cpp
+  dataformat.cpp
+  datatype.cpp
+  datetime_impl.cpp
+  debugglobals.cpp
+  general_math.cpp
+  generic_basearray.cpp
+  iostreams.cpp
+  lib_math.cpp
+  multiindex.cpp
+  object.cpp
+  parser.cpp
+  reflection.cpp
+  spinlock.cpp
+  stacktrace.cpp
+  streamconversion.cpp
+  string.cpp
+  stringencoding.cpp
+  thread.cpp
+  timer.cpp
+  timevalue.cpp
+  url.cpp
+  apibaseid.cpp
+  apibasemath.cpp
+  iostreams_helper.cpp
+  weakref.cpp
+  win_strptime.cpp
+  core.framework.vcxproj -> D:\C4D_MMD_Tool\sdk_2023\plugins\project\_obj\core.framework\x64_Release\core.framework_Release_64bit.lib

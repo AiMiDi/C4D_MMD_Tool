@@ -1,0 +1,1 @@
+D:\C4D_MMD_Tool\sdk_2023\plugins\project\_obj\command.framework\x64_Debug\command.framework_Debug_64bit.lib

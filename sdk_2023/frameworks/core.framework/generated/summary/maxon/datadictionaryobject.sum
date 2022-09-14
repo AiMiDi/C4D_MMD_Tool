@@ -1,0 +1,2 @@
+maxon.DataDictionaryObjectInterface	"net.maxon.interface.datadictionaryobject"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\datadictionaryobject.h(43,7)	ObjectInterface	EraseData,GetData,InitIterator,IsEmpty,Reset,SetData	
+maxon.DataDictionaryReferenceObjectInterface	"net.maxon.interface.datadictionaryreferenceobject"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\datadictionaryobject.h(260,7)	DataDictionaryObjectInterface	GetDataContainer,Init	

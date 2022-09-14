@@ -1,0 +1,8 @@
+maxon.OutOfMemoryErrorInterface	"net.maxon.interface.outofmemoryerror"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\errorbase.h(15,7)	ErrorInterface		
+maxon.FunctionNotImplementedErrorInterface	"net.maxon.interface.functionnotimplementederror"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\errorbase.h(25,7)	ErrorInterface		
+maxon.IllegalArgumentErrorInterface	"net.maxon.interface.illegalargumenterror"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\errorbase.h(33,7)	ErrorInterface		
+maxon.NullptrErrorInterface	"net.maxon.interface.nullptrerror"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\errorbase.h(41,7)	IllegalArgumentErrorInterface		
+maxon.IllegalStateErrorInterface	"net.maxon.interface.illegalstateerror"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\errorbase.h(50,7)	ErrorInterface		
+maxon.UnexpectedErrorInterface	"net.maxon.interface.unexpectederror"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\errorbase.h(60,7)	ErrorInterface		
+maxon.OperationCancelledErrorInterface	"net.maxon.interface.OperationCancelledError"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\errorbase.h(68,7)	ErrorInterface		
+maxon.AggregatedErrorInterface	"net.maxon.interface.aggregatederror"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\errorbase.h(80,7)	ErrorInterface	AddError,GetCount,GetError	

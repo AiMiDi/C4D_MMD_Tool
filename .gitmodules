@@ -7,3 +7,6 @@
 [submodule "dependency/libiconv"]
 	path = dependency/libiconv
 	url =https://github.com/AiMiDi/libiconv_cmake.git
+[submodule "setup"]
+	path = setup
+	url = https://github.com/AiMiDi/C4D_Plugin_Setup.git

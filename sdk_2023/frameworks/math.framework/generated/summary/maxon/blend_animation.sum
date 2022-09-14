@@ -1,0 +1,2 @@
+maxon.BlendTweenInterface	"net.maxon.interface.blendtween"	D:\C4D_MMD_Tool\sdk_2023\frameworks\math.framework\source\maxon\blend_animation.h(35,7)	ObserverObjectInterface	GetEnd,GetFunction,GetMappedValue,GetStart,ObservableAnimation,SetEnd,SetFunction,SetNewTarget,SetStart	
+maxon.BlendAnimationInterface	"net.maxon.interface.blendanimation"	D:\C4D_MMD_Tool\sdk_2023\frameworks\math.framework\source\maxon\blend_animation.h(120,7)	ObserverObjectInterface	AddTween,CancelAndWait,GetProgress,GetState,GetTimerRef,GetTweens,RemoveTween,SetDirection,SetStartProgress,StartAnimation	

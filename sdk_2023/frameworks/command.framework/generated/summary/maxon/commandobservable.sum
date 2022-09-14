@@ -1,0 +1,1 @@
+maxon.CommandObserverInterface	"net.maxon.command.interface.observer"	D:\C4D_MMD_Tool\sdk_2023\frameworks\command.framework\source\maxon\commandobservable.h(28,7)	ObserverObjectInterface	ObservableCommandInvoked,ObservableCommandInvokedInfo,ObservableCommandPrepareInfo,ObservableCommandStatus	

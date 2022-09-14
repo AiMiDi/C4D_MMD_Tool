@@ -1,1 +1,1 @@
-maxon.AudioObjectInterface	"net.maxon.image.interface.audioobject"	D:\C4DSDK\C4D_MMDTool\sdk_r21\frameworks\image.framework\source\maxon\audioobject.h(11,7)	DataDictionaryObjectInterface	GetBitsPerChannel,GetChannelCount,GetDataPtr,GetLength,GetSampleCount,GetSampleRate,Init	
+maxon.AudioObjectInterface	"net.maxon.image.interface.audioobject"	D:\C4D_MMD_Tool\sdk_r21\frameworks\image.framework\source\maxon\audioobject.h(11,7)	DataDictionaryObjectInterface	GetBitsPerChannel,GetChannelCount,GetDataPtr,GetLength,GetSampleCount,GetSampleRate,Init	

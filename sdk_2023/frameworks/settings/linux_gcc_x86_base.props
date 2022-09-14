@@ -1,0 +1,1 @@
+-Wno-maybe-uninitialized -D_GLIBCXX_USE_CXX11_ABI=0 -fno-strict-aliasing -Wno-parentheses -Wno-register -Wno-deprecated-declarations -Wno-class-memaccess -Wno-attributes -fmessage-length=0 -fvisibility=hidden -Wall -Wno-multichar -Wno-switch -Wno-strict-aliasing -Werror=char-subscripts -Werror=sequence-point -mavx

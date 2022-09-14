@@ -1,0 +1,12 @@
+#ifndef XSLAVERTEXMAP_H__
+#define XSLAVERTEXMAP_H__
+
+enum
+{
+	SLA_DIRTY_VMAP_OBJECT											= 1001, // link
+	SLA_DIRTY_VMAP_INVERT											= 1002, // bool
+	SLA_DIRTY_VMAP_OCIO_COLORSPACE						= 1003, // long
+	SLA_DIRTY_VMAP_OCIO_USE_RENDER_COLORSPACE = 10000,
+};
+
+#endif // XSLAVERTEXMAP_H__

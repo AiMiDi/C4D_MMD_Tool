@@ -1,0 +1,1 @@
+maxon.DimensionInterface	"net.maxon.interface.dimension"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\units.h(28,7)	ObjectInterface	AddUnit,Copy,Get,GetExponent,GetId,GetUnits,IsEquivalent,ToString,operatorDiv,operatorMul,operatorXor	singleImpl=true	hasStaticMethods=true	
