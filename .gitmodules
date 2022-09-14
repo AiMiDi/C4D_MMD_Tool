@@ -1,12 +1,12 @@
 [submodule "dependency/yaml-cpp"]
 	path = dependency/yaml-cpp
-	url = https://github.com/AiMiDi/yaml-cpp.git
+	url = https://github.com/jbeder/yaml-cpp.git
 [submodule "dependency/bullet3"]
 	path = dependency/bullet3
-	url = https://github.com/AiMiDi/bullet3.git
+	url = https://github.com/bulletphysics/bullet3.git
 [submodule "dependency/libiconv"]
 	path = dependency/libiconv
-	url =https://github.com/AiMiDi/libiconv_cmake.git
+	url = https://github.com/AiMiDi/libiconv_cmake.git
 [submodule "setup"]
 	path = setup
 	url = https://github.com/AiMiDi/C4D_Plugin_Setup.git
