@@ -1,2 +1,2 @@
-maxon.MediaStreamFormatInterface	"net.maxon.image.interface.mediastreamformat"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\image.framework\source\maxon\mediasession_streamformat.h(16,7)	DataDictionaryObjectInterface		
-maxon.MediaStreamPropertiesInterface	"net.maxon.image.interface.mediastreamproperties"	D:\C4DSDK\C4D_MMDTool\sdk_r25\frameworks\image.framework\source\maxon\mediasession_streamformat.h(32,7)	MediaStreamFormatInterface	Init	
+maxon.MediaStreamFormatInterface	"net.maxon.image.interface.mediastreamformat"	D:\C4D_MMD_Tool\sdk_r25\frameworks\image.framework\source\maxon\mediasession_streamformat.h(16,7)	DataDictionaryObjectInterface		
+maxon.MediaStreamPropertiesInterface	"net.maxon.image.interface.mediastreamproperties"	D:\C4D_MMD_Tool\sdk_r25\frameworks\image.framework\source\maxon\mediasession_streamformat.h(32,7)	MediaStreamFormatInterface	Init	

@@ -1,0 +1,1 @@
+D:\C4D_MMD_Tool\sdk_2023\plugins\project\_obj\crypt.framework\x64_Debug\crypt.framework_Debug_64bit.lib

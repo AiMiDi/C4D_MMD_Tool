@@ -1,0 +1,113 @@
+﻿  Source processor
+  Loading generator module cppgenerator from ..\..\..\frameworks\settings\sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from ..\..\..\frameworks\settings\sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from ..\..\..\frameworks\settings\sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from ..\..\..\frameworks\settings\sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in D:\C4D_MMD_Tool\sdk_2023\plugins\mmdtool...
+  BulletTest.cpp
+  ImagesGUI.cpp
+  main.cpp
+  MMD_PMX_Control.cpp
+  MMD_PMX_model.cpp
+  MMD_utility.cpp
+  MMD_VMD_animation.cpp
+  MMD_VPD_pose.cpp
+  NameConversion.cpp
+  PluginRegister.cpp
+  interface_registration.cpp
+  register.cpp
+D:\C4D_MMD_Tool\res\description/TMMDBone.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\..\source\MMD_PMX_Control.cpp)
+D:\C4D_MMD_Tool\res\description/TMMDBone.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\..\source\BulletTest.cpp)
+D:\C4D_MMD_Tool\res\description/TMMDBone.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\..\source\MMD_VMD_animation.cpp)
+D:\C4D_MMD_Tool\res\description/TMMDBone.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\..\source\MMD_VPD_pose.cpp)
+D:\C4D_MMD_Tool\res\description/TMMDBone.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\..\source\PluginRegister.cpp)
+D:\C4D_MMD_Tool\res\description/TMMDBone.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+..\..\..\..\source\BulletTest.cpp(231,41): warning C4242: “=”: 从“Int32”转换到“uint16_t”，可能丢失数据
+..\..\..\..\source\BulletTest.cpp(440,72): warning C4800: 从“Float”到 bool 的隐式转换。信息可能丢失
+..\..\..\..\source\BulletTest.cpp(440,72): message : 请考虑使用显式强制转换或比较 0 来避免此警告
+D:\C4D_MMD_Tool\sdk_2023\frameworks\cinema.framework\source\ge_sys_math.h(66,24): message : 参见“Float”的声明 (编译源文件 ..\..\..\..\source\BulletTest.cpp)
+..\..\..\..\source\BulletTest.cpp(469,72): warning C4800: 从“Float”到 bool 的隐式转换。信息可能丢失
+..\..\..\..\source\BulletTest.cpp(469,72): message : 请考虑使用显式强制转换或比较 0 来避免此警告
+D:\C4D_MMD_Tool\sdk_2023\frameworks\cinema.framework\source\ge_sys_math.h(66,24): message : 参见“Float”的声明 (编译源文件 ..\..\..\..\source\BulletTest.cpp)
+..\..\..\..\source\BulletTest.cpp(472,72): warning C4800: 从“Float”到 bool 的隐式转换。信息可能丢失
+..\..\..\..\source\BulletTest.cpp(472,72): message : 请考虑使用显式强制转换或比较 0 来避免此警告
+D:\C4D_MMD_Tool\sdk_2023\frameworks\cinema.framework\source\ge_sys_math.h(66,24): message : 参见“Float”的声明 (编译源文件 ..\..\..\..\source\BulletTest.cpp)
+..\..\..\..\source\BulletTest.cpp(492,150): warning C4800: 从“Float”到 bool 的隐式转换。信息可能丢失
+..\..\..\..\source\BulletTest.cpp(492,150): message : 请考虑使用显式强制转换或比较 0 来避免此警告
+D:\C4D_MMD_Tool\sdk_2023\frameworks\cinema.framework\source\ge_sys_math.h(66,24): message : 参见“Float”的声明 (编译源文件 ..\..\..\..\source\BulletTest.cpp)
+..\..\..\..\source\MMD_VMD_animation.cpp(2975,20): warning C4566: 由通用字符名称“\u30FB”表示的字符不能在当前代码页(936)中表示出来
+D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon/utilities/compare.h(256,12): warning C4389: “==”: 有符号/无符号不匹配 (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon/utilities/compare.h(168): message : 查看对正在编译的函数 模板 实例化“bool maxon::CompareTemplate<false,maxon::EQUALITY::SHALLOW,maxon::OverloadRank5>::IsEqualHelper<unsigned int,int>(const K1 &,const K2 &,OPERATOR_RANK)”的引用
+          with
+          [
+              K1=unsigned int,
+              K2=int,
+              OPERATOR_RANK=maxon::OverloadRank5
+          ] (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon/utilities/compare.h(168): message : 查看对正在编译的函数 模板 实例化“bool maxon::CompareTemplate<false,maxon::EQUALITY::SHALLOW,maxon::OverloadRank5>::IsEqualHelper<unsigned int,int>(const K1 &,const K2 &,OPERATOR_RANK)”的引用
+          with
+          [
+              K1=unsigned int,
+              K2=int,
+              OPERATOR_RANK=maxon::OverloadRank5
+          ] (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon/hashmap.h(2636): message : 查看对正在编译的函数 模板 实例化“maxon::Bool maxon::CompareTemplate<false,maxon::EQUALITY::SHALLOW,maxon::OverloadRank5>::IsEqual<KEY,K>(const T1 &,const T2 &)”的引用
+          with
+          [
+              KEY=UInt32,
+              K=Int32,
+              T1=UInt32,
+              T2=Int32
+          ] (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon/hashmap.h(2636): message : 查看对正在编译的函数 模板 实例化“maxon::Bool maxon::CompareTemplate<false,maxon::EQUALITY::SHALLOW,maxon::OverloadRank5>::IsEqual<KEY,K>(const T1 &,const T2 &)”的引用
+          with
+          [
+              KEY=UInt32,
+              K=Int32,
+              T1=UInt32,
+              T2=Int32
+          ] (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon/hashmap.h(2646): message : 查看对正在编译的函数 模板 实例化“const maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,maxon::DefaultAllocator,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::Entry *maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,ALLOCATOR,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::FindEntryImpl<KEY,KEYHASH>(unsigned __int64,const KEY &) const”的引用
+          with
+          [
+              ALLOCATOR=maxon::DefaultAllocator,
+              KEY=UInt32,
+              KEYHASH=maxon::DefaultCompare
+          ] (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon/hashmap.h(2646): message : 查看对正在编译的函数 模板 实例化“const maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,maxon::DefaultAllocator,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::Entry *maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,ALLOCATOR,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::FindEntryImpl<KEY,KEYHASH>(unsigned __int64,const KEY &) const”的引用
+          with
+          [
+              ALLOCATOR=maxon::DefaultAllocator,
+              KEY=UInt32,
+              KEYHASH=maxon::DefaultCompare
+          ] (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon/hashmap.h(1342): message : 查看对正在编译的函数 模板 实例化“maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,maxon::DefaultAllocator,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::Entry *maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,ALLOCATOR,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::FindEntryImpl<KEY,KEYHASH>(unsigned __int64,const KEY &)”的引用
+          with
+          [
+              ALLOCATOR=maxon::DefaultAllocator,
+              KEY=UInt32,
+              KEYHASH=maxon::DefaultCompare
+          ] (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon/hashmap.h(1342): message : 查看对正在编译的函数 模板 实例化“maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,maxon::DefaultAllocator,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::Entry *maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,ALLOCATOR,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::FindEntryImpl<KEY,KEYHASH>(unsigned __int64,const KEY &)”的引用
+          with
+          [
+              ALLOCATOR=maxon::DefaultAllocator,
+              KEY=UInt32,
+              KEYHASH=maxon::DefaultCompare
+          ] (编译源文件 ..\..\..\..\source\MMD_PMX_model.cpp)
+..\..\..\..\source\MMD_PMX_model.cpp(1886): message : 查看对正在编译的函数 模板 实例化“maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,maxon::DefaultAllocator,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::Entry *maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,ALLOCATOR,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::Find<HASH,UInt32>(const KEY &)”的引用
+          with
+          [
+              ALLOCATOR=maxon::DefaultAllocator,
+              HASH=maxon::DefaultCompare,
+              KEY=UInt32
+          ]
+..\..\..\..\source\MMD_PMX_model.cpp(1938): message : 查看对正在编译的函数 模板 实例化“maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,maxon::DefaultAllocator,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::Entry *maxon::HashMap<Int32,mmd::PMXModel::FromFileImportMultipartModel::point_info,maxon::DefaultCompare,maxon::HashMapKeyValuePair,ALLOCATOR,maxon::HASHMAP_MODE::DEFAULT,16,10,ALLOCATOR>::Find<HASH,UInt32>(const KEY &)”的引用
+          with
+          [
+              ALLOCATOR=maxon::DefaultAllocator,
+              HASH=maxon::DefaultCompare,
+              KEY=UInt32
+          ]
+    正在创建库 D:\C4D_MMD_Tool\sdk_2023\plugins\project\_obj\mmdtool\x64_Release\MMDTool.xdl64.lib 和对象 D:\C4D_MMD_Tool\sdk_2023\plugins\project\_obj\mmdtool\x64_Release\MMDTool.xdl64.exp
+  mmdtool.vcxproj -> D:\C4D_MMD_Tool\release\2023\MMDTool.xdl64

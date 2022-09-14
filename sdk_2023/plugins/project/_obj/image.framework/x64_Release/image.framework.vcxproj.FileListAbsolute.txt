@@ -1,0 +1,1 @@
+D:\C4D_MMD_Tool\sdk_2023\plugins\project\_obj\image.framework\x64_Release\image.framework_Release_64bit.lib

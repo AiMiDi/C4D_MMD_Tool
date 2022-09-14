@@ -64,10 +64,10 @@
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.xdl64</TargetExt>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MMDTool_R21</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MMDTool</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.xdl64</TargetExt>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\release\R21</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>..\..\..\..\lib\yaml_cpp\include;..\..\..\..\lib\bullet\include;..\..\..\..\lib\libiconv-1.16\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>

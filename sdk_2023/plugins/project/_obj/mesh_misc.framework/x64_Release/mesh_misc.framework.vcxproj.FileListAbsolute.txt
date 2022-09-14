@@ -1,0 +1,1 @@
+D:\C4D_MMD_Tool\sdk_2023\plugins\project\_obj\mesh_misc.framework\x64_Release\mesh_misc.framework_Release_64bit.lib

@@ -1,0 +1,1 @@
+maxon.CodeExchangeInterface	"net.maxon.python.interface.codeexchange"	D:\C4D_MMD_Tool\sdk_2023\frameworks\python.framework\source\maxon\code_exchange.h(27,7)	ObjectInterface	GetLanguage,GetName,SendConsoleOutput,SendScriptToIDE,Start,Stop	

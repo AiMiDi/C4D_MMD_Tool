@@ -1,0 +1,1 @@
+maxon.ImagePixelStorageInterface	"net.maxon.image.interface.imagepixelstorage"	D:\C4D_MMD_Tool\sdk_2023\frameworks\image.framework\source\maxon\gfx_image_storage.h(19,7)	ObjectInterface	FreePixelHandler,GetChannelCount,GetComponent,GetHeight,GetPixelFormat,GetPixelHandler,GetWidth,Init,SetComponent,SetPixelHandler	

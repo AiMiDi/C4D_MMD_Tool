@@ -1,0 +1,1 @@
+maxon.SettingsInterface	"net.maxon.interface.settingsinterface"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\settingsinterface.h(35,7)	DataDictionaryObjectInterface	GetAccessLevel,GetParentSettings,GetSettings,GetSettingsCopy,ObservableSettingsChanged	hasStaticMethods=true	

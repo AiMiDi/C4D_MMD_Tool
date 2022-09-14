@@ -1,0 +1,37 @@
+#if 1
+namespace MACHINE_MESSAGE
+{
+#ifndef PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE
+#define PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE
+	class RESTRICT : public maxon::RESTRICT { }; template <typename T> RESTRICT TestRestriction(T y, maxon::OverloadRank1);
+#endif
+	namespace MSG_INITIALIZATION_STAGE
+	{
+	#ifndef PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE_MSG_INITIALIZATION_STAGE
+	#define PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE_MSG_INITIALIZATION_STAGE
+		class RESTRICT : public MACHINE_MESSAGE::RESTRICT { }; template <typename T> RESTRICT TestRestriction(T y, maxon::OverloadRank1);
+	#endif
+	}
+	namespace MSG_INITIALIZATION_IMAGE
+	{
+	#ifndef PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE_MSG_INITIALIZATION_IMAGE
+	#define PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE_MSG_INITIALIZATION_IMAGE
+		class RESTRICT : public MACHINE_MESSAGE::RESTRICT { }; template <typename T> RESTRICT TestRestriction(T y, maxon::OverloadRank1);
+	#endif
+	}
+	namespace MSG_INITIALIZATION_BLOCKING_START
+	{
+	#ifndef PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE_MSG_INITIALIZATION_BLOCKING_START
+	#define PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE_MSG_INITIALIZATION_BLOCKING_START
+		class RESTRICT : public MACHINE_MESSAGE::RESTRICT { }; template <typename T> RESTRICT TestRestriction(T y, maxon::OverloadRank1);
+	#endif
+	}
+	namespace MSG_INITIALIZATION_SPLASH_SHOW
+	{
+	#ifndef PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE_MSG_INITIALIZATION_SPLASH_SHOW
+	#define PRIVATE_MAXON_GUARD_maxon_MACHINE_MESSAGE_MSG_INITIALIZATION_SPLASH_SHOW
+		class RESTRICT : public MACHINE_MESSAGE::RESTRICT { }; template <typename T> RESTRICT TestRestriction(T y, maxon::OverloadRank1);
+	#endif
+	}
+}
+#endif

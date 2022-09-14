@@ -1,0 +1,1 @@
+maxon.FileFormatHandlerInterface	"net.maxon.interface.fileformathandler"	D:\C4D_MMD_Tool\sdk_2023\frameworks\core.framework\source\maxon\fileformat_handler.h(45,7)	ObjectInterface	CreateHandler,GetDependends,GetFileFormat,GetHandlerType	
