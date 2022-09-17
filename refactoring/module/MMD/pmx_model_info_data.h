@@ -60,26 +60,30 @@ public:
 	// Is there a vertex morph 
 	Bool	have_vertex_morph = false;
 
-	explicit PMXModelInfoData(
-		const Char text_encoding = 0,
-		const Char vertex_index_size = 4,
-		const Char texture_index_size = 2,
-		const Char material_index_size = 2,
-		const Char bone_index_size = 2,
-		const Char morph_index_size = 2,
-		const Char rigidbody_index_size = 2) :
-	m_text_encoding(text_encoding),
-	m_vertex_index_size(vertex_index_size),
-	m_texture_index_size(texture_index_size),
-	m_material_index_size(material_index_size),
-	m_bone_index_size(bone_index_size),
-	m_morph_index_size(morph_index_size),
-	m_rigidbody_index_size(rigidbody_index_size)
+	PMXModelInfoData() = default;
+
+	void Init(
+		const Char& text_encoding = 0,
+		const Char& vertex_index_size = 4,
+		const Char& texture_index_size = 2,
+		const Char& material_index_size = 2,
+		const Char& bone_index_size = 2,
+		const Char& morph_index_size = 2,
+		const Char& rigidbody_index_size = 2)
 	{
+		m_text_encoding = text_encoding;
+		m_vertex_index_size = vertex_index_size;
+		m_texture_index_size = texture_index_size;
+		m_material_index_size = material_index_size;
+		m_bone_index_size = bone_index_size;
+		m_morph_index_size = morph_index_size;
+		m_rigidbody_index_size = rigidbody_index_size;
 		InitReader();
 	}
-	void InitReader();
+	
 	Bool ReadFromFile(BaseFile* file) override;
+private:
+	void InitReader();
 };
 
 #endif // !_PMX_MODEL_INFO_DATA_H_

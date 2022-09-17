@@ -26,6 +26,13 @@ public:
 		assert(text_encoding == 0 || text_encoding == 1);
 		m_text_encoding = text_encoding;
 	}
+	bool operator()(BaseFile* const file) const
+	{
+		// text字符串最大长度
+		Int32 text_length = 0;
+		file->ReadInt32(&text_length);
+		return file->Seek(text_length);
+	}
 	bool operator()(BaseFile* const file, String& out_string) const
 	{
 		// text字符串最大长度
@@ -68,6 +75,10 @@ public:
 	{
 		assert(m_index_size == 1 || m_index_size == 2 || m_index_size == 4);
 		m_index_size = index_size;
+	}
+	bool operator()(BaseFile* const file) const
+	{
+		return file->Seek(m_index_size);
 	}
 	bool operator()(BaseFile* const file, Int32& out_index) const
 	{
@@ -115,6 +126,10 @@ public:
 	{
 		assert(m_index_size == 1 || m_index_size == 2 || m_index_size == 4);
 		m_index_size = index_size;
+	}
+	bool operator()(BaseFile* const file) const
+	{
+		return file->Seek(m_index_size);
 	}
 	bool operator()(BaseFile* const file, UInt32& out_index) const
 	{

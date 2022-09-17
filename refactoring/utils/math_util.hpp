@@ -37,10 +37,12 @@ namespace math_util
 	}
 	/**
 	 * \brief Converts Quaternion rotation to euler rotation.
-	 * \param quaternion Enter Quaternion rotation
-	 * \return Results Euler rotation
+	 * \tparam T Vector float type
+	 * \param quaternion Enter quaternion rotation
+	 * \return Results euler rotation
 	 */
-	inline maxon::Vector QuaternionToEuler(const maxon::Vector4d32& quaternion)
+	template<class T>
+	auto QuaternionToEuler(const maxon::Vec4<T>& quaternion)
 	{
 		// pitch(y - axis rotation)
 		const Float sinr_cosp = 2.0 * (static_cast<double>(quaternion.w * quaternion.y) + 
@@ -94,7 +96,7 @@ namespace math_util
 			roll = -PI - roll;
 		}
 		// HPB
-		return maxon::Vector(pitch, -roll, yaw);
+		return maxon::Vec3<T>{ maxon::SafeConvert<T>(pitch), maxon::SafeConvert<T>(-roll), maxon::SafeConvert<T>(yaw) };
 	}
 }
 
