@@ -21,6 +21,7 @@ struct PMXMaterialFlags
 	Bool	point_drawing : 1;
 	// Three sides are drawn 
 	Bool	line_drawing : 1;
+
 	PMXMaterialFlags()
 	{
 		no_cull = false;
@@ -34,48 +35,56 @@ struct PMXMaterialFlags
 	}
 };
 
-class PMXMaterialData : public MMDDataBase
+struct PMXMaterialData
 {
-	const PMXModelInfoData& m_model_info;
-
 	// Local material name, Japanese, Chinese, etc 
-	String				m_material_name_local{};
+	String				material_name_local{};
 	// General material name, usually in English 
-	String				m_material_name_universal{};
+	String				material_name_universal{};
 	// diffuse color RGBA 
-	Vector4d32			m_diffuse_colour = Vector4d32(1);
+	Vector4d32			diffuse_colour = Vector4d32(1);
 	// Specular (specular) color RGB 
-	Vector32			m_specular_colour{};
+	Vector32			specular_colour{};
 	// Specular light intensity 
-	Float32				m_specular_strength = 5.0f;
+	Float32				specular_strength = 5.0f;
 	// Environment color, the shadow color when the light is insufficient (i.e. the base color, which makes the shadow less black) 
-	Vector32			m_ambient_colour = Vector32(1);
+	Vector32			ambient_colour = Vector32(1);
 	// Draw marker 
-	PMXMaterialFlags	m_drawing_flags{};
+	PMXMaterialFlags	drawing_flags{};
 	// Edge color RGBA 
-	Vector4d32			m_edge_colour{ 0, 0, 0, 1 };
+	Vector4d32			edge_colour{ 0, 0, 0, 1 };
 	// Edge scale[0, 1] 
-	Float32				m_edge_scale = 1.f;
+	Float32				edge_scale = 1.f;
 	// Texture index 
-	Int32				m_texture_index = -1;
+	Int32				texture_index = -1;
 	// Environment (specular map) index for environment mapping 
-	Int32				m_environment_index = 0;
+	Int32				environment_index = 0;
 	// Environment (specular map) blend mode, 0 = off, 1 = multiply, 2 = add, 3 = extra vector4d32 */
-	Char				m_environment_blend_mode = 0;
+	Char				environment_blend_mode = 0;
 	// Map reference 0 = reference texture, 1 = internal reference 
-	Char				m_toon_reference = 0;
+	Char				toon_reference = 0;
 	// toon texture part 
-	Int32				m_toon_part = 0;
+	Int32				toon_part = 0;
 	// toon internal index 
-	Char				m_toon_internal = 0;
+	Char				toon_internal = 0;
 	// Metadata, used for scripts and other data. 
-	String				m_meta_data{};
+	String				meta_data{};
 	// Number of faces, which indicates how many faces are affected by the current material. 
-	Int32				m_surface_count = 0;
-public:
-	explicit PMXMaterialData(const PMXModelInfoData& model_info) : m_model_info(model_info) {}
+	Int32				surface_count = 0;
 
-	~PMXMaterialData() override = default;
+
+};
+
+class PMXMaterial final : public MMDDataBase
+{
+	using data_type = PMXMaterialData;
+	std::unique_ptr<data_type> m_data;
+
+	const PMXModelInfoData& m_model_info;
+public:
+	explicit PMXMaterial(const PMXModelInfoData& model_info) : m_model_info(model_info) {}
+
+	~PMXMaterial() override = default;
 
 	Bool ReadFromFile(BaseFile* file) override;
 };

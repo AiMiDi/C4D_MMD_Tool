@@ -31,12 +31,11 @@ Bool VMDAnimationArray<T>::ReadFormFile(BaseFile* file)
 		return FALSE;
 	iferr(this->Resize(frame_number))
 		return FALSE;
-	while (--frame_number)
+	for (UInt32 frame_index = 0; frame_index < frame_number; ++frame_index)
 	{
-		if (T frame{}; frame.ReadFromFile(file))
+		if (T& frame = (*this)[frame_index]; !frame.ReadFromFile(file))
 		{
-			iferr(this->Append(std::move(frame)))
-				return FALSE;
+			return FALSE;
 		}
 	}
 	VMDAnimationSort sorter;
@@ -52,7 +51,10 @@ Bool VMDAnimationArray<T>::WriteToFile(BaseFile* file) const
 		return FALSE;
 	for (UInt32 frame_index = 0; frame_index < frame_number; ++frame_index)
 	{
-		(*this)[frame_number].WriteToFile(file);
+		if (T& frame = (*this)[frame_number]; !frame.WriteToFile(file))
+		{
+			return FALSE;
+		}
 	}
 	return TRUE;
 }

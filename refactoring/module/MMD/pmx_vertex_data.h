@@ -14,14 +14,14 @@ Description:	pmx vertex data
 #include "pmx_model_info_data.h"
 #include "pmx_weight.h"
 
-class PMXVertexData final : public MMDDataBase
+struct PMXVertexData
 {
 	// The position
-	Vector32 m_position{};
+	Vector32 position{};
 	// The normal vector
-	Vector32 m_normal{};
+	Vector32 normal{};
 	// The UV coordinates. 
-	maxon::Vector2d32 m_UV{};          
+	maxon::Vector2d32 UV{};          
 	// Skip the extra Vector4d32[N]  16*N
 	enum
 	{
@@ -33,15 +33,22 @@ class PMXVertexData final : public MMDDataBase
 		QDEF
 	};
 	// Variant weight type, 0=BDEF1, 1=BDEF2, 2=BDEF4, 3=SDEF, 4=QDEF
-	Char m_weight_deform_type = DEFAULT;
+	Char weight_deform_type = DEFAULT;
 	// Variant weight 
-	std::unique_ptr<PMXWeight> m_weight_deform{nullptr};
+	std::unique_ptr<PMXWeight> weight_deform{nullptr};
 	// Edge magnification 
-	Float32 m_edge_scale = 0.f;
+	Float32 edge_scale = 0.f;
+};
+
+class PMXVertex final : public MMDDataBase
+{
+	using data_type = PMXVertexData;
+	std::unique_ptr<data_type> m_data;
+
 	const PMXModelInfoData& m_model_info;
 public:
-	explicit PMXVertexData(const PMXModelInfoData& model_info) :m_model_info(model_info) {}
-	~PMXVertexData() override = default;
+	explicit PMXVertex(const PMXModelInfoData& model_info) :m_model_info(model_info) {}
+	~PMXVertex() override = default;
 	Bool ReadFromFile(BaseFile* file) override;
 };
 #endif // !PMX_VERTEX_DATA

@@ -13,6 +13,7 @@ Description:	pmx bone data
 
 #include "pch.h"
 #include "mmd_base.hpp"
+#include "pmx_model_info_data.h"
 
 /* Bone flags(2bytes) */
 struct PMXBoneFlags
@@ -45,62 +46,87 @@ struct PMXBoneFlags
 	Bool	external_parent_deform : 1;
 	// seize a seat 
 	Bool : 2;
-	PMXBoneFlags();
+
+	// ReSharper disable once CppPossiblyUninitializedMember
+	PMXBoneFlags()
+	{
+		indexed_tail_position = false;
+		rotatable = true;
+		translatable = false;
+		is_visible = true;
+		enabled = true;
+		is_IK = false;
+		inherit_rotation = false;
+		inherit_translation = false;
+		fixed_axis = false;
+		local_coordinate = false;
+		physics_after_deform = false;
+		external_parent_deform = false;
+	}
 };
 
 struct PMXIKLinks
 {
 	// Bone index
-	Int32		m_bone_index = 0;
+	Int32		bone_index = 0;
 	// When the value is 1, the angle limit is used
-	Bool		m_has_limits = false;
+	Bool		has_limits = false;
 	// IK angle limit minimum angle (radians)
-	Vector32	m_limit_min = {};
+	Vector32	limit_min = {};
 	// IK angle limit maximum angle (radians)
-	Vector32	m_limit_max = {};
+	Vector32	limit_max = {};
 };
 
-class PMXBoneData final :public MMDDataBase
+struct PMXBoneData
 {
 	// The local name of the skeleton, usually Japanese. 
-	String			m_bone_name_local = {};
+	String			bone_name_local = {};
 	// The common name of bones is usually English. 
-	String			m_bone_name_universal = {};
+	String			bone_name_universal = {};
 	// Bone position 
-	Vector32		m_position = {};
+	Vector32		position = {};
 	// Bone affinity index, special: the bone affinity of the operation center is - 1 
-	Int32			m_parent_bone_index = 0;
+	Int32			parent_bone_index = 0;
 	// Deformation stratum 
-	Int32			m_layer = 0;
+	Int32			layer = 0;
 	// Bone flags 
-	PMXBoneFlags	m_bone_flags = {};
+	PMXBoneFlags	bone_flags = {};
 	// Bone tail coordinates (valid when relative on) 
-	Vector32		m_tail_position = {};
+	Vector32		tail_position = {};
 	// Bone tail index (valid when it is relatively unopened) 
-	Int32			m_tail_index = 0;
+	Int32			tail_index = 0;
 	/* 尾部位置,相对位置或连接子骨骼 */
 	// Bone inheritance - bone affinity index 
-	Int32			m_inherit_bone_parent_index = 0;
+	Int32			inherit_bone_parent_index = 0;
 	// Bone inheritance - influence weights 
-	Float32			m_inherit_bone_parent_influence = 0.f;
+	Float32			inherit_bone_parent_influence = 0.f;
 	// Bone fixed axis - axis direction 
-	Vector32		m_bone_fixed_axis = Vector32();
+	Vector32		bone_fixed_axis = Vector32();
 	// Bone local coordinates - x vector 
-	Vector32		m_bone_local_X = Vector32();
+	Vector32		bone_local_X = Vector32();
 	// Bone local coordinates - Z vector 
-	Vector32		m_bone_local_Z = Vector32();
+	Vector32		bone_local_Z = Vector32();
 	/* 跳过外亲骨(index) */
 	// IK bone - target bone index 
-	Int32			m_IK_target_index = 0;
+	Int32			IK_target_index = 0;
 	// IK bone - cycle count 
-	Int32			m_IK_loop_count = 0;
+	Int32			IK_loop_count = 0;
 	// IK bone - unit angle 
-	Float32			m_IK_limit_radian = 0.f;
+	Float32			IK_limit_radian = 0.f;
 	// IK bone IK chain count 
-	Int32			m_IK_link_count = 0;
-	maxon::BaseArray<PMXIKLinks>	m_IK_links;
+	Int32			IK_link_count = 0;
+	maxon::BaseArray<PMXIKLinks>	IK_links;
+};
+
+class PMXBone final :public MMDDataBase
+{
+	typedef PMXBoneData data_type;
+	std::unique_ptr<data_type> m_data;
+
+	const PMXModelInfoData& m_model_info;
 public:
-	~PMXBoneData() override = default;
+	explicit PMXBone(const PMXModelInfoData& model_info) : m_model_info(model_info){}
+	~PMXBone() override = default;
 
 	Bool ReadFromFile(BaseFile* file) override;
 };
