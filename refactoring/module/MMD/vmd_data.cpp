@@ -51,7 +51,7 @@ Bool VMDAnimationArray<T>::WriteToFile(BaseFile* file) const
 		return FALSE;
 	for (UInt32 frame_index = 0; frame_index < frame_number; ++frame_index)
 	{
-		if (T& frame = (*this)[frame_number]; !frame.WriteToFile(file))
+		if (const T& frame = (*this)[frame_number]; !frame.WriteToFile(file))
 		{
 			return FALSE;
 		}

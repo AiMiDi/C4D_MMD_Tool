@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -108,11 +108,11 @@ Bool PMXMorph::ReadFromFile(BaseFile* file)
 		return FALSE;
 	if (!m_model_info.m_text_reader(file, m_data->morph_name_universal))
 		return FALSE;
-	if (!file->ReadChar(&(m_data->panel_type)))
+	if (!file->ReadChar(&m_data->panel_type))
 		return FALSE;
-	if (!file->ReadChar(&(m_data->morph_type)))
+	if (!file->ReadChar(&m_data->morph_type))
 		return FALSE;
-	if (!file->ReadInt32(&(m_data->offset_count)))
+	if (!file->ReadInt32(&m_data->offset_count))
 		return FALSE;
 	for (Int32 offset_index = 0; offset_index < m_data->offset_count; offset_index++)
 	{
