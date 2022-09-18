@@ -42,14 +42,16 @@ struct PMXVertexData
 
 class PMXVertex final : public MMDDataBase
 {
-	using data_type = PMXVertexData;
-	std::unique_ptr<data_type> m_data;
-
-	const PMXModelInfoData& m_model_info;
 public:
 	explicit PMXVertex(const PMXModelInfoData& model_info) :m_model_info(model_info) {}
 	~PMXVertex() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXVertex)
+public:
 	Bool ReadFromFile(BaseFile* file) override;
+private:
+	using data_type = PMXVertexData;
+	std::unique_ptr<data_type> m_data;
+	const PMXModelInfoData& m_model_info;
 };
 #endif // !PMX_VERTEX_DATA
 

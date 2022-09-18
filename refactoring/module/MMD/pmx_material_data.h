@@ -77,14 +77,14 @@ struct PMXMaterialData
 
 class PMXMaterial final : public MMDDataBase
 {
-	using data_type = PMXMaterialData;
-	std::unique_ptr<data_type> m_data;
-
-	const PMXModelInfoData& m_model_info;
 public:
 	explicit PMXMaterial(const PMXModelInfoData& model_info) : m_model_info(model_info) {}
-
 	~PMXMaterial() override = default;
-
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMaterial)
+public:
 	Bool ReadFromFile(BaseFile* file) override;
+private:
+	using data_type = PMXMaterialData;
+	std::unique_ptr<data_type> m_data;
+	const PMXModelInfoData& m_model_info;
 };

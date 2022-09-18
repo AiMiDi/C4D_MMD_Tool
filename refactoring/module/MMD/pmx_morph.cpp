@@ -10,7 +10,6 @@ Description:	pmx morph data
 
 #include "pch.h"
 #include "pmx_morph.h"
-
 #include "utils/math_util.hpp"
 
 Bool PMXGroupMorphOffset::ReadFromFile(BaseFile* file)
@@ -48,7 +47,7 @@ Bool PMXUVMorphOffset::ReadFromFile(BaseFile* file)
 {
 	if (!m_model_info.m_vertex_index_reader(file, m_data->vertex_index))
 		return FALSE;
-	if (!file->ReadBytes(&m_data->uv_offset, sizeof m_data->uv_offset))
+	if (!file->ReadBytes(&m_data->UV_offset, sizeof m_data->UV_offset))
 		return FALSE;
 	return TRUE;
 }
@@ -104,6 +103,10 @@ Bool PMXImpulseMorphOffset::ReadFromFile(BaseFile* file)
 
 Bool PMXMorph::ReadFromFile(BaseFile* file)
 {
+	iferr_scope_handler
+	{
+		return FALSE;
+	};
 	if (!m_model_info.m_text_reader(file, m_data->morph_name_local))
 		return FALSE;
 	if (!m_model_info.m_text_reader(file, m_data->morph_name_universal))
@@ -114,66 +117,56 @@ Bool PMXMorph::ReadFromFile(BaseFile* file)
 		return FALSE;
 	if (!file->ReadInt32(&m_data->offset_count))
 		return FALSE;
+	m_data->offset_data.Resize(m_data->offset_count)iferr_return;
 	for (Int32 offset_index = 0; offset_index < m_data->offset_count; offset_index++)
 	{
+		auto& offset = m_data->offset_data[offset_index];
 		switch (m_data->morph_type)
 		{
 		case PMXMorphData::GROUP:
 		{
-			m_data->offset_data.Append(NewObj(PMXGroupMorphOffset, m_model_info).GetValue())
-				.GetValue()->ReadFromFile(file);
+			offset = std::make_unique<PMXGroupMorphOffset>(m_model_info);
 			break;
 		}
 		case PMXMorphData::VERTEX:
 		{
-			m_data->offset_data.Append(NewObj(PMXVertexMorpOffset, m_model_info).GetValue()).GetValue()
-				->ReadFromFile(file);
-			if (!m_model_info.have_vertex_morph)
-				m_model_info.have_vertex_morph = true;
+			offset = std::make_unique<PMXVertexMorpOffset>(m_model_info);
 			break;
 		}
 		case PMXMorphData::BONE:
 		{
-			m_data->offset_data.Append(NewObj(PMXBoneMorphOffset, m_model_info).GetValue()).GetValue()
-				->ReadFromFile(file);
+			offset = std::make_unique<PMXBoneMorphOffset>(m_model_info);
 			break;
 		}
 		case PMXMorphData::UV:
-		{
-			m_data->offset_data.Append(NewObj(PMXUVMorphOffset, m_model_info).GetValue()).GetValue()
-				->ReadFromFile(file);
-			if (!m_model_info.have_UV_morph)
-				m_model_info.have_UV_morph = true;
-			break;
-		}
 		case PMXMorphData::UV1:
 		case PMXMorphData::UV2:
 		case PMXMorphData::UV3:
 		case PMXMorphData::UV4:
 		{
-			// seek vertex index
-			m_model_info.m_vertex_index_reader(file);
-			if (!file->Seek(sizeof Vector4d32))
-				return FALSE;
+			offset = std::make_unique<PMXUVMorphOffset>(m_model_info, m_data->morph_type - 3);
 			break;
 		}
 		case PMXMorphData::MATERIAL:
 		{
-			m_data->offset_data.Append(NewObj(PMXMaterialMorphOffset, m_model_info).GetValue()).GetValue()
-				->ReadFromFile(file);
+			offset = std::make_unique<PMXMaterialMorphOffset>(m_model_info);
 			break;
 		}
 		case PMXMorphData::FLIP:
-			m_data->offset_data.Append(NewObj(PMXFlipMorphOffset, m_model_info).GetValue()).GetValue()
-				->ReadFromFile(file);
-			break;
-		case PMXMorphData::IMPULSE:
-			m_data->offset_data.Append(NewObj(PMXImpulseMorphOffset, m_model_info).GetValue()).GetValue()
-				->ReadFromFile(file);
-			break;
-		default:
+		{
+			offset = std::make_unique<PMXFlipMorphOffset>(m_model_info);
 			break;
 		}
+		case PMXMorphData::IMPULSE:
+		{
+			offset = std::make_unique<PMXImpulseMorphOffset>(m_model_info);
+			break;
+		}
+		default: 
+			return FALSE;
+		}
+		if (!offset->ReadFromFile(file))
+			return FALSE;
 	}
 	return TRUE;
 }

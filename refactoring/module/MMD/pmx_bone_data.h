@@ -120,15 +120,17 @@ struct PMXBoneData
 
 class PMXBone final :public MMDDataBase
 {
-	typedef PMXBoneData data_type;
-	std::unique_ptr<data_type> m_data;
 
-	const PMXModelInfoData& m_model_info;
 public:
 	explicit PMXBone(const PMXModelInfoData& model_info) : m_model_info(model_info){}
 	~PMXBone() override = default;
-
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXBone)
+public:
 	Bool ReadFromFile(BaseFile* file) override;
+private:
+	typedef PMXBoneData data_type;
+	std::unique_ptr<data_type> m_data;
+	const PMXModelInfoData& m_model_info;
 };
 
 #endif // !_PMX_BONE_DATA_H_

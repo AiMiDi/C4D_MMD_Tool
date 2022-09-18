@@ -20,6 +20,7 @@ class PMXMorphOffsetBase : MMDDataBase
 public:
 	explicit PMXMorphOffsetBase(const PMXModelInfoData& model_info) : m_model_info(model_info){}
 	~PMXMorphOffsetBase() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMorphOffsetBase)
 public:
 	Bool ReadFromFile(BaseFile* file) override = 0;
 protected:
@@ -39,6 +40,7 @@ class PMXGroupMorphOffset final : public PMXMorphOffsetBase
 public:
 	explicit PMXGroupMorphOffset(const PMXModelInfoData& model_info) : PMXMorphOffsetBase(model_info) {}
 	~PMXGroupMorphOffset() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXGroupMorphOffset)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
@@ -59,6 +61,7 @@ class PMXVertexMorpOffset final : public PMXMorphOffsetBase
 public:
 	explicit PMXVertexMorpOffset(const PMXModelInfoData& model_info) : PMXMorphOffsetBase(model_info) {}
 	~PMXVertexMorpOffset() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXVertexMorpOffset)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
@@ -81,6 +84,7 @@ class PMXBoneMorphOffset final : public PMXMorphOffsetBase
 public:
 	explicit PMXBoneMorphOffset(const PMXModelInfoData& model_info) : PMXMorphOffsetBase(model_info) {}
 	~PMXBoneMorphOffset() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXBoneMorphOffset)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
@@ -90,17 +94,32 @@ private:
 
 struct PMXUVMorphOffsetData
 {
+	// UV type
+	enum
+	{
+		UV, // UV
+		UV1,// expansion UV1
+		UV2,// expansion UV2
+		UV3,// expansion UV3
+		UV4 // expansion UV4
+	};
+	Int32 UV_type = UV;
 	// Vertex index
 	UInt32		vertex_index = 0;
 	// Influence (only x and y are useful, Z and W are 0)
-	Vector4d32	uv_offset;                       
+	Vector4d32	UV_offset;
+
+	explicit PMXUVMorphOffsetData() = default;
+	explicit PMXUVMorphOffsetData(const Int32& UV_type) : UV_type(UV_type){}
 };
 
 class PMXUVMorphOffset final : public PMXMorphOffsetBase
 {
 public:
-	explicit PMXUVMorphOffset(const PMXModelInfoData& model_info) : PMXMorphOffsetBase(model_info) {}
+	explicit PMXUVMorphOffset(const PMXModelInfoData& model_info, const Int32& UV_type) :
+	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>(UV_type)) {}
 	~PMXUVMorphOffset() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXUVMorphOffset)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
@@ -139,6 +158,7 @@ class PMXMaterialMorphOffset final : public PMXMorphOffsetBase
 public:
 	explicit PMXMaterialMorphOffset(const PMXModelInfoData& model_info) : PMXMorphOffsetBase(model_info) {}
 	~PMXMaterialMorphOffset() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMaterialMorphOffset)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
@@ -159,6 +179,7 @@ class PMXFlipMorphOffset final : public PMXMorphOffsetBase
 public:
 	explicit PMXFlipMorphOffset(const PMXModelInfoData& model_info) : PMXMorphOffsetBase(model_info) {}
 	~PMXFlipMorphOffset() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXFlipMorphOffset)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
@@ -183,6 +204,7 @@ class PMXImpulseMorphOffset final : public PMXMorphOffsetBase
 public:
 	explicit PMXImpulseMorphOffset(const PMXModelInfoData& model_info) : PMXMorphOffsetBase(model_info) {}
 	~PMXImpulseMorphOffset() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXImpulseMorphOffset)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
@@ -216,7 +238,7 @@ struct PMXMorphData
 	// Number of offsets 
 	Int32	offset_count = 0;
 	// Offset data  
-	maxon::BaseArray<PMXMorphOffsetBase*> offset_data;
+	maxon::BaseArray<std::unique_ptr<PMXMorphOffsetBase>> offset_data;
 };
 
 class PMXMorph final : MMDDataBase
@@ -224,6 +246,7 @@ class PMXMorph final : MMDDataBase
 public:
 	explicit PMXMorph(PMXModelInfoData& model_info) : m_model_info(model_info) {}
 	~PMXMorph() override = default;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMorph)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
