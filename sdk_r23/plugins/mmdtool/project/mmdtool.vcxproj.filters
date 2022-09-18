@@ -126,6 +126,9 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_morph.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_display.cpp">
+      <Filter>source\module\MMD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -261,6 +264,9 @@
       <Filter>source\module\MMD</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_morph.h">
+      <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_display.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
   </ItemGroup>
