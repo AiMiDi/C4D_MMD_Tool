@@ -1,5 +1,15 @@
+/**************************************************************************
+
+Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Author:			Aimidi
+Date:			2022/8/14
+File:			pmx_model_info.cpp
+Description:	pmx model information data
+
+**************************************************************************/
+
 #include "pch.h"
-#include "module/MMD/pmx_model_info_data.h"
+#include "module/MMD/pmx_model_info.h"
 
 void PMXModelInfoData::InitReader()
 {

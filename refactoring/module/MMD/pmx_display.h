@@ -12,7 +12,7 @@ Description:	pmx display data
 #define _PMX_DISPLAY_H_
 
 #include "mmd_base.hpp"
-#include "pmx_model_info_data.h"
+#include "pmx_model_info.h"
 
 struct PMXFrameData
 {
@@ -49,15 +49,38 @@ struct PMXDisplayData
 class PMXDisplay final : MMDDataBase
 {
 public:
-	explicit PMXDisplay(PMXModelInfoData& model_info) : m_model_info(model_info) {}
+	/**
+	 * \brief Default constructor function
+	 */
+	explicit PMXDisplay(const PMXModelInfoData* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
+	/**
+	 * \brief Destructor function
+	 */
 	~PMXDisplay() override = default;
+	/**
+	 * \brief Move constructor
+	 */
+	PMXDisplay(PMXDisplay&& src) noexcept = default;
+	/**
+	 * \brief Move operator=
+	 * \return Result reference
+	 */
+	PMXDisplay& operator =(PMXDisplay&& src) noexcept
+	{
+		if (this != &src)
+		{
+			m_data = std::move(src.m_data);
+			m_model_info = src.m_model_info;
+		}
+		return *this;
+	}
 	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXDisplay)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
 	using data_type = PMXDisplayData;
 	std::unique_ptr<data_type> m_data;
-	PMXModelInfoData& m_model_info;
+	const PMXModelInfoData* m_model_info;
 };
 
 #endif // !_PMX_DISPLAY_H_

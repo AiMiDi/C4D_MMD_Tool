@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -14,7 +14,7 @@ Description:	pmx morph data
 
 Bool PMXGroupMorphOffset::ReadFromFile(BaseFile* file)
 {
-	if (!m_model_info.m_morph_index_reader(file, m_data->morph_index))
+	if (!m_model_info->m_morph_index_reader(file, m_data->morph_index))
 		return FALSE;
 	if (!file->ReadFloat32(&m_data->influence))
 		return FALSE;
@@ -23,7 +23,7 @@ Bool PMXGroupMorphOffset::ReadFromFile(BaseFile* file)
 
 Bool PMXVertexMorpOffset::ReadFromFile(BaseFile* file)
 {
-	if (!m_model_info.m_vertex_index_reader(file, m_data->vertex_index))
+	if (!m_model_info->m_vertex_index_reader(file, m_data->vertex_index))
 		return FALSE;
 	if (!file->ReadVector32(&m_data->position_offset))
 		return FALSE;
@@ -32,7 +32,7 @@ Bool PMXVertexMorpOffset::ReadFromFile(BaseFile* file)
 
 Bool PMXBoneMorphOffset::ReadFromFile(BaseFile* file)
 {
-	if (!m_model_info.m_bone_index_reader(file, m_data->bone_index))
+	if (!m_model_info->m_bone_index_reader(file, m_data->bone_index))
 		return FALSE;
 	if (!file->ReadVector32(&m_data->translation))
 		return FALSE;
@@ -45,7 +45,7 @@ Bool PMXBoneMorphOffset::ReadFromFile(BaseFile* file)
 
 Bool PMXUVMorphOffset::ReadFromFile(BaseFile* file)
 {
-	if (!m_model_info.m_vertex_index_reader(file, m_data->vertex_index))
+	if (!m_model_info->m_vertex_index_reader(file, m_data->vertex_index))
 		return FALSE;
 	if (!file->ReadBytes(&m_data->UV_offset, sizeof m_data->UV_offset))
 		return FALSE;
@@ -54,7 +54,7 @@ Bool PMXUVMorphOffset::ReadFromFile(BaseFile* file)
 
 Bool PMXMaterialMorphOffset::ReadFromFile(BaseFile* file)
 {
-	if (!m_model_info.m_material_index_reader(file, m_data->material_index))
+	if (!m_model_info->m_material_index_reader(file, m_data->material_index))
 		return FALSE;
 	if (!file->ReadChar(&m_data->blend_mode))
 		return FALSE;
@@ -81,7 +81,7 @@ Bool PMXMaterialMorphOffset::ReadFromFile(BaseFile* file)
 
 Bool PMXFlipMorphOffset::ReadFromFile(BaseFile* file)
 {
-	if (!m_model_info.m_morph_index_reader(file, m_data->morph_index))
+	if (!m_model_info->m_morph_index_reader(file, m_data->morph_index))
 		return FALSE;
 	if (!file->ReadFloat32(&m_data->influence))
 		return FALSE;
@@ -90,7 +90,7 @@ Bool PMXFlipMorphOffset::ReadFromFile(BaseFile* file)
 
 Bool PMXImpulseMorphOffset::ReadFromFile(BaseFile* file)
 {
-	if (!m_model_info.m_rigidbody_index_reader(file, m_data->rigid_body_index))
+	if (!m_model_info->m_rigidbody_index_reader(file, m_data->rigid_body_index))
 		return FALSE;
 	if (!file->ReadChar(&m_data->local_flag))
 		return FALSE;
@@ -107,9 +107,9 @@ Bool PMXMorph::ReadFromFile(BaseFile* file)
 	{
 		return FALSE;
 	};
-	if (!m_model_info.m_text_reader(file, m_data->morph_name_local))
+	if (!m_model_info->m_text_reader(file, m_data->morph_name_local))
 		return FALSE;
-	if (!m_model_info.m_text_reader(file, m_data->morph_name_universal))
+	if (!m_model_info->m_text_reader(file, m_data->morph_name_universal))
 		return FALSE;
 	if (!file->ReadChar(&m_data->panel_type))
 		return FALSE;

@@ -3,13 +3,13 @@
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
 Date:			2022/8/24
-File:			pmx_bone_data.cpp
+File:			pmx_bone.cpp
 Description:	pmx bone data
 
 **************************************************************************/
 
 #include "pch.h"
-#include "pmx_bone_data.h"
+#include "pmx_bone.h"
 
 Bool PMXBone::ReadFromFile(BaseFile* file)
 {
@@ -17,13 +17,13 @@ Bool PMXBone::ReadFromFile(BaseFile* file)
 	{
 		return FALSE;
 	};
-	if (!m_model_info.m_text_reader(file, m_data->bone_name_local))
+	if (!m_model_info->m_text_reader(file, m_data->bone_name_local))
 		return FALSE;
-	if (!m_model_info.m_text_reader(file, m_data->bone_name_universal))
+	if (!m_model_info->m_text_reader(file, m_data->bone_name_universal))
 		return FALSE;
 	if (!file->ReadVector32(&m_data->position))
 		return FALSE;
-	if (!m_model_info.m_bone_index_reader(file,m_data->parent_bone_index))
+	if (!m_model_info->m_bone_index_reader(file,m_data->parent_bone_index))
 		return FALSE;
 	if (!file->ReadInt32(& m_data->layer))
 		return FALSE;
@@ -36,12 +36,12 @@ Bool PMXBone::ReadFromFile(BaseFile* file)
 	}
 	else if ( m_data->bone_flags.indexed_tail_position == 1)
 	{
-		if (!m_model_info.m_bone_index_reader(file, m_data->tail_index))
+		if (!m_model_info->m_bone_index_reader(file, m_data->tail_index))
 			return FALSE;
 	}
 	if ( m_data->bone_flags.inherit_rotation || m_data->bone_flags.inherit_translation)
 	{
-		if (!m_model_info.m_bone_index_reader(file, m_data->inherit_bone_parent_index))
+		if (!m_model_info->m_bone_index_reader(file, m_data->inherit_bone_parent_index))
 			return FALSE;
 		if (!file->ReadFloat32(& m_data->inherit_bone_parent_influence))
 			return FALSE;
@@ -64,7 +64,7 @@ Bool PMXBone::ReadFromFile(BaseFile* file)
 	}
 	if ( m_data->bone_flags.is_IK)
 	{
-		if (!m_model_info.m_bone_index_reader(file, m_data->IK_target_index))
+		if (!m_model_info->m_bone_index_reader(file, m_data->IK_target_index))
 			return FALSE;
 		if (!file->ReadInt32(& m_data->IK_loop_count))
 			return FALSE;
@@ -76,7 +76,7 @@ Bool PMXBone::ReadFromFile(BaseFile* file)
 		for (Int32 j = 0; j < m_data->IK_link_count; j++)
 		{
 			auto& [bone_index, has_limits, limit_min, limit_max] = m_data->IK_links[j];
-			if (!m_model_info.m_bone_index_reader(file, bone_index))
+			if (!m_model_info->m_bone_index_reader(file, bone_index))
 				return FALSE;
 			if (!file->ReadBool(&has_limits))
 				return FALSE;

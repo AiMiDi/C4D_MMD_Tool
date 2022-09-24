@@ -1,6 +1,18 @@
-#pragma once
+/**************************************************************************
+
+Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Author:			Aimidi
+Date:			2022/9/14
+File:			pmx_material.h
+Description:	pmx material data
+
+**************************************************************************/
+
+#ifndef _PMX_MATERIAL_H_
+#define _PMX_MATERIAL_H_
+
 #include "mmd_base.hpp"
-#include "pmx_model_info_data.h"
+#include "pmx_model_info.h"
 
 /* Material symbol(1 byte) */
 struct PMXMaterialFlags
@@ -78,13 +90,38 @@ struct PMXMaterialData
 class PMXMaterial final : public MMDDataBase
 {
 public:
-	explicit PMXMaterial(const PMXModelInfoData& model_info) : m_model_info(model_info) {}
+	/**
+	 * \brief Default constructor function
+	 */
+	explicit PMXMaterial(const PMXModelInfoData* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
+	/**
+	 * \brief Destructor function
+	 */
 	~PMXMaterial() override = default;
+	/**
+	 * \brief Move constructor
+	 */
+	PMXMaterial(PMXMaterial&& src) noexcept = default;
+	/**
+	 * \brief Move operator=
+	 * \return Result reference
+	 */
+	PMXMaterial& operator =(PMXMaterial&& src) noexcept
+	{
+		if (this != &src)
+		{
+			m_data = std::move(src.m_data);
+			m_model_info = src.m_model_info;
+		}
+		return *this;
+	}
 	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMaterial)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
 	using data_type = PMXMaterialData;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfoData& m_model_info;
+	const PMXModelInfoData* m_model_info;
 };
+
+#endif // !_PMX_MATERIAL_H_

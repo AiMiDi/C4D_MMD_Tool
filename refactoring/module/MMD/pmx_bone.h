@@ -3,17 +3,17 @@
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
 Date:			2022/8/24
-File:			pmx_bone_data.h
+File:			pmx_bone.h
 Description:	pmx bone data
 
 **************************************************************************/
 
-#ifndef _PMX_BONE_DATA_H_
-#define _PMX_BONE_DATA_H_
+#ifndef _PMX_BONE_H_
+#define _PMX_BONE_H_
 
 #include "pch.h"
 #include "mmd_base.hpp"
-#include "pmx_model_info_data.h"
+#include "pmx_model_info.h"
 
 /* Bone flags(2bytes) */
 struct PMXBoneFlags
@@ -118,19 +118,42 @@ struct PMXBoneData
 	maxon::BaseArray<PMXIKLinks>	IK_links;
 };
 
-class PMXBone final :public MMDDataBase
+class PMXBone final : public MMDDataBase
 {
 
 public:
-	explicit PMXBone(const PMXModelInfoData& model_info) : m_model_info(model_info){}
+	/**
+	 * \brief Default constructor function
+	 */
+	explicit PMXBone(const PMXModelInfoData* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info){}
+	/**
+	 * \brief Destructor function
+	 */
 	~PMXBone() override = default;
+	/**
+	 * \brief Move constructor
+	 */
+	PMXBone(PMXBone&& src) noexcept = default;
+	/**
+	 * \brief Move operator=
+	 * \return Result reference
+	 */
+	PMXBone& operator =(PMXBone&& src) noexcept
+	{
+		if (this != &src)
+		{
+			m_data = std::move(src.m_data);
+			m_model_info = src.m_model_info;
+		}
+		return *this;
+	}
 	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXBone)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
 	typedef PMXBoneData data_type;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfoData& m_model_info;
+	const PMXModelInfoData* m_model_info;
 };
 
-#endif // !_PMX_BONE_DATA_H_
+#endif // !_PMX_BONE_H_

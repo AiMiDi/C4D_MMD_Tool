@@ -1,11 +1,21 @@
+/**************************************************************************
+
+Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Author:			Aimidi
+Date:			2022/9/14
+File:			pmx_material.cpp
+Description:	pmx material data
+
+**************************************************************************/
+
 #include "pch.h"
-#include "pmx_material_data.h"
+#include "pmx_material.h"
 
 Bool PMXMaterial::ReadFromFile(BaseFile* file)
 {
-	if (!m_model_info.m_text_reader(file, m_data->material_name_local))
+	if (!m_model_info->m_text_reader(file, m_data->material_name_local))
 		return FALSE;
-	if (!m_model_info.m_text_reader(file, m_data->material_name_universal))
+	if (!m_model_info->m_text_reader(file, m_data->material_name_universal))
 		return FALSE;
 	static_assert(sizeof Vector4d32 == 16);
 	if (!file->ReadBytes(&m_data->diffuse_colour, sizeof Vector4d32))
@@ -23,9 +33,9 @@ Bool PMXMaterial::ReadFromFile(BaseFile* file)
 		return FALSE;
 	if (!file->ReadFloat32(&m_data->edge_scale))
 		return FALSE;
-	if (!m_model_info.m_texture_index_reader(file,m_data->texture_index))
+	if (!m_model_info->m_texture_index_reader(file,m_data->texture_index))
 		return FALSE;
-	if (!m_model_info.m_texture_index_reader(file,m_data->environment_index))
+	if (!m_model_info->m_texture_index_reader(file,m_data->environment_index))
 		 return FALSE;
 	if (!file->ReadChar(&m_data->environment_blend_mode))
 		return FALSE;
@@ -33,7 +43,7 @@ Bool PMXMaterial::ReadFromFile(BaseFile* file)
 		return FALSE;
 	if (m_data->toon_reference == 0)
 	{
-		if (!m_model_info.m_texture_index_reader(file, m_data->toon_part))
+		if (!m_model_info->m_texture_index_reader(file, m_data->toon_part))
 		return FALSE;
 	}
 	else if (m_data->toon_reference == 1)
@@ -41,7 +51,7 @@ Bool PMXMaterial::ReadFromFile(BaseFile* file)
 		if (!file->ReadChar(&m_data->toon_internal))
 			return FALSE;
 	}
-	if (!m_model_info.m_text_reader(file, m_data->meta_data))
+	if (!m_model_info->m_text_reader(file, m_data->meta_data))
 		return FALSE;
 	if (!file->ReadInt32(&m_data->surface_count))
 		return FALSE;

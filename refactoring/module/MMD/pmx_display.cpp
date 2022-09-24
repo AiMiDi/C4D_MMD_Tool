@@ -13,9 +13,9 @@ Description:	pmx display data
 
 Bool PMXDisplay::ReadFromFile(BaseFile* file)
 {
-	if (!m_model_info.m_text_reader(file, m_data->display_name_local))
+	if (!m_model_info->m_text_reader(file, m_data->display_name_local))
 		return FALSE;
-	if (!m_model_info.m_text_reader(file, m_data->display_name_universal))
+	if (!m_model_info->m_text_reader(file, m_data->display_name_universal))
 		return FALSE;
 	if (!file->ReadChar(&m_data->special_flag))
 		return FALSE;
@@ -31,12 +31,12 @@ Bool PMXDisplay::ReadFromFile(BaseFile* file)
 		{
 		case PMXFrameData::BONE:
 		{
-			m_model_info.m_bone_index_reader(file, frame_data);
+			m_model_info->m_bone_index_reader(file, frame_data);
 			break;
 		}
 		case PMXFrameData::MORPH:
 		{
-			m_model_info.m_morph_index_reader(file, frame_data);
+			m_model_info->m_morph_index_reader(file, frame_data);
 			break;
 		}
 		default:

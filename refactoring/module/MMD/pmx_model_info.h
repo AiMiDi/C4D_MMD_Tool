@@ -3,13 +3,13 @@
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
 Date:			2022/8/14
-File:			pmx_model_info_data.h
+File:			pmx_model_info.h
 Description:	pmx model information data
 
 **************************************************************************/
 
-#ifndef _PMX_MODEL_INFO_DATA_H_
-#define _PMX_MODEL_INFO_DATA_H_
+#ifndef _PMX_MODEL_INFO_H_
+#define _PMX_MODEL_INFO_H_
 
 #include "pch.h"
 #include "mmd_base.hpp"
@@ -60,6 +60,9 @@ public:
 	// Is there a vertex morph 
 	Bool	have_vertex_morph = false;
 
+	/**
+	 * \brief Default constructor function
+	 */
 	PMXModelInfoData() = default;
 
 	void Init(
@@ -86,4 +89,4 @@ private:
 	void InitReader();
 };
 
-#endif // !_PMX_MODEL_INFO_DATA_H_
+#endif // !_PMX_MODEL_INFO_H_
