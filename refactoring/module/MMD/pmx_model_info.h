@@ -12,13 +12,13 @@ Description:	pmx model information data
 #define _PMX_MODEL_INFO_H_
 
 #include "pch.h"
-#include "mmd_base.hpp"
+#include "mmd_element.hpp"
 #include "utils/pmx_util.hpp"
 
 /**
  * \brief PMX model global information struct
  */
-class PMXModelInfoData final : public MMDDataBase
+class PMXModelInfo final : public MMDElement
 {
 	// String encoding. 0 is UTF16LE encoding and 1 is UTF8 encoding
 	Char	m_text_encoding = 0;
@@ -63,7 +63,7 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	PMXModelInfoData() = default;
+	PMXModelInfo() = default;
 
 	void Init(
 		const Char& text_encoding = 0,
@@ -72,18 +72,8 @@ public:
 		const Char& material_index_size = 2,
 		const Char& bone_index_size = 2,
 		const Char& morph_index_size = 2,
-		const Char& rigidbody_index_size = 2)
-	{
-		m_text_encoding = text_encoding;
-		m_vertex_index_size = vertex_index_size;
-		m_texture_index_size = texture_index_size;
-		m_material_index_size = material_index_size;
-		m_bone_index_size = bone_index_size;
-		m_morph_index_size = morph_index_size;
-		m_rigidbody_index_size = rigidbody_index_size;
-		InitReader();
-	}
-	
+		const Char& rigidbody_index_size = 2);
+
 	Bool ReadFromFile(BaseFile* file) override;
 private:
 	void InitReader();

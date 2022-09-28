@@ -84,31 +84,31 @@
     <ClCompile Include="..\..\..\..\refactoring\cmt_scene_manager.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone.cpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_camera.cpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_data.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd.cpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller_animation.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller.cpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_light_animation.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_light.cpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller_animation.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller.cpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_morph_animation.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_morph.cpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_shadow_animation.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_shadow.cpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_bone.cpp">
@@ -221,40 +221,40 @@
     <ClInclude Include="..\..\..\..\refactoring\cmt_scene_manager.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_base.hpp">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_element.hpp">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_shadow_animation.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_shadow.h">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone_animation.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone.h">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_camera_animation.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_camera.h">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd.h">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_data_element.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_element.hpp">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller_animation.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller.h">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_light_animation.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_light.h">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller_animation.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller.h">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_morph_animation.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_morph.h">
       <Filter>source\module\MMD\vmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_bone.h">

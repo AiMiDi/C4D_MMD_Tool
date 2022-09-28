@@ -11,7 +11,7 @@ Description:	pmx model information data
 #include "pch.h"
 #include "module/MMD/pmx_model_info.h"
 
-void PMXModelInfoData::InitReader()
+void PMXModelInfo::InitReader()
 {
 	m_text_reader.SetTextEncoding(m_text_encoding);
 	m_vertex_index_reader.SetIndexSize(m_vertex_index_size);
@@ -22,7 +22,25 @@ void PMXModelInfoData::InitReader()
 	m_rigidbody_index_reader.SetIndexSize(m_rigidbody_index_size);
 }
 
-Bool PMXModelInfoData::ReadFromFile(BaseFile* file)
+void PMXModelInfo::Init(const Char& text_encoding,
+	const Char& vertex_index_size,
+	const Char& texture_index_size,
+	const Char& material_index_size,
+	const Char& bone_index_size,
+	const Char& morph_index_size,
+	const Char& rigidbody_index_size)
+{
+	m_text_encoding = text_encoding;
+	m_vertex_index_size = vertex_index_size;
+	m_texture_index_size = texture_index_size;
+	m_material_index_size = material_index_size;
+	m_bone_index_size = bone_index_size;
+	m_morph_index_size = morph_index_size;
+	m_rigidbody_index_size = rigidbody_index_size;
+	InitReader();
+}
+
+Bool PMXModelInfo::ReadFromFile(BaseFile* file)
 {
 	if (!file->ReadFloat32(&version))
 		return FALSE;

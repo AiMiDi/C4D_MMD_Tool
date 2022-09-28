@@ -11,7 +11,7 @@ Description:	pmx weight data
 #include "pch.h"
 #include "pmx_weight.h"
 
-PMXWeight* PMXWeight::Alloc(const Char& type, const PMXModelInfoData* index_reader)
+PMXWeight* PMXWeight::Alloc(const Char& type, const PMXModelInfo* index_reader)
 {
 	switch (type)
 	{

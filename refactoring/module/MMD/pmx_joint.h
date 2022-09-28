@@ -59,13 +59,13 @@ struct PMXJointData
 	Vector32	rotation_spring{};
 };
 
-class PMXJoint final : MMDDataBase
+class PMXJoint final : MMDElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXJoint(const PMXModelInfoData* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
+	explicit PMXJoint(const PMXModelInfo* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
 	/**
 	 * \brief Destructor function
 	 */
@@ -93,7 +93,7 @@ public:
 private:
 	using data_type = PMXJointData;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfoData* m_model_info;
+	const PMXModelInfo* m_model_info;
 };
 
 #endif // !_PMX_JOINT_H_

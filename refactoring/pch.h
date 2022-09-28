@@ -15,6 +15,7 @@
 #include <c4d_gui.h>
 #include <c4d_string.h>
 #include "maxon/pointerarray.h"
+#include "maxon/sortedarray.h"
 
 // The third party
 #include "yaml-cpp/yaml.h"

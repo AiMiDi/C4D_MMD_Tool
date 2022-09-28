@@ -10,14 +10,14 @@ Description:	tools manager
 
 #include "pch.h"
 #include "cmt_tools_manager.h"
-#include "module/MMD/vmd_data.h"
+#include "module/MMD/vmd.h"
 
 namespace tools_manager
 {
 	bool ImportVMDCamera(const cmt_tools_setting::CameraImport& setting)
 	{
 		Filename vmd_fn;
-		VMDData vmd_animation;
+		VMD vmd_animation;
 		vmd_animation.LoadFromFile(vmd_fn);
 		return true;
 	}
@@ -25,7 +25,7 @@ namespace tools_manager
 	bool ExportVMDCamera(const cmt_tools_setting::CameraExport& setting)
 	{
 		Filename vmd_fn;
-		VMDData vmd_animation;
+		VMD vmd_animation;
 		vmd_animation.SaveToFile(vmd_fn);
 		return true;
 	}

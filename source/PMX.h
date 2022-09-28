@@ -1,4 +1,4 @@
-﻿#ifndef __MMD_VMD_MODEl_H__
+#ifndef __MMD_VMD_MODEl_H__
 #define __MMD_VMD_MODEl_H__
 
 #include "Utility.h"

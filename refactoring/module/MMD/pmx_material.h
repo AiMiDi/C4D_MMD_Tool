@@ -11,7 +11,7 @@ Description:	pmx material data
 #ifndef _PMX_MATERIAL_H_
 #define _PMX_MATERIAL_H_
 
-#include "mmd_base.hpp"
+#include "mmd_element.hpp"
 #include "pmx_model_info.h"
 
 /* Material symbol(1 byte) */
@@ -87,13 +87,13 @@ struct PMXMaterialData
 
 };
 
-class PMXMaterial final : public MMDDataBase
+class PMXMaterial final : public MMDElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXMaterial(const PMXModelInfoData* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
+	explicit PMXMaterial(const PMXModelInfo* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
 	/**
 	 * \brief Destructor function
 	 */
@@ -121,7 +121,7 @@ public:
 private:
 	using data_type = PMXMaterialData;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfoData* m_model_info;
+	const PMXModelInfo* m_model_info;
 };
 
 #endif // !_PMX_MATERIAL_H_

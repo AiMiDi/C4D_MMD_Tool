@@ -11,7 +11,7 @@ Description:	pmx rigid body data
 #ifndef _PMX_RIGID_BODY_H_
 #define _PMX_RIGID_BODY_H_
 
-#include "mmd_base.hpp"
+#include "mmd_element.hpp"
 #include "pmx_model_info.h"
 
 struct PMXRigidBodyNonCollisionGroup
@@ -117,13 +117,13 @@ struct PMXRigidBodyData
 	Char physics_mode = TRACKING_BONES;
 };
 
-class PMXRigidBody final : MMDDataBase
+class PMXRigidBody final : MMDElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXRigidBody(const PMXModelInfoData* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
+	explicit PMXRigidBody(const PMXModelInfo* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
 	/**
 	 * \brief Destructor function
 	 */
@@ -151,7 +151,7 @@ public:
 private:
 	using data_type = PMXRigidBodyData;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfoData* m_model_info;
+	const PMXModelInfo* m_model_info;
 };
 
 #endif // !_PMX_RIGID_BODY_H_

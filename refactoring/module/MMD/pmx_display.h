@@ -11,7 +11,7 @@ Description:	pmx display data
 #ifndef _PMX_DISPLAY_H_
 #define _PMX_DISPLAY_H_
 
-#include "mmd_base.hpp"
+#include "mmd_element.hpp"
 #include "pmx_model_info.h"
 
 struct PMXFrameData
@@ -46,13 +46,13 @@ struct PMXDisplayData
 	maxon::BaseArray<PMXFrameData> frame_datas;  
 };
 
-class PMXDisplay final : MMDDataBase
+class PMXDisplay final : MMDElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXDisplay(const PMXModelInfoData* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
+	explicit PMXDisplay(const PMXModelInfo* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
 	/**
 	 * \brief Destructor function
 	 */
@@ -80,7 +80,7 @@ public:
 private:
 	using data_type = PMXDisplayData;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfoData* m_model_info;
+	const PMXModelInfo* m_model_info;
 };
 
 #endif // !_PMX_DISPLAY_H_

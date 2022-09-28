@@ -12,16 +12,16 @@ Description:	pmx morph data
 #define _PMX_MORPH_H_
 
 #include "pch.h"
-#include "mmd_base.hpp"
+#include "mmd_element.hpp"
 #include "pmx_model_info.h"
 
-class PMXMorphOffsetBase : MMDDataBase
+class PMXMorphOffsetBase : MMDElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXMorphOffsetBase(const PMXModelInfoData* model_info) : m_model_info(model_info){}
+	explicit PMXMorphOffsetBase(const PMXModelInfo* model_info) : m_model_info(model_info){}
 	/**
 	 * \brief Destructor function
 	 */
@@ -46,7 +46,7 @@ public:
 public:
 	Bool ReadFromFile(BaseFile* file) override = 0;
 protected:
-	const PMXModelInfoData* m_model_info;
+	const PMXModelInfo* m_model_info;
 };
 
 struct PMXGroupMorphOffsetData
@@ -63,7 +63,7 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXGroupMorphOffset(const PMXModelInfoData* model_info) :
+	explicit PMXGroupMorphOffset(const PMXModelInfo* model_info) :
 	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
@@ -108,7 +108,7 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXVertexMorpOffset(const PMXModelInfoData* model_info) :
+	explicit PMXVertexMorpOffset(const PMXModelInfo* model_info) :
 	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
@@ -155,7 +155,7 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXBoneMorphOffset(const PMXModelInfoData* model_info) :
+	explicit PMXBoneMorphOffset(const PMXModelInfo* model_info) :
 	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
@@ -213,7 +213,7 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXUVMorphOffset(const PMXModelInfoData* model_info, const Int32& UV_type) :
+	explicit PMXUVMorphOffset(const PMXModelInfo* model_info, const Int32& UV_type) :
 	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>(UV_type)) {}
 	/**
 	 * \brief Destructor function
@@ -276,7 +276,7 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXMaterialMorphOffset(const PMXModelInfoData* model_info) :
+	explicit PMXMaterialMorphOffset(const PMXModelInfo* model_info) :
 	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
@@ -321,7 +321,7 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXFlipMorphOffset(const PMXModelInfoData* model_info) :
+	explicit PMXFlipMorphOffset(const PMXModelInfo* model_info) :
 	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
@@ -370,7 +370,7 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXImpulseMorphOffset(const PMXModelInfoData* model_info) :
+	explicit PMXImpulseMorphOffset(const PMXModelInfo* model_info) :
 	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
@@ -430,13 +430,13 @@ struct PMXMorphData
 	maxon::BaseArray<std::unique_ptr<PMXMorphOffsetBase>> offset_data;
 };
 
-class PMXMorph final : MMDDataBase
+class PMXMorph final : MMDElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXMorph(const PMXModelInfoData* model_info) :
+	explicit PMXMorph(const PMXModelInfo* model_info) :
 	m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
 	/**
 	 * \brief Destructor function
@@ -465,7 +465,7 @@ public:
 private:
 	using data_type = PMXMorphData;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfoData* m_model_info;
+	const PMXModelInfo* m_model_info;
 };
 
 #endif // !_PMX_MORPH_H_
