@@ -17,7 +17,7 @@ Bool PMXVertex::ReadFromFile(BaseFile* file)
 		return FALSE;
 	if (!file->ReadVector32(&m_data->normal))
 		return FALSE;
-	if (!file->ReadBytes(&m_data->UV, sizeof(maxon::Vector2d32)))
+	if (!file->ReadBytes(&m_data->UV, sizeof m_data->UV))
 		return FALSE;
 	if (!file->Seek(16LL * m_model_info->additional_Vector4d32_count))
 		return FALSE;

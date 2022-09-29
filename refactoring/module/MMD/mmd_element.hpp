@@ -70,9 +70,9 @@ public:
 			return FALSE;
 		iferr(this->Resize(data_number))
 			return FALSE;
-		for (UInt32 data_index = 0; data_index < data_number; ++data_index)
+		for (auto& data : *this)
 		{
-			if (T& data = (*this)[data_index]; !data.ReadFromFile(file))
+			if (!data.ReadFromFile(file))
 			{
 				return FALSE;
 			}
@@ -86,12 +86,11 @@ public:
 	 */
 	virtual Bool WriteToFile(BaseFile* file) const
 	{
-		auto data_number = static_cast<UInt32>(this->GetCount());
-		if (!file->WriteUInt32(data_number))
+		if (const auto data_number = static_cast<UInt32>(this->GetCount()); !file->WriteUInt32(data_number))
 			return FALSE;
-		for (UInt32 data_index = 0; data_index < data_number; ++data_index)
+		for(auto& data : *this)
 		{
-			if (const T& data = (*this)[data_number]; !data.WriteToFile(file))
+			if (!data.WriteToFile(file))
 			{
 				return FALSE;
 			}

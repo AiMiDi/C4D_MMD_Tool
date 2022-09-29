@@ -15,7 +15,7 @@ Description:	pmx morph data
 #include "mmd_element.hpp"
 #include "pmx_model_info.h"
 
-class PMXMorphOffsetBase : MMDElement
+class PMXMorphOffsetBase : public MMDElement
 {
 public:
 	/**
@@ -430,7 +430,7 @@ struct PMXMorphData
 	maxon::BaseArray<std::unique_ptr<PMXMorphOffsetBase>> offset_data;
 };
 
-class PMXMorph final : MMDElement
+class PMXMorph final : public MMDElement
 {
 public:
 	/**

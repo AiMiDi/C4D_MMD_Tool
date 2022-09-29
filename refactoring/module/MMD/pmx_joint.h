@@ -59,7 +59,7 @@ struct PMXJointData
 	Vector32	rotation_spring{};
 };
 
-class PMXJoint final : MMDElement
+class PMXJoint final : public MMDElement
 {
 public:
 	/**

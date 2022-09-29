@@ -11,7 +11,7 @@ Description:	MMD style shadow animation
 #include "pch.h"
 #include "vmd_shadow.h"
 
-Bool VMDShadowAnimation::ReadFromFile(BaseFile* file)
+Bool VMDShadow::ReadFromFile(BaseFile* file)
 {
 	assert(file != nullptr);
 	if (!file->ReadUInt32(&m_frame_num))
@@ -23,7 +23,7 @@ Bool VMDShadowAnimation::ReadFromFile(BaseFile* file)
 	return TRUE;
 }
 
-Bool VMDShadowAnimation::WriteToFile(BaseFile* file) const
+Bool VMDShadow::WriteToFile(BaseFile* file) const
 {
 	assert(file != nullptr);
 	if (!file->WriteUInt32(m_frame_num))

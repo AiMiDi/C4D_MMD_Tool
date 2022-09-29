@@ -66,29 +66,29 @@ public:
  * \tparam T VMD data element class
  */
 template<class T>
-class VMDElementArray : public MMDElementArray<T>
+class VMDElementArray final : public MMDElementArray<T>
 {
 	static_assert(std::is_base_of_v<VMDElement, T>);
 
-	class VMDElementSorter : public maxon::ParallelSort<VMDElementSorter>
+	class VMDElementSorter : public maxon::SimpleParallelSort<VMDElementSorter>
 	{
 	public:
-		/**
-		 * \brief Less than the comparison function, which is used to sort
-		 * \return The first instance is less than the second instance and returns TRUE, and the other is FALSE
-		 */
-		static Bool LessThan(const T& a, const T& b)
-		{
-			return a < b;
-		}
-		/**
-		 * \brief Equal to the comparison function, which is used to sort
-		 * \return TRUE is returned when two instances are equal, and the other is FALSE
-		 */
-		static Bool IsEqual(const T& a, const T& b)
-		{
-			return a == b;
-		}
+		///**
+		// * \brief Less than the comparison function, which is used to sort
+		// * \return The first instance is less than the second instance and returns TRUE, and the other is FALSE
+		// */
+		//static Bool LessThan(const T& a, const T& b)
+		//{
+		//	return a < b;
+		//}
+		///**
+		// * \brief Equal to the comparison function, which is used to sort
+		// * \return TRUE is returned when two instances are equal, and the other is FALSE
+		// */
+		//static Bool IsEqual(const T& a, const T& b)
+		//{
+		//	return a == b;
+		//}
 	};
 public:
 	/**

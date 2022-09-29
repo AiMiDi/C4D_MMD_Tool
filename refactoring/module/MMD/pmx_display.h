@@ -46,7 +46,7 @@ struct PMXDisplayData
 	maxon::BaseArray<PMXFrameData> frame_datas;  
 };
 
-class PMXDisplay final : MMDElement
+class PMXDisplay final : public MMDElement
 {
 public:
 	/**

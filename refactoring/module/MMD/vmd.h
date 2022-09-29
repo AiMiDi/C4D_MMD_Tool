@@ -27,7 +27,7 @@ struct VMDData
 	VMDElementArray<VMDMorphAnimation> morph_frames;
 	VMDElementArray<VMDCameraAnimation> camera_frames;
 	VMDElementArray<VMDLightAnimation> light_frames;
-	VMDElementArray<VMDShadowAnimation> shadow_frames;
+	VMDElementArray<VMDShadow> shadow_frames;
 	VMDElementArray<VMDModelControllerAnimation> model_frames;
 
 	explicit VMDData(String model_name) : model_name(std::move(model_name)){}

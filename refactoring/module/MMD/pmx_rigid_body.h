@@ -117,7 +117,7 @@ struct PMXRigidBodyData
 	Char physics_mode = TRACKING_BONES;
 };
 
-class PMXRigidBody final : MMDElement
+class PMXRigidBody final : public MMDElement
 {
 public:
 	/**

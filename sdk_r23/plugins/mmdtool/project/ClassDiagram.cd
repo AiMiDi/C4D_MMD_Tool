@@ -1,88 +1,725 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="VMDCameraAnimation">
-    <Position X="6.25" Y="7.75" Width="3" />
+  <Class Name="CMTToolConfigManager" Collapsed="true">
+    <Position X="66" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAgCAAoQMgCAAAAQAAABABAAAEAAAgAAEAAQA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_camera_animation.h</FileName>
+      <HashCode>AAAAAAIAAAAAgABIAAAAgAAgAAAAAAAAAiHgAAAQQQA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\cmt_tools_config_manager.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDDataElement">
-    <Position X="14.5" Y="3.75" Width="2.75" />
+  <Class Name="SceneManager" Collapsed="true">
+    <Position X="67.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAAAAAAAAAAAAAAAAAUAgAAAAAAAAAAAgAAAAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_data_element.h</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\cmt_scene_manager.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="MMDDataBase">
-    <Position X="27" Y="0.5" Width="1.5" />
+  <Class Name="code_conversion" Collapsed="true">
+    <Position X="69.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAQAAAAAAAAAAAAAAAAAEEAAgAAAAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\mmd_base.hpp</FileName>
+      <HashCode>ABAIAAQAAAAAAABAJAAAAAAAAAAAAgAAAAAoAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\utils\code_conversion_util.hpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDCameraInterpolator">
-    <Position X="12.75" Y="15.75" Width="1.5" />
+  <Class Name="ImagesUserArea" Collapsed="true">
+    <Position X="73" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_interpolator.h</FileName>
+      <HashCode>AAAAAAAAAAAAAEAAAgAAAAAAAAAAQACAAAAAAAAAKAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\utils\images_user_area_util.hpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDInterpolator">
-    <Position X="13.5" Y="10.75" Width="4.25" />
+  <Class Name="PMXTextReader" Collapsed="true">
+    <Position X="64.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAgAAAAAAABAAAAAAAAAAgAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\utils\pmx_util.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXIndexReader" Collapsed="true">
+    <Position X="74.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAEIAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\utils\pmx_util.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXUIndexReader" Collapsed="true">
+    <Position X="66" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAEIAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\utils\pmx_util.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HashTime" Collapsed="true">
+    <Position X="71.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\utils\time_util.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMDElement" Collapsed="true">
+    <Position X="32.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAQAAAAAAAAAAAAIAAAAEAAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\mmd_element.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMDElementArray&lt;T&gt;">
+    <Position X="7.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAIAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\mmd_element.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VPDFile" Collapsed="true">
+    <Position X="74.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgQAAAAAAAAAAAAAAAAAAAAAAgEAAAAAADEAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vpd_data.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDBoneAnimation" Collapsed="true">
+    <Position X="52.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAIAAAACAAAAAABAEAAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_bone.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDCameraAnimation" Collapsed="true">
+    <Position X="55" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAQAAAIAAAAAAAAAAAAAEAAAgAAAAAQA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMD" Collapsed="true">
+    <Position X="69.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAACBACIAACAAAAAAAAAAAAAAgAAAAEAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDElement" Collapsed="true">
+    <Position X="54" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAQAAgAAAABAAAAAggAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_element.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDElementArray&lt;T&gt;">
+    <Position X="5.25" Y="5.25" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VMDElementArray&lt;T&gt;::VMDElementSorter" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_element.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAIAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_element.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDIkControllerAnimation" Collapsed="true">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAQAAAIAAAAAAAAAAAAAEAAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_Ik_controller.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDInterpolator" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAAAAAAoRAAAAgAAAAAAAAAAABAAYIAAAEYgBAAAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_interpolator.h</FileName>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_interpolator.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDBoneInterpolator">
-    <Position X="17.25" Y="15.75" Width="1.5" />
+  <Class Name="VMDBoneInterpolator" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_interpolator.h</FileName>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_interpolator.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDBoneAnimation">
-    <Position X="9.5" Y="7.75" Width="3" />
+  <Class Name="VMDCameraInterpolator" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAoQEgAAABAACAAAAAABAEAAAgAAEAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_bone_animation.h</FileName>
+      <HashCode>AAAAAAAABAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_interpolator.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDLightAnimation">
-    <Position X="22.5" Y="7.75" Width="3.25" />
+  <Class Name="VMDLightAnimation" Collapsed="true">
+    <Position X="57.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAAAAACAAAQAAgAAAAAAAAAAAAAAEAAAhAAAAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_light_animation.h</FileName>
+      <HashCode>AAAgAAAAAAAAAQAAAIAAAAAAAAAAAAAEAAAhAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_light.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDMorphAnimation">
-    <Position X="16.75" Y="7.75" Width="2.5" />
+  <Class Name="VMDModelControllerAnimation" Collapsed="true">
+    <Position X="59.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAQABAAAAAAAAAQAAAAAEAAAgAAAAAAQ=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_morph_animation.h</FileName>
+      <HashCode>QAAAAAAAAAAAAQAAAIAAAAAAAAAAAAAEAAAwAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_model_controller.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDShadowAnimation">
-    <Position X="19.5" Y="7.75" Width="2.75" />
+  <Class Name="VMDMorphAnimation" Collapsed="true">
+    <Position X="48.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAQAAAAAAAAAQAAAAAAAQAAAAAAAAAGAAAgAAAAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_shadow_animation.h</FileName>
+      <HashCode>AAAAAAAABAAAAQAAAIAAAAAAAAAAAAAEAAAgAAAAAAQ=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_morph.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDIkControllerAnimation">
-    <Position X="29.75" Y="4" Width="1.5" />
+  <Class Name="VMDShadow" Collapsed="true">
+    <Position X="50.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAAAAAAAAAQAAAAAAAAAEAAAAAAAEAAAgBAAAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_Ik_controller_animation.h</FileName>
+      <HashCode>AAAAAAAAAAAAAQAAAIAAAAAAAAAAgAAEAAAgAAAAACA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_shadow.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="VMDModelControllerAnimation">
-    <Position X="12.75" Y="7.75" Width="3.75" />
+  <Class Name="PMXDisplay" Collapsed="true">
+    <Position X="12.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAAAAAAAAAQAAAIAAAAAAAAAAAAAEAACwAAAAAAA=</HashCode>
-      <FileName>D:\C4D_MMD_Tool\refactoring\module\MMD\vmd_model_controller_animation.h</FileName>
+      <HashCode>AAAAAAAAAAAAAQAAAIAAAAAAAAAAAAACAAAgAAABgAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_display.h</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="PMXJoint" Collapsed="true">
+    <Position X="19" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAQEAAIAAAAAAAAAAAAAAAAAgAAABAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_joint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXMorphOffsetBase" Collapsed="true">
+    <Position X="39.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQEAEAAAAAAAAAAAAAAAAAAgAAABAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXGroupMorphOffset" Collapsed="true">
+    <Position X="32.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAIAAAAAAAAAAAAAAABAgAEAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXVertexMorpOffset" Collapsed="true">
+    <Position X="37" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAIAAAAAAAQAAAAAAAAAggAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXBoneMorphOffset" Collapsed="true">
+    <Position X="39.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAQAAAIAAAAAAAAAAAAAAEAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXUVMorphOffset" Collapsed="true">
+    <Position X="41.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAQIAAAAAAAAAAAAAIAAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXMaterialMorphOffset" Collapsed="true">
+    <Position X="43.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAQIAAAAAACAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXFlipMorphOffset" Collapsed="true">
+    <Position X="46" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAIAAAACAAAAAAAAAAQAgAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXImpulseMorphOffset" Collapsed="true">
+    <Position X="34.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAIAAAAAAIIAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXMorph" Collapsed="true">
+    <Position X="7.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAQAAAKAAAAAAAAAAAAAAAAAgAAABAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXMaterial" Collapsed="true">
+    <Position X="14.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAUAAAIACAAAAAAAAAAAAAAAgAAABAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_material.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXBone" Collapsed="true">
+    <Position X="61.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAQAAAIAAAIAAAAAAAAAAAAAgAAABAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_bone.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXModelInfo" Collapsed="true">
+    <Position X="5.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgkQCCoSAAEgARAgBABAAAgAAAIABACQAAAKAAAAAQA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_model_info.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXRigidBody" Collapsed="true">
+    <Position X="10" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAQAAAIAAAAAAAAAAAAAEAAAgAAABAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_rigid_body.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXVertex" Collapsed="true">
+    <Position X="16.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAQAAAIAAAAAAAAAAAAAAAAAgAAABABA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_vertex.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXWeight" Collapsed="true">
+    <Position X="25.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABACAAAgAAAAAAAAAAAAgAAABAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_weight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXWeight_BDEF1" Collapsed="true">
+    <Position X="28" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAQAAAAAAQAAAAAAAAgAAAAABA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_weight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXWeight_BDEF2" Collapsed="true">
+    <Position X="30.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAQAAAAACAAAAAgAAAgAAAAABA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_weight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXWeight_BDEF4" Collapsed="true">
+    <Position X="21.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAQAAAAgAAAAAAgAAAgAAAAABA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_weight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXWeight_SDEF" Collapsed="true">
+    <Position X="23.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAQAAAAAQAAAAAAAgAAAgAYAggAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_weight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PMXWeight_QDEF" Collapsed="true">
+    <Position X="25.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAQAAAAAQAAAAAAAAAAAgAAAgAgAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_weight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMTToolDialog" Collapsed="true">
+    <Position X="67.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAQAAAAAAAAEAAAAAABAiAgAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\ui\cmt_tools_dialog.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMTToolCommand" Collapsed="true">
+    <Position X="64.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAEAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\ui\cmt_tools_dialog.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDLoaderCameraDialog" Collapsed="true">
+    <Position X="71.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAQAAAAQABACAgAAAgAAAAAAAIAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\ui\vmd_loader_camera_dialog.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VMDLoaderData" Collapsed="true">
+    <Position X="73" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAACAAAAAAAAgAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\tools\vmd_loader_data.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="VPDBoneData" Collapsed="true">
+    <Position X="66" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAEAAAAAAAAAAAABAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vpd_data.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VPDMorphData" Collapsed="true">
+    <Position X="67.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vpd_data.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VMDBoneData" Collapsed="true">
+    <Position X="64.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAoAEgAAABAAAAAAAAAAAAAAQAAAEAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_bone.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VMDcameraData" Collapsed="true">
+    <Position X="66" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABCAAoAMgCAAAAQAAABABAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_camera.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VMDData" Collapsed="true">
+    <Position X="69.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAgAAAwAAAAAAAAAAAAAACAAAAAAABSAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VMDControllerData" Collapsed="true">
+    <Position X="67.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_Ik_controller.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VMDLightData" Collapsed="true">
+    <Position X="71.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAABAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_light.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VMDModelControllerData" Collapsed="true">
+    <Position X="73" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAABAAgAAAAAEA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_model_controller.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VMDMorphData" Collapsed="true">
+    <Position X="74.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAQAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_morph.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VMDShadowData" Collapsed="true">
+    <Position X="64.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAABAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_shadow.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXFrameData" Collapsed="true">
+    <Position X="64.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_display.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXDisplayData" Collapsed="true">
+    <Position X="73" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAABAAIAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_display.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXJointData" Collapsed="true">
+    <Position X="71.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAARAAAEAAgABACAIAAAAAAAAAAAQAAAAAAAAgA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_joint.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXGroupMorphOffsetData" Collapsed="true">
+    <Position X="66" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXVertexMorpOffsetData" Collapsed="true">
+    <Position X="74.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXBoneMorphOffsetData" Collapsed="true">
+    <Position X="67.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAIAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXUVMorphOffsetData" Collapsed="true">
+    <Position X="71.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAQAAAAAAAAAAAABAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXMaterialMorphOffsetData" Collapsed="true">
+    <Position X="64.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAACAAAAAAAABAAAIAIAAIAACAAQAAAABCABA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXFlipMorphOffsetData" Collapsed="true">
+    <Position X="74.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXImpulseMorphOffsetData" Collapsed="true">
+    <Position X="69.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAACAAAAAAAAAAAAAAAQAAAAAAAAAAAg=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXMorphData" Collapsed="true">
+    <Position X="66" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAABAAAMAQAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_morph.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXMaterialFlags" Collapsed="true">
+    <Position X="74.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAgAQAAAAAAAAAwAAAAAAAAAAAgAACCE=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_material.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXMaterialData" Collapsed="true">
+    <Position X="73" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAIAQQIABAAkAAAAAAEAAQIAAAADQAAgEAAAAAIA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_material.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXBoneFlags" Collapsed="true">
+    <Position X="66" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAABARAAAAABAACCAAAAAACIAAQAAAQAAACAAAE=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_bone.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXIKLinks" Collapsed="true">
+    <Position X="67.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_bone.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXBoneData" Collapsed="true">
+    <Position X="64.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AKACQAAAEAAAAABIAAAAIIAAAAAAAAAAAgEABARAAgQ=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_bone.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXDataCount" Collapsed="true">
+    <Position X="71.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAgAAAAAAAAAAACQAAQAACAAAAAAAAAEAAAAAAIg=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_data.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXData" Collapsed="true">
+    <Position X="69.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAACABAAAAABAAEAgAABAAABAAQQAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_data.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXRigidBodyNonCollisionGroup" Collapsed="true">
+    <Position X="69.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAgAAAAAAAAAAAAABAIBAAAAAQEABAAAAICAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_rigid_body.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXRigidBodyData" Collapsed="true">
+    <Position X="67.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AJAAAAAgCBAECCgAAAAggAQAAAAAAAAIAAAAAAAAAQA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_rigid_body.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PMXVertexData" Collapsed="true">
+    <Position X="73" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAEAAAAAAAIAgAAAAAAABAAIAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\pmx_vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cmt_tools_setting::CameraImport" Collapsed="true">
+    <Position X="67.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\cmt_tools_setting.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cmt_tools_setting::CameraExport" Collapsed="true">
+    <Position X="66" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABCAAAAAAAAIAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\cmt_tools_setting.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cmt_tools_setting::CameraConversion" Collapsed="true">
+    <Position X="64.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAABAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\cmt_tools_setting.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cmt_tools_setting::MotionImport" Collapsed="true">
+    <Position X="74.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAEAAAAAAAACIgAIAAAAAAAAAAAAAAAAAAAAAhA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\cmt_tools_setting.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cmt_tools_setting::MotionExport" Collapsed="true">
+    <Position X="73" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABCAAAAAAAAIAAAAAAAAAAAAAgAEEAAAABA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\cmt_tools_setting.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cmt_tools_setting::ModelImport" Collapsed="true">
+    <Position X="71.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQAAAAAAAICAAAAAAAAKAAEAAAABAAECAAAASAAAACA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\cmt_tools_setting.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cmt_tools_setting::ModelExport" Collapsed="true">
+    <Position X="69.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAAEAAAAAQAAAAAEAIAAACIAgAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\cmt_tools_setting.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="VMDIkControllerArray" Collapsed="true">
+    <Position X="64.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\refactoring\module\MMD\vmd_model_controller.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="__unnamed_enum_11c2_1" Collapsed="true">
+    <Position X="64.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACABQAAAA0IJBEQRAgAAAAQAAApACAARhAAAgwEAgRA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\c4d_symbols.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c2_2" Collapsed="true">
+    <Position X="66" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAIHBRygRUQikEBAQANIyZwMaBgCaBAULAg2CQccJw=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\c4d_symbols.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c2_3" Collapsed="true">
+    <Position X="67.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAABABCAIASJAAAAAAEAAAAAQAAAAAAQAAAIQAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\c4d_symbols.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c2_4" Collapsed="true">
+    <Position X="69.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIRGFAIJQ4qiZMggpJ6QSCCFwkKIQUkFQUGAwJBAFBI=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\c4d_symbols.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c3_1" Collapsed="true">
+    <Position X="71.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAIAAAAAAAAAAIAAAAkEAAEIAAEAAAAAgAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\description\OMMDBoneRoot.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c4_1" Collapsed="true">
+    <Position X="73" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAREAAAADAAAAAgQAAAgIAAAAEAAAUABQQAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\description\OMMDCamera.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c5_1" Collapsed="true">
+    <Position X="74.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIAeDCghAABCCoCLgAIoAQxKACACAcACEAARGAgKnhk=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\description\OMMDJoint.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c6_1" Collapsed="true">
+    <Position X="64.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAECQAAACBAgAAAAACAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\description\OMMDJointRoot.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c7_1" Collapsed="true">
+    <Position X="66" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAAAAAAAgAAAAAQAAAAAIAEAAABgAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\description\OMMDMeshRoot.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c8_1" Collapsed="true">
+    <Position X="67.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQQAAAAAQQAAAAYABCAABAACECgIEAEBAAAQAAAACI=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\description\OMMDModel.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11c9_1" Collapsed="true">
+    <Position X="69.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAiAAACABAJCACAQDsF8ABQqACAACwgAIKF/Bl4ZIEo=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\description\OMMDRigid.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11ca_1" Collapsed="true">
+    <Position X="71.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAAIAAAAAAABgCABAAAAAAAAAAAiAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\description\OMMDRigidRoot.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_11cb_1" Collapsed="true">
+    <Position X="73" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KgGKwAgYkCgFoAgAoWBYQEKGGEBQAAFBCAkIAQHEAQA=</HashCode>
+      <FileName>D:\C4DSDK\C4D_MMDTool\res\R20-S24\description\TMMDBone.h</FileName>
+    </TypeIdentifier>
+  </Enum>
   <Font Name="Microsoft YaHei UI" Size="9" />
 </ClassDiagram>
