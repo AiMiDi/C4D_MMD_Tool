@@ -10,14 +10,14 @@ Description:	pmx weight data
 
 #ifndef _PMX_WEIGHT_H_
 #define _PMX_WEIGHT_H_
-#include "mmd_element.hpp"
+
+#include "pmx_element.hpp"
 #include "pmx_model_info.h"
 
-class PMXWeight : public MMDElement
+class PMXWeight : public PMXElement
 {
 protected:
-	const PMXModelInfo* m_model_info;
-	explicit PMXWeight(const PMXModelInfo* model_info) : m_model_info(model_info) {}
+	explicit PMXWeight(const PMXModelInfo* model_info) : PMXElement(model_info) {}
 public:
 	~PMXWeight() override = default;
 	PMXWeight(PMXWeight&&) = delete;

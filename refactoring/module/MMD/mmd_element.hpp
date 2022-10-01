@@ -53,29 +53,36 @@ public:
  * \brief MMD data sort array template class
  * \tparam T MMD data element class
  */
-template<class T>
+template<class T, typename... Args>
 class MMDElementArray : public maxon::BaseArray<T>
 {
 	static_assert(std::is_base_of_v<MMDElement, T>);
+	std::tuple<Args...> args;
 public:
+	explicit MMDElementArray(Args... args) : args(std::forward<Args>(args)...){}
+
 	/**
 	 * \brief Read from a mmd file
 	 * \param file file mmd file
 	 * \return Successful TRUE, other FALSE.
 	 */
-	virtual Bool ReadFormFile(BaseFile* file)
+	virtual Bool ReadFromFile(BaseFile* file)
 	{
 		UInt32 data_number = 0;
 		if (!file->ReadUInt32(&data_number))
 			return FALSE;
-		iferr(this->Resize(data_number))
+		this->Flush();
+		iferr(this->EnsureCapacity(data_number))
 			return FALSE;
-		for (auto& data : *this)
+		for (int data_index = 0; data_index < data_number; ++data_index)
 		{
+			T data = std::make_from_tuple<T>(args);
 			if (!data.ReadFromFile(file))
 			{
 				return FALSE;
 			}
+			iferr(this->Append(std::move(data)))
+				return FALSE;
 		}
 		return TRUE;
 	}

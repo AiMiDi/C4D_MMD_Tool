@@ -70,35 +70,36 @@ class VMDElementArray final : public MMDElementArray<T>
 {
 	static_assert(std::is_base_of_v<VMDElement, T>);
 
-	class VMDElementSorter : public maxon::SimpleParallelSort<VMDElementSorter>
+	class VMDElementSorter : public maxon::ParallelSort<VMDElementSorter>
 	{
 	public:
-		///**
-		// * \brief Less than the comparison function, which is used to sort
-		// * \return The first instance is less than the second instance and returns TRUE, and the other is FALSE
-		// */
-		//static Bool LessThan(const T& a, const T& b)
-		//{
-		//	return a < b;
-		//}
-		///**
-		// * \brief Equal to the comparison function, which is used to sort
-		// * \return TRUE is returned when two instances are equal, and the other is FALSE
-		// */
-		//static Bool IsEqual(const T& a, const T& b)
-		//{
-		//	return a == b;
-		//}
+		/**
+		 * \brief Less than the comparison function, which is used to sort
+		 * \return The first instance is less than the second instance and returns TRUE, and the other is FALSE
+		 */
+		static Bool LessThan(const T& a, const T& b)
+		{
+			return a < b;
+		}
+		/**
+		 * \brief Equal to the comparison function, which is used to sort
+		 * \return TRUE is returned when two instances are equal, and the other is FALSE
+		 */
+		static Bool IsEqual(const T& a, const T& b)
+		{
+			return a == b;
+		}
 	};
 public:
+	explicit VMDElementArray() : MMDElementArray() {}
 	/**
 	 * \brief Read from a vmd file
 	 * \param file file vmd file
 	 * \return Successful TRUE, other FALSE.
 	 */
-	Bool ReadFormFile(BaseFile* file) override
+	Bool ReadFromFile(BaseFile* file) override
 	{
-		if(!MMDElementArray<T>::ReadFormFile(file))
+		if(!MMDElementArray<T>::ReadFromFile(file))
 		{
 			return FALSE;
 		}

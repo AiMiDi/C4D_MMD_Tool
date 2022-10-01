@@ -46,7 +46,7 @@ public:
 	// version
 	Float32 version = 2.0f;
 	// Additional Vector4d32 numbers
-	Char	additional_Vector4d32_count = 0;
+	Char	additional_Vector4d32_count = 1;
 	// Local model name 
 	String	model_name_local;
 	// Generic model name 
@@ -63,7 +63,8 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	PMXModelInfo() = default;
+	explicit PMXModelInfo(String model_name_local_ = {}, String model_name_universal_ = {}) :
+	model_name_local(std::move(model_name_local_)), model_name_universal(std::move(model_name_universal_)){}
 
 	void Init(
 		const Char& text_encoding = 0,

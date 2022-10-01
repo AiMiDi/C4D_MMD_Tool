@@ -124,8 +124,8 @@
       <AdditionalManifestFiles />
     </Manifest>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>cd ../../../..
+./init.bat</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>cd ../../../..
@@ -214,9 +214,11 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_morph.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_material.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_bone.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_model_info.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_rigid_body.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_texture.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_vertex.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_weight.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone.cpp" />
@@ -256,13 +258,16 @@
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_config_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_element.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_display.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_element.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_joint.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_morph.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_material.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_bone.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_model_info.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_rigid_body.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_texture.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_vertex.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_weight.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone.h" />

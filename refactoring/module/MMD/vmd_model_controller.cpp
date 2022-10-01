@@ -11,7 +11,7 @@ Description:	MMD style model information animation
 #include "pch.h"
 #include "vmd_model_controller.h"
 
-Bool VMDModelControllerAnimation::ReadFromFile(BaseFile* file)
+Bool VMDModelController::ReadFromFile(BaseFile* file)
 {
 	iferr_scope_handler
 	{
@@ -34,7 +34,7 @@ Bool VMDModelControllerAnimation::ReadFromFile(BaseFile* file)
 	return TRUE;
 }
 
-Bool VMDModelControllerAnimation::WriteToFile(BaseFile* file) const
+Bool VMDModelController::WriteToFile(BaseFile* file) const
 {
 	iferr_scope_handler
 	{

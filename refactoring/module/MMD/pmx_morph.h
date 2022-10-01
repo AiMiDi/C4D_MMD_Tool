@@ -12,16 +12,16 @@ Description:	pmx morph data
 #define _PMX_MORPH_H_
 
 #include "pch.h"
-#include "mmd_element.hpp"
+#include "pmx_element.hpp"
 #include "pmx_model_info.h"
 
-class PMXMorphOffsetBase : public MMDElement
+class PMXMorphOffsetBase : public PMXElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXMorphOffsetBase(const PMXModelInfo* model_info) : m_model_info(model_info){}
+	explicit PMXMorphOffsetBase(const PMXModelInfo* model_info) : PMXElement(model_info){}
 	/**
 	 * \brief Destructor function
 	 */
@@ -45,8 +45,6 @@ public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMorphOffsetBase)
 public:
 	Bool ReadFromFile(BaseFile* file) override = 0;
-protected:
-	const PMXModelInfo* m_model_info;
 };
 
 struct PMXGroupMorphOffsetData
@@ -430,14 +428,13 @@ struct PMXMorphData
 	maxon::BaseArray<std::unique_ptr<PMXMorphOffsetBase>> offset_data;
 };
 
-class PMXMorph final : public MMDElement
+class PMXMorph final : public PMXElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXMorph(const PMXModelInfo* model_info) :
-	m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
+	explicit PMXMorph(const PMXModelInfo* model_info) : PMXElement(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
 	 */
@@ -465,7 +462,6 @@ public:
 private:
 	using data_type = PMXMorphData;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfo* m_model_info;
 };
 
 #endif // !_PMX_MORPH_H_

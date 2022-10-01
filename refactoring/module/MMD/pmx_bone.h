@@ -12,7 +12,7 @@ Description:	pmx bone data
 #define _PMX_BONE_H_
 
 #include "pch.h"
-#include "mmd_element.hpp"
+#include "pmx_element.hpp"
 #include "pmx_model_info.h"
 
 /* Bone flags(2bytes) */
@@ -118,14 +118,14 @@ struct PMXBoneData
 	maxon::BaseArray<PMXIKLinks>	IK_links;
 };
 
-class PMXBone final : public MMDElement
+class PMXBone final : public PMXElement
 {
 
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXBone(const PMXModelInfo* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info){}
+	explicit PMXBone(const PMXModelInfo* model_info) : PMXElement(model_info), m_data(std::make_unique<data_type>()){}
 	/**
 	 * \brief Destructor function
 	 */
@@ -153,7 +153,6 @@ public:
 private:
 	typedef PMXBoneData data_type;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfo* m_model_info;
 };
 
 #endif // !_PMX_BONE_H_

@@ -12,7 +12,7 @@ Description:	MMD style IK enable information animation
 #include "vmd_Ik_controller.h"
 
 
-Bool VMDIkControllerAnimation::ReadFromFile(BaseFile* const file)
+Bool VMDIkController::ReadFromFile(BaseFile* const file)
 {
 	iferr_scope_handler
 	{
@@ -31,7 +31,7 @@ Bool VMDIkControllerAnimation::ReadFromFile(BaseFile* const file)
 	return TRUE;
 }
 
-Bool VMDIkControllerAnimation::WriteToFile(BaseFile* const file) const
+Bool VMDIkController::WriteToFile(BaseFile* const file) const
 {
 	iferr_scope_handler
 	{

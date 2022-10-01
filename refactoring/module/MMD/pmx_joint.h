@@ -10,6 +10,8 @@ Description:	pmx joint data
 
 #ifndef _PMX_JOINT_H_
 #define _PMX_JOINT_H_
+
+#include "pmx_element.hpp"
 #include "pmx_model_info.h"
 
 struct PMXJointData
@@ -59,13 +61,13 @@ struct PMXJointData
 	Vector32	rotation_spring{};
 };
 
-class PMXJoint final : public MMDElement
+class PMXJoint final : public PMXElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXJoint(const PMXModelInfo* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info) {}
+	explicit PMXJoint(const PMXModelInfo* model_info) : PMXElement(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
 	 */
@@ -93,7 +95,6 @@ public:
 private:
 	using data_type = PMXJointData;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfo* m_model_info;
 };
 
 #endif // !_PMX_JOINT_H_

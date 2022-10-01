@@ -114,7 +114,7 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_bone.cpp">
       <Filter>source\module\MMD\pmx</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_data.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx.cpp">
       <Filter>source\module\MMD\pmx</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_display.cpp">
@@ -140,6 +140,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_joint.cpp">
       <Filter>source\module\MMD\pmx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.cpp">
+      <Filter>source\module\MMD\pmx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_texture.cpp">
+      <Filter>source\module\MMD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,7 +266,7 @@
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_bone.h">
       <Filter>source\module\MMD\pmx</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_data.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx.h">
       <Filter>source\module\MMD\pmx</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_display.h">
@@ -286,6 +292,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_joint.h">
       <Filter>source\module\MMD\pmx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_element.hpp">
+      <Filter>source\module\MMD\pmx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.h">
+      <Filter>source\module\MMD\pmx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_texture.h">
+      <Filter>source\module\MMD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

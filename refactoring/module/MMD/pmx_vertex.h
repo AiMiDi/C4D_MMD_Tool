@@ -11,7 +11,7 @@ Description:	pmx vertex data
 #ifndef _PMX_VERTEX_H_
 #define _PMX_VERTEX_H_
 
-#include "mmd_element.hpp"
+#include "pmx_element.hpp"
 #include "pmx_model_info.h"
 #include "pmx_weight.h"
 
@@ -41,13 +41,13 @@ struct PMXVertexData
 	Float32 edge_scale = 0.f;
 };
 
-class PMXVertex final : public MMDElement
+class PMXVertex final : public PMXElement
 {
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXVertex(const PMXModelInfo* model_info) : m_data(std::make_unique<data_type>()), m_model_info(model_info)  {}
+	explicit PMXVertex(const PMXModelInfo* model_info) : PMXElement(model_info), m_data(std::make_unique<data_type>())  {}
 	/**
 	 * \brief Destructor function
 	 */
@@ -60,22 +60,14 @@ public:
 	 * \brief Move operator=
 	 * \return Result reference
 	 */
-	PMXVertex& operator =(PMXVertex&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
+	PMXVertex& operator =(PMXVertex&& src) noexcept = default;
 	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXVertex)
 public:
 	Bool ReadFromFile(BaseFile* file) override;
 private:
 	using data_type = PMXVertexData;
 	std::unique_ptr<data_type> m_data;
-	const PMXModelInfo* m_model_info;
 };
+
 #endif // !PMX_VERTEX
 

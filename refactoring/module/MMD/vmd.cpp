@@ -61,17 +61,17 @@ Bool VMD::LoadFromFile(Filename& fn)
 		MessageDialog("Import failed: File corruption or unknown version"_s);
 		return FALSE;
 	}
-	if (!m_data->motion_frames.ReadFormFile(file))
+	if (!m_data->motion_frames.ReadFromFile(file))
 		return FALSE;
-	if (!m_data->morph_frames.ReadFormFile(file))
+	if (!m_data->morph_frames.ReadFromFile(file))
 		return FALSE;
-	if (!m_data->camera_frames.ReadFormFile(file))
+	if (!m_data->camera_frames.ReadFromFile(file))
 		return FALSE;
-	if (!m_data->light_frames.ReadFormFile(file))
+	if (!m_data->light_frames.ReadFromFile(file))
 		return FALSE;
-	if (!m_data->shadow_frames.ReadFormFile(file))
+	if (!m_data->shadow_frames.ReadFromFile(file))
 		return FALSE;
-	if (!m_data->model_frames.ReadFormFile(file))
+	if (!m_data->model_frames.ReadFromFile(file))
 		return FALSE;
 	return TRUE;
 }

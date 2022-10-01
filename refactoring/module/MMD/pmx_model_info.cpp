@@ -49,7 +49,7 @@ Bool PMXModelInfo::ReadFromFile(BaseFile* file)
 		return FALSE;      
 	if (globals_count != 8)
 	{
-		DebugStop("PMX file corruption!"_s);
+		ApplicationOutput("PMXModelInfo::LoadFromFile() error at read global info count"_s);
 		return FALSE;
 	}
 	if (!file->ReadChar(&m_text_encoding))
