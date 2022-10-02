@@ -2,13 +2,9 @@ name: MSBuild
 
 on:
   push:
-    branches: 
-      - "main"
-      - "refactoring"
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  schedule:
-  - cron: "0 2 * * 1-5"
 
 env:
 
