@@ -1,6 +1,7 @@
 name: MSBuild
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
@@ -17,23 +18,33 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    runs-on: windows-latest
 
+  setup:
+    runs-on: ubuntu-latest
+    
     steps:
     - name: First interaction
       uses: actions/first-interaction@v1.1.0
       with:
         # Token for the repository. Can be passed in using {{ secrets.GITHUB_TOKEN }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-    
+        
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [ 'r20', 'r21', 'r23', 'r25' ]
+        
+    steps:
     - uses: actions/checkout@v3
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
 
-    - name: Build_R23
+    - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ./sdk_r23/plugins/project/plugins.sln
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ./sdk_${{matrix.version}}/plugins/project/plugins.sln
