@@ -18,16 +18,6 @@ permissions:
   contents: read
 
 jobs:
-
-  setup:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: First interaction
-      uses: actions/first-interaction@v1.1.0
-      with:
-        # Token for the repository. Can be passed in using {{ secrets.GITHUB_TOKEN }}
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
         
   build:
     runs-on: windows-latest
