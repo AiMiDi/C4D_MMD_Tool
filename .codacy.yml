@@ -1,6 +1,6 @@
 ---
 exclude_paths:
-  - "dependency/install/**"
+  - "lib/**"
   - "sdk_r20/frameworks/**"
   - "sdk_r21/frameworks/**"
   - "sdk_r23/frameworks/**"
