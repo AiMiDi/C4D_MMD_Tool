@@ -31,34 +31,33 @@ Bool VPDFile::LoadFromFile(const Filename& fn) {
 		return FALSE;
 	}
 	const Int64 file_length = file->GetLength();
-	/* ÉêÇëÎÄ¼ş³¤¶ÈµÄÄÚ´æ */
+	/* ç”³è¯·æ–‡ä»¶é•¿åº¦çš„å†…å­˜ */
 	std::string file_string(file_length, '\0');
-	/* ½«Õû¸öÎÄ¼ş¶ÁÈ¡µ½ÉêÇëµÄÄÚ´æ */
+	/* å°†æ•´ä¸ªæ–‡ä»¶è¯»å–åˆ°ç”³è¯·çš„å†…å­˜ */
 	file->ReadBytes(file_string.data(), file_length);
-	/* ½«¶ÁÈ¡µÄ×Ö·û×ªÎªUTF8 */
+	/* å°†è¯»å–çš„å­—ç¬¦è½¬ä¸ºUTF8 */
 	file_string = code_conversion::SJIStoUTF8(file_string);
-	/* file_lengthÓÃÓÚÅĞ¶ÏÊÇ·ñµ½´ïÎÄ¼şÎ² */
+	/* file_lengthç”¨äºåˆ¤æ–­æ˜¯å¦åˆ°è¾¾æ–‡ä»¶å°¾ */
 	size_t is_read = 0;
-	size_t read_pos;
 	const size_t file_length_size = file_string.length();
 	maxon::BaseArray<std::string_view> lines;
 	while (is_read < file_length_size)
 	{
 		std::string_view line;
-		/* Óöµ½ /r /n ½Ø¶Ï×Ö·û´®ÎªÒ»ĞĞ²¢Ìø¹ı \r \n¡£ */
-		if ((read_pos = file_string.find_first_of('\r', is_read)))
+		/* é‡åˆ° /r /n æˆªæ–­å­—ç¬¦ä¸²ä¸ºä¸€è¡Œå¹¶è·³è¿‡ \r \nã€‚ */
+		if (size_t read_pos; (read_pos = file_string.find_first_of('\r', is_read)))
 		{
 			line = std::string_view(file_string.data() + is_read, read_pos - is_read);
 			is_read = read_pos + 2;
 		}
-		/* Óöµ½ /n ½Ø¶Ï×Ö·û´®ÎªÒ»ĞĞ²¢Ìø¹ı \n¡£ */
+		/* é‡åˆ° /n æˆªæ–­å­—ç¬¦ä¸²ä¸ºä¸€è¡Œå¹¶è·³è¿‡ \nã€‚ */
 		else if ((read_pos = file_string.find_first_of('\n', is_read)))
 		{
 			line = std::string_view(file_string.data() + is_read, read_pos - is_read);
 			is_read = read_pos + 1;
 
 		}
-		/* Èç¹û·Ç¿ÕÔò²åÈë½á¹û */
+		/* å¦‚æœéç©ºåˆ™æ’å…¥ç»“æœ */
 		if (!line.empty())
 		{
 			lines.Append(line)iferr_return;

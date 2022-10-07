@@ -23,7 +23,7 @@ public:
 	/**
 	* \brief  Constructor function
 	*/
-	explicit PMXElement(const PMXModelInfo* model_info = nullptr) : m_model_info(model_info) {}
+	explicit PMXElement(const PMXModelInfo* model_info) : m_model_info(model_info) {}
 	/**
 	 * \brief Move constructor
 	 */
@@ -45,7 +45,7 @@ public:
 };
 
 /**
- * \brief PMX animation data sort array template class
+ * \brief PMX data array template class
  * \tparam T PMX data element class
  */
 template<class T>
@@ -53,7 +53,8 @@ class PMXElementArray final : public MMDElementArray<T, const PMXModelInfo*>
 {
 	static_assert(std::is_base_of_v<PMXElement, T>);
 public:
-	explicit PMXElementArray(const PMXModelInfo* model_info_ptr) : MMDElementArray<T, const PMXModelInfo*>(model_info_ptr) {}
+	explicit PMXElementArray(const PMXModelInfo* model_info_ptr) :
+	MMDElementArray<T, const PMXModelInfo*>(model_info_ptr) {}
 	/**
 	 * \brief Read from a pmx file
 	 * \param file file pmx file

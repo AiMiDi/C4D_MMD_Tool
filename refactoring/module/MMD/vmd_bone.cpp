@@ -27,13 +27,13 @@ Bool VMDBoneAnimation::ReadFromFile(BaseFile* file)
 	static_assert(sizeof Vector4d32 == 16);
 	if (!file->ReadBytes(&m_data->m_rotation, sizeof Vector4d32))
 		return FALSE;
-	if (!m_data->m_interpolator_position_x.ReadInterpolator(file))
+	if (!m_data->m_interpolator_position_x.Read(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_y.ReadInterpolator(file))
+	if (!m_data->m_interpolator_position_y.Read(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_z.ReadInterpolator(file))
+	if (!m_data->m_interpolator_position_z.Read(file))
 		return FALSE;
-	if (!m_data->m_interpolator_rotation.ReadInterpolator(file))
+	if (!m_data->m_interpolator_rotation.Read(file))
 		return FALSE;
 	return TRUE;
 }
@@ -52,13 +52,13 @@ Bool VMDBoneAnimation::WriteToFile(BaseFile* file) const
 	static_assert(sizeof Vector4d32 == 16);
 	if (!file->WriteBytes(&m_data->m_rotation, sizeof Vector4d32))
 		return FALSE;
-	if (!m_data->m_interpolator_position_x.WriteInterpolator(file))
+	if (!m_data->m_interpolator_position_x.Write(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_y.WriteInterpolator(file))
+	if (!m_data->m_interpolator_position_y.Write(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_z.WriteInterpolator(file))
+	if (!m_data->m_interpolator_position_z.Write(file))
 		return FALSE;
-	if (!m_data->m_interpolator_rotation.WriteInterpolator(file))
+	if (!m_data->m_interpolator_rotation.Write(file))
 		return FALSE;
 	return TRUE;
 }

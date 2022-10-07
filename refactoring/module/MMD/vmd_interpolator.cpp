@@ -34,7 +34,7 @@ VMDInterpolator& VMDInterpolator::operator=(VMDInterpolator&& src) noexcept
 
 BaseTime VMDInterpolator::GetTimeRight() const
 {
-	return BaseTime{ static_cast<Float>(m_ax) / 127.0,127.0 };
+	return BaseTime{ static_cast<Float>(m_ax) / 127.0, 127.0 };
 }
 
 Float VMDInterpolator::GetValueRight() const
@@ -44,7 +44,7 @@ Float VMDInterpolator::GetValueRight() const
 
 BaseTime VMDInterpolator::GetTimeLeft() const
 {
-	return BaseTime{ static_cast<Float>(m_bx - 127) / 127.0,127.0 };
+	return BaseTime{ static_cast<Float>(m_bx - 127) / 127.0, 127.0 };
 }
 
 Float VMDInterpolator::GetValueLeft() const
@@ -52,12 +52,36 @@ Float VMDInterpolator::GetValueLeft() const
 	return static_cast<Float>(m_by - 127)/127.0;
 }
 
-void VMDInterpolator::SetInterpolator(const SplineData* spline)
+Vector VMDInterpolator::GetTangentRight() const
+{
+	return Vector{ static_cast<Float>(m_ax),static_cast<Float>(m_ay),0. };
+}
+
+Vector VMDInterpolator::GetTangentLeft() const
+{
+	return Vector{ static_cast<Float>(m_bx - 127),static_cast<Float>(m_by - 127),0. };
+}
+
+void VMDInterpolator::Set(const SplineData* spline)
 {
 	m_ax = maxon::SafeConvert<UChar>(spline->GetKnot(0)->vTangentRight.x);
 	m_ay = maxon::SafeConvert<UChar>(spline->GetKnot(0)->vTangentRight.y);
 	m_bx = 127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.x);
 	m_by = 127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.y);
+}
+
+void VMDInterpolator::Set(const UChar& ax, const UChar& ay, const UChar& bx, const UChar& by)
+{
+	m_ax = ax;
+	m_ay = ay;
+	m_bx = bx;
+	m_by = by;
+	m_isLinear = m_ax == m_ay && m_bx == m_by;
+}
+
+void VMDInterpolator::Reset()
+{
+	Set();
 }
 
 Bool VMDInterpolator::IsLinear() const
@@ -70,7 +94,7 @@ maxon::HashInt VMDInterpolator::GetHashCode() const
 	return MAXON_HASHCODE(this->m_ax, this->m_ay, this->m_bx, this->m_by);
 }
 
-Bool VMDBoneInterpolator::ReadInterpolator(BaseFile* const file)
+Bool VMDBoneInterpolator::Read(BaseFile* const file)
 {
 	if (!file->ReadUChar(&this->m_ax))
 		return false;
@@ -88,7 +112,7 @@ Bool VMDBoneInterpolator::ReadInterpolator(BaseFile* const file)
 	return true;
 }
 
-Bool VMDBoneInterpolator::WriteInterpolator(BaseFile* const file) const
+Bool VMDBoneInterpolator::Write(BaseFile* const file) const
 {
 	if (!file->WriteUChar(m_ax))
 		return false;
@@ -125,7 +149,7 @@ Bool VMDBoneInterpolator::WriteInterpolator(BaseFile* const file) const
 	return true;
 }
 
-Bool VMDCameraInterpolator::ReadInterpolator(BaseFile* const file)
+Bool VMDCameraInterpolator::Read(BaseFile* const file)
 {
 	UInt32 tmp = 0;
 	if (!file->ReadUInt32(&tmp))
@@ -138,7 +162,7 @@ Bool VMDCameraInterpolator::ReadInterpolator(BaseFile* const file)
 	return true;
 }
 
-Bool VMDCameraInterpolator::WriteInterpolator(BaseFile* const file) const
+Bool VMDCameraInterpolator::Write(BaseFile* const file) const
 {
 	if (!file->WriteUChar(m_ax))
 		return false;

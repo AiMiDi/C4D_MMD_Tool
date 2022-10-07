@@ -50,7 +50,7 @@ public:
 };
 
 /**
- * \brief MMD data sort array template class
+ * \brief MMD data array template class
  * \tparam T MMD data element class
  */
 template<class T, typename... Args>

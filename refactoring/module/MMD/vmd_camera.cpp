@@ -22,17 +22,17 @@ Bool VMDCameraAnimation::ReadFromFile(BaseFile* file)
 		return FALSE;
 	if (!file->ReadVector32(&m_data->m_rotation))
 		return FALSE;
-	if (!m_data->m_interpolator_position_x.ReadInterpolator(file))
+	if (!m_data->m_interpolator_position_x.Read(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_y.ReadInterpolator(file))
+	if (!m_data->m_interpolator_position_y.Read(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_z.ReadInterpolator(file))
+	if (!m_data->m_interpolator_position_z.Read(file))
 		return FALSE;
-	if (!m_data->m_interpolator_rotation.ReadInterpolator(file))
+	if (!m_data->m_interpolator_rotation.Read(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_d.ReadInterpolator(file))
+	if (!m_data->m_interpolator_position_d.Read(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_v.ReadInterpolator(file))
+	if (!m_data->m_interpolator_position_v.Read(file))
 		return FALSE;
 	if (!file->ReadUInt32(&m_data->m_viewing_angle))
 		return FALSE;
@@ -52,17 +52,17 @@ Bool VMDCameraAnimation::WriteToFile(BaseFile* file) const
 		return FALSE;
 	if (!file->WriteVector32(m_data->m_rotation))
 		return FALSE;
-	if (!m_data->m_interpolator_position_x.WriteInterpolator(file))
+	if (!m_data->m_interpolator_position_x.Write(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_y.WriteInterpolator(file))
+	if (!m_data->m_interpolator_position_y.Write(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_z.WriteInterpolator(file))
+	if (!m_data->m_interpolator_position_z.Write(file))
 		return FALSE;
-	if (!m_data->m_interpolator_rotation.WriteInterpolator(file))
+	if (!m_data->m_interpolator_rotation.Write(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_d.WriteInterpolator(file))
+	if (!m_data->m_interpolator_position_d.Write(file))
 		return FALSE;
-	if (!m_data->m_interpolator_position_v.WriteInterpolator(file))
+	if (!m_data->m_interpolator_position_v.Write(file))
 		return FALSE;
 	if (!file->WriteUInt32(m_data->m_viewing_angle))
 		return FALSE;

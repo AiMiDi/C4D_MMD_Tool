@@ -22,7 +22,7 @@ protected:
 	UChar m_ay = 20U;
 	UChar m_bx = 107U;
 	UChar m_by = 107U;
-	Bool  m_isLinear = false;
+	Bool  m_isLinear = true;
 public:
 	/**
 	 * \brief  Constructor function
@@ -72,9 +72,26 @@ public:
 	[[nodiscard]] Float GetValueLeft() const;
 	/**
 	 * \brief Set interpolator by C4D SplineData
-	 * \param spline C4D SplineData
+	 * \return C4D style tangent of right
 	 */
-	void SetInterpolator(const SplineData* spline);
+	[[nodiscard]] Vector GetTangentRight() const;
+	/**
+	 * \brief Set interpolator by C4D SplineData
+	* \return C4D style tangent of left
+	*/
+	[[nodiscard]] Vector GetTangentLeft() const;
+	/**
+	* \brief Set interpolator by C4D SplineData
+	*/
+	void Set(const SplineData* spline);
+	/**
+	* \brief Set interpolator by 4 UChar
+	*/
+	void Set(const UChar& ax = 20U, const UChar& ay = 20U, const UChar& bx = 107U, const UChar& by = 107U);
+	/**
+	* \brief Reset interpolator
+	*/
+	void Reset();
 	/**
 	 * \brief Is the interpolator is linear
 	 * \return TRUE is linear, other is FALSE
@@ -90,13 +107,13 @@ public:
 	 * \param file vmd file
 	 * \return Successful TRUE, other FALSE.
 	 */
-	virtual Bool ReadInterpolator(BaseFile* file) = 0;
+	virtual Bool Read(BaseFile* file) = 0;
 	/**
 	 * \brief Write to vmd file
 	 * \param file vmd file
 	 * \return Successful TRUE, other FALSE.
 	 */
-	virtual Bool WriteInterpolator(BaseFile* file) const = 0;
+	virtual Bool Write(BaseFile* file) const = 0;
 };
 
 class VMDBoneInterpolator final : public VMDInterpolator
@@ -107,13 +124,13 @@ public:
 	* \param file vmd file
 	* \return Successful TRUE, other FALSE.
 	*/
-	Bool ReadInterpolator(BaseFile* file) override;
+	Bool Read(BaseFile* file) override;
 	/**
 	* \brief Write to vmd file
 	* \param file vmd file
 	* \return Successful TRUE, other FALSE.
 	*/
-	Bool WriteInterpolator(BaseFile* file) const override;
+	Bool Write(BaseFile* file) const override;
 };
 
 class VMDCameraInterpolator final : public VMDInterpolator
@@ -124,13 +141,13 @@ public:
 	* \param file vmd file
 	* \return Successful TRUE, other FALSE.
 	*/
-	Bool ReadInterpolator(BaseFile* file) override;
+	Bool Read(BaseFile* file) override;
 	/**
 	* \brief Write to vmd file
 	* \param file vmd file
 	* \return Successful TRUE, other FALSE.
 	*/
-	Bool WriteInterpolator(BaseFile* file) const override;
+	Bool Write(BaseFile* file) const override;
 };
 
 #endif //!VMD_INTERPOLATOR_H_
