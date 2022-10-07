@@ -1230,6 +1230,7 @@ Bool OMMDCamera::GetDEnabling(GeListNode* node, const DescID& id, const GeData& 
 		return(false);
 	return(SUPER::GetDEnabling(node, id, t_data, flags, itemdesc));
 }
+
 Bool VMD_Cam_Draw::Draw(BaseSceneHook* node, BaseDocument* doc, BaseDraw* bd, BaseDrawHelp* bh, BaseThread* bt, SCENEHOOKDRAW flags)
 {
 	if (!node || !doc || !bd || !bh)
@@ -1728,7 +1729,16 @@ maxon::Result<BaseObject*> OMMDCamera::ConversionCamera(VMD_Conversion_Camera_se
 			time_of_two_frames = next_key->GetTime().GetFrame(30.) - now_key_frame;
 			str_curve_position_x->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
 			str_curve_position_x->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
-			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, now_key_frame, mmd::VMDInterpolator( maxon::SafeConvert<UChar>(maxon::Abs(key_right_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x * Fps * 127.0 / Float(time_of_two_frames))), maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
+			if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_XCURVE, now_key_frame, mmd::VMDInterpolator(
+				                                      maxon::SafeConvert<
+					                                      UChar>(maxon::Abs(
+					                                      key_right_x * Fps * 127.0 / static_cast<Float>(time_of_two_frames))),
+				                                      maxon::SafeConvert<
+					                                      UChar>(maxon::Abs(key_right_y * 127.0 / value_of_two_frames)),
+				                                      maxon::SafeConvert<UChar>(maxon::Abs(
+					                                      next_key_left_x * Fps * 127.0 / static_cast<Float>(time_of_two_frames))),
+				                                      maxon::SafeConvert<UChar>(
+					                                      maxon::Abs(next_key_left_y * 127.0 / value_of_two_frames)))))
 				return false;
 		}
 		//最后一帧

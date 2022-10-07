@@ -10,3 +10,6 @@
 [submodule "setup"]
 	path = setup
 	url = https://github.com/AiMiDi/C4D_Plugin_Setup.git
+[submodule "dependency/span"]
+	path = dependency/span
+	url = https://github.com/tcbrindle/span.git

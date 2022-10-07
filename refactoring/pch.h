@@ -16,6 +16,7 @@
 #include <c4d_string.h>
 #include "maxon/pointerarray.h"
 #include "maxon/sortedarray.h"
+#include "tprotection.h"
 
 // The third party
 #include "yaml-cpp/yaml.h"

@@ -20,7 +20,7 @@ namespace maxon {
 #endif
 
 //  HashTime
-class HashTime : BaseTime
+class HashTime : public BaseTime
 {
 public:
 	[[nodiscard]] maxon::HashInt GetHashCode() const
@@ -28,7 +28,9 @@ public:
         return MAXON_HASHCODE(this->GetNumerator(), this->GetDenominator());
     }
 
-    explicit HashTime(const BaseTime& time) : BaseTime(time){}
+	HashTime() = default;
+
+	HashTime(const BaseTime& time) : BaseTime(time) {}
 };
 
 #endif // !_TIME_UTIL_H_

@@ -47,7 +47,7 @@ public:
 		 * \param input_string Source UTF8 string
 		 * \return Result SHIFT-JIS string
 		 */
-		static std::string UTF8toSJIS(std::string& input_string)
+		static std::string UTF8toSJIS(const std::string& input_string)
 		{
 			std::string output_string{};
 			iferr_scope_handler{
@@ -69,7 +69,7 @@ public:
 		 * \param input_string_length Source SHIFT-JIS string length
 		 * \return Result UTF8 string
 		 */
-		static String SJIStoUTF8(char* input_string, const Int64 input_string_length = -1)
+		static String SJIStoUTF8(const char* input_string, const Int64 input_string_length = -1)
 		{
 			String output_string{};
 			iferr_scope_handler{
@@ -83,7 +83,7 @@ public:
 			if (input_string_length == -1)
 			{
 				input_length = strlen(input_string) + 1;
-				if (input_string_length == 1)
+				if (input_length == 1)
 				{
 					return output_string;
 				}
@@ -108,7 +108,7 @@ public:
 		 * \param input_string Source SHIFT-JIS string
 		 * \return Result UTF8 string
 		 */
-		static std::string SJIStoUTF8(std::string& input_string)
+		static std::string SJIStoUTF8(const std::string& input_string)
 		{
 			std::string output_string{};
 			iferr_scope_handler{

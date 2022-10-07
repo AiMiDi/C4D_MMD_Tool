@@ -147,6 +147,9 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_texture.cpp">
       <Filter>source\module\MMD</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\o_mmd_camera.cpp">
+      <Filter>source\module\tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -301,6 +304,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_texture.h">
       <Filter>source\module\MMD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\o_mmd_camera.h">
+      <Filter>source\module\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\o_mmd_interpolator.hpp">
+      <Filter>source\module\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\span_util.hpp.h">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp">
+      <Filter>source\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

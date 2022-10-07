@@ -26,3 +26,5 @@ cmake --build . --config Debug -j
 cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j
 cmake --install . --config Release --prefix ../../install
+cd ../..
+Xcopy "span\include\tcb\*" "install\include\" /y
