@@ -349,7 +349,7 @@ BaseObject* OMMDCamera::ConversionCamera(const cmt_tools_setting::CameraConversi
 			}
 		}
 	}
-
+	
 	EventAdd();
 	if (!VMD_camera_data->UpdateAllInterpolator())
 		return nullptr;

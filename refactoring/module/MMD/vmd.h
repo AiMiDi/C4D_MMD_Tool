@@ -57,6 +57,14 @@ public:
 	 * \return Successful TRUE, other FALSE.
 	 */
 	Bool SaveToFile(Filename& fn) const;
+	/**
+	 * \brief Check it is VMD Camera
+	 * \return Is a VMD Camera TRUE, other FALSE.
+	 */
+	[[nodiscard]] bool IsCamera() const
+	{
+		return m_is_camera;
+	}
 private:
 	bool m_is_camera = false;
 

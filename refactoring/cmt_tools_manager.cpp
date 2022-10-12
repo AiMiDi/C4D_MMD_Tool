@@ -14,38 +14,36 @@ Description:	tools manager
 
 namespace tools_manager
 {
-	bool ImportVMDCamera(const cmt_tools_setting::CameraImport& setting)
+	bool ImportVMDCamera(cmt_tools_setting::CameraImport& setting)
 	{
-		Filename vmd_fn;
 		VMD vmd_animation;
-		vmd_animation.LoadFromFile(vmd_fn);
+		vmd_animation.LoadFromFile(setting.fn);
 		return true;
 	}
 
-	bool ExportVMDCamera(const cmt_tools_setting::CameraExport& setting)
+	bool ExportVMDCamera(cmt_tools_setting::CameraExport& setting)
 	{
-		Filename vmd_fn;
 		VMD vmd_animation;
-		vmd_animation.SaveToFile(vmd_fn);
+		vmd_animation.SaveToFile(setting.fn);
 		return true;
 	}
 
-	bool ImportVMDMotion(const cmt_tools_setting::MotionImport& setting)
+	bool ImportVMDMotion(cmt_tools_setting::MotionImport& setting)
 	{
 		return true;
 	}
 
-	bool ExportVMDMotion(const cmt_tools_setting::MotionExport& setting)
+	bool ExportVMDMotion(cmt_tools_setting::MotionExport& setting)
 	{
 		return true;
 	}
 
-	bool ImportPMXModel(const cmt_tools_setting::ModelImport& setting)
+	bool ImportPMXModel(cmt_tools_setting::ModelImport& setting)
 	{
 		return true;
 	}
 
-	bool ExportPMXModel(const cmt_tools_setting::ModelExport& setting)
+	bool ExportPMXModel(cmt_tools_setting::ModelExport& setting)
 	{
 		return true;
 	}
