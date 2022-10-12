@@ -20,7 +20,6 @@ namespace cmt_tools_setting
 		Float		position_multiple = 8.5;
 		Float		time_offset = 0;
 		Filename	fn = Filename();
-		BaseDocument* doc = nullptr;
 	};
 	struct CameraExport
 	{
@@ -28,6 +27,7 @@ namespace cmt_tools_setting
 		Float	time_offset = 0;
 		Int32	use_rotation = 0;
 		Bool    use_bake = true;
+		Filename	fn = Filename();
 	};
 	struct CameraConversion {
 		Float		distance = 0;

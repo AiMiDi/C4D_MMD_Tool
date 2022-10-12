@@ -43,7 +43,7 @@ class OMMDCamera final : public OMMDCameraBase
 	};
 public:
 	// Constructor function
-	OMMDCamera() : OMMDInterpolator<VMDCameraInterpolator, 9>(VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_ON, VMD_CAM_OBJ_ACURVE) {}
+	OMMDCamera() : OMMDCameraBase(VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_ON, VMD_CAM_OBJ_ACURVE) {}
 
 	// Destructor function
 	~OMMDCamera() override = default;
@@ -86,6 +86,7 @@ public:
 
 	// Called at the point in the priority pipeline specified by AddToExecution, or the lack thereof.
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
+
 protected:
 	TrackDescIDSpan GetTrackDescIDs() override;
 
