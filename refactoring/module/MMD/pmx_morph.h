@@ -17,6 +17,8 @@ Description:	pmx morph data
 
 class PMXMorphOffsetBase : public PMXElement
 {
+	CMT_DEFAULT_MOVE_BODY(PMXMorphOffsetBase)
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(PMXMorphOffsetBase)
 public:
 	/**
 	 * \brief Default constructor function
@@ -26,23 +28,6 @@ public:
 	 * \brief Destructor function
 	 */
 	~PMXMorphOffsetBase() override = default;
-	/**
-	 * \brief Move constructor
-	 */
-	PMXMorphOffsetBase(PMXMorphOffsetBase&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXMorphOffsetBase& operator =(PMXMorphOffsetBase&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMorphOffsetBase)
 public:
 	Bool ReadFromFile(BaseFile* file) override = 0;
 };
@@ -57,39 +42,19 @@ struct PMXGroupMorphOffsetData
 
 class PMXGroupMorphOffset final : public PMXMorphOffsetBase
 {
+	GENERATE_MMD_CLASS_BODY(PMXGroupMorphOffset, PMXGroupMorphOffsetData)
 public:
 	/**
 	 * \brief Default constructor function
 	 */
 	explicit PMXGroupMorphOffset(const PMXModelInfo* model_info) :
-	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
+		PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
 	 */
 	~PMXGroupMorphOffset() override = default;
-	/**
-	 * \brief Move constructor
-	 */
-	PMXGroupMorphOffset(PMXGroupMorphOffset&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXGroupMorphOffset& operator =(PMXGroupMorphOffset&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXGroupMorphOffset)
-public:
+
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXGroupMorphOffsetData;
-	std::unique_ptr<data_type> m_data;
 };
 
 struct PMXVertexMorpOffsetData
@@ -102,6 +67,7 @@ struct PMXVertexMorpOffsetData
 
 class PMXVertexMorpOffset final : public PMXMorphOffsetBase
 {
+	GENERATE_MMD_CLASS_BODY(PMXVertexMorpOffset, PMXVertexMorpOffsetData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -112,29 +78,8 @@ public:
 	 * \brief Destructor function
 	 */
 	~PMXVertexMorpOffset() override = default;
-	/**
-	 * \brief Move constructor
-	 */
-	PMXVertexMorpOffset(PMXVertexMorpOffset&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXVertexMorpOffset& operator =(PMXVertexMorpOffset&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXVertexMorpOffset)
-public:
+
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXVertexMorpOffsetData;
-	std::unique_ptr<data_type> m_data;
 };
 
 struct PMXBoneMorphOffsetData
@@ -149,6 +94,7 @@ struct PMXBoneMorphOffsetData
 
 class PMXBoneMorphOffset final : public PMXMorphOffsetBase
 {
+	GENERATE_MMD_CLASS_BODY(PMXBoneMorphOffset, PMXBoneMorphOffsetData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -159,29 +105,8 @@ public:
 	 * \brief Destructor function
 	 */
 	~PMXBoneMorphOffset() override = default;
-	/**
-	 * \brief Move constructor
-	 */
-	PMXBoneMorphOffset(PMXBoneMorphOffset&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXBoneMorphOffset& operator =(PMXBoneMorphOffset&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXBoneMorphOffset)
-public:
+
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXBoneMorphOffsetData;
-	std::unique_ptr<data_type> m_data;
 };
 
 struct PMXUVMorphOffsetData
@@ -207,6 +132,7 @@ struct PMXUVMorphOffsetData
 
 class PMXUVMorphOffset final : public PMXMorphOffsetBase
 {
+	GENERATE_MMD_CLASS_BODY(PMXUVMorphOffset, PMXUVMorphOffsetData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -217,29 +143,8 @@ public:
 	 * \brief Destructor function
 	 */
 	~PMXUVMorphOffset() override = default;
-	/**
-	 * \brief Move constructor
-	 */
-	PMXUVMorphOffset(PMXUVMorphOffset&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXUVMorphOffset& operator =(PMXUVMorphOffset&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXUVMorphOffset)
-public:
+
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXUVMorphOffsetData;
-	std::unique_ptr<data_type> m_data;
 };
 
 struct PMXMaterialMorphOffsetData
@@ -270,6 +175,7 @@ struct PMXMaterialMorphOffsetData
 
 class PMXMaterialMorphOffset final : public PMXMorphOffsetBase
 {
+	GENERATE_MMD_CLASS_BODY(PMXMaterialMorphOffset, PMXMaterialMorphOffsetData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -280,29 +186,8 @@ public:
 	 * \brief Destructor function
 	 */
 	~PMXMaterialMorphOffset() override = default;
-	/**
-	 * \brief Move constructor
-	 */
-	PMXMaterialMorphOffset(PMXMaterialMorphOffset&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXMaterialMorphOffset& operator =(PMXMaterialMorphOffset&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMaterialMorphOffset)
-public:
+
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXMaterialMorphOffsetData;
-	std::unique_ptr<data_type> m_data;
 };
 
 struct PMXFlipMorphOffsetData
@@ -315,6 +200,7 @@ struct PMXFlipMorphOffsetData
 
 class PMXFlipMorphOffset final : public PMXMorphOffsetBase
 {
+	GENERATE_MMD_CLASS_BODY(PMXFlipMorphOffset, PMXFlipMorphOffsetData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -325,29 +211,8 @@ public:
 	 * \brief Destructor function
 	 */
 	~PMXFlipMorphOffset() override = default;
-	/**
-	 * \brief Move constructor
-	 */
-	PMXFlipMorphOffset(PMXFlipMorphOffset&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXFlipMorphOffset& operator =(PMXFlipMorphOffset&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXFlipMorphOffset)
-public:
+	
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXFlipMorphOffsetData;
-	std::unique_ptr<data_type> m_data;
 };
 
 struct PMXImpulseMorphOffsetData
@@ -364,6 +229,7 @@ struct PMXImpulseMorphOffsetData
 
 class PMXImpulseMorphOffset final : public PMXMorphOffsetBase
 {
+	GENERATE_MMD_CLASS_BODY(PMXImpulseMorphOffset, PMXImpulseMorphOffsetData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -374,29 +240,8 @@ public:
 	 * \brief Destructor function
 	 */
 	~PMXImpulseMorphOffset() override = default;
-	/**
-	 * \brief Move constructor
-	 */
-	PMXImpulseMorphOffset(PMXImpulseMorphOffset&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXImpulseMorphOffset& operator =(PMXImpulseMorphOffset&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXImpulseMorphOffset)
-public:
+
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXImpulseMorphOffsetData;
-	std::unique_ptr<data_type> m_data;
 };
 
 struct PMXMorphData
@@ -430,6 +275,7 @@ struct PMXMorphData
 
 class PMXMorph final : public PMXElement
 {
+	GENERATE_MMD_CLASS_BODY(PMXMorph, PMXMorphData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -439,29 +285,8 @@ public:
 	 * \brief Destructor function
 	 */
 	~PMXMorph() override = default;
-	/**
-	 * \brief Move constructor
-	 */
-	PMXMorph(PMXMorph&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXMorph& operator =(PMXMorph&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMorph)
-public:
+	
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXMorphData;
-	std::unique_ptr<data_type> m_data;
 };
 
 #endif // !_PMX_MORPH_H_

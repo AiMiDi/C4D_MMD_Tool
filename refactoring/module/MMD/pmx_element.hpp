@@ -16,10 +16,10 @@ Description:	pmx element base class.
 
 class PMXElement : public MMDElement
 {
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(PMXElement)
 protected:
 	const PMXModelInfo* m_model_info = nullptr;
 public:
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXElement)
 	/**
 	* \brief  Constructor function
 	*/
