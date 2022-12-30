@@ -255,9 +255,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\refactoring\cmt_marco.h" />
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_config_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\core\cmt_marco.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_element.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_display.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_element.hpp" />

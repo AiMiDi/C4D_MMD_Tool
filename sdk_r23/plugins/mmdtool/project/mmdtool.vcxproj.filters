@@ -320,7 +320,7 @@
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_element.hpp">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\cmt_marco.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\core\cmt_marco.h">
       <Filter>source\module\core</Filter>
     </ClInclude>
   </ItemGroup>
