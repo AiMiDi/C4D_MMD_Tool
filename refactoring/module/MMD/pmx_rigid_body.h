@@ -119,6 +119,7 @@ struct PMXRigidBodyData
 
 class PMXRigidBody final : public PMXElement
 {
+	GENERATE_MMD_CLASS_BODY(PMXRigidBody, PMXRigidBodyData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -129,28 +130,11 @@ public:
 	 */
 	~PMXRigidBody() override = default;
 	/**
-	 * \brief Move constructor
+	 * \brief Read PMX rigid body data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
 	 */
-	PMXRigidBody(PMXRigidBody&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXRigidBody& operator =(PMXRigidBody&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXRigidBody)
-public:
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXRigidBodyData;
-	std::unique_ptr<data_type> m_data;
 };
 
 #endif // !_PMX_RIGID_BODY_H_

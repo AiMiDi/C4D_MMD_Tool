@@ -43,6 +43,7 @@ struct PMXVertexData
 
 class PMXVertex final : public PMXElement
 {
+	GENERATE_MMD_CLASS_BODY(PMXVertex, PMXVertexData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -53,20 +54,11 @@ public:
 	 */
 	~PMXVertex() override = default;
 	/**
-	 * \brief Move constructor
+	 * \brief Read PMX vertex data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
 	 */
-	PMXVertex(PMXVertex&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXVertex& operator =(PMXVertex&& src) noexcept = default;
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXVertex)
-public:
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXVertexData;
-	std::unique_ptr<data_type> m_data;
 };
 
 #endif // !PMX_VERTEX

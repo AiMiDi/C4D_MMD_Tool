@@ -22,45 +22,24 @@ struct VMDMorphData
 	// Expression deformation strength
 	Float32 weight;
 
-	explicit VMDMorphData(String morph_name = {}, const Float32 &weight = 0.f) :
+	explicit VMDMorphData(String morph_name = {}, const Float32& weight = {}) :
 		morph_name(std::move(morph_name)), weight(weight){}
 };
 
 class VMDMorphAnimation final : public VMDElement
 {
-	typedef VMDMorphData data_type;
-	std::unique_ptr<data_type> m_data;
+	GENERATE_MMD_CLASS_BODY(VMDMorphAnimation, VMDMorphData)
 public:
-	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDMorphAnimation)
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit VMDMorphAnimation() :
-		VMDElement(), m_data(std::make_unique<data_type>()) {}
+	explicit VMDMorphAnimation() : VMDElement(), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Constructor function
 	 * \param frame_num Frame of action
-	 * \param morph_name The action corresponds to the expression name
-	 * \param weight Expression deformation strength
+	 * \param data Internal data unique_ptr
 	 */
-	explicit VMDMorphAnimation(const UInt32& frame_num, const String &morph_name = {}, const Float32 &weight = 0.f) :
-		VMDElement(frame_num), m_data(std::make_unique<data_type>(morph_name, weight)) {}
-	/**
-	 * \brief Constructor function
-	 * \param frame_num Frame of action
-	 * \param data Internal data
-	 */
-	explicit VMDMorphAnimation(const UInt32& frame_num, const data_type& data) :
-		VMDElement(frame_num), m_data(std::make_unique<data_type>(data)) {}
-	/**
-	 * \brief Move constructor
-	 */
-	VMDMorphAnimation(VMDMorphAnimation&&) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	VMDMorphAnimation& operator =(VMDMorphAnimation&&) noexcept = default;
+	explicit VMDMorphAnimation(const UInt32& frame_num, std::unique_ptr<data_type> data = std::make_unique<data_type>()) : VMDElement(frame_num), m_data(std::move(data)) {}
 	/**
 	 * \brief Destructor function
 	 */

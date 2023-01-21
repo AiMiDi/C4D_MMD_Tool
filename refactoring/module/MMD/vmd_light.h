@@ -32,10 +32,8 @@ struct VMDLightData
 
 class VMDLightAnimation final : public VMDElement
 {
-	typedef VMDLightData data_type;
-	std::unique_ptr<data_type> m_data;
+	GENERATE_MMD_CLASS_BODY(VMDLightAnimation, VMDLightData)
 public:
-	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDLightAnimation)
 	/**
 	 * \brief Default constructor function
 	 */
@@ -43,27 +41,9 @@ public:
 	/**
 	 * \brief Constructor function
 	 * \param frame_num Frame of action
-	 * \param light_color Light color
-	 * \param light_position Location
+	 * \param data Internal data unique_ptr
 	 */
-	explicit VMDLightAnimation(const UInt32 &frame_num, const Vector32 &light_color = {}, const Vector32 &light_position = {}):
-		VMDElement(frame_num), m_data(std::make_unique<data_type>(light_color, light_position)) {}
-	/**
-	 * \brief Constructor function
-	 * \param frame_num Frame of action
-	 * \param data Internal data
-	 */
-	explicit VMDLightAnimation(const UInt32 &frame_num, const data_type &data) :
-		VMDElement(frame_num), m_data(std::make_unique<data_type>(data)) {}
-	/**
-	 * \brief Move constructor
-	 */
-	VMDLightAnimation(VMDLightAnimation&&) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	VMDLightAnimation& operator =(VMDLightAnimation&&) noexcept = default;
+	explicit VMDLightAnimation(const UInt32& frame_num, std::unique_ptr<data_type> data = std::make_unique<data_type>()) : VMDElement(frame_num), m_data(std::move(data)) {}
 	/**
 	 * \brief Destructor function
 	 */

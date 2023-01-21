@@ -120,7 +120,7 @@ struct PMXBoneData
 
 class PMXBone final : public PMXElement
 {
-
+	GENERATE_MMD_CLASS_BODY(PMXBone, PMXBoneData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -131,28 +131,11 @@ public:
 	 */
 	~PMXBone() override = default;
 	/**
-	 * \brief Move constructor
+	 * \brief Read PMX bone data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
 	 */
-	PMXBone(PMXBone&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXBone& operator =(PMXBone&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXBone)
-public:
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	typedef PMXBoneData data_type;
-	std::unique_ptr<data_type> m_data;
 };
 
 #endif // !_PMX_BONE_H_

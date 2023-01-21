@@ -89,6 +89,7 @@ struct PMXMaterialData
 
 class PMXMaterial final : public PMXElement
 {
+	GENERATE_MMD_CLASS_BODY(PMXMaterial, PMXMaterialData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -99,28 +100,11 @@ public:
 	 */
 	~PMXMaterial() override = default;
 	/**
-	 * \brief Move constructor
+	 * \brief Read PMX material data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
 	 */
-	PMXMaterial(PMXMaterial&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXMaterial& operator =(PMXMaterial&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXMaterial)
-public:
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXMaterialData;
-	std::unique_ptr<data_type> m_data;
 };
 
 #endif // !_PMX_MATERIAL_H_

@@ -63,6 +63,7 @@ struct PMXJointData
 
 class PMXJoint final : public PMXElement
 {
+	GENERATE_MMD_CLASS_BODY(PMXJoint, PMXJointData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -73,28 +74,11 @@ public:
 	 */
 	~PMXJoint() override = default;
 	/**
-	 * \brief Move constructor
+	 * \brief Read PMX joint data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
 	 */
-	PMXJoint(PMXJoint&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXJoint& operator =(PMXJoint&& src) noexcept
-	{
-		if (this != &src)
-		{
-			m_data = std::move(src.m_data);
-			m_model_info = src.m_model_info;
-		}
-		return *this;
-	}
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXJoint)
-public:
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXJointData;
-	std::unique_ptr<data_type> m_data;
 };
 
 #endif // !_PMX_JOINT_H_

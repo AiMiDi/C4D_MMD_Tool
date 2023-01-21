@@ -31,6 +31,7 @@ struct PMXPolygonData
 
 class PMXPolygon final : public PMXElement
 {
+	GENERATE_MMD_CLASS_BODY(PMXPolygon, PMXPolygonData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -41,20 +42,11 @@ public:
 	 */
 	~PMXPolygon() override = default;
 	/**
-	 * \brief Move constructor
+	 * \brief Read PMX polygon data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
 	 */
-	PMXPolygon(PMXPolygon&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXPolygon& operator =(PMXPolygon&& src) noexcept = default;
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXPolygon)
-public:
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXPolygonData;
-	std::unique_ptr<data_type> m_data;
 };
 
 #endif // !_PMX_POLYGON_H_

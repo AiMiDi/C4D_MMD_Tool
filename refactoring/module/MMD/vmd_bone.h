@@ -44,9 +44,9 @@ struct VMDBoneData
 	 * \param interpolator_rotation Rotation action interpolation
 	 */
 	explicit VMDBoneData(
-		String bone_name = {},
-		const Vector32				&position = {},
-		const Vector4d32			&rotation = {},
+		String				bone_name = {},
+		const Vector32&		position = {},
+		const Vector4d32&	rotation = {},
 		VMDBoneInterpolator interpolator_position_x = {},
 		VMDBoneInterpolator interpolator_position_y = {},
 		VMDBoneInterpolator interpolator_position_z = {},
@@ -62,50 +62,18 @@ struct VMDBoneData
 
 class VMDBoneAnimation final : public VMDElement
 {
-	typedef VMDBoneData data_type;
-	std::unique_ptr<data_type> m_data;
+	GENERATE_MMD_CLASS_BODY(VMDBoneAnimation, VMDBoneData)
 public:
-	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDBoneAnimation)
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit VMDBoneAnimation() :VMDElement(), m_data(std::make_unique<data_type>()) {}
+	explicit VMDBoneAnimation() : VMDElement(), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Constructor function
 	 * \param frame_num Frame of action
-	 * \param bone_name The action corresponds to the bone name
-	 * \param position The action corresponds to the bone position
-	 * \param rotation The action corresponds to the rotation of the bone (quad)
-	 * \param interpolator_position_x X-axis displacement action interpolation
-	 * \param interpolator_position_y Y-axis displacement action interpolation
-	 * \param interpolator_position_z Z-axis displacement action interpolation
-	 * \param interpolator_rotation Rotation action interpolation
+	 * \param data Internal data unique_ptr
 	 */
-	explicit VMDBoneAnimation(
-		const UInt32				&frame_num, 
-		const String				&bone_name = {},
-		const Vector32				&position = {},
-		const Vector4d32			&rotation = {},
-		const VMDBoneInterpolator	&interpolator_position_x = {},
-		const VMDBoneInterpolator	&interpolator_position_y = {},
-		const VMDBoneInterpolator	&interpolator_position_z = {},
-		const VMDBoneInterpolator	&interpolator_rotation = {}) :
-		VMDElement(frame_num), m_data(std::make_unique<data_type>(bone_name, position, rotation, interpolator_position_x, interpolator_position_y, interpolator_position_z, interpolator_rotation)) {}
-	/**
-	 * \brief Constructor function
-	 * \param frame_num Frame of action
-	 * \param data Internal data
-	 */
-	explicit VMDBoneAnimation(const UInt32& frame_num, const data_type& data) : VMDElement(frame_num), m_data(std::make_unique<data_type>(data)) {}
-	/**
-	 * \brief Move constructor
-	 */
-	VMDBoneAnimation(VMDBoneAnimation&&) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	VMDBoneAnimation& operator =(VMDBoneAnimation&&) noexcept = default;
+	explicit VMDBoneAnimation(const UInt32& frame_num, std::unique_ptr<data_type> data = std::make_unique<data_type>()) : VMDElement(frame_num), m_data(std::move(data)) {}
 	/**
 	 * \brief Destructor function
 	 */

@@ -22,6 +22,7 @@ struct PMXTextureData
 
 class PMXTexture final : public PMXElement
 {
+	GENERATE_MMD_CLASS_BODY(PMXTexture, PMXTextureData)
 public:
 	/**
 	 * \brief Default constructor function
@@ -32,20 +33,11 @@ public:
 	 */
 	~PMXTexture() override = default;
 	/**
-	 * \brief Move constructor
+	 * \brief Read PMX texture data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
 	 */
-	PMXTexture(PMXTexture&& src) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMXTexture& operator =(PMXTexture&& src) noexcept = default;
-	MAXON_DISALLOW_COPY_AND_ASSIGN(PMXTexture)
-public:
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	using data_type = PMXTextureData;
-	std::unique_ptr<data_type> m_data;
 };
 
 #endif // !PMX_TEXTURE_H

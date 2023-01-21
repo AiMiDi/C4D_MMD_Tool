@@ -16,13 +16,17 @@ Description:	vmd element base class.
 class VMDElement : public MMDElement
 {
 protected:
-	UInt32 m_frame_num = 0U;
+	UInt32 m_frame_num;
 public:
 	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDElement)
 	/**
+	 * \brief Default constructor function
+	 */
+	explicit VMDElement() : m_frame_num(0U) {}
+	/**
 	 * \brief  Constructor function
 	 */
-	explicit VMDElement(const UInt32& frame_no = 0U) :m_frame_num(frame_no) {}
+	explicit VMDElement(const UInt32& frame_no) : m_frame_num(frame_no) {}
 	/**
 	 * \brief Move constructor
 	 */

@@ -18,6 +18,9 @@ Description:	MMD style model information animation
 
 struct VMDModelControllerData
 {
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(VMDModelControllerData)
+	CMT_DEFAULT_MOVE_BODY(VMDModelControllerData)
+public:
 	typedef maxon::BaseArray<VMDIkController> VMDIkControllerArray;
 
 	// Is model show
@@ -30,52 +33,22 @@ struct VMDModelControllerData
 	 */
 	explicit VMDModelControllerData(const Bool &show = true):
 		show(show){}
-
-	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDModelControllerData)
-	/**
-	 * \brief Move constructor
-	 */
-	VMDModelControllerData(VMDModelControllerData&& src) noexcept : MAXON_MOVE_MEMBERS(show, IK_Info_array){}
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	VMDModelControllerData& operator =(VMDModelControllerData&&) noexcept = default;
 };
 
 class VMDModelController final : public VMDElement
 {
-	typedef VMDModelControllerData data_type;
-	std::unique_ptr<data_type> m_data;
+	GENERATE_MMD_CLASS_BODY(VMDModelController, VMDModelControllerData)
 public:
-	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDModelController)
 	/**
 	 * \brief Default constructor function
 	 */
 	explicit VMDModelController() : VMDElement(), m_data(std::make_unique<data_type>()) {}
 	/**
-	 * \brief  Constructor function
-	 * \param frame_num Frame of action
-	 * \param show Is model show
-	 */
-	explicit VMDModelController(const UInt32& frame_num, const Bool &show = true) :
-	VMDElement(frame_num), m_data(std::make_unique<data_type>(show)){}
-	/**
 	 * \brief Constructor function
 	 * \param frame_num Frame of action
-	 * \param data Internal data
+	 * \param data Internal data unique_ptr
 	 */
-	explicit VMDModelController(const UInt32& frame_num, data_type&& data) :
-		VMDElement(frame_num), m_data(std::make_unique<data_type>(std::move(data))) {}
-	/**
-	 * \brief Move constructor
-	 */
-	VMDModelController(VMDModelController&&) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	VMDModelController& operator =(VMDModelController&&) noexcept = default;
+	explicit VMDModelController(const UInt32& frame_num, std::unique_ptr<data_type> data = std::make_unique<data_type>()) : VMDElement(frame_num), m_data(std::move(data)) {}
 	/**
 	 * \brief Destructor function
 	 */
@@ -93,6 +66,5 @@ public:
 	 */
 	Bool WriteToFile(BaseFile* file) const override;
 };
-
 
 #endif //!_VMD_MODEL_CONTROLLER_H_

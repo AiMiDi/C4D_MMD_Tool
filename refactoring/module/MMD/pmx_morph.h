@@ -15,20 +15,25 @@ Description:	pmx morph data
 #include "pmx_element.hpp"
 #include "pmx_model_info.h"
 
-class PMXMorphOffsetBase : public PMXElement
+class PMXMorphOffset : public PMXElement
 {
-	CMT_DEFAULT_MOVE_BODY(PMXMorphOffsetBase)
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(PMXMorphOffsetBase)
+	CMT_DEFAULT_MOVE_BODY(PMXMorphOffset)
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(PMXMorphOffset)
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXMorphOffsetBase(const PMXModelInfo* model_info) : PMXElement(model_info){}
+	explicit PMXMorphOffset(const PMXModelInfo* model_info) : PMXElement(model_info){}
 	/**
 	 * \brief Destructor function
 	 */
-	~PMXMorphOffsetBase() override = default;
+	~PMXMorphOffset() override = default;
 public:
+	/**
+	 * \brief Read PMX morph offset data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override = 0;
 };
 
@@ -40,7 +45,7 @@ struct PMXGroupMorphOffsetData
 	Float32 influence = 0.f;         
 };
 
-class PMXGroupMorphOffset final : public PMXMorphOffsetBase
+class PMXGroupMorphOffset final : public PMXMorphOffset
 {
 	GENERATE_MMD_CLASS_BODY(PMXGroupMorphOffset, PMXGroupMorphOffsetData)
 public:
@@ -48,12 +53,16 @@ public:
 	 * \brief Default constructor function
 	 */
 	explicit PMXGroupMorphOffset(const PMXModelInfo* model_info) :
-		PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
+		PMXMorphOffset(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
 	 */
 	~PMXGroupMorphOffset() override = default;
-
+	/**
+	 * \brief Read PMX group morph offset data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override;
 };
 
@@ -65,7 +74,7 @@ struct PMXVertexMorpOffsetData
 	Vector32	position_offset{};       
 };
 
-class PMXVertexMorpOffset final : public PMXMorphOffsetBase
+class PMXVertexMorpOffset final : public PMXMorphOffset
 {
 	GENERATE_MMD_CLASS_BODY(PMXVertexMorpOffset, PMXVertexMorpOffsetData)
 public:
@@ -73,12 +82,16 @@ public:
 	 * \brief Default constructor function
 	 */
 	explicit PMXVertexMorpOffset(const PMXModelInfo* model_info) :
-	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
+	PMXMorphOffset(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
 	 */
 	~PMXVertexMorpOffset() override = default;
-
+	/**
+	 * \brief Read PMX vertex morph offset data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override;
 };
 
@@ -92,7 +105,7 @@ struct PMXBoneMorphOffsetData
 	Vector32	rotation{};          
 };
 
-class PMXBoneMorphOffset final : public PMXMorphOffsetBase
+class PMXBoneMorphOffset final : public PMXMorphOffset
 {
 	GENERATE_MMD_CLASS_BODY(PMXBoneMorphOffset, PMXBoneMorphOffsetData)
 public:
@@ -100,12 +113,16 @@ public:
 	 * \brief Default constructor function
 	 */
 	explicit PMXBoneMorphOffset(const PMXModelInfo* model_info) :
-	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
+	PMXMorphOffset(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
 	 */
 	~PMXBoneMorphOffset() override = default;
-
+	/**
+	 * \brief Read PMX bone morph offset data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override;
 };
 
@@ -130,7 +147,7 @@ struct PMXUVMorphOffsetData
 	explicit PMXUVMorphOffsetData(const Int32& UV_type) : UV_type(UV_type){}
 };
 
-class PMXUVMorphOffset final : public PMXMorphOffsetBase
+class PMXUVMorphOffset final : public PMXMorphOffset
 {
 	GENERATE_MMD_CLASS_BODY(PMXUVMorphOffset, PMXUVMorphOffsetData)
 public:
@@ -138,12 +155,16 @@ public:
 	 * \brief Default constructor function
 	 */
 	explicit PMXUVMorphOffset(const PMXModelInfo* model_info, const Int32& UV_type) :
-	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>(UV_type)) {}
+	PMXMorphOffset(model_info), m_data(std::make_unique<data_type>(UV_type)) {}
 	/**
 	 * \brief Destructor function
 	 */
 	~PMXUVMorphOffset() override = default;
-
+	/**
+	 * \brief Read PMX UV morph offset data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override;
 };
 
@@ -173,7 +194,7 @@ struct PMXMaterialMorphOffsetData
 	Vector4d32	toon_tint{};
 };
 
-class PMXMaterialMorphOffset final : public PMXMorphOffsetBase
+class PMXMaterialMorphOffset final : public PMXMorphOffset
 {
 	GENERATE_MMD_CLASS_BODY(PMXMaterialMorphOffset, PMXMaterialMorphOffsetData)
 public:
@@ -181,12 +202,16 @@ public:
 	 * \brief Default constructor function
 	 */
 	explicit PMXMaterialMorphOffset(const PMXModelInfo* model_info) :
-	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
+	PMXMorphOffset(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
 	 */
 	~PMXMaterialMorphOffset() override = default;
-
+	/**
+	 * \brief Read PMX material morph offset data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override;
 };
 
@@ -198,7 +223,7 @@ struct PMXFlipMorphOffsetData
 	Float32 influence = 0.f;
 };
 
-class PMXFlipMorphOffset final : public PMXMorphOffsetBase
+class PMXFlipMorphOffset final : public PMXMorphOffset
 {
 	GENERATE_MMD_CLASS_BODY(PMXFlipMorphOffset, PMXFlipMorphOffsetData)
 public:
@@ -206,12 +231,16 @@ public:
 	 * \brief Default constructor function
 	 */
 	explicit PMXFlipMorphOffset(const PMXModelInfo* model_info) :
-	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
+	PMXMorphOffset(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
 	 */
 	~PMXFlipMorphOffset() override = default;
-	
+	/**
+	 * \brief Read PMX filp morph offset data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override;
 };
 
@@ -227,7 +256,7 @@ struct PMXImpulseMorphOffsetData
 	Vector32	rotation_torque{};
 };
 
-class PMXImpulseMorphOffset final : public PMXMorphOffsetBase
+class PMXImpulseMorphOffset final : public PMXMorphOffset
 {
 	GENERATE_MMD_CLASS_BODY(PMXImpulseMorphOffset, PMXImpulseMorphOffsetData)
 public:
@@ -235,12 +264,16 @@ public:
 	 * \brief Default constructor function
 	 */
 	explicit PMXImpulseMorphOffset(const PMXModelInfo* model_info) :
-	PMXMorphOffsetBase(model_info), m_data(std::make_unique<data_type>()) {}
+	PMXMorphOffset(model_info), m_data(std::make_unique<data_type>()) {}
 	/**
 	 * \brief Destructor function
 	 */
 	~PMXImpulseMorphOffset() override = default;
-
+	/**
+	 * \brief Read PMX impulse morph offset data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override;
 };
 
@@ -270,7 +303,7 @@ struct PMXMorphData
 	// Number of offsets 
 	Int32	offset_count = 0;
 	// Offset data  
-	maxon::BaseArray<std::unique_ptr<PMXMorphOffsetBase>> offset_data;
+	maxon::BaseArray<std::unique_ptr<PMXMorphOffset>> offset_data;
 };
 
 class PMXMorph final : public PMXElement
@@ -285,7 +318,11 @@ public:
 	 * \brief Destructor function
 	 */
 	~PMXMorph() override = default;
-	
+	/**
+	 * \brief Read PMX morph data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override;
 };
 

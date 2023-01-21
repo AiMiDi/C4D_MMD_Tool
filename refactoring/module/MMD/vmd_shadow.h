@@ -26,16 +26,14 @@ struct VMDShadowData
 	 * \param shadow_type 0:Off 1:mode1 2:mode2
 	 * \param distance Shadow distance
 	 */
-	explicit VMDShadowData(const UChar &shadow_type = 0U, const Float32 &distance = 0.f) :
+	explicit VMDShadowData(const UChar& shadow_type = {}, const Float32& distance = {}) :
 	shadow_type(shadow_type), distance(distance) {}
 };
 
 class VMDShadow final : public VMDElement
 {
-	typedef VMDShadowData data_type;
-	std::unique_ptr<data_type> m_data;
+	GENERATE_MMD_CLASS_BODY(VMDShadow, VMDShadowData)
 public:
-	MAXON_DISALLOW_COPY_AND_ASSIGN(VMDShadow)
 	/**
 	 * \brief Default constructor function
 	 */
@@ -43,27 +41,9 @@ public:
 	/**
 	 * \brief Constructor function
 	 * \param frame_num Frame of action
-	 * \param shadow_type 0:Off 1:mode1 2:mode2
-	 * \param distance Shadow distance
+	 * \param data Internal data unique_ptr
 	 */
-	explicit VMDShadow(const UInt32 &frame_num, const UChar &shadow_type = 0U, const Float32 &distance = 0.f) :
-	VMDElement(frame_num), m_data(std::make_unique<data_type>(shadow_type, distance)){}
-	/**
-	 * \brief Constructor function
-	 * \param frame_num Frame of action
-	 * \param data Internal data
-	 */
-	explicit VMDShadow(const UInt32 &frame_num, const data_type &data) :
-		VMDElement(frame_num), m_data(std::make_unique<data_type>(data)) {}
-	/**
-	 * \brief Move constructor
-	 */
-	VMDShadow(VMDShadow&&) noexcept = default;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	VMDShadow& operator =(VMDShadow&&) noexcept = default;
+	explicit VMDShadow(const UInt32& frame_num, std::unique_ptr<data_type> data = std::make_unique<data_type>()) : VMDElement(frame_num), m_data(std::move(data)) {}
 	/**
 	 * \brief Destructor function
 	 */
