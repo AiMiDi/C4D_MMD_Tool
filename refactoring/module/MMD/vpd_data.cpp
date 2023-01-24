@@ -15,20 +15,20 @@ Description:	vpd file data
 Bool VPDFile::LoadFromFile(const Filename& fn) {
 	iferr_scope_handler
 	{
-		return FALSE;
+		return false;
 	};
 	AutoAlloc<BaseFile> file;
 	if (file == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		return FALSE;
+		return false;
 	}
 	if (!file->Open(fn, FILEOPEN::READ, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA))
 	{
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_OPEN_FILE_ERR));
-		return FALSE;
+		return false;
 	}
 	const Int64 file_length = file->GetLength();
 	/* 申请文件长度的内存 */
@@ -45,13 +45,13 @@ Bool VPDFile::LoadFromFile(const Filename& fn) {
 	{
 		std::string_view line;
 		/* 遇到 /r /n 截断字符串为一行并跳过 \r \n。 */
-		if (size_t read_pos; (read_pos = file_string.find_first_of('\r', is_read)))
+		if (size_t read_pos = file_string.find_first_of('\r', is_read); read_pos)
 		{
 			line = std::string_view(file_string.data() + is_read, read_pos - is_read);
 			is_read = read_pos + 2;
 		}
 		/* 遇到 /n 截断字符串为一行并跳过 \n。 */
-		else if ((read_pos = file_string.find_first_of('\n', is_read)))
+		else if (read_pos = file_string.find_first_of('\n', is_read); read_pos)
 		{
 			line = std::string_view(file_string.data() + is_read, read_pos - is_read);
 			is_read = read_pos + 1;
@@ -66,12 +66,11 @@ Bool VPDFile::LoadFromFile(const Filename& fn) {
 	if (lines.IsEmpty() || lines[0].compare(0, 24,R"(Vocaloid Pose Data file)") != 0)
 	{
 		MessageDialog("VPD File Format Error."_s);
-		return FALSE;
+		return false;
 	}
 	/* remove comment */
 	for (auto& line : lines) {
-		size_t comment_pos;
-		if ((comment_pos = line.find_first_of("//"))) {
+		 if (const size_t comment_pos = line.find_first_of("//"); comment_pos) {
 			line = line.substr(0, comment_pos);
 		}
 	}
@@ -104,7 +103,7 @@ Bool VPDFile::LoadFromFile(const Filename& fn) {
 		semicolon_pos = lines[i + 2].find_first_of(';', prec_comma_pos);
 		rotation.w = std::stof(lines[i + 2].substr(prec_comma_pos, semicolon_pos - prec_comma_pos).data());
 	}
-	return TRUE;
+	return true;
 }
 Bool VPDFile::SaveToFile(const Filename& fn) const
 {
@@ -114,7 +113,7 @@ Bool VPDFile::SaveToFile(const Filename& fn) const
 	{
 		GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		return FALSE;
+		return false;
 	}
 	if (!file->Open(fn, FILEOPEN::WRITE, FILEDIALOG::ANY, BYTEORDER::V_INTEL, MACTYPE_CINEMA, MACCREATOR_CINEMA))
 	{
@@ -124,5 +123,5 @@ Bool VPDFile::SaveToFile(const Filename& fn) const
 	}
 	file_string.append("Vocaloid Pose Data file\r\n");
 	file->WriteBytes(file_string.data(), static_cast<Int>(file_string.length()));
-	return TRUE;
+	return true;
 }
