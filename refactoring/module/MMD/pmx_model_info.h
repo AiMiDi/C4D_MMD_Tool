@@ -15,38 +15,27 @@ Description:	pmx model information data
 #include "mmd_element.hpp"
 #include "utils/pmx_util.hpp"
 
-/**
- * \brief PMX model global information struct
- */
-class PMXModelInfo final : public MMDElement
+struct PMXModelInfoData
 {
 	// String encoding. 0 is UTF16LE encoding and 1 is UTF8 encoding
-	Char	m_text_encoding = 0;
+	Char	text_encoding = 0;
 	// Vertex index size
-	Char	m_vertex_index_size = 4;
+	Char	vertex_index_size = 4;
 	// Texture index size
-	Char	m_texture_index_size = 2;
+	Char	texture_index_size = 2;
 	// Material index size 
-	Char	m_material_index_size = 2;
+	Char	material_index_size = 2;
 	// Bone index size
-	Char	m_bone_index_size = 2;
+	Char	bone_index_size = 2;
 	// Morph index size 
-	Char	m_morph_index_size = 2;
+	Char	morph_index_size = 2;
 	// Rigid-body index size 
-	Char	m_rigidbody_index_size = 2;
-public:
-	PMXTextReader	m_text_reader{};
-	PMXUIndexReader	m_vertex_index_reader{};
-	PMXIndexReader	m_texture_index_reader{};
-	PMXIndexReader	m_material_index_reader{};
-	PMXIndexReader	m_bone_index_reader{};
-	PMXIndexReader	m_morph_index_reader{};
-	PMXIndexReader	m_rigidbody_index_reader{};
+	Char	rigidbody_index_size = 2;
 
 	// version
 	Float32 version = 2.0f;
 	// Additional Vector4d32 numbers
-	Char	additional_Vector4d32_count = 1;
+	Char	additional_vec4_count = 1;
 	// Local model name 
 	String	model_name_local;
 	// Generic model name 
@@ -60,24 +49,46 @@ public:
 	// Is there a vertex morph 
 	Bool	have_vertex_morph = false;
 
+	PMXModelInfoData(String model_name_local = {}, String model_name_universal = {}, String	comments_local = {}, String	comments_universal = {}):
+		model_name_local(std::move(model_name_local)), model_name_universal(std::move(model_name_universal)), comments_local(std::move(comments_local)), comments_universal(std::move(comments_universal)) {}
+};
+
+/**
+ * \brief PMX model global information struct
+ */
+class PMXModelInfo final : public MMDElement
+{
+	GENERATE_MMD_CLASS_BODY(PMXModelInfo, PMXModelInfoData)
+public:
+	PMXTextReader	m_text_reader{};
+	PMXUIndexReader	m_vertex_index_reader{};
+	PMXIndexReader	m_texture_index_reader{};
+	PMXIndexReader	m_material_index_reader{};
+	PMXIndexReader	m_bone_index_reader{};
+	PMXIndexReader	m_morph_index_reader{};
+	PMXIndexReader	m_rigidbody_index_reader{};
+
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit PMXModelInfo(String model_name_local_ = {}, String model_name_universal_ = {}) :
-	model_name_local(std::move(model_name_local_)), model_name_universal(std::move(model_name_universal_)){}
+	explicit PMXModelInfo(std::unique_ptr<PMXModelInfoData> data = std::make_unique<PMXModelInfoData>()) : m_data(std::move(data)){}
+	/**
+	 * \brief Constructor function
+	 */
+	explicit PMXModelInfo(String model_name_local, String model_name_universal, String comments_local, String comments_universal) :
+		m_data(std::make_unique<PMXModelInfoData>(std::move(model_name_local), std::move(model_name_universal), std::move(comments_local), std::move(comments_universal))) {}
+	/**
+	* \brief Destructor function
+	*/
+	~PMXModelInfo() override = default;
 
-	void Init(
-		const Char& text_encoding = 0,
-		const Char& vertex_index_size = 4,
-		const Char& texture_index_size = 2,
-		const Char& material_index_size = 2,
-		const Char& bone_index_size = 2,
-		const Char& morph_index_size = 2,
-		const Char& rigidbody_index_size = 2);
-
+	void ResetReader();
+	/**
+	 * \brief Read PMX model info data from a pmx file
+	 * \param file file pmx file
+	 * \return Successful TRUE, other FALSE.
+	 */
 	Bool ReadFromFile(BaseFile* file) override;
-private:
-	void InitReader();
 };
 
 #endif // !_PMX_MODEL_INFO_H_

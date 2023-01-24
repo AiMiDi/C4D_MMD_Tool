@@ -47,35 +47,18 @@ struct PMXData
 	// J点数据  
 	PMXElementArray<PMXJoint>			joint_data{ &model_info };
 
-	explicit PMXData(String model_name_local = {}, String model_name_universal = {}) :
-	model_info(std::move(model_name_local),std::move(model_name_universal)){}
+	explicit PMXData(String model_name_local = {}, String model_name_universal = {}, String	comments_local = {}, String	comments_universal = {}) :
+	model_info(std::move(model_name_local), std::move(model_name_universal), std::move(comments_local), std::move(comments_universal)){}
 };
 
 class PMX
 {
+	GENERATE_MMD_CLASS_BODY(PMX, PMXData)
 public:
 	/**
 	 * \brief  Constructor function
 	 */
 	explicit PMX(String model_name_local = {}, String model_name_universal = {});
-	/**
-	 * \brief Copy constructor
-	 */
-	PMX(const PMX&) = delete;
-	/**
-	 * \brief Move constructor
-	 */
-	PMX(PMX&&) noexcept = default;
-	/**
-	 * \brief Copy operator=
-	 * \return Result reference
-	 */
-	PMX& operator =(const PMX&) = delete;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	PMX& operator =(PMX&&) noexcept = default;
 	/**
 	 * \brief Destructor function
 	 */
@@ -92,10 +75,6 @@ public:
 	 * \return Successful TRUE, other FALSE.
 	 */
 	// TODO: Bool SaveToFile(Filename& fn) const;
-private:
-	using data_type = PMXData;
-
-	std::unique_ptr<data_type> m_data;
 };
 
 #endif // !_PMX_DATA_H_

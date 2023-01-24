@@ -35,29 +35,12 @@ struct VMDData
 
 class VMD
 {
+	GENERATE_MMD_CLASS_BODY(VMD, VMDData)
 public:
 	/**
 	 * \brief  Constructor function
 	 */
 	explicit VMD(String model_name = {}, bool is_camera = false);
-	/**
-	 * \brief Copy constructor
-	 */
-	VMD(const VMD&) = delete;
-	/**
-	 * \brief Move constructor
-	 */
-	VMD(VMD&&) noexcept = default;
-	/**
-	 * \brief Copy operator=
-	 * \return Result reference
-	 */
-	VMD& operator =(const VMD&) = delete;
-	/**
-	 * \brief Move operator=
-	 * \return Result reference
-	 */
-	VMD& operator =(VMD&&) noexcept = default;
 	/**
 	 * \brief Destructor function
 	 */
@@ -75,9 +58,6 @@ public:
 	 */
 	Bool SaveToFile(Filename& fn) const;
 private:
-	using data_type = VMDData;
-
-	std::unique_ptr<data_type> m_data;
 	bool m_is_camera = false;
 
 	inline static String m_camera_name = L"カメラ・照明"_s;
