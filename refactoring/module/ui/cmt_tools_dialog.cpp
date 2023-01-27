@@ -17,19 +17,19 @@ Description:	CMT tools main dialog.
 void CMTToolDialog::GetItem(const Int32 id, Float& value) const
 {
 	GetFloat(id, value);
-	CMTToolConfigManager::SetConfig(id, value);
+	CMTToolConfigManager::GetInstance().SetConfig(id, value);
 }
 
 void CMTToolDialog::GetItem(const Int32 id, Int32& value) const
 {
 	GetInt32(id, value);
-	CMTToolConfigManager::SetConfig(id, value);
+	CMTToolConfigManager::GetInstance().SetConfig(id, value);
 }
 
 void CMTToolDialog::GetItem(const Int32 id, Bool& value) const
 {
 	GetBool(id, value);
-	CMTToolConfigManager::SetConfig(id, value);
+	CMTToolConfigManager::GetInstance().SetConfig(id, value);
 }
 
 Bool CMTToolDialog::CreateLayout()
@@ -49,7 +49,7 @@ Bool CMTToolDialog::CreateLayout()
 
 Bool CMTToolDialog::InitValues()
 {
-	CMTToolConfigManager::InitDialog(this);
+	CMTToolConfigManager::GetInstance().InitDialog(this);
 	return true;
 }
 
@@ -139,90 +139,90 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	{
 		break;
 	}
-	case DIG_CMT_TOOL_MODLE_IMPORT_BUTTON:
+	case DIG_CMT_TOOL_MODEL_IMPORT_BUTTON:
 	{
 		cmt_tools_setting::ModelImport setting;
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_SIZE, setting.position_multiple);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_POLYGON, setting.import_polygon);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_NORMAL, setting.import_normal);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_UV, setting.import_uv);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_MATERIAL, setting.import_material);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_BONE, setting.import_bone);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS, setting.import_weights);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_IK, setting.import_ik);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_INHERIT, setting.import_inherit);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_EXPRESSION, setting.import_expression);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_MULTIPART, setting.import_multipart);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_ENGLISH, setting.import_english);
-		GetItem(DIG_CMT_TOOL_MODLE_IMPORT_ENGLISH_CHECK, setting.import_english_check);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_SIZE, setting.position_multiple);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_POLYGON, setting.import_polygon);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_NORMAL, setting.import_normal);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_UV, setting.import_uv);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_MATERIAL, setting.import_material);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_BONE, setting.import_bone);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS, setting.import_weights);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_IK, setting.import_ik);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_INHERIT, setting.import_inherit);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_EXPRESSION, setting.import_expression);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_MULTIPART, setting.import_multipart);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH, setting.import_english);
+		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK, setting.import_english_check);
 		break;
 	}
-	case DIG_CMT_TOOL_MODLE_IMPORT_BONE:
+	case DIG_CMT_TOOL_MODEL_IMPORT_BONE:
 	{
 		Bool import_bone = false;
-		GetBool(DIG_CMT_TOOL_MODLE_IMPORT_BONE, import_bone);
+		GetBool(DIG_CMT_TOOL_MODEL_IMPORT_BONE, import_bone);
 		if (import_bone == false)
 		{
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_IK, false);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_INHERIT, false);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS, false);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS, false);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_IK, false);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_INHERIT, false);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_IK, false);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_INHERIT, false);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS, false);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS, false);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_IK, false);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_INHERIT, false);
 		}
 		else {
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS, true);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_IK, true);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_INHERIT, true);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_IK, true);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_INHERIT, true);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS, true);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS, true);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_IK, true);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_INHERIT, true);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_IK, true);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_INHERIT, true);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS, true);
 		}
 		break;
 	}
-	case DIG_CMT_TOOL_MODLE_IMPORT_POLYGON:
+	case DIG_CMT_TOOL_MODEL_IMPORT_POLYGON:
 	{
 		Bool import_polygon = false;
-		GetBool(DIG_CMT_TOOL_MODLE_IMPORT_POLYGON, import_polygon);
+		GetBool(DIG_CMT_TOOL_MODEL_IMPORT_POLYGON, import_polygon);
 		if (import_polygon == false)
 		{
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_NORMAL, false);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_UV, false);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS, false);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_EXPRESSION, false);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS, false);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_NORMAL, false);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_UV, false);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_EXPRESSION, false);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_NORMAL, false);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_UV, false);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS, false);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_EXPRESSION, false);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS, false);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_NORMAL, false);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_UV, false);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_EXPRESSION, false);
 		}
 		else {
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS, true);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_NORMAL, true);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_UV, true);
-			Enable(DIG_CMT_TOOL_MODLE_IMPORT_EXPRESSION, true);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_EXPRESSION, true);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_NORMAL, true);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_UV, true);
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS, true);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS, true);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_NORMAL, true);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_UV, true);
+			Enable(DIG_CMT_TOOL_MODEL_IMPORT_EXPRESSION, true);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_EXPRESSION, true);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_NORMAL, true);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_UV, true);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS, true);
 		}
 		break;
 	}
-	case DIG_CMT_TOOL_MODLE_IMPORT_ENGLISH:
+	case DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH:
 	{
 		Bool import_english = false;
-		GetBool(DIG_CMT_TOOL_MODLE_IMPORT_ENGLISH, import_english);
+		GetBool(DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH, import_english);
 		if (import_english == false)
 		{
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_ENGLISH_CHECK, false);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK, false);
 		}
 		else {
-			SetBool(DIG_CMT_TOOL_MODLE_IMPORT_ENGLISH_CHECK, true);
+			SetBool(DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK, true);
 		}
 		break;
 	}
 	default:
 		break;
 	}
-	CMTToolConfigManager::SaveConfig();
+	CMTToolConfigManager::GetInstance().SaveConfig();
 	return true;
 }

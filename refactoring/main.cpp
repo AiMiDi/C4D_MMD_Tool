@@ -20,13 +20,13 @@ Bool PluginStart()
 	{
 		return FALSE;
 	}
-	CMTToolConfigManager::InitConfigManager();
+	CMTToolConfigManager::GetInstance().InitConfigManager();
 	return TRUE;
 }
 
 void PluginEnd()
 {
-	CMTToolConfigManager::SaveConfig();
+	CMTToolConfigManager::GetInstance().SaveConfig();
 }
 
 Bool PluginMessage(Int32 id, void* data)

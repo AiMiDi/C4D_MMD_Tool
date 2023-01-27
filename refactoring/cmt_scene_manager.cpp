@@ -21,7 +21,7 @@ bool SceneManager::Init()
 	return true;
 }
 
-BaseObject* SceneManager::LoadVMDCamera(const cmt_tools_setting::CameraImport& setting, const VMD& data)
+BaseObject* SceneManager::LoadVMDCamera(const cmt_tools_setting::CameraImport& setting, const VMD& data) const
 {
 	if(data.IsCamera())
 	{
@@ -33,6 +33,11 @@ BaseObject* SceneManager::LoadVMDCamera(const cmt_tools_setting::CameraImport& s
 		vmd_camera->SetName(setting.fn.GetFileString());
 		auto* vmd_camera_data = vmd_camera->GetNodeData<OMMDCamera>();
 		vmd_camera_data->CameraInit();
+
+		for(const auto& frame_data : data.GetData()->camera_frames)
+		{
+			//frame_data.GetData();
+		}
 
 		return vmd_camera;
 	}

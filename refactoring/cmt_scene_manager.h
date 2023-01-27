@@ -32,7 +32,9 @@ public:
 public:
 	bool Init();
 
-	BaseObject* LoadVMDCamera(const cmt_tools_setting::CameraImport& setting, const VMD& data);
+	BaseObject* LoadVMDCamera(const cmt_tools_setting::CameraImport& setting, const VMD& data) const;
+private:
+	maxon::BaseArray<BaseObject*> SceneCameraList;
 };
 
 #endif // !_CMT_SCENE_MANAGER_H_

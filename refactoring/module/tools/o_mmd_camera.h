@@ -27,6 +27,8 @@ class OMMDCamera final : public OMMDCameraBase
 
 	// Maintained camera object
 	BaseObject* m_camera = nullptr;
+	
+	BaseTag* m_protection_tag = nullptr;
 
 	//Track DESC ID table
 	inline static const DescID m_track_desc_IDs[]
@@ -50,7 +52,7 @@ public:
 
 public:
 	// Get maintained camera object
-	BaseObject* GetCamera()
+	BaseObject* GetCamera() const
 	{
 		return m_camera;
 	}

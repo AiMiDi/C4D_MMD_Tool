@@ -40,9 +40,9 @@ Bool OMMDCamera::CameraInit(GeListNode* node)
 		m_camera = BaseObject::Alloc(Ocamera); 
 		m_camera->SetName("Camera"_s);
 		UniqueIDWriter::AddUniqueID(m_camera, "001"_s, ID_O_MMD_CAMERA);
-		BaseTag* ProtectionTag = BaseTag::Alloc(Tprotection);
-		ProtectionTag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
-		m_camera->InsertTag(ProtectionTag);
+		m_protection_tag = BaseTag::Alloc(Tprotection);
+		m_protection_tag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
+		m_camera->InsertTag(m_protection_tag);
 		m_camera->InsertUnder(node);
 	}
 	return true;
@@ -324,7 +324,7 @@ BaseObject* OMMDCamera::ConversionCamera(const cmt_tools_setting::CameraConversi
 			// rotation_curve
 			else if (track_index <= 3)
 			{
-				// 根据stting使用对应旋转曲线
+				// 根据setting使用对应旋转曲线
 				if (!ConversionCameraCurve(VMD_camera_data, src_curves[3 + setting.use_rotation], track_index, frame_count))
 					return nullptr;
 			}
