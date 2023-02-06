@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "register_entity.h"
 
 #include "module/tools/o_mmd_camera.h"

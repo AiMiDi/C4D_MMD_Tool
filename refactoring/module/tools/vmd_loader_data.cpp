@@ -25,7 +25,7 @@ Bool VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, UChar*
 	if (strncmp(VMDVersion, "Vocaloid Motion Data file", 25) != 0 || strncmp(VMDVersion, "Vocaloid Motion Data 0002", 25)!= 0)
 	{
 		const String ModelName = code_conversion::SJIStoUTF8(VMDModelName, 20);
-		// カメラ・照明 
+		// カメラ照明 
 		if (ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) 
 		{
 			m_is_camera = TRUE;

@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -68,7 +68,7 @@ public:
 private:
 	bool m_is_camera = false;
 
-	inline static String m_camera_name = L"カメラ・照明"_s;
+	inline static String m_camera_name = L"カメラ照明"_s;
 	
 };
 
