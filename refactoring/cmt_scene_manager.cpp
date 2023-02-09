@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			walter white/Aimidi
@@ -11,7 +11,7 @@ Description:	scene manager
 #include "pch.h"
 #include "cmt_scene_manager.h"
 
-#include "module/tools/o_mmd_camera.h"
+#include "module/tools/object/mmd_camera.h"
 
 bool SceneManager::Init()
 {
@@ -31,12 +31,12 @@ BaseObject* SceneManager::LoadVMDCamera(const cmt_tools_setting::CameraImport& s
 		m_document->InsertObject(vmd_camera, nullptr, nullptr);
 
 		vmd_camera->SetName(setting.fn.GetFileString());
-		auto* vmd_camera_data = vmd_camera->GetNodeData<OMMDCamera>();
+		auto* vmd_camera_data = vmd_camera->GetNodeData<MMDCamera>();
 		vmd_camera_data->CameraInit();
 
 		for(const auto& frame_data : data.GetData()->camera_frames)
 		{
-			//frame_data.GetData();
+			vmd_camera_data->SetFrom(frame_data.GetData());
 		}
 
 		return vmd_camera;

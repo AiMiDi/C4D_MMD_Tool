@@ -1,9 +1,9 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "register_entity.h"
 
-#include "module/tools/o_mmd_camera.h"
+#include "module/tools/object/mmd_camera.h"
 #include "module/ui/cmt_tools_dialog.h"
-#include "module/tools/vmd_loader_data.h"
+#include "module/tools/loader/vmd_loader.h"
 
 Bool RegisterCMTTool()
 {
@@ -17,7 +17,7 @@ Bool RegisterVMDLoader()
 
 Bool RegisterOMMDCamera()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_CAMERA, GeLoadString(IDS_O_MMD_CAMERA), OBJECT_CALL_ADDEXECUTION, OMMDCamera::Alloc, "MMD Camera"_s, AutoBitmap("OMMDCamera.png"_s), 0));
+	return(RegisterObjectPlugin(ID_O_MMD_CAMERA, GeLoadString(IDS_O_MMD_CAMERA), OBJECT_CALL_ADDEXECUTION, MMDCamera::Alloc, "MMD Camera"_s, AutoBitmap("OMMDCamera.png"_s), 0));
 }
 
 Bool cmt_register::RigisterPlugin()

@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			walter white/Aimidi
@@ -8,8 +8,8 @@ Description:	vmd data loader
 
 **************************************************************************/
 
-#ifndef _VMD_LOADER_DATAH_H_
-#define _VMD_LOADER_DATAH_H_
+#ifndef _VMD_LOADER_H_
+#define _VMD_LOADER_H_
 
 #include "pch.h"
 
@@ -31,4 +31,4 @@ public:
 
 };
 
-#endif // !_VMD_LOADER_DATAH_H_
+#endif // !_VMD_LOADER_H_

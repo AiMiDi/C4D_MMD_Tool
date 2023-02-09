@@ -49,6 +49,12 @@
     <Filter Include="source\module\core">
       <UniqueIdentifier>{ed9da958-ca0e-41b2-931a-7c733e4daeda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\module\tools\object">
+      <UniqueIdentifier>{4103a52c-5944-49e3-821d-726e64cd9ea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\module\tools\loader">
+      <UniqueIdentifier>{358939d2-af04-4f2b-ac48-e0a2a72368df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -68,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp">
       <Filter>source\module\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.cpp">
-      <Filter>source\module\tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vpd_data.cpp">
       <Filter>source\module\MMD</Filter>
@@ -147,11 +150,14 @@
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.cpp">
       <Filter>source\module\MMD\pmx</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\o_mmd_camera.cpp">
-      <Filter>source\module\tools</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_texture.cpp">
       <Filter>source\module\MMD\pmx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp">
+      <Filter>source\module\tools\loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,9 +220,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\utils\code_conversion_util.hpp">
       <Filter>source\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.h">
-      <Filter>source\module\tools</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vpd_data.h">
       <Filter>source\module\MMD</Filter>
@@ -299,12 +302,6 @@
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.h">
       <Filter>source\module\MMD\pmx</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\o_mmd_camera.h">
-      <Filter>source\module\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\o_mmd_interpolator.hpp">
-      <Filter>source\module\tools</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\utils\span_util.hpp.h">
       <Filter>source\utils</Filter>
     </ClInclude>
@@ -322,6 +319,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\core\cmt_marco.h">
       <Filter>source\module\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_interpolator.hpp">
+      <Filter>source\module\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.h">
+      <Filter>source\module\tools\loader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -10,11 +10,11 @@ Description:	C4D MMD camera object
 
 
 #include "pch.h"
-#include "o_mmd_camera.h"
+#include "mmd_camera.h"
 
 #include "utils/unique_id_util.hpp"
 
-Bool OMMDCamera::CameraInit(GeListNode* node)
+Bool MMDCamera::CameraInit(GeListNode* node)
 {
 	if (!node)
 	{
@@ -48,7 +48,14 @@ Bool OMMDCamera::CameraInit(GeListNode* node)
 	return true;
 }
 
-bool OMMDCamera::ConversionCameraCurve(OMMDCamera* camera_data, CCurve* src_curve_position, const Int32 curve_type, const Int32 frame_count)
+Bool MMDCamera::SetFrom(const std::unique_ptr<VMDCameraData>& data)
+{
+	CTrack* tracks[m_track_count]{ nullptr };
+	CCurve* curves[m_track_count]{ nullptr };
+	return true;
+}
+
+bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_position, const Int32 curve_type, const Int32 frame_count)
 {
 	Float key_left_x = .0, key_left_y = .0, key_right_x = .0, key_right_y = .0,
 		next_key_left_x = .0, next_key_left_y = .0, next_key_right_x = .0, next_key_right_y = .0;
@@ -116,7 +123,7 @@ bool OMMDCamera::ConversionCameraCurve(OMMDCamera* camera_data, CCurve* src_curv
 	return false;
 }
 
-BaseObject* OMMDCamera::ConversionCamera(const cmt_tools_setting::CameraConversion& setting)
+BaseObject* MMDCamera::ConversionCamera(const cmt_tools_setting::CameraConversion& setting)
 {
 	iferr_scope_handler{
 		MessageDialog(err.ToString(nullptr));
@@ -170,7 +177,7 @@ BaseObject* OMMDCamera::ConversionCamera(const cmt_tools_setting::CameraConversi
 	doc->InsertObject(VMD_camera, nullptr, nullptr);
 
 	/* 获取目标对象内部的数据 */
-	auto* VMD_camera_data = VMD_camera->GetNodeData<OMMDCamera>();
+	auto* VMD_camera_data = VMD_camera->GetNodeData<MMDCamera>();
 	if (!VMD_camera_data->CameraInit())
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -358,7 +365,7 @@ BaseObject* OMMDCamera::ConversionCamera(const cmt_tools_setting::CameraConversi
 	return VMD_camera;
 }
 
-Bool OMMDCamera::Init(GeListNode* node)
+Bool MMDCamera::Init(GeListNode* node)
 {
 	if (node == nullptr)
 		return false;
@@ -368,7 +375,7 @@ Bool OMMDCamera::Init(GeListNode* node)
 	return true;
 }
 
-Bool OMMDCamera::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
+Bool MMDCamera::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	if (id[0].id == VMD_CAM_OBJ_SPLINE)
 	{
@@ -377,7 +384,7 @@ Bool OMMDCamera::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 
-Bool OMMDCamera::Message(GeListNode* node, Int32 type, void* data)
+Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
 		MessageDialog(err.ToString(nullptr));
@@ -446,14 +453,14 @@ Bool OMMDCamera::Message(GeListNode* node, Int32 type, void* data)
 	return true;
 }
 
-Bool OMMDCamera::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
+Bool MMDCamera::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
 {
 	if (id[0].id == VMD_CAM_OBJ_FRAME_ON)
 		return false;
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
 }
 
-EXECUTIONRESULT OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
+EXECUTIONRESULT MMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (!op || !doc)
 	{
@@ -463,28 +470,28 @@ EXECUTIONRESULT OMMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThrea
 	return SUPER::Execute(op, doc, bt, priority, flags);
 }
 
-OMMDCameraBase::TrackDescIDSpan OMMDCamera::GetTrackDescIDs()
+MMDCameraBase::TrackDescIDSpan MMDCamera::GetTrackDescIDs()
 {
 	return span_namespace::make_span(m_track_desc_IDs);
 }
 
-OMMDCameraBase::TrackObjectSpan OMMDCamera::GetTrackObjects(GeListNode* node)
+MMDCameraBase::TrackObjectSpan MMDCamera::GetTrackObjects(GeListNode* node)
 {
-	const auto obj = reinterpret_cast<BaseObject*>(node);
-	static BaseObject* track_objcts[9];
-	track_objcts[0] = obj;
-	track_objcts[1] = obj;
-	track_objcts[2] = obj;
-	track_objcts[3] = obj;
-	track_objcts[4] = obj;
-	track_objcts[5] = obj;
-	track_objcts[6] = m_camera;
-	track_objcts[7] = m_camera;
-	track_objcts[8] = obj;
-	return span_namespace::make_span(track_objcts);
+	const auto object = reinterpret_cast<BaseObject*>(node);
+	static BaseObject* track_objects[9];
+	track_objects[0] = object;
+	track_objects[1] = object;
+	track_objects[2] = object;
+	track_objects[3] = object;
+	track_objects[4] = object;
+	track_objects[5] = object;
+	track_objects[6] = m_camera;
+	track_objects[7] = m_camera;
+	track_objects[8] = object;
+	return span_namespace::make_span(track_objects);
 }
 
-OMMDCameraBase::KeyDefaultValueSpan OMMDCamera::GetKeyDefaultValue(GeListNode* node)
+MMDCameraBase::KeyDefaultValueSpan MMDCamera::GetKeyDefaultValue(GeListNode* node)
 {
 	const auto obj = reinterpret_cast<BaseObject*>(node);
 
@@ -504,11 +511,11 @@ OMMDCameraBase::KeyDefaultValueSpan OMMDCamera::GetKeyDefaultValue(GeListNode* n
 	return span_namespace::make_span(key_default_value);
 }
 
-OMMDCameraBase::MapIndexSpan OMMDCamera::GetMapIndexs()
+MMDCameraBase::TrackInterpolatorSpan MMDCamera::GetTrackInterpolatorMap()
 {
-	static constexpr Int32 map_indexs[8]
+	static constexpr Int32 track_interpolator_map[8]
 	{
 		0,1,2,3,3,3,4,5
 	};
-	return span_namespace::make_span(map_indexs);
+	return span_namespace::make_span(track_interpolator_map);
 }

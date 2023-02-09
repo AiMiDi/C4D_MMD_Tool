@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -9,7 +9,7 @@ Description:	vmd data loader
 **************************************************************************/
 
 #include "pch.h"
-#include "vmd_loader_data.h"
+#include "vmd_loader.h"
 #include "module/ui/vmd_loader_camera_dialog.h"
 
 Bool VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, UChar* probe, Int32 size)

@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -8,19 +8,20 @@ Description:	C4D MMD camera object
 
 **************************************************************************/
 
-#ifndef _O_MMD_CAMERA_H_
-#define _O_MMD_CAMERA_H_
+#ifndef _MMD_CAMERA_H_
+#define _MMD_CAMERA_H_
 
 #include "cmt_tools_setting.h"
-#include "o_mmd_interpolator.hpp"
 #include "description/OMMDCamera.h"
+#include "module/MMD/vmd_camera.h"
 #include "module/MMD/vmd_interpolator.h"
+#include "module/tools/mmd_interpolator.hpp"
 
-using OMMDCameraBase = OMMDInterpolator<VMDCameraInterpolator, 9>;
+using MMDCameraBase = MMDInterpolator<ObjectData, VMDCameraInterpolator, 9>;
 
-class OMMDCamera final : public OMMDCameraBase
+class MMDCamera final : public MMDCameraBase
 {
-	INSTANCEOF(OMMDCamera, OMMDCameraBase)
+	INSTANCEOF(OMMDCamera, MMDCameraBase)
 
 	// Default camera distance
 	inline static Float default_distance = 0;
@@ -45,14 +46,14 @@ class OMMDCamera final : public OMMDCameraBase
 	};
 public:
 	// Constructor function
-	OMMDCamera() : OMMDCameraBase(VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_ON, VMD_CAM_OBJ_ACURVE) {}
+	MMDCamera() : MMDCameraBase(VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_ON, VMD_CAM_OBJ_ACURVE) {}
 
 	// Destructor function
-	~OMMDCamera() override = default;
+	~MMDCamera() override = default;
 
 public:
 	// Get maintained camera object
-	BaseObject* GetCamera() const
+	[[nodiscard]] BaseObject* GetCamera() const
 	{
 		return m_camera;
 	}
@@ -60,17 +61,19 @@ public:
 	// Initialize camera object
 	Bool CameraInit(GeListNode* node = nullptr);
 
+	Bool SetFrom(const std::unique_ptr<VMDCameraData>& data);
+
 	// Convert a normal camera to a MMD camera
 	static BaseObject* ConversionCamera(const cmt_tools_setting::CameraConversion& setting);
 
 	// Generating function
 	static NodeData* Alloc()
 	{
-		return NewObjClear(OMMDCamera);
+		return NewObjClear(MMDCamera);
 	}
 
 private:
-	static bool ConversionCameraCurve(OMMDCamera* camera_data, CCurve* src_curve_position, Int32 curve_type, Int32 frame_count);
+	static bool ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_position, Int32 curve_type, Int32 frame_count);
 
 
 public:
@@ -96,8 +99,8 @@ protected:
 
 	KeyDefaultValueSpan GetKeyDefaultValue(GeListNode* node) override;
 
-	MapIndexSpan GetMapIndexs() override;
+	TrackInterpolatorSpan GetTrackInterpolatorMap() override;
 };
 
 
-#endif // !O_MMD_CAMERA_H
+#endif // !MMD_CAMERA_H
