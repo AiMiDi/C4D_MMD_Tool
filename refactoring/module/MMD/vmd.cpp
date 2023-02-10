@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -34,7 +34,7 @@ Bool VMD::LoadFromFile(Filename& fn)
 		if (!file->ReadBytes(VMD_model_name, 20))
 			return FALSE;
 		m_data->model_name = code_conversion::SJIStoUTF8(VMD_model_name);
-		// カメラ・照明
+		// カメラ照明
 		if (m_data->model_name.LexComparePart(m_camera_name, 12, 0) == 0)
 		{
 			m_is_camera = true;

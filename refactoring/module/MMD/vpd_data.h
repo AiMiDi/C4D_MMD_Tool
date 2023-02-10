@@ -1,4 +1,4 @@
-/**************************************************************************
+ï»¿/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -38,9 +38,9 @@ public:
 		m_bones.Reset();
 		m_morphs.Reset();
 	}
-	/* ÓÃÓÚ´ÓÎÄ¼şµ¼Èëµ½¶ÔÏó */
+	/* ç”¨äºä»æ–‡ä»¶å¯¼å…¥åˆ°å¯¹è±¡ */
 	Bool LoadFromFile(const Filename& fn);
-	/* ÓÃÓÚ½«¶ÔÏó±£´æµ½ÎÄ¼ş */
+	/* ç”¨äºå°†å¯¹è±¡ä¿å­˜åˆ°æ–‡ä»¶ */
 	Bool SaveToFile(const Filename& fn) const;
 };
 
