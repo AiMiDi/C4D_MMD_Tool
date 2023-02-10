@@ -13,3 +13,6 @@
 [submodule "dependency/span"]
 	path = dependency/span
 	url = https://github.com/tcbrindle/span.git
+[submodule "dependency/eigen"]
+	path = dependency/eigen
+	url = https://gitlab.com/libeigen/eigen.git

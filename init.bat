@@ -10,6 +10,15 @@ cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j
 cmake --install . --config Release --prefix ../../install
 cd ../..
+cd ./eigen 
+mkdir build 
+cd build
+cmake ..  -G "Ninja Multi-Config" -D INSTALL_LIBS=ON -D USE_DOUBLE_PRECISION=ON
+cmake --build . --config Debug -j
+cmake --install . --config Debug --prefix ../../install
+cmake --build . --config Release -j
+cmake --install . --config Release --prefix ../../install
+cd ../..
 cd ./yaml-cpp 
 mkdir build
 cd build
@@ -29,3 +38,4 @@ cmake --build . --config Release -j
 cmake --install . --config Release --prefix ../../install
 cd ../..
 Xcopy "span\include\tcb\*" "install\include\" /y
+pause
