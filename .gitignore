@@ -3,8 +3,12 @@ dependency/install/
 
 sdk_r20/frameworks/
 sdk_r21/frameworks/
+sdk_s22/frameworks/
 sdk_r23/frameworks/
+sdk_s24/frameworks/
 sdk_r25/frameworks/
+sdk_r26/frameworks/
+sdk_2023/frameworks/
 
 setup/Output/
 

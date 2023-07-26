@@ -50,8 +50,17 @@ Bool MMDCamera::CameraInit(GeListNode* node)
 
 Bool MMDCamera::SetFrom(const std::unique_ptr<VMDCameraData>& data)
 {
+	const auto object = reinterpret_cast<BaseObject*>(Get());
+
+	CTrack* track_frame = object->FindCTrack(DescID(m_frame_on_desc_id));
+	CCurve* curve_frame = track_frame->GetCurve();
+
 	CTrack* tracks[m_track_count]{ nullptr };
 	CCurve* curves[m_track_count]{ nullptr };
+
+	const auto track_objects = GetTrackObjects(object);
+	const auto track_desc_IDs = GetTrackDescIDs();
+	const auto  track_interpolator_map = GetTrackInterpolatorMap();
 	return true;
 }
 

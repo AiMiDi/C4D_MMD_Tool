@@ -22,14 +22,14 @@ protected:
 	static constexpr size_t m_interpolator_count = INTERPOLATOR_COUNT;
 	static  constexpr size_t m_track_count = TRACK_COUNT;
 
-	// Tween curve data
-	maxon::HashMap<Int32, INTERPOLATOR_TYPE> m_interpolator_maps[m_interpolator_count];
-private:
 	Int32 m_spline_desc_id = 0;
 	Int32 m_curve_type_desc_id = 0;
 	Int32 m_frame_on_desc_id = 0;
 	Int32 m_curve_type_count = 0;
 
+	// Tween curve data
+	maxon::HashMap<Int32, INTERPOLATOR_TYPE> m_interpolator_maps[m_interpolator_count];
+private:
 	// Save the previous frame to determine the update status
 	Int32 m_prev_frame = -1;
 
@@ -314,10 +314,10 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRA
 			return false;
 		}
 	}
-	const auto obj = reinterpret_cast<BaseObject*>(node);
+	const auto object = reinterpret_cast<BaseObject*>(node);
 
-	CTrack* track_frame = obj->FindCTrack(DescID(m_frame_on_desc_id));
-	CCurve* curve_frame = track_frame->GetCurve();
+	CTrack* frame_track = object->FindCTrack(DescID(m_frame_on_desc_id));
+	CCurve* frame_curve = frame_track->GetCurve();
 
 	CTrack* tracks[m_track_count]{ nullptr };
 	CCurve* curves[m_track_count]{ nullptr };
@@ -347,14 +347,14 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRA
 			continue;
 		}
 
-		const Int32 key_count = curve_frame->GetKeyCount();
+		const Int32 key_count = frame_curve->GetKeyCount();
 		for (Int32 frame_index = 0; frame_index < key_count; frame_index++)
 		{
-			const CKey* now_frame_key = curve_frame->GetKey(frame_index);
+			const CKey* now_frame_key = frame_curve->GetKey(frame_index);
 			auto frame = maxon::SafeConvert<Int32>(now_frame_key->GetValue());
 			BaseTime now_time = now_frame_key->GetTime();
 			// Add 0.01 to exclude the frame.
-			const CKey* next_frame_key = curve_frame->FindKey(now_time + BaseTime(1., 120.), nullptr, FINDANIM::RIGHT);
+			const CKey* next_frame_key = frame_curve->FindKey(now_time + BaseTime(1., 120.), nullptr, FINDANIM::RIGHT);
 			if (!next_frame_key)
 			{
 				break;
