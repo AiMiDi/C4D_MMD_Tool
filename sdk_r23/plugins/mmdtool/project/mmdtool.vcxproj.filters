@@ -28,9 +28,6 @@
     <Filter Include="source\module">
       <UniqueIdentifier>{df3c1df2-82ba-4dda-8383-077c81bb6106}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\module\MMD">
-      <UniqueIdentifier>{965f55d6-e953-4de5-a118-a5dc8cd31deb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\module\ui">
       <UniqueIdentifier>{763d99e3-66fa-423c-a912-35256eed4549}</UniqueIdentifier>
     </Filter>
@@ -40,14 +37,11 @@
     <Filter Include="res\dialogs">
       <UniqueIdentifier>{64a74702-1da7-4200-b4e7-d0e0e9ead4b0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\module\MMD\vmd">
-      <UniqueIdentifier>{c905bc1c-70b3-46ff-8bb5-9933a86ed188}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\module\MMD\pmx">
-      <UniqueIdentifier>{0eaf91ad-85fc-4e51-a05f-054da64caecb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\module\core">
       <UniqueIdentifier>{ed9da958-ca0e-41b2-931a-7c733e4daeda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\module\MMD">
+      <UniqueIdentifier>{37c379c2-3518-43e8-a5e5-f99c62a3556e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +66,6 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.cpp">
       <Filter>source\module\tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vpd_data.cpp">
-      <Filter>source\module\MMD</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp">
       <Filter>source\module\ui</Filter>
     </ClCompile>
@@ -87,71 +78,11 @@
     <ClCompile Include="..\..\..\..\refactoring\cmt_scene_manager.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone.cpp">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_camera.cpp">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd.cpp">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller.cpp">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_light.cpp">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller.cpp">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_morph.cpp">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_shadow.cpp">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_bone.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_display.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_material.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_model_info.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_morph.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_vertex.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_weight.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_rigid_body.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_joint.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\o_mmd_camera.cpp">
       <Filter>source\module\tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_texture.cpp">
-      <Filter>source\module\MMD\pmx</Filter>
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp">
+      <Filter>source\module\MMD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,14 +143,8 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\utils\code_conversion_util.hpp">
-      <Filter>source\utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.h">
       <Filter>source\module\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vpd_data.h">
-      <Filter>source\module\MMD</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h">
       <Filter>source\module\ui</Filter>
@@ -233,71 +158,8 @@
     <ClInclude Include="..\..\..\..\refactoring\cmt_scene_manager.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_element.hpp">
-      <Filter>source\module\MMD</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp">
       <Filter>source\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_shadow.h">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone.h">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_camera.h">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd.h">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller.h">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_light.h">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller.h">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_morph.h">
-      <Filter>source\module\MMD\vmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_bone.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_display.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_material.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_model_info.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_morph.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_vertex.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_weight.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_rigid_body.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_joint.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.h">
-      <Filter>source\module\MMD\pmx</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\o_mmd_camera.h">
       <Filter>source\module\tools</Filter>
@@ -311,17 +173,11 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_texture.h">
-      <Filter>source\module\MMD\pmx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_element.hpp">
-      <Filter>source\module\MMD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_element.hpp">
-      <Filter>source\module\MMD</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\core\cmt_marco.h">
       <Filter>source\module\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h">
+      <Filter>source\module\MMD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

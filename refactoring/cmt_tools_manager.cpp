@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			walter white/Aimidi
@@ -10,23 +10,32 @@ Description:	tools manager
 
 #include "pch.h"
 #include "cmt_tools_manager.h"
-#include "module/MMD/vmd.h"
 
 namespace tools_manager
 {
 	bool ImportVMDCamera(const cmt_tools_setting::CameraImport& setting)
 	{
-		Filename vmd_fn;
-		VMD vmd_animation;
-		vmd_animation.LoadFromFile(vmd_fn);
+		Filename vmd_filename;
+		const std::string vmd_utf8_filename{ vmd_filename.GetString().GetCStringCopy(STRINGENCODING::UTF8) };
+		libmmd::vmd_animation* vmd_animation = libmmd::create_vmd_animation();
+		if (!vmd_animation->read_from_file(vmd_utf8_filename))
+			return false;
+		// TODO
+
+		delete vmd_animation;
 		return true;
 	}
 
 	bool ExportVMDCamera(const cmt_tools_setting::CameraExport& setting)
 	{
-		Filename vmd_fn;
-		VMD vmd_animation;
-		vmd_animation.SaveToFile(vmd_fn);
+		Filename vmd_filename;
+		const std::string vmd_utf8_filename{ vmd_filename.GetString().GetCStringCopy(STRINGENCODING::UTF8) };
+		libmmd::vmd_animation* vmd_animation = libmmd::create_vmd_animation();
+		if(!vmd_animation->write_to_file(vmd_utf8_filename))
+			return false;
+		// TODO
+
+		delete vmd_animation;
 		return true;
 	}
 

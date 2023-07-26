@@ -4,16 +4,7 @@ call "%VSPath%\VC\Auxiliary\Build\vcvars64.bat" x64
 cd ./dependency/bullet3 
 mkdir build 
 cd build
-cmake ..  -G "Ninja Multi-Config" -D INSTALL_LIBS=ON -D USE_DOUBLE_PRECISION=ON
-cmake --build . --config Debug -j
-cmake --install . --config Debug --prefix ../../install
-cmake --build . --config Release -j
-cmake --install . --config Release --prefix ../../install
-cd ../..
-cd ./eigen 
-mkdir build 
-cd build
-cmake ..  -G "Ninja Multi-Config" -D INSTALL_LIBS=ON -D USE_DOUBLE_PRECISION=ON
+cmake ..  -G "Ninja Multi-Config" -D INSTALL_LIBS=ON -D USE_DOUBLE_PRECISION=ON -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install"
 cmake --build . --config Debug -j
 cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j
@@ -22,16 +13,16 @@ cd ../..
 cd ./yaml-cpp 
 mkdir build
 cd build
-cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug"
+cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install"
 cmake --build . --config Debug -j
 cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j
 cmake --install . --config Release --prefix ../../install
 cd ../..
-cd ./libiconv
+cd ./libMMD
 mkdir build 
 cd build
-cmake ..  -G "Ninja Multi-Config"
+cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install"
 cmake --build . --config Debug -j
 cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j

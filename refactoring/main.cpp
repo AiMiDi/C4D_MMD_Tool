@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi/walter white
@@ -12,7 +12,6 @@ Description:	Entrance of the plugin
 
 #include "cmt_tools_config_manager.h"
 #include "register_entity.h"
-#include "module/MMD/vmd.h"
 
 Bool PluginStart()
 {

@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -12,14 +12,15 @@ Description:	C4D MMD interpolator object
 #define _O_MMD_INTERPOLATOR_H_
 
 #include "utils/span_util.hpp.h"
+#include "module/MMD/vmd_interpolator.h"
 
-template <typename INTERPOLATOR_TYPE,size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT = INTERPOLATOR_COUNT - 1ULL>
+template <size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT = INTERPOLATOR_COUNT - 1ULL>
 class OMMDInterpolator : public ObjectData
 {
 	INSTANCEOF(OMMDInterpolator, ObjectData)
 protected:
 	// Tween curve data
-	maxon::HashMap<Int32, INTERPOLATOR_TYPE> m_interpolator_maps[INTERPOLATOR_COUNT];
+	maxon::HashMap<Int32, VMDInterpolator> m_interpolator_maps[INTERPOLATOR_COUNT];
 private:
 	Int32 m_spline_desc_id = 0;
 	Int32 m_curve_type_desc_id = 0;
@@ -36,7 +37,7 @@ public:
 	static Bool SplineDataCallBack(Int32, const void*);
 
 	// Get interpolator value
-	Bool GetInterpolator(Int32 type, Int32 frame_on, INTERPOLATOR_TYPE& interpolator) const;
+	Bool GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator) const;
 
 	// Set interpolator value
 	template<typename ...Args>
@@ -97,8 +98,8 @@ public:
 
 // ----- Implementation -----
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::SplineDataCallBack(const Int32 cid, const void* data)
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::SplineDataCallBack(const Int32 cid, const void* data)
 {
 	// The callback function which does clamp the SplineData
 	if (cid == SPLINE_CALLBACK_CORE_MESSAGE)
@@ -141,8 +142,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Spli
 	return true;
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::GetInterpolator(Int32 type, Int32 frame_on, INTERPOLATOR_TYPE& interpolator) const
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator) const
 {
 	if (const auto interpolator_ptr = m_interpolator_maps[type].Find(frame_on); interpolator_ptr == nullptr)
 	{
@@ -156,9 +157,9 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::GetI
 	return true;
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
 template <typename ... Args>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::SetInterpolator(Int32 type, Int32 frame_on, Args&&... args)
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::SetInterpolator(Int32 type, Int32 frame_on, Args&&... args)
 {
 	iferr_scope_handler
 	{
@@ -195,8 +196,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::SetI
 	return true;
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::RegisterKeyFrame(const Int32 frame_on, GeListNode* node)
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::RegisterKeyFrame(const Int32 frame_on, GeListNode* node)
 {
 	iferr_scope_handler{
 		ApplicationOutput(err.ToString(nullptr));
@@ -298,8 +299,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Regi
 	return true;
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::UpdateAllInterpolator(GeListNode* node)
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::UpdateAllInterpolator(GeListNode* node)
 
 {
 	if (!node)
@@ -362,7 +363,7 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Upda
 			{
 				break;
 			}
-			const INTERPOLATOR_TYPE& interpolator = interpolator_ptr->GetValue();
+			const VMDInterpolator& interpolator = interpolator_ptr->GetValue();
 			CKey* key = curve->FindKey(now_time);
 			if (!key)
 			{
@@ -391,8 +392,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Upda
 	return true;
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::InitInterpolator(GeListNode* node) const
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::InitInterpolator(GeListNode* node) const
 {
 	if (!node)
 	{
@@ -420,8 +421,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Init
 	return true;
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteKeyFrame(Int32 frame_on, GeListNode* node)
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteKeyFrame(Int32 frame_on, GeListNode* node)
 {
 	if (!node)
 	{
@@ -467,8 +468,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Dele
 	return true;
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteAllKeyFrame(GeListNode* node)
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteAllKeyFrame(GeListNode* node)
 {
 	if (!node)
 	{
@@ -502,8 +503,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Dele
 	return true;
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Read(GeListNode* node, HyperFile* hf, Int32 level)
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
 		ApplicationOutput(err.ToString(nullptr));
@@ -522,7 +523,7 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Read
 			return false;
 		for (Int32 i = 0; i < count; i++)
 		{
-			INTERPOLATOR_TYPE interpolator;
+			VMDInterpolator interpolator;
 			Int	size = sizeof interpolator;
 			void* data = &interpolator;
 			Int32 TempIndex = 0;
@@ -536,8 +537,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Read
 	return SUPER::Read(node, hf, level);
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Write(GeListNode* node, HyperFile* hf)
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::Write(GeListNode* node, HyperFile* hf)
 {
 	if (!hf->WriteInt32(this->m_prev_frame))
 		return false;
@@ -562,8 +563,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Writ
 	return SUPER::Write(node, hf);
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::CopyTo(NodeData* dest, GeListNode* snode,
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::CopyTo(NodeData* dest, GeListNode* snode,
 	GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
 {
 	iferr_scope_handler{
@@ -587,8 +588,8 @@ Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Copy
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-EXECUTIONRESULT OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Execute(BaseObject* op, BaseDocument* doc,
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+EXECUTIONRESULT OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::Execute(BaseObject* op, BaseDocument* doc,
 	BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (!op || !doc)
@@ -623,7 +624,7 @@ EXECUTIONRESULT OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_C
 	{
 		if (const auto interpolator_ptr = m_interpolator_maps[interpolator_type].Find(frame_on); interpolator_ptr != nullptr)
 		{
-			const INTERPOLATOR_TYPE& interpolator_position = interpolator_ptr->GetValue();
+			const VMDInterpolator& interpolator_position = interpolator_ptr->GetValue();
 			spline->GetKnot(0)->vTangentRight = interpolator_position.GetTangentRight();
 			spline->GetKnot(left_knot_index)->vTangentLeft = interpolator_position.GetTangentLeft();
 		}
@@ -639,8 +640,8 @@ EXECUTIONRESULT OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_C
 	return EXECUTIONRESULT::OK;
 }
 
-template <typename INTERPOLATOR_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool OMMDInterpolator<INTERPOLATOR_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::AddToExecution(BaseObject* op, PriorityList* list)
+template < size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
+Bool OMMDInterpolator<INTERPOLATOR_COUNT,  TRACK_COUNT>::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (!list || !op)
 		return true;
