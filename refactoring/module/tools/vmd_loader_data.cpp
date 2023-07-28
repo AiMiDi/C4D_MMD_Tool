@@ -24,9 +24,10 @@ Bool VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, UChar*
 	}
 	if (strncmp(VMDVersion, "Vocaloid Motion Data file", 25) != 0 || strncmp(VMDVersion, "Vocaloid Motion Data 0002", 25)!= 0)
 	{
-		const String ModelName; //= code_conversion::SJIStoUTF8(VMDModelName, 20)
+		const std::string SJISVMDModelName(VMDModelName, 20);
 		// カメラ照明 
-		if (ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) 
+		if (const String ModelName = libmmd::shift_jis_to_utf8(SJISVMDModelName).c_str();
+			ModelName.LexComparePart(L"\u30ab\u30e1\u30e9\u30fb\u7167\u660e"_s, 12, 0) == 0) 
 		{
 			m_is_camera = TRUE;
 		}

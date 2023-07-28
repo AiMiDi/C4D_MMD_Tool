@@ -1,8 +1,8 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2023-present, Aimidi libMMD contributors.
 Author:			walter white/Aimidi
-Date:			2022/7/31
+Date:			2023/7/28
 File:			cmt_tools_manager.cpp
 Description:	tools manager
 
@@ -22,7 +22,7 @@ namespace tools_manager
 			return false;
 		// TODO
 
-		delete vmd_animation;
+		libmmd::delete_vmd_animation(&vmd_animation);
 		return true;
 	}
 
@@ -35,7 +35,7 @@ namespace tools_manager
 			return false;
 		// TODO
 
-		delete vmd_animation;
+		libmmd::delete_vmd_animation(&vmd_animation);
 		return true;
 	}
 

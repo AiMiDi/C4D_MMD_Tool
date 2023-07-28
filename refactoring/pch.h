@@ -20,7 +20,8 @@
 
 // The third party
 #include "yaml-cpp/yaml.h"
-#include "libMMD/mmd_assets.h"
+#include "libMMD/libmmd_assets.h"
+#include "libMMD/libmmd_conversion.h"
 
 // symbols
 #include "c4d_symbols.h"
@@ -32,4 +33,3 @@
 #include "utils/filename_util.hpp"
 
 #include "module/core/cmt_marco.h"
-
