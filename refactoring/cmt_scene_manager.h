@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			walter white/Aimidi
@@ -11,7 +11,6 @@ Description:	scene manager
 #ifndef _CMT_SCENE_MANAGER_H_
 #define _CMT_SCENE_MANAGER_H_
 #include "cmt_tools_setting.h"
-#include "module/MMD/vmd.h"
 
 class SceneManager
 {
@@ -32,7 +31,7 @@ public:
 public:
 	bool Init();
 
-	BaseObject* LoadVMDCamera(const cmt_tools_setting::CameraImport& setting, const VMD& data) const;
+	BaseObject* LoadVMDCamera(const cmt_tools_setting::CameraImport& setting, libmmd::vmd_animation* data) const;
 private:
 	maxon::BaseArray<BaseObject*> SceneCameraList;
 };

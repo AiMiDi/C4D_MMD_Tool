@@ -13,15 +13,14 @@ Description:	C4D MMD camera object
 
 #include "cmt_tools_setting.h"
 #include "description/OMMDCamera.h"
-#include "module/MMD/vmd_camera.h"
 #include "module/MMD/vmd_interpolator.h"
 #include "module/tools/mmd_interpolator.hpp"
 
-using MMDCameraBase = MMDInterpolator<ObjectData, VMDCameraInterpolator, 9>;
+using MMDCameraBase = MMDInterpolator<ObjectData, VMDInterpolator,9>;
 
 class MMDCamera final : public MMDCameraBase
 {
-	INSTANCEOF(OMMDCamera, MMDCameraBase)
+	INSTANCEOF(MMDCamera, MMDCameraBase)
 
 	// Default camera distance
 	inline static Float default_distance = 0;
@@ -61,7 +60,7 @@ public:
 	// Initialize camera object
 	Bool CameraInit(GeListNode* node = nullptr);
 
-	Bool SetFrom(const std::unique_ptr<VMDCameraData>& data);
+	Bool SetFrom(const libmmd::vmd_camera_key_frame& data);
 
 	// Convert a normal camera to a MMD camera
 	static BaseObject* ConversionCamera(const cmt_tools_setting::CameraConversion& setting);

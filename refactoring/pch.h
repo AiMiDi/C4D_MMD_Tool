@@ -20,7 +20,8 @@
 
 // The third party
 #include "yaml-cpp/yaml.h"
-#include "iconv.h"
+#include "libMMD/libmmd_assets.h"
+#include "libMMD/libmmd_conversion.h"
 
 // symbols
 #include "c4d_symbols.h"
@@ -29,8 +30,6 @@
 // utils
 #include "utils/time_util.hpp"
 #include "utils/images_user_area_util.hpp"
-#include "utils/code_conversion_util.hpp"
 #include "utils/filename_util.hpp"
 
 #include "module/core/cmt_marco.h"
-

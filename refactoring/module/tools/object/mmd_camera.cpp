@@ -48,7 +48,7 @@ Bool MMDCamera::CameraInit(GeListNode* node)
 	return true;
 }
 
-Bool MMDCamera::SetFrom(const std::unique_ptr<VMDCameraData>& data)
+Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data)
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #ifndef CMT_DISALLOW_COPY_AND_ASSIGN_BODY
 //----------------------------------------------------------------------------------------
