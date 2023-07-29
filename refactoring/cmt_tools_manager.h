@@ -13,14 +13,14 @@ Description:	tools manager
 
 #include "cmt_tools_setting.h"
 
-namespace tools_manager 
+namespace CMTToolsManager 
 {
-	bool ImportVMDCamera(cmt_tools_setting::CameraImport& setting);
-	bool ExportVMDCamera(cmt_tools_setting::CameraExport& setting);
-	bool ImportVMDMotion(cmt_tools_setting::MotionImport& setting);
-	bool ExportVMDMotion(cmt_tools_setting::MotionExport& setting);
-	bool ImportPMXModel (cmt_tools_setting::ModelImport&  setting);
-	bool ExportPMXModel (cmt_tools_setting::ModelExport&  setting);
-}
+	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting);
+	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting);
+	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting);
+	bool ExportVMDMotion(const CMTToolsSetting::MotionExport& setting);
+	bool ImportPMXModel (const CMTToolsSetting::ModelImport&  setting);
+	bool ExportPMXModel (const CMTToolsSetting::ModelExport&  setting);
+}	    
 
 #endif // !_CMT_TOOLS_MANAGER_H_

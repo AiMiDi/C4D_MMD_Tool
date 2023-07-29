@@ -52,15 +52,89 @@ Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data)
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 
-	CTrack* track_frame = object->FindCTrack(DescID(m_frame_on_desc_id));
-	CCurve* curve_frame = track_frame->GetCurve();
+	const auto frame_at = static_cast<int32_t>(data.get_frame_at());
+	const auto frame_at_time = BaseTime(frame_at);
+
+	CTrack* frame_track = object->FindCTrack(DescID(m_frame_on_desc_id));
+	CCurve* frame_curve = frame_track->GetCurve();
+
+	CKey* frame_key = frame_curve->AddKey(frame_at_time);
+	frame_key->SetValue(frame_curve, frame_at);
 
 	CTrack* tracks[m_track_count]{ nullptr };
 	CCurve* curves[m_track_count]{ nullptr };
 
 	const auto track_objects = GetTrackObjects(object);
 	const auto track_desc_IDs = GetTrackDescIDs();
-	const auto  track_interpolator_map = GetTrackInterpolatorMap();
+
+	for (size_t track_index = 0; track_index < m_track_count; ++track_index)
+	{
+		auto& track = tracks[track_index];
+		auto& track_ID = track_desc_IDs[track_index];
+		const auto& track_object = track_objects[track_index];
+		track = track_object->FindCTrack(track_ID);
+		if (!track)
+		{
+			track = CTrack::Alloc(track_object, track_ID);
+			if (!track)
+			{
+				return false;
+			}
+			track_object->InsertTrackSorted(track);
+		}
+
+		auto& curve = curves[track_index];
+		curve = track->GetCurve();
+		if (!curve)
+		{
+			return false;
+		}
+	}
+
+	const auto& position = data.get_position();
+
+	auto* position_x_curve = curves[POSITION_X];
+	CKey* position_x_key = position_x_curve->AddKey(frame_at_time);
+	position_x_key->SetValue(position_x_curve, maxon::SafeConvert<Float>(position[0]));
+	LoadInterpolator(POSITION_X, frame_at, data.get_position_x_interpolator());
+
+	auto* position_y_curve = curves[POSITION_Y];
+	CKey* position_y_key = position_y_curve->AddKey(frame_at_time);
+	position_y_key->SetValue(position_y_curve, maxon::SafeConvert<Float>(position[1]));
+	LoadInterpolator(POSITION_Y, frame_at, data.get_position_y_interpolator());
+
+	auto* position_z_curve = curves[POSITION_Z];
+	CKey* position_z_key = position_z_curve->AddKey(frame_at_time);
+	position_z_key->SetValue(position_z_curve, maxon::SafeConvert<Float>(position[2]));
+	LoadInterpolator(POSITION_Z, frame_at, data.get_position_z_interpolator());
+
+	const auto& rotation = data.get_rotation();
+
+	auto* rotation_x_curve = curves[ROTATION_X];
+	CKey* rotation_x_key = rotation_x_curve->AddKey(frame_at_time);
+	rotation_x_key->SetValue(rotation_x_curve, maxon::SafeConvert<Float>(rotation[0]));
+	LoadInterpolator(ROTATION_X, frame_at, data.get_rotation_interpolator());
+
+	auto* rotation_y_curve = curves[ROTATION_Y];
+	CKey* rotation_y_key = rotation_y_curve->AddKey(frame_at_time);
+	rotation_y_key->SetValue(rotation_y_curve, maxon::SafeConvert<Float>(rotation[1]));
+	LoadInterpolator(ROTATION_Y, frame_at, data.get_rotation_interpolator());
+
+	auto* rotation_z_curve = curves[ROTATION_Z];
+	CKey* rotation_z_key = rotation_z_curve->AddKey(frame_at_time);
+	rotation_z_key->SetValue(rotation_z_curve, maxon::SafeConvert<Float>(rotation[2]));
+	LoadInterpolator(ROTATION_Z, frame_at, data.get_rotation_interpolator());
+
+	auto* distance_curve = curves[DISTANCE];
+	CKey* distance_key = distance_curve->AddKey(frame_at_time);
+	distance_key->SetValue(distance_curve, maxon::SafeConvert<Float>(data.get_distance()));
+	LoadInterpolator(DISTANCE, frame_at, data.get_distance_interpolator());
+
+	auto* aov_curve = curves[AOV];
+	CKey* aov_key = aov_curve->AddKey(frame_at_time);
+	aov_key->SetValue(aov_curve, data.get_view_angle());
+	LoadInterpolator(AOV, frame_at, data.get_view_angle_interpolator());
+
 	return true;
 }
 
@@ -132,7 +206,7 @@ bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_
 	return false;
 }
 
-BaseObject* MMDCamera::ConversionCamera(const cmt_tools_setting::CameraConversion& setting)
+BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
 {
 	iferr_scope_handler{
 		MessageDialog(err.ToString(nullptr));
@@ -464,7 +538,7 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 
 Bool MMDCamera::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
 {
-	if (id[0].id == VMD_CAM_OBJ_FRAME_ON)
+	if (id[0].id == VMD_CAM_OBJ_FRAME_AT)
 		return false;
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
 }

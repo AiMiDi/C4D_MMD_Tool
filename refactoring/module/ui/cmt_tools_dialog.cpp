@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -62,10 +62,10 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	{
 	case DIG_CMT_TOOL_CAMERA_IMPORT_BUTTON:
 	{
-		cmt_tools_setting::CameraImport setting;
+		CMTToolsSetting::CameraImport setting;
 		GetItem(DIG_CMT_TOOL_CAMERA_IMPORT_SIZE, setting.position_multiple);
 		GetItem(DIG_CMT_TOOL_CAMERA_IMPORT_OFFSET, setting.time_offset);
-		if(!tools_manager::ImportVMDCamera(setting))
+		if(!CMTToolsManager::ImportVMDCamera(setting))
 		{
 			
 		}
@@ -73,7 +73,7 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	}
 	case DIG_CMT_TOOL_CAMERA_CONV_BUTTON:
 	{
-		cmt_tools_setting::CameraConversion setting;
+		CMTToolsSetting::CameraConversion setting;
 		GetItem(DIG_CMT_TOOL_CAMERA_CONV_DIS, setting.distance);
 		GetItem(DIG_CMT_TOOL_CAMERA_CONV_ROTATION_TWEEN, setting.use_rotation);
 		break;
@@ -92,7 +92,7 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	}
 	case DIG_CMT_TOOL_CAMERA_EXPORT_BUTTON:
 	{
-		cmt_tools_setting::CameraExport setting;
+		CMTToolsSetting::CameraExport setting;
 		GetItem(DIG_CMT_TOOL_CAMERA_EXPORT_SIZE, setting.position_multiple);
 		GetItem(DIG_CMT_TOOL_CAMERA_EXPORT_OFFSET, setting.time_offset);
 		GetItem(DIG_CMT_TOOL_CAMERA_EXPORT_USE_BAKE, setting.use_bake);
@@ -101,7 +101,7 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	}
 	case DIG_CMT_TOOL_MOTION_IMPORT_BUTTON:
 	{
-		cmt_tools_setting::MotionImport setting;
+		CMTToolsSetting::MotionImport setting;
 		GetItem(DIG_CMT_TOOL_MOTION_IMPORT_SIZE, setting.position_multiple);
 		GetItem(DIG_CMT_TOOL_MOTION_IMPORT_OFFSET, setting.time_offset);
 		GetItem(DIG_CMT_TOOL_MOTION_IMPORT_MOTION, setting.import_motion);
@@ -126,7 +126,7 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	}
 	case DIG_CMT_TOOL_MOTION_EXPORT_BUTTON:
 	{
-		cmt_tools_setting::MotionExport setting;
+		CMTToolsSetting::MotionExport setting;
 		GetItem(DIG_CMT_TOOL_MOTION_EXPORT_SIZE, setting.position_multiple);
 		GetItem(DIG_CMT_TOOL_MOTION_EXPORT_OFFSET, setting.time_offset);
 		GetItem(DIG_CMT_TOOL_MOTION_EXPORT_ROTATION_TWEEN, setting.use_rotation);
@@ -141,7 +141,7 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	}
 	case DIG_CMT_TOOL_MODEL_IMPORT_BUTTON:
 	{
-		cmt_tools_setting::ModelImport setting;
+		CMTToolsSetting::ModelImport setting;
 		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_SIZE, setting.position_multiple);
 		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_POLYGON, setting.import_polygon);
 		GetItem(DIG_CMT_TOOL_MODEL_IMPORT_NORMAL, setting.import_normal);

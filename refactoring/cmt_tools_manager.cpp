@@ -10,26 +10,26 @@ Description:	tools manager
 
 #include "pch.h"
 #include "cmt_tools_manager.h"
+#include "CMTSceneManager.h"
 
-namespace tools_manager
+namespace CMTToolsManager
 {
-	bool ImportVMDCamera(cmt_tools_setting::CameraImport& setting)
+	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
-		Filename vmd_filename;
-		const std::string vmd_utf8_filename{ vmd_filename.GetString().GetCStringCopy(STRINGENCODING::UTF8) };
+		const std::string vmd_utf8_filename{ setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8) };
 		libmmd::vmd_animation* vmd_animation = libmmd::create_vmd_animation();
 		if (!vmd_animation->read_from_file(vmd_utf8_filename))
 			return false;
-		// TODO
+
+		CMTSceneManager::GetSceneManager(GetActiveDocument()).LoadVMDCamera(setting, vmd_animation);
 
 		libmmd::delete_vmd_animation(&vmd_animation);
 		return true;
 	}
 
-	bool ExportVMDCamera(cmt_tools_setting::CameraExport& setting)
+	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting)
 	{
-		Filename vmd_filename;
-		const std::string vmd_utf8_filename{ vmd_filename.GetString().GetCStringCopy(STRINGENCODING::UTF8) };
+		const std::string vmd_utf8_filename{ setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8) };
 		libmmd::vmd_animation* vmd_animation = libmmd::create_vmd_animation();
 		if(!vmd_animation->write_to_file(vmd_utf8_filename))
 			return false;
@@ -39,22 +39,22 @@ namespace tools_manager
 		return true;
 	}
 
-	bool ImportVMDMotion(cmt_tools_setting::MotionImport& setting)
+	bool ImportVMDMotion(CMTToolsSetting::MotionImport& setting)
 	{
 		return true;
 	}
 
-	bool ExportVMDMotion(cmt_tools_setting::MotionExport& setting)
+	bool ExportVMDMotion(CMTToolsSetting::MotionExport& setting)
 	{
 		return true;
 	}
 
-	bool ImportPMXModel(cmt_tools_setting::ModelImport& setting)
+	bool ImportPMXModel(CMTToolsSetting::ModelImport& setting)
 	{
 		return true;
 	}
 
-	bool ExportPMXModel(cmt_tools_setting::ModelExport& setting)
+	bool ExportPMXModel(CMTToolsSetting::ModelExport& setting)
 	{
 		return true;
 	}

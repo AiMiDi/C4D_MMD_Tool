@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -105,13 +105,11 @@ public:
 	/**
 	 * \brief Load from a vmd interpolator
 	 * \param interpolator vmd interpolator
-	 * \return Successful TRUE, other FALSE.
 	 */
 	void Load(const libmmd::vmd_interpolator* interpolator);
 	/**
 	 * \brief Save to vmd interpolator
 	 * \param interpolator vmd interpolator
-	 * \return Successful TRUE, other FALSE.
 	 */
 	void Save(libmmd::vmd_interpolator* interpolator) const;
 };

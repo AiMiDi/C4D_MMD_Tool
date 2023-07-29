@@ -223,7 +223,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_manager.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\cmt_scene_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\CMTSceneManager.cpp" />
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -247,7 +247,7 @@
     <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h" />
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\cmt_scene_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\CMTSceneManager.h" />
     <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />

@@ -12,28 +12,28 @@ Description:	scene manager
 #define _CMT_SCENE_MANAGER_H_
 #include "cmt_tools_setting.h"
 
-class SceneManager
+class CMTSceneManager final 
 {
-	BaseDocument* m_document{};
-
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	SceneManager()
-	{
-		this->Init();
-	}
+	CMTSceneManager() = default;
 	/**
 	 * \brief Destructor function
 	 */
-	~SceneManager() = default;
-public:
-	bool Init();
+	~CMTSceneManager() = default;
 
-	BaseObject* LoadVMDCamera(const cmt_tools_setting::CameraImport& setting, libmmd::vmd_animation* data) const;
+	BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation* data);
+
+	static CMTSceneManager& GetSceneManager(const BaseDocument* Document);
+	static Bool RemoveSceneManager(const BaseDocument* Document);
+
 private:
+	BaseDocument* SceneDocument{};
 	maxon::BaseArray<BaseObject*> SceneCameraList;
+
+	static maxon::HashMap<BaseDocument*, CMTSceneManager> SceneManagerMap;
 };
 
 #endif // !_CMT_SCENE_MANAGER_H_

@@ -78,7 +78,7 @@
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_manager.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\cmt_scene_manager.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\CMTSceneManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp">
@@ -158,7 +158,7 @@
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_manager.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\cmt_scene_manager.h">
+    <ClInclude Include="..\..\..\..\refactoring\CMTSceneManager.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp">

@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -13,7 +13,7 @@ Description:    CMT tools setting struct.
 
 #include "pch.h"
 
-namespace cmt_tools_setting
+namespace CMTToolsSetting
 {
 	struct CameraImport
 	{

@@ -16,7 +16,7 @@ Description:	C4D MMD camera object
 #include "module/MMD/vmd_interpolator.h"
 #include "module/tools/mmd_interpolator.hpp"
 
-using MMDCameraBase = MMDInterpolator<ObjectData, VMDInterpolator,9>;
+using MMDCameraBase = MMDInterpolator<ObjectData, 9>;
 
 class MMDCamera final : public MMDCameraBase
 {
@@ -41,11 +41,25 @@ class MMDCamera final : public MMDCameraBase
 		DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z),
 		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z),
 		DescID(CAMERAOBJECT_APERTURE),
-		DescID(VMD_CAM_OBJ_FRAME_ON)
+		DescID(VMD_CAM_OBJ_FRAME_AT)
 	};
+
+	enum track_enum : int8_t
+	{
+		POSITION_X,
+		POSITION_Y,
+		POSITION_Z,
+		ROTATION_X,
+		ROTATION_Y,
+		ROTATION_Z,
+		DISTANCE,
+		AOV,
+		FRAME_AT
+	};
+
 public:
 	// Constructor function
-	MMDCamera() : MMDCameraBase(VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_ON, VMD_CAM_OBJ_ACURVE) {}
+	MMDCamera() : MMDCameraBase(VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_AT, VMD_CAM_OBJ_ACURVE) {}
 
 	// Destructor function
 	~MMDCamera() override = default;
@@ -63,7 +77,7 @@ public:
 	Bool SetFrom(const libmmd::vmd_camera_key_frame& data);
 
 	// Convert a normal camera to a MMD camera
-	static BaseObject* ConversionCamera(const cmt_tools_setting::CameraConversion& setting);
+	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
 	// Generating function
 	static NodeData* Alloc()
