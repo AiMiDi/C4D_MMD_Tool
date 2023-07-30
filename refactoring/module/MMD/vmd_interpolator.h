@@ -106,11 +106,11 @@ public:
 	 * \brief Load from a vmd interpolator
 	 * \param interpolator vmd interpolator
 	 */
-	void Load(const libmmd::vmd_interpolator* interpolator);
+	void Load(const libmmd::vmd_interpolator& interpolator);
 	/**
 	 * \brief Save to vmd interpolator
 	 * \param interpolator vmd interpolator
 	 */
-	void Save(libmmd::vmd_interpolator* interpolator) const;
+	void Save(libmmd::vmd_interpolator& interpolator) const;
 };
 #endif //!VMD_INTERPOLATOR_H_

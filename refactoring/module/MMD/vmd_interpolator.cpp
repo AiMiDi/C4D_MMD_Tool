@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -94,15 +94,18 @@ maxon::HashInt VMDInterpolator::GetHashCode() const
 	return MAXON_HASHCODE(this->m_ax, this->m_ay, this->m_bx, this->m_by);
 }
 
-void VMDInterpolator::Load(const libmmd::vmd_interpolator* interpolator)
+void VMDInterpolator::Load(const libmmd::vmd_interpolator& interpolator)
 {
-	Set(interpolator->get_ax(), interpolator->get_ay(), interpolator->get_bx(), interpolator->get_by());
+	Set(interpolator.get_ax(),
+		interpolator.get_ay(),
+		interpolator.get_bx(),
+		interpolator.get_by());
 }
 
-void VMDInterpolator::Save(libmmd::vmd_interpolator* interpolator) const
+void VMDInterpolator::Save(libmmd::vmd_interpolator& interpolator) const
 {
-	interpolator->set_ax(m_ax);
-	interpolator->set_ay(m_ay);
-	interpolator->set_bx(m_bx);
-	interpolator->set_by(m_by);
+	interpolator.set_ax(m_ax);
+	interpolator.set_ay(m_ay);
+	interpolator.set_bx(m_bx);
+	interpolator.set_by(m_by);
 }

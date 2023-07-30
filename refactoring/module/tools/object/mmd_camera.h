@@ -13,7 +13,6 @@ Description:	C4D MMD camera object
 
 #include "cmt_tools_setting.h"
 #include "description/OMMDCamera.h"
-#include "module/MMD/vmd_interpolator.h"
 #include "module/tools/mmd_interpolator.hpp"
 
 using MMDCameraBase = MMDInterpolator<ObjectData, 9>;
@@ -29,20 +28,6 @@ class MMDCamera final : public MMDCameraBase
 	BaseObject* m_camera = nullptr;
 	
 	BaseTag* m_protection_tag = nullptr;
-
-	//Track DESC ID table
-	inline static const DescID m_track_desc_IDs[]
-	{
-		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X),
-		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y),
-		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z),
-		DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X),
-		DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y),
-		DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z),
-		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z),
-		DescID(CAMERAOBJECT_APERTURE),
-		DescID(VMD_CAM_OBJ_FRAME_AT)
-	};
 
 	enum track_enum : int8_t
 	{
@@ -79,6 +64,8 @@ public:
 	// Convert a normal camera to a MMD camera
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
+	static TrackDescIDSpan MMDCamera::GetDescID();
+
 	// Generating function
 	static NodeData* Alloc()
 	{
@@ -88,7 +75,7 @@ public:
 private:
 	static bool ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_position, Int32 curve_type, Int32 frame_count);
 
-
+	static TrackDescIDSpan GetTrackDescIDsImpl();
 public:
 	// Object initialization
 	Bool Init(GeListNode* node = nullptr) override;

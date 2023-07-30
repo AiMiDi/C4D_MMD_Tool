@@ -12,6 +12,7 @@ Description:	C4D MMD interpolator object
 #define _MMD_INTERPOLATOR_H_
 
 #include "utils/span_util.hpp.h"
+#include "module/MMD/vmd_interpolator.h"
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT = INTERPOLATOR_COUNT - 1ULL>
 class MMDInterpolator : public NODE_DATE_TYPE

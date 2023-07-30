@@ -65,9 +65,13 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		CMTToolsSetting::CameraImport setting;
 		GetItem(DIG_CMT_TOOL_CAMERA_IMPORT_SIZE, setting.position_multiple);
 		GetItem(DIG_CMT_TOOL_CAMERA_IMPORT_OFFSET, setting.time_offset);
+		if(!filename_util::SelectSuffixImportFile(setting.fn, "vmd"_s))
+		{
+			return false;
+		}
 		if(!CMTToolsManager::ImportVMDCamera(setting))
 		{
-			
+			return false;
 		}
 		break;
 	}

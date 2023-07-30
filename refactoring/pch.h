@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 // std
 #include <optional>
@@ -7,6 +7,7 @@
 #include <tuple>
 #include <vector>
 #include <cassert>
+#include <memory>
 
 // C4D
 #include <c4d.h>

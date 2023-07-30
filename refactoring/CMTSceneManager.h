@@ -18,7 +18,7 @@ public:
 	/**
 	 * \brief Default constructor function
 	 */
-	CMTSceneManager() = default;
+	explicit CMTSceneManager(BaseDocument* Document) : SceneDocument(Document){}
 	/**
 	 * \brief Destructor function
 	 */
@@ -26,14 +26,14 @@ public:
 
 	BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation* data);
 
-	static CMTSceneManager& GetSceneManager(const BaseDocument* Document);
-	static Bool RemoveSceneManager(const BaseDocument* Document);
+	static CMTSceneManager& GetSceneManager(BaseDocument* Document);
+	static Bool RemoveSceneManager(BaseDocument* Document);
 
 private:
 	BaseDocument* SceneDocument{};
 	maxon::BaseArray<BaseObject*> SceneCameraList;
-
-	static maxon::HashMap<BaseDocument*, CMTSceneManager> SceneManagerMap;
+	
+	inline static std::unordered_map<BaseDocument*, std::unique_ptr<CMTSceneManager>> SceneManagerMap{};
 };
 
 #endif // !_CMT_SCENE_MANAGER_H_

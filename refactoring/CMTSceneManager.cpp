@@ -43,30 +43,17 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 	return nullptr;
 }
 
-CMTSceneManager& CMTSceneManager::GetSceneManager(const BaseDocument* Document)
+CMTSceneManager& CMTSceneManager::GetSceneManager(BaseDocument* Document)
 {
-	if(auto* scene_manager_ptr = SceneManagerMap.Find(Document); scene_manager_ptr == nullptr)
-	{
-		auto& new_scene_manager = SceneManagerMap.Insert(Document, {}).GetValue().GetValue();
-		return new_scene_manager;
-	}
-	else
-	{
-		return scene_manager_ptr->GetValue();
-	}
+	return *SceneManagerMap.try_emplace(Document, std::make_unique<CMTSceneManager>(Document)).first->second;
 }
 
-Bool CMTSceneManager::RemoveSceneManager(const BaseDocument* Document)
+Bool CMTSceneManager::RemoveSceneManager(BaseDocument* Document)
 {
-	const auto result = SceneManagerMap.Erase(Document);
+	if(SceneManagerMap.erase(Document) == 0)
+	{
+		return false;
+	}
 	
-	iferr(result)
-	{
-		return false;
-	}
-	if(!result.GetValue())
-	{
-		return false;
-	}
 	return true;
 }

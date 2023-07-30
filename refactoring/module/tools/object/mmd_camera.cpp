@@ -360,7 +360,7 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 
 	constexpr auto dst_track_count = 8;
 
-	const auto& dst_track_desc_IDs = m_track_desc_IDs;
+	const auto& dst_track_desc_IDs = GetTrackDescIDsImpl();
 
 	CTrack* dst_tracks[dst_track_count]{ nullptr };
 	CCurve* dst_curves[dst_track_count]{ nullptr };
@@ -553,12 +553,29 @@ EXECUTIONRESULT MMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread
 	return SUPER::Execute(op, doc, bt, priority, flags);
 }
 
-MMDCameraBase::TrackDescIDSpan MMDCamera::GetTrackDescIDs()
+MMDCamera::TrackDescIDSpan MMDCamera::GetTrackDescIDsImpl()
 {
-	return span_namespace::make_span(m_track_desc_IDs);
+	static const DescID track_desc_IDs[9] =
+	{
+		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X),
+		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y),
+		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z),
+		DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_X),
+		DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y),
+		DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z),
+		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z),
+		DescID(CAMERAOBJECT_APERTURE),
+		DescID(VMD_CAM_OBJ_FRAME_AT)
+	};
+	return span_namespace::make_span(track_desc_IDs);
 }
 
-MMDCameraBase::TrackObjectSpan MMDCamera::GetTrackObjects(GeListNode* node)
+MMDCamera::TrackDescIDSpan MMDCamera::GetTrackDescIDs()
+{
+	return GetTrackDescIDsImpl();
+}
+
+MMDCamera::TrackObjectSpan MMDCamera::GetTrackObjects(GeListNode* node)
 {
 	const auto object = reinterpret_cast<BaseObject*>(node);
 	static BaseObject* track_objects[9];
@@ -574,7 +591,7 @@ MMDCameraBase::TrackObjectSpan MMDCamera::GetTrackObjects(GeListNode* node)
 	return span_namespace::make_span(track_objects);
 }
 
-MMDCameraBase::KeyDefaultValueSpan MMDCamera::GetKeyDefaultValue(GeListNode* node)
+MMDCamera::KeyDefaultValueSpan MMDCamera::GetKeyDefaultValue(GeListNode* node)
 {
 	const auto obj = reinterpret_cast<BaseObject*>(node);
 
@@ -594,7 +611,7 @@ MMDCameraBase::KeyDefaultValueSpan MMDCamera::GetKeyDefaultValue(GeListNode* nod
 	return span_namespace::make_span(key_default_value);
 }
 
-MMDCameraBase::TrackInterpolatorSpan MMDCamera::GetTrackInterpolatorMap()
+MMDCamera::TrackInterpolatorSpan MMDCamera::GetTrackInterpolatorMap()
 {
 	static constexpr Int32 track_interpolator_map[8]
 	{
