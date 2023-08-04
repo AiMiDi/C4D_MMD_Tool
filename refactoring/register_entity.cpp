@@ -15,9 +15,9 @@ Bool RegisterVMDLoader()
 	return RegisterSceneLoaderPlugin(ID_L_MMD_VMD_IMPORT, "VMD(.vmd)"_s, 0, VMDLoaderData::Alloc, "Import VMD Camera."_s);
 }
 
-Bool RegisterOMMDCamera()
+Bool RegisterMMDCamera()
 {
-	return(RegisterObjectPlugin(ID_O_MMD_CAMERA, GeLoadString(IDS_O_MMD_CAMERA), OBJECT_CALL_ADDEXECUTION, MMDCamera::Alloc, "MMD Camera"_s, AutoBitmap("OMMDCamera.png"_s), 0));
+	return(RegisterObjectPlugin(ID_O_MMD_CAMERA, GeLoadString(IDS_O_MMD_CAMERA), OBJECT_CALL_ADDEXECUTION, MMDCamera::Alloc, "MMD Camera"_s, AutoBitmap("MMDCamera.png"_s), 0));
 }
 
 Bool cmt_register::RigisterPlugin()
@@ -26,7 +26,7 @@ Bool cmt_register::RigisterPlugin()
 		return FALSE;
 	if (!RegisterVMDLoader())
 		return FALSE;
-	if(!RegisterOMMDCamera())
+	if(!RegisterMMDCamera())
 		return FALSE;
 	return TRUE;
 }

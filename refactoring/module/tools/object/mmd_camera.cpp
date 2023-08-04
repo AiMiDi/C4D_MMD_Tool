@@ -55,12 +55,6 @@ Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data)
 	const auto frame_at = static_cast<int32_t>(data.get_frame_at());
 	const auto frame_at_time = BaseTime(frame_at);
 
-	CTrack* frame_track = object->FindCTrack(DescID(m_frame_on_desc_id));
-	CCurve* frame_curve = frame_track->GetCurve();
-
-	CKey* frame_key = frame_curve->AddKey(frame_at_time);
-	frame_key->SetValue(frame_curve, frame_at);
-
 	CTrack* tracks[m_track_count]{ nullptr };
 	CCurve* curves[m_track_count]{ nullptr };
 
@@ -90,6 +84,10 @@ Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data)
 			return false;
 		}
 	}
+
+	CCurve* frame_curve = curves[FRAME_AT];
+	CKey* frame_key = frame_curve->AddKey(frame_at_time);
+	frame_key->SetValue(frame_curve, frame_at);
 
 	const auto& position = data.get_position();
 

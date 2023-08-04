@@ -14,8 +14,8 @@ Description:	C4D MMD interpolator object
 #include "utils/span_util.hpp.h"
 #include "module/MMD/vmd_interpolator.h"
 
-template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT = INTERPOLATOR_COUNT - 1ULL>
-class MMDInterpolator : public NODE_DATE_TYPE
+template <typename NODE_DATE_TYPE, size_t TRACK_COUNT, size_t INTERPOLATOR_COUNT = TRACK_COUNT - 1ULL>
+class MMDInterpolatorNode : public NODE_DATE_TYPE
 {
 	INSTANCEOF(OMMDInterpolator, NODE_DATE_TYPE)
 protected:
@@ -79,10 +79,10 @@ public:
 	// Called to add execution priorities.
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 protected:
-	using TrackDescIDSpan = span_namespace::span<const DescID, INTERPOLATOR_COUNT>;
-	using TrackObjectSpan = span_namespace::span<BaseObject*, INTERPOLATOR_COUNT>;
-	using KeyDefaultValueSpan = span_namespace::span<const Float, TRACK_COUNT>;
-	using TrackInterpolatorSpan = span_namespace::span<const Int32, TRACK_COUNT>;
+	using TrackDescIDSpan = span_namespace::span<const DescID, TRACK_COUNT>;
+	using TrackObjectSpan = span_namespace::span<BaseObject*, TRACK_COUNT>;
+	using KeyDefaultValueSpan = span_namespace::span<const Float, INTERPOLATOR_COUNT>;
+	using TrackInterpolatorSpan = span_namespace::span<const Int32, INTERPOLATOR_COUNT>;
 
 	virtual TrackDescIDSpan GetTrackDescIDs() = 0;
 
@@ -93,11 +93,11 @@ protected:
 	virtual TrackInterpolatorSpan GetTrackInterpolatorMap() = 0;
 public:
 	// Constructor function
-	MMDInterpolator(const Int32& spline_desc_id , const Int32& curve_type_desc_id, const Int32& frame_on_desc_id, const Int32& curve_type_count):
+	MMDInterpolatorNode(const Int32& spline_desc_id , const Int32& curve_type_desc_id, const Int32& frame_on_desc_id, const Int32& curve_type_count):
 	m_spline_desc_id(spline_desc_id), m_curve_type_desc_id(curve_type_desc_id), m_frame_on_desc_id(frame_on_desc_id), m_curve_type_count(curve_type_count) {}
 
 	// Destructor function
-	~MMDInterpolator() override = default;
+	~MMDInterpolatorNode() override = default;
 };
 
 
@@ -105,7 +105,7 @@ public:
 // ----- Implementation -----
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::SplineDataCallBack(const Int32 cid, const void* data)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::SplineDataCallBack(const Int32 cid, const void* data)
 {
 	// The callback function which does clamp the SplineData
 	if (cid == SPLINE_CALLBACK_CORE_MESSAGE)
@@ -149,7 +149,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::SplineDa
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator) const
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator) const
 {
 	if (const auto interpolator_ptr = m_interpolator_maps[type].Find(frame_on); interpolator_ptr == nullptr)
 	{
@@ -164,7 +164,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::GetInterp
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::LoadInterpolator(Int32 type, Int32 frame_at, const libmmd::vmd_interpolator& vmd_interpolator)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::LoadInterpolator(Int32 type, Int32 frame_at, const libmmd::vmd_interpolator& vmd_interpolator)
 {
 	iferr_scope_handler
 	{
@@ -178,7 +178,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::LoadInter
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
 template <typename ... Args>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::SetInterpolator(Int32 type, Int32 frame_on, Args&&... args)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::SetInterpolator(Int32 type, Int32 frame_on, Args&&... args)
 {
 	iferr_scope_handler
 	{
@@ -216,7 +216,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::SetInterp
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::RegisterKeyFrame(const Int32 frame_on, GeListNode* node)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::RegisterKeyFrame(const Int32 frame_on, GeListNode* node)
 {
 	iferr_scope_handler{
 		ApplicationOutput(err.ToString(nullptr));
@@ -319,7 +319,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Register
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::UpdateAllInterpolator(GeListNode* node)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::UpdateAllInterpolator(GeListNode* node)
 
 {
 	if (!node)
@@ -412,7 +412,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::UpdateAl
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::InitInterpolator(GeListNode* node) const
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::InitInterpolator(GeListNode* node) const
 {
 	if (!node)
 	{
@@ -441,7 +441,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::InitInte
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteKeyFrame(Int32 frame_on, GeListNode* node)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteKeyFrame(Int32 frame_on, GeListNode* node)
 {
 	if (!node)
 	{
@@ -488,7 +488,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteKe
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteAllKeyFrame(GeListNode* node)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteAllKeyFrame(GeListNode* node)
 {
 	if (!node)
 	{
@@ -523,7 +523,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::DeleteAl
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Read(GeListNode* node, HyperFile* hf, Int32 level)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
 		ApplicationOutput(err.ToString(nullptr));
@@ -557,7 +557,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Read(GeL
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Write(GeListNode* node, HyperFile* hf)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Write(GeListNode* node, HyperFile* hf)
 {
 	if (!hf->WriteInt32(this->m_prev_frame))
 		return false;
@@ -583,7 +583,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Write(Ge
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::CopyTo(NodeData* dest, GeListNode* snode,
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::CopyTo(NodeData* dest, GeListNode* snode,
 	GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
 {
 	iferr_scope_handler{
@@ -591,7 +591,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::CopyTo(N
 		return false;
 	};
 
-	auto* const destObject = reinterpret_cast<MMDInterpolator*>(dest);
+	auto* const destObject = reinterpret_cast<MMDInterpolatorNode*>(dest);
 	if (!destObject)
 	{
 		return false;
@@ -608,7 +608,7 @@ Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::CopyTo(N
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-EXECUTIONRESULT MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Execute(BaseObject* op, BaseDocument* doc,
+EXECUTIONRESULT MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Execute(BaseObject* op, BaseDocument* doc,
 	BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (!op || !doc)
@@ -660,7 +660,7 @@ EXECUTIONRESULT MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolator<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::AddToExecution(BaseObject* op, PriorityList* list)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (!list || !op)
 		return true;

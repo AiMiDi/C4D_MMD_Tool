@@ -12,10 +12,10 @@ Description:	C4D MMD camera object
 #define _MMD_CAMERA_H_
 
 #include "cmt_tools_setting.h"
-#include "description/OMMDCamera.h"
+#include "description/MMDCamera.h"
 #include "module/tools/mmd_interpolator.hpp"
 
-using MMDCameraBase = MMDInterpolator<ObjectData, 9>;
+using MMDCameraBase = MMDInterpolatorNode<ObjectData, 9>;
 
 class MMDCamera final : public MMDCameraBase
 {
@@ -63,8 +63,6 @@ public:
 
 	// Convert a normal camera to a MMD camera
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
-
-	static TrackDescIDSpan MMDCamera::GetDescID();
 
 	// Generating function
 	static NodeData* Alloc()
