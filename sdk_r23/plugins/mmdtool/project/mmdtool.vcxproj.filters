@@ -164,7 +164,7 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\utils\span_util.hpp.h">
+    <ClInclude Include="..\..\..\..\refactoring\utils\span_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp">

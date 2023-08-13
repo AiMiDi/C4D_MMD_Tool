@@ -252,7 +252,7 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
-    <ClInclude Include="..\..\..\..\refactoring\utils\span_util.hpp.h" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\span_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
     <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h" />
