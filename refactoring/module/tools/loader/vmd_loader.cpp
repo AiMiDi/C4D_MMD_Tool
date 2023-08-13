@@ -42,7 +42,7 @@ FILEERROR VMDLoaderData::Load(BaseSceneLoader* node, const Filename& name, BaseD
 	if (m_is_camera)
 	{
 		VMDLoaderCameraDialog dlg_Camera(name, doc);
-		dlg_Camera.Open(DLG_TYPE::MODAL, ID_L_MMD_VMD_IMPORT, -1, -1, 350, 80);
+		dlg_Camera.Open(DLG_TYPE::MODAL, ID_L_MMD_VMD_IMPORT);
 	}
 	else {
 		MessageDialog(GeLoadString(IDS_MES_IMPORT_VMD_CAM_ONLY));

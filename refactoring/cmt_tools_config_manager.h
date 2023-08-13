@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -105,8 +105,8 @@ private:
 	 */
 	YAML::Node m_config;
 
-	inline static constexpr int k_config_id_begin = DIG_CMT_TOOL_CAMERA_IMPORT_SIZE;
-	inline static constexpr int k_config_id_end = DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK;
+	inline static constexpr int k_config_id_begin = DLG_CMT_TOOL_CAMERA_IMPORT_SIZE;
+	inline static constexpr int k_config_id_end = DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK;
 	inline static constexpr int k_default_config_table_size = k_config_id_end - k_config_id_begin + 1;
 	/**
 	* \brief Configuration entry initial value table.

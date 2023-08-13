@@ -16,9 +16,8 @@ namespace CMTToolsManager
 {
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
-		auto vmd_utf8_filename_cstr = setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8);
-		const std::string vmd_utf8_filename{ vmd_utf8_filename_cstr };
-		DeleteMem(vmd_utf8_filename_cstr);
+		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const std::string vmd_utf8_filename{ vmd_utf8_filename_mem };
 		libmmd::vmd_animation* vmd_animation = libmmd::create_vmd_animation();
 		if(!vmd_animation)
 		{
@@ -29,7 +28,7 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		CMTSceneManager::GetSceneManager(GetActiveDocument()).LoadVMDCamera(setting, vmd_animation);
+		CMTSceneManager::GetSceneManager(setting.doc).LoadVMDCamera(setting, vmd_animation);
 		EventAdd();
 
 		libmmd::delete_vmd_animation(&vmd_animation);
@@ -38,9 +37,8 @@ namespace CMTToolsManager
 
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting)
 	{
-		const auto vmd_utf8_filename_cstr = setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8);
-		const std::string vmd_utf8_filename{ vmd_utf8_filename_cstr };
-		delete vmd_utf8_filename_cstr;
+		const maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const std::string vmd_utf8_filename{ vmd_utf8_filename_mem };
 		libmmd::vmd_animation* vmd_animation = libmmd::create_vmd_animation();
 		if (!vmd_animation)
 		{

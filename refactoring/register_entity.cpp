@@ -12,7 +12,7 @@ Bool RegisterCMTTool()
 
 Bool RegisterVMDLoader()
 {
-	return RegisterSceneLoaderPlugin(ID_L_MMD_VMD_IMPORT, "VMD(.vmd)"_s, 0, VMDLoaderData::Alloc, "ImportVMDCamera."_s);
+	return RegisterSceneLoaderPlugin(ID_L_MMD_VMD_IMPORT, "VMD(.vmd)"_s, 0, VMDLoaderData::Alloc, ""_s);
 }
 
 Bool RegisterMMDCamera()

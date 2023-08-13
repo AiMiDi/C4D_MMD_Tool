@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			walter white
@@ -15,17 +15,13 @@ Description:	vmd data loader dialog
 
 class VMDLoaderCameraDialog : public GeDialog
 {
-	ImagesUserArea* m_images = nullptr;
 	Filename	m_filename;
+	ImagesUserArea* m_images = nullptr;
 	BaseDocument* m_document = nullptr;
 	INSTANCEOF(VMDLoaderCameraDialog, GeDialog)
 public:
 	VMDLoaderCameraDialog(const Filename& fn, BaseDocument* doc) : m_filename(fn), m_document(doc){}
-
-	~VMDLoaderCameraDialog() override
-	{
-		DeleteObj(m_images);
-	}
+	~VMDLoaderCameraDialog() override;
 
 	Bool CreateLayout() override;
 	Bool InitValues() override;
