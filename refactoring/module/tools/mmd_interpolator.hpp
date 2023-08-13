@@ -335,8 +335,8 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Upda
 	CTrack* frame_track = object->FindCTrack(DescID(m_frame_on_desc_id));
 	CCurve* frame_curve = frame_track->GetCurve();
 
-	CTrack* tracks[m_track_count]{ nullptr };
-	CCurve* curves[m_track_count]{ nullptr };
+	CTrack* tracks[m_interpolator_count]{ nullptr };
+	CCurve* curves[m_interpolator_count]{ nullptr };
 
 	const auto track_objects = GetTrackObjects(node);
 
@@ -344,11 +344,11 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Upda
 
 	const auto  track_interpolator_map = GetTrackInterpolatorMap();
 
-	for (size_t track_index = 0; track_index < m_track_count; ++track_index)
+	for (size_t interpolator_track_index = 0; interpolator_track_index < m_interpolator_count; ++interpolator_track_index)
 	{
-		auto& track = tracks[track_index];
-		const auto& track_ID = track_desc_IDs[track_index];
-		const auto& track_object = track_objects[track_index];
+		auto& track = tracks[interpolator_track_index];
+		const auto& track_ID = track_desc_IDs[interpolator_track_index];
+		const auto& track_object = track_objects[interpolator_track_index];
 
 		track = track_object->FindCTrack(track_ID);
 		if (!track)
@@ -356,7 +356,7 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Upda
 			continue;
 		}
 
-		auto& curve = curves[track_index];
+		auto& curve = curves[interpolator_track_index];
 		curve = track->GetCurve();
 		if (!curve)
 		{
@@ -370,14 +370,14 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Upda
 			auto frame = maxon::SafeConvert<Int32>(now_frame_key->GetValue());
 			BaseTime now_time = now_frame_key->GetTime();
 			// Add 0.01 to exclude the frame.
-			const CKey* next_frame_key = frame_curve->FindKey(now_time + BaseTime(1., 120.), nullptr, FINDANIM::RIGHT);
+			const CKey* next_frame_key = frame_curve->FindKey(now_time + BaseTime(1., 1000.), nullptr, FINDANIM::RIGHT);
 			if (!next_frame_key)
 			{
 				break;
 			}
 			BaseTime next_time = next_frame_key->GetTime();
 			BaseTime time_of_two_frames = next_time - now_time;
-			auto* interpolator_ptr = m_interpolator_maps[track_interpolator_map[track_index]].Find(frame);
+			auto* interpolator_ptr = m_interpolator_maps[track_interpolator_map[interpolator_track_index]].Find(frame);
 			if (!interpolator_ptr)
 			{
 				break;

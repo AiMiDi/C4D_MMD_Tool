@@ -48,12 +48,12 @@ Bool MMDCamera::CameraInit(GeListNode* node)
 	return true;
 }
 
-Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data)
+Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data, const Float position_multiple)
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 
 	const auto frame_at = static_cast<int32_t>(data.get_frame_at());
-	const auto frame_at_time = BaseTime(frame_at);
+	const auto frame_at_time = BaseTime(frame_at, 30.0);
 
 	CTrack* tracks[m_track_count]{ nullptr };
 	CCurve* curves[m_track_count]{ nullptr };
@@ -93,17 +93,17 @@ Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data)
 
 	auto* position_x_curve = curves[POSITION_X];
 	CKey* position_x_key = position_x_curve->AddKey(frame_at_time);
-	position_x_key->SetValue(position_x_curve, maxon::SafeConvert<Float>(position[0]));
+	position_x_key->SetValue(position_x_curve, maxon::SafeConvert<Float>(position[0]) * position_multiple);
 	LoadInterpolator(POSITION_X, frame_at, data.get_position_x_interpolator());
 
 	auto* position_y_curve = curves[POSITION_Y];
 	CKey* position_y_key = position_y_curve->AddKey(frame_at_time);
-	position_y_key->SetValue(position_y_curve, maxon::SafeConvert<Float>(position[1]));
+	position_y_key->SetValue(position_y_curve, maxon::SafeConvert<Float>(position[1]) * position_multiple);
 	LoadInterpolator(POSITION_Y, frame_at, data.get_position_y_interpolator());
 
 	auto* position_z_curve = curves[POSITION_Z];
 	CKey* position_z_key = position_z_curve->AddKey(frame_at_time);
-	position_z_key->SetValue(position_z_curve, maxon::SafeConvert<Float>(position[2]));
+	position_z_key->SetValue(position_z_curve, maxon::SafeConvert<Float>(position[2]) * position_multiple);
 	LoadInterpolator(POSITION_Z, frame_at, data.get_position_z_interpolator());
 
 	const auto& rotation = data.get_rotation();
@@ -125,7 +125,7 @@ Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data)
 
 	auto* distance_curve = curves[DISTANCE];
 	CKey* distance_key = distance_curve->AddKey(frame_at_time);
-	distance_key->SetValue(distance_curve, maxon::SafeConvert<Float>(data.get_distance()));
+	distance_key->SetValue(distance_curve, maxon::SafeConvert<Float>(data.get_distance()) * position_multiple);
 	LoadInterpolator(DISTANCE, frame_at, data.get_distance_interpolator());
 
 	auto* aov_curve = curves[AOV];

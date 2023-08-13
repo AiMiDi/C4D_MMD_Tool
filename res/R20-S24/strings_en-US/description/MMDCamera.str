@@ -1,6 +1,6 @@
-STRINGTABLE OMMDCamera
+STRINGTABLE MMDCamera
 {
-	OMMDCamera "MMD Camera Object";
+	MMDCamera "MMD Camera Object";
 	VMD_CAM_OBJ_ANIMATION_GRP "Animation";
 	VMD_CAM_OBJ_FRAME_AT "Frame at";
 	VMD_CAM_OBJ_INIT_CURVE_BUTTON "Init curve";

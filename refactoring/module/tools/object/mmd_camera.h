@@ -3,7 +3,7 @@
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
 Date:			2022/10/2
-File:			o_mmd_camera.h
+File:			mmd_camera.h
 Description:	C4D MMD camera object
 
 **************************************************************************/
@@ -59,7 +59,7 @@ public:
 	// Initialize camera object
 	Bool CameraInit(GeListNode* node = nullptr);
 
-	Bool SetFrom(const libmmd::vmd_camera_key_frame& data);
+	Bool SetFrom(const libmmd::vmd_camera_key_frame& data, const Float position_multiple);
 
 	// Convert a normal camera to a MMD camera
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);

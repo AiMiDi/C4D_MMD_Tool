@@ -33,10 +33,14 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 		const auto& vmd_camera_key_frame_array = data->get_vmd_camera_key_frame_array();
 		const auto  vmd_camera_key_frame_num = static_cast<int>(vmd_camera_key_frame_array.size());
 
+		const auto fps = SceneDocument->GetFps();
 		for (auto frame_index = int(); frame_index < vmd_camera_key_frame_num; ++frame_index)
 		{
-			vmd_camera_data->SetFrom(vmd_camera_key_frame_array[frame_index]);
+			vmd_camera_data->SetFrom(vmd_camera_key_frame_array[frame_index], setting.position_multiple);
 		}
+		vmd_camera_data->UpdateAllInterpolator();
+
+		SceneDocument->SetMaxTime(BaseTime( vmd_camera_key_frame_num, 1.0 ));
 
 		return vmd_camera;
 	}

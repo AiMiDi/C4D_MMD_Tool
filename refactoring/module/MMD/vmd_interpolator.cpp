@@ -34,7 +34,7 @@ VMDInterpolator& VMDInterpolator::operator=(VMDInterpolator&& src) noexcept
 
 BaseTime VMDInterpolator::GetTimeRight() const
 {
-	return BaseTime{ static_cast<Float>(m_ax) / 127.0, 127.0 };
+	return BaseTime{ static_cast<Float>(m_ax), 127.0 };
 }
 
 Float VMDInterpolator::GetValueRight() const
@@ -44,7 +44,7 @@ Float VMDInterpolator::GetValueRight() const
 
 BaseTime VMDInterpolator::GetTimeLeft() const
 {
-	return BaseTime{ static_cast<Float>(m_bx - 127) / 127.0, 127.0 };
+	return BaseTime{ static_cast<Float>(m_bx - 127), 127.0 };
 }
 
 Float VMDInterpolator::GetValueLeft() const
