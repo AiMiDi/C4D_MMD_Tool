@@ -1,13 +1,19 @@
 #include "pch.h"
 #include "register_entity.h"
 
+#include "CMTSceneManager.h"
 #include "module/tools/object/mmd_camera.h"
 #include "module/ui/cmt_tools_dialog.h"
 #include "module/tools/loader/vmd_loader.h"
 
 Bool RegisterCMTTool()
 {
-	return RegisterCommandPlugin(ID_MMD_TOOL, "MMDTool"_s, 0, AutoBitmap("MMDIcon.png"_s), "MMD tool for C4D"_s, NewObjClear(CMTToolCommand));
+	return RegisterCommandPlugin(ID_COMMAND_CMT_TOOL, "MMDTool"_s, 0, AutoBitmap("MMDIcon.png"_s), "MMD tool for C4D"_s, NewObjClear(CMTToolCommand));
+}
+
+Bool RegisterCMTSceneManager()
+{
+	return RegisterSceneHookPlugin(ID_SCENE_HOOK_CMT_SCENE_MANAGER, "CMTSceneManager"_s, 0, CMTSceneManager::Alloc, 0, 0);
 }
 
 Bool RegisterVMDLoader()
@@ -23,6 +29,8 @@ Bool RegisterMMDCamera()
 Bool cmt_register::RigisterPlugin()
 {
 	if (!RegisterCMTTool())
+		return FALSE;
+	if (!RegisterCMTSceneManager())
 		return FALSE;
 	if (!RegisterVMDLoader())
 		return FALSE;

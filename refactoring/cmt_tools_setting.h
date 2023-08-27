@@ -43,9 +43,11 @@ namespace CMTToolsSetting
 	{
 		Float		distance = 0;
 		Int32		use_rotation = 0;
-		BaseObject* str_cam = nullptr;
+		BaseObject* src_cam = nullptr;
 
 		explicit CameraConversion(BaseDocument* document) : BaseSetting(document) {}
+		explicit CameraConversion(BaseDocument* document, const Float& distance_, const Int32& use_rotation_, BaseObject* src_cam_) : BaseSetting(document),
+			distance(distance_), use_rotation(use_rotation_), src_cam(src_cam_) {}
 	};
 	struct MotionImport : BaseSetting
 	{

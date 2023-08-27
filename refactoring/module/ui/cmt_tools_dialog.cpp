@@ -14,19 +14,19 @@ Description:	CMT tools main dialog.
 #include "cmt_tools_config_manager.h"
 #include "cmt_tools_manager.h"
 
-void CMTToolDialog::GetItem(const Int32 id, Float& value) const
+inline void CMTToolDialog::GetItem(const Int32 id, Float& value) const
 {
 	GetFloat(id, value);
 	CMTToolConfigManager::GetInstance().SetConfig(id, value);
 }
 
-void CMTToolDialog::GetItem(const Int32 id, Int32& value) const
+inline void CMTToolDialog::GetItem(const Int32 id, Int32& value) const
 {
 	GetInt32(id, value);
 	CMTToolConfigManager::GetInstance().SetConfig(id, value);
 }
 
-void CMTToolDialog::GetItem(const Int32 id, Bool& value) const
+inline void CMTToolDialog::GetItem(const Int32 id, Bool& value) const
 {
 	GetBool(id, value);
 	CMTToolConfigManager::GetInstance().SetConfig(id, value);
@@ -80,6 +80,10 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		CMTToolsSetting::CameraConversion setting(GetActiveDocument());
 		GetItem(DLG_CMT_TOOL_CAMERA_CONV_DIS, setting.distance);
 		GetItem(DLG_CMT_TOOL_CAMERA_CONV_ROTATION_TWEEN, setting.use_rotation);
+		if (!CMTToolsManager::ConversionCamera(setting))
+		{
+			return false;
+		}
 		break;
 	}
 	case DLG_CMT_TOOL_CAMERA_EXPORT_USE_BAKE:
@@ -101,6 +105,10 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		GetItem(DLG_CMT_TOOL_CAMERA_EXPORT_OFFSET, setting.time_offset);
 		GetItem(DLG_CMT_TOOL_CAMERA_EXPORT_USE_BAKE, setting.use_bake);
 		GetItem(DLG_CMT_TOOL_CAMERA_EXPORT_ROTATION_TWEEN, setting.use_rotation);
+		if (!CMTToolsManager::ExportVMDCamera(setting))
+		{
+			return false;
+		}
 		break;
 	}
 	case DLG_CMT_TOOL_MOTION_IMPORT_BUTTON:

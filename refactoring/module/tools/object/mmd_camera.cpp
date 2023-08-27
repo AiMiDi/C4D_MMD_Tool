@@ -12,20 +12,23 @@ Description:	C4D MMD camera object
 #include "pch.h"
 #include "mmd_camera.h"
 
+#include <functional>
+
+#include "CMTSceneManager.h"
 #include "utils/unique_id_util.hpp"
 
 Bool MMDCamera::CameraInit(GeListNode* node)
 {
-	if (!node)
-	{
-		node = Get();
-		if (!node)
-		{
-			return false;
-		}
-	}
 	if (!m_camera)
 	{
+		if (!node)
+		{
+			node = Get();
+			if (!node)
+			{
+				return false;
+			}
+		}
 		auto* down_obj = reinterpret_cast<BaseObject*>(node->GetDown());
 		while (down_obj)
 		{
@@ -39,20 +42,22 @@ Bool MMDCamera::CameraInit(GeListNode* node)
 
 		m_camera = BaseObject::Alloc(Ocamera); 
 		m_camera->SetName("Camera"_s);
-		UniqueIDWriter::AddUniqueID(m_camera, "001"_s, ID_O_MMD_CAMERA);
+		UniqueIDWriter::AddUniqueID(m_camera, "MMDCamera001"_s, ID_O_MMD_CAMERA);
 		m_protection_tag = BaseTag::Alloc(Tprotection);
 		m_protection_tag->SetParameter(DescID(PROTECTION_P_Z), false, DESCFLAGS_SET::NONE);
+		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+		m_protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
 		m_camera->InsertTag(m_protection_tag);
 		m_camera->InsertUnder(node);
 	}
 	return true;
 }
 
-Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data, const Float position_multiple)
+Bool MMDCamera::SetFromVMD(const libmmd::vmd_camera_key_frame& data, const Float position_multiple, Float time_offset)
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 
-	const auto frame_at = static_cast<int32_t>(data.get_frame_at());
+	const auto frame_at = static_cast<int32_t>(data.get_frame_at() + time_offset);
 	const auto frame_at_time = BaseTime(frame_at, 30.0);
 
 	CTrack* tracks[m_track_count]{ nullptr };
@@ -84,59 +89,79 @@ Bool MMDCamera::SetFrom(const libmmd::vmd_camera_key_frame& data, const Float po
 			return false;
 		}
 	}
-
-	CCurve* frame_curve = curves[FRAME_AT];
-	CKey* frame_key = frame_curve->AddKey(frame_at_time);
-	frame_key->SetValue(frame_curve, frame_at);
+	CTrack* frame_at_track = object->FindCTrack(m_frame_at_desc);
+	if(!frame_at_track)
+	{
+		frame_at_track = CTrack::Alloc(object, m_frame_at_desc);
+		if (!frame_at_track)
+		{
+			return false;
+		}
+		object->InsertTrackSorted(frame_at_track);
+	}
+	CCurve* frame_at_curve = frame_at_track->GetCurve();
+	if (!frame_at_curve)
+	{
+		return false;
+	}
+	CKey* frame_key = frame_at_curve->AddKey(frame_at_time);
+	frame_key->SetValue(frame_at_curve, frame_at);
 
 	const auto& position = data.get_position();
 
 	auto* position_x_curve = curves[POSITION_X];
 	CKey* position_x_key = position_x_curve->AddKey(frame_at_time);
 	position_x_key->SetValue(position_x_curve, maxon::SafeConvert<Float>(position[0]) * position_multiple);
-	LoadInterpolator(POSITION_X, frame_at, data.get_position_x_interpolator());
+	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_X, frame_at, data.get_position_x_interpolator());
 
 	auto* position_y_curve = curves[POSITION_Y];
 	CKey* position_y_key = position_y_curve->AddKey(frame_at_time);
 	position_y_key->SetValue(position_y_curve, maxon::SafeConvert<Float>(position[1]) * position_multiple);
-	LoadInterpolator(POSITION_Y, frame_at, data.get_position_y_interpolator());
+	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Y, frame_at, data.get_position_y_interpolator());
 
 	auto* position_z_curve = curves[POSITION_Z];
 	CKey* position_z_key = position_z_curve->AddKey(frame_at_time);
 	position_z_key->SetValue(position_z_curve, maxon::SafeConvert<Float>(position[2]) * position_multiple);
-	LoadInterpolator(POSITION_Z, frame_at, data.get_position_z_interpolator());
+	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Z, frame_at, data.get_position_z_interpolator());
 
 	const auto& rotation = data.get_rotation();
 
 	auto* rotation_x_curve = curves[ROTATION_X];
 	CKey* rotation_x_key = rotation_x_curve->AddKey(frame_at_time);
 	rotation_x_key->SetValue(rotation_x_curve, maxon::SafeConvert<Float>(rotation[0]));
-	LoadInterpolator(ROTATION_X, frame_at, data.get_rotation_interpolator());
+	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
 
 	auto* rotation_y_curve = curves[ROTATION_Y];
 	CKey* rotation_y_key = rotation_y_curve->AddKey(frame_at_time);
 	rotation_y_key->SetValue(rotation_y_curve, maxon::SafeConvert<Float>(rotation[1]));
-	LoadInterpolator(ROTATION_Y, frame_at, data.get_rotation_interpolator());
+	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
 
 	auto* rotation_z_curve = curves[ROTATION_Z];
 	CKey* rotation_z_key = rotation_z_curve->AddKey(frame_at_time);
 	rotation_z_key->SetValue(rotation_z_curve, maxon::SafeConvert<Float>(rotation[2]));
-	LoadInterpolator(ROTATION_Z, frame_at, data.get_rotation_interpolator());
+	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
 
 	auto* distance_curve = curves[DISTANCE];
 	CKey* distance_key = distance_curve->AddKey(frame_at_time);
 	distance_key->SetValue(distance_curve, maxon::SafeConvert<Float>(data.get_distance()) * position_multiple);
-	LoadInterpolator(DISTANCE, frame_at, data.get_distance_interpolator());
+	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_at, data.get_distance_interpolator());
 
 	auto* aov_curve = curves[AOV];
 	CKey* aov_key = aov_curve->AddKey(frame_at_time);
 	aov_key->SetValue(aov_curve, data.get_view_angle());
-	LoadInterpolator(AOV, frame_at, data.get_view_angle_interpolator());
+	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_at, data.get_view_angle_interpolator());
 
 	return true;
 }
 
-bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_position, const Int32 curve_type, const Int32 frame_count)
+Bool MMDCamera::SetToVMD(libmmd::vmd_camera_key_frame& data, Float position_multiple, Float time_offset)
+{
+
+	return true;
+}
+
+bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float&
+                                      fps)
 {
 	Float key_left_x = .0, key_left_y = .0, key_right_x = .0, key_right_y = .0,
 		next_key_left_x = .0, next_key_left_y = .0, next_key_right_x = .0, next_key_right_y = .0;
@@ -163,7 +188,7 @@ bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_
 			src_curve_position->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
 			src_curve_position->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
 
-			if (!camera_data->SetInterpolator(curve_type, now_key_time.GetFrame(30.),
+			if (!camera_data->SetInterpolator(curve_type, now_key_time.GetFrame(fps), fps,
 				maxon::SafeConvert<UChar>(maxon::Abs(key_right_x / time_of_two_frames.Get()) * 127),
 				maxon::SafeConvert<UChar>(maxon::Abs(key_right_y / value_of_two_frames) * 127),
 				maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x / time_of_two_frames.Get()) * 127),
@@ -188,7 +213,7 @@ bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_
 			key_right_y = next_key_right_y;
 			src_curve_position->GetTangents(key_index + 1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
 
-			if (!camera_data->SetInterpolator(curve_type, now_key_time.GetFrame(30.),
+			if (!camera_data->SetInterpolator(curve_type, now_key_time.GetFrame(fps), fps,
 				maxon::SafeConvert<UChar>(maxon::Abs(key_right_x / time_of_two_frames.Get()) * 127),
 				maxon::SafeConvert<UChar>(maxon::Abs(key_right_y / value_of_two_frames) * 127),
 				maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x / time_of_two_frames.Get()) * 127),
@@ -197,7 +222,7 @@ bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_
 
 		}
 		//最后一帧
-		if (!camera_data->SetInterpolator(curve_type, src_curve_position->GetKey(frame_count)->GetTime().GetFrame(30.))) {
+		if (!camera_data->SetInterpolator(curve_type, src_curve_position->GetKey(frame_count)->GetTime().GetFrame(fps), fps)) {
 			return true;
 		}
 	}
@@ -211,19 +236,20 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 		return nullptr;
 	};
 	/* 获取活动文档 */
-	BaseDocument* doc = GetActiveDocument();
-	if (doc == nullptr)
+	if (setting.doc == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + "error");
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + "error");
 		return nullptr;
 	}
+	const Float fps = setting.doc->GetFps();
+
 	BaseObject* select_object;
 
-	if (setting.str_cam == nullptr) /* 若传入的参数非空则使用传入参数 */
+	if (setting.src_cam == nullptr) /* 若传入的参数非空则使用传入参数 */
 	{
 		/* 获取选中对象 */
-		select_object = doc->GetActiveObject();
+		select_object = setting.doc->GetActiveObject();
 		if (select_object == nullptr)
 		{
 			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
@@ -232,7 +258,7 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 		}
 	}
 	else { /* 否则使用选择参数 */
-		select_object = setting.str_cam;
+		select_object = setting.src_cam;
 	}
 
 	/* 判断选中对象类型是否为摄像机 */
@@ -255,7 +281,7 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 	/* 创建要转化摄像机的副本，防止操作破坏原摄像机对象的数据 */
 	auto* select_object_clone = reinterpret_cast<BaseObject*>(select_object->GetClone(COPYFLAGS::NO_HIERARCHY, nullptr));
 	VMD_camera->SetName(select_object_clone->GetName());
-	doc->InsertObject(VMD_camera, nullptr, nullptr);
+	setting.doc->InsertObject(VMD_camera, nullptr, nullptr);
 
 	/* 获取目标对象内部的数据 */
 	auto* VMD_camera_data = VMD_camera->GetNodeData<MMDCamera>();
@@ -270,7 +296,7 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 	default_distance = setting.distance;
 
 	// 将时间设置为0 
-	doc->SetTime(BaseTime{});
+	setting.doc->SetTime(BaseTime{});
 
 	constexpr auto src_track_count = 7;
 
@@ -356,14 +382,14 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 	// 只需循环第2到最后一个
 	const Int32 frame_count = static_cast<Int32>(frame_set.GetCount()) - 1;
 
-	constexpr auto dst_track_count = 8;
+	constexpr auto dst_track_count = m_track_count;
 
 	const auto& dst_track_desc_IDs = GetTrackDescIDsImpl();
 
 	CTrack* dst_tracks[dst_track_count]{ nullptr };
 	CCurve* dst_curves[dst_track_count]{ nullptr };
 
-	for (int track_index = 0; track_index < dst_track_count; ++track_index)
+	for (size_t track_index = 0; track_index < dst_track_count; ++track_index)
 	{
 		auto& dst_track = dst_tracks[track_index];
 		const auto& dst_track_desc_ID = dst_track_desc_IDs[track_index];
@@ -396,7 +422,7 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 		}
 
 		// 转换移动和旋转写入对象，添加关键帧数据
-		if (track_index != 7)
+		if (track_index != DISTANCE)
 		{
 			const auto& src_curve = src_curves[track_index];
 			for (const BaseTime& frame_time : frame_set)
@@ -404,22 +430,22 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 				dst_curve->AddKey(frame_time)->SetValue(dst_curve, src_curve->FindKey(frame_time)->GetValue());
 			}
 
-			if (track_index <= 2)
+			if (track_index <= POSITION_Z)
 			{
-				if (!ConversionCameraCurve(VMD_camera_data, src_curve, track_index, frame_count))
+				if (!ConversionCameraCurve(VMD_camera_data, src_curve, track_index, frame_count, fps))
 					return nullptr;
 			}
 			// rotation_curve
-			else if (track_index <= 3)
+			else if (track_index <= ROTATION_Z)
 			{
 				// 根据setting使用对应旋转曲线
-				if (!ConversionCameraCurve(VMD_camera_data, src_curves[3 + setting.use_rotation], track_index, frame_count))
+				if (!ConversionCameraCurve(VMD_camera_data, src_curves[3 + setting.use_rotation], track_index, frame_count, fps))
 					return nullptr;
 			}
 			// aov_curve
-			else if (track_index == 6)
+			else if (track_index == AOV)
 			{
-				if (!ConversionCameraCurve(VMD_camera_data, src_curve, VMD_CAM_OBJ_VCURVE, frame_count))
+				if (!ConversionCameraCurve(VMD_camera_data, src_curve, VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_count, fps))
 					return nullptr;
 			}
 
@@ -432,7 +458,7 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 				dst_curve->AddKey(frame_time)->SetValue(dst_curve, setting.distance);
 
 				// 距离没有曲线，顺便在循环里设置线性曲线
-				if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_DCURVE, frame_time.GetFrame(30.)))
+				if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_time.GetFrame(fps), fps))
 					return nullptr;
 			}
 		}
@@ -441,8 +467,8 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 	EventAdd();
 	if (!VMD_camera_data->UpdateAllInterpolator())
 		return nullptr;
-	doc->SetTime(BaseTime(1));
-	doc->SetTime(BaseTime());
+	setting.doc->SetTime(BaseTime(1));
+	setting.doc->SetTime(BaseTime());
 	return VMD_camera;
 }
 
@@ -450,10 +476,31 @@ Bool MMDCamera::Init(GeListNode* node)
 {
 	if (node == nullptr)
 		return false;
-	node->SetParameter(DescID(VMD_CAM_OBJ_CURVE_TYPE), VMD_CAM_OBJ_ACURVE, DESCFLAGS_SET::NONE);
-	if (!InitInterpolator(node))
-		return false;
+
+	node->SetParameter(DescID(VMD_CAM_OBJ_CURVE_TYPE), VMD_CAM_OBJ_INTERPOLATOR_ALL, DESCFLAGS_SET::NONE);
+
+	InitInterpolator(node);
+
 	return true;
+}
+
+Bool MMDCamera::CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn)
+{
+	if (m_camera)
+	{
+		auto* const destObject = reinterpret_cast<MMDCamera*>(dest);
+		destObject->m_camera = reinterpret_cast<BaseObject*>(m_camera->GetClone(COPYFLAGS::NONE, nullptr));
+		if(m_protection_tag && destObject->m_camera)
+		{
+			destObject->m_protection_tag = reinterpret_cast<BaseTag*>(m_protection_tag->GetClone(COPYFLAGS::NONE, nullptr));
+			if(destObject->m_protection_tag)
+			{
+				destObject->m_camera->InsertTag(destObject->m_protection_tag);
+			}
+		}
+	}
+		
+	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
 Bool MMDCamera::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
@@ -483,10 +530,11 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 		}
 		case VMD_CAM_OBJ_REGISTER_CURVE_BUTTON:
 		{
-			const BaseTime time = GetActiveDocument()->GetTime();
-			RegisterKeyFrame(time.GetFrame(30.), node);
-			node->GetDocument()->SetTime(BaseTime());
-			node->GetDocument()->SetTime(time);
+			BaseDocument* doc = node->GetDocument();
+			const BaseTime time = doc->GetTime();
+			RegisterKeyFrame(time.GetFrame(doc->GetFps()), node);
+			doc->SetTime(BaseTime{});
+			doc->SetTime(time);
 			break;
 		}
 		case VMD_CAM_OBJ_UPDATE_CURVE_BUTTON:
@@ -498,10 +546,11 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 		{
 			if (QuestionDialog(IDS_MES_DELETE_CAM_CURVE))
 			{
-				const BaseTime time = GetActiveDocument()->GetTime();
-				DeleteKeyFrame(time.GetFrame(30.), node);
-				node->GetDocument()->SetTime(BaseTime());
-				node->GetDocument()->SetTime(time);
+				BaseDocument* doc = node->GetDocument();
+				const BaseTime time = doc->GetTime();
+				DeleteKeyFrame(time.GetFrame(doc->GetFps()), node);
+				doc->SetTime(BaseTime{});
+				doc->SetTime(time);
 			}
 			break;
 		}
@@ -509,10 +558,11 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 		{
 			if (QuestionDialog(IDS_MES_DELETE_CAM_ALL_CURVE))
 			{
+				BaseDocument* doc = node->GetDocument();
 				DeleteAllKeyFrame(node);
-				this->InitInterpolator(node);
-				node->GetDocument()->SetTime(BaseTime(1));
-				node->GetDocument()->SetTime(BaseTime());
+				InitInterpolator(node);
+				doc->SetTime(BaseTime{1.0});
+				doc->SetTime(BaseTime{});
 			}
 			break;
 		}
@@ -521,9 +571,12 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
-	case MSG_MENUPREPARE: {
+	case MSG_MENUPREPARE:
+	{
 		if (!CameraInit(node))
+		{
 			return true;
+		}
 		node->SetParameter(DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y), 85.0, DESCFLAGS_SET::NONE);
 		m_camera->SetRelPos(Vector(0, 0, -382.5));
 		break;
@@ -534,13 +587,6 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 	return true;
 }
 
-Bool MMDCamera::GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc)
-{
-	if (id[0].id == VMD_CAM_OBJ_FRAME_AT)
-		return false;
-	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
-}
-
 EXECUTIONRESULT MMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (!op || !doc)
@@ -548,12 +594,13 @@ EXECUTIONRESULT MMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread
 		return EXECUTIONRESULT::OK;
 	}
 	CameraInit(op);
+	std::call_once(m_init_flag, AddToSceneManager, op);
 	return SUPER::Execute(op, doc, bt, priority, flags);
 }
 
-MMDCamera::TrackDescIDSpan MMDCamera::GetTrackDescIDsImpl()
+MMDCamera::TrackDescIDArray MMDCamera::GetTrackDescIDsImpl()
 {
-	static const DescID track_desc_IDs[9] =
+	static const TrackDescIDArray track_desc_IDs
 	{
 		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_X),
 		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Y),
@@ -562,58 +609,73 @@ MMDCamera::TrackDescIDSpan MMDCamera::GetTrackDescIDsImpl()
 		DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y),
 		DescID(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z),
 		DescID(ID_BASEOBJECT_REL_POSITION, VECTOR_Z),
-		DescID(CAMERAOBJECT_APERTURE),
-		DescID(VMD_CAM_OBJ_FRAME_AT)
+		DescID(CAMERAOBJECT_APERTURE)
 	};
-	return span_namespace::make_span(track_desc_IDs);
+	return track_desc_IDs;
 }
 
-MMDCamera::TrackDescIDSpan MMDCamera::GetTrackDescIDs()
+void MMDCamera::AddToSceneManager(BaseObject* object)
+{
+	if(const auto scene_manager = CMTSceneManager::GetSceneManager(object->GetDocument()))
+		scene_manager->AddMMDCamera(object);
+}
+
+inline MMDCamera::TrackDescIDArray MMDCamera::GetTrackDescIDs()
 {
 	return GetTrackDescIDsImpl();
 }
 
-MMDCamera::TrackObjectSpan MMDCamera::GetTrackObjects(GeListNode* node)
+MMDCamera::TrackObjectArray MMDCamera::GetTrackObjects(GeListNode* node)
 {
 	const auto object = reinterpret_cast<BaseObject*>(node);
-	static BaseObject* track_objects[9];
-	track_objects[0] = object;
-	track_objects[1] = object;
-	track_objects[2] = object;
-	track_objects[3] = object;
-	track_objects[4] = object;
-	track_objects[5] = object;
-	track_objects[6] = m_camera;
-	track_objects[7] = m_camera;
-	track_objects[8] = object;
-	return span_namespace::make_span(track_objects);
+	const TrackObjectArray track_objects
+	{
+		object,		// POSITION_X
+		object,		// POSITION_Y
+		object,		// POSITION_Z
+		object,		// ROTATION_X
+		object,		// ROTATION_Y
+		object,		// ROTATION_Z
+		m_camera,	// DISTANCE
+		m_camera	// AOV
+	};
+	return track_objects;
 }
 
-MMDCamera::KeyDefaultValueSpan MMDCamera::GetKeyDefaultValue(GeListNode* node)
+MMDCamera::CurrentValuesArray MMDCamera::GetCurrentValues(GeListNode* node)
 {
 	const auto obj = reinterpret_cast<BaseObject*>(node);
 
 	const Vector RelPos = obj->GetRelPos();
 	const Vector RelRot = obj->GetRelRot();
 
-	static Float key_default_value[8];
-	key_default_value[0] = RelPos.x;
-	key_default_value[1] = RelPos.y;
-	key_default_value[2] = RelPos.z;
-	key_default_value[3] = RelRot.x;
-	key_default_value[4] = RelRot.y;
-	key_default_value[5] = RelRot.z;
-	key_default_value[6] = reinterpret_cast<CameraObject*>(m_camera)->GetAperture();
-	key_default_value[7] = default_distance;
+	const CurrentValuesArray current_values
+	{
+		RelPos.x,													// POSITION_X
+		RelPos.y,													// POSITION_Y
+		RelPos.z,													// POSITION_Z
+		RelRot.x,													// ROTATION_X
+		RelRot.y,													// ROTATION_Y
+		RelRot.z,													// ROTATION_Z
+		m_camera->GetRelPos().z,									// DISTANCE
+		reinterpret_cast<CameraObject*>(m_camera)->GetAperture()	// AOV
+	};
 
-	return span_namespace::make_span(key_default_value);
+	return current_values;
 }
 
-MMDCamera::TrackInterpolatorSpan MMDCamera::GetTrackInterpolatorMap()
+MMDCamera::InterpolatorTrackTableArray MMDCamera::GetTrackInterpolatorMap()
 {
-	static constexpr Int32 track_interpolator_map[8]
+	static constexpr InterpolatorTrackTableArray track_interpolator_map
 	{
-		0,1,2,3,3,3,4,5
+		VMD_CAM_OBJ_INTERPOLATOR_POSITION_X,
+		VMD_CAM_OBJ_INTERPOLATOR_POSITION_Y,
+		VMD_CAM_OBJ_INTERPOLATOR_POSITION_Z,
+		VMD_CAM_OBJ_INTERPOLATOR_ROTATION,
+		VMD_CAM_OBJ_INTERPOLATOR_ROTATION,
+		VMD_CAM_OBJ_INTERPOLATOR_ROTATION,
+		VMD_CAM_OBJ_INTERPOLATOR_DISTANCE,
+		VMD_CAM_OBJ_INTERPOLATOR_AOV
 	};
-	return span_namespace::make_span(track_interpolator_map);
+	return track_interpolator_map;
 }

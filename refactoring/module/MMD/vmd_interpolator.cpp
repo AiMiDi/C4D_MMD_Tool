@@ -12,10 +12,7 @@ Description:	MMD style animation interpolator
 #include "vmd_interpolator.h"
 
 VMDInterpolator::VMDInterpolator(const UChar ax, const UChar ay, const UChar bx, const UChar by):
-	m_ax(ax), m_ay(ay), m_bx(bx), m_by(by)
-{
-	m_isLinear = m_ax == m_ay && m_bx == m_by;
-}
+	m_ax(ax), m_ay(ay), m_bx(bx), m_by(by){}
 
 VMDInterpolator::VMDInterpolator(VMDInterpolator&& src) noexcept
 {
@@ -49,7 +46,7 @@ BaseTime VMDInterpolator::GetTimeLeft() const
 
 Float VMDInterpolator::GetValueLeft() const
 {
-	return static_cast<Float>(m_by - 127)/127.0;
+	return static_cast<Float>(m_by - 127) / 127.0;
 }
 
 Vector VMDInterpolator::GetTangentRight() const
@@ -64,10 +61,12 @@ Vector VMDInterpolator::GetTangentLeft() const
 
 void VMDInterpolator::Set(const SplineData* spline)
 {
-	m_ax = maxon::SafeConvert<UChar>(spline->GetKnot(0)->vTangentRight.x);
-	m_ay = maxon::SafeConvert<UChar>(spline->GetKnot(0)->vTangentRight.y);
-	m_bx = 127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.x);
-	m_by = 127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.y);
+	const auto* knot_a = spline->GetKnot(0);
+	const auto* knot_b = spline->GetKnot(spline->GetKnotCount() - 1);
+	m_ax = maxon::SafeConvert<UChar>(knot_a->vTangentRight.x);
+	m_ay = maxon::SafeConvert<UChar>(knot_a->vTangentRight.y);
+	m_bx = 127U - maxon::SafeConvert<UChar>(-knot_b->vTangentLeft.x);
+	m_by = 127U - maxon::SafeConvert<UChar>(-knot_b->vTangentLeft.y);
 }
 
 void VMDInterpolator::Set(const UChar& ax, const UChar& ay, const UChar& bx, const UChar& by)
@@ -76,17 +75,11 @@ void VMDInterpolator::Set(const UChar& ax, const UChar& ay, const UChar& bx, con
 	m_ay = ay;
 	m_bx = bx;
 	m_by = by;
-	m_isLinear = m_ax == m_ay && m_bx == m_by;
 }
 
 void VMDInterpolator::Reset()
 {
 	Set();
-}
-
-Bool VMDInterpolator::IsLinear() const
-{
-	return m_isLinear;
 }
 
 maxon::HashInt VMDInterpolator::GetHashCode() const

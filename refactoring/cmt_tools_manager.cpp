@@ -14,11 +14,12 @@ Description:	tools manager
 
 namespace CMTToolsManager
 {
+
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
 		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
 		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
-		libmmd::vmd_animation* vmd_animation = libmmd::create_vmd_animation();
+		const std::shared_ptr<libmmd::vmd_animation> vmd_animation{ libmmd::create_vmd_animation(), libmmd::delete_vmd_animation };
 		if(!vmd_animation)
 		{
 			return false;
@@ -28,27 +29,43 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		CMTSceneManager::GetSceneManager(setting.doc).LoadVMDCamera(setting, vmd_animation);
-		EventAdd();
+		if (CMTSceneManager::LoadVMDCamera(setting, vmd_animation.get()))
+		{
+			return false;
+		}
 
-		libmmd::delete_vmd_animation(&vmd_animation);
 		return true;
+	}
+
+	bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
+	{
+		if (CMTSceneManager::ConversionCamera(setting))
+		{
+			return true;
+		}
+		return false;
 	}
 
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting)
 	{
 		const maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
 		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
-		libmmd::vmd_animation* vmd_animation = libmmd::create_vmd_animation();
+		const std::shared_ptr<libmmd::vmd_animation> vmd_animation{ libmmd::create_vmd_animation(), libmmd::delete_vmd_animation };
 		if (!vmd_animation)
 		{
 			return false;
 		}
-		if(!vmd_animation->write_to_file(vmd_utf8_filename))
-			return false;
-		// TODO
 
-		libmmd::delete_vmd_animation(&vmd_animation);
+		if (CMTSceneManager::SaveVMDCamera(setting, vmd_animation.get()))
+		{
+			return false;
+		}
+
+		if(!vmd_animation->write_to_file(vmd_utf8_filename))
+		{
+			return false;
+		}
+		
 		return true;
 	}
 

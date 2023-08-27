@@ -16,6 +16,7 @@ Description:	tools manager
 namespace CMTToolsManager 
 {
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting);
+	bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting);
 	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting);
 	bool ExportVMDMotion(const CMTToolsSetting::MotionExport& setting);

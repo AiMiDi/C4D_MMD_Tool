@@ -12,28 +12,37 @@ Description:	scene manager
 #define _CMT_SCENE_MANAGER_H_
 #include "cmt_tools_setting.h"
 
-class CMTSceneManager final 
+
+
+class CMTSceneManager final : SceneHookData
 {
+	INSTANCEOF(CMTSceneManager, SceneHookData)
 public:
 	/**
 	 * \brief Default constructor function
 	 */
-	explicit CMTSceneManager(BaseDocument* Document) : SceneDocument(Document){}
+	explicit CMTSceneManager() = default;
 	/**
 	 * \brief Destructor function
 	 */
-	~CMTSceneManager() = default;
+	~CMTSceneManager() override = default;
 
-	BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation* data);
+	static NodeData* Alloc()
+	{
+		return NewObjClear(CMTSceneManager);
+	}
 
-	static CMTSceneManager& GetSceneManager(BaseDocument* Document);
-	static Bool RemoveSceneManager(BaseDocument* Document);
+	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation* data);
+	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::vmd_animation* data);
+	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
+
+	void AddMMDCamera(BaseObject* camera);
+
+	static CMTSceneManager* GetSceneManager(const BaseDocument* Document);
 
 private:
-	BaseDocument* SceneDocument{};
-	maxon::BaseArray<BaseObject*> SceneCameraList;
+	BaseLinkArray SceneCameraArray;
 	
-	inline static std::unordered_map<BaseDocument*, std::unique_ptr<CMTSceneManager>> SceneManagerMap{};
 };
 
 #endif // !_CMT_SCENE_MANAGER_H_

@@ -22,7 +22,6 @@ protected:
 	UChar m_ay = 20U;
 	UChar m_bx = 107U;
 	UChar m_by = 107U;
-	Bool  m_isLinear = true;
 public:
 	/**
 	 * \brief  Constructor function
@@ -92,11 +91,6 @@ public:
 	* \brief Reset interpolator
 	*/
 	void Reset();
-	/**
-	 * \brief Is the interpolator is linear
-	 * \return TRUE is linear, other is FALSE
-	 */
-	[[nodiscard]] Bool IsLinear() const;
 	/**
 	 * \brief Hash function
 	 * \return Hash code

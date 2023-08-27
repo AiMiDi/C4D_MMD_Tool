@@ -8,6 +8,7 @@
 #include <vector>
 #include <cassert>
 #include <memory>
+#include <mutex>
 
 // C4D
 #include <c4d.h>
@@ -17,6 +18,7 @@
 #include <c4d_string.h>
 #include "maxon/pointerarray.h"
 #include "maxon/sortedarray.h"
+#include "c4d_baselinkarray.h"
 #include "tprotection.h"
 
 // The third party
