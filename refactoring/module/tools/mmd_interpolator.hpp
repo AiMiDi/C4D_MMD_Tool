@@ -46,10 +46,10 @@ public:
 	Bool GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator) const;
 
 	// Load interpolator from libmmd::vmd_interpolator
-	Bool LoadInterpolator(Int32 type, Int32 frame_at, const libmmd::vmd_interpolator& vmd_interpolator);
+	Bool LoadVMDInterpolator(Int32 type, Int32 frame_at, const libmmd::vmd_interpolator& vmd_interpolator);
 
 	// Save interpolator to libmmd::vmd_interpolator
-	Bool SaveInterpolator(Int32 type, Int32 frame_at, libmmd::vmd_interpolator& vmd_interpolator);
+	Bool SaveVMDInterpolator(Int32 type, Int32 frame_at, libmmd::vmd_interpolator& vmd_interpolator);
 
 	// Set interpolator value
 	template<typename ...Args>
@@ -186,7 +186,7 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::GetIn
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::LoadInterpolator(Int32 type, Int32 frame_at, const libmmd::vmd_interpolator& vmd_interpolator)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::LoadVMDInterpolator(Int32 type, Int32 frame_at, const libmmd::vmd_interpolator& vmd_interpolator)
 {
 	iferr_scope_handler
 	{
@@ -199,7 +199,7 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::LoadI
 }
 
 template <typename NODE_DATE_TYPE, size_t TRACK_COUNT, size_t INTERPOLATOR_COUNT>
-Bool MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT>::SaveInterpolator(Int32 type, Int32 frame_at, libmmd::vmd_interpolator& vmd_interpolator)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT>::SaveVMDInterpolator(Int32 type, Int32 frame_at, libmmd::vmd_interpolator& vmd_interpolator)
 {
 	if(auto interpolator_ptr = m_interpolator_maps[type].FindValue(frame_at); interpolator_ptr)
 	{

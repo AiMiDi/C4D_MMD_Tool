@@ -14,12 +14,16 @@ Description:	tools manager
 
 namespace CMTToolsManager
 {
+	std::shared_ptr<libmmd::vmd_animation> make_vmd_animation()
+	{
+		return std::shared_ptr<libmmd::vmd_animation>{ libmmd::create_vmd_animation(), libmmd::delete_vmd_animation };
+	}
 
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
 		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
 		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
-		const std::shared_ptr<libmmd::vmd_animation> vmd_animation{ libmmd::create_vmd_animation(), libmmd::delete_vmd_animation };
+		const auto vmd_animation = make_vmd_animation();
 		if(!vmd_animation)
 		{
 			return false;
@@ -29,7 +33,8 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		if (CMTSceneManager::LoadVMDCamera(setting, vmd_animation.get()))
+		vmd_animation->mutable_vmd_camera_key_frame_array().sort();
+		if (CMTSceneManager::LoadVMDCamera(setting, *vmd_animation))
 		{
 			return false;
 		}
@@ -50,7 +55,7 @@ namespace CMTToolsManager
 	{
 		const maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
 		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
-		const std::shared_ptr<libmmd::vmd_animation> vmd_animation{ libmmd::create_vmd_animation(), libmmd::delete_vmd_animation };
+		const auto vmd_animation = make_vmd_animation();
 		if (!vmd_animation)
 		{
 			return false;

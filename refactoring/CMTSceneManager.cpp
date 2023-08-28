@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			walter white/Aimidi
@@ -13,9 +13,9 @@ Description:	scene manager
 #include "CMTSceneManager.h"
 #include "module/tools/object/mmd_camera.h"
 
-BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation* data)
+BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation& data)
 {
-	if(data->is_camera())
+	if(data.is_camera())
 	{
 		// create camera
 		BaseObject* vmd_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
@@ -30,17 +30,13 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 		vmd_camera_data->CameraInit();
 
 		// set camera with vmd data
-		const auto& vmd_camera_key_frame_array = data->get_vmd_camera_key_frame_array();
-		const auto  vmd_camera_key_frame_num = static_cast<int>(vmd_camera_key_frame_array.size());
-		for (auto frame_index = int(); frame_index < vmd_camera_key_frame_num; ++frame_index)
-		{
-			vmd_camera_data->SetFromVMD(vmd_camera_key_frame_array[frame_index], setting.position_multiple, setting.time_offset);
-		}
-		vmd_camera_data->UpdateAllInterpolator();
+		const auto& vmd_camera_key_frame_array = data.get_vmd_camera_key_frame_array();
+		vmd_camera_data->LoadVMDCamera(data, setting);
 
 		EventAdd();
 		// set document with vmd length
-		setting.doc->SetMaxTime(BaseTime( vmd_camera_key_frame_num, 1.0 ));
+		setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(),
+			BaseTime(vmd_camera_key_frame_array[vmd_camera_key_frame_array.size() - 1ULL].get_frame_at(), 30.0)));
 		setting.doc->SetTime(BaseTime{ 1.0 });
 		setting.doc->SetTime(BaseTime{});
 
@@ -59,16 +55,16 @@ BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& 
 		return nullptr;
 	}
 	setting.doc->SetTime(BaseTime(0.));
-	BaseObject* camera_obj = nullptr;
+	BaseObject* camera_obj;
 
 	// 转化对象自动销毁
-	AutoFree<BaseObject> convected_camera;
+	AutoFree<BaseObject> convected_camera{};
 
 	// 选择对象为普通摄像机则转化
 	if (select_object->IsInstanceOf(Ocamera))
 	{
 		const auto convected_camera_ = ConversionCamera(CMTToolsSetting::CameraConversion{ setting.doc, 0., setting.use_rotation, select_object });
-		convected_camera.Assign(convected_camera_);
+		convected_camera.Set(convected_camera_);
 		camera_obj = convected_camera_;
 	}
 	// 选择对象为vmd摄像机则直接使用
@@ -83,8 +79,10 @@ BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& 
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TYPE_ERR));
 		return nullptr;
 	}
-	auto* vmd_camera_data = camera_obj->GetNodeData<MMDCamera>();
-
+	if(auto* vmd_camera_data = camera_obj->GetNodeData<MMDCamera>(); !vmd_camera_data->SaveVMDCamera(data, setting))
+	{
+		return nullptr;
+	}
 
 	return nullptr;
 }

@@ -60,9 +60,9 @@ public:
 	// Initialize camera object
 	Bool CameraInit(GeListNode* node = nullptr);
 
-	Bool SetFromVMD(const libmmd::vmd_camera_key_frame& data, Float position_multiple, Float time_offset);
+	Bool LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTToolsSetting::CameraImport& setting);
 
-	Bool SetToVMD(libmmd::vmd_camera_key_frame& data, Float position_multiple, Float time_offset);
+	Bool SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSetting::CameraExport& setting);
 
 	// Convert a normal camera to a MMD camera
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);

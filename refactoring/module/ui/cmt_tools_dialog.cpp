@@ -102,9 +102,14 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	{
 		CMTToolsSetting::CameraExport setting(GetActiveDocument());
 		GetItem(DLG_CMT_TOOL_CAMERA_EXPORT_SIZE, setting.position_multiple);
+		setting.position_multiple = 1.0 / setting.position_multiple;
 		GetItem(DLG_CMT_TOOL_CAMERA_EXPORT_OFFSET, setting.time_offset);
 		GetItem(DLG_CMT_TOOL_CAMERA_EXPORT_USE_BAKE, setting.use_bake);
 		GetItem(DLG_CMT_TOOL_CAMERA_EXPORT_ROTATION_TWEEN, setting.use_rotation);
+		if (!filename_util::SelectSuffixExportFile(setting.fn, "vmd"_s))
+		{
+			return false;
+		}
 		if (!CMTToolsManager::ExportVMDCamera(setting))
 		{
 			return false;

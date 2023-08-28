@@ -32,7 +32,7 @@ public:
 		return NewObjClear(CMTSceneManager);
 	}
 
-	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation* data);
+	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation& data);
 	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::vmd_animation* data);
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 

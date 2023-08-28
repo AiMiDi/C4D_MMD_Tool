@@ -53,25 +53,110 @@ Bool MMDCamera::CameraInit(GeListNode* node)
 	return true;
 }
 
-Bool MMDCamera::SetFromVMD(const libmmd::vmd_camera_key_frame& data, const Float position_multiple, Float time_offset)
+Bool MMDCamera::LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTToolsSetting::CameraImport& setting)
+{
+	const auto object = reinterpret_cast<BaseObject*>(Get());
+	const auto& vmd_camera_key_frame_array = vmd_data.get_vmd_camera_key_frame_array();
+	const auto  vmd_camera_key_frame_num = static_cast<int>(vmd_camera_key_frame_array.size());
+	for (auto frame_index = int(); frame_index < vmd_camera_key_frame_num; ++frame_index)
+	{
+		const libmmd::vmd_camera_key_frame & data = vmd_camera_key_frame_array[frame_index];
+		const auto frame_at = static_cast<int32_t>(data.get_frame_at() + setting.time_offset);
+		const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
+
+		std::array<CCurve*, m_track_count> curves{ nullptr };
+
+		const auto track_objects = GetTrackObjects(object);
+		const auto track_desc_IDs = GetTrackDescIDs();
+
+		for (size_t track_index = 0; track_index < m_track_count; ++track_index)
+		{
+			auto& track_ID = track_desc_IDs[track_index];
+			const auto& track_object = track_objects[track_index];
+			CTrack* track = track_object->FindCTrack(track_ID);
+			if (!track)
+			{
+				track = CTrack::Alloc(track_object, track_ID);
+				if (!track)
+				{
+					return false;
+				}
+				track_object->InsertTrackSorted(track);
+			}
+
+			auto& curve = curves[track_index];
+			curve = track->GetCurve();
+			if (!curve)
+			{
+				return false;
+			}
+		}
+		CTrack* frame_at_track = object->FindCTrack(m_frame_at_desc);
+		if (!frame_at_track)
+		{
+			frame_at_track = CTrack::Alloc(object, m_frame_at_desc);
+			if (!frame_at_track)
+			{
+				return false;
+			}
+			object->InsertTrackSorted(frame_at_track);
+		}
+		CCurve* frame_at_curve = frame_at_track->GetCurve();
+		if (!frame_at_curve)
+		{
+			return false;
+		}
+		CKey* frame_key = frame_at_curve->AddKey(frame_at_time);
+		frame_key->SetValue(frame_at_curve, frame_at);
+
+		auto set_curve_value = [&frame_at_time, &curves](const uint8_t& curve_index, const Float& value)
+			{
+				CCurve* curve = curves[curve_index];
+				CKey* key = curve->AddKey(frame_at_time);
+				key->SetValue(curve, value);
+			};
+
+		const auto& position = data.get_position();
+		set_curve_value(POSITION_X, position[0] * setting.position_multiple);
+		set_curve_value(POSITION_Y, position[1] * setting.position_multiple);
+		set_curve_value(POSITION_Z, position[2] * setting.position_multiple);
+		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_X, frame_at, data.get_position_x_interpolator());
+		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Y, frame_at, data.get_position_y_interpolator());
+		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Z, frame_at, data.get_position_z_interpolator());
+
+		const auto& rotation = data.get_rotation();
+		set_curve_value(ROTATION_X, rotation[0]);
+		set_curve_value(ROTATION_Y, rotation[1]);
+		set_curve_value(ROTATION_Z, rotation[2]);
+		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
+		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
+		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
+
+		set_curve_value(DISTANCE, data.get_distance() * setting.position_multiple);
+		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_at, data.get_distance_interpolator());
+
+		set_curve_value(AOV, data.get_view_angle());
+		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_at, data.get_view_angle_interpolator());
+	}
+	UpdateAllInterpolator();
+
+	return true;
+}
+
+Bool MMDCamera::SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSetting::CameraExport& setting)
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 
-	const auto frame_at = static_cast<int32_t>(data.get_frame_at() + time_offset);
-	const auto frame_at_time = BaseTime(frame_at, 30.0);
-
-	CTrack* tracks[m_track_count]{ nullptr };
-	CCurve* curves[m_track_count]{ nullptr };
+	std::array<CCurve*, m_track_count> curves{ nullptr };
 
 	const auto track_objects = GetTrackObjects(object);
 	const auto track_desc_IDs = GetTrackDescIDs();
 
 	for (size_t track_index = 0; track_index < m_track_count; ++track_index)
 	{
-		auto& track = tracks[track_index];
 		auto& track_ID = track_desc_IDs[track_index];
 		const auto& track_object = track_objects[track_index];
-		track = track_object->FindCTrack(track_ID);
+		CTrack* track = track_object->FindCTrack(track_ID);
 		if (!track)
 		{
 			track = CTrack::Alloc(track_object, track_ID);
@@ -89,79 +174,120 @@ Bool MMDCamera::SetFromVMD(const libmmd::vmd_camera_key_frame& data, const Float
 			return false;
 		}
 	}
+
 	CTrack* frame_at_track = object->FindCTrack(m_frame_at_desc);
-	if(!frame_at_track)
+	if (!frame_at_track)
 	{
-		frame_at_track = CTrack::Alloc(object, m_frame_at_desc);
-		if (!frame_at_track)
-		{
-			return false;
-		}
-		object->InsertTrackSorted(frame_at_track);
+		return false;
 	}
-	CCurve* frame_at_curve = frame_at_track->GetCurve();
+	const CCurve* frame_at_curve = frame_at_track->GetCurve();
 	if (!frame_at_curve)
 	{
 		return false;
 	}
-	CKey* frame_key = frame_at_curve->AddKey(frame_at_time);
-	frame_key->SetValue(frame_at_curve, frame_at);
+	auto& vmd_camera_key_frame_array = vmd_data->mutable_vmd_camera_key_frame_array();
 
-	const auto& position = data.get_position();
+	auto not_bake_func = [this, &frame_at_curve, &vmd_camera_key_frame_array, &setting, &curves]()
+		{
+			const Int32 frame_count = frame_at_curve->GetKeyCount();
+			for (Int32 frame_index = 0; frame_index < frame_count; ++frame_index)
+			{
+				BaseTime frame_at_time = frame_at_curve->GetKey(frame_index)->GetTime();
+				const Int32 frame_at = frame_at_time.GetFrame(30.);
 
-	auto* position_x_curve = curves[POSITION_X];
-	CKey* position_x_key = position_x_curve->AddKey(frame_at_time);
-	position_x_key->SetValue(position_x_curve, maxon::SafeConvert<Float>(position[0]) * position_multiple);
-	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_X, frame_at, data.get_position_x_interpolator());
+				auto get_curve_value = [&frame_at_time, &curves](const uint8_t& curve_index)
+					{
+						const CCurve* curve = curves[curve_index];
+						if (const CKey* key = curve->FindKey(frame_at_time))
+						{
+							return key->GetValue();
+						}
+						return curve->GetValue(frame_at_time);
+					};
 
-	auto* position_y_curve = curves[POSITION_Y];
-	CKey* position_y_key = position_y_curve->AddKey(frame_at_time);
-	position_y_key->SetValue(position_y_curve, maxon::SafeConvert<Float>(position[1]) * position_multiple);
-	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Y, frame_at, data.get_position_y_interpolator());
+				libmmd::vmd_camera_key_frame& camera_key_frame = vmd_camera_key_frame_array.add();
 
-	auto* position_z_curve = curves[POSITION_Z];
-	CKey* position_z_key = position_z_curve->AddKey(frame_at_time);
-	position_z_key->SetValue(position_z_curve, maxon::SafeConvert<Float>(position[2]) * position_multiple);
-	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Z, frame_at, data.get_position_z_interpolator());
+				// frame_at
+				camera_key_frame.set_frame_at(frame_at + static_cast<uint32_t>(setting.time_offset));
 
-	const auto& rotation = data.get_rotation();
+				// position
+				if(!SaveVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_X, frame_at, camera_key_frame.mutable_position_x_interpolator()))
+					return false;
+				if (!SaveVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Y, frame_at, camera_key_frame.mutable_position_y_interpolator()))
+					return false;
+				if (!SaveVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Z, frame_at, camera_key_frame.mutable_position_z_interpolator()))
+					return false;
+				camera_key_frame.set_position({ maxon::SafeConvert<float>(get_curve_value(POSITION_X) * setting.position_multiple),
+												maxon::SafeConvert<float>(get_curve_value(POSITION_Y) * setting.position_multiple),
+												maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) });
 
-	auto* rotation_x_curve = curves[ROTATION_X];
-	CKey* rotation_x_key = rotation_x_curve->AddKey(frame_at_time);
-	rotation_x_key->SetValue(rotation_x_curve, maxon::SafeConvert<Float>(rotation[0]));
-	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
+				// rotation
+				if (!SaveVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, camera_key_frame.mutable_rotation_interpolator()))
+					return false;
+				camera_key_frame.set_rotation({ maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
+												maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
+												maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) });
 
-	auto* rotation_y_curve = curves[ROTATION_Y];
-	CKey* rotation_y_key = rotation_y_curve->AddKey(frame_at_time);
-	rotation_y_key->SetValue(rotation_y_curve, maxon::SafeConvert<Float>(rotation[1]));
-	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
+				// distance
+				if (!SaveVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_at, camera_key_frame.mutable_distance_interpolator()))
+					return false;
+				camera_key_frame.set_distance(maxon::SafeConvert<float>(get_curve_value(DISTANCE) * setting.position_multiple));
 
-	auto* rotation_z_curve = curves[ROTATION_Z];
-	CKey* rotation_z_key = rotation_z_curve->AddKey(frame_at_time);
-	rotation_z_key->SetValue(rotation_z_curve, maxon::SafeConvert<Float>(rotation[2]));
-	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
+				// view_angle
+				if (!SaveVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_at, camera_key_frame.mutable_view_angle_interpolator()))
+					return false;
+				camera_key_frame.set_view_angle(static_cast<uint32_t>(get_curve_value(AOV)));
+			}
+			return true;
+		};
 
-	auto* distance_curve = curves[DISTANCE];
-	CKey* distance_key = distance_curve->AddKey(frame_at_time);
-	distance_key->SetValue(distance_curve, maxon::SafeConvert<Float>(data.get_distance()) * position_multiple);
-	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_at, data.get_distance_interpolator());
+	auto bake_func = [this, &vmd_camera_key_frame_array, &setting, &curves]()
+		{
+			std::vector<BaseTime> time_list(m_track_count);
+			std::transform(curves.begin(), curves.end(), time_list.begin(), [](const CCurve* curve) { return curve->GetEndTime(); });
+			const auto max_time = *std::max_element(time_list.begin(), time_list.end());
+			const auto time_step = BaseTime{ 1., 30. };
+			for (BaseTime time_at = {}; time_at <= max_time; time_at = time_at + time_step)
+			{
+				auto get_curve_value = [&time_at, &curves](const uint8_t& curve_index)
+					{
+						const CCurve* curve = curves[curve_index];
+						return curve->GetValue(time_at);
+					};
+				libmmd::vmd_camera_key_frame& camera_key_frame = vmd_camera_key_frame_array.add();
 
-	auto* aov_curve = curves[AOV];
-	CKey* aov_key = aov_curve->AddKey(frame_at_time);
-	aov_key->SetValue(aov_curve, data.get_view_angle());
-	LoadInterpolator(VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_at, data.get_view_angle_interpolator());
+				// frame_at
+				camera_key_frame.set_frame_at(time_at.GetFrame(30.) + static_cast<uint32_t>(setting.time_offset));
+
+				// position
+				camera_key_frame.set_position({ maxon::SafeConvert<float>(get_curve_value(POSITION_X) * setting.position_multiple),
+												maxon::SafeConvert<float>(get_curve_value(POSITION_Y) * setting.position_multiple),
+												maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) });
+
+				// rotation
+				camera_key_frame.set_rotation({ maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
+												maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
+												maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) });
+				// distance
+				camera_key_frame.set_distance(maxon::SafeConvert<float>(get_curve_value(DISTANCE) * setting.position_multiple));
+
+				// view_angle
+				camera_key_frame.set_view_angle(static_cast<uint32_t>(get_curve_value(AOV)));
+			}
+			return true;
+		};
+	
+	if(!(setting.use_bake ? bake_func() : not_bake_func()))
+	{
+		return false;
+	}
+
+	vmd_data->set_camera(true);
 
 	return true;
 }
 
-Bool MMDCamera::SetToVMD(libmmd::vmd_camera_key_frame& data, Float position_multiple, Float time_offset)
-{
-
-	return true;
-}
-
-bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float&
-                                      fps)
+bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float& fps)
 {
 	Float key_left_x = .0, key_left_y = .0, key_right_x = .0, key_right_y = .0,
 		next_key_left_x = .0, next_key_left_y = .0, next_key_right_x = .0, next_key_right_y = .0;
