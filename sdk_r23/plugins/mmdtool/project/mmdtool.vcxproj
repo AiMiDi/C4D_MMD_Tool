@@ -84,7 +84,7 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -94,7 +94,7 @@
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>iconv_Debug.lib;yaml-cpp_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMMD_Debug_static.lib;yaml-cpp_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -110,7 +110,7 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/R20-S24;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -118,7 +118,7 @@
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>iconv.lib;yaml-cpp.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMMD_static.lib;yaml-cpp.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -209,30 +209,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_config_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_display.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_joint.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_morph.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_material.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_bone.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_model_info.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_rigid_body.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_texture.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_vertex.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\pmx_weight.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_bone.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_camera.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_light.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_morph.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_shadow.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vpd_data.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\o_mmd_camera.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
@@ -244,7 +223,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_manager.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\cmt_scene_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\CMTSceneManager.cpp" />
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -258,47 +237,22 @@
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_config_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\core\cmt_marco.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\mmd_element.hpp" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_display.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_element.hpp" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_joint.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_morph.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_material.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_bone.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_model_info.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_polygon.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_rigid_body.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_texture.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_vertex.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\pmx_weight.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_bone.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_camera.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_element.hpp" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_Ik_controller.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_light.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_model_controller.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_morph.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_shadow.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vpd_data.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\o_mmd_camera.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\o_mmd_interpolator.hpp" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\vmd_loader_data.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_interpolator.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\pch.h" />
     <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h" />
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\cmt_scene_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\utils\code_conversion_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\CMTSceneManager.h" />
     <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
-    <ClInclude Include="..\..\..\..\refactoring\utils\span_util.hpp.h" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\span_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
     <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h" />

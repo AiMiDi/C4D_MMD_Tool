@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -20,6 +20,80 @@ class CMTToolConfigManager
 {
 	typedef std::variant<bool, int, double> config_types;
 	typedef std::tuple<const char*, config_types> confin_item_type;
+
+	~CMTToolConfigManager() = default;
+	CMTToolConfigManager() = default;
+public:
+	CMTToolConfigManager(CMTToolConfigManager&&) = delete;
+	void operator =(CMTToolConfigManager&&) = delete;
+	MAXON_DISALLOW_COPY_AND_ASSIGN(CMTToolConfigManager)
+
+	/**
+	 * \brief Get ConfigManager instance.
+	 * \return ConfigManager instance.
+	 */
+	static CMTToolConfigManager& GetInstance()
+	{
+		static CMTToolConfigManager instance;
+		return instance;
+	}
+	/**
+	 * \brief Get configuration entry value. If the configuration entry does not exist, it is generated according to the default value.
+	 * \tparam T configuration entry value type.
+	 * \param id configuration entry id.
+	 * \return configuration entry value.
+	 */
+	template <class T>
+	T GetConfig(Int32 id)
+	{
+		id -= 10000;
+		assert(id >= 0 && id < k_default_config_table_size);
+		auto& [default_config_name, default_config_value] = k_default_config_table[id];
+		try
+		{
+			return m_config[default_config_name].as<T>();
+		}
+		catch (YAML::BadConversion&)
+		{
+			const T& config_value = std::get<T>(default_config_value);
+			m_config[default_config_name] = config_value;
+			return config_value;
+		}
+	}
+	/**
+	 * \brief Set configuration entry value.
+	 * \tparam T configuration entry value type.
+	 * \param id configuration entry id.
+	 * \param value configuration entry value.
+	 */
+	template <class T>
+	void SetConfig(Int32 id, const T& value)
+	{
+		id -= 10000;
+		assert(id >= 0 && id < k_default_config_table_size);
+		const auto& [default_config_name, default_config_value] = k_default_config_table[id];
+		m_config[default_config_name] = value;
+	}
+	/**
+	 * \brief Initialization dialog items by config.
+	 * \param dlg dialog to initialization.
+	 */
+	void InitDialog(GeDialog* dlg);
+	/**
+	 * \brief Set the configuration entry to the default value.
+	 * \param id configuration entry id.
+	 */
+	void InitConfig(Int32 id);
+	/**
+	 * \brief Initialization ConfigManager.
+	 */
+	void InitConfigManager();
+	/**
+	 * \brief Save the configuration file.
+	 */
+	void SaveConfig() const;
+
+private:
 	/**
 	 * \brief Configuration file path.
 	 */
@@ -30,23 +104,9 @@ class CMTToolConfigManager
 	 * \brief Configuration YAML root node.
 	 */
 	YAML::Node m_config;
-	~CMTToolConfigManager() = default;
-	CMTToolConfigManager() = default;
-public:
-	CMTToolConfigManager(CMTToolConfigManager&&) = delete;
-	void operator =(CMTToolConfigManager&&) = delete;
-	MAXON_DISALLOW_COPY_AND_ASSIGN(CMTToolConfigManager)
-		/**
-		 * \brief Get ConfigManager instance.
-		 * \return ConfigManager instance.
-		 */
-		static CMTToolConfigManager& Get()
-	{
-		static CMTToolConfigManager instance;
-		return instance;
-	}
-	inline static constexpr int k_config_id_begin = DIG_CMT_TOOL_CAMERA_IMPORT_SIZE;
-	inline static constexpr int k_config_id_end = DIG_CMT_TOOL_MODLE_IMPORT_ENGLISH_CHECK;
+
+	inline static constexpr int k_config_id_begin = DLG_CMT_TOOL_CAMERA_IMPORT_SIZE;
+	inline static constexpr int k_config_id_end = DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK;
 	inline static constexpr int k_default_config_table_size = k_config_id_end - k_config_id_begin + 1;
 	/**
 	* \brief Configuration entry initial value table.
@@ -76,73 +136,20 @@ public:
 		{{"DIG_CMT_TOOL_MOTION_EXPORT_MORPH"},{true}},
 		{{"DIG_CMT_TOOL_MOTION_EXPORT_MODEL_INFO"},{true}},
 		{{"DIG_CMT_TOOL_MOTION_EXPORT_USE_BAKE"},{0}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_SIZE"},{8.5f}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_POLYGON"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_NORMAL"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_UV"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_MATERIAL"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_BONE"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_WEIGHTS"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_IK"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_INHERIT"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_EXPRESSION"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_MULTIPART"},{true}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_ENGLISH"},{false}},
-		{{"DIG_CMT_TOOL_MODLE_IMPORT_ENGLISH_CHECK"},{false}}
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_SIZE"},{8.5f}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_POLYGON"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_NORMAL"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_UV"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_MATERIAL"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_BONE"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_IK"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_INHERIT"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_EXPRESSION"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_MULTIPART"},{true}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH"},{false}},
+		{{"DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK"},{false}}
 	};
-	/**
-	 * \brief Get configuration entry value. If the configuration entry does not exist, it is generated according to the default value.
-	 * \tparam T configuration entry value type.
-	 * \param id configuration entry id.
-	 * \return configuration entry value.
-	 */
-	template <class T>
-	static T GetConfig(Int32 id)
-	{
-		id -= 10000;
-		assert(id >= 0 && id < k_default_config_table_size);
-		auto& [default_config_name, default_config_value] = k_default_config_table[id];
-		try {
-			return Get().m_config[default_config_name].as<T>();
-		}
-		catch (YAML::BadConversion&) {
-			const T& config_value = std::get<T>(default_config_value);
-			Get().m_config[default_config_name] = config_value;
-			return config_value;
-		}
-	}
-	/**
-	 * \brief Set configuration entry value.
-	 * \tparam T configuration entry value type.
-	 * \param id configuration entry id.
-	 * \param value configuration entry value.
-	 */
-	template <class T>
-	static void SetConfig(Int32 id, const T& value)
-	{
-		id -= 10000;
-		assert(id >= 0 && id < k_default_config_table_size);
-		const auto& [default_config_name, default_config_value] = k_default_config_table[id];
-		Get().m_config[default_config_name] = value;
-	}
-	/**
-	 * \brief Initialization dialog items by config.
-	 * \param dlg dialog to initialization.
-	 */
-	static void InitDialog(GeDialog* dlg);
-	/**
-	 * \brief Set the configuration entry to the default value.
-	 * \param id configuration entry id.
-	 */
-	static void InitConfig(Int32 id);
-	/**
-	 * \brief Initialization ConfigManager.
-	 */
-	static void InitConfigManager();
-	/**
-	 * \brief Save the configuration file.
-	 */
-	static void SaveConfig();
 };
 
 #endif //_CMT_TOOL_CONFIG_MANAGER_H_

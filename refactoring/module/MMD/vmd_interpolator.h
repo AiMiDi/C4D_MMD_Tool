@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -15,14 +15,13 @@ Description:	MMD style animation interpolator
 /**
  * \brief MMD style animation interpolator
  */
-class VMDInterpolator
+class VMDInterpolator final
 {
 protected:
 	UChar m_ax = 20U;
 	UChar m_ay = 20U;
 	UChar m_bx = 107U;
 	UChar m_by = 107U;
-	Bool  m_isLinear = true;
 public:
 	/**
 	 * \brief  Constructor function
@@ -93,61 +92,19 @@ public:
 	*/
 	void Reset();
 	/**
-	 * \brief Is the interpolator is linear
-	 * \return TRUE is linear, other is FALSE
-	 */
-	[[nodiscard]] Bool IsLinear() const;
-	/**
 	 * \brief Hash function
 	 * \return Hash code
 	 */
 	[[nodiscard]] maxon::HashInt GetHashCode() const;
 	/**
-	 * \brief Read from a vmd file
-	 * \param file vmd file
-	 * \return Successful TRUE, other FALSE.
+	 * \brief Load from a vmd interpolator
+	 * \param interpolator vmd interpolator
 	 */
-	virtual Bool Read(BaseFile* file) = 0;
+	void Load(const libmmd::vmd_interpolator& interpolator);
 	/**
-	 * \brief Write to vmd file
-	 * \param file vmd file
-	 * \return Successful TRUE, other FALSE.
+	 * \brief Save to vmd interpolator
+	 * \param interpolator vmd interpolator
 	 */
-	virtual Bool Write(BaseFile* file) const = 0;
+	void Save(libmmd::vmd_interpolator& interpolator) const;
 };
-
-class VMDBoneInterpolator final : public VMDInterpolator
-{
-public:
-	/**
-	* \brief Read from a vmd file
-	* \param file vmd file
-	* \return Successful TRUE, other FALSE.
-	*/
-	Bool Read(BaseFile* file) override;
-	/**
-	* \brief Write to vmd file
-	* \param file vmd file
-	* \return Successful TRUE, other FALSE.
-	*/
-	Bool Write(BaseFile* file) const override;
-};
-
-class VMDCameraInterpolator final : public VMDInterpolator
-{
-public:
-	/**
-	* \brief Read from a vmd file
-	* \param file vmd file
-	* \return Successful TRUE, other FALSE.
-	*/
-	Bool Read(BaseFile* file) override;
-	/**
-	* \brief Write to vmd file
-	* \param file vmd file
-	* \return Successful TRUE, other FALSE.
-	*/
-	Bool Write(BaseFile* file) const override;
-};
-
 #endif //!VMD_INTERPOLATOR_H_

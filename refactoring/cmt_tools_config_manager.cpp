@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -50,19 +50,19 @@ void CMTToolConfigManager::InitConfig(Int32 id)
 		// bool
 	case 0:
 	{
-		Get().m_config[default_config_name] = std::get<bool>(default_config_value);
+		m_config[default_config_name] = std::get<bool>(default_config_value);
 		break;
 	}
 	// int
 	case 1:
 	{
-		Get().m_config[default_config_name] = std::get<int>(default_config_value);
+		m_config[default_config_name] = std::get<int>(default_config_value);
 		break;
 	}
 	// float
 	case 2:
 	{
-		Get().m_config[default_config_name] = std::get<double>(default_config_value);
+		m_config[default_config_name] = std::get<double>(default_config_value);
 		break;
 	}
 	default: break;
@@ -71,9 +71,9 @@ void CMTToolConfigManager::InitConfig(Int32 id)
 
 void CMTToolConfigManager::InitConfigManager()
 {
-	auto& config = Get().m_config;
+	auto& config = m_config;
 	try {
-		config = YAML::LoadFile(Get().m_config_path);
+		config = YAML::LoadFile(m_config_path);
 	}
 	catch (YAML::BadFile&) {
 		ApplicationOutput("Failed to load the YAML file!"_s);
@@ -86,11 +86,11 @@ void CMTToolConfigManager::InitConfigManager()
 	}
 }
 
-void CMTToolConfigManager::SaveConfig()
+void CMTToolConfigManager::SaveConfig() const
 {
-	std::ofstream fout(Get().m_config_path);
+	std::ofstream fout(m_config_path);
 	if (fout.is_open()) {
-		fout << Get().m_config;
+		fout << m_config;
 	}
 	fout.close();
 }

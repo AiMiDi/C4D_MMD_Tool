@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 // std
 #include <optional>
@@ -7,6 +7,8 @@
 #include <tuple>
 #include <vector>
 #include <cassert>
+#include <memory>
+#include <mutex>
 
 // C4D
 #include <c4d.h>
@@ -16,11 +18,13 @@
 #include <c4d_string.h>
 #include "maxon/pointerarray.h"
 #include "maxon/sortedarray.h"
+#include "c4d_baselinkarray.h"
 #include "tprotection.h"
 
 // The third party
 #include "yaml-cpp/yaml.h"
-#include "iconv.h"
+#include "libMMD/libmmd_assets.h"
+#include "libMMD/libmmd_conversion.h"
 
 // symbols
 #include "c4d_symbols.h"
@@ -29,8 +33,6 @@
 // utils
 #include "utils/time_util.hpp"
 #include "utils/images_user_area_util.hpp"
-#include "utils/code_conversion_util.hpp"
 #include "utils/filename_util.hpp"
 
 #include "module/core/cmt_marco.h"
-

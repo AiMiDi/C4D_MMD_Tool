@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			walter white
@@ -13,7 +13,7 @@ Description:	plugin load resource
 
 /*------------Plugin ID------------*/
 //	GUI
-#define ID_MMD_TOOL 1056563
+#define ID_COMMAND_CMT_TOOL 1056563
 
 //	Entity
 #define ID_O_MMD_MODEL		1056724
@@ -29,7 +29,7 @@ Description:	plugin load resource
 #define ID_O_MMD_JOINT_ROOT	1057946
 
 //	Util
-#define ID_S_MMD_CAM_DRAW	1057017
+constexpr auto ID_SCENE_HOOK_CMT_SCENE_MANAGER = 1057017;
 #define ID_L_MMD_VMD_IMPORT	1057489
 #define ID_E_MMD_VMD_EXPORT	1057490
 

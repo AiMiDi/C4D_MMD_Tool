@@ -12,7 +12,6 @@ Description:	Entrance of the plugin
 
 #include "cmt_tools_config_manager.h"
 #include "register_entity.h"
-#include "module/MMD/vmd.h"
 
 Bool PluginStart()
 {
@@ -20,13 +19,13 @@ Bool PluginStart()
 	{
 		return FALSE;
 	}
-	CMTToolConfigManager::InitConfigManager();
+	CMTToolConfigManager::GetInstance().InitConfigManager();
 	return TRUE;
 }
 
 void PluginEnd()
 {
-	CMTToolConfigManager::SaveConfig();
+	CMTToolConfigManager::GetInstance().SaveConfig();
 }
 
 Bool PluginMessage(Int32 id, void* data)

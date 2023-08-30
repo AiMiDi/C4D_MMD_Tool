@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -11,41 +11,34 @@ Description:	vmd data loader dialog
 #include "pch.h"
 #include "vmd_loader_camera_dialog.h"
 
+#include "cmt_tools_manager.h"
+#include "cmt_tools_setting.h"
+
+VMDLoaderCameraDialog::~VMDLoaderCameraDialog()
+{
+	DeleteObj(m_images);
+}
+
 Bool VMDLoaderCameraDialog::CreateLayout()
 {
-	SetTitle(GeLoadString(DIG_CMT_TOOL_TITLE));
-	m_images = NewObj(ImagesUserArea, "mmd_tool_title.png"_s, 300, 78).GetValue();
-	C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(78));
-	if (userAreaGadget != nullptr)
-		this->AttachUserArea(*m_images, userAreaGadget);
-	GroupBegin(1001, BFH_CENTER, 1, 2, GeLoadString(IDS_CMT_TOOL_CAMERA_IMPORT_GRP), 0, 0, 0);
-	GroupBorder(BORDER_GROUP_IN);
-	GroupBorderSpace(5, 5, 5, 10);
-	GroupSpace(2, 5);
+	// call default CreateLayout()
+	if (!GeDialog::CreateLayout())
+		return false;
 
-	GroupBegin(1002, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
-	AddStaticText(100001, BFH_LEFT, 100, 10, GeLoadString(IDS_CMT_TOOL_SIZE), BORDER_NONE);
-	AddEditNumberArrows(100002, BFH_LEFT, 250, 10);
-	GroupEnd();
+	// load dialog from resource file
+	if (!LoadDialogResource(DLG_CMT_VMD_IMPORT, nullptr, 0))
+		return false;
 
-	GroupBegin(1003, BFH_LEFT, 2, 1, ""_s, 0, 350, 10);
-	AddStaticText(100003, BFH_LEFT, 100, 10, GeLoadString(IDS_CMT_TOOL_OFFSET), BORDER_NONE);
-	AddEditNumberArrows(100004, BFH_LEFT, 250, 10);
-	GroupEnd();
+	m_images = NewObj(ImagesUserArea, "mmd_tool_title.png"_s, 300, 95).GetValue();
+	this->AttachUserArea((*m_images), DLG_CMT_TOOL_IMG);
 
-
-	GroupBegin(1004, BFH_CENTER, 2, 1, ""_s, 0, 350, 10);
-	GroupSpace(50, 0);
-	AddButton(100005, BFH_CENTER, 100, 30, GeLoadString(IDS_CMT_TOOL_IMPORT_BUTTON));
-	AddButton(100006, BFH_CENTER, 100, 30, GeLoadString(IDS_MSG_RENAME_CANCEL));
-	GroupEnd();
 	return TRUE;
 }
 
 Bool VMDLoaderCameraDialog::InitValues()
 {
-	SetFloat(100002, 8.5);
-	SetFloat(100004, 0);
+	SetFloat(DLG_CMT_TOOL_CAMERA_IMPORT_SIZE, 8.5);
+	SetFloat(DLG_CMT_TOOL_CAMERA_IMPORT_OFFSET, 0);
 	return TRUE;
 }
 
@@ -56,22 +49,17 @@ Bool VMDLoaderCameraDialog::Command(Int32 id, const BaseContainer& msg)
 	};
 	switch (id)
 	{
-	case 100005:
+	case DLG_CMT_TOOL_CAMERA_IMPORT_BUTTON:
 	{
-		/*maxon::UniqueRef<VMDAnimation>	mmd_animation = NewObj(VMDAnimation)iferr_return;
-		mmd_animation->m_camera_import_settings.fn = m_filename;
-		mmd_animation->m_camera_import_settings.doc = m_document;
-		GetFloat(100002, mmd_animation->m_camera_import_settings.position_multiple);
-		GetFloat(100004, mmd_animation->m_camera_import_settings.time_offset);
-
-		iferr(mmd_animation ->FromFileImportCamera())
-		{
-			return FALSE;
-		}*/
+		CMTToolsSetting::CameraImport setting(m_document);
+		setting.fn = m_filename;
+		GetFloat(DLG_CMT_TOOL_CAMERA_IMPORT_SIZE, setting.position_multiple);
+		GetFloat(DLG_CMT_TOOL_CAMERA_IMPORT_OFFSET, setting.time_offset);
+		CMTToolsManager::ImportVMDCamera(setting);
 		Close();
 		break;
 	}
-	case 100006:
+	case DLG_CMT_TOOL_CAMERA_CANCEL_BUTTON:
 	{
 		Close();
 		break;

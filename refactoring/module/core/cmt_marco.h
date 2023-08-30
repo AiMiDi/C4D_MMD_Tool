@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #ifndef CMT_DISALLOW_COPY_AND_ASSIGN_BODY
 //----------------------------------------------------------------------------------------
@@ -39,15 +39,28 @@
 		private:
 #endif
 
+#ifndef GENERATE_MMD_CLASS_BODY
+//----------------------------------------------------------------------------------------
+/// This statement needs to be used at the beginning of any class that uses the MMD data interface
+/// An example:
+/// @code
+/// class MMDClass
+/// {
+///   GENERATE_MMD_CLASS_BODY(MyClass);
+///   ...
+/// };
+/// @endcode
+//----------------------------------------------------------------------------------------
+#define	GENERATE_MMD_CLASS_BODY(CLASSTYPE, DATATYPE)				\
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(CLASSTYPE) 					\
+	CMT_DEFAULT_MOVE_BODY(CLASSTYPE)								\
+	public:															\
+	using data_type = DATATYPE;										\
+	[[nodiscard]] const std::unique_ptr<data_type>& GetData() const	\
+	{																\
+		return m_data;												\
+	}																\
+	private:														\
+	std::unique_ptr<data_type> m_data;
+#endif
 
-#define	GENERATE_MMD_CLASS_BODY(CLASSTYPE, DATATYPE)	\
-	public:												\
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(CLASSTYPE) 		\
-	CMT_DEFAULT_MOVE_BODY(CLASSTYPE)					\
-	using data_type = DATATYPE;							\
-	inline data_type* GetData()	const					\
-	{													\
-		return m_data.get();							\
-	}													\
-	private:											\
-	std::unique_ptr<data_type> m_data;				

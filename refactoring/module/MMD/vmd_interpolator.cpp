@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
 Author:			Aimidi
@@ -12,10 +12,7 @@ Description:	MMD style animation interpolator
 #include "vmd_interpolator.h"
 
 VMDInterpolator::VMDInterpolator(const UChar ax, const UChar ay, const UChar bx, const UChar by):
-	m_ax(ax), m_ay(ay), m_bx(bx), m_by(by)
-{
-	m_isLinear = m_ax == m_ay && m_bx == m_by;
-}
+	m_ax(ax), m_ay(ay), m_bx(bx), m_by(by){}
 
 VMDInterpolator::VMDInterpolator(VMDInterpolator&& src) noexcept
 {
@@ -34,7 +31,7 @@ VMDInterpolator& VMDInterpolator::operator=(VMDInterpolator&& src) noexcept
 
 BaseTime VMDInterpolator::GetTimeRight() const
 {
-	return BaseTime{ static_cast<Float>(m_ax) / 127.0, 127.0 };
+	return BaseTime{ static_cast<Float>(m_ax), 127.0 };
 }
 
 Float VMDInterpolator::GetValueRight() const
@@ -44,12 +41,12 @@ Float VMDInterpolator::GetValueRight() const
 
 BaseTime VMDInterpolator::GetTimeLeft() const
 {
-	return BaseTime{ static_cast<Float>(m_bx - 127) / 127.0, 127.0 };
+	return BaseTime{ static_cast<Float>(m_bx - 127), 127.0 };
 }
 
 Float VMDInterpolator::GetValueLeft() const
 {
-	return static_cast<Float>(m_by - 127)/127.0;
+	return static_cast<Float>(m_by - 127) / 127.0;
 }
 
 Vector VMDInterpolator::GetTangentRight() const
@@ -64,10 +61,12 @@ Vector VMDInterpolator::GetTangentLeft() const
 
 void VMDInterpolator::Set(const SplineData* spline)
 {
-	m_ax = maxon::SafeConvert<UChar>(spline->GetKnot(0)->vTangentRight.x);
-	m_ay = maxon::SafeConvert<UChar>(spline->GetKnot(0)->vTangentRight.y);
-	m_bx = 127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.x);
-	m_by = 127U + maxon::SafeConvert<UChar>(spline->GetKnot(spline->GetKnotCount() - 1)->vTangentLeft.y);
+	const auto* knot_a = spline->GetKnot(0);
+	const auto* knot_b = spline->GetKnot(spline->GetKnotCount() - 1);
+	m_ax = maxon::SafeConvert<UChar>(knot_a->vTangentRight.x);
+	m_ay = maxon::SafeConvert<UChar>(knot_a->vTangentRight.y);
+	m_bx = 127U - maxon::SafeConvert<UChar>(-knot_b->vTangentLeft.x);
+	m_by = 127U - maxon::SafeConvert<UChar>(-knot_b->vTangentLeft.y);
 }
 
 void VMDInterpolator::Set(const UChar& ax, const UChar& ay, const UChar& bx, const UChar& by)
@@ -76,7 +75,6 @@ void VMDInterpolator::Set(const UChar& ax, const UChar& ay, const UChar& bx, con
 	m_ay = ay;
 	m_bx = bx;
 	m_by = by;
-	m_isLinear = m_ax == m_ay && m_bx == m_by;
 }
 
 void VMDInterpolator::Reset()
@@ -84,93 +82,23 @@ void VMDInterpolator::Reset()
 	Set();
 }
 
-Bool VMDInterpolator::IsLinear() const
-{
-	return m_isLinear;
-}
-
 maxon::HashInt VMDInterpolator::GetHashCode() const
 {
 	return MAXON_HASHCODE(this->m_ax, this->m_ay, this->m_bx, this->m_by);
 }
 
-Bool VMDBoneInterpolator::Read(BaseFile* const file)
+void VMDInterpolator::Load(const libmmd::vmd_interpolator& interpolator)
 {
-	if (!file->ReadUChar(&this->m_ax))
-		return false;
-	file->Seek(3);
-	if (!file->ReadUChar(&this->m_ay))
-		return false;
-	file->Seek(3);
-	if (!file->ReadUChar(&this->m_bx))
-		return false;
-	file->Seek(3);
-	if (!file->ReadUChar(&this->m_by))
-		return false;
-	file->Seek(3);
-	m_isLinear = m_ax == m_ay && m_bx == m_by;
-	return true;
+	Set(interpolator.get_ax(),
+		interpolator.get_ay(),
+		interpolator.get_bx(),
+		interpolator.get_by());
 }
 
-Bool VMDBoneInterpolator::Write(BaseFile* const file) const
+void VMDInterpolator::Save(libmmd::vmd_interpolator& interpolator) const
 {
-	if (!file->WriteUChar(m_ax))
-		return false;
-	if (!file->WriteUChar(m_ax))
-		return false;
-	if (!file->WriteUChar(m_ax))
-		return false;
-	if (!file->WriteUChar(m_ax))
-		return false;
-	if (!file->WriteUChar(m_ay))
-		return false;
-	if (!file->WriteUChar(m_ay))
-		return false;
-	if (!file->WriteUChar(m_ay))
-		return false;
-	if (!file->WriteUChar(m_ay))
-		return false;
-	if (!file->WriteUChar(m_bx))
-		return false;
-	if (!file->WriteUChar(m_bx))
-		return false;
-	if (!file->WriteUChar(m_bx))
-		return false;
-	if (!file->WriteUChar(m_bx))
-		return false;
-	if (!file->WriteUChar(m_by))
-		return false;
-	if (!file->WriteUChar(m_by))
-		return false;
-	if (!file->WriteUChar(m_by))
-		return false;
-	if (!file->WriteUChar(m_by))
-		return false;
-	return true;
-}
-
-Bool VMDCameraInterpolator::Read(BaseFile* const file)
-{
-	UInt32 tmp = 0;
-	if (!file->ReadUInt32(&tmp))
-		return false;
-	this->m_ax = static_cast<UChar>(((tmp & 0xFF) ^ 0x80) - 0x80);
-	this->m_bx = static_cast<UChar>(((tmp & 0xFF00) >> 8 ^ 0x80) - 0x80);
-	this->m_ay = static_cast<UChar>(((tmp & 0xFF0000) >> 16 ^ 0x80) - 0x80);
-	this->m_by = static_cast<UChar>(((tmp & 0xFF000000) >> 24 ^ 0x80) - 0x80);
-	m_isLinear = m_ax == m_ay && m_bx == m_by;
-	return true;
-}
-
-Bool VMDCameraInterpolator::Write(BaseFile* const file) const
-{
-	if (!file->WriteUChar(m_ax))
-		return false;
-	if (!file->WriteUChar(m_bx))
-		return false;
-	if (!file->WriteUChar(m_ay))
-		return false;
-	if (!file->WriteUChar(m_by))
-		return false;
-	return true;
+	interpolator.set_ax(m_ax);
+	interpolator.set_ay(m_ay);
+	interpolator.set_bx(m_bx);
+	interpolator.set_by(m_by);
 }

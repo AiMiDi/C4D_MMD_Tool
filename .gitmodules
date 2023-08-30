@@ -4,12 +4,9 @@
 [submodule "dependency/bullet3"]
 	path = dependency/bullet3
 	url = https://github.com/bulletphysics/bullet3.git
-[submodule "dependency/libiconv"]
-	path = dependency/libiconv
-	url = https://github.com/AiMiDi/libiconv_cmake.git
 [submodule "setup"]
 	path = setup
 	url = https://github.com/AiMiDi/C4D_Plugin_Setup.git
-[submodule "dependency/span"]
-	path = dependency/span
-	url = https://github.com/tcbrindle/span.git
+[submodule "dependency/libMMD"]
+	path = dependency/libMMD
+	url = https://github.com/AiMiDi/libMMD.git
