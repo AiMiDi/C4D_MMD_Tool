@@ -65,7 +65,7 @@ public:
 	Bool SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSetting::CameraExport& setting);
 
 	// Convert a normal camera to a MMD camera
-	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
+	Bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
 	// Generating function
 	static NodeData* Alloc()
@@ -74,8 +74,7 @@ public:
 	}
 
 private:
-	static bool ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count,
-		const Float& fps);
+	bool ConversionCameraCurve(CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float& fps);
 
 	static TrackDescIDArray GetTrackDescIDsImpl();
 

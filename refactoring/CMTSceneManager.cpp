@@ -89,7 +89,15 @@ BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& 
 
 BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
 {
-	BaseObject* vmd_camera = MMDCamera::ConversionCamera(setting);
+	BaseObject* vmd_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
+	if(!vmd_camera)
+		return nullptr;
+	if(!vmd_camera->GetNodeData<MMDCamera>()->ConversionCamera(setting))
+	{
+		BaseObject::Free(vmd_camera);
+		return nullptr;
+	}
+	setting.doc->InsertObject(vmd_camera, nullptr, nullptr);
 	EventAdd();
 	setting.doc->SetTime(BaseTime{ 1.0 });
 	setting.doc->SetTime(BaseTime{});

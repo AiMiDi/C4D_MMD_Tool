@@ -117,29 +117,30 @@ Bool MMDCamera::LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTTo
 			};
 
 		const auto& position = data.get_position();
-		set_curve_value(POSITION_X, position[0] * setting.position_multiple);
-		set_curve_value(POSITION_Y, position[1] * setting.position_multiple);
-		set_curve_value(POSITION_Z, position[2] * setting.position_multiple);
+		set_curve_value(POSITION_X, maxon::SafeConvert<Float>(position[0]) * setting.position_multiple);
+		set_curve_value(POSITION_Y, maxon::SafeConvert<Float>(position[1]) * setting.position_multiple);
+		set_curve_value(POSITION_Z, maxon::SafeConvert<Float>(position[2]) * setting.position_multiple);
 		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_X, frame_at, data.get_position_x_interpolator());
 		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Y, frame_at, data.get_position_y_interpolator());
 		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Z, frame_at, data.get_position_z_interpolator());
 
 		const auto& rotation = data.get_rotation();
-		set_curve_value(ROTATION_X, rotation[0]);
-		set_curve_value(ROTATION_Y, rotation[1]);
-		set_curve_value(ROTATION_Z, rotation[2]);
+		set_curve_value(ROTATION_X, maxon::SafeConvert<Float>(rotation[0]));
+		set_curve_value(ROTATION_Y, maxon::SafeConvert<Float>(rotation[1]));
+		set_curve_value(ROTATION_Z, maxon::SafeConvert<Float>(rotation[2]));
 		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
 		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
 		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
 
-		set_curve_value(DISTANCE, data.get_distance() * setting.position_multiple);
+		set_curve_value(DISTANCE, maxon::SafeConvert<Float>(data.get_distance()) * setting.position_multiple);
 		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_at, data.get_distance_interpolator());
 
 		set_curve_value(AOV, data.get_view_angle());
 		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_at, data.get_view_angle_interpolator());
 	}
-	UpdateAllInterpolator();
-
+	if (!UpdateAllInterpolator())
+		return false;
+	EventAdd();
 	return true;
 }
 
@@ -287,7 +288,7 @@ Bool MMDCamera::SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSet
 	return true;
 }
 
-bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float& fps)
+bool MMDCamera::ConversionCameraCurve(CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float& fps)
 {
 	Float key_left_x = .0, key_left_y = .0, key_right_x = .0, key_right_y = .0,
 		next_key_left_x = .0, next_key_left_y = .0, next_key_right_x = .0, next_key_right_y = .0;
@@ -314,12 +315,12 @@ bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_
 			src_curve_position->GetTangents(0, &key_left_y, &key_right_y, &key_left_x, &key_right_x);
 			src_curve_position->GetTangents(1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
 
-			if (!camera_data->SetInterpolator(curve_type, now_key_time.GetFrame(fps), fps,
+			if (!SetInterpolator(curve_type, now_key_time.GetFrame(fps), fps,
 				maxon::SafeConvert<UChar>(maxon::Abs(key_right_x / time_of_two_frames.Get()) * 127),
 				maxon::SafeConvert<UChar>(maxon::Abs(key_right_y / value_of_two_frames) * 127),
-				maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x / time_of_two_frames.Get()) * 127),
-				maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y / value_of_two_frames) * 127)))
-				return true;
+				maxon::SafeConvert<UChar>(127 - maxon::Abs(next_key_left_x / time_of_two_frames.Get()) * 127),
+				maxon::SafeConvert<UChar>(127 - maxon::Abs(next_key_left_y / value_of_two_frames) * 127)))
+				return false;
 		}
 		// 循环第2到最后一个
 		for (Int32 key_index = 1; key_index < frame_count; key_index++)
@@ -339,34 +340,34 @@ bool MMDCamera::ConversionCameraCurve(MMDCamera* camera_data, CCurve* src_curve_
 			key_right_y = next_key_right_y;
 			src_curve_position->GetTangents(key_index + 1, &next_key_left_y, &next_key_right_y, &next_key_left_x, &next_key_right_x);
 
-			if (!camera_data->SetInterpolator(curve_type, now_key_time.GetFrame(fps), fps,
+			if (!SetInterpolator(curve_type, now_key_time.GetFrame(fps), fps,
 				maxon::SafeConvert<UChar>(maxon::Abs(key_right_x / time_of_two_frames.Get()) * 127),
 				maxon::SafeConvert<UChar>(maxon::Abs(key_right_y / value_of_two_frames) * 127),
-				maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_x / time_of_two_frames.Get()) * 127),
-				maxon::SafeConvert<UChar>(maxon::Abs(next_key_left_y / value_of_two_frames) * 127)))
-				return true;
+				maxon::SafeConvert<UChar>(127 - maxon::Abs(next_key_left_x / time_of_two_frames.Get()) * 127),
+				maxon::SafeConvert<UChar>(127 - maxon::Abs(next_key_left_y / value_of_two_frames) * 127)))
+				return false;
 
 		}
 		//最后一帧
-		if (!camera_data->SetInterpolator(curve_type, src_curve_position->GetKey(frame_count)->GetTime().GetFrame(fps), fps)) {
-			return true;
+		if (!SetInterpolator(curve_type, src_curve_position->GetKey(frame_count)->GetTime().GetFrame(fps), fps)) {
+			return false;
 		}
 	}
-	return false;
+	return true;
 }
 
-BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
+Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
 {
 	iferr_scope_handler{
 		MessageDialog(err.ToString(nullptr));
-		return nullptr;
+		return false;
 	};
 	/* 获取活动文档 */
 	if (setting.doc == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + "error");
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + "error");
-		return nullptr;
+		return false;
 	}
 	const Float fps = setting.doc->GetFps();
 
@@ -380,7 +381,7 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 		{
 			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 			MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
-			return nullptr;
+			return false;
 		}
 	}
 	else { /* 否则使用选择参数 */
@@ -392,32 +393,14 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_CONVER_TYPE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_CONVER_TYPE_ERR));
-		return nullptr;
-	}
-
-	/* 创建转换目标对象 */
-	BaseObject* VMD_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
-	if (VMD_camera == nullptr)
-	{
-		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		return nullptr;
+		return false;
 	}
 
 	/* 创建要转化摄像机的副本，防止操作破坏原摄像机对象的数据 */
 	auto* select_object_clone = reinterpret_cast<BaseObject*>(select_object->GetClone(COPYFLAGS::NO_HIERARCHY, nullptr));
-	VMD_camera->SetName(select_object_clone->GetName());
-	setting.doc->InsertObject(VMD_camera, nullptr, nullptr);
+	reinterpret_cast<BaseObject*>(Get())->SetName(select_object_clone->GetName());
 
-	/* 获取目标对象内部的数据 */
-	auto* VMD_camera_data = VMD_camera->GetNodeData<MMDCamera>();
-	if (!VMD_camera_data->CameraInit())
-	{
-		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		return nullptr;
-	}
-	BaseObject* VMD_camera_distance = VMD_camera_data->m_camera;
+	CameraInit();
 
 	default_distance = setting.distance;
 
@@ -447,32 +430,35 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 		DescID(CAMERAOBJECT_APERTURE)
 	};
 
-	CTrack* src_tracks[src_track_count]{ nullptr };
-	CCurve* src_curves[src_track_count]{ nullptr };
+	std::array<CTrack*, src_track_count> src_tracks{ nullptr };
+	std::array<CCurve*, src_track_count> src_curves{ nullptr };
 
 	// 所有参数的全部关键帧所在帧数组
 	maxon::HashSet<HashTime> frame_set;
 
 	// Init src tracks info.
-	for (int track_index = 0; track_index < src_track_count; ++track_index)
+	for (size_t track_index = 0; track_index < src_tracks.size(); ++track_index)
 	{
 		auto& src_track = src_tracks[track_index];
 		const auto& src_track_desc_ID = src_track_desc_IDs[track_index];
 
 		// 确保每个参数都注册了CTrack，没有则创建一个
 		src_track = select_object_clone->FindCTrack(src_track_desc_ID);
+		bool is_alloc_track = false;
 		// 没有则生成轨道
-		if (src_track)
-		{
-			src_track = CTrack::Alloc(select_object_clone, src_track_desc_ID);
-			select_object_clone->InsertTrackSorted(src_track);
-		}
-		// 确保生成成功
 		if (!src_track)
 		{
-			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			return nullptr;
+			is_alloc_track = true;
+			src_track = CTrack::Alloc(select_object_clone, src_track_desc_ID);
+			select_object_clone->InsertTrackSorted(src_track);
+
+			// 确保生成成功
+			if (!src_track)
+			{
+				GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+				return false;
+			}
 		}
 
 		// 获取曲线对象
@@ -482,12 +468,14 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 		// 确保获取成功
 		if (!src_curve)
 		{
-			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			return nullptr;
+			return false;
 		}
-		// 添加默认值
-		src_curve->AddKey(BaseTime{})->SetValue(src_curve, src_key_default_value[track_index]);
+
+		if (is_alloc_track)
+		{
+			// 添加默认值
+			src_curve->AddKey(BaseTime{})->SetValue(src_curve, src_key_default_value[track_index]);
+		}
 
 		const Int32 key_count = src_curve->GetKeyCount();
 		for (Int32 key_index = 0; key_index < key_count; key_index++)
@@ -510,18 +498,19 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 
 	constexpr auto dst_track_count = m_track_count;
 
-	const auto& dst_track_desc_IDs = GetTrackDescIDsImpl();
+	const auto dst_track_desc_IDs = GetTrackDescIDsImpl();
+	const auto dst_objects = GetTrackObjects(Get());
 
-	CTrack* dst_tracks[dst_track_count]{ nullptr };
-	CCurve* dst_curves[dst_track_count]{ nullptr };
+	std::array<CTrack*, dst_track_count> dst_tracks{ nullptr };
+	std::array<CCurve*, dst_track_count> dst_curves{ nullptr };
 
-	for (size_t track_index = 0; track_index < dst_track_count; ++track_index)
+	for (size_t track_index = 0; track_index < dst_tracks.size(); ++track_index)
 	{
 		auto& dst_track = dst_tracks[track_index];
 		const auto& dst_track_desc_ID = dst_track_desc_IDs[track_index];
 
 		// 为目标对象生成动画轨迹
-		auto* dst_object = track_index < 6 ? VMD_camera : VMD_camera_distance;
+		auto* dst_object = dst_objects[track_index];
 		dst_track = CTrack::Alloc(dst_object, dst_track_desc_ID);
 
 		// 确保生成成功
@@ -529,7 +518,7 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 		{
 			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 			MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			return nullptr;
+			return false;
 		}
 
 		// 将生成的动画轨迹插入目标对象
@@ -542,15 +531,13 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 		// 确保获取成功
 		if (!dst_curve)
 		{
-			GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-			return nullptr;
+			return false;
 		}
 
 		// 转换移动和旋转写入对象，添加关键帧数据
 		if (track_index != DISTANCE)
 		{
-			const auto& src_curve = src_curves[track_index];
+			const auto& src_curve = src_curves[track_index > DISTANCE ? track_index - 1 : track_index];
 			for (const BaseTime& frame_time : frame_set)
 			{
 				dst_curve->AddKey(frame_time)->SetValue(dst_curve, src_curve->FindKey(frame_time)->GetValue());
@@ -558,21 +545,21 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 
 			if (track_index <= POSITION_Z)
 			{
-				if (!ConversionCameraCurve(VMD_camera_data, src_curve, track_index, frame_count, fps))
-					return nullptr;
+				if (!ConversionCameraCurve(src_curve, track_index, frame_count, fps))
+					return false;
 			}
 			// rotation_curve
 			else if (track_index <= ROTATION_Z)
 			{
 				// 根据setting使用对应旋转曲线
-				if (!ConversionCameraCurve(VMD_camera_data, src_curves[3 + setting.use_rotation], track_index, frame_count, fps))
-					return nullptr;
+				if (!ConversionCameraCurve(src_curves[ROTATION_X + setting.use_rotation], track_index, frame_count, fps))
+					return false;
 			}
 			// aov_curve
 			else if (track_index == AOV)
 			{
-				if (!ConversionCameraCurve(VMD_camera_data, src_curve, VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_count, fps))
-					return nullptr;
+				if (!ConversionCameraCurve(src_curve, VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_count, fps))
+					return false;
 			}
 
 		}
@@ -584,18 +571,15 @@ BaseObject* MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion&
 				dst_curve->AddKey(frame_time)->SetValue(dst_curve, setting.distance);
 
 				// 距离没有曲线，顺便在循环里设置线性曲线
-				if (!VMD_camera_data->SetInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_time.GetFrame(fps), fps))
-					return nullptr;
+				if (!SetInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_time.GetFrame(fps), fps))
+					return false;
 			}
 		}
 	}
-	
+	if (!UpdateAllInterpolator())
+		return false;
 	EventAdd();
-	if (!VMD_camera_data->UpdateAllInterpolator())
-		return nullptr;
-	setting.doc->SetTime(BaseTime(1));
-	setting.doc->SetTime(BaseTime());
-	return VMD_camera;
+	return true;
 }
 
 Bool MMDCamera::Init(GeListNode* node)
@@ -666,6 +650,7 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 		case VMD_CAM_OBJ_UPDATE_CURVE_BUTTON:
 		{
 			UpdateAllInterpolator(node);
+			EventAdd();
 			break;
 		}
 		case VMD_CAM_OBJ_DELETE_CURVE_BUTTON:
