@@ -16,7 +16,7 @@ namespace CMTToolsManager
 {
 	std::shared_ptr<libmmd::vmd_animation> make_vmd_animation()
 	{
-		return std::shared_ptr<libmmd::vmd_animation>{ libmmd::create_vmd_animation(), libmmd::delete_vmd_animation };
+		return std::shared_ptr<libmmd::vmd_animation>{ libmmd::vmd_animation::create(), libmmd::vmd_animation::free };
 	}
 
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
@@ -28,7 +28,7 @@ namespace CMTToolsManager
 		{
 			return false;
 		}
-		if (!vmd_animation->read_from_file(vmd_utf8_filename))
+		if (!vmd_animation->read_from_file_u8(vmd_utf8_filename))
 		{
 			return false;
 		}
@@ -66,7 +66,7 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		if(!vmd_animation->write_to_file(vmd_utf8_filename))
+		if(!vmd_animation->write_to_file_u8(vmd_utf8_filename))
 		{
 			return false;
 		}
