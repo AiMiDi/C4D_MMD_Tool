@@ -1,5 +1,5 @@
-#ifndef _VMD_CAM_OBJ_H_
-#define _VMD_CAM_OBJ_H_
+#ifndef _O_MMD_CAM_H_
+#define _O_MMD_CAM_H_
 enum 
 {
 	VMD_CAM_OBJ_ANIMATION_GRP = 1000,
@@ -25,4 +25,4 @@ enum
 
 };
 
-#endif _VMD_CAM_OBJ_H_
+#endif _O_MMD_CAM_H_
