@@ -1,0 +1,11 @@
+#ifndef FLGROUP_H__
+#define FLGROUP_H__
+
+enum
+{
+	FIELDLAYER_GROUP_MASK = 1000,	// FIELDLIST, LEGACY
+
+	FIELDLAYER_GROUP_DUMMY
+};
+#endif	// #FLGROUP_H__
+
