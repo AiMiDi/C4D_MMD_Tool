@@ -1,4 +1,4 @@
-#include "TMMDBone.h"
+ï»¿#include "TMMDBone.h"
 #include "OMMDBoneRoot.h"
 #include "description/OMMDBoneRoot.h"
 
@@ -75,35 +75,35 @@ inline Int32 TMMDBone::AddBondMorph(String morph_name)
 }
 Bool TMMDBone::SplineDataCallBack(Int32 cid, const void* data)
 {
-	/* »¹ÓĞÆäËûÒ»Ğ©»Øµ÷ÀàĞÍ£¬ÎÒÃÇÔÚÕâÀï½öÊ¹ÓÃSPLINE_CALLBACK_CORE_MESSAGE */
+	/* è¿˜æœ‰å…¶ä»–ä¸€äº›å›è°ƒç±»å‹ï¼Œæˆ‘ä»¬åœ¨è¿™é‡Œä»…ä½¿ç”¨SPLINE_CALLBACK_CORE_MESSAGE */
 	if (cid == SPLINE_CALLBACK_CORE_MESSAGE)
 	{
 		if (data == nullptr)
 			return(true);
 
-		/* Êı¾İĞÅÏ¢... */
+		/* æ•°æ®ä¿¡æ¯... */
 		SplineData* splineData = (static_cast<const SplineDataCallbackCoreMessage*>(data))->pGUI->GetSplineData();
 		if (splineData == nullptr)
 			return(true);
 
 
 		/*
-		 * ÏÖÔÚÎÒÃÇÖ»Ğè¼ì²éËùÓĞµÄknot²¢ÏŞÖÆËüÃÇ¡£ÎÒÖ»ÊÇÏŞÖÆÔÚÕâÀïµÄÃ¿¸öÇĞÏßµÄ[0£¬1]Çø¼ä£¬
-		 * ÏŞÖÆ¾ÍÊÇ°ÑÇĞÏß¿ØÖÆµãÕı½»Í¶Ó°ÇĞÏßµ½¡°[0£¬1]¡±¡£
-		 * Èç¹ûÒªËõ·ÅÏòÁ¿£¬Ê¹Î»ÓÚ[0£¬1]Çø¼äÍâ²¿µÄ¿ØÖÆ±úÒÔ¸Ã¿ØÖÆ±ú½Ó´¥¸Ã¿ò±ß½çµÄ·½Ê½½øĞĞËõ·Å¡£
+		 * ç°åœ¨æˆ‘ä»¬åªéœ€æ£€æŸ¥æ‰€æœ‰çš„knotå¹¶é™åˆ¶å®ƒä»¬ã€‚æˆ‘åªæ˜¯é™åˆ¶åœ¨è¿™é‡Œçš„æ¯ä¸ªåˆ‡çº¿çš„[0ï¼Œ1]åŒºé—´ï¼Œ
+		 * é™åˆ¶å°±æ˜¯æŠŠåˆ‡çº¿æ§åˆ¶ç‚¹æ­£äº¤æŠ•å½±åˆ‡çº¿åˆ°â€œ[0ï¼Œ1]â€ã€‚
+		 * å¦‚æœè¦ç¼©æ”¾å‘é‡ï¼Œä½¿ä½äº[0ï¼Œ1]åŒºé—´å¤–éƒ¨çš„æ§åˆ¶æŸ„ä»¥è¯¥æ§åˆ¶æŸ„æ¥è§¦è¯¥æ¡†è¾¹ç•Œçš„æ–¹å¼è¿›è¡Œç¼©æ”¾ã€‚
 		 */
 		for (int i = 0; i < splineData->GetKnotCount(); i++)
 		{
-			/* »ñÈ¡µ±Ç°knot¡£ */
+			/* è·å–å½“å‰knotã€‚ */
 			CustomSplineKnot* knot = splineData->GetKnot(i);
-			/* ÇĞÏß´æÔÚÓÚÏà¶ÔÓÚÆä¶¥µãµÄÏòÁ¿¿Õ¼äÖĞ£¬Òò´ËÎÒÃÇÊ×ÏÈÊ¹ÇĞÏßÏòÁ¿È«¾Ö»¯£¬È»ºóÏŞÖÆËüÃÇ¡£ */
+			/* åˆ‡çº¿å­˜åœ¨äºç›¸å¯¹äºå…¶é¡¶ç‚¹çš„å‘é‡ç©ºé—´ä¸­ï¼Œå› æ­¤æˆ‘ä»¬é¦–å…ˆä½¿åˆ‡çº¿å‘é‡å…¨å±€åŒ–ï¼Œç„¶åé™åˆ¶å®ƒä»¬ã€‚ */
 			Vector globalLeftTangent = knot->vPos + knot->vTangentLeft;
 			globalLeftTangent.ClampMax(Vector(127., 127., 0.));
 			globalLeftTangent.ClampMin(Vector(0.0));
 			Vector globalRightTangent = knot->vPos + knot->vTangentRight;
 			globalRightTangent.ClampMax(Vector(127, 127, 0));
 			globalRightTangent.ClampMin(Vector(0.0));
-			/* È»ºóÎÒÃÇ°ÑÇĞÏß×ª»»»ØËüÃÇµÄ¾Ö²¿ÇĞÏß¿Õ¼ä£¬È»ºóĞ´»ØÈ¥¡£ */
+			/* ç„¶åæˆ‘ä»¬æŠŠåˆ‡çº¿è½¬æ¢å›å®ƒä»¬çš„å±€éƒ¨åˆ‡çº¿ç©ºé—´ï¼Œç„¶åå†™å›å»ã€‚ */
 			knot->vTangentLeft = globalLeftTangent - knot->vPos;
 			knot->vTangentRight = globalRightTangent - knot->vPos;
 		}
@@ -485,10 +485,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 	Int32 now_key_frame = 0;
 	Int32 next_key_frame = 0;
 
-	//µÚÒ»Ö¡
+	//ç¬¬ä¸€å¸§
 	now_key = Curve_position_x->GetKey(0);
 	now_key_frame = now_key->GetTime().GetFrame(Fps);
-	if (frame_count > 0) //µÚÒ»Ö¡²»ÊÇ×îºóÒ»Ö¡
+	if (frame_count > 0) //ç¬¬ä¸€å¸§ä¸æ˜¯æœ€åä¸€å¸§
 	{
 		next_key = Curve_position_x->GetKey(1);
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
@@ -499,11 +499,11 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 		if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
 	}
-	//×îºóÒ»Ö¡
+	//æœ€åä¸€å¸§
 	if (!this->SetInterpolator(PMX_BONE_TAG_XCURVE, Curve_position_x->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 		return false;
 	}
-	// Ñ­»·µÚ2µ½×îºóÒ»¸ö
+	// å¾ªç¯ç¬¬2åˆ°æœ€åä¸€ä¸ª
 	for (Int32 key_index = 1; key_index < frame_count; key_index++)
 	{
 		now_key = next_key;
@@ -522,10 +522,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 
 	}
 
-	//µÚÒ»Ö¡
+	//ç¬¬ä¸€å¸§
 	now_key = Curve_position_y->GetKey(0);
 	now_key_frame = now_key->GetTime().GetFrame(Fps);
-	if (frame_count > 0) //µÚÒ»Ö¡²»ÊÇ×îºóÒ»Ö¡
+	if (frame_count > 0) //ç¬¬ä¸€å¸§ä¸æ˜¯æœ€åä¸€å¸§
 	{
 		next_key = Curve_position_y->GetKey(1);
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
@@ -536,11 +536,11 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 		if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
 	}
-	//×îºóÒ»Ö¡
+	//æœ€åä¸€å¸§
 	if (!this->SetInterpolator(PMX_BONE_TAG_YCURVE, Curve_position_y->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 		return false;
 	}
-	// Ñ­»·µÚ2µ½×îºóÒ»¸ö
+	// å¾ªç¯ç¬¬2åˆ°æœ€åä¸€ä¸ª
 	for (Int32 key_index = 1; key_index < frame_count; key_index++)
 	{
 		now_key = next_key;
@@ -558,10 +558,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			return false;
 	}
 
-	//µÚÒ»Ö¡
+	//ç¬¬ä¸€å¸§
 	now_key = Curve_position_z->GetKey(0);
 	now_key_frame = now_key->GetTime().GetFrame(Fps);
-	if (frame_count > 0) //µÚÒ»Ö¡²»ÊÇ×îºóÒ»Ö¡
+	if (frame_count > 0) //ç¬¬ä¸€å¸§ä¸æ˜¯æœ€åä¸€å¸§
 	{
 		next_key = Curve_position_z->GetKey(1);
 		next_key_frame = next_key->GetTime().GetFrame(Fps);
@@ -572,11 +572,11 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 		if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 			return false;
 	}
-	//×îºóÒ»Ö¡
+	//æœ€åä¸€å¸§
 	if (!this->SetInterpolator(PMX_BONE_TAG_ZCURVE, Curve_position_z->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 		return false;
 	}
-	// Ñ­»·µÚ2µ½×îºóÒ»¸ö
+	// å¾ªç¯ç¬¬2åˆ°æœ€åä¸€ä¸ª
 	for (Int32 key_index = 1; key_index < frame_count; key_index++)
 	{
 		now_key = next_key;
@@ -596,10 +596,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 	switch (use_rotation)
 	{
 	case 0:
-		//µÚÒ»Ö¡
+		//ç¬¬ä¸€å¸§
 		now_key = Curve_rotation_x->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(Fps);
-		if (frame_count > 0) //µÚÒ»Ö¡²»ÊÇ×îºóÒ»Ö¡
+		if (frame_count > 0) //ç¬¬ä¸€å¸§ä¸æ˜¯æœ€åä¸€å¸§
 		{
 			next_key = Curve_rotation_x->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
@@ -610,11 +610,11 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
 		}
-		//×îºóÒ»Ö¡
+		//æœ€åä¸€å¸§
 		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_x->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 			return false;
 		}
-		// Ñ­»·µÚ2µ½×îºóÒ»¸ö
+		// å¾ªç¯ç¬¬2åˆ°æœ€åä¸€ä¸ª
 		for (Int32 key_index = 1; key_index < frame_count; key_index++)
 		{
 			now_key = next_key;
@@ -633,10 +633,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 		}
 		break;
 	case 1:
-		//µÚÒ»Ö¡
+		//ç¬¬ä¸€å¸§
 		now_key = Curve_rotation_y->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(Fps);
-		if (frame_count > 0) //µÚÒ»Ö¡²»ÊÇ×îºóÒ»Ö¡
+		if (frame_count > 0) //ç¬¬ä¸€å¸§ä¸æ˜¯æœ€åä¸€å¸§
 		{
 			next_key = Curve_rotation_y->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
@@ -647,11 +647,11 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
 		}
-		//×îºóÒ»Ö¡
+		//æœ€åä¸€å¸§
 		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_y->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 			return false;
 		}
-		// Ñ­»·µÚ2µ½×îºóÒ»¸ö
+		// å¾ªç¯ç¬¬2åˆ°æœ€åä¸€ä¸ª
 		for (Int32 key_index = 1; key_index < frame_count; key_index++)
 		{
 			now_key = next_key;
@@ -670,10 +670,10 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 		}
 		break;
 	case 2:
-		//µÚÒ»Ö¡
+		//ç¬¬ä¸€å¸§
 		now_key = Curve_rotation_z->GetKey(0);
 		now_key_frame = now_key->GetTime().GetFrame(Fps);
-		if (frame_count > 0) //µÚÒ»Ö¡²»ÊÇ×îºóÒ»Ö¡
+		if (frame_count > 0) //ç¬¬ä¸€å¸§ä¸æ˜¯æœ€åä¸€å¸§
 		{
 			next_key = Curve_rotation_z->GetKey(1);
 			next_key_frame = next_key->GetTime().GetFrame(Fps);
@@ -684,11 +684,11 @@ Bool TMMDBone::AutoRegisterKeyFrame(Int32 use_rotation, GeListNode* node) {
 			if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, now_key_frame, mmd::VMDInterpolator(maxon::SafeConvert<UChar>(maxon::Abs(KeyRightX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(KeyRightY * 127.0 / ValueOfTwoFrames)), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftX * Fps * 127.0 / Float(TimeOfTwoFrames))), maxon::SafeConvert<UChar>(maxon::Abs(NextKeyLeftY * 127.0 / ValueOfTwoFrames))), false))
 				return false;
 		}
-		//×îºóÒ»Ö¡
+		//æœ€åä¸€å¸§
 		if (!this->SetInterpolator(PMX_BONE_TAG_RCURVE, Curve_rotation_z->GetKey(frame_count)->GetTime().GetFrame(Fps), mmd::VMDInterpolator())) {
 			return false;
 		}
-		// Ñ­»·µÚ2µ½×îºóÒ»¸ö
+		// å¾ªç¯ç¬¬2åˆ°æœ€åä¸€ä¸ª
 		for (Int32 key_index = 1; key_index < frame_count; key_index++)
 		{
 			now_key = next_key;
@@ -823,16 +823,16 @@ inline Bool TMMDBone::RegisterKeyFrame(Int32 frame_on, GeListNode* node) {
 	const Int32 KnotCount = spline->GetKnotCount();
 	for (int i = 0; i < KnotCount; i++)
 	{
-		/* »ñÈ¡µ±Ç°knot¡£ */
+		/* è·å–å½“å‰knotã€‚ */
 		CustomSplineKnot* knot = spline->GetKnot(i);
-		/* ÇĞÏß´æÔÚÓÚÏà¶ÔÓÚÆä¶¥µãµÄÏòÁ¿¿Õ¼äÖĞ£¬Ê×ÏÈÊ¹ÇĞÏßÏòÁ¿È«¾Ö»¯£¬ÏŞÖÆ¡£ */
+		/* åˆ‡çº¿å­˜åœ¨äºç›¸å¯¹äºå…¶é¡¶ç‚¹çš„å‘é‡ç©ºé—´ä¸­ï¼Œé¦–å…ˆä½¿åˆ‡çº¿å‘é‡å…¨å±€åŒ–ï¼Œé™åˆ¶ã€‚ */
 		Vector globalLeftTangent = knot->vPos + knot->vTangentLeft;
 		globalLeftTangent.ClampMax(Vector(127., 127., 0.));
 		globalLeftTangent.ClampMin(Vector(0.0));
 		Vector globalRightTangent = knot->vPos + knot->vTangentRight;
 		globalRightTangent.ClampMax(Vector(127., 127., 0.));
 		globalRightTangent.ClampMin(Vector(0.0));
-		/* °ÑÇĞÏß×ª»»»ØËüÃÇµÄ¾Ö²¿ÇĞÏß¿Õ¼ä£¬Ğ´»Ø¡£ */
+		/* æŠŠåˆ‡çº¿è½¬æ¢å›å®ƒä»¬çš„å±€éƒ¨åˆ‡çº¿ç©ºé—´ï¼Œå†™å›ã€‚ */
 		knot->vTangentLeft = globalLeftTangent - knot->vPos;
 		knot->vTangentRight = globalRightTangent - knot->vPos;
 	}
@@ -960,7 +960,7 @@ inline Bool TMMDBone::UpdateAllInterpolator(GeListNode* node)
 		const CKey* frame_key = frameCurve->GetKey(frame_index);
 		frame_on = maxon::SafeConvert<Int32>(frame_key->GetValue());
 		time = frame_key->GetTime();
-		const CKey* frame_next = frameCurve->FindKey(time + BaseTime(1., 100.), nullptr, FINDANIM::RIGHT); /* ¼Ó0.1ÅÅ³ıËùÔÚµÄÄÇÒ»Ö¡ */
+		const CKey* frame_next = frameCurve->FindKey(time + BaseTime(1., 100.), nullptr, FINDANIM::RIGHT); /* åŠ 0.1æ’é™¤æ‰€åœ¨çš„é‚£ä¸€å¸§ */
 		if (frame_next == nullptr)
 		{
 			break;
@@ -1468,12 +1468,12 @@ EXECUTIONRESULT TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* o
 			}
 			else {
 				lase_obj = pred_obj;
-				/* »ñÈ¡ÉÏÒ»¸ö¹Ç÷À */
+				/* è·å–ä¸Šä¸€ä¸ªéª¨éª¼ */
 				while (pred_obj != nullptr && !pred_obj->IsInstanceOf(Ojoint)) {
 					lase_obj = pred_obj;
 					pred_obj = pred_obj->GetPred();
 				}
-				/* »ñÈ¡µ½×îºóÒ»¸ö¹Ç÷À */
+				/* è·å–åˆ°æœ€åä¸€ä¸ªéª¨éª¼ */
 				tmp_lase_obj = lase_obj->GetDownLast();
 				while (tmp_lase_obj != nullptr)
 				{
@@ -1506,12 +1506,12 @@ EXECUTIONRESULT TMMDBone::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* o
 			}
 			else {
 				lase_obj = pred_obj;
-				/* »ñÈ¡ÉÏÒ»¸ö¹Ç÷À */
+				/* è·å–ä¸Šä¸€ä¸ªéª¨éª¼ */
 				while (pred_obj != nullptr && !pred_obj->IsInstanceOf(Ojoint)) {
 					lase_obj = pred_obj;
 					pred_obj = pred_obj->GetPred();
 				}
-				/* »ñÈ¡µ½×îºóÒ»¸ö¹Ç÷À */
+				/* è·å–åˆ°æœ€åä¸€ä¸ªéª¨éª¼ */
 				tmp_lase_obj = lase_obj->GetDownLast();
 				while (tmp_lase_obj != nullptr)
 				{

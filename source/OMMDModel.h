@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "ImagesGUI.hpp"
 #include "PMX.h"
 #include "Utility.h"
@@ -260,9 +260,9 @@ namespace tool {
 		Bool Write(GeListNode* node, HyperFile* hf) override;
 		Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) override;
 		Bool GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags) override;
-		/* ÊµÊ±µ÷ÓÃ */
+		/* ÊµÊ±ï¿½ï¿½ï¿½ï¿½ */
 		EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
-		/* ½«ÊµÊ±µ÷ÓÃÌí¼ÓÈëÓÅÏÈ¼¶ÁÐ±í */
+		/* ï¿½ï¿½ÊµÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½Ð±ï¿½ */
 		Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 		Bool Message(GeListNode* node, Int32 type, void* data) override;
 

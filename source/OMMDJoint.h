@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Utility.h"
 #include "description/OMMDJoint.h"
 #include "description/OMMDJointRoot.h"
@@ -19,23 +19,23 @@ namespace tool {
 		INSTANCEOF(OMMDJoint, ObjectData)
 
 	public:
-		/* ¶ÔÏó³õÊ¼»¯ */
+		/* å¯¹è±¡åˆå§‹åŒ– */
 		virtual Bool Init(GeListNode* node);
-		/* ÉèÖÃ²ÎÊıÊ±µ÷ÓÃ£¬ÓÃÓÚµ÷ÓÃSplineDataµÄ»Øµ÷º¯Êı */
+		/* è®¾ç½®å‚æ•°æ—¶è°ƒç”¨ï¼Œç”¨äºè°ƒç”¨SplineDataçš„å›è°ƒå‡½æ•° */
 		virtual Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags);
 		virtual Bool GetDDescription(GeListNode* node, Description* description, DESCFLAGS_DESC& flags);
 		Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc);
-		/* ½ÓÊÕMessageÊ±µ÷ÓÃ£¬ÓÃÓÚ´¦ÀíÊÂ¼ş */
+		/* æ¥æ”¶Messageæ—¶è°ƒç”¨ï¼Œç”¨äºå¤„ç†äº‹ä»¶ */
 		virtual Bool Message(GeListNode* node, Int32 type, void* data);
 		virtual DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh);
-		/* ÊµÊ±µ÷ÓÃ */
+		/* å®æ—¶è°ƒç”¨ */
 		virtual EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags);
 		virtual Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn);
 		virtual Bool Read(GeListNode* node, HyperFile* hf, Int32 level);
 		virtual Bool Write(GeListNode* node, HyperFile* hf);
-		/* ½«ÊµÊ±µ÷ÓÃÌí¼ÓÈëÓÅÏÈ¼¶ÁĞ±í */
+		/* å°†å®æ—¶è°ƒç”¨æ·»åŠ å…¥ä¼˜å…ˆçº§åˆ—è¡¨ */
 		virtual Bool AddToExecution(BaseObject* op, PriorityList* list);
-		/* Éú³Éº¯Êı */
+		/* ç”Ÿæˆå‡½æ•° */
 		static NodeData* Alloc()
 		{
 			return(NewObjClear(OMMDJoint));
