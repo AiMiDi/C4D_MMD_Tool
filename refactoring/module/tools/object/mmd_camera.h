@@ -13,7 +13,7 @@ Description:	C4D MMD camera object
 
 #include "CMTSceneManager.h"
 #include "cmt_tools_setting.h"
-#include "description/MMDCamera.h"
+#include "description/OMMDCamera.h"
 #include "module/tools/mmd_interpolator.hpp"
 
 using MMDCameraBase = MMDInterpolatorNode<ObjectData, 8, VMD_CAM_OBJ_INTERPOLATOR_NUM>;
