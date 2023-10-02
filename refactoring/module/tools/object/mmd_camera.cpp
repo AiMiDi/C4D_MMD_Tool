@@ -1,6 +1,6 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/10/2
 File:			o_mmd_camera.cpp
@@ -16,6 +16,26 @@ Description:	C4D MMD camera object
 
 #include "CMTSceneManager.h"
 #include "utils/unique_id_util.hpp"
+
+MMDCamera::MMDCamera(): MMDCameraBase(VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_AT, VMD_CAM_OBJ_FRAME_AT_STR)
+{}
+
+MMDCamera::MMDCamera(MMDCamera&& other) noexcept : MMDCameraBase(std::move(other))
+{}
+
+MMDCamera& MMDCamera::operator=(MMDCamera&& other) noexcept
+{
+	if (this != &other)
+	{
+		MMDCameraBase::operator=(std::move(other)); 
+	}
+	return *this;
+}
+
+BaseObject* MMDCamera::GetCamera() const
+{
+	return m_camera;
+}
 
 Bool MMDCamera::CameraInit(GeListNode* node)
 {
@@ -580,6 +600,11 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 		return false;
 	EventAdd();
 	return true;
+}
+
+NodeData* MMDCamera::Alloc()
+{
+	return NewObjClear(MMDCamera);
 }
 
 Bool MMDCamera::Init(GeListNode* node)

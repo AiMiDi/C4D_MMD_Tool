@@ -1,6 +1,6 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/10/2
 File:			mmd_camera.h
@@ -11,7 +11,6 @@ Description:	C4D MMD camera object
 #ifndef _MMD_CAMERA_H_
 #define _MMD_CAMERA_H_
 
-#include "CMTSceneManager.h"
 #include "cmt_tools_setting.h"
 #include "description/OMMDCamera.h"
 #include "module/tools/mmd_interpolator.hpp"
@@ -45,17 +44,40 @@ class MMDCamera final : public MMDCameraBase
 
 public:
 	// Constructor function
-	MMDCamera() : MMDCameraBase(VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_AT, VMD_CAM_OBJ_FRAME_AT_STR) {}
+	MMDCamera();
 
 	// Destructor function
 	~MMDCamera() override = default;
 
+	/**
+	 * \brief Default copy constructor.
+	 * \param other The object to be copied from.
+	 */
+	MMDCamera(const MMDCamera& other) = delete;
+
+	/**
+	 * \brief Default copy assignment operator.
+	 * \param other The object to be copied from.
+	 * \return A reference to this object.
+	 */
+	MMDCamera& operator=(const MMDCamera& other) = delete;
+
+	/**
+	 * \brief Default move constructor.
+	 * \param other The object to be moved from.
+	 */
+	MMDCamera(MMDCamera&& other) noexcept;
+
+	/**
+	 * \brief Default move assignment operator.
+	 * \param other The object to be moved from.
+	 * \return A reference to this object.
+	 */
+	MMDCamera& operator=(MMDCamera&& other) noexcept;
+
 public:
 	// Get maintained camera object
-	[[nodiscard]] BaseObject* GetCamera() const
-	{
-		return m_camera;
-	}
+	[[nodiscard]] BaseObject* GetCamera() const;
 
 	// Initialize camera object
 	Bool CameraInit(GeListNode* node = nullptr);
@@ -68,10 +90,7 @@ public:
 	Bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
 	// Generating function
-	static NodeData* Alloc()
-	{
-		return NewObjClear(MMDCamera);
-	}
+	static NodeData* Alloc();
 
 private:
 	bool ConversionCameraCurve(CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float& fps);

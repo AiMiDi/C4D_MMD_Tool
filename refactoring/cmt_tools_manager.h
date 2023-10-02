@@ -1,6 +1,6 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			walter white/Aimidi
 Date:			2022/7/31
 File:			cmt_tools_manager.h

@@ -1,6 +1,6 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/10/7
 File:			o_mmd_interpolator.h
@@ -18,9 +18,11 @@ class MMDInterpolatorNode : public NODE_DATE_TYPE
 {
 	INSTANCEOF(MMDInterpolatorNode, NODE_DATE_TYPE)
 protected:
+	// Constants for interpolator and track count.
 	static constexpr size_t m_interpolator_count = INTERPOLATOR_COUNT;
 	static constexpr size_t m_track_count = TRACK_COUNT;
 
+	// Descriptor IDs for various properties.
 	Int32 m_spline_desc_id;
 	Int32 m_curve_type_desc_id;
 	Int32 m_frame_at_desc_id;
@@ -31,58 +33,144 @@ protected:
 	// Tween curve data
 	maxon::HashMap<Int32, VMDInterpolator> m_interpolator_maps[m_interpolator_count];
 private:
-	// Save the previous frame to determine the update status
+	// Previous frame and interpolator type to check for updates.
 	Int32 m_prev_frame = -1;
-
-	// Save the previous curve type to determine the update status
 	Int32 m_prev_interpolator_type = -1;
 public:
+	/**
+	 * \brief Refreshes the spline data.
+	 * \param spline_data The spline data to be refreshed.
+	 */
 	static void RefreshSplineData(SplineData* spline_data);
 
-	// Callback function used to restrict SplineData
-	static Bool SplineDataCallBack(Int32, const void*);
+	/**
+	 * \brief Callback function used to restrict SplineData.
+	 * \param cid An integer value, typically representing a component or channel ID.
+	 * \param data A pointer to data associated with the callback, its interpretation depends on the callback's context.
+	 * \return Boolean indicating whether the restriction was successful or not.
+	 */
+	static Bool SplineDataCallBack(const Int32 cid, const void* data);
 
-	// Get interpolator value
+	/**
+	 * \brief Get the interpolator value.
+	 * \param type The type of interpolator.
+	 * \param frame_on The frame number.
+	 * \param interpolator The output interpolator value.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool GetInterpolator(Int32 type, Int32 frame_on, VMDInterpolator& interpolator) const;
 
-	// Load interpolator from libmmd::vmd_interpolator
+	/**
+	 * \brief Load interpolator from VMD format.
+	 * \param type The type of interpolator.
+	 * \param frame_at The frame number.
+	 * \param vmd_interpolator The VMD interpolator data to load from.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool LoadVMDInterpolator(Int32 type, Int32 frame_at, const libmmd::vmd_interpolator& vmd_interpolator);
 
-	// Save interpolator to libmmd::vmd_interpolator
+	/**
+	 * \brief Save interpolator to VMD format.
+	 * \param type The type of interpolator.
+	 * \param frame_at The frame number.
+	 * \param vmd_interpolator The VMD interpolator data to save to.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool SaveVMDInterpolator(Int32 type, Int32 frame_at, libmmd::vmd_interpolator& vmd_interpolator);
 
-	// Set interpolator value
+	/**
+	 * \brief Sets the interpolator value.
+	 * \param interpolator_type Type of the interpolator to be set.
+	 * \param frame_at Frame number for which the interpolator value should be set.
+	 * \param fps Frame rate (frames per second) for the animation.
+	 * \param args Variable arguments required for setting the interpolator.
+	 * \return Boolean indicating success or failure.
+	 */
 	template<typename ...Args>
-	Bool SetInterpolator(size_t interpolator_type, Int32 frame_on, Float fps, Args&& ...args);
+	Bool SetInterpolator(size_t interpolator_type, Int32 frame_at, Float fps, Args&& ...args);
 
-	// Register Keyframe
-	Bool RegisterKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
+	/**
+	 * \brief Registers a keyframe for animation.
+	 * \param frame_at Frame number at which the keyframe should be registered.
+	 * \param node Pointer to the node associated with the keyframe.
+	 * \return Boolean indicating success or failure.
+	 */
+	Bool RegisterKeyFrame(Int32 frame_at, GeListNode* node = nullptr);
 
-	// Update all tracks
+	/**
+	 * \brief Updates all interpolator tracks.
+	 * \param node Pointer to the node for which tracks should be updated.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool UpdateAllInterpolator(GeListNode* node = nullptr);
 
-	// Initialization tracks
+	/**
+	 * \brief Initializes interpolator tracks.
+	 * \param node Pointer to the node for which tracks should be initialized.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool InitInterpolator(GeListNode* node = nullptr) const;
 
-	// Delete the track
+	/**
+	 * \brief Deletes a specified keyframe.
+	 * \param frame_on Frame number of the keyframe to be deleted.
+	 * \param node Pointer to the node from which the keyframe should be deleted.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool DeleteKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
 
-	// Delete all tracks
+	/**
+	 * \brief Deletes all keyframes for the specified node.
+	 * \param node Pointer to the node for which all keyframes should be deleted.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool DeleteAllKeyFrame(GeListNode* node = nullptr);
 
-	// Reads the entity from the given HyperFile.
+	/**
+	 * \brief Reads entity data from a HyperFile.
+	 * \param node Pointer to the node associated with the entity.
+	 * \param hf HyperFile instance from which data should be read.
+	 * \param level Level of detail or depth for reading.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 
-	// Writes the entity to the given HyperFile.
+	/**
+	 * \brief Writes entity data to a HyperFile.
+	 * \param node Pointer to the node associated with the entity.
+	 * \param hf HyperFile instance to which data should be written.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool Write(GeListNode* node, HyperFile* hf) override;
 
-	// Copies all values from *this to *dst.
+	/**
+	 * \brief Copies all values from the current object to a destination object.
+	 * \param dest Destination object to which values should be copied.
+	 * \param snode Source node associated with the current object.
+	 * \param dnode Destination node associated with the dest object.
+	 * \param flags Flags indicating how copying should be performed.
+	 * \param trn AliasTrans instance for any required translation during copy.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) override;
 
-	// Called at the point in the priority pipeline specified by AddToExecution, or the lack thereof.
+	/**
+	 * \brief Executes the object at a specified point in the priority pipeline.
+	 * \param op BaseObject for the operation.
+	 * \param doc BaseDocument in which the operation occurs.
+	 * \param bt BaseThread associated with the execution.
+	 * \param priority Execution priority level.
+	 * \param flags Execution flags.
+	 * \return Result of the execution.
+	 */
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 
-	// Called to add execution priorities.
+	/**
+	 * \brief Adds execution priorities to the object.
+	 * \param op BaseObject for which priorities should be added.
+	 * \param list Priority list to which priorities should be added.
+	 * \return Boolean indicating success or failure.
+	 */
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 protected:
 	using TrackDescIDArray = std::array<const DescID, TRACK_COUNT>;
@@ -95,12 +183,45 @@ protected:
 	virtual InterpolatorTrackTableArray GetTrackInterpolatorMap() = 0;
 	virtual CurrentValuesArray GetCurrentValues(GeListNode* node) = 0;
 public:
-	// Constructor function
-	MMDInterpolatorNode(const Int32& spline_desc_id , const Int32& curve_type_desc_id, const Int32& frame_on_desc_id, const Int32& frame_at_str_desc_id):
-	m_spline_desc_id(spline_desc_id), m_curve_type_desc_id(curve_type_desc_id), m_frame_at_desc_id(frame_on_desc_id), m_frame_at_str_desc_id(frame_at_str_desc_id){}
+	/**
+	 * \brief Constructor to initialize MMDInterpolatorNode with specific descriptors.
+	 * \param spline_desc_id ID of the spline descriptor.
+	 * \param curve_type_desc_id ID of the curve type descriptor.
+	 * \param frame_on_desc_id ID of the frame on descriptor.
+	 * \param frame_at_str_desc_id ID of the frame at string descriptor.
+	 */
+	MMDInterpolatorNode(const Int32& spline_desc_id , const Int32& curve_type_desc_id, const Int32& frame_on_desc_id, const Int32& frame_at_str_desc_id);
 
-	// Destructor function
+	/**
+	 * \brief Destructor.
+	 */
 	~MMDInterpolatorNode() override = default;
+
+	/**
+	 * \brief Default copy constructor.
+	 * \param other The object to be copied from.
+	 */
+	MMDInterpolatorNode(const MMDInterpolatorNode& other) = delete;
+
+	/**
+	 * \brief Default copy assignment operator.
+	 * \param other The object to be copied from.
+	 * \return A reference to this object.
+	 */
+	MMDInterpolatorNode& operator=(const MMDInterpolatorNode& other) = delete;
+
+	/**
+	 * \brief Default move constructor.
+	 * \param other The object to be moved from.
+	 */
+	MMDInterpolatorNode(MMDInterpolatorNode&& other) noexcept = default;
+
+	/**
+	 * \brief Default move assignment operator.
+	 * \param other The object to be moved from.
+	 * \return A reference to this object.
+	 */
+	MMDInterpolatorNode& operator=(MMDInterpolatorNode&& other) noexcept = default;
 };
 
 
@@ -211,7 +332,7 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT>::SaveV
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
 template <typename ... Args>
-Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::SetInterpolator(size_t interpolator_type, Int32 frame_on, const Float fps, Args&&... args)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::SetInterpolator(size_t interpolator_type, Int32 frame_at, const Float fps, Args&&... args)
 {
 	iferr_scope_handler
 	{
@@ -233,23 +354,23 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT, TRACK_COUNT>::SetIn
 	{
 		return false;
 	}
-	CKey* key_frame_at = frame_curve->AddKey(BaseTime(frame_on, fps));
+	CKey* key_frame_at = frame_curve->AddKey(BaseTime(frame_at, fps));
 	if (key_frame_at == nullptr)
 	{
 		return false;
 	}
-	key_frame_at->SetValue(frame_curve, frame_on);
+	key_frame_at->SetValue(frame_curve, frame_at);
 	key_frame_at->SetInterpolation(frame_curve, CINTERPOLATION::STEP);
 	key_frame_at->ChangeNBit(NBIT::CKEY_LOCK_T, NBITCONTROL::SET);
 	key_frame_at->ChangeNBit(NBIT::CKEY_LOCK_V, NBITCONTROL::SET);
-	auto& entry = m_interpolator_maps[interpolator_type].InsertEntry(frame_on)iferr_return;
+	auto& entry = m_interpolator_maps[interpolator_type].InsertEntry(frame_at)iferr_return;
 	VMDInterpolator& interpolator = entry.GetValue();
 	interpolator.Set(std::forward<Args&&>(args)...);
 	return true;
 }
 
 template <typename NODE_DATE_TYPE, size_t INTERPOLATOR_COUNT, size_t TRACK_COUNT>
-Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::RegisterKeyFrame(const Int32 frame_on, GeListNode* node)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::RegisterKeyFrame(const Int32 frame_at, GeListNode* node)
 {
 	iferr_scope_handler{
 		ApplicationOutput(err.ToString(nullptr));
@@ -271,7 +392,7 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Regi
 
 	const Float fps = doc->GetFps();
 
-	const BaseTime time(frame_on, fps);
+	const BaseTime time(frame_at, fps);
 	GeData curve_type_data;
 	const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
 	if (bc == nullptr)
@@ -327,14 +448,14 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::Regi
 	{
 		for (size_t track_index = 0; track_index < m_interpolator_count; ++track_index)
 		{
-			if (!SetInterpolator(track_index, frame_on, fps, spline))
+			if (!SetInterpolator(track_index, frame_at, fps, spline))
 				return false;
 		}
 	}
 	// not all curve
 	else
 	{
-		if (!SetInterpolator(interpolator_type, frame_on, fps, spline))
+		if (!SetInterpolator(interpolator_type, frame_at, fps, spline))
 			return false;
 	}
 
@@ -709,5 +830,11 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, INTERPOLATOR_COUNT,  TRACK_COUNT>::AddT
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return true;
 }
+
+template <typename NODE_DATE_TYPE, size_t TRACK_COUNT, size_t INTERPOLATOR_COUNT>
+MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT>::MMDInterpolatorNode(const Int32& spline_desc_id,
+	const Int32& curve_type_desc_id, const Int32& frame_on_desc_id, const Int32& frame_at_str_desc_id):
+	m_spline_desc_id(spline_desc_id), m_curve_type_desc_id(curve_type_desc_id), m_frame_at_desc_id(frame_on_desc_id), m_frame_at_str_desc_id(frame_at_str_desc_id)
+{}
 
 #endif // !_MMD_INTERPOLATOR_H
