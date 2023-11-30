@@ -1,0 +1,1 @@
+maxon.InterpolateTypeInterface	"net.maxon.geometry.interface.interpolate"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\modeling_geom.framework\source\maxon\interpolation.h(96,7)	ObjectInterface	Average,GetInterpolateDataType,GetInterpolationClass,InterpolateInOutline,InterpolateLinear	hasStaticMethods=true	

@@ -64,3 +64,25 @@
 	std::unique_ptr<data_type> m_data;
 #endif
 
+#if API_VERSION < 2024000
+
+#   define SDK2024_Const
+#   define SDK2024_NotConst const
+
+#   ifndef ConstDescID
+#       define ConstDescID(...) DescID(__VA_ARGS__)
+#       define CreateDescID(...) DescID(__VA_ARGS__)
+#   endif
+
+#	define DataGetCustomDataType(data, type, id) reinterpret_cast<type*>(data.GetCustomDataType(id))
+
+#else
+
+#   define SDK2024_Const const
+#   define SDK2024_NotConst
+
+#   define SDK2024_InitPara ,Bool isCloneInit
+
+#	define DataGetCustomDataType(data, type, id) data.GetCustomDataTypeWritable<type>()
+
+#endif

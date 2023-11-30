@@ -1,0 +1,3 @@
+maxon.DataSerializeInterface	"net.maxon.interface.dataserialize"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\core.framework\source\maxon\dataserialize.h(206,7)	ObjectInterface	DescribeElement,PrepareHelperClass,RegisterDefaults,RegisterObjectSubstitution	
+maxon.DataSerializeWriterInterface	"net.maxon.interface.dataserializewriter"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\core.framework\source\maxon\dataserialize.h(504,7)	DataSerializeInterface	WriteDocument	
+maxon.DataSerializeReaderInterface	"net.maxon.interface.dataserializereader"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\core.framework\source\maxon\dataserialize.h(522,7)	DataSerializeInterface	ReadDocument	

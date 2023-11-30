@@ -1,0 +1,11 @@
+#ifndef OFPKILL_H__
+#define OFPKILL_H__
+
+enum
+{
+	FP_KILL_OBJECT_GROUP = 2000,
+	FP_KILL_OBJECT_RANDOMNESS = 2001,
+	FP_KILL_OBJECT_DUMMY
+};
+
+#endif // OFPKILL_H__

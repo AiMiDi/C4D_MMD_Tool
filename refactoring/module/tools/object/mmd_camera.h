@@ -15,7 +15,7 @@ Description:	C4D MMD camera object
 #include "description/OMMDCamera.h"
 #include "module/tools/mmd_interpolator.hpp"
 
-using MMDCameraBase = MMDInterpolatorNode<ObjectData, 8, VMD_CAM_OBJ_INTERPOLATOR_NUM>;
+using MMDCameraBase = MMDInterpolatorNode<ObjectData, 8, VMD_CAM_OBJ_INTERPOLATOR_NUM, VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_AT, VMD_CAM_OBJ_FRAME_AT_STR>;
 
 class MMDCamera final : public MMDCameraBase
 {
@@ -44,7 +44,7 @@ class MMDCamera final : public MMDCameraBase
 
 public:
 	// Constructor function
-	MMDCamera();
+	MMDCamera() = default;
 
 	// Destructor function
 	~MMDCamera() override = default;
@@ -100,9 +100,9 @@ private:
 	static void AddToSceneManager(BaseObject* object);
 public:
 	// Object initialization
-	Bool Init(GeListNode* node = nullptr) override;
+	Bool Init(GeListNode* node SDK2024_InitPara) override;
 
-	Bool CopyTo(NodeData* dest, GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) override;
+	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
 
 	// Called to override the writing of parameters. The callback function used to call SplineData.
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8800E4E7-0D26-2958-0009-38CB8C5CDEA3}</ProjectGuid>
+    <RootNamespace>maxon</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="./projectsettings.props" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\DebugWin64.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\cinema.framework\project\cinema.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\image.framework\project\image.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\math.framework\project\math.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\mesh_misc.framework\project\mesh_misc.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\modeling_geom.framework\project\modeling_geom.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\ReleaseWin64.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\cinema.framework\project\cinema.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\image.framework\project\image.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\math.framework\project\math.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\mesh_misc.framework\project\mesh_misc.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\modeling_geom.framework\project\modeling_geom.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.xdl64</TargetExt>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectName)</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.xdl64</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>../../../../dependency/install/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LibraryPath>../../../../dependency/install/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <IgnoreSpecificDefaultLibraries />
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>libMMD_Debug_static.lib;yaml-cpp_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles />
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <IgnoreSpecificDefaultLibraries />
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>libMMD_static.lib;yaml-cpp.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles />
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\cinema.framework\project\cinema.framework.vcxproj">
+      <Project>{69BF9B7D-7EB2-7FC5-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.vcxproj">
+      <Project>{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\image.framework\project\image.framework.vcxproj">
+      <Project>{2F669138-9991-9827-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\math.framework\project\math.framework.vcxproj">
+      <Project>{96B02211-112B-F41C-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\mesh_misc.framework\project\mesh_misc.framework.vcxproj">
+      <Project>{3A883A00-61CC-D50A-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\modeling_geom.framework\project\modeling_geom.framework.vcxproj">
+      <Project>{334CB027-DCC3-21AE-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\refactoring\CMTSceneManager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\cmt_tools_config_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\cmt_tools_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\register_entity.cpp" />
+    <ClCompile Include="..\generated\hxx\interface_registration.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\refactoring\CMTSceneManager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\cmt_tools_config_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\cmt_tools_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\core\cmt_marco.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_interpolator.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
+    <ClInclude Include="..\..\..\..\refactoring\pch.h" />
+    <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />
+    <ClInclude Include="..\..\..\..\refactoring\register_entity.h" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="AfterClean">
+    <RemoveDir Directories="$(ProjectDir)..\generated" ContinueOnError="true" />
+    <Message Text="Removing generated folder: $(ProjectDir)..\generated" Importance="high" ContinueOnError="true" />
+  </Target>
+</Project>
