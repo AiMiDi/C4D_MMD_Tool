@@ -438,12 +438,12 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 
 	const DescID src_track_desc_IDs[src_track_count]
 	{
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION, VECTOR_X)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION, VECTOR_Y)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION, VECTOR_Z)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, VECTOR_X)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_X)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Y)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Z)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_X)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Y)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Z)),
 		ConstDescID(DescLevel(CAMERAOBJECT_APERTURE))
 	};
 
@@ -637,9 +637,10 @@ Bool MMDCamera::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNo
 
 Bool MMDCamera::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
-	if (id[0].id == VMD_CAM_OBJ_SPLINE)
+	if (!m_is_setup_spline_callback && id[0].id == VMD_CAM_OBJ_SPLINE)
 	{
 		DataGetCustomDataType(const_cast<GeData&>(t_data), SplineData, CUSTOMDATATYPE_SPLINE)->SetUserCallback(SplineDataCallBack, nullptr);
+		m_is_setup_spline_callback = true;
 	}
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
@@ -710,7 +711,7 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 		{
 			return true;
 		}
-		node->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION, VECTOR_Y)), 85.0, DESCFLAGS_SET::NONE);
+		node->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Y)), 85.0, DESCFLAGS_SET::NONE);
 		m_camera->SetRelPos(Vector(0, 0, -382.5));
 		break;
 	}
@@ -735,13 +736,13 @@ MMDCamera::TrackDescIDArray MMDCamera::GetTrackDescIDsImpl()
 {
 	static const TrackDescIDArray track_desc_IDs
 	{
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION, VECTOR_X)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION, VECTOR_Y)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION, VECTOR_Z)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, VECTOR_X)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, VECTOR_Y)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION, VECTOR_Z)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION, VECTOR_Z)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_X)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Y)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Z)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_X)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Y)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Z)),
+		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Z)),
 		ConstDescID(DescLevel(CAMERAOBJECT_APERTURE))
 	};
 	return track_desc_IDs;

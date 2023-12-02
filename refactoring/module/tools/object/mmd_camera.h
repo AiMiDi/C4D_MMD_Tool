@@ -26,9 +26,10 @@ class MMDCamera final : public MMDCameraBase
 
 	// Maintained camera object
 	BaseObject* m_camera = nullptr;
-	BaseTag* m_protection_tag = nullptr;
+	BaseTag*    m_protection_tag = nullptr;
 
 	std::once_flag m_init_flag{};
+	bool m_is_setup_spline_callback = false;
 
 	enum track_enum : uint8_t
 	{

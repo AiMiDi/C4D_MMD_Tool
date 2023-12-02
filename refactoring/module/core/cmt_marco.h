@@ -69,6 +69,8 @@
 #   define SDK2024_Const
 #   define SDK2024_NotConst const
 
+#	define SDK2024_InitPara
+
 #   ifndef ConstDescID
 #       define ConstDescID(...) DescID(__VA_ARGS__)
 #       define CreateDescID(...) DescID(__VA_ARGS__)

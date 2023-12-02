@@ -90,6 +90,21 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp">
       <Filter>source\module\tools\loader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -184,6 +199,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.h">
       <Filter>source\module\tools\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.h">
+      <Filter>source\module\tools\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
