@@ -10,7 +10,7 @@ Description:	DESC
 
 #pragma once
 
-class mmd_bone_root final : public ObjectData
+class MMDBoneRootObject final : public ObjectData
 {
 public:
 	

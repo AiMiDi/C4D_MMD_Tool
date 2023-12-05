@@ -20,6 +20,10 @@
 #include "maxon/sortedarray.h"
 #include "c4d_baselinkarray.h"
 #include "tprotection.h"
+#include "maxon/baselist.h"
+#include "lib_ca.h"
+#include "tcaik.h"
+#include "maxon/queue.h"
 
 // The third party
 #include "yaml-cpp/yaml.h"

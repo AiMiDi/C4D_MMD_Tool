@@ -10,9 +10,8 @@ Description:	scene manager
 
 #ifndef _CMT_SCENE_MANAGER_H_
 #define _CMT_SCENE_MANAGER_H_
+
 #include "cmt_tools_setting.h"
-
-
 
 class CMTSceneManager final : SceneHookData
 {

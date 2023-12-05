@@ -10,7 +10,7 @@ Description:	MMD joint root object
 
 #pragma once
 
-class mmd_joint_root final : public ObjectData
+class MMDJointRootObject final : public ObjectData
 {
 public:
 	

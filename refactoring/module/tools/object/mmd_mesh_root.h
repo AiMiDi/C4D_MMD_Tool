@@ -10,7 +10,7 @@ Description:	MMD mesh root object
 
 #pragma once
 
-class mmd_mesh_root final : public ObjectData
+class MMDMeshRootObject final : public ObjectData
 {
 public:
 	

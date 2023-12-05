@@ -10,7 +10,7 @@ Description:	MMD rigid root object
 
 #pragma once
 
-class mmd_rigid_root final : public ObjectData
+class MMDRigidRootObject final : public ObjectData
 {
 public:
 	

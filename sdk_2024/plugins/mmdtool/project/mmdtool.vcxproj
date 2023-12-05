@@ -171,6 +171,7 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
@@ -202,6 +203,7 @@
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\pch.h" />
@@ -213,6 +215,94 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\MMDCamera.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneRoot.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDCamera.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJoint.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJointRoot.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshRoot.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModel.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigid.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidRoot.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\TMMDBone.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\c4d_strings.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\MMDCamera.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDBoneRoot.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDCamera.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDJoint.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDJointRoot.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDMeshRoot.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDModel.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDRigid.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDRigidRoot.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\TMMDBone.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\dialogs\DLG_CMT_TOOL.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_en-US\dialogs\DLG_CMT_VMD_IMPORT.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\c4d_strings.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\MMDCamera.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDBoneRoot.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDCamera.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDJoint.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDJointRoot.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDMeshRoot.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDModel.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDRigid.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDRigidRoot.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\TMMDBone.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\dialogs\DLG_CMT_TOOL.str" />
+    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\dialogs\DLG_CMT_VMD_IMPORT.str" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\..\..\res\S24_up\description\MMDCamera.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDBoneRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDCamera.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJoint.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJointRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDMeshRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDModel.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigid.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigidRoot.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\TMMDBone.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\dialogs\DLG_CMT_TOOL.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\dialogs\DLG_CMT_VMD_IMPORT.res">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Resource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">
