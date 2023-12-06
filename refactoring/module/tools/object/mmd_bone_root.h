@@ -13,5 +13,6 @@ Description:	DESC
 class MMDBoneRootObject final : public ObjectData
 {
 public:
-	
+	BaseLink* GetBoneLink(Int32 index);
+	Int32 GetBoneIndex(BaseLink* bone);
 };

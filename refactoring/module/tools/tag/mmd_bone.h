@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
@@ -109,7 +109,7 @@ class MMDBoneTag final : public MMDBoneTagBase
 	// 储存骨骼表情数据
 	maxon::BaseArray<BoneMorphData> bone_morph_data_arr;
 
-	Bool RefreshColor(GeListNode* node, BaseObject* op);
+	Bool RefreshColor(GeListNode* node, BaseObject* op = nullptr);
 	static TrackDescIDArray GetTrackDescIDsImpl();
 
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTag)
@@ -122,6 +122,8 @@ public:
 
 	Bool Init(GeListNode* node SDK2024_InitPara) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
+	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
+	Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
 
 	void SetBoneObject(BaseObject* object)
 	{

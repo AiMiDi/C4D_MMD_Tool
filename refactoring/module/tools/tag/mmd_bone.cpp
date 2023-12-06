@@ -12,6 +12,8 @@ Description:	DESC
 #include "mmd_bone.h"
 
 #include "customgui_priority.h"
+#include "ocajoint.h"
+#include "module/tools/object/mmd_bone_root.h"
 
 Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 {
@@ -26,7 +28,7 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 	const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
 	if (!bc)
 	{
-		return(false);
+		return false;
 	}
 	static constexpr Vector colors[6]
 	{
@@ -67,7 +69,7 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 		auto objColor = MakeObjectColorProperties(colors[color], ID_BASEOBJECT_USECOLOR_ALWAYS, true);
 		op->SetColorProperties(&objColor);
 	}
-	return(true);
+	return true;
 }
 
 MMDBoneTag::TrackDescIDArray MMDBoneTag::GetTrackDescIDsImpl()
@@ -87,7 +89,7 @@ MMDBoneTag::TrackDescIDArray MMDBoneTag::GetTrackDescIDsImpl()
 Bool MMDBoneTag::Init(GeListNode* node, Bool isCloneInit)
 {
 	if (!node)
-		return(false);
+		return false;
 	
 	BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
 	if (!bc)
@@ -125,6 +127,265 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 {
 
 	return SUPER::Message(node, type, data);
+}
+
+Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
+{
+	BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	if (bc == nullptr)
+	{
+		return false;
+	}
+	switch (id[0].id)
+	{
+	case PMX_BONE_ROTATABLE:
+	{
+		if (m_bone_object == nullptr)
+			return true;
+		if (BaseTag* protection_tag = m_bone_object->GetTag(Tprotection); protection_tag != nullptr)
+		{
+			if (t_data.GetBool() == true)
+			{
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), false, DESCFLAGS_SET::NONE);
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), false, DESCFLAGS_SET::NONE);
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), false, DESCFLAGS_SET::NONE);
+			}
+			else
+			{
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), true, DESCFLAGS_SET::NONE);
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), true, DESCFLAGS_SET::NONE);
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), true, DESCFLAGS_SET::NONE);
+			}
+		}
+		RefreshColor(node);
+		break;
+	}
+	case PMX_BONE_TRANSLATABLE:
+	{
+		if (m_bone_object == nullptr)
+			return true;
+		if (BaseTag* protection_tag = m_bone_object->GetTag(Tprotection); protection_tag != nullptr)
+		{
+			if (t_data.GetBool() == true)
+			{
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), false, DESCFLAGS_SET::NONE);
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), false, DESCFLAGS_SET::NONE);
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
+			}
+			else
+			{
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), true, DESCFLAGS_SET::NONE);
+				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), true, DESCFLAGS_SET::NONE);
+			}
+		}
+		this->RefreshColor(node);
+		break;
+	}
+	case PMX_BONE_VISIBLE:
+	{
+		if (m_bone_object == nullptr)
+			return true;
+		if (t_data.GetBool() == false)
+		{
+			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+		}
+		else
+		{
+			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS, DESCFLAGS_SET::NONE);
+			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_STANDARD, DESCFLAGS_SET::NONE);
+		}
+		this->RefreshColor(node);
+		break;
+	}
+	case PMX_BONE_INDEXED_TAIL_POSITION:
+	{
+		if (m_bone_object == nullptr)
+			return true;
+		switch (t_data.GetInt32())
+		{
+		case PMX_BONE_TAIL_IS_INDEX:
+		{
+			if (bc->GetInt32(PMX_BONE_TAIL_INDEX) == -1)
+			{
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+			}
+			else
+			{
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+			}
+			break;
+		}
+		case PMX_BONE_TAIL_POSITION:
+		{
+			if (bc->GetVector(PMX_BONE_TAIL_POSITION) == Vector())
+			{
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+			}
+			else
+			{
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+			}
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	case PMX_BONE_TAIL_INDEX:
+	{
+		if (m_bone_object == nullptr)
+			return true;
+		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_IS_INDEX)
+		{
+			if (t_data.GetInt32() == -1)
+			{
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+			}
+			else {
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+			}
+		}
+		break;
+	}
+	case PMX_BONE_TAIL_POSITION:
+	{
+		if (m_bone_object == nullptr)
+			return true;
+		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_POSITION)
+		{
+			if (t_data.GetVector().IsZero())
+			{
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+			}
+			else {
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+			}
+		}
+		break;
+	}
+	case PMX_BONE_NAME_IS:
+	{
+		if (m_bone_object == nullptr)
+			return true;
+		if (t_data.GetInt32() == true)
+		{
+			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
+		}
+		else {
+			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
+		}
+		break;
+	}
+	case PMX_BONE_NAME_UNIVERSAL:
+	case PMX_BONE_NAME_LOCAL:
+	{
+		if (m_bone_object == nullptr)
+			return true;
+		if (bc->GetInt32(PMX_BONE_NAME_IS) == 1)
+		{
+			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
+		}
+		else {
+			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
+		}
+		break;
+	}
+	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
+	{
+		if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
+			if (m_bone_root == nullptr)
+				return true;
+			if (SDK2024_Const auto inherit_bone_parent_link = t_data.GetBaseLink(); inherit_bone_parent_link != nullptr) {
+				inherit_bone_parent_link->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
+				if (const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->GetBoneIndex(inherit_bone_parent);
+					inherit_bone_parent_index != -1)
+				{
+					bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index);
+				}
+			}
+		}
+		break;
+	}
+	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
+	{
+		if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_INDEX)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
+			if (m_bone_root == nullptr)
+				return true;
+			if (SDK2024_Const auto inherit_bone_parent_link_ptr = m_bone_root->GetNodeData<MMDBoneRootObject>()->GetBoneLink(t_data.GetInt32());
+				inherit_bone_parent_link_ptr != nullptr)
+			{
+				if (SDK2024_Const auto inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
+					inherit_bone_parent_link == nullptr)
+				{
+					node->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), BaseLink::Alloc(), DESCFLAGS_SET::NONE);
+				}
+				inherit_bone_parent_link_ptr->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
+			}
+		}
+		break;
+	}
+	case PMX_BONE_IS_IK:
+	case PMX_BONE_IS_FIXED_AXIS:
+	case PMX_BONE_INHERIT_ROTATION:
+	case PMX_BONE_INHERIT_TRANSLATION:
+	{
+		this->RefreshColor(node);
+		break;
+	}
+	default:
+		break;
+	}
+	return SUPER::SetDParameter(node, id, t_data, flags);
+}
+
+Bool MMDBoneTag::GetDEnabling(const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
+	const BaseContainer* itemdesc) const
+{
+	switch (id[0].id)
+	{
+	case PMX_BONE_TAIL_INDEX:
+		if (const Bool indexed_tail_position = itemdesc->GetBool(PMX_BONE_INDEXED_TAIL_POSITION);
+			indexed_tail_position == PMX_BONE_TAIL_IS_POSITION)
+		{
+			return false;
+		}
+		break;
+	case PMX_BONE_TAIL_POSITION:
+		if (const Bool indexed_tail_position = itemdesc->GetBool(PMX_BONE_INDEXED_TAIL_POSITION);
+			indexed_tail_position == PMX_BONE_TAIL_IS_INDEX)
+		{
+			return false;
+		}
+		break;
+	[[fallthrough]] case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
+	[[fallthrough]] case PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE:
+	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
+		const Bool inherit_rotation = itemdesc->GetBool(PMX_BONE_INHERIT_ROTATION);
+		const Bool inherit_translation = itemdesc->GetBool(PMX_BONE_INHERIT_TRANSLATION);
+		if (inherit_rotation == 0 && inherit_translation == 0)
+		{
+			return false;
+		}
+		break;
+	case PMX_BONE_FIXED_AXIS:
+		if (const Bool fixed_axis = itemdesc->GetBool(PMX_BONE_IS_FIXED_AXIS); fixed_axis == 0)
+		{
+			return false;
+		}
+		break;
+	[[fallthrough]] case PMX_BONE_LOCAL_X:
+	case PMX_BONE_LOCAL_Z:
+		if (const Bool local_coordinate = itemdesc->GetBool(PMX_BONE_LOCAL_IS_COORDINATE); local_coordinate == 0)
+		{
+			return false;
+		}
+		break;
+	default:;
+	}
+	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
 }
 
 MMDBoneTag::TrackDescIDArray MMDBoneTag::GetTrackDescIDs()
