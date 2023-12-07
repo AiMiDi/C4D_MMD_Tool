@@ -31,12 +31,14 @@ struct BoneMorphData
 	DescID	button_delete_id = DescID();
 	DescID	button_rename_id = DescID();
 	String	name = String();
-	BoneMorphData() = default;
-	BoneMorphData(const BoneMorphData&) = delete;
-	BoneMorphData(BoneMorphData&& src) noexcept :
-	MAXON_MOVE_MEMBERS(grp_id, strength_id, translation_id, rotation_id, button_grp_id, button_delete_id, button_rename_id, name){}
 	Bool Write(HyperFile* hf) const;
 	Bool Read(HyperFile* hf);
+	BoneMorphData() = default;
+	~BoneMorphData() = default;
+	BoneMorphData(BoneMorphData&& src) noexcept :
+	MAXON_MOVE_MEMBERS(grp_id, strength_id, translation_id, rotation_id, button_grp_id, button_delete_id, button_rename_id, name){}
+	BoneMorphData& operator=(BoneMorphData&&) = default;
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(BoneMorphData)
 };
 
 struct MMDBoneTagMsg
