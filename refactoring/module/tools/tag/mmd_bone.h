@@ -35,46 +35,8 @@ struct BoneMorphData
 	BoneMorphData(const BoneMorphData&) = delete;
 	BoneMorphData(BoneMorphData&& src) noexcept :
 	MAXON_MOVE_MEMBERS(grp_id, strength_id, translation_id, rotation_id, button_grp_id, button_delete_id, button_rename_id, name){}
-	Bool Write(HyperFile* hf) const
-	{
-		if (!grp_id.Write(hf))
-			return false;
-		if (!strength_id.Write(hf))
-			return false;
-		if (!translation_id.Write(hf))
-			return false;
-		if (!rotation_id.Write(hf))
-			return false;
-		if (!button_grp_id.Write(hf))
-			return false;
-		if (!button_delete_id.Write(hf))
-			return false;
-		if (!button_rename_id.Write(hf))
-			return false;
-		if (!hf->WriteString(name))
-			return false;
-		return true;
-	}
-	Bool Read(HyperFile* hf)
-	{
-		if (!grp_id.Read(hf))
-			return false;
-		if (!strength_id.Read(hf))
-			return false;
-		if (!translation_id.Read(hf))
-			return false;
-		if (!rotation_id.Read(hf))
-			return false;
-		if (!button_grp_id.Read(hf))
-			return false;
-		if (!button_delete_id.Read(hf))
-			return false;
-		if (!button_rename_id.Read(hf))
-			return false;
-		if (!hf->ReadString(&name))
-			return false;
-		return true;
-	}
+	Bool Write(HyperFile* hf) const;
+	Bool Read(HyperFile* hf);
 };
 
 struct MMDBoneTagMsg
@@ -103,48 +65,57 @@ class MMDBoneTag final : public MMDBoneTagBase
 	BaseObject* m_bone_root = nullptr;
 	// 对应的骨骼主对象 
 	BaseObject* m_bone_object = nullptr;
+	// 骨骼标签 
+	BaseTag* m_bone_tag = nullptr;
+	// 用于限制骨骼
+	BaseTag* protection_tag = nullptr;
 	// 是否是物理骨骼 
 	Bool m_is_physical_bone = false;
 
+	// 骨骼表情索引
+	Int32 m_bone_morph_name_index = 0;
 	// 储存骨骼表情数据
 	maxon::BaseArray<BoneMorphData> bone_morph_data_arr;
-
-	Bool RefreshColor(GeListNode* node, BaseObject* op = nullptr);
-	static TrackDescIDArray GetTrackDescIDsImpl();
+	maxon::HashMap<DescID, Int> button_id_map;
 
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTag)
 	CMT_DEFAULT_MOVE_BODY(MMDBoneTag)
 	INSTANCEOF(MMDBoneTag, MMDBoneTagBase)
 
 public:
-	MMDBoneTag() = default;
+	explicit MMDBoneTag(BaseObject* bone_object, BaseObject* bone_root) : m_bone_root(bone_root), m_bone_object(bone_object) {}
 	~MMDBoneTag() override = default;
 
+	static NodeData* Alloc();
 	Bool Init(GeListNode* node SDK2024_InitPara) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
+	EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
+	Bool AddToExecution(BaseTag* tag, PriorityList* list) override;
+	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
+	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 
-	void SetBoneObject(BaseObject* object)
-	{
-		m_bone_object = object;
-	}
-	void SetBoneRootObject(BaseObject* object)
-	{
-		m_bone_root = object;
-	}
-	Bool IsPhysicalBone() const
-	{
-		return m_is_physical_bone;
-	}
-	void SetPhysical(const Bool is_physical_bone)
-	{
-		m_is_physical_bone = is_physical_bone;
-	}
+	[[nodiscard]] Bool IsPhysicalBone() const;
+	void SetPhysical(Bool is_physical_bone);
+
+	Int AddBondMorph(String morph_name);
+	BoneMorphData* GetMorph(Int index);
+	Bool SetBondMorphTranslation(Int index, const Vector& translation);
+	Bool SetBondMorphRotation(Int index, const Vector& rotation);
+	[[nodiscard]] Int GetMorphCount() const;
+	[[nodiscard]] bool CheckBoneMorphIndex(Int index) const;
 protected:
 	TrackDescIDArray GetTrackDescIDs() override;
 	TrackObjectArray GetTrackObjects(GeListNode* node) override;
 	InterpolatorTrackTableArray GetTrackInterpolatorMap() override;
 	CurrentValuesArray GetCurrentValues(GeListNode* node) override;
-
+private:
+	Bool RefreshColor(GeListNode* node, BaseObject* op = nullptr);
+	void CheckInheritBoneParent(const BaseDocument* doc, BaseObject* op, const BaseContainer* bc);
+	void UpdateBoneMorph(const BaseTag* tag, BaseObject* op);
+	bool CreateBoneLockTag();
+	void UpdateBoneIndex(BaseTag* tag, BaseObject* op, BaseContainer* bc);
+	void UpdateBoneLock(BaseObject* op, const BaseContainer* bc);
+	static TrackDescIDArray GetTrackDescIDsImpl();
 };

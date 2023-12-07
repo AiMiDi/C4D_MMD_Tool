@@ -70,7 +70,7 @@
 #   define SDK2024_NotConst const
 
 #	define SDK2024_InitPara
-#	define GeData_DescID(id) GeData{ CUSTOMDATATYPE_DESCID, id }
+#	define DescIDGeData(id) GeData{ CUSTOMDATATYPE_DESCID, id }
 
 #   ifndef ConstDescID
 #       define ConstDescID(...) DescID(__VA_ARGS__)
@@ -87,7 +87,7 @@
 #   define SDK2024_NotConst
 
 #   define SDK2024_InitPara ,Bool isCloneInit
-#	define GeData_DescID(id) GeData{ id }
+#	define DescIDGeData(id) GeData{ id }
 
 #	define DataGetCustomDataType(data, type, id) data.GetCustomDataTypeWritable<type>()
 #	define MakeObjectColorProperties(color, usecolor, xray) ObjectColorProperties{color, usecolor, xray}
