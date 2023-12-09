@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
@@ -86,6 +86,19 @@ MMDBoneTag::TrackDescIDArray MMDBoneTag::GetTrackDescIDsImpl()
 	return track_desc_IDs;
 }
 
+BoneMorphData::BoneMorphData(String name, DescID grp_id, DescID strength_id, DescID translation_id, DescID rotation_id,
+	DescID button_grp_id, DescID button_delete_id, DescID button_rename_id):
+	name(std::move(name)),
+	grp_id(std::move(grp_id)),
+	strength_id(std::move(strength_id)),
+	translation_id(std::move(translation_id)),
+	rotation_id(std::move(rotation_id)),
+	button_grp_id(std::move(button_grp_id)),
+	button_delete_id(std::move(button_delete_id)),
+	button_rename_id(std::move(button_rename_id))
+{
+}
+
 Bool BoneMorphData::Write(HyperFile* hf) const
 {
 	if (!grp_id.Write(hf))
@@ -126,6 +139,23 @@ Bool BoneMorphData::Read(HyperFile* hf)
 	if (!hf->ReadString(&name))
 		return false;
 	return true;
+}
+
+MMDBoneTagMsg::MMDBoneTagMsg() : type(MMDBoneTagMsgType::BONE_INDEX_CHANGE)
+{
+}
+
+MMDBoneTagMsg::MMDBoneTagMsg(String name): type(MMDBoneTagMsgType::BONE_MORPH_DELETE), name(std::move(name))
+{}
+
+MMDBoneTagMsg::MMDBoneTagMsg(String name, const BaseTag* bone_tag, DescID strength_id):
+type(MMDBoneTagMsgType::BONE_MORPH_ADD), name(std::move(name)), strength_id(std::move(strength_id))
+{
+	this->bone_tag->SetLink(bone_tag);
+}
+
+MMDBoneTagMsg::MMDBoneTagMsg(String name, String name_old): type(MMDBoneTagMsgType::BONE_MORPH_RENAME), name(std::move(name)), name_old(std::move(name_old))
+{
 }
 
 NodeData* MMDBoneTag::Alloc()
@@ -174,8 +204,455 @@ Bool MMDBoneTag::Init(GeListNode* node, Bool isCloneInit)
 	return SUPER::Init(node, isCloneInit);
 }
 
+void MMDBoneTag::CheckDescriptionUpdate(GeListNode* node, BaseContainer* const bc, const Int32 id)
+{
+	switch (id)
+	{
+	case PMX_BONE_ROTATABLE:
+		{
+			if (!m_bone_object)
+				return;
+			if (!protection_tag)
+			{
+				if (!CreateBoneLockTag())
+					break;
+			}
+			SetRotationLock(!bc->GetBool(id));
+			RefreshColor(node);
+			break;
+		}
+	case PMX_BONE_TRANSLATABLE:
+		{
+			if (!m_bone_object)
+				return;
+			if (!protection_tag)
+			{
+				if (!CreateBoneLockTag())
+					break;
+			}
+			SetPositionLock(!bc->GetBool(id));
+			RefreshColor(node);
+			break;
+		}
+	case PMX_BONE_VISIBLE:
+		{
+			if (!m_bone_object)
+				return;
+			if (!bc->GetBool(id))
+			{
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+			}
+			else
+			{
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS, DESCFLAGS_SET::NONE);
+				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_STANDARD, DESCFLAGS_SET::NONE);
+			}
+			this->RefreshColor(node);
+			break;
+		}
+	case PMX_BONE_INDEXED_TAIL_POSITION:
+		{
+			if (!m_bone_object)
+				return;
+			switch (bc->GetInt32(id))
+			{
+			case PMX_BONE_TAIL_IS_INDEX:
+				{
+					if (bc->GetInt32(PMX_BONE_TAIL_INDEX) == -1)
+					{
+						m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+					}
+					else
+					{
+						m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+					}
+					break;
+				}
+			case PMX_BONE_TAIL_POSITION:
+				{
+					if (bc->GetVector(PMX_BONE_TAIL_POSITION) == Vector())
+					{
+						m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+					}
+					else
+					{
+						m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+					}
+					break;
+				}
+			default:
+				break;
+			}
+			break;
+		}
+	case PMX_BONE_TAIL_INDEX:
+		{
+			if (!m_bone_object)
+				return;
+			if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_IS_INDEX)
+			{
+				if (bc->GetInt32(id) == -1)
+				{
+					m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+				}
+				else {
+					m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+				}
+			}
+			break;
+		}
+	case PMX_BONE_TAIL_POSITION:
+		{
+			if (!m_bone_object)
+				return;
+			if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_POSITION)
+			{
+				if (bc->GetVector(id).IsZero())
+				{
+					m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+				}
+				else {
+					m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+				}
+			}
+			break;
+		}
+	case PMX_BONE_NAME_IS:
+		{
+			if (!m_bone_object)
+				return;
+			if (bc->GetInt32(id))
+			{
+				m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
+			}
+			else {
+				m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
+			}
+			break;
+		}
+	case PMX_BONE_NAME_UNIVERSAL:
+	case PMX_BONE_NAME_LOCAL:
+		{
+			if (!m_bone_object)
+				return;
+			if (bc->GetInt32(PMX_BONE_NAME_IS) == 1)
+			{
+				m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
+			}
+			else {
+				m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
+			}
+			break;
+		}
+	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
+		{
+			if (m_bone_root == nullptr)
+				return;
+			if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
+				if (SDK2024_Const auto inherit_bone_parent_link = bc->GetBaseLink(id); inherit_bone_parent_link != nullptr) {
+					inherit_bone_parent_link->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
+					if (const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->GetBoneIndex(inherit_bone_parent);
+						inherit_bone_parent_index != -1)
+					{
+						bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index);
+					}
+				}
+			}
+			break;
+		}
+	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
+		{
+			if (!m_bone_root)
+				return;
+			if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_INDEX)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
+				if (SDK2024_Const auto inherit_bone_parent_link_ptr = m_bone_root->GetNodeData<MMDBoneRootObject>()->GetBoneLink(bc->GetInt32(id));
+					inherit_bone_parent_link_ptr != nullptr)
+				{
+					if (SDK2024_Const auto inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
+						inherit_bone_parent_link == nullptr)
+					{
+						node->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), BaseLink::Alloc(), DESCFLAGS_SET::NONE);
+					}
+					inherit_bone_parent_link_ptr->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
+				}
+			}
+			break;
+		}
+	case PMX_BONE_IS_IK:
+	case PMX_BONE_IS_FIXED_AXIS:
+	case PMX_BONE_INHERIT_ROTATION:
+	case PMX_BONE_INHERIT_TRANSLATION:
+		{
+			RefreshColor(node);
+			break;
+		}
+	default:
+		break;
+	}
+}
+
+void MMDBoneTag::CheckUserDataButton(GeListNode* node, const DescriptionCommand* description_command)
+{
+	if (const auto button_id_ptr = button_id_map.Find(description_command->_descId); button_id_ptr != nullptr)
+	{
+		DynamicDescription* const dynamic_description = node->GetDynamicDescriptionWritable();
+		if (dynamic_description == nullptr)
+			return;
+		const auto button_id = button_id_ptr->GetValue();
+		if (button_id == -1)
+			return;
+		BoneMorphData& morph_data = bone_morph_data_arr[button_id];
+		if (description_command->_descId == morph_data.button_delete_id)
+		{
+			if (QuestionDialog(IDS_MES_BONE_MORPH_DELETE, morph_data.name))
+			{
+				dynamic_description->Remove(morph_data.button_delete_id);
+				dynamic_description->Remove(morph_data.button_rename_id);
+				dynamic_description->Remove(morph_data.button_grp_id);
+				dynamic_description->Remove(morph_data.rotation_id);
+				dynamic_description->Remove(morph_data.translation_id);
+				dynamic_description->Remove(morph_data.strength_id);
+				dynamic_description->Remove(morph_data.grp_id);
+				iferr(button_id_map.Erase(morph_data.button_delete_id))
+					return;
+				iferr(button_id_map.Erase(morph_data.button_rename_id))
+					return;
+				for (auto& desc_id : button_id_map.GetKeys())
+				{
+					if (auto index = button_id_map.FindValue(desc_id); *index > button_id)
+					{
+						(*index)--;
+					}
+				}
+				// BONE_MORPH_DELETE
+				const maxon::StrongRef<MMDBoneTagMsg> msg(NewObj(MMDBoneTagMsg, morph_data.name).GetValue());
+				m_bone_root->Message(ID_T_MMD_BONE, msg);
+				iferr(bone_morph_data_arr.Erase(button_id))
+					return;
+				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); 
+				if (::GeIsMainThread())
+				{
+					::EventAdd();
+				}
+			}
+			return;
+		}
+		if (description_command->_descId == morph_data.button_rename_id)
+		{
+			auto new_name = morph_data.name;
+			if (!RenameDialog(&new_name))
+			{
+				BaseContainer description_bc = *dynamic_description->Find(morph_data.grp_id);
+				description_bc.SetString(DESC_NAME, new_name);
+				dynamic_description->Set(morph_data.grp_id, description_bc, nullptr);
+				description_bc = *dynamic_description->Find(morph_data.strength_id);
+				description_bc.SetString(DESC_NAME, new_name);
+				dynamic_description->Set(morph_data.strength_id, description_bc, nullptr);
+				// BONE_MORPH_RENAME
+				const maxon::StrongRef<MMDBoneTagMsg> msg(NewObj(MMDBoneTagMsg, new_name, morph_data.name).GetValue());
+				m_bone_root->Message(ID_T_MMD_BONE, msg);
+				morph_data.name = std::move(new_name);
+				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); 
+				if (::GeIsMainThread())
+				{
+					::EventAdd();
+				}
+			}
+			return;
+		}
+	}
+}
+
 Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 {
+	iferr_scope_handler{
+		return true;
+	};
+	const auto data_instance_bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	if (!data_instance_bc)
+	{
+		return true;
+	}
+	switch (type)
+	{
+	case MSG_DESCRIPTION_CHECKUPDATE:
+		CheckDescriptionUpdate(node, data_instance_bc, static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id);
+		break;
+	case MSG_DESCRIPTION_COMMAND:
+		const auto* description_command = static_cast<DescriptionCommand*>(data);
+		if (!description_command)
+			return false;
+		// check if it is a user data button 
+		if (description_command->_descId.GetDepth() == 2 && description_command->_descId[0].id == ID_USERDATA)
+		{
+			CheckUserDataButton(node, description_command);
+		}
+		else {
+			if(description_command->_descId[0].id == PMX_BONE_MORPH_ADD_BUTTON)
+				AddBondMorph(data_instance_bc->GetString(PMX_BONE_MORPH_ADD_NAME));
+		}
+		break;
+	case MSG_MENUPREPARE:
+		if (const auto doc = static_cast<BaseDocument*>(data); doc)
+		{
+			if (BaseObject* op = doc->GetActiveObject(); op)
+			{
+				const String name = op->GetName();
+				node->SetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_LOCAL)), name, DESCFLAGS_SET::NONE);
+				RefreshColor(node, op);
+			}
+		}
+		break;
+	case  ID_O_MMD_BONE_ROOT:
+		if (const auto* msg = static_cast<MMDBoneRootObjectMSG*>(data); msg)
+		{
+			switch (msg->type)
+			{
+			case MMDBoneRootObjectMSGType::SET_BONE_DISPLAY_TYPE:
+				switch (msg->display_type)
+				{
+				case BONE_DISPLAY_TYPE_MOVABLE:
+				{
+					if (data_instance_bc->GetBool(PMX_BONE_TRANSLATABLE))
+					{
+						m_bone_object->SetEditorMode(MODE_ON);
+						m_bone_object->SetRenderMode(MODE_ON);
+					}
+					else {
+						m_bone_object->SetEditorMode(MODE_OFF);
+						m_bone_object->SetRenderMode(MODE_OFF);
+					}
+					break;
+				}
+				case BONE_DISPLAY_TYPE_ROTATABLE:
+				{
+					if (data_instance_bc->GetBool(PMX_BONE_ROTATABLE))
+					{
+						m_bone_object->SetEditorMode(MODE_ON);
+						m_bone_object->SetRenderMode(MODE_ON);
+					}
+					else {
+						m_bone_object->SetEditorMode(MODE_OFF);
+						m_bone_object->SetRenderMode(MODE_OFF);
+					}
+					break;
+				}
+				case BONE_DISPLAY_TYPE_VISIBLE:
+				{
+					if (data_instance_bc->GetBool(PMX_BONE_VISIBLE))
+					{
+						m_bone_object->SetEditorMode(MODE_ON);
+						m_bone_object->SetRenderMode(MODE_ON);
+					}
+					else {
+						m_bone_object->SetEditorMode(MODE_OFF);
+						m_bone_object->SetRenderMode(MODE_OFF);
+					}
+					break;
+				}
+				case BONE_DISPLAY_TYPE_ENABLED:
+				{
+					if (data_instance_bc->GetBool(PMX_BONE_ENABLED))
+					{
+						m_bone_object->SetEditorMode(MODE_ON);
+						m_bone_object->SetRenderMode(MODE_ON);
+					}
+					else {
+						m_bone_object->SetEditorMode(MODE_OFF);
+						m_bone_object->SetRenderMode(MODE_OFF);
+					}
+					break;
+				}
+				case BONE_DISPLAY_TYPE_IK:
+				{
+					if (data_instance_bc->GetBool(PMX_BONE_IS_IK))
+					{
+						m_bone_object->SetEditorMode(MODE_ON);
+						m_bone_object->SetRenderMode(MODE_ON);
+					}
+					else {
+						m_bone_object->SetEditorMode(MODE_OFF);
+						m_bone_object->SetRenderMode(MODE_OFF);
+					}
+					break;
+				}
+				default:
+					m_bone_object->SetEditorMode(MODE_UNDEF);
+					m_bone_object->SetRenderMode(MODE_UNDEF);
+					break;
+			}
+				break;
+			case MMDBoneRootObjectMSGType::BONE_ROOT_UPDATE:
+				m_bone_root = msg->bond_root_object;
+				if (m_bone_object) {
+					BaseObject* up_obj = m_bone_object->GetUp();
+					BaseObject* prev_obj = m_bone_object->GetPred();
+					const Int32	prev_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
+					if (up_obj)
+					{
+						GeData Ge_data;
+						if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
+						{
+							const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE);
+							if (up_tag)
+							{
+								up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
+								data_instance_bc->SetData(PMX_BONE_PARENT_BONE_INDEX, Ge_data);
+							}
+							if (prev_obj == nullptr)
+							{
+								if (up_tag != nullptr)
+								{
+									up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
+									data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
+								}
+							}
+							else {
+								BaseObject* lase_obj = prev_obj;
+								while (lase_obj->GetDownLast() != nullptr)
+								{
+									lase_obj = lase_obj->GetDownLast();
+								}
+
+								if (const BaseTag* last_tag = lase_obj->GetTag(ID_T_MMD_BONE); last_tag != nullptr)
+								{
+									last_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
+									data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
+								}
+							}
+						}
+						else {
+							if (prev_obj == nullptr)
+							{
+								data_instance_bc->SetString(PMX_BONE_INDEX, "0"_s);
+							}
+							else {
+								if (const BaseTag* prev_tag = prev_obj->GetTag(ID_T_MMD_BONE); prev_tag != nullptr)
+								{
+									prev_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
+									data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
+								}
+							}
+						}
+					}
+					else {
+						data_instance_bc->SetString(PMX_BONE_INDEX, "0"_s);
+					}
+					bool error = false;
+					if (const Int32 now_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(&error);
+						!error && now_index != prev_index && m_bone_root != nullptr)
+						m_bone_root->Message(ID_T_MMD_BONE, nullptr);
+			}
+				break;
+			case MMDBoneRootObjectMSGType::DEFAULT:
+			case MMDBoneRootObjectMSGType::BONE_MORPH_CHANGE:
+				break;
+			}
+		}
+				break;
+	default:;
+	}
 
 	return SUPER::Message(node, type, data);
 }
@@ -198,13 +675,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 			if (!CreateBoneLockTag())
 				break;
 		}
-		auto SetRotationProtectionFunc = [this](const bool flag)
-			{
-				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
-			};
-		SetRotationProtectionFunc(!t_data.GetBool());
+		SetRotationLock(!t_data.GetBool());
 		RefreshColor(node);
 		break;
 	}
@@ -217,13 +688,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 			if (!CreateBoneLockTag())
 				break;
 		}
-		auto SetPositionProtectionFunc = [this](const bool flag)
-			{
-				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
-				protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
-			};
-		SetPositionProtectionFunc(!t_data.GetBool());
+		SetPositionLock(!t_data.GetBool());
 		RefreshColor(node);
 		break;
 	}
@@ -513,37 +978,27 @@ bool MMDBoneTag::CreateBoneLockTag()
 	return true;
 }
 
-void MMDBoneTag::UpdateBoneLock(BaseObject* op, const BaseContainer* bc)
+void MMDBoneTag::UpdateBoneLock(const BaseContainer* bc)
 {
 	if (!protection_tag)
-	{
 		if (!CreateBoneLockTag())
 			return;
-	}
-	if (bc->GetBool(PMX_BONE_ROTATABLE) == true)
-	{
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), false, DESCFLAGS_SET::NONE);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), false, DESCFLAGS_SET::NONE);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), false, DESCFLAGS_SET::NONE);
-	}
-	else
-	{
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), true, DESCFLAGS_SET::NONE);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), true, DESCFLAGS_SET::NONE);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), true, DESCFLAGS_SET::NONE);
-	}
-	if (bc->GetBool(PMX_BONE_TRANSLATABLE) == true)
-	{
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), false, DESCFLAGS_SET::NONE);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), false, DESCFLAGS_SET::NONE);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
-	}
-	else
-	{
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), true, DESCFLAGS_SET::NONE);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), true, DESCFLAGS_SET::NONE);
-	}
+	SetRotationLock(!bc->GetBool(PMX_BONE_ROTATABLE));
+	SetPositionLock(!bc->GetBool(PMX_BONE_TRANSLATABLE));
+}
+
+void MMDBoneTag::SetRotationLock(const bool flag) const
+{
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
+}
+
+void MMDBoneTag::SetPositionLock(const bool flag) const
+{
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
 }
 
 void MMDBoneTag::UpdateBoneIndex(BaseTag* tag, BaseObject* op, BaseContainer* bc)
@@ -603,8 +1058,8 @@ void MMDBoneTag::UpdateBoneIndex(BaseTag* tag, BaseObject* op, BaseContainer* bc
 				if (!m_bone_root)
 				{
 					m_bone_root = up_obj;
-					// TODO: const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONEROOT_UPDATA, 0, up_obj).GetValue());
-					// op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
+					const maxon::StrongRef<MMDBoneRootObjectMSG> BoneRoot_msg(NewObj(MMDBoneRootObjectMSG, MMDBoneRootObjectMSGType::BONE_ROOT_UPDATE, 0, up_obj).GetValue());
+					op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 				}
 				bc->SetString(PMX_BONE_INDEX, "0"_s);
 			}
@@ -638,14 +1093,14 @@ void MMDBoneTag::UpdateBoneIndex(BaseTag* tag, BaseObject* op, BaseContainer* bc
 	}
 	else {
 		m_bone_root = nullptr;
-		// TODO: const maxon::StrongRef<OMMDBoneRoot_MSG> BoneRoot_msg(NewObj(OMMDBoneRoot_MSG, OMMDBoneRoot_MSG_Type::BONEROOT_UPDATA, 0, nullptr).GetValue());
-		// op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
+		const maxon::StrongRef<MMDBoneRootObjectMSG> BoneRoot_msg(NewObj(MMDBoneRootObjectMSG, MMDBoneRootObjectMSGType::BONE_ROOT_UPDATE, 0, nullptr).GetValue());
+		op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
 		bc->SetString(PMX_BONE_INDEX, "0"_s);
 	}
 	if (const Int32 now_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr); now_index != prev_index && m_bone_root) {
 		// BONE_INDEX_CHANGE
-		// TODO: const maxon::StrongRef<TMMDBone_MSG> msg(NewObj(TMMDBone_MSG, TMMDBone_MSG_Type::BONE_INDEX_CHANGE).GetValue());
-		// m_bone_root->Message(ID_T_MMD_BONE, msg);
+		const maxon::StrongRef<MMDBoneTagMsg> msg(NewObj(MMDBoneTagMsg).GetValue());
+		m_bone_root->Message(ID_T_MMD_BONE, msg);
 	}
 }
 
@@ -665,7 +1120,7 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	if(!m_bone_tag)
 		m_bone_tag = tag;
 
-	UpdateBoneLock(op, bc);
+	UpdateBoneLock(bc);
 	UpdateBoneIndex(tag, op, bc);
 	CheckInheritBoneParent(doc, op, bc);
 	UpdateBoneMorph(tag, op);
@@ -795,58 +1250,60 @@ Int MMDBoneTag::AddBondMorph(String morph_name)
 		morph_name = "morph_" + String::IntToString(m_bone_morph_name_index);
 		m_bone_morph_name_index++;
 	}
-	DynamicDescription* const ddesc = m_bone_tag->GetDynamicDescriptionWritable();
-	if (ddesc == nullptr)
+	DynamicDescription* const dynamic_description = m_bone_tag->GetDynamicDescriptionWritable();
+	if (!dynamic_description)
 		return-1;
-	auto& data = bone_morph_data_arr.Append()iferr_return;
-	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-	bc.SetString(DESC_NAME, morph_name);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(PMX_BONE_MORPH_GRP));
-	data.grp_id = ddesc->Alloc(bc);
-	bc = GetCustomDataTypeDefault(DTYPE_REAL);
-	bc.SetString(DESC_NAME, morph_name);
-	bc.SetFloat(DESC_MAX, 1.);
-	bc.SetFloat(DESC_MIN, 0.);
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
-	bc.SetFloat(DESC_MAXSLIDER, 1.);
-	bc.SetFloat(DESC_MINSLIDER, 0.);
-	bc.SetFloat(DESC_STEP, 0.01);
-	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(data.grp_id));
-	data.strength_id = ddesc->Alloc(bc);
-	bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_TRANSLATION));
-	bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(data.grp_id));
-	data.translation_id = ddesc->Alloc(bc);
-	bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_ROTATION));
-	bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(data.grp_id));
-	data.rotation_id = ddesc->Alloc(bc);
-	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-	bc.SetInt32(DESC_COLUMNS, 2);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(data.grp_id));
-	data.button_grp_id = ddesc->Alloc(bc);
-	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(data.button_grp_id));
-	data.button_delete_id = ddesc->Alloc(bc);
-	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(data.button_grp_id));
-	data.button_rename_id = ddesc->Alloc(bc);
-	const Int index = bone_morph_data_arr.GetIndex(*data);
+	BaseContainer grp_bc = GetCustomDataTypeDefault(DTYPE_GROUP);
+	grp_bc.SetString(DESC_NAME, morph_name);
+	grp_bc.SetData(DESC_PARENTGROUP, DescIDGeData(PMX_BONE_MORPH_GRP));
+	auto grp_id = dynamic_description->Alloc(grp_bc);
+	BaseContainer strength_bc = GetCustomDataTypeDefault(DTYPE_REAL);
+	strength_bc.SetString(DESC_NAME, morph_name);
+	strength_bc.SetFloat(DESC_MAX, 1.);
+	strength_bc.SetFloat(DESC_MIN, 0.);
+	strength_bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
+	strength_bc.SetFloat(DESC_MAXSLIDER, 1.);
+	strength_bc.SetFloat(DESC_MINSLIDER, 0.);
+	strength_bc.SetFloat(DESC_STEP, 0.01);
+	strength_bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
+	strength_bc.SetData(DESC_PARENTGROUP, DescIDGeData(grp_id));
+	BaseContainer translation_bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
+	translation_bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_TRANSLATION));
+	translation_bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+	translation_bc.SetData(DESC_PARENTGROUP, DescIDGeData(grp_id));
+	BaseContainer rotation_bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
+	rotation_bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_ROTATION));
+	rotation_bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+	rotation_bc.SetData(DESC_PARENTGROUP, DescIDGeData(grp_id));
+	BaseContainer button_grp_bc = GetCustomDataTypeDefault(DTYPE_GROUP);
+	button_grp_bc.SetInt32(DESC_COLUMNS, 2);
+	button_grp_bc.SetData(DESC_PARENTGROUP, DescIDGeData(grp_id));
+	auto button_grp_id = dynamic_description->Alloc(button_grp_bc);
+	BaseContainer button_delete_bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
+	button_delete_bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
+	button_delete_bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
+	button_delete_bc.SetData(DESC_PARENTGROUP, DescIDGeData(button_grp_id));
+	BaseContainer button_rename_bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
+	button_rename_bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
+	button_rename_bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
+	button_rename_bc.SetData(DESC_PARENTGROUP, DescIDGeData(button_grp_id));
+	const auto& data = bone_morph_data_arr.Append(
+		morph_name,
+		std::move(grp_id),
+		dynamic_description->Alloc(strength_bc),
+		dynamic_description->Alloc(translation_bc),
+		dynamic_description->Alloc(rotation_bc),
+		std::move(button_grp_id),
+		dynamic_description->Alloc(button_delete_bc),
+		dynamic_description->Alloc(button_rename_bc))iferr_return;
+	const Int index = bone_morph_data_arr.GetIndex(data);
 	iferr(button_id_map.Insert(data.button_delete_id, index))
 		return -1;
 	iferr(button_id_map.Insert(data.button_rename_id, index))
 		return -1;
 	// BONE_MORPH_ADD
-	// TODO: const maxon::StrongRef<TMMDBone_MSG> msg(NewObj(TMMDBone_MSG, TMMDBone_MSG_Type::BONE_MORPH_ADD, morph_name, data.strength_id, static_cast<BaseTag*>(Get())).GetValue());
-	// m_bone_root->Message(ID_T_MMD_BONE, msg);
-	data.name = std::move(morph_name);
+	const maxon::StrongRef<MMDBoneTagMsg> msg(NewObj(MMDBoneTagMsg, std::move(morph_name), static_cast<BaseTag*>(Get()), data.strength_id).GetValue());
+	m_bone_root->Message(ID_T_MMD_BONE, msg);
 	if (GeIsMainThread())
 	{
 		SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); 
@@ -878,6 +1335,16 @@ Bool MMDBoneTag::SetBondMorphRotation(const Int index, const Vector& rotation)
 	return Get()->SetParameter(bone_morph_data_arr[index].rotation_id, rotation, DESCFLAGS_SET::NONE);
 }
 
+Bool MMDBoneTag::SetBondMorphTranslationNoCheck(Int index, const Vector& translation)
+{
+	return Get()->SetParameter(bone_morph_data_arr[index].translation_id, translation, DESCFLAGS_SET::NONE);
+}
+
+Bool MMDBoneTag::SetBondMorphRotationNoCheck(Int index, const Vector& rotation)
+{
+	return Get()->SetParameter(bone_morph_data_arr[index].rotation_id, rotation, DESCFLAGS_SET::NONE);
+}
+
 Int MMDBoneTag::GetMorphCount() const
 {
 	return bone_morph_data_arr.GetCount();
@@ -887,6 +1354,11 @@ BoneMorphData* MMDBoneTag::GetMorph(const Int index)
 {
 	if (!CheckBoneMorphIndex(index))
 		return nullptr;
+	return &bone_morph_data_arr[index];
+}
+
+BoneMorphData* MMDBoneTag::GetMorphNoCheck(const Int index)
+{
 	return &bone_morph_data_arr[index];
 }
 
@@ -937,12 +1409,12 @@ MMDBoneTag::CurrentValuesArray MMDBoneTag::GetCurrentValues(
 
 	const CurrentValuesArray current_values
 	{
-		RelPos.x,													// POSITION_X
-		RelPos.y,													// POSITION_Y
-		RelPos.z,													// POSITION_Z
-		RelRot.x,													// ROTATION_X
-		RelRot.y,													// ROTATION_Y
-		RelRot.z,													// ROTATION_Z
+		RelPos.x,	// POSITION_X
+		RelPos.y,	// POSITION_Y
+		RelPos.z,	// POSITION_Z
+		RelRot.x,	// ROTATION_X
+		RelRot.y,	// ROTATION_Y
+		RelRot.z,	// ROTATION_Z
 	};
 
 	return current_values;

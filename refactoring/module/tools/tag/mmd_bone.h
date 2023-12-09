@@ -12,6 +12,39 @@ Description:	DESC
 #include "module/tools/mmd_interpolator.hpp"
 #include "description/TMMDBone.h"
 
+struct BoneMorphData
+{
+	String name;
+	DescID grp_id;
+
+	DescID strength_id;
+	DescID translation_id;
+	DescID rotation_id;
+
+	DescID button_grp_id;
+	DescID button_delete_id;
+	DescID button_rename_id;
+	
+	explicit BoneMorphData(
+		String name = String(),
+		DescID grp_id = DescID(),
+		DescID strength_id = DescID(),
+		DescID translation_id = DescID(),
+		DescID rotation_id = DescID(),
+		DescID button_grp_id = DescID(),
+		DescID button_delete_id = DescID(),
+		DescID button_rename_id = DescID()
+	);
+	~BoneMorphData() = default;
+
+	Bool Write(HyperFile* hf) const;
+	Bool Read(HyperFile* hf);
+	BoneMorphData(BoneMorphData&& src) noexcept :
+	MAXON_MOVE_MEMBERS(name, grp_id, strength_id, translation_id, rotation_id, button_grp_id, button_delete_id, button_rename_id){}
+	BoneMorphData& operator=(BoneMorphData&&) = default;
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(BoneMorphData)
+};
+
 enum class MMDBoneTagMsgType : int8_t
 {
 	DEFAULT = -1,
@@ -21,31 +54,22 @@ enum class MMDBoneTagMsgType : int8_t
 	BONE_MORPH_RENAME
 };
 
-struct BoneMorphData
-{
-	DescID	grp_id = DescID();
-	DescID	strength_id = DescID();
-	DescID	translation_id = DescID();
-	DescID	rotation_id = DescID();
-	DescID	button_grp_id = DescID();
-	DescID	button_delete_id = DescID();
-	DescID	button_rename_id = DescID();
-	String	name = String();
-	Bool Write(HyperFile* hf) const;
-	Bool Read(HyperFile* hf);
-	BoneMorphData() = default;
-	~BoneMorphData() = default;
-	BoneMorphData(BoneMorphData&& src) noexcept :
-	MAXON_MOVE_MEMBERS(grp_id, strength_id, translation_id, rotation_id, button_grp_id, button_delete_id, button_rename_id, name){}
-	BoneMorphData& operator=(BoneMorphData&&) = default;
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(BoneMorphData)
-};
-
 struct MMDBoneTagMsg
 {
 	MMDBoneTagMsgType type = MMDBoneTagMsgType::DEFAULT;
-	String	name;
-	String	name_old;
+	String	name{};
+	String	name_old{};
+	AutoAlloc<BaseLink> bone_tag{};
+	DescID strength_id{};
+
+	// bone index change
+	MMDBoneTagMsg();
+	// bone morph delete
+	explicit MMDBoneTagMsg(String name);
+	// bone morph add
+	explicit MMDBoneTagMsg(String name, const BaseTag* bone_tag,  DescID strength_id);
+	// bone morph rename
+	explicit MMDBoneTagMsg(String name,String name_old);
 };
 
 using MMDBoneTagBase = MMDInterpolatorNode<TagData, 6, PMX_BONE_TAG_INTERPOLATOR_NUM, PMX_BONE_TAG_SPLINE, PMX_BONE_TAG_CURVE_TYPE, PMX_BONE_TAG_FRAME_AT, VMD_CAM_OBJ_FRAME_AT_STR>;
@@ -103,8 +127,11 @@ public:
 
 	Int AddBondMorph(String morph_name);
 	BoneMorphData* GetMorph(Int index);
+	BoneMorphData* GetMorphNoCheck(Int index);
 	Bool SetBondMorphTranslation(Int index, const Vector& translation);
 	Bool SetBondMorphRotation(Int index, const Vector& rotation);
+	Bool SetBondMorphTranslationNoCheck(Int index, const Vector& translation);
+	Bool SetBondMorphRotationNoCheck(Int index, const Vector& rotation);
 	[[nodiscard]] Int GetMorphCount() const;
 	[[nodiscard]] bool CheckBoneMorphIndex(Int index) const;
 protected:
@@ -118,6 +145,10 @@ private:
 	void UpdateBoneMorph(const BaseTag* tag, BaseObject* op);
 	bool CreateBoneLockTag();
 	void UpdateBoneIndex(BaseTag* tag, BaseObject* op, BaseContainer* bc);
-	void UpdateBoneLock(BaseObject* op, const BaseContainer* bc);
+	void UpdateBoneLock(const BaseContainer* bc);
+	void SetRotationLock(bool flag) const;
+	void SetPositionLock(bool flag) const;
+	void CheckDescriptionUpdate(GeListNode* node, BaseContainer* bc, Int32 id);
+	void CheckUserDataButton(GeListNode* node, const DescriptionCommand* description_command);
 	static TrackDescIDArray GetTrackDescIDsImpl();
 };

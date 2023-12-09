@@ -11,6 +11,7 @@ Description:	MMD model object
 #include "pch.h"
 #include "mmd_model.h"
 #include "description/OMMDModel.h"
+#include "module/tools/tag/mmd_bone.h"
 
 #define COL_NAME 'name'
 
@@ -886,6 +887,18 @@ inline auto FlipMorph::AddSubMorphNoCheck(Int32 id, const Float weight) -> void
 {
 	std::ignore = m_data.Insert(id, weight);
 }
+
+MMDModelObject::AddMorphHelper::AddMorphHelper(MMDModelObject* model):m_model(model)
+{
+	*m_model->m_is_need_update.Write() = false;
+	*m_model->m_is_morph_initialized.Write() = false;
+}
+
+MMDModelObject::AddMorphHelper::~AddMorphHelper()
+{
+	*m_model->m_is_need_update.Write() = true;
+}
+
 Bool MMDModelObject::Init(GeListNode* node SDK2024_InitPara)
 {
 	if (node == nullptr)
@@ -1080,7 +1093,7 @@ Bool MMDModelObject::ReadMorph(HyperFile* hf)
 			break;
 		}
 		res->Read(hf);
-		GetMorphData().AppendPtr(res)iferr_return;
+		GetMorphDataWritable().AppendPtr(res)iferr_return;
 	}
 	return true;
 }
@@ -1134,6 +1147,12 @@ Bool MMDModelObject::CopyMorph(MMDModelObject* dst) const
 	}
 	return true;
 }
+
+MMDModelObject::AddMorphHelper MMDModelObject::BeginMorphChange()
+{
+	return AddMorphHelper{this};
+}
+
 void MMDModelObject::RefreshMorph()
 {
 	iferr_scope_handler{ return; };
@@ -1429,11 +1448,10 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				case DescType::BUTTON_RENAME:
 				{
-					utility::RenameDialog dlg;
-					dlg.Open(DLG_TYPE::MODAL, 100001, -1, -1, 0, 0);
-					if (!dlg.Rename.IsEmpty())
+					auto new_name = morph.GetName();
+					if (RenameDialog(&new_name))
 					{
-						morph.RenameMorph(this, dlg.Rename);
+						morph.RenameMorph(this, new_name);
 					}
 					break;
 				}
@@ -1498,12 +1516,11 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 						{
 							if (node_->GetType() == Ojoint)
 							{
-								BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE);
-								if (node_bone_tag != nullptr)
+								if (BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
 								{
-									TMMDBone* pmx_bone_tag_data = node_bone_tag->GetNodeData<TMMDBone>();
-									const Int32	BoneMorphCount = (Int32)pmx_bone_tag_data->GetMorphCount();
-									for (Int32 index = 0; index < BoneMorphCount; index++)
+									auto* pmx_bone_tag_data = node_bone_tag->GetNodeData<MMDBoneTag>();
+									const Int BoneMorphCount = pmx_bone_tag_data->GetMorphCount();
+									for (Int index = 0; index < BoneMorphCount; index++)
 									{
 										auto* bone_morph = pmx_bone_tag_data->GetMorph(index);
 										if (bone_morph == nullptr)
@@ -1582,12 +1599,11 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 						{
 							if (node_->GetType() == Ojoint)
 							{
-								BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE);
-								if (node_bone_tag != nullptr)
+								if (BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
 								{
-									TMMDBone* pmx_bone_tag_data = node_bone_tag->GetNodeData<TMMDBone>();
-									const Int32	BoneMorphCount = (Int32)pmx_bone_tag_data->GetMorphCount();
-									for (Int32 index = 0; index < BoneMorphCount; index++)
+									auto* pmx_bone_tag_data = node_bone_tag->GetNodeData<MMDBoneTag>();
+									const Int BoneMorphCount = pmx_bone_tag_data->GetMorphCount();
+									for (Int index = 0; index < BoneMorphCount; index++)
 									{
 										auto* bone_morph = pmx_bone_tag_data->GetMorph(index);
 										if (bone_morph == nullptr)
@@ -1598,16 +1614,15 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 									}
 								}
 							}
-							BaseTag* const node_morph_tag = node_->GetTag(Tposemorph);
-							if (node_morph_tag != nullptr)
+							if (BaseTag* const node_morph_tag = node_->GetTag(Tposemorph); node_morph_tag != nullptr)
 							{
-								CAPoseMorphTag* const	pose_morph_tag = static_cast<CAPoseMorphTag*>(node_morph_tag);
+								auto* const	pose_morph_tag = reinterpret_cast<CAPoseMorphTag*>(node_morph_tag);
 								const Int32		MorphCount = pose_morph_tag->GetMorphCount();
 								for (Int32 index = 0; index < MorphCount; index++)
 								{
 									CTrack* morph_track = node_morph_tag->FindCTrack(pose_morph_tag->GetMorphID(index));
 									CTrack::Free(morph_track);
-									pose_morph_tag->GetMorph(index)->SetStrength(0);
+									pose_morph_tag->GetMorph(index)->SetStrength(0.);
 								}
 							}
 							iferr(nodes.Push(node_->GetDown())) return true;
@@ -1660,7 +1675,7 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 							{
 								if (BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
 								{
-									TMMDBone* pmx_bone_tag_data = node_bone_tag->GetNodeData<TMMDBone>();
+									auto* pmx_bone_tag_data = node_bone_tag->GetNodeData<MMDBoneTag>();
 									const auto BoneMorphCount = static_cast<Int32>(pmx_bone_tag_data->GetMorphCount());
 									for (Int32 index = 0; index < BoneMorphCount; index++)
 									{

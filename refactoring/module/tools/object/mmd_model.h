@@ -258,16 +258,11 @@ public:
 	class AddMorphHelper
 	{
 		MMDModelObject* m_model = nullptr;
+		CMT_DISALLOW_COPY_AND_ASSIGN_BODY(AddMorphHelper)
+		CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(AddMorphHelper)
 	public:
-		explicit AddMorphHelper(MMDModelObject* model) :m_model(model)
-		{
-			*m_model->m_is_need_update.Write() = false;
-			*m_model->m_is_morph_initialized.Write() = false;
-		}
-		~AddMorphHelper()
-		{
-			*m_model->m_is_need_update.Write() = true;
-		}
+		explicit AddMorphHelper(MMDModelObject* model);
+		~AddMorphHelper();
 	};
 public:
 	~MMDModelObject() override = default;
@@ -284,10 +279,7 @@ public:
 	Bool ReadMorph(HyperFile* hf);
 	Bool WriteMorph(HyperFile* hf) const;
 	Bool CopyMorph(MMDModelObject* dst) const;
-	AddMorphHelper BeginMorphChange()
-	{
-		return AddMorphHelper{this};
-	}
+	AddMorphHelper BeginMorphChange();
 	Int32 ImportGroupAndFlipMorph(const PMXModel* pmx_model, libmmd::pmx_morph& pmx_morph);
 
 	String GetMorphNamedNumber()
