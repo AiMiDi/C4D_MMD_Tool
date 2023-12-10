@@ -141,6 +141,29 @@ Bool BoneMorphData::Read(HyperFile* hf)
 	return true;
 }
 
+BoneMorphUIData::BoneMorphUIData(const BaseTag* bone_tag, DescID strength_id): strength_id(std::move(strength_id))
+{
+	bone_tag_link->SetLink(bone_tag);
+}
+
+Bool BoneMorphUIData::Write(HyperFile* hf) const
+{
+	if(!bone_tag_link->Write(hf))
+		return false;
+	if (!strength_id.Write(hf))
+		return false;
+	return true;
+}
+
+Bool BoneMorphUIData::Read(HyperFile* hf)
+{
+	if (!bone_tag_link->Read(hf))
+		return false;
+	if (!strength_id.Read(hf))
+		return false;
+	return true;
+}
+
 MMDBoneTagMsg::MMDBoneTagMsg() : type(MMDBoneTagMsgType::BONE_INDEX_CHANGE)
 {
 }
@@ -149,9 +172,8 @@ MMDBoneTagMsg::MMDBoneTagMsg(String name): type(MMDBoneTagMsgType::BONE_MORPH_DE
 {}
 
 MMDBoneTagMsg::MMDBoneTagMsg(String name, const BaseTag* bone_tag, DescID strength_id):
-type(MMDBoneTagMsgType::BONE_MORPH_ADD), name(std::move(name)), strength_id(std::move(strength_id))
+type(MMDBoneTagMsgType::BONE_MORPH_ADD), name(std::move(name)), bone_morph_UI_data(bone_tag, std::move(strength_id))
 {
-	this->bone_tag->SetLink(bone_tag);
 }
 
 MMDBoneTagMsg::MMDBoneTagMsg(String name, String name_old): type(MMDBoneTagMsgType::BONE_MORPH_RENAME), name(std::move(name)), name_old(std::move(name_old))

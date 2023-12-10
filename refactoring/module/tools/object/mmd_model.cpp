@@ -10,6 +10,8 @@ Description:	MMD model object
 
 #include "pch.h"
 #include "mmd_model.h"
+
+#include "mmd_bone_root.h"
 #include "description/OMMDModel.h"
 #include "module/tools/tag/mmd_bone.h"
 
@@ -492,19 +494,12 @@ inline void MeshMorph::UpdateMorphOfModel(MMDModelObject* model)
 }
 inline void BoneMorph::UpdateMorphOfModel(MMDModelObject* model)
 {
-	if (model == nullptr)
+	if (!model)
 		return;
-	BaseObject* BoneRoot_ptr = model->GetRootObject(ToolObjectType::BoneRoot);
-	if (BoneRoot_ptr == nullptr)
+	BaseObject* bone_root = model->GetRootObject(ToolObjectType::BoneRoot);
+	if (!bone_root)
 		return;
-	auto& bone_morph_map = BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->GetBoneMorphMap();
-	auto* bone_morph_ptr = bone_morph_map.Find(m_name);
-	if (bone_morph_ptr == nullptr)
-		return;
-	auto& mesh_morph_list = bone_morph_ptr->GetValue();
-	for (auto& bone_morph : mesh_morph_list) {
-		bone_morph.SetStrength(this->GetStrength(model->Get()));
-	}
+	bone_root->GetNodeData<MMDBoneRootObject>()->SetBoneMorphStrength(m_name, GetStrength(model->Get()));
 }
 inline Int32 GroupMorph::AddMorphToModel(MMDModelObject* model, String morph_name)
 {

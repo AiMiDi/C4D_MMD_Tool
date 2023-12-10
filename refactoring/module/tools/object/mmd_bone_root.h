@@ -10,6 +10,7 @@ Description:	DESC
 
 #pragma once
 #include "description/OMMDBoneRoot.h"
+#include "module/tools/tag/mmd_bone.h"
 /*
 type 0: update BoneRoot;
 type 1: set bone display type;
@@ -40,7 +41,28 @@ struct MMDBoneRootObjectMSG
 };
 class MMDBoneRootObject final : public ObjectData
 {
+	Int bone_name_index = 0;
+	BaseObject* m_model_root = nullptr;
+	BaseObject* m_rigid_root = nullptr;
+	BaseObject* m_joint_root = nullptr;
+	BaseTag* m_protection_tag = nullptr;
+	BaseContainer m_bone_items;
+	BaseLinkArray m_bone_list;
+	maxon::HashMap<String, maxon::BaseList<BoneMorphUIData>> m_bone_morph_data;
+	MMDBoneRootObject() = default;
+	~MMDBoneRootObject() override = default;
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneRootObject)
+	CMT_DEFAULT_MOVE_BODY(MMDBoneRootObject)
+	INSTANCEOF(MMDBoneRootObject, ObjectData)
 public:
-	BaseLink* GetBoneLink(Int32 index);
-	Int32 GetBoneIndex(BaseLink* bone);
+	Bool Init(GeListNode* node SDK2024_InitPara) override;
+	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
+	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
+	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
+	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
+	Bool Message(GeListNode* node, Int32 type, void* data) override;
+
+	[[nodiscard]] BaseTag* FindBoneTag(Int32 index, BaseDocument* doc) const;
+	Int32 FindBoneIndex(const BaseTag* bone_tag, const BaseDocument* doc) const;
+	Bool SetBoneMorphStrength(const String& morph_name, Float strength);
 };

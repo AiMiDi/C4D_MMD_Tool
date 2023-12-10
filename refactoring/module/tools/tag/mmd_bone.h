@@ -45,6 +45,16 @@ struct BoneMorphData
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(BoneMorphData)
 };
 
+struct BoneMorphUIData
+{
+	AutoAlloc<BaseLink> bone_tag_link{ BaseLink::Alloc() };
+	DescID strength_id{};
+
+	explicit BoneMorphUIData(const BaseTag* bone_tag = nullptr, DescID strength_id = {});
+	Bool Write(HyperFile* hf) const;
+	Bool Read(HyperFile* hf);
+};
+
 enum class MMDBoneTagMsgType : int8_t
 {
 	DEFAULT = -1,
@@ -59,8 +69,7 @@ struct MMDBoneTagMsg
 	MMDBoneTagMsgType type = MMDBoneTagMsgType::DEFAULT;
 	String	name{};
 	String	name_old{};
-	AutoAlloc<BaseLink> bone_tag{};
-	DescID strength_id{};
+	BoneMorphUIData bone_morph_UI_data{};
 
 	// bone index change
 	MMDBoneTagMsg();
