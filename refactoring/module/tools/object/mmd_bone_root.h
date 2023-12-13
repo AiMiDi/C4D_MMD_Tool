@@ -62,7 +62,7 @@ public:
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 
-	[[nodiscard]] BaseTag* FindBoneTag(Int32 index, BaseDocument* doc) const;
-	Int32 FindBoneIndex(const BaseTag* bone_tag, const BaseDocument* doc) const;
+	[[nodiscard]] BaseList2D* FindBone(Int32 index, BaseDocument* doc) const;
+	Int32 FindBoneIndex(const BaseList2D* bone_tag, const BaseDocument* doc) const;
 	Bool SetBoneMorphStrength(const String& morph_name, Float strength);
 };

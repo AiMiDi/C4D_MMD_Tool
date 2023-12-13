@@ -53,6 +53,10 @@ struct BoneMorphUIData
 	explicit BoneMorphUIData(const BaseTag* bone_tag = nullptr, DescID strength_id = {});
 	Bool Write(HyperFile* hf) const;
 	Bool Read(HyperFile* hf);
+	Bool operator==(const BoneMorphUIData& other) const
+	{
+		return bone_tag_link->ForceGetLink() == other.bone_tag_link->ForceGetLink() && strength_id == other.strength_id;
+	}
 };
 
 enum class MMDBoneTagMsgType : int8_t
@@ -118,8 +122,10 @@ class MMDBoneTag final : public MMDBoneTagBase
 	INSTANCEOF(MMDBoneTag, MMDBoneTagBase)
 
 public:
-	explicit MMDBoneTag(BaseObject* bone_object, BaseObject* bone_root) : m_bone_root(bone_root), m_bone_object(bone_object) {}
+	MMDBoneTag() = default;
 	~MMDBoneTag() override = default;
+	void SetBoneRoot(BaseObject* bone_root);
+	void SetBoneObject(BaseObject* bone_object);
 
 	static NodeData* Alloc();
 	Bool Init(GeListNode* node SDK2024_InitPara) override;
@@ -143,13 +149,13 @@ public:
 	Bool SetBondMorphRotationNoCheck(Int index, const Vector& rotation);
 	[[nodiscard]] Int GetMorphCount() const;
 	[[nodiscard]] bool CheckBoneMorphIndex(Int index) const;
+	Bool RefreshColor(GeListNode* node = nullptr, BaseObject* op = nullptr);
 protected:
 	TrackDescIDArray GetTrackDescIDs() override;
 	TrackObjectArray GetTrackObjects(GeListNode* node) override;
 	InterpolatorTrackTableArray GetTrackInterpolatorMap() override;
 	CurrentValuesArray GetCurrentValues(GeListNode* node) override;
 private:
-	Bool RefreshColor(GeListNode* node, BaseObject* op = nullptr);
 	void CheckInheritBoneParent(const BaseDocument* doc, BaseObject* op, const BaseContainer* bc);
 	void UpdateBoneMorph(const BaseTag* tag, BaseObject* op);
 	bool CreateBoneLockTag();
