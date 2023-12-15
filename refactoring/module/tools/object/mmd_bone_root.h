@@ -17,22 +17,22 @@ type 1: set bone display type;
 type 2: bone index change;
 type 3: bone morph change;
 */
-enum class MMDBoneRootObjectMSGType : int8_t
+enum class MMDBoneRootObjectMsgType : int8_t
 {
 	DEFAULT = -1,
 	SET_BONE_DISPLAY_TYPE,
 	BONE_ROOT_UPDATE,
 	BONE_MORPH_CHANGE
 };
-struct MMDBoneRootObjectMSG
+struct MMDBoneRootObjectMsg
 {
 
-	MMDBoneRootObjectMSGType type;
+	MMDBoneRootObjectMsgType type;
 	Int32	display_type;
 	BaseObject* bond_root_object;
 
-	explicit MMDBoneRootObjectMSG(
-		const MMDBoneRootObjectMSGType type_ = MMDBoneRootObjectMSGType::DEFAULT,
+	explicit MMDBoneRootObjectMsg(
+		const MMDBoneRootObjectMsgType type_ = MMDBoneRootObjectMsgType::DEFAULT,
 		const Int32 display_type_ = BONE_DISPLAY_TYPE_ON,
 		BaseObject* BoneRoot_ = nullptr) :
 		type(type_),
@@ -47,7 +47,7 @@ class MMDBoneRootObject final : public ObjectData
 	BaseObject* m_joint_root = nullptr;
 	BaseTag* m_protection_tag = nullptr;
 	BaseContainer m_bone_items;
-	BaseLinkArray m_bone_list;
+	maxon::HashMap<Int, AutoAlloc<BaseLink>> m_bone_list;
 	maxon::HashMap<String, maxon::BaseList<BoneMorphUIData>> m_bone_morph_data;
 	MMDBoneRootObject() = default;
 	~MMDBoneRootObject() override = default;
@@ -61,8 +61,16 @@ public:
 	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
-
-	[[nodiscard]] BaseList2D* FindBone(Int32 index, BaseDocument* doc) const;
-	Int32 FindBoneIndex(const BaseList2D* bone_tag, const BaseDocument* doc) const;
+	const maxon::HashMap<String, maxon::BaseList<BoneMorphUIData>>& GetBoneMorphData() const;
+	[[nodiscard]] BaseList2D* FindBone(Int32 index) const;
+	Int32 FindBoneIndex(const BaseList2D* bone_tag) const;
+	
 	Bool SetBoneMorphStrength(const String& morph_name, Float strength);
+private:
+	void HandleDescriptionCommandMessage(GeListNode* node, void* data);
+	bool HandleMMDBoneTagMessage(GeListNode* node, void* data);
+	bool HandleBoneIndexChangeMessage(GeListNode* node, void* data, bool& need_update_morph);
+	bool HandleBoneMorphAdd(GeListNode* node, void* data, bool& need_update_morph);
+	bool HandleBoneMorphDelete(GeListNode* node, void* data, bool& need_update_morph);
+	bool HandleBoneMorphRename(GeListNode* node, void* data, bool& need_update_morph);
 };

@@ -1167,7 +1167,7 @@ void MMDModelObject::RefreshMorph()
 		auto* morph = NewObj(MeshMorph)iferr_return;
 		morph->AddMorphToModel(this, name);
 	}
-	auto& bone_morph_map = m_BoneRoot_ptr->GetNodeData<OMMDBoneRoot>()->GetBoneMorphMap();
+	auto& bone_morph_map = m_BoneRoot_ptr->GetNodeData<MMDBoneRootObject>()->GetBoneMorphData();
 	for (auto& name : bone_morph_map.GetKeys())
 	{
 		auto* morph = NewObj(BoneMorph)iferr_return;
@@ -1250,29 +1250,29 @@ Bool MMDModelObject::UpdateRoot(BaseObject* op)
 		m_is_root_initialized = false;
 	}
 	if (m_is_root_initialized == false) {
-		const maxon::StrongRef<OMMDModel_MSG> MeshRoot_msg(
-			NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::Model, op).GetValue());
+		const maxon::StrongRef<MMDModelObjectMsg> MeshRoot_msg(
+			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATA, ToolObjectType::Model, op).GetValue());
 		this->m_MeshRoot_ptr->Message(ID_O_MMD_MODEL, MeshRoot_msg);
-		const maxon::StrongRef<OMMDModel_MSG> BoneRoot_msgA(
-			NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::RigidRoot, this->m_RigidRoot_ptr).GetValue());
+		const maxon::StrongRef<MMDModelObjectMsg> BoneRoot_msgA(
+			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATA, ToolObjectType::RigidRoot, this->m_RigidRoot_ptr).GetValue());
 		this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, BoneRoot_msgA);
-		const maxon::StrongRef<OMMDModel_MSG> BoneRoot_msgB(
-			NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::JointRoot, this->m_JointRoot_ptr).GetValue());
+		const maxon::StrongRef<MMDModelObjectMsg> BoneRoot_msgB(
+			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATA, ToolObjectType::JointRoot, this->m_JointRoot_ptr).GetValue());
 		this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, BoneRoot_msgB);
-		const maxon::StrongRef<OMMDModel_MSG> BoneRoot_msgC(
-			NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::Model, op).GetValue());
+		const maxon::StrongRef<MMDModelObjectMsg> BoneRoot_msgC(
+			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATA, ToolObjectType::Model, op).GetValue());
 		this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, BoneRoot_msgC);
-		const maxon::StrongRef<OMMDModel_MSG> RigidRoot_msgA(
-			NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::BoneRoot, this->m_BoneRoot_ptr).GetValue());
+		const maxon::StrongRef<MMDModelObjectMsg> RigidRoot_msgA(
+			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATA, ToolObjectType::BoneRoot, this->m_BoneRoot_ptr).GetValue());
 		this->m_RigidRoot_ptr->Message(ID_O_MMD_MODEL, RigidRoot_msgA);
-		const maxon::StrongRef<OMMDModel_MSG> RigidRoot_msgB(
-			NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::JointRoot, this->m_JointRoot_ptr).GetValue());
+		const maxon::StrongRef<MMDModelObjectMsg> RigidRoot_msgB(
+			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATA, ToolObjectType::JointRoot, this->m_JointRoot_ptr).GetValue());
 		this->m_RigidRoot_ptr->Message(ID_O_MMD_MODEL, RigidRoot_msgB);
-		const maxon::StrongRef<OMMDModel_MSG> JointRoot_msgA(
-			NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::BoneRoot, this->m_BoneRoot_ptr).GetValue());
+		const maxon::StrongRef<MMDModelObjectMsg> JointRoot_msgA(
+			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATA, ToolObjectType::BoneRoot, this->m_BoneRoot_ptr).GetValue());
 		this->m_JointRoot_ptr->Message(ID_O_MMD_MODEL, JointRoot_msgA);
-		const maxon::StrongRef<OMMDModel_MSG> JointRoot_msgB(
-			NewObj(OMMDModel_MSG, OMMDModel_MSG_Type::TOOL_OBJECT_UPDATA, ToolObjectType::RigidRoot, this->m_RigidRoot_ptr).GetValue());
+		const maxon::StrongRef<MMDModelObjectMsg> JointRoot_msgB(
+			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATA, ToolObjectType::RigidRoot, this->m_RigidRoot_ptr).GetValue());
 		this->m_JointRoot_ptr->Message(ID_O_MMD_MODEL, JointRoot_msgB);
 		m_is_root_initialized = true;
 	}
@@ -1411,8 +1411,8 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 	}
 	case ID_O_MMD_BONE_ROOT:
 	{
-		OMMDBoneRoot_MSG* msg = static_cast<OMMDBoneRoot_MSG*>(data);
-		if (msg->type == OMMDBoneRoot_MSG_Type::BONE_MORPH_CHANGE) {
+		MMDBoneRootObjectMsg* msg = static_cast<MMDBoneRootObjectMsg*>(data);
+		if (msg->type == MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE) {
 			*m_is_morph_initialized.Write() = false;
 		}
 		break;
@@ -1514,10 +1514,10 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 								if (BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
 								{
 									auto* pmx_bone_tag_data = node_bone_tag->GetNodeData<MMDBoneTag>();
-									const Int BoneMorphCount = pmx_bone_tag_data->GetMorphCount();
+									const Int BoneMorphCount = pmx_bone_tag_data->GetBoneMorphCount();
 									for (Int index = 0; index < BoneMorphCount; index++)
 									{
-										auto* bone_morph = pmx_bone_tag_data->GetMorph(index);
+										auto* bone_morph = pmx_bone_tag_data->GetBoneMorph(index);
 										if (bone_morph == nullptr)
 											break;
 										CTrack* morph_track = node_bone_tag->FindCTrack(bone_morph->strength_id);
@@ -1597,10 +1597,10 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 								if (BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
 								{
 									auto* pmx_bone_tag_data = node_bone_tag->GetNodeData<MMDBoneTag>();
-									const Int BoneMorphCount = pmx_bone_tag_data->GetMorphCount();
+									const Int BoneMorphCount = pmx_bone_tag_data->GetBoneMorphCount();
 									for (Int index = 0; index < BoneMorphCount; index++)
 									{
-										auto* bone_morph = pmx_bone_tag_data->GetMorph(index);
+										auto* bone_morph = pmx_bone_tag_data->GetBoneMorph(index);
 										if (bone_morph == nullptr)
 											break;
 										CTrack* morph_track = node_bone_tag->FindCTrack(bone_morph->strength_id);
@@ -1671,10 +1671,10 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 								if (BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
 								{
 									auto* pmx_bone_tag_data = node_bone_tag->GetNodeData<MMDBoneTag>();
-									const auto BoneMorphCount = static_cast<Int32>(pmx_bone_tag_data->GetMorphCount());
+									const auto BoneMorphCount = static_cast<Int32>(pmx_bone_tag_data->GetBoneMorphCount());
 									for (Int32 index = 0; index < BoneMorphCount; index++)
 									{
-										auto* bone_morph = pmx_bone_tag_data->GetMorph(index);
+										auto* bone_morph = pmx_bone_tag_data->GetBoneMorph(index);
 										if (bone_morph == nullptr)
 											break;
 										CTrack* morph_track = node_bone_tag->FindCTrack(bone_morph->strength_id);

@@ -208,18 +208,18 @@ enum class ToolObjectType
 	JointRoot,
 	Model
 };
-enum class MMDModelObject_MSG_Type
+enum class MMDModelObjectMsgType
 {
 	DEFAULT,
 	TOOL_OBJECT_UPDATA
 };
-struct MMDModelObject_MSG
+struct MMDModelObjectMsg
 {
-	MMDModelObject_MSG_Type msg_type;
+	MMDModelObjectMsgType msg_type;
 	ToolObjectType	object_type;
 	BaseObject* object;
 
-	explicit MMDModelObject_MSG(const MMDModelObject_MSG_Type msg_type_ = MMDModelObject_MSG_Type::DEFAULT,
+	explicit MMDModelObjectMsg(const MMDModelObjectMsgType msg_type_ = MMDModelObjectMsgType::DEFAULT,
 	                            const ToolObjectType object_type_ = ToolObjectType::DEFAULT, BaseObject* object_ = nullptr)
 		:msg_type(msg_type_), object_type(object_type_), object(object_) {}
 };
