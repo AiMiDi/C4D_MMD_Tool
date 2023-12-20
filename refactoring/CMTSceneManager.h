@@ -8,8 +8,8 @@ Description:	scene manager
 
 **************************************************************************/
 
-#ifndef _CMT_SCENE_MANAGER_H_
-#define _CMT_SCENE_MANAGER_H_
+#ifndef CMT_SCENE_MANAGER_H__
+#define CMT_SCENE_MANAGER_H__
 
 #include "cmt_tools_setting.h"
 
@@ -44,4 +44,4 @@ private:
 	
 };
 
-#endif // !_CMT_SCENE_MANAGER_H_
+#endif // !CMT_SCENE_MANAGER_H__

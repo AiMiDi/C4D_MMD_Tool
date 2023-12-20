@@ -8,8 +8,8 @@ Description:    CMT tools setting struct.
 
 **************************************************************************/
 
-#ifndef _CMT_TOOLS_SETTING_H_
-#define _CMT_TOOLS_SETTING_H_
+#ifndef CMT_TOOLS_SETTING_H__
+#define CMT_TOOLS_SETTING_H__
 
 #include "pch.h"
 
@@ -109,4 +109,4 @@ namespace CMTToolsSetting
 	};
 }
 
-#endif //!_CMT_TOOLS_SETTING_H_
+#endif //!CMT_TOOLS_SETTING_H__

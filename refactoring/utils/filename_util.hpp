@@ -8,8 +8,8 @@ Description:	Filename utils
 
 **************************************************************************/
 
-#ifndef _FILENAME_UTIL_H_
-#define _FILENAME_UTIL_H_
+#ifndef FILENAME_UTIL_H__
+#define FILENAME_UTIL_H__
 
 #include "pch.h"
 
@@ -62,4 +62,4 @@ namespace filename_util
 	}
 }
 
-#endif // !_FILENAME_UTIL_H_
+#endif // !FILENAME_UTIL_H__

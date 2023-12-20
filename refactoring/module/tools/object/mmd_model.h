@@ -8,7 +8,8 @@ Description:	MMD model object
 
 **************************************************************************/
 
-#pragma once
+#ifndef MMD_MODEL_H__
+#define MMD_MODEL_H__
 
 #include "CMTSceneManager.h"
 
@@ -47,12 +48,12 @@ class IMorph {
 protected:
 	DescID m_strength_id;
 	String m_name;
-	MorphType m_type = MorphType::DEFAULT;
+	MorphType m_type;
 public:
 	virtual ~IMorph() = default;
 	explicit IMorph(const MorphType& type_) : m_type(type_) {}
 
-	IMorph(DescID strength_id_ = DescID(), String name_ = String(), const MorphType& type_) :
+	IMorph(DescID strength_id_ = DescID(), String name_ = String(), const MorphType& type_ = MorphType::DEFAULT) :
 		m_strength_id(std::move(strength_id_)), m_name(std::move(name_)), m_type(type_) {}
 
 	IMorph(const IMorph&) = delete;
@@ -71,14 +72,14 @@ public:
 	MorphType GetType() const { return m_type; }
 	DescID GetStrengthDescID() { return m_strength_id; }
 	bool operator==(const IMorph& other) const { return m_name == other.m_name; }
-	virtual void RenameMorph(MMDModelObject* model, const String& name);
+	void RenameMorph(MMDModelObject* model, const String& name);
 	virtual void UpdateMorphOfModel(MMDModelObject* model) = 0;
 	virtual Int32 AddMorphToModel(MMDModelObject* model, String morph_name = String()) = 0;
 	virtual void DeleteMorphOfModel(MMDModelObject* model) = 0;
 	virtual void AddSubMorph(MMDModelObject* model, Int32 id, Float weight) {}
 	virtual void AddSubMorphNoCheck(Int32 id, Float weight) {}
 	virtual void DeleteSubMorph(const Int32 id) {}
-	virtual void RenameSubMorph(const String& old_name, const String& new_name) {}
+	virtual void RenameSubMorph(const Int32 old_id, const Int32 new_id) {}
 	virtual maxon::HashMap<Int32, Float>* GetSubMorphDataWritable() { return nullptr; }
 	virtual Bool Read(HyperFile* hf);
 	virtual Bool Write(HyperFile* hf) const;
@@ -121,11 +122,10 @@ public:
 	void UpdateMorphOfModel(MMDModelObject* model) override;
 	Int32 AddMorphToModel(MMDModelObject* model, String morph_name = String()) override;
 	void DeleteMorphOfModel(MMDModelObject* model) override;
-	void RenameMorph(MMDModelObject* model, const String& name) override;
 	void AddSubMorph(MMDModelObject* model, Int32 id, Float weight) override;
 	void AddSubMorphNoCheck(Int32 id, Float weight) override;
 	void DeleteSubMorph(const Int32 id) override { m_data.Erase(id); }
-	void RenameSubMorph(const String& old_name, const String& new_name) override;
+	void RenameSubMorph(const Int32 old_id, const Int32 new_id) override;
 	Bool Read(HyperFile* hf) override;
 	Bool Write(HyperFile* hf) const override;
 	Bool CopyTo(IMorph* dest) const override;
@@ -167,11 +167,10 @@ public:
 	void UpdateMorphOfModel(MMDModelObject* model) override;
 	Int32 AddMorphToModel(MMDModelObject* model, String morph_name = String()) override;
 	void DeleteMorphOfModel(MMDModelObject* model) override;
-	void RenameMorph(MMDModelObject* model, const String& name) override;
 	void AddSubMorph(MMDModelObject* model, Int32 id, Float weight) override;
 	void AddSubMorphNoCheck(Int32 id, Float weight) override;
 	void DeleteSubMorph(const Int32 id) override { m_data.Erase(id); }
-	void RenameSubMorph(const String& old_name, const String& new_name) override;
+	void RenameSubMorph(const Int32 old_id, const Int32 new_id) override;
 	Bool Read(HyperFile* hf) override;
 	Bool Write(HyperFile* hf) const override;
 	Bool CopyTo(IMorph* dest) const override;
@@ -337,3 +336,5 @@ public:
 		return NewObjClear(MMDModelObject);
 	}
 };
+
+#endif // !MMD_MODEL_H__

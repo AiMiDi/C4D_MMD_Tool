@@ -141,29 +141,6 @@ Bool BoneMorphData::Read(HyperFile* hf)
 	return true;
 }
 
-BoneMorphUIData::BoneMorphUIData(const BaseTag* bone_tag, DescID strength_id): strength_id(std::move(strength_id))
-{
-	bone_tag_link->SetLink(bone_tag);
-}
-
-Bool BoneMorphUIData::Write(HyperFile* hf) const
-{
-	if(!bone_tag_link->Write(hf))
-		return false;
-	if (!strength_id.Write(hf))
-		return false;
-	return true;
-}
-
-Bool BoneMorphUIData::Read(HyperFile* hf)
-{
-	if (!bone_tag_link->Read(hf))
-		return false;
-	if (!strength_id.Read(hf))
-		return false;
-	return true;
-}
-
 MMDBoneTagMsg::MMDBoneTagMsg(const MMDBoneTagMsgType type): type(type)
 {}
 
@@ -469,8 +446,8 @@ void MMDBoneTag::CheckUserDataButton(GeListNode* node, const DescriptionCommand*
 					}
 				}
 				// BONE_MORPH_DELETE
-				const auto msg = std::make_unique<MMDBoneTagBoneMorphDeleteMsg>(morph_data.name, static_cast<BaseTag*>(Get()), morph_data.strength_id);
-				m_bone_root->Message(ID_T_MMD_BONE, msg.get());
+				MMDBoneTagBoneMorphDeleteMsg msg{ morph_data.name, static_cast<BaseTag*>(Get()), morph_data.strength_id };
+				m_bone_root->Message(ID_T_MMD_BONE, &msg);
 				iferr(bone_morph_data_arr.Erase(button_id))
 					return;
 				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); 
@@ -493,8 +470,8 @@ void MMDBoneTag::CheckUserDataButton(GeListNode* node, const DescriptionCommand*
 				description_bc.SetString(DESC_NAME, new_name);
 				dynamic_description->Set(morph_data.strength_id, description_bc, nullptr);
 				// BONE_MORPH_RENAME
-				const auto msg = std::make_unique<MMDBoneTagBoneMorphRenameMsg>(morph_data.name, new_name, static_cast<BaseTag*>(Get()), morph_data.strength_id);
-				m_bone_root->Message(ID_T_MMD_BONE, msg.get());
+				MMDBoneTagBoneMorphRenameMsg msg{ morph_data.name, new_name, static_cast<BaseTag*>(Get()), morph_data.strength_id };
+				m_bone_root->Message(ID_T_MMD_BONE, &msg);
 				morph_data.name = std::move(new_name);
 				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); 
 				if (::GeIsMainThread())
@@ -523,19 +500,21 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 		HandleDescriptionUpdate(node, data_instance_bc, static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id);
 		break;
 	case MSG_DESCRIPTION_COMMAND:
-		const auto* description_command = static_cast<DescriptionCommand*>(data);
-		if (!description_command)
-			return false;
-		// check if it is a user data button 
-		if (description_command->_descId.GetDepth() == 2 && description_command->_descId[0].id == ID_USERDATA)
 		{
-			CheckUserDataButton(node, description_command);
+			const auto* description_command = static_cast<DescriptionCommand*>(data);
+			if (!description_command)
+				return false;
+			// check if it is a user data button 
+			if (description_command->_descId.GetDepth() == 2 && description_command->_descId[0].id == ID_USERDATA)
+			{
+				CheckUserDataButton(node, description_command);
+			}
+			else {
+				if(description_command->_descId[0].id == PMX_BONE_MORPH_ADD_BUTTON)
+					AddBoneMorph(data_instance_bc->GetString(PMX_BONE_MORPH_ADD_NAME));
+			}
+			break;
 		}
-		else {
-			if(description_command->_descId[0].id == PMX_BONE_MORPH_ADD_BUTTON)
-				AddBoneMorph(data_instance_bc->GetString(PMX_BONE_MORPH_ADD_NAME));
-		}
-		break;
 	case MSG_MENUPREPARE:
 		if (const auto doc = static_cast<BaseDocument*>(data); doc)
 		{
@@ -693,8 +672,8 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 				break;
 			}
 		}
-				break;
-	default:;
+		break;
+	default: ;
 	}
 
 	return SUPER::Message(node, type, data);
@@ -919,23 +898,25 @@ Bool MMDBoneTag::GetDEnabling(const GeListNode* node, const DescID& id, const Ge
 			return false;
 		}
 		break;
-	[[fallthrough]] case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
-	[[fallthrough]] case PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE:
+	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
+	case PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE:
 	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
-		const Bool inherit_rotation = itemdesc->GetBool(PMX_BONE_INHERIT_ROTATION);
-		const Bool inherit_translation = itemdesc->GetBool(PMX_BONE_INHERIT_TRANSLATION);
-		if (inherit_rotation == 0 && inherit_translation == 0)
 		{
-			return false;
+			const Bool inherit_rotation = itemdesc->GetBool(PMX_BONE_INHERIT_ROTATION);
+			const Bool inherit_translation = itemdesc->GetBool(PMX_BONE_INHERIT_TRANSLATION);
+			if (inherit_rotation == 0 && inherit_translation == 0)
+			{
+				return false;
+			}
+			break;
 		}
-		break;
 	case PMX_BONE_FIXED_AXIS:
 		if (const Bool fixed_axis = itemdesc->GetBool(PMX_BONE_IS_FIXED_AXIS); fixed_axis == 0)
 		{
 			return false;
 		}
 		break;
-	[[fallthrough]] case PMX_BONE_LOCAL_X:
+	case PMX_BONE_LOCAL_X:
 	case PMX_BONE_LOCAL_Z:
 		if (const Bool local_coordinate = itemdesc->GetBool(PMX_BONE_LOCAL_IS_COORDINATE); local_coordinate == 0)
 		{
@@ -1149,8 +1130,8 @@ void MMDBoneTag::HandleBoneIndexUpdate(BaseTag* tag, BaseObject* op, BaseContain
 	if (m_bone_root && m_bone_index != prev_index) {
 		bc->SetString(PMX_BONE_INDEX, String::IntToString(m_bone_index));
 		// BONE_INDEX_CHANGE
-		const auto msg = std::make_unique<MMDBoneTagBoneIndexChangeMsg>();
-		m_bone_root->Message(ID_T_MMD_BONE, msg.get());
+		MMDBoneTagBoneIndexChangeMsg msg{};
+		m_bone_root->Message(ID_T_MMD_BONE, &msg);
 	}
 }
 
@@ -1175,17 +1156,12 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	CheckInheritBoneParent(doc, op, bc);
 	HandleBoneMorphUpdate(tag, op);
 
-	return SUPER::Execute(op, doc, bt, priority, flags);
+	return ExecuteImpl(op, doc, bt, priority, flags);
 }
 
 Bool MMDBoneTag::AddToExecution(BaseTag* tag, PriorityList* list)
 {
-	if (list == nullptr || tag == nullptr)
-	{
-		return true;
-	}
-	list->Add(tag, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
-	return true;
+	return AddToExecutionImpl(tag, list);
 }
 
 Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
@@ -1352,8 +1328,8 @@ Int MMDBoneTag::AddBoneMorph(String morph_name)
 	iferr(button_id_map.Insert(morph_data.button_rename_id, index))
 		return -1;
 	// BONE_MORPH_ADD
-	const auto msg = std::make_unique<MMDBoneTagBoneMorphAddMsg>(std::move(morph_name), static_cast<BaseTag*>(Get()), morph_data.strength_id);
-	m_bone_root->Message(ID_T_MMD_BONE, msg.get());
+	MMDBoneTagBoneMorphAddMsg msg{ std::move(morph_name), static_cast<BaseTag*>(Get()), morph_data.strength_id };
+	m_bone_root->Message(ID_T_MMD_BONE, &msg);
 	if (GeIsMainThread())
 	{
 		SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); 

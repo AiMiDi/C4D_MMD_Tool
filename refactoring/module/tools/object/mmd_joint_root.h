@@ -8,10 +8,13 @@ Description:	MMD joint root object
 
 **************************************************************************/
 
-#pragma once
+#ifndef MMD_JOINT_ROOT_H__
+#define MMD_JOINT_ROOT_H__
 
 class MMDJointRootObject final : public ObjectData
 {
 public:
 	
 };
+
+#endif // !MMD_JOINT_ROOT_H__

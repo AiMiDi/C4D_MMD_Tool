@@ -164,15 +164,15 @@ public:
 	 * \param flags Execution flags.
 	 * \return Result of the execution.
 	 */
-	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
+	EXECUTIONRESULT ExecuteImpl(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags);
 
 	/**
 	 * \brief Adds execution priorities to the object.
-	 * \param op BaseObject for which priorities should be added.
+	 * \param bl BaseObject for which priorities should be added.
 	 * \param list Priority list to which priorities should be added.
 	 * \return Boolean indicating success or failure.
 	 */
-	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
+	Bool AddToExecutionImpl(BaseList2D* bl, PriorityList* list);
 protected:
 	using TrackDescIDArray = std::array<const DescID, TRACK_COUNT>;
 	using TrackObjectArray = std::array<BaseObject*, TRACK_COUNT>;
@@ -771,7 +771,7 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT, SPLINE
 }
 
 template <typename NODE_DATE_TYPE, size_t TRACK_COUNT, size_t INTERPOLATOR_COUNT, Int32 SPLINE_DESC_ID, Int32 CURVE_TYPE_DESC_ID, Int32 FRAME_AT_DESC_ID,Int32 FRAME_AT_STR_DESC_ID>
-EXECUTIONRESULT MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT, SPLINE_DESC_ID, CURVE_TYPE_DESC_ID, FRAME_AT_DESC_ID, FRAME_AT_STR_DESC_ID>::Execute(BaseObject* op, BaseDocument* doc,
+EXECUTIONRESULT MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT, SPLINE_DESC_ID, CURVE_TYPE_DESC_ID, FRAME_AT_DESC_ID, FRAME_AT_STR_DESC_ID>::ExecuteImpl(BaseObject* op, BaseDocument* doc,
 	BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	if (!op || !doc)
@@ -820,11 +820,11 @@ EXECUTIONRESULT MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_CO
 }
 
 template <typename NODE_DATE_TYPE, size_t TRACK_COUNT, size_t INTERPOLATOR_COUNT, Int32 SPLINE_DESC_ID, Int32 CURVE_TYPE_DESC_ID, Int32 FRAME_AT_DESC_ID,Int32 FRAME_AT_STR_DESC_ID>
-Bool MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT, SPLINE_DESC_ID, CURVE_TYPE_DESC_ID, FRAME_AT_DESC_ID, FRAME_AT_STR_DESC_ID>::AddToExecution(BaseObject* op, PriorityList* list)
+Bool MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT, SPLINE_DESC_ID, CURVE_TYPE_DESC_ID, FRAME_AT_DESC_ID, FRAME_AT_STR_DESC_ID>::AddToExecutionImpl(BaseList2D* bl, PriorityList* list)
 {
-	if (!list || !op)
+	if (!list || !bl)
 		return true;
-	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
+	list->Add(bl, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	return true;
 }
 

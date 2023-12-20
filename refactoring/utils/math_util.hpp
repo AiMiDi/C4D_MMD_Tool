@@ -8,8 +8,8 @@ Description:	math util
 
 **************************************************************************/
 
-#ifndef _MATH_UTIL_H_
-#define _MATH_UTIL_H_
+#ifndef MATH_UTIL_H__
+#define MATH_UTIL_H__
 
 #include "pch.h"
 
@@ -100,4 +100,4 @@ namespace math_util
 	}
 }
 
-#endif // !_MATH_UTIL_H_
+#endif // !MATH_UTIL_H__

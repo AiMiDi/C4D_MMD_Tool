@@ -8,10 +8,13 @@ Description:	MMD rigid root object
 
 **************************************************************************/
 
-#pragma once
+#ifndef MMD_RIGID_ROOT_H__
+#define MMD_RIGID_ROOT_H__
 
 class MMDRigidRootObject final : public ObjectData
 {
 public:
 	
 };
+
+#endif // !MMD_RIGID_ROOT_H__

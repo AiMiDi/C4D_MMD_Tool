@@ -12,6 +12,7 @@ Description:	MMD model object
 #include "mmd_model.h"
 
 #include "mmd_bone_root.h"
+#include "mmd_mesh_root.h"
 #include "description/OMMDModel.h"
 #include "module/tools/tag/mmd_bone.h"
 
@@ -379,20 +380,12 @@ inline void IMorph::RenameMorph(MMDModelObject* model, const String& name)
 	descbc.SetString(DESC_NAME, name);
 	ddesc->Set(m_strength_id, descbc, nullptr);
 	auto& morph_name_map = model->GetMorphNameMapWritable();
-	auto* morph_name_ptr = morph_name_map.Find(name);
-	if (morph_name_ptr != nullptr) {
+	if (auto* morph_name_ptr = morph_name_map.Find(name); morph_name_ptr != nullptr) {
 		const Int32& index = morph_name_ptr->GetValue();
 		iferr(morph_name_map.Insert(name, index))
 			return;
 		iferr(morph_name_map.Erase(morph_name_ptr))
 			return;
-	}
-	auto& morph_arr = model->GetMorphDataWritable();
-	for (auto& morph : morph_arr)
-	{
-		if (morph.IsMeshMorph() || morph.IsBoneMorph()) {
-			morph.RenameSubMorph(m_name, name);
-		}
 	}
 	m_name = name;
 	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); /* Refresh the AM to see the changes in real time */
@@ -401,39 +394,18 @@ inline void IMorph::RenameMorph(MMDModelObject* model, const String& name)
 		::EventAdd();
 	}
 }
-inline void GroupMorph::RenameMorph(MMDModelObject* model, const String& name)
+inline void GroupMorph::RenameSubMorph(const Int32 old_id, const Int32 new_id)
 {
-	DynamicDescription* const ddesc = model->Get()->GetDynamicDescriptionWritable();
-	if (ddesc == nullptr)
-		return;
-	BaseContainer descbc = *ddesc->Find(m_grp_id);
-	descbc.SetString(DESC_NAME, name);
-	ddesc->Set(m_grp_id, descbc, nullptr);
-	this->IMorph::RenameMorph(model, name);
-}
-inline void FlipMorph::RenameMorph(MMDModelObject* model, const String& name)
-{
-	DynamicDescription* const ddesc = model->Get()->GetDynamicDescriptionWritable();
-	if (ddesc == nullptr)
-		return;
-	BaseContainer descbc = *ddesc->Find(m_grp_id);
-	descbc.SetString(DESC_NAME, name);
-	ddesc->Set(m_grp_id, descbc, nullptr);
-	this->IMorph::RenameMorph(model, name);
-}
-inline void GroupMorph::RenameSubMorph(const String& old_name, const String& new_name)
-{
-	if (auto* data_ptr = m_data.Find(old_name); data_ptr != nullptr) {
-		iferr(m_data.Insert(new_name, data_ptr->GetValue()))
+	if (auto* data_ptr = m_data.Find(old_id); data_ptr != nullptr) {
+		iferr(m_data.Insert(new_id, data_ptr->GetValue()))
 			return;
 		std::ignore = m_data.Erase(data_ptr);
-			return;
 	}
 }
-inline void FlipMorph::RenameSubMorph(const String& old_name, const String& new_name)
+inline void FlipMorph::RenameSubMorph(const Int32 old_id, const Int32 new_id)
 {
-	if (auto* data_ptr = m_data.Find(old_name); data_ptr != nullptr) {
-		iferr(m_data.Insert(new_name, data_ptr->GetValue()))
+	if (auto* data_ptr = m_data.Find(old_id); data_ptr != nullptr) {
+		iferr(m_data.Insert(new_id, data_ptr->GetValue()))
 			return;
 		std::ignore = m_data.Erase(data_ptr);
 	}
@@ -461,18 +433,10 @@ inline void FlipMorph::UpdateMorphOfModel(MMDModelObject* model) {
 	if (model == nullptr)
 		return;
 	GeListNode* node = model->Get();
-	auto& morph_name_map = model->GetMorphNameMap();
 	auto& morph_arr = model->GetMorphDataWritable();
 	for (auto& data : m_data) {
-		auto& morph_name = data.GetKey();
-		auto* morph_ptr = morph_name_map.Find(morph_name);
-		if (morph_ptr == nullptr) {
-			for (auto& morph : morph_arr) {
-				morph.DeleteSubMorph(morph_name);
-			}
-			return;
-		}
-		IMorph& morph = morph_arr[morph_ptr->GetValue()];
+		auto& morph_id = data.GetKey();
+		IMorph& morph = morph_arr[morph_id];
 		morph.SetStrength(node, this->GetStrength(node) >= 0.5 ? data.GetValue() : 0.0);
 	}
 }
@@ -480,26 +444,20 @@ inline void MeshMorph::UpdateMorphOfModel(MMDModelObject* model)
 {
 	if (model == nullptr)
 		return;
-	BaseObject* MeshRoot_ptr = model->GetRootObject(ToolObjectType::MeshRoot);
-	if (MeshRoot_ptr == nullptr)
-		return;
-	auto& mesh_morph_map = MeshRoot_ptr->GetNodeData<MMDMeshRootObject>()->GetMeshMorphMap();
-	auto* mesh_morph_ptr = mesh_morph_map.Find(m_name);
-	if (mesh_morph_ptr == nullptr)
-		return;
-	auto& mesh_morph_list = mesh_morph_ptr->GetValue();
-	for (auto& mesh_morph : mesh_morph_list) {
-		mesh_morph.SetStrength(this->GetStrength(model->Get()));
+	if (BaseObject* mesh_root = model->GetRootObject(ToolObjectType::MeshRoot))
+	{
+		mesh_root->GetNodeData<MMDMeshRootObject>()->SetMeshMorphStrength(m_name, GetStrength(model->Get()));
 	}
+	
 }
 inline void BoneMorph::UpdateMorphOfModel(MMDModelObject* model)
 {
 	if (!model)
 		return;
-	BaseObject* bone_root = model->GetRootObject(ToolObjectType::BoneRoot);
-	if (!bone_root)
-		return;
-	bone_root->GetNodeData<MMDBoneRootObject>()->SetBoneMorphStrength(m_name, GetStrength(model->Get()));
+	if (BaseObject* bone_root = model->GetRootObject(ToolObjectType::BoneRoot))
+	{
+		bone_root->GetNodeData<MMDBoneRootObject>()->SetBoneMorphStrength(m_name, GetStrength(model->Get()));
+	}
 }
 inline Int32 GroupMorph::AddMorphToModel(MMDModelObject* model, String morph_name)
 {
@@ -507,13 +465,13 @@ inline Int32 GroupMorph::AddMorphToModel(MMDModelObject* model, String morph_nam
 	{
 		morph_name = "[Group morph]" + model->GetMorphNamedNumber();
 	}
-	DynamicDescription* const ddesc = model->Get()->GetDynamicDescriptionWritable();
-	if (ddesc == nullptr)
+	DynamicDescription* const dynamic_description = model->Get()->GetDynamicDescriptionWritable();
+	if (dynamic_description == nullptr)
 		return-1;
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetString(DESC_NAME, morph_name);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_GROUP_GRP))));
-	m_grp_id = ddesc->Alloc(bc);
+	m_grp_id = dynamic_description->Alloc(bc);
 	bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, morph_name);
 	bc.SetFloat(DESC_MAX, 1.);
@@ -524,26 +482,26 @@ inline Int32 GroupMorph::AddMorphToModel(MMDModelObject* model, String morph_nam
 	bc.SetFloat(DESC_STEP, 0.01);
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
-	m_strength_id = ddesc->Alloc(bc);
+	m_strength_id = dynamic_description->Alloc(bc);
 	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetInt32(DESC_COLUMNS, 3);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
-	m_button_grp_id = ddesc->Alloc(bc);
+	m_button_grp_id = dynamic_description->Alloc(bc);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_EDITOR));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
-	m_button_editor_id = ddesc->Alloc(bc);
+	m_button_editor_id = dynamic_description->Alloc(bc);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
-	m_button_delete_id = ddesc->Alloc(bc);
+	m_button_delete_id = dynamic_description->Alloc(bc);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
-	m_button_rename_id = ddesc->Alloc(bc);
+	m_button_rename_id = dynamic_description->Alloc(bc);
 	auto& morph_arr = model->GetMorphDataWritable();
 	auto& morph_name_map = model->GetMorphNameMapWritable();
 	auto& DescID_map = model->GetDescIDMap();
@@ -1084,7 +1042,6 @@ Bool MMDModelObject::ReadMorph(HyperFile* hf)
 			break;
 		}
 		case MorphType::DEFAULT:
-		default:
 			break;
 		}
 		res->Read(hf);
@@ -1161,7 +1118,7 @@ void MMDModelObject::RefreshMorph()
 			morph_count = m_morph_arr.GetCount();
 		}
 	}
-	auto& mesh_morph_map = m_MeshRoot_ptr->GetNodeData<MMDMeshRootObject>()->GetMeshMorphMap();
+	auto& mesh_morph_map = m_MeshRoot_ptr->GetNodeData<MMDMeshRootObject>()->GetMeshMorphData();
 	for (auto& name : mesh_morph_map.GetKeys())
 	{
 		auto* morph = NewObj(MeshMorph)iferr_return;
@@ -1403,16 +1360,15 @@ Bool MMDModelObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 	case ID_O_MMD_MESH_ROOT:
 	{
-		OMMDMeshRoot_MSG* msg = static_cast<OMMDMeshRoot_MSG*>(data);
-		if (msg->type == OMMDMeshRoot_MSG_Type::MESH_MORPH_CHANGE) {
+		if (auto msg = static_cast<MMDMeshRootObjectMsg*>(data); msg->type == MMDMeshRootObjectMsgType::MESH_MORPH_CHANGE)
+		{
 			*m_is_morph_initialized.Write() = false;
 		}
 		break;
 	}
 	case ID_O_MMD_BONE_ROOT:
 	{
-		MMDBoneRootObjectMsg* msg = static_cast<MMDBoneRootObjectMsg*>(data);
-		if (msg->type == MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE) {
+		if (auto msg = static_cast<MMDBoneRootObjectMsg*>(data); msg->type == MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE) {
 			*m_is_morph_initialized.Write() = false;
 		}
 		break;

@@ -11,6 +11,11 @@ Description:	DESC
 #include "pch.h"
 #include "mmd_bone_root.h"
 
+NodeData* MMDBoneRootObject::Alloc()
+{
+	return NewObjClear(MMDBoneRootObject);
+}
+
 Bool MMDBoneRootObject::Init(GeListNode* node SDK2024_InitPara)
 {
 	if(!node)
@@ -40,8 +45,7 @@ Bool MMDBoneRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, 
 	}
 	for (const auto & entry : m_bone_morph_data)
 	{
-		iferr(dest_object->m_bone_morph_data.Insert(entry.GetKey(), entry.GetValue()))
-			return false;
+		dest_object->m_bone_morph_data.Insert(entry.GetKey(), entry.GetValue())iferr_return;
 	}
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
@@ -115,21 +119,23 @@ Bool MMDBoneRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK
 {
 	if(!hf->WriteInt64(bone_name_index))
 		return false;
-	AutoAlloc<BaseLink> temp_link;
-	if(!temp_link)
-		return false;
-	temp_link->SetLink(m_model_root);
-	if (!temp_link->Write(hf))
-		return false;
-	temp_link->SetLink(m_rigid_root);
-	if (!temp_link->Write(hf))
-		return false;
-	temp_link->SetLink(m_joint_root);
-	if (!temp_link->Write(hf))
-		return false;
-	temp_link->SetLink(m_protection_tag);
-	if (!temp_link->Write(hf))
-		return false;
+	{
+		AutoAlloc<BaseLink> temp_link;
+		if(!temp_link)
+			return false;
+		temp_link->SetLink(m_model_root);
+		if (!temp_link->Write(hf))
+			return false;
+		temp_link->SetLink(m_rigid_root);
+		if (!temp_link->Write(hf))
+			return false;
+		temp_link->SetLink(m_joint_root);
+		if (!temp_link->Write(hf))
+			return false;
+		temp_link->SetLink(m_protection_tag);
+		if (!temp_link->Write(hf))
+			return false;
+	}
 	// m_bone_list
 	{
 		if (!hf->WriteInt64(m_bone_list.GetCount()))
@@ -174,63 +180,56 @@ Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			const maxon::StrongRef<MMDBoneRootObjectMsg> bone_root_msg(
-				NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ON).GetValue());
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, bone_root_msg);
+			MMDBoneRootObjectMsg msg { MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ON };
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_OFF:
 		{
 			op->SetEditorMode(MODE_OFF);
 			op->SetRenderMode(MODE_OFF);
-			const maxon::StrongRef<MMDBoneRootObjectMsg> bone_root_msg(
-				NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF).GetValue());
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, bone_root_msg);
+			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF };
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_MOVABLE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			const maxon::StrongRef<MMDBoneRootObjectMsg> bone_root_msg(
-				NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_MOVABLE).GetValue());
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, bone_root_msg);
+			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_MOVABLE };
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_VISIBLE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			const maxon::StrongRef<MMDBoneRootObjectMsg> bone_root_msg(
-				NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_VISIBLE).GetValue());
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, bone_root_msg);
+			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_VISIBLE };
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_ROTATABLE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			const maxon::StrongRef<MMDBoneRootObjectMsg> bone_root_msg(
-				NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ROTATABLE).GetValue());
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, bone_root_msg);
+			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ROTATABLE };
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_ENABLED:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			const maxon::StrongRef<MMDBoneRootObjectMsg> bone_root_msg(
-				NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ENABLED).GetValue());
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, bone_root_msg);
+			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ENABLED };
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_IK:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			const maxon::StrongRef<MMDBoneRootObjectMsg> bone_root_msg(
-				NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_IK).GetValue());
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, bone_root_msg);
+			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_IK };
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
 		default:
@@ -287,12 +286,10 @@ bool MMDBoneRootObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	case MMDBoneTagMsgType::DEFAULT: 
 		break;
 	}
-	if (need_update_morph) {
-		if (m_model_root) {
-			const maxon::StrongRef<MMDBoneRootObjectMsg> Model_msg(
-				NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE).GetValue());
-			m_model_root->Message(ID_O_MMD_BONE_ROOT, Model_msg);
-		}
+	if (need_update_morph && m_model_root)
+	{
+		MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE };
+		m_model_root->Message(ID_O_MMD_BONE_ROOT, &msg);
 	}
 	return true;
 }
@@ -345,14 +342,14 @@ bool MMDBoneRootObject::HandleBoneMorphAdd(GeListNode* node, void* data, bool& n
 	iferr_scope_handler{
 		return false;
 	};
-	maxon::BaseList<BoneMorphUIData>* bone_morph_list;
+	maxon::BaseList<MorphUIData>* bone_morph_list;
 	const auto msg = static_cast<MMDBoneTagBoneMorphAddMsg*>(data);
 	bool isExit = false;
 	if (const auto bone_morph_map_ptr = m_bone_morph_data.Find(msg->name); bone_morph_map_ptr != nullptr)
 	{
 		bone_morph_list = &bone_morph_map_ptr->GetValue();
 		for (auto& morph_hub_data : *bone_morph_list) {
-			if (morph_hub_data == msg->bone_morph_UI_data) {
+			if (morph_hub_data.Compare(msg->bone_morph_UI_data) ) {
 				isExit = true;
 				break;
 			}
@@ -377,10 +374,10 @@ bool MMDBoneRootObject::HandleBoneMorphDelete(GeListNode* node, void* data, bool
 	if (auto* bone_morph_map_ptr = m_bone_morph_data.Find(msg->name);
 		bone_morph_map_ptr)
 	{
-		maxon::BaseList<BoneMorphUIData>& bone_morph_list = bone_morph_map_ptr->GetValue();
+		maxon::BaseList<MorphUIData>& bone_morph_list = bone_morph_map_ptr->GetValue();
 		for (auto morph_hub_data_it = bone_morph_list.Begin(); morph_hub_data_it != bone_morph_list.End(); ++morph_hub_data_it)
 		{
-			if (*morph_hub_data_it == msg->bone_morph_UI_data)
+			if (morph_hub_data_it->Compare(msg->bone_morph_UI_data))
 			{
 				morph_hub_data_it = bone_morph_list.Erase(morph_hub_data_it);
 				need_update_morph = true;
@@ -404,17 +401,17 @@ bool MMDBoneRootObject::HandleBoneMorphRename(GeListNode* node, void* data, bool
 	if (auto* old_bone_morph_map_ptr = m_bone_morph_data.Find(msg->old_name);
 		old_bone_morph_map_ptr)
 	{
-		maxon::BaseList<BoneMorphUIData>& old_bone_morph_list = old_bone_morph_map_ptr->GetValue();
+		maxon::BaseList<MorphUIData>& old_bone_morph_list = old_bone_morph_map_ptr->GetValue();
 		bool isExit = false;
 		for (auto morph_hub_data_it = old_bone_morph_list.Begin(); morph_hub_data_it != old_bone_morph_list.End(); ++morph_hub_data_it) {
-			if (auto& morph_hub_data = *morph_hub_data_it; morph_hub_data == msg->bone_morph_UI_data)
+			if (auto& morph_hub_data = *morph_hub_data_it; morph_hub_data.Compare(msg->bone_morph_UI_data))
 			{
-				maxon::BaseList<BoneMorphUIData>* new_bone_morph_list;
+				maxon::BaseList<MorphUIData>* new_bone_morph_list;
 				if (auto* new_bone_morph_map_ptr = m_bone_morph_data.Find(msg->new_name))
 				{
 					new_bone_morph_list = &new_bone_morph_map_ptr->GetValue();
 					for (auto& new_morph_data : *new_bone_morph_list) {
-						if (new_morph_data == msg->bone_morph_UI_data) {
+						if (new_morph_data.Compare(msg->bone_morph_UI_data)) {
 							isExit = true;
 							break;
 						}
@@ -462,7 +459,7 @@ Bool MMDBoneRootObject::Message(GeListNode* node, Int32 type, void* data)
 	return SUPER::Message(node, type, data);
 }
 
-const maxon::HashMap<String, maxon::BaseList<BoneMorphUIData>>& MMDBoneRootObject::GetBoneMorphData() const
+const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& MMDBoneRootObject::GetBoneMorphData() const
 {
 	return m_bone_morph_data;
 }
@@ -503,9 +500,9 @@ Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Flo
 	}
 	for (auto& bone_morph_ui_data : morph_ptr->GetSecond())
 	{
-		if(const auto bone_tag = reinterpret_cast< BaseTag*>(bone_morph_ui_data.bone_tag_link->ForceGetLink()); bone_tag)
+		if(const auto bone_tag = bone_morph_ui_data.GetMorphTag(); bone_tag)
 		{
-			if(!bone_tag->SetParameter(bone_morph_ui_data.strength_id, strength, DESCFLAGS_SET::NONE))
+			if(!bone_tag->SetParameter(bone_morph_ui_data.GetStrengthID(), strength, DESCFLAGS_SET::NONE))
 				return false;
 		}
 	}

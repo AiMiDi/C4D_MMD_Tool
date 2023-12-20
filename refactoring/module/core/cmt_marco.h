@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CMT_MARCO_H__
+#define CMT_MARCO_H__
 
 #ifndef CMT_DISALLOW_COPY_AND_ASSIGN_BODY
 //----------------------------------------------------------------------------------------
@@ -85,3 +86,5 @@
 #	define MakeObjectColorProperties(color, usecolor, xray) ObjectColorProperties{color, usecolor, xray}
 
 #endif
+
+#endif // !CMT_MARCO_H__

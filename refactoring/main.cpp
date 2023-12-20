@@ -15,7 +15,7 @@ Description:	Entrance of the plugin
 
 Bool PluginStart()
 {
-	if (!cmt_register::RigisterPlugin())
+	if (!cmt_register::RegisterPlugin())
 	{
 		return FALSE;
 	}

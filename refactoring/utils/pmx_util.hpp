@@ -8,8 +8,8 @@ Description:	PMX util
 
 **************************************************************************/
 
-#ifndef _PMX_UTIL_H_
-#define _PMX_UTIL_H_
+#ifndef PMX_UTIL_H__
+#define PMX_UTIL_H__
 
 #include "pch.h"
 
@@ -165,5 +165,5 @@ public:
 	}
 };
 
-#endif // !_PMX_UTIL_H_
+#endif // !PMX_UTIL_H__
 

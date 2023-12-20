@@ -8,8 +8,8 @@ Description:	Manager of plugin configuration
 
 **************************************************************************/
 
-#ifndef _CMT_TOOL_CONFIG_MANAGER_H_
-#define _CMT_TOOL_CONFIG_MANAGER_H_
+#ifndef CMT_TOOL_CONFIG_MANAGER_H__
+#define CMT_TOOL_CONFIG_MANAGER_H__
 
 #include "pch.h"
 
@@ -152,4 +152,4 @@ private:
 	};
 };
 
-#endif //_CMT_TOOL_CONFIG_MANAGER_H_
+#endif //CMT_TOOL_CONFIG_MANAGER_H__

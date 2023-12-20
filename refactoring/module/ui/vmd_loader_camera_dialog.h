@@ -8,12 +8,12 @@ Description:	vmd data loader dialog
 
 **************************************************************************/
 
-#ifndef _VMD_LOADER_DATA_DIALOG_H_
-#define _VMD_LOADER_DATA_DIALOG_H_
+#ifndef VMD_LOADER_DATA_DIALOG_H__
+#define VMD_LOADER_DATA_DIALOG_H__
 
 #include "pch.h"
 
-class VMDLoaderCameraDialog : public GeDialog
+class VMDLoaderCameraDialog final : public GeDialog
 {
 	Filename	m_filename;
 	ImagesUserArea* m_images = nullptr;
@@ -28,4 +28,4 @@ public:
 	Bool Command(Int32 id, const BaseContainer& msg) override;
 };
 
-#endif // !_VMD_LOADER_DATA_DIALOG_H_
+#endif // !VMD_LOADER_DATA_DIALOG_H__

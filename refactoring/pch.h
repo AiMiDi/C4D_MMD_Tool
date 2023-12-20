@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PCH_H__
+#define PCH_H__
 
 // std
 #include <optional>
@@ -40,3 +41,5 @@
 #include "utils/filename_util.hpp"
 
 #include "module/core/cmt_marco.h"
+
+#endif // !PCH_H__

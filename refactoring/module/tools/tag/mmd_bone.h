@@ -3,14 +3,17 @@
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2023/9/12
-File:			mmd_bone_root.cpp
+File:			mmd_bone.cpp
 Description:	DESC
 
 **************************************************************************/
 
-#pragma once
+#ifndef MMD_BONE_H__
+#define MMD_BONE_H__
+
 #include "module/tools/mmd_interpolator.hpp"
 #include "description/TMMDBone.h"
+#include "utils/morph_ui_data_util.hpp"
 
 struct BoneMorphData
 {
@@ -45,20 +48,6 @@ struct BoneMorphData
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(BoneMorphData)
 };
 
-struct BoneMorphUIData
-{
-	AutoAlloc<BaseLink> bone_tag_link{ BaseLink::Alloc() };
-	DescID strength_id{};
-
-	explicit BoneMorphUIData(const BaseTag* bone_tag = nullptr, DescID strength_id = {});
-	Bool Write(HyperFile* hf) const;
-	Bool Read(HyperFile* hf);
-	Bool operator==(const BoneMorphUIData& other) const
-	{
-		return bone_tag_link->ForceGetLink() == other.bone_tag_link->ForceGetLink() && strength_id == other.strength_id;
-	}
-};
-
 enum class MMDBoneTagMsgType : int8_t
 {
 	DEFAULT = -1,
@@ -91,7 +80,7 @@ class MMDBoneTagBoneMorphAddMsg final : public MMDBoneTagMsg
 {
 public:
 	String	name;
-	BoneMorphUIData bone_morph_UI_data;
+	MorphUIData bone_morph_UI_data;
 
 	explicit MMDBoneTagBoneMorphAddMsg(String name, const BaseTag* bone_tag, const DescID& strength_id);
 	~MMDBoneTagBoneMorphAddMsg() override = default;
@@ -103,7 +92,7 @@ class MMDBoneTagBoneMorphDeleteMsg final : public MMDBoneTagMsg
 {
 public:
 	String	name;
-	BoneMorphUIData bone_morph_UI_data;
+	MorphUIData bone_morph_UI_data;
 
 	explicit MMDBoneTagBoneMorphDeleteMsg(String name, const BaseTag* bone_tag, const DescID& strength_id);
 	~MMDBoneTagBoneMorphDeleteMsg() override = default;
@@ -116,7 +105,7 @@ class MMDBoneTagBoneMorphRenameMsg final : public MMDBoneTagMsg
 public:
 	String	old_name;
 	String	new_name;
-	BoneMorphUIData bone_morph_UI_data;
+	MorphUIData bone_morph_UI_data;
 
 	explicit MMDBoneTagBoneMorphRenameMsg(String old_name, String new_name, const BaseTag* bone_tag, const DescID& strength_id);
 	~MMDBoneTagBoneMorphRenameMsg() override = default;
@@ -463,3 +452,5 @@ private:
 	 */
 	static TrackDescIDArray GetTrackDescIDsImpl();
 };
+
+#endif // MMD_BONE_H__

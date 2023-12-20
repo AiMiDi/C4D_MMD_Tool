@@ -8,15 +8,15 @@ Description:	Entrance all the resource
 
 **************************************************************************/
 
-#ifndef _REGISTER_RNTITY_H_
-#define _REGISTER_RNTITY_H_
+#ifndef REGISTER_ENTITY_H__
+#define REGISTER_ENTITY_H__
 
 #include "pch.h"
 
 namespace cmt_register
 {
-	//	rigister all the resource
-	Bool RigisterPlugin();
+	//	register all the resource
+	Bool RegisterPlugin();
 }
 
-#endif // !_REGISTER_RNTITY_H_
+#endif // !REGISTER_ENTITY_H__

@@ -729,7 +729,12 @@ EXECUTIONRESULT MMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread
 	}
 	CameraInit(op);
 	std::call_once(m_init_flag, AddToSceneManager, op);
-	return SUPER::Execute(op, doc, bt, priority, flags);
+	return ExecuteImpl(op, doc, bt, priority, flags);
+}
+
+Bool MMDCamera::AddToExecution(BaseObject* op, PriorityList* list)
+{
+	return AddToExecutionImpl(op, list);
 }
 
 MMDCamera::TrackDescIDArray MMDCamera::GetTrackDescIDsImpl()

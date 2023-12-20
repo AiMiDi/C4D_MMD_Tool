@@ -8,8 +8,8 @@ Description:	C4D MMD camera object
 
 **************************************************************************/
 
-#ifndef _MMD_CAMERA_H_
-#define _MMD_CAMERA_H_
+#ifndef MMD_CAMERA_H__
+#define MMD_CAMERA_H__
 
 #include "cmt_tools_setting.h"
 #include "description/OMMDCamera.h"
@@ -114,6 +114,8 @@ public:
 	// Called at the point in the priority pipeline specified by AddToExecution, or the lack thereof.
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 
+	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
+
 protected:
 	TrackDescIDArray GetTrackDescIDs() override;
 
@@ -125,4 +127,4 @@ protected:
 };
 
 
-#endif // !MMD_CAMERA_H
+#endif // !MMD_CAMERA_H__
