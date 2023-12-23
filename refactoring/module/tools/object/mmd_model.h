@@ -73,10 +73,10 @@ public:
 	[[nodiscard]] MMDMorphType GetType() const;
 	DescID GetStrengthDescID();
 	bool operator==(const IMorph& other) const;
-	virtual void AddMorphUI(MMDModelRootObject* model, Int morph_id) = 0;
-	virtual void DeleteMorphUI(MMDModelRootObject* model) = 0;
+	virtual void AddMorphUI(MMDModelRootObject& model, Int morph_id) = 0;
+	virtual void DeleteMorphUI(MMDModelRootObject& model) = 0;
 	void RenameMorph(const String& name);
-	virtual void UpdateMorph(MMDModelRootObject* model) = 0;
+	virtual void UpdateMorph(MMDModelRootObject& model) = 0;
 	virtual void AddSubMorph(MMDModelRootObject* model, Int id, Float weight) {}
 	virtual void AddSubMorphNoCheck(Int id, Float weight) {}
 	virtual void DeleteSubMorph(const Int id) {}
@@ -110,9 +110,9 @@ public:
 	GroupMorph& operator=(const GroupMorph&) = delete;
 	GroupMorph& operator=(GroupMorph&& other) noexcept = default;
 
-	void UpdateMorph(MMDModelRootObject* model) override;
-	void AddMorphUI(MMDModelRootObject* model, Int morph_id) override;
-	void DeleteMorphUI(MMDModelRootObject* model) override;
+	void UpdateMorph(MMDModelRootObject& model) override;
+	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelRootObject& model) override;
 	void AddSubMorph(MMDModelRootObject* model, Int id, Float weight) override;
 	void AddSubMorphNoCheck(Int id, Float weight) override;
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
@@ -145,9 +145,9 @@ public:
 	FlipMorph& operator=(const FlipMorph&) = delete;
 	FlipMorph& operator=(FlipMorph&& other) noexcept = default;
 
-	void UpdateMorph(MMDModelRootObject* model) override;
-	void AddMorphUI(MMDModelRootObject* model, Int morph_id) override;
-	void DeleteMorphUI(MMDModelRootObject* model) override;
+	void UpdateMorph(MMDModelRootObject& model) override;
+	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelRootObject& model) override;
 	void AddSubMorph(MMDModelRootObject* model, Int id, Float weight) override;
 	void AddSubMorphNoCheck(Int id, Float weight) override;
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
@@ -168,9 +168,9 @@ public:
 	MeshMorph& operator=(const MeshMorph&) = delete;
 	MeshMorph& operator=(MeshMorph&& other) noexcept = default;
 
-	void UpdateMorph(MMDModelRootObject* model) override;
-	void AddMorphUI(MMDModelRootObject* model, Int morph_id) override;
-	void DeleteMorphUI(MMDModelRootObject* model) override;
+	void UpdateMorph(MMDModelRootObject& model) override;
+	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelRootObject& model) override;
 };
 class BoneMorph final : public IMorph
 {
@@ -183,9 +183,9 @@ public:
 	BoneMorph& operator=(const BoneMorph&) = delete;
 	BoneMorph& operator=(BoneMorph&& other) noexcept = default;
 
-	void UpdateMorph(MMDModelRootObject* model) override;
-	void AddMorphUI(MMDModelRootObject* model, Int morph_id) override;
-	void DeleteMorphUI(MMDModelRootObject* model) override;
+	void UpdateMorph(MMDModelRootObject& model) override;
+	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelRootObject& model) override;
 };
 enum class CMTObjectType
 {
@@ -262,40 +262,6 @@ public:
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 
-	Int AddMorph(const MMDMorphType& morph_type, String morph_name = {}, bool is_add_morph_ui = true);
-	void RenameMorph(const String& name);
-	void UpdateMorph();
-	void DeleteMorph(Int morph_index);
-	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it)
-	{
-		iferr_scope_handler{ return; };
-		auto& morph = *it;
-		const Int morph_index = it.FindIndex(morph);
-		morph.DeleteMorphUI(this);
-		for (auto& i : m_DescID_map.GetKeys())
-		{
-			if (auto* index = &m_DescID_map.FindValue(i)->second; *index > morph_index)
-			{
-				(*index)--;
-			}
-		}
-		m_morph_name_map.Erase(morph.GetName())iferr_return;
-		for (auto& i : m_morph_name_map.GetKeys())
-		{
-			if (auto* index = m_morph_name_map.FindValue(i).ToPointer(); *index > morph_index)
-			{
-				(*index)--;
-			}
-		}
-		it.Erase();
-	}
-	void AddSubMorph(Int32 id, Float weight);
-	void AddSubMorphNoCheck(Int32 id, Float weight);
-	void DeleteSubMorph(const Int32 id);
-	void RenameSubMorph(const Int32 old_id, const Int32 new_id);
-	Bool ReadMorph(HyperFile* hf);
-	Bool WriteMorph(HyperFile* hf) const;
-	Bool CopyMorph(MMDModelRootObject* dst) const;
 	AddMorphHelper BeginMorphChange();
 	Int ImportGroupAndFlipMorph(const PMXModel* pmx_model, libmmd::pmx_morph& pmx_morph);
 
@@ -310,10 +276,16 @@ public:
 	Bool UpdateRoot(BaseObject* op = nullptr);
 	BaseObject* GetRootObject(const CMTObjectType type) const;
 private:
-	String GetMorphNamedNumber()
-	{
-		return String::IntToString(m_morph_named_number++);
-	}
+	String GetMorphNamedNumber();
+	bool DeleteMorphImpl(IMorph& morph, const Int morph_index);
+	Int AddMorph(const MMDMorphType& morph_type, String morph_name = {}, bool is_add_morph_ui = true);
+	void RenameMorph(const String& name);
+	void UpdateMorph(IMorph& morph);
+	void DeleteMorph(Int morph_index);
+	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it);
+	Bool ReadMorph(HyperFile* hf);
+	Bool WriteMorph(HyperFile* hf) const;
+	Bool CopyMorph(MMDModelRootObject* dst) const;
 };
 
 #endif // !MMD_MODEL_H__

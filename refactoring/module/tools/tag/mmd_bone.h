@@ -62,7 +62,7 @@ class MMDBoneTagMsg
 public:
 	MMDBoneTagMsgType type;
 	explicit MMDBoneTagMsg(const MMDBoneTagMsgType type = MMDBoneTagMsgType::DEFAULT);
-	virtual ~MMDBoneTagMsg() = 0;
+	virtual ~MMDBoneTagMsg() = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTagMsg)
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDBoneTagMsg)
 };
