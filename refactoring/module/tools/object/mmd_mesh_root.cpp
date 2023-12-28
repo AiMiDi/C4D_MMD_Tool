@@ -22,6 +22,8 @@ NodeData* MMDMeshRootObject::Alloc()
 
 Bool MMDMeshRootObject::Init(GeListNode* node SDK2024_InitPara)
 {
+	if (!node)
+		return false;
 	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	if (!m_protection_tag)
 	{

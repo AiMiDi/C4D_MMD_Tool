@@ -227,10 +227,10 @@ class MMDModelRootObject final : public ObjectData
 	maxon::Synchronized<Bool> m_is_morph_initialized;
 	Bool m_is_root_initialized = false;
 	Int32 m_morph_named_number = 0;
-	BaseObject* m_MeshRoot_ptr = nullptr;
-	BaseObject* m_BoneRoot_ptr = nullptr;
-	BaseObject* m_RigidRoot_ptr = nullptr;
-	BaseObject* m_JointRoot_ptr = nullptr;
+	BaseObject* m_mesh_root = nullptr;
+	BaseObject* m_bone_root = nullptr;
+	BaseObject* m_rigid_root = nullptr;
+	BaseObject* m_joint_root = nullptr;
 	maxon::HashMap<DescID, maxon::Pair<MorphDescType, Int>> m_DescID_map;
 	maxon::HashMap<String, Int> m_morph_name_map;
 	maxon::PointerArray<IMorph> m_morph_arr;

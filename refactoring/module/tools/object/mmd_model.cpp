@@ -22,9 +22,9 @@ Bool EditorSubMorphDialog::CreateLayout()
 {
 	SetTitle(GeLoadString(IDS_MORPH_EDITOR));
 	m_images = std::make_unique<ImagesUserArea>("mmd_tool_title.png"_s, 300, 95);
-	if (C4DGadget* userAreaGadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(95));
+	if (C4DGadget* userAreaGadget = AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(95));
 		userAreaGadget != nullptr)
-		this->AttachUserArea(*m_images, userAreaGadget);
+		AttachUserArea(*m_images, userAreaGadget);
 	GroupBegin(1000, BFH_CENTER, 3, 1, ""_s, 0, 0, 150);
 	AddListView(10004, BFH_LEFT, 350, 150);
 	m_listview.AttachListView(this, 10004);
@@ -32,7 +32,7 @@ Bool EditorSubMorphDialog::CreateLayout()
 	m_id = 20000;
 	auto* sub_morph_data = m_morph->GetSubMorphDataWritable();
 	if (sub_morph_data == nullptr) {
-		this->Close();
+		Close();
 		return false;
 	}
 	ScrollGroupBegin(1002, BFH_SCALEFIT, SCROLLGROUP_VERT | SCROLLGROUP_BORDERIN, 350, 150);
@@ -91,7 +91,7 @@ Bool EditorSubMorphDialog::Command(Int32 id, const BaseContainer& msg)
 	{
 		auto* sub_morph_data = m_morph->GetSubMorphDataWritable();
 		if (sub_morph_data == nullptr) {
-			this->Close();
+			Close();
 			return false;
 		}
 		sub_morph_data->Reset();
@@ -227,7 +227,7 @@ inline Bool IMorph::CopyTo(IMorph* dest) const
 }
 inline Bool GroupMorph::Read(HyperFile* hf)
 {
-	if (this->IMorph::Read(hf) == false)
+	if (IMorph::Read(hf) == false)
 		return false;
 	if (m_grp_id.Read(hf) == false)
 		return false;
@@ -258,7 +258,7 @@ inline Bool GroupMorph::Read(HyperFile* hf)
 }
 inline Bool GroupMorph::Write(HyperFile* hf) const
 {
-	if (this->IMorph::Write(hf) == false)
+	if (IMorph::Write(hf) == false)
 		return false;
 	if (m_grp_id.Write(hf) == false)
 		return false;
@@ -283,7 +283,7 @@ inline Bool GroupMorph::Write(HyperFile* hf) const
 }
 inline Bool GroupMorph::CopyTo(IMorph* dest) const
 {
-	if (this->IMorph::CopyTo(dest) == false)
+	if (IMorph::CopyTo(dest) == false)
 		return false;
 	for (auto& data : m_data)
 	{
@@ -294,7 +294,7 @@ inline Bool GroupMorph::CopyTo(IMorph* dest) const
 }
 inline Bool FlipMorph::Read(HyperFile* hf)
 {
-	if (this->IMorph::Read(hf) == false)
+	if (IMorph::Read(hf) == false)
 		return false;
 	if (m_grp_id.Read(hf) == false)
 		return false;
@@ -325,7 +325,7 @@ inline Bool FlipMorph::Read(HyperFile* hf)
 }
 inline Bool FlipMorph::Write(HyperFile* hf) const
 {
-	if (this->IMorph::Write(hf) == false)
+	if (IMorph::Write(hf) == false)
 		return false;
 	if (m_grp_id.Write(hf) == false)
 		return false;
@@ -350,7 +350,7 @@ inline Bool FlipMorph::Write(HyperFile* hf) const
 }
 inline Bool FlipMorph::CopyTo(IMorph* dest) const
 {
-	if (this->IMorph::CopyTo(dest) == false)
+	if (IMorph::CopyTo(dest) == false)
 		return false;
 	for (auto& data : m_data)
 	{
@@ -461,7 +461,7 @@ inline void GroupMorph::UpdateMorph(MMDModelRootObject& model)
 	for (auto& data : m_data)
 	{
 		auto& morph = morph_arr[data.GetKey()];
-		morph.SetStrength(node, this->GetStrength(node) * data.GetValue());
+		morph.SetStrength(node, GetStrength(node) * data.GetValue());
 	}
 }
 
@@ -667,7 +667,7 @@ BoneMorph::BoneMorph(BoneMorph&& other) noexcept: IMorph(std::move(other))
 
 inline void BoneMorph::DeleteMorphUI(MMDModelRootObject& model)
 {
-	model.DeleteDynamicDescription(this->m_strength_id);
+	model.DeleteDynamicDescription(m_strength_id);
 
 	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 	if (::GeIsMainThread())
@@ -744,10 +744,10 @@ Bool MMDModelRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		if (!bone_root_link->Read(hf))
 			return false;
-		this->m_MeshRoot_ptr = reinterpret_cast<BaseObject*>(mesh_root_link->ForceGetLink());
-		this->m_RigidRoot_ptr = reinterpret_cast<BaseObject*>(rigid_root_link->ForceGetLink());
-		this->m_JointRoot_ptr = reinterpret_cast<BaseObject*>(joint_root_link->ForceGetLink());
-		this->m_BoneRoot_ptr = reinterpret_cast<BaseObject*>(bone_root_link->ForceGetLink());
+		m_mesh_root = reinterpret_cast<BaseObject*>(mesh_root_link->ForceGetLink());
+		m_rigid_root = reinterpret_cast<BaseObject*>(rigid_root_link->ForceGetLink());
+		m_joint_root = reinterpret_cast<BaseObject*>(joint_root_link->ForceGetLink());
+		m_bone_root = reinterpret_cast<BaseObject*>(bone_root_link->ForceGetLink());
 
 		if (!hf->ReadInt32(&m_morph_named_number))
 			return false;
@@ -801,10 +801,10 @@ Bool MMDModelRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SD
 	AutoAlloc<BaseLink> bone_root_link;
 	if (bone_root_link == nullptr)
 		return false;
-	mesh_root_link->SetLink(this->m_MeshRoot_ptr);
-	rigid_root_link->SetLink(this->m_RigidRoot_ptr);
-	joint_root_link->SetLink(this->m_JointRoot_ptr);
-	bone_root_link->SetLink(this->m_BoneRoot_ptr);
+	mesh_root_link->SetLink(m_mesh_root);
+	rigid_root_link->SetLink(m_rigid_root);
+	joint_root_link->SetLink(m_joint_root);
+	bone_root_link->SetLink(m_bone_root);
 	if (!mesh_root_link->Write(hf))
 		return false;
 	if (!rigid_root_link->Write(hf))
@@ -843,13 +843,13 @@ Bool MMDModelRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SD
 Bool MMDModelRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
 {
 	const auto destObject = reinterpret_cast<MMDModelRootObject*>(dest);
-	destObject->m_BoneRoot_ptr = this->m_BoneRoot_ptr;
-	destObject->m_JointRoot_ptr = this->m_JointRoot_ptr;
-	destObject->m_RigidRoot_ptr = this->m_RigidRoot_ptr;
-	destObject->m_MeshRoot_ptr = this->m_MeshRoot_ptr;
-	iferr(destObject->m_DescID_map.CopyFrom(this->m_DescID_map))
+	destObject->m_bone_root = m_bone_root;
+	destObject->m_joint_root = m_joint_root;
+	destObject->m_rigid_root = m_rigid_root;
+	destObject->m_mesh_root = m_mesh_root;
+	iferr(destObject->m_DescID_map.CopyFrom(m_DescID_map))
 		return false;
-	iferr(destObject->m_morph_name_map.CopyFrom(this->m_morph_name_map))
+	iferr(destObject->m_morph_name_map.CopyFrom(m_morph_name_map))
 		return false;
 	if (!CopyMorph(destObject))
 		return false;
@@ -919,12 +919,12 @@ void MMDModelRootObject::RefreshMorph()
 	{
 		DeleteMorph(it);
 	}
-	auto& mesh_morph_map = m_MeshRoot_ptr->GetNodeData<MMDMeshRootObject>()->GetMeshMorphData();
+	auto& mesh_morph_map = m_mesh_root->GetNodeData<MMDMeshRootObject>()->GetMeshMorphData();
 	for (auto& name : mesh_morph_map.GetKeys())
 	{
 		AddMorph(MMDMorphType::MESH, name);
 	}
-	auto& bone_morph_map = m_BoneRoot_ptr->GetNodeData<MMDBoneRootObject>()->GetBoneMorphData();
+	auto& bone_morph_map = m_bone_root->GetNodeData<MMDBoneRootObject>()->GetBoneMorphData();
 	for (auto& name : bone_morph_map.GetKeys())
 	{
 		AddMorph(MMDMorphType::BONE, name);
@@ -957,79 +957,71 @@ Bool MMDModelRootObject::UpdateRoot(BaseObject* op)
 		}
 	}
 	nodes.Reset();
-	if (m_JointRoot_ptr == nullptr) {
+	if (m_joint_root == nullptr) {
 		if (JointRoot_ == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_JOINT_ROOT);
 			tmp->InsertUnder(op);
-			this->m_JointRoot_ptr = tmp;
+			m_joint_root = tmp;
 		}
 		else {
-			this->m_JointRoot_ptr = JointRoot_;
+			m_joint_root = JointRoot_;
 		}
 		m_is_root_initialized = false;
 	}
-	if (m_RigidRoot_ptr == nullptr) {
+	if (m_rigid_root == nullptr) {
 		if (RigidRoot_ == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_RIGID_ROOT);
 			tmp->InsertUnder(op);
-			this->m_RigidRoot_ptr = tmp;
+			m_rigid_root = tmp;
 		}
 		else {
-			this->m_RigidRoot_ptr = RigidRoot_;
+			m_rigid_root = RigidRoot_;
 		}
 		m_is_root_initialized = false;
 	}
-	if (m_BoneRoot_ptr == nullptr) {
+	if (m_bone_root == nullptr) {
 		if (BoneRoot_ == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_BONE_ROOT);
 			tmp->InsertUnder(op);
-			this->m_BoneRoot_ptr = tmp;
+			m_bone_root = tmp;
 		}
 		else {
-			this->m_BoneRoot_ptr = BoneRoot_;
+			m_bone_root = BoneRoot_;
 		}
 		m_is_root_initialized = false;
 	}
-	if (m_MeshRoot_ptr == nullptr) {
+	if (m_mesh_root == nullptr) {
 		if (MeshRoot_ == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_MESH_ROOT);
 			tmp->InsertUnder(op);
-			this->m_MeshRoot_ptr = tmp;
+			m_mesh_root = tmp;
 		}
 		else {
-			this->m_MeshRoot_ptr = MeshRoot_;
+			m_mesh_root = MeshRoot_;
 		}
 		m_is_root_initialized = false;
 	}
 	if (m_is_root_initialized == false) {
-		const maxon::StrongRef<MMDModelObjectMsg> MeshRoot_msg(
-			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op).GetValue());
-		this->m_MeshRoot_ptr->Message(ID_O_MMD_MODEL, MeshRoot_msg);
-		const maxon::StrongRef<MMDModelObjectMsg> BoneRoot_msgA(
-			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, this->m_RigidRoot_ptr).GetValue());
-		this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, BoneRoot_msgA);
-		const maxon::StrongRef<MMDModelObjectMsg> BoneRoot_msgB(
-			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, this->m_JointRoot_ptr).GetValue());
-		this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, BoneRoot_msgB);
-		const maxon::StrongRef<MMDModelObjectMsg> BoneRoot_msgC(
-			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op).GetValue());
-		this->m_BoneRoot_ptr->Message(ID_O_MMD_MODEL, BoneRoot_msgC);
-		const maxon::StrongRef<MMDModelObjectMsg> RigidRoot_msgA(
-			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, this->m_BoneRoot_ptr).GetValue());
-		this->m_RigidRoot_ptr->Message(ID_O_MMD_MODEL, RigidRoot_msgA);
-		const maxon::StrongRef<MMDModelObjectMsg> RigidRoot_msgB(
-			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, this->m_JointRoot_ptr).GetValue());
-		this->m_RigidRoot_ptr->Message(ID_O_MMD_MODEL, RigidRoot_msgB);
-		const maxon::StrongRef<MMDModelObjectMsg> JointRoot_msgA(
-			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, this->m_BoneRoot_ptr).GetValue());
-		this->m_JointRoot_ptr->Message(ID_O_MMD_MODEL, JointRoot_msgA);
-		const maxon::StrongRef<MMDModelObjectMsg> JointRoot_msgB(
-			NewObj(MMDModelObjectMsg, MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, this->m_RigidRoot_ptr).GetValue());
-		this->m_JointRoot_ptr->Message(ID_O_MMD_MODEL, JointRoot_msgB);
+		MMDModelObjectMsg MeshRoot_msg(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op);
+		m_mesh_root->Message(ID_O_MMD_MODEL, &MeshRoot_msg);
+		MMDModelObjectMsg BoneRoot_msgA(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, m_rigid_root);
+		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgA);
+		MMDModelObjectMsg BoneRoot_msgB(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, m_joint_root);
+		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgB);
+		MMDModelObjectMsg BoneRoot_msgC(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op);
+		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgC);
+		MMDModelObjectMsg RigidRoot_msgA(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, m_bone_root);
+		m_rigid_root->Message(ID_O_MMD_MODEL, &RigidRoot_msgA);
+		MMDModelObjectMsg RigidRoot_msgB(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, m_joint_root);
+		m_rigid_root->Message(ID_O_MMD_MODEL, &RigidRoot_msgB);
+		MMDModelObjectMsg JointRoot_msgA(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, m_bone_root);
+		m_joint_root->Message(ID_O_MMD_MODEL, &JointRoot_msgA);
+		MMDModelObjectMsg JointRoot_msgB(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, m_rigid_root);
+		m_joint_root->Message(ID_O_MMD_MODEL, &JointRoot_msgB);
 		m_is_root_initialized = true;
 	}
 	return true;
@@ -1044,7 +1036,7 @@ EXECUTIONRESULT MMDModelRootObject::Execute(BaseObject* op, BaseDocument* doc, B
 		return EXECUTIONRESULT::OK;
 	if (*m_is_morph_initialized.Read() == false)
 	{
-		this->RefreshMorph();
+		RefreshMorph();
 		*m_is_morph_initialized.Write() = true;
 	}
 	if (*m_is_need_update.Read() == true)
@@ -1087,15 +1079,15 @@ Int MMDModelRootObject::ImportGroupAndFlipMorph(const PMXModel* pmx_model, libmm
 			morph.AddSubMorphNoCheck(morph_offset.get_morph_index(), morph_offset.get_morph_weight());
 		}
 	}
-	case libmmd::pmx_morph::morph_type::VERTEX:
-	case libmmd::pmx_morph::morph_type::BONE:
-	case libmmd::pmx_morph::morph_type::UV0:
-	case libmmd::pmx_morph::morph_type::UV1:
-	case libmmd::pmx_morph::morph_type::UV2:
-	case libmmd::pmx_morph::morph_type::UV3:
-	case libmmd::pmx_morph::morph_type::UV4:
-	case libmmd::pmx_morph::morph_type::MATERIAL:
-	case libmmd::pmx_morph::morph_type::IMPULSE:
+	case libmmd::pmx_morph::morph_type::VERTEX:  [[fallthrough]]
+	case libmmd::pmx_morph::morph_type::BONE:    [[fallthrough]]
+	case libmmd::pmx_morph::morph_type::UV0:     [[fallthrough]] 
+	case libmmd::pmx_morph::morph_type::UV1:     [[fallthrough]] 
+	case libmmd::pmx_morph::morph_type::UV2:     [[fallthrough]] 
+	case libmmd::pmx_morph::morph_type::UV3:     [[fallthrough]] 
+	case libmmd::pmx_morph::morph_type::UV4:     [[fallthrough]] 
+	case libmmd::pmx_morph::morph_type::MATERIAL:[[fallthrough]] 
+	case libmmd::pmx_morph::morph_type::IMPULSE: 
 	break;
 	}
 	return morph_id;
@@ -1142,29 +1134,29 @@ Bool MMDModelRootObject::CreateRoot()
 	const BaseDocument* doc = GetActiveDocument();
 	if (const auto op = reinterpret_cast<BaseObject*>(Get()); op != nullptr && doc != nullptr)
 	{
-		if (this->m_JointRoot_ptr == nullptr)
+		if (m_joint_root == nullptr)
 		{
 			BaseObject* joint_root_object = BaseObject::Alloc(ID_O_MMD_JOINT_ROOT);
 			joint_root_object->InsertUnder(op);
-			this->m_JointRoot_ptr = joint_root_object;
+			m_joint_root = joint_root_object;
 		}
-		if (this->m_RigidRoot_ptr == nullptr)
+		if (m_rigid_root == nullptr)
 		{
 			BaseObject* rigid_root_object = BaseObject::Alloc(ID_O_MMD_RIGID_ROOT);
 			rigid_root_object->InsertUnder(op);
-			this->m_RigidRoot_ptr = rigid_root_object;
+			m_rigid_root = rigid_root_object;
 		}
-		if (this->m_BoneRoot_ptr == nullptr)
+		if (m_bone_root == nullptr)
 		{
 			BaseObject* bone_root_object = BaseObject::Alloc(ID_O_MMD_BONE_ROOT);
 			bone_root_object->InsertUnder(op);
-			this->m_BoneRoot_ptr = bone_root_object;
+			m_bone_root = bone_root_object;
 		}
-		if (this->m_MeshRoot_ptr == nullptr)
+		if (m_mesh_root == nullptr)
 		{
 			BaseObject* mesh_root_object = BaseObject::Alloc(ID_O_MMD_MESH_ROOT);
 			mesh_root_object->InsertUnder(op);
-			this->m_MeshRoot_ptr = mesh_root_object;
+			m_mesh_root = mesh_root_object;
 		}
 		return true;
 	}
@@ -1176,13 +1168,13 @@ BaseObject* MMDModelRootObject::GetRootObject(const CMTObjectType type) const
 	switch (type)
 	{
 	case CMTObjectType::MeshRoot:
-		return this->m_MeshRoot_ptr;
+		return m_mesh_root;
 	case CMTObjectType::BoneRoot:
-		return this->m_BoneRoot_ptr;
+		return m_bone_root;
 	case CMTObjectType::RigidRoot:
-		return this->m_RigidRoot_ptr;
+		return m_rigid_root;
 	case CMTObjectType::JointRoot:
-		return this->m_JointRoot_ptr;
+		return m_joint_root;
 
 	case CMTObjectType::DEFAULT:
 	case CMTObjectType::ModelRoot:;
@@ -1641,7 +1633,7 @@ void MMDModelRootObject::RenameMorph(const String& name)
 		return;
 	if(const auto morph_id_ptr = m_morph_name_map.Find(name); morph_id_ptr)
 	{
-		if (const Int32& index = morph_id_ptr->GetValue(); index < GetMorphNum())
+		if (const auto& index = morph_id_ptr->GetValue(); index < GetMorphNum())
 		{
 			iferr(m_morph_name_map.Insert(name, index))
 				return;
