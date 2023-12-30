@@ -36,6 +36,7 @@ Bool MMDBoneRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, 
 		return false;
 	};
 	auto const dest_object = reinterpret_cast<MMDBoneRootObject*>(dest);
+	dest_object->bone_name_index = bone_name_index;
 	dest_object->m_rigid_root = m_rigid_root;
 	dest_object->m_joint_root = m_joint_root;
 	for (const auto& entry : m_bone_list)

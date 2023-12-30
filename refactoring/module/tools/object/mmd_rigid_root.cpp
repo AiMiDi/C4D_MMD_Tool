@@ -14,40 +14,131 @@ Description:	MMD rigid root object
 #include "mmd_model.h"
 #include "description/OMMDRigid.h"
 
-Bool MMDRigidRootObject::Init(GeListNode* node SDK2024_InitPara)
+void MMDRigidRootObject::CreateLockTag(GeListNode* node)
 {
-	if(!node)
-		return false;
-	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	if (!m_protection_tag)
 	{
 		m_protection_tag = reinterpret_cast<BaseObject*>(node)->MakeTag(Tprotection);
 		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
 		m_protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
 	}
-	if (!m_displayTag)
+}
+
+void MMDRigidRootObject::CreateDisplayTag(GeListNode* node)
+{
+	if (!m_display_tag)
 	{
-		m_displayTag = reinterpret_cast<BaseObject*>(node)->MakeTag(Tdisplay);
-		m_displayTag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_AFFECT_DISPLAYMODE)), true, DESCFLAGS_SET::NONE);
-		m_displayTag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		m_displayTag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
+		m_display_tag = reinterpret_cast<BaseObject*>(node)->MakeTag(Tdisplay);
+		m_display_tag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_AFFECT_DISPLAYMODE)), true, DESCFLAGS_SET::NONE);
+		m_display_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+		m_display_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
 	}
+}
+
+Bool MMDRigidRootObject::Init(GeListNode* node SDK2024_InitPara)
+{
+	if(!node)
+		return false;
+	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
+	CreateLockTag(node);
+	CreateDisplayTag(node);
 	return true;
 }
 
 Bool MMDRigidRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
+	iferr_scope_handler{
+	return false;
+	};
+	if (!hf->ReadInt64(&m_rigid_name_index))
+		return false;
+	{
+		AutoAlloc<BaseLink> temp_link;
+		if (!temp_link)
+			return false;
+		if (!temp_link->Read(hf))
+			return false;
+		m_bone_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
+		if (!temp_link->Read(hf))
+			return false;
+		m_joint_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
+		if (!temp_link->Read(hf))
+			return false;
+		m_display_tag = reinterpret_cast<BaseTag*>(temp_link->ForceGetLink());
+		if (!temp_link->Read(hf))
+			return false;
+		m_protection_tag = reinterpret_cast<BaseTag*>(temp_link->ForceGetLink());
+	}
+	// m_rigid_list
+	{
+		Int64 rigid_list_count = 0;
+		if (!hf->ReadInt64(&rigid_list_count))
+			return false;
+		while (rigid_list_count--)
+		{
+			Int32 rigid_index = 0;
+			if (!hf->ReadInt32(&rigid_index))
+				return false;
+			AutoAlloc<BaseLink> temp_link;
+			if (!temp_link->Read(hf))
+				return false;
+			m_rigid_list.Insert(rigid_index, std::move(temp_link))iferr_return;
+		}
+	}
 	return ObjectData::Read(node, hf, level);
 }
 
 Bool MMDRigidRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
+	if (!hf->WriteInt64(m_rigid_name_index))
+		return false;
+	{
+		AutoAlloc<BaseLink> temp_link;
+		if (!temp_link)
+			return false;
+		temp_link->SetLink(m_bone_root);
+		if (!temp_link->Write(hf))
+			return false;
+		temp_link->SetLink(m_joint_root);
+		if (!temp_link->Write(hf))
+			return false;
+		temp_link->SetLink(m_display_tag);
+		if (!temp_link->Write(hf))
+			return false;
+		temp_link->SetLink(m_protection_tag);
+		if (!temp_link->Write(hf))
+			return false;
+	}
+	// m_rigid_list
+	{
+		if (!hf->WriteInt64(m_rigid_list.GetCount()))
+			return false;
+		for (const auto& rigid_link : m_rigid_list)
+		{
+			if (hf->WriteInt32(!rigid_link.GetKey()))
+				return false;
+			if (!rigid_link.GetValue()->Write(hf))
+				return false;
+		}
+	}
 	return ObjectData::Write(node, hf);
 }
 
 Bool MMDRigidRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
 	AliasTrans* trn) SDK2024_Const
 {
+	iferr_scope_handler{
+	return false;
+	};
+	auto const dest_object = reinterpret_cast<MMDRigidRootObject*>(dest);
+	dest_object->m_rigid_name_index = m_rigid_name_index;
+	dest_object->m_bone_root = m_bone_root;
+	dest_object->m_joint_root = m_joint_root;
+	for (const auto& entry : m_rigid_list)
+	{
+		auto& link = dest_object->m_rigid_list.InsertKey(entry.GetKey())iferr_return;
+		entry.GetValue()->CopyTo(link.GetPointer(), flags, trn);
+	}
 	return ObjectData::CopyTo(dest, snode, dnode, flags, trn);
 }
 
@@ -60,24 +151,23 @@ Bool MMDRigidRootObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 	case MSG_DESCRIPTION_COMMAND:
 	{
-		BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
-		if (bc == nullptr) {
-			return(true);
+		const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+		if (!bc) {
+			return true;
 		}
-		DescriptionCommand* dc = (DescriptionCommand*)data;
-		if (dc->_descId[0].id == ADD_RIGID_BUTTON)
+		if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_RIGID_BUTTON)
 		{
-			if (BaseObject* newRigid = BaseObject::Alloc(ID_O_MMD_RIGID))
+			if (BaseObject* new_rigid = BaseObject::Alloc(ID_O_MMD_RIGID))
 			{
-				newRigid->SetName(newRigid->GetName() + "." + String::IntToString(m_rigid_named_number++));
-				newRigid->InsertUnder(node);
+				new_rigid->SetName(new_rigid->GetName() + "." + String::IntToString(m_rigid_name_index++));
+				new_rigid->InsertUnder(node);
 				{
 					MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, bc->GetInt32(RIGID_DISPLAY_TYPE));
-					newRigid->Message(ID_O_MMD_RIGID_ROOT, &msg);
+					new_rigid->Message(ID_O_MMD_RIGID_ROOT, &msg);
 				}
 				{
 					MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF,bc->GetInt32(RIGID_MODE));
-					newRigid->Message(ID_O_MMD_RIGID_ROOT, &msg);
+					new_rigid->Message(ID_O_MMD_RIGID_ROOT, &msg);
 				}
 			}
 		}
@@ -122,7 +212,10 @@ Bool MMDRigidRootObject::Message(GeListNode* node, Int32 type, void* data)
 					m_joint_root = msg->object;
 					break;
 				}
-				default:
+				case CMTObjectType::DEFAULT: [[fallthrough]]
+				case CMTObjectType::MeshRoot: [[fallthrough]]
+				case CMTObjectType::RigidRoot: [[fallthrough]]
+				case CMTObjectType::ModelRoot: 
 					break;
 				}
 			}
@@ -153,16 +246,16 @@ Bool MMDRigidRootObject::SetDParameter(GeListNode* node, const DescID& id, const
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_ON);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, &msg);
-			if (m_displayTag)
-				m_displayTag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE)), DISPLAYTAG_SDISPLAY_GOURAUD, DESCFLAGS_SET::NONE);
+			CreateDisplayTag(node);
+			m_display_tag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE)), DISPLAYTAG_SDISPLAY_GOURAUD, DESCFLAGS_SET::NONE);
 			break;
 		}
 		case RIGID_DISPLAY_TYPE_WIRE:
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_WIRE);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, &msg);
-			if (m_displayTag)
-				m_displayTag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE)), DISPLAYTAG_SDISPLAY_NOSHADING, DESCFLAGS_SET::NONE);
+			CreateDisplayTag(node);
+			m_display_tag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE)), DISPLAYTAG_SDISPLAY_NOSHADING, DESCFLAGS_SET::NONE);
 			break;
 		}
 		default:
@@ -199,5 +292,5 @@ Bool MMDRigidRootObject::SetDParameter(GeListNode* node, const DescID& id, const
 
 NodeData* MMDRigidRootObject::Alloc()
 {
-	return(NewObjClear(MMDRigidRootObject));
+	return NewObjClear(MMDRigidRootObject);
 }
