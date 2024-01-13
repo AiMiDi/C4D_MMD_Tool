@@ -604,7 +604,7 @@ NodeData* MMDCamera::Alloc()
 	return NewObjClear(MMDCamera);
 }
 
-Bool MMDCamera::Init(GeListNode* node SDK2024_InitPara)
+Bool MMDCamera::Init(GeListNode* node SDK2024_InitParaName)
 {
 	if (node == nullptr)
 		return false;

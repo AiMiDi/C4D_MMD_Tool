@@ -20,27 +20,6 @@ NodeData* MMDMeshRootObject::Alloc()
 	return NewObjClear(MMDMeshRootObject);
 }
 
-Bool MMDMeshRootObject::Init(GeListNode* node SDK2024_InitPara)
-{
-	if (!node)
-		return false;
-	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
-	if (!m_protection_tag)
-	{
-		m_protection_tag = reinterpret_cast<BaseObject*>(node)->MakeTag(Tprotection);
-		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		m_protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-	}
-	if (!m_displayTag)
-	{
-		m_displayTag = reinterpret_cast<BaseObject*>(node)->MakeTag(Tdisplay);
-		m_displayTag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_AFFECT_DISPLAYMODE)), true, DESCFLAGS_SET::NONE);
-		m_displayTag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		m_displayTag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-	}
-	return SUPER::Init(node, isCloneInit);
-}
-
 Bool MMDMeshRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
@@ -53,12 +32,6 @@ Bool MMDMeshRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		if (!temp_link->Read(hf))
 			return false;
 		m_model_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
-		if (!temp_link->Read(hf))
-			return false;
-		m_displayTag = reinterpret_cast<BaseTag*>(temp_link->ForceGetLink());
-		if (!temp_link->Read(hf))
-			return false;
-		m_protection_tag = reinterpret_cast<BaseTag*>(temp_link->ForceGetLink());
 	}
 
 	// m_tag_mode_map
@@ -122,12 +95,6 @@ Bool MMDMeshRootObject::Write(const GeListNode* node, HyperFile* hf) const
 		temp_link->SetLink(m_model_root);
 		if (!temp_link->Write(hf))
 			return false;
-		temp_link->SetLink(m_displayTag);
-		if (!temp_link->Write(hf))
-			return false;
-		temp_link->SetLink(m_protection_tag);
-		if (!temp_link->Write(hf))
-			return false;
 	}
 	// m_tag_mode_map
 	{
@@ -172,8 +139,6 @@ Bool MMDMeshRootObject::CopyTo(NodeData* dest, const GeListNode* snode, GeListNo
 	};
 	auto const dest_object = reinterpret_cast<MMDMeshRootObject*>(dest);
 	dest_object->m_model_root = m_model_root;
-	dest_object->m_displayTag = m_displayTag;
-	dest_object->m_protection_tag = m_protection_tag;
 	for (const auto& entry : m_tag_mode_map)
 	{
 		dest_object->m_tag_mode_map.Insert(entry.GetKey(), entry.GetValue())iferr_return;
@@ -188,7 +153,8 @@ Bool MMDMeshRootObject::CopyTo(NodeData* dest, const GeListNode* snode, GeListNo
 Bool MMDMeshRootObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	const auto op = reinterpret_cast<BaseObject*>(node);
-	if (id[0].id == MESH_DISPLAY_TYPE && m_displayTag != nullptr)
+	CreateDisplayTag(node);
+	if (id[0].id == MESH_DISPLAY_TYPE && m_display_tag != nullptr)
 	{
 		const auto display_mode_DescID = ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE));
 		switch (t_data.GetInt32())
@@ -203,42 +169,42 @@ Bool MMDMeshRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			m_displayTag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_GOURAUD, DESCFLAGS_SET::NONE);
+			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_GOURAUD, DESCFLAGS_SET::NONE);
 			break;
 		}
 		case MESH_DISPLAY_TYPE_ON_WIRE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			m_displayTag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_GOURAUD_WIRE, DESCFLAGS_SET::NONE);
+			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_GOURAUD_WIRE, DESCFLAGS_SET::NONE);
 			break;
 		}
 		case MESH_DISPLAY_TYPE_QUICK:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			m_displayTag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_QUICK, DESCFLAGS_SET::NONE);
+			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_QUICK, DESCFLAGS_SET::NONE);
 			break;
 		}
 		case MESH_DISPLAY_TYPE_QUICK_WIRE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			m_displayTag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_QUICK_WIRE, DESCFLAGS_SET::NONE);
+			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_QUICK_WIRE, DESCFLAGS_SET::NONE);
 			break;
 		}
 		case MESH_DISPLAY_TYPE_HIDDENLINE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			m_displayTag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_HIDDENLINE, DESCFLAGS_SET::NONE);
+			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_HIDDENLINE, DESCFLAGS_SET::NONE);
 			break;
 		}
 		case MESH_DISPLAY_TYPE_WIRE:
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			m_displayTag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_NOSHADING, DESCFLAGS_SET::NONE);
+			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_NOSHADING, DESCFLAGS_SET::NONE);
 			break;
 		}
 		default:

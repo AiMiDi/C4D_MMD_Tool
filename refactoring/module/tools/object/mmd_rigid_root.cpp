@@ -14,41 +14,10 @@ Description:	MMD rigid root object
 #include "mmd_model.h"
 #include "description/OMMDRigid.h"
 
-void MMDRigidRootObject::CreateLockTag(GeListNode* node)
-{
-	if (!m_protection_tag)
-	{
-		m_protection_tag = reinterpret_cast<BaseObject*>(node)->MakeTag(Tprotection);
-		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		m_protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-	}
-}
-
-void MMDRigidRootObject::CreateDisplayTag(GeListNode* node)
-{
-	if (!m_display_tag)
-	{
-		m_display_tag = reinterpret_cast<BaseObject*>(node)->MakeTag(Tdisplay);
-		m_display_tag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_AFFECT_DISPLAYMODE)), true, DESCFLAGS_SET::NONE);
-		m_display_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		m_display_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-	}
-}
-
-Bool MMDRigidRootObject::Init(GeListNode* node SDK2024_InitPara)
-{
-	if(!node)
-		return false;
-	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
-	CreateLockTag(node);
-	CreateDisplayTag(node);
-	return true;
-}
-
 Bool MMDRigidRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
-	return false;
+		return false;
 	};
 	if (!hf->ReadInt64(&m_rigid_name_index))
 		return false;
@@ -62,12 +31,6 @@ Bool MMDRigidRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		if (!temp_link->Read(hf))
 			return false;
 		m_joint_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
-		if (!temp_link->Read(hf))
-			return false;
-		m_display_tag = reinterpret_cast<BaseTag*>(temp_link->ForceGetLink());
-		if (!temp_link->Read(hf))
-			return false;
-		m_protection_tag = reinterpret_cast<BaseTag*>(temp_link->ForceGetLink());
 	}
 	// m_rigid_list
 	{
@@ -85,7 +48,7 @@ Bool MMDRigidRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			m_rigid_list.Insert(rigid_index, std::move(temp_link))iferr_return;
 		}
 	}
-	return ObjectData::Read(node, hf, level);
+	return SUPER::Read(node, hf, level);
 }
 
 Bool MMDRigidRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
@@ -102,12 +65,6 @@ Bool MMDRigidRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SD
 		temp_link->SetLink(m_joint_root);
 		if (!temp_link->Write(hf))
 			return false;
-		temp_link->SetLink(m_display_tag);
-		if (!temp_link->Write(hf))
-			return false;
-		temp_link->SetLink(m_protection_tag);
-		if (!temp_link->Write(hf))
-			return false;
 	}
 	// m_rigid_list
 	{
@@ -121,14 +78,14 @@ Bool MMDRigidRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SD
 				return false;
 		}
 	}
-	return ObjectData::Write(node, hf);
+	return SUPER::Write(node, hf);
 }
 
 Bool MMDRigidRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
 	AliasTrans* trn) SDK2024_Const
 {
 	iferr_scope_handler{
-	return false;
+		return false;
 	};
 	auto const dest_object = reinterpret_cast<MMDRigidRootObject*>(dest);
 	dest_object->m_rigid_name_index = m_rigid_name_index;
@@ -139,7 +96,7 @@ Bool MMDRigidRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode,
 		auto& link = dest_object->m_rigid_list.InsertKey(entry.GetKey())iferr_return;
 		entry.GetValue()->CopyTo(link.GetPointer(), flags, trn);
 	}
-	return ObjectData::CopyTo(dest, snode, dnode, flags, trn);
+	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
 Bool MMDRigidRootObject::Message(GeListNode* node, Int32 type, void* data)

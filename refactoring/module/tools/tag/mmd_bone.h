@@ -195,7 +195,7 @@ public:
 	 * @param[in] isCloneInit The initialization parameters.
 	 * @return true if initialization is successful, false otherwise.
 	 */
-	Bool Init(GeListNode* node SDK2024_InitPara) override;
+	Bool Init(GeListNode* node SDK2024_InitParaName) override;
 
 	/**
 	 * @brief Handles messages sent to the MMDBoneTag.

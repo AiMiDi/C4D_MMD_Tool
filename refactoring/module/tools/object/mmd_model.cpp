@@ -708,7 +708,7 @@ MMDModelRootObject::AddMorphHelper::~AddMorphHelper()
 	*m_model->m_is_need_update.Write() = true;
 }
 
-Bool MMDModelRootObject::Init(GeListNode* node SDK2024_InitPara)
+Bool MMDModelRootObject::Init(GeListNode* node SDK2024_InitParaName)
 {
 	if (node == nullptr)
 		return false;

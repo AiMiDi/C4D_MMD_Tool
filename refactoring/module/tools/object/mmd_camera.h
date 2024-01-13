@@ -101,7 +101,7 @@ private:
 	static void AddToSceneManager(BaseObject* object);
 public:
 	// Object initialization
-	Bool Init(GeListNode* node SDK2024_InitPara) override;
+	Bool Init(GeListNode* node SDK2024_InitParaName) override;
 
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
 

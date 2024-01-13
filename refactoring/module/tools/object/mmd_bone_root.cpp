@@ -16,20 +16,6 @@ NodeData* MMDBoneRootObject::Alloc()
 	return NewObjClear(MMDBoneRootObject);
 }
 
-Bool MMDBoneRootObject::Init(GeListNode* node SDK2024_InitPara)
-{
-	if(!node)
-		return true;
-	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
-	if(!m_protection_tag)
-	{
-		m_protection_tag = reinterpret_cast<BaseObject*>(node)->MakeTag(Tprotection);
-		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		m_protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-	}
-	return true;
-}
-
 Bool MMDBoneRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
 {
 	iferr_scope_handler{
@@ -54,7 +40,7 @@ Bool MMDBoneRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, 
 Bool MMDBoneRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
-			return false;
+		return false;
 	};
 	if (!hf->ReadInt64(&bone_name_index))
 		return false;
@@ -71,9 +57,6 @@ Bool MMDBoneRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		if (!temp_link->Read(hf))
 			return false;
 		m_joint_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
-		if (!temp_link->Read(hf))
-			return false;
-		m_protection_tag = reinterpret_cast<BaseTag*>(temp_link->ForceGetLink());
 	}
 	// m_bone_list
 	{
@@ -131,9 +114,6 @@ Bool MMDBoneRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK
 		if (!temp_link->Write(hf))
 			return false;
 		temp_link->SetLink(m_joint_root);
-		if (!temp_link->Write(hf))
-			return false;
-		temp_link->SetLink(m_protection_tag);
 		if (!temp_link->Write(hf))
 			return false;
 	}
@@ -509,3 +489,6 @@ Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Flo
 	}
 	return true;
 }
+
+void MMDBoneRootObject::CreateDisplayTag(GeListNode* node)
+{}

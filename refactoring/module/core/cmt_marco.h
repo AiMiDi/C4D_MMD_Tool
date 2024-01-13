@@ -63,6 +63,7 @@
 #   define SDK2024_NotConst const
 
 #	define SDK2024_InitPara
+#	define SDK2024_InitParaName
 #	define DescIDGeData(id) GeData{ CUSTOMDATATYPE_DESCID, id }
 
 #   ifndef ConstDescID
@@ -79,7 +80,8 @@
 #   define SDK2024_Const const
 #   define SDK2024_NotConst
 
-#   define SDK2024_InitPara ,Bool isCloneInit
+#	define SDK2024_InitPara , isCloneInit
+#   define SDK2024_InitParaName ,Bool isCloneInit
 #	define DescIDGeData(id) GeData{ id }
 
 #	define DataGetCustomDataType(data, type, id) data.GetCustomDataTypeWritable<type>()

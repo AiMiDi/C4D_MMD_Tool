@@ -221,6 +221,12 @@
     <ClInclude Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.h">
       <Filter>source\module\tools\tag</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_root.hpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\S24_up\strings_en-US\c4d_strings.str">

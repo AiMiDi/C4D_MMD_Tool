@@ -11,6 +11,7 @@ Description:	MMD mesh root object
 #ifndef MMD_MESH_ROOT_H__
 #define MMD_MESH_ROOT_H__
 
+#include "mmd_root.hpp"
 #include "utils/morph_ui_data_util.hpp"
 
 enum class MMDMeshRootObjectMsgType : uint8_t
@@ -24,11 +25,9 @@ struct MMDMeshRootObjectMsg
 	explicit MMDMeshRootObjectMsg(const MMDMeshRootObjectMsgType type_ = MMDMeshRootObjectMsgType::DEFAULT) : type(type_) {}
 };
 
-class MMDMeshRootObject final : public ObjectData
+class MMDMeshRootObject final : public MMDRootObject
 {
 	BaseObject* m_model_root = nullptr;
-	BaseTag* m_displayTag = nullptr;
-	BaseTag* m_protection_tag = nullptr;
 	maxon::HashMap<BaseTag*, Int32> m_tag_mode_map;
 	maxon::HashMap<String, maxon::BaseList<MorphUIData>> m_mesh_morph_data;
 
@@ -37,10 +36,9 @@ class MMDMeshRootObject final : public ObjectData
 
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDMeshRootObject)
 	CMT_DEFAULT_MOVE_BODY(MMDMeshRootObject)
-	INSTANCEOF(MMDMeshRootObject, ObjectData)
+	INSTANCEOF(MMDMeshRootObject, MMDRootObject)
 public:
 	static NodeData* Alloc();
-	Bool Init(GeListNode* node SDK2024_InitPara) override;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
