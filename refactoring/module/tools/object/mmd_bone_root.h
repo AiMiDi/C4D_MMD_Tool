@@ -13,7 +13,9 @@ Description:	DESC
 
 #include "mmd_root.hpp"
 #include "description/OMMDBoneRoot.h"
+#include "utils/morph_ui_data_util.hpp"
 #include "module/tools/tag/mmd_bone.h"
+
 /*
 type 0: update BoneRoot;
 type 1: set bone display type;

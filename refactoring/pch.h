@@ -22,10 +22,12 @@
 #include "c4d_baselinkarray.h"
 #include "tprotection.h"
 #include "maxon/baselist.h"
-#include "lib_ca.h"
-#include "tcaik.h"
 #include "maxon/queue.h"
 #include "maxon/synchronized.h"
+#include "lib_ca.h"
+#include "tcaik.h"
+#include "ocajoint.h"
+#include "customgui_priority.h"
 
 // The third party
 #include "yaml-cpp/yaml.h"

@@ -10,9 +10,6 @@ Description:	DESC
 
 #include "pch.h"
 #include "mmd_bone.h"
-
-#include "customgui_priority.h"
-#include "ocajoint.h"
 #include "module/tools/object/mmd_bone_root.h"
 
 Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
@@ -484,6 +481,146 @@ void MMDBoneTag::CheckUserDataButton(GeListNode* node, const DescriptionCommand*
 	}
 }
 
+void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, const MMDBoneRootObjectMsg* msg) const
+{
+	switch (msg->display_type)
+	{
+	case BONE_DISPLAY_TYPE_MOVABLE:
+		{
+			if (data_instance_bc->GetBool(PMX_BONE_TRANSLATABLE))
+			{
+				m_bone_object->SetEditorMode(MODE_ON);
+				m_bone_object->SetRenderMode(MODE_ON);
+			}
+			else {
+				m_bone_object->SetEditorMode(MODE_OFF);
+				m_bone_object->SetRenderMode(MODE_OFF);
+			}
+			break;
+		}
+	case BONE_DISPLAY_TYPE_ROTATABLE:
+		{
+			if (data_instance_bc->GetBool(PMX_BONE_ROTATABLE))
+			{
+				m_bone_object->SetEditorMode(MODE_ON);
+				m_bone_object->SetRenderMode(MODE_ON);
+			}
+			else {
+				m_bone_object->SetEditorMode(MODE_OFF);
+				m_bone_object->SetRenderMode(MODE_OFF);
+			}
+			break;
+		}
+	case BONE_DISPLAY_TYPE_VISIBLE:
+		{
+			if (data_instance_bc->GetBool(PMX_BONE_VISIBLE))
+			{
+				m_bone_object->SetEditorMode(MODE_ON);
+				m_bone_object->SetRenderMode(MODE_ON);
+			}
+			else {
+				m_bone_object->SetEditorMode(MODE_OFF);
+				m_bone_object->SetRenderMode(MODE_OFF);
+			}
+			break;
+		}
+	case BONE_DISPLAY_TYPE_ENABLED:
+		{
+			if (data_instance_bc->GetBool(PMX_BONE_ENABLED))
+			{
+				m_bone_object->SetEditorMode(MODE_ON);
+				m_bone_object->SetRenderMode(MODE_ON);
+			}
+			else {
+				m_bone_object->SetEditorMode(MODE_OFF);
+				m_bone_object->SetRenderMode(MODE_OFF);
+			}
+			break;
+		}
+	case BONE_DISPLAY_TYPE_IK:
+		{
+			if (data_instance_bc->GetBool(PMX_BONE_IS_IK))
+			{
+				m_bone_object->SetEditorMode(MODE_ON);
+				m_bone_object->SetRenderMode(MODE_ON);
+			}
+			else {
+				m_bone_object->SetEditorMode(MODE_OFF);
+				m_bone_object->SetRenderMode(MODE_OFF);
+			}
+			break;
+		}
+	default:
+		m_bone_object->SetEditorMode(MODE_UNDEF);
+		m_bone_object->SetRenderMode(MODE_UNDEF);
+		break;
+	}
+}
+
+void MMDBoneTag::BoneRootUpdate(BaseContainer* const data_instance_bc, const MMDBoneRootObjectMsg* msg)
+{
+	m_bone_root = msg->bond_root_object;
+	if (m_bone_object) {
+		BaseObject* up_obj = m_bone_object->GetUp();
+		BaseObject* prev_obj = m_bone_object->GetPred();
+		const Int32	prev_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
+		if (up_obj)
+		{
+			GeData Ge_data;
+			if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
+			{
+				SDK2024_Const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE);
+				if (up_tag)
+				{
+					up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
+					data_instance_bc->SetData(PMX_BONE_PARENT_BONE_INDEX, Ge_data);
+				}
+				if (prev_obj == nullptr)
+				{
+					if (up_tag != nullptr)
+					{
+						up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
+						data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
+					}
+				}
+				else {
+					BaseObject* lase_obj = prev_obj;
+					while (lase_obj->GetDownLast() != nullptr)
+					{
+						lase_obj = lase_obj->GetDownLast();
+					}
+
+					if (SDK2024_Const BaseTag* last_tag = lase_obj->GetTag(ID_T_MMD_BONE); last_tag != nullptr)
+					{
+						last_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
+						data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
+					}
+				}
+			}
+			else {
+				if (prev_obj == nullptr)
+				{
+					data_instance_bc->SetString(PMX_BONE_INDEX, "0"_s);
+				}
+				else {
+					if (SDK2024_Const BaseTag* prev_tag = prev_obj->GetTag(ID_T_MMD_BONE); prev_tag != nullptr)
+					{
+						prev_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
+						data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
+					}
+				}
+			}
+		}
+		else {
+			data_instance_bc->SetString(PMX_BONE_INDEX, "0"_s);
+		}
+		bool error = false;
+		if (const Int32 now_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(&error);
+			!error && now_index != prev_index && m_bone_root != nullptr)
+			m_bone_root->Message(ID_T_MMD_BONE, nullptr);
+	}
+}
+
 Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
@@ -532,140 +669,10 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 			switch (msg->type)
 			{
 			case MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE:
-				switch (msg->display_type)
-				{
-				case BONE_DISPLAY_TYPE_MOVABLE:
-				{
-					if (data_instance_bc->GetBool(PMX_BONE_TRANSLATABLE))
-					{
-						m_bone_object->SetEditorMode(MODE_ON);
-						m_bone_object->SetRenderMode(MODE_ON);
-					}
-					else {
-						m_bone_object->SetEditorMode(MODE_OFF);
-						m_bone_object->SetRenderMode(MODE_OFF);
-					}
-					break;
-				}
-				case BONE_DISPLAY_TYPE_ROTATABLE:
-				{
-					if (data_instance_bc->GetBool(PMX_BONE_ROTATABLE))
-					{
-						m_bone_object->SetEditorMode(MODE_ON);
-						m_bone_object->SetRenderMode(MODE_ON);
-					}
-					else {
-						m_bone_object->SetEditorMode(MODE_OFF);
-						m_bone_object->SetRenderMode(MODE_OFF);
-					}
-					break;
-				}
-				case BONE_DISPLAY_TYPE_VISIBLE:
-				{
-					if (data_instance_bc->GetBool(PMX_BONE_VISIBLE))
-					{
-						m_bone_object->SetEditorMode(MODE_ON);
-						m_bone_object->SetRenderMode(MODE_ON);
-					}
-					else {
-						m_bone_object->SetEditorMode(MODE_OFF);
-						m_bone_object->SetRenderMode(MODE_OFF);
-					}
-					break;
-				}
-				case BONE_DISPLAY_TYPE_ENABLED:
-				{
-					if (data_instance_bc->GetBool(PMX_BONE_ENABLED))
-					{
-						m_bone_object->SetEditorMode(MODE_ON);
-						m_bone_object->SetRenderMode(MODE_ON);
-					}
-					else {
-						m_bone_object->SetEditorMode(MODE_OFF);
-						m_bone_object->SetRenderMode(MODE_OFF);
-					}
-					break;
-				}
-				case BONE_DISPLAY_TYPE_IK:
-				{
-					if (data_instance_bc->GetBool(PMX_BONE_IS_IK))
-					{
-						m_bone_object->SetEditorMode(MODE_ON);
-						m_bone_object->SetRenderMode(MODE_ON);
-					}
-					else {
-						m_bone_object->SetEditorMode(MODE_OFF);
-						m_bone_object->SetRenderMode(MODE_OFF);
-					}
-					break;
-				}
-				default:
-					m_bone_object->SetEditorMode(MODE_UNDEF);
-					m_bone_object->SetRenderMode(MODE_UNDEF);
-					break;
-			}
+				SetBoneDisplay(data_instance_bc, msg);
 				break;
 			case MMDBoneRootObjectMsgType::BONE_ROOT_UPDATE:
-				m_bone_root = msg->bond_root_object;
-				if (m_bone_object) {
-					BaseObject* up_obj = m_bone_object->GetUp();
-					BaseObject* prev_obj = m_bone_object->GetPred();
-					const Int32	prev_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
-					if (up_obj)
-					{
-						GeData Ge_data;
-						if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
-						{
-							SDK2024_Const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE);
-							if (up_tag)
-							{
-								up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-								data_instance_bc->SetData(PMX_BONE_PARENT_BONE_INDEX, Ge_data);
-							}
-							if (prev_obj == nullptr)
-							{
-								if (up_tag != nullptr)
-								{
-									up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-									data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
-								}
-							}
-							else {
-								BaseObject* lase_obj = prev_obj;
-								while (lase_obj->GetDownLast() != nullptr)
-								{
-									lase_obj = lase_obj->GetDownLast();
-								}
-
-								if (SDK2024_Const BaseTag* last_tag = lase_obj->GetTag(ID_T_MMD_BONE); last_tag != nullptr)
-								{
-									last_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-									data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
-								}
-							}
-						}
-						else {
-							if (prev_obj == nullptr)
-							{
-								data_instance_bc->SetString(PMX_BONE_INDEX, "0"_s);
-							}
-							else {
-								if (SDK2024_Const BaseTag* prev_tag = prev_obj->GetTag(ID_T_MMD_BONE); prev_tag != nullptr)
-								{
-									prev_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-									data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
-								}
-							}
-						}
-					}
-					else {
-						data_instance_bc->SetString(PMX_BONE_INDEX, "0"_s);
-					}
-					bool error = false;
-					if (const Int32 now_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(&error);
-						!error && now_index != prev_index && m_bone_root != nullptr)
-						m_bone_root->Message(ID_T_MMD_BONE, nullptr);
-			}
+				BoneRootUpdate(data_instance_bc, msg);
 				break;
 			case MMDBoneRootObjectMsgType::DEFAULT:
 			case MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE:

@@ -11,9 +11,11 @@ Description:	DESC
 #ifndef MMD_BONE_H__
 #define MMD_BONE_H__
 
-#include "module/tools/mmd_interpolator.hpp"
 #include "description/TMMDBone.h"
+#include "module/tools/mmd_interpolator.hpp"
 #include "utils/morph_ui_data_util.hpp"
+
+struct MMDBoneRootObjectMsg;
 
 struct BoneMorphData
 {
@@ -437,6 +439,10 @@ private:
 	 * @param[in] description_command The DescriptionCommand for the user data button.
 	 */
 	void CheckUserDataButton(GeListNode* node, const DescriptionCommand* description_command);
+
+	void SetBoneDisplay(const BaseContainer* data_instance_bc, const MMDBoneRootObjectMsg* msg) const;
+
+	void BoneRootUpdate(BaseContainer* data_instance_bc, const MMDBoneRootObjectMsg* msg);
 
 	/**
 	 * @brief Checks the inherit bone parent for the MMDBoneTag.
