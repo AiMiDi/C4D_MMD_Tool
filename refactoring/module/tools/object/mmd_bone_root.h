@@ -49,7 +49,7 @@ class MMDBoneRootObject final : public MMDRootObject
 	BaseObject* m_rigid_root = nullptr;
 	BaseObject* m_joint_root = nullptr;
 	BaseContainer m_bone_items;
-	maxon::HashMap<Int, AutoAlloc<BaseLink>> m_bone_list;
+	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> m_bone_list;
 	maxon::HashMap<String, maxon::BaseList<MorphUIData>> m_bone_morph_data;
 	MMDBoneRootObject() = default;
 	~MMDBoneRootObject() override = default;

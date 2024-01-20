@@ -34,7 +34,7 @@ Bool MMDJointRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDJointRootObject::Write(const GeListNode* node, HyperFile* hf) const
+Bool MMDJointRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
 	if (!hf->WriteInt64(m_joint_name_index))
 		return false;
@@ -50,8 +50,8 @@ Bool MMDJointRootObject::Write(const GeListNode* node, HyperFile* hf) const
 	return SUPER::Write(node, hf);
 }
 
-Bool MMDJointRootObject::CopyTo(NodeData* dest, const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
-	AliasTrans* trn) const
+Bool MMDJointRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
+	AliasTrans* trn) SDK2024_Const
 {
 	auto const dest_object = reinterpret_cast<MMDJointRootObject*>(dest);
 	dest_object->m_bone_root = m_bone_root;

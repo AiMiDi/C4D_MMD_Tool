@@ -99,7 +99,7 @@ BoneMorphData::BoneMorphData(String name, DescID grp_id, DescID strength_id, Des
 {
 }
 
-Bool BoneMorphData::Write(HyperFile* hf) const
+Bool BoneMorphData::Write(HyperFile* hf) SDK2024_Const
 {
 	if (!grp_id.Write(hf))
 		return false;
@@ -147,16 +147,16 @@ MMDBoneTagMsg::MMDBoneTagMsg(const MMDBoneTagMsgType type): type(type)
 MMDBoneTagBoneIndexChangeMsg::MMDBoneTagBoneIndexChangeMsg(): MMDBoneTagMsg(MMDBoneTagMsgType::BONE_INDEX_CHANGE)
 {}
 
-MMDBoneTagBoneMorphAddMsg::MMDBoneTagBoneMorphAddMsg(String name, const BaseTag* bone_tag, const DescID& strength_id):
+MMDBoneTagBoneMorphAddMsg::MMDBoneTagBoneMorphAddMsg(String name, SDK2024_Const BaseTag* bone_tag, const DescID& strength_id):
 	MMDBoneTagMsg(MMDBoneTagMsgType::BONE_MORPH_ADD), name(std::move(name)), bone_morph_UI_data(bone_tag, strength_id)
 {}
 
-MMDBoneTagBoneMorphDeleteMsg::MMDBoneTagBoneMorphDeleteMsg(String name, const BaseTag* bone_tag,
+MMDBoneTagBoneMorphDeleteMsg::MMDBoneTagBoneMorphDeleteMsg(String name, SDK2024_Const BaseTag* bone_tag,
 	const DescID& strength_id):
 	MMDBoneTagMsg(MMDBoneTagMsgType::BONE_MORPH_DELETE), name(std::move(name)), bone_morph_UI_data(bone_tag, strength_id)
 {}
 
-MMDBoneTagBoneMorphRenameMsg::MMDBoneTagBoneMorphRenameMsg(String old_name, String new_name, const BaseTag* bone_tag,
+MMDBoneTagBoneMorphRenameMsg::MMDBoneTagBoneMorphRenameMsg(String old_name, String new_name, SDK2024_Const BaseTag* bone_tag,
 	const DescID& strength_id):
 	MMDBoneTagMsg(MMDBoneTagMsgType::BONE_MORPH_RENAME), old_name(std::move(old_name)), new_name(std::move(new_name)), bone_morph_UI_data(bone_tag, strength_id)
 {}
@@ -180,7 +180,7 @@ NodeData* MMDBoneTag::Alloc()
 	return NewObj(MMDBoneTag) iferr_return;
 }
 
-Bool MMDBoneTag::Init(GeListNode* node, Bool isCloneInit)
+Bool MMDBoneTag::Init(GeListNode* node SDK2024_InitParaName)
 {
 	if (!node)
 		return false;
@@ -214,7 +214,7 @@ Bool MMDBoneTag::Init(GeListNode* node, Bool isCloneInit)
 	if (!InitInterpolator(node))
 		return false;
 
-	return SUPER::Init(node, isCloneInit);
+	return SUPER::Init(node SDK2024_InitPara);
 }
 
 void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const bc, const Int32 id)
@@ -616,7 +616,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 						GeData Ge_data;
 						if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
 						{
-							const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE);
+							SDK2024_Const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE);
 							if (up_tag)
 							{
 								up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
@@ -637,7 +637,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 									lase_obj = lase_obj->GetDownLast();
 								}
 
-								if (const BaseTag* last_tag = lase_obj->GetTag(ID_T_MMD_BONE); last_tag != nullptr)
+								if (SDK2024_Const BaseTag* last_tag = lase_obj->GetTag(ID_T_MMD_BONE); last_tag != nullptr)
 								{
 									last_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
 									data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
@@ -650,7 +650,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 								data_instance_bc->SetString(PMX_BONE_INDEX, "0"_s);
 							}
 							else {
-								if (const BaseTag* prev_tag = prev_obj->GetTag(ID_T_MMD_BONE); prev_tag != nullptr)
+								if (SDK2024_Const BaseTag* prev_tag = prev_obj->GetTag(ID_T_MMD_BONE); prev_tag != nullptr)
 								{
 									prev_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
 									data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
@@ -879,8 +879,8 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 
-Bool MMDBoneTag::GetDEnabling(const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
-	const BaseContainer* itemdesc) const
+Bool MMDBoneTag::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
+	const BaseContainer* itemdesc) SDK2024_Const
 {
 	switch (id[0].id)
 	{
@@ -960,7 +960,7 @@ void MMDBoneTag::CheckInheritBoneParent(const BaseDocument* doc, BaseObject* op,
 	}
 }
 
-void MMDBoneTag::HandleBoneMorphUpdate(const BaseTag* tag, BaseObject* op)
+void MMDBoneTag::HandleBoneMorphUpdate(SDK2024_Const BaseTag* tag, BaseObject* op)
 {
 	GeData Ge_data;
 	op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), Ge_data, DESCFLAGS_GET::NONE);
@@ -1045,7 +1045,7 @@ void MMDBoneTag::HandleBoneIndexUpdate(BaseTag* tag, BaseObject* op, BaseContain
 		if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
 		{
 			tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_PARENT_BONE_NAME)), up_obj->GetName(), DESCFLAGS_SET::NONE);
-			if (const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE); !up_tag)
+			if (SDK2024_Const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE); !up_tag)
 			{
 				up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
 				bc->SetData(PMX_BONE_PARENT_BONE_INDEX, Ge_data);
@@ -1213,7 +1213,7 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDBoneTag::Write(const GeListNode* node, HyperFile* hf) const
+Bool MMDBoneTag::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
 	iferr_scope_handler{
 		return false;
@@ -1236,16 +1236,16 @@ Bool MMDBoneTag::Write(const GeListNode* node, HyperFile* hf) const
 		return false;
 	if (!hf->WriteInt64(button_id_map.GetCount()))
 		return false;
-	for (const auto& button_id : button_id_map)
+	for (SDK2024_Const auto& button_id : button_id_map)
 	{
-		if (!button_id.GetKey().Write(hf))
+		if (!const_cast<DescID&>(button_id.GetKey()).Write(hf))
 			return false;
 		if (!hf->WriteInt64(button_id.GetValue()))
 			return false;
 	}
 	if (!hf->WriteInt64(bone_morph_data_arr.GetCount()))
 		return false;
-	for (const auto& bone_morph : bone_morph_data_arr)
+	for (SDK2024_Const auto& bone_morph : bone_morph_data_arr)
 	{
 		if (!bone_morph.Write(hf))
 			return false;
@@ -1281,7 +1281,7 @@ Int MMDBoneTag::AddBoneMorph(String morph_name)
 		return-1;
 	BaseContainer grp_bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	grp_bc.SetString(DESC_NAME, morph_name);
-	grp_bc.SetData(DESC_PARENTGROUP, DescIDGeData(PMX_BONE_MORPH_GRP));
+	grp_bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(PMX_BONE_MORPH_GRP)));
 	auto grp_id = dynamic_description->Alloc(grp_bc);
 	BaseContainer strength_bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	strength_bc.SetString(DESC_NAME, morph_name);
@@ -1313,13 +1313,13 @@ Int MMDBoneTag::AddBoneMorph(String morph_name)
 	button_rename_bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
 	button_rename_bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
 	button_rename_bc.SetData(DESC_PARENTGROUP, DescIDGeData(button_grp_id));
-	const auto& morph_data = bone_morph_data_arr.Append(
+	const auto& morph_data = bone_morph_data_arr.SDK2024_Append(
 		morph_name,
-		std::move(grp_id),
+		SDK2024_Move(grp_id),
 		dynamic_description->Alloc(strength_bc),
 		dynamic_description->Alloc(translation_bc),
 		dynamic_description->Alloc(rotation_bc),
-		std::move(button_grp_id),
+		SDK2024_Move(button_grp_id),
 		dynamic_description->Alloc(button_delete_bc),
 		dynamic_description->Alloc(button_rename_bc))iferr_return;
 	const Int index = bone_morph_data_arr.GetIndex(morph_data);

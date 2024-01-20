@@ -208,7 +208,7 @@ inline Bool IMorph::Read(HyperFile* hf)
 	}
 	return true;
 }
-inline Bool IMorph::Write(HyperFile* hf) const
+inline Bool IMorph::Write(HyperFile* hf)
 {
 	if (m_strength_id.Write(hf) == false)
 		return false;
@@ -256,7 +256,7 @@ inline Bool GroupMorph::Read(HyperFile* hf)
 	}
 	return true;
 }
-inline Bool GroupMorph::Write(HyperFile* hf) const
+inline Bool GroupMorph::Write(HyperFile* hf)
 {
 	if (IMorph::Write(hf) == false)
 		return false;
@@ -323,7 +323,7 @@ inline Bool FlipMorph::Read(HyperFile* hf)
 	}
 	return true;
 }
-inline Bool FlipMorph::Write(HyperFile* hf) const
+inline Bool FlipMorph::Write(HyperFile* hf)
 {
 	if (IMorph::Write(hf) == false)
 		return false;
@@ -377,7 +377,7 @@ IMorph::IMorph(IMorph&& other) noexcept:
 	m_strength_id(std::move(other.m_strength_id))
 {}
 
-inline Float IMorph::GetStrength(const GeListNode* node) const
+inline Float IMorph::GetStrength(SDK2024_Const GeListNode* node) const
 {
 	GeData ge_data;
 	if (!node->GetParameter(m_strength_id, ge_data, DESCFLAGS_GET::NONE))
@@ -819,7 +819,7 @@ Bool MMDModelRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SD
 		return false;
 	for (auto& i : m_DescID_map)
 	{
-		if (!i.GetKey().Write(hf))
+		if (!const_cast<DescID&>(i.GetKey()).Write(hf))
 			return false;
 		auto& val = i.GetValue();
 		if (!hf->WriteUChar(static_cast<uint8_t>(val.first)))
@@ -874,11 +874,11 @@ Bool MMDModelRootObject::ReadMorph(HyperFile* hf)
 	}
 	return true;
 }
-Bool MMDModelRootObject::WriteMorph(HyperFile* hf) const
+Bool MMDModelRootObject::WriteMorph(HyperFile* hf) SDK2024_Const
 {
 	if (!hf->WriteInt64(m_morph_arr.GetCount()))
 		return false;
-	for (const auto& i : m_morph_arr)
+	for (SDK2024_Const auto& i : m_morph_arr)
 	{
 		if (!i.Write(hf))
 			return false;
@@ -1079,14 +1079,14 @@ Int MMDModelRootObject::ImportGroupAndFlipMorph(const PMXModel* pmx_model, libmm
 			morph.AddSubMorphNoCheck(morph_offset.get_morph_index(), morph_offset.get_morph_weight());
 		}
 	}
-	case libmmd::pmx_morph::morph_type::VERTEX:  [[fallthrough]]
-	case libmmd::pmx_morph::morph_type::BONE:    [[fallthrough]]
-	case libmmd::pmx_morph::morph_type::UV0:     [[fallthrough]] 
-	case libmmd::pmx_morph::morph_type::UV1:     [[fallthrough]] 
-	case libmmd::pmx_morph::morph_type::UV2:     [[fallthrough]] 
-	case libmmd::pmx_morph::morph_type::UV3:     [[fallthrough]] 
-	case libmmd::pmx_morph::morph_type::UV4:     [[fallthrough]] 
-	case libmmd::pmx_morph::morph_type::MATERIAL:[[fallthrough]] 
+	case libmmd::pmx_morph::morph_type::VERTEX: [[fallthrough]];
+	case libmmd::pmx_morph::morph_type::BONE: [[fallthrough]];
+	case libmmd::pmx_morph::morph_type::UV0: [[fallthrough]];
+	case libmmd::pmx_morph::morph_type::UV1: [[fallthrough]];
+	case libmmd::pmx_morph::morph_type::UV2: [[fallthrough]];
+	case libmmd::pmx_morph::morph_type::UV3: [[fallthrough]];
+	case libmmd::pmx_morph::morph_type::UV4: [[fallthrough]];
+	case libmmd::pmx_morph::morph_type::MATERIAL: [[fallthrough]];
 	case libmmd::pmx_morph::morph_type::IMPULSE: 
 	break;
 	}
@@ -1681,7 +1681,7 @@ bool MMDModelRootObject::DeleteMorphImpl(IMorph& morph, const Int morph_index)
 	m_morph_name_map.Erase(morph.GetName())iferr_return;
 	for (auto& i : m_morph_name_map.GetKeys())
 	{
-		if (auto* index = m_morph_name_map.FindValue(i).ToPointer(); *index > morph_index)
+		if (auto* index = m_morph_name_map.FindValue(i)SDK2024_ToPointer; *index > morph_index)
 		{
 			(*index)--;
 		}

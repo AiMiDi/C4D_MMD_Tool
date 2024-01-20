@@ -86,7 +86,7 @@ Bool MMDMeshRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDMeshRootObject::Write(const GeListNode* node, HyperFile* hf) const
+Bool MMDMeshRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
 	{
 		AutoAlloc<BaseLink> temp_link;
@@ -114,14 +114,14 @@ Bool MMDMeshRootObject::Write(const GeListNode* node, HyperFile* hf) const
 	{
 		if (!hf->WriteInt64(m_mesh_morph_data.GetCount()))
 			return false;
-		for (const auto& entry : m_mesh_morph_data)
+		for (SDK2024_Const auto& entry : m_mesh_morph_data)
 		{
 			if (!hf->WriteString(entry.GetKey()))
 				return false;
-			const auto& morph_ui_data_list = entry.GetValue();
+			SDK2024_Const auto& morph_ui_data_list = entry.GetValue();
 			if (!hf->WriteInt64(morph_ui_data_list.GetCount()))
 				return false;
-			for (const auto& morph_ui_data : morph_ui_data_list)
+			for (SDK2024_Const auto& morph_ui_data : morph_ui_data_list)
 			{
 				if (!morph_ui_data.Write(hf))
 					return false;
@@ -131,8 +131,8 @@ Bool MMDMeshRootObject::Write(const GeListNode* node, HyperFile* hf) const
 	return SUPER::Write(node, hf);
 }
 
-Bool MMDMeshRootObject::CopyTo(NodeData* dest, const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
-	AliasTrans* trn) const
+Bool MMDMeshRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
+	AliasTrans* trn) SDK2024_Const
 {
 	iferr_scope_handler{
 		return false;
@@ -289,7 +289,7 @@ void MMDMeshRootObject::RefreshMeshMorphData(BaseObject* op)
 			{
 				if (const auto morph_tag = node->GetTag(Tposemorph); morph_tag)
 				{
-					const auto pose_morph_tag = reinterpret_cast<CAPoseMorphTag*>(morph_tag);
+					SDK2024_Const auto pose_morph_tag = reinterpret_cast<CAPoseMorphTag*>(morph_tag);
 					const auto morph_mode = pose_morph_tag->GetMode();
 					const auto morph_count = pose_morph_tag->GetMorphCount();
 					for (Int32 morph_index = 1; morph_index < morph_count; morph_index++)
@@ -333,7 +333,7 @@ void MMDMeshRootObject::RefreshMeshMorphData(BaseObject* op)
 							else {
 								mesh_morph_list = &m_mesh_morph_data.InsertEntry(morph_name).GetValue().GetValue();
 							}
-							mesh_morph_list->Append(pose_morph_tag, morph_id)iferr_return;
+							mesh_morph_list->SDK2024_Append(pose_morph_tag, morph_id)iferr_return;
 							need_update_morph = true;
 						}
 					}

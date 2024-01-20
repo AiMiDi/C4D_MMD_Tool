@@ -28,7 +28,8 @@ Bool MMDBoneRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, 
 	for (const auto& entry : m_bone_list)
 	{
 		auto& link = dest_object->m_bone_list.InsertKey(entry.GetKey())iferr_return;
-		entry.GetValue()->CopyTo(link.GetPointer(), flags, trn);
+		link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
+		(*entry.GetValue())->CopyTo(*link, flags, trn);
 	}
 	for (const auto & entry : m_bone_morph_data)
 	{
@@ -68,10 +69,10 @@ Bool MMDBoneRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			Int32 bone_index = 0;
 			if (!hf->ReadInt32(&bone_index))
 				return false;
-			AutoAlloc<BaseLink> temp_link;
-			if (!temp_link->Read(hf))
+			auto& link = m_bone_list.InsertKey(bone_index)iferr_return;
+			link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
+			if (!(*link)->Read(hf))
 				return false;
-			m_bone_list.Insert(bone_index, std::move(temp_link))iferr_return;
 		}
 	}
 	// m_bone_morph_data
@@ -125,7 +126,7 @@ Bool MMDBoneRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK
 		{
 			if (hf->WriteInt32(!bone_link.GetKey()))
 				return false;
-			if (!bone_link.GetValue()->Write(hf))
+			if (!(*bone_link.GetValue())->Write(hf))
 				return false;
 		}
 	}
@@ -133,14 +134,14 @@ Bool MMDBoneRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK
 	{
 		if (!hf->WriteInt64(m_bone_morph_data.GetCount()))
 			return false;
-		for (const auto& entry : m_bone_morph_data)
+		for (SDK2024_Const auto& entry : m_bone_morph_data)
 		{
 			if (!hf->WriteString(entry.GetFirst()))
 				return false;
-			const auto& bone_morph_ui_data_list = entry.GetSecond();
+			SDK2024_Const auto& bone_morph_ui_data_list = entry.GetSecond();
 			if (!hf->WriteInt64(bone_morph_ui_data_list.GetCount()))
 				return false;
-			for (const auto & bone_morph_ui_data : bone_morph_ui_data_list)
+			for (SDK2024_Const auto & bone_morph_ui_data : bone_morph_ui_data_list)
 			{
 				if (!bone_morph_ui_data.Write(hf))
 					return false;
@@ -293,14 +294,15 @@ bool MMDBoneRootObject::HandleBoneIndexChangeMessage(GeListNode* node, void* dat
 		{
 			if (node_->GetType() == Ojoint)
 			{
-				if (const BaseTag* node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
+				if (SDK2024_Const BaseTag* node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
 				{
 					GeData ge_data;
 					node_bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), ge_data, DESCFLAGS_GET::NONE);
 					const auto bone_index = node_bone_tag->GetNodeData<MMDBoneTag>()->GetBoneIndex();
 					m_bone_items.SetString(bone_index, node_->GetName());
 					auto& link = m_bone_list.InsertKey(bone_index)iferr_return;
-					link->SetLink(node_bone_tag);
+					link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
+					(*link)->SetLink(node_bone_tag);
 				}
 			}
 			iferr(nodes.Push(node_->GetDown()))
@@ -450,7 +452,7 @@ BaseList2D* MMDBoneRootObject::FindBone(const Int32 index) const
 	// find index in m_bone_list
 	if (const auto bone_link_ptr = m_bone_list.Find(index); bone_link_ptr)
 	{
-		return bone_link_ptr->GetValue()->ForceGetLink();
+		return (*bone_link_ptr->GetValue())->ForceGetLink();
 	}
 	return nullptr;
 }

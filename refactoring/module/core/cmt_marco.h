@@ -75,6 +75,10 @@
 #	define GetDynamicDescriptionWritable GetDynamicDescription
 #	define MakeObjectColorProperties(color, usecolor, xray) ObjectColorProperties{usecolor, color, xray}
 
+#	define SDK2024_ToPointer 
+#	define SDK2024_Append(...) Append({__VA_ARGS__})
+#	define SDK2024_Move(x) x
+
 #else
 
 #   define SDK2024_Const const
@@ -86,6 +90,10 @@
 
 #	define DataGetCustomDataType(data, type, id) data.GetCustomDataTypeWritable<type>()
 #	define MakeObjectColorProperties(color, usecolor, xray) ObjectColorProperties{color, usecolor, xray}
+
+#	define SDK2024_ToPointer .ToPointer()
+#	define SDK2024_Append(...) Append(__VA_ARGS__)
+#	define SDK2024_Move(x) std::move(x)
 
 #endif
 

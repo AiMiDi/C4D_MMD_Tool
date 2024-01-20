@@ -217,6 +217,7 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
@@ -251,6 +252,7 @@
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\pch.h" />
@@ -261,6 +263,7 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\span_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />

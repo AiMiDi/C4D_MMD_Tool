@@ -25,6 +25,7 @@
 #include "lib_ca.h"
 #include "tcaik.h"
 #include "maxon/queue.h"
+#include "maxon/synchronized.h"
 
 // The third party
 #include "yaml-cpp/yaml.h"

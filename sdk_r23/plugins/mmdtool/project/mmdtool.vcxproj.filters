@@ -49,6 +49,9 @@
     <Filter Include="source\module\tools\loader">
       <UniqueIdentifier>{fff445b0-0ec5-480a-af28-105c8c7250b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\module\tools\tag">
+      <UniqueIdentifier>{45e86b43-83be-4a80-8dd2-b48f8bf4a487}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.cpp">
       <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp">
+      <Filter>source\module\tools\tag</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.h">
       <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp">
+      <Filter>source\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.h">
+      <Filter>source\module\tools\tag</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

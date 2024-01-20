@@ -28,7 +28,7 @@ struct BoneMorphData
 	DescID button_delete_id;
 	DescID button_rename_id;
 	
-	explicit BoneMorphData(
+	BoneMorphData(
 		String name = String(),
 		DescID grp_id = DescID(),
 		DescID strength_id = DescID(),
@@ -40,7 +40,7 @@ struct BoneMorphData
 	);
 	~BoneMorphData() = default;
 
-	Bool Write(HyperFile* hf) const;
+	Bool Write(HyperFile* hf) SDK2024_Const;
 	Bool Read(HyperFile* hf);
 	BoneMorphData(BoneMorphData&& src) noexcept :
 	MAXON_MOVE_MEMBERS(name, grp_id, strength_id, translation_id, rotation_id, button_grp_id, button_delete_id, button_rename_id){}
@@ -82,7 +82,7 @@ public:
 	String	name;
 	MorphUIData bone_morph_UI_data;
 
-	explicit MMDBoneTagBoneMorphAddMsg(String name, const BaseTag* bone_tag, const DescID& strength_id);
+	explicit MMDBoneTagBoneMorphAddMsg(String name, SDK2024_Const BaseTag* bone_tag, const DescID& strength_id);
 	~MMDBoneTagBoneMorphAddMsg() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTagBoneMorphAddMsg)
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDBoneTagBoneMorphAddMsg)
@@ -94,7 +94,7 @@ public:
 	String	name;
 	MorphUIData bone_morph_UI_data;
 
-	explicit MMDBoneTagBoneMorphDeleteMsg(String name, const BaseTag* bone_tag, const DescID& strength_id);
+	explicit MMDBoneTagBoneMorphDeleteMsg(String name, SDK2024_Const BaseTag* bone_tag, const DescID& strength_id);
 	~MMDBoneTagBoneMorphDeleteMsg() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTagBoneMorphDeleteMsg)
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDBoneTagBoneMorphDeleteMsg)
@@ -107,7 +107,7 @@ public:
 	String	new_name;
 	MorphUIData bone_morph_UI_data;
 
-	explicit MMDBoneTagBoneMorphRenameMsg(String old_name, String new_name, const BaseTag* bone_tag, const DescID& strength_id);
+	explicit MMDBoneTagBoneMorphRenameMsg(String old_name, String new_name, SDK2024_Const BaseTag* bone_tag, const DescID& strength_id);
 	~MMDBoneTagBoneMorphRenameMsg() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTagBoneMorphRenameMsg)
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDBoneTagBoneMorphRenameMsg)
@@ -395,7 +395,7 @@ private:
 	 * @param[in] tag The BaseTag representing the MMDBoneTag.
 	 * @param[in] op The BaseObject associated with the MMDBoneTag.
 	 */
-	void HandleBoneMorphUpdate(const BaseTag* tag, BaseObject* op);
+	void HandleBoneMorphUpdate(SDK2024_Const BaseTag* tag, BaseObject* op);
 
 	/**
 	 * @brief Handles bone index updates for the MMDBoneTag.

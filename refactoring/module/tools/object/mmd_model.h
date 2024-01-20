@@ -12,10 +12,6 @@ Description:	MMD model object
 #define MMD_MODEL_H__
 
 #include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
 
 class MMDModelRootObject;
 class PMXModel;
@@ -64,7 +60,7 @@ public:
 	IMorph& operator=(IMorph&& other) noexcept = default;
 
 	[[nodiscard]] const String& GetName() const { return m_name; }
-	Float GetStrength(const GeListNode* node) const;
+	Float GetStrength(SDK2024_Const GeListNode* node) const;
 	Bool SetStrength(GeListNode* node, const Float& strength) const;
 	[[nodiscard]] Bool IsGroupMorph() const;
 	[[nodiscard]] Bool IsFlipMorph() const;
@@ -83,7 +79,7 @@ public:
 	virtual void RenameSubMorph(const Int old_id, const Int new_id) {}
 	virtual maxon::HashMap<Int, Float>* GetSubMorphDataWritable() { return nullptr; }
 	virtual Bool Read(HyperFile* hf);
-	virtual Bool Write(HyperFile* hf) const;
+	virtual Bool Write(HyperFile* hf);
 	virtual Bool CopyTo(IMorph* dest) const;
 };
 class GroupMorph final : public IMorph
@@ -118,7 +114,7 @@ public:
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
 	void RenameSubMorph(const Int old_id, const Int new_id) override;
 	Bool Read(HyperFile* hf) override;
-	Bool Write(HyperFile* hf) const override;
+	Bool Write(HyperFile* hf) override;
 	Bool CopyTo(IMorph* dest) const override;
 	maxon::HashMap<Int, Float>* GetSubMorphDataWritable() override { return &m_data; }
 };
@@ -153,7 +149,7 @@ public:
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
 	void RenameSubMorph(const Int old_id, const Int new_id) override;
 	Bool Read(HyperFile* hf) override;
-	Bool Write(HyperFile* hf) const override;
+	Bool Write(HyperFile* hf) override;
 	Bool CopyTo(IMorph* dest) const override;
 	maxon::HashMap<Int, Float>* GetSubMorphDataWritable() override { return &m_data; }
 };
@@ -284,7 +280,7 @@ private:
 	void DeleteMorph(Int morph_index);
 	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it);
 	Bool ReadMorph(HyperFile* hf);
-	Bool WriteMorph(HyperFile* hf) const;
+	Bool WriteMorph(HyperFile* hf) SDK2024_Const;
 	Bool CopyMorph(MMDModelRootObject* dst) const;
 };
 

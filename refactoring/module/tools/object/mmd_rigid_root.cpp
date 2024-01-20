@@ -42,10 +42,10 @@ Bool MMDRigidRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			Int32 rigid_index = 0;
 			if (!hf->ReadInt32(&rigid_index))
 				return false;
-			AutoAlloc<BaseLink> temp_link;
-			if (!temp_link->Read(hf))
+			auto& link = m_rigid_list.InsertKey(rigid_index)iferr_return;
+			link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
+			if (!(*link)->Read(hf))
 				return false;
-			m_rigid_list.Insert(rigid_index, std::move(temp_link))iferr_return;
 		}
 	}
 	return SUPER::Read(node, hf, level);
@@ -74,7 +74,7 @@ Bool MMDRigidRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SD
 		{
 			if (hf->WriteInt32(!rigid_link.GetKey()))
 				return false;
-			if (!rigid_link.GetValue()->Write(hf))
+			if (!(*rigid_link.GetValue())->Write(hf))
 				return false;
 		}
 	}
@@ -94,7 +94,8 @@ Bool MMDRigidRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode,
 	for (const auto& entry : m_rigid_list)
 	{
 		auto& link = dest_object->m_rigid_list.InsertKey(entry.GetKey())iferr_return;
-		entry.GetValue()->CopyTo(link.GetPointer(), flags, trn);
+		link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
+		(*entry.GetValue())->CopyTo(*link, flags, trn);
 	}
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
@@ -146,7 +147,7 @@ Bool MMDRigidRootObject::Message(GeListNode* node, Int32 type, void* data)
 				Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
 				this->rigid_items.SetString(rigid_index, node_->GetName());
 				auto& link = m_rigid_list.InsertKey(rigid_index)iferr_return;
-				link->SetLink(node_);
+				(*link)->SetLink(node_);
 			}
 			node_ = node_->GetNext();
 		}
@@ -156,24 +157,15 @@ Bool MMDRigidRootObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto msg = static_cast<MMDModelObjectMsg*>(data))
 		{
-			if (msg->msg_type == MMDModelObjectMsgType::TOOL_OBJECT_UPDATE) {
-				switch (msg->object_type)
-				{
-				case  CMTObjectType::BoneRoot:
+			if (msg->msg_type == MMDModelObjectMsgType::TOOL_OBJECT_UPDATE)
+			{
+				if(msg->object_type == CMTObjectType::BoneRoot)
 				{
 					m_bone_root = msg->object;
-					break;
 				}
-				case CMTObjectType::JointRoot:
+				else if (msg->object_type == CMTObjectType::JointRoot)
 				{
 					m_joint_root = msg->object;
-					break;
-				}
-				case CMTObjectType::DEFAULT: [[fallthrough]]
-				case CMTObjectType::MeshRoot: [[fallthrough]]
-				case CMTObjectType::RigidRoot: [[fallthrough]]
-				case CMTObjectType::ModelRoot: 
-					break;
 				}
 			}
 		}

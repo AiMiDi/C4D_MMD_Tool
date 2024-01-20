@@ -8,6 +8,7 @@ Description:	morph UI data util
 
 **************************************************************************/
 
+
 #ifndef MORPH_UI_DATA_UTIL_H__
 #define MORPH_UI_DATA_UTIL_H__
 
@@ -16,13 +17,13 @@ class MorphUIData final
 	DescID strength_id;
 	maxon::StrongRef<AutoAlloc<BaseLink>> morph_tag_link;
 public:
-	explicit MorphUIData(const BaseTag* bone_tag = nullptr, DescID strength_id = {}) : strength_id(std::move(strength_id))
+	MorphUIData(SDK2024_Const BaseTag* bone_tag = nullptr, const DescID& strength_id = {}) : strength_id(strength_id)
 	{
 		iferr(morph_tag_link.Create())
 		{
 			// TODO: log
 		}
-		morph_tag_link->GetPointer()->SetLink(bone_tag);
+		(*morph_tag_link)->SetLink(bone_tag);
 	}
 
 	~MorphUIData() = default;
@@ -33,9 +34,9 @@ public:
 	//MorphUIData(MorphUIData&& other) noexcept: strength_id(std::move(other.strength_id)), morph_tag_link(std::move(other.morph_tag_link)) {}
 	//MorphUIData& operator=(MorphUIData&& other) noexcept = default;
 
-	Bool Write(HyperFile* hf) const
+	Bool Write(HyperFile* hf) SDK2024_Const
 	{
-		if (!morph_tag_link->GetPointer()->Write(hf))
+		if (!(*morph_tag_link)->Write(hf))
 			return false;
 		if (!strength_id.Write(hf))
 			return false;
@@ -44,7 +45,7 @@ public:
 
 	Bool Read(HyperFile* hf)
 	{
-		if (!morph_tag_link->GetPointer()->Read(hf))
+		if (!(*morph_tag_link)->Read(hf))
 			return false;
 		if (!strength_id.Read(hf))
 			return false;
@@ -53,12 +54,12 @@ public:
 
 	[[nodiscard]] Bool Compare(const MorphUIData& other) const
 	{
-		return morph_tag_link->GetPointer()->ForceGetLink() == other.morph_tag_link->GetPointer()->ForceGetLink() && strength_id == other.strength_id;
+		return (*morph_tag_link)->ForceGetLink() == (*other.morph_tag_link)->ForceGetLink() && strength_id == other.strength_id;
 	}
 
 	[[nodiscard]] BaseTag* GetMorphTag() const
 	{
-		return reinterpret_cast<BaseTag*>(morph_tag_link->GetPointer()->ForceGetLink());
+		return reinterpret_cast<BaseTag*>((*morph_tag_link)->ForceGetLink());
 	}
 
 	[[nodiscard]] const DescID& GetStrengthID() const

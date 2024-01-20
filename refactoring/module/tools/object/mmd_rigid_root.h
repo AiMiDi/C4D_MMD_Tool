@@ -37,7 +37,7 @@ class MMDRigidRootObject final : public MMDRootObject
 	BaseContainer rigid_items;
 	BaseObject* m_bone_root = nullptr;
 	BaseObject* m_joint_root = nullptr;
-	maxon::HashMap<Int32, AutoAlloc<BaseLink>> m_rigid_list;
+	maxon::HashMap<Int32, maxon::StrongRef<AutoAlloc<BaseLink>>> m_rigid_list;
 	MMDRigidRootObject() = default;
 	~MMDRigidRootObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRigidRootObject)
