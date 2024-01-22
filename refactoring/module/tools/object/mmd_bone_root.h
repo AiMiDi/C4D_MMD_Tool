@@ -70,6 +70,8 @@ public:
 	Int32 FindBoneIndex(const BaseList2D* bone_tag) const;
 	
 	Bool SetBoneMorphStrength(const String& morph_name, Float strength);
+
+	Bool LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, Float position_multiple);
 private:
 	void CreateDisplayTag(GeListNode* node) override;
 	void HandleDescriptionCommandMessage(GeListNode* node, void* data);

@@ -1182,6 +1182,20 @@ BaseObject* MMDModelRootObject::GetRootObject(const CMTObjectType type) const
 	return nullptr;
 }
 
+Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelImport& setting)
+{
+	const auto model_root_object = reinterpret_cast<BaseObject*>(Get());
+	if (model_root_object == nullptr)
+	{
+		return false;
+	}
+
+}
+
+Bool MMDModelRootObject::SavePMXModel(libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelExport& setting) const
+{
+}
+
 String MMDModelRootObject::GetMorphNamedNumber()
 {
 	return String::IntToString(m_morph_named_number++);

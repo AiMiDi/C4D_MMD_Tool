@@ -271,6 +271,9 @@ public:
 	Bool CreateRoot();
 	Bool UpdateRoot(BaseObject* op = nullptr);
 	BaseObject* GetRootObject(const CMTObjectType type) const;
+
+	Bool LoadPMXModel(const libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelImport& setting);
+	Bool SavePMXModel(libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelExport& setting) const;
 private:
 	String GetMorphNamedNumber();
 	bool DeleteMorphImpl(IMorph& morph, const Int morph_index);

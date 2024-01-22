@@ -492,5 +492,31 @@ Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Flo
 	return true;
 }
 
+Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, Float position_multiple)
+{
+	iferr_scope_handler{
+		return false;
+	};
+	// create bone
+	const auto  pmx_bone_num = static_cast<int>(pmx_bone_array.size());
+	for (auto pmx_bone_index = int(); pmx_bone_index < pmx_bone_num; ++pmx_bone_index)
+	{
+		const auto& pmx_bone = pmx_bone_array[pmx_bone_index];
+		if (BaseObject* new_bone = BaseObject::Alloc(Ojoint); new_bone != nullptr)
+		{
+			const auto bone_node = new_bone->MakeTag(ID_T_MMD_BONE)->GetNodeData<MMDBoneTag>();
+			new_bone->SetName(maxon::String(pmx_bone.get_bone_name_local().c_str()));
+			bone_node->SetBoneObject(new_bone);
+			bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(this));
+			new_bone->InsertUnder(this->Get());
+
+			const auto& bone_pos = pmx_bone.get_position();
+			new_bone->SetFrozenPos(Vector(bone_pos[0], bone_pos[1], bone_pos[2]) * position_multiple);
+
+		}
+	}
+	return true;
+}
+
 void MMDBoneRootObject::CreateDisplayTag(GeListNode* node)
 {}
