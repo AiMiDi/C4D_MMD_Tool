@@ -208,7 +208,7 @@ inline Bool IMorph::Read(HyperFile* hf)
 	}
 	return true;
 }
-inline Bool IMorph::Write(HyperFile* hf)
+inline Bool IMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	if (m_strength_id.Write(hf) == false)
 		return false;
@@ -256,7 +256,7 @@ inline Bool GroupMorph::Read(HyperFile* hf)
 	}
 	return true;
 }
-inline Bool GroupMorph::Write(HyperFile* hf)
+inline Bool GroupMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	if (IMorph::Write(hf) == false)
 		return false;
@@ -323,7 +323,7 @@ inline Bool FlipMorph::Read(HyperFile* hf)
 	}
 	return true;
 }
-inline Bool FlipMorph::Write(HyperFile* hf)
+inline Bool FlipMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	if (IMorph::Write(hf) == false)
 		return false;
@@ -1184,10 +1184,9 @@ BaseObject* MMDModelRootObject::GetRootObject(const CMTObjectType type) const
 
 Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelImport& setting)
 {
-	const auto model_root_object = reinterpret_cast<BaseObject*>(Get());
-	if (model_root_object == nullptr)
+	if(setting.import_bone)
 	{
-		return false;
+		m_bone_root->GetNodeData<MMDBoneRootObject>()->LoadBones(pmx_data.get_pmx_bone_array(), setting.position_multiple, setting.import_english);
 	}
 
 }

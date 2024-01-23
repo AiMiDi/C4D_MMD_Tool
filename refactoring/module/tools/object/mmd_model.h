@@ -79,7 +79,7 @@ public:
 	virtual void RenameSubMorph(const Int old_id, const Int new_id) {}
 	virtual maxon::HashMap<Int, Float>* GetSubMorphDataWritable() { return nullptr; }
 	virtual Bool Read(HyperFile* hf);
-	virtual Bool Write(HyperFile* hf);
+	virtual Bool Write(HyperFile* hf) SDK2024_Const;
 	virtual Bool CopyTo(IMorph* dest) const;
 };
 class GroupMorph final : public IMorph
@@ -114,7 +114,7 @@ public:
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
 	void RenameSubMorph(const Int old_id, const Int new_id) override;
 	Bool Read(HyperFile* hf) override;
-	Bool Write(HyperFile* hf) override;
+	Bool Write(HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(IMorph* dest) const override;
 	maxon::HashMap<Int, Float>* GetSubMorphDataWritable() override { return &m_data; }
 };
@@ -149,7 +149,7 @@ public:
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
 	void RenameSubMorph(const Int old_id, const Int new_id) override;
 	Bool Read(HyperFile* hf) override;
-	Bool Write(HyperFile* hf) override;
+	Bool Write(HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(IMorph* dest) const override;
 	maxon::HashMap<Int, Float>* GetSubMorphDataWritable() override { return &m_data; }
 };

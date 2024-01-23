@@ -467,7 +467,7 @@ void MMDBoneTag::CheckUserDataButton(GeListNode* node, const DescriptionCommand*
 				description_bc.SetString(DESC_NAME, new_name);
 				dynamic_description->Set(morph_data.strength_id, description_bc, nullptr);
 				// BONE_MORPH_RENAME
-				MMDBoneTagBoneMorphRenameMsg msg{ morph_data.name, new_name, static_cast<BaseTag*>(Get()), morph_data.strength_id };
+				MMDBoneTagBoneMorphRenameMsg msg{ morph_data.name, new_name, reinterpret_cast<BaseTag*>(Get()), morph_data.strength_id };
 				m_bone_root->Message(ID_T_MMD_BONE, &msg);
 				morph_data.name = std::move(new_name);
 				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); 
@@ -1288,7 +1288,7 @@ Int MMDBoneTag::AddBoneMorph(String morph_name)
 		return-1;
 	BaseContainer grp_bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	grp_bc.SetString(DESC_NAME, morph_name);
-	grp_bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(PMX_BONE_MORPH_GRP)));
+	grp_bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(PMX_BONE_MORPH_GRP))));
 	auto grp_id = dynamic_description->Alloc(grp_bc);
 	BaseContainer strength_bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	strength_bc.SetString(DESC_NAME, morph_name);

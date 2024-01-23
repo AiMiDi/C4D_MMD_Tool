@@ -11,6 +11,8 @@ Description:	DESC
 #include "pch.h"
 #include "mmd_bone_root.h"
 
+#include "description/OMMDModel.h"
+
 NodeData* MMDBoneRootObject::Alloc()
 {
 	return NewObjClear(MMDBoneRootObject);
@@ -492,29 +494,257 @@ Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Flo
 	return true;
 }
 
-Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, Float position_multiple)
+Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, const Float position_multiple, const bool import_english)
 {
 	iferr_scope_handler{
 		return false;
 	};
+
+	// bone map
+	maxon::HashMap<Int32, BaseObject*> bone_map;
+
 	// create bone
 	const auto  pmx_bone_num = static_cast<int>(pmx_bone_array.size());
 	for (auto pmx_bone_index = int(); pmx_bone_index < pmx_bone_num; ++pmx_bone_index)
 	{
+		BaseObject* new_bone = BaseObject::Alloc(Ojoint);
+		if (new_bone == nullptr)
+			continue;
+
+		bone_map.Insert(pmx_bone_index, new_bone)iferr_return;
+	}
+
+	// set bone data
+	for (auto pmx_bone_index = int(); pmx_bone_index < pmx_bone_num; ++pmx_bone_index)
+	{
 		const auto& pmx_bone = pmx_bone_array[pmx_bone_index];
-		if (BaseObject* new_bone = BaseObject::Alloc(Ojoint); new_bone != nullptr)
+
+		if(!bone_map.Contains(pmx_bone_index))
+			continue;
+
+		const auto bone_object = bone_map.Find(pmx_bone_index)->GetValue();
+		const auto bone_tag = bone_object->MakeTag(ID_T_MMD_BONE);
+		const auto bone_node = bone_tag->GetNodeData<MMDBoneTag>();
+
+		// init bone tag
+		bone_node->SetBoneObject(bone_object);
+		bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(this));
+
+		// bone name
+		const maxon::String bone_name_local{ pmx_bone.get_bone_name_local().c_str() };
+		const maxon::String bone_name_universal{ pmx_bone.get_bone_name_universal().c_str() };
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_LOCAL)), bone_name_local, DESCFLAGS_SET::NONE);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_UNIVERSAL)), bone_name_universal, DESCFLAGS_SET::NONE);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_IS)), import_english, DESCFLAGS_SET::NONE);
+
+		// set bone position
+		const auto& bone_position = pmx_bone.get_position();
+		Vector position(bone_position[0], bone_position[1], bone_position[2]);
+		position *= position_multiple;
+		bone_object->SetFrozenPos(position);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), position, DESCFLAGS_SET::NONE);
+
+		// set parent bone
+		if (const auto parent_bone_index = pmx_bone.get_parent_bone_index(); parent_bone_index == -1)
 		{
-			const auto bone_node = new_bone->MakeTag(ID_T_MMD_BONE)->GetNodeData<MMDBoneTag>();
-			new_bone->SetName(maxon::String(pmx_bone.get_bone_name_local().c_str()));
-			bone_node->SetBoneObject(new_bone);
-			bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(this));
-			new_bone->InsertUnder(this->Get());
+			bone_object->InsertUnder(this->Get());
+		}
+		else
+		{
+			if (const auto parent_bone_ptr = bone_map.Find(parent_bone_index); parent_bone_ptr != nullptr)
+			{
+				bone_object->InsertUnder(parent_bone_ptr->GetValue());
+			}
+			else
+			{
+				bone_object->InsertUnder(this->Get());
+			}
+		}
 
-			const auto& bone_pos = pmx_bone.get_position();
-			new_bone->SetFrozenPos(Vector(bone_pos[0], bone_pos[1], bone_pos[2]) * position_multiple);
+		// set layer
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_LAYER)), pmx_bone.get_layer(), DESCFLAGS_SET::NONE);
 
+		// set rotatable
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_ROTATABLE)), pmx_bone.is_rotatable(), DESCFLAGS_SET::NONE);
+
+		// set movable
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TRANSLATABLE)), pmx_bone.is_translatable(), DESCFLAGS_SET::NONE);
+
+		// set visible
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_VISIBLE)), pmx_bone.is_visible(), DESCFLAGS_SET::NONE);
+
+		// set enabled
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_ENABLED)), pmx_bone.is_enabled(), DESCFLAGS_SET::NONE);
+
+		// set physics after deform
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_PHYSICS_AFTER_DEFORM)), pmx_bone.is_physics_after_deform(), DESCFLAGS_SET::NONE);
+
+		/// tail
+
+		// set tail use index
+		const auto is_tail_use_index = pmx_bone.is_tail_use_index();
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_IS_INDEX)), is_tail_use_index, DESCFLAGS_SET::NONE);
+
+		if(is_tail_use_index)
+		{
+			// set tail index
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_INDEX)), pmx_bone.get_tail_index(), DESCFLAGS_SET::NONE);
+		}
+		else
+		{
+			// set tail position
+			const auto& tail_position = pmx_bone.get_tail_position();
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_POSITION)), Vector(tail_position[0], tail_position[1], tail_position[2]) * position_multiple, DESCFLAGS_SET::NONE);
+		}
+
+		/// inherit bone
+
+		// set have inherit rotation
+		const auto have_inherit_rotation = pmx_bone.have_inherit_rotation();
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_ROTATION)), have_inherit_rotation, DESCFLAGS_SET::NONE);
+
+		// set have inherit translation
+		const auto have_inherit_translation = pmx_bone.have_inherit_translation();
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_TRANSLATION)), have_inherit_translation, DESCFLAGS_SET::NONE);
+
+		if (have_inherit_rotation || have_inherit_translation)
+		{
+			// set inherit bone parent
+			const auto inherit_parent_bone_index = pmx_bone.get_inherit_bone_parent_index();
+			if (const auto inherit_parent_bone_ptr = bone_map.Find(inherit_parent_bone_index); inherit_parent_bone_ptr)
+			{
+				AutoAlloc<BaseLink> link;
+				link->SetLink(inherit_parent_bone_ptr->GetValue());
+				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link.GetPointer(), DESCFLAGS_SET::NONE);
+			}
+
+			// set inherit rate
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE)), pmx_bone.get_inherit_bone_parent_influence(), DESCFLAGS_SET::NONE);
+		}
+
+		/// fixed axis
+
+		// set have fixed axis
+		const auto have_fixed_axis = pmx_bone.have_fixed_axis();
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_FIXED_AXIS)), have_fixed_axis, DESCFLAGS_SET::NONE);
+
+		if (have_fixed_axis)
+		{
+			// set fixed axis
+			const auto& fixed_axis = pmx_bone.get_bone_fixed_axis();
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_FIXED_AXIS)), Vector(fixed_axis[0], fixed_axis[1], fixed_axis[2]), DESCFLAGS_SET::NONE);
+		}
+
+		/// local axis
+		
+		// set have local axis
+		const auto have_local_axis = pmx_bone.have_local_coordinate();
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_LOCAL_IS_COORDINATE)), have_local_axis, DESCFLAGS_SET::NONE);
+
+		if (have_local_axis)
+		{
+			// set local axis x
+			const auto& local_axis_x = pmx_bone.get_bone_local_coordinate_x();
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_LOCAL_X)), Vector(local_axis_x[0], local_axis_x[1], local_axis_x[2]), DESCFLAGS_SET::NONE);
+
+			// set local axis z
+			const auto& local_axis_z = pmx_bone.get_bone_local_coordinate_z();
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_LOCAL_Z)), Vector(local_axis_z[0], local_axis_z[1], local_axis_z[2]), DESCFLAGS_SET::NONE);
+		}
+
+		/// IK
+
+		// set is IK
+		const auto is_ik = pmx_bone.is_IK();
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IS_IK)), is_ik, DESCFLAGS_SET::NONE);
+
+		if(is_ik)
+		{
+			const auto& ik_array = pmx_bone.get_IK_link_array();
+			const auto ik_bone_num = static_cast<int>(ik_array.size());
+			if(ik_bone_num == 0)
+				return true;
+			if(const auto ik_beging_bone_ptr = bone_map.Find(ik_array[ik_bone_num - 1].get_bone_index()); ik_beging_bone_ptr)
+			{
+				// create ik tag
+				BaseObject* ik_beging_bone = ik_beging_bone_ptr->GetValue();
+				BaseTag* ik_tag = ik_beging_bone->MakeTag(1019561); // Ik tag ID : 1019561
+				if(import_english)
+				{
+					ik_tag->SetName(bone_name_universal);
+				}
+				else
+				{
+					ik_tag->SetName(bone_name_local);
+				}
+				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_SOLVER)), ID_CA_IK_TAG_SOLVER_3D, DESCFLAGS_SET::NONE);
+				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_PREFERRED_WEIGHT)), 1, DESCFLAGS_SET::NONE);
+
+				// set target link
+				AutoAlloc<BaseLink> target_link;
+				target_link->SetLink(bone_object);
+				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TARGET)), target_link.GetPointer(), DESCFLAGS_SET::NONE);
+
+				// set tip link
+				AutoAlloc<BaseLink> tip_link;
+				if(const auto ik_target_bone_ptr = bone_map.Find(pmx_bone.get_IK_target_index()); ik_target_bone_ptr)
+				{
+					tip_link->SetLink(ik_target_bone_ptr->GetValue());
+				}
+				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TIP)), tip_link.GetPointer(), DESCFLAGS_SET::NONE);
+
+				// add to model_root description
+				if (auto* dynamic_description = m_model_root->GetDynamicDescriptionWritable())
+				{
+					BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
+					bc.SetString(DESC_NAME, bone_name_local);
+					bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_IK_GRP))));
+					auto ik_link_id = dynamic_description->Alloc(bc);
+					AutoAlloc<BaseLink> ik_link;
+					ik_link->SetLink(ik_tag);
+					m_model_root->SetParameter(ik_link_id, ik_link.GetPointer(), DESCFLAGS_SET::NONE);
+				}
+
+				// set ik limit
+				for (auto ik_link_bone_index = int(); ik_link_bone_index < ik_bone_num; ++ik_link_bone_index)
+				{
+					const auto& pmx_ik_link_bone = ik_array[ik_link_bone_index];
+					if(const auto ik_link_bone_ptr = bone_map.Find(pmx_ik_link_bone.get_bone_index()); ik_link_bone_ptr)
+					{
+						if(!pmx_ik_link_bone.have_limits())
+							continue;
+
+						BaseObject* ik_link_bone = ik_link_bone_ptr->GetValue();
+
+						const auto& limit_min = pmx_ik_link_bone.get_limit_min();
+						const auto& limit_max = pmx_ik_link_bone.get_limit_max();
+
+						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_MIN_ROT)),
+							Vector(limit_min[0], limit_min[1], limit_min[2]) * position_multiple, DESCFLAGS_SET::NONE);
+						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_MAX_ROT)),
+							Vector(limit_max[0], limit_max[1], limit_max[2]) * position_multiple, DESCFLAGS_SET::NONE);
+						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_H)), 1, DESCFLAGS_SET::NONE);
+						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_B)), 1, DESCFLAGS_SET::NONE);
+					}
+				}
+			}
 		}
 	}
+
+	// send bone index change msg
+	{
+		MMDBoneTagBoneIndexChangeMsg msg;
+		Get()->Message(ID_T_MMD_BONE, &msg);
+	}
+
+	// send description check update msg
+	{
+		DescriptionCheckUpdate msg;
+		const auto msg_descid = ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK));
+		msg.descid = &msg_descid;
+		Get()->MultiMessage(MULTIMSG_ROUTE::BROADCAST, MSG_DESCRIPTION_CHECKUPDATE, &msg);
+	}
+
 	return true;
 }
 

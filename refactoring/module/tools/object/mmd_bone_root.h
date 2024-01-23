@@ -71,7 +71,7 @@ public:
 	
 	Bool SetBoneMorphStrength(const String& morph_name, Float strength);
 
-	Bool LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, Float position_multiple);
+	Bool LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, Float position_multiple, bool import_english);
 private:
 	void CreateDisplayTag(GeListNode* node) override;
 	void HandleDescriptionCommandMessage(GeListNode* node, void* data);
