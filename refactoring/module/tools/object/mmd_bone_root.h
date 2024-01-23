@@ -16,6 +16,11 @@ Description:	DESC
 #include "utils/morph_ui_data_util.hpp"
 #include "module/tools/tag/mmd_bone.h"
 
+namespace CMTToolsSetting
+{
+	struct ModelImport;
+}
+
 /*
 type 0: update BoneRoot;
 type 1: set bone display type;
@@ -71,7 +76,7 @@ public:
 	
 	Bool SetBoneMorphStrength(const String& morph_name, Float strength);
 
-	Bool LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, Float position_multiple, bool import_english);
+	Bool LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, const CMTToolsSetting::ModelImport& setting);
 private:
 	void CreateDisplayTag(GeListNode* node) override;
 	void HandleDescriptionCommandMessage(GeListNode* node, void* data);

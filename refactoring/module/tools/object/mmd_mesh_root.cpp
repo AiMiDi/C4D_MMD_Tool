@@ -272,6 +272,16 @@ Bool MMDMeshRootObject::SetMeshMorphStrength(const String& morph_name, Float str
 	return true;
 }
 
+Bool MMDMeshRootObject::LoadMeshs(
+	const libmmd::pmx_model::pmx_surface_array& pmx_surface_array,
+	const libmmd::pmx_model::pmx_vertex_array&  pmx_vertex_array,
+	const CMTToolsSetting::ModelImport& setting)
+{
+	// create mesh
+	
+	return true;
+}
+
 void MMDMeshRootObject::RefreshMeshMorphData(BaseObject* op)
 {
 	iferr_scope_handler{};

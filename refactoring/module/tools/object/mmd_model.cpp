@@ -1186,7 +1186,7 @@ Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_data, const C
 {
 	if(setting.import_bone)
 	{
-		m_bone_root->GetNodeData<MMDBoneRootObject>()->LoadBones(pmx_data.get_pmx_bone_array(), setting.position_multiple, setting.import_english);
+		m_bone_root->GetNodeData<MMDBoneRootObject>()->LoadBones(pmx_data.get_pmx_bone_array(), setting);
 	}
 
 }

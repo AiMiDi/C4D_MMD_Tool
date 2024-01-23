@@ -11,6 +11,7 @@ Description:	DESC
 #include "pch.h"
 #include "mmd_bone_root.h"
 
+#include "cmt_tools_setting.h"
 #include "description/OMMDModel.h"
 
 NodeData* MMDBoneRootObject::Alloc()
@@ -494,7 +495,7 @@ Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Flo
 	return true;
 }
 
-Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, const Float position_multiple, const bool import_english)
+Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, const CMTToolsSetting::ModelImport& setting)
 {
 	iferr_scope_handler{
 		return false;
@@ -535,12 +536,12 @@ Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_b
 		const maxon::String bone_name_universal{ pmx_bone.get_bone_name_universal().c_str() };
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_LOCAL)), bone_name_local, DESCFLAGS_SET::NONE);
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_UNIVERSAL)), bone_name_universal, DESCFLAGS_SET::NONE);
-		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_IS)), import_english, DESCFLAGS_SET::NONE);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_IS)), setting.import_english, DESCFLAGS_SET::NONE);
 
 		// set bone position
 		const auto& bone_position = pmx_bone.get_position();
 		Vector position(bone_position[0], bone_position[1], bone_position[2]);
-		position *= position_multiple;
+		position *= setting.position_multiple;
 		bone_object->SetFrozenPos(position);
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), position, DESCFLAGS_SET::NONE);
 
@@ -594,7 +595,7 @@ Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_b
 		{
 			// set tail position
 			const auto& tail_position = pmx_bone.get_tail_position();
-			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_POSITION)), Vector(tail_position[0], tail_position[1], tail_position[2]) * position_multiple, DESCFLAGS_SET::NONE);
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_POSITION)), Vector(tail_position[0], tail_position[1], tail_position[2]) * setting.position_multiple, DESCFLAGS_SET::NONE);
 		}
 
 		/// inherit bone
@@ -669,7 +670,7 @@ Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_b
 				// create ik tag
 				BaseObject* ik_beging_bone = ik_beging_bone_ptr->GetValue();
 				BaseTag* ik_tag = ik_beging_bone->MakeTag(1019561); // Ik tag ID : 1019561
-				if(import_english)
+				if(setting.import_english)
 				{
 					ik_tag->SetName(bone_name_universal);
 				}
@@ -720,9 +721,9 @@ Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_b
 						const auto& limit_max = pmx_ik_link_bone.get_limit_max();
 
 						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_MIN_ROT)),
-							Vector(limit_min[0], limit_min[1], limit_min[2]) * position_multiple, DESCFLAGS_SET::NONE);
+							Vector(limit_min[0], limit_min[1], limit_min[2]) * setting.position_multiple, DESCFLAGS_SET::NONE);
 						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_MAX_ROT)),
-							Vector(limit_max[0], limit_max[1], limit_max[2]) * position_multiple, DESCFLAGS_SET::NONE);
+							Vector(limit_max[0], limit_max[1], limit_max[2]) * setting.position_multiple, DESCFLAGS_SET::NONE);
 						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_H)), 1, DESCFLAGS_SET::NONE);
 						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_B)), 1, DESCFLAGS_SET::NONE);
 					}
