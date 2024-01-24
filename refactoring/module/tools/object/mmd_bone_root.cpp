@@ -11,6 +11,10 @@ Description:	DESC
 #include "pch.h"
 #include "mmd_bone_root.h"
 
+#include "CMTSceneManager.h"
+#include "CMTSceneManager.h"
+#include "CMTSceneManager.h"
+#include "CMTSceneManager.h"
 #include "cmt_tools_setting.h"
 #include "description/OMMDModel.h"
 
@@ -450,7 +454,7 @@ const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& MMDBoneRootObject::G
 	return m_bone_morph_data;
 }
 
-BaseList2D* MMDBoneRootObject::FindBone(const Int32 index) const
+BaseList2D* MMDBoneRootObject::FindBoneTag(const Int32 index) const
 {
 	// find index in m_bone_list
 	if (const auto bone_link_ptr = m_bone_list.Find(index); bone_link_ptr)
@@ -460,7 +464,7 @@ BaseList2D* MMDBoneRootObject::FindBone(const Int32 index) const
 	return nullptr;
 }
 
-Int32 MMDBoneRootObject::FindBoneIndex(const BaseList2D* bone_tag) const
+Int32 MMDBoneRootObject::FindBoneTagIndex(const BaseList2D* bone_tag) const
 {
 	// get index from bone
 	const auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
@@ -495,18 +499,19 @@ Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Flo
 	return true;
 }
 
-Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, const CMTToolsSetting::ModelImport& setting)
+Bool MMDBoneRootObject::LoadPMX(const ::libmmd::pmx_model& pmx_model, maxon::HashMap<uint64_t, BaseObject*>& bone_map, const CMTToolsSetting::ModelImport& setting)
 {
 	iferr_scope_handler{
 		return false;
 	};
 
-	// bone map
-	maxon::HashMap<Int32, BaseObject*> bone_map;
+	const auto& pmx_bone_array = pmx_model.get_pmx_bone_array();
+	const auto pmx_bone_num = pmx_bone_array.size();
+	if (pmx_bone_num == 0)
+		return true;
 
 	// create bone
-	const auto  pmx_bone_num = static_cast<int>(pmx_bone_array.size());
-	for (auto pmx_bone_index = int(); pmx_bone_index < pmx_bone_num; ++pmx_bone_index)
+	for (auto pmx_bone_index = decltype(pmx_bone_num){}; pmx_bone_index < pmx_bone_num; ++pmx_bone_index)
 	{
 		BaseObject* new_bone = BaseObject::Alloc(Ojoint);
 		if (new_bone == nullptr)
@@ -516,7 +521,7 @@ Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_b
 	}
 
 	// set bone data
-	for (auto pmx_bone_index = int(); pmx_bone_index < pmx_bone_num; ++pmx_bone_index)
+	for (auto pmx_bone_index = decltype(pmx_bone_num){}; pmx_bone_index < pmx_bone_num; ++pmx_bone_index)
 	{
 		const auto& pmx_bone = pmx_bone_array[pmx_bone_index];
 
@@ -744,6 +749,41 @@ Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_b
 		const auto msg_descid = ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK));
 		msg.descid = &msg_descid;
 		Get()->MultiMessage(MULTIMSG_ROUTE::BROADCAST, MSG_DESCRIPTION_CHECKUPDATE, &msg);
+	}
+
+	if (setting.import_expression)
+	{
+		const auto& pmx_morph_array = pmx_model.get_pmx_morph_array();
+		const auto pmx_morph_num = pmx_morph_array.size();
+		for (auto morph_index = decltype(pmx_morph_num){}; morph_index < pmx_morph_num; ++morph_index)
+		{
+			const auto& pmx_morph = pmx_morph_array[morph_index];
+			if (pmx_morph.get_morph_offset_type() != libmmd::pmx_morph::morph_type::BONE)
+				continue;
+
+			const maxon::String morph_name_local{ pmx_morph.get_morph_name_local().c_str() };
+
+			const auto& pmx_bone_morph_offset_array = pmx_morph.get_morph_offset_array();
+			const auto pmx_bone_morph_offset_num = pmx_bone_morph_offset_array.size();
+
+			if (pmx_bone_morph_offset_num == 0)
+				continue;
+
+			for (auto offset_index = decltype(pmx_bone_morph_offset_num){}; offset_index < pmx_bone_morph_offset_num; ++offset_index)
+			{
+				const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_bone_morph_offset&>(pmx_bone_morph_offset_array[offset_index]);
+				if (const auto bone_tag = reinterpret_cast<BaseTag*>(FindBoneTag(pmx_bone_morph_offset.get_bone_index())); bone_tag)
+				{
+					auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
+					const auto added_morph_index = bone_tag_node->AddBoneMorph(morph_name_local);
+					const auto bone_translation = pmx_bone_morph_offset.get_bone_translation();
+					const auto bone_rotation = pmx_bone_morph_offset.get_bone_rotation();
+					bone_tag_node->SetBoneMorphTranslationNoCheck(added_morph_index, Vector(bone_translation[0], bone_translation[1], bone_translation[2]) * setting.position_multiple);
+					bone_tag_node->SetBoneMorphRotationNoCheck(added_morph_index, Vector(bone_rotation[0], bone_rotation[1], bone_rotation[2]));
+				}
+			}
+
+		}
 	}
 
 	return true;

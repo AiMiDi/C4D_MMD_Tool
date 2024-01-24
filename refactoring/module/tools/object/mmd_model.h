@@ -259,7 +259,7 @@ public:
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 
 	AddMorphHelper BeginMorphChange();
-	Int ImportGroupAndFlipMorph(const PMXModel* pmx_model, libmmd::pmx_morph& pmx_morph);
+	Int ImportGroupAndFlipMorph(const libmmd::pmx_morph& pmx_morph);
 
 	DescID AddDynamicDescription(const BaseContainer& bc, const MorphDescType& type, Int index);
 	void DeleteDynamicDescription(const DescID& id);
@@ -272,7 +272,7 @@ public:
 	Bool UpdateRoot(BaseObject* op = nullptr);
 	BaseObject* GetRootObject(const CMTObjectType type) const;
 
-	Bool LoadPMXModel(const libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadPMXModel(const libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMXModel(libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelExport& setting) const;
 private:
 	String GetMorphNamedNumber();

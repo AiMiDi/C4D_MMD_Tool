@@ -858,7 +858,7 @@ Bool MMDModelRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode,
 Bool MMDModelRootObject::ReadMorph(HyperFile* hf)
 {
 	iferr_scope_handler{ return nullptr; };
-	AddMorphHelper add_helper = BeginMorphChange();
+	auto morph_change_helper = BeginMorphChange();
 	Int data_count = 0;
 	if (!hf->ReadInt64(&data_count))
 		return false;
@@ -1049,7 +1049,7 @@ EXECUTIONRESULT MMDModelRootObject::Execute(BaseObject* op, BaseDocument* doc, B
 	return EXECUTIONRESULT::OK;
 }
 
-Int MMDModelRootObject::ImportGroupAndFlipMorph(const PMXModel* pmx_model, libmmd::pmx_morph& pmx_morph)
+Int MMDModelRootObject::ImportGroupAndFlipMorph(const libmmd::pmx_morph& pmx_morph)
 {
 	Int morph_id = -1;
 	iferr_scope_handler{ return morph_id; };
@@ -1066,6 +1066,7 @@ Int MMDModelRootObject::ImportGroupAndFlipMorph(const PMXModel* pmx_model, libmm
 			auto& morph_offset = dynamic_cast<const libmmd::pmx_group_morph_offset&>(morph_offset_array[morph_offset_index]);
 			morph.AddSubMorphNoCheck(morph_offset.get_morph_index(), morph_offset.get_morph_weight());
 		}
+		break;
 	}
 	case libmmd::pmx_morph::morph_type::FLIP:
 	{
@@ -1078,6 +1079,7 @@ Int MMDModelRootObject::ImportGroupAndFlipMorph(const PMXModel* pmx_model, libmm
 			auto& morph_offset = dynamic_cast<const libmmd::pmx_flip_morph_offset&>(morph_offset_array[morph_offset_index]);
 			morph.AddSubMorphNoCheck(morph_offset.get_morph_index(), morph_offset.get_morph_weight());
 		}
+		break;
 	}
 	case libmmd::pmx_morph::morph_type::VERTEX: [[fallthrough]];
 	case libmmd::pmx_morph::morph_type::BONE: [[fallthrough]];
@@ -1182,17 +1184,39 @@ BaseObject* MMDModelRootObject::GetRootObject(const CMTObjectType type) const
 	return nullptr;
 }
 
-Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelImport& setting)
+Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
-	if(setting.import_bone)
+	maxon::HashMap<uint64_t, BaseObject*> bone_map;
+
+	auto morph_change_helper = BeginMorphChange();
+
+	if (setting.import_bone)
+		if(!m_bone_root->GetNodeData<MMDBoneRootObject>()->LoadPMX(pmx_model, bone_map, setting))
+			return false;
+
+	if (setting.import_polygon)
+		if(!m_mesh_root->GetNodeData<MMDMeshRootObject>()->LoadPMX(pmx_model, bone_map, setting))
+			return false;
+
+	if (setting.import_expression)
 	{
-		m_bone_root->GetNodeData<MMDBoneRootObject>()->LoadBones(pmx_data.get_pmx_bone_array(), setting);
+		const auto& pmx_morph_array = pmx_model.get_pmx_morph_array();
+		const auto pmx_morph_num = pmx_morph_array.size();
+		for (auto morph_index = decltype(pmx_morph_num){}; morph_index < pmx_morph_num; ++morph_index)
+		{
+			const auto& pmx_morph = pmx_morph_array[morph_index];
+			if (pmx_morph.get_morph_offset_type() != libmmd::pmx_morph::morph_type::GROUP || pmx_morph.get_morph_offset_type() != libmmd::pmx_morph::morph_type::FLIP)
+				continue;
+			ImportGroupAndFlipMorph(pmx_morph);
+		}
 	}
 
+	return true;
 }
 
 Bool MMDModelRootObject::SavePMXModel(libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelExport& setting) const
 {
+	return true;
 }
 
 String MMDModelRootObject::GetMorphNamedNumber()

@@ -55,9 +55,9 @@ public:
 	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetMeshMorphData() const;
 	Bool SetMeshMorphStrength(const String& morph_name, Float strength);
 
-	Bool LoadMeshs(
-		const libmmd::pmx_model::pmx_surface_array& pmx_surface_array,
-		const libmmd::pmx_model::pmx_vertex_array& pmx_vertex_array,
+	Bool LoadPMX(
+		const libmmd::pmx_model& pmx_model,
+		const maxon::HashMap<uint64_t, BaseObject*>& bone_map,
 		const CMTToolsSetting::ModelImport& setting);
 private:
 	void RefreshMeshMorphData(BaseObject* op);

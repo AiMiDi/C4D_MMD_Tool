@@ -74,8 +74,8 @@ Bool MMDCamera::LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTTo
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 	const auto& vmd_camera_key_frame_array = vmd_data.get_vmd_camera_key_frame_array();
-	const auto  vmd_camera_key_frame_num = static_cast<int>(vmd_camera_key_frame_array.size());
-	for (auto frame_index = int(); frame_index < vmd_camera_key_frame_num; ++frame_index)
+	const auto  vmd_camera_key_frame_num = vmd_camera_key_frame_array.size();
+	for (auto frame_index = decltype(vmd_camera_key_frame_num){}; frame_index < vmd_camera_key_frame_num; ++frame_index)
 	{
 		const libmmd::vmd_camera_key_frame & data = vmd_camera_key_frame_array[frame_index];
 		const auto frame_at = static_cast<int32_t>(data.get_frame_at() + setting.time_offset);
@@ -86,7 +86,7 @@ Bool MMDCamera::LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTTo
 		const auto track_objects = GetTrackObjects(object);
 		const auto track_desc_IDs = GetTrackDescIDs();
 
-		for (size_t track_index = 0; track_index < m_track_count; ++track_index)
+		for (auto track_index = size_t{}; track_index < m_track_count; ++track_index)
 		{
 			auto& track_ID = track_desc_IDs[track_index];
 			const auto& track_object = track_objects[track_index];
