@@ -46,7 +46,7 @@ public:
 	template <class T>
 	T GetConfig(Int32 id)
 	{
-		id -= 10000;
+		id -= DLG_CMT_TOOL_ID_BEGIN;
 		assert(id >= 0 && id < k_default_config_table_size);
 		auto& [default_config_name, default_config_value] = k_default_config_table[id];
 		try
@@ -105,9 +105,9 @@ private:
 	 */
 	YAML::Node m_config;
 
-	inline static constexpr int k_config_id_begin = DLG_CMT_TOOL_CAMERA_IMPORT_SIZE;
-	inline static constexpr int k_config_id_end = DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK;
-	inline static constexpr int k_default_config_table_size = k_config_id_end - k_config_id_begin + 1;
+	inline static constexpr int k_config_id_begin = DLG_CMT_TOOL_ID_BEGIN;
+	inline static constexpr int k_config_id_end = DLG_CMT_TOOL_ID_END;
+	inline static constexpr int k_default_config_table_size = k_config_id_end - k_config_id_begin;
 	/**
 	* \brief Configuration entry initial value table.
 	*/

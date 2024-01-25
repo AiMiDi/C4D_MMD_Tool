@@ -10,13 +10,9 @@ Description:	DESC
 
 #include "pch.h"
 #include "mmd_bone_root.h"
-
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
 #include "cmt_tools_setting.h"
 #include "description/OMMDModel.h"
+#include "module/tools/tag/mmd_bone.h"
 
 NodeData* MMDBoneRootObject::Alloc()
 {

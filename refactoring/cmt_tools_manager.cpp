@@ -19,6 +19,11 @@ namespace CMTToolsManager
 		return std::shared_ptr<libmmd::vmd_animation>{ libmmd::vmd_animation::create(), libmmd::vmd_animation::free };
 	}
 
+	std::shared_ptr<libmmd::pmx_model> make_pmx_model()
+	{
+		return std::shared_ptr<libmmd::pmx_model>{ libmmd::pmx_model::create(), libmmd::pmx_model::free };
+	}
+
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
 		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
@@ -74,22 +79,38 @@ namespace CMTToolsManager
 		return true;
 	}
 
-	bool ImportVMDMotion(CMTToolsSetting::MotionImport& setting)
+	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting)
 	{
 		return true;
 	}
 
-	bool ExportVMDMotion(CMTToolsSetting::MotionExport& setting)
+	bool ExportVMDMotion(const CMTToolsSetting::MotionExport& setting)
 	{
 		return true;
 	}
 
-	bool ImportPMXModel(CMTToolsSetting::ModelImport& setting)
+	bool ImportPMXModel(const CMTToolsSetting::ModelImport& setting)
 	{
+		maxon::AutoMem<Char> pmx_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const std::string_view pmx_utf8_filename{ pmx_utf8_filename_mem };
+		const auto pmx_model = make_pmx_model();
+		if (!pmx_model)
+		{
+			return false;
+		}
+		if (!pmx_model->read_from_file_u8(pmx_utf8_filename))
+		{
+			return false;
+		}
+		
+		if (CMTSceneManager::LoadPMXModel(setting, *pmx_model))
+		{
+			return false;
+		}
 		return true;
 	}
 
-	bool ExportPMXModel(CMTToolsSetting::ModelExport& setting)
+	bool ExportPMXModel(const CMTToolsSetting::ModelExport& setting)
 	{
 		return true;
 	}

@@ -15,7 +15,7 @@ class MMDRootObject : public ObjectData
 {
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRootObject)
 	CMT_DEFAULT_MOVE_BODY(MMDRootObject)
-	INSTANCEOF(MMDRootObject, MMDRootObject)
+	INSTANCEOF(MMDRootObject, ObjectData)
 protected:
 	MMDRootObject() = default;
 	~MMDRootObject() override = default;

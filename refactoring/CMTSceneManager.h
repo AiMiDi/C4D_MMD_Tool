@@ -35,6 +35,8 @@ public:
 	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::vmd_animation* data);
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
+	static BaseObject* LoadPMXModel(const CMTToolsSetting::ModelImport& setting, const libmmd::pmx_model& data);
+
 	void AddMMDCamera(BaseObject* camera);
 
 	static CMTSceneManager* GetSceneManager(const BaseDocument* Document);

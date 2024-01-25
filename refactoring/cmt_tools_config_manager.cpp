@@ -42,7 +42,7 @@ void CMTToolConfigManager::InitDialog(GeDialog* dlg)
 
 void CMTToolConfigManager::InitConfig(Int32 id)
 {
-	id -= 10000;
+	id -= DLG_CMT_TOOL_ID_BEGIN;
 	assert(id >= 0 && id < k_default_config_table_size);
 	const auto& default_config_item = k_default_config_table[id];
 	switch (const auto& [default_config_name, default_config_value] = default_config_item; default_config_value.index())

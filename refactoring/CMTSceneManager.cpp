@@ -12,6 +12,7 @@ Description:	scene manager
 
 #include "CMTSceneManager.h"
 #include "module/tools/object/mmd_camera.h"
+#include "module/tools/object/mmd_model.h"
 
 BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation& data)
 {
@@ -102,6 +103,28 @@ BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConve
 	setting.doc->SetTime(BaseTime{ 1.0 });
 	setting.doc->SetTime(BaseTime{});
 	return vmd_camera;
+}
+
+BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& setting, const libmmd::pmx_model& data)
+{
+	// create model
+	BaseObject* pmx_model = BaseObject::Alloc(ID_O_MMD_MODEL);
+	if (!pmx_model)
+		return nullptr;
+
+	setting.doc->InsertObject(pmx_model, nullptr, nullptr);
+
+	// init model
+	pmx_model->SetName(setting.fn.GetFileString());
+	auto* pmx_model_data = pmx_model->GetNodeData<MMDModelRootObject>();
+	pmx_model_data->CreateRoot();
+
+	// set model with pmx data
+	pmx_model_data->LoadPMXModel(data, setting);
+
+	EventAdd();
+
+	return pmx_model;
 }
 
 void CMTSceneManager::AddMMDCamera(BaseObject* camera)

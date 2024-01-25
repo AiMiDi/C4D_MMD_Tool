@@ -172,6 +172,14 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		GetItem(DLG_CMT_TOOL_MODEL_IMPORT_MULTIPART, setting.import_multipart);
 		GetItem(DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH, setting.import_english);
 		GetItem(DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK, setting.import_english_check);
+		if (!filename_util::SelectSuffixImportFile(setting.fn, "pmx"_s))
+		{
+			return false;
+		}
+		if (!CMTToolsManager::ImportPMXModel(setting))
+		{
+			return false;
+		}
 		break;
 	}
 	case DLG_CMT_TOOL_MODEL_IMPORT_BONE:
