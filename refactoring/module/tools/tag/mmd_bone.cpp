@@ -889,6 +889,8 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 Bool MMDBoneTag::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
 	const BaseContainer* itemdesc) SDK2024_Const
 {
+	if(!itemdesc)
+		return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
 	switch (id[0].id)
 	{
 	case PMX_BONE_TAIL_INDEX:
