@@ -192,18 +192,18 @@ enum class CMTObjectType
 	JointRoot,
 	ModelRoot
 };
-enum class MMDModelObjectMsgType
+enum class MMDModelRootObjectMsgType
 {
 	DEFAULT,
 	TOOL_OBJECT_UPDATE
 };
-struct MMDModelObjectMsg
+struct MMDModelRootObjectMsg
 {
-	MMDModelObjectMsgType msg_type;
+	MMDModelRootObjectMsgType msg_type;
 	CMTObjectType	object_type;
 	BaseObject* object;
 
-	explicit MMDModelObjectMsg(const MMDModelObjectMsgType msg_type_ = MMDModelObjectMsgType::DEFAULT,
+	explicit MMDModelRootObjectMsg(const MMDModelRootObjectMsgType msg_type_ = MMDModelRootObjectMsgType::DEFAULT,
 	                            const CMTObjectType object_type_ = CMTObjectType::DEFAULT, BaseObject* object_ = nullptr)
 		:msg_type(msg_type_), object_type(object_type_), object(object_) {}
 };

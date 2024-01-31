@@ -83,9 +83,9 @@ Bool MMDJointRootObject::Message(GeListNode* node, Int32 type, void* data)
 	}
 	case ID_O_MMD_MODEL:
 	{
-		if (const auto msg = static_cast<MMDModelObjectMsg*>(data); msg != nullptr)
+		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data); msg != nullptr)
 		{
-			if (msg->msg_type == MMDModelObjectMsgType::TOOL_OBJECT_UPDATE) {
+			if (msg->msg_type == MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE) {
 				switch (msg->object_type)
 				{
 				case CMTObjectType::BoneRoot:

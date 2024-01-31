@@ -118,6 +118,7 @@ BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& se
 	pmx_model->SetName(setting.fn.GetFileString());
 	auto* pmx_model_data = pmx_model->GetNodeData<MMDModelRootObject>();
 	pmx_model_data->CreateRoot();
+	pmx_model_data->UpdateRoot();
 
 	// set model with pmx data
 	pmx_model_data->LoadPMXModel(data, setting);

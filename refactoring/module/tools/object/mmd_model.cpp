@@ -938,7 +938,7 @@ Bool MMDModelRootObject::UpdateRoot(BaseObject* op)
 	BaseObject* BoneRoot_ = nullptr;
 	BaseObject* RigidRoot_ = nullptr;
 	BaseObject* JointRoot_ = nullptr;
-	maxon::Queue<BaseObject*>	nodes;
+	maxon::Queue<BaseObject*> nodes;
 	iferr(nodes.Push(op->GetDown())) return false;
 	while (!nodes.IsEmpty())
 	{
@@ -1006,21 +1006,21 @@ Bool MMDModelRootObject::UpdateRoot(BaseObject* op)
 		m_is_root_initialized = false;
 	}
 	if (m_is_root_initialized == false) {
-		MMDModelObjectMsg MeshRoot_msg(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op);
+		MMDModelRootObjectMsg MeshRoot_msg(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op);
 		m_mesh_root->Message(ID_O_MMD_MODEL, &MeshRoot_msg);
-		MMDModelObjectMsg BoneRoot_msgA(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, m_rigid_root);
+		MMDModelRootObjectMsg BoneRoot_msgA(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, m_rigid_root);
 		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgA);
-		MMDModelObjectMsg BoneRoot_msgB(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, m_joint_root);
+		MMDModelRootObjectMsg BoneRoot_msgB(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, m_joint_root);
 		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgB);
-		MMDModelObjectMsg BoneRoot_msgC(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op);
+		MMDModelRootObjectMsg BoneRoot_msgC(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op);
 		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgC);
-		MMDModelObjectMsg RigidRoot_msgA(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, m_bone_root);
+		MMDModelRootObjectMsg RigidRoot_msgA(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, m_bone_root);
 		m_rigid_root->Message(ID_O_MMD_MODEL, &RigidRoot_msgA);
-		MMDModelObjectMsg RigidRoot_msgB(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, m_joint_root);
+		MMDModelRootObjectMsg RigidRoot_msgB(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, m_joint_root);
 		m_rigid_root->Message(ID_O_MMD_MODEL, &RigidRoot_msgB);
-		MMDModelObjectMsg JointRoot_msgA(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, m_bone_root);
+		MMDModelRootObjectMsg JointRoot_msgA(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, m_bone_root);
 		m_joint_root->Message(ID_O_MMD_MODEL, &JointRoot_msgA);
-		MMDModelObjectMsg JointRoot_msgB(MMDModelObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, m_rigid_root);
+		MMDModelRootObjectMsg JointRoot_msgB(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, m_rigid_root);
 		m_joint_root->Message(ID_O_MMD_MODEL, &JointRoot_msgB);
 		m_is_root_initialized = true;
 	}

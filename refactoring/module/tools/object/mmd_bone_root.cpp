@@ -11,6 +11,7 @@ Description:	DESC
 #include "pch.h"
 #include "mmd_bone_root.h"
 #include "cmt_tools_setting.h"
+#include "mmd_model.h"
 #include "description/OMMDModel.h"
 #include "module/tools/tag/mmd_bone.h"
 
@@ -440,6 +441,35 @@ Bool MMDBoneRootObject::Message(GeListNode* node, Int32 type, void* data)
 			return SUPER::Message(node, type, data);
 		break;
 	}
+	case ID_O_MMD_MODEL:
+	{
+		if (const auto* msg = static_cast<MMDModelRootObjectMsg*>(data); msg != nullptr)
+		{
+			if (msg->msg_type == MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE) {
+				switch (msg->object_type)
+				{
+				case CMTObjectType::JointRoot:
+				{
+					m_joint_root = msg->object;
+					break;
+				}
+				case CMTObjectType::RigidRoot:
+				{
+					m_rigid_root = msg->object;
+					break;
+				}
+				case CMTObjectType::ModelRoot:
+				{
+					m_model_root = msg->object;
+					break;
+				}
+				default:
+					break;
+				}
+			}
+		}
+		break;
+	}
 	default: ;
 	}
 	return SUPER::Message(node, type, data);
@@ -530,7 +560,7 @@ Bool MMDBoneRootObject::LoadPMX(const ::libmmd::pmx_model& pmx_model, maxon::Has
 
 		// init bone tag
 		bone_node->SetBoneObject(bone_object);
-		bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(this));
+		bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(this->Get()));
 
 		// bone name
 		const maxon::String bone_name_local{ pmx_bone.get_bone_name_local().c_str() };
