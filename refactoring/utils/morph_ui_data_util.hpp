@@ -17,12 +17,8 @@ class MorphUIData final
 	DescID strength_id;
 	maxon::StrongRef<AutoAlloc<BaseLink>> morph_tag_link;
 public:
-	MorphUIData(SDK2024_Const BaseTag* bone_tag = nullptr, const DescID& strength_id = {}) : strength_id(strength_id)
+	MorphUIData(SDK2024_Const BaseTag* bone_tag = nullptr, DescID strength_id = {}) : strength_id(std::move(strength_id)), morph_tag_link(maxon::StrongRef<AutoAlloc<BaseLink>>::Create()iferr_ignore())
 	{
-		iferr(morph_tag_link.Create())
-		{
-			// TODO: log
-		}
 		(*morph_tag_link)->SetLink(bone_tag);
 	}
 
@@ -31,8 +27,6 @@ public:
 	MorphUIData& operator=(const MorphUIData& other) = default;
 	MorphUIData(MorphUIData&& other) noexcept = default;
 	MorphUIData& operator=(MorphUIData&& other) noexcept = default;
-	//MorphUIData(MorphUIData&& other) noexcept: strength_id(std::move(other.strength_id)), morph_tag_link(std::move(other.morph_tag_link)) {}
-	//MorphUIData& operator=(MorphUIData&& other) noexcept = default;
 
 	Bool Write(HyperFile* hf) SDK2024_Const
 	{

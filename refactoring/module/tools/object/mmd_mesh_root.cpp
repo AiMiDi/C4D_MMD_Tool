@@ -413,7 +413,7 @@ Bool MMDMeshRootObject::LoadPMX(
 		});
 
 		// if import_normal is true, create normal tag
-		maxon::Synchronized<NormalHandle> normal_handle{ NormalHandle{} };
+		NormalHandle normal_handle{};
 		if (setting.import_normal)
 		{
 			NormalTag* normal_tag = NormalTag::Alloc(static_cast<Int32>(surface_count));
@@ -421,12 +421,12 @@ Bool MMDMeshRootObject::LoadPMX(
 			{
 				return false;
 			}
-			*normal_handle.Write() = normal_tag->GetDataAddressW();
+			normal_handle = normal_tag->GetDataAddressW();
 			mesh_object->InsertTag(normal_tag);
 		}
 
 		// if import_uv is true, create uv tag
-		maxon::Synchronized<UVWHandle> uvw_handle{ UVWHandle{} };
+		UVWHandle uvw_handle{};
 		if (setting.import_uv)
 		{
 			UVWTag* uvw_tag = UVWTag::Alloc(static_cast<Int32>(surface_count));
@@ -434,13 +434,11 @@ Bool MMDMeshRootObject::LoadPMX(
 			{
 				return false;
 			}
-			*uvw_handle.Write() = uvw_tag->GetDataAddressW();
+			uvw_handle = uvw_tag->GetDataAddressW();
 			mesh_object->InsertTag(uvw_tag);
 		}
 		// vertex index -> surface index
-		maxon::HashMap<Int32, Int32> surface_map;
-		maxon::ParallelFor::Dynamic(decltype(surface_count){}, surface_count, [&pmx_surface_array, &surface_map, &pmx_vertex_array, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const uint64_t surface_index)
-		//for (auto surface_index = decltype(surface_count){}; surface_index < surface_count; ++surface_index)
+		maxon::ParallelFor::Dynamic(decltype(surface_count){}, surface_count, [&pmx_surface_array, &pmx_vertex_array, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const uint64_t surface_index)
 		{
 			iferr_scope_handler{
 				return;
@@ -455,11 +453,7 @@ Bool MMDMeshRootObject::LoadPMX(
 			auto& mesh_object_polygon = mesh_object_polygons[surface_index];
 			mesh_object_polygon.a = static_cast<Int32>(pmx_surface_vertex_a);
 			mesh_object_polygon.b = static_cast<Int32>(pmx_surface_vertex_b);
-			mesh_object_polygon.c = static_cast<Int32>(pmx_surface_vertex_c);
-
-			surface_map.Insert(mesh_object_polygon.a, static_cast<Int32>(surface_index))iferr_return;
-			surface_map.Insert(mesh_object_polygon.b, static_cast<Int32>(surface_index))iferr_return;
-			surface_map.Insert(mesh_object_polygon.c, static_cast<Int32>(surface_index))iferr_return;
+			mesh_object_polygon.c = mesh_object_polygon.d = static_cast<Int32>(pmx_surface_vertex_c);
 
 			const auto& pmx_vertex_a = pmx_vertex_array[pmx_surface_vertex_a];
 			const auto& pmx_vertex_b = pmx_vertex_array[pmx_surface_vertex_b];
@@ -472,16 +466,12 @@ Bool MMDMeshRootObject::LoadPMX(
 				const auto& pmx_vertex_normal_b = pmx_vertex_b.get_normal();
 				const auto& pmx_vertex_normal_c = pmx_vertex_c.get_normal();
 
-				normal_handle.Write([&surface_index, &pmx_vertex_normal_a, &pmx_vertex_normal_b, &pmx_vertex_normal_c](auto& handle)
-				{
-					NormalTag::Set(handle, static_cast<Int32>(surface_index), NormalStruct(
-						Vector(pmx_vertex_normal_a[0], pmx_vertex_normal_a[1], pmx_vertex_normal_a[2]).GetNormalized(),
-						Vector(pmx_vertex_normal_b[0], pmx_vertex_normal_b[1], pmx_vertex_normal_b[2]).GetNormalized(),
-						Vector(pmx_vertex_normal_c[0], pmx_vertex_normal_c[1], pmx_vertex_normal_c[2]).GetNormalized(),
-						Vector{}));
-				});
+				NormalTag::Set(normal_handle, static_cast<Int32>(surface_index), NormalStruct(
+					Vector(pmx_vertex_normal_a[0], pmx_vertex_normal_a[1], pmx_vertex_normal_a[2]).GetNormalized(),
+					Vector(pmx_vertex_normal_b[0], pmx_vertex_normal_b[1], pmx_vertex_normal_b[2]).GetNormalized(),
+					Vector(pmx_vertex_normal_c[0], pmx_vertex_normal_c[1], pmx_vertex_normal_c[2]).GetNormalized(),
+					Vector{}));
 			}
-
 			// add uv
 			if (setting.import_uv)
 			{
@@ -489,16 +479,12 @@ Bool MMDMeshRootObject::LoadPMX(
 				const auto& pmx_vertex_uv_b = pmx_vertex_b.get_uv();
 				const auto& pmx_vertex_uv_c = pmx_vertex_c.get_uv();
 
-				uvw_handle.Write([&surface_index, &pmx_vertex_uv_a, &pmx_vertex_uv_b, &pmx_vertex_uv_c](auto& handle)
-				{
-					UVWTag::Set(handle, static_cast<Int32>(surface_index), UVWStruct(
-						Vector(pmx_vertex_uv_a[0], pmx_vertex_uv_a[1], 0.),
-						Vector(pmx_vertex_uv_b[0], pmx_vertex_uv_b[1], 0.),
-						Vector(pmx_vertex_uv_c[0], pmx_vertex_uv_c[1], 0.),
-						Vector{}));
-				});
+				UVWTag::Set(uvw_handle, static_cast<Int32>(surface_index), UVWStruct(
+					Vector(pmx_vertex_uv_a[0], pmx_vertex_uv_a[1], 0.),
+					Vector(pmx_vertex_uv_b[0], pmx_vertex_uv_b[1], 0.),
+					Vector(pmx_vertex_uv_c[0], pmx_vertex_uv_c[1], 0.),
+					Vector{}));
 			}
-
 		});
 
 		if (setting.import_weights)
@@ -623,8 +609,6 @@ Bool MMDMeshRootObject::LoadPMX(
 
 					morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
 
-					// has uv morph surface_index
-					maxon::BaseList<Int32> morph_uv_surface_list;
 					// vertex_index -> uv offset
 					maxon::HashMap<Int32, Vector> morph_uv_map;
 					// mapping uv morph from vertex_index to surface_index
@@ -634,27 +618,40 @@ Bool MMDMeshRootObject::LoadPMX(
 						const auto& pmx_bone_morph_offset_vertex_index = pmx_bone_morph_offset.get_vertex_index();
 						const auto& pmx_bone_morph_offset_uv = pmx_bone_morph_offset.get_uv_offset();
 
-						if (auto surface_index_ptr = surface_map.Find(static_cast<Int32>(pmx_bone_morph_offset_vertex_index)); surface_index_ptr)
-							morph_uv_surface_list.Append(surface_index_ptr->GetValue())iferr_return;
-
 						morph_uv_map.Insert(static_cast<Int32>(pmx_bone_morph_offset_vertex_index), Vector(pmx_bone_morph_offset_uv[0], pmx_bone_morph_offset_uv[1], 0.))iferr_return;
 					}
 
 					// add morph uv
-					for (auto surface_index : morph_uv_surface_list)
+					maxon::ParallelFor::Dynamic(decltype(surface_count){}, surface_count, [&pmx_surface_array, &morph_node, &morph_uv_map](const uint64_t surface_index)
 					{
+						iferr_scope_handler{
+							return;
+						};
+						const auto& pmx_surface = pmx_surface_array[surface_index];
+						const auto& pmx_surface_vertex_a = pmx_surface.get_a();
+						const auto& pmx_surface_vertex_b = pmx_surface.get_b();
+						const auto& pmx_surface_vertex_c = pmx_surface.get_c();
 						UVWStruct uvw;
-						auto& surface = mesh_object_polygons[surface_index];
-						morph_node->GetUV(0, surface_index, uvw);
-						for (auto index = Int32(); index < 3; ++index)
+						bool is_has_uv_morph = false;
+						if (const auto vertex_a_ptr = morph_uv_map.Find(pmx_surface_vertex_a); vertex_a_ptr)
 						{
-							if (auto uv_ptr = morph_uv_map.Find(surface[index]); uv_ptr)
-							{
-								uvw[index] = uv_ptr->GetValue();
-							}
+							uvw[0] = vertex_a_ptr->GetValue();
+							is_has_uv_morph = true;
 						}
-						morph_node->SetUV(0, surface_index, uvw);
-					}
+						else if (const auto vertex_b_ptr = morph_uv_map.Find(pmx_surface_vertex_b); vertex_b_ptr)
+						{
+							uvw[1] = vertex_b_ptr->GetValue();
+							is_has_uv_morph = true;
+						}else if (const auto vertex_c_ptr = morph_uv_map.Find(pmx_surface_vertex_c); vertex_c_ptr)
+						{
+							uvw[2] = vertex_c_ptr->GetValue();
+							is_has_uv_morph = true;
+						}
+						if (is_has_uv_morph)
+						{
+							morph_node->SetUV(0, static_cast<Int32>(surface_index), uvw);
+						}
+					});
 
 					morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
 					morph_tag->UpdateMorphs();
