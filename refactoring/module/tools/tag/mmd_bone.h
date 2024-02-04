@@ -450,7 +450,7 @@ private:
 	 * @param[in] op The BaseObject associated with the MMDBoneTag.
 	 * @param[in] bc The BaseContainer containing the inherit bone parent data.
 	 */
-	void CheckInheritBoneParent(const BaseDocument* doc, BaseObject* op, const BaseContainer* bc);
+	void HandleInheritParentBone(const BaseDocument* doc, BaseObject* op, const BaseContainer* bc);
 
 	/**
 	 * @brief Gets the track description IDs for the MMDBoneTag (implementation).

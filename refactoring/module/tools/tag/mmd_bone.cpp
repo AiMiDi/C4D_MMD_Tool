@@ -694,7 +694,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	case PMX_BONE_ROTATABLE:
 	{
 		if (!m_bone_object)
-			return true;
+			break;
 		if (!protection_tag)
 		{
 			if (!CreateBoneLockTag())
@@ -707,7 +707,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	case PMX_BONE_TRANSLATABLE:
 	{
 		if (!m_bone_object)
-			return true;
+			break;
 		if (!protection_tag)
 		{
 			if (!CreateBoneLockTag())
@@ -720,7 +720,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	case PMX_BONE_VISIBLE:
 	{
 		if (!m_bone_object)
-			return true;
+			break;
 		if (!t_data.GetBool())
 		{
 			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
@@ -737,7 +737,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	case PMX_BONE_INDEXED_TAIL_POSITION:
 	{
 		if (!m_bone_object)
-			return true;
+			break;
 		switch (t_data.GetInt32())
 		{
 		case PMX_BONE_TAIL_IS_INDEX:
@@ -772,7 +772,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	case PMX_BONE_TAIL_INDEX:
 	{
 		if (!m_bone_object)
-			return true;
+			break;
 		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_IS_INDEX)
 		{
 			if (t_data.GetInt32() == -1)
@@ -788,7 +788,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	case PMX_BONE_TAIL_POSITION:
 	{
 		if (!m_bone_object)
-			return true;
+			break;
 		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_POSITION)
 		{
 			if (t_data.GetVector().IsZero())
@@ -804,7 +804,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	case PMX_BONE_NAME_IS:
 	{
 		if (!m_bone_object)
-			return true;
+			break;
 		if (t_data.GetInt32())
 		{
 			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
@@ -818,7 +818,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	case PMX_BONE_NAME_LOCAL:
 	{
 		if (!m_bone_object)
-			return true;
+			break;
 		if (bc->GetInt32(PMX_BONE_NAME_IS) == 1)
 		{
 			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
@@ -830,20 +830,23 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	}
 	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
 	{
-		if (m_bone_root == nullptr)
-			return true;
+		if (!m_bone_root)
+			break;
 		if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr))
 		{
-			if (SDK2024_Const auto inherit_bone_parent_link = t_data.GetBaseLink(); inherit_bone_parent_link != nullptr)
+			const auto doc = node->GetDocument();
+			if (!doc)
+				break;
+			if (SDK2024_Const auto inherit_bone_parent_link = t_data.GetBaseLink(); inherit_bone_parent_link)
 			{
-				const auto doc = node->GetDocument();
-				if (!doc)
-					break;
-				inherit_bone_parent_link->CopyTo(inherit_bone_parent.GetPointer(), COPYFLAGS::NONE, nullptr);
-				if (const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneTagIndex(inherit_bone_parent->GetLink(doc));
-					inherit_bone_parent_index != -1)
+				if(const auto inherit_bone_tag = inherit_bone_parent_link->GetLink(doc); inherit_bone_tag)
 				{
-					bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index);
+					inherit_bone_parent_link->CopyTo(inherit_bone_parent.GetPointer(), COPYFLAGS::NONE, nullptr);
+					if (const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneTagIndex(inherit_bone_parent->GetLink(doc));
+						inherit_bone_parent_index != -1)
+					{
+						bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index);
+					}
 				}
 			}
 		}
@@ -852,7 +855,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
 	{
 		if (!m_bone_root)
-			return true;
+			break;
 		if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_INDEX)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr)) {
 			if (SDK2024_Const auto inherit_bone_parent_tag = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneTag(t_data.GetInt32());
 				inherit_bone_parent_tag != nullptr)
@@ -933,17 +936,11 @@ Bool MMDBoneTag::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, 
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
 }
 
-void MMDBoneTag::CheckInheritBoneParent(const BaseDocument* doc, BaseObject* op, const BaseContainer* bc)
+void MMDBoneTag::HandleInheritParentBone(const BaseDocument* doc, BaseObject* op, const BaseContainer* bc)
 {
 	auto CheckInheritBoneParentFunc = [this, &bc, &doc](const std::function<void(const BaseObject*)>& UpdateFunc)
 	{
-		if (!inherit_bone_parent->IsCacheLink())
-		{
-			if (SDK2024_Const BaseLink* inherit_bone_parent_link = bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK);
-				!inherit_bone_parent_link)
-				inherit_bone_parent_link->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
-		}
-		else if (const auto inherit_bone_parent_object = reinterpret_cast<const BaseObject*>(inherit_bone_parent->GetLink(doc, Ojoint));
+		if (const auto inherit_bone_parent_object = reinterpret_cast<const BaseObject*>(inherit_bone_parent->GetLink(doc, Ojoint));
 			inherit_bone_parent_object) {
 			UpdateFunc(inherit_bone_parent_object);
 		}
@@ -1050,7 +1047,7 @@ void MMDBoneTag::HandleBoneIndexUpdate(BaseTag* tag, BaseObject* op, BaseContain
 		if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
 		{
 			tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_PARENT_BONE_NAME)), up_obj->GetName(), DESCFLAGS_SET::NONE);
-			if (SDK2024_Const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE); !up_tag)
+			if (SDK2024_Const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE); up_tag)
 			{
 				up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
 				bc->SetData(PMX_BONE_PARENT_BONE_INDEX, Ge_data);
@@ -1158,7 +1155,7 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 	HandleBoneLockUpdate(bc);
 	HandleBoneIndexUpdate(tag, op, bc);
-	CheckInheritBoneParent(doc, op, bc);
+	HandleInheritParentBone(doc, op, bc);
 	HandleBoneMorphUpdate(tag, op);
 
 	return ExecuteImpl(op, doc, bt, priority, flags);

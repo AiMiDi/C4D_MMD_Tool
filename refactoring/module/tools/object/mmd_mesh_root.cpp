@@ -326,10 +326,17 @@ Bool MMDMeshRootObject::LoadPMX(
 				const auto joint_index = weight_tag->AddJoint(bone_object);
 				weight_tag_joint_map.Insert(mmd_bone_index, joint_index)iferr_return;
 			}
+
+			// add morph deformer
+			BaseObject* morph_deformer_object = BaseObject::Alloc(Oskin);
+			if (!morph_deformer_object)
+			{ 
+				return false;
+			}
+			morph_deformer_object->InsertUnder(mesh_object);
 		}
 
 		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertex_array, &setting, &mesh_object_points, &weight_tag, &weight_tag_joint_map](const uint64_t vertex_index)
-		//for (auto vertex_index = decltype(vertex_count){}; vertex_index < vertex_count; ++vertex_index)
 		{
 			const auto& pmx_vertex = pmx_vertex_array[vertex_index];
 
