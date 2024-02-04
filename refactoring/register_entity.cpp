@@ -40,27 +40,27 @@ Bool RegisterMMDModelRoot()
 
 Bool RegisterMMDBoneRoot()
 {
-	return RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), OBJECT_CALL_ADDEXECUTION, MMDBoneRootObject::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 0);
+	return RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU, MMDBoneRootObject::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 0);
 }
 
 Bool RegisterMMDMeshRoot()
 {
-	return RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), OBJECT_CALL_ADDEXECUTION, MMDMeshRootObject::Alloc, "OMMDMeshRoot"_s, AutoBitmap("OMMDMeshRoot.png"_s), 0);
+	return RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, MMDMeshRootObject::Alloc, "OMMDMeshRoot"_s, AutoBitmap("OMMDMeshRoot.png"_s), 0);
 }
 
 Bool RegisterMMDRigidRoot()
 {
-	return RegisterObjectPlugin(ID_O_MMD_RIGID_ROOT, GeLoadString(IDS_O_MMD_RIGID_ROOT), OBJECT_CALL_ADDEXECUTION, MMDRigidRootObject::Alloc, "OMMDRigidRoot"_s, AutoBitmap("OMMDRigidRoot.png"_s), 0);
+	return RegisterObjectPlugin(ID_O_MMD_RIGID_ROOT, GeLoadString(IDS_O_MMD_RIGID_ROOT), PLUGINFLAG_HIDEPLUGINMENU , MMDRigidRootObject::Alloc, "OMMDRigidRoot"_s, AutoBitmap("OMMDRigidRoot.png"_s), 0);
 }
 
 Bool RegisterMMDJointRoot()
 {
-	return RegisterObjectPlugin(ID_O_MMD_JOINT_ROOT, GeLoadString(IDS_O_MMD_JOINT_ROOT), OBJECT_CALL_ADDEXECUTION, MMDJointRootObject::Alloc, "OMMDJointRoot"_s, AutoBitmap("OMMDJointRoot.png"_s), 0);
+	return RegisterObjectPlugin(ID_O_MMD_JOINT_ROOT, GeLoadString(IDS_O_MMD_JOINT_ROOT), PLUGINFLAG_HIDEPLUGINMENU , MMDJointRootObject::Alloc, "OMMDJointRoot"_s, AutoBitmap("OMMDJointRoot.png"_s), 0);
 }
 
 Bool RegisterMMDBoneTag()
 {
-	return RegisterTagPlugin(ID_T_MMD_BONE, GeLoadString(IDS_T_MMD_BONE), TAG_VISIBLE, MMDBoneTag::Alloc, "TMMDBone"_s, AutoBitmap("TMMDBone.png"_s), 0);
+	return RegisterTagPlugin(ID_T_MMD_BONE, GeLoadString(IDS_T_MMD_BONE), TAG_VISIBLE | TAG_EXPRESSION, MMDBoneTag::Alloc, "TMMDBone"_s, AutoBitmap("TMMDBone.png"_s), 0);
 }
 
 Bool cmt_register::RegisterPlugin()

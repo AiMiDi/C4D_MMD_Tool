@@ -170,11 +170,7 @@ void MMDBoneTag::SetBoneObject(BaseObject* bone_object)
 
 NodeData* MMDBoneTag::Alloc()
 {
-	iferr_scope_handler
-	{
-		return nullptr;
-	};
-	return NewObj(MMDBoneTag) iferr_return;
+	return NewObj(MMDBoneTag).GetValue();
 }
 
 Bool MMDBoneTag::Init(GeListNode* node SDK2024_InitParaName)
@@ -843,7 +839,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 				const auto doc = node->GetDocument();
 				if (!doc)
 					break;
-				inherit_bone_parent_link->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
+				inherit_bone_parent_link->CopyTo(inherit_bone_parent.GetPointer(), COPYFLAGS::NONE, nullptr);
 				if (const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneTagIndex(inherit_bone_parent->GetLink(doc));
 					inherit_bone_parent_index != -1)
 				{

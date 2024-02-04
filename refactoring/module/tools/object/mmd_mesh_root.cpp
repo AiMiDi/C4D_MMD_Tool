@@ -507,12 +507,20 @@ Bool MMDMeshRootObject::LoadPMX(
 			// create morph tag
 			CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
 			if (!morph_tag)
-			{
 				return false;
-			}
+
 			mesh_object->InsertTag(morph_tag);
 			morph_tag->InitMorphs();
 			morph_tag->ExitEdit(setting.doc, true);
+
+			CAMorph* base_morph = morph_tag->AddMorph();
+			if (!base_morph)
+				return false;
+
+			base_morph->Store(setting.doc, morph_tag, CAMORPH_DATA_FLAGS::ASTAG);
+			morph_tag->UpdateMorphs();
+			morph_tag->Message(MSG_UPDATE);
+
 			bool is_point_morph_tag_init = false;
 			bool is_uv_morph_tag_init = false;
 			const auto& pmx_morph_array = pmx_model.get_pmx_morph_array();
@@ -533,13 +541,13 @@ Bool MMDMeshRootObject::LoadPMX(
 					if (!is_point_morph_tag_init)
 					{
 						morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_POINTS)), true, DESCFLAGS_SET::NONE);
+
 						is_point_morph_tag_init = true;
 					}
 					CAMorph* morph = morph_tag->AddMorph();
 					if (!morph)
-					{
 						return false;
-					}
+
 					// set morph name
 					morph->SetName(maxon::String{ pmx_morph.get_morph_name_local().c_str() });
 
@@ -569,7 +577,6 @@ Bool MMDMeshRootObject::LoadPMX(
 					morph_tag->UpdateMorphs();
 					morph_tag->Message(MSG_UPDATE);
 					morph->SetStrength(0);
-					morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_MODE)), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
 					break;
 				}
 				case libmmd::pmx_morph::morph_type::UV0: [[fallthrough]];
@@ -592,9 +599,8 @@ Bool MMDMeshRootObject::LoadPMX(
 
 					CAMorph* morph = morph_tag->AddMorph();
 					if (!morph)
-					{
 						return false;
-					}
+
 					// set morph name
 					morph->SetName(maxon::String{ pmx_morph.get_morph_name_local().c_str() });
 
@@ -657,7 +663,6 @@ Bool MMDMeshRootObject::LoadPMX(
 					morph_tag->UpdateMorphs();
 					morph_tag->Message(MSG_UPDATE);
 					morph->SetStrength(0);
-					morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_MODE)), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
 					break;
 				}
 				case libmmd::pmx_morph::morph_type::GROUP: [[fallthrough]];
@@ -668,6 +673,7 @@ Bool MMDMeshRootObject::LoadPMX(
 					break;
 				}
 			}
+			morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_MODE)), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
 		}
 	}
 	else
