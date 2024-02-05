@@ -76,6 +76,13 @@ namespace CMTToolsSetting
 	};
 	struct ModelImport : BaseSetting
 	{
+		enum class material_type : uint8_t
+		{
+			Standard,
+			RedShift,
+			Octane,
+		};
+
 		Float	position_multiple{};
 		Bool	import_polygon{};
 		Bool	import_normal{};
@@ -89,6 +96,7 @@ namespace CMTToolsSetting
 		Bool	import_multipart{};
 		Bool	import_english{};
 		Bool	import_english_check{};
+		material_type import_material_type = material_type::Standard;
 
 		explicit ModelImport(BaseDocument* document) : BaseSetting(document) {}
 	};

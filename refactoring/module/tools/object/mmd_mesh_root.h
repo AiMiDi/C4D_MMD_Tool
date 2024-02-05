@@ -61,6 +61,7 @@ public:
 		const CMTToolsSetting::ModelImport& setting);
 private:
 	void RefreshMeshMorphData(BaseObject* op);
+
 };
 
 #endif // !MMD_MESH_ROOT_H__

@@ -682,6 +682,43 @@ Bool MMDMeshRootObject::LoadPMX(
 			}
 			morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_MODE)), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
 		}
+
+		auto surface_begin_index = decltype(surface_count){};
+		for (auto material_index = decltype(material_count){}; material_index < material_count; ++material_index)
+		{
+			const auto& pmx_material = pmx_material_array[material_index];
+			const uint64_t surface_num = pmx_material.get_surface_count();
+
+			if (surface_num == 0)
+				continue;
+
+			maxon::String material_name(pmx_material.get_material_name_local().c_str());
+
+			const auto polygon_selection_tag = SelectionTag::Alloc(Tpolygonselection);
+			if(!polygon_selection_tag)
+				return false;
+			polygon_selection_tag->GetWritableBaseSelect()->SelectAll(static_cast<Int32>(surface_begin_index), static_cast<Int32>(surface_begin_index + surface_num - 1));
+			polygon_selection_tag->SetName(material_name);
+			mesh_object->InsertTag(polygon_selection_tag);
+
+			if(setting.import_material)
+			{
+				const auto material = LoadPMXMaterial(pmx_material, pmx_model.get_pmx_texture_array(), material_index, setting);
+				if (!material)
+					return false;
+
+				const auto texture_tag = TextureTag::Alloc();
+				if (!texture_tag)
+					return false;
+				texture_tag->SetName(material_name);
+				texture_tag->SetMaterial(material);
+				texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_PROJECTION)), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
+				texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), material_name, DESCFLAGS_SET::NONE);
+				mesh_object->InsertTag(texture_tag, polygon_selection_tag);
+			}
+
+			surface_begin_index += surface_num;
+		}
 	}
 	else
 	{
