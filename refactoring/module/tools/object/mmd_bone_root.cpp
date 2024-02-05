@@ -749,5 +749,10 @@ Bool MMDBoneRootObject::LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_b
 	return true;
 }
 
+const BaseContainer& MMDBoneRootObject::GetBoneItems() const
+{
+	return m_bone_items; 
+}
+
 void MMDBoneRootObject::CreateDisplayTag(GeListNode* node)
 {}

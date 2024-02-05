@@ -10,8 +10,11 @@ Description:	MMD rigid root object
 
 #ifndef MMD_RIGID_ROOT_H__
 #define MMD_RIGID_ROOT_H__
+
 #include "description/OMMDRigidRoot.h"
 #include "mmd_root.hpp"
+
+class MMDRigidObject;
 
 enum class MMDRigidRootObjectMsgType : uint8_t
 {
@@ -50,6 +53,11 @@ public:
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	static NodeData* Alloc();
+
+	BaseList2D* FindRigid(const Int32 index) const;
+	Int32 FindRigidIndex(const BaseList2D* rigid_object) const;
+
+	const BaseContainer& GetRigidItems() const;
 };
 
 #endif // !MMD_RIGID_ROOT_H__

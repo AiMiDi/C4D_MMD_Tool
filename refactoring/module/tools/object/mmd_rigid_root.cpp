@@ -13,6 +13,7 @@ Description:	MMD rigid root object
 
 #include "mmd_model.h"
 #include "description/OMMDRigid.h"
+#include "module/tools/object/mmd_rigid.h"
 
 Bool MMDRigidRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
@@ -242,4 +243,36 @@ Bool MMDRigidRootObject::SetDParameter(GeListNode* node, const DescID& id, const
 NodeData* MMDRigidRootObject::Alloc()
 {
 	return NewObjClear(MMDRigidRootObject);
+}
+
+BaseList2D* MMDRigidRootObject::FindRigid(const Int32 index) const
+{
+	// find index in m_rigid_list
+	if (const auto bone_link_ptr = m_rigid_list.Find(index); bone_link_ptr)
+	{
+		return (*bone_link_ptr->GetValue())->ForceGetLink();
+	}
+	return nullptr;
+}
+
+Int32 MMDRigidRootObject::FindRigidIndex(const BaseList2D* rigid_object) const
+{
+	// get index from rigid
+	const auto rigid_object_node = rigid_object->GetNodeData<MMDRigidObject>();
+	if (!rigid_object_node)
+	{
+		return -1;
+	}
+	const Int32 rigid_index = rigid_object_node->GetRigidIndex();
+	// find index in m_rigid_list
+	if (!m_rigid_list.Contains(rigid_index))
+	{
+		return -1;
+	}
+	return rigid_index;
+}
+
+const BaseContainer& MMDRigidRootObject::GetRigidItems() const
+{
+	return rigid_items;
 }
