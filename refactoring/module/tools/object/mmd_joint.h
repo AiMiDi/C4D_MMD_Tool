@@ -31,7 +31,7 @@ public:
 
 	// 设置参数时调用，用于调用SplineData的回调函数
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
-	Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
+	Bool GetDDescription(BaseList2D* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
 	Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc);
 
 	// 接收Message时调用，用于处理事件 

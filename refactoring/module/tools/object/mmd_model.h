@@ -253,7 +253,7 @@ public:
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
-	Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
+	Bool GetDDescription(BaseList2D* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;

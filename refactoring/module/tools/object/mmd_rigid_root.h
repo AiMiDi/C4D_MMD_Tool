@@ -58,6 +58,7 @@ public:
 	Int32 FindRigidIndex(const BaseList2D* rigid_object) const;
 
 	const BaseContainer& GetRigidItems() const;
+	BaseObject* GetBoneRoot() const;
 };
 
 #endif // !MMD_RIGID_ROOT_H__

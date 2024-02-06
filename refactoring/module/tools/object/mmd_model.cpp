@@ -1214,7 +1214,7 @@ Bool MMDModelRootObject::AddToExecution(BaseObject* op, PriorityList* list)
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION - 1, EXECUTIONFLAGS::NONE);
 	return true;
 }
-Bool MMDModelRootObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const
+Bool MMDModelRootObject::GetDDescription(BaseList2D* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const
 {
 	if (!description->LoadDescription("MMDModelObject"_s))
 		return false;

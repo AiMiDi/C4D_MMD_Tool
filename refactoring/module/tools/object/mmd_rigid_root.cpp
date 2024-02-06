@@ -276,3 +276,8 @@ const BaseContainer& MMDRigidRootObject::GetRigidItems() const
 {
 	return rigid_items;
 }
+
+BaseObject* MMDRigidRootObject::GetBoneRoot() const
+{
+	return m_bone_root;
+}

@@ -28,6 +28,7 @@
 #include "tcaik.h"
 #include "ocajoint.h"
 #include "customgui_priority.h"
+#include "customgui_iconchooser.h"
 
 // The third party
 #include "yaml-cpp/yaml.h"
