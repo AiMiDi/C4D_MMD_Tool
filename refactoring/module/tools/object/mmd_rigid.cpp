@@ -10,11 +10,11 @@ Description:	C4D MMD rigid object
 
 #include "pch.h"
 #include "mmd_rigid.h"
-
 #include "mmd_bone_root.h"
 #include "mmd_rigid_root.h"
 
-constexpr Vector PMX_Rigid_Color[16] = {
+constexpr Vector PMX_Rigid_Color[16] =
+{
 		Vector(255, 212, 127) / 255,
 		Vector(212, 255, 127) / 255,
 		Vector(127, 255, 127) / 255,
@@ -32,7 +32,8 @@ constexpr Vector PMX_Rigid_Color[16] = {
 		Vector(255, 0,	  84) / 255,
 		Vector(127, 127, 0) / 255
 };
-constexpr Vector PMX_Rigid_Wire_Color[3] = {
+constexpr Vector PMX_Rigid_Wire_Color[3] =
+{
 	Vector(200, 255, 150) / 255,
 	Vector(255, 200, 150) / 255,
 	Vector(255, 255, 150) / 255,
@@ -41,10 +42,17 @@ constexpr Vector PMX_Rigid_Wire_Color[3] = {
 Bool MMDRigidObject::Init(GeListNode* node, Bool isCloneInit)
 {
 	if (node == nullptr)
+	{
 		return false;
+	}
+
 	BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
+
 	if (bc == nullptr)
+	{
 		return false;
+	}
+
 	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	bc->SetInt32(RIGID_RELATED_BONE_INDEX, -1);
 	bc->SetFloat(RIGID_SHAPE_SIZE_X, 17.);
@@ -54,21 +62,28 @@ Bool MMDRigidObject::Init(GeListNode* node, Bool isCloneInit)
 	bc->SetFloat(RIGID_FRICTION_FORCE, 0.5);
 	bc->SetFloat(RIGID_MOVE_ATTENUATION, 0.5);
 	bc->SetFloat(RIGID_ROTATION_DAMPING, 0.5);
+
 #if API_VERSION >= 21000
 	bc->SetInt32(ID_BASELIST_ICON_COLORIZE_MODE, ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM);
 #endif
 	return true;
 }
 
-Bool MMDRigidObject::GetDDescription(BaseList2D* node, Description* description,
-                                                DESCFLAGS_DESC& flags) const
+Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) const
 {
 	if (!(node && description))
+	{
 		return false;
+	}
+
 	if (!description->LoadDescription(node->GetType()))
+	{
 		return false;
-	BaseContainer* settings = nullptr;
-	BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
+	}
+
+	BaseContainer* settings;
+	SDK2024_Const BaseContainer* bc = static_cast<SDK2024_Const BaseList2D*>(node)->GetDataInstance();
+
 	if (bc != nullptr)
 	{
 		switch (bc->GetInt32(RIGID_SHAPE_TYPE))
@@ -1510,11 +1525,6 @@ NodeData* MMDRigidObject::Alloc()
 BaseObject* MMDRigidObject::GetRootObject() const
 {
 	return m_rigid_root;
-}
-
-Int32 MMDRigidObject::GetRigidIndex() const
-{
-	return m_rigid_index;
 }
 
 

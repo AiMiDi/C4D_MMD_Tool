@@ -31,11 +31,12 @@ public:
 
 	// 设置参数时调用，用于调用SplineData的回调函数
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
-	Bool GetDDescription(BaseList2D* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
+	Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
 	Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
 
 	// 接收Message时调用，用于处理事件 
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
+	void GetDrawBox(const BaseObject* op, BaseDraw* bd, const BaseContainer* bc);
 	DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
 
 	// 实时调用
