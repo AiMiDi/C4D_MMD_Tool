@@ -13,8 +13,6 @@ Description:	C4D MMD rigid object
 #include "description/OMMDRigid.h"
 #include "description/OMMDRigidRoot.h"
 
-class MMDRigidObject final : public ObjectData
-{
 	struct OMMDRigid_MSG
 	{
 		Int32		pred_index = 0;
@@ -27,29 +25,29 @@ class MMDRigidObject final : public ObjectData
 			rigid = rigid_;
 		}
 	};
-	class OMMDRigid : public ObjectData
+	class MMDRigidObject final : public ObjectData
 	{
 	private:
-		Vector		no_anim_pos = Vector();
-		Vector		no_anim_rot = Vector();
-		Vector		relative_bone_position = Vector();
-		Vector		relative_bone_rotation = Vector();
 		Int32		m_display_type = RIGID_DISPLAY_TYPE_OFF;
 		Int32		m_rigid_mode = RIGID_MODE_ANIM;
 		Int32		physics_mode = TRACK_BONES;
 		BaseObject* pdraw_obj = nullptr;
 		BaseObject* draw_obj = nullptr;
-		BaseObject* RigidRoot = nullptr;
+		BaseObject* m_rigid_root = nullptr;
 		BaseObject* related_bone = nullptr;
 		BaseTag* protection_tag = nullptr;
-		OMMDRigid() {}
-		~OMMDRigid() {}
-		MAXON_DISALLOW_COPY_AND_ASSIGN(OMMDRigid);
+		Vector		no_anim_pos = Vector();
+		Vector		no_anim_rot = Vector();
+		Vector		relative_bone_position = Vector();
+		Vector		relative_bone_rotation = Vector();
+		MMDRigidObject() = default;
+		~MMDRigidObject() override = default;
+		MAXON_DISALLOW_COPY_AND_ASSIGN(MMDRigidObject);
 		INSTANCEOF(OMMDRigid, ObjectData)
 	public:
 		// 对象初始化 
 		Bool Init(GeListNode* node SDK2024_InitParaName) override;
-		Bool GetDDescription(BaseList2D* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
+		Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
 
 		// 设置参数时调用 
 		Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
@@ -72,17 +70,9 @@ class MMDRigidObject final : public ObjectData
 
 		// 删除函数
 		void Free(GeListNode* node) override;
+		static NodeData* Alloc();
 
-		// 生成函数
-		static NodeData* Alloc()
-		{
-			return(NewObjClear(OMMDRigid));
-		}
-		BaseObject* GetRootObject()
-		{
-			return this->RigidRoot;
-		}
+		BaseObject* GetRootObject() const;
 	};
-};
 
 #endif

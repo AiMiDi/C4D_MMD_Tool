@@ -38,7 +38,7 @@ constexpr Vector PMX_Rigid_Wire_Color[3] = {
 	Vector(255, 255, 150) / 255,
 };
 
-Bool MMDRigidObject::OMMDRigid::Init(GeListNode* node, Bool isCloneInit)
+Bool MMDRigidObject::Init(GeListNode* node, Bool isCloneInit)
 {
 	if (node == nullptr)
 		return false;
@@ -60,7 +60,7 @@ Bool MMDRigidObject::OMMDRigid::Init(GeListNode* node, Bool isCloneInit)
 	return true;
 }
 
-Bool MMDRigidObject::OMMDRigid::GetDDescription(BaseList2D* node, Description* description,
+Bool MMDRigidObject::GetDDescription(BaseList2D* node, Description* description,
                                                 DESCFLAGS_DESC& flags) const
 {
 	if (!(node && description))
@@ -112,13 +112,13 @@ Bool MMDRigidObject::OMMDRigid::GetDDescription(BaseList2D* node, Description* d
 	}
 	settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)), nullptr);
 	if (settings != nullptr) {
-		settings->SetContainer(DESC_CYCLE, RigidRoot->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->GetBoneItems());
+		settings->SetContainer(DESC_CYCLE, m_rigid_root->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->GetBoneItems());
 	}
 	flags |= DESCFLAGS_DESC::LOADED;
 	return SUPER::GetDDescription(node, description, flags);
 }
 
-Bool MMDRigidObject::OMMDRigid::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data,
+Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data,
 	DESCFLAGS_SET& flags)
 {
 	BaseContainer* bc = static_cast<BaseList2D*>(node)->GetDataInstance();
@@ -364,8 +364,8 @@ Bool MMDRigidObject::OMMDRigid::SetDParameter(GeListNode* node, const DescID& id
 	}
 	case RIGID_RELATED_BONE_INDEX:
 	{
-		related_bone = static_cast<BaseObject*>(RigidRoot->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->
-		                                                   FindBone(t_data.GetInt32()));
+		related_bone = m_rigid_root->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->
+		                                                   FindBone(t_data.GetInt32())->GetObject();
 		break;
 	}
 	case RIGID_PHYSICS_MODE:
@@ -379,7 +379,7 @@ Bool MMDRigidObject::OMMDRigid::SetDParameter(GeListNode* node, const DescID& id
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 
-Bool MMDRigidObject::OMMDRigid::GetDEnabling(const GeListNode* node, const DescID& id, const GeData& t_data,
+Bool MMDRigidObject::GetDEnabling(const GeListNode* node, const DescID& id, const GeData& t_data,
 	DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) const
 {
 	switch (id[0].id)
@@ -774,7 +774,7 @@ Bool MMDRigidObject::OMMDRigid::GetDEnabling(const GeListNode* node, const DescI
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
 }
 
-Bool MMDRigidObject::OMMDRigid::Message(GeListNode* node, Int32 type, void* data)
+Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	switch (type)
 	{
@@ -1059,8 +1059,8 @@ Bool MMDRigidObject::OMMDRigid::Message(GeListNode* node, Int32 type, void* data
 		}
 		case RIGID_RELATED_BONE_INDEX:
 		{
-			related_bone = static_cast<BaseObject*>(RigidRoot->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->
-											   FindBone(bc->GetInt32(RIGID_RELATED_BONE_INDEX)));
+			related_bone = m_rigid_root->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->
+			                             FindBone(bc->GetInt32(RIGID_RELATED_BONE_INDEX))->GetObject();
 			break;
 		}
 		case RIGID_PHYSICS_MODE:
@@ -1187,7 +1187,7 @@ Bool MMDRigidObject::OMMDRigid::Message(GeListNode* node, Int32 type, void* data
 	return SUPER::Message(node, type, data);
 }
 
-DRAWRESULT MMDRigidObject::OMMDRigid::Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh)
+DRAWRESULT MMDRigidObject::Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh)
 {
 	if (drawpass == DRAWPASS::OBJECT)
 	{
@@ -1339,7 +1339,7 @@ DRAWRESULT MMDRigidObject::OMMDRigid::Draw(BaseObject* op, DRAWPASS drawpass, Ba
 	return SUPER::Draw(op, drawpass, bd, bh);
 }
 
-EXECUTIONRESULT MMDRigidObject::OMMDRigid::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
+EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
 	EXECUTIONFLAGS flags)
 {
 	if (op == nullptr || doc == nullptr)
@@ -1353,7 +1353,7 @@ EXECUTIONRESULT MMDRigidObject::OMMDRigid::Execute(BaseObject* op, BaseDocument*
 	}
 	BaseObject* PredObject = op->GetPred();
 	BaseObject* UpObject = op->GetUp();
-	BaseObject* rigid_root_object = RigidRoot;
+	BaseObject* rigid_root_object = m_rigid_root;
 	if (UpObject == nullptr && rigid_root_object != nullptr)
 	{
 		op->Remove();
@@ -1378,12 +1378,12 @@ EXECUTIONRESULT MMDRigidObject::OMMDRigid::Execute(BaseObject* op, BaseDocument*
 		}
 		if (rigid_root_object == nullptr)
 		{
-			RigidRoot = UpObject;
+			m_rigid_root = UpObject;
 		}
 	}
 	Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
-	if (now_index != pred_index && RigidRoot != nullptr)
-		RigidRoot->Message(ID_O_MMD_RIGID, NewObj(OMMDRigid_MSG, pred_index, now_index, op).GetValue());
+	if (now_index != pred_index && m_rigid_root != nullptr)
+		m_rigid_root->Message(ID_O_MMD_RIGID, NewObj(OMMDRigid_MSG, pred_index, now_index, op).GetValue());
 	if (protection_tag == nullptr) {
 		protection_tag = op->MakeTag(Tprotection);
 		protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
@@ -1421,7 +1421,7 @@ EXECUTIONRESULT MMDRigidObject::OMMDRigid::Execute(BaseObject* op, BaseDocument*
 	return EXECUTIONRESULT::OK;
 }
 
-Bool MMDRigidObject::OMMDRigid::AddToExecution(BaseObject* op, PriorityList* list)
+Bool MMDRigidObject::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (list == nullptr || op == nullptr)
 	{
@@ -1431,7 +1431,7 @@ Bool MMDRigidObject::OMMDRigid::AddToExecution(BaseObject* op, PriorityList* lis
 	return true;
 }
 
-Bool MMDRigidObject::OMMDRigid::Read(GeListNode* node, HyperFile* hf, Int32 level)
+Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	hf->ReadInt32(&m_display_type);
 	hf->ReadInt32(&m_rigid_mode);
@@ -1445,7 +1445,7 @@ Bool MMDRigidObject::OMMDRigid::Read(GeListNode* node, HyperFile* hf, Int32 leve
 		return false;
 	if (!rigid_root_link->Read(hf))
 		return false;
-	RigidRoot = static_cast<BaseObject*>(rigid_root_link->GetLink(GetActiveDocument()));
+	m_rigid_root = static_cast<BaseObject*>(rigid_root_link->GetLink(GetActiveDocument()));
 	AutoAlloc<BaseLink> related_bone_link;
 	if (related_bone_link == nullptr)
 		return false;
@@ -1455,7 +1455,7 @@ Bool MMDRigidObject::OMMDRigid::Read(GeListNode* node, HyperFile* hf, Int32 leve
 	return true;
 }
 
-Bool MMDRigidObject::OMMDRigid::Write(const GeListNode* node, HyperFile* hf) const
+Bool MMDRigidObject::Write(const GeListNode* node, HyperFile* hf) const
 {
 	hf->WriteInt32(m_display_type);
 	hf->WriteInt32(m_rigid_mode);
@@ -1467,7 +1467,7 @@ Bool MMDRigidObject::OMMDRigid::Write(const GeListNode* node, HyperFile* hf) con
 	AutoAlloc<BaseLink> rigid_root_link;
 	if (rigid_root_link == nullptr)
 		return false;
-	rigid_root_link->SetLink(RigidRoot);
+	rigid_root_link->SetLink(m_rigid_root);
 	if (!rigid_root_link->Write(hf))
 		return false;
 	AutoAlloc<BaseLink> related_bone_link;
@@ -1479,13 +1479,13 @@ Bool MMDRigidObject::OMMDRigid::Write(const GeListNode* node, HyperFile* hf) con
 	return true;
 }
 
-Bool MMDRigidObject::OMMDRigid::CopyTo(NodeData* dest, const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
+Bool MMDRigidObject::CopyTo(NodeData* dest, const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
 	AliasTrans* trn) const
 {
-	OMMDRigid* const destObject = static_cast<OMMDRigid*>(dest);
+	auto* const destObject = static_cast<MMDRigidObject*>(dest);
 	if (destObject == nullptr)
 		return false;
-	destObject->RigidRoot = RigidRoot;
+	destObject->m_rigid_root = m_rigid_root;
 	destObject->related_bone = related_bone;
 	destObject->m_rigid_mode = m_rigid_mode;
 	destObject->m_display_type = m_display_type;
@@ -1496,10 +1496,25 @@ Bool MMDRigidObject::OMMDRigid::CopyTo(NodeData* dest, const GeListNode* snode, 
 	return true;
 }
 
-void MMDRigidObject::OMMDRigid::Free(GeListNode* node)
+void MMDRigidObject::Free(GeListNode* node)
 {
 	BaseObject::Free(pdraw_obj);
 	BaseObject::Free(draw_obj);
+}
+
+NodeData* MMDRigidObject::Alloc()
+{
+	return NewObjClear(MMDRigidObject);
+}
+
+BaseObject* MMDRigidObject::GetRootObject() const
+{
+	return m_rigid_root;
+}
+
+Int32 MMDRigidObject::GetRigidIndex() const
+{
+	return m_rigid_index;
 }
 
 

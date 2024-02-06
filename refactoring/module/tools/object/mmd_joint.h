@@ -12,9 +12,9 @@ Description:	C4D MMD joint object
 #define MMD_JOINT_H__
 #include "description/OMMDJointRoot.h"
 
-class MMDJointObject : public ObjectData
+class MMDJointObject final : public ObjectData
 {
-	Int32	DisplayType = JOINT_DISPLAY_TYPE_OFF;
+	Int32	m_display_type = JOINT_DISPLAY_TYPE_OFF;
 	Int32	mode = JOINT_MODE_ANIM;
 	BaseObject* JointRoot = nullptr;
 	BaseObject* link_rigid_a = nullptr;
@@ -32,7 +32,7 @@ public:
 	// 设置参数时调用，用于调用SplineData的回调函数
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool GetDDescription(BaseList2D* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
-	Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc);
+	Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
 
 	// 接收Message时调用，用于处理事件 
 	Bool Message(GeListNode* node, Int32 type, void* data) override;

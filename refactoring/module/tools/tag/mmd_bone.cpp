@@ -367,7 +367,7 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 					if (!doc)
 						break;
 					inherit_bone_parent_link->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
-					if (const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneIndex(inherit_bone_parent->GetLink(doc));
+					if (const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneIndex(static_cast<BaseTag*>(inherit_bone_parent->GetLink(doc)));
 						inherit_bone_parent_index != -1)
 					{
 						bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index);
@@ -844,7 +844,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 				if (!doc)
 					break;
 				inherit_bone_parent_link->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
-				if (const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneIndex(inherit_bone_parent->GetLink(doc));
+				if (const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneIndex(static_cast<BaseTag*>(inherit_bone_parent->GetLink(doc)));
 					inherit_bone_parent_index != -1)
 				{
 					bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index);
