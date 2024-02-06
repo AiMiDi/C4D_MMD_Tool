@@ -78,6 +78,7 @@
 #	define SDK2024_ToPointer 
 #	define SDK2024_Append(...) Append({__VA_ARGS__})
 #	define SDK2024_Move(x) x
+#	define GetWritableBaseSelect GetBaseSelect
 
 #else
 

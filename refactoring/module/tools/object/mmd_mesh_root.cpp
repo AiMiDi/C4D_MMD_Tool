@@ -15,6 +15,7 @@ Description:	MMD mesh root object
 #include "mmd_model.h"
 #include "tcaposemorph.h"
 #include "description/OMMDMeshRoot.h"
+#include "module/tools/mmd_material.h"
 
 NodeData* MMDMeshRootObject::Alloc()
 {
@@ -683,6 +684,17 @@ Bool MMDMeshRootObject::LoadPMX(
 			morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_MODE)), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
 		}
 
+		std::shared_ptr<MMDMaterialManager> material_manager;
+		if (setting.import_material)
+		{
+			material_manager = std::make_shared<MMDMaterialManager>();
+			if (!material_manager)
+				return false;
+			material_manager->SetTextureRelativePath(setting.fn.GetDirectory());
+			if (!material_manager->LoadPMXTexture(pmx_model.get_pmx_texture_array()))
+				return false;
+		}
+
 		auto surface_begin_index = decltype(surface_count){};
 		for (auto material_index = decltype(material_count){}; material_index < material_count; ++material_index)
 		{
@@ -703,9 +715,10 @@ Bool MMDMeshRootObject::LoadPMX(
 
 			if(setting.import_material)
 			{
-				const auto material = LoadPMXMaterial(pmx_material, pmx_model.get_pmx_texture_array(), material_index, setting);
+				const auto material = material_manager->LoadPMXMaterial(pmx_material, material_index, setting);
 				if (!material)
 					return false;
+				setting.doc->InsertMaterial(material);
 
 				const auto texture_tag = TextureTag::Alloc();
 				if (!texture_tag)

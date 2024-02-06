@@ -18,7 +18,6 @@ public:
 	Bool LoadPMXTexture(const libmmd::pmx_model::pmx_texture_array& pmx_texture_array);
 
 	BaseMaterial* LoadPMXMaterial(const libmmd::pmx_material& pmx_material,
-	                              const libmmd::pmx_model::pmx_texture_array& pmx_texture_array,
 	                              const uint64_t material_index, const CMTToolsSetting::ModelImport& setting);
 private:
 

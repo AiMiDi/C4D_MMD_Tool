@@ -111,6 +111,9 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp">
       <Filter>source\module\tools\tag</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp">
+      <Filter>source\module\tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModel.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.h">
       <Filter>source\module\tools\tag</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_material.h">
+      <Filter>source\module\tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

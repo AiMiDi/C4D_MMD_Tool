@@ -667,7 +667,7 @@ Bool MMDBoneRootObject::LoadPMX(const ::libmmd::pmx_model& pmx_model, maxon::Has
 			{
 				AutoAlloc<BaseLink> link;
 				link->SetLink(inherit_parent_bone_ptr->GetValue());
-				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link.GetPointer(), DESCFLAGS_SET::NONE);
+				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link.Release(), DESCFLAGS_SET::NONE);
 			}
 
 			// set inherit rate
@@ -735,7 +735,7 @@ Bool MMDBoneRootObject::LoadPMX(const ::libmmd::pmx_model& pmx_model, maxon::Has
 				// set target link
 				AutoAlloc<BaseLink> target_link;
 				target_link->SetLink(bone_object);
-				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TARGET)), target_link.GetPointer(), DESCFLAGS_SET::NONE);
+				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TARGET)), target_link.Release(), DESCFLAGS_SET::NONE);
 
 				// set tip link
 				AutoAlloc<BaseLink> tip_link;
@@ -743,7 +743,7 @@ Bool MMDBoneRootObject::LoadPMX(const ::libmmd::pmx_model& pmx_model, maxon::Has
 				{
 					tip_link->SetLink(ik_target_bone_ptr->GetValue());
 				}
-				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TIP)), tip_link.GetPointer(), DESCFLAGS_SET::NONE);
+				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TIP)), tip_link.Release(), DESCFLAGS_SET::NONE);
 
 				// add to model_root description
 				if (auto* dynamic_description = m_model_root->GetDynamicDescriptionWritable())
@@ -754,7 +754,7 @@ Bool MMDBoneRootObject::LoadPMX(const ::libmmd::pmx_model& pmx_model, maxon::Has
 					auto ik_link_id = dynamic_description->Alloc(bc);
 					AutoAlloc<BaseLink> ik_link;
 					ik_link->SetLink(ik_tag);
-					m_model_root->SetParameter(ik_link_id, ik_link.GetPointer(), DESCFLAGS_SET::NONE);
+					m_model_root->SetParameter(ik_link_id, ik_link.Release(), DESCFLAGS_SET::NONE);
 				}
 
 				// set ik limit

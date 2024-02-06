@@ -165,6 +165,7 @@
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_interpolator.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_material.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.h" />
@@ -293,10 +295,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\TMMDBone.res">
+    <Text Include="..\..\..\..\res\S24_up\description\TMMDBone.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
+    </Text>
     <Resource Include="..\..\..\..\res\S24_up\dialogs\DLG_CMT_TOOL.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
