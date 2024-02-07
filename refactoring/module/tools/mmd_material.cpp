@@ -7,7 +7,6 @@
 
 void MMDMaterialManager::SetTextureRelativePath(const Filename& texture_relative_path)
 {
-	// GePrint(texture_relative_path.GetString());
 	m_texture_relative_path = texture_relative_path;
 }
 
@@ -22,14 +21,13 @@ Bool MMDMaterialManager::LoadPMXTexture(const libmmd::pmx_model::pmx_texture_arr
 	for (auto texture_index = decltype(texture_count){}; texture_index < texture_count; ++texture_index)
 	{
 		const auto& texture = pmx_texture_array[texture_index];
-		Filename texture_path(maxon::String(texture.get_texture_path().c_str()));
-		// GePrint(texture_path.GetString());
+		String texture_path_str(texture.get_texture_path().c_str());
+		Filename texture_path(texture_path_str);
 		if(texture_path.IsPopulated() && !GeFExist(texture_path))
 		{
-			// TODO: relative path to abs path
-			// GenerateTexturePath(m_texture_relative_path, texture_path, m_texture_relative_path, &texture_path);
+			// relative path to abs path
+			texture_path = m_texture_relative_path.GetString() + texture_path_str;
 		}
-		// GePrint(texture_path.GetString());
 		iferr(m_texture_path_array.SDK2024_Append(std::move(texture_path)))
 			return false;
 	}
@@ -47,7 +45,6 @@ BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::pmx_material& pm
 	if (texture_index != -1 && texture_index < m_texture_path_array.GetCount())
 	{
 		const auto& texture_path = m_texture_path_array[texture_index];
-		// GePrint(texture_path.GetString());
 		if (GeFExist(texture_path))
 			has_texture = true;
 
