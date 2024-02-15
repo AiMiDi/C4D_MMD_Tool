@@ -11,6 +11,7 @@ Description:	MMD mesh root object
 #ifndef MMD_MESH_ROOT_H__
 #define MMD_MESH_ROOT_H__
 
+#include "CMTSceneManager.h"
 #include "mmd_root.hpp"
 #include "utils/morph_ui_data_util.hpp"
 
@@ -62,6 +63,7 @@ public:
 private:
 	void RefreshMeshMorphData(BaseObject* op);
 
+	static void LoadPMXVertexWeight(const libmmd::pmx_vertex& pmx_vertex, maxon::HashMap<Int32, Int32>& weight_tag_joint_map, uint64_t vertex_index, CAWeightTag* weight_tag);
 };
 
 #endif // !MMD_MESH_ROOT_H__
