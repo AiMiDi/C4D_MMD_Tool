@@ -46,21 +46,23 @@ BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::pmx_material& pm
 	{
 		const auto& texture_path = m_texture_path_array[texture_index];
 		if (GeFExist(texture_path))
+		{
 			has_texture = true;
 
-		AutoAlloc<BaseBitmap> bitmap;
-		if(!bitmap)
-			return base_material;
+			AutoAlloc<BaseBitmap> bitmap;
+			if(!bitmap)
+				return base_material;
 
-		if(bitmap->Init(texture_path) != IMAGERESULT::OK)
-			return base_material;
+			if(bitmap->Init(texture_path) != IMAGERESULT::OK)
+				return base_material;
 
-		// has alpha channel
-		if (bitmap->GetChannelCount() &&
-			(texture_path.GetSuffix().ToLower().Compare("png"_s) != maxon::COMPARERESULT::EQUAL||
-			 texture_path.GetSuffix().ToLower().Compare("tga"_s) != maxon::COMPARERESULT::EQUAL))
-		{
-			has_alpha_channel = true;
+			// has alpha channel
+			if (bitmap->GetChannelCount() &&
+				(texture_path.GetSuffix().ToLower().Compare("png"_s) != maxon::COMPARERESULT::EQUAL||
+				 texture_path.GetSuffix().ToLower().Compare("tga"_s) != maxon::COMPARERESULT::EQUAL))
+			{
+				has_alpha_channel = true;
+			}
 		}
 	}
 
@@ -117,7 +119,7 @@ BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::pmx_material& pm
 	}
 	case CMTToolsSetting::ModelImport::material_type::RedShift:
 		{
-			NodeMaterial* material = static_cast<NodeMaterial*>(BaseMaterial::Alloc(Mmaterial));
+			NodeMaterial* material = reinterpret_cast<NodeMaterial*>(BaseMaterial::Alloc(Mmaterial));
 			break;
 		}
 	case CMTToolsSetting::ModelImport::material_type::Octane:
