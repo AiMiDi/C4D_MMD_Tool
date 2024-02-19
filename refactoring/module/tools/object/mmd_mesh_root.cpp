@@ -716,6 +716,7 @@ Bool MMDMeshRootObject::LoadPMX(
 	else
 	{
 		maxon::Synchronized<maxon::HashMap<uint64_t, vertex_info>> vertex_info_map;
+		maxon::BaseArray<morph_tag_info> morph_tag_infos;
 
 		auto surface_begin_index = decltype(surface_count){};
 		for (auto material_index = decltype(material_count){}; material_index < material_count; ++material_index)
@@ -797,7 +798,6 @@ Bool MMDMeshRootObject::LoadPMX(
 			}
 
 			// create morph tag
-			maxon::BaseArray<morph_tag_info> morph_tag_infos;
 			if (setting.import_expression)
 			{
 				/* Initialization morph tag. */
@@ -811,39 +811,54 @@ Bool MMDMeshRootObject::LoadPMX(
 				morph_tag_infos.Append(morph_tag_info{ morph_tag })iferr_return;
 			}
 
+			maxon::HashMap<uint32_t, Int32> vertex_index_map;
 			// add vertex position and weight data
 			{
-				maxon::BaseArray<uint32_t> part_vertex_array;
+				Int32 part_vertex_count = 0;
 				for(auto surface_index = surface_begin_index; surface_index < surface_begin_index + surface_num; ++surface_index)
 				{
 					const auto& pmx_surface = pmx_surface_array[surface_index];
-					part_vertex_array.Append(pmx_surface.get_a())iferr_return;
-					part_vertex_array.Append(pmx_surface.get_b())iferr_return;
-					part_vertex_array.Append(pmx_surface.get_c())iferr_return;
-				}
-				const auto part_vertex_count = part_vertex_array.GetCount();
+					const auto& pmx_surface_vertex_a = pmx_surface.get_a();
+					const auto& pmx_surface_vertex_b = pmx_surface.get_b();
+					const auto& pmx_surface_vertex_c = pmx_surface.get_c();
 
-				maxon::ParallelFor::Dynamic(0, part_vertex_count, [&pmx_vertex_array, &setting, &mesh_object_points, &weight_tag, &weight_tag_joint_map, &part_vertex_array, &vertex_info_map, &mesh_object, &morph_tag_infos](const uint64_t vertex_index)
+					if (!vertex_index_map.Contains(pmx_surface_vertex_a))
+						vertex_index_map.Insert(pmx_surface_vertex_a, part_vertex_count++)iferr_return;
+
+					if (!vertex_index_map.Contains(pmx_surface_vertex_b))
+						vertex_index_map.Insert(pmx_surface_vertex_b, part_vertex_count++)iferr_return;
+
+					if(!vertex_index_map.Contains(pmx_surface_vertex_c))
+						vertex_index_map.Insert(pmx_surface_vertex_c, part_vertex_count++)iferr_return;
+				}
+				maxon::BaseArray<uint32_t> pmx_vertex_index_array;
+				for (const auto& vertex_index : vertex_index_map.GetKeys())
+				{
+					pmx_vertex_index_array.Append(vertex_index)iferr_return;
+				}
+				mesh_object->ResizeObject(part_vertex_count, static_cast<Int32>(surface_num));
+
+				maxon::ParallelFor::Dynamic(0, part_vertex_count, [&pmx_vertex_array, &setting, &mesh_object_points, &weight_tag, &weight_tag_joint_map, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
 				{
 					iferr_scope_handler
 					{
 						return;
 					};
-
-					const auto& pmx_surface_vertex = static_cast<Int>(vertex_index);
-					const auto& pmx_vertex = pmx_vertex_array[part_vertex_array[pmx_surface_vertex]];
+					const auto& pmx_vertex_index = pmx_vertex_index_array[vertex_index];
+					const auto& pmx_vertex = pmx_vertex_array[pmx_vertex_index];
 					// add vertex position
-					auto& mesh_object_point = mesh_object_points[vertex_index];
+					const auto& c4d_vertex_index = vertex_index_map.Find(pmx_vertex_index)->GetValue();
+					auto& mesh_object_point = mesh_object_points[c4d_vertex_index];
 					const auto& pmx_vertex_position = pmx_vertex.get_position();
 					mesh_object_point.x = pmx_vertex_position[0] * setting.position_multiple;
 					mesh_object_point.y = pmx_vertex_position[1] * setting.position_multiple;
 					mesh_object_point.z = pmx_vertex_position[2] * setting.position_multiple;
 
-					vertex_info_map.Write([&pmx_surface_vertex, &vertex_index, &mesh_object, &setting, &morph_tag_infos](auto& map)->maxon::Result<void>
+					vertex_info_map.Write([&vertex_index, &c4d_vertex_index, &mesh_object, &setting, &morph_tag_infos](auto& map)->maxon::Result<void>
 					{
 						iferr_scope;
-						auto& vertex_info = map.InsertMultiEntry(pmx_surface_vertex).GetValue().GetValue();
-						vertex_info.vertex_index = vertex_index;
+						auto& vertex_info = map.InsertMultiEntry(vertex_index).GetValue().GetValue();
+						vertex_info.vertex_index = c4d_vertex_index;
 						vertex_info.mesh_object = mesh_object;
 						if (setting.import_expression)
 						{
@@ -858,7 +873,6 @@ Bool MMDMeshRootObject::LoadPMX(
 						LoadPMXVertexWeight(pmx_vertex, weight_tag_joint_map, vertex_index, weight_tag);
 					}
 				});
-				mesh_object->ResizeObject(static_cast<Int32>(part_vertex_count), static_cast<Int32>(surface_num));
 			}
 
 			// if import_normal is true, create normal tag
@@ -889,24 +903,38 @@ Bool MMDMeshRootObject::LoadPMX(
 		
 
 			// vertex index -> surface index
-			maxon::ParallelFor::Dynamic(surface_begin_index, surface_begin_index + surface_num, [&pmx_surface_array, &pmx_vertex_array, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_info_map](const uint64_t surface_index)
+			maxon::ParallelFor::Dynamic(surface_begin_index, surface_begin_index + surface_num, [&pmx_surface_array, &pmx_vertex_array, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_index_map](const uint64_t surface_index)
 			{
 					iferr_scope_handler
 					{
 						return;
 					};
 
+					const auto& pmx_surface = pmx_surface_array[surface_index];
+					const auto& pmx_surface_vertex_a = pmx_surface.get_a();
+					const auto& pmx_surface_vertex_b = pmx_surface.get_b();
+					const auto& pmx_surface_vertex_c = pmx_surface.get_c();
+
 					// add index
 					const auto object_surface_index = surface_index - surface_begin_index;
 					auto& mesh_object_polygon = mesh_object_polygons[object_surface_index];
-					mesh_object_polygon.a = static_cast<Int32>(object_surface_index);
-					mesh_object_polygon.b = static_cast<Int32>(object_surface_index + 1);
-					mesh_object_polygon.c = mesh_object_polygon.d = static_cast<Int32>(object_surface_index + 2);
 
-					const auto& pmx_surface = pmx_surface_array[surface_index];
-					const auto& pmx_vertex_a = pmx_vertex_array[pmx_surface.get_a()];
-					const auto& pmx_vertex_b = pmx_vertex_array[pmx_surface.get_b()];
-					const auto& pmx_vertex_c = pmx_vertex_array[pmx_surface.get_c()];
+					if(const auto vertex_index_a_ptr = vertex_index_map.Find(pmx_surface_vertex_a); vertex_index_a_ptr)
+					{
+						mesh_object_polygon.a = vertex_index_a_ptr->GetValue();
+					}
+					if(const auto vertex_index_b_ptr = vertex_index_map.Find(pmx_surface_vertex_b); vertex_index_b_ptr)
+					{
+						mesh_object_polygon.b = vertex_index_b_ptr->GetValue();
+					}
+					if(const auto vertex_index_c_ptr = vertex_index_map.Find(pmx_surface_vertex_c); vertex_index_c_ptr)
+					{
+						mesh_object_polygon.c = mesh_object_polygon.d = vertex_index_c_ptr->GetValue();
+					}
+
+					const auto& pmx_vertex_a = pmx_vertex_array[pmx_surface_vertex_a];
+					const auto& pmx_vertex_b = pmx_vertex_array[pmx_surface_vertex_b];
+					const auto& pmx_vertex_c = pmx_vertex_array[pmx_surface_vertex_c];
 
 					// add normal
 					if (setting.import_normal)
@@ -951,7 +979,10 @@ Bool MMDMeshRootObject::LoadPMX(
 
 			}
 
-			if (setting.import_expression)
+			surface_begin_index += surface_num;
+		}
+
+		if (setting.import_expression)
 			{
 				// initialize morph tag
 				for (const auto& [morph_tag, morph, is_point_morph_tag_init, is_uv_morph_tag_init] : morph_tag_infos)
@@ -1015,6 +1046,9 @@ Bool MMDMeshRootObject::LoadPMX(
 									morph->SetName(maxon::String{ pmx_morph.get_morph_name_local().c_str() });
 
 									morph->Store(setting.doc, morph_tag, CAMORPH_DATA_FLAGS::ASTAG);
+
+									// set morph mode
+									morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
 								}
 
 								// set morph node to end
@@ -1023,9 +1057,6 @@ Bool MMDMeshRootObject::LoadPMX(
 								{
 									morph_node = morph_node->GetNext();
 								}
-
-								// set morph mode
-								morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
 
 								morph_node->SetPoint(vertex_index,
 									Vector(pmx_bone_morph_offset_position[0], pmx_bone_morph_offset_position[1], pmx_bone_morph_offset_position[2]) * setting.position_multiple);
@@ -1059,11 +1090,13 @@ Bool MMDMeshRootObject::LoadPMX(
 							{
 								const auto& [vertex_index, offset_mesh_object, morph_tag_index] = it->GetValue();
 								auto& [morph_tag, morph, is_point_morph_tag_init, is_uv_morph_tag_init] = morph_tag_infos[morph_tag_index];
+
 								if (!is_uv_morph_tag_init)
 								{
 									morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_UV)), true, DESCFLAGS_SET::NONE);
 									is_uv_morph_tag_init = true;
 								}
+
 								if (!morph)
 								{
 									morph = morph_tag->AddMorph();
@@ -1074,7 +1107,11 @@ Bool MMDMeshRootObject::LoadPMX(
 									morph->SetName(maxon::String{ pmx_morph.get_morph_name_local().c_str() });
 
 									morph->Store(setting.doc, morph_tag, CAMORPH_DATA_FLAGS::ASTAG);
+
+									// set morph mode
+									morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
 								}
+
 								// set morph node to end
 								CAMorphNode* morph_node = morph->GetFirst();
 								while (!(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::UV) && morph_node)
@@ -1093,7 +1130,7 @@ Bool MMDMeshRootObject::LoadPMX(
 								const auto& pmx_surface_vertex_a = pmx_surface.get_a();
 								const auto& pmx_surface_vertex_b = pmx_surface.get_b();
 								const auto& pmx_surface_vertex_c = pmx_surface.get_c();
-								const UVWStruct uvw{};
+								UVWStruct uvw{};
 								CAMorphNode* morph_node = nullptr;
 								if (const auto vertex_a_ptr = morph_uv_map.Find(pmx_surface_vertex_a); vertex_a_ptr)
 								{
@@ -1138,9 +1175,6 @@ Bool MMDMeshRootObject::LoadPMX(
 					morph->SetStrength(0);
 				}
 			}
-
-			surface_begin_index += surface_num;
-		}
 	}
 	return true;
 }
