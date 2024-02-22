@@ -13,15 +13,15 @@ Description:	C4D MMD rigid object
 #include "description/OMMDRigid.h"
 #include "description/OMMDRigidRoot.h"
 
-	struct OMMDRigid_MSG
+	struct MMDRigidObjectMsg
 	{
-		Int32		pred_index = 0;
-		Int32		now_index = 0;
+		Int32		old_index = 0;
+		Int32		new_index = 0;
 		BaseObject* rigid = nullptr;
-		OMMDRigid_MSG(Int32 pred_index_ = 0, Int32 now_index_ = 0, BaseObject* rigid_ = nullptr)
+		MMDRigidObjectMsg(Int32 pred_index_ = 0, Int32 now_index_ = 0, BaseObject* rigid_ = nullptr)
 		{
-			pred_index = pred_index_;
-			now_index = now_index_;
+			old_index = pred_index_;
+			new_index = now_index_;
 			rigid = rigid_;
 		}
 	};
@@ -30,49 +30,45 @@ Description:	C4D MMD rigid object
 	private:
 		Int32		m_display_type = RIGID_DISPLAY_TYPE_OFF;
 		Int32		m_rigid_mode = RIGID_MODE_ANIM;
-		Int32		physics_mode = TRACK_BONES;
-		BaseObject* pdraw_obj = nullptr;
-		BaseObject* draw_obj = nullptr;
+		Int32		m_physics_mode = TRACK_BONES;
+		BaseTag*	m_protection_tag = nullptr;
+		AutoFree<BaseObject> m_grid_draw_object;
+		AutoFree<BaseObject> m_draw_object;
+
 		BaseObject* m_rigid_root = nullptr;
 		BaseObject* related_bone = nullptr;
-		BaseTag* protection_tag = nullptr;
-		Vector		no_anim_pos = Vector();
-		Vector		no_anim_rot = Vector();
-		Vector		relative_bone_position = Vector();
-		Vector		relative_bone_rotation = Vector();
+
+		Vector		m_original_position = Vector();
+		Vector		m_original_rotation = Vector();
+		Vector		m_relative_bone_position = Vector();
+		Vector		m_relative_bone_rotation = Vector();
 		MMDRigidObject() = default;
 		~MMDRigidObject() override = default;
-		MAXON_DISALLOW_COPY_AND_ASSIGN(MMDRigidObject);
-		INSTANCEOF(OMMDRigid, ObjectData)
-	public:
-		// 对象初始化 
+		CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRigidObject)
+		CMT_DEFAULT_MOVE_BODY(MMDRigidObject)
+		INSTANCEOF(MMDRigidObject, ObjectData)
+	public: 
 		Bool Init(GeListNode* node SDK2024_InitParaName) override;
 		Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
-
-		// 设置参数时调用 
 		Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
-
-		// 禁用与启用参数 
 		Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
-
-		// 接收Message时调用，用于处理事件 
 		Bool Message(GeListNode* node, Int32 type, void* data) override;
 		DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
-
-		// 实时调用
 		EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
-
-		// 将实时调用添加入优先级列表
 		Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 		Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 		Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 		Bool CopyTo( NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
 
-		// 删除函数
-		void Free(GeListNode* node) override;
 		static NodeData* Alloc();
-
 		BaseObject* GetRootObject() const;
+	private:
+		void SetSphericalType(const BaseContainer* bc);
+		void SetBoxType(const BaseContainer* bc);
+		void SetCapletsType(const BaseContainer* bc);
+		void SetSphericalSize(const BaseContainer* bc);
+		void SetBoxSize(const BaseContainer* bc);
+		void SetCapletsSize(const BaseContainer* bc);
 	};
 
 #endif

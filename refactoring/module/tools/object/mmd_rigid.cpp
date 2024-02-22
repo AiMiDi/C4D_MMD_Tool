@@ -168,82 +168,82 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 
 void MMDRigidObject::SetSphericalType(const BaseContainer* bc)
 {
-	BaseObject::Free(draw_obj);
-	BaseObject::Free(pdraw_obj);
+	m_draw_object.Free();
+	m_grid_draw_object.Free();
 	ModelingCommandData cd;
 	cd.doc = GetActiveDocument();
-	pdraw_obj = BaseObject::Alloc(Osphere);
-	pdraw_obj->SetParameter(ConstDescID(DescLevel(PRIM_SPHERE_RAD)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
-	cd.op = pdraw_obj;
+	m_grid_draw_object.Assign(BaseObject::Alloc(Osphere));
+	m_grid_draw_object->SetParameter(ConstDescID(DescLevel(PRIM_SPHERE_RAD)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
+	cd.op = m_grid_draw_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	draw_obj = static_cast<BaseObject*>(cd.result->GetIndex(0));
-	draw_obj->SetPhong(true, true, 0.7853982);
+	m_draw_object.Assign(static_cast<BaseObject*>(cd.result->GetIndex(0)));
+	m_draw_object->SetPhong(true, true, 0.7853982);
 }
 
 void MMDRigidObject::SetBoxType(const BaseContainer* bc)
 {
-	BaseObject::Free(draw_obj);
-	BaseObject::Free(pdraw_obj);
+	m_draw_object.Free();
+	m_grid_draw_object.Free();
 	ModelingCommandData cd;
 	cd.doc = GetActiveDocument();
-	pdraw_obj = BaseObject::Alloc(Ocube);
-	pdraw_obj->SetParameter(ConstDescID(DescLevel(PRIM_CUBE_LEN)), Vector(bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Z) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Y) * 2), DESCFLAGS_SET::NONE);
-	cd.op = pdraw_obj;
+	m_grid_draw_object.Assign(BaseObject::Alloc(Ocube));
+	m_grid_draw_object->SetParameter(ConstDescID(DescLevel(PRIM_CUBE_LEN)), Vector(bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Z) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Y) * 2), DESCFLAGS_SET::NONE);
+	cd.op = m_grid_draw_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	draw_obj = static_cast<BaseObject*>(cd.result->GetIndex(0));
-	draw_obj->SetPhong(true, true, 0.7853982);
+	m_draw_object.Assign(static_cast<BaseObject*>(cd.result->GetIndex(0)));
+	m_draw_object->SetPhong(true, true, 0.7853982);
 }
 
 void MMDRigidObject::SetCapletsType(const BaseContainer* bc)
 {
-	BaseObject::Free(draw_obj);
-	BaseObject::Free(pdraw_obj);
+	m_draw_object.Free();
+	m_grid_draw_object.Free();
 	ModelingCommandData cd;
 	cd.doc = GetActiveDocument();
-	pdraw_obj = BaseObject::Alloc(Ocapsule);
-	pdraw_obj->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_RADIUS)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
-	pdraw_obj->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_HEIGHT)), bc->GetFloat(RIGID_SHAPE_SIZE_Y) + bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, DESCFLAGS_SET::NONE);
-	cd.op = pdraw_obj;
+	m_grid_draw_object.Assign(BaseObject::Alloc(Ocapsule));
+	m_grid_draw_object->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_RADIUS)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
+	m_grid_draw_object->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_HEIGHT)), bc->GetFloat(RIGID_SHAPE_SIZE_Y) + bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, DESCFLAGS_SET::NONE);
+	cd.op = m_grid_draw_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	draw_obj = static_cast<BaseObject*>(cd.result->GetIndex(0));
-	draw_obj->SetPhong(true, true, 0.7853982);
+	m_draw_object.Assign(static_cast<BaseObject*>(cd.result->GetIndex(0)));
+	m_draw_object->SetPhong(true, true, 0.7853982);
 }
 
 void MMDRigidObject::SetSphericalSize(const BaseContainer* bc)
 {
-	BaseObject::Free(draw_obj);
+	m_draw_object.Free();
 	ModelingCommandData cd;
 	cd.doc = GetActiveDocument();
-	pdraw_obj->SetParameter(ConstDescID(DescLevel(PRIM_SPHERE_RAD)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
-	cd.op = pdraw_obj;
+	m_grid_draw_object->SetParameter(ConstDescID(DescLevel(PRIM_SPHERE_RAD)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
+	cd.op = m_grid_draw_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	draw_obj = static_cast<BaseObject*>(cd.result->GetIndex(0));
-	draw_obj->SetPhong(true, true, 0.7853982);
+	m_draw_object.Assign(static_cast<BaseObject*>(cd.result->GetIndex(0)));
+	m_draw_object->SetPhong(true, true, 0.7853982);
 }
 
 void MMDRigidObject::SetBoxSize(const BaseContainer* bc)
 {
-	BaseObject::Free(draw_obj);
+	m_draw_object.Free();
 	ModelingCommandData cd;
 	cd.doc = GetActiveDocument();
-	pdraw_obj->SetParameter(ConstDescID(DescLevel(PRIM_CUBE_LEN)), Vector(bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Z) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Y) * 2), DESCFLAGS_SET::NONE);
-	cd.op = pdraw_obj;
+	m_grid_draw_object->SetParameter(ConstDescID(DescLevel(PRIM_CUBE_LEN)), Vector(bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Z) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Y) * 2), DESCFLAGS_SET::NONE);
+	cd.op = m_grid_draw_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	draw_obj = static_cast<BaseObject*>(cd.result->GetIndex(0));
-	draw_obj->SetPhong(true, true, 0.7853982);
+	m_draw_object.Assign(static_cast<BaseObject*>(cd.result->GetIndex(0)));
+	m_draw_object->SetPhong(true, true, 0.7853982);
 }
 
 void MMDRigidObject::SetCapletsSize(const BaseContainer* bc)
 {
-	BaseObject::Free(draw_obj);
+	m_draw_object.Free();
 	ModelingCommandData cd;
 	cd.doc = GetActiveDocument();
-	pdraw_obj->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_RADIUS)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
-	pdraw_obj->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_HEIGHT)), bc->GetFloat(RIGID_SHAPE_SIZE_Y) + bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, DESCFLAGS_SET::NONE);
-	cd.op = pdraw_obj;
+	m_grid_draw_object->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_RADIUS)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
+	m_grid_draw_object->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_HEIGHT)), bc->GetFloat(RIGID_SHAPE_SIZE_Y) + bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, DESCFLAGS_SET::NONE);
+	cd.op = m_grid_draw_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	draw_obj = static_cast<BaseObject*>(cd.result->GetIndex(0));
-	draw_obj->SetPhong(true, true, 0.7853982);
+	m_draw_object.Assign(static_cast<BaseObject*>(cd.result->GetIndex(0)));
+	m_draw_object->SetPhong(true, true, 0.7853982);
 }
 
 Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
@@ -259,7 +259,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 			{
 			case SPHERICAL:
 			{
-				if (pdraw_obj != nullptr)
+				if (m_grid_draw_object != nullptr)
 				{
 					SetSphericalType(bc);
 				}
@@ -267,7 +267,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 			}
 			case BOX:
 			{
-				if (pdraw_obj != nullptr)
+				if (m_grid_draw_object != nullptr)
 				{
 					SetBoxType(bc);
 				}
@@ -275,7 +275,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 			}
 			case CAPLETS:
 			{
-				if (pdraw_obj != nullptr)
+				if (m_grid_draw_object != nullptr)
 				{
 					SetCapletsType(bc);
 				}
@@ -297,7 +297,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 			{
 			case SPHERICAL:
 			{
-				if (pdraw_obj != nullptr)
+				if (m_grid_draw_object != nullptr)
 				{
 					SetSphericalSize(bc);
 				}
@@ -305,7 +305,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 			}
 			case BOX:
 			{
-				if (pdraw_obj != nullptr)
+				if (m_grid_draw_object != nullptr)
 				{
 					SetBoxSize(bc);
 				}
@@ -313,7 +313,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 			}
 			case CAPLETS:
 			{
-				if (pdraw_obj != nullptr)
+				if (m_grid_draw_object != nullptr)
 				{
 					SetCapletsSize(bc);
 				}
@@ -333,7 +333,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	}
 	case RIGID_PHYSICS_MODE:
 	{
-		physics_mode = t_data.GetInt32();
+		m_physics_mode = t_data.GetInt32();
 		break;
 	}
 	default:
@@ -462,7 +462,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 				case SPHERICAL:
 				{
-					if (pdraw_obj != nullptr)
+					if (m_grid_draw_object != nullptr)
 					{
 						SetSphericalType(bc);
 					}
@@ -470,7 +470,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				case BOX:
 				{
-					if (pdraw_obj != nullptr)
+					if (m_grid_draw_object != nullptr)
 					{
 						SetBoxType(bc);
 					}
@@ -478,7 +478,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				case CAPLETS:
 				{
-					if (pdraw_obj != nullptr)
+					if (m_grid_draw_object != nullptr)
 					{
 						SetCapletsType(bc);
 					}
@@ -500,7 +500,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 				case SPHERICAL:
 				{
-					if (pdraw_obj != nullptr)
+					if (m_grid_draw_object != nullptr)
 					{
 						SetSphericalSize(bc);
 					}
@@ -508,7 +508,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				case BOX:
 				{
-					if (pdraw_obj != nullptr)
+					if (m_grid_draw_object != nullptr)
 					{
 						SetBoxSize(bc);
 					}
@@ -516,7 +516,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				case CAPLETS:
 				{
-					if (pdraw_obj != nullptr)
+					if (m_grid_draw_object != nullptr)
 					{
 						SetCapletsSize(bc);
 					}
@@ -536,7 +536,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		case RIGID_PHYSICS_MODE:
 		{
-			physics_mode = bc->GetInt32(RIGID_PHYSICS_MODE);
+			m_physics_mode = bc->GetInt32(RIGID_PHYSICS_MODE);
 			break;
 		}
 		default:
@@ -554,7 +554,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 			case 0:
 			{
 				m_display_type = msg->display_type;
-				if (draw_obj == nullptr)
+				if (m_draw_object == nullptr)
 				{
 					if (m_display_type != RIGID_DISPLAY_TYPE_OFF)
 					{
@@ -586,8 +586,8 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				else if (m_display_type == RIGID_DISPLAY_TYPE_OFF)
 				{
-					BaseObject::Free(draw_obj);
-					BaseObject::Free(pdraw_obj);
+					m_draw_object.Free();
+					m_grid_draw_object.Free();
 				}
 				break;
 			}
@@ -596,40 +596,40 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				BaseObject* op = static_cast<BaseObject*>(node);
 				if (m_rigid_mode == RIGID_MODE_EDIT && msg->rigid_mode == RIGID_MODE_ANIM)
 				{
-					no_anim_pos = op->GetAbsPos();
-					no_anim_rot = op->GetAbsRot();
+					m_original_position = op->GetAbsPos();
+					m_original_rotation = op->GetAbsRot();
 					if (related_bone != nullptr)
 					{
-						relative_bone_position = op->GetAbsPos() - related_bone->GetAbsPos();
-						relative_bone_rotation = op->GetAbsRot() - related_bone->GetAbsRot();
+						m_relative_bone_position = op->GetAbsPos() - related_bone->GetAbsPos();
+						m_relative_bone_rotation = op->GetAbsRot() - related_bone->GetAbsRot();
 					}
 				}
 				else if (m_rigid_mode == RIGID_MODE_ANIM && msg->rigid_mode == RIGID_MODE_EDIT)
 				{
-					op->SetAbsPos(no_anim_pos);
-					op->SetAbsRot(no_anim_rot);
+					op->SetAbsPos(m_original_position);
+					op->SetAbsRot(m_original_rotation);
 				}
 
 				m_rigid_mode = msg->rigid_mode;
-				if (protection_tag != nullptr)
+				if (m_protection_tag != nullptr)
 				{
 					if (m_rigid_mode == RIGID_MODE_ANIM)
 					{
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), true, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), true, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), true, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), true, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), true, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), true, DESCFLAGS_SET::NONE);
 					}
 					else
 					{
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), false, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), false, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), false, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), false, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), false, DESCFLAGS_SET::NONE);
+						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), false, DESCFLAGS_SET::NONE);
 					}
 				}
 				break;
@@ -662,19 +662,19 @@ DRAWRESULT MMDRigidObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 			{
 			case RIGID_DISPLAY_TYPE_ON:
 			{
-				if (draw_obj != nullptr)
+				if (m_draw_object != nullptr)
 				{
 					if (op == GetActiveDocument()->GetActiveObject())
 					{
 						ObjectColorProperties objColor{ PMX_Rigid_Color[bc->GetInt32(RIGID_GROUP_ID)], ID_BASEOBJECT_USECOLOR_ALWAYS, false };
-						draw_obj->SetColorProperties(&objColor);
-						bd->DrawObject(bh, draw_obj, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
+						m_draw_object->SetColorProperties(&objColor);
+						bd->DrawObject(bh, m_draw_object, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
 					}
 					else
 					{
 						ObjectColorProperties objColor{ PMX_Rigid_Color[bc->GetInt32(RIGID_GROUP_ID)], ID_BASEOBJECT_USECOLOR_ALWAYS, true };
-						draw_obj->SetColorProperties(&objColor);
-						bd->DrawObject(bh, draw_obj, DRAWOBJECT::USE_OBJECT_COLOR | DRAWOBJECT::XRAY_ON, drawpass);
+						m_draw_object->SetColorProperties(&objColor);
+						bd->DrawObject(bh, m_draw_object, DRAWOBJECT::USE_OBJECT_COLOR | DRAWOBJECT::XRAY_ON, drawpass);
 					}
 				}
 				else
@@ -707,19 +707,19 @@ DRAWRESULT MMDRigidObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 			}
 			case RIGID_DISPLAY_TYPE_WIRE:
 			{
-				if (draw_obj != nullptr)
+				if (m_draw_object != nullptr)
 				{
 					if (op == GetActiveDocument()->GetActiveObject())
 					{
 						ObjectColorProperties objColor{ PMX_Rigid_Color[bc->GetInt32(RIGID_GROUP_ID)], ID_BASEOBJECT_USECOLOR_ALWAYS, false };
-						draw_obj->SetColorProperties(&objColor);
-						bd->DrawObject(bh, draw_obj, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
+						m_draw_object->SetColorProperties(&objColor);
+						bd->DrawObject(bh, m_draw_object, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
 					}
 					else
 					{
 						ObjectColorProperties objColor{ PMX_Rigid_Color[bc->GetInt32(RIGID_GROUP_ID)], ID_BASEOBJECT_USECOLOR_ALWAYS, true};
-						draw_obj->SetColorProperties(&objColor);
-						bd->DrawObject(bh, draw_obj, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
+						m_draw_object->SetColorProperties(&objColor);
+						bd->DrawObject(bh, m_draw_object, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
 					}
 				}
 				else {
@@ -808,27 +808,27 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 
 	if (Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != pred_index && m_rigid_root != nullptr)
 	{
-		m_rigid_root->Message(ID_O_MMD_RIGID, NewObj(OMMDRigid_MSG, pred_index, now_index, op).GetValue());
+		m_rigid_root->Message(ID_O_MMD_RIGID, NewObj(MMDRigidObjectMsg, pred_index, now_index, op).GetValue());
 	}
 		
-	if (protection_tag == nullptr)
+	if (m_protection_tag == nullptr)
 	{
-		protection_tag = op->MakeTag(Tprotection);
-		protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
+		m_protection_tag = op->MakeTag(Tprotection);
+		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+		m_protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
+		m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
 	}
 
 	if (m_rigid_mode == RIGID_MODE_ANIM)
 	{
-		switch (physics_mode)
+		switch (m_physics_mode)
 		{
 		case TRACK_BONES:
 		{
 			if (related_bone != nullptr)
 			{
-				op->SetAbsPos(related_bone->GetAbsPos() + relative_bone_position);
-				op->SetAbsRot(related_bone->GetAbsRot() + relative_bone_rotation);
+				op->SetAbsPos(related_bone->GetAbsPos() + m_relative_bone_position);
+				op->SetAbsRot(related_bone->GetAbsRot() + m_relative_bone_rotation);
 			}
 			break;
 		}
@@ -836,8 +836,8 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		{
 			if (related_bone != nullptr)
 			{
-				related_bone->SetAbsPos(op->GetAbsPos() - relative_bone_position);
-				related_bone->SetAbsRot(op->GetAbsRot() - relative_bone_rotation);
+				related_bone->SetAbsPos(op->GetAbsPos() - m_relative_bone_position);
+				related_bone->SetAbsRot(op->GetAbsRot() - m_relative_bone_rotation);
 			}
 			break;
 		}
@@ -866,11 +866,11 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	hf->ReadInt32(&m_display_type);
 	hf->ReadInt32(&m_rigid_mode);
-	hf->ReadInt32(&physics_mode);
-	hf->ReadVector(&no_anim_pos);
-	hf->ReadVector(&no_anim_rot);
-	hf->ReadVector(&relative_bone_position);
-	hf->ReadVector(&relative_bone_rotation);
+	hf->ReadInt32(&m_physics_mode);
+	hf->ReadVector(&m_original_position);
+	hf->ReadVector(&m_original_rotation);
+	hf->ReadVector(&m_relative_bone_position);
+	hf->ReadVector(&m_relative_bone_rotation);
 	AutoAlloc<BaseLink> rigid_root_link;
 
 	if (rigid_root_link == nullptr)
@@ -904,11 +904,11 @@ Bool MMDRigidObject::Write(const GeListNode* node, HyperFile* hf) const
 {
 	hf->WriteInt32(m_display_type);
 	hf->WriteInt32(m_rigid_mode);
-	hf->WriteInt32(physics_mode);
-	hf->WriteVector(no_anim_pos);
-	hf->WriteVector(no_anim_rot);
-	hf->WriteVector(relative_bone_position);
-	hf->WriteVector(relative_bone_rotation);
+	hf->WriteInt32(m_physics_mode);
+	hf->WriteVector(m_original_position);
+	hf->WriteVector(m_original_rotation);
+	hf->WriteVector(m_relative_bone_position);
+	hf->WriteVector(m_relative_bone_rotation);
 
 	AutoAlloc<BaseLink> rigid_root_link;
 	if (rigid_root_link == nullptr)
@@ -950,18 +950,12 @@ Bool MMDRigidObject::CopyTo(NodeData* dest, const GeListNode* snode, GeListNode*
 	destObject->related_bone = related_bone;
 	destObject->m_rigid_mode = m_rigid_mode;
 	destObject->m_display_type = m_display_type;
-	destObject->no_anim_pos = no_anim_pos;
-	destObject->no_anim_rot = no_anim_rot;
-	destObject->relative_bone_position = relative_bone_position;
-	destObject->relative_bone_rotation = relative_bone_rotation;
+	destObject->m_original_position = m_original_position;
+	destObject->m_original_rotation = m_original_rotation;
+	destObject->m_relative_bone_position = m_relative_bone_position;
+	destObject->m_relative_bone_rotation = m_relative_bone_rotation;
 
 	return true;
-}
-
-void MMDRigidObject::Free(GeListNode* node)
-{
-	BaseObject::Free(pdraw_obj);
-	BaseObject::Free(draw_obj);
 }
 
 NodeData* MMDRigidObject::Alloc()
