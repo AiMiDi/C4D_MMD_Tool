@@ -71,13 +71,12 @@ public:
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetBoneMorphData() const;
 	Bool SetBoneMorphStrength(const String& morph_name, Float strength);
-	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetBoneMorphData() const;
 
 	[[nodiscard]] BaseTag* FindBone(Int32 index) const;
 	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
 	const BaseContainer& GetBoneItems() const;
 
-	Bool LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashMap<uint64_t, BaseObject*>& bone_map, const CMTToolsSetting::ModelImport& setting);
 
 private:
 	void CreateDisplayTag(GeListNode* node) override;

@@ -223,7 +223,7 @@ Bool MMDRigidRootObject::SetDParameter(GeListNode* node, const DescID& id, const
 		}
 		case RIGID_MODE_EDIT:
 		{
-			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_OFF, RIGID_MODE_EDIT);
+			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, RIGID_MODE_EDIT);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, &msg);
 			break;
 		}

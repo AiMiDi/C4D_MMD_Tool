@@ -77,6 +77,7 @@ Description:	C4D MMD rigid object
 
 		void UpdateRigidShape(const BaseContainer* bc, Int32 rigid_shape_type);
 		void UpdateRigidSize(const BaseContainer* bc);
+		void UpdateRigidPhysics(Int32 physics_mode);
 		void UpdateRigidGroup(Int32 rigid_group);
 	};
 

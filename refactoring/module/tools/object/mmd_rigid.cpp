@@ -158,7 +158,7 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 	}
 
 	settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)), nullptr);
-	if (settings != nullptr)
+	if (settings != nullptr && m_rigid_root)
 	{
 		settings->SetContainer(DESC_CYCLE, m_rigid_root->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->GetBoneItems());
 	}
@@ -270,7 +270,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	}
 	case RIGID_PHYSICS_MODE:
 	{
-		m_physics_mode = t_data.GetInt32();
+		UpdateRigidPhysics(t_data.GetInt32());
 		break;
 	}
 	case RIGID_GROUP_ID:
@@ -366,10 +366,6 @@ void MMDRigidObject::UpdateRigidShape(const BaseContainer* bc, const Int32 rigid
 	default:
 		break;
 	}
-	if (m_display_type == RIGID_DISPLAY_TYPE_WIRE)
-	{
-		m_draw_color.color = g_pmx_rigid_wire_colors[m_rigid_group_id];
-	}
 }
 
 void MMDRigidObject::UpdateRigidSize(const BaseContainer* bc)
@@ -393,6 +389,15 @@ void MMDRigidObject::UpdateRigidSize(const BaseContainer* bc)
 		}
 	default:
 		break;
+	}
+}
+
+void MMDRigidObject::UpdateRigidPhysics(Int32 physics_mode)
+{
+	m_physics_mode = physics_mode;
+	if (m_display_type == RIGID_DISPLAY_TYPE_WIRE)
+	{
+		m_draw_color.color = g_pmx_rigid_wire_colors[m_physics_mode];
 	}
 }
 
@@ -470,7 +475,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		case RIGID_PHYSICS_MODE:
 		{
-			m_physics_mode = bc->GetInt32(RIGID_PHYSICS_MODE);
+			UpdateRigidPhysics(bc->GetInt32(RIGID_PHYSICS_MODE));
 			break;
 		}
 		case RIGID_GROUP_ID:
@@ -537,8 +542,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				break;
 			}
-			case MMDRigidRootObjectMsgType::DEFAULT: [[fallthrough]];
-			default:
+			case MMDRigidRootObjectMsgType::DEFAULT:
 				break;
 			}
 		}
@@ -735,6 +739,7 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	hf->ReadInt32(&m_display_type);
 	hf->ReadInt32(&m_rigid_mode);
 	hf->ReadInt32(&m_physics_mode);
+	UpdateRigidPhysics(m_physics_mode);
 
 	hf->ReadInt32(&m_rigid_shape_type);
 	UpdateRigidShape(bc, m_rigid_shape_type);
