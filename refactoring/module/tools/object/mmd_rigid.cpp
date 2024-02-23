@@ -672,12 +672,12 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		}
 	}
 
-	if (Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != pred_index && m_rigid_root != nullptr)
+	if (const Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != pred_index && m_rigid_root != nullptr)
 	{
-		m_rigid_root->Message(ID_O_MMD_RIGID, NewObj(MMDRigidObjectMsg, pred_index, now_index, op).GetValue());
+		m_rigid_root->Message(ID_O_MMD_RIGID, nullptr);
 	}
 		
-	if (m_protection_tag == nullptr)
+	if (!m_protection_tag)
 	{
 		m_protection_tag = op->MakeTag(Tprotection);
 		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);

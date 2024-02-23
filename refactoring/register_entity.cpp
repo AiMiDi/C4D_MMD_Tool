@@ -36,7 +36,7 @@ Bool RegisterMMDCamera()
 
 Bool RegisterMMDRigid()
 {
-		return RegisterObjectPlugin(ID_O_MMD_RIGID, "MMDRigid"_s, OBJECT_GENERATOR | OBJECT_CALL_ADDEXECUTION, MMDRigidObject::Alloc, "OMMDRigid"_s, AutoBitmap("OMMDRigid.png"_s), 0);
+		return RegisterObjectPlugin(ID_O_MMD_RIGID, GeLoadString(IDS_O_MMD_RIGID), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, MMDRigidObject::Alloc, "OMMDRigid"_s, AutoBitmap("OMMDRigid.png"_s), 0);
 }
 
 Bool RegisterMMDModelRoot()
