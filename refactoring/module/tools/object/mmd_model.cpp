@@ -1188,11 +1188,12 @@ Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_data, const C
 	{
 		m_bone_root->GetNodeData<MMDBoneRootObject>()->LoadBones(pmx_data.get_pmx_bone_array(), setting);
 	}
-
+	return true;
 }
 
 Bool MMDModelRootObject::SavePMXModel(libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelExport& setting) const
 {
+	return true;
 }
 
 String MMDModelRootObject::GetMorphNamedNumber()
