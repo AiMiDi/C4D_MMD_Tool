@@ -483,17 +483,17 @@ const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& MMDBoneRootObject::G
 	return m_bone_morph_data;
 }
 
-BaseList2D* MMDBoneRootObject::FindBoneTag(const Int32 index) const
+BaseTag* MMDBoneRootObject::FindBone(const Int32 index) const
 {
 	// find index in m_bone_list
 	if (const auto bone_link_ptr = m_bone_list.Find(index); bone_link_ptr)
 	{
-		return (*bone_link_ptr->GetValue())->ForceGetLink();
+		return static_cast<BaseTag*>((*bone_link_ptr->GetValue())->ForceGetLink());
 	}
 	return nullptr;
 }
 
-Int32 MMDBoneRootObject::FindBoneTagIndex(const BaseList2D* bone_tag) const
+Int32 MMDBoneRootObject::FindBoneIndex(const BaseTag* bone_tag) const
 {
 	if(!bone_tag)
 	{
@@ -833,6 +833,11 @@ Bool MMDBoneRootObject::LoadPMX(const ::libmmd::pmx_model& pmx_model, maxon::Has
 	}
 
 	return true;
+}
+
+const BaseContainer& MMDBoneRootObject::GetBoneItems() const
+{
+	return m_bone_items; 
 }
 
 void MMDBoneRootObject::CreateDisplayTag(GeListNode* node)

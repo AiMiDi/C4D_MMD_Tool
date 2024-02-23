@@ -4,6 +4,7 @@
 #include "CMTSceneManager.h"
 #include "module/ui/cmt_tools_dialog.h"
 #include "module/tools/loader/vmd_loader.h"
+#include "module/tools/object/mmd_rigid.h"
 #include "module/tools/object/mmd_joint_root.h"
 #include "module/tools/object/mmd_mesh_root.h"
 #include "module/tools/object/mmd_model.h"
@@ -31,6 +32,11 @@ Bool RegisterVMDLoader()
 Bool RegisterMMDCamera()
 {
 	return(RegisterObjectPlugin(ID_O_MMD_CAMERA, GeLoadString(IDS_O_MMD_CAMERA), OBJECT_CALL_ADDEXECUTION, MMDCamera::Alloc, "OMMDCamera"_s, AutoBitmap("OMMDCamera.png"_s), 0));
+}
+
+Bool RegisterMMDRigid()
+{
+		return RegisterObjectPlugin(ID_O_MMD_RIGID, "MMDRigid"_s, OBJECT_GENERATOR | OBJECT_CALL_ADDEXECUTION, MMDRigidObject::Alloc, "OMMDRigid"_s, AutoBitmap("OMMDRigid.png"_s), 0);
 }
 
 Bool RegisterMMDModelRoot()
@@ -87,4 +93,10 @@ Bool cmt_register::RegisterPlugin()
 		return false;
 
 	return true;
+		return FALSE;
+	if(!RegisterMMDCamera())
+		return FALSE;
+	if(!RegisterMMDRigid())
+		return FALSE;
+	return TRUE;
 }

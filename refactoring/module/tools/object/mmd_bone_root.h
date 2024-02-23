@@ -69,14 +69,16 @@ public:
 	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
-
+	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetBoneMorphData() const;
 	Bool SetBoneMorphStrength(const String& morph_name, Float strength);
 	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetBoneMorphData() const;
 
-	[[nodiscard]] BaseList2D* FindBoneTag(Int32 index) const;
-	Int32 FindBoneTagIndex(const BaseList2D* bone_tag) const;
+	[[nodiscard]] BaseTag* FindBone(Int32 index) const;
+	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
+	const BaseContainer& GetBoneItems() const;
 
-	Bool LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashMap<uint64_t, BaseObject*>& bone_map, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadBones(const libmmd::pmx_model::pmx_bone_array& pmx_bone_array, const CMTToolsSetting::ModelImport& setting);
+
 private:
 	void CreateDisplayTag(GeListNode* node) override;
 	void HandleDescriptionCommandMessage(GeListNode* node, void* data);

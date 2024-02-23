@@ -51,6 +51,10 @@ public:
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
+
+	BaseObject* GetRigidRoot() const;
+	BaseObject* GetBoneRoot() const;
+
 };
 
 #endif // !MMD_JOINT_ROOT_H__

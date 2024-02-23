@@ -10,8 +10,11 @@ Description:	MMD rigid root object
 
 #ifndef MMD_RIGID_ROOT_H__
 #define MMD_RIGID_ROOT_H__
+
 #include "description/OMMDRigidRoot.h"
 #include "mmd_root.hpp"
+
+class MMDRigidObject;
 
 enum class MMDRigidRootObjectMsgType : uint8_t
 {
@@ -44,12 +47,17 @@ class MMDRigidRootObject final : public MMDRootObject
 	CMT_DEFAULT_MOVE_BODY(MMDRigidRootObject)
 	INSTANCEOF(MMDRigidRootObject, MMDRootObject)
 public:
+	static NodeData* Alloc();
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
-	static NodeData* Alloc();
+
+	BaseObject* FindRigid(Int32 index) const;
+
+	const BaseContainer& GetRigidItems() const;
+	BaseObject* GetBoneRoot() const;
 };
 
 #endif // !MMD_RIGID_ROOT_H__

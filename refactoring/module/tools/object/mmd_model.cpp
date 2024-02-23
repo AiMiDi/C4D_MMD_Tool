@@ -1210,7 +1210,6 @@ Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const 
 			ImportGroupAndFlipMorph(pmx_morph);
 		}
 	}
-
 	return true;
 }
 

@@ -9,10 +9,9 @@ Description:	MMD rigid root object
 **************************************************************************/
 
 #include "pch.h"
-#include "mmd_rigid_root.h"
-
 #include "mmd_model.h"
-#include "description/OMMDRigid.h"
+#include "mmd_rigid_root.h"
+#include "mmd_rigid.h"
 
 Bool MMDRigidRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
@@ -242,4 +241,24 @@ Bool MMDRigidRootObject::SetDParameter(GeListNode* node, const DescID& id, const
 NodeData* MMDRigidRootObject::Alloc()
 {
 	return NewObjClear(MMDRigidRootObject);
+}
+
+BaseObject* MMDRigidRootObject::FindRigid(const Int32 index) const
+{
+	// find index in m_rigid_list
+	if (const auto bone_link_ptr = m_rigid_list.Find(index); bone_link_ptr)
+	{
+		return static_cast<BaseObject*>((*bone_link_ptr->GetValue())->ForceGetLink());
+	}
+	return nullptr;
+}
+
+const BaseContainer& MMDRigidRootObject::GetRigidItems() const
+{
+	return rigid_items;
+}
+
+BaseObject* MMDRigidRootObject::GetBoneRoot() const
+{
+	return m_bone_root;
 }

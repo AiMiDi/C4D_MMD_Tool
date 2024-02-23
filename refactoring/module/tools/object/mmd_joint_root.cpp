@@ -135,3 +135,13 @@ Bool MMDJointRootObject::SetDParameter(GeListNode* node, const DescID& id, const
 	}
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
+
+BaseObject* MMDJointRootObject::GetRigidRoot() const
+{
+	return m_rigid_root; 
+}
+
+BaseObject* MMDJointRootObject::GetBoneRoot() const
+{
+	return m_bone_root;
+}
