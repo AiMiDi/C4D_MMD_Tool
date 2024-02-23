@@ -291,7 +291,8 @@ struct vertex_info
 	BaseObject* mesh_object = nullptr;
 	Int			morph_tag_index = -1;
 	vertex_info() = default;
-	vertex_info(Int32 morph_tag_index) : morph_tag_index(morph_tag_index){}
+	vertex_info(Int32 vertex_index, BaseObject* mesh_object, Int morph_tag_index) :
+	vertex_index(vertex_index), mesh_object(mesh_object), morph_tag_index(morph_tag_index){}
 	maxon::HashInt GetHashCode() const;
 };
 
@@ -715,7 +716,7 @@ Bool MMDMeshRootObject::LoadPMX(
 	}
 	else
 	{
-		maxon::Synchronized<maxon::HashMap<uint64_t, vertex_info>> vertex_info_map;
+		maxon::Synchronized<std::unordered_map<uint64_t, std::vector<vertex_info>>> vertex_info_map;
 		maxon::BaseArray<morph_tag_info> morph_tag_infos;
 
 		auto surface_begin_index = decltype(surface_count){};
@@ -854,16 +855,11 @@ Bool MMDMeshRootObject::LoadPMX(
 					mesh_object_point.y = pmx_vertex_position[1] * setting.position_multiple;
 					mesh_object_point.z = pmx_vertex_position[2] * setting.position_multiple;
 
-					vertex_info_map.Write([&vertex_index, &c4d_vertex_index, &mesh_object, &setting, &morph_tag_infos](auto& map)->maxon::Result<void>
+					vertex_info_map.Write([&pmx_vertex_index, &c4d_vertex_index, &mesh_object, &setting, &morph_tag_infos](std::unordered_map<uint64_t, std::vector<vertex_info>>& map)->maxon::Result<void>
 					{
 						iferr_scope;
-						auto& vertex_info = map.InsertMultiEntry(vertex_index).GetValue().GetValue();
-						vertex_info.vertex_index = c4d_vertex_index;
-						vertex_info.mesh_object = mesh_object;
-						if (setting.import_expression)
-						{
-							vertex_info.morph_tag_index = morph_tag_infos.GetCount() - 1;
-						}
+						auto& vertex_info_array = map[pmx_vertex_index];
+						vertex_info_array.emplace_back(c4d_vertex_index, mesh_object, morph_tag_infos.GetCount() - 1);
 						return maxon::OK;
 					})iferr_return;
 
@@ -1024,10 +1020,10 @@ Bool MMDMeshRootObject::LoadPMX(
 							const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_vertex_morph_offset&>(morph_offset_array[offset_index]);
 							const auto& pmx_bone_morph_offset_vertex_index = pmx_bone_morph_offset.get_vertex_index();
 							const auto& pmx_bone_morph_offset_position = pmx_bone_morph_offset.get_offset_position();
-							// MultiEntry
-							for (auto it = vertex_info_map.Read()->FindAll(pmx_bone_morph_offset_vertex_index); it; ++it)
+							// MultiMap
+							const auto& vertex_info_array = vertex_info_map.Read()->at(pmx_bone_morph_offset_vertex_index);
+							for (const auto& [vertex_index, offset_mesh_object, morph_tag_index] : vertex_info_array)
 							{
-								const auto& [vertex_index, offset_mesh_object, morph_tag_index] = it->GetValue();
 								auto& [morph_tag, morph, is_point_morph_tag_init, is_uv_morph_tag_init] = morph_tag_infos[morph_tag_index];
 
 								if (!is_point_morph_tag_init)
@@ -1085,10 +1081,10 @@ Bool MMDMeshRootObject::LoadPMX(
 							const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_uv_morph_offset&>(morph_offset_array[offset_index]);
 							const auto& pmx_bone_morph_offset_vertex_index = pmx_bone_morph_offset.get_vertex_index();
 							const auto& pmx_bone_morph_offset_uv = pmx_bone_morph_offset.get_uv_offset();
-							// MultiEntry
-							for (auto it = vertex_info_map.Read()->FindAll(pmx_bone_morph_offset_vertex_index); it; ++it)
+							// MultiMap
+							const auto& vertex_info_array = vertex_info_map.Read()->at(pmx_bone_morph_offset_vertex_index);
+							for (const auto& [vertex_index, offset_mesh_object, morph_tag_index] : vertex_info_array)
 							{
-								const auto& [vertex_index, offset_mesh_object, morph_tag_index] = it->GetValue();
 								auto& [morph_tag, morph, is_point_morph_tag_init, is_uv_morph_tag_init] = morph_tag_infos[morph_tag_index];
 
 								if (!is_uv_morph_tag_init)
