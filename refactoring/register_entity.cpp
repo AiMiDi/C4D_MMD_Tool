@@ -10,6 +10,7 @@
 #include "module/tools/object/mmd_rigid_root.h"
 #include "module/tools/object/mmd_bone_root.h"
 #include "module/tools/object/mmd_camera.h"
+#include "module/tools/object/mmd_joint.h"
 #include "module/tools/object/mmd_rigid.h"
 #include "module/tools/tag/mmd_bone.h"
 
@@ -37,6 +38,11 @@ Bool RegisterMMDCamera()
 Bool RegisterMMDRigid()
 {
 		return RegisterObjectPlugin(ID_O_MMD_RIGID, GeLoadString(IDS_O_MMD_RIGID), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, MMDRigidObject::Alloc, "OMMDRigid"_s, AutoBitmap("OMMDRigid.png"_s), 0);
+}
+
+Bool RegisterMMDJoint()
+{
+	return RegisterObjectPlugin(ID_O_MMD_JOINT, GeLoadString(IDS_O_MMD_JOINT), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, MMDJointObject::Alloc, "OMMDJoint"_s, AutoBitmap("OMMDJoint.png"_s), 0);
 }
 
 Bool RegisterMMDModelRoot()
@@ -79,6 +85,10 @@ Bool cmt_register::RegisterPlugin()
 		return false;
 	if (!RegisterMMDCamera())
 		return false;
+	if (!RegisterMMDRigid())
+		return false;
+	if (!RegisterMMDJoint())
+		return false;
 	if (!RegisterMMDModelRoot())
 		return false;
 	if (!RegisterMMDBoneRoot())
@@ -92,7 +102,5 @@ Bool cmt_register::RegisterPlugin()
 	if (!RegisterMMDBoneTag())
 		return false;
 
-	if(!RegisterMMDRigid())
-		return false;
 	return true;
 }

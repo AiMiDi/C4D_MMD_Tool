@@ -146,6 +146,7 @@ Bool MMDRigidRootObject::Message(GeListNode* node, Int32 type, void* data)
 				Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
 				this->rigid_items.SetString(rigid_index, node_->GetName());
 				auto& link = m_rigid_list.InsertKey(rigid_index)iferr_return;
+				link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
 				(*link)->SetLink(node_);
 			}
 			node_ = node_->GetNext();

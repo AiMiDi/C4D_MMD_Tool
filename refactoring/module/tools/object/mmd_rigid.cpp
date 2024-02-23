@@ -647,7 +647,7 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		op->InsertUnderLast(rigid_root_object);
 	}
 
-	Int32 pred_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
+	const Int32 pred_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
 	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_RIGID_ROOT))
 	{
 		if (pred_object == nullptr)

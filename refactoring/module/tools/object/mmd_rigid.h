@@ -35,8 +35,8 @@ class MMDRigidObject final : public ObjectData
 	MMDRigidObject();
 	~MMDRigidObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRigidObject)
-		CMT_DEFAULT_MOVE_BODY(MMDRigidObject)
-		INSTANCEOF(MMDRigidObject, ObjectData)
+	CMT_DEFAULT_MOVE_BODY(MMDRigidObject)
+	INSTANCEOF(MMDRigidObject, ObjectData)
 public:
 	Bool Init(GeListNode* node SDK2024_InitParaName) override;
 	Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;

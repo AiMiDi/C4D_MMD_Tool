@@ -66,12 +66,13 @@ Bool MMDJointRootObject::Message(GeListNode* node, Int32 type, void* data)
 	case MSG_DESCRIPTION_COMMAND:
 	{
 		const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
-		if (bc == nullptr) {
+		if (!bc)
+		{
 			return(true);
 		}
 		if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_JOINT_BUTTON)
 		{
-			if (BaseObject* new_joint = BaseObject::Alloc(ID_O_MMD_JOINT); new_joint != nullptr)
+			if (BaseObject* new_joint = BaseObject::Alloc(ID_O_MMD_JOINT); new_joint)
 			{
 				new_joint->SetName(new_joint->GetName() + "." + String::IntToString(m_joint_name_index++));
 				new_joint->InsertUnder(node);
