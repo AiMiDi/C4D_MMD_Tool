@@ -532,7 +532,7 @@ Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Flo
 	return true;
 }
 
-Bool MMDBoneRootObject::LoadPMX(const ::libmmd::pmx_model& pmx_model, maxon::HashMap<uint64_t, BaseObject*>& bone_map, const CMTToolsSetting::ModelImport& setting)
+Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashMap<uint64_t, BaseObject*>& bone_map, const CMTToolsSetting::ModelImport& setting)
 {
 	iferr_scope_handler{
 		return false;
@@ -818,7 +818,7 @@ Bool MMDBoneRootObject::LoadPMX(const ::libmmd::pmx_model& pmx_model, maxon::Has
 			for (auto offset_index = decltype(pmx_bone_morph_offset_num){}; offset_index < pmx_bone_morph_offset_num; ++offset_index)
 			{
 				const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_bone_morph_offset&>(pmx_bone_morph_offset_array[offset_index]);
-				if (const auto bone_tag = reinterpret_cast<BaseTag*>(FindBoneTag(pmx_bone_morph_offset.get_bone_index())); bone_tag)
+				if (const auto bone_tag = reinterpret_cast<BaseTag*>(FindBone(pmx_bone_morph_offset.get_bone_index())); bone_tag)
 				{
 					auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
 					const auto added_morph_index = bone_tag_node->AddBoneMorph(morph_name_local);

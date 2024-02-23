@@ -146,6 +146,7 @@ Bool MMDRigidRootObject::Message(GeListNode* node, Int32 type, void* data)
 				Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
 				this->rigid_items.SetString(rigid_index, node_->GetName());
 				auto& link = m_rigid_list.InsertKey(rigid_index)iferr_return;
+				link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
 				(*link)->SetLink(node_);
 			}
 			node_ = node_->GetNext();
@@ -223,7 +224,7 @@ Bool MMDRigidRootObject::SetDParameter(GeListNode* node, const DescID& id, const
 		}
 		case RIGID_MODE_EDIT:
 		{
-			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_OFF, RIGID_MODE_EDIT);
+			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, RIGID_MODE_EDIT);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, &msg);
 			break;
 		}

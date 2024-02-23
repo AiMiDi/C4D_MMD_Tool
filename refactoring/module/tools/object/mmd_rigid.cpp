@@ -158,7 +158,7 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 	}
 
 	settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)), nullptr);
-	if (settings != nullptr)
+	if (settings != nullptr && m_rigid_root)
 	{
 		settings->SetContainer(DESC_CYCLE, m_rigid_root->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->GetBoneItems());
 	}
@@ -270,7 +270,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	}
 	case RIGID_PHYSICS_MODE:
 	{
-		m_physics_mode = t_data.GetInt32();
+		UpdateRigidPhysics(t_data.GetInt32());
 		break;
 	}
 	case RIGID_GROUP_ID:
@@ -366,10 +366,6 @@ void MMDRigidObject::UpdateRigidShape(const BaseContainer* bc, const Int32 rigid
 	default:
 		break;
 	}
-	if (m_display_type == RIGID_DISPLAY_TYPE_WIRE)
-	{
-		m_draw_color.color = g_pmx_rigid_wire_colors[m_rigid_group_id];
-	}
 }
 
 void MMDRigidObject::UpdateRigidSize(const BaseContainer* bc)
@@ -393,6 +389,15 @@ void MMDRigidObject::UpdateRigidSize(const BaseContainer* bc)
 		}
 	default:
 		break;
+	}
+}
+
+void MMDRigidObject::UpdateRigidPhysics(Int32 physics_mode)
+{
+	m_physics_mode = physics_mode;
+	if (m_display_type == RIGID_DISPLAY_TYPE_WIRE)
+	{
+		m_draw_color.color = g_pmx_rigid_wire_colors[m_physics_mode];
 	}
 }
 
@@ -470,7 +475,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		case RIGID_PHYSICS_MODE:
 		{
-			m_physics_mode = bc->GetInt32(RIGID_PHYSICS_MODE);
+			UpdateRigidPhysics(bc->GetInt32(RIGID_PHYSICS_MODE));
 			break;
 		}
 		case RIGID_GROUP_ID:
@@ -537,8 +542,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				break;
 			}
-			case MMDRigidRootObjectMsgType::DEFAULT: [[fallthrough]];
-			default:
+			case MMDRigidRootObjectMsgType::DEFAULT:
 				break;
 			}
 		}
@@ -643,7 +647,7 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		op->InsertUnderLast(rigid_root_object);
 	}
 
-	Int32 pred_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
+	const Int32 pred_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
 	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_RIGID_ROOT))
 	{
 		if (pred_object == nullptr)
@@ -668,12 +672,12 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		}
 	}
 
-	if (Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != pred_index && m_rigid_root != nullptr)
+	if (const Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != pred_index && m_rigid_root != nullptr)
 	{
-		m_rigid_root->Message(ID_O_MMD_RIGID, NewObj(MMDRigidObjectMsg, pred_index, now_index, op).GetValue());
+		m_rigid_root->Message(ID_O_MMD_RIGID, nullptr);
 	}
 		
-	if (m_protection_tag == nullptr)
+	if (!m_protection_tag)
 	{
 		m_protection_tag = op->MakeTag(Tprotection);
 		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
@@ -735,6 +739,7 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	hf->ReadInt32(&m_display_type);
 	hf->ReadInt32(&m_rigid_mode);
 	hf->ReadInt32(&m_physics_mode);
+	UpdateRigidPhysics(m_physics_mode);
 
 	hf->ReadInt32(&m_rigid_shape_type);
 	UpdateRigidShape(bc, m_rigid_shape_type);
