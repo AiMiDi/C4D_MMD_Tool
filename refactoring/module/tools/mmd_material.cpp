@@ -26,7 +26,7 @@ Bool MMDMaterialManager::LoadPMXTexture(const libmmd::pmx_model::pmx_texture_arr
 		if(texture_path.IsPopulated() && !GeFExist(texture_path))
 		{
 			// relative path to abs path
-			texture_path = m_texture_relative_path.GetString() + texture_path_str;
+			texture_path = FormatString("@\\@", m_texture_relative_path.GetString(), texture_path_str);
 		}
 		iferr(m_texture_path_array.SDK2024_Append(std::move(texture_path)))
 			return false;

@@ -760,7 +760,6 @@ Bool MMDMeshRootObject::LoadPMX(
 				texture_tag->SetName(material_name);
 				texture_tag->SetMaterial(material);
 				texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_PROJECTION)), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
-				texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), material_name, DESCFLAGS_SET::NONE);
 				mesh_object->InsertTag(texture_tag);
 			}
 
