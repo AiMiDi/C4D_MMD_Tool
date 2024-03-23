@@ -77,23 +77,23 @@ Bool MMDCamera::LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTTo
 	const auto  vmd_camera_key_frame_num = vmd_camera_key_frame_array.size();
 	for (auto frame_index = decltype(vmd_camera_key_frame_num){}; frame_index < vmd_camera_key_frame_num; ++frame_index)
 	{
-		const libmmd::vmd_camera_key_frame & data = vmd_camera_key_frame_array[frame_index];
+		const libmmd::vmd_camera_key_frame& data = vmd_camera_key_frame_array[frame_index];
 		const auto frame_at = static_cast<int32_t>(data.get_frame_at() + setting.time_offset);
 		const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
 
 		std::array<CCurve*, m_track_count> curves{ nullptr };
 
 		const auto track_objects = GetTrackObjects(object);
-		const auto track_desc_IDs = GetTrackDescIDs();
+		const auto track_desc_ids = GetTrackDescIDs();
 
 		for (auto track_index = size_t{}; track_index < m_track_count; ++track_index)
 		{
-			auto& track_ID = track_desc_IDs[track_index];
+			auto& track_id = track_desc_ids[track_index];
 			const auto& track_object = track_objects[track_index];
-			CTrack* track = track_object->FindCTrack(track_ID);
+			CTrack* track = track_object->FindCTrack(track_id);
 			if (!track)
 			{
-				track = CTrack::Alloc(track_object, track_ID);
+				track = CTrack::Alloc(track_object, track_id);
 				if (!track)
 				{
 					return false;
@@ -130,30 +130,83 @@ Bool MMDCamera::LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTTo
 			{
 				CCurve* curve = curves[curve_index];
 				CKey* key = curve->AddKey(frame_at_time);
+				if (!key)
+				{
+					return false;
+				}
 				key->SetValue(curve, value);
+				return true;
 			};
 
 		const auto& position = data.get_position();
-		set_curve_value(POSITION_X, maxon::SafeConvert<Float>(position[0]) * setting.position_multiple);
-		set_curve_value(POSITION_Y, maxon::SafeConvert<Float>(position[1]) * setting.position_multiple);
-		set_curve_value(POSITION_Z, maxon::SafeConvert<Float>(position[2]) * setting.position_multiple);
-		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_X, frame_at, data.get_position_x_interpolator());
-		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Y, frame_at, data.get_position_y_interpolator());
-		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Z, frame_at, data.get_position_z_interpolator());
+		if (!set_curve_value(POSITION_X, maxon::SafeConvert<Float>(position[0]) * setting.position_multiple))
+		{
+			return false;
+		}
+		if (!set_curve_value(POSITION_Y, maxon::SafeConvert<Float>(position[1]) * setting.position_multiple))
+		{
+			return false;
+		}
+		if (!set_curve_value(POSITION_Z, maxon::SafeConvert<Float>(position[2]) * setting.position_multiple))
+		{
+			return false;
+		}
+		if (!LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_X, frame_at, data.get_position_x_interpolator()))
+		{
+			return false;
+		}
+		if (!LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Y, frame_at, data.get_position_y_interpolator()))
+		{
+			return false;
+		}
+		if (!LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_POSITION_Z, frame_at, data.get_position_z_interpolator()))
+		{
+			return false;
+		}
 
 		const auto& rotation = data.get_rotation();
-		set_curve_value(ROTATION_X, maxon::SafeConvert<Float>(rotation[0]));
-		set_curve_value(ROTATION_Y, maxon::SafeConvert<Float>(rotation[1]));
-		set_curve_value(ROTATION_Z, maxon::SafeConvert<Float>(rotation[2]));
-		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
-		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
-		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator());
+		if (!set_curve_value(ROTATION_X, maxon::SafeConvert<Float>(rotation[0])))
+		{
+			return false;
+		}
+		if (!set_curve_value(ROTATION_Y, maxon::SafeConvert<Float>(rotation[1])))
+		{
+			return false;
+		}
+		if (!set_curve_value(ROTATION_Z, maxon::SafeConvert<Float>(rotation[2])))
+		{
+			return false;
+		}
+		if (!LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator()))
+		{
+			return false;
+		}
+		if (!LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator()))
+		{
+			return false;
+		}
+		if (!LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator()))
+		{
+			return false;
+		}
 
-		set_curve_value(DISTANCE, maxon::SafeConvert<Float>(data.get_distance()) * setting.position_multiple);
-		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_at, data.get_distance_interpolator());
+		if (!set_curve_value(DISTANCE, maxon::SafeConvert<Float>(data.get_distance()) * setting.position_multiple))
+		{
+			return false;
+		}
+		if (!LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_DISTANCE, frame_at, data.get_distance_interpolator()))
+		{
+			return false;
+		}
 
-		set_curve_value(AOV, data.get_view_angle());
-		LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_at, data.get_view_angle_interpolator());
+		if (!set_curve_value(AOV, data.get_view_angle()))
+		{
+			return false;
+		}
+		if (!LoadVMDInterpolator(VMD_CAM_OBJ_INTERPOLATOR_AOV, frame_at, data.get_view_angle_interpolator()))
+		{
+			return false;
+		}
 	}
 	if (!UpdateAllInterpolator())
 		return false;

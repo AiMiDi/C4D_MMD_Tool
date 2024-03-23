@@ -11,6 +11,7 @@ Description:	DESC
 #include "pch.h"
 #include "mmd_bone.h"
 #include "module/tools/object/mmd_bone_root.h"
+#include "cmt_tools_setting.h"
 
 Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 {
@@ -166,6 +167,125 @@ void MMDBoneTag::SetBoneRoot(BaseObject* bone_root)
 void MMDBoneTag::SetBoneObject(BaseObject* bone_object)
 {
 	m_bone_object = bone_object;
+}
+
+Bool MMDBoneTag::LoadVMDMotion(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting)
+{
+	const auto frame_at = static_cast<int32_t>(data.get_frame_at() + setting.time_offset);
+	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
+
+	std::array<CCurve*, m_track_count> curves{ nullptr };
+
+	const auto track_desc_ids = GetTrackDescIDs();
+
+	for (auto track_index = size_t{}; track_index < m_track_count; ++track_index)
+	{
+		auto& track_id = track_desc_ids[track_index];
+		CTrack* track = m_bone_object->FindCTrack(track_id);
+		if (!track)
+		{
+			track = CTrack::Alloc(m_bone_object, track_id);
+			if (!track)
+			{
+				return false;
+			}
+			m_bone_object->InsertTrackSorted(track);
+		}
+
+		auto& curve = curves[track_index];
+		curve = track->GetCurve();
+		if (!curve)
+		{
+			return false;
+		}
+	}
+	CTrack* frame_at_track = m_bone_object->FindCTrack(m_frame_at_desc);
+	if (!frame_at_track)
+	{
+		frame_at_track = CTrack::Alloc(m_bone_object, m_frame_at_desc);
+		if (!frame_at_track)
+		{
+			return false;
+		}
+		m_bone_object->InsertTrackSorted(frame_at_track);
+	}
+	CCurve* frame_at_curve = frame_at_track->GetCurve();
+	if (!frame_at_curve)
+	{
+		return false;
+	}
+	CKey* frame_key = frame_at_curve->AddKey(frame_at_time);
+	if (!frame_key)
+	{
+		return false;
+	}
+	frame_key->SetValue(frame_at_curve, frame_at);
+
+	auto set_curve_value = [&frame_at_time, &curves](const uint8_t& curve_index, const Float& value)
+		{
+			CCurve* curve = curves[curve_index];
+			CKey* key = curve->AddKey(frame_at_time);
+			if (!key)
+			{
+				return false;
+			}
+			key->SetValue(curve, value);
+			return true;
+		};
+
+	const auto& position = data.get_position();
+	if (!set_curve_value(POSITION_X, maxon::SafeConvert<Float>(position[0]) * setting.position_multiple))
+	{
+		return false;
+	}
+	if (!set_curve_value(POSITION_Y, maxon::SafeConvert<Float>(position[1]) * setting.position_multiple))
+	{
+		return false;
+	}
+	if (!set_curve_value(POSITION_Z, maxon::SafeConvert<Float>(position[2]) * setting.position_multiple))
+	{
+		return false;
+	}
+	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_POSITION_X, frame_at, data.get_position_x_interpolator()))
+	{
+		return false;
+	}
+	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_POSITION_Y, frame_at, data.get_position_y_interpolator()))
+	{
+		return false;
+	}
+	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_POSITION_Z, frame_at, data.get_position_z_interpolator()))
+	{
+		return false;
+	}
+
+	const auto& rotation = data.get_rotation();
+	if (!set_curve_value(ROTATION_X, maxon::SafeConvert<Float>(rotation[0])))
+	{
+		return false;
+	}
+	if (!set_curve_value(ROTATION_Y, maxon::SafeConvert<Float>(rotation[1])))
+	{
+		return false;
+	}
+	if (!set_curve_value(ROTATION_Z, maxon::SafeConvert<Float>(rotation[2])))
+	{
+		return false;
+	}
+	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator()))
+	{
+		return false;
+	}
+	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator()))
+	{
+		return false;
+	}
+	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator()))
+	{
+		return false;
+	}
+
+	return true;
 }
 
 NodeData* MMDBoneTag::Alloc()

@@ -274,6 +274,48 @@ Bool MMDMeshRootObject::SetMeshMorphStrength(const String& morph_name, Float str
 	return true;
 }
 
+Bool MMDMeshRootObject::SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data, const CMTToolsSetting::MotionImport& setting)
+{
+	const auto& morph_name = String(data.get_morph_name().c_str());
+	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
+	const auto morph_ptr = m_mesh_morph_data.Find(morph_name);
+	if (!morph_ptr)
+	{
+		return false;
+	}
+	for (const auto& mesh_morph_ui_data : morph_ptr->GetSecond())
+	{
+		if (const auto mesh_morph_tag = mesh_morph_ui_data.GetMorphTag(); mesh_morph_tag)
+		{
+			const auto& track_id = mesh_morph_ui_data.GetStrengthID();
+			CTrack* track = mesh_morph_tag->FindCTrack(track_id);
+			if (!track)
+			{
+				track = CTrack::Alloc(mesh_morph_tag, track_id);
+				if (!track)
+				{
+					return false;
+				}
+				mesh_morph_tag->InsertTrackSorted(track);
+			}
+
+			const auto curve = track->GetCurve();
+			if (!curve)
+			{
+				return false;
+			}
+
+			CKey* key = curve->AddKey(frame_at_time);
+			if (!key)
+			{
+				return false;
+			}
+			key->SetValue(curve, data.get_weight());
+		}
+	}
+	return true;
+}
+
 struct morph_tag_info
 {
 	CAPoseMorphTag* morph_tag = nullptr;

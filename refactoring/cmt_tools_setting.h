@@ -56,6 +56,7 @@ namespace CMTToolsSetting
 		Bool    import_motion = true;
 		Bool    import_morph = true;
 		Bool    import_model_info = true;
+		Bool	import_by_local_name = true;
 		Bool	ignore_physical = true;
 		Bool	delete_previous_animation = true;
 		Bool	detail_report = false;

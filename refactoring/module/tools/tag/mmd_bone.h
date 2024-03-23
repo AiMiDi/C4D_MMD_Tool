@@ -15,6 +15,11 @@ Description:	DESC
 #include "module/tools/mmd_interpolator.hpp"
 #include "utils/morph_ui_data_util.hpp"
 
+namespace CMTToolsSetting
+{
+	struct MotionImport;
+}
+
 struct MMDBoneRootObjectMsg;
 
 struct BoneMorphData
@@ -184,6 +189,8 @@ public:
 	 * @param[in] bone_object The bone object.
 	 */
 	void SetBoneObject(BaseObject* bone_object);
+
+	Bool LoadVMDMotion(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 
 	/**
 	 * @brief Allocates a new instance of MMDBoneTag.
@@ -386,6 +393,16 @@ protected:
 	CurrentValuesArray GetCurrentValues(GeListNode* node) override;
 
 private:
+	enum track_enum : uint8_t
+	{
+		POSITION_X,
+		POSITION_Y,
+		POSITION_Z,
+		ROTATION_X,
+		ROTATION_Y,
+		ROTATION_Z
+	};
+
 	/**
 	 * @brief Creates a bone lock tag for the MMDBoneTag.
 	 * @return true if the bone lock tag is created successfully, false otherwise.

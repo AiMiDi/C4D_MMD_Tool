@@ -208,13 +208,14 @@ struct MMDModelRootObjectMsg
 		:msg_type(msg_type_), object_type(object_type_), object(object_) {}
 };
 
-enum class MorphDescType : uint8_t
+enum class MMDModelRootDynamicDescriptionType : uint8_t
 {
-	GRP,
-	REAL_STRENGTH,
-	BUTTON_EDITOR,
-	BUTTON_DELETE,
-	BUTTON_RENAME
+	MORPH_GRP,
+	MORPH_STRENGTH,
+	MORPH_EDITOR_BUTTON,
+	MORPH_DELETE_BUTTON,
+	MORPH_RENAME_BUTTON,
+	IK_BOME_LINK
 };
 
 class MMDModelRootObject final : public ObjectData
@@ -227,8 +228,9 @@ class MMDModelRootObject final : public ObjectData
 	BaseObject* m_bone_root = nullptr;
 	BaseObject* m_rigid_root = nullptr;
 	BaseObject* m_joint_root = nullptr;
-	maxon::HashMap<DescID, maxon::Pair<MorphDescType, Int>> m_DescID_map;
+	maxon::HashMap<DescID, maxon::Pair<MMDModelRootDynamicDescriptionType, Int>> m_desc_id_map;
 	maxon::HashMap<String, Int> m_morph_name_map;
+	maxon::HashMap<String, BaseTag*> m_ik_name_map;
 	maxon::PointerArray<IMorph> m_morph_arr;
 private:
 	MMDModelRootObject();
@@ -261,8 +263,9 @@ public:
 	AddMorphHelper BeginMorphChange();
 	Int ImportGroupAndFlipMorph(const libmmd::pmx_morph& pmx_morph);
 
-	DescID AddDynamicDescription(const BaseContainer& bc, const MorphDescType& type, Int index);
+	DescID AddDynamicDescription(const BaseContainer& bc, const MMDModelRootDynamicDescriptionType& type, Int index);
 	void DeleteDynamicDescription(const DescID& id);
+	Bool AddIKBoneDescription(const maxon::String& bone_name_local, BaseTag* ik_tag);
 
 	Int GetMorphNum() const;
 	const maxon::PointerArray<IMorph>& GetMorphData();
@@ -274,6 +277,11 @@ public:
 
 	Bool LoadPMXModel(const libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMXModel(libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelExport& setting) const;
+
+	Bool LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionImport& setting);
+	Bool SaveVMDMotion(libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionExport& setting) const;
+	bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
+
 private:
 	String GetMorphNamedNumber();
 	bool DeleteMorphImpl(IMorph& morph, const Int morph_index);

@@ -114,6 +114,12 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp">
       <Filter>source\module\tools</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h">
@@ -232,6 +238,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_material.h">
       <Filter>source\module\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.h">
+      <Filter>source\module\tools\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

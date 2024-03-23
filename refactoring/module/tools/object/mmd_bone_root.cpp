@@ -514,6 +514,36 @@ Int32 MMDBoneRootObject::FindBoneIndex(const BaseTag* bone_tag) const
 	return bone_index;
 }
 
+Bool MMDBoneRootObject::SetBoneAnimation(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting)
+{
+	const String bone_name{ data.get_bone_name().c_str() };
+	for (const auto& bone_link : m_bone_list)
+	{
+		if (const auto tag = (*bone_link.GetValue())->ForceGetLink(); tag)
+		{
+			MMDBoneTag* bone_tag = nullptr;
+			if(setting.import_by_local_name)
+			{
+				GeData ge_data;
+				tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_LOCAL)), ge_data, DESCFLAGS_GET::NONE);
+				if (ge_data.GetString() == bone_name)
+					bone_tag = tag->GetNodeData<MMDBoneTag>();
+			}
+			else
+			{
+				if (tag->GetName() == bone_name)
+					bone_tag = tag->GetNodeData<MMDBoneTag>();
+			}
+			if(bone_tag)
+			{
+				bone_tag->LoadVMDMotion(data, setting);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Float strength)
 {
 	const auto morph_ptr = m_bone_morph_data.Find(morph_name);
@@ -746,16 +776,8 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TIP)), tip_link.Release(), DESCFLAGS_SET::NONE);
 
 				// add to model_root description
-				if (auto* dynamic_description = m_model_root->GetDynamicDescriptionWritable())
-				{
-					BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
-					bc.SetString(DESC_NAME, bone_name_local);
-					bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_IK_GRP))));
-					auto ik_link_id = dynamic_description->Alloc(bc);
-					AutoAlloc<BaseLink> ik_link;
-					ik_link->SetLink(ik_tag);
-					m_model_root->SetParameter(ik_link_id, ik_link.Release(), DESCFLAGS_SET::NONE);
-				}
+				if(!m_model_root->GetNodeData<MMDModelRootObject>()->AddIKBoneDescription(bone_name_local, ik_tag))
+					return false;
 
 				// set ik limit
 				for (auto ik_link_bone_index = int(); ik_link_bone_index < ik_bone_num; ++ik_link_bone_index)

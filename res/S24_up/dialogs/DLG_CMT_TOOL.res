@@ -332,6 +332,12 @@ DIALOG DLG_CMT_TOOL {
                                 SIZE 180, 13;
                                 ALIGN_LEFT;
                             }
+							
+							CHECKBOX DLG_CMT_TOOL_MOTION_IMPORT_BY_LOCAL_NAME {
+                                NAME IDS_CMT_TOOL_MOTION_IMPORT_BY_LOCAL_NAME;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
 
                             CHECKBOX DLG_CMT_TOOL_MOTION_IMPORT_IGNORE_PHYSICAL {
                                 NAME IDS_CMT_TOOL_MOTION_IMPORT_IGNORE_PHYSICAL;

@@ -124,6 +124,7 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_MOTION, setting.import_motion);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_MORPH, setting.import_morph);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_MODEL_INFO, setting.import_model_info);
+		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_BY_LOCAL_NAME, setting.import_by_local_name);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_IGNORE_PHYSICAL, setting.ignore_physical);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_DELETE_PREVIOUS_ANIMATION, setting.delete_previous_animation);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_DETAIL, setting.detail_report);
