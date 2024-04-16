@@ -12,6 +12,7 @@ Description:	DESC
 #include "mmd_bone.h"
 #include "module/tools/object/mmd_bone_root.h"
 #include "cmt_tools_setting.h"
+#include "utils/math_util.hpp"
 
 Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 {
@@ -169,7 +170,7 @@ void MMDBoneTag::SetBoneObject(BaseObject* bone_object)
 	m_bone_object = bone_object;
 }
 
-Bool MMDBoneTag::LoadVMDMotion(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting)
+Bool MMDBoneTag::LoadVMD(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting)
 {
 	const auto frame_at = static_cast<int32_t>(data.get_frame_at() + setting.time_offset);
 	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
@@ -199,15 +200,15 @@ Bool MMDBoneTag::LoadVMDMotion(const libmmd::vmd_bone_key_frame& data, const CMT
 			return false;
 		}
 	}
-	CTrack* frame_at_track = m_bone_object->FindCTrack(m_frame_at_desc);
+	CTrack* frame_at_track = m_bone_tag->FindCTrack(m_frame_at_desc);
 	if (!frame_at_track)
 	{
-		frame_at_track = CTrack::Alloc(m_bone_object, m_frame_at_desc);
+		frame_at_track = CTrack::Alloc(m_bone_tag, m_frame_at_desc);
 		if (!frame_at_track)
 		{
 			return false;
 		}
-		m_bone_object->InsertTrackSorted(frame_at_track);
+		m_bone_tag->InsertTrackSorted(frame_at_track);
 	}
 	CCurve* frame_at_curve = frame_at_track->GetCurve();
 	if (!frame_at_curve)
@@ -259,16 +260,16 @@ Bool MMDBoneTag::LoadVMDMotion(const libmmd::vmd_bone_key_frame& data, const CMT
 		return false;
 	}
 
-	const auto& rotation = data.get_rotation();
-	if (!set_curve_value(ROTATION_X, maxon::SafeConvert<Float>(rotation[0])))
+	const auto rotation_euler = math_util::QuaternionToEuler(data.get_rotation());
+	if (!set_curve_value(ROTATION_X, maxon::SafeConvert<Float>(rotation_euler.x)))
 	{
 		return false;
 	}
-	if (!set_curve_value(ROTATION_Y, maxon::SafeConvert<Float>(rotation[1])))
+	if (!set_curve_value(ROTATION_Y, maxon::SafeConvert<Float>(rotation_euler.y)))
 	{
 		return false;
 	}
-	if (!set_curve_value(ROTATION_Z, maxon::SafeConvert<Float>(rotation[2])))
+	if (!set_curve_value(ROTATION_Z, maxon::SafeConvert<Float>(rotation_euler.z)))
 	{
 		return false;
 	}
@@ -316,14 +317,7 @@ Bool MMDBoneTag::Init(GeListNode* node SDK2024_InitParaName)
 	bc->SetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE, 1.0);
 	bc->SetVector(PMX_BONE_LOCAL_X, Vector(1, 0, 0));
 	bc->SetVector(PMX_BONE_LOCAL_Z, Vector(0, 0, 1));
-	if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
-	{
-		if (auto* pd = DataGetCustomDataType(priority, PriorityData, CUSTOMGUI_PRIORITY_DATA))
-		{
-			pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 1);
-			bc->SetData(EXPRESSION_PRIORITY, priority);
-		}
-	}
+
 	if (!InitInterpolator(node))
 		return false;
 
@@ -493,25 +487,37 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 			break;
 		}
 	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
+	{
+		if (!m_bone_root)
+			return;
+		if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_INDEX)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr))
 		{
-			if (!m_bone_root)
-				return;
-			if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_INDEX)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr))
+			if (SDK2024_Const auto inherit_bone_parent_tag = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBone(bc->GetInt32(id));
+				inherit_bone_parent_tag != nullptr)
 			{
-				if (SDK2024_Const auto inherit_bone_parent_tag = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBone(bc->GetInt32(id));
-					inherit_bone_parent_tag != nullptr)
+				if (!bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK))
 				{
-					if (!bc->GetBaseLink(PMX_BONE_INHERIT_BONE_PARENT_LINK))
-					{
-						const auto inherit_bone_parent_link = BaseLink::Alloc();
-						inherit_bone_parent_link->SetLink(inherit_bone_parent_tag);
-						node->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
-					}
-					inherit_bone_parent->SetLink(inherit_bone_parent_tag);
+					const auto inherit_bone_parent_link = BaseLink::Alloc();
+					inherit_bone_parent_link->SetLink(inherit_bone_parent_tag);
+					node->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), inherit_bone_parent_link, DESCFLAGS_SET::NONE);
 				}
+				inherit_bone_parent->SetLink(inherit_bone_parent_tag);
 			}
-			break;
 		}
+		break;
+	}
+	case PMX_BONE_LAYER:
+	{
+		if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
+		{
+			if (auto* pd = DataGetCustomDataType(priority, PriorityData, CUSTOMGUI_PRIORITY_DATA))
+			{
+				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, bc->GetData(PMX_BONE_LAYER));
+				bc->SetData(EXPRESSION_PRIORITY, priority);
+			}
+		}
+		break;
+	}
 	case PMX_BONE_IS_IK:
 	case PMX_BONE_IS_FIXED_AXIS:
 	case PMX_BONE_INHERIT_ROTATION:
@@ -988,6 +994,18 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 		}
 		break;
 	}
+	case PMX_BONE_LAYER:
+	{
+		if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
+		{
+			if (auto* pd = DataGetCustomDataType(priority, PriorityData, CUSTOMGUI_PRIORITY_DATA))
+			{
+				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, t_data);
+				bc->SetData(EXPRESSION_PRIORITY, priority);
+			}
+		}
+		break;
+	}
 	case PMX_BONE_IS_IK:
 	case PMX_BONE_IS_FIXED_AXIS:
 	case PMX_BONE_INHERIT_ROTATION:
@@ -1173,35 +1191,37 @@ void MMDBoneTag::HandleBoneIndexUpdate(BaseTag* tag, BaseObject* op, BaseContain
 					up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
 					m_bone_index = Ge_data.GetString().ToInt32(nullptr) + 1;
 				}
-			}
-			else {
-				lase_obj = prev_obj;
-				// Get the previous bone
-				while (prev_obj != nullptr && !prev_obj->IsInstanceOf(Ojoint)) {
+				else
+				{
 					lase_obj = prev_obj;
-					prev_obj = prev_obj->GetPred();
-				}
-				// Get the last bone
-				tmp_lase_obj = lase_obj->GetDownLast();
-				while (tmp_lase_obj != nullptr)
-				{
-					if (tmp_lase_obj->IsInstanceOf(Ojoint)) {
-						lase_obj = tmp_lase_obj;
-						tmp_lase_obj = tmp_lase_obj->GetDownLast();
+					// Get the previous bone
+					while (prev_obj != nullptr && !prev_obj->IsInstanceOf(Ojoint)) {
+						lase_obj = prev_obj;
+						prev_obj = prev_obj->GetPred();
 					}
-					else {
-						tmp_lase_obj = tmp_lase_obj->GetPred();
+					// Get the last bone
+					tmp_lase_obj = lase_obj->GetDownLast();
+					while (tmp_lase_obj != nullptr)
+					{
+						if (tmp_lase_obj->IsInstanceOf(Ojoint)) {
+							lase_obj = tmp_lase_obj;
+							tmp_lase_obj = tmp_lase_obj->GetDownLast();
+						}
+						else {
+							tmp_lase_obj = tmp_lase_obj->GetPred();
+						}
 					}
-				}
-				lase_tag = lase_obj->GetTag(ID_T_MMD_BONE);
-				if (lase_tag != nullptr)
-				{
-					lase_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-					m_bone_index = Ge_data.GetString().ToInt32(nullptr) + 1;
+					lase_tag = lase_obj->GetTag(ID_T_MMD_BONE);
+					if (lase_tag != nullptr)
+					{
+						lase_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
+						m_bone_index = Ge_data.GetString().ToInt32(nullptr) + 1;
+					}
 				}
 			}
 		}
-		else {
+		else
+		{
 			if (!prev_obj)
 			{
 				if (!m_bone_root)
@@ -1276,11 +1296,6 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	HandleBoneMorphUpdate(tag, op);
 
 	return ExecuteImpl(op, doc, bt, priority, flags);
-}
-
-Bool MMDBoneTag::AddToExecution(BaseTag* tag, PriorityList* list)
-{
-	return AddToExecutionImpl(tag, list);
 }
 
 Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)

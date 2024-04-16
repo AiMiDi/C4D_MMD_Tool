@@ -55,7 +55,6 @@ public:
 
 	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetMeshMorphData() const;
 	Bool SetMeshMorphStrength(const String& morph_name, Float strength);
-	Bool SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	Bool LoadPMX(
 		const libmmd::pmx_model& pmx_model,
 		const maxon::HashMap<uint64_t, BaseObject*>& bone_map,

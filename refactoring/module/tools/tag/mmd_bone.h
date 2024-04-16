@@ -51,7 +51,7 @@ struct BoneMorphData
 	Bool Read(HyperFile* hf);
 	BoneMorphData(BoneMorphData&& src) noexcept :
 	MAXON_MOVE_MEMBERS(name, grp_id, strength_id, translation_id, rotation_id, button_grp_id, button_delete_id, button_rename_id){}
-	BoneMorphData& operator=(BoneMorphData&&) = default;
+	BoneMorphData& operator=(BoneMorphData&&) noexcept = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(BoneMorphData)
 };
 
@@ -134,7 +134,7 @@ using MMDBoneTagBase = MMDInterpolatorNode<TagData, 6, PMX_BONE_TAG_INTERPOLATOR
 class MMDBoneTag final : public MMDBoneTagBase
 {
 	// Bone index
-	Int32 m_bone_index = 0;
+	Int32 m_bone_index = -1;
 	// Bone morph name index
 	Int32 m_bone_morph_name_index = 0;
 	// Store the previous frame to determine the update state
@@ -190,7 +190,7 @@ public:
 	 */
 	void SetBoneObject(BaseObject* bone_object);
 
-	Bool LoadVMDMotion(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting);
+	Bool LoadVMD(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 
 	/**
 	 * @brief Allocates a new instance of MMDBoneTag.
@@ -247,14 +247,6 @@ public:
 	 * @return The execution result.
 	 */
 	EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
-
-	/**
-	 * @brief Adds the MMDBoneTag to the execution list.
-	 * @param[in] tag The BaseTag representing the MMDBoneTag.
-	 * @param[in] list The PriorityList for execution.
-	 * @return true if the MMDBoneTag is added successfully, false otherwise.
-	 */
-	Bool AddToExecution(BaseTag* tag, PriorityList* list) override;
 
 	/**
 	 * @brief Reads the MMDBoneTag from a HyperFile.

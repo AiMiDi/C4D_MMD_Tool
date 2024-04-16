@@ -75,8 +75,11 @@ public:
 
 	[[nodiscard]] BaseTag* FindBone(Int32 index) const;
 	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
-	[[nodiscard]] Bool SetBoneAnimation(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	const BaseContainer& GetBoneItems() const;
+
+	[[nodiscard]] Bool SetBoneAnimation(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting);
+	void UpdateAllBoneAnimation();
+	void DeleteAllBoneAnimation();
 
 	Bool LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashMap<uint64_t, BaseObject*>& bone_map, const CMTToolsSetting::ModelImport& setting);
 

@@ -166,13 +166,6 @@ public:
 	 */
 	EXECUTIONRESULT ExecuteImpl(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags);
 
-	/**
-	 * \brief Adds execution priorities to the object.
-	 * \param bl BaseObject for which priorities should be added.
-	 * \param list Priority list to which priorities should be added.
-	 * \return Boolean indicating success or failure.
-	 */
-	Bool AddToExecutionImpl(BaseList2D* bl, PriorityList* list);
 protected:
 	using TrackDescIDArray = std::array<const DescID, TRACK_COUNT>;
 	using TrackObjectArray = std::array<BaseObject*, TRACK_COUNT>;
@@ -475,7 +468,15 @@ Bool MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT, SPLINE
 	const auto object = reinterpret_cast<BaseObject*>(node);
 
 	CTrack* frame_track = object->FindCTrack(m_frame_at_desc);
+	if (!frame_track)
+	{
+				return false;
+	}
 	CCurve* frame_curve = frame_track->GetCurve();
+	if (!frame_curve)
+	{
+				return false;
+	}
 
 	const auto track_objects = GetTrackObjects(node);
 
@@ -817,15 +818,6 @@ EXECUTIONRESULT MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_CO
 		m_prev_interpolator_type = interpolator_type_int;
 	}
 	return EXECUTIONRESULT::OK;
-}
-
-template <typename NODE_DATE_TYPE, size_t TRACK_COUNT, size_t INTERPOLATOR_COUNT, Int32 SPLINE_DESC_ID, Int32 CURVE_TYPE_DESC_ID, Int32 FRAME_AT_DESC_ID,Int32 FRAME_AT_STR_DESC_ID>
-Bool MMDInterpolatorNode<NODE_DATE_TYPE, TRACK_COUNT, INTERPOLATOR_COUNT, SPLINE_DESC_ID, CURVE_TYPE_DESC_ID, FRAME_AT_DESC_ID, FRAME_AT_STR_DESC_ID>::AddToExecutionImpl(BaseList2D* bl, PriorityList* list)
-{
-	if (!list || !bl)
-		return true;
-	list->Add(bl, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
-	return true;
 }
 
 #endif // !_MMD_INTERPOLATOR_H

@@ -1275,41 +1275,75 @@ Bool MMDModelRootObject::SavePMXModel(libmmd::pmx_model& pmx_data, const CMTTool
 
 Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionImport& setting)
 {
+	iferr_scope_handler
+	{
+		return false;
+	};
+
+	maxon::BaseList<String> not_find_bone_name_list;
+	maxon::BaseList<String> not_find_morph_name_list;
+
+	BaseTime max_time {};
+	UInt64 imported_bone_count = 0;
+	UInt64 imported_morph_count = 0;
+	UInt64 imported_motion_count = 0;
+
+	maxon::TimeValue timing = maxon::TimeValue::GetTime();
+
 	// load bone motion
 	if (setting.import_motion)
 	{
+		const auto bone_root = m_bone_root->GetNodeData<MMDBoneRootObject>();
+		if (setting.delete_previous_animation)
+		{
+			bone_root->DeleteAllBoneAnimation();
+		}
 		const auto& bone_vmd_motion = vmd_motion.get_vmd_bone_key_frame_array();
 		auto bone_vmd_motion_count = bone_vmd_motion.size();
 		for (auto bone_vmd_motion_index = decltype(bone_vmd_motion_count){}; bone_vmd_motion_index < bone_vmd_motion_count; ++bone_vmd_motion_index)
 		{
-			if (const auto& bone_vmd_key_frame = bone_vmd_motion[bone_vmd_motion_index];
-				!m_bone_root->GetNodeData<MMDBoneRootObject>()->SetBoneAnimation(bone_vmd_key_frame, setting))
+			const auto& bone_vmd_key_frame = bone_vmd_motion[bone_vmd_motion_index];
+			if (bone_root->SetBoneAnimation(bone_vmd_key_frame, setting))
 			{
-				const auto& bone_name = bone_vmd_key_frame.get_bone_name();
-				// TODO: import by default way
+				++imported_bone_count;
 			}
+			not_find_bone_name_list.Append(String(bone_vmd_key_frame.get_bone_name().c_str()))iferr_return;
 		}
+		bone_root->UpdateAllBoneAnimation();
+		if(bone_vmd_motion_count > 0)
+			max_time = maxon::Max(max_time, BaseTime(bone_vmd_motion[bone_vmd_motion_count - 1].get_frame_at(), 30.));
 	}
 
 	// load morph motion
 	if (setting.import_morph)
 	{
+		if (setting.delete_previous_animation)
+		{
+			// TODO: delete previous animation
+		}
 		const auto& morph_vmd_motion = vmd_motion.get_vmd_morph_key_frame_array();
 		auto morph_vmd_motion_count = morph_vmd_motion.size();
+		imported_motion_count = morph_vmd_motion_count;
 		for (auto morph_vmd_motion_index = decltype(morph_vmd_motion_count){}; morph_vmd_motion_index < morph_vmd_motion_count; ++morph_vmd_motion_index)
 		{
-			if (const auto& morph_vmd_key_frame = morph_vmd_motion[morph_vmd_motion_index];
-				!m_mesh_root->GetNodeData<MMDMeshRootObject>()->SetMeshMorphAnimation(morph_vmd_key_frame, setting))
+			const auto& morph_vmd_key_frame = morph_vmd_motion[morph_vmd_motion_index];
+			if (SetMeshMorphAnimation(morph_vmd_key_frame, setting))
 			{
-				const auto& morph_name = morph_vmd_key_frame.get_morph_name();
-				// TODO: import by default way
+				++imported_morph_count;
 			}
+			not_find_morph_name_list.Append(String(morph_vmd_key_frame.get_morph_name().c_str()))iferr_return;
 		}
+		if(morph_vmd_motion_count > 0)
+			max_time = maxon::Max(max_time, BaseTime(morph_vmd_motion[morph_vmd_motion_count - 1].get_frame_at(), 30.));
 	}
 
 	// load model info
 	if (setting.import_model_info)
 	{
+		if (setting.delete_previous_animation)
+		{
+			// TODO: delete previous animation
+		}
 		const auto& model_controller_key_frame_array = vmd_motion.get_vmd_model_controller_key_frame_array();
 		auto model_controller_key_frame_count = model_controller_key_frame_array.size();
 		for (auto model_controller_key_frame_index = decltype(model_controller_key_frame_count){}; model_controller_key_frame_index < model_controller_key_frame_count; ++model_controller_key_frame_index)
@@ -1317,11 +1351,36 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 			if (const auto& model_controller_key_frame = model_controller_key_frame_array[model_controller_key_frame_index];
 				!SetModelControllerAnimation(model_controller_key_frame, setting))
 			{
-				// TODO: import by default way
+				return false;
 			}
 		}
+		if(model_controller_key_frame_count > 0)
+			max_time = maxon::Max(max_time, BaseTime(model_controller_key_frame_array[model_controller_key_frame_count - 1].get_frame_at(), 30.));
 	}
+	setting.doc->SetMaxTime(max_time);
+	setting.doc->SetLoopMaxTime(max_time);
 
+	timing.Stop();
+
+	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK,
+		String::UIntToString(imported_motion_count),
+		String::UIntToString(imported_bone_count),
+		String::UIntToString(imported_morph_count),
+		String::FloatToString(timing.GetMilliseconds())) + "\n";
+	if (setting.detail_report == 1)
+	{
+		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_name_list.GetCount())) + ":\n";
+		for (String i : not_find_bone_name_list)
+		{
+			report += "\"" + i + "\" ";
+		}
+		report += "\n" + GeLoadString(IDS_MES_IMPORT_MOT_CF_MORPH, String::IntToString(not_find_morph_name_list.GetCount())) + ":\n";
+		for (String i : not_find_morph_name_list)
+		{
+			report += "\"" + i + "\" ";
+		}
+	}
+	MessageDialog(report);
 	return true;
 }
 
@@ -1330,8 +1389,48 @@ Bool MMDModelRootObject::SaveVMDMotion(libmmd::vmd_animation& vmd_motion, const 
 	return true;
 }
 
-bool MMDModelRootObject::SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data,
+Bool MMDModelRootObject::SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data,
 	const CMTToolsSetting::MotionImport& setting)
+{
+	const auto object = reinterpret_cast<BaseObject*>(Get());
+	const auto& morph_name = String(data.get_morph_name().c_str());
+	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
+	const auto morph_ptr = m_morph_name_map.Find(morph_name);
+	if (!morph_ptr)
+	{
+		return false;
+	}
+	const auto& morph_id = morph_ptr->GetValue();
+	const auto& track_id = m_morph_arr[morph_id].GetStrengthDescID();
+	CTrack* track = object->FindCTrack(track_id);
+	if (!track)
+	{
+		track = CTrack::Alloc(object, track_id);
+		if (!track)
+		{
+			return false;
+		}
+		object->InsertTrackSorted(track);
+	}
+
+	const auto curve = track->GetCurve();
+	if (!curve)
+	{
+		return false;
+	}
+
+	CKey* key = curve->AddKey(frame_at_time);
+	if (!key)
+	{
+		return false;
+	}
+	key->SetValue(curve, data.get_weight());
+
+	return true;
+}
+
+bool MMDModelRootObject::SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data,
+                                                     const CMTToolsSetting::MotionImport& setting)
 {
 	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
 	const auto object = reinterpret_cast<BaseObject*>(Get());
@@ -1410,9 +1509,8 @@ bool MMDModelRootObject::SetModelControllerAnimation(const libmmd::vmd_model_con
 			if (const auto ik_entry = m_ik_name_map.Find(ik_bone_name); ik_entry)
 			{
 				if (const auto& ik_tag = ik_entry->GetValue(); !add_key_func(ik_tag))
-				{
 					return false;
-				}
+				
 			}
 		}
 		else
@@ -1420,7 +1518,7 @@ bool MMDModelRootObject::SetModelControllerAnimation(const libmmd::vmd_model_con
 			for (const auto& ik_tag : m_ik_name_map.GetValues())
 			{
 				if (ik_tag->GetName().IsEqual(ik_bone_name) && !add_key_func(ik_tag))
-						return false;
+					return false;
 			}			
 		}
 	}

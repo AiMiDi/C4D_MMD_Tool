@@ -36,8 +36,9 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 
 		EventAdd();
 		// set document with vmd length
-		setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(),
-			BaseTime(vmd_camera_key_frame_array[vmd_camera_key_frame_array.size() - 1ULL].get_frame_at(), 30.0)));
+		if(vmd_camera_key_frame_array.size() > 0)
+			setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(),
+				BaseTime(vmd_camera_key_frame_array[vmd_camera_key_frame_array.size() - 1ULL].get_frame_at(), 30.0)));
 		setting.doc->SetTime(BaseTime{ 1.0 });
 		setting.doc->SetTime(BaseTime{});
 
@@ -103,6 +104,32 @@ BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConve
 	setting.doc->SetTime(BaseTime{ 1.0 });
 	setting.doc->SetTime(BaseTime{});
 	return vmd_camera;
+}
+
+Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::vmd_animation& data)
+{
+	BaseObject* select_object = setting.doc->GetActiveObject();
+	if (select_object == nullptr)
+	{
+		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+		return false;
+	}
+
+	if (!select_object->IsInstanceOf(ID_O_MMD_MODEL))
+	{
+		MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + "Not MMD model.");
+		return false;
+	}
+
+	if(!select_object->GetNodeData<MMDModelRootObject>()->LoadVMDMotion(data, setting))
+	{
+		return false;
+	}
+
+	EventAdd(EVENT::NONE);
+	setting.doc->SetTime(BaseTime(1, 30.));
+	setting.doc->SetTime(BaseTime(0, 30.));
+	return true;
 }
 
 BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& setting, const libmmd::pmx_model& data)

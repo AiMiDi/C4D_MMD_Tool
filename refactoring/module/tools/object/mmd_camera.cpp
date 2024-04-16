@@ -787,7 +787,10 @@ EXECUTIONRESULT MMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread
 
 Bool MMDCamera::AddToExecution(BaseObject* op, PriorityList* list)
 {
-	return AddToExecutionImpl(op, list);
+	if (!list || !op)
+		return true;
+	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
+	return true;
 }
 
 MMDCamera::TrackDescIDArray MMDCamera::GetTrackDescIDsImpl()

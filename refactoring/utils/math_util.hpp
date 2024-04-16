@@ -37,31 +37,30 @@ namespace math_util
 	}
 	/**
 	 * \brief Converts Quaternion rotation to euler rotation.
-	 * \tparam T Vector float type
 	 * \param quaternion Enter quaternion rotation
 	 * \return Results euler rotation
 	 */
-	template<class T>
-	auto QuaternionToEuler(const maxon::Vec4<T>& quaternion)
+
+	inline maxon::Vec3<float> QuaternionToEuler(const std::array<float, 4>& quaternion)
 	{
 		// pitch(y - axis rotation)
-		const Float sinr_cosp = 2.0 * (static_cast<double>(quaternion.w * quaternion.y) + 
-			static_cast<double>(quaternion.x * quaternion.z));
-		const Float cosr_cosp = 1.0 - (2.0 * (static_cast<double>(quaternion.x * quaternion.x) + 
-			static_cast<double>(quaternion.y * quaternion.y)));
+		const Float sinr_cosp = 2.0 * (static_cast<double>(quaternion[3] * quaternion[1]) +
+			static_cast<double>(quaternion[0] * quaternion[2]));
+		const Float cosr_cosp = 1.0 - (2.0 * (static_cast<double>(quaternion[0] * quaternion[0]) + 
+			static_cast<double>(quaternion[1] * quaternion[1])));
 		const Float pitch = -atan2(sinr_cosp, cosr_cosp);
 
 		// yaw(z - axis rotation)
-		const Float siny_cosp = 2.0 * (static_cast<double>(-quaternion.w * quaternion.z) - 
-			static_cast<double>(quaternion.x * quaternion.y));
-		const Float cosy_cosp = 1.0 - (2.0 * (static_cast<double>(quaternion.x * quaternion.x) + 
-			static_cast<double>(quaternion.z * quaternion.z)));
+		const Float siny_cosp = 2.0 * (static_cast<double>(-quaternion[3] * quaternion[2]) - 
+			static_cast<double>(quaternion[0] * quaternion[1]));
+		const Float cosy_cosp = 1.0 - (2.0 * (static_cast<double>(quaternion[0] * quaternion[0]) + 
+			static_cast<double>(quaternion[2] * quaternion[2])));
 		const Float yaw = atan2(siny_cosp, cosy_cosp);
 
 		// roll(x - axis rotation)
 		Float roll;
-		if (const Float sinp = 2.0 * (static_cast<double>(quaternion.z * quaternion.y) - 
-			static_cast<double>(quaternion.w *quaternion.x)); sinp >= 1.0)
+		if (const Float sinp = 2.0 * (static_cast<double>(quaternion[2] * quaternion[1]) - 
+			static_cast<double>(quaternion[3] *quaternion[0])); sinp >= 1.0)
 		{
 			// use 90 degrees if out of range
 			roll = -PI05;
@@ -75,15 +74,15 @@ namespace math_util
 		}
 
 		// fixing the x rotation, part 1
-		if (quaternion.x * quaternion.x > 0.5f || quaternion.w < 0.0f)
+		if (quaternion[0] * quaternion[0] > 0.5f || quaternion[3] < 0.0f)
 		{
-			if (quaternion.x < 0.0f)
+			if (quaternion[0] < 0.0f)
 			{
 				roll = -PI - roll;
 			}
 			else
 			{
-				roll = PI * copysign(1.0, quaternion.w) - roll;
+				roll = PI * copysign(1.0, quaternion[3]) - roll;
 			}
 		}
 		// fixing the x rotation, part 2
@@ -96,7 +95,7 @@ namespace math_util
 			roll = -PI - roll;
 		}
 		// HPB
-		return maxon::Vec3<T>{ maxon::SafeConvert<T>(pitch), maxon::SafeConvert<T>(-roll), maxon::SafeConvert<T>(yaw) };
+		return maxon::Vec3<float>{ maxon::SafeConvert<float>(pitch), maxon::SafeConvert<float>(-roll), maxon::SafeConvert<float>(yaw) };
 	}
 }
 

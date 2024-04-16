@@ -12,7 +12,6 @@ Description:	DESC
 #include "mmd_bone_root.h"
 #include "cmt_tools_setting.h"
 #include "mmd_model.h"
-#include "description/OMMDModel.h"
 #include "module/tools/tag/mmd_bone.h"
 
 NodeData* MMDBoneRootObject::Alloc()
@@ -536,12 +535,34 @@ Bool MMDBoneRootObject::SetBoneAnimation(const libmmd::vmd_bone_key_frame& data,
 			}
 			if(bone_tag)
 			{
-				bone_tag->LoadVMDMotion(data, setting);
+				bone_tag->LoadVMD(data, setting);
 				return true;
 			}
 		}
 	}
 	return false;
+}
+
+void MMDBoneRootObject::UpdateAllBoneAnimation()
+{
+	for (const auto& bone_link : m_bone_list)
+	{
+		if (const auto tag = (*bone_link.GetValue())->ForceGetLink(); tag)
+		{
+			tag->GetNodeData<MMDBoneTag>()->UpdateAllInterpolator();
+		}
+	}
+}
+
+void MMDBoneRootObject::DeleteAllBoneAnimation()
+{
+	for (const auto& bone_link : m_bone_list)
+	{
+		if (const auto tag = (*bone_link.GetValue())->ForceGetLink(); tag)
+		{
+			tag->GetNodeData<MMDBoneTag>()->DeleteAllKeyFrame();
+		}
+	}
 }
 
 Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Float strength)
@@ -840,7 +861,7 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 			for (auto offset_index = decltype(pmx_bone_morph_offset_num){}; offset_index < pmx_bone_morph_offset_num; ++offset_index)
 			{
 				const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_bone_morph_offset&>(pmx_bone_morph_offset_array[offset_index]);
-				if (const auto bone_tag = reinterpret_cast<BaseTag*>(FindBone(pmx_bone_morph_offset.get_bone_index())); bone_tag)
+				if (const auto bone_tag = FindBone(pmx_bone_morph_offset.get_bone_index()); bone_tag)
 				{
 					auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
 					const auto added_morph_index = bone_tag_node->AddBoneMorph(morph_name_local);

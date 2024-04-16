@@ -280,7 +280,6 @@ public:
 
 	Bool LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionImport& setting);
 	Bool SaveVMDMotion(libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionExport& setting) const;
-	bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 
 private:
 	String GetMorphNamedNumber();
@@ -293,6 +292,8 @@ private:
 	Bool ReadMorph(HyperFile* hf);
 	Bool WriteMorph(HyperFile* hf) SDK2024_Const;
 	Bool CopyMorph(MMDModelRootObject* dst) const;
+	Bool SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data, const CMTToolsSetting::MotionImport& setting);
+	Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 };
 
 #endif // !MMD_MODEL_H__

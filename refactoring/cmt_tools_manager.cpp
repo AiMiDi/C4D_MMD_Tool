@@ -81,6 +81,32 @@ namespace CMTToolsManager
 
 	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting)
 	{
+		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
+		const auto vmd_animation = make_vmd_animation();
+		if (!vmd_animation)
+		{
+			return false;
+		}
+		if (!vmd_animation->read_from_file_u8(vmd_utf8_filename))
+		{
+			return false;
+		}
+
+		if (setting.import_motion)
+			vmd_animation->mutable_vmd_bone_key_frame_array().sort();
+
+		if (setting.import_morph)
+			vmd_animation->mutable_vmd_morph_key_frame_array().sort();
+
+		if (setting.import_model_info)
+			vmd_animation->mutable_vmd_model_controller_key_frame_array().sort();
+
+		if (CMTSceneManager::LoadVMDMotion(setting, *vmd_animation))
+		{
+			return false;
+		}
+
 		return true;
 	}
 
