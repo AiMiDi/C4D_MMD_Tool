@@ -12,6 +12,8 @@ Description:	MMD mesh root object
 #define MMD_MESH_ROOT_H__
 
 #include "CMTSceneManager.h"
+#include "CMTSceneManager.h"
+#include "CMTSceneManager.h"
 #include "mmd_root.hpp"
 #include "utils/morph_ui_data_util.hpp"
 
@@ -57,11 +59,10 @@ public:
 	Bool SetMeshMorphStrength(const String& morph_name, Float strength);
 	Bool LoadPMX(
 		const libmmd::pmx_model& pmx_model,
-		const maxon::HashMap<uint64_t, BaseObject*>& bone_map,
+		const maxon::BaseArray<BaseObject*>& bone_list,
 		const CMTToolsSetting::ModelImport& setting);
 private:
 	void RefreshMeshMorphData(BaseObject* op);
-	static void LoadPMXVertexWeight(const libmmd::pmx_vertex& pmx_vertex, maxon::HashMap<Int32, Int32>& weight_tag_joint_map, uint64_t vertex_index, CAWeightTag* weight_tag);
 };
 
 #endif // !MMD_MESH_ROOT_H__

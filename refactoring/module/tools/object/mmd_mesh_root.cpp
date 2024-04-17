@@ -11,6 +11,7 @@ Description:	MMD mesh root object
 #include "pch.h"
 #include "mmd_mesh_root.h"
 
+#include "CMTSceneManager.h"
 #include "mmd_bone_root.h"
 #include "mmd_model.h"
 #include "tcaposemorph.h"
@@ -303,7 +304,7 @@ maxon::HashInt vertex_info::GetHashCode() const
 
 Bool MMDMeshRootObject::LoadPMX(
 	const libmmd::pmx_model& pmx_model,
-	const maxon::HashMap<uint64_t, BaseObject*>& bone_map,
+	const maxon::BaseArray<BaseObject*>& bone_list,
 	const CMTToolsSetting::ModelImport& setting)
 {
 	iferr_scope_handler{
@@ -334,6 +335,107 @@ Bool MMDMeshRootObject::LoadPMX(
 			return false;
 	}
 
+	maxon::BaseArray<std::unordered_map<Int32, Float32>> vertex_weight_data;
+	if (setting.import_weights)
+	{
+		// statistics vertex weight data
+		const auto vertex_count_int = static_cast<Int>(vertex_count);
+		vertex_weight_data.Resize(vertex_count_int)iferr_return;
+		maxon::ParallelFor::Dynamic(Int{}, vertex_count_int, [&pmx_vertex_array, &vertex_weight_data](const Int vertex_index)
+		{
+			auto& weight_data = vertex_weight_data[vertex_index];
+			switch (const auto& pmx_vertex = pmx_vertex_array[vertex_index]; pmx_vertex.get_skinning_type())
+			{
+			case libmmd::pmx_vertex_skinning::skinning_type::BDEF1:
+			{
+				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_BDEF1*>(pmx_vertex.get_skinning());
+				weight_data[skinning_data->get_bone_index()] = 1.f;
+				break;
+			}
+			case libmmd::pmx_vertex_skinning::skinning_type::BDEF2:
+			{
+				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_BDEF2*>(pmx_vertex.get_skinning());
+				const auto bone_weight = skinning_data->get_bone_weight();
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index1(), bone_weight); !inserted)
+				{
+					it->second += bone_weight;
+				}
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index2(), 1.f - bone_weight); !inserted)
+				{
+					it->second += 1.f - bone_weight;
+				}
+				break;
+			}
+			case libmmd::pmx_vertex_skinning::skinning_type::BDEF4:
+			{
+				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_BDEF4*>(pmx_vertex.get_skinning());
+				const auto bone_weight1 = skinning_data->get_bone_weight1();
+				const auto bone_weight2 = skinning_data->get_bone_weight2();
+				const auto bone_weight3 = skinning_data->get_bone_weight3();
+				const auto bone_weight4 = skinning_data->get_bone_weight4();
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index1(), bone_weight1); !inserted)
+				{
+					it->second += bone_weight1;
+				}
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index2(), bone_weight2); !inserted)
+				{
+					it->second += bone_weight2;
+				}
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index3(), bone_weight3); !inserted)
+				{
+					it->second += bone_weight3;
+				}
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index4(), bone_weight4); !inserted)
+				{
+					it->second += bone_weight4;
+				}
+				break;
+			}
+			case libmmd::pmx_vertex_skinning::skinning_type::SDEF:
+			{
+				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_SDEF*>(pmx_vertex.get_skinning());
+				const auto bone_weight = skinning_data->get_bone_weight();
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index1(), bone_weight); !inserted)
+				{
+					it->second += bone_weight;
+				}
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index2(), 1.f - bone_weight); !inserted)
+				{
+					it->second += 1.f - bone_weight;
+				}
+				break;
+			}
+			case libmmd::pmx_vertex_skinning::skinning_type::QDEF:
+			{
+				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_QDEF*>(pmx_vertex.get_skinning());
+				const auto bone_weight1 = skinning_data->get_bone_weight1();
+				const auto bone_weight2 = skinning_data->get_bone_weight2();
+				const auto bone_weight3 = skinning_data->get_bone_weight3();
+				const auto bone_weight4 = skinning_data->get_bone_weight4();
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index1(), bone_weight1); !inserted)
+				{
+					it->second += bone_weight1;
+				}
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index2(), bone_weight2); !inserted)
+				{
+					it->second += bone_weight2;
+				}
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index3(), bone_weight3); !inserted)
+				{
+					it->second += bone_weight3;
+				}
+				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index4(), bone_weight4); !inserted)
+				{
+					it->second += bone_weight4;
+				}
+				break;
+			}
+			case libmmd::pmx_vertex_skinning::skinning_type::NONE:
+				break;
+			}
+		});
+	}
+
 	// create mesh
 	if (!setting.import_multipart)
 	{
@@ -350,7 +452,6 @@ Bool MMDMeshRootObject::LoadPMX(
 		CAWeightTag* weight_tag = nullptr;
 
 		// mmd bone index -> weight tag joint index
-		maxon::HashMap<Int32, Int32> weight_tag_joint_map;
 		if (setting.import_weights)
 		{
 			weight_tag = CAWeightTag::Alloc();
@@ -361,11 +462,10 @@ Bool MMDMeshRootObject::LoadPMX(
 			mesh_object->InsertTag(weight_tag);
 
 			// add joint to weight tag
-			for (const auto& mmd_bone_index : bone_map.GetKeys())
+			const auto bone_count = bone_list.GetCount();
+			for (auto mmd_bone_index = Int32{}; mmd_bone_index < bone_count; ++mmd_bone_index)
 			{
-				const auto& bone_object = bone_map.Find(mmd_bone_index)->GetValue();
-				const auto joint_index = weight_tag->AddJoint(bone_object);
-				weight_tag_joint_map.Insert(mmd_bone_index, joint_index)iferr_return;
+				weight_tag->AddJoint(bone_list[mmd_bone_index]);
 			}
 
 			// add morph skin
@@ -377,7 +477,7 @@ Bool MMDMeshRootObject::LoadPMX(
 			morph_skin_object->InsertUnder(mesh_object);
 		}
 
-		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertex_array, &setting, &mesh_object_points, &weight_tag, &weight_tag_joint_map](const uint64_t vertex_index)
+		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertex_array, &setting, &mesh_object_points, &weight_tag, &vertex_weight_data](const uint64_t vertex_index)
 		{
 			const auto& pmx_vertex = pmx_vertex_array[vertex_index];
 
@@ -391,7 +491,11 @@ Bool MMDMeshRootObject::LoadPMX(
 			if (setting.import_weights)
 			{
 				// add weight data to weight tag
-				LoadPMXVertexWeight(pmx_vertex, weight_tag_joint_map, vertex_index, weight_tag);
+				for (const auto& [joint_index, weight] : vertex_weight_data[static_cast<Int>(vertex_index)])
+				{
+					// clamp weight at 0.0 to 1.0
+					weight_tag->SetWeight(joint_index, static_cast<Int32>(vertex_index), Clamp01(weight));
+				}
 			}
 		});
 
@@ -767,7 +871,6 @@ Bool MMDMeshRootObject::LoadPMX(
 			CAWeightTag* weight_tag = nullptr;
 
 			// mmd bone index -> weight tag joint index
-			maxon::HashMap<Int32, Int32> weight_tag_joint_map;
 			if (setting.import_weights)
 			{
 				weight_tag = CAWeightTag::Alloc();
@@ -778,11 +881,10 @@ Bool MMDMeshRootObject::LoadPMX(
 				mesh_object->InsertTag(weight_tag);
 
 				// add joint to weight tag
-				for (const auto& mmd_bone_index : bone_map.GetKeys())
+				const auto bone_count = bone_list.GetCount();
+				for (auto mmd_bone_index = Int32{}; mmd_bone_index < bone_count; ++mmd_bone_index)
 				{
-					const auto& bone_object = bone_map.Find(mmd_bone_index)->GetValue();
-					const auto joint_index = weight_tag->AddJoint(bone_object);
-					weight_tag_joint_map.Insert(mmd_bone_index, joint_index)iferr_return;
+					weight_tag->AddJoint(bone_list[mmd_bone_index]);
 				}
 
 				// add morph skin
@@ -837,7 +939,7 @@ Bool MMDMeshRootObject::LoadPMX(
 
 				const auto mesh_object_points = ToPoint(mesh_object)->GetPointW();
 
-				maxon::ParallelFor::Dynamic(0, part_vertex_count, [&setting, &pmx_vertex_array, &mesh_object_points, &weight_tag, &weight_tag_joint_map, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
+				maxon::ParallelFor::Dynamic(0, part_vertex_count, [&setting, &pmx_vertex_array, &mesh_object_points, &weight_tag, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
 				{
 					iferr_scope_handler
 					{
@@ -870,7 +972,11 @@ Bool MMDMeshRootObject::LoadPMX(
 					if (setting.import_weights)
 					{
 						// add weight data to weight tag
-						LoadPMXVertexWeight(pmx_vertex, weight_tag_joint_map, vertex_index, weight_tag);
+						for (const auto& [joint_index, weight] :vertex_weight_data[pmx_vertex_index])
+						{
+							// clamp weight at 0.0 to 1.0
+							weight_tag->SetWeight(joint_index, c4d_vertex_index, Clamp01(weight));
+						}
 					}
 				});
 			}
@@ -1292,76 +1398,5 @@ void MMDMeshRootObject::RefreshMeshMorphData(BaseObject* op)
 			MMDMeshRootObjectMsg msg{ MMDMeshRootObjectMsgType::MESH_MORPH_CHANGE };
 			m_model_root->Message(ID_O_MMD_MESH_ROOT, &msg);
 		}
-	}
-}
-
-void MMDMeshRootObject::LoadPMXVertexWeight(const libmmd::pmx_vertex& pmx_vertex,
-                                            maxon::HashMap<Int32, Int32>& weight_tag_joint_map, uint64_t vertex_index, CAWeightTag* weight_tag)
-{
-	switch (pmx_vertex.get_skinning_type())
-	{
-	case libmmd::pmx_vertex_skinning::skinning_type::BDEF1:
-		{
-			const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_BDEF1*>(pmx_vertex.get_skinning());
-			const auto& joint_index = weight_tag_joint_map.Find(skinning_data->get_bone_index())->GetValue();
-			weight_tag->SetWeight(joint_index, static_cast<Int32>(vertex_index), 1.);
-			break;
-		}
-	case libmmd::pmx_vertex_skinning::skinning_type::BDEF2:
-		{
-			const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_BDEF2*>(pmx_vertex.get_skinning());
-			const auto bone_weight = skinning_data->get_bone_weight();
-			const auto& joint_index1 = weight_tag_joint_map.Find(skinning_data->get_bone_index1())->GetValue();
-			const auto& joint_index2 = weight_tag_joint_map.Find(skinning_data->get_bone_index2())->GetValue();
-			weight_tag->SetWeight(joint_index1, static_cast<Int32>(vertex_index), bone_weight);
-			weight_tag->SetWeight(joint_index2, static_cast<Int32>(vertex_index), 1. - bone_weight);
-			break;
-		}
-	case libmmd::pmx_vertex_skinning::skinning_type::BDEF4:
-		{
-			const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_BDEF4*>(pmx_vertex.get_skinning());
-			const auto bone_weight1 = skinning_data->get_bone_weight1();
-			const auto bone_weight2 = skinning_data->get_bone_weight2();
-			const auto bone_weight3 = skinning_data->get_bone_weight3();
-			const auto bone_weight4 = skinning_data->get_bone_weight4();
-			const auto& joint_index1 = weight_tag_joint_map.Find(skinning_data->get_bone_index1())->GetValue();
-			const auto& joint_index2 = weight_tag_joint_map.Find(skinning_data->get_bone_index2())->GetValue();
-			const auto& joint_index3 = weight_tag_joint_map.Find(skinning_data->get_bone_index3())->GetValue();
-			const auto& joint_index4 = weight_tag_joint_map.Find(skinning_data->get_bone_index4())->GetValue();
-			weight_tag->SetWeight(joint_index1, static_cast<Int32>(vertex_index), bone_weight1);
-			weight_tag->SetWeight(joint_index2, static_cast<Int32>(vertex_index), bone_weight2);
-			weight_tag->SetWeight(joint_index3, static_cast<Int32>(vertex_index), bone_weight3);
-			weight_tag->SetWeight(joint_index4, static_cast<Int32>(vertex_index), bone_weight4);
-			break;
-		}
-	case libmmd::pmx_vertex_skinning::skinning_type::SDEF:
-		{
-			const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_SDEF*>(pmx_vertex.get_skinning());
-			const auto bone_weight1 = skinning_data->get_bone_weight();
-			const auto& joint_index1 = weight_tag_joint_map.Find(skinning_data->get_bone_index1())->GetValue();
-			const auto& joint_index2 = weight_tag_joint_map.Find(skinning_data->get_bone_index2())->GetValue();
-			weight_tag->SetWeight(joint_index1, static_cast<Int32>(vertex_index), bone_weight1);
-			weight_tag->SetWeight(joint_index2, static_cast<Int32>(vertex_index), 1. - bone_weight1);
-			break;
-		}
-	case libmmd::pmx_vertex_skinning::skinning_type::QDEF:
-		{
-			const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_QDEF*>(pmx_vertex.get_skinning());
-			const auto bone_weight1 = skinning_data->get_bone_weight1();
-			const auto bone_weight2 = skinning_data->get_bone_weight2();
-			const auto bone_weight3 = skinning_data->get_bone_weight3();
-			const auto bone_weight4 = skinning_data->get_bone_weight4();
-			const auto& joint_index1 = weight_tag_joint_map.Find(skinning_data->get_bone_index1())->GetValue();
-			const auto& joint_index2 = weight_tag_joint_map.Find(skinning_data->get_bone_index2())->GetValue();
-			const auto& joint_index3 = weight_tag_joint_map.Find(skinning_data->get_bone_index3())->GetValue();
-			const auto& joint_index4 = weight_tag_joint_map.Find(skinning_data->get_bone_index4())->GetValue();
-			weight_tag->SetWeight(joint_index1, static_cast<Int32>(vertex_index), bone_weight1);
-			weight_tag->SetWeight(joint_index2, static_cast<Int32>(vertex_index), bone_weight2);
-			weight_tag->SetWeight(joint_index3, static_cast<Int32>(vertex_index), bone_weight3);
-			weight_tag->SetWeight(joint_index4, static_cast<Int32>(vertex_index), bone_weight4);
-			break;
-		}
-	case libmmd::pmx_vertex_skinning::skinning_type::NONE:
-		break;
 	}
 }

@@ -583,7 +583,7 @@ Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Flo
 	return true;
 }
 
-Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashMap<uint64_t, BaseObject*>& bone_map, const CMTToolsSetting::ModelImport& setting)
+Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting)
 {
 	iferr_scope_handler{
 		return false;
@@ -595,13 +595,14 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 		return true;
 
 	// create bone
+	bone_list.EnsureCapacity(static_cast<Int>(pmx_bone_num))iferr_return;
 	for (auto pmx_bone_index = decltype(pmx_bone_num){}; pmx_bone_index < pmx_bone_num; ++pmx_bone_index)
 	{
 		BaseObject* new_bone = BaseObject::Alloc(Ojoint);
 		if (new_bone == nullptr)
 			continue;
 
-		bone_map.Insert(pmx_bone_index, new_bone)iferr_return;
+		bone_list.Append(new_bone)iferr_return;
 	}
 
 	// set bone data
@@ -609,16 +610,16 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 	{
 		const auto& pmx_bone = pmx_bone_array[pmx_bone_index];
 
-		if(!bone_map.Contains(pmx_bone_index))
+		const auto bone_object = bone_list[static_cast<Int>(pmx_bone_index)];
+		if(!bone_object)
 			continue;
 
-		const auto bone_object = bone_map.Find(pmx_bone_index)->GetValue();
 		const auto bone_tag = bone_object->MakeTag(ID_T_MMD_BONE);
 		const auto bone_node = bone_tag->GetNodeData<MMDBoneTag>();
 
 		// init bone tag
 		bone_node->SetBoneObject(bone_object);
-		bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(this->Get()));
+		bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(Get()));
 
 		// bone name
 		const maxon::String bone_name_local{ pmx_bone.get_bone_name_local().c_str() };
@@ -631,7 +632,7 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 		const auto& bone_position = pmx_bone.get_position();
 		Vector position(bone_position[0], bone_position[1], bone_position[2]);
 
-		auto set_postion_root = [&bone_object, &bone_tag, &position, &setting]()
+		auto set_position_root = [&bone_object, &bone_tag, &position, &setting]()
 		{
 			position *= setting.position_multiple;
 			bone_object->SetFrozenPos(position);
@@ -641,26 +642,26 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 		// set parent bone
 		if (const auto parent_bone_index = pmx_bone.get_parent_bone_index(); parent_bone_index == -1)
 		{
-			set_postion_root();
-			bone_object->InsertUnder(this->Get());
+			set_position_root();
+			bone_object->InsertUnder(Get());
 		}
 		else
 		{
-			if (const auto parent_bone_ptr = bone_map.Find(parent_bone_index); parent_bone_ptr != nullptr)
+			if (const auto parent_bone = bone_list[parent_bone_index]; parent_bone)
 			{
-				// set postion child
+				// set position child
 				const auto& parent_position = pmx_bone_array[parent_bone_index].get_position();
 				position -= Vector(parent_position[0], parent_position[1], parent_position[2]);
 				position *= setting.position_multiple;
 				bone_object->SetFrozenPos(position);
 				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), position, DESCFLAGS_SET::NONE);
 
-				bone_object->InsertUnder(parent_bone_ptr->GetValue());
+				bone_object->InsertUnder(parent_bone);
 			}
 			else
 			{
-				set_postion_root();
-				bone_object->InsertUnder(this->Get());
+				set_position_root();
+				bone_object->InsertUnder(Get());
 			}
 		}
 
@@ -714,10 +715,10 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 		{
 			// set inherit bone parent
 			const auto inherit_parent_bone_index = pmx_bone.get_inherit_bone_parent_index();
-			if (const auto inherit_parent_bone_ptr = bone_map.Find(inherit_parent_bone_index); inherit_parent_bone_ptr)
+			if (const auto inherit_parent_bone = bone_list[inherit_parent_bone_index]; inherit_parent_bone)
 			{
 				AutoAlloc<BaseLink> link;
-				link->SetLink(inherit_parent_bone_ptr->GetValue());
+				link->SetLink(inherit_parent_bone);
 				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link.Release(), DESCFLAGS_SET::NONE);
 			}
 
@@ -767,11 +768,10 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 			const auto ik_bone_num = static_cast<int>(ik_array.size());
 			if(ik_bone_num == 0)
 				return true;
-			if(const auto ik_beging_bone_ptr = bone_map.Find(ik_array[ik_bone_num - 1].get_bone_index()); ik_beging_bone_ptr)
+			if(const auto ik_begin_bone = bone_list[ik_array[ik_bone_num - 1].get_bone_index()]; ik_begin_bone)
 			{
 				// create ik tag
-				BaseObject* ik_beging_bone = ik_beging_bone_ptr->GetValue();
-				BaseTag* ik_tag = ik_beging_bone->MakeTag(1019561); // Ik tag ID : 1019561
+				BaseTag* ik_tag = ik_begin_bone->MakeTag(1019561); // Ik tag ID : 1019561
 				if(setting.import_english)
 				{
 					ik_tag->SetName(bone_name_universal);
@@ -790,9 +790,9 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 
 				// set tip link
 				AutoAlloc<BaseLink> tip_link;
-				if(const auto ik_target_bone_ptr = bone_map.Find(pmx_bone.get_IK_target_index()); ik_target_bone_ptr)
+				if(const auto ik_target_bone = bone_list[pmx_bone.get_IK_target_index()]; ik_target_bone)
 				{
-					tip_link->SetLink(ik_target_bone_ptr->GetValue());
+					tip_link->SetLink(ik_target_bone);
 				}
 				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TIP)), tip_link.Release(), DESCFLAGS_SET::NONE);
 
@@ -804,12 +804,10 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 				for (auto ik_link_bone_index = int(); ik_link_bone_index < ik_bone_num; ++ik_link_bone_index)
 				{
 					const auto& pmx_ik_link_bone = ik_array[ik_link_bone_index];
-					if(const auto ik_link_bone_ptr = bone_map.Find(pmx_ik_link_bone.get_bone_index()); ik_link_bone_ptr)
+					if(const auto ik_link_bone = bone_list[pmx_ik_link_bone.get_bone_index()]; ik_link_bone)
 					{
 						if(!pmx_ik_link_bone.have_limits())
 							continue;
-
-						BaseObject* ik_link_bone = ik_link_bone_ptr->GetValue();
 
 						const auto& limit_min = pmx_ik_link_bone.get_limit_min();
 						const auto& limit_max = pmx_ik_link_bone.get_limit_max();
@@ -863,7 +861,7 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashM
 				const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_bone_morph_offset&>(pmx_bone_morph_offset_array[offset_index]);
 				if (const auto bone_tag = FindBone(pmx_bone_morph_offset.get_bone_index()); bone_tag)
 				{
-					auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
+					const auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
 					const auto added_morph_index = bone_tag_node->AddBoneMorph(morph_name_local);
 					const auto bone_translation = pmx_bone_morph_offset.get_bone_translation();
 					const auto bone_rotation = pmx_bone_morph_offset.get_bone_rotation();

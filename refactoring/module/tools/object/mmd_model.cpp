@@ -1241,16 +1241,16 @@ Bool MMDModelRootObject::AddIKBoneDescription(const maxon::String& bone_name_loc
 
 Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
-	maxon::HashMap<uint64_t, BaseObject*> bone_map;
+	maxon::BaseArray<BaseObject*> bone_list;
 
 	auto morph_change_helper = BeginMorphChange();
 
 	if (setting.import_bone)
-		if(!m_bone_root->GetNodeData<MMDBoneRootObject>()->LoadPMX(pmx_model, bone_map, setting))
+		if(!m_bone_root->GetNodeData<MMDBoneRootObject>()->LoadPMX(pmx_model, bone_list, setting))
 			return false;
 
 	if (setting.import_polygon)
-		if(!m_mesh_root->GetNodeData<MMDMeshRootObject>()->LoadPMX(pmx_model, bone_map, setting))
+		if(!m_mesh_root->GetNodeData<MMDMeshRootObject>()->LoadPMX(pmx_model, bone_list, setting))
 			return false;
 
 	if (setting.import_expression)

@@ -11,6 +11,8 @@ Description:	DESC
 #ifndef MMD_BONE_ROOT_H__
 #define MMD_BONE_ROOT_H__
 
+#include "CMTSceneManager.h"
+#include "CMTSceneManager.h"
 #include "mmd_root.hpp"
 #include "description/OMMDBoneRoot.h"
 #include "utils/morph_ui_data_util.hpp"
@@ -81,7 +83,7 @@ public:
 	void UpdateAllBoneAnimation();
 	void DeleteAllBoneAnimation();
 
-	Bool LoadPMX(const libmmd::pmx_model& pmx_model, maxon::HashMap<uint64_t, BaseObject*>& bone_map, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 
 private:
 	void CreateDisplayTag(GeListNode* node) override;
