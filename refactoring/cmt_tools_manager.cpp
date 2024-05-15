@@ -39,7 +39,7 @@ namespace CMTToolsManager
 		}
 
 		vmd_animation->mutable_vmd_camera_key_frame_array().sort();
-		if (CMTSceneManager::LoadVMDCamera(setting, *vmd_animation))
+		if (!CMTSceneManager::LoadVMDCamera(setting, *vmd_animation))
 		{
 			return false;
 		}
@@ -66,7 +66,7 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		if (CMTSceneManager::SaveVMDCamera(setting, vmd_animation.get()))
+		if (!CMTSceneManager::SaveVMDCamera(setting, vmd_animation.get()))
 		{
 			return false;
 		}
@@ -102,7 +102,7 @@ namespace CMTToolsManager
 		if (setting.import_model_info)
 			vmd_animation->mutable_vmd_model_controller_key_frame_array().sort();
 
-		if (CMTSceneManager::LoadVMDMotion(setting, *vmd_animation))
+		if (!CMTSceneManager::LoadVMDMotion(setting, *vmd_animation))
 		{
 			return false;
 		}
@@ -129,7 +129,7 @@ namespace CMTToolsManager
 			return false;
 		}
 		
-		if (CMTSceneManager::LoadPMXModel(setting, *pmx_model))
+		if (!CMTSceneManager::LoadPMXModel(setting, *pmx_model))
 		{
 			return false;
 		}
