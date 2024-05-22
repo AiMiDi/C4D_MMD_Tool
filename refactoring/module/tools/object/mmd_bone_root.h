@@ -11,8 +11,6 @@ Description:	DESC
 #ifndef MMD_BONE_ROOT_H__
 #define MMD_BONE_ROOT_H__
 
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
 #include "mmd_root.hpp"
 #include "description/OMMDBoneRoot.h"
 #include "utils/morph_ui_data_util.hpp"

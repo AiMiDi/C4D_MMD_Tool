@@ -208,16 +208,18 @@ inline Bool IMorph::Read(HyperFile* hf)
 	}
 	return true;
 }
+
 inline Bool IMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	if (m_strength_id.Write(hf) == false)
 		return false;
 	if (hf->WriteString(m_name) == false)
 		return false;
-	if (!hf->WriteUChar(static_cast<uint8_t>(m_type)))
+	if (!hf->WriteUChar(static_cast<UChar>(m_type)))
 		return false;
 	return true;
 }
+
 inline Bool IMorph::CopyTo(IMorph* dest) const
 {
 	dest->m_strength_id = m_strength_id;
