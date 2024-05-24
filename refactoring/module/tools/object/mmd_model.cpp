@@ -1243,7 +1243,6 @@ Bool MMDModelRootObject::AddIKBoneDescription(const maxon::String& bone_name_loc
 Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
 	maxon::BaseArray<BaseObject*> bone_list;
-
 	auto morph_change_helper = BeginMorphChange();
 
 	if (setting.import_bone)
@@ -1274,22 +1273,14 @@ Bool MMDModelRootObject::SavePMXModel(libmmd::pmx_model& pmx_data, const CMTTool
 	return true;
 }
 
-Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionImport& setting)
+Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
 {
 	iferr_scope_handler
 	{
 		return false;
 	};
 
-	maxon::BaseList<String> not_find_bone_name_list;
-	maxon::BaseList<String> not_find_morph_name_list;
-
 	BaseTime max_time {};
-	UInt64 imported_bone_count = 0;
-	UInt64 imported_morph_count = 0;
-	UInt64 imported_motion_count = 0;
-
-	maxon::TimeValue timing = maxon::TimeValue::GetTime();
 
 	// load bone motion
 	if (setting.import_motion)
@@ -1301,14 +1292,15 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 		}
 		const auto& bone_vmd_motion = vmd_motion.get_vmd_bone_key_frame_array();
 		auto bone_vmd_motion_count = bone_vmd_motion.size();
+		log.imported_motion_count += bone_vmd_motion_count;
 		for (auto bone_vmd_motion_index = decltype(bone_vmd_motion_count){}; bone_vmd_motion_index < bone_vmd_motion_count; ++bone_vmd_motion_index)
 		{
 			const auto& bone_vmd_key_frame = bone_vmd_motion[bone_vmd_motion_index];
 			if (bone_root->SetBoneAnimation(bone_vmd_key_frame, setting))
 			{
-				++imported_bone_count;
+				++log.imported_bone_count;
 			}
-			not_find_bone_name_list.Append(String(bone_vmd_key_frame.get_bone_name().c_str()))iferr_return;
+			log.not_find_bone_name_list.Append(String(bone_vmd_key_frame.get_bone_name().c_str()))iferr_return;
 		}
 		bone_root->UpdateAllBoneAnimation();
 		if(bone_vmd_motion_count > 0)
@@ -1324,15 +1316,15 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 		}
 		const auto& morph_vmd_motion = vmd_motion.get_vmd_morph_key_frame_array();
 		auto morph_vmd_motion_count = morph_vmd_motion.size();
-		imported_motion_count = morph_vmd_motion_count;
+		log.imported_motion_count += morph_vmd_motion_count;
 		for (auto morph_vmd_motion_index = decltype(morph_vmd_motion_count){}; morph_vmd_motion_index < morph_vmd_motion_count; ++morph_vmd_motion_index)
 		{
 			const auto& morph_vmd_key_frame = morph_vmd_motion[morph_vmd_motion_index];
 			if (SetMeshMorphAnimation(morph_vmd_key_frame, setting))
 			{
-				++imported_morph_count;
+				++log.imported_morph_count;
 			}
-			not_find_morph_name_list.Append(String(morph_vmd_key_frame.get_morph_name().c_str()))iferr_return;
+			log.not_find_morph_name_list.Append(String(morph_vmd_key_frame.get_morph_name().c_str()))iferr_return;
 		}
 		if(morph_vmd_motion_count > 0)
 			max_time = maxon::Max(max_time, BaseTime(morph_vmd_motion[morph_vmd_motion_count - 1].get_frame_at(), 30.));
@@ -1360,28 +1352,7 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 	}
 	setting.doc->SetMaxTime(max_time);
 	setting.doc->SetLoopMaxTime(max_time);
-
-	timing.Stop();
-
-	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK,
-		String::UIntToString(imported_motion_count),
-		String::UIntToString(imported_bone_count),
-		String::UIntToString(imported_morph_count),
-		String::FloatToString(timing.GetMilliseconds())) + "\n";
-	if (setting.detail_report == 1)
-	{
-		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_name_list.GetCount())) + ":\n";
-		for (const String& i : not_find_bone_name_list)
-		{
-			report += "\"" + i + "\" ";
-		}
-		report += "\n" + GeLoadString(IDS_MES_IMPORT_MOT_CF_MORPH, String::IntToString(not_find_morph_name_list.GetCount())) + ":\n";
-		for (String i : not_find_morph_name_list)
-		{
-			report += "\"" + i + "\" ";
-		}
-	}
-	MessageDialog(report);
+	log.timing.Stop();
 	return true;
 }
 

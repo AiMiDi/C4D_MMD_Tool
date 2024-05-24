@@ -12,7 +12,18 @@ Description:	scene manager
 #define CMT_SCENE_MANAGER_H__
 
 #include "cmt_tools_setting.h"
+struct LoadVmdMotionLog
+{
+	maxon::TimeValue timing = maxon::TimeValue::GetTime();
+	UInt64 imported_bone_count = 0;
+	UInt64 imported_morph_count = 0;
+	UInt64 imported_motion_count = 0;
 
+	maxon::BaseList<String> not_find_bone_name_list;
+	maxon::BaseList<String> not_find_morph_name_list;
+
+	String log(Bool detail);
+};
 class CMTSceneManager final : SceneHookData
 {
 	INSTANCEOF(CMTSceneManager, SceneHookData)

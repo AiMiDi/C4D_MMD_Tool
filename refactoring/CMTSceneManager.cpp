@@ -14,6 +14,29 @@ Description:	scene manager
 #include "module/tools/object/mmd_camera.h"
 #include "module/tools/object/mmd_model.h"
 
+String LoadVmdMotionLog::log(const Bool detail)
+{
+	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK,
+	                             String::UIntToString(imported_motion_count),
+	                             String::UIntToString(imported_bone_count),
+	                             String::UIntToString(imported_morph_count),
+	                             String::FloatToString(timing.GetMilliseconds())) + "\n";
+	if (detail)
+	{
+		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_name_list.GetCount())) + ":\n";
+		for (const String& name : not_find_bone_name_list)
+		{
+			report += FormatString("@ ,", name);
+		}
+		report += "\n" + GeLoadString(IDS_MES_IMPORT_MOT_CF_MORPH, String::IntToString(not_find_morph_name_list.GetCount())) + ":\n";
+		for (const String& name : not_find_morph_name_list)
+		{
+			report += FormatString("@ ,", name);
+		}
+	}
+	return report;
+}
+
 BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation& data)
 {
 	if(data.is_camera())
@@ -108,6 +131,7 @@ BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConve
 
 Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::vmd_animation& data)
 {
+	LoadVmdMotionLog log;
 	BaseObject* select_object = setting.doc->GetActiveObject();
 	if (select_object == nullptr)
 	{
@@ -121,7 +145,7 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 		return false;
 	}
 
-	if(!select_object->GetNodeData<MMDModelRootObject>()->LoadVMDMotion(data, setting))
+	if(!select_object->GetNodeData<MMDModelRootObject>()->LoadVMDMotion(data, setting, log))
 	{
 		return false;
 	}
@@ -129,6 +153,9 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 	EventAdd(EVENT::NONE);
 	setting.doc->SetTime(BaseTime(1, 30.));
 	setting.doc->SetTime(BaseTime(0, 30.));
+
+	MessageDialog(log.log(setting.detail_report));
+
 	return true;
 }
 
