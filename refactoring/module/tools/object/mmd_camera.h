@@ -90,6 +90,8 @@ public:
 	// Convert a normal camera to a MMD camera
 	Bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
+	Bool DeleteAllKeyFrame(GeListNode* node = nullptr) override;
+
 	// Generating function
 	static NodeData* Alloc();
 

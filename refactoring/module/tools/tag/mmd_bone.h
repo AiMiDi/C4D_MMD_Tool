@@ -286,6 +286,13 @@ public:
 	Bool RefreshColor(GeListNode* node = nullptr, BaseObject* op = nullptr);
 
 	/**
+	 * \brief Deletes all keyframes for the specified node.
+	 * \param node Pointer to the node for which all keyframes should be deleted.
+	 * \return Boolean indicating success or failure.
+	 */
+	Bool DeleteAllKeyFrame(GeListNode* node = nullptr) override;
+
+	/**
 	 * @brief Adds a bone morph to the MMDBoneTag.
 	 * @param[in] morph_name The name of the bone morph.
 	 * @return The index of the added bone morph.

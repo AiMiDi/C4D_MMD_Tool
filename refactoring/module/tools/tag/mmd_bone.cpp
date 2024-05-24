@@ -71,6 +71,12 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 	return true;
 }
 
+Bool MMDBoneTag::DeleteAllKeyFrame(GeListNode* node)
+{
+	m_bone_object->SetRelMl({});
+	return SUPER::DeleteAllKeyFrame(node);
+}
+
 MMDBoneTag::TrackDescIDArray MMDBoneTag::GetTrackDescIDsImpl()
 {
 	static const TrackDescIDArray track_desc_IDs

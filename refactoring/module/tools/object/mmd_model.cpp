@@ -875,7 +875,6 @@ Bool MMDModelRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SD
 			ik_link->SetLink(i.GetValue());
 			if (!ik_link->Write(hf))
 				return false;
-
 		}
 	}
 
@@ -1321,7 +1320,7 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 	{
 		if (setting.delete_previous_animation)
 		{
-			// TODO: delete previous animation
+			DeleteAllMorphAnimation();
 		}
 		const auto& morph_vmd_motion = vmd_motion.get_vmd_morph_key_frame_array();
 		auto morph_vmd_motion_count = morph_vmd_motion.size();
@@ -1344,7 +1343,7 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 	{
 		if (setting.delete_previous_animation)
 		{
-			// TODO: delete previous animation
+			DeleteAllModelControllerAnimation();
 		}
 		const auto& model_controller_key_frame_array = vmd_motion.get_vmd_model_controller_key_frame_array();
 		auto model_controller_key_frame_count = model_controller_key_frame_array.size();
@@ -1372,7 +1371,7 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 	if (setting.detail_report == 1)
 	{
 		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_name_list.GetCount())) + ":\n";
-		for (String i : not_find_bone_name_list)
+		for (const String& i : not_find_bone_name_list)
 		{
 			report += "\"" + i + "\" ";
 		}
@@ -1528,6 +1527,43 @@ bool MMDModelRootObject::SetModelControllerAnimation(const libmmd::vmd_model_con
 	return true;
 }
 
+Bool MMDModelRootObject::DeleteAllMorphAnimation()
+{
+	const auto object = reinterpret_cast<BaseObject*>(Get());
+	for (auto& morph : m_morph_arr)
+	{
+		const auto& track_id = morph.GetStrengthDescID();
+		if (CTrack* track = object->FindCTrack(track_id); track)
+		{
+			CTrack::Free(track);
+		}
+		morph.SetStrength(object, 0.0);
+	}
+	return true;
+}
+
+Bool MMDModelRootObject::DeleteAllModelControllerAnimation()
+{
+	const auto object = reinterpret_cast<BaseObject*>(Get());
+
+	CTrack* model_editor_display_track = object->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)));
+	CTrack::Free(model_editor_display_track);
+	object->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)), 2, DESCFLAGS_SET::NONE);
+
+	CTrack* model_render_display_track = object->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)));
+	object->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)), 2, DESCFLAGS_SET::NONE);
+	CTrack::Free(model_render_display_track);
+
+	for (const auto& ik : m_ik_name_map.GetValues())
+	{
+		CTrack* ik_enable_track = ik->FindCTrack(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)));
+		CTrack::Free(ik_enable_track);
+		ik->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)), true, DESCFLAGS_SET::NONE);
+	}
+	
+	return true;
+}
+
 String MMDModelRootObject::GetMorphNamedNumber()
 {
 	return String::IntToString(m_morph_named_number++);
@@ -1575,7 +1611,7 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 	case ID_O_MMD_MESH_ROOT:
 	{
-		if (auto msg = static_cast<MMDMeshRootObjectMsg*>(data); msg->type == MMDMeshRootObjectMsgType::MESH_MORPH_CHANGE)
+		if (static_cast<MMDMeshRootObjectMsg*>(data)->type == MMDMeshRootObjectMsgType::MESH_MORPH_CHANGE)
 		{
 			*m_is_morph_initialized.Write() = false;
 		}
@@ -1583,7 +1619,8 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 	}
 	case ID_O_MMD_BONE_ROOT:
 	{
-		if (auto msg = static_cast<MMDBoneRootObjectMsg*>(data); msg->type == MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE) {
+		if (static_cast<MMDBoneRootObjectMsg*>(data)->type == MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE)
+		{
 			*m_is_morph_initialized.Write() = false;
 		}
 		break;
@@ -1591,11 +1628,11 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 	case MSG_DESCRIPTION_COMMAND:
 	{
 		/* check if it is a user data button */
-		if (auto* dc = static_cast<DescriptionCommand*>(data); dc->_descId[0].id == ID_USERDATA)
+		if (const auto* dc = static_cast<DescriptionCommand*>(data); dc->_descId[0].id == ID_USERDATA)
 		{
-			if (auto DescID_ptr = m_desc_id_map.Find(dc->_descId); DescID_ptr != nullptr)
+			if (const auto desc_id_ptr = m_desc_id_map.Find(dc->_descId); desc_id_ptr != nullptr)
 			{
-				const auto& [desc_type, morph_index] = DescID_ptr->GetValue();
+				const auto& [desc_type, morph_index] = desc_id_ptr->GetValue();
 				auto& morph = m_morph_arr[morph_index];
 				switch (desc_type)
 				{
@@ -1634,18 +1671,16 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 			{
 			case MODEL_MORPH_GROUP_ADD_BUTTON:
 			{
-				GeData Ge_data;
-				node->GetParameter(ConstDescID(DescLevel(MODEL_MORPH_GROUP_ADD_NAME)), Ge_data, DESCFLAGS_GET::NONE);
-				String morph_name = Ge_data.GetString();
-				AddMorph(MMDMorphType::GROUP, morph_name);
+				GeData ge_data;
+				node->GetParameter(ConstDescID(DescLevel(MODEL_MORPH_GROUP_ADD_NAME)), ge_data, DESCFLAGS_GET::NONE);
+				AddMorph(MMDMorphType::GROUP, ge_data.GetString());
 				break;
 			}
 			case MODEL_MORPH_FLIP_ADD_BUTTON:
 			{
-				GeData Ge_data;
-				node->GetParameter(ConstDescID(DescLevel(MODEL_MORPH_FLIP_ADD_NAME)), Ge_data, DESCFLAGS_GET::NONE);
-				String morph_name = Ge_data.GetString();
-				AddMorph(MMDMorphType::FLIP, morph_name);
+				GeData ge_data;
+				node->GetParameter(ConstDescID(DescLevel(MODEL_MORPH_FLIP_ADD_NAME)), ge_data, DESCFLAGS_GET::NONE);
+				AddMorph(MMDMorphType::FLIP, ge_data.GetString());
 				break;
 			}
 			case MODEL_DEL_BONE_ANIM_BUTTON:
@@ -1657,80 +1692,9 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 					MessageDialog("error"_s);
 					return true;
 				}
-				auto* op = reinterpret_cast<BaseObject*>(node);
-				if (!op)
-				{
-					GePrint(GeLoadString(IDS_MES_SELECT_ERR));
-					MessageDialog(GeLoadString(IDS_MES_SELECT_ERR));
-					return true;
-				}
-				CTrack* ModelEditorDisplayTrack = op->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)));
-				CTrack::Free(ModelEditorDisplayTrack);
-				op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)), 2, DESCFLAGS_SET::NONE);
-				CTrack* ModelRenderDisplayTrack = op->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)));
-				op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)), 2, DESCFLAGS_SET::NONE);
-				CTrack::Free(ModelRenderDisplayTrack);
 				if (QuestionDialog(IDS_MES_DELETE_BONE_ANIM))
 				{
-					maxon::Queue<BaseObject*> nodes;
-					iferr(nodes.Push(op)) return true;
-					while (!nodes.IsEmpty())
-					{
-						BaseObject* node_ = *nodes.Pop();
-						while (node_ != nullptr)
-						{
-							if (node_->GetType() == Ojoint)
-							{
-								if (BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
-								{
-									auto* pmx_bone_tag_data = node_bone_tag->GetNodeData<MMDBoneTag>();
-									const Int BoneMorphCount = pmx_bone_tag_data->GetBoneMorphCount();
-									for (Int index = 0; index < BoneMorphCount; index++)
-									{
-										auto* bone_morph = pmx_bone_tag_data->GetBoneMorph(index);
-										if (bone_morph == nullptr)
-											break;
-										CTrack* morph_track = node_bone_tag->FindCTrack(bone_morph->strength_id);
-										CTrack::Free(morph_track);
-										node_bone_tag->SetParameter(bone_morph->strength_id, 0, DESCFLAGS_SET::NONE);
-									}
-									pmx_bone_tag_data->DeleteAllKeyFrame();
-								}
-								else {
-									CTrack* BoneTrack_position_x = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_X)));
-									CTrack::Free(BoneTrack_position_x);
-									CTrack* BoneTrack_position_y = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Y)));
-									CTrack::Free(BoneTrack_position_y);
-									CTrack* BoneTrack_position_z = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Z)));
-									CTrack::Free(BoneTrack_position_z);
-									CTrack* BoneTrack_rotation_x = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_X)));
-									CTrack::Free(BoneTrack_rotation_x);
-									CTrack* BoneTrack_rotation_y = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Y)));
-									CTrack::Free(BoneTrack_rotation_y);
-									CTrack* BoneTrack_rotation_z = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Z)));
-									CTrack::Free(BoneTrack_rotation_z);
-									node_->SetRelPos(Vector{});
-									node_->SetRelRot(Vector{});
-								}
-								BaseTag* const node_ik_tag = node_->GetTag(1019561); /* IK tag */
-								if (node_ik_tag != nullptr)
-								{
-									CTrack* ik_enable_track = node_ik_tag->FindCTrack(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)));
-									CTrack::Free(ik_enable_track);
-									node_ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)), true, DESCFLAGS_SET::NONE);
-								}
-							}
-							iferr(nodes.Push(node_->GetDown())) return true;
-							if (node_ != op)
-							{
-								node_ = node_->GetNext();
-							}
-							else {
-								break;
-							}
-						}
-					}
-					nodes.Reset();
+					m_bone_root->GetNodeData<MMDBoneRootObject>()->DeleteAllBoneAnimation();
 					EventAdd();
 					doc->SetTime(BaseTime(1, 30));
 					doc->SetTime(BaseTime(0, 30));
@@ -1746,61 +1710,9 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 					MessageDialog("error"_s);
 					return true;
 				}
-				auto op = reinterpret_cast<BaseObject*>(node);
-				if (!op)
-				{
-					GePrint(GeLoadString(IDS_MES_SELECT_ERR));
-					MessageDialog(GeLoadString(IDS_MES_SELECT_ERR));
-					return true;
-				}
 				if (QuestionDialog(IDS_MES_DELETE_MORPH_ANIM))
 				{
-					maxon::Queue<BaseObject*> nodes;
-					iferr(nodes.Push(op)) return true;
-					while (!nodes.IsEmpty())
-					{
-						BaseObject* node_ = *nodes.Pop();
-						while (node_ != nullptr)
-						{
-							if (node_->GetType() == Ojoint)
-							{
-								if (BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
-								{
-									auto* pmx_bone_tag_data = node_bone_tag->GetNodeData<MMDBoneTag>();
-									const Int BoneMorphCount = pmx_bone_tag_data->GetBoneMorphCount();
-									for (Int index = 0; index < BoneMorphCount; index++)
-									{
-										auto* bone_morph = pmx_bone_tag_data->GetBoneMorph(index);
-										if (bone_morph == nullptr)
-											break;
-										CTrack* morph_track = node_bone_tag->FindCTrack(bone_morph->strength_id);
-										CTrack::Free(morph_track);
-										node_bone_tag->SetParameter(bone_morph->strength_id, 0, DESCFLAGS_SET::NONE);
-									}
-								}
-							}
-							if (BaseTag* const node_morph_tag = node_->GetTag(Tposemorph); node_morph_tag != nullptr)
-							{
-								auto* const	pose_morph_tag = reinterpret_cast<CAPoseMorphTag*>(node_morph_tag);
-								const Int32		MorphCount = pose_morph_tag->GetMorphCount();
-								for (Int32 index = 0; index < MorphCount; index++)
-								{
-									CTrack* morph_track = node_morph_tag->FindCTrack(pose_morph_tag->GetMorphID(index));
-									CTrack::Free(morph_track);
-									pose_morph_tag->GetMorph(index)->SetStrength(0.);
-								}
-							}
-							iferr(nodes.Push(node_->GetDown())) return true;
-							if (node_ != op)
-							{
-								node_ = node_->GetNext();
-							}
-							else {
-								break;
-							}
-						}
-					}
-					nodes.Reset();
+					DeleteAllMorphAnimation();
 					EventAdd();
 					doc->SetTime(BaseTime(1, 30));
 					doc->SetTime(BaseTime(0, 30));
@@ -1814,92 +1726,11 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					return true;
 				}
-				auto op = reinterpret_cast<BaseObject*>(node);
-				if (op == nullptr)
-				{
-					GePrint(GeLoadString(IDS_MES_SELECT_ERR));
-					MessageDialog(GeLoadString(IDS_MES_SELECT_ERR));
-					return true;
-				}
 				if (QuestionDialog(IDS_MES_DELETE_ALL_ANIM))
 				{
-					CTrack* ModelEditorDisplayTrack = op->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)));
-					CTrack::Free(ModelEditorDisplayTrack);
-					op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)), 2, DESCFLAGS_SET::NONE);
-					CTrack* ModelRenderDisplayTrack = op->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)));
-					op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)), 2, DESCFLAGS_SET::NONE);
-					CTrack::Free(ModelRenderDisplayTrack);
-					maxon::Queue<BaseObject*> nodes;
-					iferr(nodes.Push(op)) return true;
-					while (!nodes.IsEmpty())
-					{
-						BaseObject* node_ = *nodes.Pop();
-						while (node_ != nullptr)
-						{
-							if (node_->GetType() == Ojoint)
-							{
-								if (BaseTag* const node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
-								{
-									auto* pmx_bone_tag_data = node_bone_tag->GetNodeData<MMDBoneTag>();
-									const auto BoneMorphCount = static_cast<Int32>(pmx_bone_tag_data->GetBoneMorphCount());
-									for (Int32 index = 0; index < BoneMorphCount; index++)
-									{
-										auto* bone_morph = pmx_bone_tag_data->GetBoneMorph(index);
-										if (bone_morph == nullptr)
-											break;
-										CTrack* morph_track = node_bone_tag->FindCTrack(bone_morph->strength_id);
-										CTrack::Free(morph_track);
-										node_bone_tag->SetParameter(bone_morph->strength_id, 0, DESCFLAGS_SET::NONE);
-									}
-									pmx_bone_tag_data->DeleteAllKeyFrame();
-								}
-								else {
-									CTrack* BoneTrack_position_x = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_X)));
-									CTrack::Free(BoneTrack_position_x);
-									CTrack* BoneTrack_position_y = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Y)));
-									CTrack::Free(BoneTrack_position_y);
-									CTrack* BoneTrack_position_z = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Z)));
-									CTrack::Free(BoneTrack_position_z);
-									CTrack* BoneTrack_rotation_x = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_X)));
-									CTrack::Free(BoneTrack_rotation_x);
-									CTrack* BoneTrack_rotation_y = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Y)));
-									CTrack::Free(BoneTrack_rotation_y);
-									CTrack* BoneTrack_rotation_z = node_->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Z)));
-									CTrack::Free(BoneTrack_rotation_z);
-									node_->SetRelPos(Vector(0));
-									node_->SetRelRot(Vector(0));
-								}
-								if (BaseTag* const node_ik_tag = node_->GetTag(1019561); node_ik_tag != nullptr)
-								{
-									CTrack* ik_enable_track = node_ik_tag->FindCTrack(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)));
-									CTrack::Free(ik_enable_track);
-									node_ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)), true, DESCFLAGS_SET::NONE);
-								}
-							}
-							else {
-								if (BaseTag* const node_morph_tag = node_->GetTag(Tposemorph); node_morph_tag != nullptr)
-								{
-									auto* const	pose_morph_tag = reinterpret_cast<CAPoseMorphTag*>(node_morph_tag);
-									const Int32		MorphCount = pose_morph_tag->GetMorphCount();
-									for (Int32 index = 0; index < MorphCount; index++)
-									{
-										CTrack* morph_track = node_morph_tag->FindCTrack(pose_morph_tag->GetMorphID(index));
-										CTrack::Free(morph_track);
-										pose_morph_tag->GetMorph(index)->SetStrength(0);
-									}
-								}
-							}
-							iferr(nodes.Push(node_->GetDown())) return true;
-							if (node_ != op)
-							{
-								node_ = node_->GetNext();
-							}
-							else {
-								break;
-							}
-						}
-					}
-					nodes.Reset();
+					DeleteAllModelControllerAnimation();
+					DeleteAllMorphAnimation();
+					m_bone_root->GetNodeData<MMDBoneRootObject>()->DeleteAllBoneAnimation();
 					EventAdd();
 					doc->SetTime(BaseTime(1, 30));
 					doc->SetTime(BaseTime(0, 30));

@@ -125,7 +125,7 @@ public:
 	 * \param node Pointer to the node for which all keyframes should be deleted.
 	 * \return Boolean indicating success or failure.
 	 */
-	Bool DeleteAllKeyFrame(GeListNode* node = nullptr);
+	virtual Bool DeleteAllKeyFrame(GeListNode* node = nullptr);
 
 	/**
 	 * \brief Reads entity data from a HyperFile.

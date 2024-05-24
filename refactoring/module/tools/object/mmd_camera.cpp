@@ -652,6 +652,12 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 	return true;
 }
 
+Bool MMDCamera::DeleteAllKeyFrame(GeListNode* node)
+{
+	m_camera->SetRelMl({});
+	return SUPER::DeleteAllKeyFrame(node);
+}
+
 NodeData* MMDCamera::Alloc()
 {
 	return NewObjClear(MMDCamera);
