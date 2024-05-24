@@ -69,8 +69,8 @@ Bool MMDBoneRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return false;
 		while (bone_list_count--)
 		{
-			Int32 bone_index = 0;
-			if (!hf->ReadInt32(&bone_index))
+			Int bone_index = 0;
+			if (!hf->ReadInt64(&bone_index))
 				return false;
 			auto& link = m_bone_list.InsertKey(bone_index)iferr_return;
 			link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
@@ -127,7 +127,7 @@ Bool MMDBoneRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK
 			return false;
 		for (const auto& bone_link : m_bone_list)
 		{
-			if (hf->WriteInt32(!bone_link.GetKey()))
+			if (!hf->WriteInt64(bone_link.GetKey()))
 				return false;
 			if (!(*bone_link.GetValue())->Write(hf))
 				return false;
