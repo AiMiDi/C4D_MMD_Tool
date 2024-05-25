@@ -17,7 +17,7 @@ Description:	C4D MMD joint object
 #include "module/tools/object/mmd_joint_root.h"
 #include "module/tools/object/mmd_rigid_root.h"
 
-constexpr Vector g_pmx_joint_colors[6] =
+SDK2024_ConstExpr Vector g_pmx_joint_colors[6] =
 {
 		Vector(255, 255, 70) / 255,
 		Vector(255, 114, 131) / 255,
@@ -386,7 +386,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		return EXECUTIONRESULT::OK;
 	}
 
-	const BaseObject* PredObject = op->GetPred();
+	SDK2024_Const BaseObject* PredObject = op->GetPred();
 	BaseObject* UpObject = op->GetUp();
 
 	if (UpObject == nullptr && m_joint_root != nullptr)
@@ -427,8 +427,8 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	return EXECUTIONRESULT::OK;
 }
 
-Bool MMDJointObject::CopyTo(NodeData* dest, const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
-	AliasTrans* trn) const
+Bool MMDJointObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
+	AliasTrans* trn) SDK2024_Const
 {
 	const auto destObject = reinterpret_cast<MMDJointObject*>(dest);
 
@@ -477,7 +477,7 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return true;
 }
 
-Bool MMDJointObject::Write(const GeListNode* node, HyperFile* hf) const
+Bool MMDJointObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
 	hf->WriteInt32(m_display_type);
 	hf->WriteInt32(m_joint_mode);

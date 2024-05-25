@@ -47,7 +47,7 @@ Bool RegisterMMDJoint()
 
 Bool RegisterMMDModelRoot()
 {
-	return RegisterObjectPlugin(ID_O_MMD_MODEL, GeLoadString(IDS_O_MMD_MODEL), OBJECT_CALL_ADDEXECUTION, MMDModelRootObject::Alloc, "OMMDModel"_s, AutoBitmap("OMMDModel.png"_s), 0);
+	return RegisterObjectPlugin(ID_O_MMD_MODEL, GeLoadString(IDS_O_MMD_MODEL), OBJECT_CALL_ADDEXECUTION, MMDModelRootObject::Alloc, "OMMDModel"_s, AutoBitmap(1021433), 0);
 }
 
 Bool RegisterMMDBoneRoot()

@@ -60,6 +60,7 @@
 #if API_VERSION < 2024000
 
 #   define SDK2024_Const
+#   define SDK2024_ConstExpr
 #   define SDK2024_NotConst const
 
 #	define SDK2024_InitPara
@@ -83,6 +84,7 @@
 #else
 
 #   define SDK2024_Const const
+#   define SDK2024_ConstExpr constexpr
 #   define SDK2024_NotConst
 
 #	define SDK2024_InitPara , isCloneInit

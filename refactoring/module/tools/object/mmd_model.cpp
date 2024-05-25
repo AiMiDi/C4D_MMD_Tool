@@ -843,7 +843,7 @@ Bool MMDModelRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SD
 		return false;
 	for (auto& i : m_desc_id_map)
 	{
-		if (!i.GetKey().Write(hf))
+		if (!const_cast<DescID&>(i.GetKey()).Write(hf))
 			return false;
 		auto& val = i.GetValue();
 		if (!hf->WriteUChar(static_cast<uint8_t>(val.first)))

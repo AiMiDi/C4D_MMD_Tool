@@ -77,6 +77,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>../../../../dependency/install/lib;$(LibraryPath)</LibraryPath>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
@@ -124,12 +125,12 @@
       <AdditionalManifestFiles />
     </Manifest>
     <PreBuildEvent>
-      <Command>cd ../../../..
-./init.bat</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>cd ../../../..
-./init.bat</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -214,9 +215,11 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
@@ -250,9 +253,11 @@
     <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_material.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />

@@ -13,7 +13,7 @@ Description:	C4D MMD rigid object
 #include "mmd_bone_root.h"
 #include "mmd_rigid_root.h"
 
-constexpr Vector g_pmx_rigid_colors[16] =
+SDK2024_ConstExpr Vector g_pmx_rigid_colors[16] =
 {
 		Vector(255, 212, 127) / 255,
 		Vector(212, 255, 127) / 255,
@@ -33,7 +33,7 @@ constexpr Vector g_pmx_rigid_colors[16] =
 		Vector(127, 127, 0) / 255
 };
 
-constexpr Vector g_pmx_rigid_wire_colors[3] =
+SDK2024_ConstExpr Vector g_pmx_rigid_wire_colors[3] =
 {
 	Vector(200, 255, 150) / 255,
 	Vector(255, 200, 150) / 255,
