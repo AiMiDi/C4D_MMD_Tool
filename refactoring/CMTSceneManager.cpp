@@ -52,9 +52,9 @@ void ConversionVmdCameraLog::LogOK() const
 void LoadVmdMotionLog::LogOK(const Bool detail)
 {
 	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK,
-	                             String::UIntToString(imported_motion_count),
 	                             String::UIntToString(imported_bone_count),
 	                             String::UIntToString(imported_morph_count),
+	                             String::UIntToString(imported_motion_count),
 	                             String::FloatToString(timing.GetMilliseconds())) + "\n";
 	if (detail)
 	{
