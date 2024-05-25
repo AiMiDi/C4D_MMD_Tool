@@ -1029,52 +1029,57 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 Bool MMDBoneTag::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
 	const BaseContainer* itemdesc) SDK2024_Const
 {
-	if(!itemdesc)
-		return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
+	GeData ge_data;
 	switch (id[0].id)
 	{
 	case PMX_BONE_TAIL_INDEX:
-		if (const Bool indexed_tail_position = itemdesc->GetBool(PMX_BONE_INDEXED_TAIL_POSITION);
+		node->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEXED_TAIL_POSITION)), ge_data, DESCFLAGS_GET::NONE);
+		if (const auto indexed_tail_position = ge_data.GetInt32();
 			indexed_tail_position == PMX_BONE_TAIL_IS_POSITION)
 		{
 			return false;
 		}
-		break;
+		return true;
 	case PMX_BONE_TAIL_POSITION:
-		if (const Bool indexed_tail_position = itemdesc->GetBool(PMX_BONE_INDEXED_TAIL_POSITION);
+		node->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEXED_TAIL_POSITION)), ge_data, DESCFLAGS_GET::NONE);
+		if (const auto indexed_tail_position = ge_data.GetInt32();
 			indexed_tail_position == PMX_BONE_TAIL_IS_INDEX)
 		{
 			return false;
 		}
-		break;
+		return true;
 	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
 	case PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE:
 	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
+	{
+		node->GetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_ROTATION)), ge_data, DESCFLAGS_GET::NONE);
+		const auto inherit_rotation = ge_data.GetBool();
+		node->GetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_TRANSLATION)), ge_data, DESCFLAGS_GET::NONE);
+		const auto inherit_translation = ge_data.GetBool();
+		if (inherit_rotation || inherit_translation)
 		{
-			const Bool inherit_rotation = itemdesc->GetBool(PMX_BONE_INHERIT_ROTATION);
-			const Bool inherit_translation = itemdesc->GetBool(PMX_BONE_INHERIT_TRANSLATION);
-			if (inherit_rotation == 0 && inherit_translation == 0)
-			{
-				return false;
-			}
-			break;
+			return true;
 		}
+		return false;
+	}
 	case PMX_BONE_FIXED_AXIS:
-		if (const Bool fixed_axis = itemdesc->GetBool(PMX_BONE_IS_FIXED_AXIS); fixed_axis == 0)
+		node->GetParameter(ConstDescID(DescLevel(PMX_BONE_IS_FIXED_AXIS)), ge_data, DESCFLAGS_GET::NONE);
+		if (const Bool fixed_axis = ge_data.GetBool(); !fixed_axis)
 		{
 			return false;
 		}
-		break;
+		return true;
 	case PMX_BONE_LOCAL_X:
 	case PMX_BONE_LOCAL_Z:
-		if (const Bool local_coordinate = itemdesc->GetBool(PMX_BONE_LOCAL_IS_COORDINATE); local_coordinate == 0)
+		node->GetParameter(ConstDescID(DescLevel(PMX_BONE_LOCAL_IS_COORDINATE)), ge_data, DESCFLAGS_GET::NONE);
+		if (const Bool local_coordinate = ge_data.GetBool(); !local_coordinate)
 		{
 			return false;
 		}
-		break;
+		return true;
 	default:;
 	}
-	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
+	return true;
 }
 
 void MMDBoneTag::HandleInheritParentBone(const BaseDocument* doc, BaseObject* op, const BaseContainer* bc)
@@ -1105,28 +1110,28 @@ void MMDBoneTag::HandleInheritParentBone(const BaseDocument* doc, BaseObject* op
 
 void MMDBoneTag::HandleBoneMorphUpdate(SDK2024_Const BaseTag* tag, BaseObject* op)
 {
-	GeData Ge_data;
-	op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), Ge_data, DESCFLAGS_GET::NONE);
-	const Vector op_position = Ge_data.GetVector() - prev_position;
+	GeData ge_data;
+	op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), ge_data, DESCFLAGS_GET::NONE);
+	const Vector op_position = ge_data.GetVector() - prev_position;
 	prev_position = Vector(0);
-	op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), Ge_data, DESCFLAGS_GET::NONE);
-	const Vector op_rotation = Ge_data.GetVector() - prev_rotation;
+	op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), ge_data, DESCFLAGS_GET::NONE);
+	const Vector op_rotation = ge_data.GetVector() - prev_rotation;
 	prev_rotation = Vector(0);
 
 	for (const auto& id : bone_morph_data_arr)
 	{
 		Float strength = 0;
-		if (tag->GetParameter(id.strength_id, Ge_data, DESCFLAGS_GET::NONE))
+		if (tag->GetParameter(id.strength_id, ge_data, DESCFLAGS_GET::NONE))
 		{
-			strength = Ge_data.GetFloat();
+			strength = ge_data.GetFloat();
 		}
-		if (tag->GetParameter(id.translation_id, Ge_data, DESCFLAGS_GET::NONE))
+		if (tag->GetParameter(id.translation_id, ge_data, DESCFLAGS_GET::NONE))
 		{
-			prev_position += Ge_data.GetVector() * strength;
+			prev_position += ge_data.GetVector() * strength;
 		}
-		if (tag->GetParameter(id.rotation_id, Ge_data, DESCFLAGS_GET::NONE))
+		if (tag->GetParameter(id.rotation_id, ge_data, DESCFLAGS_GET::NONE))
 		{
-			prev_rotation += Ge_data.GetVector() * strength;
+			prev_rotation += ge_data.GetVector() * strength;
 		}
 	}
 	op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), op_position + prev_position, DESCFLAGS_SET::NONE);
