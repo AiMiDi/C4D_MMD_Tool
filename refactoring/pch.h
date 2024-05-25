@@ -10,6 +10,8 @@
 #include <cassert>
 #include <memory>
 #include <mutex>
+#include <unordered_set>
+#include <unordered_map>
 
 // C4D
 #include <c4d.h>

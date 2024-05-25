@@ -1293,18 +1293,24 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 		const auto& bone_vmd_motion = vmd_motion.get_vmd_bone_key_frame_array();
 		auto bone_vmd_motion_count = bone_vmd_motion.size();
 		log.imported_motion_count += bone_vmd_motion_count;
+		std::unordered_set<std::string> imported_bone;
 		for (auto bone_vmd_motion_index = decltype(bone_vmd_motion_count){}; bone_vmd_motion_index < bone_vmd_motion_count; ++bone_vmd_motion_index)
 		{
 			const auto& bone_vmd_key_frame = bone_vmd_motion[bone_vmd_motion_index];
 			if (bone_root->SetBoneAnimation(bone_vmd_key_frame, setting))
 			{
-				++log.imported_bone_count;
+				imported_bone.insert(bone_vmd_key_frame.get_bone_name());
 			}
-			log.not_find_bone_name_list.Append(String(bone_vmd_key_frame.get_bone_name().c_str()))iferr_return;
+			else if(setting.detail_report)
+			{
+				log.not_find_bone_name_list.Append(String(bone_vmd_key_frame.get_bone_name().c_str()))iferr_return;
+			}
 		}
 		bone_root->UpdateAllBoneAnimation();
 		if(bone_vmd_motion_count > 0)
 			max_time = maxon::Max(max_time, BaseTime(bone_vmd_motion[bone_vmd_motion_count - 1].get_frame_at(), 30.));
+
+		log.imported_bone_count = imported_bone.size();
 	}
 
 	// load morph motion
@@ -1317,17 +1323,23 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 		const auto& morph_vmd_motion = vmd_motion.get_vmd_morph_key_frame_array();
 		auto morph_vmd_motion_count = morph_vmd_motion.size();
 		log.imported_motion_count += morph_vmd_motion_count;
+		std::unordered_set<std::string> imported_morph;
 		for (auto morph_vmd_motion_index = decltype(morph_vmd_motion_count){}; morph_vmd_motion_index < morph_vmd_motion_count; ++morph_vmd_motion_index)
 		{
 			const auto& morph_vmd_key_frame = morph_vmd_motion[morph_vmd_motion_index];
 			if (SetMeshMorphAnimation(morph_vmd_key_frame, setting))
 			{
-				++log.imported_morph_count;
+				imported_morph.insert(morph_vmd_key_frame.get_morph_name());
 			}
-			log.not_find_morph_name_list.Append(String(morph_vmd_key_frame.get_morph_name().c_str()))iferr_return;
+			else if (setting.detail_report)
+			{
+				log.not_find_morph_name_list.Append(String(morph_vmd_key_frame.get_morph_name().c_str()))iferr_return;
+			}
 		}
 		if(morph_vmd_motion_count > 0)
 			max_time = maxon::Max(max_time, BaseTime(morph_vmd_motion[morph_vmd_motion_count - 1].get_frame_at(), 30.));
+
+		log.imported_morph_count = imported_morph.size();
 	}
 
 	// load model info

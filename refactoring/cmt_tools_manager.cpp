@@ -26,31 +26,44 @@ namespace CMTToolsManager
 
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
-		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
-		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
+		LoadVmdCameraLog log;
 		const auto vmd_animation = make_vmd_animation();
 		if(!vmd_animation)
 		{
+			LoadVmdCameraLog::LogOutMem();
 			return false;
 		}
+
+		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
 		if (!vmd_animation->read_from_file_u8(vmd_utf8_filename))
 		{
+			LoadVmdCameraLog::LogReadFileErr();
+			return false;
+		}
+
+		if (!vmd_animation->is_camera())
+		{
+			LoadVmdCameraLog::LogNotCameraError();
 			return false;
 		}
 
 		vmd_animation->mutable_vmd_camera_key_frame_array().sort();
+		log.camera_frame_number = vmd_animation->get_vmd_camera_key_frame_array().size();
 		if (!CMTSceneManager::LoadVMDCamera(setting, *vmd_animation))
 		{
 			return false;
 		}
+		log.LogOK();
 
 		return true;
 	}
 
 	bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
 	{
-		if (CMTSceneManager::ConversionCamera(setting))
+		if (const ConversionVmdCameraLog log; CMTSceneManager::ConversionCamera(setting))
 		{
+			log.LogOK();
 			return true;
 		}
 		return false;
@@ -58,21 +71,25 @@ namespace CMTToolsManager
 
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting)
 	{
-		const maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
-		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
+		SaveVmdCameraLog log;
 		const auto vmd_animation = make_vmd_animation();
 		if (!vmd_animation)
 		{
+			SaveVmdCameraLog::LogOutMem();
 			return false;
 		}
 
 		if (!CMTSceneManager::SaveVMDCamera(setting, vmd_animation.get()))
 		{
+			log.LogOK();
 			return false;
 		}
 
+		const maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
 		if(!vmd_animation->write_to_file_u8(vmd_utf8_filename))
 		{
+			SaveVmdCameraLog::LogWriteFileErr();
 			return false;
 		}
 		
@@ -81,15 +98,26 @@ namespace CMTToolsManager
 
 	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting)
 	{
-		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
-		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
+		LoadVmdMotionLog log;
+
 		const auto vmd_animation = make_vmd_animation();
 		if (!vmd_animation)
 		{
+			LoadVmdMotionLog::LogOutMem();
 			return false;
 		}
+
+		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
 		if (!vmd_animation->read_from_file_u8(vmd_utf8_filename))
 		{
+			LoadVmdMotionLog::LogReadFileErr();
+			return false;
+		}
+
+		if (vmd_animation->is_camera())
+		{
+			LoadVmdMotionLog::LogNotMotionError();
 			return false;
 		}
 
@@ -102,10 +130,12 @@ namespace CMTToolsManager
 		if (setting.import_model_info)
 			vmd_animation->mutable_vmd_model_controller_key_frame_array().sort();
 
-		if (!CMTSceneManager::LoadVMDMotion(setting, *vmd_animation))
+		if (!CMTSceneManager::LoadVMDMotion(setting, *vmd_animation, log))
 		{
 			return false;
 		}
+
+		log.LogOK(setting.detail_report);
 
 		return true;
 	}
@@ -117,22 +147,30 @@ namespace CMTToolsManager
 
 	bool ImportPMXModel(const CMTToolsSetting::ModelImport& setting)
 	{
-		maxon::AutoMem<Char> pmx_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
-		const std::string_view pmx_utf8_filename{ pmx_utf8_filename_mem };
+		LoadPmxModelLog log;
+
 		const auto pmx_model = make_pmx_model();
 		if (!pmx_model)
 		{
+			LoadPmxModelLog::LogOutMem();
 			return false;
 		}
+
+		maxon::AutoMem<Char> pmx_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const std::string_view pmx_utf8_filename{ pmx_utf8_filename_mem };
 		if (!pmx_model->read_from_file_u8(pmx_utf8_filename))
 		{
+			LoadPmxModelLog::LogReadFileErr();
 			return false;
 		}
-		
+
+		log.Set(*pmx_model, setting);
 		if (!CMTSceneManager::LoadPMXModel(setting, *pmx_model))
 		{
 			return false;
 		}
+		log.LogOK();
+
 		return true;
 	}
 
