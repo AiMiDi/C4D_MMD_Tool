@@ -1,0 +1,1 @@
+maxon.IoPipeInOutputStreamInterface	"net.maxon.interface.iopipeinoutputstream"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\core.framework\source\maxon\iostream_pipe.h(32,7)	InOutputStreamInterface	GetReadHandle,GetWriteHandle	

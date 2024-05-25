@@ -1,0 +1,11 @@
+#ifndef PREFSPLUGINS_H__
+#define PREFSPLUGINS_H__
+
+enum
+{
+	PREF_PLUGINS_PATHS = 1000,
+
+	PREFS_PLUGINS_DUMMY
+};
+
+#endif // PREFSPLUGINS_H__

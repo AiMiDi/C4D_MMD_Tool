@@ -1,0 +1,1 @@
+maxon.StreamConversionInterface	"net.maxon.interface.streamconversion"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\core.framework\source\maxon\streamconversion.h(18,7)	DataDictionaryObjectInterface	ConvertImpl,ConvertToReader,ConvertToStream,ConvertToWriter,GetBatchSize,GetBlockSize,GetCounterpart,GetDestinationType,GetSourceType,SupportInplaceConversion	

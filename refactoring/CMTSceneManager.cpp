@@ -1,7 +1,7 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
-Author:			walter white/Aimidi
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
+Author:			Aimidi
 Date:			2022/7/31
 File:			cmt_scene_manager.cpp
 Description:	scene manager
@@ -12,6 +12,114 @@ Description:	scene manager
 
 #include "CMTSceneManager.h"
 #include "module/tools/object/mmd_camera.h"
+#include "module/tools/object/mmd_model.h"
+
+void IOLog::LogOutMem()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+}
+
+void IOLog::LogReadFileErr()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
+}
+
+void IOLog::LogWriteFileErr()
+{
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
+}
+
+void LoadVmdCameraLog::LogOK() const
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_OK, maxon::String::UIntToString(camera_frame_number), String::FloatToString(timing.GetMilliseconds())));
+}
+
+void LoadVmdCameraLog::LogNotCameraError()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_CAM_ERR));
+}
+
+void SaveVmdCameraLog::LogOK() const
+{
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, String::FloatToString(timing.GetMilliseconds())));
+}
+
+void ConversionVmdCameraLog::LogOK() const
+{
+	// MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, String::FloatToString(timing.GetMilliseconds())));
+}
+
+void LoadVmdMotionLog::LogOK(const Bool detail)
+{
+	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK,
+	                             String::UIntToString(imported_bone_count),
+	                             String::UIntToString(imported_morph_count),
+	                             String::UIntToString(imported_motion_count),
+	                             String::FloatToString(timing.GetMilliseconds())) + "\n";
+	if (detail)
+	{
+		report += GeLoadString(IDS_MES_IMPORT_MOT_CF_BONE, String::IntToString(not_find_bone_name_list.GetCount())) + ":\n";
+		for (const String& name : not_find_bone_name_list)
+		{
+			report += FormatString("@ ,", name);
+		}
+		report += "\n" + GeLoadString(IDS_MES_IMPORT_MOT_CF_MORPH, String::IntToString(not_find_morph_name_list.GetCount())) + ":\n";
+		for (const String& name : not_find_morph_name_list)
+		{
+			report += FormatString("@ ,", name);
+		}
+	}
+	MessageDialog(report);
+}
+
+void LoadVmdMotionLog::LogNotMMDModelError()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + "Not MMD model.");
+}
+
+void LoadVmdMotionLog::LogNotMotionError()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MOD_ERR));
+}
+
+void LoadVmdMotionLog::LogSelectError()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+}
+
+void LoadPmxModelLog::Set(const libmmd::pmx_model& model, const CMTToolsSetting::ModelImport& setting)
+{
+	model_name_local = model.get_model_name_local().c_str();
+	comments_local = model.get_comments_local().c_str();
+	model_name_universal = model.get_model_name_universal().c_str();
+	comments_universal = model.get_comments_universal().c_str();
+
+	vertex_data_count = setting.import_polygon ? model.get_pmx_vertex_array().size() : 0;
+	surface_data_count = setting.import_polygon ? model.get_pmx_surface_array().size() : 0;
+	texture_data_count = setting.import_material ? model.get_pmx_texture_array().size() : 0;
+	material_data_count = setting.import_material ? model.get_pmx_material_array().size() : 0;
+	bone_data_count = setting.import_bone ? model.get_pmx_bone_array().size() : 0;
+	morph_data_count = setting.import_expression ? model.get_pmx_morph_array().size() : 0;
+}
+
+void LoadPmxModelLog::LogOK() const
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_MOD_OK,
+	                    model_name_local + "\n",
+	                    "\n" + comments_local + "\n",
+	                    model_name_universal + "\n",
+	                    "\n" + comments_universal + "\n") +
+		GeLoadString(IDS_MES_IMPORT_MOD_INFO_A,
+		             String::UIntToString(vertex_data_count) + "\n",
+		             String::UIntToString(surface_data_count) + "\n",
+		             String::UIntToString(texture_data_count) + "\n",
+		             String::UIntToString(material_data_count) + "\n"
+		) +
+		GeLoadString(IDS_MES_IMPORT_MOD_INFO_B,
+		             String::UIntToString(bone_data_count) + "\n",
+		             String::UIntToString(morph_data_count) + "\n",
+		             String::FloatToString(timing.GetMilliseconds())));
+}
 
 BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation& data)
 {
@@ -35,8 +143,9 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 
 		EventAdd();
 		// set document with vmd length
-		setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(),
-			BaseTime(vmd_camera_key_frame_array[vmd_camera_key_frame_array.size() - 1ULL].get_frame_at(), 30.0)));
+		if(vmd_camera_key_frame_array.size() > 0)
+			setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(),
+				BaseTime(vmd_camera_key_frame_array[vmd_camera_key_frame_array.size() - 1ULL].get_frame_at(), 30.0)));
 		setting.doc->SetTime(BaseTime{ 1.0 });
 		setting.doc->SetTime(BaseTime{});
 
@@ -102,6 +211,56 @@ BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConve
 	setting.doc->SetTime(BaseTime{ 1.0 });
 	setting.doc->SetTime(BaseTime{});
 	return vmd_camera;
+}
+
+Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::vmd_animation& data, LoadVmdMotionLog& log)
+{
+	BaseObject* select_object = setting.doc->GetActiveObject();
+	if (select_object == nullptr)
+	{
+		LoadVmdMotionLog::LogSelectError();
+		return false;
+	}
+
+	if (!select_object->IsInstanceOf(ID_O_MMD_MODEL))
+	{
+		LoadVmdMotionLog::LogNotMMDModelError();
+		return false;
+	}
+
+	if(!select_object->GetNodeData<MMDModelRootObject>()->LoadVMDMotion(data, setting, log))
+	{
+		return false;
+	}
+
+	EventAdd(EVENT::NONE);
+	setting.doc->SetTime(BaseTime(1, 30.));
+	setting.doc->SetTime(BaseTime(0, 30.));
+
+	return true;
+}
+
+BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& setting, const libmmd::pmx_model& data)
+{
+	// create model
+	BaseObject* pmx_model = BaseObject::Alloc(ID_O_MMD_MODEL);
+	if (!pmx_model)
+		return nullptr;
+
+	setting.doc->InsertObject(pmx_model, nullptr, nullptr);
+
+	// init model
+	pmx_model->SetName(setting.fn.GetFileString());
+	auto* pmx_model_data = pmx_model->GetNodeData<MMDModelRootObject>();
+	pmx_model_data->CreateRoot();
+	pmx_model_data->UpdateRoot();
+
+	// set model with pmx data
+	pmx_model_data->LoadPMXModel(data, setting);
+
+	EventAdd();
+
+	return pmx_model;
 }
 
 void CMTSceneManager::AddMMDCamera(BaseObject* camera)

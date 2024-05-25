@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/10/7
 File:			unique_id_util.h
@@ -8,8 +8,8 @@ Description:	Unique ID util
 
 **************************************************************************/
 
-#ifndef _UNIQUE_ID_UTIL_H_
-#define _UNIQUE_ID_UTIL_H_
+#ifndef UNIQUE_ID_UTIL_H__
+#define UNIQUE_ID_UTIL_H__
 
 #include "pch.h"
 
@@ -50,4 +50,4 @@ public:
 	}
 };
 
-#endif // !UNIQUE_ID_UTIL_H
+#endif // !UNIQUE_ID_UTIL_H__

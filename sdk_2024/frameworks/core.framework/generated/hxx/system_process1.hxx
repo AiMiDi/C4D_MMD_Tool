@@ -1,0 +1,270 @@
+#if 1
+class SystemProcessKilledError;
+
+struct SystemProcessKilledErrorInterface::HasBaseDetector { template <typename I> struct Check { static const maxon::Bool value = std::is_same<I, SystemProcessKilledErrorInterface>::value || ErrorInterface::HasBaseDetector::template Check<I>::value; static I* Cast(SystemProcessKilledErrorInterface* ptr) { return reinterpret_cast<I*>(ptr); } }; };
+struct SystemProcessKilledErrorObject_PrivateHelper;
+struct SystemProcessKilledErrorInterface::Hxx1
+{
+	class Reference;
+	class NonConstRef;
+	using ErrObj = SystemProcessKilledErrorObject_PrivateHelper;
+	using ReferenceClass = SystemProcessKilledError;
+	template <template <typename...> class TEMPL> using SubstituteBases = TEMPL<ErrorInterface>;
+	/// Intermediate helper class for SystemProcessKilledErrorInterface.
+	template <typename S> class COWFn : public S
+	{
+	public:
+		COWFn() = default;
+		using PrivateBaseClass = S;
+		using PrivateBaseClass::PrivateBaseClass;
+		using PrivateInterface = SystemProcessKilledErrorInterface;
+		using PrivateBaseClass::PrivateLookupFn;
+		static COWFn PrivateLookupFn(SystemProcessKilledErrorInterface**);
+		operator const typename maxon::RefConversionTarget<S, typename S::Handler, maxon::StrongCOWRefHandler, SystemProcessKilledError, false>::type&() const { return reinterpret_cast<const SystemProcessKilledError&>(this->GetBaseRef()); }
+		operator const typename maxon::RefConversionTarget<S, typename S::Handler, maxon::StrongCOWRefHandler, SystemProcessKilledError, false>::type&() { return reinterpret_cast<const SystemProcessKilledError&>(this->GetBaseRef()); }
+	};
+	template <typename ST> struct FnHelper : public std::conditional<
+	maxon::Bool(ST::type::Handler::KIND & (maxon::VALUEKIND::COW_MASK | maxon::VALUEKIND::DEEP_CONSTNESS)),
+	COWFn<typename ErrorInterface::Hxx1::template FnHelper<ST>::type>,
+	typename ErrorInterface::Hxx1::template FnHelper<ST>::type
+	> { };
+};
+class SystemProcessKilledErrorInterface::Hxx1::Reference :
+#ifdef DOXYGEN
+public COWFnDoxy<SystemProcessKilledError>
+#else
+public maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<const SystemProcessKilledErrorInterface, maxon::StrongCOWRefHandler, SystemProcessKilledError>>>>
+#endif
+{
+public:
+	MAXON_DEFAULT_REFERENCE_CONSTRUCTORS(Reference, maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<const SystemProcessKilledErrorInterface, maxon::StrongCOWRefHandler, SystemProcessKilledError>>>>);
+	using NonConst = Hxx1::NonConstRef;
+};
+
+class SystemProcessKilledErrorInterface::Hxx1::NonConstRef :
+#ifdef DOXYGEN
+public FnDoxy<NonConstRef>
+#else
+public maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<SystemProcessKilledErrorInterface, maxon::StrongRefHandler, NonConstRef>>>>
+#endif
+{
+public:
+	MAXON_DEFAULT_REFERENCE_CONSTRUCTORS(NonConstRef, maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<SystemProcessKilledErrorInterface, maxon::StrongRefHandler, NonConstRef>>>>);
+};
+
+/// SystemProcessKilledError is the reference class of SystemProcessKilledErrorInterface.
+///
+/// System Process has been killed by a signal. E.g. process crashed or killed by user.
+class SystemProcessKilledError : public SystemProcessKilledErrorInterface::Hxx1::Reference
+{
+public:
+	friend class SystemProcessKilledErrorObject;
+	friend class maxon::ResultBase<SystemProcessKilledError>;
+	SystemProcessKilledError(maxon::ERROR_OK) { }
+	PRIVATE_MAXON_DEFAULT_REFERENCE_CONSTRUCTORS(SystemProcessKilledError, typename SystemProcessKilledErrorInterface::Hxx1::Reference);
+	template <typename D> SystemProcessKilledError(const D& allocLocation, typename D::SourceLocationMarker* dummy = nullptr) { maxon::SFINAEHelper<SystemProcessKilledError, D>::type::Create(MAXON_SOURCE_LOCATION_FORWARD); }
+	template <typename ARG1, typename... ARGS> SystemProcessKilledError(MAXON_SOURCE_LOCATION_DECLARATION, ARG1&& arg1, ARGS&&... args) { maxon::SFINAEHelper<SystemProcessKilledError, ARG1>::type::Create(MAXON_SOURCE_LOCATION_FORWARD, std::forward<ARG1>(arg1), std::forward<ARGS>(args)...); }
+private:
+	SystemProcessKilledError() = default;
+};
+
+MAXON_DECLARATION(SystemProcessKilledError, SystemProcessKilledErrorObject, "net.maxon.error.systemprocesskilled");
+class SystemProcessOperationError;
+
+struct SystemProcessOperationErrorInterface::HasBaseDetector { template <typename I> struct Check { static const maxon::Bool value = std::is_same<I, SystemProcessOperationErrorInterface>::value || ErrorInterface::HasBaseDetector::template Check<I>::value; static I* Cast(SystemProcessOperationErrorInterface* ptr) { return reinterpret_cast<I*>(ptr); } }; };
+struct SystemProcessOperationErrorObject_PrivateHelper;
+struct SystemProcessOperationErrorInterface::Hxx1
+{
+	class Reference;
+	class NonConstRef;
+	using ErrObj = SystemProcessOperationErrorObject_PrivateHelper;
+	using ReferenceClass = SystemProcessOperationError;
+	template <template <typename...> class TEMPL> using SubstituteBases = TEMPL<ErrorInterface>;
+	/// Intermediate helper class for SystemProcessOperationErrorInterface.
+	template <typename S> class COWFn : public S
+	{
+	public:
+		COWFn() = default;
+		using PrivateBaseClass = S;
+		using PrivateBaseClass::PrivateBaseClass;
+		using PrivateInterface = SystemProcessOperationErrorInterface;
+		using PrivateBaseClass::PrivateLookupFn;
+		static COWFn PrivateLookupFn(SystemProcessOperationErrorInterface**);
+		operator const typename maxon::RefConversionTarget<S, typename S::Handler, maxon::StrongCOWRefHandler, SystemProcessOperationError, false>::type&() const { return reinterpret_cast<const SystemProcessOperationError&>(this->GetBaseRef()); }
+		operator const typename maxon::RefConversionTarget<S, typename S::Handler, maxon::StrongCOWRefHandler, SystemProcessOperationError, false>::type&() { return reinterpret_cast<const SystemProcessOperationError&>(this->GetBaseRef()); }
+	};
+	template <typename ST> struct FnHelper : public std::conditional<
+	maxon::Bool(ST::type::Handler::KIND & (maxon::VALUEKIND::COW_MASK | maxon::VALUEKIND::DEEP_CONSTNESS)),
+	COWFn<typename ErrorInterface::Hxx1::template FnHelper<ST>::type>,
+	typename ErrorInterface::Hxx1::template FnHelper<ST>::type
+	> { };
+};
+class SystemProcessOperationErrorInterface::Hxx1::Reference :
+#ifdef DOXYGEN
+public COWFnDoxy<SystemProcessOperationError>
+#else
+public maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<const SystemProcessOperationErrorInterface, maxon::StrongCOWRefHandler, SystemProcessOperationError>>>>
+#endif
+{
+public:
+	MAXON_DEFAULT_REFERENCE_CONSTRUCTORS(Reference, maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<const SystemProcessOperationErrorInterface, maxon::StrongCOWRefHandler, SystemProcessOperationError>>>>);
+	using NonConst = Hxx1::NonConstRef;
+};
+
+class SystemProcessOperationErrorInterface::Hxx1::NonConstRef :
+#ifdef DOXYGEN
+public FnDoxy<NonConstRef>
+#else
+public maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<SystemProcessOperationErrorInterface, maxon::StrongRefHandler, NonConstRef>>>>
+#endif
+{
+public:
+	MAXON_DEFAULT_REFERENCE_CONSTRUCTORS(NonConstRef, maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<SystemProcessOperationErrorInterface, maxon::StrongRefHandler, NonConstRef>>>>);
+};
+
+/// SystemProcessOperationError is the reference class of SystemProcessOperationErrorInterface.
+///
+/// System process operation failed.
+class SystemProcessOperationError : public SystemProcessOperationErrorInterface::Hxx1::Reference
+{
+public:
+	friend class SystemProcessOperationErrorObject;
+	friend class maxon::ResultBase<SystemProcessOperationError>;
+	SystemProcessOperationError(maxon::ERROR_OK) { }
+	PRIVATE_MAXON_DEFAULT_REFERENCE_CONSTRUCTORS(SystemProcessOperationError, typename SystemProcessOperationErrorInterface::Hxx1::Reference);
+	template <typename D> SystemProcessOperationError(const D& allocLocation, typename D::SourceLocationMarker* dummy = nullptr) { maxon::SFINAEHelper<SystemProcessOperationError, D>::type::Create(MAXON_SOURCE_LOCATION_FORWARD); }
+	template <typename ARG1, typename... ARGS> SystemProcessOperationError(MAXON_SOURCE_LOCATION_DECLARATION, ARG1&& arg1, ARGS&&... args) { maxon::SFINAEHelper<SystemProcessOperationError, ARG1>::type::Create(MAXON_SOURCE_LOCATION_FORWARD, std::forward<ARG1>(arg1), std::forward<ARGS>(args)...); }
+private:
+	SystemProcessOperationError() = default;
+};
+
+MAXON_DECLARATION(SystemProcessOperationError, SystemProcessOperationErrorObject, "net.maxon.error.systemprocessoperation");
+class SystemProcessObjectRef;
+
+struct SystemProcessObjectInterface::HasBaseDetector { template <typename I> struct Check { static const maxon::Bool value = std::is_same<I, SystemProcessObjectInterface>::value || ObserverObjectInterface::HasBaseDetector::template Check<I>::value; static I* Cast(SystemProcessObjectInterface* ptr) { return reinterpret_cast<I*>(ptr); } }; };
+struct SystemProcessObjectInterface::Hxx1
+{
+	class Reference;
+	using ReferenceClass = SystemProcessObjectRef;
+	template <template <typename...> class TEMPL> using SubstituteBases = TEMPL<ObserverObjectInterface>;
+	/// Intermediate helper class for SystemProcessObjectInterface.
+	template <typename S> class ConstFn DOXYGEN_SWITCH_REVERSED(, : public S)
+	{
+	public:
+		ConstFn() = default;
+		using PrivateBaseClass = S;
+		using PrivateBaseClass::PrivateBaseClass;
+		using PrivateInterface = SystemProcessObjectInterface;
+		using PrivateBaseClass::PrivateLookupFn;
+		static ConstFn PrivateLookupFn(SystemProcessObjectInterface**);
+/// Returns the exit code of the execution. This is possible as soon as the process finished.
+/// Note: The exit code under OS X only works for own child processes.
+/// Under Windows the exit code is available for all processes.
+/// @return												Returns the exit code of the process or (UInt)NOTOK if the process is still running.
+		inline HXXADDRET2(Int) GetExitCode() const;
+/// Returns whether the process is running or not.
+/// @return												True if the process is running.
+		inline HXXADDRET2(Bool) IsRunning() const;
+/// Returns the System Process Id.
+/// @return												The system process id (pid).
+		inline HXXADDRET2(UInt) GetProcessId() const;
+/// Returns the pointer to the windows process handle.
+/// @return												Windows: HANDLE of the windows process. OS X: pid of the process.
+		inline HXXADDRET2(void*) GetProcessHandle() const;
+/// Returns the file path to the executable.
+/// Notes: Under windows the full path is only returned for processes that the user owns. System processes are only given by name.
+/// Under OS X the name is limited to the first 10 characters at the moment.
+/// @return												File name of the executable.
+		inline HXXADDRET2(Url) GetProcessUrl() const;
+/// Returns the path of the captured logfile.
+/// @return												Return the log file path. If the process was not created using EXECUTEPROGRAMFLAGS::CAPTURELOGFILE an empty name is returned.
+		inline HXXADDRET2(Url) GetLogFile() const;
+/// Returns the user data connected to this process. See SystemProcessInterface::CreateProcess().
+/// @return												Return the pointer to the user data of this process.
+		inline HXXADDRET2(void*) GetUserData() const;
+/// Gets an array of all loaded dlls for this process.
+/// @return												OK on success.
+		inline Result<void> GetLoadedDlls(const ValueReceiver<const DllRef&>& dlls) const;
+/// Signal that the process finished execution. Make sure that you add this notification before you
+/// start the process, otherwise it could be too late if the process already ended.
+/// -param[in] sender							Reference to the SystemProcessObjectRef which has been finished.
+/// @return												ObservableRef to operate on.
+		inline HXXADDRET2(maxon::ObservableRef<ObservableProcessFinishedDelegate>) ObservableProcessFinished(Bool create) const;
+	};
+	/// Intermediate helper class for SystemProcessObjectInterface.
+	template <typename S> class Fn : public ConstFn<S>
+	{
+	public:
+		Fn() = default;
+		using PrivateBaseClass = ConstFn<S>;
+		using PrivateBaseClass::PrivateBaseClass;
+		using PrivateInterface = SystemProcessObjectInterface;
+		using PrivateBaseClass::PrivateLookupFn;
+		static Fn PrivateLookupFn(SystemProcessObjectInterface**);
+		operator const typename maxon::RefConversionTarget<S, typename S::Handler, maxon::StrongRefHandler, SystemProcessObjectRef, true>::type&() const { return reinterpret_cast<const SystemProcessObjectRef&>(this->GetBaseRef()); }
+		operator const typename maxon::RefConversionTarget<S, typename S::Handler, maxon::StrongRefHandler, SystemProcessObjectRef, false>::type&() { return reinterpret_cast<const SystemProcessObjectRef&>(this->GetBaseRef()); }
+/// Executes the prepared process. This only works once. To start the same executable again you need to allocate another instance with the same settings.
+/// @return												OK on success.
+		inline Result<void> StartProcess() const;
+/// Kills the process if it is still running. All child processes are also killed.
+/// @return												OK on success. If the process was not running SystemProcessOperationError is returned.
+		inline Result<void> KillProcess() const;
+	};
+	/// Intermediate helper class for SystemProcessObjectInterface.
+	template <typename S> class COWFn : public ConstFn<S>
+	{
+	public:
+		COWFn() = default;
+		using PrivateBaseClass = ConstFn<S>;
+		using PrivateBaseClass::PrivateBaseClass;
+		using PrivateInterface = SystemProcessObjectInterface;
+		using PrivateBaseClass::PrivateLookupFn;
+		static COWFn PrivateLookupFn(SystemProcessObjectInterface**);
+		operator const typename maxon::RefConversionTarget<S, typename S::Handler, void, SystemProcessObjectRef, false>::type&() { return reinterpret_cast<const SystemProcessObjectRef&>(this->GetBaseRef()); }
+/// Executes the prepared process. This only works once. To start the same executable again you need to allocate another instance with the same settings.
+/// @return												OK on success.
+		inline Result<void> StartProcess();
+/// Kills the process if it is still running. All child processes are also killed.
+/// @return												OK on success. If the process was not running SystemProcessOperationError is returned.
+		inline Result<void> KillProcess();
+	};
+	template <typename ST> struct FnHelper : public std::conditional<
+	maxon::Bool(ST::type::Handler::KIND & (maxon::VALUEKIND::COW_MASK | maxon::VALUEKIND::DEEP_CONSTNESS)),
+	COWFn<typename ObserverObjectInterface::Hxx1::template FnHelper<ST>::type>,
+	typename std::conditional<std::is_const<typename ST::type::PrivateReferencedType>::value, ConstFn<typename ObserverObjectInterface::Hxx1::template FnHelper<ST>::type>, Fn<typename ObserverObjectInterface::Hxx1::template FnHelper<ST>::type>>::type
+	> { };
+};
+class SystemProcessObjectInterface::Hxx1::Reference :
+#ifdef DOXYGEN
+public FnDoxy<SystemProcessObjectRef>
+#else
+public maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<SystemProcessObjectInterface, maxon::StrongRefHandler, SystemProcessObjectRef>>>>
+#endif
+{
+public:
+	MAXON_DEFAULT_REFERENCE_CONSTRUCTORS(Reference, maxon::RefBase<Hxx1::FnHelper<maxon::RefBaseFn<maxon::DirectRef<SystemProcessObjectInterface, maxon::StrongRefHandler, SystemProcessObjectRef>>>>);
+	using NonConst = typename Super::ReferenceClass;
+};
+
+/// SystemProcessObjectRef is the reference class of SystemProcessObjectInterface.
+///
+/// SystemProcessObjectInterface
+class SystemProcessObjectRef : public SystemProcessObjectInterface::Hxx1::Reference
+{
+public:
+	MAXON_DEFAULT_REFERENCE_CONSTRUCTORS(SystemProcessObjectRef, typename SystemProcessObjectInterface::Hxx1::Reference);
+	using ConstPtr = typename SystemProcessObjectInterface::ConstPtr;
+};
+
+class SystemProcessObjectInterface::ObservableProcessFinishedDelegate : public maxon::Delegate<void(const SystemProcessObjectRef&)>
+{
+public:
+	using Super = maxon::Delegate<void(const SystemProcessObjectRef&)>;
+	MAXON_MEMBERFUNCTION_DETECTOR(HandleProcessFinished);
+	ObservableProcessFinishedDelegate() = default;
+	template <typename FN> static maxon::ResultOk<Super> Create(FN&& src, typename std::enable_if<HasHandleProcessFinished<typename maxon::Dereference<typename std::decay<FN>::type, false>::type>::value, void>::type* = nullptr) { return Super::CreateByReference(std::forward<FN>(src), &maxon::Dereference<typename std::decay<FN>::type, false>::type::HandleProcessFinished); }
+	template <typename FN> static maxon::Result<Super> Create(FN&& src, typename std::enable_if<!HasHandleProcessFinished<typename maxon::Dereference<typename std::decay<FN>::type, false>::type>::value, void>::type* = nullptr){ return Super::Create(std::forward<FN>(src)); }
+	using OBSERVABLECOMBINER = ObservableCombinerRunAllComponent_PrivateHelper;
+};
+
+#endif

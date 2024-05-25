@@ -1,8 +1,9 @@
-#pragma once
+#ifndef CMT_MARCO_H__
+#define CMT_MARCO_H__
 
 #ifndef CMT_DISALLOW_COPY_AND_ASSIGN_BODY
 //----------------------------------------------------------------------------------------
-/// This statement needs to be used at the beginning of any class that cannot be copied
+/// This statement needs to be used at the beginning of any class that cannot be copied.
 /// An example:
 /// @code
 /// class MyClass
@@ -18,7 +19,24 @@
 		void operator =(const TypeName&) = delete;	\
 		private:
 #endif
-
+//----------------------------------------------------------------------------------------
+/// This statement needs to be used at the beginning of any class that cannot be moved.
+/// An example:
+/// @code
+/// class MyClass
+/// {
+///   CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MyClass);
+///   ...
+/// };
+/// @endcode
+//----------------------------------------------------------------------------------------
+#ifndef CMT_DISALLOW_MOVE_AND_ASSIGN_BODY
+#define CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(TypeName) \
+		public:										\
+		TypeName(TypeName&&) = delete;			\
+		void operator =(TypeName&&) = delete;	\
+		private:
+#endif
 
 #ifndef CMT_DEFAULT_MOVE_BODY
 //----------------------------------------------------------------------------------------
@@ -39,28 +57,47 @@
 		private:
 #endif
 
-#ifndef GENERATE_MMD_CLASS_BODY
-//----------------------------------------------------------------------------------------
-/// This statement needs to be used at the beginning of any class that uses the MMD data interface
-/// An example:
-/// @code
-/// class MMDClass
-/// {
-///   GENERATE_MMD_CLASS_BODY(MyClass);
-///   ...
-/// };
-/// @endcode
-//----------------------------------------------------------------------------------------
-#define	GENERATE_MMD_CLASS_BODY(CLASSTYPE, DATATYPE)				\
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(CLASSTYPE) 					\
-	CMT_DEFAULT_MOVE_BODY(CLASSTYPE)								\
-	public:															\
-	using data_type = DATATYPE;										\
-	[[nodiscard]] const std::unique_ptr<data_type>& GetData() const	\
-	{																\
-		return m_data;												\
-	}																\
-	private:														\
-	std::unique_ptr<data_type> m_data;
+#if API_VERSION < 2024000
+
+#   define SDK2024_Const
+#   define SDK2024_ConstExpr
+#   define SDK2024_NotConst const
+
+#	define SDK2024_InitPara
+#	define SDK2024_InitParaName
+#	define DescIDGeData(id) GeData{ CUSTOMDATATYPE_DESCID, id }
+
+#   ifndef ConstDescID
+#       define ConstDescID(...) DescID(__VA_ARGS__)
+#       define CreateDescID(...) DescID(__VA_ARGS__)
+#   endif
+
+#	define DataGetCustomDataType(data, type, id) reinterpret_cast<type*>(data.GetCustomDataType(id))
+#	define GetDynamicDescriptionWritable GetDynamicDescription
+#	define MakeObjectColorProperties(color, usecolor, xray) ObjectColorProperties{usecolor, color, xray}
+
+#	define SDK2024_ToPointer 
+#	define SDK2024_Append(...) Append({__VA_ARGS__})
+#	define SDK2024_Move(x) x
+#	define GetWritableBaseSelect GetBaseSelect
+
+#else
+
+#   define SDK2024_Const const
+#   define SDK2024_ConstExpr constexpr
+#   define SDK2024_NotConst
+
+#	define SDK2024_InitPara , isCloneInit
+#   define SDK2024_InitParaName ,Bool isCloneInit
+#	define DescIDGeData(id) GeData{ id }
+
+#	define DataGetCustomDataType(data, type, id) data.GetCustomDataTypeWritable<type>()
+#	define MakeObjectColorProperties(color, usecolor, xray) ObjectColorProperties{color, usecolor, xray}
+
+#	define SDK2024_ToPointer .ToPointer()
+#	define SDK2024_Append(...) Append(__VA_ARGS__)
+#	define SDK2024_Move(x) std::move(x)
+
 #endif
 
+#endif // !CMT_MARCO_H__

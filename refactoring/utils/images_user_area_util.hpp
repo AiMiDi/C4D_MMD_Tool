@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/7/1
 File:			images_user_area_util.hpp
@@ -8,8 +8,8 @@ Description:	UserArea Utils for images
 
 **************************************************************************/
 
-#ifndef _IMAGES_USER_AREA_UTIL_H_
-#define _IMAGES_USER_AREA_UTIL_H_
+#ifndef IMAGES_USER_AREA_UTIL_H__
+#define IMAGES_USER_AREA_UTIL_H__
 
 #include "pch.h"
 
@@ -30,4 +30,4 @@ public:
 	}
 };
 
-#endif // !_IMAGES_USER_AREA_UTIL_H_
+#endif // !IMAGES_USER_AREA_UTIL_H__

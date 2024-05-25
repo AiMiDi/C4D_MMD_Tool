@@ -1,6 +1,6 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			walter white/Aimidi
 Date:			2022/7/31
 File:			cmt_tools_manager.h
@@ -8,8 +8,8 @@ Description:	tools manager
 
 **************************************************************************/
 
-#ifndef _CMT_TOOLS_MANAGER_H_
-#define _CMT_TOOLS_MANAGER_H_
+#ifndef CMT_TOOLS_MANAGER_H__
+#define CMT_TOOLS_MANAGER_H__
 
 #include "cmt_tools_setting.h"
 
@@ -24,4 +24,4 @@ namespace CMTToolsManager
 	bool ExportPMXModel (const CMTToolsSetting::ModelExport&  setting);
 }	    
 
-#endif // !_CMT_TOOLS_MANAGER_H_
+#endif // !CMT_TOOLS_MANAGER_H__

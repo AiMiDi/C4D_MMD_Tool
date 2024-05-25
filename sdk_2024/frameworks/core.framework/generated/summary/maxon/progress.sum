@@ -1,0 +1,1 @@
+maxon.ProgressInterface	"net.maxon.interface.progress"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\core.framework\source\maxon\progress.h(28,7)	ObserverObjectInterface	AddProgressJob,CancelJob,GetDetailsText,GetProgress,GetTime,GetTotalWeight,InitProgress,IsCancelled,ObservableProgressNotification,SetCancelJobDelegate,SetDetailsText,SetProgressAndCheckBreak,SupportsCancelJob	

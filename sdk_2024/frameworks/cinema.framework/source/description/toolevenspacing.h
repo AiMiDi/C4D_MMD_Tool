@@ -1,0 +1,10 @@
+#ifndef TOOLEVENSPACING_H__
+#define TOOLEVENSPACING_H__
+
+enum
+{
+    MDATA_EVENSPACING_WEIGHT              = 1100, //LONG
+    MDATA_EVENSPACING_LINEAR              = 1101  //BOOL
+};
+
+#endif // TOOLEVENSPACING_H__

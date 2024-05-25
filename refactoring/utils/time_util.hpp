@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			walter white/Aimidi
 Date:			2022/7/1
 File:			time_util.hpp
@@ -8,10 +8,8 @@ Description:	Time Utils with hash
 
 **************************************************************************/
 
-#ifndef _TIME_UTIL_H_
-#define _TIME_UTIL_H_
-
-#include "pch.h"
+#ifndef TIME_UTIL_H__
+#define TIME_UTIL_H__
 
 #if API_VERSION < 23000
 namespace maxon {
@@ -33,4 +31,4 @@ public:
 	HashTime(const BaseTime& time) : BaseTime(time) {}
 };
 
-#endif // !_TIME_UTIL_H_
+#endif // !TIME_UTIL_H__

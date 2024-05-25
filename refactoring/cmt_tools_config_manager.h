@@ -1,6 +1,6 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/6/25
 File:			cmt_tool_config_manager.h
@@ -8,8 +8,8 @@ Description:	Manager of plugin configuration
 
 **************************************************************************/
 
-#ifndef _CMT_TOOL_CONFIG_MANAGER_H_
-#define _CMT_TOOL_CONFIG_MANAGER_H_
+#ifndef CMT_TOOL_CONFIG_MANAGER_H__
+#define CMT_TOOL_CONFIG_MANAGER_H__
 
 #include "pch.h"
 
@@ -46,7 +46,7 @@ public:
 	template <class T>
 	T GetConfig(Int32 id)
 	{
-		id -= 10000;
+		id -= DLG_CMT_TOOL_ID_BEGIN;
 		assert(id >= 0 && id < k_default_config_table_size);
 		auto& [default_config_name, default_config_value] = k_default_config_table[id];
 		try
@@ -105,51 +105,52 @@ private:
 	 */
 	YAML::Node m_config;
 
-	inline static constexpr int k_config_id_begin = DLG_CMT_TOOL_CAMERA_IMPORT_SIZE;
-	inline static constexpr int k_config_id_end = DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK;
-	inline static constexpr int k_default_config_table_size = k_config_id_end - k_config_id_begin + 1;
+	inline static constexpr int k_config_id_begin = DLG_CMT_TOOL_ID_BEGIN;
+	inline static constexpr int k_config_id_end = DLG_CMT_TOOL_ID_END;
+	inline static constexpr int k_default_config_table_size = k_config_id_end - k_config_id_begin;
 	/**
 	* \brief Configuration entry initial value table.
 	*/
 	inline static constexpr confin_item_type k_default_config_table[k_default_config_table_size]
 	{
-		{{"DIG_CMT_TOOL_CAMERA_IMPORT_SIZE"},{8.5f}},
-		{{"DIG_CMT_TOOL_CAMERA_IMPORT_OFFSET"},{0.f}},
-		{{"DIG_CMT_TOOL_CAMERA_EXPORT_SIZE"},{8.5f}},
-		{{"DIG_CMT_TOOL_CAMERA_EXPORT_OFFSET"},{0.f}},
-		{{"DIG_CMT_TOOL_CAMERA_EXPORT_ROTATION_TWEEN"},{0}},
-		{{"DIG_CMT_TOOL_CAMERA_EXPORT_USE_BAKE"},{true}},
-		{{"DIG_CMT_TOOL_CAMERA_CONVER_DIS"},{0.f}},
-		{{"DIG_CMT_TOOL_CAMERA_CONV_ROTATION_TWEEN"},{0}},
-		{{"DIG_CMT_TOOL_MOTION_IMPORT_SIZE"},{8.5f}},
-		{{"DIG_CMT_TOOL_MOTION_IMPORT_OFFSET"},{0.f}},
-		{{"DIG_CMT_TOOL_MOTION_IMPORT_MOTION"},{true}},
-		{{"DIG_CMT_TOOL_MOTION_IMPORT_MORPH"},{true}},
-		{{"DIG_CMT_TOOL_MOTION_IMPORT_MODEL_INFO"},{true}},
-		{{"DIG_CMT_TOOL_MOTION_IMPORT_IGNORE_PHYSICAL"},{true}},
-		{{"DIG_CMT_TOOL_MOTION_IMPORT_DELETE_PREVIOUS_ANIMATION"},{true}},
-		{{"DIG_CMT_TOOL_MOTION_IMPORT_DETAIL"},{false}},
-		{{"DIG_CMT_TOOL_MOTION_EXPORT_SIZE"},{8.5f}},
-		{{"DIG_CMT_TOOL_MOTION_EXPORT_OFFSET"},{0.f}},
-		{{"DIG_CMT_TOOL_MOTION_EXPORT_ROTATION_TWEEN"},{true}},
-		{{"DIG_CMT_TOOL_MOTION_EXPORT_MOTION"},{true}},
-		{{"DIG_CMT_TOOL_MOTION_EXPORT_MORPH"},{true}},
-		{{"DIG_CMT_TOOL_MOTION_EXPORT_MODEL_INFO"},{true}},
-		{{"DIG_CMT_TOOL_MOTION_EXPORT_USE_BAKE"},{0}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_SIZE"},{8.5f}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_POLYGON"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_NORMAL"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_UV"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_MATERIAL"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_BONE"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_WEIGHTS"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_IK"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_INHERIT"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_EXPRESSION"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_MULTIPART"},{true}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH"},{false}},
-		{{"DIG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK"},{false}}
+		{{"DLG_CMT_TOOL_CAMERA_IMPORT_SIZE"},{8.5f}},
+		{{"DLG_CMT_TOOL_CAMERA_IMPORT_OFFSET"},{0.f}},
+		{{"DLG_CMT_TOOL_CAMERA_EXPORT_SIZE"},{8.5f}},
+		{{"DLG_CMT_TOOL_CAMERA_EXPORT_OFFSET"},{0.f}},
+		{{"DLG_CMT_TOOL_CAMERA_EXPORT_ROTATION_TWEEN"},{0}},
+		{{"DLG_CMT_TOOL_CAMERA_EXPORT_USE_BAKE"},{true}},
+		{{"DLG_CMT_TOOL_CAMERA_CONVER_DIS"},{0.f}},
+		{{"DLG_CMT_TOOL_CAMERA_CONV_ROTATION_TWEEN"},{0}},
+		{{"DLG_CMT_TOOL_MOTION_IMPORT_SIZE"},{8.5f}},
+		{{"DLG_CMT_TOOL_MOTION_IMPORT_OFFSET"},{0.f}},
+		{{"DLG_CMT_TOOL_MOTION_IMPORT_MOTION"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_IMPORT_MORPH"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_IMPORT_MODEL_INFO"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_IMPORT_BY_LOCAL_NAME"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_IMPORT_IGNORE_PHYSICAL"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_IMPORT_DELETE_PREVIOUS_ANIMATION"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_IMPORT_DETAIL"},{false}},
+		{{"DLG_CMT_TOOL_MOTION_EXPORT_SIZE"},{8.5f}},
+		{{"DLG_CMT_TOOL_MOTION_EXPORT_OFFSET"},{0.f}},
+		{{"DLG_CMT_TOOL_MOTION_EXPORT_ROTATION_TWEEN"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_EXPORT_MOTION"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_EXPORT_MORPH"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_EXPORT_MODEL_INFO"},{true}},
+		{{"DLG_CMT_TOOL_MOTION_EXPORT_USE_BAKE"},{0}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_SIZE"},{8.5f}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_POLYGON"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_NORMAL"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_UV"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_BONE"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_WEIGHTS"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_IK"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_INHERIT"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_EXPRESSION"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_MULTIPART"},{true}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH"},{false}},
+		{{"DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK"},{false}}
 	};
 };
 
-#endif //_CMT_TOOL_CONFIG_MANAGER_H_
+#endif //CMT_TOOL_CONFIG_MANAGER_H__

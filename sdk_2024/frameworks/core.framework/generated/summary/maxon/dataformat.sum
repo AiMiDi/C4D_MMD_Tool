@@ -1,0 +1,2 @@
+maxon.DataFormatReaderInterface	"net.maxon.interface.dataformatreader"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\core.framework\source\maxon\dataformat.h(16,7)	DataFormatBaseReaderInterface,DataSerializeReaderInterface		
+maxon.DataFormatWriterInterface	"net.maxon.interface.dataformatwriter"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\core.framework\source\maxon\dataformat.h(26,7)	DataFormatBaseWriterInterface,DataSerializeWriterInterface		

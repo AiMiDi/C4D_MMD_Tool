@@ -4,7 +4,16 @@ call "%VSPath%\VC\Auxiliary\Build\vcvars64.bat" x64
 cd ./dependency/bullet3 
 mkdir build 
 cd build
-cmake ..  -G "Ninja Multi-Config" -D INSTALL_LIBS=ON -D USE_DOUBLE_PRECISION=ON -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install"
+cmake ..  -G "Ninja Multi-Config" ^
+-D INSTALL_LIBS=ON  ^
+-D USE_DOUBLE_PRECISION=ON ^
+-D CMAKE_DEBUG_POSTFIX="_Debug" ^
+-D CMAKE_INSTALL_PREFIX="../../install" ^
+-D USE_MSVC_RUNTIME_LIBRARY_DLL=On ^
+-D BUILD_CPU_DEMOS=Off ^
+-D BUILD_OPENGL3_DEMOS=Off ^
+-D BUILD_BULLET2_DEMOS=Off ^
+-D BUILD_UNIT_TESTS=Off
 cmake --build . --config Debug -j
 cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j

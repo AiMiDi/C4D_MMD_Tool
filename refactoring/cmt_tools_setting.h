@@ -1,6 +1,6 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/7/30
 File:			cmt_tools_setting.cpp
@@ -8,8 +8,8 @@ Description:    CMT tools setting struct.
 
 **************************************************************************/
 
-#ifndef _CMT_TOOLS_SETTING_H_
-#define _CMT_TOOLS_SETTING_H_
+#ifndef CMT_TOOLS_SETTING_H__
+#define CMT_TOOLS_SETTING_H__
 
 #include "pch.h"
 
@@ -56,6 +56,7 @@ namespace CMTToolsSetting
 		Bool    import_motion = true;
 		Bool    import_morph = true;
 		Bool    import_model_info = true;
+		Bool	import_by_local_name = true;
 		Bool	ignore_physical = true;
 		Bool	delete_previous_animation = true;
 		Bool	detail_report = false;
@@ -76,6 +77,13 @@ namespace CMTToolsSetting
 	};
 	struct ModelImport : BaseSetting
 	{
+		enum class material_type : uint8_t
+		{
+			Standard,
+			RedShift,
+			Octane,
+		};
+
 		Float	position_multiple{};
 		Bool	import_polygon{};
 		Bool	import_normal{};
@@ -89,6 +97,7 @@ namespace CMTToolsSetting
 		Bool	import_multipart{};
 		Bool	import_english{};
 		Bool	import_english_check{};
+		material_type import_material_type = material_type::Standard;
 
 		explicit ModelImport(BaseDocument* document) : BaseSetting(document) {}
 	};
@@ -109,4 +118,4 @@ namespace CMTToolsSetting
 	};
 }
 
-#endif //!_CMT_TOOLS_SETTING_H_
+#endif //!CMT_TOOLS_SETTING_H__

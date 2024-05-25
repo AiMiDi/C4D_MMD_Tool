@@ -93,66 +93,68 @@ namespace tool {
 	};
 	class TMMDBone : public TagData
 	{
-		/* Ê¹ÓÃMap´¢´æ²¹¼äÇúÏßÊı¾İ */
+		/* ä½¿ç”¨Mapå‚¨å­˜è¡¥é—´æ›²çº¿æ•°æ® */
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_X_map;
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_Y_map;
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_Z_map;
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_R_map;
 		maxon::HashMap<Int32, mmd::VMDInterpolator>	interpolator_A_map;
 		maxon::HashMap<DescID, Int32> button_id_map;
-		/* ¹Ç÷À±íÇéË÷Òı */
+		/* éª¨éª¼è¡¨æƒ…ç´¢å¼• */
 		Int32 bone_morph_name_index = 0;
-		/* ´¢´æÇ°Ò»Ö¡£¬ÒÔÈ·¶¨¸üĞÂ×´Ì¬ */
+		/* å‚¨å­˜å‰ä¸€å¸§ï¼Œä»¥ç¡®å®šæ›´æ–°çŠ¶æ€ */
 		Int32 prev_frame = -1;
-		/* ´¢´æÉÏÒ»ÖÖÇúÏßÀàĞÍ£¬ÒÔÈ·¶¨¸üĞÂ×´Ì¬ */
+		/* å‚¨å­˜ä¸Šä¸€ç§æ›²çº¿ç±»å‹ï¼Œä»¥ç¡®å®šæ›´æ–°çŠ¶æ€ */
 		Int32 prev_interpolator_type = -1;
-		/* ¶ÔÓ¦µÄ¹Ç÷ÀÖ÷¶ÔÏó */
+		/* å¯¹åº”çš„éª¨éª¼ä¸»å¯¹è±¡ */
 		BaseObject* obj = nullptr;
-		/* ¸³ÓèÇ×¹Ç÷À¶ÔÏó */
+		/* èµ‹äºˆäº²éª¨éª¼å¯¹è±¡ */
 		BaseObject* inherit_bone_parent = nullptr;
-		/* ¹Ç÷À¸ù¶ÔÏó */
+		/* éª¨éª¼æ ¹å¯¹è±¡ */
 		BaseObject* m_BoneRoot_ptr = nullptr;
-		/* ÊÇ·ñÊÇÎïÀí¹Ç÷À */
+		/* æ˜¯å¦æ˜¯ç‰©ç†éª¨éª¼ */
 		Bool	Is_physical = false;
-		/* ÓÃÓÚ´¦Àí¹Ç÷À±íÇé */
+		/* ç”¨äºå¤„ç†éª¨éª¼è¡¨æƒ… */
 		Vector	prev_position = Vector();
-		/* ÓÃÓÚ´¦Àí¹Ç÷À±íÇé */
+		/* ç”¨äºå¤„ç†éª¨éª¼è¡¨æƒ… */
 		Vector	prev_rotation = Vector();
-		/* ´¢´æ¹Ç÷À±íÇéÊı¾İ */
+		/* å‚¨å­˜éª¨éª¼è¡¨æƒ…æ•°æ® */
 		maxon::PointerArray<bone_morph_data> bone_morph_data_arr;
 		TMMDBone() {}
 		~TMMDBone() override {}
 		MAXON_DISALLOW_COPY_AND_ASSIGN(TMMDBone)
 		INSTANCEOF(TMMDBone, TagData)
 	public:
-		Int32 AddBondMorph(String morph_name);
-		Bool RefreshColor(GeListNode* node = nullptr, BaseObject* op = nullptr);
-		/* ÓÃÓÚÏŞÖÆSplineDataµÄ»Øµ÷º¯Êı */
-		static Bool SplineDataCallBack(Int32 cid, const void* data);
-		/* »ñÈ¡ÇúÏßÖµ */
-		Bool GetInterpolator(const Int32& type, const Int32& frame_on, mmd::VMDInterpolator& interpolator) const;
-		/* ÉèÖÃÇúÏßÖµ */
-		Bool SetInterpolator(const Int32& type, const Int32& frame_on, mmd::VMDInterpolator&& interpolator, Bool cover = true);
-		Bool AutoRegisterKeyFrame(Int32 use_rotation = 0, GeListNode* node = nullptr);
-		/* ×¢²á¹Ø¼üÖ¡ */
-		Bool RegisterKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
-		/* ¸üĞÂÈ«²¿²¹¼äÇúÏß */
-		Bool UpdateAllInterpolator(GeListNode* node = nullptr);
-		/* ³õÊ¼»¯ÇúÏß */
-		Bool InitInterpolator(GeListNode* node = nullptr);
-		/* É¾³ıÇúÏß */
-		Bool DeleteKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
-		/* É¾³ıÈ«²¿ÇúÏß */
-		Bool DeleteAllKeyFrame(GeListNode* node = nullptr);
-		/* ½ÓÊÕMessageÊ±µ÷ÓÃ£¬ÓÃÓÚ´¦ÀíÊÂ¼ş */
-		Bool Message(GeListNode* node, Int32 type, void* data) override;
 		Bool Init(GeListNode* node) override;
-		/* ÉèÖÃ²ÎÊıÊ±µ÷ÓÃ£¬ÓÃÓÚµ÷ÓÃSplineDataµÄ»Øµ÷º¯Êı */
+		/* æ¥æ”¶Messageæ—¶è°ƒç”¨ï¼Œç”¨äºå¤„ç†äº‹ä»¶ */
+		Bool Message(GeListNode* node, Int32 type, void* data) override;
+		/* è®¾ç½®å‚æ•°æ—¶è°ƒç”¨ï¼Œç”¨äºè°ƒç”¨SplineDataçš„å›è°ƒå‡½æ•° */
 		Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 		Bool GetDEnabling(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) override;
 		EXECUTIONRESULT Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 		Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 		Bool Write(GeListNode* node, HyperFile* hf) override;
+
+		/* ç”¨äºé™åˆ¶SplineDataçš„å›è°ƒå‡½æ•° */
+		static Bool SplineDataCallBack(Int32 cid, const void* data);
+		/* è·å–æ›²çº¿å€¼ */
+		Bool GetInterpolator(const Int32& type, const Int32& frame_on, mmd::VMDInterpolator& interpolator) const;
+		/* è®¾ç½®æ›²çº¿å€¼ */
+		Bool SetInterpolator(const Int32& type, const Int32& frame_on, mmd::VMDInterpolator&& interpolator, Bool cover = true);
+		Bool AutoRegisterKeyFrame(Int32 use_rotation = 0, GeListNode* node = nullptr);
+		/* æ³¨å†Œå…³é”®å¸§ */
+		Bool RegisterKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
+		/* æ›´æ–°å…¨éƒ¨è¡¥é—´æ›²çº¿ */
+		Bool UpdateAllInterpolator(GeListNode* node = nullptr);
+		/* åˆå§‹åŒ–æ›²çº¿ */
+		Bool InitInterpolator(GeListNode* node = nullptr);
+		/* åˆ é™¤æ›²çº¿ */
+		Bool DeleteKeyFrame(Int32 frame_on, GeListNode* node = nullptr);
+		/* åˆ é™¤å…¨éƒ¨æ›²çº¿ */
+		Bool DeleteAllKeyFrame(GeListNode* node = nullptr);
+
+		Int32 AddBondMorph(String morph_name);
+		Bool RefreshColor(GeListNode* node = nullptr, BaseObject* op = nullptr);
 		static NodeData* Alloc()
 		{
 			return(NewObjClear(TMMDBone));

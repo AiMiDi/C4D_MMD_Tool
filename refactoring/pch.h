@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PCH_H__
+#define PCH_H__
 
 // std
 #include <optional>
@@ -9,6 +10,8 @@
 #include <cassert>
 #include <memory>
 #include <mutex>
+#include <unordered_set>
+#include <unordered_map>
 
 // C4D
 #include <c4d.h>
@@ -20,6 +23,14 @@
 #include "maxon/sortedarray.h"
 #include "c4d_baselinkarray.h"
 #include "tprotection.h"
+#include "maxon/baselist.h"
+#include "maxon/queue.h"
+#include "maxon/synchronized.h"
+#include "lib_ca.h"
+#include "tcaik.h"
+#include "ocajoint.h"
+#include "customgui_priority.h"
+#include "customgui_iconchooser.h"
 
 // The third party
 #include "yaml-cpp/yaml.h"
@@ -36,3 +47,5 @@
 #include "utils/filename_util.hpp"
 
 #include "module/core/cmt_marco.h"
+
+#endif // !PCH_H__

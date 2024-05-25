@@ -1,0 +1,89 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 16
+VisualStudioVersion = 16.0.29209.152
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frameworks", "frameworks", "{E00CFF2B-A8AD-81B9-0009-38CB8C5CDEA3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{8800E4E7-1090-4283-0009-38CB8C5CDEA3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cinema.framework", "..\..\frameworks\cinema.framework\project\cinema.framework.vcxproj", "{69BF9B7D-7EB2-7FC5-0009-38CB8C5CDEA3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3A883A00-61CC-D50A-0009-38CB8C5CDEA3} = {3A883A00-61CC-D50A-0009-38CB8C5CDEA3}
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3} = {F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}
+		{96B02211-112B-F41C-0009-38CB8C5CDEA3} = {96B02211-112B-F41C-0009-38CB8C5CDEA3}
+		{334CB027-DCC3-21AE-0009-38CB8C5CDEA3} = {334CB027-DCC3-21AE-0009-38CB8C5CDEA3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core.framework", "..\..\frameworks\core.framework\project\core.framework.vcxproj", "{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "image.framework", "..\..\frameworks\image.framework\project\image.framework.vcxproj", "{2F669138-9991-9827-0009-38CB8C5CDEA3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3} = {F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "math.framework", "..\..\frameworks\math.framework\project\math.framework.vcxproj", "{96B02211-112B-F41C-0009-38CB8C5CDEA3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3} = {F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mesh_misc.framework", "..\..\frameworks\mesh_misc.framework\project\mesh_misc.framework.vcxproj", "{3A883A00-61CC-D50A-0009-38CB8C5CDEA3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3} = {F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}
+		{334CB027-DCC3-21AE-0009-38CB8C5CDEA3} = {334CB027-DCC3-21AE-0009-38CB8C5CDEA3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "modeling_geom.framework", "..\..\frameworks\modeling_geom.framework\project\modeling_geom.framework.vcxproj", "{334CB027-DCC3-21AE-0009-38CB8C5CDEA3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3} = {F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mmdtool", "..\..\plugins\mmdtool\project\mmdtool.vcxproj", "{8800E4E7-0D26-2958-0009-38CB8C5CDEA3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69BF9B7D-7EB2-7FC5-0009-38CB8C5CDEA3}.Debug|x64.ActiveCfg = Debug|x64
+		{69BF9B7D-7EB2-7FC5-0009-38CB8C5CDEA3}.Debug|x64.Build.0 = Debug|x64
+		{69BF9B7D-7EB2-7FC5-0009-38CB8C5CDEA3}.Release|x64.ActiveCfg = Release|x64
+		{69BF9B7D-7EB2-7FC5-0009-38CB8C5CDEA3}.Release|x64.Build.0 = Release|x64
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}.Debug|x64.ActiveCfg = Debug|x64
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}.Debug|x64.Build.0 = Debug|x64
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}.Release|x64.ActiveCfg = Release|x64
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3}.Release|x64.Build.0 = Release|x64
+		{2F669138-9991-9827-0009-38CB8C5CDEA3}.Debug|x64.ActiveCfg = Debug|x64
+		{2F669138-9991-9827-0009-38CB8C5CDEA3}.Debug|x64.Build.0 = Debug|x64
+		{2F669138-9991-9827-0009-38CB8C5CDEA3}.Release|x64.ActiveCfg = Release|x64
+		{2F669138-9991-9827-0009-38CB8C5CDEA3}.Release|x64.Build.0 = Release|x64
+		{96B02211-112B-F41C-0009-38CB8C5CDEA3}.Debug|x64.ActiveCfg = Debug|x64
+		{96B02211-112B-F41C-0009-38CB8C5CDEA3}.Debug|x64.Build.0 = Debug|x64
+		{96B02211-112B-F41C-0009-38CB8C5CDEA3}.Release|x64.ActiveCfg = Release|x64
+		{96B02211-112B-F41C-0009-38CB8C5CDEA3}.Release|x64.Build.0 = Release|x64
+		{3A883A00-61CC-D50A-0009-38CB8C5CDEA3}.Debug|x64.ActiveCfg = Debug|x64
+		{3A883A00-61CC-D50A-0009-38CB8C5CDEA3}.Debug|x64.Build.0 = Debug|x64
+		{3A883A00-61CC-D50A-0009-38CB8C5CDEA3}.Release|x64.ActiveCfg = Release|x64
+		{3A883A00-61CC-D50A-0009-38CB8C5CDEA3}.Release|x64.Build.0 = Release|x64
+		{334CB027-DCC3-21AE-0009-38CB8C5CDEA3}.Debug|x64.ActiveCfg = Debug|x64
+		{334CB027-DCC3-21AE-0009-38CB8C5CDEA3}.Debug|x64.Build.0 = Debug|x64
+		{334CB027-DCC3-21AE-0009-38CB8C5CDEA3}.Release|x64.ActiveCfg = Release|x64
+		{334CB027-DCC3-21AE-0009-38CB8C5CDEA3}.Release|x64.Build.0 = Release|x64
+		{8800E4E7-0D26-2958-0009-38CB8C5CDEA3}.Debug|x64.ActiveCfg = Debug|x64
+		{8800E4E7-0D26-2958-0009-38CB8C5CDEA3}.Debug|x64.Build.0 = Debug|x64
+		{8800E4E7-0D26-2958-0009-38CB8C5CDEA3}.Release|x64.ActiveCfg = Release|x64
+		{8800E4E7-0D26-2958-0009-38CB8C5CDEA3}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{69BF9B7D-7EB2-7FC5-0009-38CB8C5CDEA3} = {E00CFF2B-A8AD-81B9-0009-38CB8C5CDEA3}
+		{F25E1DE5-7B9B-0BF3-0009-38CB8C5CDEA3} = {E00CFF2B-A8AD-81B9-0009-38CB8C5CDEA3}
+		{2F669138-9991-9827-0009-38CB8C5CDEA3} = {E00CFF2B-A8AD-81B9-0009-38CB8C5CDEA3}
+		{96B02211-112B-F41C-0009-38CB8C5CDEA3} = {E00CFF2B-A8AD-81B9-0009-38CB8C5CDEA3}
+		{3A883A00-61CC-D50A-0009-38CB8C5CDEA3} = {E00CFF2B-A8AD-81B9-0009-38CB8C5CDEA3}
+		{334CB027-DCC3-21AE-0009-38CB8C5CDEA3} = {E00CFF2B-A8AD-81B9-0009-38CB8C5CDEA3}
+		{8800E4E7-0D26-2958-0009-38CB8C5CDEA3} = {8800E4E7-1090-4283-0009-38CB8C5CDEA3}
+	EndGlobalSection
+EndGlobal

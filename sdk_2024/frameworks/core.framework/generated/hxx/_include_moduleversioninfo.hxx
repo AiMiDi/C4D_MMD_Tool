@@ -1,0 +1,1 @@
+#include "maxon/moduleversioninfo.h"

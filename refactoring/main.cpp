@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi/walter white
 Date:			2022/6/21
 File:			main.h
@@ -15,7 +15,7 @@ Description:	Entrance of the plugin
 
 Bool PluginStart()
 {
-	if (!cmt_register::RigisterPlugin())
+	if (!cmt_register::RegisterPlugin())
 	{
 		return FALSE;
 	}

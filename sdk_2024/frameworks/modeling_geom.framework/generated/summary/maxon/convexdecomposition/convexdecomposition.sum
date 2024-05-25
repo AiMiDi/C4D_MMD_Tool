@@ -1,0 +1,1 @@
+maxon.ConvexDecompositionInterface	"net.maxon.interface.convexdecomposition"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\modeling_geom.framework\source\maxon\convexdecomposition\convexdecomposition.h(13,7)	ObjectInterface	Cancel,Clear,Compute,FetchResults,GetProgress,GetSettings,Init,IsReady	

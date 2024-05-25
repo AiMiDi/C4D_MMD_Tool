@@ -1,0 +1,1 @@
+maxon.ObserverObjectInterface	"net.maxon.interface.observerobject"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\core.framework\source\maxon\observerobject.h(23,7)	ObjectInterface	AddSenderSignal,GetName,ObserverConnectNotify,ObserverDestroyed,ObserverDisconnectNotify,RemoveSenderSignal,SetName	

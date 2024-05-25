@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/7/33
 File:			cmt_tools_dialog.h
@@ -8,8 +8,8 @@ Description:	CMT tools main dialog.
 
 **************************************************************************/
 
-#ifndef _CMT_TOOL_DIALOG_H_
-#define _CMT_TOOL_DIALOG_H_
+#ifndef CMT_TOOL_DIALOG_H__
+#define CMT_TOOL_DIALOG_H__
 
 #include "pch.h"
 
@@ -64,4 +64,4 @@ public:
 #endif
 };
 
-#endif //_CMT_TOOL_DIALOG_H_
+#endif //CMT_TOOL_DIALOG_H__

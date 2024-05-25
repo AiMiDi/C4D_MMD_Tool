@@ -1,0 +1,1 @@
+maxon.ImageUrlCacheInterface	"net.maxon.image.interface.imageurlcache"	E:\C4DSDK\C4D_MMDTool\sdk_2024\frameworks\image.framework\source\maxon\imageurlcache.h(17,7)	ObserverObjectInterface	FindOrCreate,GetImage,InvalidateCache,ObservableFreeCache	hasStaticMethods=true	

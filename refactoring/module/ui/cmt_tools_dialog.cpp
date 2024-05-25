@@ -1,6 +1,6 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2022-present, Aimidi & Walter White & CMT contributors.
+Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/7/30
 File:			cmt_tools_dialog.cpp
@@ -124,9 +124,18 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_MOTION, setting.import_motion);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_MORPH, setting.import_morph);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_MODEL_INFO, setting.import_model_info);
+		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_BY_LOCAL_NAME, setting.import_by_local_name);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_IGNORE_PHYSICAL, setting.ignore_physical);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_DELETE_PREVIOUS_ANIMATION, setting.delete_previous_animation);
 		GetItem(DLG_CMT_TOOL_MOTION_IMPORT_DETAIL, setting.detail_report);
+		if (!filename_util::SelectSuffixImportFile(setting.fn, "vmd"_s))
+		{
+			return false;
+		}
+		if (!CMTToolsManager::ImportVMDMotion(setting))
+		{
+			return false;
+		}
 		break;
 	}
 	case DLG_CMT_TOOL_MOTION_EXPORT_USE_BAKE:
@@ -172,6 +181,14 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		GetItem(DLG_CMT_TOOL_MODEL_IMPORT_MULTIPART, setting.import_multipart);
 		GetItem(DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH, setting.import_english);
 		GetItem(DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK, setting.import_english_check);
+		if (!filename_util::SelectSuffixImportFile(setting.fn, "pmx"_s))
+		{
+			return false;
+		}
+		if (!CMTToolsManager::ImportPMXModel(setting))
+		{
+			return false;
+		}
 		break;
 	}
 	case DLG_CMT_TOOL_MODEL_IMPORT_BONE:
