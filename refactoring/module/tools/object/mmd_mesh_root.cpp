@@ -311,14 +311,14 @@ Bool MMDMeshRootObject::LoadPMX(
 		return false;
 	};
 
-	const auto& pmx_surface_array = pmx_model.get_pmx_surface_array();
-	const auto& pmx_vertex_array = pmx_model.get_pmx_vertex_array();
-	const auto& pmx_material_array = pmx_model.get_pmx_material_array();
+	const auto pmx_surface_ptr_array = pmx_model.get_pmx_surface_array().readonly_elements_ptr();
+	const auto pmx_vertex_ptr_array = pmx_model.get_pmx_vertex_array().readonly_elements_ptr();
+	const auto pmx_material_ptr_array = pmx_model.get_pmx_material_array().readonly_elements_ptr();
 
 	// create mesh
-	const auto surface_count = pmx_surface_array.size();
-	const auto vertex_count = pmx_vertex_array.size();
-	const auto material_count = pmx_material_array.size();
+	const auto surface_count = pmx_surface_ptr_array.size();
+	const auto vertex_count = pmx_vertex_ptr_array.size();
+	const auto material_count = pmx_material_ptr_array.size();
 
 	if (surface_count == 0 || vertex_count == 0 || material_count == 0)
 		return true;
@@ -341,10 +341,10 @@ Bool MMDMeshRootObject::LoadPMX(
 		// statistics vertex weight data
 		const auto vertex_count_int = static_cast<Int>(vertex_count);
 		vertex_weight_data.Resize(vertex_count_int)iferr_return;
-		maxon::ParallelFor::Dynamic(Int{}, vertex_count_int, [&pmx_vertex_array, &vertex_weight_data](const Int vertex_index)
+		maxon::ParallelFor::Dynamic(Int{}, vertex_count_int, [&pmx_vertex_ptr_array, &vertex_weight_data](const Int vertex_index)
 		{
 			auto& weight_data = vertex_weight_data[vertex_index];
-			switch (const auto& pmx_vertex = pmx_vertex_array[vertex_index]; pmx_vertex.get_skinning_type())
+			switch (const auto& pmx_vertex = *pmx_vertex_ptr_array[vertex_index]; pmx_vertex.get_skinning_type())
 			{
 			case libmmd::pmx_vertex_skinning::skinning_type::BDEF1:
 			{
@@ -477,9 +477,9 @@ Bool MMDMeshRootObject::LoadPMX(
 			morph_skin_object->InsertUnder(mesh_object);
 		}
 
-		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertex_array, &setting, &mesh_object_points, &weight_tag, &vertex_weight_data](const uint64_t vertex_index)
+		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertex_ptr_array, &setting, &mesh_object_points, &weight_tag, &vertex_weight_data](const uint64_t vertex_index)
 		{
-			const auto& pmx_vertex = pmx_vertex_array[vertex_index];
+			const auto& pmx_vertex = *pmx_vertex_ptr_array[vertex_index];
 
 			// add vertex position
 			auto& mesh_object_point = mesh_object_points[vertex_index];
@@ -525,7 +525,7 @@ Bool MMDMeshRootObject::LoadPMX(
 			mesh_object->InsertTag(uvw_tag);
 		}
 		// vertex index -> surface index
-		maxon::ParallelFor::Dynamic(decltype(surface_count){}, surface_count, [&pmx_surface_array, &pmx_vertex_array, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const uint64_t surface_index)
+		maxon::ParallelFor::Dynamic(decltype(surface_count){}, surface_count, [&pmx_surface_ptr_array, &pmx_vertex_ptr_array, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const uint64_t surface_index)
 		{
 			iferr_scope_handler
 			{
@@ -533,7 +533,7 @@ Bool MMDMeshRootObject::LoadPMX(
 			};
 
 			// add surface
-			const auto& pmx_surface = pmx_surface_array[surface_index];
+			const auto& pmx_surface = *pmx_surface_ptr_array[surface_index];
 			const auto& pmx_surface_vertex_a = pmx_surface.get_a();
 			const auto& pmx_surface_vertex_b = pmx_surface.get_b();
 			const auto& pmx_surface_vertex_c = pmx_surface.get_c();
@@ -543,9 +543,9 @@ Bool MMDMeshRootObject::LoadPMX(
 			mesh_object_polygon.b = static_cast<Int32>(pmx_surface_vertex_b);
 			mesh_object_polygon.c = mesh_object_polygon.d = static_cast<Int32>(pmx_surface_vertex_c);
 
-			const auto& pmx_vertex_a = pmx_vertex_array[pmx_surface_vertex_a];
-			const auto& pmx_vertex_b = pmx_vertex_array[pmx_surface_vertex_b];
-			const auto& pmx_vertex_c = pmx_vertex_array[pmx_surface_vertex_c];
+			const auto& pmx_vertex_a = *pmx_vertex_ptr_array[pmx_surface_vertex_a];
+			const auto& pmx_vertex_b = *pmx_vertex_ptr_array[pmx_surface_vertex_b];
+			const auto& pmx_vertex_c = *pmx_vertex_ptr_array[pmx_surface_vertex_c];
 
 			// add normal
 			if (setting.import_normal)
@@ -717,12 +717,12 @@ Bool MMDMeshRootObject::LoadPMX(
 					}
 
 					// add morph uv
-					maxon::ParallelFor::Dynamic(decltype(surface_count){}, surface_count, [&pmx_surface_array, &morph_node, &morph_uv_map](const uint64_t surface_index)
+					maxon::ParallelFor::Dynamic(decltype(surface_count){}, surface_count, [&pmx_surface_ptr_array, &morph_node, &morph_uv_map](const uint64_t surface_index)
 					{
 						iferr_scope_handler{
 							return;
 						};
-						const auto& pmx_surface = pmx_surface_array[surface_index];
+						const auto& pmx_surface = *pmx_surface_ptr_array[surface_index];
 						const auto& pmx_surface_vertex_a = pmx_surface.get_a();
 						const auto& pmx_surface_vertex_b = pmx_surface.get_b();
 						const auto& pmx_surface_vertex_c = pmx_surface.get_c();
@@ -768,7 +768,7 @@ Bool MMDMeshRootObject::LoadPMX(
 		auto surface_begin_index = decltype(surface_count){};
 		for (auto material_index = decltype(material_count){}; material_index < material_count; ++material_index)
 		{
-			const auto& pmx_material = pmx_material_array[material_index];
+			const auto& pmx_material = *pmx_material_ptr_array[material_index];
 			const uint64_t surface_num = pmx_material.get_surface_count();
 
 			if (surface_num == 0)
@@ -826,7 +826,7 @@ Bool MMDMeshRootObject::LoadPMX(
 		auto surface_begin_index = decltype(surface_count){};
 		for (auto material_index = decltype(material_count){}; material_index < material_count; ++material_index)
 		{
-			const auto& pmx_material = pmx_material_array[material_index];
+			const auto& pmx_material = *pmx_material_ptr_array[material_index];
 			const uint64_t surface_num = pmx_material.get_surface_count();
 			maxon::String material_name(pmx_material.get_material_name_local().c_str());
 
@@ -914,7 +914,7 @@ Bool MMDMeshRootObject::LoadPMX(
 				Int32 part_vertex_count = 0;
 				for (auto surface_index = surface_begin_index; surface_index < surface_begin_index + surface_num; ++surface_index)
 				{
-					const auto& pmx_surface = pmx_surface_array[surface_index];
+					const auto& pmx_surface = *pmx_surface_ptr_array[surface_index];
 					const auto& pmx_surface_vertex_a = pmx_surface.get_a();
 					const auto& pmx_surface_vertex_b = pmx_surface.get_b();
 					const auto& pmx_surface_vertex_c = pmx_surface.get_c();
@@ -939,14 +939,14 @@ Bool MMDMeshRootObject::LoadPMX(
 
 				const auto mesh_object_points = ToPoint(mesh_object)->GetPointW();
 
-				maxon::ParallelFor::Dynamic(0, part_vertex_count, [&setting, &pmx_vertex_array, &mesh_object_points, &weight_tag, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
+				maxon::ParallelFor::Dynamic(0, part_vertex_count, [&setting, &pmx_vertex_ptr_array, &mesh_object_points, &weight_tag, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
 				{
 					iferr_scope_handler
 					{
 						return;
 					};
 					const auto & pmx_vertex_index = pmx_vertex_index_array[vertex_index];
-					const auto & pmx_vertex = pmx_vertex_array[pmx_vertex_index];
+					const auto & pmx_vertex = *pmx_vertex_ptr_array[pmx_vertex_index];
 					// add vertex position
 					const auto & c4d_vertex_index = vertex_index_map.Find(pmx_vertex_index)->GetValue();
 					auto & mesh_object_point = mesh_object_points[c4d_vertex_index];
@@ -1010,14 +1010,14 @@ Bool MMDMeshRootObject::LoadPMX(
 
 			// vertex index -> surface index
 			const auto mesh_object_polygons = ToPoly(mesh_object)->GetPolygonW();
-			maxon::ParallelFor::Dynamic(surface_begin_index, surface_begin_index + surface_num, [&pmx_surface_array, &pmx_vertex_array, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_index_map](const uint64_t surface_index)
+			maxon::ParallelFor::Dynamic(surface_begin_index, surface_begin_index + surface_num, [&pmx_surface_ptr_array, &pmx_vertex_ptr_array, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_index_map](const uint64_t surface_index)
 			{
 				iferr_scope_handler
 				{
 					return;
 				};
 
-				const auto & pmx_surface = pmx_surface_array[surface_index];
+				const auto & pmx_surface = *pmx_surface_ptr_array[surface_index];
 				const auto & pmx_surface_vertex_a = pmx_surface.get_a();
 				const auto & pmx_surface_vertex_b = pmx_surface.get_b();
 				const auto & pmx_surface_vertex_c = pmx_surface.get_c();
@@ -1039,9 +1039,9 @@ Bool MMDMeshRootObject::LoadPMX(
 					mesh_object_polygon.c = mesh_object_polygon.d = vertex_index_c_ptr->GetValue();
 				}
 
-				const auto& pmx_vertex_a = pmx_vertex_array[pmx_surface_vertex_a];
-				const auto& pmx_vertex_b = pmx_vertex_array[pmx_surface_vertex_b];
-				const auto& pmx_vertex_c = pmx_vertex_array[pmx_surface_vertex_c];
+				const auto& pmx_vertex_a = *pmx_vertex_ptr_array[pmx_surface_vertex_a];
+				const auto& pmx_vertex_b = *pmx_vertex_ptr_array[pmx_surface_vertex_b];
+				const auto& pmx_vertex_c = *pmx_vertex_ptr_array[pmx_surface_vertex_c];
 
 				// add normal
 				if (setting.import_normal)
@@ -1244,9 +1244,9 @@ Bool MMDMeshRootObject::LoadPMX(
 					}
 
 					// add morph uv
-					maxon::ParallelFor::Dynamic(decltype(surface_count){}, surface_count, [&pmx_surface_array, &morph_uv_map](const uint64_t surface_index)
+					maxon::ParallelFor::Dynamic(decltype(surface_count){}, surface_count, [&pmx_surface_ptr_array, &morph_uv_map](const uint64_t surface_index)
 					{
-					const auto& pmx_surface = pmx_surface_array[surface_index];
+					const auto& pmx_surface = *pmx_surface_ptr_array[surface_index];
 					const auto& pmx_surface_vertex_a = pmx_surface.get_a();
 					const auto& pmx_surface_vertex_b = pmx_surface.get_b();
 					const auto& pmx_surface_vertex_c = pmx_surface.get_c();

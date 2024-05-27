@@ -589,8 +589,8 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 		return false;
 	};
 
-	const auto& pmx_bone_array = pmx_model.get_pmx_bone_array();
-	const auto pmx_bone_num = pmx_bone_array.size();
+	const auto pmx_bone_ptr_array = pmx_model.get_pmx_bone_array().readonly_elements_ptr();
+	const auto pmx_bone_num = pmx_bone_ptr_array.size();
 	if (pmx_bone_num == 0)
 		return true;
 
@@ -608,7 +608,7 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 	// set bone data
 	for (auto pmx_bone_index = decltype(pmx_bone_num){}; pmx_bone_index < pmx_bone_num; ++pmx_bone_index)
 	{
-		const auto& pmx_bone = pmx_bone_array[pmx_bone_index];
+		const auto& pmx_bone = *pmx_bone_ptr_array[pmx_bone_index];
 
 		const auto bone_object = bone_list[static_cast<Int>(pmx_bone_index)];
 		if(!bone_object)
@@ -650,7 +650,7 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 			if (const auto parent_bone = bone_list[parent_bone_index]; parent_bone)
 			{
 				// set position child
-				const auto& parent_position = pmx_bone_array[parent_bone_index].get_position();
+				const auto& parent_position = pmx_bone_ptr_array[parent_bone_index]->get_position();
 				position -= Vector(parent_position[0], parent_position[1], parent_position[2]);
 				position *= setting.position_multiple;
 				bone_object->SetFrozenPos(position);

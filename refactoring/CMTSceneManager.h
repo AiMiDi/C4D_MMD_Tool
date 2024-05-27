@@ -27,18 +27,18 @@ struct LoadVmdCameraLog : IOLog
 {
 	UInt camera_frame_number;
 
-	void LogOK() const;
+	void LogOK();
 	static void LogNotCameraError();
 };
 
 struct SaveVmdCameraLog : IOLog
 {
-	void LogOK() const;
+	void LogOK();
 };
 
 struct ConversionVmdCameraLog : IOLog
 {
-	void LogOK() const;
+	void LogOK();
 };
 
 struct LoadVmdMotionLog : IOLog
@@ -75,7 +75,7 @@ struct LoadPmxModelLog : IOLog
 	UInt morph_data_count = 0;
 
 	void Set(const libmmd::pmx_model& model, const CMTToolsSetting::ModelImport& setting);
-	void LogOK() const;
+	void LogOK();
 };
 
 struct SavePmxModelLog : IOLog

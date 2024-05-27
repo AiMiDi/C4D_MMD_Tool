@@ -29,8 +29,9 @@ void IOLog::LogWriteFileErr()
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_WRITE_ERR));
 }
 
-void LoadVmdCameraLog::LogOK() const
+void LoadVmdCameraLog::LogOK()
 {
+	timing.Stop();
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_OK, maxon::String::UIntToString(camera_frame_number), String::FloatToString(timing.GetMilliseconds())));
 }
 
@@ -39,18 +40,21 @@ void LoadVmdCameraLog::LogNotCameraError()
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_CAM_ERR));
 }
 
-void SaveVmdCameraLog::LogOK() const
+void SaveVmdCameraLog::LogOK()
 {
+	timing.Stop();
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, String::FloatToString(timing.GetMilliseconds())));
 }
 
-void ConversionVmdCameraLog::LogOK() const
+void ConversionVmdCameraLog::LogOK()
 {
+	timing.Stop();
 	// MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, String::FloatToString(timing.GetMilliseconds())));
 }
 
 void LoadVmdMotionLog::LogOK(const Bool detail)
 {
+	timing.Stop();
 	String report = GeLoadString(IDS_MES_IMPORT_MOT_OK,
 	                             String::UIntToString(imported_bone_count),
 	                             String::UIntToString(imported_morph_count),
@@ -102,8 +106,9 @@ void LoadPmxModelLog::Set(const libmmd::pmx_model& model, const CMTToolsSetting:
 	morph_data_count = setting.import_expression ? model.get_pmx_morph_array().size() : 0;
 }
 
-void LoadPmxModelLog::LogOK() const
+void LoadPmxModelLog::LogOK()
 {
+	timing.Stop();
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_MOD_OK,
 	                    model_name_local + "\n",
 	                    "\n" + comments_local + "\n",
@@ -193,7 +198,7 @@ BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& 
 		return nullptr;
 	}
 
-	return nullptr;
+	return camera_obj;
 }
 
 BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConversion& setting)

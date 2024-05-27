@@ -1290,13 +1290,13 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 		{
 			bone_root->DeleteAllBoneAnimation();
 		}
-		const auto& bone_vmd_motion = vmd_motion.get_vmd_bone_key_frame_array();
-		auto bone_vmd_motion_count = bone_vmd_motion.size();
+		const auto bone_vmd_motion_ptr_array = vmd_motion.get_vmd_bone_key_frame_array().readonly_elements_ptr();
+		auto bone_vmd_motion_count = bone_vmd_motion_ptr_array.size();
 		log.imported_motion_count += bone_vmd_motion_count;
 		std::unordered_set<std::string> imported_bone;
 		for (auto bone_vmd_motion_index = decltype(bone_vmd_motion_count){}; bone_vmd_motion_index < bone_vmd_motion_count; ++bone_vmd_motion_index)
 		{
-			const auto& bone_vmd_key_frame = bone_vmd_motion[bone_vmd_motion_index];
+			const auto& bone_vmd_key_frame = *bone_vmd_motion_ptr_array[bone_vmd_motion_index];
 			if (bone_root->SetBoneAnimation(bone_vmd_key_frame, setting))
 			{
 				imported_bone.insert(bone_vmd_key_frame.get_bone_name());
@@ -1308,7 +1308,7 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 		}
 		bone_root->UpdateAllBoneAnimation();
 		if(bone_vmd_motion_count > 0)
-			max_time = maxon::Max(max_time, BaseTime(bone_vmd_motion[bone_vmd_motion_count - 1].get_frame_at(), 30.));
+			max_time = maxon::Max(max_time, BaseTime(bone_vmd_motion_ptr_array[bone_vmd_motion_count - 1]->get_frame_at(), 30.));
 
 		log.imported_bone_count = imported_bone.size();
 	}
@@ -1320,13 +1320,13 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 		{
 			DeleteAllMorphAnimation();
 		}
-		const auto& morph_vmd_motion = vmd_motion.get_vmd_morph_key_frame_array();
-		auto morph_vmd_motion_count = morph_vmd_motion.size();
+		const auto& morph_vmd_motion_ptr_array = vmd_motion.get_vmd_morph_key_frame_array().readonly_elements_ptr();
+		auto morph_vmd_motion_count = morph_vmd_motion_ptr_array.size();
 		log.imported_motion_count += morph_vmd_motion_count;
 		std::unordered_set<std::string> imported_morph;
 		for (auto morph_vmd_motion_index = decltype(morph_vmd_motion_count){}; morph_vmd_motion_index < morph_vmd_motion_count; ++morph_vmd_motion_index)
 		{
-			const auto& morph_vmd_key_frame = morph_vmd_motion[morph_vmd_motion_index];
+			const auto& morph_vmd_key_frame = *morph_vmd_motion_ptr_array[morph_vmd_motion_index];
 			if (SetMeshMorphAnimation(morph_vmd_key_frame, setting))
 			{
 				imported_morph.insert(morph_vmd_key_frame.get_morph_name());
@@ -1337,7 +1337,7 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 			}
 		}
 		if(morph_vmd_motion_count > 0)
-			max_time = maxon::Max(max_time, BaseTime(morph_vmd_motion[morph_vmd_motion_count - 1].get_frame_at(), 30.));
+			max_time = maxon::Max(max_time, BaseTime(morph_vmd_motion_ptr_array[morph_vmd_motion_count - 1]->get_frame_at(), 30.));
 
 		log.imported_morph_count = imported_morph.size();
 	}
@@ -1349,22 +1349,21 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 		{
 			DeleteAllModelControllerAnimation();
 		}
-		const auto& model_controller_key_frame_array = vmd_motion.get_vmd_model_controller_key_frame_array();
-		auto model_controller_key_frame_count = model_controller_key_frame_array.size();
+		const auto& model_controller_key_frame_ptr_array = vmd_motion.get_vmd_model_controller_key_frame_array().readonly_elements_ptr();
+		auto model_controller_key_frame_count = model_controller_key_frame_ptr_array.size();
 		for (auto model_controller_key_frame_index = decltype(model_controller_key_frame_count){}; model_controller_key_frame_index < model_controller_key_frame_count; ++model_controller_key_frame_index)
 		{
-			if (const auto& model_controller_key_frame = model_controller_key_frame_array[model_controller_key_frame_index];
+			if (const auto& model_controller_key_frame = *model_controller_key_frame_ptr_array[model_controller_key_frame_index];
 				!SetModelControllerAnimation(model_controller_key_frame, setting))
 			{
 				return false;
 			}
 		}
 		if(model_controller_key_frame_count > 0)
-			max_time = maxon::Max(max_time, BaseTime(model_controller_key_frame_array[model_controller_key_frame_count - 1].get_frame_at(), 30.));
+			max_time = maxon::Max(max_time, BaseTime(model_controller_key_frame_ptr_array[model_controller_key_frame_count - 1]->get_frame_at(), 30.));
 	}
 	setting.doc->SetMaxTime(max_time);
 	setting.doc->SetLoopMaxTime(max_time);
-	log.timing.Stop();
 	return true;
 }
 
