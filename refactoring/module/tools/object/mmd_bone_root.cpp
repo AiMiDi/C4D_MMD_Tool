@@ -876,6 +876,52 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 	return true;
 }
 
+Bool MMDBoneRootObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting)
+{
+		iferr_scope_handler{
+		return false;
+	};
+
+	const auto bone_num = m_bone_list.GetCount();
+	if (bone_num == 0)
+		return true;
+
+	auto& pmx_bone_array = pmx_model.mutable_pmx_bone_array();
+	if(!pmx_bone_array.add_elements(bone_num))
+		return false;
+	// set bone data
+	for (const auto& bone_data : m_bone_list)
+	{
+		const auto bone_tag = reinterpret_cast<BaseTag*>((*bone_data.GetSecond())->ForceGetLink());
+			const auto bone_index = bone_data.GetFirst();
+
+		auto& pmx_bone = pmx_bone_array[bone_index];
+
+		// bone name
+		GeData data;
+		bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_LOCAL)), data, DESCFLAGS_GET::NONE);
+		pmx_bone.set_bone_name_local(data.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+
+		bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_UNIVERSAL)), data, DESCFLAGS_GET::NONE);
+		pmx_bone.set_bone_name_universal(data.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+
+
+		// set bone position
+		bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), data, DESCFLAGS_GET::NONE);
+		const Vector position = data.GetVector();
+		pmx_bone.set_position({ maxon::SafeConvert<float>(position.x) , maxon::SafeConvert<float>(position.y), maxon::SafeConvert<float>(position.z) });
+
+		// set parent bone
+		bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_PARENT_BONE_INDEX)), data, DESCFLAGS_GET::NONE);
+		bool error = false;
+		pmx_bone.set_parent_bone_index(data.GetString().ToInt32(&error));
+		if (error)
+		{
+			pmx_bone.set_parent_bone_index(-1);
+		}
+	}
+}
+
 const BaseContainer& MMDBoneRootObject::GetBoneItems() const
 {
 	return m_bone_items; 

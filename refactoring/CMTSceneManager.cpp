@@ -263,9 +263,37 @@ BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& se
 	return pmx_model;
 }
 
-void CMTSceneManager::AddMMDCamera(BaseObject* camera)
+BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::pmx_model& data)
 {
-	if (BaseDocument* doc = Get()->GetDocument(); doc)
+	
+	BaseObject* select_object = setting.doc->GetActiveObject();
+	if (select_object == nullptr)
+	{
+		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+		return nullptr;
+	}
+
+	if (select_object->IsInstanceOf(ID_O_MMD_MODEL))
+	{
+		if(auto* pmx_model_data = select_object->GetNodeData<MMDModelRootObject>(); !pmx_model_data->SavePMXModel(data, setting))
+		{
+			return nullptr;
+		}
+	}
+	else
+	{
+		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TYPE_ERR));
+		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TYPE_ERR));
+		return nullptr;
+	}
+
+	return nullptr;
+}
+
+void CMTSceneManager::AddMMDCamera(const BaseObject* camera)
+{
+	if (const BaseDocument* doc = Get()->GetDocument(); doc)
 	{
 		if (SceneCameraArray.Find(camera, doc) == NOTOK)
 		{

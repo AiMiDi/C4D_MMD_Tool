@@ -22,7 +22,11 @@ cd ../..
 cd ./yaml-cpp 
 mkdir build
 cd build
-cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install"
+cmake ..  -G "Ninja Multi-Config" ^
+-D CMAKE_DEBUG_POSTFIX="_Debug" ^
+-D CMAKE_INSTALL_PREFIX="../../install" ^
+-D YAML_CPP_BUILD_TESTS=Off ^
+-D YAML_CPP_BUILD_TOOLS=Off
 cmake --build . --config Debug -j
 cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j

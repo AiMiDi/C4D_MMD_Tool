@@ -1268,8 +1268,16 @@ Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const 
 	return true;
 }
 
-Bool MMDModelRootObject::SavePMXModel(libmmd::pmx_model& pmx_data, const CMTToolsSetting::ModelExport& setting) const
+Bool MMDModelRootObject::SavePMXModel(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting) const
 {
+
+	if (setting.export_bone)
+		if (!m_bone_root->GetNodeData<MMDBoneRootObject>()->SavePMX(pmx_model, setting))
+			return false;
+
+	if (setting.export_polygon)
+		if (!m_mesh_root->GetNodeData<MMDMeshRootObject>()->SavePMX(pmx_model, setting))
+			return false;
 	return true;
 }
 

@@ -108,8 +108,9 @@ public:
 	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::vmd_animation& data, LoadVmdMotionLog& log);
 
 	static BaseObject* LoadPMXModel(const CMTToolsSetting::ModelImport& setting, const libmmd::pmx_model& data);
+	static BaseObject* SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::pmx_model& data);
 
-	void AddMMDCamera(BaseObject* camera);
+	void AddMMDCamera(const BaseObject* camera);
 
 	static CMTSceneManager* GetSceneManager(const BaseDocument* Document);
 

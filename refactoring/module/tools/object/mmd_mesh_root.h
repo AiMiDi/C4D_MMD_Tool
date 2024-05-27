@@ -61,6 +61,7 @@ public:
 		const libmmd::pmx_model& pmx_model,
 		const maxon::BaseArray<BaseObject*>& bone_list,
 		const CMTToolsSetting::ModelImport& setting);
+	Bool SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting);
 private:
 	void RefreshMeshMorphData(BaseObject* op);
 };

@@ -1304,6 +1304,10 @@ Bool MMDMeshRootObject::LoadPMX(
 	return true;
 }
 
+Bool MMDMeshRootObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting)
+{
+}
+
 void MMDMeshRootObject::RefreshMeshMorphData(BaseObject* op)
 {
 	iferr_scope_handler{};
