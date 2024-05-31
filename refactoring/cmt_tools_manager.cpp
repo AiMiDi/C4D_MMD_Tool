@@ -61,7 +61,7 @@ namespace CMTToolsManager
 
 	bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
 	{
-		if (const ConversionVmdCameraLog log; CMTSceneManager::ConversionCamera(setting))
+		if (ConversionVmdCameraLog log; CMTSceneManager::ConversionCamera(setting))
 		{
 			log.LogOK();
 			return true;

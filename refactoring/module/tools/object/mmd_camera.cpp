@@ -75,9 +75,10 @@ Bool MMDCamera::LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTTo
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 	const auto& vmd_camera_key_frame_array = vmd_data.get_vmd_camera_key_frame_array();
 	const auto  vmd_camera_key_frame_num = vmd_camera_key_frame_array.size();
+	const auto vmd_camera_key_frame_ptr_array = vmd_camera_key_frame_array.readonly_elements_ptr();
 	for (auto frame_index = decltype(vmd_camera_key_frame_num){}; frame_index < vmd_camera_key_frame_num; ++frame_index)
 	{
-		const libmmd::vmd_camera_key_frame& data = vmd_camera_key_frame_array[frame_index];
+		const libmmd::vmd_camera_key_frame& data = *vmd_camera_key_frame_ptr_array[frame_index];
 		const auto frame_at = static_cast<int32_t>(data.get_frame_at() + setting.time_offset);
 		const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
 
@@ -257,10 +258,14 @@ Bool MMDCamera::SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSet
 		return false;
 	}
 	auto& vmd_camera_key_frame_array = vmd_data->mutable_vmd_camera_key_frame_array();
-
 	auto not_bake_func = [this, &frame_at_curve, &vmd_camera_key_frame_array, &setting, &curves]()
 		{
 			const Int32 frame_count = frame_at_curve->GetKeyCount();
+			if (!vmd_camera_key_frame_array.add_elements(frame_count))
+			{
+				return false;
+			}
+			auto vmd_camera_key_frame_ptr_array = vmd_camera_key_frame_array.mutable_elements_ptr();
 			for (Int32 frame_index = 0; frame_index < frame_count; ++frame_index)
 			{
 				BaseTime frame_at_time = frame_at_curve->GetKey(frame_index)->GetTime();
@@ -276,7 +281,7 @@ Bool MMDCamera::SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSet
 						return curve->GetValue(frame_at_time);
 					};
 
-				libmmd::vmd_camera_key_frame& camera_key_frame = vmd_camera_key_frame_array.add();
+				libmmd::vmd_camera_key_frame& camera_key_frame = *vmd_camera_key_frame_ptr_array[frame_index];
 
 				// frame_at
 				camera_key_frame.set_frame_at(frame_at + static_cast<uint32_t>(setting.time_offset));
@@ -318,6 +323,12 @@ Bool MMDCamera::SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSet
 			std::transform(curves.begin(), curves.end(), time_list.begin(), [](const CCurve* curve) { return curve->GetEndTime(); });
 			const auto max_time = *std::max_element(time_list.begin(), time_list.end());
 			const auto time_step = BaseTime{ 1., 30. };
+			const Int32 frame_count = max_time.GetFrame(30.) + 1;
+			if (!vmd_camera_key_frame_array.add_elements(frame_count))
+			{
+				return false;
+			}
+			Int32 frame_index = 0;
 			for (BaseTime time_at = {}; time_at <= max_time; time_at = time_at + time_step)
 			{
 				auto get_curve_value = [&time_at, &curves](const uint8_t& curve_index)
@@ -325,7 +336,7 @@ Bool MMDCamera::SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSet
 						const CCurve* curve = curves[curve_index];
 						return curve->GetValue(time_at);
 					};
-				libmmd::vmd_camera_key_frame& camera_key_frame = vmd_camera_key_frame_array.add();
+				libmmd::vmd_camera_key_frame& camera_key_frame = vmd_camera_key_frame_array[frame_index++];
 
 				// frame_at
 				camera_key_frame.set_frame_at(time_at.GetFrame(30.) + static_cast<uint32_t>(setting.time_offset));
