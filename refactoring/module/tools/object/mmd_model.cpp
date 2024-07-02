@@ -889,10 +889,7 @@ Bool MMDModelRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode,
 	destObject->m_joint_root = m_joint_root;
 	destObject->m_rigid_root = m_rigid_root;
 	destObject->m_mesh_root = m_mesh_root;
-	iferr(destObject->m_desc_id_map.CopyFrom(m_desc_id_map))
-		return false;
-	iferr(destObject->m_morph_name_map.CopyFrom(m_morph_name_map))
-		return false;
+	destObject->RefreshMorph();
 	if (!CopyMorph(destObject))
 		return false;
 	return true;
