@@ -198,14 +198,6 @@ inline Bool IMorph::Read(HyperFile* hf)
 		return false;
 	if (hf->ReadString(&m_name) == false)
 		return false;
-	if (UChar type = 0;hf->ReadUChar(&type))
-	{
-		m_type = static_cast<MMDMorphType>(type);
-	}
-	else
-	{
-		return false;
-	}
 	return true;
 }
 
@@ -214,8 +206,6 @@ inline Bool IMorph::Write(HyperFile* hf) SDK2024_Const
 	if (m_strength_id.Write(hf) == false)
 		return false;
 	if (hf->WriteString(m_name) == false)
-		return false;
-	if (!hf->WriteUChar(static_cast<UChar>(m_type)))
 		return false;
 	return true;
 }
@@ -903,11 +893,16 @@ Bool MMDModelRootObject::ReadMorph(HyperFile* hf)
 		return false;
 	for (Int i = 0; i < data_count; ++i)
 	{
-		Int64 data = 0;
-		if (!hf->ReadInt64(&data))
+		MMDMorphType type;
+		// Read morph type
+		if (!hf->ReadUChar(reinterpret_cast<UChar*>(&type)))
 			return false;
-		const auto morph_index = AddMorph(static_cast<MMDMorphType>(data), {}, false);
+
+		// Add morph
+		const auto morph_index = AddMorph(type, {}, false);
 		auto& morph = m_morph_arr[morph_index];
+
+		// Read morph data
 		morph.Read(hf);
 		morph.AddMorphUI(*this, morph_index);
 	}
@@ -917,7 +912,13 @@ Bool MMDModelRootObject::WriteMorph(HyperFile* hf) SDK2024_Const
 {
 	if (!hf->WriteInt64(m_morph_arr.GetCount()))
 		return false;
-	if(!std::all_of(m_morph_arr.Begin(), m_morph_arr.End(), [&](SDK2024_Const IMorph& i) { return i.Write(hf); }))
+	if(!std::all_of(m_morph_arr.Begin(), m_morph_arr.End(), [&](SDK2024_Const IMorph& i)
+	{
+			// Write morph type
+		return hf->WriteUChar(static_cast<UChar>(i.GetType()))
+			// Write morph data
+			&& i.Write(hf);
+	}))
 		return false;
 
 	return true;
