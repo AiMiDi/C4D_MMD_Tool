@@ -282,7 +282,7 @@ public:
 	Bool SaveVMDMotion(libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionExport& setting) const;
 
 private:
-	String GetMorphNamedNumber();
+	Int32 GetMorphNamedNumber();
 	bool DeleteMorphImpl(IMorph& morph, const Int morph_index);
 	Int AddMorph(const MMDMorphType& morph_type, String morph_name = {}, bool is_add_morph_ui = true);
 	void RenameMorph(const String& name);

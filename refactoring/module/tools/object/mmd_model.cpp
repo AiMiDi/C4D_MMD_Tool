@@ -967,6 +967,7 @@ void MMDModelRootObject::RefreshMorph()
 		AddMorph(MMDMorphType::BONE, name);
 	}
 }
+
 Bool MMDModelRootObject::UpdateRoot(BaseObject* op)
 {
 	if (!op)
@@ -1551,9 +1552,9 @@ Bool MMDModelRootObject::DeleteAllModelControllerAnimation()
 	return true;
 }
 
-String MMDModelRootObject::GetMorphNamedNumber()
+Int32 MMDModelRootObject::GetMorphNamedNumber()
 {
-	return String::IntToString(m_morph_named_number++);
+	return m_morph_named_number++;
 }
 
 NodeData* MMDModelRootObject::Alloc()
@@ -1747,21 +1748,21 @@ Int MMDModelRootObject::AddMorph(const MMDMorphType& morph_type, String morph_na
 	case MMDMorphType::GROUP:
 		if (morph_name.IsEmpty())
 		{
-			morph_name = "[Group morph]" + GetMorphNamedNumber();
+			morph_name = FormatString("Group morph @", GetMorphNamedNumber());
 		}
 		morph = NewObj(GroupMorph, morph_name)iferr_return;
 		break;
 	case MMDMorphType::FLIP:
 		if (morph_name.IsEmpty())
 		{
-			morph_name = "[Flip morph]" + GetMorphNamedNumber();
+			morph_name = FormatString("Flip morph @", GetMorphNamedNumber());
 		}
 		morph = NewObj(FlipMorph, morph_name)iferr_return;
 		break;
 	case MMDMorphType::MESH:
 		if (morph_name.IsEmpty())
 		{
-			morph_name = "[Mesh morph]" + GetMorphNamedNumber();
+			morph_name = FormatString("Mesh morph @", GetMorphNamedNumber());
 		}
 		morph = NewObj(MeshMorph, morph_name)iferr_return;
 		break;
@@ -1769,7 +1770,7 @@ Int MMDModelRootObject::AddMorph(const MMDMorphType& morph_type, String morph_na
 
 		if (morph_name.IsEmpty())
 		{
-			morph_name = "[Bone morph]" + GetMorphNamedNumber();
+			morph_name = FormatString("Bone morph @", GetMorphNamedNumber());
 		}
 		morph = NewObj(BoneMorph, morph_name)iferr_return;
 		break;
