@@ -1307,6 +1307,7 @@ Bool MMDMeshRootObject::LoadPMX(
 
 Bool MMDMeshRootObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting)
 {
+	return false;
 }
 
 void MMDMeshRootObject::RefreshMeshMorphData(BaseObject* op)

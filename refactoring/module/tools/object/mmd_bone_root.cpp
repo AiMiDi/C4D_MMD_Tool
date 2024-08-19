@@ -909,7 +909,7 @@ Bool MMDBoneRootObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSett
 		// set bone position
 		bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), data, DESCFLAGS_GET::NONE);
 		const Vector position = data.GetVector();
-		pmx_bone.set_position({ maxon::SafeConvert<float>(position.x) , maxon::SafeConvert<float>(position.y), maxon::SafeConvert<float>(position.z) });
+		pmx_bone.set_position({ maxon::SafeConvert<float>(position.x), maxon::SafeConvert<float>(position.y), maxon::SafeConvert<float>(position.z) });
 
 		// set parent bone
 		bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_PARENT_BONE_INDEX)), data, DESCFLAGS_GET::NONE);
@@ -920,6 +920,7 @@ Bool MMDBoneRootObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSett
 			pmx_bone.set_parent_bone_index(-1);
 		}
 	}
+	return true;
 }
 
 const BaseContainer& MMDBoneRootObject::GetBoneItems() const

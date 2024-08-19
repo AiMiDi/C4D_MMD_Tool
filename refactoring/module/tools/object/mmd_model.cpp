@@ -1259,9 +1259,9 @@ Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const 
 		for (auto morph_index = decltype(pmx_morph_num){}; morph_index < pmx_morph_num; ++morph_index)
 		{
 			const auto& pmx_morph = pmx_morph_array[morph_index];
-			if (pmx_morph.get_morph_offset_type() != libmmd::pmx_morph::morph_type::GROUP || pmx_morph.get_morph_offset_type() != libmmd::pmx_morph::morph_type::FLIP)
-				continue;
-			ImportGroupAndFlipMorph(pmx_morph);
+			if (const auto& morph_offset_type = pmx_morph.get_morph_offset_type();
+				morph_offset_type == libmmd::pmx_morph::morph_type::GROUP || morph_offset_type == libmmd::pmx_morph::morph_type::FLIP)
+				ImportGroupAndFlipMorph(pmx_morph);
 		}
 	}
 	return true;
