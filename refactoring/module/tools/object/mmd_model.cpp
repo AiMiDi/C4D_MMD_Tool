@@ -214,7 +214,6 @@ inline Bool IMorph::CopyTo(IMorph* dest) const
 {
 	dest->m_strength_id = m_strength_id;
 	dest->m_name = m_name;
-	dest->m_type = m_type;
 	return true;
 }
 inline Bool GroupMorph::Read(HyperFile* hf)
@@ -352,19 +351,17 @@ inline Bool FlipMorph::CopyTo(IMorph* dest) const
 	return true;
 }
 
-MeshMorph::MeshMorph(String name, DescID strength_id):
-	IMorph(MMDMorphType::MESH, std::move(name), std::move(strength_id))
+MeshMorph::MeshMorph(String name, DescID strength_id): IMorph(std::move(name), std::move(strength_id))
 {}
 
 MeshMorph::MeshMorph(MeshMorph&& other) noexcept: IMorph(std::move(other))
 {}
 
-IMorph::IMorph(const MMDMorphType& type, String name, DescID strength_id):
-	m_type(type), m_name(std::move(name)), m_strength_id(std::move(strength_id))
+IMorph::IMorph(String name, DescID strength_id):
+	m_name(std::move(name)), m_strength_id(std::move(strength_id))
 {}
 
 IMorph::IMorph(IMorph&& other) noexcept:
-	m_type(other.m_type),
 	m_name(std::move(other.m_name)),
 	m_strength_id(std::move(other.m_strength_id))
 {}
@@ -382,21 +379,6 @@ inline Bool IMorph::SetStrength(GeListNode* node, const Float& strength) const
 {
 	return node->SetParameter(m_strength_id, strength, DESCFLAGS_SET::NONE);
 }
-
-Bool IMorph::IsGroupMorph() const
-{ return m_type == MMDMorphType::GROUP; }
-
-Bool IMorph::IsFlipMorph() const
-{ return m_type == MMDMorphType::FLIP; }
-
-Bool IMorph::IsMeshMorph() const
-{ return m_type == MMDMorphType::MESH; }
-
-Bool IMorph::IsBoneMorph() const
-{ return m_type == MMDMorphType::BONE; }
-
-MMDMorphType IMorph::GetType() const
-{ return m_type; }
 
 DescID IMorph::GetStrengthDescID()
 { return m_strength_id; }
@@ -429,7 +411,7 @@ inline void FlipMorph::RenameSubMorph(const Int old_id, const Int new_id)
 
 GroupMorph::GroupMorph(String name, DescID grp_id, DescID strength_id, DescID button_grp_id, DescID button_editor_id,
 	DescID button_delete_id, DescID button_rename_id):
-	IMorph(MMDMorphType::GROUP, std::move(name), std::move(strength_id)),
+	IMorph(std::move(name), std::move(strength_id)),
 	m_grp_id(std::move(grp_id)),
 	m_button_grp_id(std::move(button_grp_id)),
 	m_button_editor_id(std::move(button_editor_id)),
@@ -438,7 +420,7 @@ GroupMorph::GroupMorph(String name, DescID grp_id, DescID strength_id, DescID bu
 {}
 
 GroupMorph::GroupMorph(GroupMorph&& other) noexcept:
-	IMorph(MMDMorphType::GROUP, std::move(other.m_name), std::move(other.m_strength_id)),
+	IMorph(std::move(other.m_name), std::move(other.m_strength_id)),
 	m_grp_id(std::move(other.m_grp_id)),
 	m_button_grp_id(std::move(other.m_button_grp_id)),
 	m_button_delete_id(std::move(other.m_button_delete_id)),
@@ -459,7 +441,7 @@ inline void GroupMorph::UpdateMorph(MMDModelRootObject& model)
 
 FlipMorph::FlipMorph(String name, DescID strength_id, DescID grp_id, DescID button_grp_id, DescID button_editor_id,
 	DescID button_delete_id, DescID button_rename_id):
-	IMorph(MMDMorphType::FLIP, std::move(name), std::move(strength_id)),
+	IMorph(std::move(name), std::move(strength_id)),
 	m_grp_id(std::move(grp_id)),
 	m_button_grp_id(std::move(button_grp_id)),
 	m_button_editor_id(std::move(button_editor_id)),
@@ -468,7 +450,7 @@ FlipMorph::FlipMorph(String name, DescID strength_id, DescID grp_id, DescID butt
 {}
 
 FlipMorph::FlipMorph(FlipMorph&& other) noexcept:
-	IMorph(MMDMorphType::FLIP, std::move(other.m_name), std::move(other.m_strength_id)),
+	IMorph(std::move(other.m_name), std::move(other.m_strength_id)),
 	m_grp_id(std::move(other.m_grp_id)),
 	m_button_grp_id(std::move(other.m_button_grp_id)),
 	m_button_delete_id(std::move(other.m_button_delete_id)),
@@ -650,8 +632,7 @@ inline void MeshMorph::DeleteMorphUI(MMDModelRootObject& model)
 	}
 }
 
-BoneMorph::BoneMorph(String name, DescID strength_id):
-	IMorph(MMDMorphType::BONE, std::move(name), std::move(strength_id))
+BoneMorph::BoneMorph(String name, DescID strength_id): IMorph(std::move(name), std::move(strength_id))
 {}
 
 BoneMorph::BoneMorph(BoneMorph&& other) noexcept: IMorph(std::move(other))

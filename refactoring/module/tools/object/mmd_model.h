@@ -47,11 +47,10 @@ enum class MMDMorphType : uint8_t
 class IMorph
 {
 protected:
-	MMDMorphType m_type;
 	String m_name;
 	DescID m_strength_id;
 public:
-	explicit IMorph(const MMDMorphType& type = MMDMorphType::DEFAULT, String name = {}, DescID strength_id = {});
+	explicit IMorph(String name = {}, DescID strength_id = {});
 	IMorph(const IMorph&) = delete;
 	IMorph(IMorph&& other) noexcept;
 	virtual ~IMorph() = default;
@@ -62,13 +61,9 @@ public:
 	[[nodiscard]] const String& GetName() const { return m_name; }
 	Float GetStrength(SDK2024_Const GeListNode* node) const;
 	Bool SetStrength(GeListNode* node, const Float& strength) const;
-	[[nodiscard]] Bool IsGroupMorph() const;
-	[[nodiscard]] Bool IsFlipMorph() const;
-	[[nodiscard]] Bool IsMeshMorph() const;
-	[[nodiscard]] Bool IsBoneMorph() const;
-	[[nodiscard]] MMDMorphType GetType() const;
 	DescID GetStrengthDescID();
 	bool operator==(const IMorph& other) const;
+	virtual MMDMorphType GetType() const = 0;
 	virtual void AddMorphUI(MMDModelRootObject& model, Int morph_id) = 0;
 	virtual void DeleteMorphUI(MMDModelRootObject& model) = 0;
 	void RenameMorph(const String& name);
@@ -117,6 +112,7 @@ public:
 	Bool Write(HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(IMorph* dest) const override;
 	maxon::HashMap<Int, Float>* GetSubMorphDataWritable() override { return &m_data; }
+	MMDMorphType GetType() const override { return MMDMorphType::GROUP; }
 };
 class FlipMorph final : public IMorph
 {
@@ -152,6 +148,7 @@ public:
 	Bool Write(HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(IMorph* dest) const override;
 	maxon::HashMap<Int, Float>* GetSubMorphDataWritable() override { return &m_data; }
+	MMDMorphType GetType() const override { return MMDMorphType::FLIP; }
 };
 class MeshMorph final : public IMorph
 {
@@ -167,6 +164,7 @@ public:
 	void UpdateMorph(MMDModelRootObject& model) override;
 	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
 	void DeleteMorphUI(MMDModelRootObject& model) override;
+	MMDMorphType GetType() const override { return MMDMorphType::MESH; }
 };
 class BoneMorph final : public IMorph
 {
@@ -182,6 +180,7 @@ public:
 	void UpdateMorph(MMDModelRootObject& model) override;
 	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
 	void DeleteMorphUI(MMDModelRootObject& model) override;
+	MMDMorphType GetType() const override { return MMDMorphType::BONE; }
 };
 enum class CMTObjectType
 {
