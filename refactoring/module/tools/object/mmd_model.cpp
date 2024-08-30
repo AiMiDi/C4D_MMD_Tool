@@ -4,7 +4,7 @@ Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2023/9/12
 File:			mmd_model.h
-Description:	MMD model object 
+Description:	MMD model object
 
 **************************************************************************/
 
@@ -474,7 +474,7 @@ inline void MeshMorph::UpdateMorph(MMDModelRootObject& model)
 	{
 		mesh_root->GetNodeData<MMDMeshRootObject>()->SetMeshMorphStrength(m_name, GetStrength(model.Get()));
 	}
-	
+
 }
 inline void BoneMorph::UpdateMorph(MMDModelRootObject& model)
 {
@@ -538,7 +538,7 @@ inline void FlipMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
 	bc.SetFloat(DESC_STEP, 0.01);
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
-	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id); 
+	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetInt32(DESC_COLUMNS, 3);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
@@ -573,7 +573,7 @@ inline void MeshMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_MESH_GRP))));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
-	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE)); 
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 inline void BoneMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
 {
@@ -614,7 +614,7 @@ inline void FlipMorph::DeleteMorphUI(MMDModelRootObject& model)
 	model.DeleteDynamicDescription(m_button_grp_id);
 	model.DeleteDynamicDescription(m_strength_id);
 	model.DeleteDynamicDescription(m_grp_id);
-	
+
 	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 	if (::GeIsMainThread())
 	{
@@ -735,14 +735,11 @@ Bool MMDModelRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			return false;
 		auto& val = m_desc_id_map.InsertKey(id).GetValue();
 
-		if (UChar type = 0; !hf->ReadUChar(&type))
-		{
+		if (UChar type = 0; hf->ReadUChar(&type))
 			val.first = static_cast<MMDModelRootDynamicDescriptionType>(type);
-		}
 		else
-		{
 			return false;
-		}
+
 		if (!hf->ReadInt64(&val.second))
 			return false;
 	}
@@ -860,7 +857,10 @@ Bool MMDModelRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode,
 	destObject->m_joint_root = m_joint_root;
 	destObject->m_rigid_root = m_rigid_root;
 	destObject->m_mesh_root = m_mesh_root;
-	destObject->RefreshMorph();
+	iferr(destObject->m_desc_id_map.CopyFrom(m_desc_id_map))
+		return false;
+	iferr(destObject->m_morph_name_map.CopyFrom(m_morph_name_map))
+		return false;
 	if (!CopyMorph(destObject))
 		return false;
 	return true;
@@ -885,8 +885,9 @@ Bool MMDModelRootObject::ReadMorph(HyperFile* hf)
 
 		// Read morph data
 		morph.Read(hf);
-		morph.AddMorphUI(*this, morph_index);
 	}
+
+
 	return true;
 }
 Bool MMDModelRootObject::WriteMorph(HyperFile* hf) SDK2024_Const
@@ -1109,7 +1110,7 @@ Int MMDModelRootObject::ImportGroupAndFlipMorph(const libmmd::pmx_morph& pmx_mor
 	case libmmd::pmx_morph::morph_type::UV3: [[fallthrough]];
 	case libmmd::pmx_morph::morph_type::UV4: [[fallthrough]];
 	case libmmd::pmx_morph::morph_type::MATERIAL: [[fallthrough]];
-	case libmmd::pmx_morph::morph_type::IMPULSE: 
+	case libmmd::pmx_morph::morph_type::IMPULSE:
 	break;
 	}
 	return morph_id;
@@ -1481,7 +1482,7 @@ bool MMDModelRootObject::SetModelControllerAnimation(const libmmd::vmd_model_con
 			{
 				if (const auto& ik_tag = ik_entry->GetValue(); !add_key_func(ik_tag))
 					return false;
-				
+
 			}
 		}
 		else
@@ -1490,7 +1491,7 @@ bool MMDModelRootObject::SetModelControllerAnimation(const libmmd::vmd_model_con
 			{
 				if (ik_tag->GetName().IsEqual(ik_bone_name) && !add_key_func(ik_tag))
 					return false;
-			}			
+			}
 		}
 	}
 
@@ -1530,7 +1531,7 @@ Bool MMDModelRootObject::DeleteAllModelControllerAnimation()
 		CTrack::Free(ik_enable_track);
 		ik->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)), true, DESCFLAGS_SET::NONE);
 	}
-	
+
 	return true;
 }
 

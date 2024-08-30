@@ -4,7 +4,7 @@ Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2023/9/12
 File:			mmd_model.cpp
-Description:	MMD model object 
+Description:	MMD model object
 
 **************************************************************************/
 
@@ -182,7 +182,7 @@ public:
 	void DeleteMorphUI(MMDModelRootObject& model) override;
 	MMDMorphType GetType() const override { return MMDMorphType::BONE; }
 };
-enum class CMTObjectType
+enum class CMTObjectType : uint8_t
 {
 	DEFAULT,
 	MeshRoot,
@@ -191,7 +191,7 @@ enum class CMTObjectType
 	JointRoot,
 	ModelRoot
 };
-enum class MMDModelRootObjectMsgType
+enum class MMDModelRootObjectMsgType : uint8_t
 {
 	DEFAULT,
 	TOOL_OBJECT_UPDATE
@@ -231,9 +231,8 @@ class MMDModelRootObject final : public ObjectData
 	maxon::HashMap<String, Int> m_morph_name_map;
 	maxon::HashMap<String, BaseTag*> m_ik_name_map;
 	maxon::PointerArray<IMorph> m_morph_arr;
-private:
+
 	MMDModelRootObject();
-	void RefreshMorph();
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelRootObject)
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDModelRootObject)
 	INSTANCEOF(MMDModelRootObject, ObjectData)
@@ -288,6 +287,7 @@ private:
 	void UpdateMorph(IMorph& morph);
 	void DeleteMorph(Int morph_index);
 	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it);
+	void RefreshMorph();
 	Bool ReadMorph(HyperFile* hf);
 	Bool WriteMorph(HyperFile* hf) SDK2024_Const;
 	Bool CopyMorph(MMDModelRootObject* dst) const;
