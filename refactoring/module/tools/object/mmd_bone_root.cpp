@@ -228,15 +228,27 @@ void MMDBoneRootObject::HandleDescriptionCommandMessage(GeListNode* node, void* 
 {
 	if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_BONE_BUTTON)
 	{
-		if (BaseObject* new_bone = BaseObject::Alloc(Ojoint); new_bone != nullptr)
+		BaseObject* new_bone = BaseObject::Alloc(Ojoint);
+		if (!new_bone)
 		{
-			const auto bone_node = new_bone->MakeTag(ID_T_MMD_BONE)->GetNodeData<MMDBoneTag>();
-			new_bone->SetName(new_bone->GetName() + "." + String::IntToString(bone_name_index++));
-			bone_node->SetBoneObject(new_bone);
-			bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(node));
-			bone_node->RefreshColor();
-			new_bone->InsertUnder(node);
+			return;
 		}
+		const auto new_bone_tag = new_bone->MakeTag(ID_T_MMD_BONE);
+		if(!new_bone_tag)
+		{
+			return;
+		}
+		const auto new_bone_node = new_bone_tag->GetNodeData<MMDBoneTag>();
+		if(!new_bone_node)
+		{
+			return;
+		}
+		new_bone->SetName(new_bone->GetName() + "." + String::IntToString(bone_name_index++));
+		new_bone_node->SetBoneTag(new_bone_tag);
+		new_bone_node->SetBoneObject(new_bone);
+		new_bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(node));
+		new_bone_node->RefreshColor();
+		new_bone->InsertUnder(node);
 	}
 }
 
@@ -268,7 +280,7 @@ bool MMDBoneRootObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 			HandleBoneMorphRename(node, data, need_update_morph);
 			break;
 		}
-	case MMDBoneTagMsgType::DEFAULT: 
+	case MMDBoneTagMsgType::DEFAULT:
 		break;
 	}
 	if (need_update_morph && m_model_root)
@@ -487,7 +499,7 @@ BaseTag* MMDBoneRootObject::FindBone(const Int32 index) const
 	// find index in m_bone_list
 	if (const auto bone_link_ptr = m_bone_list.Find(index); bone_link_ptr)
 	{
-		return static_cast<BaseTag*>((*bone_link_ptr->GetValue())->ForceGetLink());
+		return reinterpret_cast<BaseTag*>((*bone_link_ptr->GetValue())->ForceGetLink());
 	}
 	return nullptr;
 }
@@ -601,7 +613,7 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 		BaseObject* new_bone = BaseObject::Alloc(Ojoint);
 		if (new_bone == nullptr)
 			continue;
-
+		new_bone->MakeTag(ID_T_MMD_BONE);
 		bone_list.Append(new_bone)iferr_return;
 	}
 
@@ -614,12 +626,13 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 		if(!bone_object)
 			continue;
 
-		const auto bone_tag = bone_object->MakeTag(ID_T_MMD_BONE);
-		const auto bone_node = bone_tag->GetNodeData<MMDBoneTag>();
+		const auto bone_tag = bone_object->GetTag(ID_T_MMD_BONE);
+		const auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
 
 		// init bone tag
-		bone_node->SetBoneObject(bone_object);
-		bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(Get()));
+		bone_tag_node->SetBoneTag(bone_tag);
+		bone_tag_node->SetBoneObject(bone_object);
+		bone_tag_node->SetBoneRoot(reinterpret_cast<BaseObject*>(Get()));
 
 		// bone name
 		const maxon::String bone_name_local{ pmx_bone.get_bone_name_local().c_str() };
@@ -632,38 +645,37 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 		const auto& bone_position = pmx_bone.get_position();
 		Vector position(bone_position[0], bone_position[1], bone_position[2]);
 
-		auto set_position_root = [&bone_object, &bone_tag, &position, &setting]()
+		auto add_bone_to_root = [&bone_object, &bone_tag, &position, &setting, this]()
 		{
 			position *= setting.position_multiple;
 			bone_object->SetFrozenPos(position);
 			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), position, DESCFLAGS_SET::NONE);
+			bone_object->InsertUnder(Get());
 		};
 
 		// set parent bone
 		if (const auto parent_bone_index = pmx_bone.get_parent_bone_index(); parent_bone_index == -1)
 		{
-			set_position_root();
-			bone_object->InsertUnder(Get());
+			add_bone_to_root();
 		}
 		else
 		{
 			if (const auto parent_bone = bone_list[parent_bone_index]; parent_bone)
 			{
-				// set position child
+				// set child position
 				const auto& parent_position = pmx_bone_ptr_array[parent_bone_index]->get_position();
 				position -= Vector(parent_position[0], parent_position[1], parent_position[2]);
 				position *= setting.position_multiple;
-				bone_object->SetFrozenPos(position);
 				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), position, DESCFLAGS_SET::NONE);
-
+				bone_object->SetFrozenPos(position);
 				bone_object->InsertUnder(parent_bone);
 			}
 			else
 			{
-				set_position_root();
-				bone_object->InsertUnder(Get());
+				add_bone_to_root();
 			}
 		}
+		bone_tag_node->HandleBoneIndexUpdate(bone_tag, bone_object, bone_tag->GetDataInstance());
 
 		// set layer
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_LAYER)), pmx_bone.get_layer(), DESCFLAGS_SET::NONE);
@@ -715,12 +727,13 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 		{
 			// set inherit bone parent
 			const auto inherit_parent_bone_index = pmx_bone.get_inherit_bone_parent_index();
-			if (const auto inherit_parent_bone = bone_list[inherit_parent_bone_index]; inherit_parent_bone)
-			{
-				AutoAlloc<BaseLink> link;
-				link->SetLink(inherit_parent_bone);
-				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link.Release(), DESCFLAGS_SET::NONE);
-			}
+			if (inherit_parent_bone_index >= 0 && inherit_parent_bone_index < bone_list.GetCount())
+				if (const auto inherit_parent_bone = bone_list[inherit_parent_bone_index]; inherit_parent_bone)
+				{
+					BaseLink* link = BaseLink::Alloc();
+					link->SetLink(inherit_parent_bone);
+					bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link, DESCFLAGS_SET::NONE);
+				}
 
 			// set inherit rate
 			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE)), pmx_bone.get_inherit_bone_parent_influence(), DESCFLAGS_SET::NONE);
@@ -740,7 +753,7 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 		}
 
 		/// local axis
-		
+
 		// set have local axis
 		const auto have_local_axis = pmx_bone.have_local_coordinate();
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_LOCAL_IS_COORDINATE)), have_local_axis, DESCFLAGS_SET::NONE);
@@ -863,13 +876,14 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 				{
 					const auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
 					const auto added_morph_index = bone_tag_node->AddBoneMorph(morph_name_local);
+					if(added_morph_index == NOTOK)
+						continue;
 					const auto bone_translation = pmx_bone_morph_offset.get_bone_translation();
 					const auto bone_rotation = pmx_bone_morph_offset.get_bone_rotation();
 					bone_tag_node->SetBoneMorphTranslationNoCheck(added_morph_index, Vector(bone_translation[0], bone_translation[1], bone_translation[2]) * setting.position_multiple);
 					bone_tag_node->SetBoneMorphRotationNoCheck(added_morph_index, Vector(bone_rotation[0], bone_rotation[1], bone_rotation[2]));
 				}
 			}
-
 		}
 	}
 
@@ -925,7 +939,7 @@ Bool MMDBoneRootObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSett
 
 const BaseContainer& MMDBoneRootObject::GetBoneItems() const
 {
-	return m_bone_items; 
+	return m_bone_items;
 }
 
 void MMDBoneRootObject::CreateDisplayTag(GeListNode* node)

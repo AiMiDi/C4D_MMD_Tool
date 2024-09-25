@@ -697,30 +697,32 @@ Bool MMDModelRootObject::Init(GeListNode* node SDK2024_InitParaName)
 	return true;
 }
 Bool MMDModelRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
-	AutoAlloc<BaseLink> mesh_root_link;
-	if (mesh_root_link == nullptr)
+	iferr_scope_handler
+	{
 		return false;
-	AutoAlloc<BaseLink> rigid_root_link;
-	if (rigid_root_link == nullptr)
+	};
+
+	m_mesh_root_link = BaseLink::Alloc();
+	if (m_mesh_root_link == nullptr)
 		return false;
-	AutoAlloc<BaseLink> joint_root_link;
-	if (joint_root_link == nullptr)
+	m_rigid_root_link = BaseLink::Alloc();
+	if (m_rigid_root_link == nullptr)
 		return false;
-	AutoAlloc<BaseLink> bone_root_link;
-	if (bone_root_link == nullptr)
+	m_joint_root_link = BaseLink::Alloc();
+	if (m_joint_root_link == nullptr)
 		return false;
-	if (!mesh_root_link->Read(hf))
+	m_bone_root_link = BaseLink::Alloc();
+	if (m_bone_root_link == nullptr)
 		return false;
-	if (!rigid_root_link->Read(hf))
+	if (!m_mesh_root_link->Read(hf))
 		return false;
-	if (!joint_root_link->Read(hf))
+	if (!m_rigid_root_link->Read(hf))
 		return false;
-	if (!bone_root_link->Read(hf))
+	if (!m_joint_root_link->Read(hf))
 		return false;
-	m_mesh_root = reinterpret_cast<BaseObject*>(mesh_root_link->ForceGetLink());
-	m_rigid_root = reinterpret_cast<BaseObject*>(rigid_root_link->ForceGetLink());
-	m_joint_root = reinterpret_cast<BaseObject*>(joint_root_link->ForceGetLink());
-	m_bone_root = reinterpret_cast<BaseObject*>(bone_root_link->ForceGetLink());
+	if (!m_bone_root_link->Read(hf))
+		return false;
+	*m_is_root_read.Write() = true;
 
 	if (!hf->ReadInt32(&m_morph_named_number))
 		return false;
@@ -758,21 +760,17 @@ Bool MMDModelRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 
 	if (!hf->ReadInt64(&data_count))
 		return false;
+	m_ik_link_name_map.SetCapacityHint(data_count)iferr_return;
+	for (Int i = 0; i < data_count; ++i)
 	{
-		AutoAlloc<BaseLink> ik_link;
-		if (ik_link == nullptr)
+		String name;
+		if (!hf->ReadString(&name))
 			return false;
-		for (Int i = 0; i < data_count; ++i)
-		{
-			String name;
-			if (!hf->ReadString(&name))
-				return false;
-			auto& val = m_ik_name_map.InsertKey(std::move(name)).GetValue();
-			if (!ik_link->Read(hf))
-				return false;
-			val = reinterpret_cast<BaseTag*>(ik_link->ForceGetLink());
-		}
+		auto& val = m_ik_link_name_map.InsertKey(std::move(name))iferr_return;
+		if (!val->Read(hf))
+			return false;
 	}
+	*m_is_ik_map_read.Write() = true;
 
 	if (!ReadMorph(hf))
 		return false;
@@ -1049,18 +1047,50 @@ Bool MMDModelRootObject::UpdateRoot(BaseObject* op)
 }
 EXECUTIONRESULT MMDModelRootObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
+	iferr_scope_handler
+	{
+		return EXECUTIONRESULT::OK;
+	};
+
 	if (op == nullptr || doc == nullptr)
 	{
 		return EXECUTIONRESULT::OK;
 	}
+
+	if(*m_is_root_read.Read())
+	{
+		m_mesh_root = reinterpret_cast<BaseObject*>(m_mesh_root_link->GetLink(doc));
+		m_rigid_root = reinterpret_cast<BaseObject*>(m_rigid_root_link->GetLink(doc));
+		m_joint_root = reinterpret_cast<BaseObject*>(m_joint_root_link->GetLink(doc));
+		m_bone_root = reinterpret_cast<BaseObject*>(m_bone_root_link->GetLink(doc));
+		BaseLink::Free(m_mesh_root_link);
+		BaseLink::Free(m_rigid_root_link);
+		BaseLink::Free(m_joint_root_link);
+		BaseLink::Free(m_bone_root_link);
+		*m_is_root_read.Write() = false;
+	}
+
+	if(*m_is_ik_map_read.Read())
+	{
+		m_ik_name_map.SetCapacityHint(m_ik_link_name_map.GetCount())iferr_return;
+		for (const auto& entry : m_ik_link_name_map)
+		{
+			m_ik_name_map.Insert(entry.GetKey(), reinterpret_cast<BaseTag*>(entry.GetSecond()->GetLink(doc)))iferr_return;
+		}
+		m_ik_link_name_map.Reset();
+		*m_is_ik_map_read.Write() = false;
+	}
+
 	if (UpdateRoot(op) == false)
 		return EXECUTIONRESULT::OK;
-	if (*m_is_morph_initialized.Read() == false)
+
+	if (!*m_is_morph_initialized.Read())
 	{
 		RefreshMorph();
 		*m_is_morph_initialized.Write() = true;
 	}
-	if (*m_is_need_update.Read() == true)
+
+	if (*m_is_need_update.Read())
 	{
 		for (auto& morph : m_morph_arr)
 		{
@@ -1214,7 +1244,7 @@ Bool MMDModelRootObject::AddIKBoneDescription(const maxon::String& bone_name_loc
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
 	bc.SetString(DESC_NAME, bone_name_local);
 	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_IK_GRP))));
-	const auto ik_link_id = AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::IK_BOME_LINK, 0);
+	const auto ik_link_id = AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::IK_BONE_LINK, 0);
 	const auto ik_link = BaseLink::Alloc();
 	ik_link->SetLink(ik_tag);
 	Get()->SetParameter(ik_link_id, ik_link, DESCFLAGS_SET::NONE);
@@ -1526,11 +1556,12 @@ Bool MMDModelRootObject::DeleteAllModelControllerAnimation()
 	CTrack::Free(model_render_display_track);
 
 	for (const auto& ik : m_ik_name_map.GetValues())
-	{
-		CTrack* ik_enable_track = ik->FindCTrack(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)));
-		CTrack::Free(ik_enable_track);
-		ik->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)), true, DESCFLAGS_SET::NONE);
-	}
+		if(ik)
+		{
+			CTrack* ik_enable_track = ik->FindCTrack(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)));
+			CTrack::Free(ik_enable_track);
+			ik->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)), true, DESCFLAGS_SET::NONE);
+		}
 
 	return true;
 }
@@ -1632,7 +1663,7 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				case MMDModelRootDynamicDescriptionType::MORPH_STRENGTH:
 				case MMDModelRootDynamicDescriptionType::MORPH_GRP:
-				case MMDModelRootDynamicDescriptionType::IK_BOME_LINK:
+				case MMDModelRootDynamicDescriptionType::IK_BONE_LINK:
 					break;
 				}
 			}

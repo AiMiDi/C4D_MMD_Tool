@@ -214,23 +214,30 @@ enum class MMDModelRootDynamicDescriptionType : uint8_t
 	MORPH_EDITOR_BUTTON,
 	MORPH_DELETE_BUTTON,
 	MORPH_RENAME_BUTTON,
-	IK_BOME_LINK
+	IK_BONE_LINK
 };
 
 class MMDModelRootObject final : public ObjectData
 {
 	maxon::Synchronized<Bool> m_is_need_update;
 	maxon::Synchronized<Bool> m_is_morph_initialized;
+	maxon::Synchronized<Bool> m_is_root_read;
+	maxon::Synchronized<Bool> m_is_ik_map_read;
 	Bool m_is_root_initialized = false;
 	Int32 m_morph_named_number = 0;
 	BaseObject* m_mesh_root = nullptr;
 	BaseObject* m_bone_root = nullptr;
 	BaseObject* m_rigid_root = nullptr;
 	BaseObject* m_joint_root = nullptr;
+	BaseLink* m_mesh_root_link = nullptr;
+	BaseLink* m_rigid_root_link = nullptr;
+	BaseLink* m_joint_root_link = nullptr;
+	BaseLink* m_bone_root_link = nullptr;
+	maxon::PointerArray<IMorph> m_morph_arr;
 	maxon::HashMap<DescID, maxon::Pair<MMDModelRootDynamicDescriptionType, Int>> m_desc_id_map;
 	maxon::HashMap<String, Int> m_morph_name_map;
 	maxon::HashMap<String, BaseTag*> m_ik_name_map;
-	maxon::PointerArray<IMorph> m_morph_arr;
+	maxon::HashMap<String, AutoAlloc<BaseLink>> m_ik_link_name_map;
 
 	MMDModelRootObject();
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelRootObject)

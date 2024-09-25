@@ -34,7 +34,7 @@ struct BoneMorphData
 	DescID button_grp_id;
 	DescID button_delete_id;
 	DescID button_rename_id;
-	
+
 	BoneMorphData(
 		String name = String(),
 		DescID grp_id = DescID(),
@@ -126,7 +126,7 @@ using MMDBoneTagBase = MMDInterpolatorNode<TagData, 6, PMX_BONE_TAG_INTERPOLATOR
 /**
  * @class MMDBoneTag
  * @brief This class represents a bone tag used in the MMDTool module.
- * 
+ *
  * The MMDBoneTag class is responsible for managing bone data and operations related to bone manipulation.
  * It provides functions for setting bone root and bone object, initializing the tag, handling messages, executing the tag, and reading/writing data.
  * Additionally, it supports bone morphs, bone protection, and physical bones.
@@ -188,8 +188,29 @@ public:
 	 * @brief Sets the bone object.
 	 * @param[in] bone_object The bone object.
 	 */
-	void SetBoneObject(BaseObject* bone_object);
+	void SetBoneObject(BaseObject* bone_object = nullptr);
 
+	/**
+	 * @brief Sets the bone tag for the MMDBoneTag.
+	 *
+	 * This function is responsible for setting the bone tag associated with the MMDBoneTag instance.
+	 * It initializes or updates the bone tag to ensure proper bone manipulation and operations.
+	 *
+	 * @param[in] bone_tag The BaseTag to be set. If nullptr, it will reset the bone tag.
+	 */
+	void SetBoneTag(BaseTag* bone_tag = nullptr);
+
+	/**
+	 * @brief Loads VMD bone key frame data into the MMDBoneTag.
+	 *
+	 * This function is responsible for loading VMD (Vocaloid Motion Data) bone key frame data
+	 * into the MMDBoneTag. It processes the provided data and applies the necessary settings
+	 * for motion import.
+	 *
+	 * @param[in] data The VMD bone key frame data to be loaded.
+	 * @param[in] setting The motion import settings to be applied.
+	 * @return true if the data is loaded successfully, false otherwise.
+	 */
 	Bool LoadVMD(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 
 	/**
@@ -364,6 +385,14 @@ public:
 	 */
 	Int32 GetBoneIndex() const;
 
+	/**
+	 * @brief Handles bone index updates for the MMDBoneTag.
+	 * @param[in] tag The BaseTag representing the MMDBoneTag.
+	 * @param[in] op The BaseObject associated with the MMDBoneTag.
+	 * @param[in] bc The BaseContainer containing the bone index.
+	 */
+	void HandleBoneIndexUpdate(BaseTag* tag, BaseObject* op, BaseContainer* bc);
+
 protected:
 	/**
 	 * @brief Gets the track description IDs for the MMDBoneTag.
@@ -416,14 +445,6 @@ private:
 	void HandleBoneMorphUpdate(SDK2024_Const BaseTag* tag, BaseObject* op);
 
 	/**
-	 * @brief Handles bone index updates for the MMDBoneTag.
-	 * @param[in] tag The BaseTag representing the MMDBoneTag.
-	 * @param[in] op The BaseObject associated with the MMDBoneTag.
-	 * @param[in] bc The BaseContainer containing the bone index.
-	 */
-	void HandleBoneIndexUpdate(BaseTag* tag, BaseObject* op, BaseContainer* bc);
-
-	/**
 	 * @brief Handles bone lock updates for the MMDBoneTag.
 	 * @param[in] bc The BaseContainer containing the bone lock data.
 	 */
@@ -456,8 +477,26 @@ private:
 	 */
 	void CheckUserDataButton(GeListNode* node, const DescriptionCommand* description_command);
 
+	/**
+	 * @brief Sets the bone display for the MMDBoneTag.
+	 *
+	 * This function is responsible for setting the display properties of the bone
+	 * based on the provided data instance and root object message.
+	 *
+	 * @param[in] data_instance_bc The BaseContainer containing the data instance.
+	 * @param[in] msg The MMDBoneRootObjectMsg containing the root object message.
+	 */
 	void SetBoneDisplay(const BaseContainer* data_instance_bc, const MMDBoneRootObjectMsg* msg) const;
 
+	/**
+	 * @brief Updates the bone root for the MMDBoneTag.
+	 *
+	 * This function is responsible for updating the bone root properties based on
+	 * the provided data instance and root object message.
+	 *
+	 * @param[in] data_instance_bc The BaseContainer containing the data instance.
+	 * @param[in] msg The MMDBoneRootObjectMsg containing the root object message.
+	 */
 	void BoneRootUpdate(BaseContainer* data_instance_bc, const MMDBoneRootObjectMsg* msg);
 
 	/**
