@@ -92,7 +92,7 @@ namespace CMTToolsManager
 			SaveVmdCameraLog::LogWriteFileErr();
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -147,6 +147,9 @@ namespace CMTToolsManager
 
 	bool ImportPMXModel(const CMTToolsSetting::ModelImport& setting)
 	{
+		if (setting.import_english_check)
+
+
 		LoadPmxModelLog log;
 
 		const auto pmx_model = make_pmx_model();

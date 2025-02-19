@@ -55,6 +55,16 @@ STRINGTABLE
 	IDS_MSG_RENAME_OK "OK";
 	IDS_MSG_RENAME_CANCEL "Cancel";
 
+	IDS_NAME_CONVER_UPDATA_TITLE "Manually confirm English(If it is not filled in, it will be generated automatically.)";
+	IDS_NAME_CONVER_NAMEMAP_NAME "English config file";
+	IDS_NAME_CONVER_NEW_DELETE "Delete config";
+	IDS_NAME_CONVER_IGNORE "Hidden confirmed";
+	IDS_NAME_CONVER_NEW_NAME "New config";
+	IDS_NAME_CONVER_NEW_ADD "New";
+	IDS_NAME_CONVER_NEW_INCREMENT_ADD "New increment";
+	IDS_NAME_CONVER_OK "OK";
+	IDS_NAME_CONVER_CANCEL "Cancel";
+
 	IDS_T_MMD_MATERIAL "MMD Material";
 	IDS_T_MMD_BONE "MMD Bone";
 	IDS_O_MMD_MODEL "MMD Model";
@@ -66,7 +76,7 @@ STRINGTABLE
 	IDS_O_MMD_RIGID_ROOT "MMD Rigid Root";
 	IDS_O_MMD_JOINT_ROOT "MMD Joint Root";
 	MODEL_IK_GRP "IK";
-	
+
 	IDS_RIGID_SHAPE_SIZE_R "radius";
 	IDS_RIGID_SHAPE_SIZE_L "length";
 	IDS_RIGID_SHAPE_SIZE_W "width";
