@@ -7,3 +7,6 @@
 [submodule "setup"]
 	path = setup
 	url = https://github.com/AiMiDi/C4D_Plugin_Setup.git
+[submodule "dependency/saba"]
+	path = dependency/saba
+	url = https://github.com/AiMiDi/saba.git
