@@ -34,8 +34,13 @@
 
 // The third party
 #include "yaml-cpp/yaml.h"
-#include "libMMD/libmmd_assets.h"
-#include "libMMD/libmmd_conversion.h"
+#include "Saba/Model/MMD/PMXFile.h"
+#include "Saba/Model/MMD/PMXModel.h"
+#include "Saba/Model/MMD/PMDFile.h"
+#include "Saba/Model/MMD/PMDModel.h"
+#include "Saba/Model/MMD/VMDFile.h"
+#include "Saba/Model/MMD/VMDAnimation.h"
+#include "Saba/Model/MMD/VMDCameraAnimation.h"
 
 // symbols
 #include "c4d_symbols.h"

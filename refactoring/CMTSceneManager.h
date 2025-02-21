@@ -80,7 +80,7 @@ struct LoadPmxModelLog : IOLog
 
 struct SavePmxModelLog : IOLog
 {
-	
+
 };
 
 class CMTSceneManager final : SceneHookData
@@ -101,7 +101,7 @@ public:
 		return NewObjClear(CMTSceneManager);
 	}
 
-	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation& data);
+	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const saba::VMDCameraAnimation& data);
 	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::vmd_animation* data);
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
@@ -116,7 +116,7 @@ public:
 
 private:
 	BaseLinkArray SceneCameraArray;
-	
+
 };
 
 #endif // !CMT_SCENE_MANAGER_H__

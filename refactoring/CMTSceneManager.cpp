@@ -125,37 +125,33 @@ void LoadPmxModelLog::LogOK()
 		             String::FloatToString(timing.GetMilliseconds())));
 }
 
-BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation& data)
+BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const saba::VMDCameraAnimation& data)
 {
-	if(data.is_camera())
-	{
-		// create camera
-		BaseObject* vmd_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
-		if (!vmd_camera)
-			return nullptr;
+	// create camera
+	BaseObject* vmd_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
+	if (!vmd_camera)
+		return nullptr;
 
-		setting.doc->InsertObject(vmd_camera, nullptr, nullptr);
+	setting.doc->InsertObject(vmd_camera, nullptr, nullptr);
 
-		// init camera
-		vmd_camera->SetName(setting.fn.GetFileString());
-		auto* vmd_camera_data = vmd_camera->GetNodeData<MMDCamera>();
-		vmd_camera_data->CameraInit();
+	// init camera
+	vmd_camera->SetName(setting.fn.GetFileString());
+	auto* vmd_camera_data = vmd_camera->GetNodeData<MMDCamera>();
+	vmd_camera_data->CameraInit();
 
-		// set camera with vmd data
-		const auto& vmd_camera_key_frame_array = data.get_vmd_camera_key_frame_array();
-		vmd_camera_data->LoadVMDCamera(data, setting);
+	// set camera with vmd data
+	const auto& vmd_camera_key_frame_array = data.get_vmd_camera_key_frame_array();
+	vmd_camera_data->LoadVMDCamera(data, setting);
 
-		EventAdd();
-		// set document with vmd length
-		if(vmd_camera_key_frame_array.size() > 0)
-			setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(),
-				BaseTime(vmd_camera_key_frame_array[vmd_camera_key_frame_array.size() - 1ULL].get_frame_at(), 30.0)));
-		setting.doc->SetTime(BaseTime{ 1.0 });
-		setting.doc->SetTime(BaseTime{});
+	EventAdd();
+	// set document with vmd length
+	if(vmd_camera_key_frame_array.size() > 0)
+		setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(),
+			BaseTime(vmd_camera_key_frame_array[vmd_camera_key_frame_array.size() - 1ULL].get_frame_at(), 30.0)));
+	setting.doc->SetTime(BaseTime{ 1.0 });
+	setting.doc->SetTime(BaseTime{});
 
-		return vmd_camera;
-	}
-	return nullptr;
+	return vmd_camera;
 }
 
 BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::vmd_animation* data)
@@ -269,7 +265,7 @@ BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& se
 
 BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::pmx_model& data)
 {
-	
+
 	BaseObject* select_object = setting.doc->GetActiveObject();
 	if (select_object == nullptr)
 	{

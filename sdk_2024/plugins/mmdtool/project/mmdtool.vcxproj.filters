@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h">
@@ -245,6 +246,7 @@
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.h">
       <Filter>source\module\tools\object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\S24_up\strings_en-US\c4d_strings.str">

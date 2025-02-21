@@ -1,7 +1,7 @@
 /**************************************************************************
 
-Copyright:Copyright(c) 2023-present, Aimidi libMMD contributors.
-Author:			walter white/Aimidi
+Copyright:Copyright(c) 2023-present, Aimidi & CMT contributors.
+Author:			Aimidi
 Date:			2023/7/28
 File:			cmt_tools_manager.cpp
 Description:	tools manager
@@ -14,43 +14,32 @@ Description:	tools manager
 
 namespace CMTToolsManager
 {
-	std::shared_ptr<libmmd::vmd_animation> make_vmd_animation()
-	{
-		return std::shared_ptr<libmmd::vmd_animation>{ libmmd::vmd_animation::create(), libmmd::vmd_animation::free };
-	}
-
-	std::shared_ptr<libmmd::pmx_model> make_pmx_model()
-	{
-		return std::shared_ptr<libmmd::pmx_model>{ libmmd::pmx_model::create(), libmmd::pmx_model::free };
-	}
-
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
 		LoadVmdCameraLog log;
-		const auto vmd_animation = make_vmd_animation();
-		if(!vmd_animation)
+		const auto vmd_camera_animation = std::make_unique<saba::VMDCameraAnimation>();
+		if(!vmd_camera_animation)
 		{
 			LoadVmdCameraLog::LogOutMem();
 			return false;
 		}
 
-		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
-		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
-		if (!vmd_animation->read_from_file_u8(vmd_utf8_filename))
+		maxon::AutoMem<Char> vmd_path(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		saba::VMDFile vmd_file;
+		if (!ReadVMDFile(&vmd_file, vmd_path))
 		{
 			LoadVmdCameraLog::LogReadFileErr();
 			return false;
 		}
 
-		if (!vmd_animation->is_camera())
+		if (!vmd_camera_animation->Create(vmd_file))
 		{
 			LoadVmdCameraLog::LogNotCameraError();
 			return false;
 		}
 
-		vmd_animation->mutable_vmd_camera_key_frame_array().sort();
-		log.camera_frame_number = vmd_animation->get_vmd_camera_key_frame_array().size();
-		if (!CMTSceneManager::LoadVMDCamera(setting, *vmd_animation))
+		log.camera_frame_number = vmd_file.m_cameras.size();
+		if (!CMTSceneManager::LoadVMDCamera(setting, *vmd_camera_animation))
 		{
 			return false;
 		}
