@@ -61,22 +61,15 @@ namespace CMTToolsManager
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting)
 	{
 		SaveVmdCameraLog log;
-		const auto vmd_animation = make_vmd_animation();
-		if (!vmd_animation)
-		{
-			SaveVmdCameraLog::LogOutMem();
-			return false;
-		}
-
-		if (!CMTSceneManager::SaveVMDCamera(setting, vmd_animation.get()))
+		saba::VMDFile vmd_file;
+		if (!CMTSceneManager::SaveVMDCamera(setting, vmd_file))
 		{
 			log.LogOK();
 			return false;
 		}
 
-		const maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
-		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
-		if(!vmd_animation->write_to_file_u8(vmd_utf8_filename))
+		const maxon::AutoMem<Char> vmd_path(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		if(!WriteVMDFile(&vmd_file, vmd_path))
 		{
 			SaveVmdCameraLog::LogWriteFileErr();
 			return false;
@@ -89,35 +82,26 @@ namespace CMTToolsManager
 	{
 		LoadVmdMotionLog log;
 
-		const auto vmd_animation = make_vmd_animation();
+		const auto vmd_animation = std::make_unique<saba::VMDAnimation>();
 		if (!vmd_animation)
 		{
 			LoadVmdMotionLog::LogOutMem();
 			return false;
 		}
 
-		maxon::AutoMem<Char> vmd_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
-		const std::string_view vmd_utf8_filename{ vmd_utf8_filename_mem };
-		if (!vmd_animation->read_from_file_u8(vmd_utf8_filename))
+		maxon::AutoMem<Char> vmd_path(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		saba::VMDFile vmd_file;
+		if (!ReadVMDFile(&vmd_file, vmd_path))
 		{
 			LoadVmdMotionLog::LogReadFileErr();
 			return false;
 		}
 
-		if (vmd_animation->is_camera())
+		if (!vmd_animation->Add(vmd_file))
 		{
 			LoadVmdMotionLog::LogNotMotionError();
 			return false;
 		}
-
-		if (setting.import_motion)
-			vmd_animation->mutable_vmd_bone_key_frame_array().sort();
-
-		if (setting.import_morph)
-			vmd_animation->mutable_vmd_morph_key_frame_array().sort();
-
-		if (setting.import_model_info)
-			vmd_animation->mutable_vmd_model_controller_key_frame_array().sort();
 
 		if (!CMTSceneManager::LoadVMDMotion(setting, *vmd_animation, log))
 		{
@@ -141,22 +125,38 @@ namespace CMTToolsManager
 
 		LoadPmxModelLog log;
 
-		const auto pmx_model = make_pmx_model();
-		if (!pmx_model)
+		std::string model_path(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		std::unique_ptr<saba::MMDModel> model;
+		if(setting.fn.CheckSuffix("pmx"_s))
+		{
+			model = std::make_unique<saba::PMXModel>();
+
+		}
+		else if(setting.fn.CheckSuffix("pmd"_s))
+		{
+			model = std::make_unique<saba::PMDModel>();
+		}
+		else
+		{
+			LoadPmxModelLog::LogReadFileErr();
+			return false;
+		}
+		if (!model)
 		{
 			LoadPmxModelLog::LogOutMem();
 			return false;
 		}
 
-		maxon::AutoMem<Char> pmx_utf8_filename_mem(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
-		const std::string_view pmx_utf8_filename{ pmx_utf8_filename_mem };
-		if (!pmx_model->read_from_file_u8(pmx_utf8_filename))
+		// TODO pmx_data_path
+		if (const std::string mmd_data_path{};
+			!model->Load(model_path, mmd_data_path))
 		{
 			LoadPmxModelLog::LogReadFileErr();
 			return false;
 		}
 
-		log.Set(*pmx_model, setting);
+
+		log.Set(*model, setting);
 		if (!CMTSceneManager::LoadPMXModel(setting, *pmx_model))
 		{
 			return false;
