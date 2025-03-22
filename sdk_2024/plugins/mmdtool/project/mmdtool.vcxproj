@@ -223,6 +223,7 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\string_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\MMDCamera.h" />

@@ -50,6 +50,7 @@
 #include "utils/time_util.hpp"
 #include "utils/images_user_area_util.hpp"
 #include "utils/filename_util.hpp"
+#include "utils/string_util.hpp"
 
 #include "module/core/cmt_marco.h"
 

@@ -26,7 +26,7 @@ class UpdateNameConversionDialog final : public GeDialog
 	Int default_name_mapping_config_index_ = 0;
 	maxon::BaseArray<String> unregulated_name_;
 	maxon::BaseArray<Filename> name_mapping_config_;
-	static Filename name_mapping_config_dirname_;
+	inline static Filename name_mapping_config_dirname_ = GeGetPluginResourcePath() + Filename("name_conversion\\");
 
 	bool LoadNameMappingConfig();
 	Bool CreateLayout() override;

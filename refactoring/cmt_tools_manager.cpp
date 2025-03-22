@@ -24,9 +24,9 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		maxon::AutoMem<Char> vmd_path(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const auto vmd_path= string_util::GetStdString(setting.fn.GetString());
 		saba::VMDFile vmd_file;
-		if (!ReadVMDFile(&vmd_file, vmd_path))
+		if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
 		{
 			LoadVmdCameraLog::LogReadFileErr();
 			return false;
@@ -68,8 +68,8 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		const maxon::AutoMem<Char> vmd_path(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
-		if(!WriteVMDFile(&vmd_file, vmd_path))
+		const auto vmd_path= string_util::GetStdString(setting.fn.GetString());
+		if(!WriteVMDFile(&vmd_file, vmd_path.c_str()))
 		{
 			SaveVmdCameraLog::LogWriteFileErr();
 			return false;
@@ -89,9 +89,9 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		maxon::AutoMem<Char> vmd_path(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		const auto vmd_path = string_util::GetStdString(setting.fn.GetString());
 		saba::VMDFile vmd_file;
-		if (!ReadVMDFile(&vmd_file, vmd_path))
+		if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
 		{
 			LoadVmdMotionLog::LogReadFileErr();
 			return false;
@@ -125,7 +125,6 @@ namespace CMTToolsManager
 
 		LoadPmxModelLog log;
 
-		std::string model_path(setting.fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
 		std::unique_ptr<saba::MMDModel> model;
 		if(setting.fn.CheckSuffix("pmx"_s))
 		{
@@ -141,14 +140,22 @@ namespace CMTToolsManager
 			LoadPmxModelLog::LogReadFileErr();
 			return false;
 		}
+
 		if (!model)
 		{
 			LoadPmxModelLog::LogOutMem();
 			return false;
 		}
 
-		// TODO pmx_data_path
-		if (const std::string mmd_data_path{};
+		static auto mmd_data_filepath = GeGetPluginResourcePath() + Filename("mikumikudance_data");
+		if (!GeFExist(mmd_data_filepath))
+		{
+			LoadPmxModelLog::LogMMDDataPathErr();
+			return false;
+		}
+		static std::string mmd_data_path =  string_util::GetStdString(mmd_data_filepath.GetString());
+
+		if (const std::string model_path= string_util::GetStdString(setting.fn.GetString());
 			!model->Load(model_path, mmd_data_path))
 		{
 			LoadPmxModelLog::LogReadFileErr();

@@ -28,7 +28,6 @@ enum
 
 UpdateNameConversionDialog::UpdateNameConversionDialog(NameConversion& name_conversion) : name_conversion_(name_conversion)
 {
-	name_mapping_config_dirname_ = GeGetPluginResourcePath() + Filename("Name_conversion\\");
 	AutoAlloc<BrowseFiles> bf;
 	bf->Init(name_mapping_config_dirname_, BROWSEFILES_CALCSIZE);
 	while (bf->GetNext())
@@ -38,7 +37,7 @@ UpdateNameConversionDialog::UpdateNameConversionDialog(NameConversion& name_conv
 			iferr(name_mapping_config_.Append(std::move(filename))) continue;
 		}
 	}
-	default_name_mapping_config_index_ = name_mapping_config_.FindIndex("Name_conversion.yaml"_s);
+	default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
 	default_name_mapping_config_index_ = default_name_mapping_config_index_ == NOTOK ? 0 : default_name_mapping_config_index_;
 	name_conversion_.LoadConfig(name_mapping_config_dirname_ + name_mapping_config_[default_name_mapping_config_index_]);
 }
@@ -158,7 +157,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 		maxon::HashMap<String, String>& universal_to_local_name_lookup_table = name_conversion_.universal_to_local_name_lookup_table_;
 		Int32 fn_index = 0;
 		GetInt32(DLG_NAME_CONVER_NAMEMAP, fn_index);
-		std::ofstream file_out((name_mapping_config_dirname_ + name_mapping_config_[fn_index]).GetString().GetCStringCopy(STRINGENCODING::UTF8), std::ios_base::app);
+		std::ofstream file_out(string_util::GetStdString((name_mapping_config_dirname_ + name_mapping_config_[fn_index]).GetString()), std::ios_base::app);
 		const Int32	conversion_count = static_cast<Int32>(unregulated_name_.GetCount());
 		YAML::Node	config;
 		for (Int32 i = 0; i < conversion_count; i++)
@@ -174,7 +173,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 			else {
 				iferr(local_to_universal_name_lookup_table.Insert(key, value)) return false;
 				iferr(universal_to_local_name_lookup_table.Insert(value, key)) return false;
-				config[std::string(key.GetCStringCopy(STRINGENCODING::UTF8))] = std::string(value.GetCStringCopy(STRINGENCODING::UTF8));
+				config[string_util::GetStdString(key)] = string_util::GetStdString(value);
 			}
 		}
 		file_out << '\n' << config;
@@ -202,7 +201,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 				GeFKill(fn);
 				name_mapping_config_.Reset();
 				AutoAlloc<BrowseFiles> bf;
-				bf->Init(GeGetPluginResourcePath() + Filename("Name_conversion"), BROWSEFILES_CALCSIZE);
+				bf->Init(GeGetPluginResourcePath() + Filename("name_conversion"), BROWSEFILES_CALCSIZE);
 				while (bf->GetNext())
 				{
 					if (!bf->IsDir())
@@ -210,7 +209,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 						iferr(name_mapping_config_.Append(bf->GetFilename())) continue;
 					}
 				}
-				default_name_mapping_config_index_ = name_mapping_config_.FindIndex("Name_conversion.yaml"_s);
+				default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
 				default_name_mapping_config_index_ = default_name_mapping_config_index_ == NOTOK ? 0 : default_name_mapping_config_index_;
 				FreeChildren(DLG_NAME_CONVER_NAMEMAP);
 				Int32 fnCount = 0;
@@ -314,7 +313,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 		file->Close();
 		name_mapping_config_.Reset();
 		AutoAlloc<BrowseFiles> bf;
-		bf->Init(GeGetPluginResourcePath() + Filename("Name_conversion"), BROWSEFILES_CALCSIZE);
+		bf->Init(GeGetPluginResourcePath() + Filename("name_conversion"), BROWSEFILES_CALCSIZE);
 		while (bf->GetNext())
 		{
 			if (!bf->IsDir())
@@ -322,7 +321,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 				iferr(name_mapping_config_.Append(bf->GetFilename())) continue;
 			}
 		}
-		default_name_mapping_config_index_ = name_mapping_config_.FindIndex("Name_conversion.yaml"_s);
+		default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
 		default_name_mapping_config_index_ = default_name_mapping_config_index_ == NOTOK ? 0 : default_name_mapping_config_index_;
 		auto add_fn_index = name_mapping_config_.FindIndex(fn_s + ".yaml");
 		default_name_mapping_config_index_ = add_fn_index == NOTOK ? add_fn_index : default_name_mapping_config_index_;
@@ -358,7 +357,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 		GeFCopyFile(name_mapping_config_dirname_ + name_mapping_config_[fn_index], fn, GE_FCOPY_OVERWRITE);
 		name_mapping_config_.Reset();
 		AutoAlloc<BrowseFiles> bf;
-		bf->Init(GeGetPluginResourcePath() + Filename("Name_conversion"), BROWSEFILES_CALCSIZE);
+		bf->Init(GeGetPluginResourcePath() + Filename("name_conversion"), BROWSEFILES_CALCSIZE);
 		while (bf->GetNext())
 		{
 			if (!bf->IsDir())
@@ -366,7 +365,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 				iferr(name_mapping_config_.Append(bf->GetFilename())) continue;
 			}
 		}
-		default_name_mapping_config_index_ = name_mapping_config_.FindIndex("Name_conversion.yaml"_s);
+		default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
 		default_name_mapping_config_index_ = default_name_mapping_config_index_ == NOTOK ? 0 : default_name_mapping_config_index_;
 		auto increment_fn_index = name_mapping_config_.FindIndex(fn_s + ".yaml");
 		increment_fn_index = increment_fn_index == NOTOK ? increment_fn_index : default_name_mapping_config_index_;
@@ -400,7 +399,7 @@ Bool NameConversion::LoadConfig(const Filename& filename)
 	local_to_universal_name_lookup_table_.Reset();
 	universal_to_local_name_lookup_table_.Reset();
 	try {
-		YAML::Node config = YAML::LoadFile(filename.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		YAML::Node config = YAML::LoadFile(string_util::GetStdString(filename.GetString()));
 		for (YAML::const_iterator it = config.begin(); it != config.end(); ++it)
 		{
 			iferr(local_to_universal_name_lookup_table_.Insert(it->first.as<String>(), it->second.as<String>())) return false;
@@ -409,7 +408,7 @@ Bool NameConversion::LoadConfig(const Filename& filename)
 	}
 	catch (YAML::BadFile&) {
 		GePrint("Failed to load the YAML file!"_s);
-		//std::ofstream file_out(fn.GetString().GetCStringCopy(STRINGENCODING::UTF8));
+		//std::ofstream file_out(string_util::GetStdString(fn.GetString()));
 	}
 	return true;
 }

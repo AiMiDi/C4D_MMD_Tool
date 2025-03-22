@@ -19,6 +19,11 @@ void IOLog::LogOutMem()
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 }
 
+void LoadPmxModelLog::LogMMDDataPathErr()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MMD_DATA_ERR));
+}
+
 void IOLog::LogReadFileErr()
 {
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
