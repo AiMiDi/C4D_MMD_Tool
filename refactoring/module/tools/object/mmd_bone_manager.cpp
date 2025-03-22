@@ -9,22 +9,22 @@ Description:	DESC
 **************************************************************************/
 
 #include "pch.h"
-#include "mmd_bone_root.h"
+#include "mmd_bone_manager.h"
 #include "cmt_tools_setting.h"
 #include "mmd_model.h"
 #include "module/tools/tag/mmd_bone.h"
 
-NodeData* MMDBoneRootObject::Alloc()
+NodeData* MMDBoneManagerObject::Alloc()
 {
-	return NewObjClear(MMDBoneRootObject);
+	return NewObjClear(MMDBoneManagerObject);
 }
 
-Bool MMDBoneRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
+Bool MMDBoneManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
 {
 	iferr_scope_handler{
 		return false;
 	};
-	auto const dest_object = reinterpret_cast<MMDBoneRootObject*>(dest);
+	auto const dest_object = reinterpret_cast<MMDBoneManagerObject*>(dest);
 	dest_object->bone_name_index = bone_name_index;
 	dest_object->m_rigid_root = m_rigid_root;
 	dest_object->m_joint_root = m_joint_root;
@@ -41,7 +41,7 @@ Bool MMDBoneRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, 
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
-Bool MMDBoneRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
+Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
 		return false;
@@ -103,7 +103,7 @@ Bool MMDBoneRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDBoneRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
+Bool MMDBoneManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
 	if(!hf->WriteInt64(bone_name_index))
 		return false;
@@ -154,7 +154,7 @@ Bool MMDBoneRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK
 	return SUPER::Write(node, hf);
 }
 
-Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
+Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	const auto op = reinterpret_cast<BaseObject*>(node);
 	if (id[0].id == BONE_DISPLAY_TYPE)
@@ -165,7 +165,7 @@ Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneRootObjectMsg msg { MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ON };
+			MMDBoneManagerObjectMsg msg { MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ON };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -173,7 +173,7 @@ Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_OFF);
 			op->SetRenderMode(MODE_OFF);
-			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -181,7 +181,7 @@ Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_MOVABLE };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_MOVABLE };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -189,7 +189,7 @@ Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_VISIBLE };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_VISIBLE };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -197,7 +197,7 @@ Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ROTATABLE };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ROTATABLE };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -205,7 +205,7 @@ Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ENABLED };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ENABLED };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -213,7 +213,7 @@ Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_IK };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_IK };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -224,7 +224,7 @@ Bool MMDBoneRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 
-void MMDBoneRootObject::HandleDescriptionCommandMessage(GeListNode* node, void* data)
+void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, void* data)
 {
 	if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_BONE_BUTTON)
 	{
@@ -246,13 +246,13 @@ void MMDBoneRootObject::HandleDescriptionCommandMessage(GeListNode* node, void* 
 		new_bone->SetName(new_bone->GetName() + "." + String::IntToString(bone_name_index++));
 		new_bone_node->SetBoneTag(new_bone_tag);
 		new_bone_node->SetBoneObject(new_bone);
-		new_bone_node->SetBoneRoot(reinterpret_cast<BaseObject*>(node));
+		new_bone_node->SetBoneManager(reinterpret_cast<BaseObject*>(node));
 		new_bone_node->RefreshColor();
 		new_bone->InsertUnder(node);
 	}
 }
 
-bool MMDBoneRootObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
+bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 {
 	iferr_scope_handler{
 		return false;
@@ -285,13 +285,13 @@ bool MMDBoneRootObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	}
 	if (need_update_morph && m_model_root)
 	{
-		MMDBoneRootObjectMsg msg{ MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE };
+		MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE };
 		m_model_root->Message(ID_O_MMD_BONE_ROOT, &msg);
 	}
 	return true;
 }
 
-bool MMDBoneRootObject::HandleBoneIndexChangeMessage(GeListNode* node, void* data, bool& need_update_morph)
+bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node, void* data, bool& need_update_morph)
 {
 	iferr_scope_handler{
 		return false;
@@ -335,7 +335,7 @@ bool MMDBoneRootObject::HandleBoneIndexChangeMessage(GeListNode* node, void* dat
 	return true;
 }
 
-bool MMDBoneRootObject::HandleBoneMorphAdd(GeListNode* node, void* data, bool& need_update_morph)
+bool MMDBoneManagerObject::HandleBoneMorphAdd(GeListNode* node, void* data, bool& need_update_morph)
 {
 	iferr_scope_handler{
 		return false;
@@ -363,7 +363,7 @@ bool MMDBoneRootObject::HandleBoneMorphAdd(GeListNode* node, void* data, bool& n
 	return true;
 }
 
-bool MMDBoneRootObject::HandleBoneMorphDelete(GeListNode* node, void* data, bool& need_update_morph)
+bool MMDBoneManagerObject::HandleBoneMorphDelete(GeListNode* node, void* data, bool& need_update_morph)
 {
 	iferr_scope_handler{
 		return false;
@@ -390,7 +390,7 @@ bool MMDBoneRootObject::HandleBoneMorphDelete(GeListNode* node, void* data, bool
 	return true;
 }
 
-bool MMDBoneRootObject::HandleBoneMorphRename(GeListNode* node, void* data, bool& need_update_morph)
+bool MMDBoneManagerObject::HandleBoneMorphRename(GeListNode* node, void* data, bool& need_update_morph)
 {
 	iferr_scope_handler{
 		return false;
@@ -434,7 +434,7 @@ bool MMDBoneRootObject::HandleBoneMorphRename(GeListNode* node, void* data, bool
 	return true;
 }
 
-Bool MMDBoneRootObject::Message(GeListNode* node, Int32 type, void* data)
+Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
 		return SUPER::Message(node, type, data);
@@ -489,12 +489,12 @@ Bool MMDBoneRootObject::Message(GeListNode* node, Int32 type, void* data)
 	return SUPER::Message(node, type, data);
 }
 
-const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& MMDBoneRootObject::GetBoneMorphData() const
+const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& MMDBoneManagerObject::GetBoneMorphData() const
 {
 	return m_bone_morph_data;
 }
 
-BaseTag* MMDBoneRootObject::FindBone(const Int32 index) const
+BaseTag* MMDBoneManagerObject::FindBone(const Int32 index) const
 {
 	// find index in m_bone_list
 	if (const auto bone_link_ptr = m_bone_list.Find(index); bone_link_ptr)
@@ -504,7 +504,7 @@ BaseTag* MMDBoneRootObject::FindBone(const Int32 index) const
 	return nullptr;
 }
 
-Int32 MMDBoneRootObject::FindBoneIndex(const BaseTag* bone_tag) const
+Int32 MMDBoneManagerObject::FindBoneIndex(const BaseTag* bone_tag) const
 {
 	if(!bone_tag)
 	{
@@ -525,7 +525,7 @@ Int32 MMDBoneRootObject::FindBoneIndex(const BaseTag* bone_tag) const
 	return bone_index;
 }
 
-Bool MMDBoneRootObject::SetBoneAnimation(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting)
+Bool MMDBoneManagerObject::SetBoneAnimation(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting)
 {
 	const String bone_name{ data.get_bone_name().c_str() };
 	for (const auto& bone_link : m_bone_list)
@@ -555,7 +555,7 @@ Bool MMDBoneRootObject::SetBoneAnimation(const libmmd::vmd_bone_key_frame& data,
 	return false;
 }
 
-void MMDBoneRootObject::UpdateAllBoneAnimation()
+void MMDBoneManagerObject::UpdateAllBoneAnimation()
 {
 	for (const auto& bone_link : m_bone_list)
 	{
@@ -566,7 +566,7 @@ void MMDBoneRootObject::UpdateAllBoneAnimation()
 	}
 }
 
-void MMDBoneRootObject::DeleteAllBoneAnimation()
+void MMDBoneManagerObject::DeleteAllBoneAnimation()
 {
 	for (const auto& bone_link : m_bone_list)
 	{
@@ -577,7 +577,7 @@ void MMDBoneRootObject::DeleteAllBoneAnimation()
 	}
 }
 
-Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Float strength)
+Bool MMDBoneManagerObject::SetBoneMorphStrength(const String& morph_name, const Float strength)
 {
 	const auto morph_ptr = m_bone_morph_data.Find(morph_name);
 	if (!morph_ptr)
@@ -595,7 +595,7 @@ Bool MMDBoneRootObject::SetBoneMorphStrength(const String& morph_name, const Flo
 	return true;
 }
 
-Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting)
+Bool MMDBoneManagerObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting)
 {
 	iferr_scope_handler{
 		return false;
@@ -810,7 +810,7 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TIP)), tip_link.Release(), DESCFLAGS_SET::NONE);
 
 				// add to model_root description
-				if(!m_model_root->GetNodeData<MMDModelRootObject>()->AddIKBoneDescription(bone_name_local, ik_tag))
+				if(!m_model_root->GetNodeData<MMDModelManagerObject>()->AddIKBoneDescription(bone_name_local, ik_tag))
 					return false;
 
 				// set ik limit
@@ -890,7 +890,7 @@ Bool MMDBoneRootObject::LoadPMX(const libmmd::pmx_model& pmx_model, maxon::BaseA
 	return true;
 }
 
-Bool MMDBoneRootObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting)
+Bool MMDBoneManagerObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting)
 {
 		iferr_scope_handler{
 		return false;
@@ -937,10 +937,10 @@ Bool MMDBoneRootObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSett
 	return true;
 }
 
-const BaseContainer& MMDBoneRootObject::GetBoneItems() const
+const BaseContainer& MMDBoneManagerObject::GetBoneItems() const
 {
 	return m_bone_items;
 }
 
-void MMDBoneRootObject::CreateDisplayTag(GeListNode* node)
+void MMDBoneManagerObject::CreateDisplayTag(GeListNode* node)
 {}

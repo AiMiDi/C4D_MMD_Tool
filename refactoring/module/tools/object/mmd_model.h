@@ -13,13 +13,13 @@ Description:	MMD model object
 
 #include "CMTSceneManager.h"
 
-class MMDModelRootObject;
+class MMDModelManagerObject;
 class PMXModel;
 class IMorph;
 
 class EditorSubMorphDialog final : public GeDialog
 {
-	MMDModelRootObject* m_model = nullptr;
+	MMDModelManagerObject* m_model = nullptr;
 	IMorph* m_morph = nullptr;
 	std::unique_ptr<ImagesUserArea> m_images = nullptr;
 	SimpleListView m_listview;
@@ -29,7 +29,7 @@ class EditorSubMorphDialog final : public GeDialog
 	Bool InitValues()override;
 	Bool Command(Int32 id, const BaseContainer& msg) override;
 public:
-	EditorSubMorphDialog(MMDModelRootObject* model, IMorph* morph) : m_model(model), m_morph(morph) {}
+	EditorSubMorphDialog(MMDModelManagerObject* model, IMorph* morph) : m_model(model), m_morph(morph) {}
 	~EditorSubMorphDialog() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(EditorSubMorphDialog)
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(EditorSubMorphDialog)
@@ -64,11 +64,11 @@ public:
 	DescID GetStrengthDescID();
 	bool operator==(const IMorph& other) const;
 	virtual MMDMorphType GetType() const = 0;
-	virtual void AddMorphUI(MMDModelRootObject& model, Int morph_id) = 0;
-	virtual void DeleteMorphUI(MMDModelRootObject& model) = 0;
+	virtual void AddMorphUI(MMDModelManagerObject& model, Int morph_id) = 0;
+	virtual void DeleteMorphUI(MMDModelManagerObject& model) = 0;
 	void RenameMorph(const String& name);
-	virtual void UpdateMorph(MMDModelRootObject& model) = 0;
-	virtual void AddSubMorph(MMDModelRootObject* model, Int id, Float weight) {}
+	virtual void UpdateMorph(MMDModelManagerObject& model) = 0;
+	virtual void AddSubMorph(MMDModelManagerObject* model, Int id, Float weight) {}
 	virtual void AddSubMorphNoCheck(Int id, Float weight) {}
 	virtual void DeleteSubMorph(const Int id) {}
 	virtual void RenameSubMorph(const Int old_id, const Int new_id) {}
@@ -101,10 +101,10 @@ public:
 	GroupMorph& operator=(const GroupMorph&) = delete;
 	GroupMorph& operator=(GroupMorph&& other) noexcept = default;
 
-	void UpdateMorph(MMDModelRootObject& model) override;
-	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
-	void DeleteMorphUI(MMDModelRootObject& model) override;
-	void AddSubMorph(MMDModelRootObject* model, Int id, Float weight) override;
+	void UpdateMorph(MMDModelManagerObject& model) override;
+	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelManagerObject& model) override;
+	void AddSubMorph(MMDModelManagerObject* model, Int id, Float weight) override;
 	void AddSubMorphNoCheck(Int id, Float weight) override;
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
 	void RenameSubMorph(const Int old_id, const Int new_id) override;
@@ -137,10 +137,10 @@ public:
 	FlipMorph& operator=(const FlipMorph&) = delete;
 	FlipMorph& operator=(FlipMorph&& other) noexcept = default;
 
-	void UpdateMorph(MMDModelRootObject& model) override;
-	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
-	void DeleteMorphUI(MMDModelRootObject& model) override;
-	void AddSubMorph(MMDModelRootObject* model, Int id, Float weight) override;
+	void UpdateMorph(MMDModelManagerObject& model) override;
+	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelManagerObject& model) override;
+	void AddSubMorph(MMDModelManagerObject* model, Int id, Float weight) override;
 	void AddSubMorphNoCheck(Int id, Float weight) override;
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
 	void RenameSubMorph(const Int old_id, const Int new_id) override;
@@ -161,9 +161,9 @@ public:
 	MeshMorph& operator=(const MeshMorph&) = delete;
 	MeshMorph& operator=(MeshMorph&& other) noexcept = default;
 
-	void UpdateMorph(MMDModelRootObject& model) override;
-	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
-	void DeleteMorphUI(MMDModelRootObject& model) override;
+	void UpdateMorph(MMDModelManagerObject& model) override;
+	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelManagerObject& model) override;
 	MMDMorphType GetType() const override { return MMDMorphType::MESH; }
 };
 class BoneMorph final : public IMorph
@@ -177,9 +177,9 @@ public:
 	BoneMorph& operator=(const BoneMorph&) = delete;
 	BoneMorph& operator=(BoneMorph&& other) noexcept = default;
 
-	void UpdateMorph(MMDModelRootObject& model) override;
-	void AddMorphUI(MMDModelRootObject& model, Int morph_id) override;
-	void DeleteMorphUI(MMDModelRootObject& model) override;
+	void UpdateMorph(MMDModelManagerObject& model) override;
+	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelManagerObject& model) override;
 	MMDMorphType GetType() const override { return MMDMorphType::BONE; }
 };
 enum class CMTObjectType : uint8_t
@@ -217,7 +217,7 @@ enum class MMDModelRootDynamicDescriptionType : uint8_t
 	IK_BONE_LINK
 };
 
-class MMDModelRootObject final : public ObjectData
+class MMDModelManagerObject final : public ObjectData
 {
 	maxon::Synchronized<Bool> m_is_need_update;
 	maxon::Synchronized<Bool> m_is_morph_initialized;
@@ -239,22 +239,22 @@ class MMDModelRootObject final : public ObjectData
 	maxon::HashMap<String, BaseTag*> m_ik_name_map;
 	maxon::HashMap<String, AutoAlloc<BaseLink>> m_ik_link_name_map;
 
-	MMDModelRootObject();
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelRootObject)
-	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDModelRootObject)
+	MMDModelManagerObject();
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelManagerObject)
+	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDModelManagerObject)
 	INSTANCEOF(MMDModelRootObject, ObjectData)
 public:
 	class AddMorphHelper
 	{
-		MMDModelRootObject* m_model = nullptr;
+		MMDModelManagerObject* m_model = nullptr;
 		CMT_DISALLOW_COPY_AND_ASSIGN_BODY(AddMorphHelper)
 		CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(AddMorphHelper)
 	public:
-		explicit AddMorphHelper(MMDModelRootObject* model);
+		explicit AddMorphHelper(MMDModelManagerObject* model);
 		~AddMorphHelper();
 	};
 
-	~MMDModelRootObject() override = default;
+	~MMDModelManagerObject() override = default;
 	static NodeData* Alloc();
 	Bool Init(GeListNode* node SDK2024_InitParaName) override;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
@@ -297,7 +297,7 @@ private:
 	void RefreshMorph();
 	Bool ReadMorph(HyperFile* hf);
 	Bool WriteMorph(HyperFile* hf) SDK2024_Const;
-	Bool CopyMorph(MMDModelRootObject* dst) const;
+	Bool CopyMorph(MMDModelManagerObject* dst) const;
 	Bool SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	Bool DeleteAllMorphAnimation();

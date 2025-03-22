@@ -233,7 +233,7 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 		return false;
 	}
 
-	if(!select_object->GetNodeData<MMDModelRootObject>()->LoadVMDMotion(data, setting, log))
+	if(!select_object->GetNodeData<MMDModelManagerObject>()->LoadVMDMotion(data, setting, log))
 	{
 		return false;
 	}
@@ -256,7 +256,7 @@ BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& se
 
 	// init model
 	pmx_model->SetName(setting.fn.GetFileString());
-	auto* pmx_model_data = pmx_model->GetNodeData<MMDModelRootObject>();
+	auto* pmx_model_data = pmx_model->GetNodeData<MMDModelManagerObject>();
 	pmx_model_data->CreateRoot();
 	pmx_model_data->UpdateRoot();
 
@@ -281,7 +281,7 @@ BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& se
 
 	if (select_object->IsInstanceOf(ID_O_MMD_MODEL))
 	{
-		if(auto* pmx_model_data = select_object->GetNodeData<MMDModelRootObject>(); !pmx_model_data->SavePMXModel(data, setting))
+		if(auto* pmx_model_data = select_object->GetNodeData<MMDModelManagerObject>(); !pmx_model_data->SavePMXModel(data, setting))
 		{
 			return nullptr;
 		}

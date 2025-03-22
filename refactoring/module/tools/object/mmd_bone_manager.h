@@ -11,7 +11,7 @@ Description:	DESC
 #ifndef MMD_BONE_ROOT_H__
 #define MMD_BONE_ROOT_H__
 
-#include "mmd_root.hpp"
+#include "mmd_manager.hpp"
 #include "description/OMMDBoneRoot.h"
 #include "utils/morph_ui_data_util.hpp"
 
@@ -28,29 +28,29 @@ type 1: set bone display type;
 type 2: bone index change;
 type 3: bone morph change;
 */
-enum class MMDBoneRootObjectMsgType : int8_t
+enum class MMDBoneManagerObjectMsgType : int8_t
 {
 	DEFAULT = -1,
 	SET_BONE_DISPLAY_TYPE,
 	BONE_ROOT_UPDATE,
 	BONE_MORPH_CHANGE
 };
-struct MMDBoneRootObjectMsg
+struct MMDBoneManagerObjectMsg
 {
 
-	MMDBoneRootObjectMsgType type;
+	MMDBoneManagerObjectMsgType type;
 	Int32	display_type;
 	BaseObject* bond_root_object;
 
-	explicit MMDBoneRootObjectMsg(
-		const MMDBoneRootObjectMsgType type_ = MMDBoneRootObjectMsgType::DEFAULT,
+	explicit MMDBoneManagerObjectMsg(
+		const MMDBoneManagerObjectMsgType type_ = MMDBoneManagerObjectMsgType::DEFAULT,
 		const Int32 display_type_ = BONE_DISPLAY_TYPE_ON,
 		BaseObject* BoneRoot_ = nullptr) :
 		type(type_),
 		display_type(display_type_),
 		bond_root_object(BoneRoot_) {}
 };
-class MMDBoneRootObject final : public MMDRootObject
+class MMDBoneManagerObject final : public MMDManagerObject
 {
 	Int bone_name_index = 0;
 	BaseObject* m_model_root = nullptr;
@@ -59,11 +59,11 @@ class MMDBoneRootObject final : public MMDRootObject
 	BaseContainer m_bone_items;
 	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> m_bone_list;
 	maxon::HashMap<String, maxon::BaseList<MorphUIData>> m_bone_morph_data;
-	MMDBoneRootObject() = default;
-	~MMDBoneRootObject() override = default;
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneRootObject)
-	CMT_DEFAULT_MOVE_BODY(MMDBoneRootObject)
-	INSTANCEOF(MMDBoneRootObject, MMDRootObject)
+	MMDBoneManagerObject() = default;
+	~MMDBoneManagerObject() override = default;
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneManagerObject)
+	CMT_DEFAULT_MOVE_BODY(MMDBoneManagerObject)
+	INSTANCEOF(MMDBoneRootObject, MMDManagerObject)
 public:
 	static NodeData* Alloc();
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;

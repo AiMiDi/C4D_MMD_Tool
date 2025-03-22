@@ -11,8 +11,8 @@ Description:	MMD model object
 #include "pch.h"
 #include "mmd_model.h"
 
-#include "mmd_bone_root.h"
-#include "mmd_mesh_root.h"
+#include "mmd_bone_manager.h"
+#include "mmd_mesh_manager.h"
 #include "description/OMMDModel.h"
 #include "module/tools/tag/mmd_bone.h"
 
@@ -428,7 +428,7 @@ GroupMorph::GroupMorph(GroupMorph&& other) noexcept:
 	m_data(std::move(other.m_data))
 {}
 
-inline void GroupMorph::UpdateMorph(MMDModelRootObject& model)
+inline void GroupMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	GeListNode* node = model.Get();
 	auto& morph_arr = model.GetMorphData();
@@ -458,7 +458,7 @@ FlipMorph::FlipMorph(FlipMorph&& other) noexcept:
 	m_data(std::move(other.m_data))
 {}
 
-inline void FlipMorph::UpdateMorph(MMDModelRootObject& model)
+inline void FlipMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	GeListNode* node = model.Get();
 	auto& morph_arr = model.GetMorphData();
@@ -468,22 +468,22 @@ inline void FlipMorph::UpdateMorph(MMDModelRootObject& model)
 		morph.SetStrength(node, GetStrength(node) >= 0.5 ? data.GetValue() : 0.0);
 	}
 }
-inline void MeshMorph::UpdateMorph(MMDModelRootObject& model)
+inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	if (BaseObject* mesh_root = model.GetRootObject(CMTObjectType::MeshRoot))
 	{
-		mesh_root->GetNodeData<MMDMeshRootObject>()->SetMeshMorphStrength(m_name, GetStrength(model.Get()));
+		mesh_root->GetNodeData<MMDMeshManagerObject>()->SetMeshMorphStrength(m_name, GetStrength(model.Get()));
 	}
 
 }
-inline void BoneMorph::UpdateMorph(MMDModelRootObject& model)
+inline void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	if (BaseObject* bone_root = model.GetRootObject(CMTObjectType::BoneRoot))
 	{
-		bone_root->GetNodeData<MMDBoneRootObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
+		bone_root->GetNodeData<MMDBoneManagerObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
 	}
 }
-inline void GroupMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
+inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetString(DESC_NAME, m_name);
@@ -522,7 +522,7 @@ inline void GroupMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 
 }
-inline void FlipMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
+inline void FlipMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetString(DESC_NAME, m_name);
@@ -560,7 +560,7 @@ inline void FlipMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
 	m_button_rename_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_RENAME_BUTTON, morph_id);
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
-inline void MeshMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
+inline void MeshMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, m_name);
@@ -575,7 +575,7 @@ inline void MeshMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
-inline void BoneMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
+inline void BoneMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, m_name);
@@ -591,7 +591,7 @@ inline void BoneMorph::AddMorphUI(MMDModelRootObject& model, Int morph_id)
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
-inline void GroupMorph::DeleteMorphUI(MMDModelRootObject& model)
+inline void GroupMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	model.DeleteDynamicDescription(m_button_editor_id);
 	model.DeleteDynamicDescription(m_button_delete_id);
@@ -606,7 +606,7 @@ inline void GroupMorph::DeleteMorphUI(MMDModelRootObject& model)
 		::EventAdd();
 	}
 }
-inline void FlipMorph::DeleteMorphUI(MMDModelRootObject& model)
+inline void FlipMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	model.DeleteDynamicDescription(m_button_editor_id);
 	model.DeleteDynamicDescription(m_button_delete_id);
@@ -621,7 +621,7 @@ inline void FlipMorph::DeleteMorphUI(MMDModelRootObject& model)
 		::EventAdd();
 	}
 }
-inline void MeshMorph::DeleteMorphUI(MMDModelRootObject& model)
+inline void MeshMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	model.DeleteDynamicDescription(m_strength_id);
 
@@ -638,7 +638,7 @@ BoneMorph::BoneMorph(String name, DescID strength_id): IMorph(std::move(name), s
 BoneMorph::BoneMorph(BoneMorph&& other) noexcept: IMorph(std::move(other))
 {}
 
-inline void BoneMorph::DeleteMorphUI(MMDModelRootObject& model)
+inline void BoneMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	model.DeleteDynamicDescription(m_strength_id);
 
@@ -648,14 +648,14 @@ inline void BoneMorph::DeleteMorphUI(MMDModelRootObject& model)
 		::EventAdd();
 	}
 }
-inline void GroupMorph::AddSubMorph(MMDModelRootObject* model, Int id, const Float weight)
+inline void GroupMorph::AddSubMorph(MMDModelManagerObject* model, Int id, const Float weight)
 {
 	if (model->GetMorphNum() > id)
 	{
 		 std::ignore = m_data.Insert(id, weight);
 	}
 }
-inline void FlipMorph::AddSubMorph(MMDModelRootObject* model, Int id, const Float weight)
+inline void FlipMorph::AddSubMorph(MMDModelManagerObject* model, Int id, const Float weight)
 {
 	if (model->GetMorphNum() > id) {
 		std::ignore = m_data.Insert(id, weight);
@@ -670,18 +670,18 @@ inline auto FlipMorph::AddSubMorphNoCheck(Int id, const Float weight) -> void
 	std::ignore = m_data.Insert(id, weight);
 }
 
-MMDModelRootObject::AddMorphHelper::AddMorphHelper(MMDModelRootObject* model):m_model(model)
+MMDModelManagerObject::AddMorphHelper::AddMorphHelper(MMDModelManagerObject* model):m_model(model)
 {
 	*m_model->m_is_need_update.Write() = false;
 	*m_model->m_is_morph_initialized.Write() = false;
 }
 
-MMDModelRootObject::AddMorphHelper::~AddMorphHelper()
+MMDModelManagerObject::AddMorphHelper::~AddMorphHelper()
 {
 	*m_model->m_is_need_update.Write() = true;
 }
 
-Bool MMDModelRootObject::Init(GeListNode* node SDK2024_InitParaName)
+Bool MMDModelManagerObject::Init(GeListNode* node SDK2024_InitParaName)
 {
 	if (node == nullptr)
 		return false;
@@ -696,7 +696,7 @@ Bool MMDModelRootObject::Init(GeListNode* node SDK2024_InitParaName)
 	bc->SetString(COMMENTS_UNIVERSAL, "description"_s);
 	return true;
 }
-Bool MMDModelRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
+Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	iferr_scope_handler
 	{
 		return false;
@@ -777,7 +777,7 @@ Bool MMDModelRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	*m_is_morph_initialized.Write() = true;
 	return true;
 }
-Bool MMDModelRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const {
+Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const {
 	AutoAlloc<BaseLink> mesh_root_link;
 	if (mesh_root_link == nullptr)
 		return false;
@@ -848,9 +848,9 @@ Bool MMDModelRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SD
 		return false;
 	return true;
 }
-Bool MMDModelRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
+Bool MMDModelManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
 {
-	const auto destObject = reinterpret_cast<MMDModelRootObject*>(dest);
+	const auto destObject = reinterpret_cast<MMDModelManagerObject*>(dest);
 	destObject->m_bone_root = m_bone_root;
 	destObject->m_joint_root = m_joint_root;
 	destObject->m_rigid_root = m_rigid_root;
@@ -863,7 +863,7 @@ Bool MMDModelRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode,
 		return false;
 	return true;
 }
-Bool MMDModelRootObject::ReadMorph(HyperFile* hf)
+Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
 {
 	iferr_scope_handler{ return nullptr; };
 	auto morph_change_helper = BeginMorphChange();
@@ -888,7 +888,7 @@ Bool MMDModelRootObject::ReadMorph(HyperFile* hf)
 
 	return true;
 }
-Bool MMDModelRootObject::WriteMorph(HyperFile* hf) SDK2024_Const
+Bool MMDModelManagerObject::WriteMorph(HyperFile* hf) SDK2024_Const
 {
 	if (!hf->WriteInt64(m_morph_arr.GetCount()))
 		return false;
@@ -903,7 +903,7 @@ Bool MMDModelRootObject::WriteMorph(HyperFile* hf) SDK2024_Const
 
 	return true;
 }
-Bool MMDModelRootObject::CopyMorph(MMDModelRootObject* dst) const
+Bool MMDModelManagerObject::CopyMorph(MMDModelManagerObject* dst) const
 {
 	if(!dst)
 		return false;
@@ -920,36 +920,36 @@ Bool MMDModelRootObject::CopyMorph(MMDModelRootObject* dst) const
 	return true;
 }
 
-MMDModelRootObject::AddMorphHelper MMDModelRootObject::BeginMorphChange()
+MMDModelManagerObject::AddMorphHelper MMDModelManagerObject::BeginMorphChange()
 {
 	return AddMorphHelper{this};
 }
 
-MMDModelRootObject::MMDModelRootObject()
+MMDModelManagerObject::MMDModelManagerObject()
 {
 	*m_is_need_update.Write() = true;
 	*m_is_morph_initialized.Write() = false;
 }
 
-void MMDModelRootObject::RefreshMorph()
+void MMDModelManagerObject::RefreshMorph()
 {
 	for (auto it = maxon::Iterable::EraseIterator(m_morph_arr); it; ++it)
 	{
 		DeleteMorph(it);
 	}
-	auto& mesh_morph_map = m_mesh_root->GetNodeData<MMDMeshRootObject>()->GetMeshMorphData();
+	auto& mesh_morph_map = m_mesh_root->GetNodeData<MMDMeshManagerObject>()->GetMeshMorphData();
 	for (auto& name : mesh_morph_map.GetKeys())
 	{
 		AddMorph(MMDMorphType::MESH, name);
 	}
-	auto& bone_morph_map = m_bone_root->GetNodeData<MMDBoneRootObject>()->GetBoneMorphData();
+	auto& bone_morph_map = m_bone_root->GetNodeData<MMDBoneManagerObject>()->GetBoneMorphData();
 	for (auto& name : bone_morph_map.GetKeys())
 	{
 		AddMorph(MMDMorphType::BONE, name);
 	}
 }
 
-Bool MMDModelRootObject::UpdateRoot(BaseObject* op)
+Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 {
 	if (!op)
 		op = reinterpret_cast<BaseObject*>(Get());
@@ -1045,7 +1045,7 @@ Bool MMDModelRootObject::UpdateRoot(BaseObject* op)
 	}
 	return true;
 }
-EXECUTIONRESULT MMDModelRootObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
+EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
 	iferr_scope_handler
 	{
@@ -1100,7 +1100,7 @@ EXECUTIONRESULT MMDModelRootObject::Execute(BaseObject* op, BaseDocument* doc, B
 	return EXECUTIONRESULT::OK;
 }
 
-Int MMDModelRootObject::ImportGroupAndFlipMorph(const libmmd::pmx_morph& pmx_morph)
+Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::pmx_morph& pmx_morph)
 {
 	Int morph_id = -1;
 	iferr_scope_handler{ return morph_id; };
@@ -1146,7 +1146,7 @@ Int MMDModelRootObject::ImportGroupAndFlipMorph(const libmmd::pmx_morph& pmx_mor
 	return morph_id;
 }
 
-DescID MMDModelRootObject::AddDynamicDescription(const BaseContainer& bc, const MMDModelRootDynamicDescriptionType& type, Int index)
+DescID MMDModelManagerObject::AddDynamicDescription(const BaseContainer& bc, const MMDModelRootDynamicDescriptionType& type, Int index)
 {
 	DescID id{};
 	DynamicDescription* const dynamic_description = Get()->GetDynamicDescriptionWritable();
@@ -1158,7 +1158,7 @@ DescID MMDModelRootObject::AddDynamicDescription(const BaseContainer& bc, const 
 	return id;
 }
 
-void MMDModelRootObject::DeleteDynamicDescription(const DescID& id)
+void MMDModelManagerObject::DeleteDynamicDescription(const DescID& id)
 {
 	DynamicDescription* const dynamic_description = Get()->GetDynamicDescriptionWritable();
 	if (!dynamic_description)
@@ -1167,22 +1167,22 @@ void MMDModelRootObject::DeleteDynamicDescription(const DescID& id)
 	std::ignore = m_desc_id_map.Erase(id);
 }
 
-Int MMDModelRootObject::GetMorphNum() const
+Int MMDModelManagerObject::GetMorphNum() const
 {
 	return m_morph_arr.GetCount();
 }
 
-const maxon::PointerArray<IMorph>& MMDModelRootObject::GetMorphData()
+const maxon::PointerArray<IMorph>& MMDModelManagerObject::GetMorphData()
 {
 	return m_morph_arr;
 }
 
-const maxon::HashMap<String, Int>& MMDModelRootObject::GetMorphNameMap()
+const maxon::HashMap<String, Int>& MMDModelManagerObject::GetMorphNameMap()
 {
 	return m_morph_name_map;
 }
 
-Bool MMDModelRootObject::CreateRoot()
+Bool MMDModelManagerObject::CreateRoot()
 {
 	const BaseDocument* doc = GetActiveDocument();
 	if (const auto op = reinterpret_cast<BaseObject*>(Get()); op != nullptr && doc != nullptr)
@@ -1216,7 +1216,7 @@ Bool MMDModelRootObject::CreateRoot()
 	return false;
 }
 
-BaseObject* MMDModelRootObject::GetRootObject(const CMTObjectType type) const
+BaseObject* MMDModelManagerObject::GetRootObject(const CMTObjectType type) const
 {
 	switch (type)
 	{
@@ -1235,7 +1235,7 @@ BaseObject* MMDModelRootObject::GetRootObject(const CMTObjectType type) const
 	return nullptr;
 }
 
-Bool MMDModelRootObject::AddIKBoneDescription(const maxon::String& bone_name_local, BaseTag* ik_tag)
+Bool MMDModelManagerObject::AddIKBoneDescription(const maxon::String& bone_name_local, BaseTag* ik_tag)
 {
 	iferr_scope_handler{ return false; };
 
@@ -1251,17 +1251,17 @@ Bool MMDModelRootObject::AddIKBoneDescription(const maxon::String& bone_name_loc
 	return true;
 }
 
-Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelImport& setting)
+Bool MMDModelManagerObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
 	maxon::BaseArray<BaseObject*> bone_list;
 	auto morph_change_helper = BeginMorphChange();
 
 	if (setting.import_bone)
-		if(!m_bone_root->GetNodeData<MMDBoneRootObject>()->LoadPMX(pmx_model, bone_list, setting))
+		if(!m_bone_root->GetNodeData<MMDBoneManagerObject>()->LoadPMX(pmx_model, bone_list, setting))
 			return false;
 
 	if (setting.import_polygon)
-		if(!m_mesh_root->GetNodeData<MMDMeshRootObject>()->LoadPMX(pmx_model, bone_list, setting))
+		if(!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->LoadPMX(pmx_model, bone_list, setting))
 			return false;
 
 	if (setting.import_expression)
@@ -1279,20 +1279,20 @@ Bool MMDModelRootObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const 
 	return true;
 }
 
-Bool MMDModelRootObject::SavePMXModel(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting) const
+Bool MMDModelManagerObject::SavePMXModel(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting) const
 {
 
 	if (setting.export_bone)
-		if (!m_bone_root->GetNodeData<MMDBoneRootObject>()->SavePMX(pmx_model, setting))
+		if (!m_bone_root->GetNodeData<MMDBoneManagerObject>()->SavePMX(pmx_model, setting))
 			return false;
 
 	if (setting.export_polygon)
-		if (!m_mesh_root->GetNodeData<MMDMeshRootObject>()->SavePMX(pmx_model, setting))
+		if (!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->SavePMX(pmx_model, setting))
 			return false;
 	return true;
 }
 
-Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
+Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
 {
 	iferr_scope_handler
 	{
@@ -1304,7 +1304,7 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 	// load bone motion
 	if (setting.import_motion)
 	{
-		const auto bone_root = m_bone_root->GetNodeData<MMDBoneRootObject>();
+		const auto bone_root = m_bone_root->GetNodeData<MMDBoneManagerObject>();
 		if (setting.delete_previous_animation)
 		{
 			bone_root->DeleteAllBoneAnimation();
@@ -1386,12 +1386,12 @@ Bool MMDModelRootObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, 
 	return true;
 }
 
-Bool MMDModelRootObject::SaveVMDMotion(libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
+Bool MMDModelManagerObject::SaveVMDMotion(libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
 {
 	return true;
 }
 
-Bool MMDModelRootObject::SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data,
+Bool MMDModelManagerObject::SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data,
 	const CMTToolsSetting::MotionImport& setting)
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
@@ -1431,7 +1431,7 @@ Bool MMDModelRootObject::SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame
 	return true;
 }
 
-bool MMDModelRootObject::SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data,
+bool MMDModelManagerObject::SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data,
                                                      const CMTToolsSetting::MotionImport& setting)
 {
 	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
@@ -1528,7 +1528,7 @@ bool MMDModelRootObject::SetModelControllerAnimation(const libmmd::vmd_model_con
 	return true;
 }
 
-Bool MMDModelRootObject::DeleteAllMorphAnimation()
+Bool MMDModelManagerObject::DeleteAllMorphAnimation()
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 	for (auto& morph : m_morph_arr)
@@ -1543,7 +1543,7 @@ Bool MMDModelRootObject::DeleteAllMorphAnimation()
 	return true;
 }
 
-Bool MMDModelRootObject::DeleteAllModelControllerAnimation()
+Bool MMDModelManagerObject::DeleteAllModelControllerAnimation()
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 
@@ -1566,17 +1566,17 @@ Bool MMDModelRootObject::DeleteAllModelControllerAnimation()
 	return true;
 }
 
-Int32 MMDModelRootObject::GetMorphNamedNumber()
+Int32 MMDModelManagerObject::GetMorphNamedNumber()
 {
 	return m_morph_named_number++;
 }
 
-NodeData* MMDModelRootObject::Alloc()
+NodeData* MMDModelManagerObject::Alloc()
 {
-	return NewObjClear(MMDModelRootObject);
+	return NewObjClear(MMDModelManagerObject);
 }
 
-Bool MMDModelRootObject::AddToExecution(BaseObject* op, PriorityList* list)
+Bool MMDModelManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (list == nullptr || op == nullptr)
 	{
@@ -1585,7 +1585,7 @@ Bool MMDModelRootObject::AddToExecution(BaseObject* op, PriorityList* list)
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION - 1, EXECUTIONFLAGS::NONE);
 	return true;
 }
-Bool MMDModelRootObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const
+Bool MMDModelManagerObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const
 {
 	if (!description->LoadDescription("MMDModelObject"_s))
 		return false;
@@ -1606,14 +1606,14 @@ Bool MMDModelRootObject::GetDDescription(SDK2024_Const GeListNode* node, Descrip
 
 	return SUPER::GetDDescription(node, description, flags);
 }
-Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
+Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{ return SUPER::Message(node,type,data); };
 	switch (type)
 	{
 	case ID_O_MMD_MESH_ROOT:
 	{
-		if (static_cast<MMDMeshRootObjectMsg*>(data)->type == MMDMeshRootObjectMsgType::MESH_MORPH_CHANGE)
+		if (static_cast<MMDMeshManagerObjectMsg*>(data)->type == MMDMeshManagerObjectMsgType::MESH_MORPH_CHANGE)
 		{
 			*m_is_morph_initialized.Write() = false;
 		}
@@ -1621,7 +1621,7 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 	}
 	case ID_O_MMD_BONE_ROOT:
 	{
-		if (static_cast<MMDBoneRootObjectMsg*>(data)->type == MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE)
+		if (static_cast<MMDBoneManagerObjectMsg*>(data)->type == MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE)
 		{
 			*m_is_morph_initialized.Write() = false;
 		}
@@ -1696,7 +1696,7 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				if (QuestionDialog(IDS_MES_DELETE_BONE_ANIM))
 				{
-					m_bone_root->GetNodeData<MMDBoneRootObject>()->DeleteAllBoneAnimation();
+					m_bone_root->GetNodeData<MMDBoneManagerObject>()->DeleteAllBoneAnimation();
 					EventAdd();
 					doc->SetTime(BaseTime(1, 30));
 					doc->SetTime(BaseTime(0, 30));
@@ -1732,7 +1732,7 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					DeleteAllModelControllerAnimation();
 					DeleteAllMorphAnimation();
-					m_bone_root->GetNodeData<MMDBoneRootObject>()->DeleteAllBoneAnimation();
+					m_bone_root->GetNodeData<MMDBoneManagerObject>()->DeleteAllBoneAnimation();
 					EventAdd();
 					doc->SetTime(BaseTime(1, 30));
 					doc->SetTime(BaseTime(0, 30));
@@ -1752,7 +1752,7 @@ Bool MMDModelRootObject::Message(GeListNode* node, Int32 type, void* data)
 	return SUPER::Message(node, type, data);
 }
 
-Int MMDModelRootObject::AddMorph(const MMDMorphType& morph_type, String morph_name, bool is_add_morph_ui)
+Int MMDModelManagerObject::AddMorph(const MMDMorphType& morph_type, String morph_name, bool is_add_morph_ui)
 {
 	Int index = -1;
 	iferr_scope_handler{ return index; };
@@ -1806,7 +1806,7 @@ Int MMDModelRootObject::AddMorph(const MMDMorphType& morph_type, String morph_na
 	return index;
 }
 
-void MMDModelRootObject::RenameMorph(const String& name)
+void MMDModelManagerObject::RenameMorph(const String& name)
 {
 	DynamicDescription* const dynamic_description = Get()->GetDynamicDescriptionWritable();
 	if (dynamic_description == nullptr)
@@ -1835,19 +1835,19 @@ void MMDModelRootObject::RenameMorph(const String& name)
 	}
 }
 
-void MMDModelRootObject::UpdateMorph(IMorph& morph)
+void MMDModelManagerObject::UpdateMorph(IMorph& morph)
 {
 	morph.UpdateMorph(*this);
 }
 
-void MMDModelRootObject::DeleteMorph(const Int morph_index)
+void MMDModelManagerObject::DeleteMorph(const Int morph_index)
 {
 	if (auto& morph = m_morph_arr[morph_index]; !DeleteMorphImpl(morph, morph_index))
 		return;
 	std::ignore = m_morph_arr.Erase(morph_index);
 }
 
-bool MMDModelRootObject::DeleteMorphImpl(IMorph& morph, const Int morph_index)
+bool MMDModelManagerObject::DeleteMorphImpl(IMorph& morph, const Int morph_index)
 {
 	iferr_scope_handler{ return false; };
 	morph.DeleteMorphUI(*this);
@@ -1869,7 +1869,7 @@ bool MMDModelRootObject::DeleteMorphImpl(IMorph& morph, const Int morph_index)
 	return true;
 }
 
-void MMDModelRootObject::DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it)
+void MMDModelManagerObject::DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it)
 {
 	auto& morph = *it;
 	if (const Int morph_index = it.FindIndex(morph); !DeleteMorphImpl(morph, morph_index))

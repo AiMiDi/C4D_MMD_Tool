@@ -11,9 +11,9 @@ Description:	DESC
 #include "pch.h"
 #include "mmd_bone.h"
 
-#include "module/tools/object/mmd_bone_root.h"
+#include "module/tools/object/mmd_bone_manager.h"
 #include "cmt_tools_setting.h"
-#include "utils/math_util.hpp"
+#include "maxon/quaternion.h"  
 
 Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 {
@@ -72,104 +72,12 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 	return true;
 }
 
-Bool MMDBoneTag::DeleteAllKeyFrame(GeListNode* node)
-{
-	m_bone_object->SetRelMl({});
-	return SUPER::DeleteAllKeyFrame(node);
-}
-
-MMDBoneTag::TrackDescIDArray MMDBoneTag::GetTrackDescIDsImpl()
-{
-	static const TrackDescIDArray track_desc_IDs
-	{
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_X)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Y)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Z)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_X)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Y)),
-		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Z))
-	};
-	return track_desc_IDs;
-}
-
-BoneMorphData::BoneMorphData(String name, DescID grp_id, DescID strength_id, DescID translation_id, DescID rotation_id,
-	DescID button_grp_id, DescID button_delete_id, DescID button_rename_id):
-	name(std::move(name)),
-	grp_id(std::move(grp_id)),
-	strength_id(std::move(strength_id)),
-	translation_id(std::move(translation_id)),
-	rotation_id(std::move(rotation_id)),
-	button_grp_id(std::move(button_grp_id)),
-	button_delete_id(std::move(button_delete_id)),
-	button_rename_id(std::move(button_rename_id))
-{
-}
-
-Bool BoneMorphData::Write(HyperFile* hf) SDK2024_Const
-{
-	if (!grp_id.Write(hf))
-		return false;
-	if (!strength_id.Write(hf))
-		return false;
-	if (!translation_id.Write(hf))
-		return false;
-	if (!rotation_id.Write(hf))
-		return false;
-	if (!button_grp_id.Write(hf))
-		return false;
-	if (!button_delete_id.Write(hf))
-		return false;
-	if (!button_rename_id.Write(hf))
-		return false;
-	if (!hf->WriteString(name))
-		return false;
-	return true;
-}
-
-Bool BoneMorphData::Read(HyperFile* hf)
-{
-	if (!grp_id.Read(hf))
-		return false;
-	if (!strength_id.Read(hf))
-		return false;
-	if (!translation_id.Read(hf))
-		return false;
-	if (!rotation_id.Read(hf))
-		return false;
-	if (!button_grp_id.Read(hf))
-		return false;
-	if (!button_delete_id.Read(hf))
-		return false;
-	if (!button_rename_id.Read(hf))
-		return false;
-	if (!hf->ReadString(&name))
-		return false;
-	return true;
-}
-
 MMDBoneTagMsg::MMDBoneTagMsg(const MMDBoneTagMsgType type): type(type)
 {}
 
-MMDBoneTagBoneIndexChangeMsg::MMDBoneTagBoneIndexChangeMsg(): MMDBoneTagMsg(MMDBoneTagMsgType::BONE_INDEX_CHANGE)
-{}
-
-MMDBoneTagBoneMorphAddMsg::MMDBoneTagBoneMorphAddMsg(String name, SDK2024_Const BaseTag* bone_tag, const DescID& strength_id):
-	MMDBoneTagMsg(MMDBoneTagMsgType::BONE_MORPH_ADD), name(std::move(name)), bone_morph_UI_data(bone_tag, strength_id)
-{}
-
-MMDBoneTagBoneMorphDeleteMsg::MMDBoneTagBoneMorphDeleteMsg(String name, SDK2024_Const BaseTag* bone_tag,
-	const DescID& strength_id):
-	MMDBoneTagMsg(MMDBoneTagMsgType::BONE_MORPH_DELETE), name(std::move(name)), bone_morph_UI_data(bone_tag, strength_id)
-{}
-
-MMDBoneTagBoneMorphRenameMsg::MMDBoneTagBoneMorphRenameMsg(String old_name, String new_name, SDK2024_Const BaseTag* bone_tag,
-	const DescID& strength_id):
-	MMDBoneTagMsg(MMDBoneTagMsgType::BONE_MORPH_RENAME), old_name(std::move(old_name)), new_name(std::move(new_name)), bone_morph_UI_data(bone_tag, strength_id)
-{}
-
-void MMDBoneTag::SetBoneRoot(BaseObject* bone_root)
+void MMDBoneTag::SetBoneManager(BaseObject* bone_manager)
 {
-	m_bone_root = bone_root;
+	m_bone_manager = bone_manager;
 }
 
 void MMDBoneTag::SetBoneObject(BaseObject* bone_object)
@@ -186,125 +94,6 @@ void MMDBoneTag::SetBoneTag(BaseTag* bone_tag)
 		m_bone_tag = bone_tag;
 	else
 		m_bone_tag = reinterpret_cast<BaseTag*>(Get());
-}
-
-Bool MMDBoneTag::LoadVMD(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting)
-{
-	const auto frame_at = static_cast<int32_t>(data.get_frame_at() + setting.time_offset);
-	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
-
-	std::array<CCurve*, m_track_count> curves{ nullptr };
-
-	const auto track_desc_ids = GetTrackDescIDs();
-
-	for (auto track_index = size_t{}; track_index < m_track_count; ++track_index)
-	{
-		auto& track_id = track_desc_ids[track_index];
-		CTrack* track = m_bone_object->FindCTrack(track_id);
-		if (!track)
-		{
-			track = CTrack::Alloc(m_bone_object, track_id);
-			if (!track)
-			{
-				return false;
-			}
-			m_bone_object->InsertTrackSorted(track);
-		}
-
-		auto& curve = curves[track_index];
-		curve = track->GetCurve();
-		if (!curve)
-		{
-			return false;
-		}
-	}
-	CTrack* frame_at_track = m_bone_tag->FindCTrack(m_frame_at_desc);
-	if (!frame_at_track)
-	{
-		frame_at_track = CTrack::Alloc(m_bone_tag, m_frame_at_desc);
-		if (!frame_at_track)
-		{
-			return false;
-		}
-		m_bone_tag->InsertTrackSorted(frame_at_track);
-	}
-	CCurve* frame_at_curve = frame_at_track->GetCurve();
-	if (!frame_at_curve)
-	{
-		return false;
-	}
-	CKey* frame_key = frame_at_curve->AddKey(frame_at_time);
-	if (!frame_key)
-	{
-		return false;
-	}
-	frame_key->SetValue(frame_at_curve, frame_at);
-
-	auto set_curve_value = [&frame_at_time, &curves](const uint8_t& curve_index, const Float& value)
-		{
-			CCurve* curve = curves[curve_index];
-			CKey* key = curve->AddKey(frame_at_time);
-			if (!key)
-			{
-				return false;
-			}
-			key->SetValue(curve, value);
-			return true;
-		};
-
-	const auto& position = data.get_position();
-	if (!set_curve_value(POSITION_X, maxon::SafeConvert<Float>(position[0]) * setting.position_multiple))
-	{
-		return false;
-	}
-	if (!set_curve_value(POSITION_Y, maxon::SafeConvert<Float>(position[1]) * setting.position_multiple))
-	{
-		return false;
-	}
-	if (!set_curve_value(POSITION_Z, maxon::SafeConvert<Float>(position[2]) * setting.position_multiple))
-	{
-		return false;
-	}
-	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_POSITION_X, frame_at, data.get_position_x_interpolator()))
-	{
-		return false;
-	}
-	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_POSITION_Y, frame_at, data.get_position_y_interpolator()))
-	{
-		return false;
-	}
-	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_POSITION_Z, frame_at, data.get_position_z_interpolator()))
-	{
-		return false;
-	}
-
-	const auto rotation_euler = math_util::QuaternionToEuler(data.get_rotation());
-	if (!set_curve_value(ROTATION_X, maxon::SafeConvert<Float>(rotation_euler.x)))
-	{
-		return false;
-	}
-	if (!set_curve_value(ROTATION_Y, maxon::SafeConvert<Float>(rotation_euler.y)))
-	{
-		return false;
-	}
-	if (!set_curve_value(ROTATION_Z, maxon::SafeConvert<Float>(rotation_euler.z)))
-	{
-		return false;
-	}
-	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator()))
-	{
-		return false;
-	}
-	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator()))
-	{
-		return false;
-	}
-	if (!LoadVMDInterpolator(PMX_BONE_TAG_INTERPOLATOR_ROTATION, frame_at, data.get_rotation_interpolator()))
-	{
-		return false;
-	}
-
-	return true;
 }
 
 NodeData* MMDBoneTag::Alloc()
@@ -334,9 +123,6 @@ Bool MMDBoneTag::Init(GeListNode* node SDK2024_InitParaName)
 	bc->SetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE, 0.0);
 	bc->SetVector(PMX_BONE_LOCAL_X, Vector(1, 0, 0));
 	bc->SetVector(PMX_BONE_LOCAL_Z, Vector(0, 0, 1));
-
-	if (!InitInterpolator(node))
-		return false;
 
 	return SUPER::Init(node SDK2024_InitPara);
 }
@@ -482,48 +268,6 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 			}
 			break;
 		}
-	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
-		{
-			if (m_bone_root == nullptr)
-				return;
-			if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr))
-			{
-				if (SDK2024_Const auto inherit_bone_parent_link = bc->GetBaseLink(id); inherit_bone_parent_link != nullptr)
-				{
-					const auto doc = node->GetDocument();
-					if (!doc)
-						break;
-					inherit_bone_parent_link->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
-					if (SDK2024_Const auto inherit_bone_parent_object = reinterpret_cast<BaseObject*>(inherit_bone_parent->GetLink(doc));
-						inherit_bone_parent_object && inherit_bone_parent_object->IsInstanceOf(Ojoint))
-						if(SDK2024_Const auto inherit_bone_parent_tag = inherit_bone_parent_object->GetTag(ID_T_MMD_BONE))
-						{
-							const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneIndex(inherit_bone_parent_tag);
-							bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index);
-						}
-				}
-			}
-			break;
-		}
-	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
-	{
-		if (!m_bone_root)
-			return;
-		if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_INDEX)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr))
-		{
-			if (SDK2024_Const auto inherit_bone_parent_tag = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBone(bc->GetInt32(id));
-				inherit_bone_parent_tag != nullptr)
-			{
-				if (SDK2024_Const auto inherit_bone_parent_object = inherit_bone_parent_tag->GetObject();
-					inherit_bone_parent_object && inherit_bone_parent_object->IsInstanceOf(Ojoint))
-				{
-					bc->SetLink(PMX_BONE_INHERIT_BONE_PARENT_LINK, inherit_bone_parent_object);
-					inherit_bone_parent->SetLink(inherit_bone_parent_object);
-				}
-			}
-		}
-		break;
-	}
 	case PMX_BONE_LAYER:
 	{
 		if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
@@ -549,79 +293,7 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	}
 }
 
-void MMDBoneTag::CheckUserDataButton(GeListNode* node, const DescriptionCommand* description_command)
-{
-	if (const auto button_id_ptr = button_id_map.Find(description_command->_descId); button_id_ptr != nullptr)
-	{
-		DynamicDescription* const dynamic_description = node->GetDynamicDescriptionWritable();
-		if (dynamic_description == nullptr)
-			return;
-		const auto button_id = button_id_ptr->GetValue();
-		if (button_id == -1)
-			return;
-		BoneMorphData& morph_data = bone_morph_data_arr[button_id];
-		if (description_command->_descId == morph_data.button_delete_id)
-		{
-			if (QuestionDialog(IDS_MES_BONE_MORPH_DELETE, morph_data.name))
-			{
-				dynamic_description->Remove(morph_data.button_delete_id);
-				dynamic_description->Remove(morph_data.button_rename_id);
-				dynamic_description->Remove(morph_data.button_grp_id);
-				dynamic_description->Remove(morph_data.rotation_id);
-				dynamic_description->Remove(morph_data.translation_id);
-				dynamic_description->Remove(morph_data.strength_id);
-				dynamic_description->Remove(morph_data.grp_id);
-				iferr(button_id_map.Erase(morph_data.button_delete_id))
-					return;
-				iferr(button_id_map.Erase(morph_data.button_rename_id))
-					return;
-				for (auto& desc_id : button_id_map.GetKeys())
-				{
-					if (auto index = button_id_map.FindValue(desc_id); *index > button_id)
-					{
-						(*index)--;
-					}
-				}
-				// BONE_MORPH_DELETE
-				MMDBoneTagBoneMorphDeleteMsg msg{ morph_data.name, reinterpret_cast<BaseTag*>(Get()), morph_data.strength_id };
-				m_bone_root->Message(ID_T_MMD_BONE, &msg);
-				iferr(bone_morph_data_arr.Erase(button_id))
-					return;
-				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-				if (::GeIsMainThread())
-				{
-					::EventAdd();
-				}
-			}
-			return;
-		}
-		if (description_command->_descId == morph_data.button_rename_id)
-		{
-			auto new_name = morph_data.name;
-			if (!RenameDialog(&new_name))
-			{
-				BaseContainer description_bc = *dynamic_description->Find(morph_data.grp_id);
-				description_bc.SetString(DESC_NAME, new_name);
-				dynamic_description->Set(morph_data.grp_id, description_bc, nullptr);
-				description_bc = *dynamic_description->Find(morph_data.strength_id);
-				description_bc.SetString(DESC_NAME, new_name);
-				dynamic_description->Set(morph_data.strength_id, description_bc, nullptr);
-				// BONE_MORPH_RENAME
-				MMDBoneTagBoneMorphRenameMsg msg{ morph_data.name, new_name, reinterpret_cast<BaseTag*>(Get()), morph_data.strength_id };
-				m_bone_root->Message(ID_T_MMD_BONE, &msg);
-				morph_data.name = std::move(new_name);
-				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-				if (::GeIsMainThread())
-				{
-					::EventAdd();
-				}
-			}
-			return;
-		}
-	}
-}
-
-void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, const MMDBoneRootObjectMsg* msg) const
+void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, const MMDBoneManagerObjectMsg* msg) const
 {
 	switch (msg->display_type)
 	{
@@ -697,9 +369,9 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 	}
 }
 
-void MMDBoneTag::BoneRootUpdate(BaseContainer* const data_instance_bc, const MMDBoneRootObjectMsg* msg)
+void MMDBoneTag::HandleBoneManagerMessage(BaseContainer* const data_instance_bc, const MMDBoneManagerObjectMsg* msg)
 {
-	m_bone_root = msg->bond_root_object;
+	m_bone_manager = msg->bond_root_object;
 	if (m_bone_object) {
 		BaseObject* up_obj = m_bone_object->GetUp();
 		BaseObject* prev_obj = m_bone_object->GetPred();
@@ -756,8 +428,8 @@ void MMDBoneTag::BoneRootUpdate(BaseContainer* const data_instance_bc, const MMD
 		}
 		bool error = false;
 		if (const Int32 now_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(&error);
-			!error && now_index != prev_index && m_bone_root != nullptr)
-			m_bone_root->Message(ID_T_MMD_BONE, nullptr);
+			!error && now_index != prev_index && m_bone_manager != nullptr)
+			m_bone_manager->Message(ID_T_MMD_BONE, nullptr);
 	}
 }
 
@@ -776,22 +448,6 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 	case MSG_DESCRIPTION_CHECKUPDATE:
 		HandleDescriptionUpdate(node, data_instance_bc, static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id);
 		break;
-	case MSG_DESCRIPTION_COMMAND:
-		{
-			const auto* description_command = static_cast<DescriptionCommand*>(data);
-			if (!description_command)
-				return false;
-			// check if it is a user data button
-			if (description_command->_descId.GetDepth() == 2 && description_command->_descId[0].id == ID_USERDATA)
-			{
-				CheckUserDataButton(node, description_command);
-			}
-			else {
-				if(description_command->_descId[0].id == PMX_BONE_MORPH_ADD_BUTTON)
-					AddBoneMorph(data_instance_bc->GetString(PMX_BONE_MORPH_ADD_NAME));
-			}
-			break;
-		}
 	case MSG_MENUPREPARE:
 		if (const auto doc = static_cast<BaseDocument*>(data); doc)
 		{
@@ -804,18 +460,18 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	case  ID_O_MMD_BONE_ROOT:
-		if (const auto* msg = static_cast<MMDBoneRootObjectMsg*>(data); msg)
+		if (const auto* msg = static_cast<MMDBoneManagerObjectMsg*>(data); msg)
 		{
 			switch (msg->type)
 			{
-			case MMDBoneRootObjectMsgType::SET_BONE_DISPLAY_TYPE:
+			case MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE:
 				SetBoneDisplay(data_instance_bc, msg);
 				break;
-			case MMDBoneRootObjectMsgType::BONE_ROOT_UPDATE:
-				BoneRootUpdate(data_instance_bc, msg);
+			case MMDBoneManagerObjectMsgType::BONE_ROOT_UPDATE:
+				HandleBoneManagerMessage(data_instance_bc, msg);
 				break;
-			case MMDBoneRootObjectMsgType::DEFAULT:
-			case MMDBoneRootObjectMsgType::BONE_MORPH_CHANGE:
+			case MMDBoneManagerObjectMsgType::DEFAULT:
+			case MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE:
 				break;
 			}
 		}
@@ -972,48 +628,6 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 		}
 		break;
 	}
-	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
-	{
-		if (!m_bone_root)
-			break;
-		if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr))
-		{
-			const auto doc = node->GetDocument();
-			if (!doc)
-				break;
-			if (SDK2024_Const auto inherit_bone_parent_link = t_data.GetBaseLink(); inherit_bone_parent_link)
-			{
-				inherit_bone_parent_link->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
-				if (SDK2024_Const auto inherit_bone_parent_object = reinterpret_cast<BaseObject*>(inherit_bone_parent->GetLink(doc));
-					inherit_bone_parent_object && inherit_bone_parent_object->IsInstanceOf(Ojoint))
-					if(SDK2024_Const auto inherit_bone_parent_tag = inherit_bone_parent_object->GetTag(ID_T_MMD_BONE))
-					{
-						const auto inherit_bone_parent_index = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBoneIndex(inherit_bone_parent_tag);
-						bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, inherit_bone_parent_index);
-					}
-			}
-		}
-		break;
-	}
-	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
-	{
-		if (!m_bone_root)
-			break;
-		if (node->GetEnabling(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_INDEX)), GeData(), DESCFLAGS_ENABLE::NONE, nullptr))
-		{
-			if (SDK2024_Const auto inherit_bone_parent_tag = m_bone_root->GetNodeData<MMDBoneRootObject>()->FindBone(t_data.GetInt32());
-				inherit_bone_parent_tag)
-			{
-				if (SDK2024_Const auto inherit_bone_parent_object = inherit_bone_parent_tag->GetObject();
-					inherit_bone_parent_object && inherit_bone_parent_object->IsInstanceOf(Ojoint))
-				{
-					bc->SetLink(PMX_BONE_INHERIT_BONE_PARENT_LINK, inherit_bone_parent_object);
-					inherit_bone_parent->SetLink(inherit_bone_parent_object);
-				}
-			}
-		}
-		break;
-	}
 	case PMX_BONE_LAYER:
 	{
 		if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
@@ -1096,62 +710,6 @@ Bool MMDBoneTag::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, 
 	return true;
 }
 
-void MMDBoneTag::HandleInheritParentBone(const BaseDocument* doc, BaseObject* op, const BaseContainer* bc)
-{
-	auto CheckInheritBoneParentFunc = [this, &doc, &bc](const std::function<void(const BaseObject*)>& UpdateFunc)
-	{
-		if (const auto inherit_bone_parent_object = reinterpret_cast<const BaseObject*>(inherit_bone_parent->GetLink(doc, Ojoint));
-			inherit_bone_parent_object) {
-			UpdateFunc(inherit_bone_parent_object);
-		}
-	};
-
-	if (bc->GetBool(PMX_BONE_INHERIT_ROTATION))
-	{
-		CheckInheritBoneParentFunc([&op, &bc](const BaseObject* inherit_bone_parent_object)
-		{
-			op->SetRelRot(inherit_bone_parent_object->GetRelRot() * bc->GetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE));
-		});
-	}
-	if (bc->GetBool(PMX_BONE_INHERIT_TRANSLATION))
-	{
-		CheckInheritBoneParentFunc([&op, &bc](const BaseObject* inherit_bone_parent_object)
-		{
-			op->SetRelPos(inherit_bone_parent_object->GetRelPos() * bc->GetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE));
-		});
-	}
-}
-
-void MMDBoneTag::HandleBoneMorphUpdate(SDK2024_Const BaseTag* tag, BaseObject* op)
-{
-	GeData ge_data;
-	op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), ge_data, DESCFLAGS_GET::NONE);
-	const Vector op_position = ge_data.GetVector() - prev_position;
-	prev_position = Vector(0);
-	op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), ge_data, DESCFLAGS_GET::NONE);
-	const Vector op_rotation = ge_data.GetVector() - prev_rotation;
-	prev_rotation = Vector(0);
-
-	for (const auto& id : bone_morph_data_arr)
-	{
-		Float strength = 0;
-		if (tag->GetParameter(id.strength_id, ge_data, DESCFLAGS_GET::NONE))
-		{
-			strength = ge_data.GetFloat();
-		}
-		if (tag->GetParameter(id.translation_id, ge_data, DESCFLAGS_GET::NONE))
-		{
-			prev_position += ge_data.GetVector() * strength;
-		}
-		if (tag->GetParameter(id.rotation_id, ge_data, DESCFLAGS_GET::NONE))
-		{
-			prev_rotation += ge_data.GetVector() * strength;
-		}
-	}
-	op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), op_position + prev_position, DESCFLAGS_SET::NONE);
-	op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), op_rotation + prev_rotation, DESCFLAGS_SET::NONE);
-}
-
 bool MMDBoneTag::CreateBoneLockTag()
 {
 	if(!m_bone_object)
@@ -1193,112 +751,6 @@ void MMDBoneTag::SetPositionLock(const bool flag) const
 	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
 }
 
-void MMDBoneTag::HandleBoneIndexUpdate(BaseTag* tag, BaseObject* op, BaseContainer* bc)
-{
-	BaseObject* up_obj = op->GetUp();
-	BaseObject* prev_obj = op->GetPred();
-	const Int32	prev_index = m_bone_index;
-	if (up_obj)
-	{
-		GeData Ge_data;
-		BaseObject* tmp_lase_obj;
-		BaseObject* lase_obj;
-		BaseTag* lase_tag;
-		if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
-		{
-			tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_PARENT_BONE_NAME)), up_obj->GetName(), DESCFLAGS_SET::NONE);
-			if (SDK2024_Const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE); up_tag)
-			{
-				up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-				bc->SetData(PMX_BONE_PARENT_BONE_INDEX, Ge_data);
-				if (!prev_obj)
-				{
-					up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-					m_bone_index = Ge_data.GetString().ToInt32(nullptr) + 1;
-				}
-				else
-				{
-					lase_obj = prev_obj;
-					// Get the previous bone
-					while (prev_obj != nullptr && !prev_obj->IsInstanceOf(Ojoint)) {
-						lase_obj = prev_obj;
-						prev_obj = prev_obj->GetPred();
-					}
-					// Get the last bone
-					tmp_lase_obj = lase_obj->GetDownLast();
-					while (tmp_lase_obj != nullptr)
-					{
-						if (tmp_lase_obj->IsInstanceOf(Ojoint)) {
-							lase_obj = tmp_lase_obj;
-							tmp_lase_obj = tmp_lase_obj->GetDownLast();
-						}
-						else {
-							tmp_lase_obj = tmp_lase_obj->GetPred();
-						}
-					}
-					lase_tag = lase_obj->GetTag(ID_T_MMD_BONE);
-					if (lase_tag != nullptr)
-					{
-						lase_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-						m_bone_index = Ge_data.GetString().ToInt32(nullptr) + 1;
-					}
-				}
-			}
-		}
-		else
-		{
-			if (!prev_obj)
-			{
-				if (!m_bone_root)
-				{
-					m_bone_root = up_obj;
-					const maxon::StrongRef<MMDBoneRootObjectMsg> BoneRoot_msg(NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::BONE_ROOT_UPDATE, 0, up_obj).GetValue());
-					op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
-				}
-				m_bone_index = 0;
-			}
-			else {
-				lase_obj = prev_obj;
-				// Get the previous bone
-				while (prev_obj != nullptr && !prev_obj->IsInstanceOf(Ojoint)) {
-					lase_obj = prev_obj;
-					prev_obj = prev_obj->GetPred();
-				}
-				// Get the last bone
-				tmp_lase_obj = lase_obj->GetDownLast();
-				while (tmp_lase_obj != nullptr)
-				{
-					if (tmp_lase_obj->IsInstanceOf(Ojoint)) {
-						lase_obj = tmp_lase_obj;
-						tmp_lase_obj = tmp_lase_obj->GetDownLast();
-					}
-					else {
-						tmp_lase_obj = tmp_lase_obj->GetPred();
-					}
-				}
-				lase_tag = lase_obj->GetTag(ID_T_MMD_BONE);
-				if (lase_tag != nullptr)
-				{
-					lase_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-					m_bone_index = Ge_data.GetString().ToInt32(nullptr) + 1;
-				}
-			}
-		}
-	}
-	else {
-		m_bone_root = nullptr;
-		const maxon::StrongRef<MMDBoneRootObjectMsg> BoneRoot_msg(NewObj(MMDBoneRootObjectMsg, MMDBoneRootObjectMsgType::BONE_ROOT_UPDATE, 0, nullptr).GetValue());
-		op->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, BoneRoot_msg);
-		m_bone_index = 0;
-	}
-	if (m_bone_root && m_bone_index != prev_index) {
-		bc->SetString(PMX_BONE_INDEX, String::IntToString(m_bone_index));
-		// BONE_INDEX_CHANGE
-		MMDBoneTagBoneIndexChangeMsg msg{};
-		m_bone_root->Message(ID_T_MMD_BONE, &msg);
-	}
-}
-
 EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority,
                                     EXECUTIONFLAGS flags)
 {
@@ -1316,11 +768,19 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 		m_bone_tag = tag;
 
 	HandleBoneLockUpdate(bc);
-	HandleBoneIndexUpdate(tag, op, bc);
-	HandleInheritParentBone(doc, op, bc);
-	HandleBoneMorphUpdate(tag, op);
 
-	return ExecuteImpl(op, doc, bt, priority, flags);
+	if (m_mmd_node)
+	{
+		const auto AnimationTranslate = m_mmd_node->GetAnimationTranslate();
+		const auto AnimationRotate = m_mmd_node->GetAnimationRotate();
+
+		const auto Ml = maxon::Matrix{Vector{AnimationTranslate.x, AnimationTranslate.y, AnimationRotate.z},
+			maxon::Quaternion64(AnimationRotate.x, AnimationRotate.y, AnimationRotate.z, AnimationRotate.w).GetMatrix()};
+
+		m_bone_object->SetMl(Ml);
+	}
+
+	return EXECUTIONRESULT::OK;
 }
 
 Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
@@ -1329,49 +789,14 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return false;
 	};
 	{
-		AutoAlloc<BaseLink> bone_root_link;
-		if (!bone_root_link)
+		AutoAlloc<BaseLink> bone_manager_link;
+		if (!bone_manager_link)
 			return false;
-		if (!bone_root_link->Read(hf))
+		if (!bone_manager_link->Read(hf))
 			return false;
-		m_bone_root = reinterpret_cast<BaseObject*>(bone_root_link->ForceGetLink());
+		m_bone_manager = reinterpret_cast<BaseObject*>(bone_manager_link->ForceGetLink());
 	}
-	if (!hf->ReadInt32(&this->m_bone_morph_name_index))
-		return false;
-	if (!hf->ReadInt32(&this->prev_frame))
-		return false;
-	if (!hf->ReadInt32(&this->prev_interpolator_type))
-		return false;
-	if (!hf->ReadVector64(&this->prev_position))
-		return false;
-	if (!hf->ReadVector64(&this->prev_rotation))
-		return false;
-	Int button_id_num = 0;
-	if (!hf->ReadInt64(&button_id_num))
-		return false;
-	for (Int button_index = 0; button_index < button_id_num; button_index++)
-	{
-		DescID button_id;
-		if (!button_id.Read(hf))
-			return false;
-		Int morph_index = 0;
-		if (!hf->ReadInt64(&morph_index))
-			return false;
-		this->button_id_map.Insert(std::move(button_id), morph_index) iferr_return;
-	}
-	Int morph_num = 0;
-	if (!hf->ReadInt64(&morph_num))
-		return false;
-	bone_morph_data_arr.EnsureCapacity(morph_num)iferr_return;
-	for (Int morph_index = 0; morph_index < morph_num; morph_index++)
-	{
-		auto& bone_morph = bone_morph_data_arr.Append()iferr_return;
-		if (!bone_morph.Read(hf))
-			return false;
-	}
-	if(GeData data; node->GetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), data, DESCFLAGS_GET::NONE))
-		if(const auto link = data.GetBaseLink())
-			link->CopyTo(inherit_bone_parent, COPYFLAGS::NONE, nullptr);
+
 	return SUPER::Read(node, hf, level);
 }
 
@@ -1380,237 +805,16 @@ Bool MMDBoneTag::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Co
 	iferr_scope_handler{
 		return false;
 	};
-	AutoAlloc<BaseLink> bone_root_link;
-	if (!bone_root_link)
+	AutoAlloc<BaseLink> bone_manager_link;
+	if (!bone_manager_link)
 		return false;
-	bone_root_link->SetLink(m_bone_root);
-	if (!bone_root_link->Write(hf))
+	bone_manager_link->SetLink(m_bone_manager);
+	if (!bone_manager_link->Write(hf))
 		return false;
-	if (!hf->WriteInt32(this->m_bone_morph_name_index))
-		return false;
-	if (!hf->WriteInt32(this->prev_frame))
-		return false;
-	if (!hf->WriteInt32(this->prev_interpolator_type))
-		return false;
-	if (!hf->WriteVector64(this->prev_position))
-		return false;
-	if (!hf->WriteVector64(this->prev_rotation))
-		return false;
-	if (!hf->WriteInt64(button_id_map.GetCount()))
-		return false;
-	for (SDK2024_Const auto& button_id : button_id_map)
-	{
-		if (!const_cast<DescID&>(button_id.GetKey()).Write(hf))
-			return false;
-		if (!hf->WriteInt64(button_id.GetValue()))
-			return false;
-	}
-	if (!hf->WriteInt64(bone_morph_data_arr.GetCount()))
-		return false;
-	for (SDK2024_Const auto& bone_morph : bone_morph_data_arr)
-	{
-		if (!bone_morph.Write(hf))
-			return false;
-	}
 	return SUPER::Write(node, hf);
-}
-
-Bool MMDBoneTag::IsPhysicalBone() const
-{
-	return m_is_physical_bone;
-}
-
-void MMDBoneTag::SetPhysical(const Bool is_physical_bone)
-{
-	m_is_physical_bone = is_physical_bone;
-}
-
-Int MMDBoneTag::AddBoneMorph(String morph_name)
-{
-	iferr_scope_handler
-	{
-		return NOTOK;
-	};
-	if (!m_bone_tag)
-		return NOTOK;
-	if (morph_name.IsEmpty())
-	{
-		morph_name = "morph_" + String::IntToString(m_bone_morph_name_index);
-		m_bone_morph_name_index++;
-	}
-	DynamicDescription* const dynamic_description = m_bone_tag->GetDynamicDescriptionWritable();
-	if (!dynamic_description)
-		return NOTOK;
-	BaseContainer grp_bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-	grp_bc.SetString(DESC_NAME, morph_name);
-	grp_bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(PMX_BONE_MORPH_GRP))));
-	auto grp_id = dynamic_description->Alloc(grp_bc);
-	BaseContainer strength_bc = GetCustomDataTypeDefault(DTYPE_REAL);
-	strength_bc.SetString(DESC_NAME, morph_name);
-	strength_bc.SetFloat(DESC_MAX, 1.);
-	strength_bc.SetFloat(DESC_MIN, 0.);
-	strength_bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
-	strength_bc.SetFloat(DESC_MAXSLIDER, 1.);
-	strength_bc.SetFloat(DESC_MINSLIDER, 0.);
-	strength_bc.SetFloat(DESC_STEP, 0.01);
-	strength_bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	strength_bc.SetData(DESC_PARENTGROUP, DescIDGeData(grp_id));
-	BaseContainer translation_bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
-	translation_bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_TRANSLATION));
-	translation_bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
-	translation_bc.SetData(DESC_PARENTGROUP, DescIDGeData(grp_id));
-	BaseContainer rotation_bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
-	rotation_bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_ROTATION));
-	rotation_bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
-	rotation_bc.SetData(DESC_PARENTGROUP, DescIDGeData(grp_id));
-	BaseContainer button_grp_bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-	button_grp_bc.SetInt32(DESC_COLUMNS, 2);
-	button_grp_bc.SetData(DESC_PARENTGROUP, DescIDGeData(grp_id));
-	auto button_grp_id = dynamic_description->Alloc(button_grp_bc);
-	BaseContainer button_delete_bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	button_delete_bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
-	button_delete_bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	button_delete_bc.SetData(DESC_PARENTGROUP, DescIDGeData(button_grp_id));
-	BaseContainer button_rename_bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	button_rename_bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
-	button_rename_bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	button_rename_bc.SetData(DESC_PARENTGROUP, DescIDGeData(button_grp_id));
-	const auto& morph_data = bone_morph_data_arr.SDK2024_Append(
-		morph_name,
-		SDK2024_Move(grp_id),
-		dynamic_description->Alloc(strength_bc),
-		dynamic_description->Alloc(translation_bc),
-		dynamic_description->Alloc(rotation_bc),
-		SDK2024_Move(button_grp_id),
-		dynamic_description->Alloc(button_delete_bc),
-		dynamic_description->Alloc(button_rename_bc))iferr_return;
-	const Int index = bone_morph_data_arr.GetCount() - 1;
-	iferr(button_id_map.Insert(morph_data.button_delete_id, index))
-		return NOTOK;
-	iferr(button_id_map.Insert(morph_data.button_rename_id, index))
-		return NOTOK;
-	// BONE_MORPH_ADD
-	MMDBoneTagBoneMorphAddMsg msg{ std::move(morph_name), reinterpret_cast<BaseTag*>(Get()), morph_data.strength_id };
-	m_bone_root->Message(ID_T_MMD_BONE, &msg);
-	if (GeIsMainThread())
-	{
-		SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-		EventAdd();
-	}
-	return index;
-}
-
-bool MMDBoneTag::CheckBoneMorphIndex(const Int index) const
-{
-	if (index < 0 || index >= GetBoneMorphCount())
-	{
-		return false;
-	}
-	return true;
 }
 
 Int32 MMDBoneTag::GetBoneIndex() const
 {
 	return m_bone_index;
-}
-
-Bool MMDBoneTag::SetBoneMorphTranslation(const Int index, const Vector& translation)
-{
-	if (!CheckBoneMorphIndex(index))
-		return nullptr;
-	return Get()->SetParameter(bone_morph_data_arr[index].translation_id, translation, DESCFLAGS_SET::NONE);
-}
-
-Bool MMDBoneTag::SetBoneMorphRotation(const Int index, const Vector& rotation)
-{
-	if (!CheckBoneMorphIndex(index))
-		return nullptr;
-	return Get()->SetParameter(bone_morph_data_arr[index].rotation_id, rotation, DESCFLAGS_SET::NONE);
-}
-
-Bool MMDBoneTag::SetBoneMorphTranslationNoCheck(Int index, const Vector& translation)
-{
-	return Get()->SetParameter(bone_morph_data_arr[index].translation_id, translation, DESCFLAGS_SET::NONE);
-}
-
-Bool MMDBoneTag::SetBoneMorphRotationNoCheck(Int index, const Vector& rotation)
-{
-	return Get()->SetParameter(bone_morph_data_arr[index].rotation_id, rotation, DESCFLAGS_SET::NONE);
-}
-
-Int MMDBoneTag::GetBoneMorphCount() const
-{
-	return bone_morph_data_arr.GetCount();
-}
-
-BoneMorphData* MMDBoneTag::GetBoneMorph(const Int index)
-{
-	if (!CheckBoneMorphIndex(index))
-		return nullptr;
-	return &bone_morph_data_arr[index];
-}
-
-BoneMorphData* MMDBoneTag::GetBoneMorphNoCheck(const Int index)
-{
-	return &bone_morph_data_arr[index];
-}
-
-MMDBoneTag::TrackDescIDArray MMDBoneTag::GetTrackDescIDs()
-{
-	return GetTrackDescIDsImpl();
-}
-
-MMDBoneTag::TrackObjectArray MMDBoneTag::GetTrackObjects(
-	GeListNode* node)
-{
-	const auto TrackArray = TrackObjectArray
-	{
-		m_bone_object,		// POSITION_X
-		m_bone_object,		// POSITION_Y
-		m_bone_object,		// POSITION_Z
-		m_bone_object,		// ROTATION_X
-		m_bone_object,		// ROTATION_Y
-		m_bone_object		// ROTATION_Z
-	};
-	return TrackArray;
-}
-
-MMDBoneTag::InterpolatorTrackTableArray MMDBoneTag::
-GetTrackInterpolatorMap()
-{
-	static constexpr InterpolatorTrackTableArray track_interpolator_map
-	{
-		PMX_BONE_TAG_INTERPOLATOR_POSITION_X,
-		PMX_BONE_TAG_INTERPOLATOR_POSITION_Y,
-		PMX_BONE_TAG_INTERPOLATOR_POSITION_Z,
-		PMX_BONE_TAG_INTERPOLATOR_ROTATION,
-		PMX_BONE_TAG_INTERPOLATOR_ROTATION,
-		PMX_BONE_TAG_INTERPOLATOR_ROTATION,
-	};
-	return track_interpolator_map;
-}
-
-MMDBoneTag::CurrentValuesArray MMDBoneTag::GetCurrentValues(
-	GeListNode* node)
-{
-	if (!m_bone_object)
-	{
-		constexpr CurrentValuesArray current_values{};
-		return current_values;
-	}
-
-	const Vector RelPos = m_bone_object->GetRelPos();
-	const Vector RelRot = m_bone_object->GetRelRot();
-
-	const CurrentValuesArray current_values
-	{
-		RelPos.x,	// POSITION_X
-		RelPos.y,	// POSITION_Y
-		RelPos.z,	// POSITION_Z
-		RelRot.x,	// ROTATION_X
-		RelRot.y,	// ROTATION_Y
-		RelRot.z,	// ROTATION_Z
-	};
-
-	return current_values;
 }

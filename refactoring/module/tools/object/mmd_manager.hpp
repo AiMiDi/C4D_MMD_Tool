@@ -3,22 +3,21 @@
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2023/09/12
-File:			mmd_root.hpp
-Description:	MMD root object
+File:			mmd_manager.hpp
+Description:	MMD manager object
 
 **************************************************************************/
 
-#ifndef MMD_ROOT_H__
-#define MMD_ROOT_H__
+#pragma once
 
-class MMDRootObject : public ObjectData
+class MMDManagerObject : public ObjectData
 {
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRootObject)
-	CMT_DEFAULT_MOVE_BODY(MMDRootObject)
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDManagerObject)
+	CMT_DEFAULT_MOVE_BODY(MMDManagerObject)
 	INSTANCEOF(MMDRootObject, ObjectData)
 protected:
-	MMDRootObject() = default;
-	~MMDRootObject() override = default;
+	MMDManagerObject() = default;
+	~MMDManagerObject() override = default;
 
 	BaseTag* m_display_tag = nullptr;
 	BaseTag* m_protection_tag = nullptr;
@@ -82,5 +81,3 @@ protected:
 		return SUPER::Write(node, hf);
 	}
 };
-
-#endif

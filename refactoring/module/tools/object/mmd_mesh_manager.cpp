@@ -9,21 +9,21 @@ Description:	MMD mesh root object
 **************************************************************************/
 
 #include "pch.h"
-#include "mmd_mesh_root.h"
+#include "mmd_mesh_manager.h"
 
 #include "CMTSceneManager.h"
-#include "mmd_bone_root.h"
+#include "mmd_bone_manager.h"
 #include "mmd_model.h"
 #include "tcaposemorph.h"
 #include "description/OMMDMeshRoot.h"
 #include "module/tools/mmd_material.h"
 
-NodeData* MMDMeshRootObject::Alloc()
+NodeData* MMDMeshManagerObject::Alloc()
 {
-	return NewObjClear(MMDMeshRootObject);
+	return NewObjClear(MMDMeshManagerObject);
 }
 
-Bool MMDMeshRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
+Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
 		return false;
@@ -89,7 +89,7 @@ Bool MMDMeshRootObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDMeshRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
+Bool MMDMeshManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
 	{
 		AutoAlloc<BaseLink> temp_link;
@@ -134,13 +134,13 @@ Bool MMDMeshRootObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK
 	return SUPER::Write(node, hf);
 }
 
-Bool MMDMeshRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
+Bool MMDMeshManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
 	AliasTrans* trn) SDK2024_Const
 {
 	iferr_scope_handler{
 		return false;
 	};
-	auto const dest_object = reinterpret_cast<MMDMeshRootObject*>(dest);
+	auto const dest_object = reinterpret_cast<MMDMeshManagerObject*>(dest);
 	dest_object->m_model_root = m_model_root;
 	for (const auto& entry : m_tag_mode_map)
 	{
@@ -153,7 +153,7 @@ Bool MMDMeshRootObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, 
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
-Bool MMDMeshRootObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
+Bool MMDMeshManagerObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	const auto op = reinterpret_cast<BaseObject*>(node);
 	CreateDisplayTag(node);
@@ -217,7 +217,7 @@ Bool MMDMeshRootObject::SetDParameter(GeListNode* node, const DescID& id, const 
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 
-Bool MMDMeshRootObject::Message(GeListNode* node, Int32 type, void* data)
+Bool MMDMeshManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	if (type == ID_O_MMD_MODEL)
 	{
@@ -229,7 +229,7 @@ Bool MMDMeshRootObject::Message(GeListNode* node, Int32 type, void* data)
 	return SUPER::Message(node, type, data);
 }
 
-EXECUTIONRESULT MMDMeshRootObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
+EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
 	EXECUTIONFLAGS flags)
 {
 	if (!m_model_root)
@@ -243,7 +243,7 @@ EXECUTIONRESULT MMDMeshRootObject::Execute(BaseObject* op, BaseDocument* doc, Ba
 	return SUPER::Execute(op, doc, bt, priority, flags);
 }
 
-Bool MMDMeshRootObject::AddToExecution(BaseObject* op, PriorityList* list)
+Bool MMDMeshManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (list && op)
 	{
@@ -252,12 +252,12 @@ Bool MMDMeshRootObject::AddToExecution(BaseObject* op, PriorityList* list)
 	return SUPER::AddToExecution(op, list);
 }
 
-const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& MMDMeshRootObject::GetMeshMorphData() const
+const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& MMDMeshManagerObject::GetMeshMorphData() const
 {
 	return m_mesh_morph_data;
 }
 
-Bool MMDMeshRootObject::SetMeshMorphStrength(const String& morph_name, Float strength)
+Bool MMDMeshManagerObject::SetMeshMorphStrength(const String& morph_name, Float strength)
 {
 	const auto morph_ptr = m_mesh_morph_data.Find(morph_name);
 	if (!morph_ptr)
@@ -302,7 +302,7 @@ maxon::HashInt vertex_info::GetHashCode() const
 	return MAXON_HASHCODE(mesh_object, vertex_index);
 }
 
-Bool MMDMeshRootObject::LoadPMX(
+Bool MMDMeshManagerObject::LoadPMX(
 	const libmmd::pmx_model& pmx_model,
 	const maxon::BaseArray<BaseObject*>& bone_list,
 	const CMTToolsSetting::ModelImport& setting)
@@ -582,7 +582,7 @@ Bool MMDMeshRootObject::LoadPMX(
 			weight_tag->WeightDirty();
 #if API_VERSION >= 21000
 			weight_tag->SetBindPose(setting.doc, false);
-#else		
+#else
 			DescriptionCommand dc;
 			dc._descId = DescID(ID_CA_WEIGHT_TAG_SET);
 			weight_tag->Message(MSG_DESCRIPTION_COMMAND, &dc);
@@ -1079,7 +1079,7 @@ Bool MMDMeshRootObject::LoadPMX(
 				weight_tag->WeightDirty();
 #if API_VERSION >= 21000
 				weight_tag->SetBindPose(setting.doc, false);
-#else		
+#else
 				DescriptionCommand dc;
 				dc._descId = DescID(ID_CA_WEIGHT_TAG_SET);
 				weight_tag->Message(MSG_DESCRIPTION_COMMAND, &dc);
@@ -1305,12 +1305,12 @@ Bool MMDMeshRootObject::LoadPMX(
 	return true;
 }
 
-Bool MMDMeshRootObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting)
+Bool MMDMeshManagerObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting)
 {
 	return false;
 }
 
-void MMDMeshRootObject::RefreshMeshMorphData(BaseObject* op)
+void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op)
 {
 	iferr_scope_handler{};
 
@@ -1401,7 +1401,7 @@ void MMDMeshRootObject::RefreshMeshMorphData(BaseObject* op)
 	}
 	if (need_update_morph == true) {
 		if (m_model_root != nullptr) {
-			MMDMeshRootObjectMsg msg{ MMDMeshRootObjectMsgType::MESH_MORPH_CHANGE };
+			MMDMeshManagerObjectMsg msg{ MMDMeshManagerObjectMsgType::MESH_MORPH_CHANGE };
 			m_model_root->Message(ID_O_MMD_MESH_ROOT, &msg);
 		}
 	}

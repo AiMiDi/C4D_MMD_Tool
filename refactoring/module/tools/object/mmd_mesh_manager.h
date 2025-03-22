@@ -14,7 +14,7 @@ Description:	MMD mesh root object
 #include "CMTSceneManager.h"
 #include "CMTSceneManager.h"
 #include "CMTSceneManager.h"
-#include "mmd_root.hpp"
+#include "mmd_manager.hpp"
 #include "utils/morph_ui_data_util.hpp"
 
 namespace CMTToolsSetting
@@ -22,29 +22,29 @@ namespace CMTToolsSetting
 	struct ModelImport;
 }
 
-enum class MMDMeshRootObjectMsgType : uint8_t
+enum class MMDMeshManagerObjectMsgType : uint8_t
 {
 	DEFAULT,
 	MESH_MORPH_CHANGE
 };
-struct MMDMeshRootObjectMsg
+struct MMDMeshManagerObjectMsg
 {
-	MMDMeshRootObjectMsgType type = MMDMeshRootObjectMsgType::DEFAULT;
-	explicit MMDMeshRootObjectMsg(const MMDMeshRootObjectMsgType type_ = MMDMeshRootObjectMsgType::DEFAULT) : type(type_) {}
+	MMDMeshManagerObjectMsgType type = MMDMeshManagerObjectMsgType::DEFAULT;
+	explicit MMDMeshManagerObjectMsg(const MMDMeshManagerObjectMsgType type_ = MMDMeshManagerObjectMsgType::DEFAULT) : type(type_) {}
 };
 
-class MMDMeshRootObject final : public MMDRootObject
+class MMDMeshManagerObject final : public MMDManagerObject
 {
 	BaseObject* m_model_root = nullptr;
 	maxon::HashMap<BaseTag*, Int32> m_tag_mode_map;
 	maxon::HashMap<String, maxon::BaseList<MorphUIData>> m_mesh_morph_data;
 
-	MMDMeshRootObject() = default;
-	~MMDMeshRootObject() override = default;
+	MMDMeshManagerObject() = default;
+	~MMDMeshManagerObject() override = default;
 
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDMeshRootObject)
-	CMT_DEFAULT_MOVE_BODY(MMDMeshRootObject)
-	INSTANCEOF(MMDMeshRootObject, MMDRootObject)
+	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDMeshManagerObject)
+	CMT_DEFAULT_MOVE_BODY(MMDMeshManagerObject)
+	INSTANCEOF(MMDMeshRootObject, MMDManagerObject)
 public:
 	static NodeData* Alloc();
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
