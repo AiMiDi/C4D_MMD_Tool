@@ -95,22 +95,22 @@ void LoadVmdMotionLog::LogSelectError()
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 }
 
-void LoadPmxModelLog::Set(const libmmd::pmx_model& model, const CMTToolsSetting::ModelImport& setting)
+void LoadModelLog::Set(const std::shared_ptr<saba::MMDModel>& model, const CMTToolsSetting::ModelImport& setting)
 {
-	model_name_local = model.get_model_name_local().c_str();
-	comments_local = model.get_comments_local().c_str();
-	model_name_universal = model.get_model_name_universal().c_str();
-	comments_universal = model.get_comments_universal().c_str();
+	model_name_local = model->GetModelName().c_str();
+	comments_local = model->GetComment().c_str();
+	model_name_universal = model->GetEnglishModelName().c_str();
+	comments_universal = model->GetEnglishComment().c_str();
 
-	vertex_data_count = setting.import_polygon ? model.get_pmx_vertex_array().size() : 0;
-	surface_data_count = setting.import_polygon ? model.get_pmx_surface_array().size() : 0;
-	texture_data_count = setting.import_material ? model.get_pmx_texture_array().size() : 0;
-	material_data_count = setting.import_material ? model.get_pmx_material_array().size() : 0;
-	bone_data_count = setting.import_bone ? model.get_pmx_bone_array().size() : 0;
-	morph_data_count = setting.import_expression ? model.get_pmx_morph_array().size() : 0;
+	vertex_data_count = setting.import_polygon ? model->GetVertexCount() : 0;
+	surface_data_count = setting.import_polygon ? model->GetSubMeshCount() : 0;
+	texture_data_count = setting.import_material ? model->GetMaterialCount() : 0;
+	material_data_count = setting.import_material ? model->GetMaterialCount() : 0;
+	bone_data_count = setting.import_bone ? model->GetNodeManager()->GetNodeCount() : 0;
+	morph_data_count = setting.import_expression ? model->GetMorphManager()->GetMorphCount() : 0;
 }
 
-void LoadPmxModelLog::LogOK()
+void LoadModelLog::LogOK()
 {
 	timing.Stop();
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_MOD_OK,
@@ -130,7 +130,7 @@ void LoadPmxModelLog::LogOK()
 		             String::FloatToString(timing.GetMilliseconds())));
 }
 
-BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const saba::VMDCameraAnimation& data)
+BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<saba::VMDCameraAnimation> animation)
 {
 	// create camera
 	BaseObject* vmd_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
@@ -143,23 +143,21 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 	vmd_camera->SetName(setting.fn.GetFileString());
 	auto* vmd_camera_data = vmd_camera->GetNodeData<MMDCamera>();
 	vmd_camera_data->CameraInit();
-
-	// set camera with vmd data
-	const auto& vmd_camera_key_frame_array = data.get_vmd_camera_key_frame_array();
-	vmd_camera_data->LoadVMDCamera(data, setting);
-
 	EventAdd();
+
 	// set document with vmd length
-	if(vmd_camera_key_frame_array.size() > 0)
-		setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(),
-			BaseTime(vmd_camera_key_frame_array[vmd_camera_key_frame_array.size() - 1ULL].get_frame_at(), 30.0)));
+	if(animation->GetKeyCount() > 0)
+		setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(), BaseTime(animation->GetMaxKeyTime(), 30.0)));
 	setting.doc->SetTime(BaseTime{ 1.0 });
 	setting.doc->SetTime(BaseTime{});
+
+	// set camera with vmd data
+	vmd_camera_data->LoadVMDCamera(std::move(animation), setting);
 
 	return vmd_camera;
 }
 
-BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::vmd_animation* data)
+BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, saba::VMDFile& data)
 {
 	BaseObject* select_object = setting.doc->GetActiveObject();
 	if (select_object == nullptr)

@@ -17,7 +17,8 @@ namespace CMTToolsManager
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
 		LoadVmdCameraLog log;
-		const auto vmd_camera_animation = std::make_unique<saba::VMDCameraAnimation>();
+
+		auto vmd_camera_animation = std::make_unique<saba::VMDCameraAnimation>();
 		if(!vmd_camera_animation)
 		{
 			LoadVmdCameraLog::LogOutMem();
@@ -38,8 +39,8 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		log.camera_frame_number = vmd_file.m_cameras.size();
-		if (!CMTSceneManager::LoadVMDCamera(setting, *vmd_camera_animation))
+		log.camera_frame_number = vmd_camera_animation->GetKeyCount();
+		if (!CMTSceneManager::LoadVMDCamera(setting, std::move(vmd_camera_animation)))
 		{
 			return false;
 		}
@@ -122,28 +123,29 @@ namespace CMTToolsManager
 	{
 		if (setting.import_english_check)
 
+		LoadModelLog log;
 
 		LoadPmxModelLog log;
 
 		std::unique_ptr<saba::MMDModel> model;
 		if(setting.fn.CheckSuffix("pmx"_s))
 		{
-			model = std::make_unique<saba::PMXModel>();
+			model = std::make_shared<saba::PMXModel>();
 
 		}
 		else if(setting.fn.CheckSuffix("pmd"_s))
 		{
-			model = std::make_unique<saba::PMDModel>();
+			model = std::make_shared<saba::PMDModel>();
 		}
 		else
 		{
-			LoadPmxModelLog::LogReadFileErr();
+			LoadModelLog::LogReadFileErr();
 			return false;
 		}
 
 		if (!model)
 		{
-			LoadPmxModelLog::LogOutMem();
+			LoadModelLog::LogOutMem();
 			return false;
 		}
 
@@ -158,12 +160,12 @@ namespace CMTToolsManager
 		if (const std::string model_path= string_util::GetStdString(setting.fn.GetString());
 			!model->Load(model_path, mmd_data_path))
 		{
-			LoadPmxModelLog::LogReadFileErr();
+			LoadModelLog::LogReadFileErr();
 			return false;
 		}
 
 
-		log.Set(*model, setting);
+		log.Set(model, setting);
 		if (!CMTSceneManager::LoadPMXModel(setting, *pmx_model))
 		{
 			return false;

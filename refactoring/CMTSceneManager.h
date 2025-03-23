@@ -60,7 +60,7 @@ struct SaveVmdMotionLog : IOLog
 {
 };
 
-struct LoadPmxModelLog : IOLog
+struct LoadModelLog : IOLog
 {
 	String model_name_local;
 	String comments_local;
@@ -74,7 +74,7 @@ struct LoadPmxModelLog : IOLog
 	UInt bone_data_count = 0;
 	UInt morph_data_count = 0;
 
-	void Set(const libmmd::pmx_model& model, const CMTToolsSetting::ModelImport& setting);
+	void Set(const std::shared_ptr<saba::MMDModel>& model, const CMTToolsSetting::ModelImport& setting);
 	void LogOK();
 	static void LogMMDDataPathErr();
 };
@@ -102,8 +102,8 @@ public:
 		return NewObjClear(CMTSceneManager);
 	}
 
-	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const saba::VMDCameraAnimation& data);
-	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::vmd_animation* data);
+	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<saba::VMDCameraAnimation> animation);
+	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, saba::VMDFile& data);
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
 	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::vmd_animation& data, LoadVmdMotionLog& log);

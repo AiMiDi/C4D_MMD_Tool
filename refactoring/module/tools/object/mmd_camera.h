@@ -17,12 +17,15 @@ Description:	C4D MMD camera object
 
 using MMDCameraBase = MMDInterpolatorNode<ObjectData, 8, VMD_CAM_OBJ_INTERPOLATOR_NUM, VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_AT, VMD_CAM_OBJ_FRAME_AT_STR>;
 
-class MMDCamera final : public MMDCameraBase
+class MMDCamera final : public ObjectData
 {
-	INSTANCEOF(MMDCamera, MMDCameraBase)
+	INSTANCEOF(MMDCamera, ObjectData)
 
 	// Default camera distance
 	inline static Float default_distance = 0;
+	static constexpr size_t track_count = 8;
+
+	static constexpr DescID frame_at_desc = ConstDescID(DescLevel(VMD_CAM_OBJ_FRAME_AT));
 
 	// Maintained camera object
 	BaseObject* m_camera = nullptr;
@@ -76,32 +79,24 @@ public:
 	 */
 	MMDCamera& operator=(MMDCamera&& other) noexcept;
 
-public:
 	// Get maintained camera object
 	[[nodiscard]] BaseObject* GetCamera() const;
 
 	// Initialize camera object
 	Bool CameraInit(GeListNode* node = nullptr);
 
-	Bool LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTToolsSetting::CameraImport& setting);
+	Bool LoadVMDCamera(std::unique_ptr<saba::VMDCameraAnimation> animation, const CMTToolsSetting::CameraImport& setting);
 
-	Bool SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSetting::CameraExport& setting);
+	Bool SaveVMDCamera(saba::VMDFile& vmd_data, const CMTToolsSetting::CameraExport& setting);
 
 	// Convert a normal camera to a MMD camera
 	Bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
-	Bool DeleteAllKeyFrame(GeListNode* node = nullptr) override;
+	//Bool DeleteAllKeyFrame(GeListNode* node = nullptr) override;
 
 	// Generating function
 	static NodeData* Alloc();
 
-private:
-	bool ConversionCameraCurve(CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float& fps);
-
-	static TrackDescIDArray GetTrackDescIDsImpl();
-
-	static void AddToSceneManager(BaseObject* object);
-public:
 	// Object initialization
 	Bool Init(GeListNode* node SDK2024_InitParaName) override;
 
@@ -118,14 +113,25 @@ public:
 
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 
-protected:
-	TrackDescIDArray GetTrackDescIDs() override;
+private:
+	using TrackDescIDArray = std::array<const DescID, track_count>;
+	using TrackObjectArray = std::array<BaseObject*, track_count>;
+	using InterpolatorTrackTableArray = std::array<const Int32, track_count>;
+	using CurrentValuesArray = std::array<const Float, track_count>;
 
-	TrackObjectArray GetTrackObjects(GeListNode* node) override;
+	bool ConversionCameraCurve(CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float& fps);
 
-	CurrentValuesArray GetCurrentValues(GeListNode* node) override;
+	static TrackDescIDArray GetTrackDescIDsImpl();
 
-	InterpolatorTrackTableArray GetTrackInterpolatorMap() override;
+	static void AddToSceneManager(BaseObject* object);
+
+	TrackDescIDArray GetTrackDescIDs();// override;
+
+	TrackObjectArray GetTrackObjects(GeListNode* node);// override;
+
+	CurrentValuesArray GetCurrentValues(GeListNode* node);// override;
+
+	InterpolatorTrackTableArray GetTrackInterpolatorMap();// override;
 };
 
 
