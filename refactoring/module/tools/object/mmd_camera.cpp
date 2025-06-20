@@ -19,33 +19,33 @@ Description:	C4D MMD camera object
 
 MMDCamera::MMDCamera(MMDCamera&& other) noexcept
 	: ObjectData()
-	, m_camera(other.m_camera)
-	, m_protection_tag(other.m_protection_tag)
+	, camera_(other.camera_)
+	, protection_tag_(other.protection_tag_)
 {
-	other.m_camera = nullptr;
-	other.m_protection_tag = nullptr;
+	other.camera_ = nullptr;
+	other.protection_tag_ = nullptr;
 }
 
 MMDCamera& MMDCamera::operator=(MMDCamera&& other) noexcept
 {
 	if (this != &other)
 	{
-		m_camera = other.m_camera;
-		m_protection_tag = other.m_protection_tag;
-		other.m_camera = nullptr;
-		other.m_protection_tag = nullptr;
+		camera_ = other.camera_;
+		protection_tag_ = other.protection_tag_;
+		other.camera_ = nullptr;
+		other.protection_tag_ = nullptr;
 	}
 	return *this;
 }
 
 BaseObject* MMDCamera::GetCamera() const
 {
-	return m_camera;
+	return camera_;
 }
 
 Bool MMDCamera::InitCamera(GeListNode* node)
 {
-	if (!m_camera)
+	if (!camera_)
 	{
 		if (!node)
 		{
@@ -60,21 +60,21 @@ Bool MMDCamera::InitCamera(GeListNode* node)
 		{
 			if(down_obj->GetType() == Ocamera && UniqueIDReader::FindUniqueID(down_obj, ID_O_MMD_CAMERA))
 			{
-				m_camera = down_obj;
+				camera_ = down_obj;
 				return true;
 			}
 			down_obj = down_obj->GetNext();
 		}
 
-		m_camera = BaseObject::Alloc(Ocamera);
-		m_camera->SetName("Camera"_s);
-		UniqueIDWriter::AddUniqueID(m_camera, "MMDCamera001"_s, ID_O_MMD_CAMERA);
-		m_protection_tag = BaseTag::Alloc(Tprotection);
-		m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
-		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		m_protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-		m_camera->InsertTag(m_protection_tag);
-		m_camera->InsertUnder(node);
+		camera_ = BaseObject::Alloc(Ocamera);
+		camera_->SetName("Camera"_s);
+		UniqueIDWriter::AddUniqueID(camera_, "CMT::MMDCamera"_s, ID_O_MMD_CAMERA);
+		protection_tag_ = BaseTag::Alloc(Tprotection);
+		protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
+		protection_tag_->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+		protection_tag_->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
+		camera_->InsertTag(protection_tag_);
+		camera_->InsertUnder(node);
 	}
 	return true;
 }
@@ -300,7 +300,6 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 		MessageDialog(err.ToString(nullptr));
 		return false;
 	};
-	/* 获取活动文档 */
 	if (setting.doc == nullptr)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + "error");
@@ -310,8 +309,7 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 	const Float fps = setting.doc->GetFps();
 
 	BaseObject* select_object;
-
-	if (setting.src_cam == nullptr) /* 若传入的参数非空则使用传入参数 */
+	if (setting.src_cam == nullptr)
 	{
 		/* 获取选中对象 */
 		select_object = setting.doc->GetActiveObject();
@@ -322,11 +320,10 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 			return false;
 		}
 	}
-	else { /* 否则使用选择参数 */
+	else {
 		select_object = setting.src_cam;
 	}
 
-	/* 判断选中对象类型是否为摄像机 */
 	if (select_object->GetType() != Ocamera)
 	{
 		GePrint(GeLoadString(IDS_MES_CONVER_ERR) + GeLoadString(IDS_MES_CONVER_TYPE_ERR));
@@ -334,7 +331,6 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 		return false;
 	}
 
-	/* 创建要转化摄像机的副本，防止操作破坏原摄像机对象的数据 */
 	auto* select_object_clone = reinterpret_cast<BaseObject*>(select_object->GetClone(COPYFLAGS::NO_HIERARCHY, nullptr));
 	reinterpret_cast<BaseObject*>(Get())->SetName(select_object_clone->GetName());
 
@@ -414,10 +410,15 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 			return false;
 		}
 
-		const auto& src_curve = src_curves[track_index > DISTANCE ? track_index - 1 : track_index];
-		for (BaseTime time_at = start_time; time_at <= end_time; time_at = time_at + time_step)
+		if (track_index != DISTANCE)
 		{
-			dst_curve->AddKey(time_at)->SetValue(dst_curve,  track_index == DISTANCE ? setting.distance : src_curve->GetValue(time_at));
+			const auto& src_curve = src_curves[track_index > DISTANCE ? track_index - 1 : track_index];
+			src_curve->CopyTo(dst_curve, COPYFLAGS::NONE, nullptr);
+		}
+		else
+		{
+			dst_curve->AddKey(start_time)->SetValue(dst_curve,  setting.distance);
+			dst_curve->AddKey(end_time)->SetValue(dst_curve, setting.distance);
 		}
 	}
 	EventAdd();
@@ -439,16 +440,16 @@ Bool MMDCamera::Init(GeListNode* node SDK2024_InitParaName)
 
 Bool MMDCamera::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
 {
-	if (m_camera)
+	if (camera_)
 	{
 		auto* const destObject = reinterpret_cast<MMDCamera*>(dest);
-		destObject->m_camera = reinterpret_cast<BaseObject*>(m_camera->GetClone(COPYFLAGS::NONE, nullptr));
-		if(m_protection_tag && destObject->m_camera)
+		destObject->camera_ = reinterpret_cast<BaseObject*>(camera_->GetClone(COPYFLAGS::NONE, nullptr));
+		if(protection_tag_ && destObject->camera_)
 		{
-			destObject->m_protection_tag = reinterpret_cast<BaseTag*>(m_protection_tag->GetClone(COPYFLAGS::NONE, nullptr));
-			if(destObject->m_protection_tag)
+			destObject->protection_tag_ = reinterpret_cast<BaseTag*>(protection_tag_->GetClone(COPYFLAGS::NONE, nullptr));
+			if(destObject->protection_tag_)
 			{
-				destObject->m_camera->InsertTag(destObject->m_protection_tag);
+				destObject->camera_->InsertTag(destObject->protection_tag_);
 			}
 		}
 	}
@@ -469,7 +470,7 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 			return true;
 		}
 		node->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Y)), 85.0, DESCFLAGS_SET::NONE);
-		m_camera->SetRelPos(Vector(0, 0, -382.5));
+		camera_->SetRelPos(Vector(0, 0, -382.5));
 	}
 	return true;
 }
@@ -481,8 +482,8 @@ EXECUTIONRESULT MMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread
 		return EXECUTIONRESULT::OK;
 	}
 	InitCamera(op);
-	std::call_once(m_init_flag, AddToSceneManager, op);
-	return SUPER::Execute(op, doc, bt, priority, flags)(op, doc, bt, priority, flags);
+	std::call_once(added_to_manager_flag_, AddToSceneManager, op);
+	return SUPER::Execute(op, doc, bt, priority, flags);
 }
 
 Bool MMDCamera::AddToExecution(BaseObject* op, PriorityList* list)
@@ -526,8 +527,8 @@ MMDCamera::TrackObjectArray MMDCamera::GetTrackObjects(GeListNode* node) const
 		object,		// ROTATION_X
 		object,		// ROTATION_Y
 		object,		// ROTATION_Z
-		m_camera,	// DISTANCE
-		m_camera	// AOV
+		camera_,	// DISTANCE
+		camera_	   // AOV
 	};
 	return track_objects;
 }

@@ -22,11 +22,10 @@ class MMDCamera final : public ObjectData
 	static constexpr auto frame_at_desc = ConstDescID(DescLevel(VMD_CAM_OBJ_FRAME_AT));
 
 	// Maintained camera object
-	BaseObject* m_camera = nullptr;
-	BaseTag*    m_protection_tag = nullptr;
+	BaseObject* camera_ = nullptr;
+	BaseTag*      protection_tag_ = nullptr;
 
-	std::once_flag m_init_flag{};
-
+	std::once_flag added_to_manager_flag_{};
 
 	enum track_enum : uint8_t
 	{
@@ -112,6 +111,5 @@ private:
 
 	TrackObjectArray GetTrackObjects(GeListNode* node) const;
 };
-
 
 #endif // !MMD_CAMERA_H__

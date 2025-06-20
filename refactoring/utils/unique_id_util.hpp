@@ -15,24 +15,24 @@ Description:	Unique ID util
 
 class UniqueIDReader
 {
-	Int m_bytes = 0;
-	const Char* m_cstr = nullptr;
 public:
 	explicit UniqueIDReader() = default;
 
 	static auto GetUniqueIDString(const BaseList2D* bl, const Int32& appid)
 	{
-		UniqueIDReader id_reader;
-		Bool successful = bl->FindUniqueID(appid, id_reader.m_cstr, id_reader.m_bytes);
-		if (id_reader.m_bytes && id_reader.m_cstr[id_reader.m_bytes - 1] == '\0')
-			--id_reader.m_bytes;
-		return std::make_tuple(successful, maxon::String{ id_reader.m_cstr ,id_reader.m_bytes });
+		Int bytes = 0;
+		const Char* temp_mem;
+		Bool successful = bl->FindUniqueID(appid, temp_mem, bytes);
+		if (bytes && temp_mem[bytes - 1] == '\0')
+			--bytes;
+		return std::make_tuple(successful, maxon::String{ temp_mem, bytes });
 	}
 
 	static Bool FindUniqueID(const BaseList2D* bl, const Int32& appid)
 	{
-		UniqueIDReader id_reader;
-		return bl->FindUniqueID(appid, id_reader.m_cstr, id_reader.m_bytes);
+		Int bytes = 0;
+		const Char* temp_mem;
+		return bl->FindUniqueID(appid, temp_mem, bytes);
 	}
 };
 
