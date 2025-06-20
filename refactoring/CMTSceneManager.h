@@ -13,7 +13,6 @@ Description:	scene manager
 
 #include "cmt_tools_setting.h"
 
-
 struct IOLog
 {
 	maxon::TimeValue timing = maxon::TimeValue::GetTime();
@@ -106,12 +105,13 @@ public:
 	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, saba::VMDFile& data);
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
-	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::vmd_animation& data, LoadVmdMotionLog& log);
+	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting,  std::unique_ptr<saba::VMDAnimation> data, LoadVmdMotionLog& log);
+	static Bool SaveVMDMotion(const CMTToolsSetting::MotionExport& setting,  saba::VMDFile&  data, SaveVmdMotionLog& log);
 
-	static BaseObject* LoadPMXModel(const CMTToolsSetting::ModelImport& setting, const libmmd::pmx_model& data);
-	static BaseObject* SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::pmx_model& data);
+	static BaseObject* LoadPMXModel(const CMTToolsSetting::ModelImport& setting, std::shared_ptr<saba::MMDModel> data);
+	static BaseObject* SavePMXModel(const CMTToolsSetting::ModelExport& setting, saba::PMXFile& data);
 
-	void AddMMDCamera(const BaseObject* camera);
+	void AddMMDCamera(SDK2024_Const BaseObject* camera);
 
 	static CMTSceneManager* GetSceneManager(const BaseDocument* Document);
 

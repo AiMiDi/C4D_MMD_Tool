@@ -19,11 +19,6 @@ void IOLog::LogOutMem()
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 }
 
-void LoadPmxModelLog::LogMMDDataPathErr()
-{
-	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MMD_DATA_ERR));
-}
-
 void IOLog::LogReadFileErr()
 {
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_READ_ERR));
@@ -110,6 +105,11 @@ void LoadModelLog::Set(const std::shared_ptr<saba::MMDModel>& model, const CMTTo
 	morph_data_count = setting.import_expression ? model->GetMorphManager()->GetMorphCount() : 0;
 }
 
+void LoadModelLog::LogMMDDataPathErr()
+{
+	//MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MMD_DATA_ERR));
+}
+
 void LoadModelLog::LogOK()
 {
 	timing.Stop();
@@ -142,7 +142,7 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 	// init camera
 	vmd_camera->SetName(setting.fn.GetFileString());
 	auto* vmd_camera_data = vmd_camera->GetNodeData<MMDCamera>();
-	vmd_camera_data->CameraInit();
+	vmd_camera_data->InitCamera();
 	EventAdd();
 
 	// set document with vmd length
@@ -216,7 +216,7 @@ BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConve
 	return vmd_camera;
 }
 
-Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::vmd_animation& data, LoadVmdMotionLog& log)
+Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, std::unique_ptr<saba::VMDAnimation> data, LoadVmdMotionLog& log)
 {
 	BaseObject* select_object = setting.doc->GetActiveObject();
 	if (select_object == nullptr)
@@ -243,7 +243,13 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 	return true;
 }
 
-BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& setting, const libmmd::pmx_model& data)
+Bool CMTSceneManager::SaveVMDMotion(const CMTToolsSetting::MotionExport& setting, saba::VMDFile& data,
+	SaveVmdMotionLog& log)
+{
+	return false;
+}
+
+BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& setting, std::shared_ptr<saba::MMDModel> data)
 {
 	// create model
 	BaseObject* pmx_model = BaseObject::Alloc(ID_O_MMD_MODEL);
@@ -266,7 +272,7 @@ BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& se
 	return pmx_model;
 }
 
-BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::pmx_model& data)
+BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& setting, saba::PMXFile& data)
 {
 
 	BaseObject* select_object = setting.doc->GetActiveObject();
@@ -294,9 +300,9 @@ BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& se
 	return nullptr;
 }
 
-void CMTSceneManager::AddMMDCamera(const BaseObject* camera)
+void CMTSceneManager::AddMMDCamera(SDK2024_Const BaseObject* camera)
 {
-	if (const BaseDocument* doc = Get()->GetDocument(); doc)
+	if (SDK2024_Const BaseDocument* doc = Get()->GetDocument(); doc)
 	{
 		if (SceneCameraArray.Find(camera, doc) == NOTOK)
 		{

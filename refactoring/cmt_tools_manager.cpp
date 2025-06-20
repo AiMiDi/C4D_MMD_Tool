@@ -125,9 +125,7 @@ namespace CMTToolsManager
 
 		LoadModelLog log;
 
-		LoadPmxModelLog log;
-
-		std::unique_ptr<saba::MMDModel> model;
+		std::shared_ptr<saba::MMDModel> model;
 		if(setting.fn.CheckSuffix("pmx"_s))
 		{
 			model = std::make_shared<saba::PMXModel>();
@@ -152,7 +150,7 @@ namespace CMTToolsManager
 		static auto mmd_data_filepath = GeGetPluginResourcePath() + Filename("mikumikudance_data");
 		if (!GeFExist(mmd_data_filepath))
 		{
-			LoadPmxModelLog::LogMMDDataPathErr();
+			LoadModelLog::LogMMDDataPathErr();
 			return false;
 		}
 		static std::string mmd_data_path =  string_util::GetStdString(mmd_data_filepath.GetString());
