@@ -1251,22 +1251,22 @@ Bool MMDModelManagerObject::AddIKBoneDescription(const maxon::String& bone_name_
 	return true;
 }
 
-Bool MMDModelManagerObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelImport& setting)
+Bool MMDModelManagerObject::LoadMMDModel(std::shared_ptr<saba::MMDModel> model, const CMTToolsSetting::ModelImport& setting)
 {
 	maxon::BaseArray<BaseObject*> bone_list;
 	auto morph_change_helper = BeginMorphChange();
 
 	if (setting.import_bone)
-		if(!m_bone_root->GetNodeData<MMDBoneManagerObject>()->LoadPMX(pmx_model, bone_list, setting))
+		if(!m_bone_root->GetNodeData<MMDBoneManagerObject>()->LoadPMX(model, bone_list, setting))
 			return false;
 
 	if (setting.import_polygon)
-		if(!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->LoadPMX(pmx_model, bone_list, setting))
+		if(!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->LoadPMX(model, bone_list, setting))
 			return false;
 
 	if (setting.import_expression)
 	{
-		const auto& pmx_morph_array = pmx_model.get_pmx_morph_array();
+		const auto& pmx_morph_array = model.get_pmx_morph_array();
 		const auto pmx_morph_num = pmx_morph_array.size();
 		for (auto morph_index = decltype(pmx_morph_num){}; morph_index < pmx_morph_num; ++morph_index)
 		{
@@ -1279,114 +1279,36 @@ Bool MMDModelManagerObject::LoadPMXModel(const libmmd::pmx_model& pmx_model, con
 	return true;
 }
 
-Bool MMDModelManagerObject::SavePMXModel(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting) const
+Bool MMDModelManagerObject::SavePMXModel(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
 {
 
 	if (setting.export_bone)
-		if (!m_bone_root->GetNodeData<MMDBoneManagerObject>()->SavePMX(pmx_model, setting))
+		if (!m_bone_root->GetNodeData<MMDBoneManagerObject>()->SavePMX(pmx_file, setting))
 			return false;
 
 	if (setting.export_polygon)
-		if (!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->SavePMX(pmx_model, setting))
+		if (!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->SavePMX(pmx_file, setting))
 			return false;
 	return true;
 }
 
-Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
+Bool MMDModelManagerObject::LoadVMDMotion(std::unique_ptr<saba::VMDAnimation> vmd_motion, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
 {
 	iferr_scope_handler
 	{
 		return false;
 	};
 
-	BaseTime max_time{};
+	BaseTime max_time{static_cast<Float>(vmd_motion->GetMaxKeyTime()) ,30.};
+	// TODO: setting
+	m_vmd_motion_arr.Insert(setting.fn.GetFileString(), std::move(vmd_motion))iferr_return;
 
-	// load bone motion
-	if (setting.import_motion)
-	{
-		const auto bone_root = m_bone_root->GetNodeData<MMDBoneManagerObject>();
-		if (setting.delete_previous_animation)
-		{
-			bone_root->DeleteAllBoneAnimation();
-		}
-		const auto bone_vmd_motion_ptr_array = vmd_motion.get_vmd_bone_key_frame_array().readonly_elements_ptr();
-		auto bone_vmd_motion_count = bone_vmd_motion_ptr_array.size();
-		log.imported_motion_count += bone_vmd_motion_count;
-		std::unordered_set<std::string> imported_bone;
-		for (auto bone_vmd_motion_index = decltype(bone_vmd_motion_count){}; bone_vmd_motion_index < bone_vmd_motion_count; ++bone_vmd_motion_index)
-		{
-			const auto& bone_vmd_key_frame = *bone_vmd_motion_ptr_array[bone_vmd_motion_index];
-			if (bone_root->SetBoneAnimation(bone_vmd_key_frame, setting))
-			{
-				imported_bone.insert(bone_vmd_key_frame.get_bone_name());
-			}
-			else if (setting.detail_report)
-			{
-				log.not_find_bone_name_list.Append(String(bone_vmd_key_frame.get_bone_name().c_str()))iferr_return;
-			}
-		}
-		bone_root->UpdateAllBoneAnimation();
-		if (bone_vmd_motion_count > 0)
-			max_time = maxon::Max(max_time, BaseTime(bone_vmd_motion_ptr_array[bone_vmd_motion_count - 1]->get_frame_at(), 30.));
-
-		log.imported_bone_count = imported_bone.size();
-	}
-
-	// load morph motion
-	if (setting.import_morph)
-	{
-		if (setting.delete_previous_animation)
-		{
-			DeleteAllMorphAnimation();
-		}
-		const auto& morph_vmd_motion_ptr_array = vmd_motion.get_vmd_morph_key_frame_array().readonly_elements_ptr();
-		auto morph_vmd_motion_count = morph_vmd_motion_ptr_array.size();
-		log.imported_motion_count += morph_vmd_motion_count;
-		std::unordered_set<std::string> imported_morph;
-		for (auto morph_vmd_motion_index = decltype(morph_vmd_motion_count){}; morph_vmd_motion_index < morph_vmd_motion_count; ++morph_vmd_motion_index)
-		{
-			const auto& morph_vmd_key_frame = *morph_vmd_motion_ptr_array[morph_vmd_motion_index];
-			if (SetMeshMorphAnimation(morph_vmd_key_frame, setting))
-			{
-				imported_morph.insert(morph_vmd_key_frame.get_morph_name());
-			}
-			else if (setting.detail_report)
-			{
-				log.not_find_morph_name_list.Append(String(morph_vmd_key_frame.get_morph_name().c_str()))iferr_return;
-			}
-		}
-		if (morph_vmd_motion_count > 0)
-			max_time = maxon::Max(max_time, BaseTime(morph_vmd_motion_ptr_array[morph_vmd_motion_count - 1]->get_frame_at(), 30.));
-
-		log.imported_morph_count = imported_morph.size();
-	}
-
-	// load model info
-	if (setting.import_model_info)
-	{
-		if (setting.delete_previous_animation)
-		{
-			DeleteAllModelControllerAnimation();
-		}
-		const auto& model_controller_key_frame_ptr_array = vmd_motion.get_vmd_model_controller_key_frame_array().readonly_elements_ptr();
-		auto model_controller_key_frame_count = model_controller_key_frame_ptr_array.size();
-		for (auto model_controller_key_frame_index = decltype(model_controller_key_frame_count){}; model_controller_key_frame_index < model_controller_key_frame_count; ++model_controller_key_frame_index)
-		{
-			if (const auto& model_controller_key_frame = *model_controller_key_frame_ptr_array[model_controller_key_frame_index];
-				!SetModelControllerAnimation(model_controller_key_frame, setting))
-			{
-				return false;
-			}
-		}
-		if (model_controller_key_frame_count > 0)
-			max_time = maxon::Max(max_time, BaseTime(model_controller_key_frame_ptr_array[model_controller_key_frame_count - 1]->get_frame_at(), 30.));
-	}
 	setting.doc->SetMaxTime(max_time);
 	setting.doc->SetLoopMaxTime(max_time);
 	return true;
 }
 
-Bool MMDModelManagerObject::SaveVMDMotion(libmmd::vmd_animation& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
+Bool MMDModelManagerObject::SaveVMDMotion(saba::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
 {
 	return true;
 }

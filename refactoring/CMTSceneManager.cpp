@@ -152,7 +152,7 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 	setting.doc->SetTime(BaseTime{});
 
 	// set camera with vmd data
-	vmd_camera_data->LoadVMDCamera(std::move(animation), setting);
+	vmd_camera_data->LoadVMDCamera(animation, setting);
 
 	return vmd_camera;
 }
@@ -231,7 +231,7 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 		return false;
 	}
 
-	if(!select_object->GetNodeData<MMDModelManagerObject>()->LoadVMDMotion(data, setting, log))
+	if(!select_object->GetNodeData<MMDModelManagerObject>()->LoadVMDMotion(std::move(data), setting, log))
 	{
 		return false;
 	}
@@ -265,7 +265,7 @@ BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& se
 	pmx_model_data->UpdateRoot();
 
 	// set model with pmx data
-	pmx_model_data->LoadPMXModel(data, setting);
+	pmx_model_data->LoadMMDModel(data, setting);
 
 	EventAdd();
 

@@ -83,7 +83,7 @@ namespace CMTToolsManager
 	{
 		LoadVmdMotionLog log;
 
-		const auto vmd_animation = std::make_unique<saba::VMDAnimation>();
+		auto vmd_animation = std::make_unique<saba::VMDAnimation>();
 		if (!vmd_animation)
 		{
 			LoadVmdMotionLog::LogOutMem();
@@ -104,7 +104,7 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		if (!CMTSceneManager::LoadVMDMotion(setting, *vmd_animation, log))
+		if (!CMTSceneManager::LoadVMDMotion(setting, std::move(vmd_animation), log))
 		{
 			return false;
 		}
@@ -164,7 +164,7 @@ namespace CMTToolsManager
 
 
 		log.Set(model, setting);
-		if (!CMTSceneManager::LoadPMXModel(setting, *pmx_model))
+		if (!CMTSceneManager::LoadPMXModel(setting, model))
 		{
 			return false;
 		}
