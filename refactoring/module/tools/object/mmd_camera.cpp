@@ -281,7 +281,13 @@ Bool MMDCamera::SaveVMDCamera(saba::VMDFile& vmd_data, const CMTToolsSetting::Ca
 				camera_key_frame.m_viewAngle = static_cast<uint32_t>(get_curve_value(AOV));
 
 				// LINEAR
-				//camera_key_frame.m_interpolation = {};
+				camera_key_frame.m_interpolation = {
+					20,20,107,107,
+					20,20,107,107,
+					20,20,107,107,
+					20,20,107,107,
+					20,20,107,107,
+					20,20,107,107};
 			}
 			return true;
 		};
