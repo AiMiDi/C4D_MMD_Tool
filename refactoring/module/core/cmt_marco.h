@@ -76,7 +76,7 @@
 #	define GetDynamicDescriptionWritable GetDynamicDescription
 #	define MakeObjectColorProperties(color, usecolor, xray) ObjectColorProperties{usecolor, color, xray}
 
-#	define SDK2024_ToPointer 
+#	define SDK2024_ToPointer
 #	define SDK2024_Append(...) Append({__VA_ARGS__})
 #	define SDK2024_Move(x) x
 #	define GetWritableBaseSelect GetBaseSelect
@@ -99,5 +99,13 @@
 #	define SDK2024_Move(x) std::move(x)
 
 #endif
+
+using MMDModel = saba::MMDModelWithoutBuffered;
+using PMXModel = saba::PMXModelWithoutBuffered;
+using PMDModel = saba::PMDModelWithoutBuffered;
+
+using MMDModelPtr = std::shared_ptr<MMDModel>;
+using PMXModelPtr = std::shared_ptr<PMXModel>;
+using PMDModelPtr = std::shared_ptr<PMDModel>;
 
 #endif // !CMT_MARCO_H__

@@ -303,7 +303,7 @@ maxon::HashInt vertex_info::GetHashCode() const
 }
 
 Bool MMDMeshManagerObject::LoadPMX(
-	const libmmd::pmx_model& pmx_model,
+	const saba::PMXFile& pmx_file,
 	const maxon::BaseArray<BaseObject*>& bone_list,
 	const CMTToolsSetting::ModelImport& setting)
 {
@@ -311,9 +311,9 @@ Bool MMDMeshManagerObject::LoadPMX(
 		return false;
 	};
 
-	const auto pmx_surface_ptr_array = pmx_model.get_pmx_surface_array().readonly_elements_ptr();
-	const auto pmx_vertex_ptr_array = pmx_model.get_pmx_vertex_array().readonly_elements_ptr();
-	const auto pmx_material_ptr_array = pmx_model.get_pmx_material_array().readonly_elements_ptr();
+	const auto& pmx_surface_ptr_array = pmx_file.m_faces;
+	const auto& pmx_vertex_ptr_array = pmx_file.m_vertices;
+	const auto& pmx_material_ptr_array = pmx_file.m_materials;
 
 	// create mesh
 	const auto surface_count = pmx_surface_ptr_array.size();
@@ -331,107 +331,99 @@ Bool MMDMeshManagerObject::LoadPMX(
 		if (!material_manager)
 			return false;
 		material_manager->SetTextureRelativePath(setting.fn.GetDirectory());
-		if (!material_manager->LoadPMXTexture(pmx_model.get_pmx_texture_array()))
+		if (!material_manager->LoadPMXTexture(pmx_file.m_textures))
 			return false;
 	}
 
-	maxon::BaseArray<std::unordered_map<Int32, Float32>> vertex_weight_data;
+	std::vector<std::unordered_map<Int32, Float32>> vertex_weight_data;
 	if (setting.import_weights)
 	{
 		// statistics vertex weight data
-		const auto vertex_count_int = static_cast<Int>(vertex_count);
-		vertex_weight_data.Resize(vertex_count_int)iferr_return;
-		maxon::ParallelFor::Dynamic(Int{}, vertex_count_int, [&pmx_vertex_ptr_array, &vertex_weight_data](const Int vertex_index)
+		vertex_weight_data.resize(vertex_count);
+		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertex_ptr_array, &vertex_weight_data](const Int vertex_index)
 		{
 			auto& weight_data = vertex_weight_data[vertex_index];
-			switch (const auto& pmx_vertex = *pmx_vertex_ptr_array[vertex_index]; pmx_vertex.get_skinning_type())
+			switch (const auto& pmx_vertex = pmx_vertex_ptr_array[vertex_index]; pmx_vertex.m_weightType)
 			{
-			case libmmd::pmx_vertex_skinning::skinning_type::BDEF1:
+			case saba::PMXVertexWeight::BDEF1:
 			{
-				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_BDEF1*>(pmx_vertex.get_skinning());
-				weight_data[skinning_data->get_bone_index()] = 1.f;
+				weight_data[pmx_vertex.m_boneIndices[0]] = 1.f;
 				break;
 			}
-			case libmmd::pmx_vertex_skinning::skinning_type::BDEF2:
+			case saba::PMXVertexWeight::BDEF2:
 			{
-				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_BDEF2*>(pmx_vertex.get_skinning());
-				const auto bone_weight = skinning_data->get_bone_weight();
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index1(), bone_weight); !inserted)
+				const auto& bone_weight = pmx_vertex.m_boneWeights[0];
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight); !inserted)
 				{
 					it->second += bone_weight;
 				}
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index2(), 1.f - bone_weight); !inserted)
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[1], 1.f - bone_weight); !inserted)
 				{
 					it->second += 1.f - bone_weight;
 				}
 				break;
 			}
-			case libmmd::pmx_vertex_skinning::skinning_type::BDEF4:
+			case saba::PMXVertexWeight::BDEF4:
 			{
-				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_BDEF4*>(pmx_vertex.get_skinning());
-				const auto bone_weight1 = skinning_data->get_bone_weight1();
-				const auto bone_weight2 = skinning_data->get_bone_weight2();
-				const auto bone_weight3 = skinning_data->get_bone_weight3();
-				const auto bone_weight4 = skinning_data->get_bone_weight4();
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index1(), bone_weight1); !inserted)
+				const auto& bone_weight1 = pmx_vertex.m_boneWeights[0];
+				const auto& bone_weight2 = pmx_vertex.m_boneWeights[1];
+				const auto& bone_weight3 = pmx_vertex.m_boneWeights[2];
+				const auto& bone_weight4 = pmx_vertex.m_boneWeights[3];
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight1); !inserted)
 				{
 					it->second += bone_weight1;
 				}
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index2(), bone_weight2); !inserted)
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[1], bone_weight2); !inserted)
 				{
 					it->second += bone_weight2;
 				}
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index3(), bone_weight3); !inserted)
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[2], bone_weight3); !inserted)
 				{
 					it->second += bone_weight3;
 				}
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index4(), bone_weight4); !inserted)
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[3], bone_weight4); !inserted)
 				{
 					it->second += bone_weight4;
 				}
 				break;
 			}
-			case libmmd::pmx_vertex_skinning::skinning_type::SDEF:
+			case saba::PMXVertexWeight::SDEF:
 			{
-				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_SDEF*>(pmx_vertex.get_skinning());
-				const auto bone_weight = skinning_data->get_bone_weight();
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index1(), bone_weight); !inserted)
+				const auto& bone_weight = pmx_vertex.m_boneWeights[0];
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight); !inserted)
 				{
 					it->second += bone_weight;
 				}
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index2(), 1.f - bone_weight); !inserted)
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[1], 1.f - bone_weight); !inserted)
 				{
 					it->second += 1.f - bone_weight;
 				}
 				break;
 			}
-			case libmmd::pmx_vertex_skinning::skinning_type::QDEF:
+			case saba::PMXVertexWeight::QDEF:
 			{
-				const auto skinning_data = reinterpret_cast<const libmmd::pmx_vertex_skinning_QDEF*>(pmx_vertex.get_skinning());
-				const auto bone_weight1 = skinning_data->get_bone_weight1();
-				const auto bone_weight2 = skinning_data->get_bone_weight2();
-				const auto bone_weight3 = skinning_data->get_bone_weight3();
-				const auto bone_weight4 = skinning_data->get_bone_weight4();
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index1(), bone_weight1); !inserted)
+				const auto& bone_weight1 = pmx_vertex.m_boneWeights[0];
+				const auto& bone_weight2 = pmx_vertex.m_boneWeights[1];
+				const auto& bone_weight3 = pmx_vertex.m_boneWeights[2];
+				const auto& bone_weight4 = pmx_vertex.m_boneWeights[3];
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight1); !inserted)
 				{
 					it->second += bone_weight1;
 				}
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index2(), bone_weight2); !inserted)
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[1], bone_weight2); !inserted)
 				{
 					it->second += bone_weight2;
 				}
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index3(), bone_weight3); !inserted)
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[2], bone_weight3); !inserted)
 				{
 					it->second += bone_weight3;
 				}
-				if (auto [it, inserted] = weight_data.try_emplace(skinning_data->get_bone_index4(), bone_weight4); !inserted)
+				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[3], bone_weight4); !inserted)
 				{
 					it->second += bone_weight4;
 				}
 				break;
 			}
-			case libmmd::pmx_vertex_skinning::skinning_type::NONE:
-				break;
 			}
 		});
 	}
@@ -477,13 +469,13 @@ Bool MMDMeshManagerObject::LoadPMX(
 			morph_skin_object->InsertUnder(mesh_object);
 		}
 
-		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertex_ptr_array, &setting, &mesh_object_points, &weight_tag, &vertex_weight_data](const uint64_t vertex_index)
+		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertex_ptr_array, &setting, &mesh_object_points, &weight_tag, &vertex_weight_data](const decltype(vertex_count) vertex_index)
 		{
-			const auto& pmx_vertex = *pmx_vertex_ptr_array[vertex_index];
+			const auto& pmx_vertex = pmx_vertex_ptr_array[vertex_index];
 
 			// add vertex position
 			auto& mesh_object_point = mesh_object_points[vertex_index];
-			const auto& pmx_vertex_position = pmx_vertex.get_position();
+			const auto& pmx_vertex_position = pmx_vertex.m_position;
 			mesh_object_point.x = pmx_vertex_position[0] * setting.position_multiple;
 			mesh_object_point.y = pmx_vertex_position[1] * setting.position_multiple;
 			mesh_object_point.z = pmx_vertex_position[2] * setting.position_multiple;
@@ -491,7 +483,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			if (setting.import_weights)
 			{
 				// add weight data to weight tag
-				for (const auto& [joint_index, weight] : vertex_weight_data[static_cast<Int>(vertex_index)])
+				for (const auto& [joint_index, weight] : vertex_weight_data[vertex_index])
 				{
 					// clamp weight at 0.0 to 1.0
 					weight_tag->SetWeight(joint_index, static_cast<Int32>(vertex_index), Clamp01(weight));
@@ -612,25 +604,20 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 			bool is_point_morph_tag_init = false;
 			bool is_uv_morph_tag_init = false;
-			const auto& pmx_morph_array = pmx_model.get_pmx_morph_array();
-			const auto pmx_morph_num = pmx_morph_array.size();
-			for (auto morph_index = decltype(pmx_morph_num){}; morph_index < pmx_morph_num; ++morph_index)
+			for (const auto& pmx_morph : pmx_file.m_morphs)
 			{
-				const auto& pmx_morph = pmx_morph_array[morph_index];
-				switch (pmx_morph.get_morph_offset_type())
+				switch (pmx_morph.m_morphType)
 				{
-				case libmmd::pmx_morph::morph_type::VERTEX:
+				case saba::PMXMorphType::Position:
 				{
-					const auto& morph_offset_array = pmx_morph.get_morph_offset_array();
-					const auto morph_offset_num = morph_offset_array.size();
+					const auto& position_morphs = pmx_morph.m_positionMorph;
 
-					if (morph_offset_num == 0)
+					if (position_morphs.empty())
 						continue;
 
 					if (!is_point_morph_tag_init)
 					{
 						morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_POINTS)), true, DESCFLAGS_SET::NONE);
-
 						is_point_morph_tag_init = true;
 					}
 					CAMorph* morph = morph_tag->AddMorph();
@@ -638,7 +625,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 						return false;
 
 					// set morph name
-					morph->SetName(maxon::String{ pmx_morph.get_morph_name_local().c_str() });
+					morph->SetName(maxon::String{ pmx_morph.m_name.c_str() });
 
 					morph->Store(setting.doc, morph_tag, CAMORPH_DATA_FLAGS::ASTAG);
 
@@ -653,13 +640,10 @@ Bool MMDMeshManagerObject::LoadPMX(
 					morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
 
 					// add morph point
-					for (auto offset_index = decltype(morph_offset_num){}; offset_index < morph_offset_num; ++offset_index)
+					for (const auto& [vertex_index, position] : position_morphs)
 					{
-						const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_vertex_morph_offset&>(morph_offset_array[offset_index]);
-						const auto& pmx_bone_morph_offset_vertex_index = pmx_bone_morph_offset.get_vertex_index();
-						const auto& pmx_bone_morph_offset_position = pmx_bone_morph_offset.get_offset_position();
-						morph_node->SetPoint(static_cast<Int32>(pmx_bone_morph_offset_vertex_index),
-							Vector(pmx_bone_morph_offset_position[0], pmx_bone_morph_offset_position[1], pmx_bone_morph_offset_position[2]) * setting.position_multiple);
+						morph_node->SetPoint(vertex_index,
+							Vector(position[0], position[1], position[2]) * setting.position_multiple);
 					}
 
 					morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
@@ -668,16 +652,15 @@ Bool MMDMeshManagerObject::LoadPMX(
 					morph->SetStrength(0);
 					break;
 				}
-				case libmmd::pmx_morph::morph_type::UV0: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::UV1: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::UV2: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::UV3: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::UV4:
+				case saba::PMXMorphType::UV: [[fallthrough]];
+				case saba::PMXMorphType::AddUV1: [[fallthrough]];
+				case saba::PMXMorphType::AddUV2: [[fallthrough]];
+				case saba::PMXMorphType::AddUV3: [[fallthrough]];
+				case saba::PMXMorphType::AddUV4:
 				{
-					const auto& morph_offset_array = pmx_morph.get_morph_offset_array();
-					const auto morph_offset_num = morph_offset_array.size();
+					const auto& uv_morphs = pmx_morph.m_uvMorph;
 
-					if (morph_offset_num == 0)
+					if (uv_morphs.empty())
 						continue;
 
 					if (!is_uv_morph_tag_init)
@@ -691,7 +674,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 						return false;
 
 					// set morph name
-					morph->SetName(maxon::String{ pmx_morph.get_morph_name_local().c_str() });
+					morph->SetName(maxon::String{ pmx_morph.m_name.c_str() });
 
 					morph->Store(setting.doc, morph_tag, CAMORPH_DATA_FLAGS::ASTAG);
 
@@ -707,13 +690,9 @@ Bool MMDMeshManagerObject::LoadPMX(
 					// vertex_index -> uv offset
 					maxon::HashMap<Int32, Vector> morph_uv_map;
 					// mapping uv morph from vertex_index to surface_index
-					for (auto offset_index = decltype(morph_offset_num){}; offset_index < morph_offset_num; ++offset_index)
+					for (const auto& [vertex_index, uv] : uv_morphs)
 					{
-						const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_uv_morph_offset&>(morph_offset_array[offset_index]);
-						const auto& pmx_bone_morph_offset_vertex_index = pmx_bone_morph_offset.get_vertex_index();
-						const auto& pmx_bone_morph_offset_uv = pmx_bone_morph_offset.get_uv_offset();
-
-						morph_uv_map.Insert(static_cast<Int32>(pmx_bone_morph_offset_vertex_index), Vector(pmx_bone_morph_offset_uv[0], pmx_bone_morph_offset_uv[1], 0.))iferr_return;
+						morph_uv_map.Insert(vertex_index, Vector(uv[0], uv[1], 0.))iferr_return;
 					}
 
 					// add morph uv
@@ -755,11 +734,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					morph->SetStrength(0);
 					break;
 				}
-				case libmmd::pmx_morph::morph_type::GROUP: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::BONE: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::MATERIAL: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::FLIP: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::IMPULSE:
+				default:
 					break;
 				}
 			}
@@ -1107,32 +1082,25 @@ Bool MMDMeshManagerObject::LoadPMX(
 				morph_tag->UpdateMorphs();
 			}
 
-			const auto& pmx_morph_array = pmx_model.get_pmx_morph_array();
-			const auto pmx_morph_num = pmx_morph_array.size();
-			for (auto morph_index = decltype(pmx_morph_num){}; morph_index < pmx_morph_num; ++morph_index)
+			for (const auto& pmx_morph : pmx_file.m_morphs)
 			{
-				const auto& pmx_morph = pmx_morph_array[morph_index];
-				maxon::String pmx_morph_name{ pmx_morph.get_morph_name_local().c_str() };
-				switch (pmx_morph.get_morph_offset_type())
+				maxon::String pmx_morph_name{ pmx_morph.m_name.c_str() };
+				switch (pmx_morph.m_morphType)
 				{
-				case libmmd::pmx_morph::morph_type::VERTEX:
+				case saba::PMXMorphType::Position:
 				{
-					const auto& morph_offset_array = pmx_morph.get_morph_offset_array();
-					const auto morph_offset_num = morph_offset_array.size();
+					const auto& position_morphs = pmx_morph.m_positionMorph;
 
-					if (morph_offset_num == 0)
+					if (position_morphs.empty())
 						continue;
 
 					// morph name
 
 					// add morph point
-					for (auto offset_index = decltype(morph_offset_num){}; offset_index < morph_offset_num; ++offset_index)
+					for (const auto& [src_vertex_index, position] : position_morphs)
 					{
-						const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_vertex_morph_offset&>(morph_offset_array[offset_index]);
-						const auto& pmx_bone_morph_offset_vertex_index = pmx_bone_morph_offset.get_vertex_index();
-						const auto& pmx_bone_morph_offset_position = pmx_bone_morph_offset.get_offset_position();
 						// MultiMap
-						for (auto it = vertex_info_map.Read()->FindAll(pmx_bone_morph_offset_vertex_index); it; ++it)
+						for (auto it = vertex_info_map.Read()->FindAll(src_vertex_index); it; ++it)
 						{
 							const auto& [vertex_index, offset_mesh_object, morph_tag_index] = it->GetValue();
 							auto& [morph_tag, morphs, is_point_morph_tag_init, is_uv_morph_tag_init] = morph_tag_infos[morph_tag_index];
@@ -1173,34 +1141,30 @@ Bool MMDMeshManagerObject::LoadPMX(
 							}
 
 							morph_node->SetPoint(vertex_index,
-								Vector(pmx_bone_morph_offset_position[0], pmx_bone_morph_offset_position[1], pmx_bone_morph_offset_position[2]) * setting.position_multiple);
+								Vector(position[0], position[1], position[2]) * setting.position_multiple);
 						}
 					}
 
 					break;
 				}
-				case libmmd::pmx_morph::morph_type::UV0: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::UV1: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::UV2: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::UV3: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::UV4:
+				case saba::PMXMorphType::UV: [[fallthrough]];
+				case saba::PMXMorphType::AddUV1: [[fallthrough]];
+				case saba::PMXMorphType::AddUV2: [[fallthrough]];
+				case saba::PMXMorphType::AddUV3: [[fallthrough]];
+				case saba::PMXMorphType::AddUV4:
 				{
-					const auto& morph_offset_array = pmx_morph.get_morph_offset_array();
-					const auto morph_offset_num = morph_offset_array.size();
+					const auto& uv_morphs = pmx_morph.m_uvMorph;
 
-					if (morph_offset_num == 0)
+					if (uv_morphs.empty())
 						continue;
 
 					// vertex_index -> uv offset
 					maxon::HashMap<Int32, std::tuple<CAMorphNode*, Vector>> morph_uv_map;
 					// mapping uv morph from vertex_index to surface_index
-					for (auto offset_index = decltype(morph_offset_num){}; offset_index < morph_offset_num; ++offset_index)
+						for (const auto& [src_vertex_index, uv] : uv_morphs)
 					{
-						const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_uv_morph_offset&>(morph_offset_array[offset_index]);
-						const auto& pmx_bone_morph_offset_vertex_index = pmx_bone_morph_offset.get_vertex_index();
-						const auto& pmx_bone_morph_offset_uv = pmx_bone_morph_offset.get_uv_offset();
 						// MultiMap
-						for (auto it = vertex_info_map.Read()->FindAll(pmx_bone_morph_offset_vertex_index); it; ++it)
+						for (auto it = vertex_info_map.Read()->FindAll(src_vertex_index); it; ++it)
 						{
 							const auto& [vertex_index, offset_mesh_object, morph_tag_index] = it->GetValue();
 							auto& [morph_tag, morphs, is_point_morph_tag_init, is_uv_morph_tag_init] = morph_tag_infos[morph_tag_index];
@@ -1240,7 +1204,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 								morph_node = morph_node->GetNext();
 							}
 
-							morph_uv_map.Insert(static_cast<Int32>(pmx_bone_morph_offset_vertex_index), std::make_tuple(morph_node, Vector(pmx_bone_morph_offset_uv[0], pmx_bone_morph_offset_uv[1], 0.)))iferr_return;
+							morph_uv_map.Insert(src_vertex_index, std::make_tuple(morph_node, Vector(uv[0], uv[1], 0.)))iferr_return;
 						}
 					}
 
@@ -1278,11 +1242,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					});
 					break;
 				}
-				case libmmd::pmx_morph::morph_type::GROUP: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::BONE: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::MATERIAL: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::FLIP: [[fallthrough]];
-				case libmmd::pmx_morph::morph_type::IMPULSE:
+				default:
 					break;
 				}
 			}
@@ -1305,7 +1265,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 	return true;
 }
 
-Bool MMDMeshManagerObject::SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting)
+Bool MMDMeshManagerObject::SavePMX(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting)
 {
 	return false;
 }

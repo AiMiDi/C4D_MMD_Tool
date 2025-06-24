@@ -125,15 +125,11 @@ namespace CMTToolsManager
 
 		LoadModelLog log;
 
-		std::shared_ptr<saba::MMDModel> model;
+		PMXModelPtr pmx_model;
 		if(setting.fn.CheckSuffix("pmx"_s))
 		{
-			model = std::make_shared<saba::PMXModel>();
+			pmx_model = std::make_shared<PMXModel>();
 
-		}
-		else if(setting.fn.CheckSuffix("pmd"_s))
-		{
-			model = std::make_shared<saba::PMDModel>();
 		}
 		else
 		{
@@ -141,7 +137,7 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		if (!model)
+		if (!pmx_model)
 		{
 			LoadModelLog::LogOutMem();
 			return false;
@@ -153,18 +149,25 @@ namespace CMTToolsManager
 			LoadModelLog::LogMMDDataPathErr();
 			return false;
 		}
-		static std::string mmd_data_path =  string_util::GetStdString(mmd_data_filepath.GetString());
 
-		if (const std::string model_path= string_util::GetStdString(setting.fn.GetString());
-			!model->Load(model_path, mmd_data_path))
+		saba::PMXFile pmx_file;
+		const std::string model_path = string_util::GetStdString(setting.fn.GetString());
+		if (saba::ReadPMXFile(&pmx_file, model_path.c_str()))
 		{
 			LoadModelLog::LogReadFileErr();
 			return false;
 		}
 
+		static std::string mmd_data_path =  string_util::GetStdString(mmd_data_filepath.GetString());
+		if (const std::string model_dir = string_util::GetStdString(setting.fn.GetDirectory().GetString());
+			!pmx_model->LoadPMX(pmx_file, model_dir, mmd_data_path))
+		{
+			LoadModelLog::LogReadFileErr();
+			return false;
+		}
 
-		log.Set(model, setting);
-		if (!CMTSceneManager::LoadPMXModel(setting, model))
+		log.Set(pmx_model, setting);
+		if (!CMTSceneManager::LoadPMXModel(pmx_file, pmx_model, setting))
 		{
 			return false;
 		}

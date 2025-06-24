@@ -90,7 +90,7 @@ void LoadVmdMotionLog::LogSelectError()
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 }
 
-void LoadModelLog::Set(const std::shared_ptr<saba::MMDModel>& model, const CMTToolsSetting::ModelImport& setting)
+void LoadModelLog::Set(const MMDModelPtr& model, const CMTToolsSetting::ModelImport& setting)
 {
 	model_name_local = model->GetModelName().c_str();
 	comments_local = model->GetComment().c_str();
@@ -249,27 +249,27 @@ Bool CMTSceneManager::SaveVMDMotion(const CMTToolsSetting::MotionExport& setting
 	return false;
 }
 
-BaseObject* CMTSceneManager::LoadPMXModel(const CMTToolsSetting::ModelImport& setting, std::shared_ptr<saba::MMDModel> data)
+BaseObject* CMTSceneManager::LoadPMXModel(const saba::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
 	// create model
-	BaseObject* pmx_model = BaseObject::Alloc(ID_O_MMD_MODEL);
-	if (!pmx_model)
+	BaseObject* object = BaseObject::Alloc(ID_O_MMD_MODEL);
+	if (!object)
 		return nullptr;
 
-	setting.doc->InsertObject(pmx_model, nullptr, nullptr);
+	setting.doc->InsertObject(object, nullptr, nullptr);
 
 	// init model
-	pmx_model->SetName(setting.fn.GetFileString());
-	auto* pmx_model_data = pmx_model->GetNodeData<MMDModelManagerObject>();
+	object->SetName(setting.fn.GetFileString());
+	auto* pmx_model_data = object->GetNodeData<MMDModelManagerObject>();
 	pmx_model_data->CreateRoot();
 	pmx_model_data->UpdateRoot();
 
 	// set model with pmx data
-	pmx_model_data->LoadMMDModel(data, setting);
+	pmx_model_data->LoadPMX(pmx_file, pmx_model, setting);
 
 	EventAdd();
 
-	return pmx_model;
+	return object;
 }
 
 BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& setting, saba::PMXFile& data)
@@ -285,7 +285,7 @@ BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& se
 
 	if (select_object->IsInstanceOf(ID_O_MMD_MODEL))
 	{
-		if(auto* pmx_model_data = select_object->GetNodeData<MMDModelManagerObject>(); !pmx_model_data->SavePMXModel(data, setting))
+		if(auto* pmx_model_data = select_object->GetNodeData<MMDModelManagerObject>(); !pmx_model_data->SavePMX(data, setting))
 		{
 			return nullptr;
 		}

@@ -73,7 +73,7 @@ struct LoadModelLog : IOLog
 	UInt bone_data_count = 0;
 	UInt morph_data_count = 0;
 
-	void Set(const std::shared_ptr<saba::MMDModel>& model, const CMTToolsSetting::ModelImport& setting);
+	void Set(const MMDModelPtr& model, const CMTToolsSetting::ModelImport& setting);
 	void LogOK();
 	static void LogMMDDataPathErr();
 };
@@ -108,7 +108,7 @@ public:
 	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting,  std::unique_ptr<saba::VMDAnimation> data, LoadVmdMotionLog& log);
 	static Bool SaveVMDMotion(const CMTToolsSetting::MotionExport& setting,  saba::VMDFile&  data, SaveVmdMotionLog& log);
 
-	static BaseObject* LoadPMXModel(const CMTToolsSetting::ModelImport& setting, std::shared_ptr<saba::MMDModel> data);
+	static BaseObject* LoadPMXModel(const saba::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 	static BaseObject* SavePMXModel(const CMTToolsSetting::ModelExport& setting, saba::PMXFile& data);
 
 	void AddMMDCamera(SDK2024_Const BaseObject* camera);

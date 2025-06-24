@@ -1100,48 +1100,34 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	return EXECUTIONRESULT::OK;
 }
 
-Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::pmx_morph& pmx_morph)
+Int MMDModelManagerObject::ImportGroupAndFlipMorph(const saba::PMXFileMorph& pmx_morph)
 {
 	Int morph_id = -1;
 	iferr_scope_handler{ return morph_id; };
-	switch (pmx_morph.get_morph_offset_type())
+	switch (pmx_morph.m_morphType)
 	{
-	case libmmd::pmx_morph::morph_type::GROUP:
+	case saba::PMXMorphType::Group:
 	{
-		morph_id = AddMorph(MMDMorphType::GROUP, String(pmx_morph.get_morph_name_local().c_str()));
+		morph_id = AddMorph(MMDMorphType::GROUP, String(pmx_morph.m_name.c_str()));
 		auto& morph = m_morph_arr[morph_id];
-		const auto& morph_offset_array = pmx_morph.get_morph_offset_array();
-		const auto morph_offset_array_num = morph_offset_array.size();
-		for (size_t morph_offset_index = 0; morph_offset_index < morph_offset_array_num; ++morph_offset_index)
+		for (const auto& [morph_index, weight] : pmx_morph.m_groupMorph)
 		{
-			auto& morph_offset = dynamic_cast<const libmmd::pmx_group_morph_offset&>(morph_offset_array[morph_offset_index]);
-			morph.AddSubMorphNoCheck(morph_offset.get_morph_index(), morph_offset.get_morph_weight());
+			morph.AddSubMorphNoCheck(morph_index, weight);
 		}
 		break;
 	}
-	case libmmd::pmx_morph::morph_type::FLIP:
+	case saba::PMXMorphType::Flip:
 	{
-		morph_id = AddMorph(MMDMorphType::FLIP, String(pmx_morph.get_morph_name_local().c_str()));
+		morph_id = AddMorph(MMDMorphType::FLIP, String(pmx_morph.m_name.c_str()));
 		auto& morph = m_morph_arr[morph_id];
-		const auto& morph_offset_array = pmx_morph.get_morph_offset_array();
-		const auto morph_offset_array_num = morph_offset_array.size();
-		for (size_t morph_offset_index = 0; morph_offset_index < morph_offset_array_num; ++morph_offset_index)
+		for (const auto& [morph_index, weight] : pmx_morph.m_flipMorph)
 		{
-			auto& morph_offset = dynamic_cast<const libmmd::pmx_flip_morph_offset&>(morph_offset_array[morph_offset_index]);
-			morph.AddSubMorphNoCheck(morph_offset.get_morph_index(), morph_offset.get_morph_weight());
+			morph.AddSubMorphNoCheck(morph_index, weight);
 		}
 		break;
 	}
-	case libmmd::pmx_morph::morph_type::VERTEX: [[fallthrough]];
-	case libmmd::pmx_morph::morph_type::BONE: [[fallthrough]];
-	case libmmd::pmx_morph::morph_type::UV0: [[fallthrough]];
-	case libmmd::pmx_morph::morph_type::UV1: [[fallthrough]];
-	case libmmd::pmx_morph::morph_type::UV2: [[fallthrough]];
-	case libmmd::pmx_morph::morph_type::UV3: [[fallthrough]];
-	case libmmd::pmx_morph::morph_type::UV4: [[fallthrough]];
-	case libmmd::pmx_morph::morph_type::MATERIAL: [[fallthrough]];
-	case libmmd::pmx_morph::morph_type::IMPULSE:
-	break;
+	default:
+		break;
 	}
 	return morph_id;
 }
@@ -1251,35 +1237,36 @@ Bool MMDModelManagerObject::AddIKBoneDescription(const maxon::String& bone_name_
 	return true;
 }
 
-Bool MMDModelManagerObject::LoadMMDModel(std::shared_ptr<saba::MMDModel> model, const CMTToolsSetting::ModelImport& setting)
+Bool MMDModelManagerObject::LoadPMX(const saba::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
+	m_model = pmx_model;
 	maxon::BaseArray<BaseObject*> bone_list;
 	auto morph_change_helper = BeginMorphChange();
 
 	if (setting.import_bone)
-		if(!m_bone_root->GetNodeData<MMDBoneManagerObject>()->LoadPMX(model, bone_list, setting))
+		if(!m_bone_root->GetNodeData<MMDBoneManagerObject>()->LoadPMX(pmx_file, bone_list, setting))
 			return false;
 
 	if (setting.import_polygon)
-		if(!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->LoadPMX(model, bone_list, setting))
+		if(!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->LoadPMX(pmx_file, bone_list, setting))
 			return false;
 
 	if (setting.import_expression)
 	{
-		const auto& pmx_morph_array = model.get_pmx_morph_array();
+		const auto& pmx_morph_array = pmx_file.m_morphs;
 		const auto pmx_morph_num = pmx_morph_array.size();
 		for (auto morph_index = decltype(pmx_morph_num){}; morph_index < pmx_morph_num; ++morph_index)
 		{
 			const auto& pmx_morph = pmx_morph_array[morph_index];
-			if (const auto& morph_offset_type = pmx_morph.get_morph_offset_type();
-				morph_offset_type == libmmd::pmx_morph::morph_type::GROUP || morph_offset_type == libmmd::pmx_morph::morph_type::FLIP)
+			if (const auto& morph_offset_type = pmx_morph.m_morphType;
+				morph_offset_type == saba::PMXMorphType::Group || morph_offset_type == saba::PMXMorphType::Flip)
 				ImportGroupAndFlipMorph(pmx_morph);
 		}
 	}
 	return true;
 }
 
-Bool MMDModelManagerObject::SavePMXModel(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
+Bool MMDModelManagerObject::SavePMX(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
 {
 
 	if (setting.export_bone)

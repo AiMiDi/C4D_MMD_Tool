@@ -14,6 +14,8 @@ Description:	MMD mesh root object
 #include "CMTSceneManager.h"
 #include "CMTSceneManager.h"
 #include "CMTSceneManager.h"
+#include "CMTSceneManager.h"
+#include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
 #include "utils/morph_ui_data_util.hpp"
 
@@ -58,10 +60,10 @@ public:
 	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetMeshMorphData() const;
 	Bool SetMeshMorphStrength(const String& morph_name, Float strength);
 	Bool LoadPMX(
-		const libmmd::pmx_model& pmx_model,
+		const ::saba::PMXFile& pmx_file,
 		const maxon::BaseArray<BaseObject*>& bone_list,
 		const CMTToolsSetting::ModelImport& setting);
-	Bool SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting);
+	Bool SavePMX(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting);
 private:
 	void RefreshMeshMorphData(BaseObject* op);
 };

@@ -240,6 +240,7 @@ class MMDModelManagerObject final : public ObjectData
 	maxon::HashMap<String, AutoAlloc<BaseLink>> m_ik_link_name_map;
 
 	maxon::HashMap<String, std::unique_ptr<saba::VMDAnimation>> m_vmd_motion_arr;
+	MMDModelPtr m_model;
 
 	MMDModelManagerObject();
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelManagerObject)
@@ -268,7 +269,7 @@ public:
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 
 	AddMorphHelper BeginMorphChange();
-	Int ImportGroupAndFlipMorph(const libmmd::pmx_morph& pmx_morph);
+	Int ImportGroupAndFlipMorph(const saba::PMXFileMorph& pmx_morph);
 
 	DescID AddDynamicDescription(const BaseContainer& bc, const MMDModelRootDynamicDescriptionType& type, Int index);
 	void DeleteDynamicDescription(const DescID& id);
@@ -282,8 +283,8 @@ public:
 	Bool UpdateRoot(BaseObject* op = nullptr);
 	BaseObject* GetRootObject(const CMTObjectType type) const;
 
-	Bool LoadMMDModel(std::shared_ptr<saba::MMDModel> model, const CMTToolsSetting::ModelImport& setting);
-	Bool SavePMXModel(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;
+	Bool LoadPMX(const saba::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
+	Bool SavePMX(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;
 
 	Bool LoadVMDMotion(std::unique_ptr<saba::VMDAnimation> vmd_motion, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log);
 	Bool SaveVMDMotion(saba::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const;

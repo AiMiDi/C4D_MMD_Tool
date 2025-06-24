@@ -11,10 +11,6 @@ Description:	DESC
 #ifndef MMD_BONE_H__
 #define MMD_BONE_H__
 
-#include "description/TMMDBone.h"
-#include "module/tools/mmd_interpolator.hpp"
-#include "utils/morph_ui_data_util.hpp"
-
 namespace CMTToolsSetting
 {
 	struct MotionImport;
