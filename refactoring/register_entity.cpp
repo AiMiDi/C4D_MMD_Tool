@@ -4,10 +4,14 @@
 #include "CMTSceneManager.h"
 #include "module/ui/cmt_tools_dialog.h"
 #include "module/tools/loader/vmd_loader.h"
-#include "module/tools/object/mmd_mesh_manager.h"
+#include "module/tools/object/mmd_joint_manager.h"
+#include "module/tools/object/mmd_mesh_root.h"
 #include "module/tools/object/mmd_model.h"
-#include "module/tools/object/mmd_bone_manager.h"
+#include "module/tools/object/mmd_rigid_manager.h"
+#include "module/tools/object/mmd_bone_root.h"
 #include "module/tools/object/mmd_camera.h"
+#include "module/tools/object/mmd_joint.h"
+#include "module/tools/object/mmd_rigid.h"
 #include "module/tools/tag/mmd_bone.h"
 
 
@@ -31,19 +35,39 @@ Bool RegisterMMDCamera()
 	return(RegisterObjectPlugin(ID_O_MMD_CAMERA, GeLoadString(IDS_O_MMD_CAMERA), OBJECT_CALL_ADDEXECUTION, MMDCamera::Alloc, "OMMDCamera"_s, AutoBitmap("OMMDCamera.png"_s), 0));
 }
 
+Bool RegisterMMDRigid()
+{
+		return RegisterObjectPlugin(ID_O_MMD_RIGID, GeLoadString(IDS_O_MMD_RIGID), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, MMDRigidObject::Alloc, "OMMDRigid"_s, AutoBitmap("OMMDRigid.png"_s), 0);
+}
+
+Bool RegisterMMDJoint()
+{
+	return RegisterObjectPlugin(ID_O_MMD_JOINT, GeLoadString(IDS_O_MMD_JOINT), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, MMDJointObject::Alloc, "OMMDJoint"_s, AutoBitmap("OMMDJoint.png"_s), 0);
+}
+
 Bool RegisterMMDModelRoot()
 {
-	return RegisterObjectPlugin(ID_O_MMD_MODEL, GeLoadString(IDS_O_MMD_MODEL), OBJECT_CALL_ADDEXECUTION, MMDModelManagerObject::Alloc, "OMMDModel"_s, AutoBitmap(1021433), 0);
+	return RegisterObjectPlugin(ID_O_MMD_MODEL, GeLoadString(IDS_O_MMD_MODEL), OBJECT_CALL_ADDEXECUTION, MMDModelRootObject::Alloc, "OMMDModel"_s, AutoBitmap(1021433), 0);
 }
 
 Bool RegisterMMDBoneRoot()
 {
-	return RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU, MMDBoneManagerObject::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 0);
+	return RegisterObjectPlugin(ID_O_MMD_BONE_ROOT, GeLoadString(IDS_O_MMD_BONE_ROOT), PLUGINFLAG_HIDEPLUGINMENU, MMDBoneRootObject::Alloc, "OMMDBoneRoot"_s, AutoBitmap("OMMDBoneRoot.png"_s), 0);
 }
 
 Bool RegisterMMDMeshRoot()
 {
-	return RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, MMDMeshManagerObject::Alloc, "OMMDMeshRoot"_s, AutoBitmap("OMMDMeshRoot.png"_s), 0);
+	return RegisterObjectPlugin(ID_O_MMD_MESH_ROOT, GeLoadString(IDS_O_MMD_MESH_ROOT), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, MMDMeshRootObject::Alloc, "OMMDMeshRoot"_s, AutoBitmap("OMMDMeshRoot.png"_s), 0);
+}
+
+Bool RegisterMMDRigidRoot()
+{
+	return RegisterObjectPlugin(ID_O_MMD_RIGID_ROOT, GeLoadString(IDS_O_MMD_RIGID_ROOT), PLUGINFLAG_HIDEPLUGINMENU , MMDRigidManagerObject::Alloc, "OMMDRigidRoot"_s, AutoBitmap("OMMDRigidRoot.png"_s), 0);
+}
+
+Bool RegisterMMDJointRoot()
+{
+	return RegisterObjectPlugin(ID_O_MMD_JOINT_ROOT, GeLoadString(IDS_O_MMD_JOINT_ROOT), PLUGINFLAG_HIDEPLUGINMENU , MMDJointManagerObject::Alloc, "OMMDJointRoot"_s, AutoBitmap("OMMDJointRoot.png"_s), 0);
 }
 
 Bool RegisterMMDBoneTag()
@@ -61,11 +85,19 @@ Bool cmt_register::RegisterPlugin()
 		return false;
 	if (!RegisterMMDCamera())
 		return false;
+	if (!RegisterMMDRigid())
+		return false;
+	if (!RegisterMMDJoint())
+		return false;
 	if (!RegisterMMDModelRoot())
 		return false;
 	if (!RegisterMMDBoneRoot())
 		return false;
 	if (!RegisterMMDMeshRoot())
+		return false;
+	if (!RegisterMMDRigidRoot())
+		return false;
+	if (!RegisterMMDJointRoot())
 		return false;
 	if (!RegisterMMDBoneTag())
 		return false;
