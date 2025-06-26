@@ -37,13 +37,13 @@ struct MMDJointRootObjectMsg
 class MMDJointManagerObject final : public MMDManagerObject
 {
 	Int64 m_joint_name_index = 1;
-	BaseObject* m_bone_root = nullptr;
-	BaseObject* m_rigid_root = nullptr;
+	BaseObject* m_bone_manager = nullptr;
+	BaseObject* m_rigid_manager = nullptr;
 	MMDJointManagerObject() {}
 	~MMDJointManagerObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDJointManagerObject)
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDJointManagerObject)
-	INSTANCEOF(MMDJointRootObject, MMDManagerObject)
+	INSTANCEOF(MMDJointManagerObject, MMDManagerObject)
 public:
 	static NodeData* Alloc();
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
@@ -52,8 +52,8 @@ public:
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 
-	BaseObject* GetRigidRoot() const;
-	BaseObject* GetBoneRoot() const;
+	BaseObject* GetRigidManager() const;
+	BaseObject* GetBoneManager() const;
 
 };
 

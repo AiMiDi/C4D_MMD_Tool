@@ -160,7 +160,7 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 	settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)), nullptr);
 	if (settings != nullptr && m_rigid_manager)
 	{
-		settings->SetContainer(DESC_CYCLE, m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneRoot()->GetNodeData<MMDBoneManagerObject>()->GetBoneItems());
+		settings->SetContainer(DESC_CYCLE, m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->GetBoneItems());
 	}
 
 	flags |= DESCFLAGS_DESC::LOADED;
@@ -264,7 +264,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	}
 	case RIGID_RELATED_BONE_INDEX:
 	{
-		related_bone = m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneRoot()->GetNodeData<MMDBoneManagerObject>()->
+		related_bone = m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->
 		                                                   FindBone(t_data.GetInt32())->GetObject();
 		break;
 	}
@@ -469,7 +469,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		case RIGID_RELATED_BONE_INDEX:
 		{
-			related_bone = m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneRoot()->GetNodeData<MMDBoneManagerObject>()->
+			related_bone = m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->
 			                             FindBone(bc->GetInt32(RIGID_RELATED_BONE_INDEX))->GetObject();
 			break;
 		}

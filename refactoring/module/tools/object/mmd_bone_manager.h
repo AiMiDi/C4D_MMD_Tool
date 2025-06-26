@@ -12,7 +12,6 @@ Description:	DESC
 #define MMD_BONE_ROOT_H__
 
 #include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
 #include "description/OMMDBoneRoot.h"
 #include "utils/morph_ui_data_util.hpp"
@@ -33,8 +32,8 @@ type 3: bone morph change;
 enum class MMDBoneManagerObjectMsgType : int8_t
 {
 	DEFAULT = -1,
-	SET_BONE_DISPLAY_TYPE,
-	BONE_ROOT_UPDATE,
+	SET_BONE_DISPLAY_UPDATE,
+	BONE_HIERARCHY_UPDATE,
 	BONE_MORPH_CHANGE
 };
 struct MMDBoneManagerObjectMsg

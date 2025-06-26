@@ -10,55 +10,58 @@ Description:	MMD model object
 
 #include "pch.h"
 #include "mmd_model.h"
-
+#include "mmd_morph.h"
 #include "mmd_bone_manager.h"
 #include "mmd_mesh_manager.h"
 #include "description/OMMDModel.h"
-#include "module/tools/tag/mmd_bone.h"
 
 #define COL_NAME 'name'
 
 Bool EditorSubMorphDialog::CreateLayout()
 {
-	SetTitle(GeLoadString(IDS_MORPH_EDITOR));
-	m_images = std::make_unique<ImagesUserArea>("mmd_tool_title.png"_s, 300, 95);
-	if (C4DGadget* userAreaGadget = AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(95));
-		userAreaGadget != nullptr)
-		AttachUserArea(*m_images, userAreaGadget);
-	GroupBegin(1000, BFH_CENTER, 3, 1, ""_s, 0, 0, 150);
-	AddListView(10004, BFH_LEFT, 350, 150);
-	m_listview.AttachListView(this, 10004);
-	AddButton(10005, BFH_LEFT, 30, 10, ">>"_s);
-	m_id = 20000;
-	auto* sub_morph_data = m_morph->GetSubMorphDataWritable();
-	if (sub_morph_data == nullptr) {
-		Close();
+	iferr_scope_handler{
 		return false;
-	}
-	ScrollGroupBegin(1002, BFH_SCALEFIT, SCROLLGROUP_VERT | SCROLLGROUP_BORDERIN, 350, 150);
-	GroupBegin(1003, BFH_CENTER, 1, 0, ""_s, 0, 350, 150);
-	for (auto& data : *sub_morph_data)
-	{
-		const auto sub_morph_id = data.GetKey();
-		if(const auto morph_count = m_model->GetMorphNum(); morph_count >= sub_morph_id)
-			continue;
-		GroupBegin(m_id++, BFH_LEFT, 3, 1, ""_s, 0, 350, 10);
-		AddStaticText(m_id++, BFH_LEFT, 150, 10, m_model->GetMorphData()[sub_morph_id].GetName(), BORDER_NONE);
-		AddEditNumber(m_id, BFH_LEFT, 150, 10);
-		SetFloat(m_id++, data.GetValue());
-		AddButton(m_id, BFH_LEFT, 32, 10, GeLoadString(IDS_DELETE));
-		iferr(m_delete_button_id_set.Insert(m_id++))
-			return false;
-		GroupEnd();
+	};
 
-	}
-	GroupEnd();
-	GroupEnd();
+	SetTitle(GeLoadString(IDS_MORPH_EDITOR));
+	m_images = ImagesUserAreaRef::Create("mmd_tool_title.png"_s, 300, 95) iferr_return;
+	if (C4DGadget* user_area_gadget = AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(95));
+		user_area_gadget != nullptr)
+		AttachUserArea(*m_images, user_area_gadget);
+	GroupBegin(1000, BFH_CENTER, 3, 1, ""_s, 0, 0, 150);
+		AddListView(10004, BFH_LEFT, 350, 150);
+		m_listview.AttachListView(this, 10004);
+		AddButton(10005, BFH_LEFT, 30, 10, ">>"_s);
+		m_id = 20000;
+		auto* sub_morph_data = m_morph->GetSubMorphDataWritable();
+		if (sub_morph_data == nullptr) {
+			Close();
+			return false;
+		}
+		ScrollGroupBegin(1002, BFH_SCALEFIT, SCROLLGROUP_VERT | SCROLLGROUP_BORDERIN, 350, 150);
+			GroupBegin(1003, BFH_CENTER, 1, 0, ""_s, 0, 350, 150);
+				for (auto& data : *sub_morph_data)
+				{
+					const auto sub_morph_id = data.GetKey();
+					if(const auto morph_count = m_model->GetMorphNum(); morph_count >= sub_morph_id)
+						continue;
+					GroupBegin(m_id++, BFH_LEFT, 3, 1, ""_s, 0, 350, 10);
+					AddStaticText(m_id++, BFH_LEFT, 150, 10, m_model->GetMorphData()[sub_morph_id].GetName(), BORDER_NONE);
+					AddEditNumber(m_id, BFH_LEFT, 150, 10);
+					SetFloat(m_id++, data.GetValue());
+					AddButton(m_id, BFH_LEFT, 32, 10, GeLoadString(IDS_DELETE));
+					iferr(m_delete_button_id.Insert(m_id++))
+						return false;
+					GroupEnd();
+
+				}
+			GroupEnd();
+		GroupEnd();
 	GroupEnd();
 	GroupBegin(1004, BFH_CENTER, 2, 1, ""_s, 0, 0, 20);
-	GroupSpace(50, 0);
-	AddButton(10002, BFH_LEFT, 80, 20, GeLoadString(IDS_MSG_RENAME_OK));
-	AddButton(10003, BFH_RIGHT, 80, 20, GeLoadString(IDS_MSG_RENAME_CANCEL));
+		GroupSpace(50, 0);
+		AddButton(10002, BFH_LEFT, 80, 20, GeLoadString(IDS_MSG_RENAME_OK));
+		AddButton(10003, BFH_RIGHT, 80, 20, GeLoadString(IDS_MSG_RENAME_CANCEL));
 	GroupEnd();
 	return true;
 }
@@ -82,6 +85,7 @@ Bool EditorSubMorphDialog::InitValues()
 	m_listview.DataChanged();
 	return true;
 }
+
 Bool EditorSubMorphDialog::Command(Int32 id, const BaseContainer& msg)
 {
 	switch (id)
@@ -95,7 +99,7 @@ Bool EditorSubMorphDialog::Command(Int32 id, const BaseContainer& msg)
 			return false;
 		}
 		sub_morph_data->Reset();
-		for (auto& delete_button_id : m_delete_button_id_set)
+		for (auto& delete_button_id : m_delete_button_id)
 		{
 			String name;
 			Float weight = 0;
@@ -121,13 +125,13 @@ Bool EditorSubMorphDialog::Command(Int32 id, const BaseContainer& msg)
 		BaseContainer bc;
 		Int32 seg = 0, a, b;
 		maxon::BaseList<maxon::Pair<String, Float>> tmp;
-		for (auto& delete_button_id : m_delete_button_id_set)
+		for (auto& delete_button_id : m_delete_button_id)
 		{
 			auto& tmp_data = tmp.Append().GetValue();
 			GetString(delete_button_id - 2, tmp_data.first);
 			GetFloat(delete_button_id - 1, tmp_data.second);
 		}
-		m_delete_button_id_set.Reset();
+		m_delete_button_id.Reset();
 		// begin layout change and store data
 		UpdateDialogHelper updateDialog = BeginLayoutChange(1003, true);
 		for (auto& tmp_data : tmp)
@@ -137,7 +141,7 @@ Bool EditorSubMorphDialog::Command(Int32 id, const BaseContainer& msg)
 			AddEditNumber(m_id, BFH_LEFT, 150, 10);
 			SetFloat(m_id++, tmp_data.second);
 			AddButton(m_id, BFH_LEFT, 32, 10, GeLoadString(IDS_DELETE));
-			iferr(m_delete_button_id_set.Insert(m_id++))
+			iferr(m_delete_button_id.Insert(m_id++))
 			{
 				GroupEnd();
 				return false;
@@ -160,7 +164,7 @@ Bool EditorSubMorphDialog::Command(Int32 id, const BaseContainer& msg)
 					GroupEnd();
 					continue;
 				}
-				iferr(m_delete_button_id_set.Insert(m_id++))
+				iferr(m_delete_button_id.Insert(m_id++))
 					return false;
 				GroupEnd();
 			}
@@ -172,7 +176,7 @@ Bool EditorSubMorphDialog::Command(Int32 id, const BaseContainer& msg)
 		break;
 	}
 	default:
-		if (m_delete_button_id_set.Find(id) != nullptr)
+		if (m_delete_button_id.Find(id) != nullptr)
 		{
 			String name;
 			RemoveElement(id);
@@ -185,489 +189,11 @@ Bool EditorSubMorphDialog::Command(Int32 id, const BaseContainer& msg)
 			m_listview.SetItem(m_listview.GetItemCount(), data);
 			m_listview.DataChanged();
 			LayoutChanged(1003);
-			m_delete_button_id_set.Erase(id);
+			m_delete_button_id.Erase(id);
 		}
 		break;
 	}
 	return true;
-}
-
-inline Bool IMorph::Read(HyperFile* hf)
-{
-	if (m_strength_id.Read(hf) == false)
-		return false;
-	if (hf->ReadString(&m_name) == false)
-		return false;
-	return true;
-}
-
-inline Bool IMorph::Write(HyperFile* hf) SDK2024_Const
-{
-	if (m_strength_id.Write(hf) == false)
-		return false;
-	if (hf->WriteString(m_name) == false)
-		return false;
-	return true;
-}
-
-inline Bool IMorph::CopyTo(IMorph* dest) const
-{
-	dest->m_strength_id = m_strength_id;
-	dest->m_name = m_name;
-	return true;
-}
-inline Bool GroupMorph::Read(HyperFile* hf)
-{
-	if (IMorph::Read(hf) == false)
-		return false;
-	if (m_grp_id.Read(hf) == false)
-		return false;
-	if (m_button_grp_id.Read(hf) == false)
-		return false;
-	if (m_button_editor_id.Read(hf) == false)
-		return false;
-	if (m_button_delete_id.Read(hf) == false)
-		return false;
-	if (m_button_rename_id.Read(hf) == false)
-		return false;
-	m_data.Reset();
-	Int64 data_const = 0;
-	if (hf->ReadInt64(&data_const) == false)
-		return false;
-	for (Int64 i = 0; i < data_const; ++i)
-	{
-		Int64 id;
-		Float influence;
-		if (hf->ReadInt64(&id) == false)
-			return false;
-		if (hf->ReadFloat(&influence) == false)
-			return false;
-		iferr(m_data.Insert(id, influence))
-			return false;
-	}
-	return true;
-}
-inline Bool GroupMorph::Write(HyperFile* hf) SDK2024_Const
-{
-	if (IMorph::Write(hf) == false)
-		return false;
-	if (m_grp_id.Write(hf) == false)
-		return false;
-	if (m_button_grp_id.Write(hf) == false)
-		return false;
-	if (m_button_editor_id.Write(hf) == false)
-		return false;
-	if (m_button_delete_id.Write(hf) == false)
-		return false;
-	if (m_button_rename_id.Write(hf) == false)
-		return false;
-	if (hf->WriteInt64(m_data.GetCount()) == false)
-		return false;
-	for (auto& data : m_data)
-	{
-		if (hf->WriteInt64(data.GetKey()) == false)
-			return false;
-		if (hf->WriteFloat(data.GetValue()) == false)
-			return false;
-	}
-	return true;
-}
-inline Bool GroupMorph::CopyTo(IMorph* dest) const
-{
-	if (IMorph::CopyTo(dest) == false)
-		return false;
-	for (auto& data : m_data)
-	{
-		iferr(dest->GetSubMorphDataWritable()->Insert(data.GetKey(), data.GetValue()))
-			return false;
-	}
-	return true;
-}
-inline Bool FlipMorph::Read(HyperFile* hf)
-{
-	if (IMorph::Read(hf) == false)
-		return false;
-	if (m_grp_id.Read(hf) == false)
-		return false;
-	if (m_button_grp_id.Read(hf) == false)
-		return false;
-	if (m_button_editor_id.Read(hf) == false)
-		return false;
-	if (m_button_delete_id.Read(hf) == false)
-		return false;
-	if (m_button_rename_id.Read(hf) == false)
-		return false;
-	m_data.Reset();
-	Int64 data_const = 0;
-	if (hf->ReadInt64(&data_const) == false)
-		return false;
-	for (Int64 i = 0; i < data_const; ++i)
-	{
-		Int64 id;
-		Float influence;
-		if (hf->ReadInt64(&id) == false)
-			return false;
-		if (hf->ReadFloat(&influence) == false)
-			return false;
-		iferr(m_data.Insert(id, influence))
-			return false;
-	}
-	return true;
-}
-inline Bool FlipMorph::Write(HyperFile* hf) SDK2024_Const
-{
-	if (IMorph::Write(hf) == false)
-		return false;
-	if (m_grp_id.Write(hf) == false)
-		return false;
-	if (m_button_grp_id.Write(hf) == false)
-		return false;
-	if (m_button_editor_id.Write(hf) == false)
-		return false;
-	if (m_button_delete_id.Write(hf) == false)
-		return false;
-	if (m_button_rename_id.Write(hf) == false)
-		return false;
-	if (hf->WriteInt64(m_data.GetCount()) == false)
-		return false;
-	for (auto& data : m_data)
-	{
-		if (hf->WriteInt64(data.GetKey()) == false)
-			return false;
-		if (hf->WriteFloat(data.GetValue()) == false)
-			return false;
-	}
-	return true;
-}
-inline Bool FlipMorph::CopyTo(IMorph* dest) const
-{
-	if (IMorph::CopyTo(dest) == false)
-		return false;
-	for (auto& data : m_data)
-	{
-		iferr(dest->GetSubMorphDataWritable()->Insert(data.GetKey(), data.GetValue()))
-			return false;
-	}
-	return true;
-}
-
-MeshMorph::MeshMorph(String name, DescID strength_id): IMorph(std::move(name), std::move(strength_id))
-{}
-
-MeshMorph::MeshMorph(MeshMorph&& other) noexcept: IMorph(std::move(other))
-{}
-
-IMorph::IMorph(String name, DescID strength_id):
-	m_name(std::move(name)), m_strength_id(std::move(strength_id))
-{}
-
-IMorph::IMorph(IMorph&& other) noexcept:
-	m_name(std::move(other.m_name)),
-	m_strength_id(std::move(other.m_strength_id))
-{}
-
-inline Float IMorph::GetStrength(SDK2024_Const GeListNode* node) const
-{
-	GeData ge_data;
-	if (!node->GetParameter(m_strength_id, ge_data, DESCFLAGS_GET::NONE))
-	{
-		return 0.0;
-	}
-	return ge_data.GetFloat();
-}
-inline Bool IMorph::SetStrength(GeListNode* node, const Float& strength) const
-{
-	return node->SetParameter(m_strength_id, strength, DESCFLAGS_SET::NONE);
-}
-
-DescID IMorph::GetStrengthDescID()
-{ return m_strength_id; }
-
-bool IMorph::operator==(const IMorph& other) const
-{ return m_name == other.m_name; }
-
-inline void IMorph::RenameMorph(const String& name)
-{
-	m_name = name;
-}
-inline void GroupMorph::RenameSubMorph(const Int old_id, const Int new_id)
-{
-	if (auto* data_ptr = m_data.Find(old_id); data_ptr)
-	{
-		iferr(m_data.Insert(new_id, data_ptr->GetValue()))
-			return;
-		std::ignore = m_data.Erase(data_ptr);
-	}
-}
-inline void FlipMorph::RenameSubMorph(const Int old_id, const Int new_id)
-{
-	if (auto* data_ptr = m_data.Find(old_id); data_ptr)
-	{
-		iferr(m_data.Insert(new_id, data_ptr->GetValue()))
-			return;
-		std::ignore = m_data.Erase(data_ptr);
-	}
-}
-
-GroupMorph::GroupMorph(String name, DescID grp_id, DescID strength_id, DescID button_grp_id, DescID button_editor_id,
-	DescID button_delete_id, DescID button_rename_id):
-	IMorph(std::move(name), std::move(strength_id)),
-	m_grp_id(std::move(grp_id)),
-	m_button_grp_id(std::move(button_grp_id)),
-	m_button_editor_id(std::move(button_editor_id)),
-	m_button_delete_id(std::move(button_delete_id)),
-	m_button_rename_id(std::move(button_rename_id))
-{}
-
-GroupMorph::GroupMorph(GroupMorph&& other) noexcept:
-	IMorph(std::move(other.m_name), std::move(other.m_strength_id)),
-	m_grp_id(std::move(other.m_grp_id)),
-	m_button_grp_id(std::move(other.m_button_grp_id)),
-	m_button_delete_id(std::move(other.m_button_delete_id)),
-	m_button_rename_id(std::move(other.m_button_rename_id)),
-	m_data(std::move(other.m_data))
-{}
-
-inline void GroupMorph::UpdateMorph(MMDModelManagerObject& model)
-{
-	GeListNode* node = model.Get();
-	auto& morph_arr = model.GetMorphData();
-	for (auto& data : m_data)
-	{
-		auto& morph = morph_arr[data.GetKey()];
-		morph.SetStrength(node, GetStrength(node) * data.GetValue());
-	}
-}
-
-FlipMorph::FlipMorph(String name, DescID strength_id, DescID grp_id, DescID button_grp_id, DescID button_editor_id,
-	DescID button_delete_id, DescID button_rename_id):
-	IMorph(std::move(name), std::move(strength_id)),
-	m_grp_id(std::move(grp_id)),
-	m_button_grp_id(std::move(button_grp_id)),
-	m_button_editor_id(std::move(button_editor_id)),
-	m_button_delete_id(std::move(button_delete_id)),
-	m_button_rename_id(std::move(button_rename_id))
-{}
-
-FlipMorph::FlipMorph(FlipMorph&& other) noexcept:
-	IMorph(std::move(other.m_name), std::move(other.m_strength_id)),
-	m_grp_id(std::move(other.m_grp_id)),
-	m_button_grp_id(std::move(other.m_button_grp_id)),
-	m_button_delete_id(std::move(other.m_button_delete_id)),
-	m_button_rename_id(std::move(other.m_button_rename_id)),
-	m_data(std::move(other.m_data))
-{}
-
-inline void FlipMorph::UpdateMorph(MMDModelManagerObject& model)
-{
-	GeListNode* node = model.Get();
-	auto& morph_arr = model.GetMorphData();
-	for (auto& data : m_data) {
-		auto& morph_id = data.GetKey();
-		auto& morph = morph_arr[morph_id];
-		morph.SetStrength(node, GetStrength(node) >= 0.5 ? data.GetValue() : 0.0);
-	}
-}
-inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
-{
-	if (BaseObject* mesh_root = model.GetRootObject(CMTObjectType::MeshRoot))
-	{
-		mesh_root->GetNodeData<MMDMeshManagerObject>()->SetMeshMorphStrength(m_name, GetStrength(model.Get()));
-	}
-
-}
-inline void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
-{
-	if (BaseObject* bone_root = model.GetRootObject(CMTObjectType::BoneRoot))
-	{
-		bone_root->GetNodeData<MMDBoneManagerObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
-	}
-}
-inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
-{
-	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-	bc.SetString(DESC_NAME, m_name);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_GROUP_GRP))));
-	m_grp_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_REAL);
-	bc.SetString(DESC_NAME, m_name);
-	bc.SetFloat(DESC_MAX, 1.);
-	bc.SetFloat(DESC_MIN, 0.);
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
-	bc.SetFloat(DESC_MAXSLIDER, 1.);
-	bc.SetFloat(DESC_MINSLIDER, 0.);
-	bc.SetFloat(DESC_STEP, 0.01);
-	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
-	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-	bc.SetInt32(DESC_COLUMNS, 3);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
-	m_button_grp_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_EDITOR));
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
-	m_button_editor_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_EDITOR_BUTTON, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
-	m_button_delete_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_DELETE_BUTTON, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
-	m_button_rename_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_RENAME_BUTTON, morph_id);
-	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-
-}
-inline void FlipMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
-{
-	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-	bc.SetString(DESC_NAME, m_name);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_FLIP_GRP))));
-	m_grp_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_REAL);
-	bc.SetString(DESC_NAME, m_name);
-	bc.SetFloat(DESC_MAX, 1.);
-	bc.SetFloat(DESC_MIN, 0.);
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
-	bc.SetFloat(DESC_MAXSLIDER, 1.);
-	bc.SetFloat(DESC_MINSLIDER, 0.);
-	bc.SetFloat(DESC_STEP, 0.01);
-	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
-	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-	bc.SetInt32(DESC_COLUMNS, 3);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
-	m_button_grp_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_EDITOR));
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
-	m_button_editor_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_EDITOR_BUTTON, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
-	m_button_delete_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_DELETE_BUTTON, morph_id);
-	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
-	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
-	m_button_rename_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_RENAME_BUTTON, morph_id);
-	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-}
-inline void MeshMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
-{
-	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
-	bc.SetString(DESC_NAME, m_name);
-	bc.SetFloat(DESC_MAX, 1.);
-	bc.SetFloat(DESC_MIN, 0.);
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
-	bc.SetFloat(DESC_MAXSLIDER, 1.);
-	bc.SetFloat(DESC_MINSLIDER, 0.);
-	bc.SetFloat(DESC_STEP, 0.01);
-	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_MESH_GRP))));
-	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
-	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-}
-inline void BoneMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
-{
-	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
-	bc.SetString(DESC_NAME, m_name);
-	bc.SetFloat(DESC_MAX, 1.);
-	bc.SetFloat(DESC_MIN, 0.);
-	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
-	bc.SetFloat(DESC_MAXSLIDER, 1.);
-	bc.SetFloat(DESC_MINSLIDER, 0.);
-	bc.SetFloat(DESC_STEP, 0.01);
-	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_BONE_GRP))));
-	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
-	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-}
-
-inline void GroupMorph::DeleteMorphUI(MMDModelManagerObject& model)
-{
-	model.DeleteDynamicDescription(m_button_editor_id);
-	model.DeleteDynamicDescription(m_button_delete_id);
-	model.DeleteDynamicDescription(m_button_rename_id);
-	model.DeleteDynamicDescription(m_button_grp_id);
-	model.DeleteDynamicDescription(m_strength_id);
-	model.DeleteDynamicDescription(m_grp_id);
-
-	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-	if (::GeIsMainThread())
-	{
-		::EventAdd();
-	}
-}
-inline void FlipMorph::DeleteMorphUI(MMDModelManagerObject& model)
-{
-	model.DeleteDynamicDescription(m_button_editor_id);
-	model.DeleteDynamicDescription(m_button_delete_id);
-	model.DeleteDynamicDescription(m_button_rename_id);
-	model.DeleteDynamicDescription(m_button_grp_id);
-	model.DeleteDynamicDescription(m_strength_id);
-	model.DeleteDynamicDescription(m_grp_id);
-
-	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-	if (::GeIsMainThread())
-	{
-		::EventAdd();
-	}
-}
-inline void MeshMorph::DeleteMorphUI(MMDModelManagerObject& model)
-{
-	model.DeleteDynamicDescription(m_strength_id);
-
-	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-	if (::GeIsMainThread())
-	{
-		::EventAdd();
-	}
-}
-
-BoneMorph::BoneMorph(String name, DescID strength_id): IMorph(std::move(name), std::move(strength_id))
-{}
-
-BoneMorph::BoneMorph(BoneMorph&& other) noexcept: IMorph(std::move(other))
-{}
-
-inline void BoneMorph::DeleteMorphUI(MMDModelManagerObject& model)
-{
-	model.DeleteDynamicDescription(m_strength_id);
-
-	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-	if (::GeIsMainThread())
-	{
-		::EventAdd();
-	}
-}
-inline void GroupMorph::AddSubMorph(MMDModelManagerObject* model, Int id, const Float weight)
-{
-	if (model->GetMorphNum() > id)
-	{
-		 std::ignore = m_data.Insert(id, weight);
-	}
-}
-inline void FlipMorph::AddSubMorph(MMDModelManagerObject* model, Int id, const Float weight)
-{
-	if (model->GetMorphNum() > id) {
-		std::ignore = m_data.Insert(id, weight);
-	}
-}
-inline void GroupMorph::AddSubMorphNoCheck(Int id, const Float weight)
-{
-	std::ignore = m_data.Insert(id, weight);
-}
-inline auto FlipMorph::AddSubMorphNoCheck(Int id, const Float weight) -> void
-{
-	std::ignore = m_data.Insert(id, weight);
 }
 
 MMDModelManagerObject::AddMorphHelper::AddMorphHelper(MMDModelManagerObject* model):m_model(model)
@@ -1025,21 +551,21 @@ Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 		m_is_root_initialized = false;
 	}
 	if (m_is_root_initialized == false) {
-		MMDModelRootObjectMsg MeshRoot_msg(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op);
+		MMDModelRootObjectMsg MeshRoot_msg(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::MODEL_MANAGER, op);
 		m_mesh_root->Message(ID_O_MMD_MODEL, &MeshRoot_msg);
-		MMDModelRootObjectMsg BoneRoot_msgA(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, m_rigid_root);
+		MMDModelRootObjectMsg BoneRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, m_rigid_root);
 		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgA);
-		MMDModelRootObjectMsg BoneRoot_msgB(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, m_joint_root);
+		MMDModelRootObjectMsg BoneRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, m_joint_root);
 		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgB);
-		MMDModelRootObjectMsg BoneRoot_msgC(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::ModelRoot, op);
+		MMDModelRootObjectMsg BoneRoot_msgC(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::MODEL_MANAGER, op);
 		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgC);
-		MMDModelRootObjectMsg RigidRoot_msgA(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, m_bone_root);
+		MMDModelRootObjectMsg RigidRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, m_bone_root);
 		m_rigid_root->Message(ID_O_MMD_MODEL, &RigidRoot_msgA);
-		MMDModelRootObjectMsg RigidRoot_msgB(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::JointRoot, m_joint_root);
+		MMDModelRootObjectMsg RigidRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, m_joint_root);
 		m_rigid_root->Message(ID_O_MMD_MODEL, &RigidRoot_msgB);
-		MMDModelRootObjectMsg JointRoot_msgA(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::BoneRoot, m_bone_root);
+		MMDModelRootObjectMsg JointRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, m_bone_root);
 		m_joint_root->Message(ID_O_MMD_MODEL, &JointRoot_msgA);
-		MMDModelRootObjectMsg JointRoot_msgB(MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE, CMTObjectType::RigidRoot, m_rigid_root);
+		MMDModelRootObjectMsg JointRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, m_rigid_root);
 		m_joint_root->Message(ID_O_MMD_MODEL, &JointRoot_msgB);
 		m_is_root_initialized = true;
 	}
@@ -1202,21 +728,21 @@ Bool MMDModelManagerObject::CreateRoot()
 	return false;
 }
 
-BaseObject* MMDModelManagerObject::GetRootObject(const CMTObjectType type) const
+BaseObject* MMDModelManagerObject::GetRootObject(const ManagerObjectType type) const
 {
 	switch (type)
 	{
-	case CMTObjectType::MeshRoot:
+	case ManagerObjectType::MESH_MANAGER:
 		return m_mesh_root;
-	case CMTObjectType::BoneRoot:
+	case ManagerObjectType::BONE_MANAGER:
 		return m_bone_root;
-	case CMTObjectType::RigidRoot:
+	case ManagerObjectType::RIGID_MANAGER:
 		return m_rigid_root;
-	case CMTObjectType::JointRoot:
+	case ManagerObjectType::JOINT_MANAGER:
 		return m_joint_root;
 
-	case CMTObjectType::DEFAULT:
-	case CMTObjectType::ModelRoot:;
+	case ManagerObjectType::DEFAULT:
+	case ManagerObjectType::MODEL_MANAGER:;
 	}
 	return nullptr;
 }

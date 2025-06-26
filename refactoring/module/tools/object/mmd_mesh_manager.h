@@ -12,10 +12,6 @@ Description:	MMD mesh root object
 #define MMD_MESH_ROOT_H__
 
 #include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
-#include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
 #include "utils/morph_ui_data_util.hpp"
 

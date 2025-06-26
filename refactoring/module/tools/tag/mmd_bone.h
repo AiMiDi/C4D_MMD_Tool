@@ -47,9 +47,6 @@ public:
  */
 class MMDBoneTag final : public TagData
 {
-	// Bone index
-	Int32 m_bone_index = -1;
-
 	saba::MMDNode* m_mmd_node = nullptr;
 
 	// Bone root object
@@ -97,6 +94,8 @@ public:
 	 * @param[in] bone_tag The BaseTag to be set. If nullptr, it will reset the bone tag.
 	 */
 	void SetBoneTag(BaseTag* bone_tag = nullptr);
+
+	void SetMMDNode(saba::MMDNode* mmd_node);
 
 	/**
 	 * @brief Allocates a new instance of MMDBoneTag.
@@ -238,7 +237,7 @@ private:
 	 * @param[in] data_instance_bc The BaseContainer containing the data instance.
 	 * @param[in] msg The MMDBoneRootObjectMsg containing the root object message.
 	 */
-	void HandleBoneManagerMessage(BaseContainer* data_instance_bc, const MMDBoneManagerObjectMsg* msg);
+	void HandleBoneHierarchyUpdate(BaseContainer* data_instance_bc, const MMDBoneManagerObjectMsg* msg);
 };
 
 #endif // MMD_BONE_H__

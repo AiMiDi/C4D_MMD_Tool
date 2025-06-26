@@ -11,9 +11,9 @@ Description:	DESC
 #include "pch.h"
 #include "mmd_bone.h"
 
+#include "maxon/quaternion.h"
+#include "description/TMMDBone.h"
 #include "module/tools/object/mmd_bone_manager.h"
-#include "cmt_tools_setting.h"
-#include "maxon/quaternion.h"  
 
 Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 {
@@ -94,6 +94,11 @@ void MMDBoneTag::SetBoneTag(BaseTag* bone_tag)
 		m_bone_tag = bone_tag;
 	else
 		m_bone_tag = reinterpret_cast<BaseTag*>(Get());
+}
+
+void MMDBoneTag::SetMMDNode(saba::MMDNode* mmd_node)
+{
+	m_mmd_node = mmd_node;
 }
 
 NodeData* MMDBoneTag::Alloc()
@@ -369,7 +374,7 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 	}
 }
 
-void MMDBoneTag::HandleBoneManagerMessage(BaseContainer* const data_instance_bc, const MMDBoneManagerObjectMsg* msg)
+void MMDBoneTag::HandleBoneHierarchyUpdate(BaseContainer* const data_instance_bc, const MMDBoneManagerObjectMsg* msg)
 {
 	m_bone_manager = msg->bond_root_object;
 	if (m_bone_object) {
@@ -464,11 +469,11 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 		{
 			switch (msg->type)
 			{
-			case MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE:
+			case MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE:
 				SetBoneDisplay(data_instance_bc, msg);
 				break;
-			case MMDBoneManagerObjectMsgType::BONE_ROOT_UPDATE:
-				HandleBoneManagerMessage(data_instance_bc, msg);
+			case MMDBoneManagerObjectMsgType::BONE_HIERARCHY_UPDATE:
+				HandleBoneHierarchyUpdate(data_instance_bc, msg);
 				break;
 			case MMDBoneManagerObjectMsgType::DEFAULT:
 			case MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE:
@@ -771,13 +776,13 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 	if (m_mmd_node)
 	{
-		const auto AnimationTranslate = m_mmd_node->GetAnimationTranslate();
-		const auto AnimationRotate = m_mmd_node->GetAnimationRotate();
+		const auto& animation_translate = m_mmd_node->GetAnimationTranslate();
+		const auto& animation_rotate = m_mmd_node->GetAnimationRotate();
 
-		const auto Ml = maxon::Matrix{Vector{AnimationTranslate.x, AnimationTranslate.y, AnimationRotate.z},
-			maxon::Quaternion64(AnimationRotate.x, AnimationRotate.y, AnimationRotate.z, AnimationRotate.w).GetMatrix()};
+		const auto local_matrix = maxon::Matrix{Vector{animation_translate.x, animation_translate.y, animation_rotate.z},
+			maxon::Quaternion64(animation_rotate.x, animation_rotate.y, animation_rotate.z, animation_rotate.w).GetMatrix()};
 
-		m_bone_object->SetMl(Ml);
+		m_bone_object->SetMl(local_matrix);
 	}
 
 	return EXECUTIONRESULT::OK;
@@ -816,5 +821,5 @@ Bool MMDBoneTag::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Co
 
 Int32 MMDBoneTag::GetBoneIndex() const
 {
-	return m_bone_index;
+	return !m_mmd_node ? -1 : static_cast<Int32>(m_mmd_node->GetIndex());
 }

@@ -56,13 +56,13 @@ Bool MMDJointObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	{
 	case JOINT_LINK_RIGID_A_INDEX:
 	{
-		m_link_rigid_a = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidRoot()->GetNodeData<MMDRigidManagerObject>()
+		m_link_rigid_a = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
 		                        ->FindRigid(t_data.GetInt32());
 		break;
 	}
 	case JOINT_LINK_RIGID_B_INDEX:
 	{
-		m_link_rigid_b = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidRoot()->GetNodeData<MMDRigidManagerObject>()
+		m_link_rigid_b = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
 		                        ->FindRigid(t_data.GetInt32());
 		break;
 	}
@@ -90,21 +90,21 @@ Bool MMDJointObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 
 		if (settings != nullptr)
 		{
-			settings->SetContainer(DESC_CYCLE, m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidRoot()->GetNodeData<MMDRigidManagerObject>()->GetRigidItems());
+			settings->SetContainer(DESC_CYCLE, m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()->GetRigidItems());
 		}
 
 		settings = description->GetParameterI(ConstDescID(DescLevel(JOINT_LINK_RIGID_B_INDEX)), nullptr);
 
 		if (settings != nullptr)
 		{
-			settings->SetContainer(DESC_CYCLE, m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidRoot()->GetNodeData<MMDRigidManagerObject>()->GetRigidItems());
+			settings->SetContainer(DESC_CYCLE, m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()->GetRigidItems());
 		}
 
 		settings = description->GetParameterI(ConstDescID(DescLevel(JOINT_ATTITUDE_USE_BONE_INDEX)), nullptr);
 
 		if (settings != nullptr)
 		{
-			settings->SetContainer(DESC_CYCLE, m_joint_root->GetNodeData<MMDJointManagerObject>()->GetBoneRoot()->GetNodeData<MMDBoneManagerObject>()->GetBoneItems());
+			settings->SetContainer(DESC_CYCLE, m_joint_root->GetNodeData<MMDJointManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->GetBoneItems());
 		}
 	}
 	flags |= DESCFLAGS_DESC::LOADED;
@@ -251,12 +251,12 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		case JOINT_LINK_RIGID_SET_NAME_BUTTON:
 		{
 			String name = "<->"_s;
-			if (const BaseObject* a_rigid_object = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidRoot()->GetNodeData<MMDRigidManagerObject>()
+			if (const BaseObject* a_rigid_object = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
 			                                                ->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX)))
 			{
 				name = a_rigid_object->GetName() + name;
 			}
-			if (const BaseObject* b_rigid_object = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidRoot()->GetNodeData<MMDRigidManagerObject>()
+			if (const BaseObject* b_rigid_object = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
 			                                                                         ->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX)))
 			{
 				name = name + b_rigid_object->GetName();
@@ -267,7 +267,7 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		case JOINT_ATTITUDE_USE_BONE_BUTTON:
 		{
-			if (const auto bone_ptr = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetBoneRoot()->GetNodeData<MMDBoneManagerObject>()
+			if (const auto bone_ptr = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()
 																					->FindBone(bc->GetInt32(JOINT_ATTITUDE_USE_BONE_INDEX)))
 			{
 				reinterpret_cast<BaseObject*>(node)->SetAbsPos(bone_ptr->GetObject()->GetAbsPos());
@@ -313,13 +313,13 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		{
 		case JOINT_LINK_RIGID_A_INDEX:
 		{
-			m_link_rigid_a = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidRoot()->GetNodeData<MMDRigidManagerObject>()
+			m_link_rigid_a = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
 				->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX));
 			break;
 		}
 		case JOINT_LINK_RIGID_B_INDEX:
 		{
-			m_link_rigid_b = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidRoot()->GetNodeData<MMDRigidManagerObject>()
+			m_link_rigid_b = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
 				->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX));
 			break;
 		}

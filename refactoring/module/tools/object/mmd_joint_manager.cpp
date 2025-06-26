@@ -27,10 +27,10 @@ Bool MMDJointManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return false;
 	if (!temp_link->Read(hf))
 		return false;
-	m_bone_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
+	m_bone_manager = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
 	if (!temp_link->Read(hf))
 		return false;
-	m_rigid_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
+	m_rigid_manager = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
 	return SUPER::Read(node, hf, level);
 }
 
@@ -41,10 +41,10 @@ Bool MMDJointManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 	AutoAlloc<BaseLink> temp_link;
 	if (!temp_link)
 		return false;
-	temp_link->SetLink(m_bone_root);
+	temp_link->SetLink(m_bone_manager);
 	if (!temp_link->Write(hf))
 		return false;
-	temp_link->SetLink(m_rigid_root);
+	temp_link->SetLink(m_rigid_manager);
 	if (!temp_link->Write(hf))
 		return false;
 	return SUPER::Write(node, hf);
@@ -54,8 +54,8 @@ Bool MMDJointManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* sno
 	AliasTrans* trn) SDK2024_Const
 {
 	auto const dest_object = reinterpret_cast<MMDJointManagerObject*>(dest);
-	dest_object->m_bone_root = m_bone_root;
-	dest_object->m_rigid_root = m_rigid_root;
+	dest_object->m_bone_manager = m_bone_manager;
+	dest_object->m_rigid_manager = m_rigid_manager;
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
@@ -86,23 +86,23 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data); msg != nullptr)
 		{
-			if (msg->msg_type == MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE) {
+			if (msg->msg_type == MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE) {
 				switch (msg->object_type)
 				{
-				case CMTObjectType::BoneRoot:
+				case ManagerObjectType::BONE_MANAGER:
 				{
-					m_bone_root = msg->object;
+					m_bone_manager = msg->object;
 					break;
 				}
-				case CMTObjectType::RigidRoot:
+				case ManagerObjectType::RIGID_MANAGER:
 				{
-					m_rigid_root = msg->object;
+					m_rigid_manager = msg->object;
 					break;
 				}
-				case CMTObjectType::DEFAULT:
-				case CMTObjectType::MeshRoot:
-				case CMTObjectType::JointRoot:
-				case CMTObjectType::ModelRoot:
+				case ManagerObjectType::DEFAULT:
+				case ManagerObjectType::MESH_MANAGER:
+				case ManagerObjectType::JOINT_MANAGER:
+				case ManagerObjectType::MODEL_MANAGER:
 					break;
 				}
 			}
@@ -137,12 +137,12 @@ Bool MMDJointManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 
-BaseObject* MMDJointManagerObject::GetRigidRoot() const
+BaseObject* MMDJointManagerObject::GetRigidManager() const
 {
-	return m_rigid_root;
+	return m_rigid_manager;
 }
 
-BaseObject* MMDJointManagerObject::GetBoneRoot() const
+BaseObject* MMDJointManagerObject::GetBoneManager() const
 {
-	return m_bone_root;
+	return m_bone_manager;
 }

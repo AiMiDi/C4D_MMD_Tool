@@ -26,10 +26,10 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return false;
 		if (!temp_link->Read(hf))
 			return false;
-		m_bone_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
+		m_bone_manager = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
 		if (!temp_link->Read(hf))
 			return false;
-		m_joint_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
+		m_joint_manager = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
 	}
 	// m_rigid_list
 	{
@@ -58,10 +58,10 @@ Bool MMDRigidManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 		AutoAlloc<BaseLink> temp_link;
 		if (!temp_link)
 			return false;
-		temp_link->SetLink(m_bone_root);
+		temp_link->SetLink(m_bone_manager);
 		if (!temp_link->Write(hf))
 			return false;
-		temp_link->SetLink(m_joint_root);
+		temp_link->SetLink(m_joint_manager);
 		if (!temp_link->Write(hf))
 			return false;
 	}
@@ -88,8 +88,8 @@ Bool MMDRigidManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* sno
 	};
 	auto const dest_object = reinterpret_cast<MMDRigidManagerObject*>(dest);
 	dest_object->m_rigid_name_index = m_rigid_name_index;
-	dest_object->m_bone_root = m_bone_root;
-	dest_object->m_joint_root = m_joint_root;
+	dest_object->m_bone_manager = m_bone_manager;
+	dest_object->m_joint_manager = m_joint_manager;
 	for (const auto& entry : m_rigid_list)
 	{
 		auto& link = dest_object->m_rigid_list.InsertKey(entry.GetKey())iferr_return;
@@ -157,15 +157,15 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data))
 		{
-			if (msg->msg_type == MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE)
+			if (msg->msg_type == MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE)
 			{
-				if(msg->object_type == CMTObjectType::BoneRoot)
+				if(msg->object_type == ManagerObjectType::BONE_MANAGER)
 				{
-					m_bone_root = msg->object;
+					m_bone_manager = msg->object;
 				}
-				else if (msg->object_type == CMTObjectType::JointRoot)
+				else if (msg->object_type == ManagerObjectType::JOINT_MANAGER)
 				{
-					m_joint_root = msg->object;
+					m_joint_manager = msg->object;
 				}
 			}
 		}
@@ -259,7 +259,7 @@ const BaseContainer& MMDRigidManagerObject::GetRigidItems() const
 	return rigid_items;
 }
 
-BaseObject* MMDRigidManagerObject::GetBoneRoot() const
+BaseObject* MMDRigidManagerObject::GetBoneManager() const
 {
-	return m_bone_root;
+	return m_bone_manager;
 }

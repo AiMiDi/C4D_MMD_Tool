@@ -38,14 +38,14 @@ class MMDRigidManagerObject final : public MMDManagerObject
 {
 	Int64 m_rigid_name_index = 1;
 	BaseContainer rigid_items;
-	BaseObject* m_bone_root = nullptr;
-	BaseObject* m_joint_root = nullptr;
+	BaseObject* m_bone_manager = nullptr;
+	BaseObject* m_joint_manager = nullptr;
 	maxon::HashMap<Int32, maxon::StrongRef<AutoAlloc<BaseLink>>> m_rigid_list;
 	MMDRigidManagerObject() = default;
 	~MMDRigidManagerObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRigidManagerObject)
 	CMT_DEFAULT_MOVE_BODY(MMDRigidManagerObject)
-	INSTANCEOF(MMDRigidRootObject, MMDManagerObject)
+	INSTANCEOF(MMDRigidManagerObject, MMDManagerObject)
 public:
 	static NodeData* Alloc();
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
@@ -57,7 +57,7 @@ public:
 	BaseObject* FindRigid(Int32 index) const;
 
 	const BaseContainer& GetRigidItems() const;
-	BaseObject* GetBoneRoot() const;
+	BaseObject* GetBoneManager() const;
 };
 
 #endif // !MMD_RIGID_ROOT_H__

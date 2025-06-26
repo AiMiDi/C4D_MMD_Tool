@@ -165,7 +165,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg { MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ON };
+			MMDBoneManagerObjectMsg msg { MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ON };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -173,7 +173,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		{
 			op->SetEditorMode(MODE_OFF);
 			op->SetRenderMode(MODE_OFF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_OFF };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -181,7 +181,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_MOVABLE };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_MOVABLE };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -189,7 +189,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_VISIBLE };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_VISIBLE };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -197,7 +197,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ROTATABLE };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ROTATABLE };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -205,7 +205,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_ENABLED };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ENABLED };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -213,7 +213,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		{
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_IK };
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_IK };
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
 			break;
 		}
@@ -456,27 +456,27 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto* msg = static_cast<MMDModelRootObjectMsg*>(data); msg != nullptr)
 		{
-			if (msg->msg_type == MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE) {
+			if (msg->msg_type == MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE) {
 				switch (msg->object_type)
 				{
-				case CMTObjectType::JointRoot:
+				case ManagerObjectType::JOINT_MANAGER:
 				{
 					m_joint_root = msg->object;
 					break;
 				}
-				case CMTObjectType::RigidRoot:
+				case ManagerObjectType::RIGID_MANAGER:
 				{
 					m_rigid_root = msg->object;
 					break;
 				}
-				case CMTObjectType::ModelRoot:
+				case ManagerObjectType::MODEL_MANAGER:
 				{
 					m_model_root = msg->object;
 					break;
 				}
-				case CMTObjectType::DEFAULT: [[fallthrough]];
-				case CMTObjectType::MeshRoot: [[fallthrough]];
-				case CMTObjectType::BoneRoot:
+				case ManagerObjectType::DEFAULT: [[fallthrough]];
+				case ManagerObjectType::MESH_MANAGER: [[fallthrough]];
+				case ManagerObjectType::BONE_MANAGER:
 					break;
 				}
 			}

@@ -221,7 +221,7 @@ Bool MMDMeshManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	if (type == ID_O_MMD_MODEL)
 	{
-		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data); msg->msg_type == MMDModelRootObjectMsgType::TOOL_OBJECT_UPDATE)
+		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data); msg->msg_type == MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE)
 		{
 			m_model_root = msg->object;
 		}
