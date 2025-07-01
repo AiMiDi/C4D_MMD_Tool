@@ -34,7 +34,8 @@ enum class MMDBoneManagerObjectMsgType : int8_t
 	DEFAULT = -1,
 	SET_BONE_DISPLAY_UPDATE,
 	BONE_HIERARCHY_UPDATE,
-	BONE_MORPH_CHANGE
+	BONE_MORPH_CHANGE,
+	BONE_MODE_CHANGE
 };
 struct MMDBoneManagerObjectMsg
 {
@@ -42,14 +43,18 @@ struct MMDBoneManagerObjectMsg
 	MMDBoneManagerObjectMsgType type;
 	Int32	display_type;
 	BaseObject* bond_root_object;
+	Int32	bone_mode;
 
 	explicit MMDBoneManagerObjectMsg(
 		const MMDBoneManagerObjectMsgType type_ = MMDBoneManagerObjectMsgType::DEFAULT,
 		const Int32 display_type_ = BONE_DISPLAY_TYPE_ON,
-		BaseObject* BoneRoot_ = nullptr) :
+		BaseObject* BoneRoot_ = nullptr,
+		const Int32 bone_mode_ = BONE_MODE_ANIM) :
 		type(type_),
 		display_type(display_type_),
-		bond_root_object(BoneRoot_) {}
+		bond_root_object(BoneRoot_),
+	    bone_mode(bone_mode_)
+	    {}
 };
 class MMDBoneManagerObject final : public MMDManagerObject
 {

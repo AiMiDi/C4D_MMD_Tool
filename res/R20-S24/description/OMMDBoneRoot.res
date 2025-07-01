@@ -19,6 +19,18 @@ CONTAINER OMMDBoneRoot {
 			}
 		}
 
+		LONG BONE_MODE {
+			CUSTOMGUI QUICKTABRADIO;
+			ANIM OFF;
+			FIT_H;
+			SCALE_H;
+
+			CYCLE {
+				BONE_MODE_EDIT;
+				BONE_MODE_ANIM;
+			}
+		}
+
 		BUTTON ADD_BONE_BUTTON {
 			FIT_H;
 			SCALE_H;

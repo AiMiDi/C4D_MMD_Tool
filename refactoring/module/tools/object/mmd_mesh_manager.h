@@ -13,6 +13,7 @@ Description:	MMD mesh root object
 
 #include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
+#include "description/OMMDMeshRoot.h"
 #include "utils/morph_ui_data_util.hpp"
 
 namespace CMTToolsSetting
@@ -23,12 +24,18 @@ namespace CMTToolsSetting
 enum class MMDMeshManagerObjectMsgType : uint8_t
 {
 	DEFAULT,
-	MESH_MORPH_CHANGE
+	MESH_MORPH_CHANGE,
+	MESH_MODE_CHANGE
 };
 struct MMDMeshManagerObjectMsg
 {
 	MMDMeshManagerObjectMsgType type = MMDMeshManagerObjectMsgType::DEFAULT;
-	explicit MMDMeshManagerObjectMsg(const MMDMeshManagerObjectMsgType type_ = MMDMeshManagerObjectMsgType::DEFAULT) : type(type_) {}
+	Int32	display_type;
+	Int32	mesh_mode;
+
+	explicit MMDMeshManagerObjectMsg(const MMDMeshManagerObjectMsgType type_ = MMDMeshManagerObjectMsgType::DEFAULT,
+		const Int32 display_type_ = MESH_DISPLAY_TYPE_ON,
+		const Int32 mesh_mode_ = MESH_MODE_ANIM) : type(type_) ,display_type(display_type_), mesh_mode(mesh_mode_){}
 };
 
 class MMDMeshManagerObject final : public MMDManagerObject

@@ -157,62 +157,91 @@ Bool MMDMeshManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 {
 	const auto op = reinterpret_cast<BaseObject*>(node);
 	CreateDisplayTag(node);
-	if (id[0].id == MESH_DISPLAY_TYPE && m_display_tag != nullptr)
+
+	switch (id[0].id)
 	{
-		const auto display_mode_DescID = ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE));
-		switch (t_data.GetInt32())
+	case MESH_DISPLAY_TYPE:
+		if (m_display_tag != nullptr)
 		{
-		case MESH_DISPLAY_TYPE_OFF:
+			{
+				const auto display_mode_DescID = ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE));
+				switch (t_data.GetInt32())
+				{
+				case MESH_DISPLAY_TYPE_OFF:
+					{
+						op->SetEditorMode(MODE_OFF);
+						op->SetRenderMode(MODE_OFF);
+						break;
+					}
+				case MESH_DISPLAY_TYPE_ON:
+					{
+						op->SetEditorMode(MODE_UNDEF);
+						op->SetRenderMode(MODE_UNDEF);
+						m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_GOURAUD, DESCFLAGS_SET::NONE);
+						break;
+					}
+				case MESH_DISPLAY_TYPE_ON_WIRE:
+					{
+						op->SetEditorMode(MODE_UNDEF);
+						op->SetRenderMode(MODE_UNDEF);
+						m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_GOURAUD_WIRE, DESCFLAGS_SET::NONE);
+						break;
+					}
+				case MESH_DISPLAY_TYPE_QUICK:
+					{
+						op->SetEditorMode(MODE_UNDEF);
+						op->SetRenderMode(MODE_UNDEF);
+						m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_QUICK, DESCFLAGS_SET::NONE);
+						break;
+					}
+				case MESH_DISPLAY_TYPE_QUICK_WIRE:
+					{
+						op->SetEditorMode(MODE_UNDEF);
+						op->SetRenderMode(MODE_UNDEF);
+						m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_QUICK_WIRE, DESCFLAGS_SET::NONE);
+						break;
+					}
+				case MESH_DISPLAY_TYPE_HIDDENLINE:
+					{
+						op->SetEditorMode(MODE_UNDEF);
+						op->SetRenderMode(MODE_UNDEF);
+						m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_HIDDENLINE, DESCFLAGS_SET::NONE);
+						break;
+					}
+				case MESH_DISPLAY_TYPE_WIRE:
+					{
+						op->SetEditorMode(MODE_UNDEF);
+						op->SetRenderMode(MODE_UNDEF);
+						m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_NOSHADING, DESCFLAGS_SET::NONE);
+						break;
+					}
+				default:
+					break;
+				}
+			}
+		}
+		break;
+	case MESH_MODE:
+		if (m_display_tag != nullptr)
 		{
-			op->SetEditorMode(MODE_OFF);
-			op->SetRenderMode(MODE_OFF);
-			break;
+			const auto display_mode_DescID = ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE));
+			switch (t_data.GetInt32())
+			{
+			case MESH_MODE_EDIT:
+				{
+					MMDMeshManagerObjectMsg msg(MMDMeshManagerObjectMsgType::MESH_MODE_CHANGE, MESH_DISPLAY_TYPE_OFF, MESH_MODE_EDIT);
+					node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MESH_ROOT, &msg);
+					break;
+				}
+			case MESH_MODE_ANIM:
+				{
+					MMDMeshManagerObjectMsg msg(MMDMeshManagerObjectMsgType::MESH_MODE_CHANGE, MESH_DISPLAY_TYPE_OFF, MESH_MODE_ANIM);
+					node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MESH_ROOT, &msg);
+					break;
+				}
+			}
 		}
-		case MESH_DISPLAY_TYPE_ON:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_GOURAUD, DESCFLAGS_SET::NONE);
-			break;
-		}
-		case MESH_DISPLAY_TYPE_ON_WIRE:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_GOURAUD_WIRE, DESCFLAGS_SET::NONE);
-			break;
-		}
-		case MESH_DISPLAY_TYPE_QUICK:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_QUICK, DESCFLAGS_SET::NONE);
-			break;
-		}
-		case MESH_DISPLAY_TYPE_QUICK_WIRE:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_QUICK_WIRE, DESCFLAGS_SET::NONE);
-			break;
-		}
-		case MESH_DISPLAY_TYPE_HIDDENLINE:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_HIDDENLINE, DESCFLAGS_SET::NONE);
-			break;
-		}
-		case MESH_DISPLAY_TYPE_WIRE:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			m_display_tag->SetParameter(display_mode_DescID, DISPLAYTAG_SDISPLAY_NOSHADING, DESCFLAGS_SET::NONE);
-			break;
-		}
-		default:
-			break;
-		}
+		break;
 	}
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }

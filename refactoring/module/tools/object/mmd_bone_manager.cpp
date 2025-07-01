@@ -157,8 +157,10 @@ Bool MMDBoneManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) 
 Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	const auto op = reinterpret_cast<BaseObject*>(node);
-	if (id[0].id == BONE_DISPLAY_TYPE)
+
+	switch (id[0].id)
 	{
+	case BONE_DISPLAY_TYPE:
 		switch (t_data.GetInt32())
 		{
 		case BONE_DISPLAY_TYPE_ON:
@@ -220,6 +222,24 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		default:
 			break;
 		}
+		break;
+	case BONE_MODE:
+		switch (t_data.GetInt32())
+		{
+		case BONE_MODE_EDIT:
+			{
+				MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, BONE_MODE_EDIT);
+				node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_BONE_ROOT, &msg);
+				break;
+			}
+		case BONE_MODE_ANIM:
+			{
+				MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, BONE_MODE_ANIM);
+				node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_BONE_ROOT, &msg);
+				break;
+			}
+		}
+		break;
 	}
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }

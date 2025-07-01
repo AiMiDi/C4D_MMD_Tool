@@ -3,6 +3,7 @@ STRINGTABLE OMMDBoneRoot
 	OMMDBoneRoot "MMD Bone Root";
 	BONE_ROOT_GRP "Setting";
 	BONE_DISPLAY_TYPE "Display type";
+	BONE_MODE "Mode";
 	ADD_BONE_BUTTON "Add bone";
 
 	BONE_DISPLAY_TYPE_ON "All";

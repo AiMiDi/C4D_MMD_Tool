@@ -21,5 +21,17 @@ CONTAINER OMMDMeshRoot {
 				MESH_DISPLAY_TYPE_WIRE;
 			}
 		}
+
+		LONG MESH_MODE {
+			CUSTOMGUI QUICKTABRADIO;
+			ANIM OFF;
+			FIT_H;
+			SCALE_H;
+
+			CYCLE {
+				MESH_MODE_EDIT;
+				MESH_MODE_ANIM;
+			}
+		}
 	}
 }

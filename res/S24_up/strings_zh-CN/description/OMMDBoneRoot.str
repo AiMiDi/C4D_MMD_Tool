@@ -3,6 +3,7 @@ STRINGTABLE OMMDBoneRoot
 	OMMDBoneRoot "MMD\u9aa8\u9abc\u6839\u8282\u70b9";
 	BONE_ROOT_GRP "\u8bbe\u7f6e";
 	BONE_DISPLAY_TYPE "\u663e\u793a\u7c7b\u578b";
+	BONE_MODE "\u6a21\u5f0f";
 	ADD_BONE_BUTTON "\u65b0\u5efa\u9aa8\u9abc";
 
 	BONE_DISPLAY_TYPE_ON "\u5168\u90e8";
