@@ -47,7 +47,7 @@ public:
  */
 class MMDBoneTag final : public TagData
 {
-	saba::MMDNode* m_mmd_node = nullptr;
+	libmmd::MMDNode* m_mmd_node = nullptr;
 
 	// Bone root object
 	BaseObject* m_bone_manager = nullptr;
@@ -95,7 +95,7 @@ public:
 	 */
 	void SetBoneTag(BaseTag* bone_tag = nullptr);
 
-	void SetMMDNode(saba::MMDNode* mmd_node);
+	void SetMMDNode(libmmd::MMDNode* mmd_node);
 
 	/**
 	 * @brief Allocates a new instance of MMDBoneTag.

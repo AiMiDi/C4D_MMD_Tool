@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8f775701-8ca4-4a3e-8d9d-7f66945c880b" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../dependency/saba" beforeDir="false" afterPath="$PROJECT_DIR$/../../../dependency/saba" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../init.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../../../init.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/CMTSceneManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/CMTSceneManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/CMTSceneManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/CMTSceneManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/cmt_tools_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/cmt_tools_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/core/cmt_marco.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/core/cmt_marco.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_bone_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_bone_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_bone_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_bone_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_camera.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_camera.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_camera.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_camera.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_mesh_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_mesh_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_mesh_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_mesh_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_model.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_model.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_model.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_model.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/tag/mmd_bone.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/tag/mmd_bone.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/tag/mmd_bone.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/tag/mmd_bone.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/pch.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/pch.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mmdtool/project/mmdtool.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../mmdtool/project/mmdtool.vcxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mmdtool/project/mmdtool.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/../mmdtool/project/mmdtool.vcxproj.filters" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;AiMiDi&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:AiMiDi/C4D_MMD_Tool.git&quot;,
+    &quot;accountId&quot;: &quot;e11885a5-f6f1-4b49-b50f-22b52cf51ac0&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2zG4pPsST2R7AxiDgYuKlJDHY6E" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "saba__test",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="8f775701-8ca4-4a3e-8d9d-7f66945c880b" name="更改" comment="" />
+      <created>1751344261224</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1751344261224</updated>
+      <workItem from="1751344263245" duration="2028000" />
+      <workItem from="1751384929220" duration="637000" />
+      <workItem from="1751385599125" duration="1142000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

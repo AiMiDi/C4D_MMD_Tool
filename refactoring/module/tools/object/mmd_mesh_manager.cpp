@@ -303,7 +303,7 @@ maxon::HashInt vertex_info::GetHashCode() const
 }
 
 Bool MMDMeshManagerObject::LoadPMX(
-	const saba::PMXFile& pmx_file,
+	const libmmd::PMXFile& pmx_file,
 	const maxon::BaseArray<BaseObject*>& bone_list,
 	const CMTToolsSetting::ModelImport& setting)
 {
@@ -345,12 +345,12 @@ Bool MMDMeshManagerObject::LoadPMX(
 			auto& weight_data = vertex_weight_data[vertex_index];
 			switch (const auto& pmx_vertex = pmx_vertex_ptr_array[vertex_index]; pmx_vertex.m_weightType)
 			{
-			case saba::PMXVertexWeight::BDEF1:
+			case libmmd::PMXVertexWeight::BDEF1:
 			{
 				weight_data[pmx_vertex.m_boneIndices[0]] = 1.f;
 				break;
 			}
-			case saba::PMXVertexWeight::BDEF2:
+			case libmmd::PMXVertexWeight::BDEF2:
 			{
 				const auto& bone_weight = pmx_vertex.m_boneWeights[0];
 				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight); !inserted)
@@ -363,7 +363,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				}
 				break;
 			}
-			case saba::PMXVertexWeight::BDEF4:
+			case libmmd::PMXVertexWeight::BDEF4:
 			{
 				const auto& bone_weight1 = pmx_vertex.m_boneWeights[0];
 				const auto& bone_weight2 = pmx_vertex.m_boneWeights[1];
@@ -387,7 +387,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				}
 				break;
 			}
-			case saba::PMXVertexWeight::SDEF:
+			case libmmd::PMXVertexWeight::SDEF:
 			{
 				const auto& bone_weight = pmx_vertex.m_boneWeights[0];
 				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight); !inserted)
@@ -400,7 +400,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				}
 				break;
 			}
-			case saba::PMXVertexWeight::QDEF:
+			case libmmd::PMXVertexWeight::QDEF:
 			{
 				const auto& bone_weight1 = pmx_vertex.m_boneWeights[0];
 				const auto& bone_weight2 = pmx_vertex.m_boneWeights[1];
@@ -608,7 +608,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			{
 				switch (pmx_morph.m_morphType)
 				{
-				case saba::PMXMorphType::Position:
+				case libmmd::PMXMorphType::Position:
 				{
 					const auto& position_morphs = pmx_morph.m_positionMorph;
 
@@ -652,11 +652,11 @@ Bool MMDMeshManagerObject::LoadPMX(
 					morph->SetStrength(0);
 					break;
 				}
-				case saba::PMXMorphType::UV: [[fallthrough]];
-				case saba::PMXMorphType::AddUV1: [[fallthrough]];
-				case saba::PMXMorphType::AddUV2: [[fallthrough]];
-				case saba::PMXMorphType::AddUV3: [[fallthrough]];
-				case saba::PMXMorphType::AddUV4:
+				case libmmd::PMXMorphType::UV: [[fallthrough]];
+				case libmmd::PMXMorphType::AddUV1: [[fallthrough]];
+				case libmmd::PMXMorphType::AddUV2: [[fallthrough]];
+				case libmmd::PMXMorphType::AddUV3: [[fallthrough]];
+				case libmmd::PMXMorphType::AddUV4:
 				{
 					const auto& uv_morphs = pmx_morph.m_uvMorph;
 
@@ -1087,7 +1087,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				maxon::String pmx_morph_name{ pmx_morph.m_name.c_str() };
 				switch (pmx_morph.m_morphType)
 				{
-				case saba::PMXMorphType::Position:
+				case libmmd::PMXMorphType::Position:
 				{
 					const auto& position_morphs = pmx_morph.m_positionMorph;
 
@@ -1147,11 +1147,11 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 					break;
 				}
-				case saba::PMXMorphType::UV: [[fallthrough]];
-				case saba::PMXMorphType::AddUV1: [[fallthrough]];
-				case saba::PMXMorphType::AddUV2: [[fallthrough]];
-				case saba::PMXMorphType::AddUV3: [[fallthrough]];
-				case saba::PMXMorphType::AddUV4:
+				case libmmd::PMXMorphType::UV: [[fallthrough]];
+				case libmmd::PMXMorphType::AddUV1: [[fallthrough]];
+				case libmmd::PMXMorphType::AddUV2: [[fallthrough]];
+				case libmmd::PMXMorphType::AddUV3: [[fallthrough]];
+				case libmmd::PMXMorphType::AddUV4:
 				{
 					const auto& uv_morphs = pmx_morph.m_uvMorph;
 
@@ -1265,7 +1265,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 	return true;
 }
 
-Bool MMDMeshManagerObject::SavePMX(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting)
+Bool MMDMeshManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting)
 {
 	return false;
 }

@@ -18,7 +18,7 @@ namespace CMTToolsManager
 	{
 		LoadVmdCameraLog log;
 
-		auto vmd_camera_animation = std::make_unique<saba::VMDCameraAnimation>();
+		auto vmd_camera_animation = std::make_unique<libmmd::VMDCameraAnimation>();
 		if(!vmd_camera_animation)
 		{
 			LoadVmdCameraLog::LogOutMem();
@@ -26,7 +26,7 @@ namespace CMTToolsManager
 		}
 
 		const auto vmd_path= string_util::GetStdString(setting.fn.GetString());
-		saba::VMDFile vmd_file;
+		libmmd::VMDFile vmd_file;
 		if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
 		{
 			LoadVmdCameraLog::LogReadFileErr();
@@ -62,7 +62,7 @@ namespace CMTToolsManager
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting)
 	{
 		SaveVmdCameraLog log;
-		saba::VMDFile vmd_file;
+		libmmd::VMDFile vmd_file;
 		if (!CMTSceneManager::SaveVMDCamera(setting, vmd_file))
 		{
 			log.LogOK();
@@ -83,7 +83,7 @@ namespace CMTToolsManager
 	{
 		LoadVmdMotionLog log;
 
-		auto vmd_animation = std::make_unique<saba::VMDAnimation>();
+		auto vmd_animation = std::make_unique<libmmd::VMDAnimation>();
 		if (!vmd_animation)
 		{
 			LoadVmdMotionLog::LogOutMem();
@@ -91,7 +91,7 @@ namespace CMTToolsManager
 		}
 
 		const auto vmd_path = string_util::GetStdString(setting.fn.GetString());
-		saba::VMDFile vmd_file;
+		libmmd::VMDFile vmd_file;
 		if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
 		{
 			LoadVmdMotionLog::LogReadFileErr();
@@ -150,9 +150,9 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		saba::PMXFile pmx_file;
+		libmmd::PMXFile pmx_file;
 		const std::string model_path = string_util::GetStdString(setting.fn.GetString());
-		if (saba::ReadPMXFile(&pmx_file, model_path.c_str()))
+		if (libmmd::ReadPMXFile(&pmx_file, model_path.c_str()))
 		{
 			LoadModelLog::LogReadFileErr();
 			return false;

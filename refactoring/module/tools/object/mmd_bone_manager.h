@@ -83,8 +83,8 @@ public:
 	void UpdateAllBoneAnimation();
 	void DeleteAllBoneAnimation();
 
-	Bool LoadPMX(const ::saba::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
-	Bool SavePMX(libmmd::pmx_model& pmx_model, const CMTToolsSetting::ModelExport& setting);
+	Bool LoadPMX(const ::libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
+	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
 
 private:
 	void CreateDisplayTag(GeListNode* node) override;

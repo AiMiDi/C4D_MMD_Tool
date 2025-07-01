@@ -56,10 +56,10 @@ public:
 	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetMeshMorphData() const;
 	Bool SetMeshMorphStrength(const String& morph_name, Float strength);
 	Bool LoadPMX(
-		const ::saba::PMXFile& pmx_file,
+		const ::libmmd::PMXFile& pmx_file,
 		const maxon::BaseArray<BaseObject*>& bone_list,
 		const CMTToolsSetting::ModelImport& setting);
-	Bool SavePMX(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting);
+	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting);
 private:
 	void RefreshMeshMorphData(BaseObject* op);
 };

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../dependency/bullet3" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../dependency/saba" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../dependency/saba/external/glm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../dependency/saba/external/spdlog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../dependency/yaml-cpp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../setup" vcs="Git" />
+  </component>
+</project>

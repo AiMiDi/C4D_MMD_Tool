@@ -130,7 +130,7 @@ void LoadModelLog::LogOK()
 		             String::FloatToString(timing.GetMilliseconds())));
 }
 
-BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<saba::VMDCameraAnimation> animation)
+BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<libmmd::VMDCameraAnimation> animation)
 {
 	// create camera
 	BaseObject* vmd_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
@@ -157,7 +157,7 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 	return vmd_camera;
 }
 
-BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, saba::VMDFile& data)
+BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::VMDFile& data)
 {
 	BaseObject* select_object = setting.doc->GetActiveObject();
 	if (select_object == nullptr)
@@ -216,7 +216,7 @@ BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConve
 	return vmd_camera;
 }
 
-Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, std::unique_ptr<saba::VMDAnimation> data, LoadVmdMotionLog& log)
+Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, std::unique_ptr<libmmd::VMDAnimation> data, LoadVmdMotionLog& log)
 {
 	BaseObject* select_object = setting.doc->GetActiveObject();
 	if (select_object == nullptr)
@@ -243,13 +243,13 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 	return true;
 }
 
-Bool CMTSceneManager::SaveVMDMotion(const CMTToolsSetting::MotionExport& setting, saba::VMDFile& data,
+Bool CMTSceneManager::SaveVMDMotion(const CMTToolsSetting::MotionExport& setting, libmmd::VMDFile& data,
 	SaveVmdMotionLog& log)
 {
 	return false;
 }
 
-BaseObject* CMTSceneManager::LoadPMXModel(const saba::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
+BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
 	// create model
 	BaseObject* object = BaseObject::Alloc(ID_O_MMD_MODEL);
@@ -272,7 +272,7 @@ BaseObject* CMTSceneManager::LoadPMXModel(const saba::PMXFile& pmx_file, const P
 	return object;
 }
 
-BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& setting, saba::PMXFile& data)
+BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::PMXFile& data)
 {
 
 	BaseObject* select_object = setting.doc->GetActiveObject();

@@ -101,15 +101,15 @@ public:
 		return NewObjClear(CMTSceneManager);
 	}
 
-	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<saba::VMDCameraAnimation> animation);
-	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, saba::VMDFile& data);
+	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<libmmd::VMDCameraAnimation> animation);
+	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::VMDFile& data);
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
-	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting,  std::unique_ptr<saba::VMDAnimation> data, LoadVmdMotionLog& log);
-	static Bool SaveVMDMotion(const CMTToolsSetting::MotionExport& setting,  saba::VMDFile&  data, SaveVmdMotionLog& log);
+	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting,  std::unique_ptr<libmmd::VMDAnimation> data, LoadVmdMotionLog& log);
+	static Bool SaveVMDMotion(const CMTToolsSetting::MotionExport& setting,  libmmd::VMDFile&  data, SaveVmdMotionLog& log);
 
-	static BaseObject* LoadPMXModel(const saba::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
-	static BaseObject* SavePMXModel(const CMTToolsSetting::ModelExport& setting, saba::PMXFile& data);
+	static BaseObject* LoadPMXModel(const libmmd::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
+	static BaseObject* SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::PMXFile& data);
 
 	void AddMMDCamera(SDK2024_Const BaseObject* camera);
 

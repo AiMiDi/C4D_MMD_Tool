@@ -96,7 +96,7 @@ void MMDBoneTag::SetBoneTag(BaseTag* bone_tag)
 		m_bone_tag = reinterpret_cast<BaseTag*>(Get());
 }
 
-void MMDBoneTag::SetMMDNode(saba::MMDNode* mmd_node)
+void MMDBoneTag::SetMMDNode(libmmd::MMDNode* mmd_node)
 {
 	m_mmd_node = mmd_node;
 }

@@ -79,7 +79,7 @@ Bool MMDCamera::InitCamera(GeListNode* node)
 	return true;
 }
 
-Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<saba::VMDCameraAnimation>& animation, const CMTToolsSetting::CameraImport& setting)
+Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>& animation, const CMTToolsSetting::CameraImport& setting)
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 	const auto fps = setting.doc->GetFps();
@@ -168,7 +168,7 @@ Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<saba::VMDCameraAnimation>& a
 	return true;
 }
 
-Bool MMDCamera::SaveVMDCamera(saba::VMDFile& vmd_data, const CMTToolsSetting::CameraExport& setting)
+Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::CameraExport& setting)
 {
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 

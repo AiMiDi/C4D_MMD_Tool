@@ -78,9 +78,9 @@ public:
 	// Initialize camera object
 	Bool InitCamera(GeListNode* node = nullptr);
 
-	Bool LoadVMDCamera(const std::unique_ptr<saba::VMDCameraAnimation>& animation, const CMTToolsSetting::CameraImport& setting);
+	Bool LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>& animation, const CMTToolsSetting::CameraImport& setting);
 
-	Bool SaveVMDCamera(saba::VMDFile& vmd_data, const CMTToolsSetting::CameraExport& setting);
+	Bool SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::CameraExport& setting);
 
 	// Convert a normal camera to a MMD camera
 	Bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting);

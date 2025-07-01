@@ -100,9 +100,9 @@
 
 #endif
 
-using MMDModel = saba::MMDModelWithoutBuffered;
-using PMXModel = saba::PMXModelWithoutBuffered;
-using PMDModel = saba::PMDModelWithoutBuffered;
+using MMDModel = libmmd::MMDModelWithoutBuffered;
+using PMXModel = libmmd::PMXModelWithoutBuffered;
+using PMDModel = libmmd::PMDModelWithoutBuffered;
 
 using MMDModelPtr = std::shared_ptr<MMDModel>;
 using PMXModelPtr = std::shared_ptr<PMXModel>;

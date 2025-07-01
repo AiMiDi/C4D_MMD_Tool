@@ -93,19 +93,7 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp">
       <Filter>source\module\tools\loader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.cpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.cpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.cpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp">
@@ -114,13 +102,24 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp">
       <Filter>source\module\tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h">
@@ -174,28 +173,13 @@
     <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h">
       <Filter>source\module\MMD</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_interpolator.hpp">
-      <Filter>source\module\tools</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.h">
       <Filter>source\module\tools\object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.h">
       <Filter>source\module\tools\loader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.h">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.h">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.h">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.h">
       <Filter>source\module\tools\object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\res\S24_up\description\MMDCamera.h">
@@ -234,19 +218,29 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_root.hpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_material.h">
       <Filter>source\module\tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_manager.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\string_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.h">
       <Filter>source\module\tools\object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.h">
       <Filter>source\module\tools\object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\S24_up\strings_en-US\c4d_strings.str">

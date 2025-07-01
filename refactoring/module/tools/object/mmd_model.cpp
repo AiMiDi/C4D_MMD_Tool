@@ -626,13 +626,13 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	return EXECUTIONRESULT::OK;
 }
 
-Int MMDModelManagerObject::ImportGroupAndFlipMorph(const saba::PMXFileMorph& pmx_morph)
+Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& pmx_morph)
 {
 	Int morph_id = -1;
 	iferr_scope_handler{ return morph_id; };
 	switch (pmx_morph.m_morphType)
 	{
-	case saba::PMXMorphType::Group:
+	case libmmd::PMXMorphType::Group:
 	{
 		morph_id = AddMorph(MMDMorphType::GROUP, String(pmx_morph.m_name.c_str()));
 		auto& morph = m_morph_arr[morph_id];
@@ -642,7 +642,7 @@ Int MMDModelManagerObject::ImportGroupAndFlipMorph(const saba::PMXFileMorph& pmx
 		}
 		break;
 	}
-	case saba::PMXMorphType::Flip:
+	case libmmd::PMXMorphType::Flip:
 	{
 		morph_id = AddMorph(MMDMorphType::FLIP, String(pmx_morph.m_name.c_str()));
 		auto& morph = m_morph_arr[morph_id];
@@ -763,7 +763,7 @@ Bool MMDModelManagerObject::AddIKBoneDescription(const maxon::String& bone_name_
 	return true;
 }
 
-Bool MMDModelManagerObject::LoadPMX(const saba::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
+Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
 	m_model = pmx_model;
 	maxon::BaseArray<BaseObject*> bone_list;
@@ -785,14 +785,14 @@ Bool MMDModelManagerObject::LoadPMX(const saba::PMXFile& pmx_file, const MMDMode
 		{
 			const auto& pmx_morph = pmx_morph_array[morph_index];
 			if (const auto& morph_offset_type = pmx_morph.m_morphType;
-				morph_offset_type == saba::PMXMorphType::Group || morph_offset_type == saba::PMXMorphType::Flip)
+				morph_offset_type == libmmd::PMXMorphType::Group || morph_offset_type == libmmd::PMXMorphType::Flip)
 				ImportGroupAndFlipMorph(pmx_morph);
 		}
 	}
 	return true;
 }
 
-Bool MMDModelManagerObject::SavePMX(saba::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
+Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
 {
 
 	if (setting.export_bone)
@@ -805,7 +805,7 @@ Bool MMDModelManagerObject::SavePMX(saba::PMXFile& pmx_file, const CMTToolsSetti
 	return true;
 }
 
-Bool MMDModelManagerObject::LoadVMDMotion(std::unique_ptr<saba::VMDAnimation> vmd_motion, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
+Bool MMDModelManagerObject::LoadVMDMotion(std::unique_ptr<libmmd::VMDAnimation> vmd_motion, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
 {
 	iferr_scope_handler
 	{
@@ -821,7 +821,7 @@ Bool MMDModelManagerObject::LoadVMDMotion(std::unique_ptr<saba::VMDAnimation> vm
 	return true;
 }
 
-Bool MMDModelManagerObject::SaveVMDMotion(saba::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
+Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
 {
 	return true;
 }
