@@ -348,7 +348,7 @@ void MMDJointObject::DrawBox(const BaseObject* op, BaseDraw* bd, const BaseConta
 
 DRAWRESULT MMDJointObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh)
 {
-	if (drawpass == DRAWPASS::OBJECT)
+	if (m_display_type == JOINT_MODE_EDIT && drawpass == DRAWPASS::OBJECT)
 	{
 		if (op == nullptr || bd == nullptr || bh == nullptr)
 		{
@@ -386,7 +386,6 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		return EXECUTIONRESULT::OK;
 	}
 
-	SDK2024_Const BaseObject* PredObject = op->GetPred();
 	BaseObject* UpObject = op->GetUp();
 
 	if (UpObject == nullptr && m_joint_root != nullptr)
@@ -397,6 +396,8 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 
 	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_JOINT_ROOT))
 	{
+		/*
+		SDK2024_Const BaseObject* PredObject = op->GetPred();
 		if (PredObject == nullptr)
 		{
 			op->SetParameter(ConstDescID(DescLevel(JOINT_INDEX)), "0"_s, DESCFLAGS_SET::NONE);
@@ -407,7 +408,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 			PredObject->GetParameter(ConstDescID(DescLevel(JOINT_INDEX)), data, DESCFLAGS_GET::NONE);
 			const String RigidIndex = data.GetString();
 			op->SetParameter(ConstDescID(DescLevel(JOINT_INDEX)), String::IntToString(RigidIndex.ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
-		}
+		}*/
 
 		if (m_joint_root == nullptr)
 		{

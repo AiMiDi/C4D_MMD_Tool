@@ -264,8 +264,6 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	}
 	case RIGID_RELATED_BONE_INDEX:
 	{
-		related_bone = m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->
-		                                                   FindBone(t_data.GetInt32())->GetObject();
 		break;
 	}
 	case RIGID_PHYSICS_MODE:
@@ -469,8 +467,6 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		case RIGID_RELATED_BONE_INDEX:
 		{
-			related_bone = m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->
-			                             FindBone(bc->GetInt32(RIGID_RELATED_BONE_INDEX))->GetObject();
 			break;
 		}
 		case RIGID_PHYSICS_MODE:
@@ -506,11 +502,6 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					m_original_position = op->GetAbsPos();
 					m_original_rotation = op->GetAbsRot();
-					if (related_bone != nullptr)
-					{
-						m_relative_bone_position = op->GetAbsPos() - related_bone->GetAbsPos();
-						m_relative_bone_rotation = op->GetAbsRot() - related_bone->GetAbsRot();
-					}
 				}
 				else if (m_rigid_mode == RIGID_MODE_ANIM && msg->rigid_mode == RIGID_MODE_EDIT)
 				{
@@ -685,36 +676,16 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
 	}
 
-	if (m_rigid_mode == RIGID_MODE_ANIM)
+	if (m_rigid_mode == RIGID_MODE_ANIM && m_rigid_body)
 	{
-		switch (m_physics_mode)
-		{
-		case TRACK_BONES:
-		{
-			if (related_bone != nullptr)
-			{
-				op->SetAbsPos(related_bone->GetAbsPos() + m_relative_bone_position);
-				op->SetAbsRot(related_bone->GetAbsRot() + m_relative_bone_rotation);
-			}
-			break;
-		}
-		case PHYSICAL_CALCULUS:
-		{
-			if (related_bone != nullptr)
-			{
-				related_bone->SetAbsPos(op->GetAbsPos() - m_relative_bone_position);
-				related_bone->SetAbsRot(op->GetAbsRot() - m_relative_bone_rotation);
-			}
-			break;
-		}
-		case PHYSICS_AND_BONES:
-		{
-			break;
-		}
-		default:
-			break;
-		}
+		const auto transform = m_rigid_body->GetTransform();
+		op->SetMl(Matrix{
+			Vector(transform[3][0],transform[3][1],transform[3][2]),
+			Vector(transform[0][0],transform[0][1],transform[0][2]),
+			Vector(transform[1][0],transform[1][1],transform[1][2]),
+			Vector(transform[2][0],transform[2][1],transform[2][2]) });
 	}
+
 	return EXECUTIONRESULT::OK;
 }
 
@@ -749,8 +720,6 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 	hf->ReadVector(&m_original_position);
 	hf->ReadVector(&m_original_rotation);
-	hf->ReadVector(&m_relative_bone_position);
-	hf->ReadVector(&m_relative_bone_rotation);
 	AutoAlloc<BaseLink> link;
 
 	if (link == nullptr)
@@ -763,12 +732,6 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return false;
 	}
 	m_rigid_manager = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
-
-	if (!link->Read(hf))
-	{
-		return false;
-	}
-	related_bone = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
 
 	if (!link->Read(hf))
 	{
@@ -788,8 +751,6 @@ Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 	hf->WriteInt32(m_rigid_group_id);
 	hf->WriteVector(m_original_position);
 	hf->WriteVector(m_original_rotation);
-	hf->WriteVector(m_relative_bone_position);
-	hf->WriteVector(m_relative_bone_rotation);
 
 	AutoAlloc<BaseLink> link;
 	if (link == nullptr)
@@ -798,12 +759,6 @@ Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 	}
 
 	link->SetLink(m_rigid_manager);
-	if (!link->Write(hf))
-	{
-		return false;
-	}
-
-	link->SetLink(related_bone);
 	if (!link->Write(hf))
 	{
 		return false;
@@ -833,11 +788,8 @@ Bool MMDRigidObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeL
 	destObject->m_rigid_shape_type = m_rigid_shape_type;
 	destObject->m_rigid_group_id = m_rigid_group_id;
 	destObject->m_rigid_manager = m_rigid_manager;
-	destObject->related_bone = related_bone;
 	destObject->m_original_position = m_original_position;
 	destObject->m_original_rotation = m_original_rotation;
-	destObject->m_relative_bone_position = m_relative_bone_position;
-	destObject->m_relative_bone_rotation = m_relative_bone_rotation;
 
 	return true;
 }

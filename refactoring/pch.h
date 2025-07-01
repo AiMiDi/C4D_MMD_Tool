@@ -41,6 +41,7 @@
 #include "libMMD/Model/MMD/VMDFile.h"
 #include "libMMD/Model/MMD/VMDAnimation.h"
 #include "libMMD/Model/MMD/VMDCameraAnimation.h"
+#include "libMMD/Model/MMD/MMDPhysics.h"
 
 // symbols
 #include "c4d_symbols.h"

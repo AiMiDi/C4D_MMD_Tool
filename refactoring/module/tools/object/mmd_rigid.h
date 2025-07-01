@@ -25,13 +25,13 @@ class MMDRigidObject final : public ObjectData
 	AutoFree<BaseObject> m_draw_mesh_object;
 
 	BaseObject* m_rigid_manager = nullptr;
-	BaseObject* related_bone = nullptr;
 
 	Vector m_original_position = Vector();
 	Vector m_original_rotation = Vector();
-	Vector m_relative_bone_position = Vector();
-	Vector m_relative_bone_rotation = Vector();
 	ObjectColorProperties m_draw_color;
+
+	libmmd::MMDRigidBody* m_rigid_body = nullptr;
+
 	MMDRigidObject();
 	~MMDRigidObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRigidObject)
