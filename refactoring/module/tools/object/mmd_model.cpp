@@ -13,8 +13,6 @@ Description:	MMD model object
 #include "mmd_morph.h"
 #include "mmd_bone_manager.h"
 #include "mmd_mesh_manager.h"
-#include "description/OMMDModel.h"
-
 #define COL_NAME 'name'
 
 Bool EditorSubMorphDialog::CreateLayout()
@@ -1185,6 +1183,32 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		break;
 	}
 	return SUPER::Message(node, type, data);
+}
+
+Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data,
+	DESCFLAGS_SET& flags)
+{
+	switch (id[0].id)
+	{
+	case MODEL_MODE:
+		switch (t_data.GetInt32())
+		{
+		case MODEL_MODE_EDIT:
+			{
+				MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, MODEL_MODE_EDIT);
+				node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MODEL, &msg);
+				break;
+			}
+		case MODEL_MODE_ANIM:
+			{
+				MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, MODEL_MODE_ANIM);
+				node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MODEL, &msg);
+				break;
+			}
+		}
+		break;
+	}
+	return ObjectData::SetDParameter(node, id, t_data, flags);
 }
 
 Int MMDModelManagerObject::AddMorph(const MMDMorphType& morph_type, String morph_name, bool is_add_morph_ui)

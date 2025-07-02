@@ -84,29 +84,39 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	}
 	case ID_O_MMD_MODEL:
 	{
-		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data); msg != nullptr)
-		{
-			if (msg->msg_type == MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE) {
-				switch (msg->object_type)
+			if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data); msg != nullptr)
+			{
+				switch (msg->msg_type)
 				{
-				case ManagerObjectType::BONE_MANAGER:
-				{
-					m_bone_manager = msg->object;
-					break;
-				}
-				case ManagerObjectType::RIGID_MANAGER:
-				{
-					m_rigid_manager = msg->object;
-					break;
-				}
-				case ManagerObjectType::DEFAULT:
-				case ManagerObjectType::MESH_MANAGER:
-				case ManagerObjectType::JOINT_MANAGER:
-				case ManagerObjectType::MODEL_MANAGER:
-					break;
+					case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
+					{
+						switch (msg->object_type)
+						{
+						case ManagerObjectType::BONE_MANAGER:
+							{
+								m_bone_manager = msg->object;
+								break;
+							}
+						case ManagerObjectType::RIGID_MANAGER:
+							{
+								m_rigid_manager = msg->object;
+								break;
+							}
+						case ManagerObjectType::DEFAULT:
+						case ManagerObjectType::MESH_MANAGER:
+						case ManagerObjectType::JOINT_MANAGER:
+						case ManagerObjectType::MODEL_MANAGER:
+							break;
+						}
+					}
+					case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
+					{
+						auto flag = DESCFLAGS_SET::NONE;
+						SetDParameter(node, ConstDescID(DescLevel(JOINT_MODE)), GeData(msg->model_mode), flag);
+						break;
+					}
 				}
 			}
-		}
 		break;
 	}
 	default:

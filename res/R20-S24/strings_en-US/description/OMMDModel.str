@@ -6,6 +6,7 @@ STRINGTABLE OMMDModel
 	MODEL_NAME_UNIVERSAL "Universal model name";
 	COMMENTS_LOCAL "Local comments";
 	COMMENTS_UNIVERSAL "Universal comments";
+	MODEL_MODE "Mode";
 	PMX_VERSION "Version";
 	MODEL_FUNCTION_GRP "Function";
 	MODEL_DEL_ANIM_BUTTON "Delete all animation";
@@ -21,4 +22,6 @@ STRINGTABLE OMMDModel
 			MODEL_MORPH_FLIP_ADD_BUTTON "Add flip morph";
 		MODEL_MORPH_MESH_GRP "Vertex morph";
 		MODEL_MORPH_BONE_GRP "Bone morph";
+	MODEL_MODE_EDIT "Edit mode";
+	MODEL_MODE_ANIM "Animation mode";
 }

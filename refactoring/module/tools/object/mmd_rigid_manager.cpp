@@ -157,17 +157,28 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data))
 		{
-			if (msg->msg_type == MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE)
+			switch (msg->msg_type)
 			{
-				if(msg->object_type == ManagerObjectType::BONE_MANAGER)
+			case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
 				{
-					m_bone_manager = msg->object;
+					if(msg->object_type == ManagerObjectType::BONE_MANAGER)
+					{
+						m_bone_manager = msg->object;
+					}
+					else if (msg->object_type == ManagerObjectType::JOINT_MANAGER)
+					{
+						m_joint_manager = msg->object;
+					}
+					break;
 				}
-				else if (msg->object_type == ManagerObjectType::JOINT_MANAGER)
+			case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
 				{
-					m_joint_manager = msg->object;
+					auto flag = DESCFLAGS_SET::NONE;
+					SetDParameter(node, ConstDescID(DescLevel(RIGID_MODE)), GeData(msg->model_mode), flag);
+					break;
 				}
 			}
+
 		}
 		break;
 	}

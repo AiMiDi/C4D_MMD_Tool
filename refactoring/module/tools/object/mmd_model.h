@@ -12,6 +12,7 @@ Description:	MMD model object
 #define MMD_MODEL_H__
 
 #include "CMTSceneManager.h"
+#include "description/OMMDModel.h"
 
 class IMorph;
 enum class MMDMorphType : uint8_t;
@@ -51,7 +52,8 @@ enum class ManagerObjectType : uint8_t
 enum class MMDModelRootObjectMsgType : uint8_t
 {
 	DEFAULT,
-	MANAGER_OBJECT_UPDATE
+	MANAGER_OBJECT_UPDATE,
+	MODEL_MODE_CHANGE
 };
 
 struct MMDModelRootObjectMsg
@@ -59,10 +61,11 @@ struct MMDModelRootObjectMsg
 	MMDModelRootObjectMsgType msg_type;
 	ManagerObjectType	object_type;
 	BaseObject* object;
+	Int32	model_mode;
 
 	explicit MMDModelRootObjectMsg(const MMDModelRootObjectMsgType msg_type_ = MMDModelRootObjectMsgType::DEFAULT,
-	                            const ManagerObjectType object_type_ = ManagerObjectType::DEFAULT, BaseObject* object_ = nullptr)
-		:msg_type(msg_type_), object_type(object_type_), object(object_) {}
+	                            const ManagerObjectType object_type_ = ManagerObjectType::DEFAULT, BaseObject* object_ = nullptr,const Int32 model_mode_ = MODEL_MODE_ANIM)
+		:msg_type(msg_type_), object_type(object_type_), object(object_), model_mode(model_mode_) {}
 };
 
 enum class MMDModelRootDynamicDescriptionType : uint8_t
@@ -125,6 +128,7 @@ public:
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
+	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 
 	AddMorphHelper BeginMorphChange();
 	Int ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& pmx_morph);

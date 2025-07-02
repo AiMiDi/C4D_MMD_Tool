@@ -12,4 +12,7 @@ STRINGTABLE OMMDMeshRoot
 	MESH_DISPLAY_TYPE_QUICK_WIRE "Quick(Wireframe)";
 	MESH_DISPLAY_TYPE_HIDDENLINE "Hidden line";
 	MESH_DISPLAY_TYPE_WIRE "Wireframe";
+
+	MESH_MODE_EDIT "Edit mode";
+    MESH_MODE_ANIM "Animation mode";
 }
