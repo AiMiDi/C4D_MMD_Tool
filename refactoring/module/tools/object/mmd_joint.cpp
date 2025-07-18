@@ -114,58 +114,28 @@ Bool MMDJointObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 Bool MMDJointObject::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
 								  const BaseContainer* itemdesc) SDK2024_Const
 {
-	switch (id[0].id)
-	{
-	case JOINT_TYPE: [[fallthrough]];
-	case ID_BASEOBJECT_REL_POSITION: [[fallthrough]];
-	case ID_BASEOBJECT_REL_ROTATION: [[fallthrough]];
-	case ID_BASEOBJECT_FROZEN_POSITION: [[fallthrough]];
-	case ID_BASEOBJECT_FROZEN_ROTATION: [[fallthrough]];
-	case JOINT_LINK_RIGID_A_INDEX: [[fallthrough]];
-	case JOINT_LINK_RIGID_B_INDEX: [[fallthrough]];
-	case JOINT_ATTITUDE_POSITION_X: [[fallthrough]];
-	case JOINT_ATTITUDE_POSITION_Y: [[fallthrough]];
-	case JOINT_ATTITUDE_POSITION_Z: [[fallthrough]];
-	case JOINT_ATTITUDE_ROTATION_X: [[fallthrough]];
-	case JOINT_ATTITUDE_ROTATION_Y: [[fallthrough]];
-	case JOINT_ATTITUDE_ROTATION_Z: [[fallthrough]];
-	case JOINT_ATTITUDE_USE_BONE_INDEX: [[fallthrough]];
-	case JOINT_PARAMETER_POSITION_X_MIN: [[fallthrough]];
-	case JOINT_PARAMETER_POSITION_X_MAX: [[fallthrough]];
-	case JOINT_PARAMETER_POSITION_Y_MIN: [[fallthrough]];
-	case JOINT_PARAMETER_POSITION_Y_MAX: [[fallthrough]];
-	case JOINT_PARAMETER_POSITION_Z_MIN: [[fallthrough]];
-	case JOINT_PARAMETER_POSITION_Z_MAX: [[fallthrough]];
-	case JOINT_PARAMETER_ROTATION_X_MIN: [[fallthrough]];
-	case JOINT_PARAMETER_ROTATION_X_MAX: [[fallthrough]];
-	case JOINT_PARAMETER_ROTATION_Y_MIN: [[fallthrough]];
-	case JOINT_PARAMETER_ROTATION_Y_MAX: [[fallthrough]];
-	case JOINT_PARAMETER_ROTATION_Z_MIN: [[fallthrough]];
-	case JOINT_PARAMETER_ROTATION_Z_MAX: [[fallthrough]];
-	case JOINT_SPRING_POSITION_X: [[fallthrough]];
-	case JOINT_SPRING_POSITION_Y: [[fallthrough]];
-	case JOINT_SPRING_POSITION_Z: [[fallthrough]];
-	case JOINT_SPRING_ROTATION_X: [[fallthrough]];
-	case JOINT_SPRING_ROTATION_Y: [[fallthrough]];
-	case JOINT_SPRING_ROTATION_Z: [[fallthrough]];
-	case JOINT_LINK_RIGID_SET_NAME_BUTTON: [[fallthrough]];
-	case JOINT_ATTITUDE_USE_BONE_BUTTON: [[fallthrough]];
-	case JOINT_PARAMETER_RESET_BUTTON: [[fallthrough]];
-	case JOINT_SPRING_RESET_BUTTON:
-	{
-		if (m_joint_mode == JOINT_MODE_ANIM)
-		{
-			return false;
-		}
-		return true;
-	}
-	case ID_BASEOBJECT_REL_SCALE: [[fallthrough]];
-	case ID_BASEOBJECT_FROZEN_SCALE:
+	if (m_joint_mode == JOINT_MODE_ANIM || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
 		return false;
-	default:
-		break;
-	}
+
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
+}
+
+void MMDJointObject::HandleJointModeChange(const Int32 mode)
+{
+	if (m_joint_mode == mode)
+		return;
+
+	if (m_joint_mode == JOINT_MODE_ANIM)
+	{
+		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+		// TODO: Save to mmd_joint
+	}
+	else
+	{
+		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::CLEAR);
+	}
+
+	m_joint_mode = mode;
 }
 
 Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
@@ -210,28 +180,7 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 			}
 			case MMDJointRootObjectMsgType::JOINT_MODE_CHANGE:
 			{
-				m_joint_mode = msg->mode;
-				if (protection_tag != nullptr)
-				{
-					if (m_joint_mode == RIGID_MODE_ANIM)
-					{
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), true, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), true, DESCFLAGS_SET::NONE);
-					}
-					else
-					{
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), false, DESCFLAGS_SET::NONE);
-						protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), false, DESCFLAGS_SET::NONE);
-					}
-				}
+				HandleJointModeChange(msg->mode);
 				break;
 			}
 			case MMDJointRootObjectMsgType::DEFAULT:
@@ -348,7 +297,7 @@ void MMDJointObject::DrawBox(const BaseObject* op, BaseDraw* bd, const BaseConta
 
 DRAWRESULT MMDJointObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh)
 {
-	if (m_display_type == JOINT_MODE_EDIT && drawpass == DRAWPASS::OBJECT)
+	if (m_joint_mode == JOINT_MODE_EDIT && drawpass == DRAWPASS::OBJECT)
 	{
 		if (op == nullptr || bd == nullptr || bh == nullptr)
 		{
@@ -415,14 +364,6 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 			m_joint_root = UpObject;
 		}
 
-	}
-
-	if (protection_tag == nullptr)
-	{
-		protection_tag = op->MakeTag(Tprotection);
-		protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-		protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
 	}
 
 	return EXECUTIONRESULT::OK;

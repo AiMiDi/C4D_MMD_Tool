@@ -54,15 +54,13 @@ public:
 	static NodeData* Alloc();
 	BaseObject* GetManagerObject() const;
 private:
-	void ResetRigidType(Int32 type, const std::function<void(BaseObject*)>& func);
-	void SetSphericalRigid(const BaseContainer* bc);
-	void SetBoxRigid(const BaseContainer* bc);
-	void SetCaplsuleRigid(const BaseContainer* bc);
+	void HandleRigidModeChange(Int32 mode);
 
-	void SetRigidSize(Int32 type, const std::function<void(BaseObject*)>& func);
-	void SetSphericalSize(const BaseContainer* bc);
-	void SetBoxSize(const BaseContainer* bc);
-	void SetCaplsuleSize(const BaseContainer* bc);
+	template <typename Size>
+	void ResetRigidType(const BaseContainer* bc);
+
+	template <typename Type>
+	void SetRigidSize(const BaseContainer* bc);
 
 	void UpdateRigidShape(const BaseContainer* bc, Int32 rigid_shape_type);
 	void UpdateRigidSize(const BaseContainer* bc);

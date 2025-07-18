@@ -10,6 +10,7 @@ Description:	C4D MMD joint object
 
 #ifndef MMD_JOINT_H__
 #define MMD_JOINT_H__
+#include "mmd_joint_manager.h"
 #include "description/OMMDJointRoot.h"
 
 class MMDJointObject final : public ObjectData
@@ -19,7 +20,7 @@ class MMDJointObject final : public ObjectData
 	BaseObject* m_joint_root = nullptr;
 	BaseObject* m_link_rigid_a = nullptr;
 	BaseObject* m_link_rigid_b = nullptr;
-	BaseTag* protection_tag = nullptr;
+	libmmd::MMDJoint* mmd_joint = nullptr;
 
 	MMDJointObject() = default;
 	~MMDJointObject() override = default;
@@ -32,6 +33,7 @@ public:
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
 	Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
+	void HandleJointModeChange(Int32 mode);
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;

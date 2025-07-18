@@ -298,6 +298,19 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	}
 }
 
+void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
+{
+	if (bone_mode_ == bone_mode)
+		return;
+
+	if (bone_mode == BONE_MODE_ANIM)
+	{
+		// TODO: Save to mmd_node
+	}
+
+	bone_mode_ = bone_mode;
+}
+
 void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, const MMDBoneManagerObjectMsg* msg) const
 {
 	switch (msg->display_type)
@@ -474,6 +487,9 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 				break;
 			case MMDBoneManagerObjectMsgType::BONE_HIERARCHY_UPDATE:
 				HandleBoneHierarchyUpdate(data_instance_bc, msg);
+				break;
+			case MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE:
+				HandleBoneModeChange(msg->bone_mode);
 				break;
 			case MMDBoneManagerObjectMsgType::DEFAULT:
 			case MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE:
@@ -662,6 +678,9 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 Bool MMDBoneTag::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
 	const BaseContainer* itemdesc) SDK2024_Const
 {
+	if (bone_mode_ == BONE_MODE_ANIM)
+		return false;
+
 	GeData ge_data;
 	switch (id[0].id)
 	{
@@ -774,7 +793,7 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 	HandleBoneLockUpdate(bc);
 
-	if (m_mmd_node)
+	if (m_mmd_node && bone_mode_ == BONE_MODE_ANIM)
 	{
 		const auto& animation_translate = m_mmd_node->GetAnimationTranslate();
 		const auto& animation_rotate = m_mmd_node->GetAnimationRotate();

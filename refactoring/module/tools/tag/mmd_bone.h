@@ -10,6 +10,7 @@ Description:	DESC
 
 #ifndef MMD_BONE_H__
 #define MMD_BONE_H__
+#include "description/OMMDBoneRoot.h"
 
 namespace CMTToolsSetting
 {
@@ -57,6 +58,8 @@ class MMDBoneTag final : public TagData
 	BaseTag* m_bone_tag = nullptr;
 	// Protection tag for limiting bone movement
 	BaseTag* protection_tag = nullptr;
+
+	Int32 bone_mode_ = BONE_MODE_ANIM;
 
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTag)
 	CMT_DEFAULT_MOVE_BODY(MMDBoneTag)
@@ -204,6 +207,8 @@ private:
 	 * @param[in] id The ID of the description.
 	 */
 	void HandleDescriptionUpdate(GeListNode* node, BaseContainer* bc, Int32 id);
+
+	void HandleBoneModeChange(Int32 bone_mode);
 
 	/**
 	 * @brief Sets the rotation lock for the MMDBoneTag.
