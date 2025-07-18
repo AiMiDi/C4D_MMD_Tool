@@ -62,6 +62,10 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	BaseObject* m_model_root = nullptr;
 	BaseObject* m_rigid_root = nullptr;
 	BaseObject* m_joint_root = nullptr;
+
+	libmmd::MMDMorphManager* m_morph_manager = nullptr;
+	libmmd::MMDNodeManager* m_morph_node_manager = nullptr;
+
 	BaseContainer m_bone_items;
 	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> m_bone_list;
 	maxon::HashMap<String, maxon::BaseList<MorphUIData>> m_bone_morph_data;
@@ -78,17 +82,14 @@ public:
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetBoneMorphData() const;
-	Bool SetBoneMorphStrength(const String& morph_name, Float strength);
 
 	[[nodiscard]] BaseTag* FindBone(Int32 index) const;
 	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
 	const BaseContainer& GetBoneItems() const;
-
-	[[nodiscard]] Bool SetBoneAnimation(const libmmd::vmd_bone_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	void UpdateAllBoneAnimation();
 	void DeleteAllBoneAnimation();
 
-	Bool LoadPMX(const ::libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
 
 private:
@@ -96,6 +97,7 @@ private:
 	void HandleDescriptionCommandMessage(GeListNode* node, void* data);
 	bool HandleMMDBoneTagMessage(GeListNode* node, void* data);
 	bool HandleBoneIndexChangeMessage(GeListNode* node, void* data, bool& need_update_morph);
+
 	bool HandleBoneMorphAdd(GeListNode* node, void* data, bool& need_update_morph);
 	bool HandleBoneMorphDelete(GeListNode* node, void* data, bool& need_update_morph);
 	bool HandleBoneMorphRename(GeListNode* node, void* data, bool& need_update_morph);

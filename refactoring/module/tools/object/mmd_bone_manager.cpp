@@ -615,11 +615,17 @@ Bool MMDBoneManagerObject::SetBoneMorphStrength(const String& morph_name, const 
 	return true;
 }
 
-Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting)
+Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting)
 {
 	iferr_scope_handler{
 		return false;
 	};
+
+	if (pmx_model)
+	{
+		m_morph_node_manager = pmx_model->GetNodeManager();
+		m_morph_manager = pmx_model->GetMorphManager();
+	}
 
 	const auto pmx_bone_ptr_array = pmx_file.get_pmx_bone_array().readonly_elements_ptr();
 	const auto pmx_bone_num = pmx_bone_ptr_array.size();
