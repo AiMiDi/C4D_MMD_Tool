@@ -387,7 +387,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
-	case  ID_O_MMD_RIGID_ROOT:
+	case  ID_O_MMD_RIGID_MANAGER:
 	{
 		if (const auto* msg = static_cast<MMDRigidRootObjectMsg*>(data); msg)
 		{
@@ -505,7 +505,7 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	}
 
 	const Int32 pred_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
-	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_RIGID_ROOT))
+	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_RIGID_MANAGER))
 	{
 		if (pred_object == nullptr)
 		{

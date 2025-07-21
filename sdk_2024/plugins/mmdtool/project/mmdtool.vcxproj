@@ -228,14 +228,14 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\MMDCamera.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneRoot.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDCamera.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJoint.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJointRoot.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshRoot.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModel.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJointManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModelManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigid.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidRoot.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\TMMDBone.h" />
   </ItemGroup>
   <ItemGroup>
@@ -271,7 +271,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDBoneRoot.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
@@ -283,15 +283,15 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJointRoot.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJointManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDMeshRoot.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDModel.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDModelManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
@@ -299,7 +299,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigidRoot.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>

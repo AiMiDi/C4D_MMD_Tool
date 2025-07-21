@@ -120,11 +120,11 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				new_rigid->InsertUnder(node);
 				{
 					MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, bc->GetInt32(RIGID_DISPLAY_TYPE));
-					new_rigid->Message(ID_O_MMD_RIGID_ROOT, &msg);
+					new_rigid->Message(ID_O_MMD_RIGID_MANAGER, &msg);
 				}
 				{
 					MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF,bc->GetInt32(RIGID_MODE));
-					new_rigid->Message(ID_O_MMD_RIGID_ROOT, &msg);
+					new_rigid->Message(ID_O_MMD_RIGID_MANAGER, &msg);
 				}
 			}
 		}
@@ -199,13 +199,13 @@ Bool MMDRigidManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case RIGID_DISPLAY_TYPE_OFF:
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_OFF);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
 			break;
 		}
 		case RIGID_DISPLAY_TYPE_ON:
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_ON);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
 			CreateDisplayTag(node);
 			m_display_tag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE)), DISPLAYTAG_SDISPLAY_GOURAUD, DESCFLAGS_SET::NONE);
 			break;
@@ -213,7 +213,7 @@ Bool MMDRigidManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case RIGID_DISPLAY_TYPE_WIRE:
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_WIRE);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
 			CreateDisplayTag(node);
 			m_display_tag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE)), DISPLAYTAG_SDISPLAY_NOSHADING, DESCFLAGS_SET::NONE);
 			break;
@@ -230,13 +230,13 @@ Bool MMDRigidManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case RIGID_MODE_ANIM:
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, RIGID_MODE_ANIM);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
 			break;
 		}
 		case RIGID_MODE_EDIT:
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, RIGID_MODE_EDIT);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
 			break;
 		}
 		default:

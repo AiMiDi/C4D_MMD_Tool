@@ -12,7 +12,7 @@ Description:	C4D MMD rigid object
 #define MMD_RIGID_H__
 
 #include "description/OMMDRigid.h"
-#include "description/OMMDRigidRoot.h"
+#include "description/OMMDRigidManager.h"
 
 class MMDRigidObject final : public ObjectData
 {

@@ -13,7 +13,7 @@ Description:	MMD mesh root object
 
 #include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
-#include "description/OMMDMeshRoot.h"
+#include "description/OMMDMeshManager.h"
 #include "utils/morph_ui_data_util.hpp"
 
 namespace CMTToolsSetting
@@ -61,9 +61,9 @@ public:
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 
 	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetMeshMorphData() const;
-	Bool SetMeshMorphStrength(const String& morph_name, Float strength);
+	Bool SetMorphStrength(const String& morph_name, const Float& strength);
 	Bool LoadPMX(
-		const ::libmmd::PMXFile& pmx_file,
+		const libmmd::PMXFile& pmx_file,
 		const maxon::BaseArray<BaseObject*>& bone_list,
 		const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting);

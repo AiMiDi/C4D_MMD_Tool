@@ -125,7 +125,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg { MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ON };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_OFF:
@@ -133,7 +133,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_OFF);
 			op->SetRenderMode(MODE_OFF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_OFF };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_MOVABLE:
@@ -141,7 +141,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_MOVABLE };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_VISIBLE:
@@ -149,7 +149,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_VISIBLE };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_ROTATABLE:
@@ -157,7 +157,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ROTATABLE };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_ENABLED:
@@ -165,7 +165,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ENABLED };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_IK:
@@ -173,7 +173,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_IK };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
 			break;
 		}
 		default:
@@ -186,13 +186,13 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		case BONE_MODE_EDIT:
 		{
 			MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, BONE_MODE_EDIT);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_BONE_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_BONE_MANAGER, &msg);
 			break;
 		}
 		case BONE_MODE_ANIM:
 		{
 			MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, BONE_MODE_ANIM);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_BONE_ROOT, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_BONE_MANAGER, &msg);
 			break;
 		}
 		default:
@@ -251,7 +251,7 @@ bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	if (need_update_morph && m_model_root)
 	{
 		MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE };
-		m_model_root->Message(ID_O_MMD_BONE_ROOT, &msg);
+		m_model_root->Message(ID_O_MMD_BONE_MANAGER, &msg);
 	}
 	return true;
 }

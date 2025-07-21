@@ -11,7 +11,7 @@ Description:	C4D MMD joint object
 #ifndef MMD_JOINT_H__
 #define MMD_JOINT_H__
 #include "mmd_joint_manager.h"
-#include "description/OMMDJointRoot.h"
+#include "description/OMMDJointManager.h"
 
 class MMDJointObject final : public ObjectData
 {

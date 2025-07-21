@@ -11,7 +11,7 @@ Description:	MMD rigid root object
 #ifndef MMD_RIGID_ROOT_H__
 #define MMD_RIGID_ROOT_H__
 
-#include "description/OMMDRigidRoot.h"
+#include "description/OMMDRigidManager.h"
 #include "mmd_manager.hpp"
 
 class MMDRigidObject;

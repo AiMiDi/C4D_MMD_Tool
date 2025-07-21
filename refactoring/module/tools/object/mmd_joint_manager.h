@@ -11,7 +11,7 @@ Description:	MMD joint root object
 #ifndef MMD_JOINT_ROOT_H__
 #define MMD_JOINT_ROOT_H__
 #include "mmd_manager.hpp"
-#include "description/OMMDJointRoot.h"
+#include "description/OMMDJointManager.h"
 
 enum class MMDJointRootObjectMsgType : uint8_t
 {

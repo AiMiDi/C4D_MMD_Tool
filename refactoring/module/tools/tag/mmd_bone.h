@@ -10,7 +10,7 @@ Description:	DESC
 
 #ifndef MMD_BONE_H__
 #define MMD_BONE_H__
-#include "description/OMMDBoneRoot.h"
+#include "description/OMMDBoneManager.h"
 
 namespace CMTToolsSetting
 {

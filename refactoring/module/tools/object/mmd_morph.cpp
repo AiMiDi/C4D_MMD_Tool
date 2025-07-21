@@ -3,7 +3,7 @@
 #include "mmd_model.h"
 #include "mmd_bone_manager.h"
 #include "mmd_mesh_manager.h"
-#include "description/OMMDModel.h"
+#include "description/OMMDModelManager.h"
 
 inline Bool IMorph::Read(HyperFile* hf)
 {
@@ -295,7 +295,7 @@ inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	if (BaseObject* mesh_root = model.GetRootObject(ManagerObjectType::MESH_MANAGER))
 	{
-		mesh_root->GetNodeData<MMDMeshManagerObject>()->SetMeshMorphStrength(m_name, GetStrength(model.Get()));
+		mesh_root->GetNodeData<MMDMeshManagerObject>()->SetMorphStrength(m_name, GetStrength(model.Get()));
 	}
 
 }
@@ -304,7 +304,7 @@ inline void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	if (BaseObject* bone_root = model.GetRootObject(ManagerObjectType::BONE_MANAGER))
 	{
-		bone_root->GetNodeData<MMDBoneManagerObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
+		//bone_root->GetNodeData<MMDBoneManagerObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
 	}
 }
 

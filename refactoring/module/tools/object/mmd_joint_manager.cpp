@@ -76,8 +76,8 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			{
 				new_joint->SetName(new_joint->GetName() + "." + String::IntToString(m_joint_name_index++));
 				new_joint->InsertUnder(node);
-				new_joint->Message(ID_O_MMD_JOINT_ROOT, NewObj(MMDJointRootObjectMsg, MMDJointRootObjectMsgType::JOINT_DISPLAY_CHANGE, bc->GetInt32(JOINT_DISPLAY_TYPE), 0).GetValue());
-				new_joint->Message(ID_O_MMD_JOINT_ROOT, NewObj(MMDJointRootObjectMsg, MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, bc->GetInt32(JOINT_MODE)).GetValue());
+				new_joint->Message(ID_O_MMD_JOINT_MANAGER, NewObj(MMDJointRootObjectMsg, MMDJointRootObjectMsgType::JOINT_DISPLAY_CHANGE, bc->GetInt32(JOINT_DISPLAY_TYPE), 0).GetValue());
+				new_joint->Message(ID_O_MMD_JOINT_MANAGER, NewObj(MMDJointRootObjectMsg, MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, bc->GetInt32(JOINT_MODE)).GetValue());
 			}
 		}
 		break;
@@ -132,13 +132,13 @@ Bool MMDJointManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	case JOINT_DISPLAY_TYPE:
 	{
 		MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_DISPLAY_CHANGE, t_data.GetInt32(), 0);
-		node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, &msg);
+		node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_MANAGER, &msg);
 		break;
 	}
 	case JOINT_MODE:
 	{
 		MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, t_data.GetInt32());
-		node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_ROOT, &msg);
+		node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_MANAGER, &msg);
 		break;
 	}
 	default:

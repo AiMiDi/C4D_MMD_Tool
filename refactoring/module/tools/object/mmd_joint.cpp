@@ -167,7 +167,7 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		break;
 	}
 #endif
-	case  ID_O_MMD_JOINT_ROOT:
+	case  ID_O_MMD_JOINT_MANAGER:
 	{
 		if (const auto* msg = static_cast<MMDJointRootObjectMsg*>(data); msg)
 		{
@@ -343,7 +343,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		op->InsertUnderLast(m_joint_root);
 	}
 
-	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_JOINT_ROOT))
+	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_JOINT_MANAGER))
 	{
 		/*
 		SDK2024_Const BaseObject* PredObject = op->GetPred();

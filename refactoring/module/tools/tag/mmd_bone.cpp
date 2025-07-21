@@ -397,7 +397,7 @@ void MMDBoneTag::HandleBoneHierarchyUpdate(BaseContainer* const data_instance_bc
 		if (up_obj)
 		{
 			GeData Ge_data;
-			if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_ROOT))
+			if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_MANAGER))
 			{
 				SDK2024_Const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE);
 				if (up_tag)
@@ -477,7 +477,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 			}
 		}
 		break;
-	case  ID_O_MMD_BONE_ROOT:
+	case  ID_O_MMD_BONE_MANAGER:
 		if (const auto* msg = static_cast<MMDBoneManagerObjectMsg*>(data); msg)
 		{
 			switch (msg->type)

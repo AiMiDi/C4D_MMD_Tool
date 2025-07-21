@@ -488,13 +488,13 @@ Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 		BaseObject* node = *nodes.Pop();
 		if (node != nullptr)
 		{
-			if (node->IsInstanceOf(ID_O_MMD_JOINT_ROOT))
+			if (node->IsInstanceOf(ID_O_MMD_JOINT_MANAGER))
 				JointRoot_ = node;
-			else if (node->IsInstanceOf(ID_O_MMD_RIGID_ROOT))
+			else if (node->IsInstanceOf(ID_O_MMD_RIGID_MANAGER))
 				RigidRoot_ = node;
-			else if (node->IsInstanceOf(ID_O_MMD_BONE_ROOT))
+			else if (node->IsInstanceOf(ID_O_MMD_BONE_MANAGER))
 				BoneRoot_ = node;
-			else if (node->IsInstanceOf(ID_O_MMD_MESH_ROOT))
+			else if (node->IsInstanceOf(ID_O_MMD_MESH_MANAGER))
 				MeshRoot_ = node;
 			iferr(nodes.Push(node->GetNext())) return false;
 		}
@@ -503,7 +503,7 @@ Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 	if (m_joint_root == nullptr) {
 		if (JointRoot_ == nullptr)
 		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_JOINT_ROOT);
+			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
 			tmp->InsertUnder(op);
 			m_joint_root = tmp;
 		}
@@ -515,7 +515,7 @@ Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 	if (m_rigid_root == nullptr) {
 		if (RigidRoot_ == nullptr)
 		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_RIGID_ROOT);
+			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
 			tmp->InsertUnder(op);
 			m_rigid_root = tmp;
 		}
@@ -527,7 +527,7 @@ Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 	if (m_bone_root == nullptr) {
 		if (BoneRoot_ == nullptr)
 		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_BONE_ROOT);
+			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
 			tmp->InsertUnder(op);
 			m_bone_root = tmp;
 		}
@@ -539,7 +539,7 @@ Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 	if (m_mesh_root == nullptr) {
 		if (MeshRoot_ == nullptr)
 		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_MESH_ROOT);
+			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
 			tmp->InsertUnder(op);
 			m_mesh_root = tmp;
 		}
@@ -699,25 +699,25 @@ Bool MMDModelManagerObject::CreateRoot()
 	{
 		if (m_joint_root == nullptr)
 		{
-			BaseObject* joint_root_object = BaseObject::Alloc(ID_O_MMD_JOINT_ROOT);
+			BaseObject* joint_root_object = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
 			joint_root_object->InsertUnder(op);
 			m_joint_root = joint_root_object;
 		}
 		if (m_rigid_root == nullptr)
 		{
-			BaseObject* rigid_root_object = BaseObject::Alloc(ID_O_MMD_RIGID_ROOT);
+			BaseObject* rigid_root_object = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
 			rigid_root_object->InsertUnder(op);
 			m_rigid_root = rigid_root_object;
 		}
 		if (m_bone_root == nullptr)
 		{
-			BaseObject* bone_root_object = BaseObject::Alloc(ID_O_MMD_BONE_ROOT);
+			BaseObject* bone_root_object = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
 			bone_root_object->InsertUnder(op);
 			m_bone_root = bone_root_object;
 		}
 		if (m_mesh_root == nullptr)
 		{
-			BaseObject* mesh_root_object = BaseObject::Alloc(ID_O_MMD_MESH_ROOT);
+			BaseObject* mesh_root_object = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
 			mesh_root_object->InsertUnder(op);
 			m_mesh_root = mesh_root_object;
 		}
@@ -1044,7 +1044,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	iferr_scope_handler{ return SUPER::Message(node,type,data); };
 	switch (type)
 	{
-	case ID_O_MMD_MESH_ROOT:
+	case ID_O_MMD_MESH_MANAGER:
 	{
 		if (static_cast<MMDMeshManagerObjectMsg*>(data)->type == MMDMeshManagerObjectMsgType::MESH_MORPH_CHANGE)
 		{
@@ -1052,7 +1052,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
-	case ID_O_MMD_BONE_ROOT:
+	case ID_O_MMD_BONE_MANAGER:
 	{
 		if (static_cast<MMDBoneManagerObjectMsg*>(data)->type == MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE)
 		{

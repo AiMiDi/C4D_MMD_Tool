@@ -13,7 +13,7 @@ Description:	DESC
 
 #include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
-#include "description/OMMDBoneRoot.h"
+#include "description/OMMDBoneManager.h"
 
 namespace CMTToolsSetting
 {

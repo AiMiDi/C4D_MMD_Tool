@@ -12,7 +12,7 @@ Description:	MMD model object
 #define MMD_MODEL_H__
 
 #include "CMTSceneManager.h"
-#include "description/OMMDModel.h"
+#include "description/OMMDModelManager.h"
 
 class IMorph;
 enum class MMDMorphType : uint8_t;
