@@ -5,6 +5,82 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f775701-8ca4-4a3e-8d9d-7f66945c880b" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/mmd_material.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/mmd_material.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/mmd_material.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/mmd_material.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_bone_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_bone_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_bone_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_bone_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_joint.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_joint.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_joint.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_joint.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_joint_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_joint_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_joint_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_joint_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_mesh_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_mesh_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_mesh_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_mesh_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_model.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_model.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_model.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_model.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_morph.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_morph.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_rigid.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_rigid.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_rigid.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_rigid.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_rigid_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_rigid_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_rigid_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/object/mmd_rigid_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/tag/mmd_bone.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/tag/mmd_bone.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/module/tools/tag/mmd_bone.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/module/tools/tag/mmd_bone.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/plugin_resource.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/plugin_resource.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../refactoring/register_entity.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../refactoring/register_entity.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/OMMDBoneRoot.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/OMMDBoneManager.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/OMMDJointRoot.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/OMMDJointManager.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/OMMDMeshRoot.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/OMMDMeshManager.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/OMMDRigidRoot.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/OMMDRigidManager.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/c4d_symbols.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/c4d_symbols.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDBoneRoot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDBoneManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDBoneRoot.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDBoneManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDJointRoot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDJointManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDJointRoot.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDJointManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDMeshRoot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDMeshManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDMeshRoot.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDMeshManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDModel.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDModelManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDModel.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDModelManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDRigidRoot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDRigidManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDRigidRoot.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDRigidManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/c4d_strings.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/c4d_strings.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDBoneRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDBoneManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDJointRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDJointManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDMeshRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDMeshManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDModel.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDModelManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDRigidRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDRigidManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/c4d_strings.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/c4d_strings.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDBoneRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDBoneManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDJointRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDJointManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDMeshRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDMeshManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDModel.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDModelManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDRigidRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDRigidManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/OMMDBoneRoot.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/OMMDBoneManager.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/OMMDJointRoot.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/OMMDJointManager.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/OMMDMeshRoot.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/OMMDMeshManager.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/OMMDRigidRoot.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/OMMDRigidManager.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/c4d_symbols.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/c4d_symbols.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDBoneRoot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDBoneManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDBoneRoot.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDBoneManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDJointRoot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDJointManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDJointRoot.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDJointManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDMeshRoot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDMeshManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDMeshRoot.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDMeshManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDModel.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDModelManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDModel.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDModelManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDRigidRoot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDRigidManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/description/OMMDRigidRoot.res" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/description/OMMDRigidManager.res" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/c4d_strings.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/c4d_strings.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDBoneRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDBoneManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDJointRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDJointManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDMeshRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDMeshManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDModel.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDModelManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_en-US/description/OMMDRigidRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_en-US/description/OMMDRigidManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/c4d_strings.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/c4d_strings.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDBoneRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDBoneManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDJointRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDJointManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDMeshRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDMeshManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDModel.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDModelManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/S24_up/strings_zh-CN/description/OMMDRigidRoot.str" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/R20-S24/strings_zh-CN/description/OMMDRigidManager.str" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mmdtool/project/mmdtool.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../mmdtool/project/mmdtool.vcxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.plugins/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.plugins/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,7 +106,11 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../../../dependency/install/include/libMMD/Model/MMD/MMDModel.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../dependency/install/include/libMMD/Model/MMD/MMDMorph.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../dependency/install/include/libMMD/Model/MMD/PMXFile.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../refactoring/utils/morph_ui_data_util.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../res/S24_up/c4d_symbols.h" root0="SKIP_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 1
@@ -66,12 +146,14 @@
       <workItem from="1751385599125" duration="1142000" />
       <workItem from="1752132627595" duration="1157000" />
       <workItem from="1752825387297" duration="8107000" />
+      <workItem from="1753067389171" duration="12096000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
