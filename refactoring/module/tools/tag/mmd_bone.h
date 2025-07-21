@@ -23,9 +23,6 @@ enum class MMDBoneTagMsgType : int8_t
 {
 	DEFAULT = -1,
 	BONE_INDEX_CHANGE,
-	BONE_MORPH_ADD,
-	BONE_MORPH_DELETE,
-	BONE_MORPH_RENAME
 };
 
 class MMDBoneTagMsg
