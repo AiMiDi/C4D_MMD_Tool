@@ -44,8 +44,12 @@ UpdateNameConversionDialog::UpdateNameConversionDialog(NameConversion& name_conv
 
 Bool UpdateNameConversionDialog::CreateLayout()
 {
+	iferr_scope_handler
+	{
+		return false;
+	};
 	SetTitle(GeLoadString(IDS_NAME_CONVER_UPDATA_TITLE));
-	images_.Assign(new ImagesUserArea("mmd_tool_title.png"_s, 300, 78));
+	images_ = ImagesUserAreaRef::Create("mmd_tool_title.png"_s, 300, 78) iferr_return;
 	if (C4DGadget* user_area_gadget = this->AddUserArea(999, BFH_SCALE, SizePix(300), SizePix(78)); user_area_gadget != nullptr)
 		AttachUserArea(*images_, user_area_gadget);
 
@@ -58,7 +62,7 @@ Bool UpdateNameConversionDialog::CreateLayout()
 		auto i_ptr = name_conversion_.local_to_universal_name_lookup_table_.Find(i);
 		if (i_ptr == nullptr && !i.IsEmpty())
 		{
-			iferr(unregulated_name_.Append(i)) return false;
+			unregulated_name_.Append(i)iferr_return;
 		}
 	}
 	const Int32 conversion_count = static_cast<Int32>(unregulated_name_.GetCount());

@@ -206,7 +206,7 @@ DescID IMorph::GetStrengthDescID()
 bool IMorph::operator==(const IMorph& other) const
 { return m_name == other.m_name; }
 
-inline void IMorph::RenameMorph(const String& name)
+void IMorph::RenameMorph(const String& name)
 {
 	m_name = name;
 }

@@ -19,7 +19,7 @@ class MMDCamera final : public ObjectData
 	INSTANCEOF(MMDCamera, ObjectData)
 
 	static constexpr size_t track_count = 8;
-	static constexpr auto frame_at_desc = ConstDescID(DescLevel(VMD_CAM_OBJ_FRAME_AT));
+	inline static auto frame_at_desc = ConstDescID(DescLevel(VMD_CAM_OBJ_FRAME_AT));
 
 	// Maintained camera object
 	BaseObject* camera_ = nullptr;

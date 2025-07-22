@@ -212,7 +212,7 @@ Bool MMDModelManagerObject::Init(GeListNode* node SDK2024_InitParaName)
 	BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
 	if (bc == nullptr)
 		return false;
-	bc->SetString(ID_BASELIST_NAME, GeLoadString(IDS_O_MMD_MODEL));
+	bc->SetString(ID_BASELIST_NAME, GeLoadString(IDS_O_MMD_MODEL_MANAGER));
 	bc->SetFloat(PMX_VERSION, 2.0);
 	bc->SetString(MODEL_NAME_LOCAL, "model"_s);
 	bc->SetString(MODEL_NAME_UNIVERSAL, "model"_s);
@@ -466,11 +466,11 @@ void MMDModelManagerObject::RefreshMorph()
 	{
 		AddMorph(MMDMorphType::MESH, name);
 	}
-	auto& bone_morph_map = m_bone_root->GetNodeData<MMDBoneManagerObject>()->GetBoneMorphData();
-	for (auto& name : bone_morph_map.GetKeys())
-	{
-		AddMorph(MMDMorphType::BONE, name);
-	}
+	//auto& bone_morph_map = m_bone_root->GetNodeData<MMDBoneManagerObject>()->GetBoneMorphData();
+	//for (auto& name : bone_morph_map.GetKeys())
+	//{
+	//	AddMorph(MMDMorphType::BONE, name);
+	//}
 }
 
 Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
@@ -768,7 +768,7 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	auto morph_change_helper = BeginMorphChange();
 
 	if (setting.import_bone)
-		if(!m_bone_root->GetNodeData<MMDBoneManagerObject>()->LoadPMX(pmx_file, bone_list, setting))
+		if(!m_bone_root->GetNodeData<MMDBoneManagerObject>()->LoadPMX(pmx_file, pmx_model, bone_list, setting))
 			return false;
 
 	if (setting.import_polygon)
@@ -824,142 +824,142 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 	return true;
 }
 
-Bool MMDModelManagerObject::SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data,
-	const CMTToolsSetting::MotionImport& setting)
-{
-	const auto object = reinterpret_cast<BaseObject*>(Get());
-	const auto& morph_name = String(data.get_morph_name().c_str());
-	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
-	const auto morph_ptr = m_morph_name_map.Find(morph_name);
-	if (!morph_ptr)
-	{
-		return false;
-	}
-	const auto& morph_id = morph_ptr->GetValue();
-	const auto& track_id = m_morph_arr[morph_id].GetStrengthDescID();
-	CTrack* track = object->FindCTrack(track_id);
-	if (!track)
-	{
-		track = CTrack::Alloc(object, track_id);
-		if (!track)
-		{
-			return false;
-		}
-		object->InsertTrackSorted(track);
-	}
-
-	const auto curve = track->GetCurve();
-	if (!curve)
-	{
-		return false;
-	}
-
-	CKey* key = curve->AddKey(frame_at_time);
-	if (!key)
-	{
-		return false;
-	}
-	key->SetValue(curve, data.get_weight());
-
-	return true;
-}
-
-bool MMDModelManagerObject::SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data,
-                                                     const CMTToolsSetting::MotionImport& setting)
-{
-	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
-	const auto object = reinterpret_cast<BaseObject*>(Get());
-
-	// set model visibility
-	const DescID track_desc_ids[] = { ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)),
-									  ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)) };
-
-	for (auto track_index = int{}; track_index < 2; ++track_index)
-	{
-		auto& track_id = track_desc_ids[track_index];
-		CTrack* track = object->FindCTrack(track_id);
-		if (!track)
-		{
-			track = CTrack::Alloc(object, track_id);
-			if (!track)
-			{
-				return false;
-			}
-			object->InsertTrackSorted(track);
-		}
-
-		CCurve* curve = track->GetCurve();
-		if (!curve)
-		{
-			return false;
-		}
-
-		CKey* key = curve->AddKey(frame_at_time);
-		if (!key)
-		{
-			return false;
-		}
-
-		key->SetValue(curve, data.is_mode_show());
-	}
-
-	// set IK enable
-	const auto& ik_controller_data = data.get_vmd_IK_controller_array();
-	const auto ik_controller_data_count = ik_controller_data.size();
-	for (auto ik_controller_data_index = decltype(ik_controller_data_count){}; ik_controller_data_index < ik_controller_data_count; ++ik_controller_data_index)
-	{
-		const auto& ik_controller = ik_controller_data[ik_controller_data_index];
-		const auto& ik_bone_name = String(ik_controller.get_bone_name().c_str());
-		const auto& ik_enable = ik_controller.is_IK_enable();
-		auto add_key_func = [&frame_at_time, &ik_enable](BaseTag* ik_tag)
-			{
-				const auto track_id = ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE));
-				CTrack* track = ik_tag->FindCTrack(track_id);
-				if (!track)
-				{
-					track = CTrack::Alloc(ik_tag, track_id);
-					if (!track)
-					{
-						return false;
-					}
-					ik_tag->InsertTrackSorted(track);
-				}
-
-				CCurve* curve = track->GetCurve();
-				if (!curve)
-				{
-					return false;
-				}
-
-				CKey* key = curve->AddKey(frame_at_time);
-				if (!key)
-				{
-					return false;
-				}
-				key->SetValue(curve, ik_enable);
-				return true;
-			};
-		if (setting.import_by_local_name)
-		{
-			if (const auto ik_entry = m_ik_name_map.Find(ik_bone_name); ik_entry)
-			{
-				if (const auto& ik_tag = ik_entry->GetValue(); !add_key_func(ik_tag))
-					return false;
-
-			}
-		}
-		else
-		{
-			for (const auto& ik_tag : m_ik_name_map.GetValues())
-			{
-				if (ik_tag->GetName().IsEqual(ik_bone_name) && !add_key_func(ik_tag))
-					return false;
-			}
-		}
-	}
-
-	return true;
-}
+//Bool MMDModelManagerObject::SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data,
+//	const CMTToolsSetting::MotionImport& setting)
+//{
+//	const auto object = reinterpret_cast<BaseObject*>(Get());
+//	const auto& morph_name = String(data.get_morph_name().c_str());
+//	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
+//	const auto morph_ptr = m_morph_name_map.Find(morph_name);
+//	if (!morph_ptr)
+//	{
+//		return false;
+//	}
+//	const auto& morph_id = morph_ptr->GetValue();
+//	const auto& track_id = m_morph_arr[morph_id].GetStrengthDescID();
+//	CTrack* track = object->FindCTrack(track_id);
+//	if (!track)
+//	{
+//		track = CTrack::Alloc(object, track_id);
+//		if (!track)
+//		{
+//			return false;
+//		}
+//		object->InsertTrackSorted(track);
+//	}
+//
+//	const auto curve = track->GetCurve();
+//	if (!curve)
+//	{
+//		return false;
+//	}
+//
+//	CKey* key = curve->AddKey(frame_at_time);
+//	if (!key)
+//	{
+//		return false;
+//	}
+//	key->SetValue(curve, data.get_weight());
+//
+//	return true;
+//}
+//
+//bool MMDModelManagerObject::SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data,
+//                                                     const CMTToolsSetting::MotionImport& setting)
+//{
+//	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
+//	const auto object = reinterpret_cast<BaseObject*>(Get());
+//
+//	// set model visibility
+//	const DescID track_desc_ids[] = { ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)),
+//									  ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)) };
+//
+//	for (auto track_index = int{}; track_index < 2; ++track_index)
+//	{
+//		auto& track_id = track_desc_ids[track_index];
+//		CTrack* track = object->FindCTrack(track_id);
+//		if (!track)
+//		{
+//			track = CTrack::Alloc(object, track_id);
+//			if (!track)
+//			{
+//				return false;
+//			}
+//			object->InsertTrackSorted(track);
+//		}
+//
+//		CCurve* curve = track->GetCurve();
+//		if (!curve)
+//		{
+//			return false;
+//		}
+//
+//		CKey* key = curve->AddKey(frame_at_time);
+//		if (!key)
+//		{
+//			return false;
+//		}
+//
+//		key->SetValue(curve, data.is_mode_show());
+//	}
+//
+//	// set IK enable
+//	const auto& ik_controller_data = data.get_vmd_IK_controller_array();
+//	const auto ik_controller_data_count = ik_controller_data.size();
+//	for (auto ik_controller_data_index = decltype(ik_controller_data_count){}; ik_controller_data_index < ik_controller_data_count; ++ik_controller_data_index)
+//	{
+//		const auto& ik_controller = ik_controller_data[ik_controller_data_index];
+//		const auto& ik_bone_name = String(ik_controller.get_bone_name().c_str());
+//		const auto& ik_enable = ik_controller.is_IK_enable();
+//		auto add_key_func = [&frame_at_time, &ik_enable](BaseTag* ik_tag)
+//			{
+//				const auto track_id = ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE));
+//				CTrack* track = ik_tag->FindCTrack(track_id);
+//				if (!track)
+//				{
+//					track = CTrack::Alloc(ik_tag, track_id);
+//					if (!track)
+//					{
+//						return false;
+//					}
+//					ik_tag->InsertTrackSorted(track);
+//				}
+//
+//				CCurve* curve = track->GetCurve();
+//				if (!curve)
+//				{
+//					return false;
+//				}
+//
+//				CKey* key = curve->AddKey(frame_at_time);
+//				if (!key)
+//				{
+//					return false;
+//				}
+//				key->SetValue(curve, ik_enable);
+//				return true;
+//			};
+//		if (setting.import_by_local_name)
+//		{
+//			if (const auto ik_entry = m_ik_name_map.Find(ik_bone_name); ik_entry)
+//			{
+//				if (const auto& ik_tag = ik_entry->GetValue(); !add_key_func(ik_tag))
+//					return false;
+//
+//			}
+//		}
+//		else
+//		{
+//			for (const auto& ik_tag : m_ik_name_map.GetValues())
+//			{
+//				if (ik_tag->GetName().IsEqual(ik_bone_name) && !add_key_func(ik_tag))
+//					return false;
+//			}
+//		}
+//	}
+//
+//	return true;
+//}
 
 Bool MMDModelManagerObject::DeleteAllMorphAnimation()
 {
@@ -1129,7 +1129,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				if (QuestionDialog(IDS_MES_DELETE_BONE_ANIM))
 				{
-					m_bone_root->GetNodeData<MMDBoneManagerObject>()->DeleteAllBoneAnimation();
+					//m_bone_root->GetNodeData<MMDBoneManagerObject>()->DeleteAllBoneAnimation();
 					EventAdd();
 					doc->SetTime(BaseTime(1, 30));
 					doc->SetTime(BaseTime(0, 30));
@@ -1165,7 +1165,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					DeleteAllModelControllerAnimation();
 					DeleteAllMorphAnimation();
-					m_bone_root->GetNodeData<MMDBoneManagerObject>()->DeleteAllBoneAnimation();
+					//m_bone_root->GetNodeData<MMDBoneManagerObject>()->DeleteAllBoneAnimation();
 					EventAdd();
 					doc->SetTime(BaseTime(1, 30));
 					doc->SetTime(BaseTime(0, 30));

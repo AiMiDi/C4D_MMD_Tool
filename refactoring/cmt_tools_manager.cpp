@@ -11,12 +11,13 @@ Description:	tools manager
 #include "pch.h"
 #include "cmt_tools_manager.h"
 #include "CMTSceneManager.h"
+#include "module/ui/cmt_name_conversion_dialog.h"
 
 namespace CMTToolsManager
 {
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
-		LoadVmdCameraLog log;
+		LoadVmdCameraLog logger;
 
 		auto vmd_camera_animation = std::make_unique<libmmd::VMDCameraAnimation>();
 		if(!vmd_camera_animation)
@@ -39,21 +40,21 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		log.camera_frame_number = vmd_camera_animation->GetKeyCount();
+		logger.camera_frame_number = vmd_camera_animation->GetKeyCount();
 		if (!CMTSceneManager::LoadVMDCamera(setting, std::move(vmd_camera_animation)))
 		{
 			return false;
 		}
-		log.LogOK();
+		logger.LogOK();
 
 		return true;
 	}
 
 	bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
 	{
-		if (ConversionVmdCameraLog log; CMTSceneManager::ConversionCamera(setting))
+		if (ConversionVmdCameraLog logger; CMTSceneManager::ConversionCamera(setting))
 		{
-			log.LogOK();
+			logger.LogOK();
 			return true;
 		}
 		return false;
@@ -61,11 +62,10 @@ namespace CMTToolsManager
 
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting)
 	{
-		SaveVmdCameraLog log;
 		libmmd::VMDFile vmd_file;
-		if (!CMTSceneManager::SaveVMDCamera(setting, vmd_file))
+		if (SaveVmdCameraLog logger; !CMTSceneManager::SaveVMDCamera(setting, vmd_file))
 		{
-			log.LogOK();
+			logger.LogOK();
 			return false;
 		}
 
@@ -81,7 +81,7 @@ namespace CMTToolsManager
 
 	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting)
 	{
-		LoadVmdMotionLog log;
+		LoadVmdMotionLog logger;
 
 		auto vmd_animation = std::make_unique<libmmd::VMDAnimation>();
 		if (!vmd_animation)
@@ -104,12 +104,12 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		if (!CMTSceneManager::LoadVMDMotion(setting, std::move(vmd_animation), log))
+		if (!CMTSceneManager::LoadVMDMotion(setting, std::move(vmd_animation), logger))
 		{
 			return false;
 		}
 
-		log.LogOK(setting.detail_report);
+		logger.LogOK(setting.detail_report);
 
 		return true;
 	}
@@ -121,9 +121,7 @@ namespace CMTToolsManager
 
 	bool ImportPMXModel(const CMTToolsSetting::ModelImport& setting)
 	{
-		if (setting.import_english_check)
-
-		LoadModelLog log;
+		LoadModelLog logger;
 
 		PMXModelPtr pmx_model;
 		if(setting.fn.CheckSuffix("pmx"_s))
@@ -166,12 +164,12 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		log.Set(pmx_model, setting);
+		logger.Set(pmx_model, pmx_file, setting);
 		if (!CMTSceneManager::LoadPMXModel(pmx_file, pmx_model, setting))
 		{
 			return false;
 		}
-		log.LogOK();
+		logger.LogOK();
 
 		return true;
 	}

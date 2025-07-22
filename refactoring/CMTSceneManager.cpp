@@ -90,14 +90,14 @@ void LoadVmdMotionLog::LogSelectError()
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 }
 
-void LoadModelLog::Set(const MMDModelPtr& model, const CMTToolsSetting::ModelImport& setting)
+void LoadModelLog::Set(const MMDModelPtr& model, const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting)
 {
 	model_name_local = model->GetModelName().c_str();
 	comments_local = model->GetComment().c_str();
 	model_name_universal = model->GetEnglishModelName().c_str();
 	comments_universal = model->GetEnglishComment().c_str();
 
-	vertex_data_count = setting.import_polygon ? model->GetVertexCount() : 0;
+	vertex_data_count = setting.import_polygon ? file.m_vertices.size() : 0;
 	surface_data_count = setting.import_polygon ? model->GetSubMeshCount() : 0;
 	texture_data_count = setting.import_material ? model->GetMaterialCount() : 0;
 	material_data_count = setting.import_material ? model->GetMaterialCount() : 0;
@@ -107,7 +107,7 @@ void LoadModelLog::Set(const MMDModelPtr& model, const CMTToolsSetting::ModelImp
 
 void LoadModelLog::LogMMDDataPathErr()
 {
-	//MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MMD_DATA_ERR));
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MMD_DATA_ERR));
 }
 
 void LoadModelLog::LogOK()

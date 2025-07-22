@@ -16,15 +16,15 @@ namespace string_util
 	{
 		if (str.IsEmpty())
 		{
-			return {};
+			return std::string{};
 		}
 		iferr_scope_handler{
-			return {};
+			return std::string{};
 		};
 		maxon::BaseArray<Char> buffer;
 		iferr(str.GetCStringAppendArray(buffer))
 		{
-			return {};
+			return std::string{};
 		}
 		return { buffer.GetFirst(), static_cast<size_t>(buffer.GetCount()) };
 	}

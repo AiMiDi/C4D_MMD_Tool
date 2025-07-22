@@ -10,6 +10,7 @@
 #include <cassert>
 #include <memory>
 #include <mutex>
+#include <future>
 #include <unordered_set>
 #include <unordered_map>
 

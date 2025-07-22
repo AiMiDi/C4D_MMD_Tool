@@ -73,7 +73,7 @@ struct LoadModelLog : IOLog
 	UInt bone_data_count = 0;
 	UInt morph_data_count = 0;
 
-	void Set(const MMDModelPtr& model, const CMTToolsSetting::ModelImport& setting);
+	void Set(const MMDModelPtr& model, const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting);
 	void LogOK();
 	static void LogMMDDataPathErr();
 };
