@@ -116,23 +116,6 @@ Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>&
 				return false;
 			}
 		}
-		CTrack* frame_at_track = object->FindCTrack(frame_at_desc);
-		if (!frame_at_track)
-		{
-			frame_at_track = CTrack::Alloc(object, frame_at_desc);
-			if (!frame_at_track)
-			{
-				return false;
-			}
-			object->InsertTrackSorted(frame_at_track);
-		}
-		CCurve* frame_at_curve = frame_at_track->GetCurve();
-		if (!frame_at_curve)
-		{
-			return false;
-		}
-		CKey* frame_key = frame_at_curve->AddKey(time);
-		frame_key->SetValue(frame_at_curve, time.GetNumerator());
 
 		auto set_curve_value = [&time, &curves](const uint8_t& curve_index, const Float& value)
 		{
@@ -170,56 +153,68 @@ Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>&
 
 Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::CameraExport& setting)
 {
+	iferr_scope_handler
+	{
+		return false;
+	};
 	const auto object = reinterpret_cast<BaseObject*>(Get());
 
 	std::array<CCurve*, track_count> curves{ nullptr };
 
 	const auto track_objects = GetTrackObjects(object);
 	const auto track_desc_IDs = GetTrackDescIDs();
-
-	for (size_t track_index = 0; track_index < track_count; ++track_index)
+	class KeySortedArray : public maxon::SortedArray<KeySortedArray, maxon::BaseArray<BaseTime>>
 	{
-		auto& track_ID = track_desc_IDs[track_index];
-		const auto& track_object = track_objects[track_index];
-		CTrack* track = track_object->FindCTrack(track_ID);
-		if (!track)
+	public:
+		static Bool LessThan(const BaseTime& a, const BaseTime& b) { return a < b; }
+		static Bool IsEqual(const BaseTime& a, const BaseTime& b) { return a == b; }
+	};
+	KeySortedArray sorted_key;
+	{
+		maxon::HashSet<HashTime> key_set;
+		for (size_t track_index = 0; track_index < track_count; ++track_index)
 		{
-			track = CTrack::Alloc(track_object, track_ID);
+			auto& track_ID = track_desc_IDs[track_index];
+			const auto& track_object = track_objects[track_index];
+			CTrack* track = track_object->FindCTrack(track_ID);
 			if (!track)
+			{
+				track = CTrack::Alloc(track_object, track_ID);
+				if (!track)
+				{
+					return false;
+				}
+				track_object->InsertTrackSorted(track);
+			}
+
+			auto& curve = curves[track_index];
+			curve = track->GetCurve();
+			if (!curve)
 			{
 				return false;
 			}
-			track_object->InsertTrackSorted(track);
-		}
 
-		auto& curve = curves[track_index];
-		curve = track->GetCurve();
-		if (!curve)
-		{
-			return false;
-		}
-	}
-
-	CTrack* frame_at_track = object->FindCTrack(frame_at_desc);
-	if (!frame_at_track)
-	{
-		return false;
-	}
-	const CCurve* frame_at_curve = frame_at_track->GetCurve();
-	if (!frame_at_curve)
-	{
-		return false;
-	}
-	auto& vmd_camera_key_frame_array = vmd_data.m_cameras;
-	auto not_bake_func = [this, &frame_at_curve, &vmd_camera_key_frame_array, &setting, &curves]()
-		{
-			const Int32 frame_count = frame_at_curve->GetKeyCount();
-			vmd_camera_key_frame_array.reserve(frame_count);
-			for (Int32 frame_index = 0; frame_index < frame_count; ++frame_index)
+			const auto key_count = curve->GetKeyCount();
+			for (int key_index = 0; key_index < key_count; ++key_index)
 			{
-				BaseTime frame_at_time = frame_at_curve->GetKey(frame_index)->GetTime();
-				const Int32 frame_at = frame_at_time.GetFrame(30.);
+				key_set.Insert(curve->GetKey(key_index)->GetTime())iferr_return;
+			}
+		}
 
+		for (const auto& frame_at_time : key_set)
+		{
+			sorted_key.Append(frame_at_time) iferr_return;
+		}
+	}
+
+	auto& vmd_camera_key_frame_array = vmd_data.m_cameras;
+	auto not_bake_func = [this, &sorted_key, &vmd_camera_key_frame_array, &setting, &curves]()
+		{
+			const auto frame_count = sorted_key.GetCount();
+			vmd_camera_key_frame_array.reserve(frame_count);
+			for (const auto& frame_at_time : sorted_key)
+			{
+				const auto frame_at = frame_at_time.GetFrame(30.);
 				auto get_curve_value = [&frame_at_time, &curves](const uint8_t& curve_index)
 					{
 						const CCurve* curve = curves[curve_index];
@@ -280,14 +275,16 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 				// view_angle
 				camera_key_frame.m_viewAngle = static_cast<uint32_t>(get_curve_value(AOV));
 
-				// LINEAR
-				camera_key_frame.m_interpolation = {
-					20,20,107,107,
+				static std::array<unsigned char, 24> linear_interpolation
+				   {20,20,107,107,
 					20,20,107,107,
 					20,20,107,107,
 					20,20,107,107,
 					20,20,107,107,
 					20,20,107,107};
+
+				// LINEAR
+				camera_key_frame.m_interpolation = linear_interpolation;
 			}
 			return true;
 		};
@@ -312,7 +309,6 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 		MessageDialog(GeLoadString(IDS_MES_CONVER_ERR) + "error");
 		return false;
 	}
-	const Float fps = setting.doc->GetFps();
 
 	BaseObject* select_object;
 	if (setting.src_cam == nullptr)
@@ -389,7 +385,6 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 
 	std::array<CTrack*, track_count> dst_tracks{ nullptr };
 	std::array<CCurve*, track_count> dst_curves{ nullptr };
-	const auto time_step = BaseTime{ 1., fps };
 
 	for (size_t track_index = 0; track_index < dst_tracks.size(); ++track_index)
 	{

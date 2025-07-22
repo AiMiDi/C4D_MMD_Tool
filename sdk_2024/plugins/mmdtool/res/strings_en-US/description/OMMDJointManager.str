@@ -1,7 +1,7 @@
-STRINGTABLE OMMDJointRoot
+STRINGTABLE OMMDJointManager
 {
-	OMMDJointRoot "MMD Joint Root";
-	JOINT_ROOT_GRP "Setting";
+	OMMDJointManager "MMD Joint Manager";
+	JOINT_MANAGER_GRP "Setting";
 	JOINT_DISPLAY_TYPE "Display type";
 	JOINT_MODE "Mode";
 	ADD_JOINT_BUTTON "Add Joint";
@@ -9,7 +9,7 @@ STRINGTABLE OMMDJointRoot
 	JOINT_DISPLAY_TYPE_OFF "OFF";
 	JOINT_DISPLAY_TYPE_ON "ON";
 	JOINT_DISPLAY_TYPE_WIRE "Wireframe";
-	
+
 	JOINT_MODE_ANIM "Animation mode";
 	JOINT_MODE_EDIT "Edit mode";
 }

@@ -52,12 +52,12 @@ static Bool RegisterMMDModelManager()
 
 static Bool RegisterMMDBoneManager()
 {
-	return RegisterObjectPlugin(ID_O_MMD_BONE_MANAGER, GeLoadString(IDS_O_MMD_BONE_MANAGER), PLUGINFLAG_HIDEPLUGINMENU, MMDBoneManagerObject::Alloc, "OMMDBoneManager"_s, AutoBitmap("OMMDBoneRoot.png"_s), 0);
+	return RegisterObjectPlugin(ID_O_MMD_BONE_MANAGER, GeLoadString(IDS_O_MMD_BONE_MANAGER), PLUGINFLAG_HIDEPLUGINMENU, MMDBoneManagerObject::Alloc, "OMMDBoneManager"_s, AutoBitmap("OMMDBoneManager.png"_s), 0);
 }
 
 static Bool RegisterMMDMeshManager()
 {
-	return RegisterObjectPlugin(ID_O_MMD_MESH_MANAGER, GeLoadString(IDS_O_MMD_MESH_MANAGER), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, MMDMeshManagerObject::Alloc, "OMMDMeshManager"_s, AutoBitmap("OMMDMeshRoot.png"_s), 0);
+	return RegisterObjectPlugin(ID_O_MMD_MESH_MANAGER, GeLoadString(IDS_O_MMD_MESH_MANAGER), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, MMDMeshManagerObject::Alloc, "OMMDMeshManager"_s, AutoBitmap("OMMDMeshManager.png"_s), 0);
 }
 
 static Bool RegisterMMDRigidManager()

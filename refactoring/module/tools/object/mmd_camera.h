@@ -12,14 +12,12 @@ Description:	C4D MMD camera object
 #define MMD_CAMERA_H__
 
 #include "cmt_tools_setting.h"
-#include "description/OMMDCamera.h"
 
 class MMDCamera final : public ObjectData
 {
 	INSTANCEOF(MMDCamera, ObjectData)
 
 	static constexpr size_t track_count = 8;
-	inline static auto frame_at_desc = ConstDescID(DescLevel(VMD_CAM_OBJ_FRAME_AT));
 
 	// Maintained camera object
 	BaseObject* camera_ = nullptr;
