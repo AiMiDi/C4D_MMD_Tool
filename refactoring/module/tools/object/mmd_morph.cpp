@@ -201,10 +201,14 @@ inline Bool IMorph::SetStrength(GeListNode* node, const Float& strength) const
 }
 
 DescID IMorph::GetStrengthDescID()
-{ return m_strength_id; }
+{
+	return m_strength_id;
+}
 
 bool IMorph::operator==(const IMorph& other) const
-{ return m_name == other.m_name; }
+{
+	return m_name == other.m_name;
+}
 
 void IMorph::RenameMorph(const String& name)
 {

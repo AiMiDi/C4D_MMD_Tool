@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 class UpdateNameConversionDialog;
 
 class NameConversion final
@@ -33,13 +32,16 @@ class UpdateNameConversionDialog final : public GeDialog
 	Int default_name_mapping_config_index_ = 0;
 	maxon::BaseArray<String> unregulated_name_;
 	maxon::BaseArray<Filename> name_mapping_config_;
-	inline static Filename name_mapping_config_dirname_ = GeGetPluginResourcePath() + Filename("name_conversion\\");
+
+	using FilenameRef = maxon::UniqueRef<Filename>;
+	inline static FilenameRef name_mapping_config_dirname_;
 
 	bool LoadNameMappingConfig();
 	Bool CreateLayout() override;
 	Bool InitValues() override;
 	Bool Command(Int32 id, const BaseContainer& msg) override;
 public:
+	static void Init();
 	explicit UpdateNameConversionDialog(NameConversion& name_conversion);
 	~UpdateNameConversionDialog() override = default;
 };

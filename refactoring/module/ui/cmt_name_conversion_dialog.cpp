@@ -29,7 +29,7 @@ enum
 UpdateNameConversionDialog::UpdateNameConversionDialog(NameConversion& name_conversion) : name_conversion_(name_conversion)
 {
 	AutoAlloc<BrowseFiles> bf;
-	bf->Init(name_mapping_config_dirname_, BROWSEFILES_CALCSIZE);
+	bf->Init(*name_mapping_config_dirname_, BROWSEFILES_CALCSIZE);
 	while (bf->GetNext())
 	{
 		if (auto filename = bf->GetFilename(); !bf->IsDir() && filename.CheckSuffix("yaml"_s))
@@ -39,7 +39,7 @@ UpdateNameConversionDialog::UpdateNameConversionDialog(NameConversion& name_conv
 	}
 	default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
 	default_name_mapping_config_index_ = default_name_mapping_config_index_ == NOTOK ? 0 : default_name_mapping_config_index_;
-	name_conversion_.LoadConfig(name_mapping_config_dirname_ + name_mapping_config_[default_name_mapping_config_index_]);
+	name_conversion_.LoadConfig(*name_mapping_config_dirname_ + name_mapping_config_[default_name_mapping_config_index_]);
 }
 
 Bool UpdateNameConversionDialog::CreateLayout()
@@ -123,7 +123,7 @@ bool UpdateNameConversionDialog::LoadNameMappingConfig()
 {
 	Int32 config_index = 0;
 	GetInt32(DLG_NAME_CONVER_NAMEMAP, config_index);
-	name_conversion_.LoadConfig(name_mapping_config_dirname_ + name_mapping_config_[config_index]);
+	name_conversion_.LoadConfig(*name_mapping_config_dirname_ + name_mapping_config_[config_index]);
 	unregulated_name_.Reset();
 	for (const String& item : name_conversion_.updata_name_conversion_)
 	{
@@ -161,7 +161,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 		maxon::HashMap<String, String>& universal_to_local_name_lookup_table = name_conversion_.universal_to_local_name_lookup_table_;
 		Int32 fn_index = 0;
 		GetInt32(DLG_NAME_CONVER_NAMEMAP, fn_index);
-		std::ofstream file_out(string_util::GetStdString((name_mapping_config_dirname_ + name_mapping_config_[fn_index]).GetString()), std::ios_base::app);
+		std::ofstream file_out(string_util::GetStdString((*name_mapping_config_dirname_ + name_mapping_config_[fn_index]).GetString()), std::ios_base::app);
 		const Int32	conversion_count = static_cast<Int32>(unregulated_name_.GetCount());
 		YAML::Node	config;
 		for (Int32 i = 0; i < conversion_count; i++)
@@ -194,7 +194,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 	{
 		Int32 fn_index = 0;
 		GetInt32(DLG_NAME_CONVER_NAMEMAP, fn_index);
-		if (Filename fn = name_mapping_config_dirname_ + name_mapping_config_[fn_index];
+		if (Filename fn = *name_mapping_config_dirname_ + name_mapping_config_[fn_index];
 			QuestionDialog(IDS_MES_CONFIRM_DELETE_FILE, fn.GetFileString()))
 		{
 			if (fn_index == default_name_mapping_config_index_)
@@ -236,7 +236,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 		{
 			Int32 fn_index = 0;
 			GetInt32(DLG_NAME_CONVER_NAMEMAP, fn_index);
-			name_conversion_.LoadConfig(name_mapping_config_dirname_ + name_mapping_config_[fn_index]);
+			name_conversion_.LoadConfig(*name_mapping_config_dirname_ + name_mapping_config_[fn_index]);
 			unregulated_name_.Reset();
 			for (const String& i : name_conversion_.updata_name_conversion_)
 			{
@@ -299,7 +299,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 	{
 		String fn_s;
 		GetString(DLG_NAME_CONVER_NEW, fn_s);
-		Filename fn = name_mapping_config_dirname_ + Filename(fn_s + ".yaml");
+		Filename fn = *name_mapping_config_dirname_ + Filename(fn_s + ".yaml");
 		if (GeFExist(fn))
 		{
 			if (!QuestionDialog(IDS_MES_INQUIRY_OVERWRITING_FILE))
@@ -344,7 +344,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 	{
 		String fn_s;
 		GetString(DLG_NAME_CONVER_NEW, fn_s);
-		Filename fn = name_mapping_config_dirname_ + Filename(fn_s + ".yaml");
+		Filename fn = *name_mapping_config_dirname_ + Filename(fn_s + ".yaml");
 		if (GeFExist(fn))
 		{
 			if (!QuestionDialog(IDS_MES_INQUIRY_OVERWRITING_FILE))
@@ -358,7 +358,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 		}
 		Int32 fn_index = 0;
 		GetInt32(DLG_NAME_CONVER_NAMEMAP, fn_index);
-		GeFCopyFile(name_mapping_config_dirname_ + name_mapping_config_[fn_index], fn, GE_FCOPY_OVERWRITE);
+		GeFCopyFile(*name_mapping_config_dirname_ + name_mapping_config_[fn_index], fn, GE_FCOPY_OVERWRITE);
 		name_mapping_config_.Reset();
 		AutoAlloc<BrowseFiles> bf;
 		bf->Init(GeGetPluginResourcePath() + Filename("name_conversion"), BROWSEFILES_CALCSIZE);
@@ -390,6 +390,10 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 	return true;
 }
 
+void UpdateNameConversionDialog::Init()
+{
+	name_mapping_config_dirname_ = FilenameRef::Create(GeGetPluginResourcePath() + Filename("name_conversion\\"))iferr_ignore();
+}
 
 NameConversion::~NameConversion()
 {

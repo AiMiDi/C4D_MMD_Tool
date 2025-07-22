@@ -12,6 +12,7 @@ Description:	Entrance of the plugin
 
 #include "cmt_tools_config_manager.h"
 #include "register_entity.h"
+#include "module/ui/cmt_name_conversion_dialog.h"
 
 Bool PluginStart()
 {
@@ -19,6 +20,7 @@ Bool PluginStart()
 	{
 		return FALSE;
 	}
+	UpdateNameConversionDialog::Init();
 	CMTToolConfigManager::GetInstance().InitConfigManager();
 	return TRUE;
 }
