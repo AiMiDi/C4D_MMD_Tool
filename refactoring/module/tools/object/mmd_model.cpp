@@ -803,16 +803,37 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 	return true;
 }
 
-Bool MMDModelManagerObject::LoadVMDMotion(std::unique_ptr<libmmd::VMDAnimation> vmd_motion, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
+Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
 {
 	iferr_scope_handler
 	{
 		return false;
 	};
 
-	BaseTime max_time{static_cast<Float>(vmd_motion->GetMaxKeyTime()) ,30.};
+	auto vmd_animation = std::make_unique<libmmd::VMDAnimation>();
+	if (!vmd_animation)
+	{
+		LoadVmdMotionLog::LogOutMem();
+		return false;
+	}
+
+	if (!vmd_animation->Create(m_model))
+	{
+		LoadVmdMotionLog::LogOutMem();
+		return false;
+	}
+
+	if (!vmd_animation->Add(vmd_file))
+	{
+		LoadVmdMotionLog::LogReadFileErr();
+		return false;
+	}
+
+
+
+	BaseTime max_time(vmd_animation->GetMaxKeyTime() ,30.);
 	// TODO: setting
-	m_vmd_motion_arr.Insert(setting.fn.GetFileString(), std::move(vmd_motion))iferr_return;
+	m_vmd_motion_arr.Insert(setting.fn.GetFileString(), std::move(vmd_animation))iferr_return;
 
 	setting.doc->SetMaxTime(max_time);
 	setting.doc->SetLoopMaxTime(max_time);

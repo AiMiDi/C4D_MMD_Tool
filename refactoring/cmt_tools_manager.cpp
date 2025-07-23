@@ -83,13 +83,6 @@ namespace CMTToolsManager
 	{
 		LoadVmdMotionLog logger;
 
-		auto vmd_animation = std::make_unique<libmmd::VMDAnimation>();
-		if (!vmd_animation)
-		{
-			LoadVmdMotionLog::LogOutMem();
-			return false;
-		}
-
 		const auto vmd_path = string_util::GetStdString(setting.fn.GetString());
 		libmmd::VMDFile vmd_file;
 		if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
@@ -98,13 +91,7 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		if (!vmd_animation->Add(vmd_file))
-		{
-			LoadVmdMotionLog::LogNotMotionError();
-			return false;
-		}
-
-		if (!CMTSceneManager::LoadVMDMotion(setting, std::move(vmd_animation), logger))
+		if (!CMTSceneManager::LoadVMDMotion(setting, vmd_file, logger))
 		{
 			return false;
 		}

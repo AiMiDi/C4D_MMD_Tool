@@ -216,7 +216,7 @@ BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConve
 	return vmd_camera;
 }
 
-Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, std::unique_ptr<libmmd::VMDAnimation> data, LoadVmdMotionLog& log)
+Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log)
 {
 	BaseObject* select_object = setting.doc->GetActiveObject();
 	if (select_object == nullptr)
@@ -231,7 +231,7 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 		return false;
 	}
 
-	if(!select_object->GetNodeData<MMDModelManagerObject>()->LoadVMDMotion(std::move(data), setting, log))
+	if(!select_object->GetNodeData<MMDModelManagerObject>()->LoadVMDMotion(vmd_file, setting, log))
 	{
 		return false;
 	}

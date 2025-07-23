@@ -105,7 +105,7 @@ public:
 	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::VMDFile& data);
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
-	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting,  std::unique_ptr<libmmd::VMDAnimation> data, LoadVmdMotionLog& log);
+	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log);
 	static Bool SaveVMDMotion(const CMTToolsSetting::MotionExport& setting,  libmmd::VMDFile&  data, SaveVmdMotionLog& log);
 
 	static BaseObject* LoadPMXModel(const libmmd::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
