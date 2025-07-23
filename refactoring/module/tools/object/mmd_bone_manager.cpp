@@ -398,7 +398,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 		m_morph_manager = pmx_model->GetMorphManager();
 	}
 
-	const auto pmx_bones = pmx_file.m_bones;
+	const auto& pmx_bones = pmx_file.m_bones;
 	const auto pmx_bone_num = pmx_bones.size();
 	if (pmx_bone_num == 0)
 		return true;

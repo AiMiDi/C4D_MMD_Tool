@@ -141,8 +141,8 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		static auto mmd_data_filepath = GeGetPluginResourcePath() + Filename("mikumikudance_data");
-		if (!GeFExist(mmd_data_filepath))
+		static auto mmd_data_filepath = GeGetPluginResourcePath() + Filename("\\mikumikudance_data");
+		if (!GeFExist(mmd_data_filepath, true))
 		{
 			LoadModelLog::LogMMDDataPathErr();
 			return false;
@@ -150,7 +150,7 @@ namespace CMTToolsManager
 
 		libmmd::PMXFile pmx_file;
 		const std::string model_path = string_util::GetStdString(setting.fn.GetString());
-		if (libmmd::ReadPMXFile(&pmx_file, model_path.c_str()))
+		if (!libmmd::ReadPMXFile(&pmx_file, model_path.c_str()))
 		{
 			LoadModelLog::LogReadFileErr();
 			return false;

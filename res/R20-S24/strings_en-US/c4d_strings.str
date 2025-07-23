@@ -13,6 +13,7 @@ STRINGTABLE
 	IDS_MES_IMPORT_CAM_ERR "It's not a camera VMD file";
 	IDS_MES_IMPORT_MOD_ERR "It's not a model VMD file";
 	IDS_MES_IMPORT_OK "Successfully imported # Frame(s) at # ms!";
+	IDS_MES_IMPORT_MMD_DATA_ERR "Cannot find mikumikudance_data dir!";
 
 	IDS_MES_EXPORT_ERR "Export failed:";
 	IDS_MES_EXPORT_TYPE_ERR "Please select a legal camera combination object";

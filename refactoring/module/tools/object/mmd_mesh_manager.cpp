@@ -782,9 +782,10 @@ Bool MMDMeshManagerObject::LoadPMX(
 		for (auto material_index = decltype(material_count){}; material_index < material_count; ++material_index)
 		{
 			const auto& pmx_material = pmx_materials[material_index];
-			const uint64_t surface_num = pmx_material.m_numFaceVertices;
+			const auto part_vertices_num = pmx_material.m_numFaceVertices;
+			const auto part_face_num = part_vertices_num / 3;
 
-			if (surface_num == 0)
+			if (part_face_num == 0)
 				continue;
 
 			maxon::String material_name;
@@ -807,7 +808,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			const auto polygon_selection_tag = SelectionTag::Alloc(Tpolygonselection);
 			if (!polygon_selection_tag)
 				return false;
-			polygon_selection_tag->GetWritableBaseSelect()->SelectAll(static_cast<Int32>(surface_begin_index), static_cast<Int32>(surface_begin_index + surface_num - 1));
+			polygon_selection_tag->GetWritableBaseSelect()->SelectAll(static_cast<Int32>(surface_begin_index), static_cast<Int32>(surface_begin_index + part_face_num - 1));
 			polygon_selection_tag->SetName(material_name);
 			mesh_object->InsertTag(polygon_selection_tag);
 
@@ -828,7 +829,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				mesh_object->InsertTag(texture_tag, polygon_selection_tag);
 			}
 
-			surface_begin_index += surface_num;
+			surface_begin_index += part_face_num;
 		}
 	}
 	else
@@ -840,10 +841,12 @@ Bool MMDMeshManagerObject::LoadPMX(
 		for (auto material_index = decltype(material_count){}; material_index < material_count; ++material_index)
 		{
 			const auto& pmx_material = pmx_materials[material_index];
-			const auto surface_num = pmx_material.m_numFaceVertices;
+			const auto part_vertices_num = pmx_material.m_numFaceVertices;
+			const auto part_face_num = part_vertices_num / 3;
+
 			maxon::String material_name;
 
-			if (surface_num == 0)
+			if (part_face_num == 0)
 				continue;
 
 			if (setting.import_english)
@@ -862,7 +865,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				material_name = maxon::String(pmx_material.m_name.c_str());
 			}
 
-			PolygonObject* mesh_object = PolygonObject::Alloc(surface_num * 3, surface_num);
+			PolygonObject* mesh_object = PolygonObject::Alloc(part_vertices_num, part_face_num);
 			mesh_object->SetName(material_name);
 			mesh_object->InsertUnder(Get());
 
@@ -927,7 +930,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			// add vertex position and weight data
 			{
 				Int32 part_vertex_count = 0;
-				for (auto surface_index = surface_begin_index; surface_index < surface_begin_index + surface_num; ++surface_index)
+				for (auto surface_index = surface_begin_index; surface_index < surface_begin_index + part_face_num; ++surface_index)
 				{
 					const auto& pmx_surface =  pmx_faces[surface_index];
 					const auto& pmx_surface_vertex_a = pmx_surface.m_vertices[0];
@@ -949,7 +952,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					pmx_vertex_index_array.Append(vertex_index)iferr_return;
 				}
 
-				if (!mesh_object->ResizeObject(part_vertex_count, static_cast<Int32>(surface_num)))
+				if (!mesh_object->ResizeObject(part_vertex_count, static_cast<Int32>(part_face_num)))
 					return false;
 
 				const auto mesh_object_points = ToPoint(mesh_object)->GetPointW();
@@ -1000,7 +1003,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			NormalHandle normal_handle{};
 			if (setting.import_normal)
 			{
-				NormalTag* normal_tag = NormalTag::Alloc(static_cast<Int32>(surface_num));
+				NormalTag* normal_tag = NormalTag::Alloc(static_cast<Int32>(part_face_num));
 				if (!normal_tag)
 				{
 					return false;
@@ -1013,7 +1016,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			UVWHandle uvw_handle{};
 			if (setting.import_uv)
 			{
-				UVWTag* uvw_tag = UVWTag::Alloc(static_cast<Int32>(surface_num));
+				UVWTag* uvw_tag = UVWTag::Alloc(static_cast<Int32>(part_face_num));
 				if (uvw_tag == nullptr)
 				{
 					return false;
@@ -1025,7 +1028,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 			// vertex index -> surface index
 			const auto mesh_object_polygons = ToPoly(mesh_object)->GetPolygonW();
-			maxon::ParallelFor::Dynamic(surface_begin_index, surface_begin_index + surface_num, [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_index_map](const uint64_t surface_index)
+			maxon::ParallelFor::Dynamic(surface_begin_index, surface_begin_index + part_face_num, [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_index_map](const uint64_t surface_index)
 			{
 				iferr_scope_handler
 				{
@@ -1101,7 +1104,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 			}
 
-			surface_begin_index += surface_num;
+			surface_begin_index += part_face_num;
 		}
 
 		if (setting.import_expression)

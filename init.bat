@@ -17,7 +17,9 @@ cmake ..  -G "Ninja Multi-Config" ^
 -D BUILD_BULLET3=Off ^
 -D BUILD_EXTRAS=Off ^
 -D USE_GRAPHICAL_BENCHMARK=Off ^
--D BUILD_PYBULLET=Off
+-D BUILD_PYBULLET=Off ^
+-D BULLET2_MULTITHREADING=ON ^
+-D BULLET2_USE_PPL_MULTITHREADING=ON
 cmake --build . --config Debug -j
 cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j
