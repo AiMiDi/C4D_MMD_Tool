@@ -14,7 +14,7 @@ Description:	Entrance of the plugin
 #include "register_entity.h"
 #include "module/ui/cmt_name_conversion_dialog.h"
 
-Bool PluginStart()
+Bool CINEMA_NAMESPASE PluginStart()
 {
 	if (!cmt_register::RegisterPlugin())
 	{
@@ -25,12 +25,12 @@ Bool PluginStart()
 	return TRUE;
 }
 
-void PluginEnd()
+void CINEMA_NAMESPASE PluginEnd()
 {
 	CMTToolConfigManager::GetInstance().SaveConfig();
 }
 
-Bool PluginMessage(Int32 id, void* data)
+Bool CINEMA_NAMESPASE PluginMessage(Int32 id, void* data)
 {
 	switch (id)
 	{

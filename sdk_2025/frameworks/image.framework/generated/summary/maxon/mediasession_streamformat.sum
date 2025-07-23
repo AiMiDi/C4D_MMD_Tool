@@ -1,0 +1,2 @@
+maxon.MediaStreamFormatInterface	"net.maxon.image.interface.mediastreamformat"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\image.framework\source\maxon\mediasession_streamformat.h(16,7)	DataDictionaryObjectInterface		
+maxon.MediaStreamPropertiesInterface	"net.maxon.image.interface.mediastreamproperties"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\image.framework\source\maxon\mediasession_streamformat.h(32,7)	MediaStreamFormatInterface	Init	

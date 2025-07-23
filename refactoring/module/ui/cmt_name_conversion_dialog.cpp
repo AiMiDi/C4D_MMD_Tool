@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "cmt_name_conversion_dialog.h"
 #include "c4d_symbols.h"
 
@@ -28,13 +28,16 @@ enum
 
 UpdateNameConversionDialog::UpdateNameConversionDialog(NameConversion& name_conversion) : name_conversion_(name_conversion)
 {
+	if (!name_mapping_config_dirname_)
+		return;
+
 	AutoAlloc<BrowseFiles> bf;
 	bf->Init(*name_mapping_config_dirname_, BROWSEFILES_CALCSIZE);
 	while (bf->GetNext())
 	{
 		if (auto filename = bf->GetFilename(); !bf->IsDir() && filename.CheckSuffix("yaml"_s))
 		{
-			iferr(name_mapping_config_.Append(std::move(filename))) continue;
+			std::ignore = name_mapping_config_.Append(std::move(filename));
 		}
 	}
 	default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
@@ -392,7 +395,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 
 void UpdateNameConversionDialog::Init()
 {
-	name_mapping_config_dirname_ = FilenameRef::Create(GeGetPluginResourcePath() + Filename("name_conversion\\"))iferr_ignore();
+	name_mapping_config_dirname_ = FilenameRef::Create(GeGetPluginResourcePath() + Filename("name_conversion\\")) iferr_cannot_fail("Config dirname was ensured.");
 }
 
 NameConversion::~NameConversion()
@@ -457,7 +460,7 @@ String NameConversion::Conver(const String& src, const Bool use_universal)
 	{
 		return converted_ptr->GetValue();
 	}
-	return FormatString("@_@", use_universal ? "bone" : "ボーン",updata_name_conversion_.FindIndex(src));
+	return FormatString(String("@_@"), use_universal ? String("bone") : String(u"\u30dc\u30fc\u30f3"), updata_name_conversion_.FindIndex(src));
 }
 
 
@@ -477,7 +480,7 @@ Bool NameConversion::AutoUpdate()
 		const String& str = updata_name_conversion_[item_index];
 		iferr(local_to_universal_name_lookup_table_.Insert(str, FormatString("bone_@", item_index)))
 			return false;
-		iferr(universal_to_local_name_lookup_table_.Insert(FormatString("ボーン_@" , item_index), str))
+		iferr(universal_to_local_name_lookup_table_.Insert(FormatString(String(u"\u30dc\u30fc\u30f3_@") , item_index), str))
 			return false;
 	}
 	return true;

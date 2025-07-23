@@ -11,6 +11,10 @@ Description:	UserArea Utils for images
 #ifndef IMAGES_USER_AREA_UTIL_H__
 #define IMAGES_USER_AREA_UTIL_H__
 
+#if API_VERSION >= 2024900
+using namespace cinema;
+#endif
+
 class ImagesUserArea final : public GeUserArea
 {
 	AutoBitmap	m_bitmap;

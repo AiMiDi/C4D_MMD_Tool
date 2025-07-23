@@ -1,0 +1,11 @@
+#ifndef CKSOUND_H__
+#define CKSOUND_H__
+
+enum
+{
+	CID_SOUNDKEYPROPERTIES = 1000,
+	CID_SOUNDKEY_VOLUME	   = 1001,
+	CID_SOUNDKEY_BALANCE	 = 1002
+};
+
+#endif // CKSOUND_H__

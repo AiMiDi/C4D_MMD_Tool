@@ -771,7 +771,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				case libmmd::PMXMorphType::Group: [[fallthrough]];
 				case libmmd::PMXMorphType::Material: [[fallthrough]];
 				case libmmd::PMXMorphType::Bone: [[fallthrough]];
-				case libmmd::PMXMorphType::Impluse: [[fallthrough]];
+				case libmmd::PMXMorphType::Impluse:
 					break;
 				}
 			}
@@ -1285,7 +1285,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				case libmmd::PMXMorphType::Group: [[fallthrough]];
 				case libmmd::PMXMorphType::Material: [[fallthrough]];
 				case libmmd::PMXMorphType::Bone: [[fallthrough]];
-				case libmmd::PMXMorphType::Impluse: [[fallthrough]];
+				case libmmd::PMXMorphType::Impluse:
 					break;
 				}
 			}

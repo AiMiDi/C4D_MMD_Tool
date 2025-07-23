@@ -17,6 +17,10 @@ namespace maxon {
 }
 #endif
 
+#if API_VERSION >= 2024900
+using namespace cinema;
+#endif
+
 //  HashTime
 class HashTime : public BaseTime
 {

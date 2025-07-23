@@ -1,0 +1,2 @@
+maxon.StringEncodingInterface	"net.maxon.interface.stringencoding"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\stringencoding.h(16,7)	StreamConversionInterface		
+maxon.StringDecodingInterface	"net.maxon.interface.stringdecoding"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\stringencoding.h(27,7)	StreamConversionInterface		

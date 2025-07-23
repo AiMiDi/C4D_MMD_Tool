@@ -1,0 +1,5 @@
+STRINGTABLE OMMDCamera
+{
+	OMMDCamera "MMD Camera Object";
+
+}

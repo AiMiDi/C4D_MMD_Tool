@@ -15,6 +15,9 @@ Description:	Filename utils
 
 namespace filename_util
 {
+#if API_VERSION >= 2024900
+	using namespace cinema;
+#endif
 	/**
 	 * \brief Check that the file name suffix is consistent with the given suffix.
 	 * \param fn File name to check

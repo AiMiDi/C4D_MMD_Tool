@@ -17,7 +17,7 @@ class MorphUIData final
 	DescID strength_id;
 	maxon::StrongRef<AutoAlloc<BaseLink>> morph_tag_link;
 public:
-	MorphUIData(SDK2024_Const BaseTag* bone_tag = nullptr, DescID strength_id = {}) : strength_id(std::move(strength_id)), morph_tag_link(maxon::StrongRef<AutoAlloc<BaseLink>>::Create()iferr_ignore())
+	MorphUIData(SDK2024_Const BaseTag* bone_tag = nullptr, DescID strength_id = {}) : strength_id(std::move(strength_id)), morph_tag_link(maxon::StrongRef<AutoAlloc<BaseLink>>::Create()iferr_cannot_fail("Link was ensured."))
 	{
 		(*morph_tag_link)->SetLink(bone_tag);
 	}

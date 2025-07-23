@@ -100,6 +100,13 @@
 
 #endif
 
+#if API_VERSION >= 2024900
+#define CINEMA_NAMESPASE cinema::
+using namespace cinema;
+#else
+#define CINEMA_NAMESPASE 
+#endif
+
 using MMDModel = libmmd::MMDModelWithoutBuffered;
 using PMXModel = libmmd::PMXModelWithoutBuffered;
 using PMDModel = libmmd::PMDModelWithoutBuffered;

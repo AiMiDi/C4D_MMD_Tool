@@ -1,0 +1,1 @@
+maxon.IoHandlerInterface	"net.maxon.interface.iohandler"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\iohandler.h(20,7)	ObjectInterface	AppendUrl,ConvertToUiName,GetHandlerForScheme,GetSystemPath,GetUrlScheme,IoNormalize,Normalize,OpenConnection,RemoveUrl,SetSystemPath	hasStaticMethods=true	

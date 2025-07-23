@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MAXON_ROOTDIR)/frameworks/cinema.framework/generated/hxx;$(MAXON_ROOTDIR)/frameworks/cinema.framework/source;$(MAXON_ROOTDIR)/frameworks/cinema.framework/source/c4d_customgui;$(MAXON_ROOTDIR)/frameworks/cinema.framework/source/c4d_gv;$(MAXON_ROOTDIR)/frameworks/cinema.framework/source/c4d_libs;$(MAXON_ROOTDIR)/frameworks/cinema.framework/source/c4d_misc;$(MAXON_ROOTDIR)/frameworks/cinema.framework/source/c4d_misc/utilities;$(MAXON_ROOTDIR)/frameworks/cinema.framework/source/description;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>
