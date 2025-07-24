@@ -100,8 +100,6 @@
       <Filter>source\module\tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
@@ -115,6 +113,12 @@
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -201,9 +205,6 @@
       <Filter>source\module\tools</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_manager.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\string_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.h">
       <Filter>source\module\tools\object</Filter>
@@ -225,6 +226,15 @@
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModelManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_manager.hpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\res\S24_up\strings_en-US\c4d_strings.str">

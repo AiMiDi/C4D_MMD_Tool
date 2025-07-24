@@ -58,6 +58,7 @@ struct MMDBoneManagerObjectMsg
 class MMDBoneManagerObject final : public MMDManagerObject
 {
 	Int bone_name_index = 0;
+	Float position_multiple = 1.0;
 	BaseObject* m_model_root = nullptr;
 	BaseObject* m_rigid_root = nullptr;
 	BaseObject* m_joint_root = nullptr;
@@ -83,6 +84,7 @@ public:
 	[[nodiscard]] BaseTag* FindBone(Int32 index) const;
 	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
 	const BaseContainer& GetBoneItems() const;
+	const Float& GetPositionMultiple() const { return position_multiple; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);

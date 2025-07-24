@@ -102,6 +102,7 @@ class MMDModelManagerObject final : public ObjectData
 
 	maxon::HashMap<String, std::unique_ptr<libmmd::VMDAnimation>> m_vmd_motion_arr;
 	MMDModelPtr m_model;
+	BaseTime prev_time_{-1};
 
 	MMDModelManagerObject();
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelManagerObject)

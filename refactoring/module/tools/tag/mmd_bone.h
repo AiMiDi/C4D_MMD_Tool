@@ -12,6 +12,8 @@ Description:	DESC
 #define MMD_BONE_H__
 #include "description/OMMDBoneManager.h"
 
+class MMDBoneManagerObject;
+
 namespace CMTToolsSetting
 {
 	struct MotionImport;
@@ -49,6 +51,7 @@ class MMDBoneTag final : public TagData
 
 	// Bone root object
 	BaseObject* m_bone_manager = nullptr;
+	MMDBoneManagerObject* m_bone_manager_node = nullptr;
 	// Corresponding bone object
 	BaseObject* m_bone_object = nullptr;
 	// Bone tag
@@ -57,6 +60,11 @@ class MMDBoneTag final : public TagData
 	BaseTag* protection_tag = nullptr;
 
 	Int32 bone_mode_ = BONE_MODE_ANIM;
+
+	Bool is_allow_rotate = false;
+	Bool is_allow_translate = false;
+
+	friend class MMDBoneManagerObject;
 
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTag)
 	CMT_DEFAULT_MOVE_BODY(MMDBoneTag)
@@ -76,8 +84,9 @@ public:
 	/**
 	 * @brief Sets the bone manager object.
 	 * @param[in] bone_manager The bone manager object.
+	 * @param bone_manager_node The bone manager object node data.
 	 */
-	void SetBoneManager(BaseObject* bone_manager);
+	void SetBoneManager(BaseObject* bone_manager, MMDBoneManagerObject* bone_manager_node);
 
 	/**
 	 * @brief Sets the bone object.

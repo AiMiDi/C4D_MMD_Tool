@@ -621,6 +621,20 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			UpdateMorph(morph);
 		}
 	}
+
+	if (!m_vmd_motion_arr.IsEmpty())
+	{
+		const auto it = m_vmd_motion_arr.GetValues();
+		if (const auto now_time = doc->GetTime(); prev_time_ != now_time)
+		{
+			m_model->BeginAnimation();
+			m_model->UpdateAllAnimation(it->get(), static_cast<float>(now_time.Get()), 1.0f / static_cast<float>(doc->GetFps()));
+			m_model->EndAnimation();
+
+			prev_time_ = now_time;
+		}
+	}
+
 	return EXECUTIONRESULT::OK;
 }
 
@@ -829,7 +843,9 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 		return false;
 	}
 
-
+	log.imported_bone_count = vmd_animation->GetNodeKeyNum();
+	log.imported_morph_count = vmd_animation->GetMorphKeyNum();
+	log.imported_motion_count = vmd_animation->GetIKKeyNum();
 
 	BaseTime max_time(vmd_animation->GetMaxKeyTime() ,30.);
 	// TODO: setting

@@ -226,7 +226,7 @@ void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, voi
 		new_bone->SetName(new_bone->GetName() + "." + String::IntToString(bone_name_index++));
 		new_bone_node->SetBoneTag(new_bone_tag);
 		new_bone_node->SetBoneObject(new_bone);
-		new_bone_node->SetBoneManager(reinterpret_cast<BaseObject*>(node));
+		new_bone_node->SetBoneManager(reinterpret_cast<BaseObject*>(node), this);
 		new_bone_node->RefreshColor();
 		new_bone->InsertUnder(node);
 	}
@@ -392,11 +392,13 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 		return false;
 	};
 
-	if (pmx_model)
-	{
-		m_morph_node_manager = pmx_model->GetNodeManager();
-		m_morph_manager = pmx_model->GetMorphManager();
-	}
+	position_multiple = setting.position_multiple;
+
+	if (!pmx_model)
+		return false;
+	
+	m_morph_node_manager = pmx_model->GetNodeManager();
+	m_morph_manager = pmx_model->GetMorphManager();
 
 	const auto& pmx_bones = pmx_file.m_bones;
 	const auto pmx_bone_num = pmx_bones.size();
@@ -429,7 +431,8 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 		// init bone tag
 		bone_tag_node->SetBoneTag(bone_tag);
 		bone_tag_node->SetBoneObject(bone_object);
-		bone_tag_node->SetBoneManager(reinterpret_cast<BaseObject*>(Get()));
+		bone_tag_node->SetBoneManager(reinterpret_cast<BaseObject*>(Get()), this);
+		bone_tag_node->SetMMDNode(m_morph_node_manager->GetMMDNode(pmx_bone_index));
 
 		// bone name
 		const maxon::String bone_name_local{ pmx_bone.m_name.c_str() };
@@ -460,10 +463,10 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 			if (const auto parent_bone = bone_list[parent_bone_index]; parent_bone)
 			{
 				// set child position
+				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), position, DESCFLAGS_SET::NONE);
 				const auto& parent_position = pmx_bones[parent_bone_index].m_position;
 				position -= Vector(parent_position[0], parent_position[1], parent_position[2]);
 				position *= setting.position_multiple;
-				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), position, DESCFLAGS_SET::NONE);
 				bone_object->SetFrozenPos(position);
 				bone_object->InsertUnder(parent_bone);
 			}
@@ -478,12 +481,12 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_LAYER)), pmx_bone.m_deformDepth, DESCFLAGS_SET::NONE);
 
 		// set rotatable
-		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_ROTATABLE)),
-			static_cast<uint16_t>(pmx_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AllowRotate), DESCFLAGS_SET::NONE);
+		bone_tag_node->is_allow_rotate = static_cast<uint16_t>(pmx_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AllowRotate);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_ROTATABLE)), bone_tag_node->is_allow_rotate, DESCFLAGS_SET::NONE);
 
 		// set movable
-		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TRANSLATABLE)),
-			static_cast<uint16_t>(pmx_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AllowTranslate), DESCFLAGS_SET::NONE);
+		bone_tag_node->is_allow_translate = static_cast<uint16_t>(pmx_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AllowTranslate);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TRANSLATABLE)), bone_tag_node->is_allow_translate, DESCFLAGS_SET::NONE);
 
 		// set visible
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_VISIBLE)),

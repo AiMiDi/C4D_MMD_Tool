@@ -75,9 +75,10 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 MMDBoneTagMsg::MMDBoneTagMsg(const MMDBoneTagMsgType type): type(type)
 {}
 
-void MMDBoneTag::SetBoneManager(BaseObject* bone_manager)
+void MMDBoneTag::SetBoneManager(BaseObject* bone_manager, MMDBoneManagerObject* bone_manager_node)
 {
 	m_bone_manager = bone_manager;
+	m_bone_manager_node = bone_manager_node;
 }
 
 void MMDBoneTag::SetBoneObject(BaseObject* bone_object)
@@ -778,7 +779,7 @@ void MMDBoneTag::SetPositionLock(const bool flag) const
 EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority,
                                     EXECUTIONFLAGS flags)
 {
-	if (!tag || !op)
+	if (!tag || !op || !m_bone_manager_node)
 		return EXECUTIONRESULT::OK;
 
 	BaseContainer* bc = tag->GetDataInstance();
@@ -795,13 +796,22 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 	if (m_mmd_node && bone_mode_ == BONE_MODE_ANIM)
 	{
-		const auto& animation_translate = m_mmd_node->GetAnimationTranslate();
-		const auto& animation_rotate = m_mmd_node->GetAnimationRotate();
+		const auto& transform = m_mmd_node->GetLocalTransform();
 
-		const auto local_matrix = maxon::Matrix{Vector{animation_translate.x, animation_translate.y, animation_rotate.z},
-			maxon::Quaternion64(animation_rotate.x, animation_rotate.y, animation_rotate.z, animation_rotate.w).GetMatrix()};
+		if (is_allow_translate)
+			if (const auto position = Vector(transform[3].x, transform[3].y, transform[3].z) * m_bone_manager_node->GetPositionMultiple();
+			   m_bone_object->GetRelPos() != position)
+				m_bone_object->SetRelPos(position);
+		
 
-		m_bone_object->SetMl(local_matrix);
+		if (is_allow_rotate)
+			if (const auto rotation = MatrixToHPB(maxon::Matrix{Vector(),
+				maxon::SqrMat3(
+					Vector(transform[0].x, transform[0].y, transform[0].z),
+					Vector(transform[1].x, transform[1].y, transform[1].z),
+					Vector(transform[2].x, transform[2].y, transform[2].z))}, ROTATIONORDER::XYZLOCAL);
+				m_bone_object->GetRelRot() != rotation)
+					m_bone_object->SetRelRot(rotation); 
 	}
 
 	return EXECUTIONRESULT::OK;
