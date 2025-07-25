@@ -630,22 +630,31 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	{
 		if (const auto now_time = doc->GetTime(); prev_time != now_time)
 		{
-			if (now_time == doc->GetMinTime())
-			{
-				const auto fps = doc->GetFps();
-				delta_time = maxon::SafeConvert<Float32>(1. / fps);
-				m_model->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
-				m_model->InitializeAnimation();
-			}
 			if (animation_index != -1 && animation_index < animations.GetCount())
 			{
 				const auto& [_, animation]  = animations[animation_index];
+				const auto time = maxon::SafeConvert<Float32>(now_time.Get() * 30.);
+				if (now_time == doc->GetMinTime())
+				{
+					const auto fps = doc->GetFps();
+					delta_time = maxon::SafeConvert<Float32>(1. / fps);
+					m_model->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
+					m_model->InitializeAnimation();
+					animation->SyncPhysics(time);
+				}
 				m_model->BeginAnimation();
-				m_model->UpdateAllAnimation(animation.get(), maxon::SafeConvert<Float32>(now_time.Get() * 30.), delta_time);
+				m_model->UpdateAllAnimation(animation.get(), time, delta_time);
 				m_model->EndAnimation();
 			}
 			else
 			{
+				if (now_time == doc->GetMinTime())
+				{
+					const auto fps = doc->GetFps();
+					delta_time = maxon::SafeConvert<Float32>(1. / fps);
+					m_model->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
+					m_model->InitializeAnimation();
+				}
 				m_model->BeginAnimation();
 				m_model->UpdateNodeAnimation(false);
 				m_model->UpdatePhysicsAnimation(delta_time);
