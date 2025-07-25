@@ -79,7 +79,7 @@ namespace CMTToolsManager
 		return true;
 	}
 
-	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting)
+	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting, BaseObject* select_object)
 	{
 		LoadVmdMotionLog logger;
 
@@ -91,7 +91,7 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		if (!CMTSceneManager::LoadVMDMotion(setting, vmd_file, logger))
+		if (!CMTSceneManager::LoadVMDMotion(setting, vmd_file, logger, select_object))
 		{
 			return false;
 		}

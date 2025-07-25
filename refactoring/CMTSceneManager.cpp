@@ -216,9 +216,12 @@ BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConve
 	return vmd_camera;
 }
 
-Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log)
+Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log, BaseObject*
+                                    select_object)
 {
-	BaseObject* select_object = setting.doc->GetActiveObject();
+	if (select_object == nullptr)
+		select_object = setting.doc->GetActiveObject();
+
 	if (select_object == nullptr)
 	{
 		LoadVmdMotionLog::LogSelectError();
@@ -236,9 +239,10 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 		return false;
 	}
 
-	EventAdd(EVENT::NONE);
+	EventAdd();
 	setting.doc->SetTime(BaseTime(1, 30.));
 	setting.doc->SetTime(BaseTime(0, 30.));
+	EventAdd();
 
 	return true;
 }

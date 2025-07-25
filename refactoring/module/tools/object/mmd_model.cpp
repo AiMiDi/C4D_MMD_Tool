@@ -10,6 +10,8 @@ Description:	MMD model object
 
 #include "pch.h"
 #include "mmd_model.h"
+
+#include "cmt_tools_manager.h"
 #include "mmd_morph.h"
 #include "mmd_bone_manager.h"
 #include "mmd_mesh_manager.h"
@@ -218,6 +220,8 @@ Bool MMDModelManagerObject::Init(GeListNode* node SDK2024_InitParaName)
 	bc->SetString(MODEL_NAME_UNIVERSAL, "model"_s);
 	bc->SetString(COMMENTS_LOCAL, "description"_s);
 	bc->SetString(COMMENTS_UNIVERSAL, "description"_s);
+	bc->SetInt32(MODEL_ANIM_LIST, -1);
+	animation_items.SetString(-1, "-"_s);
 	return true;
 }
 Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
@@ -226,27 +230,27 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		return false;
 	};
 
-	m_mesh_root_link = BaseLink::Alloc();
-	if (m_mesh_root_link == nullptr)
+	mesh_manager_link = BaseLink::Alloc();
+	if (mesh_manager_link == nullptr)
 		return false;
-	m_rigid_root_link = BaseLink::Alloc();
-	if (m_rigid_root_link == nullptr)
+	rigid_manager_link = BaseLink::Alloc();
+	if (rigid_manager_link == nullptr)
 		return false;
-	m_joint_root_link = BaseLink::Alloc();
-	if (m_joint_root_link == nullptr)
+	joint_manager_link = BaseLink::Alloc();
+	if (joint_manager_link == nullptr)
 		return false;
-	m_bone_root_link = BaseLink::Alloc();
-	if (m_bone_root_link == nullptr)
+	bone_manager_link = BaseLink::Alloc();
+	if (bone_manager_link == nullptr)
 		return false;
-	if (!m_mesh_root_link->Read(hf))
+	if (!mesh_manager_link->Read(hf))
 		return false;
-	if (!m_rigid_root_link->Read(hf))
+	if (!rigid_manager_link->Read(hf))
 		return false;
-	if (!m_joint_root_link->Read(hf))
+	if (!joint_manager_link->Read(hf))
 		return false;
-	if (!m_bone_root_link->Read(hf))
+	if (!bone_manager_link->Read(hf))
 		return false;
-	*m_is_root_read.Write() = true;
+	*is_manager_read.Write() = true;
 
 	if (!hf->ReadInt32(&m_morph_named_number))
 		return false;
@@ -314,10 +318,10 @@ Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 	AutoAlloc<BaseLink> bone_root_link;
 	if (bone_root_link == nullptr)
 		return false;
-	mesh_root_link->SetLink(m_mesh_root);
-	rigid_root_link->SetLink(m_rigid_root);
-	joint_root_link->SetLink(m_joint_root);
-	bone_root_link->SetLink(m_bone_root);
+	mesh_root_link->SetLink(mesh_manager);
+	rigid_root_link->SetLink(rigid_manager);
+	joint_root_link->SetLink(joint_manager);
+	bone_root_link->SetLink(bone_manager);
 	if (!mesh_root_link->Write(hf))
 		return false;
 	if (!rigid_root_link->Write(hf))
@@ -375,10 +379,10 @@ Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 Bool MMDModelManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
 {
 	const auto destObject = reinterpret_cast<MMDModelManagerObject*>(dest);
-	destObject->m_bone_root = m_bone_root;
-	destObject->m_joint_root = m_joint_root;
-	destObject->m_rigid_root = m_rigid_root;
-	destObject->m_mesh_root = m_mesh_root;
+	destObject->bone_manager = bone_manager;
+	destObject->joint_manager = joint_manager;
+	destObject->rigid_manager = rigid_manager;
+	destObject->mesh_manager = mesh_manager;
 	iferr(destObject->m_desc_id_map.CopyFrom(m_desc_id_map))
 		return false;
 	iferr(destObject->m_morph_name_map.CopyFrom(m_morph_name_map))
@@ -461,7 +465,7 @@ void MMDModelManagerObject::RefreshMorph()
 	{
 		DeleteMorph(it);
 	}
-	auto& mesh_morph_map = m_mesh_root->GetNodeData<MMDMeshManagerObject>()->GetMeshMorphData();
+	auto& mesh_morph_map = mesh_manager->GetNodeData<MMDMeshManagerObject>()->GetMeshMorphData();
 	for (auto& name : mesh_morph_map.GetKeys())
 	{
 		AddMorph(MMDMorphType::MESH, name);
@@ -500,71 +504,71 @@ Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 		}
 	}
 	nodes.Reset();
-	if (m_joint_root == nullptr) {
+	if (joint_manager == nullptr) {
 		if (JointRoot_ == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
 			tmp->InsertUnder(op);
-			m_joint_root = tmp;
+			joint_manager = tmp;
 		}
 		else {
-			m_joint_root = JointRoot_;
+			joint_manager = JointRoot_;
 		}
 		m_is_root_initialized = false;
 	}
-	if (m_rigid_root == nullptr) {
+	if (rigid_manager == nullptr) {
 		if (RigidRoot_ == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
 			tmp->InsertUnder(op);
-			m_rigid_root = tmp;
+			rigid_manager = tmp;
 		}
 		else {
-			m_rigid_root = RigidRoot_;
+			rigid_manager = RigidRoot_;
 		}
 		m_is_root_initialized = false;
 	}
-	if (m_bone_root == nullptr) {
+	if (bone_manager == nullptr) {
 		if (BoneRoot_ == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
 			tmp->InsertUnder(op);
-			m_bone_root = tmp;
+			bone_manager = tmp;
 		}
 		else {
-			m_bone_root = BoneRoot_;
+			bone_manager = BoneRoot_;
 		}
 		m_is_root_initialized = false;
 	}
-	if (m_mesh_root == nullptr) {
+	if (mesh_manager == nullptr) {
 		if (MeshRoot_ == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
 			tmp->InsertUnder(op);
-			m_mesh_root = tmp;
+			mesh_manager = tmp;
 		}
 		else {
-			m_mesh_root = MeshRoot_;
+			mesh_manager = MeshRoot_;
 		}
 		m_is_root_initialized = false;
 	}
 	if (m_is_root_initialized == false) {
 		MMDModelRootObjectMsg MeshRoot_msg(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::MODEL_MANAGER, op);
-		m_mesh_root->Message(ID_O_MMD_MODEL, &MeshRoot_msg);
-		MMDModelRootObjectMsg BoneRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, m_rigid_root);
-		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgA);
-		MMDModelRootObjectMsg BoneRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, m_joint_root);
-		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgB);
+		mesh_manager->Message(ID_O_MMD_MODEL, &MeshRoot_msg);
+		MMDModelRootObjectMsg BoneRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, rigid_manager);
+		bone_manager->Message(ID_O_MMD_MODEL, &BoneRoot_msgA);
+		MMDModelRootObjectMsg BoneRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, joint_manager);
+		bone_manager->Message(ID_O_MMD_MODEL, &BoneRoot_msgB);
 		MMDModelRootObjectMsg BoneRoot_msgC(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::MODEL_MANAGER, op);
-		m_bone_root->Message(ID_O_MMD_MODEL, &BoneRoot_msgC);
-		MMDModelRootObjectMsg RigidRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, m_bone_root);
-		m_rigid_root->Message(ID_O_MMD_MODEL, &RigidRoot_msgA);
-		MMDModelRootObjectMsg RigidRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, m_joint_root);
-		m_rigid_root->Message(ID_O_MMD_MODEL, &RigidRoot_msgB);
-		MMDModelRootObjectMsg JointRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, m_bone_root);
-		m_joint_root->Message(ID_O_MMD_MODEL, &JointRoot_msgA);
-		MMDModelRootObjectMsg JointRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, m_rigid_root);
-		m_joint_root->Message(ID_O_MMD_MODEL, &JointRoot_msgB);
+		bone_manager->Message(ID_O_MMD_MODEL, &BoneRoot_msgC);
+		MMDModelRootObjectMsg RigidRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, bone_manager);
+		rigid_manager->Message(ID_O_MMD_MODEL, &RigidRoot_msgA);
+		MMDModelRootObjectMsg RigidRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, joint_manager);
+		rigid_manager->Message(ID_O_MMD_MODEL, &RigidRoot_msgB);
+		MMDModelRootObjectMsg JointRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, bone_manager);
+		joint_manager->Message(ID_O_MMD_MODEL, &JointRoot_msgA);
+		MMDModelRootObjectMsg JointRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, rigid_manager);
+		joint_manager->Message(ID_O_MMD_MODEL, &JointRoot_msgB);
 		m_is_root_initialized = true;
 	}
 	return true;
@@ -581,17 +585,17 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		return EXECUTIONRESULT::OK;
 	}
 
-	if(*m_is_root_read.Read())
+	if(*is_manager_read.Read())
 	{
-		m_mesh_root = reinterpret_cast<BaseObject*>(m_mesh_root_link->GetLink(doc));
-		m_rigid_root = reinterpret_cast<BaseObject*>(m_rigid_root_link->GetLink(doc));
-		m_joint_root = reinterpret_cast<BaseObject*>(m_joint_root_link->GetLink(doc));
-		m_bone_root = reinterpret_cast<BaseObject*>(m_bone_root_link->GetLink(doc));
-		BaseLink::Free(m_mesh_root_link);
-		BaseLink::Free(m_rigid_root_link);
-		BaseLink::Free(m_joint_root_link);
-		BaseLink::Free(m_bone_root_link);
-		*m_is_root_read.Write() = false;
+		mesh_manager = reinterpret_cast<BaseObject*>(mesh_manager_link->GetLink(doc));
+		rigid_manager = reinterpret_cast<BaseObject*>(rigid_manager_link->GetLink(doc));
+		joint_manager = reinterpret_cast<BaseObject*>(joint_manager_link->GetLink(doc));
+		bone_manager = reinterpret_cast<BaseObject*>(bone_manager_link->GetLink(doc));
+		BaseLink::Free(mesh_manager_link);
+		BaseLink::Free(rigid_manager_link);
+		BaseLink::Free(joint_manager_link);
+		BaseLink::Free(bone_manager_link);
+		*is_manager_read.Write() = false;
 	}
 
 	if(*m_is_ik_map_read.Read())
@@ -622,19 +626,35 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		}
 	}
 
-	if (!m_vmd_motion_arr.IsEmpty())
+	if (model_mode == MODEL_MODE_ANIM && m_model)
 	{
-		const auto it = m_vmd_motion_arr.GetValues();
-		if (const auto now_time = doc->GetTime(); prev_time_ != now_time)
+		if (const auto now_time = doc->GetTime(); prev_time != now_time)
 		{
-			m_model->BeginAnimation();
-			m_model->UpdateAllAnimation(it->get(), static_cast<float>(now_time.Get()), 1.0f / static_cast<float>(doc->GetFps()));
-			m_model->EndAnimation();
-
-			prev_time_ = now_time;
+			if (now_time == doc->GetMinTime())
+			{
+				const auto fps = doc->GetFps();
+				delta_time = maxon::SafeConvert<Float32>(1. / fps);
+				m_model->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
+				m_model->InitializeAnimation();
+			}
+			if (animation_index != -1 && animation_index < animations.GetCount())
+			{
+				const auto& [_, animation]  = animations[animation_index];
+				m_model->BeginAnimation();
+				m_model->UpdateAllAnimation(animation.get(), maxon::SafeConvert<Float32>(now_time.Get() * 30.), delta_time);
+				m_model->EndAnimation();
+			}
+			else
+			{
+				m_model->BeginAnimation();
+				m_model->UpdateNodeAnimation(false);
+				m_model->UpdatePhysicsAnimation(delta_time);
+				m_model->UpdateNodeAnimation(true);
+				m_model->EndAnimation();
+			}
+			prev_time = now_time;
 		}
 	}
-
 	return EXECUTIONRESULT::OK;
 }
 
@@ -711,29 +731,29 @@ Bool MMDModelManagerObject::CreateRoot()
 	const BaseDocument* doc = GetActiveDocument();
 	if (const auto op = reinterpret_cast<BaseObject*>(Get()); op != nullptr && doc != nullptr)
 	{
-		if (m_joint_root == nullptr)
+		if (joint_manager == nullptr)
 		{
 			BaseObject* joint_root_object = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
 			joint_root_object->InsertUnder(op);
-			m_joint_root = joint_root_object;
+			joint_manager = joint_root_object;
 		}
-		if (m_rigid_root == nullptr)
+		if (rigid_manager == nullptr)
 		{
 			BaseObject* rigid_root_object = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
 			rigid_root_object->InsertUnder(op);
-			m_rigid_root = rigid_root_object;
+			rigid_manager = rigid_root_object;
 		}
-		if (m_bone_root == nullptr)
+		if (bone_manager == nullptr)
 		{
 			BaseObject* bone_root_object = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
 			bone_root_object->InsertUnder(op);
-			m_bone_root = bone_root_object;
+			bone_manager = bone_root_object;
 		}
-		if (m_mesh_root == nullptr)
+		if (mesh_manager == nullptr)
 		{
 			BaseObject* mesh_root_object = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
 			mesh_root_object->InsertUnder(op);
-			m_mesh_root = mesh_root_object;
+			mesh_manager = mesh_root_object;
 		}
 		return true;
 	}
@@ -745,13 +765,13 @@ BaseObject* MMDModelManagerObject::GetRootObject(const ManagerObjectType type) c
 	switch (type)
 	{
 	case ManagerObjectType::MESH_MANAGER:
-		return m_mesh_root;
+		return mesh_manager;
 	case ManagerObjectType::BONE_MANAGER:
-		return m_bone_root;
+		return bone_manager;
 	case ManagerObjectType::RIGID_MANAGER:
-		return m_rigid_root;
+		return rigid_manager;
 	case ManagerObjectType::JOINT_MANAGER:
-		return m_joint_root;
+		return joint_manager;
 
 	case ManagerObjectType::DEFAULT:
 	case ManagerObjectType::MODEL_MANAGER:;
@@ -781,12 +801,12 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	maxon::BaseArray<BaseObject*> bone_list;
 	auto morph_change_helper = BeginMorphChange();
 
-	if (setting.import_bone)
-		if(!m_bone_root->GetNodeData<MMDBoneManagerObject>()->LoadPMX(pmx_file, pmx_model, bone_list, setting))
+	if (setting.import_bone && bone_manager)
+		if(const auto bone_manager_data = bone_manager->GetNodeData<MMDBoneManagerObject>(); bone_manager_data && !bone_manager_data->LoadPMX(pmx_file, pmx_model, bone_list, setting))
 			return false;
 
-	if (setting.import_polygon)
-		if(!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->LoadPMX(pmx_file, bone_list, setting))
+	if (setting.import_polygon && mesh_manager)
+		if(const auto mesh_manager_data = mesh_manager->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->LoadPMX(pmx_file, bone_list, setting))
 			return false;
 
 	if (setting.import_expression)
@@ -807,12 +827,12 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
 {
 
-	if (setting.export_bone)
-		if (!m_bone_root->GetNodeData<MMDBoneManagerObject>()->SavePMX(pmx_file, setting))
+	if (setting.export_bone && bone_manager)
+		if (const auto bone_manager_data = bone_manager->GetNodeData<MMDBoneManagerObject>(); bone_manager_data && !bone_manager_data->SavePMX(pmx_file, setting))
 			return false;
 
-	if (setting.export_polygon)
-		if (!m_mesh_root->GetNodeData<MMDMeshManagerObject>()->SavePMX(pmx_file, setting))
+	if (setting.export_polygon && mesh_manager)
+		if (const auto mesh_manager_data = mesh_manager->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->SavePMX(pmx_file, setting))
 			return false;
 	return true;
 }
@@ -848,11 +868,15 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	log.imported_motion_count = vmd_animation->GetIKKeyNum();
 
 	BaseTime max_time(vmd_animation->GetMaxKeyTime() ,30.);
-	// TODO: setting
-	m_vmd_motion_arr.Insert(setting.fn.GetFileString(), std::move(vmd_animation))iferr_return;
+
+	const auto& [animation_name, _] = animations.Append(setting.fn.GetFileString(), std::move(vmd_animation))iferr_return;
+	animation_index = static_cast<Int32>(animations.GetCount()) - 1;
+	animation_items.SetString(animation_index, animation_name);
 
 	setting.doc->SetMaxTime(max_time);
 	setting.doc->SetLoopMaxTime(max_time);
+
+	EventAdd();
 	return true;
 }
 
@@ -998,41 +1022,23 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 //	return true;
 //}
 
-Bool MMDModelManagerObject::DeleteAllMorphAnimation()
+Bool MMDModelManagerObject::DeleteAnimation()
 {
-	const auto object = reinterpret_cast<BaseObject*>(Get());
-	for (auto& morph : m_morph_arr)
+	iferr_scope_handler{ return false; };
+	animation_items.FlushAll();
+	animation_items.SetString(-1, "-"_s);
+	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> new_animations;
+	const auto animation_count = animations.GetCount();
+	for (int i = 0, j = 0; i < animation_count; ++i)
 	{
-		const auto& track_id = morph.GetStrengthDescID();
-		if (CTrack* track = object->FindCTrack(track_id); track)
+		if (i != animation_index)
 		{
-			CTrack::Free(track);
+			const auto& [animation_name, _] = new_animations.Append(std::move(animations[i]))iferr_return;
+			animation_items.SetString(j++, animation_name);
 		}
-		morph.SetStrength(object, 0.0);
 	}
-	return true;
-}
-
-Bool MMDModelManagerObject::DeleteAllModelControllerAnimation()
-{
-	const auto object = reinterpret_cast<BaseObject*>(Get());
-
-	CTrack* model_editor_display_track = object->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)));
-	CTrack::Free(model_editor_display_track);
-	object->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)), 2, DESCFLAGS_SET::NONE);
-
-	CTrack* model_render_display_track = object->FindCTrack(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)));
-	object->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)), 2, DESCFLAGS_SET::NONE);
-	CTrack::Free(model_render_display_track);
-
-	for (const auto& ik : m_ik_name_map.GetValues())
-		if(ik)
-		{
-			CTrack* ik_enable_track = ik->FindCTrack(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)));
-			CTrack::Free(ik_enable_track);
-			ik->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE)), true, DESCFLAGS_SET::NONE);
-		}
-
+	std::swap(new_animations, animations);
+	animation_index = -1;
 	return true;
 }
 
@@ -1052,25 +1058,26 @@ Bool MMDModelManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 	{
 		return true;
 	}
-	list->Add(op, EXECUTIONPRIORITY_EXPRESSION - 1, EXECUTIONFLAGS::NONE);
+	list->Add(op, EXECUTIONPRIORITY_ANIMATION_NLA + 1, EXECUTIONFLAGS::NONE);
 	return true;
 }
 Bool MMDModelManagerObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const
 {
-	if (!description->LoadDescription("MMDModelObject"_s))
+	if (!description->LoadDescription("OMMDModelManager"_s))
 		return false;
+	if (const auto settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_ANIM_LIST)), nullptr); settings != nullptr)
+	{
+		settings->SetContainer(DESC_CYCLE, animation_items);
+	}
 	const DescID* single_id = description->GetSingleDescID();
 	if (single_id == nullptr)
 	{
 		return SUPER::GetDDescription(node, description, flags);
 	}
-	MAXON_SCOPE
+	if (const auto cid = ConstDescID(DescLevel(MODEL_INFO_GRP)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
 	{
-		if (const auto cid = ConstDescID(DescLevel(MODEL_INFO_GRP)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
-		{
-			if (BaseContainer* settings = description->GetParameterI(cid, nullptr))
-				settings->SetBool(DESC_GROUPSCALEV, true);
-		}
+		if (BaseContainer* settings = description->GetParameterI(cid, nullptr))
+			settings->SetBool(DESC_GROUPSCALEV, true);
 	}
 	flags |= DESCFLAGS_DESC::LOADED;
 
@@ -1155,58 +1162,24 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				AddMorph(MMDMorphType::FLIP, ge_data.GetString());
 				break;
 			}
-			case MODEL_DEL_BONE_ANIM_BUTTON:
+			case MODEL_ANIM_LOAD_VMD_BUTTON:
 			{
-				BaseDocument* doc = GetActiveDocument();
-				if (doc == nullptr)
+				CMTToolsSetting::MotionImport setting(GetActiveDocument());
+				if(!filename_util::SelectSuffixImportFile(setting.fn, "vmd"_s))
 				{
-					GePrint("error"_s);
-					MessageDialog("error"_s);
-					return true;
+					break;
 				}
-				if (QuestionDialog(IDS_MES_DELETE_BONE_ANIM))
-				{
-					//m_bone_root->GetNodeData<MMDBoneManagerObject>()->DeleteAllBoneAnimation();
-					EventAdd();
-					doc->SetTime(BaseTime(1, 30));
-					doc->SetTime(BaseTime(0, 30));
-				}
+				if (bone_manager)
+					if (const auto bone_manager_data = bone_manager->GetNodeData<MMDBoneManagerObject>(); bone_manager_data)
+					{
+						setting.position_multiple = bone_manager_data->GetPositionMultiple();
+					}
+				CMTToolsManager::ImportVMDMotion(setting, reinterpret_cast<BaseObject*>(Get()));
 				break;
 			}
-			case MODEL_DEL_MORPH_ANIM_BUTTON:
+			case MODEL_ANIM_DElETE_BUTTON:
 			{
-				BaseDocument* doc = GetActiveDocument();
-				if (doc == nullptr)
-				{
-					GePrint("error"_s);
-					MessageDialog("error"_s);
-					return true;
-				}
-				if (QuestionDialog(IDS_MES_DELETE_MORPH_ANIM))
-				{
-					DeleteAllMorphAnimation();
-					EventAdd();
-					doc->SetTime(BaseTime(1, 30));
-					doc->SetTime(BaseTime(0, 30));
-				}
-				break;
-			}
-			case MODEL_DEL_ALL_ANIM_BUTTON:
-			{
-				BaseDocument* doc = GetActiveDocument();
-				if (doc == nullptr)
-				{
-					return true;
-				}
-				if (QuestionDialog(IDS_MES_DELETE_ALL_ANIM))
-				{
-					DeleteAllModelControllerAnimation();
-					DeleteAllMorphAnimation();
-					//m_bone_root->GetNodeData<MMDBoneManagerObject>()->DeleteAllBoneAnimation();
-					EventAdd();
-					doc->SetTime(BaseTime(1, 30));
-					doc->SetTime(BaseTime(0, 30));
-				}
+				DeleteAnimation();
 				break;
 			}
 			default:
@@ -1222,28 +1195,22 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	return SUPER::Message(node, type, data);
 }
 
-Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data,
-	DESCFLAGS_SET& flags)
+Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
 	switch (id[0].id)
 	{
-	case MODEL_MODE:
-		switch (t_data.GetInt32())
+		case MODEL_MODE:
 		{
-		case MODEL_MODE_EDIT:
-			{
-				MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, MODEL_MODE_EDIT);
-				node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MODEL, &msg);
-				break;
-			}
-		case MODEL_MODE_ANIM:
-			{
-				MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, MODEL_MODE_ANIM);
-				node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MODEL, &msg);
-				break;
-			}
+			model_mode = t_data.GetInt32();
+			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, model_mode);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MODEL, &msg);
+			break;
 		}
-		break;
+		case MODEL_ANIM_LIST:
+			animation_index = t_data.GetInt32();
+			if (m_model)
+				m_model->InitializeAnimation();
+			break;
 	}
 	return ObjectData::SetDParameter(node, id, t_data, flags);
 }

@@ -76,7 +76,7 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_PPL=;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_PPL=1;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -95,7 +95,7 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_PPL=;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_PPL=1;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>

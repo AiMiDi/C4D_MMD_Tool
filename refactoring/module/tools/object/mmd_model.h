@@ -82,27 +82,32 @@ class MMDModelManagerObject final : public ObjectData
 {
 	maxon::Synchronized<Bool> m_is_need_update;
 	maxon::Synchronized<Bool> m_is_morph_initialized;
-	maxon::Synchronized<Bool> m_is_root_read;
+	maxon::Synchronized<Bool> is_manager_read;
 	maxon::Synchronized<Bool> m_is_ik_map_read;
 	Bool m_is_root_initialized = false;
 	Int32 m_morph_named_number = 0;
-	BaseObject* m_mesh_root = nullptr;
-	BaseObject* m_bone_root = nullptr;
-	BaseObject* m_rigid_root = nullptr;
-	BaseObject* m_joint_root = nullptr;
-	BaseLink* m_mesh_root_link = nullptr;
-	BaseLink* m_rigid_root_link = nullptr;
-	BaseLink* m_joint_root_link = nullptr;
-	BaseLink* m_bone_root_link = nullptr;
+	BaseObject* mesh_manager = nullptr;
+	BaseObject* bone_manager = nullptr;
+	BaseObject* rigid_manager = nullptr;
+	BaseObject* joint_manager = nullptr;
+	BaseLink* mesh_manager_link = nullptr;
+	BaseLink* bone_manager_link = nullptr;
+	BaseLink* rigid_manager_link = nullptr;
+	BaseLink* joint_manager_link = nullptr;
 	maxon::PointerArray<IMorph> m_morph_arr;
 	maxon::HashMap<DescID, maxon::Pair<MMDModelRootDynamicDescriptionType, Int>> m_desc_id_map;
 	maxon::HashMap<String, Int> m_morph_name_map;
 	maxon::HashMap<String, BaseTag*> m_ik_name_map;
 	maxon::HashMap<String, AutoAlloc<BaseLink>> m_ik_link_name_map;
 
-	maxon::HashMap<String, std::unique_ptr<libmmd::VMDAnimation>> m_vmd_motion_arr;
+	Int32 animation_index = -1;
+	BaseContainer animation_items;
+	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> animations;
+
 	MMDModelPtr m_model;
-	BaseTime prev_time_{-1};
+	Int32 model_mode = MODEL_MODE_ANIM;
+	Float32 delta_time = 1.f / 30.f;
+	BaseTime prev_time{-1};
 
 	MMDModelManagerObject();
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelManagerObject)
@@ -166,8 +171,7 @@ private:
 	Bool CopyMorph(MMDModelManagerObject* dst) const;
 	//Bool SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	//Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
-	Bool DeleteAllMorphAnimation();
-	Bool DeleteAllModelControllerAnimation();
+	Bool DeleteAnimation();
 };
 
 #endif // !MMD_MODEL_H__

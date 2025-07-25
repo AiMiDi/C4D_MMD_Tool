@@ -10,8 +10,8 @@ Description:	Entrance of the plugin
 
 #include "pch.h"
 
-#include "cmt_tools_config_manager.h"
 #include "register_entity.h"
+#include "cmt_tools_config_manager.h"
 #include "module/ui/cmt_name_conversion_dialog.h"
 
 Bool CINEMA_NAMESPASE PluginStart()

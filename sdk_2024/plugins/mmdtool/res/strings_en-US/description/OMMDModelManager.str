@@ -8,10 +8,10 @@ STRINGTABLE OMMDModelManager
 	COMMENTS_UNIVERSAL "Universal comments";
 	MODEL_MODE "Mode";
 	PMX_VERSION "Version";
-	MODEL_FUNCTION_GRP "Function";
-	MODEL_DEL_ANIM_BUTTON "Delete all animation";
-	MODEL_DEL_BONE_ANIM_BUTTON "Delete all bone animation";
-	MODEL_DEL_MORPH_ANIM_BUTTON "Delete all morph animation";
+	MODEL_ANIM_GRP "Animation";
+		MODEL_ANIM_LIST "Animation list";
+		MODEL_ANIM_LOAD_VMD_BUTTON "Load VMD";
+		MODEL_ANIM_DElETE_BUTTON "Delete animation";
 	MODEL_IK_GRP "IK";
 		MODEL_MORPH_GRP "Morph";
 		MODEL_MORPH_GROUP_GRP "Group morph";
@@ -22,6 +22,7 @@ STRINGTABLE OMMDModelManager
 			MODEL_MORPH_FLIP_ADD_BUTTON "Add flip morph";
 		MODEL_MORPH_MESH_GRP "Vertex morph";
 		MODEL_MORPH_BONE_GRP "Bone morph";
+	MODEL_ANIM_NONE "-- No animation --";
 	MODEL_MODE_EDIT "Edit mode";
 	MODEL_MODE_ANIM "Animation mode";
 }
