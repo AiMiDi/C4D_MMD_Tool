@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
@@ -56,8 +56,11 @@ public:
 
 	BaseObject* FindRigid(Int32 index) const;
 
+	BaseObject* AddRigidbody(const String& name = {}, GeListNode* node = nullptr);
 	const BaseContainer& GetRigidItems() const;
 	BaseObject* GetBoneManager() const;
+
+	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 };
 
 #endif // !MMD_RIGID_ROOT_H__

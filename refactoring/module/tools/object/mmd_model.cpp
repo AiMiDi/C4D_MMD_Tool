@@ -15,6 +15,7 @@ Description:	MMD model object
 #include "mmd_morph.h"
 #include "mmd_bone_manager.h"
 #include "mmd_mesh_manager.h"
+#include "mmd_rigid_manager.h"
 #define COL_NAME 'name'
 
 Bool EditorSubMorphDialog::CreateLayout()
@@ -640,7 +641,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 					delta_time = maxon::SafeConvert<Float32>(1. / fps);
 					m_model->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
 					m_model->InitializeAnimation();
-					animation->SyncPhysics(time);
+					animation->SyncPhysics(0.f);
 				}
 				m_model->BeginAnimation();
 				m_model->UpdateAllAnimation(animation.get(), time, delta_time);
@@ -818,6 +819,10 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 		if(const auto mesh_manager_data = mesh_manager->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->LoadPMX(pmx_file, bone_list, setting))
 			return false;
 
+	if (rigid_manager)
+		if(const auto rigid_manager_data = rigid_manager->GetNodeData<MMDRigidManagerObject>(); rigid_manager_data && !rigid_manager_data->LoadPMX(pmx_file, pmx_model, setting))
+			return false;
+
 	if (setting.import_expression)
 	{
 		const auto& pmx_morph_array = pmx_file.m_morphs;
@@ -876,11 +881,14 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	log.imported_morph_count = vmd_animation->GetMorphKeyNum();
 	log.imported_motion_count = vmd_animation->GetIKKeyNum();
 
-	BaseTime max_time(vmd_animation->GetMaxKeyTime() ,30.);
+	const BaseTime max_time(vmd_animation->GetMaxKeyTime() ,30.);
 
 	const auto& [animation_name, _] = animations.Append(setting.fn.GetFileString(), std::move(vmd_animation))iferr_return;
 	animation_index = static_cast<Int32>(animations.GetCount()) - 1;
 	animation_items.SetString(animation_index, animation_name);
+	const auto node = Get();
+	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
+	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index, DESCFLAGS_SET::NONE);
 
 	setting.doc->SetMaxTime(max_time);
 	setting.doc->SetLoopMaxTime(max_time);
@@ -1048,6 +1056,9 @@ Bool MMDModelManagerObject::DeleteAnimation()
 	}
 	std::swap(new_animations, animations);
 	animation_index = -1;
+	const auto node = Get();
+	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
+	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index, DESCFLAGS_SET::NONE);
 	return true;
 }
 
@@ -1072,17 +1083,11 @@ Bool MMDModelManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 }
 Bool MMDModelManagerObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const
 {
-	if (!description->LoadDescription("OMMDModelManager"_s))
+	if (!description->LoadDescription(node->GetType()))
 		return false;
-	if (const auto settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_ANIM_LIST)), nullptr); settings != nullptr)
-	{
+	if (BaseContainer* settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_ANIM_LIST)), nullptr))
 		settings->SetContainer(DESC_CYCLE, animation_items);
-	}
 	const DescID* single_id = description->GetSingleDescID();
-	if (single_id == nullptr)
-	{
-		return SUPER::GetDDescription(node, description, flags);
-	}
 	if (const auto cid = ConstDescID(DescLevel(MODEL_INFO_GRP)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
 	{
 		if (BaseContainer* settings = description->GetParameterI(cid, nullptr))
@@ -1216,10 +1221,20 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			break;
 		}
 		case MODEL_ANIM_LIST:
+		{
 			animation_index = t_data.GetInt32();
-			if (m_model)
-				m_model->InitializeAnimation();
+			prev_time = BaseTime(-1.);
+			const auto doc = node->GetDocument();
+			doc->SetTime({});
+			if (animation_index != -1 && animation_index < animations.GetCount())
+			{
+				const auto& animation = animations[animation_index].second;
+				const BaseTime max_time(animation->GetMaxKeyTime() ,30.);
+				doc->SetMaxTime(max_time);
+				doc->SetLoopMaxTime(max_time);
+			}
 			break;
+		}
 	}
 	return ObjectData::SetDParameter(node, id, t_data, flags);
 }

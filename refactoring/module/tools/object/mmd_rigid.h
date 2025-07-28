@@ -53,6 +53,7 @@ public:
 
 	static NodeData* Alloc();
 	BaseObject* GetManagerObject() const;
+	friend class MMDRigidManagerObject;
 private:
 	void HandleRigidModeChange(Int32 mode);
 

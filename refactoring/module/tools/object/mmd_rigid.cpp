@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Luc
@@ -157,20 +157,18 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 		}
 	}
 
-	settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)), nullptr);
-	if (settings != nullptr && m_rigid_manager)
-	{
-		settings->SetContainer(DESC_CYCLE, m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->GetBoneItems());
-	}
+	const DescID* const single_id = description->GetSingleDescID();
+	if (const auto cid = ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
+    {
+		settings = description->GetParameterI(cid, nullptr);
+		if (settings != nullptr && m_rigid_manager)
+		{
+			settings->SetContainer(DESC_CYCLE, m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->GetBoneItems());
+		}
+    }
 
 	flags |= DESCFLAGS_DESC::LOADED;
 	return SUPER::GetDDescription(node, description, flags);
-}
-
-static void ResetAutoFreeObject(AutoFree<BaseObject>& object, BaseObject* new_object)
-{
-	object.Free();
-	object.Assign(new_object);
 }
 
 struct BoxType
@@ -213,7 +211,8 @@ void MMDRigidObject::ResetRigidType(const BaseContainer* bc)
 	Type::InitParameter(bc, draw_parameter_object);
 	cd.op = draw_parameter_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	ResetAutoFreeObject(m_draw_mesh_object, reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
+	m_draw_mesh_object.Free();
+	m_draw_mesh_object.Assign(reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
 	m_draw_mesh_object->SetPhong(true, true, 0.7853982);
 }
 
@@ -226,7 +225,8 @@ void MMDRigidObject::SetRigidSize(const BaseContainer* bc)
 	Type::InitParameter(bc, draw_parameter_object);
 	cd.op = draw_parameter_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	ResetAutoFreeObject(m_draw_mesh_object, reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
+	m_draw_mesh_object.Free();
+	m_draw_mesh_object.Assign(reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
 	m_draw_mesh_object->SetPhong(true, true, 0.7853982);
 }
 
@@ -488,48 +488,48 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		return EXECUTIONRESULT::OK;
 	}
 
-	const BaseContainer* bc = static_cast<BaseList2D*>(op)->GetDataInstance();
+	const BaseContainer* bc = op->GetDataInstance();
 	if (bc == nullptr)
 	{
 		return EXECUTIONRESULT::OK;
 	}
 
-	BaseObject* pred_object = op->GetPred();
-	BaseObject* UpObject = op->GetUp();
+	BaseObject* prev_object = op->GetPred();
+	BaseObject* up_object = op->GetUp();
 	BaseObject* rigid_root_object = m_rigid_manager;
 
-	if (UpObject == nullptr && rigid_root_object != nullptr)
+	if (up_object == nullptr && rigid_root_object != nullptr)
 	{
 		op->Remove();
 		op->InsertUnderLast(rigid_root_object);
 	}
 
-	const Int32 pred_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
-	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_RIGID_MANAGER))
+	const Int32 prev_object_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
+	if (up_object != nullptr && up_object->IsInstanceOf(ID_O_MMD_RIGID_MANAGER))
 	{
-		if (pred_object == nullptr)
+		if (prev_object == nullptr)
 		{
 			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), "0"_s, DESCFLAGS_SET::NONE);
 		}
 		else
 		{
-			while (pred_object != nullptr && !pred_object->IsInstanceOf(ID_O_MMD_RIGID))
+			while (prev_object != nullptr && !prev_object->IsInstanceOf(ID_O_MMD_RIGID))
 			{
-				pred_object = pred_object->GetPred();
+				prev_object = prev_object->GetPred();
 			}
 			GeData data;
-			pred_object->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), data, DESCFLAGS_GET::NONE);
+			prev_object->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), data, DESCFLAGS_GET::NONE);
 			const String RigidIndex = data.GetString();
 			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), String::IntToString(RigidIndex.ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
 		}
 
 		if (rigid_root_object == nullptr)
 		{
-			m_rigid_manager = UpObject;
+			m_rigid_manager = up_object;
 		}
 	}
 
-	if (const Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != pred_index && m_rigid_manager != nullptr)
+	if (const Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != prev_object_index && m_rigid_manager != nullptr)
 	{
 		m_rigid_manager->Message(ID_O_MMD_RIGID, nullptr);
 	}

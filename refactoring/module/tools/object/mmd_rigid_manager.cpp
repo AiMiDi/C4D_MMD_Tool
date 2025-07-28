@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
@@ -99,6 +99,34 @@ Bool MMDRigidManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* sno
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
+BaseObject* MMDRigidManagerObject::AddRigidbody(const String& name, GeListNode* node)
+{
+	if (!node)
+		node = Get();
+	if (const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance())
+	{
+		if (BaseObject* new_rigid = BaseObject::Alloc(ID_O_MMD_RIGID))
+		{
+			if (name.IsEmpty())
+				new_rigid->SetName(new_rigid->GetName() + "." + String::IntToString(m_rigid_name_index++));
+			else
+				new_rigid->SetName(name);
+
+			new_rigid->InsertUnder(node);
+			{
+				MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, bc->GetInt32(RIGID_DISPLAY_TYPE));
+				new_rigid->Message(ID_O_MMD_RIGID_MANAGER, &msg);
+			}
+			{
+				MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF,bc->GetInt32(RIGID_MODE));
+				new_rigid->Message(ID_O_MMD_RIGID_MANAGER, &msg);
+			}
+			return new_rigid;
+		}
+	}
+	return nullptr;
+}
+
 Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
@@ -108,25 +136,9 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 	case MSG_DESCRIPTION_COMMAND:
 	{
-		const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
-		if (!bc) {
-			return true;
-		}
 		if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_RIGID_BUTTON)
 		{
-			if (BaseObject* new_rigid = BaseObject::Alloc(ID_O_MMD_RIGID))
-			{
-				new_rigid->SetName(new_rigid->GetName() + "." + String::IntToString(m_rigid_name_index++));
-				new_rigid->InsertUnder(node);
-				{
-					MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, bc->GetInt32(RIGID_DISPLAY_TYPE));
-					new_rigid->Message(ID_O_MMD_RIGID_MANAGER, &msg);
-				}
-				{
-					MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF,bc->GetInt32(RIGID_MODE));
-					new_rigid->Message(ID_O_MMD_RIGID_MANAGER, &msg);
-				}
-			}
+			AddRigidbody({}, node);
 		}
 		break;
 	}
@@ -177,6 +189,8 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					SetDParameter(node, ConstDescID(DescLevel(RIGID_MODE)), GeData(msg->model_mode), flag);
 					break;
 				}
+			default:
+				break;
 			}
 
 		}
@@ -274,3 +288,80 @@ BaseObject* MMDRigidManagerObject::GetBoneManager() const
 {
 	return m_bone_manager;
 }
+
+namespace
+{
+	template <Int32 ID>
+	void SetRigidParameterT(BaseObject* object ,GeData data)
+	{
+		object->SetParameter(ConstDescID(DescLevel(ID)), data, DESCFLAGS_SET::NONE);
+	}
+
+	template<int... I>
+	void SetNonCollisionGroups(BaseObject* rigid_object, uint16_t collisionGroup, std::integer_sequence<int, I...>)
+	{
+		(SetRigidParameterT<RIGID_NON_COLLISION_GROUP_0 + I>(rigid_object, (collisionGroup >> I) & 0x01), ...);
+	}
+}
+
+Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
+{
+	if (!pmx_model)
+		return false;
+
+	if (!pmx_model->GetPhysicsManager())
+		return false;
+
+	const auto pmx_rigidbodies = pmx_model->GetPhysicsManager()->GetRigidBodys();
+	if (!pmx_rigidbodies)
+		return false;
+
+	const auto rigid_count = pmx_file.m_rigidbodies.size();
+	for (size_t rigid_index = 0; rigid_index < rigid_count; ++rigid_index)
+	{
+		const auto& pmx_rigidbody = pmx_file.m_rigidbodies[rigid_index];
+		const maxon::String name_local{ pmx_rigidbody.m_name.c_str() };
+		auto rigid_object = AddRigidbody(name_local);
+		if (!rigid_object)
+			return false;
+		const maxon::String name_universal{ pmx_rigidbody.m_englishName.c_str() };
+		SetRigidParameterT<RIGID_NAME_LOCAL>(rigid_object, name_local);
+		SetRigidParameterT<RIGID_NAME_UNIVERSAL>(rigid_object, name_universal);
+		SetRigidParameterT<RIGID_NAME_IS>(rigid_object, setting.import_english);
+
+		SetRigidParameterT<RIGID_GROUP_ID>(rigid_object, pmx_rigidbody.m_group);
+		SetRigidParameterT<RIGID_RELATED_BONE_INDEX>(rigid_object, pmx_rigidbody.m_boneIndex);
+		SetRigidParameterT<RIGID_PHYSICS_MODE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_op));
+		SetRigidParameterT<RIGID_SHAPE_TYPE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_shape));
+
+		const auto shape_size = pmx_rigidbody.m_shapeSize * static_cast<float>(setting.position_multiple);
+		SetRigidParameterT<RIGID_SHAPE_SIZE_X>(rigid_object, shape_size.x);
+		SetRigidParameterT<RIGID_SHAPE_SIZE_Y>(rigid_object, shape_size.y);
+		SetRigidParameterT<RIGID_SHAPE_SIZE_Z>(rigid_object, shape_size.z);
+
+		const auto translate = pmx_rigidbody.m_translate * static_cast<float>(setting.position_multiple);
+		SetRigidParameterT<RIGID_SHAPE_POSITION_X>(rigid_object, translate.x);
+		SetRigidParameterT<RIGID_SHAPE_POSITION_Y>(rigid_object, translate.y);
+		SetRigidParameterT<RIGID_SHAPE_POSITION_Z>(rigid_object, translate.z);
+
+		SetRigidParameterT<RIGID_SHAPE_ROTATION_X>(rigid_object, pmx_rigidbody.m_rotate.x);
+		SetRigidParameterT<RIGID_SHAPE_ROTATION_Y>(rigid_object, pmx_rigidbody.m_rotate.y);
+		SetRigidParameterT<RIGID_SHAPE_ROTATION_Z>(rigid_object, pmx_rigidbody.m_rotate.z);
+
+		SetNonCollisionGroups(rigid_object, pmx_rigidbody.m_collisionGroup, std::make_integer_sequence<int, 16>{});
+
+		SetRigidParameterT<RIGID_MASS>(rigid_object, pmx_rigidbody.m_mass);
+		SetRigidParameterT<RIGID_REPULSION>(rigid_object, pmx_rigidbody.m_repulsion);
+		SetRigidParameterT<RIGID_FRICTION_FORCE>(rigid_object, pmx_rigidbody.m_friction);
+		SetRigidParameterT<RIGID_MOVE_ATTENUATION>(rigid_object, pmx_rigidbody.m_translateDimmer);
+		SetRigidParameterT<RIGID_ROTATION_DAMPING>(rigid_object, pmx_rigidbody.m_rotateDimmer);
+
+		if (const auto rigid_node = rigid_object->GetNodeData<MMDRigidObject>())
+		{
+			rigid_node->m_rigid_body = (*pmx_rigidbodies)[rigid_index].get();
+		}
+	}
+
+	return true;
+}
+

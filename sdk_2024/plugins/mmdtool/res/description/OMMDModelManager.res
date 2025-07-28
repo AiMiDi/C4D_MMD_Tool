@@ -54,7 +54,6 @@ CONTAINER OMMDModelManager {
 		LONG MODEL_ANIM_LIST {
 			ANIM OFF;
 			CYCLE {
-				MODEL_ANIM_NONE;
 			}
 		}
 

@@ -225,7 +225,6 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\string_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\MMDCamera.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDCamera.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJoint.h" />
@@ -265,10 +264,6 @@
     <None Include="..\..\..\..\res\S24_up\strings_zh-CN\dialogs\DLG_CMT_VMD_IMPORT.str" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\..\..\res\S24_up\description\MMDCamera.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
     <Resource Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

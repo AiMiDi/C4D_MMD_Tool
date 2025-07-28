@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Luc
@@ -127,12 +127,12 @@ void MMDJointObject::HandleJointModeChange(const Int32 mode)
 
 	if (m_joint_mode == JOINT_MODE_ANIM)
 	{
-		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::CLEAR);
 		// TODO: Save to mmd_joint
 	}
 	else
 	{
-		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::CLEAR);
+		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
 	}
 
 	m_joint_mode = mode;
