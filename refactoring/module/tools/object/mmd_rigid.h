@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Luc
@@ -14,6 +14,8 @@ Description:	C4D MMD rigid object
 #include "description/OMMDRigid.h"
 #include "description/OMMDRigidManager.h"
 
+class MMDRigidManagerObject;
+
 class MMDRigidObject final : public ObjectData
 {
 	Int32		m_rigid_mode = RIGID_MODE_ANIM;
@@ -22,15 +24,14 @@ class MMDRigidObject final : public ObjectData
 	Int32		m_rigid_shape_type = SPHERICAL;
 	Int32		m_rigid_group_id = RIGID_GROUP_0;
 	BaseTag*	m_protection_tag = nullptr;
-	AutoFree<BaseObject> m_draw_mesh_object;
 
-	BaseObject* m_rigid_manager = nullptr;
+	BaseObject* rigid_manager_ = nullptr;
+	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
 
-	Vector m_original_position = Vector();
-	Vector m_original_rotation = Vector();
-	ObjectColorProperties m_draw_color;
+	libmmd::MMDRigidBody* rigidbody_ = nullptr;
 
-	libmmd::MMDRigidBody* m_rigid_body = nullptr;
+	AutoFree<BaseObject> draw_mesh_object_;
+	ObjectColorProperties draw_color_;
 
 	MMDRigidObject();
 	~MMDRigidObject() override = default;
@@ -52,7 +53,6 @@ public:
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
 
 	static NodeData* Alloc();
-	BaseObject* GetManagerObject() const;
 	friend class MMDRigidManagerObject;
 private:
 	void HandleRigidModeChange(Int32 mode);

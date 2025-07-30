@@ -14,6 +14,7 @@ Description:	MMD rigid root object
 #include "description/OMMDRigidManager.h"
 #include "mmd_manager.hpp"
 
+class MMDBoneManagerObject;
 class MMDRigidObject;
 
 enum class MMDRigidRootObjectMsgType : uint8_t
@@ -36,11 +37,13 @@ struct MMDRigidRootObjectMsg
 
 class MMDRigidManagerObject final : public MMDManagerObject
 {
-	Int64 m_rigid_name_index = 1;
-	BaseContainer rigid_items;
-	BaseObject* m_bone_manager = nullptr;
-	BaseObject* m_joint_manager = nullptr;
-	maxon::HashMap<Int32, maxon::StrongRef<AutoAlloc<BaseLink>>> m_rigid_list;
+	Int64 m_rigid_name_index_ = 1;
+	Float32 position_multiple_ = 1.0;
+	BaseContainer rigid_items_;
+	BaseObject* bone_manager_ = nullptr;
+	BaseObject* joint_manager_ = nullptr;
+	MMDBoneManagerObject* bone_manager_data_ = nullptr;
+	maxon::HashMap<Int32, maxon::StrongRef<AutoAlloc<BaseLink>>> rigid_list_;
 	MMDRigidManagerObject() = default;
 	~MMDRigidManagerObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRigidManagerObject)
@@ -54,11 +57,12 @@ public:
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 
+	BaseObject* AddRigid(const String& name = {}, GeListNode* node = nullptr);
 	BaseObject* FindRigid(Int32 index) const;
 
-	BaseObject* AddRigidbody(const String& name = {}, GeListNode* node = nullptr);
 	const BaseContainer& GetRigidItems() const;
-	BaseObject* GetBoneManager() const;
+	const BaseContainer& GetBoneItems() const;
+	const Float32& GetPositionMultiple() const { return position_multiple_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 };

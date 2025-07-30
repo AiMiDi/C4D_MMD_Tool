@@ -11,6 +11,8 @@ Description:	MMD rigid root object
 #include "pch.h"
 #include "mmd_model.h"
 #include "mmd_rigid_manager.h"
+
+#include "mmd_bone_manager.h"
 #include "mmd_rigid.h"
 
 Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
@@ -18,7 +20,7 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	iferr_scope_handler{
 		return false;
 	};
-	if (!hf->ReadInt64(&m_rigid_name_index))
+	if (!hf->ReadInt64(&m_rigid_name_index_))
 		return false;
 	{
 		AutoAlloc<BaseLink> temp_link;
@@ -26,12 +28,13 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			return false;
 		if (!temp_link->Read(hf))
 			return false;
-		m_bone_manager = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
+		bone_manager_ = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
+		bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
 		if (!temp_link->Read(hf))
 			return false;
-		m_joint_manager = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
+		joint_manager_ = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
 	}
-	// m_rigid_list
+	// rigid_list_
 	{
 		Int64 rigid_list_count = 0;
 		if (!hf->ReadInt64(&rigid_list_count))
@@ -41,7 +44,7 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 			Int32 rigid_index = 0;
 			if (!hf->ReadInt32(&rigid_index))
 				return false;
-			auto& link = m_rigid_list.InsertKey(rigid_index)iferr_return;
+			auto& link = rigid_list_.InsertKey(rigid_index)iferr_return;
 			link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
 			if (!(*link)->Read(hf))
 				return false;
@@ -52,24 +55,24 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 Bool MMDRigidManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	if (!hf->WriteInt64(m_rigid_name_index))
+	if (!hf->WriteInt64(m_rigid_name_index_))
 		return false;
 	{
 		AutoAlloc<BaseLink> temp_link;
 		if (!temp_link)
 			return false;
-		temp_link->SetLink(m_bone_manager);
+		temp_link->SetLink(bone_manager_);
 		if (!temp_link->Write(hf))
 			return false;
-		temp_link->SetLink(m_joint_manager);
+		temp_link->SetLink(joint_manager_);
 		if (!temp_link->Write(hf))
 			return false;
 	}
-	// m_rigid_list
+	// rigid_list_
 	{
-		if (!hf->WriteInt64(m_rigid_list.GetCount()))
+		if (!hf->WriteInt64(rigid_list_.GetCount()))
 			return false;
-		for (const auto& rigid_link : m_rigid_list)
+		for (const auto& rigid_link : rigid_list_)
 		{
 			if (hf->WriteInt32(!rigid_link.GetKey()))
 				return false;
@@ -87,19 +90,20 @@ Bool MMDRigidManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* sno
 		return false;
 	};
 	auto const dest_object = reinterpret_cast<MMDRigidManagerObject*>(dest);
-	dest_object->m_rigid_name_index = m_rigid_name_index;
-	dest_object->m_bone_manager = m_bone_manager;
-	dest_object->m_joint_manager = m_joint_manager;
-	for (const auto& entry : m_rigid_list)
+	dest_object->m_rigid_name_index_ = m_rigid_name_index_;
+	dest_object->bone_manager_ = bone_manager_;
+	dest_object->bone_manager_data_ = bone_manager_data_;
+	dest_object->joint_manager_ = joint_manager_;
+	for (const auto& entry : rigid_list_)
 	{
-		auto& link = dest_object->m_rigid_list.InsertKey(entry.GetKey())iferr_return;
+		auto& link = dest_object->rigid_list_.InsertKey(entry.GetKey())iferr_return;
 		link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
 		(*entry.GetValue())->CopyTo(*link, flags, trn);
 	}
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
-BaseObject* MMDRigidManagerObject::AddRigidbody(const String& name, GeListNode* node)
+BaseObject* MMDRigidManagerObject::AddRigid(const String& name, GeListNode* node)
 {
 	if (!node)
 		node = Get();
@@ -108,7 +112,7 @@ BaseObject* MMDRigidManagerObject::AddRigidbody(const String& name, GeListNode* 
 		if (BaseObject* new_rigid = BaseObject::Alloc(ID_O_MMD_RIGID))
 		{
 			if (name.IsEmpty())
-				new_rigid->SetName(new_rigid->GetName() + "." + String::IntToString(m_rigid_name_index++));
+				new_rigid->SetName(new_rigid->GetName() + "." + String::IntToString(m_rigid_name_index_++));
 			else
 				new_rigid->SetName(name);
 
@@ -138,16 +142,16 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_RIGID_BUTTON)
 		{
-			AddRigidbody({}, node);
+			AddRigid({}, node);
 		}
 		break;
 	}
 	case ID_O_MMD_RIGID:
 	{
 		const auto op = reinterpret_cast<BaseObject*>(node);
-		rigid_items.FlushAll();
-		rigid_items.SetString(-1, "-"_s);
-		m_rigid_list.Reset();
+		rigid_items_.FlushAll();
+		rigid_items_.SetString(-1, "-"_s);
+		rigid_list_.Reset();
 		GeData ge_data;
 		BaseObject* node_ = op->GetDown();
 		while (node_)
@@ -156,8 +160,8 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			{
 				node_->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), ge_data, DESCFLAGS_GET::NONE);
 				Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
-				this->rigid_items.SetString(rigid_index, node_->GetName());
-				auto& link = m_rigid_list.InsertKey(rigid_index)iferr_return;
+				this->rigid_items_.SetString(rigid_index, node_->GetName());
+				auto& link = rigid_list_.InsertKey(rigid_index)iferr_return;
 				link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
 				(*link)->SetLink(node_);
 			}
@@ -175,11 +179,12 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					if(msg->object_type == ManagerObjectType::BONE_MANAGER)
 					{
-						m_bone_manager = msg->object;
+						bone_manager_ = msg->object;
+						bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
 					}
 					else if (msg->object_type == ManagerObjectType::JOINT_MANAGER)
 					{
-						m_joint_manager = msg->object;
+						joint_manager_ = msg->object;
 					}
 					break;
 				}
@@ -271,28 +276,28 @@ NodeData* MMDRigidManagerObject::Alloc()
 
 BaseObject* MMDRigidManagerObject::FindRigid(const Int32 index) const
 {
-	// find index in m_rigid_list
-	if (const auto bone_link_ptr = m_rigid_list.Find(index); bone_link_ptr)
+	// find index in rigid_list_
+	if (const auto bone_link_ptr = rigid_list_.Find(index); bone_link_ptr)
 	{
-		return static_cast<BaseObject*>((*bone_link_ptr->GetValue())->ForceGetLink());
+		return reinterpret_cast<BaseObject*>((*bone_link_ptr->GetValue())->ForceGetLink());
 	}
 	return nullptr;
 }
 
 const BaseContainer& MMDRigidManagerObject::GetRigidItems() const
 {
-	return rigid_items;
+	return rigid_items_;
 }
 
-BaseObject* MMDRigidManagerObject::GetBoneManager() const
+const BaseContainer& MMDRigidManagerObject::GetBoneItems() const
 {
-	return m_bone_manager;
+	return bone_manager_data_->GetBoneItems();
 }
 
 namespace
 {
 	template <Int32 ID>
-	void SetRigidParameterT(BaseObject* object ,GeData data)
+	void SetRigidParameter(BaseObject* object ,GeData data)
 	{
 		object->SetParameter(ConstDescID(DescLevel(ID)), data, DESCFLAGS_SET::NONE);
 	}
@@ -300,7 +305,7 @@ namespace
 	template<int... I>
 	void SetNonCollisionGroups(BaseObject* rigid_object, uint16_t collisionGroup, std::integer_sequence<int, I...>)
 	{
-		(SetRigidParameterT<RIGID_NON_COLLISION_GROUP_0 + I>(rigid_object, (collisionGroup >> I) & 0x01), ...);
+		(SetRigidParameter<RIGID_NON_COLLISION_GROUP_0 + I>(rigid_object, (collisionGroup >> I) & 0x01), ...);
 	}
 }
 
@@ -316,49 +321,51 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	if (!pmx_rigidbodies)
 		return false;
 
+	position_multiple_ = static_cast<float>(setting.position_multiple);
+
 	const auto rigid_count = pmx_file.m_rigidbodies.size();
 	for (size_t rigid_index = 0; rigid_index < rigid_count; ++rigid_index)
 	{
 		const auto& pmx_rigidbody = pmx_file.m_rigidbodies[rigid_index];
 		const maxon::String name_local{ pmx_rigidbody.m_name.c_str() };
-		auto rigid_object = AddRigidbody(name_local);
+		auto rigid_object = AddRigid(name_local);
 		if (!rigid_object)
 			return false;
 		const maxon::String name_universal{ pmx_rigidbody.m_englishName.c_str() };
-		SetRigidParameterT<RIGID_NAME_LOCAL>(rigid_object, name_local);
-		SetRigidParameterT<RIGID_NAME_UNIVERSAL>(rigid_object, name_universal);
-		SetRigidParameterT<RIGID_NAME_IS>(rigid_object, setting.import_english);
+		SetRigidParameter<RIGID_NAME_LOCAL>(rigid_object, name_local);
+		SetRigidParameter<RIGID_NAME_UNIVERSAL>(rigid_object, name_universal);
+		SetRigidParameter<RIGID_NAME_IS>(rigid_object, setting.import_english);
 
-		SetRigidParameterT<RIGID_GROUP_ID>(rigid_object, pmx_rigidbody.m_group);
-		SetRigidParameterT<RIGID_RELATED_BONE_INDEX>(rigid_object, pmx_rigidbody.m_boneIndex);
-		SetRigidParameterT<RIGID_PHYSICS_MODE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_op));
-		SetRigidParameterT<RIGID_SHAPE_TYPE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_shape));
+		SetRigidParameter<RIGID_GROUP_ID>(rigid_object, pmx_rigidbody.m_group);
+		SetRigidParameter<RIGID_RELATED_BONE_INDEX>(rigid_object, pmx_rigidbody.m_boneIndex);
+		SetRigidParameter<RIGID_PHYSICS_MODE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_op));
+		SetRigidParameter<RIGID_SHAPE_TYPE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_shape));
 
-		const auto shape_size = pmx_rigidbody.m_shapeSize * static_cast<float>(setting.position_multiple);
-		SetRigidParameterT<RIGID_SHAPE_SIZE_X>(rigid_object, shape_size.x);
-		SetRigidParameterT<RIGID_SHAPE_SIZE_Y>(rigid_object, shape_size.y);
-		SetRigidParameterT<RIGID_SHAPE_SIZE_Z>(rigid_object, shape_size.z);
+		const auto shape_size = pmx_rigidbody.m_shapeSize * position_multiple_;
+		SetRigidParameter<RIGID_SHAPE_SIZE_X>(rigid_object, shape_size.x);
+		SetRigidParameter<RIGID_SHAPE_SIZE_Y>(rigid_object, shape_size.y);
+		SetRigidParameter<RIGID_SHAPE_SIZE_Z>(rigid_object, shape_size.z);
 
-		const auto translate = pmx_rigidbody.m_translate * static_cast<float>(setting.position_multiple);
-		SetRigidParameterT<RIGID_SHAPE_POSITION_X>(rigid_object, translate.x);
-		SetRigidParameterT<RIGID_SHAPE_POSITION_Y>(rigid_object, translate.y);
-		SetRigidParameterT<RIGID_SHAPE_POSITION_Z>(rigid_object, translate.z);
+		const auto translate = pmx_rigidbody.m_translate * position_multiple_;
+		SetRigidParameter<RIGID_SHAPE_POSITION_X>(rigid_object, translate.x);
+		SetRigidParameter<RIGID_SHAPE_POSITION_Y>(rigid_object, translate.y);
+		SetRigidParameter<RIGID_SHAPE_POSITION_Z>(rigid_object, translate.z);
 
-		SetRigidParameterT<RIGID_SHAPE_ROTATION_X>(rigid_object, pmx_rigidbody.m_rotate.x);
-		SetRigidParameterT<RIGID_SHAPE_ROTATION_Y>(rigid_object, pmx_rigidbody.m_rotate.y);
-		SetRigidParameterT<RIGID_SHAPE_ROTATION_Z>(rigid_object, pmx_rigidbody.m_rotate.z);
+		SetRigidParameter<RIGID_SHAPE_ROTATION_X>(rigid_object, pmx_rigidbody.m_rotate.x);
+		SetRigidParameter<RIGID_SHAPE_ROTATION_Y>(rigid_object, pmx_rigidbody.m_rotate.y);
+		SetRigidParameter<RIGID_SHAPE_ROTATION_Z>(rigid_object, pmx_rigidbody.m_rotate.z);
 
 		SetNonCollisionGroups(rigid_object, pmx_rigidbody.m_collisionGroup, std::make_integer_sequence<int, 16>{});
 
-		SetRigidParameterT<RIGID_MASS>(rigid_object, pmx_rigidbody.m_mass);
-		SetRigidParameterT<RIGID_REPULSION>(rigid_object, pmx_rigidbody.m_repulsion);
-		SetRigidParameterT<RIGID_FRICTION_FORCE>(rigid_object, pmx_rigidbody.m_friction);
-		SetRigidParameterT<RIGID_MOVE_ATTENUATION>(rigid_object, pmx_rigidbody.m_translateDimmer);
-		SetRigidParameterT<RIGID_ROTATION_DAMPING>(rigid_object, pmx_rigidbody.m_rotateDimmer);
+		SetRigidParameter<RIGID_MASS>(rigid_object, pmx_rigidbody.m_mass);
+		SetRigidParameter<RIGID_REPULSION>(rigid_object, pmx_rigidbody.m_repulsion);
+		SetRigidParameter<RIGID_FRICTION_FORCE>(rigid_object, pmx_rigidbody.m_friction);
+		SetRigidParameter<RIGID_MOVE_ATTENUATION>(rigid_object, pmx_rigidbody.m_translateDimmer);
+		SetRigidParameter<RIGID_ROTATION_DAMPING>(rigid_object, pmx_rigidbody.m_rotateDimmer);
 
 		if (const auto rigid_node = rigid_object->GetNodeData<MMDRigidObject>())
 		{
-			rigid_node->m_rigid_body = (*pmx_rigidbodies)[rigid_index].get();
+			rigid_node->rigidbody_ = (*pmx_rigidbodies)[rigid_index].get();
 		}
 	}
 

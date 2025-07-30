@@ -80,34 +80,34 @@ enum class MMDModelRootDynamicDescriptionType : uint8_t
 
 class MMDModelManagerObject final : public ObjectData
 {
-	maxon::Synchronized<Bool> m_is_need_update;
-	maxon::Synchronized<Bool> m_is_morph_initialized;
-	maxon::Synchronized<Bool> is_manager_read;
-	maxon::Synchronized<Bool> m_is_ik_map_read;
-	Bool m_is_root_initialized = false;
-	Int32 m_morph_named_number = 0;
-	BaseObject* mesh_manager = nullptr;
-	BaseObject* bone_manager = nullptr;
-	BaseObject* rigid_manager = nullptr;
-	BaseObject* joint_manager = nullptr;
-	BaseLink* mesh_manager_link = nullptr;
-	BaseLink* bone_manager_link = nullptr;
-	BaseLink* rigid_manager_link = nullptr;
-	BaseLink* joint_manager_link = nullptr;
-	maxon::PointerArray<IMorph> m_morph_arr;
-	maxon::HashMap<DescID, maxon::Pair<MMDModelRootDynamicDescriptionType, Int>> m_desc_id_map;
-	maxon::HashMap<String, Int> m_morph_name_map;
-	maxon::HashMap<String, BaseTag*> m_ik_name_map;
-	maxon::HashMap<String, AutoAlloc<BaseLink>> m_ik_link_name_map;
+	maxon::Synchronized<Bool> is_need_update_;
+	maxon::Synchronized<Bool> is_morph_initialized_;
+	maxon::Synchronized<Bool> is_manager_read_;
+	maxon::Synchronized<Bool> is_ik_map_read_;
+	Bool is_manager_initialized_ = false;
+	Int32 morph_named_number_ = 0;
+	BaseObject* mesh_manager_ = nullptr;
+	BaseObject* bone_manager_ = nullptr;
+	BaseObject* rigid_manager_ = nullptr;
+	BaseObject* joint_manager_ = nullptr;
+	BaseLink* mesh_manager_link_ = nullptr;
+	BaseLink* bone_manager_link_ = nullptr;
+	BaseLink* rigid_manager_link_ = nullptr;
+	BaseLink* joint_manager_link_ = nullptr;
+	maxon::PointerArray<IMorph> morph_data_;
+	maxon::HashMap<DescID, maxon::Pair<MMDModelRootDynamicDescriptionType, Int>> desc_id_map_;
+	maxon::HashMap<String, Int> morph_map_;
+	maxon::HashMap<String, BaseTag*> ik_map_;
+	maxon::HashMap<String, AutoAlloc<BaseLink>> ik_link_map_;
 
-	Int32 animation_index = -1;
-	BaseContainer animation_items;
-	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> animations;
+	Int32 animation_index_ = -1;
+	BaseContainer animation_items_;
+	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> animations_;
 
-	MMDModelPtr m_model;
-	Int32 model_mode = MODEL_MODE_ANIM;
-	Float32 delta_time = 1.f / 30.f;
-	BaseTime prev_time{-1};
+	MMDModelPtr model_;
+	Int32 model_mode_ = MODEL_MODE_ANIM;
+	Float32 delta_time_ = 1.f / 30.f;
+	BaseTime prev_time_{-1};
 
 	MMDModelManagerObject();
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelManagerObject)

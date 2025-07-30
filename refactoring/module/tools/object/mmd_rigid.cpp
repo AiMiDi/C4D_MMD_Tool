@@ -40,7 +40,7 @@ SDK2024_ConstExpr Vector g_pmx_rigid_wire_colors[3] =
 	Vector(255, 255, 150) / 255,
 };
 
-MMDRigidObject::MMDRigidObject() : m_draw_color(MakeObjectColorProperties(g_pmx_rigid_colors[0], ID_BASEOBJECT_USECOLOR_ALWAYS, true))
+MMDRigidObject::MMDRigidObject() : draw_color_(MakeObjectColorProperties(g_pmx_rigid_colors[0], ID_BASEOBJECT_USECOLOR_ALWAYS, true))
 {}
 
 Bool MMDRigidObject::Init(GeListNode* node SDK2024_InitParaName)
@@ -161,9 +161,9 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 	if (const auto cid = ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
     {
 		settings = description->GetParameterI(cid, nullptr);
-		if (settings != nullptr && m_rigid_manager)
+		if (settings != nullptr && rigid_manager_)
 		{
-			settings->SetContainer(DESC_CYCLE, m_rigid_manager->GetNodeData<MMDRigidManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->GetBoneItems());
+			settings->SetContainer(DESC_CYCLE, rigid_manager_data_->GetBoneItems());
 		}
     }
 
@@ -211,9 +211,9 @@ void MMDRigidObject::ResetRigidType(const BaseContainer* bc)
 	Type::InitParameter(bc, draw_parameter_object);
 	cd.op = draw_parameter_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	m_draw_mesh_object.Free();
-	m_draw_mesh_object.Assign(reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
-	m_draw_mesh_object->SetPhong(true, true, 0.7853982);
+	draw_mesh_object_.Free();
+	draw_mesh_object_.Assign(reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
+	draw_mesh_object_->SetPhong(true, true, 0.7853982);
 }
 
 template <typename Type>
@@ -225,9 +225,9 @@ void MMDRigidObject::SetRigidSize(const BaseContainer* bc)
 	Type::InitParameter(bc, draw_parameter_object);
 	cd.op = draw_parameter_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	m_draw_mesh_object.Free();
-	m_draw_mesh_object.Assign(reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
-	m_draw_mesh_object->SetPhong(true, true, 0.7853982);
+	draw_mesh_object_.Free();
+	draw_mesh_object_.Assign(reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
+	draw_mesh_object_->SetPhong(true, true, 0.7853982);
 }
 
 Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
@@ -320,7 +320,7 @@ void MMDRigidObject::UpdateRigidPhysics(Int32 physics_mode)
 	m_physics_mode = physics_mode;
 	if (m_display_type == RIGID_DISPLAY_TYPE_WIRE)
 	{
-		m_draw_color.color = g_pmx_rigid_wire_colors[m_physics_mode];
+		draw_color_.color = g_pmx_rigid_wire_colors[m_physics_mode];
 	}
 }
 
@@ -329,7 +329,7 @@ void MMDRigidObject::UpdateRigidGroup(const Int32 rigid_group)
 	m_rigid_group_id = rigid_group;
 	if (m_display_type != RIGID_DISPLAY_TYPE_WIRE)
 	{
-		m_draw_color.color = g_pmx_rigid_colors[m_rigid_group_id];
+		draw_color_.color = g_pmx_rigid_colors[m_rigid_group_id];
 	}
 }
 
@@ -429,19 +429,19 @@ DRAWRESULT MMDRigidObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 		{
 		case RIGID_DISPLAY_TYPE_ON:
 		{
-			if (m_draw_mesh_object)
+			if (draw_mesh_object_)
 			{
 					if (op == GetActiveDocument()->GetActiveObject())
 					{
-						m_draw_color.xray = false;
-						m_draw_mesh_object->SetColorProperties(&m_draw_color);
-						bd->DrawObject(bh, m_draw_mesh_object, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
+						draw_color_.xray = false;
+						draw_mesh_object_->SetColorProperties(&draw_color_);
+						bd->DrawObject(bh, draw_mesh_object_, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
 					}
 					else
 					{
-						m_draw_color.xray = true;
-						m_draw_mesh_object->SetColorProperties(&m_draw_color);
-						bd->DrawObject(bh, m_draw_mesh_object, DRAWOBJECT::USE_OBJECT_COLOR | DRAWOBJECT::XRAY_ON, drawpass);
+						draw_color_.xray = true;
+						draw_mesh_object_->SetColorProperties(&draw_color_);
+						bd->DrawObject(bh, draw_mesh_object_, DRAWOBJECT::USE_OBJECT_COLOR | DRAWOBJECT::XRAY_ON, drawpass);
 					}
 			}
 			else
@@ -452,19 +452,19 @@ DRAWRESULT MMDRigidObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 		}
 		case RIGID_DISPLAY_TYPE_WIRE:
 		{
-			if (m_draw_mesh_object)
+			if (draw_mesh_object_)
 			{
 				if (op == GetActiveDocument()->GetActiveObject())
 				{
 					ObjectColorProperties objColor = MakeObjectColorProperties(Vector(1, 0.21, 0.21), ID_BASEOBJECT_USECOLOR_ALWAYS, false);
-					m_draw_mesh_object->SetColorProperties(&objColor);
-					bd->DrawObject(bh, m_draw_mesh_object, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
+					draw_mesh_object_->SetColorProperties(&objColor);
+					bd->DrawObject(bh, draw_mesh_object_, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
 				}
 				else
 				{
-					m_draw_color.xray = false;
-					m_draw_mesh_object->SetColorProperties(&m_draw_color);
-					bd->DrawObject(bh, m_draw_mesh_object, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
+					draw_color_.xray = false;
+					draw_mesh_object_->SetColorProperties(&draw_color_);
+					bd->DrawObject(bh, draw_mesh_object_, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
 				}
 			}
 			else
@@ -496,12 +496,12 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 
 	BaseObject* prev_object = op->GetPred();
 	BaseObject* up_object = op->GetUp();
-	BaseObject* rigid_root_object = m_rigid_manager;
+	BaseObject* rigid_manager = rigid_manager_;
 
-	if (up_object == nullptr && rigid_root_object != nullptr)
+	if (up_object == nullptr && rigid_manager != nullptr)
 	{
 		op->Remove();
-		op->InsertUnderLast(rigid_root_object);
+		op->InsertUnderLast(rigid_manager);
 	}
 
 	const Int32 prev_object_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
@@ -523,15 +523,16 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), String::IntToString(RigidIndex.ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
 		}
 
-		if (rigid_root_object == nullptr)
+		if (rigid_manager == nullptr)
 		{
-			m_rigid_manager = up_object;
+			rigid_manager_ = up_object;
+			rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
 		}
 	}
 
-	if (const Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != prev_object_index && m_rigid_manager != nullptr)
+	if (const Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != prev_object_index && rigid_manager_ != nullptr)
 	{
-		m_rigid_manager->Message(ID_O_MMD_RIGID, nullptr);
+		rigid_manager_->Message(ID_O_MMD_RIGID, nullptr);
 	}
 
 	if (!m_protection_tag)
@@ -542,9 +543,9 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
 	}
 
-	if (m_rigid_mode == RIGID_MODE_ANIM && m_rigid_body)
+	if (m_rigid_mode == RIGID_MODE_ANIM && rigidbody_)
 	{
-		const auto transform = m_rigid_body->GetTransform();
+		const auto transform = rigidbody_->GetTransform();
 		op->SetMl(Matrix{
 			Vector(transform[3][0],transform[3][1],transform[3][2]),
 			Vector(transform[0][0],transform[0][1],transform[0][2]),
@@ -584,8 +585,6 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	hf->ReadInt32(&m_rigid_group_id);
 	UpdateRigidGroup(m_rigid_group_id);
 
-	hf->ReadVector(&m_original_position);
-	hf->ReadVector(&m_original_rotation);
 	AutoAlloc<BaseLink> link;
 
 	if (link == nullptr)
@@ -597,7 +596,8 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	{
 		return false;
 	}
-	m_rigid_manager = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
+	rigid_manager_ = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
+	rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
 
 	if (!link->Read(hf))
 	{
@@ -615,8 +615,6 @@ Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 	hf->WriteInt32(m_physics_mode);
 	hf->WriteInt32(m_rigid_shape_type);
 	hf->WriteInt32(m_rigid_group_id);
-	hf->WriteVector(m_original_position);
-	hf->WriteVector(m_original_rotation);
 
 	AutoAlloc<BaseLink> link;
 	if (link == nullptr)
@@ -624,7 +622,7 @@ Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 		return false;
 	}
 
-	link->SetLink(m_rigid_manager);
+	link->SetLink(rigid_manager_);
 	if (!link->Write(hf))
 	{
 		return false;
@@ -653,9 +651,8 @@ Bool MMDRigidObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeL
 	destObject->m_physics_mode = m_physics_mode;
 	destObject->m_rigid_shape_type = m_rigid_shape_type;
 	destObject->m_rigid_group_id = m_rigid_group_id;
-	destObject->m_rigid_manager = m_rigid_manager;
-	destObject->m_original_position = m_original_position;
-	destObject->m_original_rotation = m_original_rotation;
+	destObject->rigid_manager_ = rigid_manager_;
+	destObject->rigid_manager_data_ = rigid_manager_data_;
 
 	return true;
 }
@@ -663,11 +660,6 @@ Bool MMDRigidObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeL
 NodeData* MMDRigidObject::Alloc()
 {
 	return NewObjClear(MMDRigidObject);
-}
-
-BaseObject* MMDRigidObject::GetManagerObject() const
-{
-	return m_rigid_manager;
 }
 
 void MMDRigidObject::HandleRigidModeChange(Int32 mode)
@@ -681,9 +673,6 @@ void MMDRigidObject::HandleRigidModeChange(Int32 mode)
 	{
 		// TODO: Save to mmd_rigid_body
 
-		m_original_position = op->GetAbsPos();
-		m_original_rotation = op->GetAbsRot();
-
 		if (m_protection_tag)
 		{
 			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
@@ -696,9 +685,6 @@ void MMDRigidObject::HandleRigidModeChange(Int32 mode)
 	}
 	else
 	{
-		op->SetAbsPos(m_original_position);
-		op->SetAbsRot(m_original_rotation);
-
 		if (m_protection_tag)
 		{
 			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), false, DESCFLAGS_SET::NONE);

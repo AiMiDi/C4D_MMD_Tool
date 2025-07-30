@@ -199,13 +199,13 @@ Bool EditorSubMorphDialog::Command(Int32 id, const BaseContainer& msg)
 
 MMDModelManagerObject::AddMorphHelper::AddMorphHelper(MMDModelManagerObject* model):m_model(model)
 {
-	*m_model->m_is_need_update.Write() = false;
-	*m_model->m_is_morph_initialized.Write() = false;
+	*m_model->is_need_update_.Write() = false;
+	*m_model->is_morph_initialized_.Write() = false;
 }
 
 MMDModelManagerObject::AddMorphHelper::~AddMorphHelper()
 {
-	*m_model->m_is_need_update.Write() = true;
+	*m_model->is_need_update_.Write() = true;
 }
 
 Bool MMDModelManagerObject::Init(GeListNode* node SDK2024_InitParaName)
@@ -222,7 +222,7 @@ Bool MMDModelManagerObject::Init(GeListNode* node SDK2024_InitParaName)
 	bc->SetString(COMMENTS_LOCAL, "description"_s);
 	bc->SetString(COMMENTS_UNIVERSAL, "description"_s);
 	bc->SetInt32(MODEL_ANIM_LIST, -1);
-	animation_items.SetString(-1, "-"_s);
+	animation_items_.SetString(-1, "-"_s);
 	return true;
 }
 Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
@@ -231,29 +231,29 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		return false;
 	};
 
-	mesh_manager_link = BaseLink::Alloc();
-	if (mesh_manager_link == nullptr)
+	mesh_manager_link_ = BaseLink::Alloc();
+	if (mesh_manager_link_ == nullptr)
 		return false;
-	rigid_manager_link = BaseLink::Alloc();
-	if (rigid_manager_link == nullptr)
+	rigid_manager_link_ = BaseLink::Alloc();
+	if (rigid_manager_link_ == nullptr)
 		return false;
-	joint_manager_link = BaseLink::Alloc();
-	if (joint_manager_link == nullptr)
+	joint_manager_link_ = BaseLink::Alloc();
+	if (joint_manager_link_ == nullptr)
 		return false;
-	bone_manager_link = BaseLink::Alloc();
-	if (bone_manager_link == nullptr)
+	bone_manager_link_ = BaseLink::Alloc();
+	if (bone_manager_link_ == nullptr)
 		return false;
-	if (!mesh_manager_link->Read(hf))
+	if (!mesh_manager_link_->Read(hf))
 		return false;
-	if (!rigid_manager_link->Read(hf))
+	if (!rigid_manager_link_->Read(hf))
 		return false;
-	if (!joint_manager_link->Read(hf))
+	if (!joint_manager_link_->Read(hf))
 		return false;
-	if (!bone_manager_link->Read(hf))
+	if (!bone_manager_link_->Read(hf))
 		return false;
-	*is_manager_read.Write() = true;
+	*is_manager_read_.Write() = true;
 
-	if (!hf->ReadInt32(&m_morph_named_number))
+	if (!hf->ReadInt32(&morph_named_number_))
 		return false;
 
 	Int data_count = 0;
@@ -264,7 +264,7 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		DescID id;
 		if (!id.Read(hf))
 			return false;
-		auto& val = m_desc_id_map.InsertKey(id).GetValue();
+		auto& val = desc_id_map_.InsertKey(id).GetValue();
 
 		if (UChar type = 0; hf->ReadUChar(&type))
 			val.first = static_cast<MMDModelRootDynamicDescriptionType>(type);
@@ -282,28 +282,28 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		String name;
 		if (!hf->ReadString(&name))
 			return false;
-		auto& val = m_morph_name_map.InsertKey(std::move(name)).GetValue();
+		auto& val = morph_map_.InsertKey(std::move(name)).GetValue();
 		if (!hf->ReadInt64(&val))
 			return false;
 	}
 
 	if (!hf->ReadInt64(&data_count))
 		return false;
-	m_ik_link_name_map.SetCapacityHint(data_count)iferr_return;
+	ik_link_map_.SetCapacityHint(data_count)iferr_return;
 	for (Int i = 0; i < data_count; ++i)
 	{
 		String name;
 		if (!hf->ReadString(&name))
 			return false;
-		auto& val = m_ik_link_name_map.InsertKey(std::move(name))iferr_return;
+		auto& val = ik_link_map_.InsertKey(std::move(name))iferr_return;
 		if (!val->Read(hf))
 			return false;
 	}
-	*m_is_ik_map_read.Write() = true;
+	*is_ik_map_read_.Write() = true;
 
 	if (!ReadMorph(hf))
 		return false;
-	*m_is_morph_initialized.Write() = true;
+	*is_morph_initialized_.Write() = true;
 	return true;
 }
 Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const {
@@ -319,10 +319,10 @@ Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 	AutoAlloc<BaseLink> bone_root_link;
 	if (bone_root_link == nullptr)
 		return false;
-	mesh_root_link->SetLink(mesh_manager);
-	rigid_root_link->SetLink(rigid_manager);
-	joint_root_link->SetLink(joint_manager);
-	bone_root_link->SetLink(bone_manager);
+	mesh_root_link->SetLink(mesh_manager_);
+	rigid_root_link->SetLink(rigid_manager_);
+	joint_root_link->SetLink(joint_manager_);
+	bone_root_link->SetLink(bone_manager_);
 	if (!mesh_root_link->Write(hf))
 		return false;
 	if (!rigid_root_link->Write(hf))
@@ -331,12 +331,12 @@ Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 		return false;
 	if (!bone_root_link->Write(hf))
 		return false;
-	if (!hf->WriteInt32(m_morph_named_number))
+	if (!hf->WriteInt32(morph_named_number_))
 		return false;
 
-	if (!hf->WriteInt64(m_desc_id_map.GetCount()))
+	if (!hf->WriteInt64(desc_id_map_.GetCount()))
 		return false;
-	for (auto& i : m_desc_id_map)
+	for (auto& i : desc_id_map_)
 	{
 		if (!const_cast<DescID&>(i.GetKey()).Write(hf))
 			return false;
@@ -347,9 +347,9 @@ Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 			return false;
 	}
 
-	if (!hf->WriteInt64(m_morph_name_map.GetCount()))
+	if (!hf->WriteInt64(morph_map_.GetCount()))
 		return false;
-	for (auto& i : m_morph_name_map)
+	for (auto& i : morph_map_)
 	{
 		if (!hf->WriteString(i.GetKey()))
 			return false;
@@ -357,13 +357,13 @@ Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 			return false;
 	}
 
-	if (!hf->WriteInt64(m_ik_name_map.GetCount()))
+	if (!hf->WriteInt64(ik_map_.GetCount()))
 		return false;
 	{
 		AutoAlloc<BaseLink> ik_link;
 		if (ik_link == nullptr)
 			return false;
-		for (auto& i : m_ik_name_map)
+		for (auto& i : ik_map_)
 		{
 			if (!hf->WriteString(i.GetKey()))
 				return false;
@@ -380,13 +380,13 @@ Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 Bool MMDModelManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
 {
 	const auto destObject = reinterpret_cast<MMDModelManagerObject*>(dest);
-	destObject->bone_manager = bone_manager;
-	destObject->joint_manager = joint_manager;
-	destObject->rigid_manager = rigid_manager;
-	destObject->mesh_manager = mesh_manager;
-	iferr(destObject->m_desc_id_map.CopyFrom(m_desc_id_map))
+	destObject->bone_manager_ = bone_manager_;
+	destObject->joint_manager_ = joint_manager_;
+	destObject->rigid_manager_ = rigid_manager_;
+	destObject->mesh_manager_ = mesh_manager_;
+	iferr(destObject->desc_id_map_.CopyFrom(desc_id_map_))
 		return false;
-	iferr(destObject->m_morph_name_map.CopyFrom(m_morph_name_map))
+	iferr(destObject->morph_map_.CopyFrom(morph_map_))
 		return false;
 	if (!CopyMorph(destObject))
 		return false;
@@ -408,7 +408,7 @@ Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
 
 		// Add morph
 		const auto morph_index = AddMorph(type, {}, false);
-		auto& morph = m_morph_arr[morph_index];
+		auto& morph = morph_data_[morph_index];
 
 		// Read morph data
 		morph.Read(hf);
@@ -419,9 +419,9 @@ Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
 }
 Bool MMDModelManagerObject::WriteMorph(HyperFile* hf) SDK2024_Const
 {
-	if (!hf->WriteInt64(m_morph_arr.GetCount()))
+	if (!hf->WriteInt64(morph_data_.GetCount()))
 		return false;
-	if(!std::all_of(m_morph_arr.Begin(), m_morph_arr.End(), [&](SDK2024_Const IMorph& i)
+	if(!std::all_of(morph_data_.Begin(), morph_data_.End(), [&](SDK2024_Const IMorph& i)
 	{
 			// Write morph type
 		return hf->WriteUChar(static_cast<UChar>(i.GetType()))
@@ -437,11 +437,11 @@ Bool MMDModelManagerObject::CopyMorph(MMDModelManagerObject* dst) const
 	if(!dst)
 		return false;
 	iferr_scope_handler{ return false; };
-	for (const auto& morph : m_morph_arr)
+	for (const auto& morph : morph_data_)
 	{
 		const auto& new_morph_name = morph.GetName();
 		const auto new_morph_index = dst->AddMorph(morph.GetType(), new_morph_name, false);
-		const auto new_morph = &dst->m_morph_arr[new_morph_index];
+		const auto new_morph = &dst->morph_data_[new_morph_index];
 		if (!morph.CopyTo(new_morph))
 			return true;
 		new_morph->AddMorphUI(*dst, new_morph_index);
@@ -456,17 +456,19 @@ MMDModelManagerObject::AddMorphHelper MMDModelManagerObject::BeginMorphChange()
 
 MMDModelManagerObject::MMDModelManagerObject()
 {
-	*m_is_need_update.Write() = true;
-	*m_is_morph_initialized.Write() = false;
+	*is_need_update_.Write() = true;
+	*is_morph_initialized_.Write() = false;
+	*is_manager_read_.Write() = false;
+	*is_ik_map_read_.Write() = false;
 }
 
 void MMDModelManagerObject::RefreshMorph()
 {
-	for (auto it = maxon::Iterable::EraseIterator(m_morph_arr); it; ++it)
+	for (auto it = maxon::Iterable::EraseIterator(morph_data_); it; ++it)
 	{
 		DeleteMorph(it);
 	}
-	auto& mesh_morph_map = mesh_manager->GetNodeData<MMDMeshManagerObject>()->GetMeshMorphData();
+	auto& mesh_morph_map = mesh_manager_->GetNodeData<MMDMeshManagerObject>()->GetMeshMorphData();
 	for (auto& name : mesh_morph_map.GetKeys())
 	{
 		AddMorph(MMDMorphType::MESH, name);
@@ -482,10 +484,10 @@ Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 {
 	if (!op)
 		op = reinterpret_cast<BaseObject*>(Get());
-	BaseObject* MeshRoot_ = nullptr;
-	BaseObject* BoneRoot_ = nullptr;
-	BaseObject* RigidRoot_ = nullptr;
-	BaseObject* JointRoot_ = nullptr;
+	BaseObject* mesh_manager = nullptr;
+	BaseObject* bone_manager = nullptr;
+	BaseObject* rigid_manager = nullptr;
+	BaseObject* joint_manager = nullptr;
 	maxon::Queue<BaseObject*> nodes;
 	iferr(nodes.Push(op->GetDown())) return false;
 	while (!nodes.IsEmpty())
@@ -494,83 +496,83 @@ Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
 		if (node != nullptr)
 		{
 			if (node->IsInstanceOf(ID_O_MMD_JOINT_MANAGER))
-				JointRoot_ = node;
+				joint_manager = node;
 			else if (node->IsInstanceOf(ID_O_MMD_RIGID_MANAGER))
-				RigidRoot_ = node;
+				rigid_manager = node;
 			else if (node->IsInstanceOf(ID_O_MMD_BONE_MANAGER))
-				BoneRoot_ = node;
+				bone_manager = node;
 			else if (node->IsInstanceOf(ID_O_MMD_MESH_MANAGER))
-				MeshRoot_ = node;
+				mesh_manager = node;
 			iferr(nodes.Push(node->GetNext())) return false;
 		}
 	}
 	nodes.Reset();
-	if (joint_manager == nullptr) {
-		if (JointRoot_ == nullptr)
+	if (joint_manager_ == nullptr) {
+		if (joint_manager == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
 			tmp->InsertUnder(op);
-			joint_manager = tmp;
+			joint_manager_ = tmp;
 		}
 		else {
-			joint_manager = JointRoot_;
+			joint_manager_ = joint_manager;
 		}
-		m_is_root_initialized = false;
+		is_manager_initialized_ = false;
 	}
-	if (rigid_manager == nullptr) {
-		if (RigidRoot_ == nullptr)
+	if (rigid_manager_ == nullptr) {
+		if (rigid_manager == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
 			tmp->InsertUnder(op);
-			rigid_manager = tmp;
+			rigid_manager_ = tmp;
 		}
 		else {
-			rigid_manager = RigidRoot_;
+			rigid_manager_ = rigid_manager;
 		}
-		m_is_root_initialized = false;
+		is_manager_initialized_ = false;
 	}
-	if (bone_manager == nullptr) {
-		if (BoneRoot_ == nullptr)
+	if (bone_manager_ == nullptr) {
+		if (bone_manager == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
 			tmp->InsertUnder(op);
-			bone_manager = tmp;
+			bone_manager_ = tmp;
 		}
 		else {
-			bone_manager = BoneRoot_;
+			bone_manager_ = bone_manager;
 		}
-		m_is_root_initialized = false;
+		is_manager_initialized_ = false;
 	}
-	if (mesh_manager == nullptr) {
-		if (MeshRoot_ == nullptr)
+	if (mesh_manager_ == nullptr) {
+		if (mesh_manager == nullptr)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
 			tmp->InsertUnder(op);
-			mesh_manager = tmp;
+			mesh_manager_ = tmp;
 		}
 		else {
-			mesh_manager = MeshRoot_;
+			mesh_manager_ = mesh_manager;
 		}
-		m_is_root_initialized = false;
+		is_manager_initialized_ = false;
 	}
-	if (m_is_root_initialized == false) {
+	if (is_manager_initialized_ == false) {
 		MMDModelRootObjectMsg MeshRoot_msg(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::MODEL_MANAGER, op);
-		mesh_manager->Message(ID_O_MMD_MODEL, &MeshRoot_msg);
-		MMDModelRootObjectMsg BoneRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, rigid_manager);
-		bone_manager->Message(ID_O_MMD_MODEL, &BoneRoot_msgA);
-		MMDModelRootObjectMsg BoneRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, joint_manager);
-		bone_manager->Message(ID_O_MMD_MODEL, &BoneRoot_msgB);
+		mesh_manager_->Message(ID_O_MMD_MODEL, &MeshRoot_msg);
+		MMDModelRootObjectMsg BoneRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, rigid_manager_);
+		bone_manager_->Message(ID_O_MMD_MODEL, &BoneRoot_msgA);
+		MMDModelRootObjectMsg BoneRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, joint_manager_);
+		bone_manager_->Message(ID_O_MMD_MODEL, &BoneRoot_msgB);
 		MMDModelRootObjectMsg BoneRoot_msgC(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::MODEL_MANAGER, op);
-		bone_manager->Message(ID_O_MMD_MODEL, &BoneRoot_msgC);
-		MMDModelRootObjectMsg RigidRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, bone_manager);
-		rigid_manager->Message(ID_O_MMD_MODEL, &RigidRoot_msgA);
-		MMDModelRootObjectMsg RigidRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, joint_manager);
-		rigid_manager->Message(ID_O_MMD_MODEL, &RigidRoot_msgB);
-		MMDModelRootObjectMsg JointRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, bone_manager);
-		joint_manager->Message(ID_O_MMD_MODEL, &JointRoot_msgA);
-		MMDModelRootObjectMsg JointRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, rigid_manager);
-		joint_manager->Message(ID_O_MMD_MODEL, &JointRoot_msgB);
-		m_is_root_initialized = true;
+		bone_manager_->Message(ID_O_MMD_MODEL, &BoneRoot_msgC);
+		MMDModelRootObjectMsg RigidRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, bone_manager_);
+		rigid_manager_->Message(ID_O_MMD_MODEL, &RigidRoot_msgA);
+		MMDModelRootObjectMsg RigidRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, joint_manager_);
+		rigid_manager_->Message(ID_O_MMD_MODEL, &RigidRoot_msgB);
+		MMDModelRootObjectMsg JointRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, bone_manager_);
+		joint_manager_->Message(ID_O_MMD_MODEL, &JointRoot_msgA);
+		MMDModelRootObjectMsg JointRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, rigid_manager_);
+		joint_manager_->Message(ID_O_MMD_MODEL, &JointRoot_msgB);
+		is_manager_initialized_ = true;
 	}
 	return true;
 }
@@ -586,83 +588,83 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		return EXECUTIONRESULT::OK;
 	}
 
-	if(*is_manager_read.Read())
+	if(*is_manager_read_.Read())
 	{
-		mesh_manager = reinterpret_cast<BaseObject*>(mesh_manager_link->GetLink(doc));
-		rigid_manager = reinterpret_cast<BaseObject*>(rigid_manager_link->GetLink(doc));
-		joint_manager = reinterpret_cast<BaseObject*>(joint_manager_link->GetLink(doc));
-		bone_manager = reinterpret_cast<BaseObject*>(bone_manager_link->GetLink(doc));
-		BaseLink::Free(mesh_manager_link);
-		BaseLink::Free(rigid_manager_link);
-		BaseLink::Free(joint_manager_link);
-		BaseLink::Free(bone_manager_link);
-		*is_manager_read.Write() = false;
+		mesh_manager_ = reinterpret_cast<BaseObject*>(mesh_manager_link_->GetLink(doc));
+		rigid_manager_ = reinterpret_cast<BaseObject*>(rigid_manager_link_->GetLink(doc));
+		joint_manager_ = reinterpret_cast<BaseObject*>(joint_manager_link_->GetLink(doc));
+		bone_manager_ = reinterpret_cast<BaseObject*>(bone_manager_link_->GetLink(doc));
+		BaseLink::Free(mesh_manager_link_);
+		BaseLink::Free(rigid_manager_link_);
+		BaseLink::Free(joint_manager_link_);
+		BaseLink::Free(bone_manager_link_);
+		*is_manager_read_.Write() = false;
 	}
 
-	if(*m_is_ik_map_read.Read())
+	if(*is_ik_map_read_.Read())
 	{
-		m_ik_name_map.SetCapacityHint(m_ik_link_name_map.GetCount())iferr_return;
-		for (const auto& entry : m_ik_link_name_map)
+		ik_map_.SetCapacityHint(ik_link_map_.GetCount())iferr_return;
+		for (const auto& entry : ik_link_map_)
 		{
-			m_ik_name_map.Insert(entry.GetKey(), reinterpret_cast<BaseTag*>(entry.GetSecond()->GetLink(doc)))iferr_return;
+			ik_map_.Insert(entry.GetKey(), reinterpret_cast<BaseTag*>(entry.GetSecond()->GetLink(doc)))iferr_return;
 		}
-		m_ik_link_name_map.Reset();
-		*m_is_ik_map_read.Write() = false;
+		ik_link_map_.Reset();
+		*is_ik_map_read_.Write() = false;
 	}
 
 	if (UpdateRoot(op) == false)
 		return EXECUTIONRESULT::OK;
 
-	if (!*m_is_morph_initialized.Read())
+	if (!*is_morph_initialized_.Read())
 	{
 		RefreshMorph();
-		*m_is_morph_initialized.Write() = true;
+		*is_morph_initialized_.Write() = true;
 	}
 
-	if (*m_is_need_update.Read())
+	if (*is_need_update_.Read())
 	{
-		for (auto& morph : m_morph_arr)
+		for (auto& morph : morph_data_)
 		{
 			UpdateMorph(morph);
 		}
 	}
 
-	if (model_mode == MODEL_MODE_ANIM && m_model)
+	if (model_mode_ == MODEL_MODE_ANIM && model_)
 	{
-		if (const auto now_time = doc->GetTime(); prev_time != now_time)
+		if (const auto now_time = doc->GetTime(); prev_time_ != now_time)
 		{
-			if (animation_index != -1 && animation_index < animations.GetCount())
+			if (animation_index_ != -1 && animation_index_ < animations_.GetCount())
 			{
-				const auto& [_, animation]  = animations[animation_index];
+				const auto& [_, animation]  = animations_[animation_index_];
 				const auto time = maxon::SafeConvert<Float32>(now_time.Get() * 30.);
 				if (now_time == doc->GetMinTime())
 				{
 					const auto fps = doc->GetFps();
-					delta_time = maxon::SafeConvert<Float32>(1. / fps);
-					m_model->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
-					m_model->InitializeAnimation();
+					delta_time_ = maxon::SafeConvert<Float32>(1. / fps);
+					model_->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
+					model_->InitializeAnimation();
 					animation->SyncPhysics(0.f);
 				}
-				m_model->BeginAnimation();
-				m_model->UpdateAllAnimation(animation.get(), time, delta_time);
-				m_model->EndAnimation();
+				model_->BeginAnimation();
+				model_->UpdateAllAnimation(animation.get(), time, delta_time_);
+				model_->EndAnimation();
 			}
 			else
 			{
 				if (now_time == doc->GetMinTime())
 				{
 					const auto fps = doc->GetFps();
-					delta_time = maxon::SafeConvert<Float32>(1. / fps);
-					m_model->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
-					m_model->InitializeAnimation();
+					delta_time_ = maxon::SafeConvert<Float32>(1. / fps);
+					model_->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
+					model_->InitializeAnimation();
 				}
-				m_model->BeginAnimation();
-				m_model->UpdateNodeAnimation(false);
-				m_model->UpdatePhysicsAnimation(delta_time);
-				m_model->UpdateNodeAnimation(true);
-				m_model->EndAnimation();
+				model_->BeginAnimation();
+				model_->UpdateNodeAnimation(false);
+				model_->UpdatePhysicsAnimation(delta_time_);
+				model_->UpdateNodeAnimation(true);
+				model_->EndAnimation();
 			}
-			prev_time = now_time;
+			prev_time_ = now_time;
 		}
 	}
 	return EXECUTIONRESULT::OK;
@@ -677,7 +679,7 @@ Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& p
 	case libmmd::PMXMorphType::Group:
 	{
 		morph_id = AddMorph(MMDMorphType::GROUP, String(pmx_morph.m_name.c_str()));
-		auto& morph = m_morph_arr[morph_id];
+		auto& morph = morph_data_[morph_id];
 		for (const auto& [morph_index, weight] : pmx_morph.m_groupMorph)
 		{
 			morph.AddSubMorphNoCheck(morph_index, weight);
@@ -687,7 +689,7 @@ Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& p
 	case libmmd::PMXMorphType::Flip:
 	{
 		morph_id = AddMorph(MMDMorphType::FLIP, String(pmx_morph.m_name.c_str()));
-		auto& morph = m_morph_arr[morph_id];
+		auto& morph = morph_data_[morph_id];
 		for (const auto& [morph_index, weight] : pmx_morph.m_flipMorph)
 		{
 			morph.AddSubMorphNoCheck(morph_index, weight);
@@ -707,7 +709,7 @@ DescID MMDModelManagerObject::AddDynamicDescription(const BaseContainer& bc, con
 	if (!dynamic_description)
 		return id;
 	id = dynamic_description->Alloc(bc);
-	iferr(m_desc_id_map.Insert(id, { type, index }))
+	iferr(desc_id_map_.Insert(id, { type, index }))
 		return id;
 	return id;
 }
@@ -718,22 +720,22 @@ void MMDModelManagerObject::DeleteDynamicDescription(const DescID& id)
 	if (!dynamic_description)
 		return;
 	dynamic_description->Remove(id);
-	std::ignore = m_desc_id_map.Erase(id);
+	std::ignore = desc_id_map_.Erase(id);
 }
 
 Int MMDModelManagerObject::GetMorphNum() const
 {
-	return m_morph_arr.GetCount();
+	return morph_data_.GetCount();
 }
 
 const maxon::PointerArray<IMorph>& MMDModelManagerObject::GetMorphData()
 {
-	return m_morph_arr;
+	return morph_data_;
 }
 
 const maxon::HashMap<String, Int>& MMDModelManagerObject::GetMorphNameMap()
 {
-	return m_morph_name_map;
+	return morph_map_;
 }
 
 Bool MMDModelManagerObject::CreateRoot()
@@ -741,29 +743,29 @@ Bool MMDModelManagerObject::CreateRoot()
 	const BaseDocument* doc = GetActiveDocument();
 	if (const auto op = reinterpret_cast<BaseObject*>(Get()); op != nullptr && doc != nullptr)
 	{
-		if (joint_manager == nullptr)
+		if (joint_manager_ == nullptr)
 		{
 			BaseObject* joint_root_object = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
 			joint_root_object->InsertUnder(op);
-			joint_manager = joint_root_object;
+			joint_manager_ = joint_root_object;
 		}
-		if (rigid_manager == nullptr)
+		if (rigid_manager_ == nullptr)
 		{
 			BaseObject* rigid_root_object = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
 			rigid_root_object->InsertUnder(op);
-			rigid_manager = rigid_root_object;
+			rigid_manager_ = rigid_root_object;
 		}
-		if (bone_manager == nullptr)
+		if (bone_manager_ == nullptr)
 		{
 			BaseObject* bone_root_object = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
 			bone_root_object->InsertUnder(op);
-			bone_manager = bone_root_object;
+			bone_manager_ = bone_root_object;
 		}
-		if (mesh_manager == nullptr)
+		if (mesh_manager_ == nullptr)
 		{
 			BaseObject* mesh_root_object = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
 			mesh_root_object->InsertUnder(op);
-			mesh_manager = mesh_root_object;
+			mesh_manager_ = mesh_root_object;
 		}
 		return true;
 	}
@@ -775,13 +777,13 @@ BaseObject* MMDModelManagerObject::GetRootObject(const ManagerObjectType type) c
 	switch (type)
 	{
 	case ManagerObjectType::MESH_MANAGER:
-		return mesh_manager;
+		return mesh_manager_;
 	case ManagerObjectType::BONE_MANAGER:
-		return bone_manager;
+		return bone_manager_;
 	case ManagerObjectType::RIGID_MANAGER:
-		return rigid_manager;
+		return rigid_manager_;
 	case ManagerObjectType::JOINT_MANAGER:
-		return joint_manager;
+		return joint_manager_;
 
 	case ManagerObjectType::DEFAULT:
 	case ManagerObjectType::MODEL_MANAGER:;
@@ -793,7 +795,7 @@ Bool MMDModelManagerObject::AddIKBoneDescription(const maxon::String& bone_name_
 {
 	iferr_scope_handler{ return false; };
 
-	m_ik_name_map.Insert(bone_name_local, ik_tag)iferr_return;
+	ik_map_.Insert(bone_name_local, ik_tag)iferr_return;
 
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
 	bc.SetString(DESC_NAME, bone_name_local);
@@ -807,20 +809,20 @@ Bool MMDModelManagerObject::AddIKBoneDescription(const maxon::String& bone_name_
 
 Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
-	m_model = pmx_model;
+	model_ = pmx_model;
 	maxon::BaseArray<BaseObject*> bone_list;
 	auto morph_change_helper = BeginMorphChange();
 
-	if (setting.import_bone && bone_manager)
-		if(const auto bone_manager_data = bone_manager->GetNodeData<MMDBoneManagerObject>(); bone_manager_data && !bone_manager_data->LoadPMX(pmx_file, pmx_model, bone_list, setting))
+	if (setting.import_bone && bone_manager_)
+		if(const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data && !bone_manager_data->LoadPMX(pmx_file, pmx_model, bone_list, setting))
 			return false;
 
-	if (setting.import_polygon && mesh_manager)
-		if(const auto mesh_manager_data = mesh_manager->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->LoadPMX(pmx_file, bone_list, setting))
+	if (setting.import_polygon && mesh_manager_)
+		if(const auto mesh_manager_data = mesh_manager_->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->LoadPMX(pmx_file, bone_list, setting))
 			return false;
 
-	if (rigid_manager)
-		if(const auto rigid_manager_data = rigid_manager->GetNodeData<MMDRigidManagerObject>(); rigid_manager_data && !rigid_manager_data->LoadPMX(pmx_file, pmx_model, setting))
+	if (rigid_manager_)
+		if(const auto rigid_manager_data = rigid_manager_->GetNodeData<MMDRigidManagerObject>(); rigid_manager_data && !rigid_manager_data->LoadPMX(pmx_file, pmx_model, setting))
 			return false;
 
 	if (setting.import_expression)
@@ -841,12 +843,12 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
 {
 
-	if (setting.export_bone && bone_manager)
-		if (const auto bone_manager_data = bone_manager->GetNodeData<MMDBoneManagerObject>(); bone_manager_data && !bone_manager_data->SavePMX(pmx_file, setting))
+	if (setting.export_bone && bone_manager_)
+		if (const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data && !bone_manager_data->SavePMX(pmx_file, setting))
 			return false;
 
-	if (setting.export_polygon && mesh_manager)
-		if (const auto mesh_manager_data = mesh_manager->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->SavePMX(pmx_file, setting))
+	if (setting.export_polygon && mesh_manager_)
+		if (const auto mesh_manager_data = mesh_manager_->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->SavePMX(pmx_file, setting))
 			return false;
 	return true;
 }
@@ -865,7 +867,7 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 		return false;
 	}
 
-	if (!vmd_animation->Create(m_model))
+	if (!vmd_animation->Create(model_))
 	{
 		LoadVmdMotionLog::LogOutMem();
 		return false;
@@ -883,12 +885,12 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 
 	const BaseTime max_time(vmd_animation->GetMaxKeyTime() ,30.);
 
-	const auto& [animation_name, _] = animations.Append(setting.fn.GetFileString(), std::move(vmd_animation))iferr_return;
-	animation_index = static_cast<Int32>(animations.GetCount()) - 1;
-	animation_items.SetString(animation_index, animation_name);
+	const auto& [animation_name, _] = animations_.Append(setting.fn.GetFileString(), std::move(vmd_animation))iferr_return;
+	animation_index_ = static_cast<Int32>(animations_.GetCount()) - 1;
+	animation_items_.SetString(animation_index_, animation_name);
 	const auto node = Get();
 	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
-	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index, DESCFLAGS_SET::NONE);
+	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index_, DESCFLAGS_SET::NONE);
 
 	setting.doc->SetMaxTime(max_time);
 	setting.doc->SetLoopMaxTime(max_time);
@@ -908,7 +910,7 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 //	const auto object = reinterpret_cast<BaseObject*>(Get());
 //	const auto& morph_name = String(data.get_morph_name().c_str());
 //	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
-//	const auto morph_ptr = m_morph_name_map.Find(morph_name);
+//	const auto morph_ptr = morph_map_.Find(morph_name);
 //	if (!morph_ptr)
 //	{
 //		return false;
@@ -1019,7 +1021,7 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 //			};
 //		if (setting.import_by_local_name)
 //		{
-//			if (const auto ik_entry = m_ik_name_map.Find(ik_bone_name); ik_entry)
+//			if (const auto ik_entry = ik_map_.Find(ik_bone_name); ik_entry)
 //			{
 //				if (const auto& ik_tag = ik_entry->GetValue(); !add_key_func(ik_tag))
 //					return false;
@@ -1028,7 +1030,7 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 //		}
 //		else
 //		{
-//			for (const auto& ik_tag : m_ik_name_map.GetValues())
+//			for (const auto& ik_tag : ik_map_.GetValues())
 //			{
 //				if (ik_tag->GetName().IsEqual(ik_bone_name) && !add_key_func(ik_tag))
 //					return false;
@@ -1042,29 +1044,29 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 Bool MMDModelManagerObject::DeleteAnimation()
 {
 	iferr_scope_handler{ return false; };
-	animation_items.FlushAll();
-	animation_items.SetString(-1, "-"_s);
+	animation_items_.FlushAll();
+	animation_items_.SetString(-1, "-"_s);
 	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> new_animations;
-	const auto animation_count = animations.GetCount();
+	const auto animation_count = animations_.GetCount();
 	for (int i = 0, j = 0; i < animation_count; ++i)
 	{
-		if (i != animation_index)
+		if (i != animation_index_)
 		{
-			const auto& [animation_name, _] = new_animations.Append(std::move(animations[i]))iferr_return;
-			animation_items.SetString(j++, animation_name);
+			const auto& [animation_name, _] = new_animations.Append(std::move(animations_[i]))iferr_return;
+			animation_items_.SetString(j++, animation_name);
 		}
 	}
-	std::swap(new_animations, animations);
-	animation_index = -1;
+	std::swap(new_animations, animations_);
+	animation_index_ = -1;
 	const auto node = Get();
 	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
-	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index, DESCFLAGS_SET::NONE);
+	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index_, DESCFLAGS_SET::NONE);
 	return true;
 }
 
 Int32 MMDModelManagerObject::GetMorphNamedNumber()
 {
-	return m_morph_named_number++;
+	return morph_named_number_++;
 }
 
 NodeData* MMDModelManagerObject::Alloc()
@@ -1086,7 +1088,7 @@ Bool MMDModelManagerObject::GetDDescription(SDK2024_Const GeListNode* node, Desc
 	if (!description->LoadDescription(node->GetType()))
 		return false;
 	if (BaseContainer* settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_ANIM_LIST)), nullptr))
-		settings->SetContainer(DESC_CYCLE, animation_items);
+		settings->SetContainer(DESC_CYCLE, animation_items_);
 	const DescID* single_id = description->GetSingleDescID();
 	if (const auto cid = ConstDescID(DescLevel(MODEL_INFO_GRP)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
 	{
@@ -1106,7 +1108,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (static_cast<MMDMeshManagerObjectMsg*>(data)->type == MMDMeshManagerObjectMsgType::MESH_MORPH_CHANGE)
 		{
-			*m_is_morph_initialized.Write() = false;
+			*is_morph_initialized_.Write() = false;
 		}
 		break;
 	}
@@ -1114,7 +1116,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (static_cast<MMDBoneManagerObjectMsg*>(data)->type == MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE)
 		{
-			*m_is_morph_initialized.Write() = false;
+			*is_morph_initialized_.Write() = false;
 		}
 		break;
 	}
@@ -1123,10 +1125,10 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		/* check if it is a user data button */
 		if (const auto* dc = static_cast<DescriptionCommand*>(data); dc->_descId[0].id == ID_USERDATA)
 		{
-			if (const auto desc_id_ptr = m_desc_id_map.Find(dc->_descId); desc_id_ptr != nullptr)
+			if (const auto desc_id_ptr = desc_id_map_.Find(dc->_descId); desc_id_ptr != nullptr)
 			{
 				const auto& [desc_type, morph_index] = desc_id_ptr->GetValue();
-				auto& morph = m_morph_arr[morph_index];
+				auto& morph = morph_data_[morph_index];
 				switch (desc_type)
 				{
 				case MMDModelRootDynamicDescriptionType::MORPH_EDITOR_BUTTON:
@@ -1183,8 +1185,8 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					break;
 				}
-				if (bone_manager)
-					if (const auto bone_manager_data = bone_manager->GetNodeData<MMDBoneManagerObject>(); bone_manager_data)
+				if (bone_manager_)
+					if (const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data)
 					{
 						setting.position_multiple = bone_manager_data->GetPositionMultiple();
 					}
@@ -1215,20 +1217,20 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	{
 		case MODEL_MODE:
 		{
-			model_mode = t_data.GetInt32();
-			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, model_mode);
+			model_mode_ = t_data.GetInt32();
+			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, model_mode_);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MODEL, &msg);
 			break;
 		}
 		case MODEL_ANIM_LIST:
 		{
-			animation_index = t_data.GetInt32();
-			prev_time = BaseTime(-1.);
+			animation_index_ = t_data.GetInt32();
+			prev_time_ = BaseTime(-1.);
 			const auto doc = node->GetDocument();
 			doc->SetTime({});
-			if (animation_index != -1 && animation_index < animations.GetCount())
+			if (animation_index_ != -1 && animation_index_ < animations_.GetCount())
 			{
-				const auto& animation = animations[animation_index].second;
+				const auto& animation = animations_[animation_index_].second;
 				const BaseTime max_time(animation->GetMaxKeyTime() ,30.);
 				doc->SetMaxTime(max_time);
 				doc->SetLoopMaxTime(max_time);
@@ -1280,11 +1282,11 @@ Int MMDModelManagerObject::AddMorph(const MMDMorphType& morph_type, String morph
 	}
 	if(!morph)
 		return index;
-	m_morph_arr.AppendPtr(morph)iferr_return;
-	index = m_morph_arr.GetIndex(*morph);
-	iferr(m_morph_name_map.Insert(morph_name, index))
+	morph_data_.AppendPtr(morph)iferr_return;
+	index = morph_data_.GetIndex(*morph);
+	iferr(morph_map_.Insert(morph_name, index))
 	{
-		m_morph_arr.Erase(index)iferr_return;
+		morph_data_.Erase(index)iferr_return;
 		index = -1;
 		return index;
 	}
@@ -1298,15 +1300,15 @@ void MMDModelManagerObject::RenameMorph(const String& name)
 	DynamicDescription* const dynamic_description = Get()->GetDynamicDescriptionWritable();
 	if (dynamic_description == nullptr)
 		return;
-	if(const auto morph_id_ptr = m_morph_name_map.Find(name); morph_id_ptr)
+	if(const auto morph_id_ptr = morph_map_.Find(name); morph_id_ptr)
 	{
 		if (const auto& index = morph_id_ptr->GetValue(); index < GetMorphNum())
 		{
-			iferr(m_morph_name_map.Insert(name, index))
+			iferr(morph_map_.Insert(name, index))
 				return;
-			iferr(m_morph_name_map.Erase(morph_id_ptr))
+			iferr(morph_map_.Erase(morph_id_ptr))
 				return;
-			auto& morph = m_morph_arr[index];
+			auto& morph = morph_data_[index];
 			const DescID& strength_id = morph.GetStrengthDescID();
 			BaseContainer description_bc = *dynamic_description->Find(strength_id);
 			description_bc.SetString(DESC_NAME, name);
@@ -1329,26 +1331,26 @@ void MMDModelManagerObject::UpdateMorph(IMorph& morph)
 
 void MMDModelManagerObject::DeleteMorph(const Int morph_index)
 {
-	if (auto& morph = m_morph_arr[morph_index]; !DeleteMorphImpl(morph, morph_index))
+	if (auto& morph = morph_data_[morph_index]; !DeleteMorphImpl(morph, morph_index))
 		return;
-	std::ignore = m_morph_arr.Erase(morph_index);
+	std::ignore = morph_data_.Erase(morph_index);
 }
 
 bool MMDModelManagerObject::DeleteMorphImpl(IMorph& morph, const Int morph_index)
 {
 	iferr_scope_handler{ return false; };
 	morph.DeleteMorphUI(*this);
-	for (auto& i : m_desc_id_map.GetKeys())
+	for (auto& i : desc_id_map_.GetKeys())
 	{
-		if (auto* index = &m_desc_id_map.FindValue(i)->second; *index > morph_index)
+		if (auto* index = &desc_id_map_.FindValue(i)->second; *index > morph_index)
 		{
 			(*index)--;
 		}
 	}
-	m_morph_name_map.Erase(morph.GetName())iferr_return;
-	for (auto& i : m_morph_name_map.GetKeys())
+	morph_map_.Erase(morph.GetName())iferr_return;
+	for (auto& i : morph_map_.GetKeys())
 	{
-		if (auto* index = m_morph_name_map.FindValue(i)SDK2024_ToPointer; *index > morph_index)
+		if (auto* index = morph_map_.FindValue(i)SDK2024_ToPointer; *index > morph_index)
 		{
 			(*index)--;
 		}
