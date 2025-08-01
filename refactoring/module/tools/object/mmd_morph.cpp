@@ -297,7 +297,7 @@ inline void FlipMorph::UpdateMorph(MMDModelManagerObject& model)
 
 inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
 {
-	if (BaseObject* mesh_root = model.GetRootObject(ManagerObjectType::MESH_MANAGER))
+	if (BaseObject* mesh_root = model.GetManagerObject(ManagerObjectType::MESH_MANAGER))
 	{
 		mesh_root->GetNodeData<MMDMeshManagerObject>()->SetMorphStrength(m_name, GetStrength(model.Get()));
 	}
@@ -306,7 +306,7 @@ inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
 
 inline void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
 {
-	if (BaseObject* bone_root = model.GetRootObject(ManagerObjectType::BONE_MANAGER))
+	if (BaseObject* bone_root = model.GetManagerObject(ManagerObjectType::BONE_MANAGER))
 	{
 		//bone_root->GetNodeData<MMDBoneManagerObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
 	}

@@ -265,8 +265,8 @@ BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const
 	// init model
 	object->SetName(setting.fn.GetFileString());
 	auto* pmx_model_data = object->GetNodeData<MMDModelManagerObject>();
-	pmx_model_data->CreateRoot();
-	pmx_model_data->UpdateRoot();
+	pmx_model_data->CreateManagers();
+	pmx_model_data->UpdateManagers();
 
 	// set model with pmx data
 	pmx_model_data->LoadPMX(pmx_file, pmx_model, setting);

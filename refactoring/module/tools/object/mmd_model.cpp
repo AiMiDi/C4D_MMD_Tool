@@ -14,6 +14,7 @@ Description:	MMD model object
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
 #include "mmd_bone_manager.h"
+#include "mmd_joint_manager.h"
 #include "mmd_mesh_manager.h"
 #include "mmd_rigid_manager.h"
 #define COL_NAME 'name'
@@ -480,7 +481,7 @@ void MMDModelManagerObject::RefreshMorph()
 	//}
 }
 
-Bool MMDModelManagerObject::UpdateRoot(BaseObject* op)
+Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 {
 	if (!op)
 		op = reinterpret_cast<BaseObject*>(Get());
@@ -612,7 +613,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		*is_ik_map_read_.Write() = false;
 	}
 
-	if (UpdateRoot(op) == false)
+	if (UpdateManagers(op) == false)
 		return EXECUTIONRESULT::OK;
 
 	if (!*is_morph_initialized_.Read())
@@ -636,17 +637,16 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			if (animation_index_ != -1 && animation_index_ < animations_.GetCount())
 			{
 				const auto& [_, animation]  = animations_[animation_index_];
-				const auto time = maxon::SafeConvert<Float32>(now_time.Get() * 30.);
 				if (now_time == doc->GetMinTime())
 				{
 					const auto fps = doc->GetFps();
-					delta_time_ = maxon::SafeConvert<Float32>(1. / fps);
+					delta_time_ = maxon::SafeConvert<Float32>(1. / (fps * 2));
 					model_->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
 					model_->InitializeAnimation();
 					animation->SyncPhysics(0.f);
 				}
 				model_->BeginAnimation();
-				model_->UpdateAllAnimation(animation.get(), time, delta_time_);
+				model_->UpdateAllAnimation(animation.get(), maxon::SafeConvert<Float32>(now_time.Get() * 30.), delta_time_);
 				model_->EndAnimation();
 			}
 			else
@@ -654,7 +654,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				if (now_time == doc->GetMinTime())
 				{
 					const auto fps = doc->GetFps();
-					delta_time_ = maxon::SafeConvert<Float32>(1. / fps);
+					delta_time_ = maxon::SafeConvert<Float32>(1. / (fps * 2));
 					model_->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
 					model_->InitializeAnimation();
 				}
@@ -738,7 +738,7 @@ const maxon::HashMap<String, Int>& MMDModelManagerObject::GetMorphNameMap()
 	return morph_map_;
 }
 
-Bool MMDModelManagerObject::CreateRoot()
+Bool MMDModelManagerObject::CreateManagers()
 {
 	const BaseDocument* doc = GetActiveDocument();
 	if (const auto op = reinterpret_cast<BaseObject*>(Get()); op != nullptr && doc != nullptr)
@@ -772,7 +772,7 @@ Bool MMDModelManagerObject::CreateRoot()
 	return false;
 }
 
-BaseObject* MMDModelManagerObject::GetRootObject(const ManagerObjectType type) const
+BaseObject* MMDModelManagerObject::GetManagerObject(const ManagerObjectType type) const
 {
 	switch (type)
 	{
@@ -823,6 +823,10 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 
 	if (rigid_manager_)
 		if(const auto rigid_manager_data = rigid_manager_->GetNodeData<MMDRigidManagerObject>(); rigid_manager_data && !rigid_manager_data->LoadPMX(pmx_file, pmx_model, setting))
+			return false;
+
+	if (joint_manager_)
+		if(const auto joint_manager_data = joint_manager_->GetNodeData<MMDJointManagerObject>(); joint_manager_data && !joint_manager_data->LoadPMX(pmx_file, pmx_model, setting))
 			return false;
 
 	if (setting.import_expression)

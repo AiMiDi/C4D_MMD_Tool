@@ -15,12 +15,13 @@ Description:	C4D MMD joint object
 
 class MMDJointObject final : public ObjectData
 {
-	Int32	m_display_type = JOINT_DISPLAY_TYPE_OFF;
-	Int32	m_joint_mode = JOINT_MODE_ANIM;
-	BaseObject* m_joint_root = nullptr;
+	Int32	display_type_ = JOINT_DISPLAY_TYPE_OFF;
+	Int32	joint_mode_ = JOINT_MODE_ANIM;
+	BaseObject* joint_manager_ = nullptr;
+	MMDJointManagerObject* joint_manager_data_ = nullptr;
 	BaseObject* m_link_rigid_a = nullptr;
 	BaseObject* m_link_rigid_b = nullptr;
-	libmmd::MMDJoint* mmd_joint = nullptr;
+	libmmd::MMDJoint* mmd_joint_ = nullptr;
 
 	MMDJointObject() = default;
 	~MMDJointObject() override = default;
@@ -41,9 +42,8 @@ public:
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
-
 	static NodeData* Alloc();
-
+	friend class MMDJointManagerObject;
 private:
 	static void DrawBox(const BaseObject* op, BaseDraw* bd, const BaseContainer* bc, Bool wire);
 };

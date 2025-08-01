@@ -750,16 +750,16 @@ void MMDBoneTag::HandleBoneLockUpdate(const BaseContainer* bc)
 
 void MMDBoneTag::SetRotationLock(const bool flag) const
 {
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
+	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
+	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
+	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
 }
 
 void MMDBoneTag::SetPositionLock(const bool flag) const
 {
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
+	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
+	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
+	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
 }
 
 EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority,
@@ -784,23 +784,11 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	{
 		const auto& transform = m_mmd_node->GetLocalTransform();
 
-		if (is_allow_translate)
-		{
-			auto p = xyz(transform[3]) - m_mmd_node->GetInitialTranslate();
-			if (const auto position = Vector(p.x, p.y, p.z) * m_bone_manager_node->GetPositionMultiple();
-			  m_bone_object->GetRelPos() != position)
-				m_bone_object->SetRelPos(position);
-		}
-		
-
-		if (is_allow_rotate)
-			if (const auto rotation = MatrixToHPB(maxon::Matrix{Vector(),
-				maxon::SqrMat3(
-					Vector(transform[0].x, transform[0].y, transform[0].z),
-					Vector(transform[1].x, transform[1].y, transform[1].z),
-					Vector(transform[2].x, transform[2].y, transform[2].z))}, ROTATIONORDER::XYZLOCAL);
-				m_bone_object->GetRelRot() != rotation)
-					m_bone_object->SetRelRot(rotation); 
+		m_bone_object->SetMl(Matrix{
+		   Vector(transform[3][0],transform[3][1],-transform[3][2]) * m_bone_manager_node->GetPositionMultiple(),
+		   Vector(transform[0][0],transform[0][1],transform[0][2]),
+		   Vector(transform[1][0],transform[1][1],transform[1][2]),
+		   Vector(transform[2][0],transform[2][1],transform[2][2]) });
 	}
 
 	return EXECUTIONRESULT::OK;

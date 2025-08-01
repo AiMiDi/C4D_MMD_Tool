@@ -147,9 +147,9 @@ public:
 	const maxon::PointerArray<IMorph>& GetMorphData();
 	const maxon::HashMap<String, Int>& GetMorphNameMap();
 
-	Bool CreateRoot();
-	Bool UpdateRoot(BaseObject* op = nullptr);
-	BaseObject* GetRootObject(const ManagerObjectType type) const;
+	Bool CreateManagers();
+	Bool UpdateManagers(BaseObject* op = nullptr);
+	BaseObject* GetManagerObject(const ManagerObjectType type) const;
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;

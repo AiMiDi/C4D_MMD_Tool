@@ -56,14 +56,12 @@ Bool MMDJointObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	{
 	case JOINT_LINK_RIGID_A_INDEX:
 	{
-		m_link_rigid_a = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
-		                        ->FindRigid(t_data.GetInt32());
+		m_link_rigid_a = joint_manager_data_->GetRigidManager()->FindRigid(t_data.GetInt32());
 		break;
 	}
 	case JOINT_LINK_RIGID_B_INDEX:
 	{
-		m_link_rigid_b = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
-		                        ->FindRigid(t_data.GetInt32());
+		m_link_rigid_b = joint_manager_data_->GetRigidManager()->FindRigid(t_data.GetInt32());
 		break;
 	}
 	default:
@@ -84,27 +82,27 @@ Bool MMDJointObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 		return false;
 	}
 
-	if (m_joint_root)
+	if (joint_manager_)
 	{
 		BaseContainer* settings = description->GetParameterI(ConstDescID(DescLevel(JOINT_LINK_RIGID_A_INDEX)), nullptr);
 
 		if (settings != nullptr)
 		{
-			settings->SetContainer(DESC_CYCLE, m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()->GetRigidItems());
+			settings->SetContainer(DESC_CYCLE, joint_manager_data_->GetRigidManager()->GetRigidItems());
 		}
 
 		settings = description->GetParameterI(ConstDescID(DescLevel(JOINT_LINK_RIGID_B_INDEX)), nullptr);
 
 		if (settings != nullptr)
 		{
-			settings->SetContainer(DESC_CYCLE, m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()->GetRigidItems());
+			settings->SetContainer(DESC_CYCLE, joint_manager_data_->GetRigidManager()->GetRigidItems());
 		}
 
 		settings = description->GetParameterI(ConstDescID(DescLevel(JOINT_ATTITUDE_USE_BONE_INDEX)), nullptr);
 
 		if (settings != nullptr)
 		{
-			settings->SetContainer(DESC_CYCLE, m_joint_root->GetNodeData<MMDJointManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()->GetBoneItems());
+			settings->SetContainer(DESC_CYCLE, joint_manager_data_->GetBoneManager()->GetBoneItems());
 		}
 	}
 	flags |= DESCFLAGS_DESC::LOADED;
@@ -114,7 +112,7 @@ Bool MMDJointObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 Bool MMDJointObject::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
 								  const BaseContainer* itemdesc) SDK2024_Const
 {
-	if (m_joint_mode == JOINT_MODE_ANIM || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
+	if (joint_mode_ == JOINT_MODE_ANIM || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
 		return false;
 
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
@@ -122,10 +120,10 @@ Bool MMDJointObject::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& 
 
 void MMDJointObject::HandleJointModeChange(const Int32 mode)
 {
-	if (m_joint_mode == mode)
+	if (joint_mode_ == mode)
 		return;
 
-	if (m_joint_mode == JOINT_MODE_ANIM)
+	if (joint_mode_ == JOINT_MODE_ANIM)
 	{
 		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::CLEAR);
 		// TODO: Save to mmd_joint
@@ -135,7 +133,7 @@ void MMDJointObject::HandleJointModeChange(const Int32 mode)
 		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
 	}
 
-	m_joint_mode = mode;
+	joint_mode_ = mode;
 }
 
 Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
@@ -175,7 +173,7 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 			{
 			case MMDJointRootObjectMsgType::JOINT_DISPLAY_CHANGE:
 			{
-				m_display_type = msg->display_type;
+				display_type_ = msg->display_type;
 				break;
 			}
 			case MMDJointRootObjectMsgType::JOINT_MODE_CHANGE:
@@ -200,13 +198,11 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		case JOINT_LINK_RIGID_SET_NAME_BUTTON:
 		{
 			String name = "<->"_s;
-			if (const BaseObject* a_rigid_object = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
-			                                                ->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX)))
+			if (const BaseObject* a_rigid_object = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX)))
 			{
 				name = a_rigid_object->GetName() + name;
 			}
-			if (const BaseObject* b_rigid_object = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
-			                                                                         ->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX)))
+			if (const BaseObject* b_rigid_object = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX)))
 			{
 				name = name + b_rigid_object->GetName();
 			}
@@ -216,8 +212,7 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		case JOINT_ATTITUDE_USE_BONE_BUTTON:
 		{
-			if (const auto bone_ptr = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetBoneManager()->GetNodeData<MMDBoneManagerObject>()
-																					->FindBone(bc->GetInt32(JOINT_ATTITUDE_USE_BONE_INDEX)))
+			if (const auto bone_ptr = joint_manager_data_->GetBoneManager()->FindBone(bc->GetInt32(JOINT_ATTITUDE_USE_BONE_INDEX)))
 			{
 				reinterpret_cast<BaseObject*>(node)->SetAbsPos(bone_ptr->GetObject()->GetAbsPos());
 			}
@@ -262,14 +257,12 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		{
 		case JOINT_LINK_RIGID_A_INDEX:
 		{
-			m_link_rigid_a = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
-				->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX));
+			m_link_rigid_a = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX));
 			break;
 		}
 		case JOINT_LINK_RIGID_B_INDEX:
 		{
-			m_link_rigid_b = m_joint_root->GetNodeData<MMDJointManagerObject>()->GetRigidManager()->GetNodeData<MMDRigidManagerObject>()
-				->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX));
+			m_link_rigid_b = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX));
 			break;
 		}
 		default:
@@ -297,7 +290,7 @@ void MMDJointObject::DrawBox(const BaseObject* op, BaseDraw* bd, const BaseConta
 
 DRAWRESULT MMDJointObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh)
 {
-	if (m_joint_mode == JOINT_MODE_EDIT && drawpass == DRAWPASS::OBJECT)
+	if (joint_mode_ == JOINT_MODE_EDIT && drawpass == DRAWPASS::OBJECT)
 	{
 		if (op == nullptr || bd == nullptr || bh == nullptr)
 		{
@@ -306,7 +299,7 @@ DRAWRESULT MMDJointObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 		if (const BaseContainer* bc = op->GetDataInstance(); bc)
 		{
 			bd->SetMatrix_Matrix(nullptr, op->GetMg());
-			switch (m_display_type)
+			switch (display_type_)
 			{
 			case JOINT_DISPLAY_TYPE_ON:
 			{
@@ -335,15 +328,15 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		return EXECUTIONRESULT::OK;
 	}
 
-	BaseObject* UpObject = op->GetUp();
+	BaseObject* up_object = op->GetUp();
 
-	if (UpObject == nullptr && m_joint_root != nullptr)
+	if (up_object == nullptr && joint_manager_ != nullptr)
 	{
 		op->Remove();
-		op->InsertUnderLast(m_joint_root);
+		op->InsertUnderLast(joint_manager_);
 	}
 
-	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_JOINT_MANAGER))
+	if (up_object != nullptr && up_object->IsInstanceOf(ID_O_MMD_JOINT_MANAGER))
 	{
 		/*
 		SDK2024_Const BaseObject* PredObject = op->GetPred();
@@ -359,11 +352,22 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 			op->SetParameter(ConstDescID(DescLevel(JOINT_INDEX)), String::IntToString(RigidIndex.ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
 		}*/
 
-		if (m_joint_root == nullptr)
+		if (joint_manager_ == nullptr)
 		{
-			m_joint_root = UpObject;
+			joint_manager_ = up_object;
+			joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
 		}
 
+	}
+
+	if (joint_mode_ == RIGID_MODE_ANIM && display_type_ != RIGID_DISPLAY_TYPE_OFF && mmd_joint_)
+	{
+		const auto transform = mmd_joint_->GetTransform();
+		op->SetMl(Matrix{
+		   Vector(transform[3][0],transform[3][1],-transform[3][2]) * joint_manager_data_->GetPositionMultiple(),
+		   Vector(transform[0][0],transform[0][1],-transform[0][2]),
+		   Vector(transform[1][0],transform[1][1],-transform[1][2]),
+		   Vector(transform[2][0],transform[2][1],-transform[2][2]) });
 	}
 
 	return EXECUTIONRESULT::OK;
@@ -379,19 +383,20 @@ Bool MMDJointObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeL
 		return false;
 	}
 
-	destObject->m_joint_root = m_joint_root;
+	destObject->joint_manager_ = joint_manager_;
+	destObject->joint_manager_data_ = joint_manager_data_;
 	destObject->m_link_rigid_a = m_link_rigid_a;
 	destObject->m_link_rigid_b = m_link_rigid_b;
-	destObject->m_joint_mode = m_joint_mode;
-	destObject->m_display_type = m_display_type;
+	destObject->joint_mode_ = joint_mode_;
+	destObject->display_type_ = display_type_;
 
 	return true;
 }
 
 Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
-	hf->ReadInt32(&m_display_type);
-	hf->ReadInt32(&m_joint_mode);
+	hf->ReadInt32(&display_type_);
+	hf->ReadInt32(&joint_mode_);
 
 	AutoAlloc<BaseLink> link;
 	if (!link)
@@ -403,8 +408,9 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	{
 		return false;
 	}
-	m_joint_root = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
-
+	joint_manager_ = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
+	if (joint_manager_)
+		joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
 	if (!link->Read(hf))
 	{
 		return false;
@@ -421,8 +427,8 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 Bool MMDJointObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	hf->WriteInt32(m_display_type);
-	hf->WriteInt32(m_joint_mode);
+	hf->WriteInt32(display_type_);
+	hf->WriteInt32(joint_mode_);
 
 	AutoAlloc<BaseLink> link;
 	if(!link)
@@ -430,7 +436,7 @@ Bool MMDJointObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 		return false;
 	}
 
-	link->SetLink(m_joint_root);
+	link->SetLink(joint_manager_);
 
 	if (!link->Write(hf))
 	{

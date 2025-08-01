@@ -481,12 +481,12 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_LAYER)), pmx_bone.m_deformDepth, DESCFLAGS_SET::NONE);
 
 		// set rotatable
-		bone_tag_node->is_allow_rotate = static_cast<uint16_t>(pmx_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AllowRotate);
-		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_ROTATABLE)), bone_tag_node->is_allow_rotate, DESCFLAGS_SET::NONE);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_ROTATABLE)),
+			static_cast<uint16_t>(pmx_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AllowRotate), DESCFLAGS_SET::NONE);
 
 		// set movable
-		bone_tag_node->is_allow_translate = static_cast<uint16_t>(pmx_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AllowTranslate);
-		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TRANSLATABLE)), bone_tag_node->is_allow_translate, DESCFLAGS_SET::NONE);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TRANSLATABLE)),
+			static_cast<uint16_t>(pmx_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AllowTranslate), DESCFLAGS_SET::NONE);
 
 		// set visible
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_VISIBLE)),

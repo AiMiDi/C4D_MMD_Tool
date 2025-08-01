@@ -13,6 +13,14 @@ Description:	MMD joint root object
 #include "mmd_manager.hpp"
 #include "description/OMMDJointManager.h"
 
+namespace CMTToolsSetting
+{
+	struct ModelImport;
+}
+
+class MMDRigidManagerObject;
+class MMDBoneManagerObject;
+
 enum class MMDJointRootObjectMsgType : uint8_t
 {
 	DEFAULT,
@@ -36,9 +44,12 @@ struct MMDJointRootObjectMsg
 
 class MMDJointManagerObject final : public MMDManagerObject
 {
-	Int64 m_joint_name_index = 1;
-	BaseObject* m_bone_manager = nullptr;
-	BaseObject* m_rigid_manager = nullptr;
+	Int32 joint_name_index_ = 1;
+	Float32 position_multiple_ = 1.f;
+	BaseObject* bone_manager_ = nullptr;
+	BaseObject* rigid_manager_ = nullptr;
+	MMDBoneManagerObject* bone_manager_data_ = nullptr;
+	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
 	MMDJointManagerObject() {}
 	~MMDJointManagerObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDJointManagerObject)
@@ -49,12 +60,15 @@ public:
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
+	BaseObject* AddJoint(const String& name, GeListNode* node = nullptr);
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
+	const Float32& GetPositionMultiple() const { return position_multiple_; }
 
-	BaseObject* GetRigidManager() const;
-	BaseObject* GetBoneManager() const;
+	MMDBoneManagerObject* GetBoneManager() const;
+	MMDRigidManagerObject* GetRigidManager() const;
 
+	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 };
 
 #endif // !MMD_JOINT_ROOT_H__

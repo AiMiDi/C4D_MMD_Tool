@@ -61,9 +61,6 @@ class MMDBoneTag final : public TagData
 
 	Int32 bone_mode_ = BONE_MODE_ANIM;
 
-	Bool is_allow_rotate = false;
-	Bool is_allow_translate = false;
-
 	friend class MMDBoneManagerObject;
 
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTag)

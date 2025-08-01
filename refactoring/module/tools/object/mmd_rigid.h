@@ -28,7 +28,7 @@ class MMDRigidObject final : public ObjectData
 	BaseObject* rigid_manager_ = nullptr;
 	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
 
-	libmmd::MMDRigidBody* rigidbody_ = nullptr;
+	libmmd::MMDRigidBody* mmd_rigidbody_ = nullptr;
 
 	AutoFree<BaseObject> draw_mesh_object_;
 	ObjectColorProperties draw_color_;

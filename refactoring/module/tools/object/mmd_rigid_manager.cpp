@@ -328,9 +328,17 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	{
 		const auto& pmx_rigidbody = pmx_file.m_rigidbodies[rigid_index];
 		const maxon::String name_local{ pmx_rigidbody.m_name.c_str() };
-		auto rigid_object = AddRigid(name_local);
+		const auto rigid_object = AddRigid(name_local);
 		if (!rigid_object)
 			return false;
+
+		if (const auto rigid_node = rigid_object->GetNodeData<MMDRigidObject>())
+		{
+			rigid_node->mmd_rigidbody_ = (*pmx_rigidbodies)[rigid_index].get();
+			rigid_node->rigid_manager_ = reinterpret_cast<BaseObject*>(Get());
+			rigid_node->rigid_manager_data_ = this;
+		}
+
 		const maxon::String name_universal{ pmx_rigidbody.m_englishName.c_str() };
 		SetRigidParameter<RIGID_NAME_LOCAL>(rigid_object, name_local);
 		SetRigidParameter<RIGID_NAME_UNIVERSAL>(rigid_object, name_universal);
@@ -346,10 +354,9 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 		SetRigidParameter<RIGID_SHAPE_SIZE_Y>(rigid_object, shape_size.y);
 		SetRigidParameter<RIGID_SHAPE_SIZE_Z>(rigid_object, shape_size.z);
 
-		const auto translate = pmx_rigidbody.m_translate * position_multiple_;
-		SetRigidParameter<RIGID_SHAPE_POSITION_X>(rigid_object, translate.x);
-		SetRigidParameter<RIGID_SHAPE_POSITION_Y>(rigid_object, translate.y);
-		SetRigidParameter<RIGID_SHAPE_POSITION_Z>(rigid_object, translate.z);
+		SetRigidParameter<RIGID_SHAPE_POSITION_X>(rigid_object, pmx_rigidbody.m_translate.x);
+		SetRigidParameter<RIGID_SHAPE_POSITION_Y>(rigid_object, pmx_rigidbody.m_translate.y);
+		SetRigidParameter<RIGID_SHAPE_POSITION_Z>(rigid_object, pmx_rigidbody.m_translate.z);
 
 		SetRigidParameter<RIGID_SHAPE_ROTATION_X>(rigid_object, pmx_rigidbody.m_rotate.x);
 		SetRigidParameter<RIGID_SHAPE_ROTATION_Y>(rigid_object, pmx_rigidbody.m_rotate.y);
@@ -362,11 +369,6 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 		SetRigidParameter<RIGID_FRICTION_FORCE>(rigid_object, pmx_rigidbody.m_friction);
 		SetRigidParameter<RIGID_MOVE_ATTENUATION>(rigid_object, pmx_rigidbody.m_translateDimmer);
 		SetRigidParameter<RIGID_ROTATION_DAMPING>(rigid_object, pmx_rigidbody.m_rotateDimmer);
-
-		if (const auto rigid_node = rigid_object->GetNodeData<MMDRigidObject>())
-		{
-			rigid_node->rigidbody_ = (*pmx_rigidbodies)[rigid_index].get();
-		}
 	}
 
 	return true;

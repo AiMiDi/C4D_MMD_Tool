@@ -543,14 +543,14 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
 	}
 
-	if (m_rigid_mode == RIGID_MODE_ANIM && rigidbody_)
+	if (m_rigid_mode == RIGID_MODE_ANIM && m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
 	{
-		const auto transform = rigidbody_->GetTransform();
+		const auto transform = mmd_rigidbody_->GetTransform();
 		op->SetMl(Matrix{
-			Vector(transform[3][0],transform[3][1],transform[3][2]),
-			Vector(transform[0][0],transform[0][1],transform[0][2]),
-			Vector(transform[1][0],transform[1][1],transform[1][2]),
-			Vector(transform[2][0],transform[2][1],transform[2][2]) });
+		   Vector(transform[3][0],transform[3][1],-transform[3][2]) * rigid_manager_data_->GetPositionMultiple(),
+		   Vector(transform[0][0],transform[0][1],-transform[0][2]),
+		   Vector(transform[1][0],transform[1][1],-transform[1][2]),
+		   Vector(transform[2][0],transform[2][1],-transform[2][2]) });
 	}
 
 	return EXECUTIONRESULT::OK;
@@ -667,8 +667,6 @@ void MMDRigidObject::HandleRigidModeChange(Int32 mode)
 	if (m_rigid_mode == mode)
 		return;
 
-
-	const auto op = reinterpret_cast<BaseObject*>(Get());
 	if (mode == RIGID_MODE_ANIM)
 	{
 		// TODO: Save to mmd_rigid_body
