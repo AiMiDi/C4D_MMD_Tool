@@ -107,6 +107,7 @@ class MMDModelManagerObject final : public ObjectData
 	MMDModelPtr model_;
 	Int32 model_mode_ = MODEL_MODE_ANIM;
 	BaseTime prev_time_{-1};
+	Float32 fps_{ 1.f / 30.f };
 
 	MMDModelManagerObject();
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelManagerObject)

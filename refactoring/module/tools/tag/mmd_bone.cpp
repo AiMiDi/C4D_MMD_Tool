@@ -803,19 +803,27 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 		const auto& transform = m_mmd_node->GetLocalTransform();
 		const auto translate = xyz(transform[3]) - m_mmd_node->GetInitialTranslate();
 
-		/*m_bone_object->SetRelMl(Matrix{Vector(),
+		/*m_bone_object->SetRelMl(Matrix{Vector(transform[3][0],transform[3][1],-transform[3][2]) * m_bone_manager_node->GetPositionMultiple(),
 		   Vector(transform[0][0],transform[0][1],transform[0][2]),
 		   Vector(transform[1][0],transform[1][1],transform[1][2]),
-		   Vector(transform[2][0],transform[2][1],transform[2][2]) });
+		   Vector(transform[2][0],transform[2][1],transform[2][2]) });*/
 
-		m_bone_object->SetRelPos(Vector(translate[0],translate[1],-translate[2]) * m_bone_manager_node->GetPositionMultiple());*/
+		//m_bone_object->SetRelPos(Vector(translate[0],translate[1],-translate[2]) * m_bone_manager_node->GetPositionMultiple());
 
 		if (allow_rotate || append_rotate)
 		{
-			m_bone_object->SetRelMl(Matrix{m_bone_object->GetRelPos(),
+			auto r = MatrixToHPB(Matrix{{},
 		   Vector(transform[0][0],transform[0][1],transform[0][2]),
 		   Vector(transform[1][0],transform[1][1],transform[1][2]),
-		   Vector(transform[2][0],transform[2][1],transform[2][2]) });
+		   Vector(transform[2][0],transform[2][1],transform[2][2]) }, ROTATIONORDER::DEFAULT);
+
+			r.y = -r.y;
+			m_bone_object->SetRelRot(r);
+
+			/*m_bone_object->SetRelMl(Matrix{{},
+		   Vector(transform[0][0],transform[0][1],transform[0][2]),
+		   Vector(transform[1][0],transform[1][1],transform[1][2]),
+		   Vector(transform[2][0],transform[2][1],transform[2][2]) });*/
 		}
 
 		if(allow_translate || append_translate)
