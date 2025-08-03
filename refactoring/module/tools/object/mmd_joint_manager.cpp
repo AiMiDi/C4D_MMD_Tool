@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
@@ -148,7 +148,7 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
 					{
 						auto flag = DESCFLAGS_SET::NONE;
-						SetDParameter(node, ConstDescID(DescLevel(JOINT_MODE)), GeData(msg->model_mode), flag);
+						SetDParameter(node, ConstDescID(DescLevel(JOINT_MODE)),msg->model_mode, flag);
 						break;
 					}
 				}

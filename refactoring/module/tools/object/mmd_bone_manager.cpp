@@ -181,25 +181,13 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		}
 		break;
 	case BONE_MODE:
-		switch (t_data.GetInt32())
-		{
-		case BONE_MODE_EDIT:
-		{
-			MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, BONE_MODE_EDIT);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_BONE_MANAGER, &msg);
-			break;
-		}
-		case BONE_MODE_ANIM:
-		{
-			MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, BONE_MODE_ANIM);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_BONE_MANAGER, &msg);
-			break;
-		}
-		default:
-			break;
-		}
-		default:
-			break;
+	{
+		MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, t_data.GetInt32());
+		node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
+		break;
+	}
+	default:
+		break;
 	}
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }

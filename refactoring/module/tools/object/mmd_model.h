@@ -106,7 +106,6 @@ class MMDModelManagerObject final : public ObjectData
 
 	MMDModelPtr model_;
 	Int32 model_mode_ = MODEL_MODE_ANIM;
-	Float32 delta_time_ = 1.f / 30.f;
 	BaseTime prev_time_{-1};
 
 	MMDModelManagerObject();

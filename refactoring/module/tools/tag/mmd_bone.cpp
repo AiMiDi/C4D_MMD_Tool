@@ -648,6 +648,19 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 		}
 		break;
 	}
+case PMX_BONE_LAYER:
+	{
+		if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
+		{
+			if (auto* pd = DataGetCustomDataType(priority, PriorityData, CUSTOMGUI_PRIORITY_DATA))
+			{
+				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, t_data);
+				pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
+				bc->SetData(EXPRESSION_PRIORITY, priority);
+			}
+		}
+		break;
+	}
 	case PMX_BONE_IS_IK:
 	case PMX_BONE_IS_FIXED_AXIS:
 	case PMX_BONE_INHERIT_ROTATION:
@@ -739,27 +752,27 @@ bool MMDBoneTag::CreateBoneLockTag()
 	return true;
 }
 
-void MMDBoneTag::HandleBoneLockUpdate(const BaseContainer* bc)
+void MMDBoneTag::HandleBoneLockUpdate(const Bool allow_rotate, const Bool allow_translate)
 {
 	if (!protection_tag)
 		if (!CreateBoneLockTag())
 			return;
-	SetRotationLock(!bc->GetBool(PMX_BONE_ROTATABLE));
-	SetPositionLock(!bc->GetBool(PMX_BONE_TRANSLATABLE));
+	SetRotationLock(!allow_rotate);
+	SetPositionLock(!allow_translate);
 }
 
 void MMDBoneTag::SetRotationLock(const bool flag) const
 {
-	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
-	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
-	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
 }
 
 void MMDBoneTag::SetPositionLock(const bool flag) const
 {
-	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
-	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
-	//protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
+	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
 }
 
 EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority,
@@ -778,17 +791,36 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	if(!m_bone_tag)
 		m_bone_tag = tag;
 
-	HandleBoneLockUpdate(bc);
+	const auto allow_rotate = bc->GetBool(PMX_BONE_ROTATABLE);
+	const auto allow_translate = bc->GetBool(PMX_BONE_TRANSLATABLE);
+	const auto append_rotate = bc->GetBool(PMX_BONE_INHERIT_ROTATION);
+	const auto append_translate = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION);
+
+	//HandleBoneLockUpdate(allow_rotate, allow_translate);
 
 	if (m_mmd_node && bone_mode_ == BONE_MODE_ANIM)
 	{
 		const auto& transform = m_mmd_node->GetLocalTransform();
+		const auto translate = xyz(transform[3]) - m_mmd_node->GetInitialTranslate();
 
-		m_bone_object->SetMl(Matrix{
-		   Vector(transform[3][0],transform[3][1],-transform[3][2]) * m_bone_manager_node->GetPositionMultiple(),
+		/*m_bone_object->SetRelMl(Matrix{Vector(),
 		   Vector(transform[0][0],transform[0][1],transform[0][2]),
 		   Vector(transform[1][0],transform[1][1],transform[1][2]),
 		   Vector(transform[2][0],transform[2][1],transform[2][2]) });
+
+		m_bone_object->SetRelPos(Vector(translate[0],translate[1],-translate[2]) * m_bone_manager_node->GetPositionMultiple());*/
+
+		if (allow_rotate || append_rotate)
+		{
+			m_bone_object->SetRelMl(Matrix{m_bone_object->GetRelPos(),
+		   Vector(transform[0][0],transform[0][1],transform[0][2]),
+		   Vector(transform[1][0],transform[1][1],transform[1][2]),
+		   Vector(transform[2][0],transform[2][1],transform[2][2]) });
+		}
+
+		if(allow_translate || append_translate)
+			m_bone_object->SetRelPos(Vector(translate[0],translate[1],-translate[2]) * m_bone_manager_node->GetPositionMultiple());
+			
 	}
 
 	return EXECUTIONRESULT::OK;

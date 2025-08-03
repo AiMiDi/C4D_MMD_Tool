@@ -639,28 +639,23 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				const auto& [_, animation]  = animations_[animation_index_];
 				if (now_time == doc->GetMinTime())
 				{
-					const auto fps = doc->GetFps();
-					delta_time_ = maxon::SafeConvert<Float32>(1. / (fps * 2));
-					model_->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
+					fps_ = doc->GetFps();
 					model_->InitializeAnimation();
 					animation->SyncPhysics(0.f);
 				}
 				model_->BeginAnimation();
-				model_->UpdateAllAnimation(animation.get(), maxon::SafeConvert<Float32>(now_time.Get() * 30.), delta_time_);
+				model_->UpdateAllAnimation(animation.get(), static_cast<Float32>(now_time.Get() * fps_), 1.f / fps_);
 				model_->EndAnimation();
 			}
 			else
 			{
 				if (now_time == doc->GetMinTime())
 				{
-					const auto fps = doc->GetFps();
-					delta_time_ = maxon::SafeConvert<Float32>(1. / (fps * 2));
-					model_->GetMMDPhysics()->SetFPS(static_cast<float>(fps * 2));
 					model_->InitializeAnimation();
 				}
 				model_->BeginAnimation();
 				model_->UpdateNodeAnimation(false);
-				model_->UpdatePhysicsAnimation(delta_time_);
+				model_->UpdatePhysicsAnimation(1.f / fps_);
 				model_->UpdateNodeAnimation(true);
 				model_->EndAnimation();
 			}
@@ -1084,7 +1079,7 @@ Bool MMDModelManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 	{
 		return true;
 	}
-	list->Add(op, EXECUTIONPRIORITY_ANIMATION_NLA + 1, EXECUTIONFLAGS::NONE);
+	list->Add(op, EXECUTIONPRIORITY_EXPRESSION - 1, EXECUTIONFLAGS::EXPRESSION);
 	return true;
 }
 Bool MMDModelManagerObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const

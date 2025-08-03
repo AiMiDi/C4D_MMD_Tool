@@ -199,9 +199,10 @@ private:
 
 	/**
 	 * @brief Handles bone lock updates for the MMDBoneTag.
-	 * @param[in] bc The BaseContainer containing the bone lock data.
+	 * @param allow_rotate
+	 * @param allow_translate
 	 */
-	void HandleBoneLockUpdate(const BaseContainer* bc);
+	void HandleBoneLockUpdate(Bool allow_rotate, Bool allow_translate);
 
 	/**
 	 * @brief Handles description updates for the MMDBoneTag.

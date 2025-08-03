@@ -290,7 +290,7 @@ void MMDJointObject::DrawBox(const BaseObject* op, BaseDraw* bd, const BaseConta
 
 DRAWRESULT MMDJointObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh)
 {
-	if (joint_mode_ == JOINT_MODE_EDIT && drawpass == DRAWPASS::OBJECT)
+	if (drawpass == DRAWPASS::OBJECT)
 	{
 		if (op == nullptr || bd == nullptr || bh == nullptr)
 		{
@@ -362,12 +362,8 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 
 	if (joint_mode_ == RIGID_MODE_ANIM && display_type_ != RIGID_DISPLAY_TYPE_OFF && mmd_joint_)
 	{
-		const auto transform = mmd_joint_->GetTransform();
-		op->SetMl(Matrix{
-		   Vector(transform[3][0],transform[3][1],-transform[3][2]) * joint_manager_data_->GetPositionMultiple(),
-		   Vector(transform[0][0],transform[0][1],-transform[0][2]),
-		   Vector(transform[1][0],transform[1][1],-transform[1][2]),
-		   Vector(transform[2][0],transform[2][1],-transform[2][2]) });
+		const auto joint_position = mmd_joint_->GetPosition();
+		op->SetAbsPos(Vector(joint_position.x, joint_position.y, joint_position.z) * joint_manager_data_->GetPositionMultiple());
 	}
 
 	return EXECUTIONRESULT::OK;
@@ -464,7 +460,7 @@ Bool MMDJointObject::AddToExecution(BaseObject* op, PriorityList* list)
 	{
 		return true;
 	}
-	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
+	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::EXPRESSION);
 	return true;
 }
 

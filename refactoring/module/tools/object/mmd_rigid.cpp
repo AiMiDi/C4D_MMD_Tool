@@ -562,7 +562,7 @@ Bool MMDRigidObject::AddToExecution(BaseObject* op, PriorityList* list)
 	{
 		return true;
 	}
-	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
+	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::EXPRESSION);
 	return true;
 }
 

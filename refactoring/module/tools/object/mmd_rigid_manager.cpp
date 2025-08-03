@@ -244,24 +244,9 @@ Bool MMDRigidManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	}
 	case RIGID_MODE:
 	{
-		switch (t_data.GetInt32())
-		{
-		case RIGID_MODE_ANIM:
-		{
-			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, RIGID_MODE_ANIM);
+			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, t_data.GetInt32());
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
 			break;
-		}
-		case RIGID_MODE_EDIT:
-		{
-			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, RIGID_MODE_EDIT);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
-			break;
-		}
-		default:
-			break;
-		}
-		break;
 	}
 	default:
 		break;
