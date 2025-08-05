@@ -22,18 +22,12 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	};
 	if (!hf->ReadInt64(&m_rigid_name_index_))
 		return false;
-	{
-		AutoAlloc<BaseLink> temp_link;
-		if (!temp_link)
-			return false;
-		if (!temp_link->Read(hf))
-			return false;
-		bone_manager_ = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
-		bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
-		if (!temp_link->Read(hf))
-			return false;
-		joint_manager_ = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
-	}
+	if (!io_util::ReadData(hf, bone_manager_))
+		return false;
+	bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
+	if (!io_util::ReadData(hf, joint_manager_))
+		return false;
+
 	// rigid_list_
 	{
 		Int64 rigid_list_count = 0;
@@ -57,17 +51,11 @@ Bool MMDRigidManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 {
 	if (!hf->WriteInt64(m_rigid_name_index_))
 		return false;
-	{
-		AutoAlloc<BaseLink> temp_link;
-		if (!temp_link)
-			return false;
-		temp_link->SetLink(bone_manager_);
-		if (!temp_link->Write(hf))
-			return false;
-		temp_link->SetLink(joint_manager_);
-		if (!temp_link->Write(hf))
-			return false;
-	}
+	if (!io_util::WriteData(hf, bone_manager_))
+		return false;
+	if (!io_util::WriteData(hf, joint_manager_))
+		return false;
+
 	// rigid_list_
 	{
 		if (!hf->WriteInt64(rigid_list_.GetCount()))

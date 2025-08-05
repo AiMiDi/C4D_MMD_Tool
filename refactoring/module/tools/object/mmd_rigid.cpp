@@ -585,25 +585,12 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	hf->ReadInt32(&m_rigid_group_id);
 	UpdateRigidGroup(m_rigid_group_id);
 
-	AutoAlloc<BaseLink> link;
-
-	if (link == nullptr)
-	{
+	if (!io_util::ReadData(hf, rigid_manager_))
 		return false;
-	}
-
-	if (!link->Read(hf))
-	{
-		return false;
-	}
-	rigid_manager_ = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
 	rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
 
-	if (!link->Read(hf))
-	{
+	if (!io_util::ReadData(hf, m_protection_tag))
 		return false;
-	}
-	m_protection_tag = reinterpret_cast<BaseTag*>(link->GetLink(GetActiveDocument()));
 
 	return true;
 }
@@ -616,23 +603,11 @@ Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 	hf->WriteInt32(m_rigid_shape_type);
 	hf->WriteInt32(m_rigid_group_id);
 
-	AutoAlloc<BaseLink> link;
-	if (link == nullptr)
-	{
+	if (!io_util::WriteData(hf, rigid_manager_))
 		return false;
-	}
 
-	link->SetLink(rigid_manager_);
-	if (!link->Write(hf))
-	{
+	if (!io_util::WriteData(hf, m_protection_tag))
 		return false;
-	}
-
-	link->SetLink(m_protection_tag);
-	if (!link->Write(hf))
-	{
-		return false;
-	}
 
 	return true;
 }

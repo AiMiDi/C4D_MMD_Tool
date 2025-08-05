@@ -40,9 +40,13 @@ struct MMDMeshManagerObjectMsg
 
 class MMDMeshManagerObject final : public MMDManagerObject
 {
-	BaseObject* m_model_root = nullptr;
-	maxon::HashMap<BaseTag*, Int32> m_tag_mode_map;
-	maxon::HashMap<String, maxon::BaseList<MorphUIData>> m_mesh_morph_data;
+	BaseObject* model_manager_ = nullptr;
+	maxon::HashMap<BaseTag*, Int32> mesh_morph_mode_;
+
+	libmmd::MMDMorphManager* morph_manager_;
+	maxon::HashMap<String, Int32> mesh_morph_name_;
+	maxon::BaseArray<Int32> morph_manager_index_;
+	maxon::BaseArray<maxon::PointerArray<MorphUIData>> mesh_morph_data_;
 
 	MMDMeshManagerObject() = default;
 	~MMDMeshManagerObject() override = default;
@@ -60,10 +64,10 @@ public:
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 
-	[[nodiscard]] const maxon::HashMap<String, maxon::BaseList<MorphUIData>>& GetMeshMorphData() const;
+	[[nodiscard]] const maxon::HashMap<String, Int32>& GetMeshMorphData() const;
 	Bool SetMorphStrength(const String& morph_name, const Float& strength);
 	Bool LoadPMX(
-		const libmmd::PMXFile& pmx_file,
+		const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model,
 		const maxon::BaseArray<BaseObject*>& bone_list,
 		const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting);

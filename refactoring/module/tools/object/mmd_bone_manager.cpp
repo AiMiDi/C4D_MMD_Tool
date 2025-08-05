@@ -27,8 +27,8 @@ Bool MMDBoneManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snod
 	};
 	auto const dest_object = reinterpret_cast<MMDBoneManagerObject*>(dest);
 	dest_object->bone_name_index = bone_name_index;
-	dest_object->m_rigid_root = m_rigid_root;
-	dest_object->m_joint_root = m_joint_root;
+	dest_object->rigid_manager_ = rigid_manager_;
+	dest_object->joint_manager_ = joint_manager_;
 	for (const auto& entry : m_bone_list)
 	{
 		auto& link = dest_object->m_bone_list.InsertKey(entry.GetKey())iferr_return;
@@ -45,20 +45,13 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	};
 	if (!hf->ReadInt64(&bone_name_index))
 		return false;
-	{
-		AutoAlloc<BaseLink> temp_link;
-		if (!temp_link)
-			return false;
-		if (!temp_link->Read(hf))
-			return false;
-		m_model_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
-		if (!temp_link->Read(hf))
-			return false;
-		m_rigid_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
-		if (!temp_link->Read(hf))
-			return false;
-		m_joint_root = reinterpret_cast<BaseObject*>(temp_link->ForceGetLink());
-	}
+	if (!io_util::ReadData(hf, model_manager_))
+		return false;
+	if (!io_util::ReadData(hf, rigid_manager_))
+		return false;
+	if (!io_util::ReadData(hf, joint_manager_))
+		return false;
+
 	// m_bone_list
 	{
 		Int64 bone_list_count = 0;
@@ -82,20 +75,14 @@ Bool MMDBoneManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) 
 {
 	if(!hf->WriteInt64(bone_name_index))
 		return false;
-	{
-		AutoAlloc<BaseLink> temp_link;
-		if(!temp_link)
-			return false;
-		temp_link->SetLink(m_model_root);
-		if (!temp_link->Write(hf))
-			return false;
-		temp_link->SetLink(m_rigid_root);
-		if (!temp_link->Write(hf))
-			return false;
-		temp_link->SetLink(m_joint_root);
-		if (!temp_link->Write(hf))
-			return false;
-	}
+
+	if (!io_util::WriteData(hf, model_manager_))
+		return false;
+	if (!io_util::WriteData(hf, rigid_manager_))
+		return false;
+	if (!io_util::WriteData(hf, joint_manager_))
+		return false;
+
 	// m_bone_list
 	{
 		if (!hf->WriteInt64(m_bone_list.GetCount()))
@@ -236,10 +223,10 @@ bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	case MMDBoneTagMsgType::DEFAULT:
 		break;
 	}
-	if (need_update_morph && m_model_root)
+	if (need_update_morph && model_manager_)
 	{
 		MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE };
-		m_model_root->Message(ID_O_MMD_BONE_MANAGER, &msg);
+		model_manager_->Message(ID_O_MMD_BONE_MANAGER, &msg);
 	}
 	return true;
 }
@@ -315,17 +302,17 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 				case ManagerObjectType::JOINT_MANAGER:
 				{
-					m_joint_root = msg->object;
+					joint_manager_ = msg->object;
 					break;
 				}
 				case ManagerObjectType::RIGID_MANAGER:
 				{
-					m_rigid_root = msg->object;
+					rigid_manager_ = msg->object;
 					break;
 				}
 				case ManagerObjectType::MODEL_MANAGER:
 				{
-					m_model_root = msg->object;
+					model_manager_ = msg->object;
 					break;
 				}
 				case ManagerObjectType::DEFAULT: [[fallthrough]];
@@ -384,7 +371,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 
 	if (!pmx_model)
 		return false;
-	
+
 	m_morph_node_manager = pmx_model->GetNodeManager();
 	m_morph_manager = pmx_model->GetMorphManager();
 
@@ -602,7 +589,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TIP)), tip_link.Release(), DESCFLAGS_SET::NONE);
 
 				// add to model_root description
-				if(!m_model_root->GetNodeData<MMDModelManagerObject>()->AddIKBoneDescription(bone_name_local, ik_tag))
+				if(!model_manager_->GetNodeData<MMDModelManagerObject>()->AddIKBoneDescription(bone_name_local, ik_tag))
 					return false;
 
 				// set ik limit

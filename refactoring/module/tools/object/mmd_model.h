@@ -80,25 +80,18 @@ enum class MMDModelRootDynamicDescriptionType : uint8_t
 
 class MMDModelManagerObject final : public ObjectData
 {
-	maxon::Synchronized<Bool> is_need_update_;
+	maxon::Synchronized<Bool> update_morph_;
 	maxon::Synchronized<Bool> is_morph_initialized_;
 	maxon::Synchronized<Bool> is_manager_read_;
-	maxon::Synchronized<Bool> is_ik_map_read_;
 	Bool is_manager_initialized_ = false;
 	Int32 morph_named_number_ = 0;
 	BaseObject* mesh_manager_ = nullptr;
 	BaseObject* bone_manager_ = nullptr;
 	BaseObject* rigid_manager_ = nullptr;
 	BaseObject* joint_manager_ = nullptr;
-	BaseLink* mesh_manager_link_ = nullptr;
-	BaseLink* bone_manager_link_ = nullptr;
-	BaseLink* rigid_manager_link_ = nullptr;
-	BaseLink* joint_manager_link_ = nullptr;
 	maxon::PointerArray<IMorph> morph_data_;
 	maxon::HashMap<DescID, maxon::Pair<MMDModelRootDynamicDescriptionType, Int>> desc_id_map_;
-	maxon::HashMap<String, Int> morph_map_;
-	maxon::HashMap<String, BaseTag*> ik_map_;
-	maxon::HashMap<String, AutoAlloc<BaseLink>> ik_link_map_;
+	maxon::HashMap<String, Int> morph_name_;
 
 	Int32 animation_index_ = -1;
 	BaseContainer animation_items_;
@@ -141,7 +134,6 @@ public:
 
 	DescID AddDynamicDescription(const BaseContainer& bc, const MMDModelRootDynamicDescriptionType& type, Int index);
 	void DeleteDynamicDescription(const DescID& id);
-	Bool AddIKBoneDescription(const maxon::String& bone_name_local, BaseTag* ik_tag);
 
 	Int GetMorphNum() const;
 	const maxon::PointerArray<IMorph>& GetMorphData();

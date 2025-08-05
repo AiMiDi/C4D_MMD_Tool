@@ -59,9 +59,9 @@ class MMDBoneManagerObject final : public MMDManagerObject
 {
 	Int bone_name_index = 0;
 	Float position_multiple = 1.0;
-	BaseObject* m_model_root = nullptr;
-	BaseObject* m_rigid_root = nullptr;
-	BaseObject* m_joint_root = nullptr;
+	BaseObject* model_manager_ = nullptr;
+	BaseObject* rigid_manager_ = nullptr;
+	BaseObject* joint_manager_ = nullptr;
 
 	libmmd::MMDMorphManager* m_morph_manager = nullptr;
 	libmmd::MMDNodeManager* m_morph_node_manager = nullptr;
