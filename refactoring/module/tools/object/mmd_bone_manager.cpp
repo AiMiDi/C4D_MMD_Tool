@@ -43,7 +43,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	iferr_scope_handler{
 		return false;
 	};
-	if (!hf->ReadInt64(&bone_name_index))
+	if (!io_util::ReadData(hf, bone_name_index))
 		return false;
 	if (!io_util::ReadData(hf, model_manager_))
 		return false;
@@ -73,7 +73,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 Bool MMDBoneManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	if(!hf->WriteInt64(bone_name_index))
+	if(!io_util::WriteData(hf, bone_name_index))
 		return false;
 
 	if (!io_util::WriteData(hf, model_manager_))

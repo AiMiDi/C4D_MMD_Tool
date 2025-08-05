@@ -20,7 +20,7 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	iferr_scope_handler{
 		return false;
 	};
-	if (!hf->ReadInt64(&m_rigid_name_index_))
+	if (!io_util::ReadData(hf, m_rigid_name_index_))
 		return false;
 	if (!io_util::ReadData(hf, bone_manager_))
 		return false;
@@ -49,7 +49,7 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 Bool MMDRigidManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	if (!hf->WriteInt64(m_rigid_name_index_))
+	if (!io_util::WriteData(hf, m_rigid_name_index_))
 		return false;
 	if (!io_util::WriteData(hf, bone_manager_))
 		return false;

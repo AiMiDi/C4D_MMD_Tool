@@ -24,7 +24,7 @@ NodeData* MMDJointManagerObject::Alloc()
 
 Bool MMDJointManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
-	if (!hf->ReadInt32(&joint_name_index_))
+	if (!io_util::ReadData(hf, joint_name_index_))
 		return false;
 	if (!io_util::ReadData(hf, bone_manager_))
 		return false;
@@ -39,7 +39,7 @@ Bool MMDJointManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 Bool MMDJointManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	if (!hf->WriteInt32(joint_name_index_))
+	if (!io_util::WriteData(hf, joint_name_index_))
 		return false;
 	if (!io_util::WriteData(hf, bone_manager_))
 		return false;

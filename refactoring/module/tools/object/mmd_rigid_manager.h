@@ -37,7 +37,7 @@ struct MMDRigidRootObjectMsg
 
 class MMDRigidManagerObject final : public MMDManagerObject
 {
-	Int64 m_rigid_name_index_ = 1;
+	Int32 m_rigid_name_index_ = 1;
 	Float32 position_multiple_ = 1.0;
 	BaseContainer rigid_items_;
 	BaseObject* bone_manager_ = nullptr;

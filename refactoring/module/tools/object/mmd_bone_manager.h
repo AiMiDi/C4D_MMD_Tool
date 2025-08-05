@@ -57,7 +57,7 @@ struct MMDBoneManagerObjectMsg
 };
 class MMDBoneManagerObject final : public MMDManagerObject
 {
-	Int bone_name_index = 0;
+	Int32 bone_name_index = 0;
 	Float position_multiple = 1.0;
 	BaseObject* model_manager_ = nullptr;
 	BaseObject* rigid_manager_ = nullptr;
