@@ -1,25 +1,20 @@
 ﻿#include "pch.h"
 #include "mmd_morph.h"
 #include "mmd_model.h"
-#include "mmd_bone_manager.h"
 #include "mmd_mesh_manager.h"
 #include "description/OMMDModelManager.h"
 
 inline Bool IMorph::Read(HyperFile* hf)
 {
-	if (m_strength_id.Read(hf) == false)
-		return false;
-	if (hf->ReadString(&m_name) == false)
-		return false;
+	IOReadField(m_strength_id);
+	IOReadField(m_name);
 	return true;
 }
 
 inline Bool IMorph::Write(HyperFile* hf) SDK2024_Const
 {
-	if (m_strength_id.Write(hf) == false)
-		return false;
-	if (hf->WriteString(m_name) == false)
-		return false;
+	IOWriteField(m_strength_id);
+	IOWriteField(m_name);
 	return true;
 }
 
@@ -32,33 +27,17 @@ inline Bool IMorph::CopyTo(IMorph* dest) const
 
 inline Bool GroupMorph::Read(HyperFile* hf)
 {
-	if (IMorph::Read(hf) == false)
+	if (!IMorph::Read(hf))
 		return false;
-	if (m_grp_id.Read(hf) == false)
-		return false;
-	if (m_button_grp_id.Read(hf) == false)
-		return false;
-	if (m_button_editor_id.Read(hf) == false)
-		return false;
-	if (m_button_delete_id.Read(hf) == false)
-		return false;
-	if (m_button_rename_id.Read(hf) == false)
-		return false;
+	IOReadField(m_grp_id);
+	IOReadField(m_button_grp_id);
+	IOReadField(m_button_editor_id);
+	IOReadField(m_button_delete_id);
+	IOReadField(m_button_rename_id);
 	m_data.Reset();
-	Int64 data_const = 0;
-	if (hf->ReadInt64(&data_const) == false)
+	if (!io_util::ReadHashMap(hf, m_data))
 		return false;
-	for (Int64 i = 0; i < data_const; ++i)
-	{
-		Int64 id;
-		Float influence;
-		if (hf->ReadInt64(&id) == false)
-			return false;
-		if (hf->ReadFloat(&influence) == false)
-			return false;
-		iferr(m_data.Insert(id, influence))
-			return false;
-	}
+
 	return true;
 }
 
@@ -66,25 +45,13 @@ inline Bool GroupMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	if (IMorph::Write(hf) == false)
 		return false;
-	if (m_grp_id.Write(hf) == false)
+	IOWriteField(m_grp_id);
+	IOWriteField(m_button_grp_id);
+	IOWriteField(m_button_editor_id);
+	IOWriteField(m_button_delete_id);
+	IOWriteField(m_button_rename_id);
+	if (!io_util::WriteHashMap(hf, m_data))
 		return false;
-	if (m_button_grp_id.Write(hf) == false)
-		return false;
-	if (m_button_editor_id.Write(hf) == false)
-		return false;
-	if (m_button_delete_id.Write(hf) == false)
-		return false;
-	if (m_button_rename_id.Write(hf) == false)
-		return false;
-	if (hf->WriteInt64(m_data.GetCount()) == false)
-		return false;
-	for (auto& data : m_data)
-	{
-		if (hf->WriteInt64(data.GetKey()) == false)
-			return false;
-		if (hf->WriteFloat(data.GetValue()) == false)
-			return false;
-	}
 	return true;
 }
 
@@ -104,31 +71,14 @@ inline Bool FlipMorph::Read(HyperFile* hf)
 {
 	if (IMorph::Read(hf) == false)
 		return false;
-	if (m_grp_id.Read(hf) == false)
-		return false;
-	if (m_button_grp_id.Read(hf) == false)
-		return false;
-	if (m_button_editor_id.Read(hf) == false)
-		return false;
-	if (m_button_delete_id.Read(hf) == false)
-		return false;
-	if (m_button_rename_id.Read(hf) == false)
-		return false;
+	IOReadField(m_grp_id);
+	IOReadField(m_button_grp_id);
+	IOReadField(m_button_editor_id);
+	IOReadField(m_button_delete_id);
+	IOReadField(m_button_rename_id);
 	m_data.Reset();
-	Int64 data_const = 0;
-	if (hf->ReadInt64(&data_const) == false)
+	if (!io_util::ReadHashMap(hf, m_data))
 		return false;
-	for (Int64 i = 0; i < data_const; ++i)
-	{
-		Int64 id;
-		Float influence;
-		if (hf->ReadInt64(&id) == false)
-			return false;
-		if (hf->ReadFloat(&influence) == false)
-			return false;
-		iferr(m_data.Insert(id, influence))
-			return false;
-	}
 	return true;
 }
 
@@ -136,25 +86,13 @@ inline Bool FlipMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	if (IMorph::Write(hf) == false)
 		return false;
-	if (m_grp_id.Write(hf) == false)
+	IOWriteField(m_grp_id);
+	IOWriteField(m_button_grp_id);
+	IOWriteField(m_button_editor_id);
+	IOWriteField(m_button_delete_id);
+	IOWriteField(m_button_rename_id);
+	if (!io_util::WriteHashMap(hf, m_data))
 		return false;
-	if (m_button_grp_id.Write(hf) == false)
-		return false;
-	if (m_button_editor_id.Write(hf) == false)
-		return false;
-	if (m_button_delete_id.Write(hf) == false)
-		return false;
-	if (m_button_rename_id.Write(hf) == false)
-		return false;
-	if (hf->WriteInt64(m_data.GetCount()) == false)
-		return false;
-	for (auto& data : m_data)
-	{
-		if (hf->WriteInt64(data.GetKey()) == false)
-			return false;
-		if (hf->WriteFloat(data.GetValue()) == false)
-			return false;
-	}
 	return true;
 }
 
@@ -306,10 +244,10 @@ inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
 
 inline void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
 {
-	if (BaseObject* bone_root = model.GetManagerObject(ManagerObjectType::BONE_MANAGER))
+	/*if (BaseObject* bone_root = model.GetManagerObject(ManagerObjectType::BONE_MANAGER))
 	{
-		//bone_root->GetNodeData<MMDBoneManagerObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
-	}
+		bone_root->GetNodeData<MMDBoneManagerObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
+	}*/
 }
 
 inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)

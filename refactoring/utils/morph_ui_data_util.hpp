@@ -15,11 +15,10 @@ Description:	morph UI data util
 class MorphUIData final
 {
 	DescID strength_id;
-	maxon::StrongRef<AutoAlloc<BaseLink>> morph_tag_link;
+	BaseTag* morph_tag;
 public:
-	MorphUIData(SDK2024_Const BaseTag* bone_tag = nullptr, DescID strength_id = {}) : strength_id(std::move(strength_id)), morph_tag_link(maxon::StrongRef<AutoAlloc<BaseLink>>::Create()iferr_cannot_fail("Link was ensured."))
+	MorphUIData(BaseTag* tag = nullptr, DescID id = {}) : strength_id(std::move(id)), morph_tag(tag)
 	{
-		(*morph_tag_link)->SetLink(bone_tag);
 	}
 
 	~MorphUIData() = default;
@@ -30,35 +29,27 @@ public:
 
 	Bool Write(HyperFile* hf) SDK2024_Const
 	{
-		if (!(*morph_tag_link)->Write(hf))
-			return false;
-		if (!strength_id.Write(hf))
-			return false;
+		IOWriteField(morph_tag);
+		IOWriteField(strength_id);
 		return true;
 	}
 
 	Bool Read(HyperFile* hf)
 	{
-		if (!(*morph_tag_link)->Read(hf))
-			return false;
-		if (!strength_id.Read(hf))
-			return false;
+		IOReadField(morph_tag);
+		IOReadField(strength_id);
 		return true;
 	}
-
-	[[nodiscard]] Bool Compare(const MorphUIData& other) const
+	[[nodiscard]] Bool Compare(BaseTag* const tag, const DescID& id) const
 	{
-		return (*morph_tag_link)->ForceGetLink() == (*other.morph_tag_link)->ForceGetLink() && strength_id == other.strength_id;
+		return morph_tag == tag && strength_id == id;
 	}
 
-	[[nodiscard]] BaseTag* GetMorphTag() const
+	void SetStrength(const Float& strength) const
 	{
-		return reinterpret_cast<BaseTag*>((*morph_tag_link)->ForceGetLink());
-	}
-
-	[[nodiscard]] const DescID& GetStrengthID() const
-	{
-		return strength_id;
+		if (!morph_tag)
+			return;
+		morph_tag->SetParameter(strength_id, strength, DESCFLAGS_SET::NONE);
 	}
 };
 

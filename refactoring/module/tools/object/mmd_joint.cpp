@@ -56,12 +56,12 @@ Bool MMDJointObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	{
 	case JOINT_LINK_RIGID_A_INDEX:
 	{
-		m_link_rigid_a = joint_manager_data_->GetRigidManager()->FindRigid(t_data.GetInt32());
+		link_rigid_a_ = joint_manager_data_->GetRigidManager()->FindRigid(t_data.GetInt32());
 		break;
 	}
 	case JOINT_LINK_RIGID_B_INDEX:
 	{
-		m_link_rigid_b = joint_manager_data_->GetRigidManager()->FindRigid(t_data.GetInt32());
+		link_rigid_b_ = joint_manager_data_->GetRigidManager()->FindRigid(t_data.GetInt32());
 		break;
 	}
 	default:
@@ -257,12 +257,12 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		{
 		case JOINT_LINK_RIGID_A_INDEX:
 		{
-			m_link_rigid_a = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX));
+			link_rigid_a_ = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX));
 			break;
 		}
 		case JOINT_LINK_RIGID_B_INDEX:
 		{
-			m_link_rigid_b = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX));
+			link_rigid_b_ = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX));
 			break;
 		}
 		default:
@@ -381,8 +381,8 @@ Bool MMDJointObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeL
 
 	destObject->joint_manager_ = joint_manager_;
 	destObject->joint_manager_data_ = joint_manager_data_;
-	destObject->m_link_rigid_a = m_link_rigid_a;
-	destObject->m_link_rigid_b = m_link_rigid_b;
+	destObject->link_rigid_a_ = link_rigid_a_;
+	destObject->link_rigid_b_ = link_rigid_b_;
 	destObject->joint_mode_ = joint_mode_;
 	destObject->display_type_ = display_type_;
 
@@ -391,65 +391,24 @@ Bool MMDJointObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeL
 
 Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
-	hf->ReadInt32(&display_type_);
-	hf->ReadInt32(&joint_mode_);
+	IOReadField(display_type_);
+	IOReadField(joint_mode_);
+	IOReadField(joint_manager_);
+	IOReadField(link_rigid_a_);
+	IOReadField(link_rigid_b_);
 
-	AutoAlloc<BaseLink> link;
-	if (!link)
-	{
-		return false;
-	}
-
-	if (!link->Read(hf))
-	{
-		return false;
-	}
-	joint_manager_ = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
 	if (joint_manager_)
 		joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
-	if (!link->Read(hf))
-	{
-		return false;
-	}
-	m_link_rigid_a = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
-
-	if (!link->Read(hf))
-	{
-		return false;
-	}
-	m_link_rigid_b = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
 	return true;
 }
 
 Bool MMDJointObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	hf->WriteInt32(display_type_);
-	hf->WriteInt32(joint_mode_);
-
-	AutoAlloc<BaseLink> link;
-	if(!link)
-	{
-		return false;
-	}
-
-	link->SetLink(joint_manager_);
-
-	if (!link->Write(hf))
-	{
-		return false;
-	}
-
-	link->SetLink(m_link_rigid_a);
-	if (!link->Write(hf))
-	{
-		return false;
-	}
-
-	link->SetLink(m_link_rigid_b);
-	if (!link->Write(hf))
-	{
-		return false;
-	}
+	IOWriteField(display_type_);
+	IOWriteField(joint_mode_);
+	IOWriteField(joint_manager_);
+	IOWriteField(link_rigid_a_);
+	IOWriteField(link_rigid_b_);
 
 	return true;
 }

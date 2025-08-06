@@ -20,54 +20,22 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	iferr_scope_handler{
 		return false;
 	};
-	if (!io_util::ReadData(hf, m_rigid_name_index_))
-		return false;
-	if (!io_util::ReadData(hf, bone_manager_))
+	IOReadField(m_rigid_name_index_);
+	IOReadField(bone_manager_);
+	IOReadField(joint_manager_);
+	if (!io_util::ReadHashMap(hf, rigid_list_))
 		return false;
 	bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
-	if (!io_util::ReadData(hf, joint_manager_))
-		return false;
-
-	// rigid_list_
-	{
-		Int64 rigid_list_count = 0;
-		if (!hf->ReadInt64(&rigid_list_count))
-			return false;
-		while (rigid_list_count--)
-		{
-			Int32 rigid_index = 0;
-			if (!hf->ReadInt32(&rigid_index))
-				return false;
-			auto& link = rigid_list_.InsertKey(rigid_index)iferr_return;
-			link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
-			if (!(*link)->Read(hf))
-				return false;
-		}
-	}
 	return SUPER::Read(node, hf, level);
 }
 
 Bool MMDRigidManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	if (!io_util::WriteData(hf, m_rigid_name_index_))
+	IOWriteField(m_rigid_name_index_);
+	IOWriteField(bone_manager_);
+	IOWriteField(joint_manager_);
+	if (!io_util::WriteHashMap(hf, rigid_list_))
 		return false;
-	if (!io_util::WriteData(hf, bone_manager_))
-		return false;
-	if (!io_util::WriteData(hf, joint_manager_))
-		return false;
-
-	// rigid_list_
-	{
-		if (!hf->WriteInt64(rigid_list_.GetCount()))
-			return false;
-		for (const auto& rigid_link : rigid_list_)
-		{
-			if (hf->WriteInt32(!rigid_link.GetKey()))
-				return false;
-			if (!(*rigid_link.GetValue())->Write(hf))
-				return false;
-		}
-	}
 	return SUPER::Write(node, hf);
 }
 
@@ -182,7 +150,7 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					SetDParameter(node, ConstDescID(DescLevel(RIGID_MODE)), GeData(msg->model_mode), flag);
 					break;
 				}
-			default:
+			case MMDModelRootObjectMsgType::DEFAULT:
 				break;
 			}
 

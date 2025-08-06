@@ -828,7 +828,7 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 		if(allow_translate || append_translate)
 			m_bone_object->SetRelPos(Vector(translate[0],translate[1],-translate[2]) * m_bone_manager_node->GetPositionMultiple());
-			
+
 	}
 
 	return EXECUTIONRESULT::OK;
@@ -836,32 +836,13 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
-	iferr_scope_handler{
-		return false;
-	};
-	{
-		AutoAlloc<BaseLink> bone_manager_link;
-		if (!bone_manager_link)
-			return false;
-		if (!bone_manager_link->Read(hf))
-			return false;
-		m_bone_manager = reinterpret_cast<BaseObject*>(bone_manager_link->ForceGetLink());
-	}
-
+	IOReadField(m_bone_manager);
 	return SUPER::Read(node, hf, level);
 }
 
 Bool MMDBoneTag::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	iferr_scope_handler{
-		return false;
-	};
-	AutoAlloc<BaseLink> bone_manager_link;
-	if (!bone_manager_link)
-		return false;
-	bone_manager_link->SetLink(m_bone_manager);
-	if (!bone_manager_link->Write(hf))
-		return false;
+	IOWriteField(m_bone_manager);
 	return SUPER::Write(node, hf);
 }
 

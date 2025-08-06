@@ -44,9 +44,7 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	iferr_scope_handler{
 		return false;
 	};
-
-	if (!io_util::ReadData(hf, model_manager_))
-		return false;
+	IOReadField(model_manager_);
 
 	if (!io_util::ReadHashMap(hf, mesh_morph_mode_))
 		return false;
@@ -65,8 +63,7 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 Bool MMDMeshManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	if (!io_util::WriteData(hf, model_manager_))
-		return false;
+	IOWriteField(model_manager_);
 
 	if (!io_util::WriteHashMap(hf, mesh_morph_mode_))
 		return false;
@@ -221,7 +218,24 @@ EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 			model_manager_ = up_object;
 		}
 	}
-	RefreshMeshMorphData(op);
+
+	if (morph_manager_)
+	{
+		const auto morph_manager_count = morph_manager_index_.GetCount();
+		for (int i = 0; i < morph_manager_count; ++i)
+		{
+			const auto strength = morph_manager_->GetMorph(i)->GetWeight();
+			if (const auto mesh_morph_data_index = morph_manager_index_[i]; mesh_morph_data_index != -1)
+			{
+				const auto& sub_morphs = mesh_morph_data_[mesh_morph_data_index];
+				for (const auto& sub_morph : sub_morphs)
+				{
+					sub_morph.SetStrength(strength);
+				}
+			}
+		}
+	}
+
 	return SUPER::Execute(op, doc, bt, priority, flags);
 }
 
@@ -229,7 +243,7 @@ Bool MMDMeshManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 {
 	if (list && op)
 	{
-		list->Add(op, EXECUTIONPRIORITY_EXPRESSION - 2, EXECUTIONFLAGS::NONE);
+		list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
 	}
 	return SUPER::AddToExecution(op, list);
 }
@@ -243,16 +257,11 @@ Bool MMDMeshManagerObject::SetMorphStrength(const String& morph_name, const Floa
 {
 	const auto morph_ptr = mesh_morph_name_.Find(morph_name);
 	if (!morph_ptr)
-	{
 		return false;
-	}
-	for (const auto& mesh_morph_ui_data : mesh_morph_data_[morph_ptr->GetSecond()])
+	const auto& sub_morphs = mesh_morph_data_[morph_ptr->GetSecond()];
+	for (const auto& sub_morph : sub_morphs)
 	{
-		if (const auto mesh_morph_tag = mesh_morph_ui_data.GetMorphTag(); mesh_morph_tag)
-		{
-			if (!mesh_morph_tag->SetParameter(mesh_morph_ui_data.GetStrengthID(), strength, DESCFLAGS_SET::NONE))
-				return false;
-		}
+		sub_morph.SetStrength(strength);
 	}
 	return true;
 }
@@ -1258,6 +1267,8 @@ Bool MMDMeshManagerObject::LoadPMX(
 			}
 		}
 	}
+
+	RefreshMeshMorphData(static_cast<BaseObject*>(Get()));
 	return true;
 }
 
@@ -1316,14 +1327,16 @@ void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op)
 							bool is_find = false;
 							for (auto& morph_data : *mesh_morph_list)
 							{
-								if (morph_data.GetMorphTag() == pose_morph_tag && morph_data.GetStrengthID() == morph_id)
+								if (morph_data.Compare(pose_morph_tag, morph_id))
 									is_find = true;
 							}
 							if (is_find)
 								continue;
 						}
 						else {
-							mesh_morph_list = &mesh_morph_data_[mesh_morph_name_.InsertEntry(morph_name).GetValue().GetValue()];
+							mesh_morph_list = &mesh_morph_data_.Append().GetValue();
+							const auto mesh_morph_data_index = static_cast<Int32>(mesh_morph_data_.GetCount() - 1);
+							mesh_morph_name_.Insert(morph_name, mesh_morph_data_index)iferr_return;
 						}
 						mesh_morph_list->SDK2024_Append(pose_morph_tag, morph_id)iferr_return;
 						need_update_morph = true;
@@ -1353,10 +1366,18 @@ void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op)
 		}
 	}
 	if (need_update_morph) {
-		morph_manager_index_.Resize(mesh_morph_name_.GetCount())iferr_return;
-		for (const auto &entry : mesh_morph_name_.Begin())
+		if (morph_manager_)
 		{
-			morph_manager_index_[static_cast<Int32>(morph_manager_->FindMorphIndex(string_util::GetStdString(entry.GetKey())))] = entry.GetValue();
+			const auto morph_count = static_cast<Int>(morph_manager_->GetMorphCount());
+			morph_manager_index_.SetCapacityHint(morph_count)iferr_return;
+			for (Int32 index = 0; index < morph_count; index++)
+			{
+				morph_manager_index_.Append(-1)iferr_return;
+			}
+			for (const auto &entry : mesh_morph_name_.Begin())
+			{
+				morph_manager_index_[static_cast<Int32>(morph_manager_->FindMorphIndex(string_util::GetStdString(entry.GetKey())))] = entry.GetValue();
+			}
 		}
 		if (model_manager_)
 		{

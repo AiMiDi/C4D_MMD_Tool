@@ -55,29 +55,15 @@ protected:
 
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override
 	{
-		AutoAlloc<BaseLink> temp_link;
-		if (!temp_link)
-			return false;
-		if (!temp_link->Read(hf))
-			return false;
-		m_display_tag = reinterpret_cast<BaseTag*>(temp_link->ForceGetLink());
-		if (!temp_link->Read(hf))
-			return false;
-		m_protection_tag = reinterpret_cast<BaseTag*>(temp_link->ForceGetLink());
+		IOReadField(m_display_tag);
+		IOReadField(m_protection_tag);
 		return SUPER::Read(node, hf, level);
 	}
 
 	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override
 	{
-		AutoAlloc<BaseLink> temp_link;
-		if (!temp_link->Write(hf))
-			return false;
-		temp_link->SetLink(m_display_tag);
-		if (!temp_link->Write(hf))
-			return false;
-		temp_link->SetLink(m_protection_tag);
-		if (!temp_link->Write(hf))
-			return false;
+		IOWriteField(m_display_tag);
+		IOWriteField(m_protection_tag);
 		return SUPER::Write(node, hf);
 	}
 };

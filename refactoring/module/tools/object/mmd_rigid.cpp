@@ -574,40 +574,31 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return false;
 	}
 
-	hf->ReadInt32(&m_display_type);
-	hf->ReadInt32(&m_rigid_mode);
-	hf->ReadInt32(&m_physics_mode);
+	IOReadField(m_display_type);
+	IOReadField(m_rigid_mode);
+	IOReadField(m_physics_mode);
+	IOReadField(m_rigid_shape_type);
+	IOReadField(m_rigid_group_id);
+	IOReadField(rigid_manager_);
+	IOReadField(m_protection_tag);
+
 	UpdateRigidPhysics(m_physics_mode);
-
-	hf->ReadInt32(&m_rigid_shape_type);
 	UpdateRigidShape(bc, m_rigid_shape_type);
-
-	hf->ReadInt32(&m_rigid_group_id);
 	UpdateRigidGroup(m_rigid_group_id);
-
-	if (!io_util::ReadData(hf, rigid_manager_))
-		return false;
 	rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
-
-	if (!io_util::ReadData(hf, m_protection_tag))
-		return false;
 
 	return true;
 }
 
 Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	hf->WriteInt32(m_display_type);
-	hf->WriteInt32(m_rigid_mode);
-	hf->WriteInt32(m_physics_mode);
-	hf->WriteInt32(m_rigid_shape_type);
-	hf->WriteInt32(m_rigid_group_id);
-
-	if (!io_util::WriteData(hf, rigid_manager_))
-		return false;
-
-	if (!io_util::WriteData(hf, m_protection_tag))
-		return false;
+	IOWriteField(m_display_type);
+	IOWriteField(m_rigid_mode);
+	IOWriteField(m_physics_mode);
+	IOWriteField(m_rigid_shape_type);
+	IOWriteField(m_rigid_group_id);
+	IOWriteField(rigid_manager_);
+	IOWriteField(m_protection_tag);
 
 	return true;
 }

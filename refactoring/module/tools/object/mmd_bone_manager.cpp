@@ -43,58 +43,23 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	iferr_scope_handler{
 		return false;
 	};
-	if (!io_util::ReadData(hf, bone_name_index))
+	IOReadField(bone_name_index);
+	IOReadField(model_manager_);
+	IOReadField(rigid_manager_);
+	IOReadField(joint_manager_);
+	if (!io_util::ReadHashMap(hf, m_bone_list))
 		return false;
-	if (!io_util::ReadData(hf, model_manager_))
-		return false;
-	if (!io_util::ReadData(hf, rigid_manager_))
-		return false;
-	if (!io_util::ReadData(hf, joint_manager_))
-		return false;
-
-	// m_bone_list
-	{
-		Int64 bone_list_count = 0;
-		if (!hf->ReadInt64(&bone_list_count))
-			return false;
-		while (bone_list_count--)
-		{
-			Int bone_index = 0;
-			if (!hf->ReadInt64(&bone_index))
-				return false;
-			auto& link = m_bone_list.InsertKey(bone_index)iferr_return;
-			link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
-			if (!(*link)->Read(hf))
-				return false;
-		}
-	}
 	return SUPER::Read(node, hf, level);
 }
 
 Bool MMDBoneManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	if(!io_util::WriteData(hf, bone_name_index))
+	IOWriteField(bone_name_index);
+	IOWriteField(model_manager_);
+	IOWriteField(rigid_manager_);
+	IOWriteField(joint_manager_);
+	if (!io_util::WriteHashMap(hf, m_bone_list))
 		return false;
-
-	if (!io_util::WriteData(hf, model_manager_))
-		return false;
-	if (!io_util::WriteData(hf, rigid_manager_))
-		return false;
-	if (!io_util::WriteData(hf, joint_manager_))
-		return false;
-
-	// m_bone_list
-	{
-		if (!hf->WriteInt64(m_bone_list.GetCount()))
-			return false;
-		for (const auto& bone_link : m_bone_list)
-		{
-			if (!hf->WriteInt64(bone_link.GetKey()))
-				return false;
-			if (!(*bone_link.GetValue())->Write(hf))
-				return false;
-		}
-	}
 	return SUPER::Write(node, hf);
 }
 

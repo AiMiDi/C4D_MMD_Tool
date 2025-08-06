@@ -19,8 +19,8 @@ class MMDJointObject final : public ObjectData
 	Int32	joint_mode_ = JOINT_MODE_ANIM;
 	BaseObject* joint_manager_ = nullptr;
 	MMDJointManagerObject* joint_manager_data_ = nullptr;
-	BaseObject* m_link_rigid_a = nullptr;
-	BaseObject* m_link_rigid_b = nullptr;
+	BaseObject* link_rigid_a_ = nullptr;
+	BaseObject* link_rigid_b_ = nullptr;
 	libmmd::MMDJoint* mmd_joint_ = nullptr;
 
 	MMDJointObject() = default;

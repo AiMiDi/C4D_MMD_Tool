@@ -140,6 +140,42 @@ bool WriteHashMap(HyperFile* hf, const maxon::HashMap<K, V>& container)
 }
 
 /**
+ * @brief Writes a pointer to a BaseList2D-derived object to HyperFile.
+ *        This function is only enabled if T is derived from BaseList2D.
+ * @tparam T Must be derived from BaseList2D.
+ * @param hf Pointer to HyperFile.
+ * @param data Pointer to T to be written.
+ * @return true if write succeeds, false otherwise.
+ */
+	template<typename T>
+	bool WriteBaseList2D(HyperFile* hf, const T* data)
+{
+	static_assert(std::is_base_of_v<BaseList2D, T>, "T must be derived from BaseList2D");
+	AutoAlloc<BaseLink> link;
+	link->SetLink(data);
+	return link->Write(hf);
+}
+
+/**
+ * @brief Reads a pointer to a BaseList2D-derived object from HyperFile.
+ *        This function is only enabled if T is derived from BaseList2D.
+ * @tparam T Must be derived from BaseList2D.
+ * @param hf Pointer to HyperFile.
+ * @param data Reference to pointer to T, will be set to the read object.
+ * @return true if read succeeds, false otherwise.
+ */
+	template<typename T>
+	bool ReadBaseList2D(HyperFile* hf, T*& data)
+{
+	static_assert(std::is_base_of_v<BaseList2D, T>, "T must be derived from BaseList2D");
+	AutoAlloc<BaseLink> link;
+	if (!link->Read(hf))
+		return false;
+	data = reinterpret_cast<T*>(link->ForceGetLink());
+	return true;
+}
+
+/**
  * @brief Macro to specialize ReadData for types directly supported by HyperFile.
  *        Expands to a template specialization using the corresponding HyperFile::ReadXXX method.
  * @param x Type name (e.g., Int32, Float64, Vector32, etc.)
@@ -174,28 +210,27 @@ READ_DATA_FUNC(Filename)
 READ_DATA_FUNC(GeData)
 template<> inline bool ReadData<BaseContainer>(HyperFile* hf, BaseContainer& data) { return hf->ReadContainer(&data, true); }
 template<> inline bool ReadData<BaseTime>(HyperFile* hf, BaseTime& data) { return hf->ReadTime(&data); }
-
-/**
- * @brief Reads a pointer to a BaseList2D-derived object from HyperFile.
- *        This function is only enabled if T is derived from BaseList2D.
- * @tparam T Must be derived from BaseList2D.
- * @param hf Pointer to HyperFile.
- * @param data Reference to pointer to T, will be set to the read object.
- * @return true if read succeeds, false otherwise.
- */
-template<typename T>
-bool ReadBaseList2D(HyperFile* hf, T*& data)
-{
-	static_assert(std::is_base_of_v<BaseList2D, T>, "T must be derived from BaseList2D");
-	AutoAlloc<BaseLink> link;
-	if (!link->Read(hf))
-		return false;
-	data = reinterpret_cast<T*>(link->ForceGetLink());
-	return true;
-}
-
 template<> inline bool ReadData<BaseTag*>(HyperFile* hf, BaseTag*& data){ return ReadBaseList2D(hf, data); }
 template<> inline bool ReadData<BaseObject*>(HyperFile* hf, BaseObject*& data){ return ReadBaseList2D(hf, data); }
+template<> inline bool ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>(HyperFile* hf, maxon::StrongRef<AutoAlloc<BaseLink>>& data)
+{
+	iferr_scope_handler{
+		return false;
+	};
+	if (!data)
+	{
+		data = maxon::StrongRef<AutoAlloc<BaseLink>>::Create()iferr_return;
+		if (!data)
+			return false;
+	}
+
+	if (!(*data))
+		return false;
+
+	if (!(*data)->Read(hf))
+		return false;
+	return true;
+}
 
 WRITE_DATA_FUNC(Int32)
 WRITE_DATA_FUNC(Int64)
@@ -217,23 +252,21 @@ WRITE_DATA_FUNC(Filename)
 WRITE_DATA_FUNC(GeData)
 template<> inline bool WriteData<BaseContainer>(HyperFile* hf, const BaseContainer& data) { return hf->WriteContainer(data); }
 template<> inline bool WriteData<BaseTime>(HyperFile* hf, const BaseTime& data) { return hf->WriteTime(data); }
-
-/**
- * @brief Writes a pointer to a BaseList2D-derived object to HyperFile.
- *        This function is only enabled if T is derived from BaseList2D.
- * @tparam T Must be derived from BaseList2D.
- * @param hf Pointer to HyperFile.
- * @param data Pointer to T to be written.
- * @return true if write succeeds, false otherwise.
- */
-template<typename T>
-bool WriteBaseList2D(HyperFile* hf, const T* data)
+template<> inline bool WriteData<BaseTag*>(HyperFile* hf, BaseTag* const& data){ return WriteBaseList2D(hf, data); }
+template<> inline bool WriteData<BaseObject*>(HyperFile* hf, BaseObject* const& data){ return WriteBaseList2D(hf, data); }
+template<> inline bool WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>>(HyperFile* hf, const maxon::StrongRef<AutoAlloc<BaseLink>>& data)
 {
-	static_assert(std::is_base_of_v<BaseList2D, T>, "T must be derived from BaseList2D");
-	AutoAlloc<BaseLink> link;
-	link->SetLink(data);
-	return link->Write(hf);
+	if (!data || !(*data))
+		return false;
+
+	if (!(*data)->Write(hf))
+		return false;
+	return true;
 }
 
-template<> inline bool WriteData<BaseTag*>(HyperFile* hf, BaseTag* const& data){ return WriteBaseList2D(hf, data); }
-template<> inline bool WriteData<BaseObject*>(HyperFile* hf, BaseObject* const& data){ return WriteBaseList2D(hf, data); }}
+}
+
+#define IOReadField(x) if (!io_util::ReadData(hf, x)) return false
+#define IOWriteField(x) if (!io_util::WriteData(hf, x)) return false
+
+

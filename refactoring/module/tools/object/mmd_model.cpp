@@ -254,20 +254,14 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	{
 		return false;
 	};
-
-	if (!io_util::ReadData(hf, bone_manager_))
-		return false;
-	if (!io_util::ReadData(hf, mesh_manager_))
-		return false;
-	if (!io_util::ReadData(hf, rigid_manager_))
-		return false;
-	if (!io_util::ReadData(hf, joint_manager_))
-		return false;
+	IOReadField(bone_manager_);
+	IOReadField(mesh_manager_);
+	IOReadField(rigid_manager_);
+	IOReadField(joint_manager_);
 
 	*is_manager_read_.Write() = true;
 
-	if (!hf->ReadInt32(&morph_named_number_))
-		return false;
+	IOReadField(morph_named_number_);
 
 	if (!io_util::ReadHashMap(hf, desc_id_map_))
 		return false;
@@ -277,23 +271,17 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 
 	if (!ReadMorph(hf))
 		return false;
+
 	*is_morph_initialized_.Write() = true;
 	return true;
 }
 Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const {
 
-
-	if (!io_util::WriteData(hf, bone_manager_))
-		return false;
-	if (!io_util::WriteData(hf, mesh_manager_))
-		return false;
-	if (!io_util::WriteData(hf, rigid_manager_))
-		return false;
-	if (!io_util::WriteData(hf, joint_manager_))
-		return false;
-
-	if (!hf->WriteInt32(morph_named_number_))
-		return false;
+	IOWriteField(bone_manager_);
+	IOWriteField(mesh_manager_);
+	IOWriteField(rigid_manager_);
+	IOWriteField(joint_manager_);
+	IOWriteField(morph_named_number_);
 
 	if (!io_util::WriteHashMap(hf, desc_id_map_))
 		return false;
