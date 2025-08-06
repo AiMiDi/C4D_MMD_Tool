@@ -545,7 +545,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		}
 	}
 
-	if (model_mode_ == MODEL_MODE_ANIM && model_)
+	if (model_mode_ == MODEL_MODE_VMD && model_)
 	{
 		if (const auto now_time = doc->GetTime(); prev_time_ != now_time)
 		{
@@ -800,9 +800,9 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	animation_index_ = static_cast<Int32>(animations_.GetCount()) - 1;
 	animation_items_.SetString(animation_index_, animation_name);
 	const auto node = Get();
-	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
 	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index_, DESCFLAGS_SET::NONE);
 	node->SetParameter(ConstDescID(DescLevel(MODEL_MODE)), MODEL_MODE_VMD, DESCFLAGS_SET::NONE);
+	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
 
 	setting.doc->SetMaxTime(max_time);
 	setting.doc->SetLoopMaxTime(max_time);
@@ -1074,7 +1074,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			}
 		}
 		else {
-			switch (dc->_descId[0].id)
+			switch (const auto id = dc->_descId[0].id)
 			{
 			case MODEL_MORPH_GROUP_ADD_BUTTON:
 			{
@@ -1090,39 +1090,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				AddMorph(MMDMorphType::FLIP, ge_data.GetString());
 				break;
 			}
-			case MODEL_ANIM_MERGE_VMD_BUTTON:
-			{
-
-					CMTToolsSetting::MotionImport setting(GetActiveDocument());
-					if(!filename_util::SelectSuffixImportFile(setting.fn, "vmd"_s))
-					{
-						break;
-					}
-					if (bone_manager_)
-					{
-						if (const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data)
-						{
-							setting.position_multiple = bone_manager_data->GetPositionMultiple();
-						}
-					}
-					LoadVmdMotionLog logger;
-					const auto vmd_path = string_util::GetStdString(setting.fn.GetString());
-					libmmd::VMDFile vmd_file;
-					if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
-					{
-						LoadVmdMotionLog::LogReadFileErr();
-						break;
-					}
-					if(LoadVMDMotion(vmd_file, setting, logger, true))
-					{
-						break;
-					}
-					setting.doc->SetTime(BaseTime(1, 30.));
-					setting.doc->SetTime(BaseTime(0, 30.));
-					EventAdd();
-					logger.LogOK(setting.detail_report);
-					break;
-			}
+			case MODEL_ANIM_MERGE_VMD_BUTTON: [[fallthrough]];
 			case MODEL_ANIM_LOAD_VMD_BUTTON:
 			{
 				CMTToolsSetting::MotionImport setting(GetActiveDocument());
@@ -1145,7 +1113,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					LoadVmdMotionLog::LogReadFileErr();
 					break;
 				}
-				if(LoadVMDMotion(vmd_file, setting, logger))
+				if(LoadVMDMotion(vmd_file, setting, logger, id == MODEL_ANIM_MERGE_VMD_BUTTON))
 				{
 					break;
 				}

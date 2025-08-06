@@ -19,7 +19,7 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 {
 	if (!op)
 	{
-		op = m_bone_object;
+		op = bone_object_;
 	}
 	if (!node)
 	{
@@ -75,33 +75,6 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 MMDBoneTagMsg::MMDBoneTagMsg(const MMDBoneTagMsgType type): type(type)
 {}
 
-void MMDBoneTag::SetBoneManager(BaseObject* bone_manager, MMDBoneManagerObject* bone_manager_node)
-{
-	m_bone_manager = bone_manager;
-	m_bone_manager_node = bone_manager_node;
-}
-
-void MMDBoneTag::SetBoneObject(BaseObject* bone_object)
-{
-	if(!bone_object && m_bone_tag)
-		m_bone_object = m_bone_tag->GetObject();
-	else
-		m_bone_object = bone_object;
-}
-
-void MMDBoneTag::SetBoneTag(BaseTag* bone_tag)
-{
-	if(bone_tag)
-		m_bone_tag = bone_tag;
-	else
-		m_bone_tag = reinterpret_cast<BaseTag*>(Get());
-}
-
-void MMDBoneTag::SetMMDNode(libmmd::MMDNode* mmd_node)
-{
-	m_mmd_node = mmd_node;
-}
-
 NodeData* MMDBoneTag::Alloc()
 {
 	return NewObj(MMDBoneTag).GetValue();
@@ -149,9 +122,9 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	{
 	case PMX_BONE_ROTATABLE:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			return;
-		if (!protection_tag)
+		if (!protection_tag_)
 		{
 			if (!CreateBoneLockTag())
 				break;
@@ -162,9 +135,9 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	}
 	case PMX_BONE_TRANSLATABLE:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			return;
-		if (!protection_tag)
+		if (!protection_tag_)
 		{
 			if (!CreateBoneLockTag())
 				break;
@@ -175,24 +148,24 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	}
 	case PMX_BONE_VISIBLE:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			return;
 		if (!bc->GetBool(id))
 		{
-			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
-			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+			bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+			bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_NONE, DESCFLAGS_SET::NONE);
 		}
 		else
 		{
-			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS, DESCFLAGS_SET::NONE);
-			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_STANDARD, DESCFLAGS_SET::NONE);
+			bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS, DESCFLAGS_SET::NONE);
+			bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_STANDARD, DESCFLAGS_SET::NONE);
 		}
 		this->RefreshColor(node);
 		break;
 	}
 	case PMX_BONE_INDEXED_TAIL_POSITION:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			return;
 		switch (bc->GetInt32(id))
 		{
@@ -200,11 +173,11 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 			{
 				if (bc->GetInt32(PMX_BONE_TAIL_INDEX) == -1)
 				{
-					m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+					bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 				}
 				else
 				{
-					m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+					bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 				}
 				break;
 			}
@@ -212,11 +185,11 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 			{
 				if (bc->GetVector(PMX_BONE_TAIL_POSITION) == Vector())
 				{
-					m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+					bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 				}
 				else
 				{
-					m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+					bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 				}
 				break;
 			}
@@ -227,60 +200,60 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	}
 	case PMX_BONE_TAIL_INDEX:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			return;
 		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_IS_INDEX)
 		{
 			if (bc->GetInt32(id) == -1)
 			{
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 			}
 			else {
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 			}
 		}
 		break;
 	}
 	case PMX_BONE_TAIL_POSITION:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			return;
 		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_POSITION)
 		{
 			if (bc->GetVector(id).IsZero())
 			{
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 			}
 			else {
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 			}
 		}
 		break;
 	}
 	case PMX_BONE_NAME_IS:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			return;
 		if (bc->GetInt32(id))
 		{
-			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
+			bone_object_->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
 		}
 		else {
-			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
+			bone_object_->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
 		}
 		break;
 	}
 	case PMX_BONE_NAME_UNIVERSAL:
 	case PMX_BONE_NAME_LOCAL:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			return;
 		if (bc->GetInt32(PMX_BONE_NAME_IS) == 1)
 		{
-			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
+			bone_object_->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
 		}
 		else {
-			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
+			bone_object_->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
 		}
 		break;
 	}
@@ -304,7 +277,7 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 
 	if (bone_mode == BONE_MODE_ANIM)
 	{
-		// TODO: Save to mmd_node
+		// TODO: Save to mmd_node_
 	}
 
 	bone_mode_ = bone_mode;
@@ -318,12 +291,12 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 		{
 			if (data_instance_bc->GetBool(PMX_BONE_TRANSLATABLE))
 			{
-				m_bone_object->SetEditorMode(MODE_ON);
-				m_bone_object->SetRenderMode(MODE_ON);
+				bone_object_->SetEditorMode(MODE_ON);
+				bone_object_->SetRenderMode(MODE_ON);
 			}
 			else {
-				m_bone_object->SetEditorMode(MODE_OFF);
-				m_bone_object->SetRenderMode(MODE_OFF);
+				bone_object_->SetEditorMode(MODE_OFF);
+				bone_object_->SetRenderMode(MODE_OFF);
 			}
 			break;
 		}
@@ -331,12 +304,12 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 		{
 			if (data_instance_bc->GetBool(PMX_BONE_ROTATABLE))
 			{
-				m_bone_object->SetEditorMode(MODE_ON);
-				m_bone_object->SetRenderMode(MODE_ON);
+				bone_object_->SetEditorMode(MODE_ON);
+				bone_object_->SetRenderMode(MODE_ON);
 			}
 			else {
-				m_bone_object->SetEditorMode(MODE_OFF);
-				m_bone_object->SetRenderMode(MODE_OFF);
+				bone_object_->SetEditorMode(MODE_OFF);
+				bone_object_->SetRenderMode(MODE_OFF);
 			}
 			break;
 		}
@@ -344,12 +317,12 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 		{
 			if (data_instance_bc->GetBool(PMX_BONE_VISIBLE))
 			{
-				m_bone_object->SetEditorMode(MODE_ON);
-				m_bone_object->SetRenderMode(MODE_ON);
+				bone_object_->SetEditorMode(MODE_ON);
+				bone_object_->SetRenderMode(MODE_ON);
 			}
 			else {
-				m_bone_object->SetEditorMode(MODE_OFF);
-				m_bone_object->SetRenderMode(MODE_OFF);
+				bone_object_->SetEditorMode(MODE_OFF);
+				bone_object_->SetRenderMode(MODE_OFF);
 			}
 			break;
 		}
@@ -357,12 +330,12 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 		{
 			if (data_instance_bc->GetBool(PMX_BONE_ENABLED))
 			{
-				m_bone_object->SetEditorMode(MODE_ON);
-				m_bone_object->SetRenderMode(MODE_ON);
+				bone_object_->SetEditorMode(MODE_ON);
+				bone_object_->SetRenderMode(MODE_ON);
 			}
 			else {
-				m_bone_object->SetEditorMode(MODE_OFF);
-				m_bone_object->SetRenderMode(MODE_OFF);
+				bone_object_->SetEditorMode(MODE_OFF);
+				bone_object_->SetRenderMode(MODE_OFF);
 			}
 			break;
 		}
@@ -370,28 +343,28 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 		{
 			if (data_instance_bc->GetBool(PMX_BONE_IS_IK))
 			{
-				m_bone_object->SetEditorMode(MODE_ON);
-				m_bone_object->SetRenderMode(MODE_ON);
+				bone_object_->SetEditorMode(MODE_ON);
+				bone_object_->SetRenderMode(MODE_ON);
 			}
 			else {
-				m_bone_object->SetEditorMode(MODE_OFF);
-				m_bone_object->SetRenderMode(MODE_OFF);
+				bone_object_->SetEditorMode(MODE_OFF);
+				bone_object_->SetRenderMode(MODE_OFF);
 			}
 			break;
 		}
 	default:
-		m_bone_object->SetEditorMode(MODE_UNDEF);
-		m_bone_object->SetRenderMode(MODE_UNDEF);
+		bone_object_->SetEditorMode(MODE_UNDEF);
+		bone_object_->SetRenderMode(MODE_UNDEF);
 		break;
 	}
 }
 
 void MMDBoneTag::HandleBoneHierarchyUpdate(BaseContainer* const data_instance_bc, const MMDBoneManagerObjectMsg* msg)
 {
-	m_bone_manager = msg->bond_root_object;
-	if (m_bone_object) {
-		BaseObject* up_obj = m_bone_object->GetUp();
-		BaseObject* prev_obj = m_bone_object->GetPred();
+	bone_manager_ = msg->bond_root_object;
+	if (bone_object_) {
+		BaseObject* up_obj = bone_object_->GetUp();
+		BaseObject* prev_obj = bone_object_->GetPred();
 		const Int32	prev_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
 		if (up_obj)
 		{
@@ -445,8 +418,8 @@ void MMDBoneTag::HandleBoneHierarchyUpdate(BaseContainer* const data_instance_bc
 		}
 		bool error = false;
 		if (const Int32 now_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(&error);
-			!error && now_index != prev_index && m_bone_manager != nullptr)
-			m_bone_manager->Message(ID_T_MMD_BONE, nullptr);
+			!error && now_index != prev_index && bone_manager_ != nullptr)
+			bone_manager_->Message(ID_T_MMD_BONE, nullptr);
 	}
 }
 
@@ -513,9 +486,9 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	{
 	case PMX_BONE_ROTATABLE:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			break;
-		if (!protection_tag)
+		if (!protection_tag_)
 		{
 			if (!CreateBoneLockTag())
 				break;
@@ -526,9 +499,9 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	}
 	case PMX_BONE_TRANSLATABLE:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			break;
-		if (!protection_tag)
+		if (!protection_tag_)
 		{
 			if (!CreateBoneLockTag())
 				break;
@@ -539,24 +512,24 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	}
 	case PMX_BONE_VISIBLE:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			break;
 		if (!t_data.GetBool())
 		{
-			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
-			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+			bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE, DESCFLAGS_SET::NONE);
+			bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_NONE, DESCFLAGS_SET::NONE);
 		}
 		else
 		{
-			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS, DESCFLAGS_SET::NONE);
-			m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_STANDARD, DESCFLAGS_SET::NONE);
+			bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)), ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS, DESCFLAGS_SET::NONE);
+			bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)), ID_CA_JOINT_OBJECT_BONE_DISPLAY_STANDARD, DESCFLAGS_SET::NONE);
 		}
 		this->RefreshColor(node);
 		break;
 	}
 	case PMX_BONE_INDEXED_TAIL_POSITION:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			break;
 		switch (t_data.GetInt32())
 		{
@@ -564,11 +537,11 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 		{
 			if (bc->GetInt32(PMX_BONE_TAIL_INDEX) == -1)
 			{
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 			}
 			else
 			{
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 			}
 			break;
 		}
@@ -576,11 +549,11 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 		{
 			if (bc->GetVector(PMX_BONE_TAIL_POSITION) == Vector())
 			{
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 			}
 			else
 			{
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 			}
 			break;
 		}
@@ -591,60 +564,60 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	}
 	case PMX_BONE_TAIL_INDEX:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			break;
 		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_IS_INDEX)
 		{
 			if (t_data.GetInt32() == -1)
 			{
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 			}
 			else {
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 			}
 		}
 		break;
 	}
 	case PMX_BONE_TAIL_POSITION:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			break;
 		if (bc->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) == PMX_BONE_TAIL_POSITION)
 		{
 			if (t_data.GetVector().IsZero())
 			{
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_NULL, DESCFLAGS_SET::NONE);
 			}
 			else {
-				m_bone_object->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
+				bone_object_->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_ALIGN)), ID_CA_JOINT_OBJECT_BONE_ALIGN_TOCHILD, DESCFLAGS_SET::NONE);
 			}
 		}
 		break;
 	}
 	case PMX_BONE_NAME_IS:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			break;
 		if (t_data.GetInt32())
 		{
-			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
+			bone_object_->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
 		}
 		else {
-			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
+			bone_object_->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
 		}
 		break;
 	}
 	case PMX_BONE_NAME_UNIVERSAL:
 	case PMX_BONE_NAME_LOCAL:
 	{
-		if (!m_bone_object)
+		if (!bone_object_)
 			break;
 		if (bc->GetInt32(PMX_BONE_NAME_IS) == 1)
 		{
-			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
+			bone_object_->SetName(bc->GetString(PMX_BONE_NAME_UNIVERSAL));
 		}
 		else {
-			m_bone_object->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
+			bone_object_->SetName(bc->GetString(PMX_BONE_NAME_LOCAL));
 		}
 		break;
 	}
@@ -736,25 +709,25 @@ Bool MMDBoneTag::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, 
 
 bool MMDBoneTag::CreateBoneLockTag()
 {
-	if(!m_bone_object)
+	if(!bone_object_)
 		return false;
-	protection_tag = m_bone_object->MakeTag(Tprotection);
-	if (!protection_tag)
+	protection_tag_ = bone_object_->MakeTag(Tprotection);
+	if (!protection_tag_)
 	{
 		// TODO: Log
 		// GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		// MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
 		return false;
 	}
-	protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-	protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
+	protection_tag_->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+	protection_tag_->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
+	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
 	return true;
 }
 
 void MMDBoneTag::HandleBoneLockUpdate(const Bool allow_rotate, const Bool allow_translate)
 {
-	if (!protection_tag)
+	if (!protection_tag_)
 		if (!CreateBoneLockTag())
 			return;
 	SetRotationLock(!allow_rotate);
@@ -763,72 +736,50 @@ void MMDBoneTag::HandleBoneLockUpdate(const Bool allow_rotate, const Bool allow_
 
 void MMDBoneTag::SetRotationLock(const bool flag) const
 {
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
+	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
+	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
+	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
 }
 
 void MMDBoneTag::SetPositionLock(const bool flag) const
 {
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
-	protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
+	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
+	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
+	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
 }
 
 EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority,
                                     EXECUTIONFLAGS flags)
 {
-	if (!tag || !op || !m_bone_manager_node)
+	if (!tag || !op || !bone_manager_node_)
 		return EXECUTIONRESULT::OK;
 
-	BaseContainer* bc = tag->GetDataInstance();
+	/*BaseContainer* bc = tag->GetDataInstance();
 	if (!bc)
-		return EXECUTIONRESULT::OK;
+		return EXECUTIONRESULT::OK;*/
 
-	if(!m_bone_object)
-		m_bone_object = op;
+	if(!bone_object_)
+		bone_object_ = op;
 
-	if(!m_bone_tag)
-		m_bone_tag = tag;
+	if(!bone_tag_)
+		bone_tag_ = tag;
 
-	const auto allow_rotate = bc->GetBool(PMX_BONE_ROTATABLE);
+	/*const auto allow_rotate = bc->GetBool(PMX_BONE_ROTATABLE);
 	const auto allow_translate = bc->GetBool(PMX_BONE_TRANSLATABLE);
 	const auto append_rotate = bc->GetBool(PMX_BONE_INHERIT_ROTATION);
-	const auto append_translate = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION);
+	const auto append_translate = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION);*/
 
 	//HandleBoneLockUpdate(allow_rotate, allow_translate);
 
-	if (m_mmd_node && bone_mode_ == BONE_MODE_ANIM)
+	if (bone_mode_ == BONE_MODE_VMD && mmd_node_)
 	{
-		const auto& transform = m_mmd_node->GetLocalTransform();
-		const auto translate = xyz(transform[3]) - m_mmd_node->GetInitialTranslate();
+		const auto& transform = mmd_node_->GetLocalTransform();
+		const auto translate = xyz(transform[3]) - mmd_node_->GetInitialTranslate();
 
-		/*m_bone_object->SetRelMl(Matrix{Vector(transform[3][0],transform[3][1],-transform[3][2]) * m_bone_manager_node->GetPositionMultiple(),
+		bone_object_->SetRelMl(Matrix{Vector(translate[0],translate[1],-translate[2]) * bone_manager_node_->GetPositionMultiple(),
 		   Vector(transform[0][0],transform[0][1],transform[0][2]),
 		   Vector(transform[1][0],transform[1][1],transform[1][2]),
-		   Vector(transform[2][0],transform[2][1],transform[2][2]) });*/
-
-		//m_bone_object->SetRelPos(Vector(translate[0],translate[1],-translate[2]) * m_bone_manager_node->GetPositionMultiple());
-
-		if (allow_rotate || append_rotate)
-		{
-			auto r = MatrixToHPB(Matrix{{},
-		   Vector(transform[0][0],transform[0][1],transform[0][2]),
-		   Vector(transform[1][0],transform[1][1],transform[1][2]),
-		   Vector(transform[2][0],transform[2][1],transform[2][2]) }, ROTATIONORDER::DEFAULT);
-
-			r.y = -r.y;
-			m_bone_object->SetRelRot(r);
-
-			/*m_bone_object->SetRelMl(Matrix{{},
-		   Vector(transform[0][0],transform[0][1],transform[0][2]),
-		   Vector(transform[1][0],transform[1][1],transform[1][2]),
-		   Vector(transform[2][0],transform[2][1],transform[2][2]) });*/
-		}
-
-		if(allow_translate || append_translate)
-			m_bone_object->SetRelPos(Vector(translate[0],translate[1],-translate[2]) * m_bone_manager_node->GetPositionMultiple());
-
+		   Vector(transform[2][0],transform[2][1],transform[2][2]) });
 	}
 
 	return EXECUTIONRESULT::OK;
@@ -836,17 +787,17 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
-	IOReadField(m_bone_manager);
+	IOReadField(bone_manager_);
 	return SUPER::Read(node, hf, level);
 }
 
 Bool MMDBoneTag::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	IOWriteField(m_bone_manager);
+	IOWriteField(bone_manager_);
 	return SUPER::Write(node, hf);
 }
 
 Int32 MMDBoneTag::GetBoneIndex() const
 {
-	return !m_mmd_node ? -1 : static_cast<Int32>(m_mmd_node->GetIndex());
+	return !mmd_node_ ? -1 : static_cast<Int32>(mmd_node_->GetIndex());
 }

@@ -29,9 +29,9 @@ Bool MMDBoneManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snod
 	dest_object->bone_name_index = bone_name_index;
 	dest_object->rigid_manager_ = rigid_manager_;
 	dest_object->joint_manager_ = joint_manager_;
-	for (const auto& entry : m_bone_list)
+	for (const auto& entry : bone_list_)
 	{
-		auto& link = dest_object->m_bone_list.InsertKey(entry.GetKey())iferr_return;
+		auto& link = dest_object->bone_list_.InsertKey(entry.GetKey())iferr_return;
 		link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
 		(*entry.GetValue())->CopyTo(*link, flags, trn);
 	}
@@ -47,7 +47,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(model_manager_);
 	IOReadField(rigid_manager_);
 	IOReadField(joint_manager_);
-	if (!io_util::ReadHashMap(hf, m_bone_list))
+	if (!io_util::ReadHashMap(hf, bone_list_))
 		return false;
 	return SUPER::Read(node, hf, level);
 }
@@ -58,7 +58,7 @@ Bool MMDBoneManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) 
 	IOWriteField(model_manager_);
 	IOWriteField(rigid_manager_);
 	IOWriteField(joint_manager_);
-	if (!io_util::WriteHashMap(hf, m_bone_list))
+	if (!io_util::WriteHashMap(hf, bone_list_))
 		return false;
 	return SUPER::Write(node, hf);
 }
@@ -164,9 +164,10 @@ void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, voi
 			return;
 		}
 		new_bone->SetName(new_bone->GetName() + "." + String::IntToString(bone_name_index++));
-		new_bone_node->SetBoneTag(new_bone_tag);
-		new_bone_node->SetBoneObject(new_bone);
-		new_bone_node->SetBoneManager(reinterpret_cast<BaseObject*>(node), this);
+		new_bone_node->bone_tag_ = new_bone_tag;
+		new_bone_node->bone_object_ = new_bone;
+		new_bone_node->bone_manager_ = reinterpret_cast<BaseObject*>(node);
+		new_bone_node->bone_manager_node_ = this;
 		new_bone_node->RefreshColor();
 		new_bone->InsertUnder(node);
 	}
@@ -182,7 +183,7 @@ bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	{
 	case MMDBoneTagMsgType::BONE_INDEX_CHANGE:
 		{
-			HandleBoneIndexChangeMessage(node, data, need_update_morph);
+			HandleBoneIndexChangeMessage(node);
 			break;
 		}
 	case MMDBoneTagMsgType::DEFAULT:
@@ -196,15 +197,15 @@ bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	return true;
 }
 
-bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node, void* data, bool& need_update_morph)
+bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node)
 {
 	iferr_scope_handler{
 		return false;
 	};
 	const auto op = reinterpret_cast<BaseObject*>(node);
-	m_bone_items.FlushAll();
-	m_bone_items.SetString(-1, "-"_s);
-	m_bone_list.Reset();
+	bone_items_.FlushAll();
+	bone_items_.SetString(-1, "-"_s);
+	bone_list_.Reset();
 	maxon::Queue<BaseObject*> nodes;
 	iferr(nodes.Push(op)) return true;
 	while (!nodes.IsEmpty())
@@ -219,8 +220,8 @@ bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node, void* 
 					GeData ge_data;
 					node_bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), ge_data, DESCFLAGS_GET::NONE);
 					const auto bone_index = node_bone_tag->GetNodeData<MMDBoneTag>()->GetBoneIndex();
-					m_bone_items.SetString(bone_index, node_->GetName());
-					auto& link = m_bone_list.InsertKey(bone_index)iferr_return;
+					bone_items_.SetString(bone_index, node_->GetName());
+					auto& link = bone_list_.InsertKey(bone_index)iferr_return;
 					link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
 					(*link)->SetLink(node_bone_tag);
 				}
@@ -262,29 +263,41 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto* msg = static_cast<MMDModelRootObjectMsg*>(data); msg != nullptr)
 		{
-			if (msg->msg_type == MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE) {
-				switch (msg->object_type)
+			switch (msg->msg_type)
+			{
+				case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
 				{
-				case ManagerObjectType::JOINT_MANAGER:
-				{
-					joint_manager_ = msg->object;
+					switch (msg->object_type)
+					{
+					case ManagerObjectType::JOINT_MANAGER:
+					{
+						joint_manager_ = msg->object;
+						break;
+					}
+					case ManagerObjectType::RIGID_MANAGER:
+					{
+						rigid_manager_ = msg->object;
+						break;
+					}
+					case ManagerObjectType::MODEL_MANAGER:
+					{
+						model_manager_ = msg->object;
+						break;
+					}
+					case ManagerObjectType::DEFAULT: [[fallthrough]];
+					case ManagerObjectType::MESH_MANAGER: [[fallthrough]];
+					case ManagerObjectType::BONE_MANAGER:
+						break;
+					}
 					break;
 				}
-				case ManagerObjectType::RIGID_MANAGER:
+				case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
 				{
-					rigid_manager_ = msg->object;
+					node->SetParameter(ConstDescID(DescLevel(BONE_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
 					break;
 				}
-				case ManagerObjectType::MODEL_MANAGER:
-				{
-					model_manager_ = msg->object;
+				case MMDModelRootObjectMsgType::DEFAULT:
 					break;
-				}
-				case ManagerObjectType::DEFAULT: [[fallthrough]];
-				case ManagerObjectType::MESH_MANAGER: [[fallthrough]];
-				case ManagerObjectType::BONE_MANAGER:
-					break;
-				}
 			}
 		}
 		break;
@@ -297,8 +310,8 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 
 BaseTag* MMDBoneManagerObject::FindBone(const Int32 index) const
 {
-	// find index in m_bone_list
-	if (const auto bone_link_ptr = m_bone_list.Find(index); bone_link_ptr)
+	// find index in bone_list_
+	if (const auto bone_link_ptr = bone_list_.Find(index); bone_link_ptr)
 	{
 		return reinterpret_cast<BaseTag*>((*bone_link_ptr->GetValue())->ForceGetLink());
 	}
@@ -318,8 +331,8 @@ Int32 MMDBoneManagerObject::FindBoneIndex(const BaseTag* bone_tag) const
 		return -1;
 	}
 	const Int32 bone_index = bone_tag_node->GetBoneIndex();
-	// find index in m_bone_list
-	if(!m_bone_list.Contains(bone_index))
+	// find index in bone_list_
+	if(!bone_list_.Contains(bone_index))
 	{
 		return -1;
 	}
@@ -337,8 +350,8 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 	if (!pmx_model)
 		return false;
 
-	m_morph_node_manager = pmx_model->GetNodeManager();
-	m_morph_manager = pmx_model->GetMorphManager();
+	node_manager_ = pmx_model->GetNodeManager();
+	morph_manager_ = pmx_model->GetMorphManager();
 
 	const auto& pmx_bones = pmx_file.m_bones;
 	const auto pmx_bone_num = pmx_bones.size();
@@ -369,10 +382,11 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMod
 		const auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
 
 		// init bone tag
-		bone_tag_node->SetBoneTag(bone_tag);
-		bone_tag_node->SetBoneObject(bone_object);
-		bone_tag_node->SetBoneManager(reinterpret_cast<BaseObject*>(Get()), this);
-		bone_tag_node->SetMMDNode(m_morph_node_manager->GetMMDNode(pmx_bone_index));
+		bone_tag_node->bone_tag_ = bone_tag;
+		bone_tag_node->bone_object_ = bone_object;
+		bone_tag_node->mmd_node_ = node_manager_->GetMMDNode(pmx_bone_index);
+		bone_tag_node->bone_manager_ = reinterpret_cast<BaseObject*>(Get());
+		bone_tag_node->bone_manager_node_ = this;
 
 		// bone name
 		const maxon::String bone_name_local{ pmx_bone.m_name.c_str() };
@@ -640,14 +654,14 @@ Bool MMDBoneManagerObject::SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSet
 		return false;
 	};
 
-	const auto bone_num = m_bone_list.GetCount();
+	const auto bone_num = bone_list_.GetCount();
 	if (bone_num == 0)
 		return true;
 
 	auto& pmx_bone_array = pmx_model.m_bones;
 	pmx_bone_array.resize(pmx_bone_array.size() + bone_num);
 	// set bone data
-	for (const auto& bone_data : m_bone_list)
+	for (const auto& bone_data : bone_list_)
 	{
 		const auto bone_tag = reinterpret_cast<BaseTag*>((*bone_data.GetSecond())->ForceGetLink());
 		const auto bone_index = bone_data.GetFirst();
@@ -679,7 +693,7 @@ Bool MMDBoneManagerObject::SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSet
 
 const BaseContainer& MMDBoneManagerObject::GetBoneItems() const
 {
-	return m_bone_items;
+	return bone_items_;
 }
 
 void MMDBoneManagerObject::CreateDisplayTag(GeListNode* node)

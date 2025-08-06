@@ -147,7 +147,7 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
 				{
 					auto flag = DESCFLAGS_SET::NONE;
-					SetDParameter(node, ConstDescID(DescLevel(RIGID_MODE)), GeData(msg->model_mode), flag);
+					node->SetParameter(ConstDescID(DescLevel(RIGID_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
 					break;
 				}
 			case MMDModelRootObjectMsgType::DEFAULT:

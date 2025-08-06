@@ -63,11 +63,11 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	BaseObject* rigid_manager_ = nullptr;
 	BaseObject* joint_manager_ = nullptr;
 
-	libmmd::MMDMorphManager* m_morph_manager = nullptr;
-	libmmd::MMDNodeManager* m_morph_node_manager = nullptr;
+	libmmd::MMDMorphManager* morph_manager_ = nullptr;
+	libmmd::MMDNodeManager* node_manager_ = nullptr;
 
-	BaseContainer m_bone_items;
-	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> m_bone_list;
+	BaseContainer bone_items_;
+	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> bone_list_;
 	MMDBoneManagerObject() = default;
 	~MMDBoneManagerObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneManagerObject)
@@ -93,7 +93,7 @@ private:
 	void CreateDisplayTag(GeListNode* node) override;
 	void HandleDescriptionCommandMessage(GeListNode* node, void* data);
 	bool HandleMMDBoneTagMessage(GeListNode* node, void* data);
-	bool HandleBoneIndexChangeMessage(GeListNode* node, void* data, bool& need_update_morph);
+	bool HandleBoneIndexChangeMessage(GeListNode* node);
 };
 
 #endif // !MMD_BONE_ROOT_H__

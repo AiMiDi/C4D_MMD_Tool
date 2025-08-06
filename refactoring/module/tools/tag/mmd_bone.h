@@ -47,17 +47,17 @@ public:
  */
 class MMDBoneTag final : public TagData
 {
-	libmmd::MMDNode* m_mmd_node = nullptr;
+	libmmd::MMDNode* mmd_node_ = nullptr;
 
 	// Bone root object
-	BaseObject* m_bone_manager = nullptr;
-	MMDBoneManagerObject* m_bone_manager_node = nullptr;
+	BaseObject* bone_manager_ = nullptr;
+	MMDBoneManagerObject* bone_manager_node_ = nullptr;
 	// Corresponding bone object
-	BaseObject* m_bone_object = nullptr;
+	BaseObject* bone_object_ = nullptr;
 	// Bone tag
-	BaseTag* m_bone_tag = nullptr;
+	BaseTag* bone_tag_ = nullptr;
 	// Protection tag for limiting bone movement
-	BaseTag* protection_tag = nullptr;
+	BaseTag* protection_tag_ = nullptr;
 
 	Int32 bone_mode_ = BONE_MODE_ANIM;
 
@@ -77,31 +77,6 @@ public:
 	 * @brief Default destructor for MMDBoneTag.
 	 */
 	~MMDBoneTag() override = default;
-
-	/**
-	 * @brief Sets the bone manager object.
-	 * @param[in] bone_manager The bone manager object.
-	 * @param bone_manager_node The bone manager object node data.
-	 */
-	void SetBoneManager(BaseObject* bone_manager, MMDBoneManagerObject* bone_manager_node);
-
-	/**
-	 * @brief Sets the bone object.
-	 * @param[in] bone_object The bone object.
-	 */
-	void SetBoneObject(BaseObject* bone_object = nullptr);
-
-	/**
-	 * @brief Sets the bone tag for the MMDBoneTag.
-	 *
-	 * This function is responsible for setting the bone tag associated with the MMDBoneTag instance.
-	 * It initializes or updates the bone tag to ensure proper bone manipulation and operations.
-	 *
-	 * @param[in] bone_tag The BaseTag to be set. If nullptr, it will reset the bone tag.
-	 */
-	void SetBoneTag(BaseTag* bone_tag = nullptr);
-
-	void SetMMDNode(libmmd::MMDNode* mmd_node);
 
 	/**
 	 * @brief Allocates a new instance of MMDBoneTag.
