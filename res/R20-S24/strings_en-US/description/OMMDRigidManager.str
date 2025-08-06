@@ -10,6 +10,7 @@ STRINGTABLE OMMDRigidManager
 	RIGID_DISPLAY_TYPE_ON "ON";
 	RIGID_DISPLAY_TYPE_WIRE "Wireframe";
 
-	RIGID_MODE_ANIM "Animation mode";
 	RIGID_MODE_EDIT "Edit mode";
+	RIGID_MODE_ANIM "Animation mode";
+	RIGID_MODE_VMD "VMD mode";
 }

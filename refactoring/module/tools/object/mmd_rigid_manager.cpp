@@ -9,7 +9,7 @@ Description:	MMD rigid root object
 **************************************************************************/
 
 #include "pch.h"
-#include "mmd_model.h"
+#include "mmd_model_manager.h"
 #include "mmd_rigid_manager.h"
 
 #include "mmd_bone_manager.h"

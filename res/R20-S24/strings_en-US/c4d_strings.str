@@ -55,6 +55,7 @@ STRINGTABLE
 	IDS_MSG_RENAME "Rename morph:";
 	IDS_MSG_RENAME_OK "OK";
 	IDS_MSG_RENAME_CANCEL "Cancel";
+	IDS_CMT_VMD_ANIM_NONE "-- No animation --";
 
 	IDS_NAME_CONVER_UPDATA_TITLE "Manually confirm English(If it is not filled in, it will be generated automatically.)";
 	IDS_NAME_CONVER_NAMEMAP_NAME "English config file";

@@ -12,7 +12,7 @@ Description:	scene manager
 
 #include "CMTSceneManager.h"
 #include "module/tools/object/mmd_camera.h"
-#include "module/tools/object/mmd_model.h"
+#include "module/tools/object/mmd_model_manager.h"
 
 void IOLog::LogOutMem()
 {
@@ -239,7 +239,6 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 		return false;
 	}
 
-	EventAdd();
 	setting.doc->SetTime(BaseTime(1, 30.));
 	setting.doc->SetTime(BaseTime(0, 30.));
 	EventAdd();

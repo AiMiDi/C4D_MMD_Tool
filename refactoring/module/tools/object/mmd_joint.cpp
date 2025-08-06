@@ -11,7 +11,6 @@ Description:	C4D MMD joint object
 #include "pch.h"
 
 #include "mmd_joint.h"
-
 #include "description/OMMDJoint.h"
 #include "module/tools/object/mmd_bone_manager.h"
 #include "module/tools/object/mmd_joint_manager.h"
@@ -360,7 +359,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 
 	}
 
-	if (joint_mode_ == RIGID_MODE_ANIM && display_type_ != RIGID_DISPLAY_TYPE_OFF && mmd_joint_)
+	if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
 	{
 		const auto joint_position = mmd_joint_->GetPosition();
 		op->SetAbsPos(Vector(joint_position.x, joint_position.y, joint_position.z) * joint_manager_data_->GetPositionMultiple());

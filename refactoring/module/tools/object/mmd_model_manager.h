@@ -163,7 +163,7 @@ private:
 	Bool CopyMorph(MMDModelManagerObject* dst) const;
 	//Bool SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	//Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
-	Bool DeleteAnimation();
+	Bool DeleteVMDAnimation();
 };
 
 #endif // !MMD_MODEL_H__

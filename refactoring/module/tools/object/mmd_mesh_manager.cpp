@@ -13,7 +13,7 @@ Description:	MMD mesh root object
 
 #include "CMTSceneManager.h"
 #include "mmd_bone_manager.h"
-#include "mmd_model.h"
+#include "mmd_model_manager.h"
 #include "tcaposemorph.h"
 #include "description/OMMDMeshManager.h"
 #include "module/tools/mmd_material.h"
@@ -44,6 +44,7 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	iferr_scope_handler{
 		return false;
 	};
+	IOReadField(mesh_mode_);
 	IOReadField(model_manager_);
 
 	if (!io_util::ReadHashMap(hf, mesh_morph_mode_))
@@ -63,6 +64,7 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 Bool MMDMeshManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
+	IOWriteField(mesh_mode_);
 	IOWriteField(model_manager_);
 
 	if (!io_util::WriteHashMap(hf, mesh_morph_mode_))
@@ -168,27 +170,7 @@ Bool MMDMeshManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		}
 		break;
 	case MESH_MODE:
-		if (m_display_tag != nullptr)
-		{
-			const auto display_mode_DescID = ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE));
-			switch (t_data.GetInt32())
-			{
-			case MESH_MODE_EDIT:
-				{
-					MMDMeshManagerObjectMsg msg(MMDMeshManagerObjectMsgType::MESH_MODE_CHANGE, MESH_DISPLAY_TYPE_OFF, MESH_MODE_EDIT);
-					node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MESH_MANAGER, &msg);
-					break;
-				}
-			case MESH_MODE_ANIM:
-				{
-					MMDMeshManagerObjectMsg msg(MMDMeshManagerObjectMsgType::MESH_MODE_CHANGE, MESH_DISPLAY_TYPE_OFF, MESH_MODE_ANIM);
-					node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MESH_MANAGER, &msg);
-					break;
-				}
-			default:
-				break;
-			}
-		}
+		mesh_mode_ = t_data.GetInt32();
 		break;
 	default:
 		break;
@@ -200,9 +182,23 @@ Bool MMDMeshManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	if (type == ID_O_MMD_MODEL)
 	{
-		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data); msg->msg_type == MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE)
+		const auto msg = static_cast<MMDModelRootObjectMsg*>(data);
+		switch (msg->msg_type)
 		{
-			model_manager_ = msg->object;
+		case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
+		{
+			if (msg->object_type == ManagerObjectType::MODEL_MANAGER)
+				model_manager_ = msg->object;
+			break;
+		}
+		case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
+		{
+			auto flag = DESCFLAGS_SET::NONE;
+			SetDParameter(node, ConstDescID(DescLevel(MESH_MODE)),msg->model_mode, flag);
+			break;
+		}
+		case MMDModelRootObjectMsgType::DEFAULT:
+			break;
 		}
 	}
 	return SUPER::Message(node, type, data);
@@ -219,7 +215,7 @@ EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		}
 	}
 
-	if (morph_manager_)
+	if (mesh_mode_ == MESH_MODE_VMD && morph_manager_)
 	{
 		const auto morph_manager_count = morph_manager_index_.GetCount();
 		for (int i = 0; i < morph_manager_count; ++i)

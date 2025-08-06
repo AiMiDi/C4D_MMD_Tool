@@ -180,9 +180,6 @@
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h">
       <Filter>source\module\tools\object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\res\S24_up\description\MMDCamera.h">
-      <Filter>res\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDCamera.h">
       <Filter>res\description</Filter>
     </ClInclude>
@@ -234,6 +231,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.h">
       <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\io_util.hpp">
+      <Filter>source\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -322,9 +322,6 @@
     </Resource>
     <Resource Include="..\..\..\..\res\S24_up\dialogs\DLG_CMT_TOOL.res">
       <Filter>res\dialogs</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\MMDCamera.res">
-      <Filter>res\description</Filter>
     </Resource>
     <Resource Include="..\..\..\..\res\S24_up\description\OMMDCamera.res">
       <Filter>res\description</Filter>

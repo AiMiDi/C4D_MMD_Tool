@@ -5,7 +5,7 @@
 #include "module/ui/cmt_tools_dialog.h"
 #include "module/tools/loader/vmd_loader.h"
 #include "module/tools/tag/mmd_bone.h"
-#include "module/tools/object/mmd_model.h"
+#include "module/tools/object/mmd_model_manager.h"
 #include "module/tools/object/mmd_camera.h"
 #include "module/tools/object/mmd_joint.h"
 #include "module/tools/object/mmd_rigid.h"

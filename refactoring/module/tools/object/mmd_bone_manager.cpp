@@ -11,7 +11,7 @@ Description:	DESC
 #include "pch.h"
 #include "mmd_bone_manager.h"
 #include "cmt_tools_setting.h"
-#include "mmd_model.h"
+#include "mmd_model_manager.h"
 #include "description/TMMDBone.h"
 #include "module/tools/tag/mmd_bone.h"
 

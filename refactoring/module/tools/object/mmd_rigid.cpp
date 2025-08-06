@@ -543,7 +543,7 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
 	}
 
-	if (m_rigid_mode == RIGID_MODE_ANIM && m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
+	if (m_rigid_mode == RIGID_MODE_VMD && m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
 	{
 		const auto transform = mmd_rigidbody_->GetTransform();
 		op->SetMl(Matrix{

@@ -14,7 +14,7 @@ Description:	MMD joint root object
 #include "mmd_rigid_manager.h"
 
 #include "mmd_joint.h"
-#include "mmd_model.h"
+#include "mmd_model_manager.h"
 #include "description/OMMDJoint.h"
 
 NodeData* MMDJointManagerObject::Alloc()
@@ -128,6 +128,7 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 						case ManagerObjectType::MODEL_MANAGER:
 							break;
 						}
+						break;
 					}
 					case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
 					{
@@ -135,6 +136,8 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 						SetDParameter(node, ConstDescID(DescLevel(JOINT_MODE)),msg->model_mode, flag);
 						break;
 					}
+					case MMDModelRootObjectMsgType::DEFAULT:
+						break;
 				}
 			}
 		break;

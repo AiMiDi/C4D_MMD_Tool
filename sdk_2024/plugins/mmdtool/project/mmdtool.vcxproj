@@ -76,7 +76,7 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_PPL=1;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;YAML_CPP_STATIC_DEFINE=1;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -95,7 +95,7 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_PPL=1;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;YAML_CPP_STATIC_DEFINE=1;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -170,7 +170,7 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.cpp" />
@@ -205,7 +205,7 @@
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_manager.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.h" />
@@ -219,6 +219,7 @@
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h" />
     <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\io_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />

@@ -28,6 +28,7 @@ CONTAINER OMMDBoneManager {
 			CYCLE {
 				BONE_MODE_EDIT;
 				BONE_MODE_ANIM;
+				BONE_MODE_VMD;
 			}
 		}
 

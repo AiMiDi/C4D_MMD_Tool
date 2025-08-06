@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "mmd_morph.h"
-#include "mmd_model.h"
+#include "mmd_model_manager.h"
 #include "mmd_mesh_manager.h"
 #include "description/OMMDModelManager.h"
 

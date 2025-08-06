@@ -44,6 +44,7 @@ CONTAINER OMMDModelManager {
 			CYCLE {
 				MODEL_MODE_EDIT;
 				MODEL_MODE_ANIM;
+				MODEL_MODE_VMD;
 			}
 		}
 	}
@@ -57,6 +58,11 @@ CONTAINER OMMDModelManager {
 				MODEL_ANIM_NONE;
 			}
 		}
+
+		BUTTON MODEL_ANIM_MERGE_VMD_BUTTON {
+        	FIT_H;
+        	SCALE_H;
+        }
 
 		BUTTON MODEL_ANIM_LOAD_VMD_BUTTON {
 			FIT_H;

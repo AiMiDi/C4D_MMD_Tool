@@ -10,8 +10,9 @@ STRINGTABLE OMMDModelManager
 	PMX_VERSION "Version";
 	MODEL_ANIM_GRP "Animation";
 		MODEL_ANIM_LIST "Animation list";
-		MODEL_ANIM_LOAD_VMD_BUTTON "Load VMD";
-		MODEL_ANIM_DElETE_BUTTON "Delete animation";
+		MODEL_ANIM_MERGE_VMD_BUTTON "Merge VMD to selected VMD animation";
+		MODEL_ANIM_LOAD_VMD_BUTTON "Load VMD to animation list";
+		MODEL_ANIM_DElETE_BUTTON "Delete animation selected VMD animation";
 	MODEL_IK_GRP "IK";
 		MODEL_MORPH_GRP "Morph";
 		MODEL_MORPH_GROUP_GRP "Group morph";
@@ -25,4 +26,5 @@ STRINGTABLE OMMDModelManager
 	MODEL_ANIM_NONE "-- No animation --";
 	MODEL_MODE_EDIT "Edit mode";
 	MODEL_MODE_ANIM "Animation mode";
+	MODEL_MODE_VMD "VMD mode";
 }

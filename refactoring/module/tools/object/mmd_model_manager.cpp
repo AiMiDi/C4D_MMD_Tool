@@ -9,7 +9,7 @@ Description:	MMD model object
 **************************************************************************/
 
 #include "pch.h"
-#include "mmd_model.h"
+#include "mmd_model_manager.h"
 
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
@@ -222,7 +222,7 @@ Bool MMDModelManagerObject::Init(GeListNode* node SDK2024_InitParaName)
 	bc->SetString(COMMENTS_LOCAL, "description"_s);
 	bc->SetString(COMMENTS_UNIVERSAL, "description"_s);
 	bc->SetInt32(MODEL_ANIM_LIST, -1);
-	animation_items_.SetString(-1, "-"_s);
+	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
 	return true;
 }
 
@@ -751,21 +751,35 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 	return true;
 }
 
-Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log)
+Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log, const Bool merge)
 {
 	iferr_scope_handler
 	{
 		return false;
 	};
-
-	auto vmd_animation = std::make_unique<libmmd::VMDAnimation>();
-	if (!vmd_animation)
+	const auto animation_name = setting.fn.GetFileString();
+	libmmd::VMDAnimation* vmd_animation;
+	if (!merge)
 	{
-		LoadVmdMotionLog::LogOutMem();
-		return false;
+		auto new_vmd_animation = std::make_unique<libmmd::VMDAnimation>();
+		if (!new_vmd_animation)
+		{
+			LoadVmdMotionLog::LogOutMem();
+			return false;
+		}
+		if (!new_vmd_animation->Create(model_))
+		{
+			LoadVmdMotionLog::LogOutMem();
+			return false;
+		}
+		vmd_animation = new_vmd_animation.get();
+		animations_.Append(animation_name, std::move(new_vmd_animation))iferr_return;
+	}else
+	{
+		vmd_animation = animations_[animation_index_].second.get();
 	}
 
-	if (!vmd_animation->Create(model_))
+	if (!vmd_animation)
 	{
 		LoadVmdMotionLog::LogOutMem();
 		return false;
@@ -777,18 +791,18 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 		return false;
 	}
 
-	log.imported_bone_count = vmd_animation->GetNodeKeyNum();
-	log.imported_morph_count = vmd_animation->GetMorphKeyNum();
-	log.imported_motion_count = vmd_animation->GetIKKeyNum();
+	log.imported_bone_count = vmd_file.m_motions.size();
+	log.imported_morph_count = vmd_file.m_morphs.size();
+	log.imported_motion_count = vmd_file.m_iks.size();
 
 	const BaseTime max_time(vmd_animation->GetMaxKeyTime() ,30.);
 
-	const auto& [animation_name, _] = animations_.Append(setting.fn.GetFileString(), std::move(vmd_animation))iferr_return;
 	animation_index_ = static_cast<Int32>(animations_.GetCount()) - 1;
 	animation_items_.SetString(animation_index_, animation_name);
 	const auto node = Get();
 	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
 	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index_, DESCFLAGS_SET::NONE);
+	node->SetParameter(ConstDescID(DescLevel(MODEL_MODE)), MODEL_MODE_VMD, DESCFLAGS_SET::NONE);
 
 	setting.doc->SetMaxTime(max_time);
 	setting.doc->SetLoopMaxTime(max_time);
@@ -939,11 +953,11 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 //	return true;
 //}
 
-Bool MMDModelManagerObject::DeleteAnimation()
+Bool MMDModelManagerObject::DeleteVMDAnimation()
 {
 	iferr_scope_handler{ return false; };
 	animation_items_.FlushAll();
-	animation_items_.SetString(-1, "-"_s);
+	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
 	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> new_animations;
 	const auto animation_count = animations_.GetCount();
 	for (int i = 0, j = 0; i < animation_count; ++i)
@@ -1076,6 +1090,39 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				AddMorph(MMDMorphType::FLIP, ge_data.GetString());
 				break;
 			}
+			case MODEL_ANIM_MERGE_VMD_BUTTON:
+			{
+
+					CMTToolsSetting::MotionImport setting(GetActiveDocument());
+					if(!filename_util::SelectSuffixImportFile(setting.fn, "vmd"_s))
+					{
+						break;
+					}
+					if (bone_manager_)
+					{
+						if (const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data)
+						{
+							setting.position_multiple = bone_manager_data->GetPositionMultiple();
+						}
+					}
+					LoadVmdMotionLog logger;
+					const auto vmd_path = string_util::GetStdString(setting.fn.GetString());
+					libmmd::VMDFile vmd_file;
+					if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
+					{
+						LoadVmdMotionLog::LogReadFileErr();
+						break;
+					}
+					if(LoadVMDMotion(vmd_file, setting, logger, true))
+					{
+						break;
+					}
+					setting.doc->SetTime(BaseTime(1, 30.));
+					setting.doc->SetTime(BaseTime(0, 30.));
+					EventAdd();
+					logger.LogOK(setting.detail_report);
+					break;
+			}
 			case MODEL_ANIM_LOAD_VMD_BUTTON:
 			{
 				CMTToolsSetting::MotionImport setting(GetActiveDocument());
@@ -1084,16 +1131,33 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					break;
 				}
 				if (bone_manager_)
+				{
 					if (const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data)
 					{
 						setting.position_multiple = bone_manager_data->GetPositionMultiple();
 					}
-				CMTToolsManager::ImportVMDMotion(setting, reinterpret_cast<BaseObject*>(Get()));
+				}
+				LoadVmdMotionLog logger;
+				const auto vmd_path = string_util::GetStdString(setting.fn.GetString());
+				libmmd::VMDFile vmd_file;
+				if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
+				{
+					LoadVmdMotionLog::LogReadFileErr();
+					break;
+				}
+				if(LoadVMDMotion(vmd_file, setting, logger))
+				{
+					break;
+				}
+				setting.doc->SetTime(BaseTime(1, 30.));
+				setting.doc->SetTime(BaseTime(0, 30.));
+				EventAdd();
+				logger.LogOK(setting.detail_report);
 				break;
 			}
 			case MODEL_ANIM_DElETE_BUTTON:
 			{
-				DeleteAnimation();
+				DeleteVMDAnimation();
 				break;
 			}
 			default:
