@@ -395,6 +395,12 @@ void MMDModelManagerObject::RefreshMorph()
 	//}
 }
 
+static void SendObjectUpdateMessage(BaseObject* dst, BaseObject* obj, const ManagerObjectType& type)
+{
+	MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE, type, obj);
+	dst->Message(ID_O_MMD_MODEL, &msg);
+}
+
 Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 {
 	if (!op)
@@ -422,32 +428,9 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 		}
 	}
 	nodes.Reset();
-	if (joint_manager_ == nullptr) {
-		if (joint_manager == nullptr)
-		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
-			tmp->InsertUnder(op);
-			joint_manager_ = tmp;
-		}
-		else {
-			joint_manager_ = joint_manager;
-		}
-		is_manager_initialized_ = false;
-	}
-	if (rigid_manager_ == nullptr) {
-		if (rigid_manager == nullptr)
-		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
-			tmp->InsertUnder(op);
-			rigid_manager_ = tmp;
-		}
-		else {
-			rigid_manager_ = rigid_manager;
-		}
-		is_manager_initialized_ = false;
-	}
-	if (bone_manager_ == nullptr) {
-		if (bone_manager == nullptr)
+	Bool send_message = false;
+	if (!bone_manager_) {
+		if (!bone_manager)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
 			tmp->InsertUnder(op);
@@ -456,10 +439,11 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 		else {
 			bone_manager_ = bone_manager;
 		}
-		is_manager_initialized_ = false;
+		bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
+		send_message = true;
 	}
-	if (mesh_manager_ == nullptr) {
-		if (mesh_manager == nullptr)
+	if (!mesh_manager_) {
+		if (!mesh_manager)
 		{
 			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
 			tmp->InsertUnder(op);
@@ -468,42 +452,48 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 		else {
 			mesh_manager_ = mesh_manager;
 		}
-		is_manager_initialized_ = false;
+		mesh_manager_data_ = mesh_manager_->GetNodeData<MMDMeshManagerObject>();
+		send_message = true;
 	}
-	if (is_manager_initialized_ == false) {
+	if (!rigid_manager_) {
+		if (!rigid_manager)
 		{
-			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::MODEL_MANAGER, op);
-			mesh_manager_->Message(ID_O_MMD_MODEL, &msg);
+			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
+			tmp->InsertUnder(op);
+			rigid_manager_ = tmp;
 		}
+		else {
+			rigid_manager_ = rigid_manager;
+		}
+		rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
+		send_message = true;
+	}
+	if (!joint_manager_) {
+		if (!joint_manager)
 		{
-			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, rigid_manager_);
-			bone_manager_->Message(ID_O_MMD_MODEL, &msg);
+			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
+			tmp->InsertUnder(op);
+			joint_manager_ = tmp;
 		}
-		{
-			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, joint_manager_);
-			bone_manager_->Message(ID_O_MMD_MODEL, &msg);
+		else {
+			joint_manager_ = joint_manager;
 		}
-		{
-			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::MODEL_MANAGER, op);
-			bone_manager_->Message(ID_O_MMD_MODEL, &msg);
-		}
-		{
-			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, bone_manager_);
-			rigid_manager_->Message(ID_O_MMD_MODEL, &msg);
-		}
-		{
-			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::JOINT_MANAGER, joint_manager_);
-			rigid_manager_->Message(ID_O_MMD_MODEL, &msg);
-		}
-		{
-			MMDModelRootObjectMsg JointRoot_msgA(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::BONE_MANAGER, bone_manager_);
-			joint_manager_->Message(ID_O_MMD_MODEL, &JointRoot_msgA);
-		}
-		{
-			MMDModelRootObjectMsg JointRoot_msgB(MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE, ManagerObjectType::RIGID_MANAGER, rigid_manager_);
-			joint_manager_->Message(ID_O_MMD_MODEL, &JointRoot_msgB);
-		}
-		is_manager_initialized_ = true;
+		joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
+		send_message = true;
+	}
+	if (send_message)
+	{
+		SendObjectUpdateMessage(bone_manager_,op, ManagerObjectType::MODEL_MANAGER);
+		SendObjectUpdateMessage(bone_manager_,rigid_manager_, ManagerObjectType::RIGID_MANAGER);
+		SendObjectUpdateMessage(bone_manager_,joint_manager_, ManagerObjectType::JOINT_MANAGER);
+
+		SendObjectUpdateMessage(mesh_manager_,op, ManagerObjectType::MODEL_MANAGER);
+
+		SendObjectUpdateMessage(rigid_manager_,bone_manager_, ManagerObjectType::BONE_MANAGER);
+		SendObjectUpdateMessage(rigid_manager_,joint_manager_, ManagerObjectType::JOINT_MANAGER);
+
+		SendObjectUpdateMessage(joint_manager_,bone_manager_, ManagerObjectType::BONE_MANAGER);
+		SendObjectUpdateMessage(joint_manager_,rigid_manager_, ManagerObjectType::RIGID_MANAGER);
 	}
 	return true;
 }
@@ -545,7 +535,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		}
 	}
 
-	if (model_mode_ == MODEL_MODE_VMD && model_)
+	if (model_mode_ == MODEL_MODE_VMD && mmd_model_)
 	{
 		if (const auto now_time = doc->GetTime(); prev_time_ != now_time)
 		{
@@ -555,24 +545,24 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				if (now_time == doc->GetMinTime())
 				{
 					fps_ = static_cast<Float32>(doc->GetFps());
-					model_->InitializeAnimation();
+					mmd_model_->InitializeAnimation();
 					animation->SyncPhysics(0.f);
 				}
-				model_->BeginAnimation();
-				model_->UpdateAllAnimation(animation.get(), static_cast<Float32>(now_time.Get() * fps_), 1.f / fps_);
-				model_->EndAnimation();
+				mmd_model_->BeginAnimation();
+				mmd_model_->UpdateAllAnimation(animation.get(), static_cast<Float32>(now_time.Get() * fps_), 1.f / fps_);
+				mmd_model_->EndAnimation();
 			}
 			else
 			{
 				if (now_time == doc->GetMinTime())
 				{
-					model_->InitializeAnimation();
+					mmd_model_->InitializeAnimation();
 				}
-				model_->BeginAnimation();
-				model_->UpdateNodeAnimation(false);
-				model_->UpdatePhysicsAnimation(1.f / fps_);
-				model_->UpdateNodeAnimation(true);
-				model_->EndAnimation();
+				mmd_model_->BeginAnimation();
+				mmd_model_->UpdateNodeAnimation(false);
+				mmd_model_->UpdatePhysicsAnimation(1.f / fps_);
+				mmd_model_->UpdateNodeAnimation(true);
+				mmd_model_->EndAnimation();
 			}
 			prev_time_ = now_time;
 		}
@@ -648,34 +638,63 @@ const maxon::HashMap<String, Int>& MMDModelManagerObject::GetMorphNameMap()
 	return morph_name_;
 }
 
+void MMDModelManagerObject::SetMMDModel(const MMDModelPtr& model)
+{
+	mmd_model_ = model;
+	if (bone_manager_data_)
+	{
+		bone_manager_data_->mmd_node_manager_ = mmd_model_->GetNodeManager();
+		bone_manager_data_->mmd_morph_manager_ = mmd_model_->GetMorphManager();
+	}
+
+	if (mesh_manager_data_)
+	{
+		mesh_manager_data_->mmd_morph_manager_ = mmd_model_->GetMorphManager();
+	}
+
+	if (rigid_manager_data_)
+	{
+		rigid_manager_data_->mmd_physics_manager_ = mmd_model_->GetPhysicsManager();
+	}
+
+	if (joint_manager_data_)
+	{
+		joint_manager_data_->mmd_physics_manager_ = mmd_model_->GetPhysicsManager();
+	}
+}
+
 Bool MMDModelManagerObject::CreateManagers()
 {
 	const BaseDocument* doc = GetActiveDocument();
 	if (const auto op = reinterpret_cast<BaseObject*>(Get()); op != nullptr && doc != nullptr)
 	{
-		if (joint_manager_ == nullptr)
-		{
-			BaseObject* joint_root_object = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
-			joint_root_object->InsertUnder(op);
-			joint_manager_ = joint_root_object;
-		}
-		if (rigid_manager_ == nullptr)
-		{
-			BaseObject* rigid_root_object = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
-			rigid_root_object->InsertUnder(op);
-			rigid_manager_ = rigid_root_object;
-		}
 		if (bone_manager_ == nullptr)
 		{
 			BaseObject* bone_root_object = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
 			bone_root_object->InsertUnder(op);
 			bone_manager_ = bone_root_object;
+			bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
 		}
 		if (mesh_manager_ == nullptr)
 		{
 			BaseObject* mesh_root_object = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
 			mesh_root_object->InsertUnder(op);
 			mesh_manager_ = mesh_root_object;
+			mesh_manager_data_ = mesh_manager_->GetNodeData<MMDMeshManagerObject>();
+		}
+		if (rigid_manager_ == nullptr)
+		{
+			BaseObject* rigid_root_object = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
+			rigid_root_object->InsertUnder(op);
+			rigid_manager_ = rigid_root_object;
+			rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
+		}
+		if (joint_manager_ == nullptr)
+		{
+			BaseObject* joint_root_object = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
+			joint_root_object->InsertUnder(op);
+			joint_manager_ = joint_root_object;
+			joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
 		}
 		return true;
 	}
@@ -703,25 +722,23 @@ BaseObject* MMDModelManagerObject::GetManagerObject(const ManagerObjectType type
 
 Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
-	model_ = pmx_model;
+	SetMMDModel(pmx_model);
 	maxon::BaseArray<BaseObject*> bone_list;
 	auto morph_change_helper = BeginMorphChange();
 
-	if (setting.import_bone && bone_manager_)
-		if(const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data && !bone_manager_data->LoadPMX(pmx_file, pmx_model, bone_list, setting))
+	if (setting.import_bone)
+		if(!bone_manager_data_ || !bone_manager_data_->LoadPMX(pmx_file, bone_list, setting))
 			return false;
 
-	if (setting.import_polygon && mesh_manager_)
-		if(const auto mesh_manager_data = mesh_manager_->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->LoadPMX(pmx_file, pmx_model, bone_list, setting))
+	if (setting.import_polygon)
+		if(!mesh_manager_data_ || !mesh_manager_data_->LoadPMX(pmx_file, bone_list, setting))
 			return false;
 
-	if (rigid_manager_)
-		if(const auto rigid_manager_data = rigid_manager_->GetNodeData<MMDRigidManagerObject>(); rigid_manager_data && !rigid_manager_data->LoadPMX(pmx_file, pmx_model, setting))
-			return false;
+	if(!rigid_manager_data_ || !rigid_manager_data_->LoadPMX(pmx_file, setting))
+		return false;
 
-	if (joint_manager_)
-		if(const auto joint_manager_data = joint_manager_->GetNodeData<MMDJointManagerObject>(); joint_manager_data && !joint_manager_data->LoadPMX(pmx_file, pmx_model, setting))
-			return false;
+	if(!joint_manager_data_ || !joint_manager_data_->LoadPMX(pmx_file, setting))
+		return false;
 
 	if (setting.import_expression)
 	{
@@ -767,7 +784,7 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 			LoadVmdMotionLog::LogOutMem();
 			return false;
 		}
-		if (!new_vmd_animation->Create(model_))
+		if (!new_vmd_animation->Create(mmd_model_))
 		{
 			LoadVmdMotionLog::LogOutMem();
 			return false;
@@ -1134,7 +1151,12 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
-
+	case MSG_MENUPREPARE:
+	{
+		CreateManagers();
+		SetMMDModel(std::make_shared<PMXModel>());
+		break;
+	}
 	default:
 		break;
 	}
@@ -1148,7 +1170,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case MODEL_MODE:
 		{
 			model_mode_ = t_data.GetInt32();
-			MMDModelRootObjectMsg msg(MMDModelRootObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, model_mode_);
+			MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, model_mode_);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MODEL, &msg);
 			break;
 		}

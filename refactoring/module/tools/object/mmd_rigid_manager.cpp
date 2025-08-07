@@ -68,7 +68,7 @@ Bool MMDRigidManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* sno
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
-BaseObject* MMDRigidManagerObject::AddRigid(const String& name, GeListNode* node)
+BaseObject* MMDRigidManagerObject::AddRigid(const String& name, libmmd::MMDRigidBody* mmd_rigidbody, GeListNode* node)
 {
 	if (!node)
 		node = Get();
@@ -80,6 +80,10 @@ BaseObject* MMDRigidManagerObject::AddRigid(const String& name, GeListNode* node
 				new_rigid->SetName(new_rigid->GetName() + "." + String::IntToString(m_rigid_name_index_++));
 			else
 				new_rigid->SetName(name);
+
+			const auto new_rigid_data = new_rigid->GetNodeData<MMDRigidObject>();
+			new_rigid_data->rigid_manager_data_ = this;
+			new_rigid_data->mmd_rigidbody_ = mmd_rigidbody;
 
 			new_rigid->InsertUnder(node);
 			{
@@ -107,17 +111,17 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_RIGID_BUTTON)
 		{
-			AddRigid({}, node);
+			AddRigid({}, mmd_physics_manager_->AddRigidBody(), node);
 		}
 		break;
 	}
 	case ID_O_MMD_MODEL:
 	{
-		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data))
+		if (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data))
 		{
 			switch (msg->msg_type)
 			{
-			case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
+			case MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE:
 			{
 				if(msg->object_type == ManagerObjectType::BONE_MANAGER)
 				{
@@ -125,12 +129,12 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				break;
 			}
-			case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
+			case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
 			{
 				node->SetParameter(ConstDescID(DescLevel(RIGID_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
 				break;
 			}
-			case MMDModelRootObjectMsgType::DEFAULT:
+			case MMDModelManagerObjectMsgType::DEFAULT:
 				break;
 			}
 
@@ -257,15 +261,12 @@ namespace
 	}
 }
 
-Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
+Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting)
 {
-	if (!pmx_model)
+	if (!mmd_physics_manager_)
 		return false;
 
-	if (!pmx_model->GetPhysicsManager())
-		return false;
-
-	const auto pmx_rigidbodies = pmx_model->GetPhysicsManager()->GetRigidBodys();
+	const auto pmx_rigidbodies = mmd_physics_manager_->GetRigidBodys();
 	if (!pmx_rigidbodies)
 		return false;
 
@@ -279,15 +280,11 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	{
 		const auto& pmx_rigidbody = pmx_file.m_rigidbodies[rigid_index];
 		const maxon::String name_local{ pmx_rigidbody.m_name.c_str() };
-		const auto rigid_object = AddRigid(name_local);
+		const auto rigid_object = AddRigid(name_local, (*pmx_rigidbodies)[rigid_index].get());
+
 		if (!rigid_object)
 			return false;
 
-		if (const auto rigid_node = rigid_object->GetNodeData<MMDRigidObject>())
-		{
-			rigid_node->mmd_rigidbody_ = (*pmx_rigidbodies)[rigid_index].get();
-			rigid_node->rigid_manager_data_ = this;
-		}
 		rigid_items_.SetString(static_cast<Int32>(rigid_index), name_local);
 		const maxon::String name_universal{ pmx_rigidbody.m_englishName.c_str() };
 		SetRigidParameter<RIGID_NAME_LOCAL>(rigid_object, name_local);

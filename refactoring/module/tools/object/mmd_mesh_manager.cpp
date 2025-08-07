@@ -182,21 +182,21 @@ Bool MMDMeshManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	if (type == ID_O_MMD_MODEL)
 	{
-		const auto msg = static_cast<MMDModelRootObjectMsg*>(data);
+		const auto msg = static_cast<MMDModelManagerObjectMsg*>(data);
 		switch (msg->msg_type)
 		{
-		case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
+		case MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE:
 		{
 			if (msg->object_type == ManagerObjectType::MODEL_MANAGER)
 				model_manager_ = msg->object;
 			break;
 		}
-		case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
+		case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
 		{
 			node->SetParameter(ConstDescID(DescLevel(MESH_MODE)),msg->model_mode, DESCFLAGS_SET::NONE);
 			break;
 		}
-		case MMDModelRootObjectMsgType::DEFAULT:
+		case MMDModelManagerObjectMsgType::DEFAULT:
 			break;
 		}
 	}
@@ -289,7 +289,7 @@ maxon::HashInt vertex_info::GetHashCode() const
 }
 
 Bool MMDMeshManagerObject::LoadPMX(
-	const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model,
+	const libmmd::PMXFile& pmx_file,
 	const maxon::BaseArray<BaseObject*>& bone_list,
 	const CMTToolsSetting::ModelImport& setting)
 {
@@ -297,7 +297,6 @@ Bool MMDMeshManagerObject::LoadPMX(
 		return false;
 	};
 
-	mmd_morph_manager_ = pmx_model->GetMorphManager();
 	const auto& pmx_faces = pmx_file.m_faces;
 	const auto& pmx_vertices = pmx_file.m_vertices;
 	const auto& pmx_materials = pmx_file.m_materials;

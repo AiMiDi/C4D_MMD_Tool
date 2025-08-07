@@ -15,8 +15,12 @@ Description:	MMD model object
 #include "description/OMMDModelManager.h"
 
 class IMorph;
-enum class MMDMorphType : uint8_t;
+class MMDBoneManagerObject;
+class MMDMeshManagerObject;
+class MMDRigidManagerObject;
+class MMDJointManagerObject;
 class MMDModelManagerObject;
+enum class MMDMorphType : uint8_t;
 
 class EditorSubMorphDialog final : public GeDialog
 {
@@ -49,21 +53,21 @@ enum class ManagerObjectType : uint8_t
 	MODEL_MANAGER
 };
 
-enum class MMDModelRootObjectMsgType : uint8_t
+enum class MMDModelManagerObjectMsgType : uint8_t
 {
 	DEFAULT,
 	MANAGER_OBJECT_UPDATE,
 	MODEL_MODE_CHANGE
 };
 
-struct MMDModelRootObjectMsg
+struct MMDModelManagerObjectMsg
 {
-	MMDModelRootObjectMsgType msg_type;
+	MMDModelManagerObjectMsgType msg_type;
 	ManagerObjectType	object_type;
 	BaseObject* object;
 	Int32	model_mode;
 
-	explicit MMDModelRootObjectMsg(const MMDModelRootObjectMsgType msg_type_ = MMDModelRootObjectMsgType::DEFAULT,
+	explicit MMDModelManagerObjectMsg(const MMDModelManagerObjectMsgType msg_type_ = MMDModelManagerObjectMsgType::DEFAULT,
 	                            const ManagerObjectType object_type_ = ManagerObjectType::DEFAULT, BaseObject* object_ = nullptr,const Int32 model_mode_ = MODEL_MODE_ANIM)
 		:msg_type(msg_type_), object_type(object_type_), object(object_), model_mode(model_mode_) {}
 };
@@ -83,12 +87,15 @@ class MMDModelManagerObject final : public ObjectData
 	maxon::Synchronized<Bool> update_morph_;
 	maxon::Synchronized<Bool> is_morph_initialized_;
 	maxon::Synchronized<Bool> is_manager_read_;
-	Bool is_manager_initialized_ = false;
 	Int32 morph_named_number_ = 0;
 	BaseObject* mesh_manager_ = nullptr;
 	BaseObject* bone_manager_ = nullptr;
 	BaseObject* rigid_manager_ = nullptr;
 	BaseObject* joint_manager_ = nullptr;
+	MMDBoneManagerObject* bone_manager_data_ = nullptr;
+	MMDMeshManagerObject* mesh_manager_data_ = nullptr;
+	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
+	MMDJointManagerObject* joint_manager_data_ = nullptr;
 	maxon::PointerArray<IMorph> morph_data_;
 	maxon::HashMap<DescID, maxon::Pair<MMDModelRootDynamicDescriptionType, Int>> desc_id_map_;
 	maxon::HashMap<String, Int> morph_name_;
@@ -97,12 +104,13 @@ class MMDModelManagerObject final : public ObjectData
 	BaseContainer animation_items_;
 	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> animations_;
 
-	MMDModelPtr model_;
+	MMDModelPtr mmd_model_;
 	Int32 model_mode_ = MODEL_MODE_ANIM;
 	BaseTime prev_time_{-1};
 	Float32 fps_{ 1.f / 30.f };
 
 	MMDModelManagerObject();
+	friend MMDModelManagerObject;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelManagerObject)
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDModelManagerObject)
 	INSTANCEOF(MMDModelRootObject, ObjectData)
@@ -139,6 +147,7 @@ public:
 	const maxon::PointerArray<IMorph>& GetMorphData();
 	const maxon::HashMap<String, Int>& GetMorphNameMap();
 
+	void SetMMDModel(const MMDModelPtr& model);
 	Bool CreateManagers();
 	Bool UpdateManagers(BaseObject* op = nullptr);
 	BaseObject* GetManagerObject(const ManagerObjectType type) const;

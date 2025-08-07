@@ -269,25 +269,25 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	}
 	case ID_O_MMD_MODEL:
 	{
-		if (const auto* msg = static_cast<MMDModelRootObjectMsg*>(data); msg != nullptr)
+		if (const auto* msg = static_cast<MMDModelManagerObjectMsg*>(data); msg != nullptr)
 		{
 			switch (msg->msg_type)
 			{
 
-				case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
+				case MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE:
 				{
 					if (msg->object_type == ManagerObjectType::MODEL_MANAGER)
 					{
 						model_manager_ = msg->object;
-						break;
 					}
+					break;
 				}
-				case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
+				case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
 				{
 					node->SetParameter(ConstDescID(DescLevel(BONE_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
 					break;
 				}
-				case MMDModelRootObjectMsgType::DEFAULT:
+				case MMDModelManagerObjectMsgType::DEFAULT:
 					break;
 			}
 		}
@@ -330,19 +330,13 @@ Int32 MMDBoneManagerObject::FindBoneIndex(const BaseTag* bone_tag) const
 	return bone_index;
 }
 
-Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting)
+Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting)
 {
 	iferr_scope_handler{
 		return false;
 	};
 
 	position_multiple = setting.position_multiple;
-
-	if (!pmx_model)
-		return false;
-
-	mmd_node_manager_ = pmx_model->GetNodeManager();
-	mmd_morph_manager_ = pmx_model->GetMorphManager();
 
 	const auto& pmx_bones = pmx_file.m_bones;
 	const auto pmx_bone_num = pmx_bones.size();

@@ -16,6 +16,8 @@ Description:	MMD mesh root object
 #include "description/OMMDMeshManager.h"
 #include "utils/morph_ui_data_util.hpp"
 
+class MMDModelManagerObject;
+
 namespace CMTToolsSetting
 {
 	struct ModelImport;
@@ -52,6 +54,7 @@ class MMDMeshManagerObject final : public MMDManagerObject
 	MMDMeshManagerObject() = default;
 	~MMDMeshManagerObject() override = default;
 
+	friend MMDModelManagerObject;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDMeshManagerObject)
 	CMT_DEFAULT_MOVE_BODY(MMDMeshManagerObject)
 	INSTANCEOF(MMDMeshRootObject, MMDManagerObject)
@@ -68,7 +71,7 @@ public:
 	[[nodiscard]] const maxon::HashMap<String, Int32>& GetMeshMorphData() const;
 	Bool SetMorphStrength(const String& morph_name, const Float& strength);
 	Bool LoadPMX(
-		const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model,
+		const libmmd::PMXFile& pmx_file,
 		const maxon::BaseArray<BaseObject*>& bone_list,
 		const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting);

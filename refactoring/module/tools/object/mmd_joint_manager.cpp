@@ -60,7 +60,7 @@ Bool MMDJointManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* sno
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
-BaseObject* MMDJointManagerObject::AddJoint(const String& name, GeListNode* node)
+BaseObject* MMDJointManagerObject::AddJoint(const String& name, libmmd::MMDJoint* mmd_joint, GeListNode* node)
 {
 	if (!node)
 		node = Get();
@@ -73,6 +73,11 @@ BaseObject* MMDJointManagerObject::AddJoint(const String& name, GeListNode* node
 			else
 				new_joint->SetName(name);
 			new_joint->GetNodeData<MMDJointObject>()->joint_manager_data_ = this;
+
+			const auto new_joint_data = new_joint->GetNodeData<MMDJointObject>();
+			new_joint_data->joint_manager_data_ = this;
+			new_joint_data->mmd_joint_ = mmd_joint;
+
 			new_joint->InsertUnder(node);
 			{
 				MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_DISPLAY_CHANGE, bc->GetInt32(JOINT_DISPLAY_TYPE), 0);
@@ -101,17 +106,17 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_JOINT_BUTTON)
 		{
-			AddJoint({}, node);
+			AddJoint({}, mmd_physics_manager_->AddJoint(), node);
 		}
 		break;
 	}
 	case ID_O_MMD_MODEL:
 	{
-			if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data); msg != nullptr)
+			if (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data); msg != nullptr)
 			{
 				switch (msg->msg_type)
 				{
-					case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
+					case MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE:
 					{
 						if (msg->object)
 						{
@@ -136,12 +141,12 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 						}
 						break;
 					}
-					case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
+					case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
 					{
 						node->SetParameter(ConstDescID(DescLevel(JOINT_MODE)),msg->model_mode, DESCFLAGS_SET::NONE);
 						break;
 					}
-					case MMDModelRootObjectMsgType::DEFAULT:
+					case MMDModelManagerObjectMsgType::DEFAULT:
 						break;
 				}
 			}
@@ -189,16 +194,13 @@ namespace
 	}
 }
 
-Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model,
-	const CMTToolsSetting::ModelImport& setting)
+Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file,
+                                    const CMTToolsSetting::ModelImport& setting)
 {
-	if (!pmx_model)
+	if (!mmd_physics_manager_)
 		return false;
 
-	if (!pmx_model->GetPhysicsManager())
-		return false;
-
-	const auto pmx_joints = pmx_model->GetPhysicsManager()->GetJoints();
+	const auto pmx_joints = mmd_physics_manager_->GetJoints();
 	if (!pmx_joints)
 		return false;
 
@@ -209,15 +211,9 @@ Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	{
 		const auto& pmx_joint = pmx_file.m_joints[joint_index];
 		const maxon::String name_local{ pmx_joint.m_name.c_str() };
-		const auto joint_object = AddJoint(name_local);
+		const auto joint_object = AddJoint(name_local, (*pmx_joints)[joint_index].get());
 		if (!joint_object)
 			return false;
-
-		if (const auto joint_node = joint_object->GetNodeData<MMDJointObject>())
-		{
-			joint_node->joint_manager_data_ = this;
-			joint_node->mmd_joint_ = (*pmx_joints)[joint_index].get();
-		}
 
 		const maxon::String name_universal{ pmx_joint.m_englishName.c_str() };
 		SetJointParameter<JOINT_NAME_LOCAL>(joint_object, name_local);

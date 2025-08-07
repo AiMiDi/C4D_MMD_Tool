@@ -40,10 +40,12 @@ class MMDRigidManagerObject final : public MMDManagerObject
 	Int32 m_rigid_name_index_ = 1;
 	Float32 position_multiple_ = 1.0;
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
+	libmmd::MMDPhysicsManager* mmd_physics_manager_ = nullptr;
 	BaseContainer rigid_items_;
 	maxon::HashMap<Int32, maxon::StrongRef<AutoAlloc<BaseLink>>> rigid_list_;
 	MMDRigidManagerObject() = default;
 	~MMDRigidManagerObject() override = default;
+	friend MMDModelManagerObject;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRigidManagerObject)
 	CMT_DEFAULT_MOVE_BODY(MMDRigidManagerObject)
 	INSTANCEOF(MMDRigidManagerObject, MMDManagerObject)
@@ -55,7 +57,7 @@ public:
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 
-	BaseObject* AddRigid(const String& name = {}, GeListNode* node = nullptr);
+	BaseObject* AddRigid(const String& name = {}, libmmd::MMDRigidBody* mmd_rigidbody, GeListNode* node = nullptr);
 	BaseObject* FindRigid(Int32 index) const;
 	Bool UpdateRigidList();
 
@@ -63,7 +65,7 @@ public:
 	const BaseContainer& GetBoneItems() const;
 	const Float32& GetPositionMultiple() const { return position_multiple_; }
 
-	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 };
 
 #endif // !MMD_RIGID_ROOT_H__

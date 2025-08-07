@@ -15,6 +15,8 @@ Description:	DESC
 #include "mmd_manager.hpp"
 #include "description/OMMDBoneManager.h"
 
+class MMDModelManagerObject;
+
 namespace CMTToolsSetting
 {
 	struct ModelExport;
@@ -66,6 +68,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 
 	BaseContainer bone_items_;
 	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> bone_list_;
+	friend MMDModelManagerObject;
 	MMDBoneManagerObject() = default;
 	~MMDBoneManagerObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneManagerObject)
@@ -84,7 +87,7 @@ public:
 	const BaseContainer& GetBoneItems() const;
 	const Float& GetPositionMultiple() const { return position_multiple; }
 
-	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
 
 private:
