@@ -11,11 +11,13 @@ Description:	MMD rigid root object
 #ifndef MMD_RIGID_ROOT_H__
 #define MMD_RIGID_ROOT_H__
 
-#include "description/OMMDRigidManager.h"
 #include "mmd_manager.hpp"
+#include "cmt_tools_setting.h"
+#include "description/OMMDRigidManager.h"
 
-class MMDBoneManagerObject;
 class MMDRigidObject;
+class MMDModelManagerObject;
+class MMDBoneManagerObject;
 
 enum class MMDRigidRootObjectMsgType : uint8_t
 {
@@ -57,7 +59,7 @@ public:
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 
-	BaseObject* AddRigid(const String& name = {}, libmmd::MMDRigidBody* mmd_rigidbody, GeListNode* node = nullptr);
+	BaseObject* AddRigid(const String& name, libmmd::MMDRigidBody* mmd_rigidbody, GeListNode* node = nullptr);
 	BaseObject* FindRigid(Int32 index) const;
 	Bool UpdateRigidList();
 
