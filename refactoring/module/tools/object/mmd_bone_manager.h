@@ -60,11 +60,9 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Int32 bone_name_index = 0;
 	Float position_multiple = 1.0;
 	BaseObject* model_manager_ = nullptr;
-	BaseObject* rigid_manager_ = nullptr;
-	BaseObject* joint_manager_ = nullptr;
 
-	libmmd::MMDMorphManager* morph_manager_ = nullptr;
-	libmmd::MMDNodeManager* node_manager_ = nullptr;
+	libmmd::MMDMorphManager* mmd_morph_manager_ = nullptr;
+	libmmd::MMDNodeManager* mmd_node_manager_ = nullptr;
 
 	BaseContainer bone_items_;
 	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> bone_list_;

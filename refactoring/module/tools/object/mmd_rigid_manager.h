@@ -39,10 +39,8 @@ class MMDRigidManagerObject final : public MMDManagerObject
 {
 	Int32 m_rigid_name_index_ = 1;
 	Float32 position_multiple_ = 1.0;
-	BaseContainer rigid_items_;
-	BaseObject* bone_manager_ = nullptr;
-	BaseObject* joint_manager_ = nullptr;
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
+	BaseContainer rigid_items_;
 	maxon::HashMap<Int32, maxon::StrongRef<AutoAlloc<BaseLink>>> rigid_list_;
 	MMDRigidManagerObject() = default;
 	~MMDRigidManagerObject() override = default;
@@ -59,6 +57,7 @@ public:
 
 	BaseObject* AddRigid(const String& name = {}, GeListNode* node = nullptr);
 	BaseObject* FindRigid(Int32 index) const;
+	Bool UpdateRigidList();
 
 	const BaseContainer& GetRigidItems() const;
 	const BaseContainer& GetBoneItems() const;

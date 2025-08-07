@@ -23,11 +23,9 @@ class MMDRigidObject final : public ObjectData
 	Int32		m_physics_mode = TRACK_BONES;
 	Int32		m_rigid_shape_type = SPHERICAL;
 	Int32		m_rigid_group_id = RIGID_GROUP_0;
+
 	BaseTag*	m_protection_tag = nullptr;
-
-	BaseObject* rigid_manager_ = nullptr;
 	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
-
 	libmmd::MMDRigidBody* mmd_rigidbody_ = nullptr;
 
 	AutoFree<BaseObject> draw_mesh_object_;

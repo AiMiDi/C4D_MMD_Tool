@@ -59,12 +59,12 @@ CONTAINER OMMDModelManager {
 			}
 		}
 
-		BUTTON MODEL_ANIM_MERGE_VMD_BUTTON {
-        	FIT_H;
-        	SCALE_H;
-        }
-
 		BUTTON MODEL_ANIM_LOAD_VMD_BUTTON {
+			FIT_H;
+			SCALE_H;
+		}
+
+		BUTTON MODEL_ANIM_MERGE_VMD_BUTTON {
 			FIT_H;
 			SCALE_H;
 		}

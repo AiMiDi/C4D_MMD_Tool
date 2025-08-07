@@ -46,8 +46,6 @@ class MMDJointManagerObject final : public MMDManagerObject
 {
 	Int32 joint_name_index_ = 1;
 	Float32 position_multiple_ = 1.f;
-	BaseObject* bone_manager_ = nullptr;
-	BaseObject* rigid_manager_ = nullptr;
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
 	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
 	MMDJointManagerObject() {}

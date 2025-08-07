@@ -81,7 +81,7 @@ Bool MMDJointObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 		return false;
 	}
 
-	if (joint_manager_)
+	if (joint_manager_data_)
 	{
 		BaseContainer* settings = description->GetParameterI(ConstDescID(DescLevel(JOINT_LINK_RIGID_A_INDEX)), nullptr);
 
@@ -122,14 +122,9 @@ void MMDJointObject::HandleJointModeChange(const Int32 mode)
 	if (joint_mode_ == mode)
 		return;
 
-	if (joint_mode_ == JOINT_MODE_ANIM)
+	if (joint_mode_ == JOINT_MODE_EDIT)
 	{
-		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::CLEAR);
 		// TODO: Save to mmd_joint
-	}
-	else
-	{
-		Get()->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
 	}
 
 	joint_mode_ = mode;
@@ -326,7 +321,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	{
 		return EXECUTIONRESULT::OK;
 	}
-
+/*
 	BaseObject* up_object = op->GetUp();
 
 	if (up_object == nullptr && joint_manager_ != nullptr)
@@ -337,7 +332,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 
 	if (up_object != nullptr && up_object->IsInstanceOf(ID_O_MMD_JOINT_MANAGER))
 	{
-		/*
+
 		SDK2024_Const BaseObject* PredObject = op->GetPred();
 		if (PredObject == nullptr)
 		{
@@ -349,7 +344,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 			PredObject->GetParameter(ConstDescID(DescLevel(JOINT_INDEX)), data, DESCFLAGS_GET::NONE);
 			const String RigidIndex = data.GetString();
 			op->SetParameter(ConstDescID(DescLevel(JOINT_INDEX)), String::IntToString(RigidIndex.ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
-		}*/
+		}
 
 		if (joint_manager_ == nullptr)
 		{
@@ -358,7 +353,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 		}
 
 	}
-
+*/
 	if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
 	{
 		const auto joint_position = mmd_joint_->GetPosition();
@@ -378,7 +373,6 @@ Bool MMDJointObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeL
 		return false;
 	}
 
-	destObject->joint_manager_ = joint_manager_;
 	destObject->joint_manager_data_ = joint_manager_data_;
 	destObject->link_rigid_a_ = link_rigid_a_;
 	destObject->link_rigid_b_ = link_rigid_b_;
@@ -392,12 +386,9 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	IOReadField(display_type_);
 	IOReadField(joint_mode_);
-	IOReadField(joint_manager_);
+	IOReadField(joint_manager_data_);
 	IOReadField(link_rigid_a_);
 	IOReadField(link_rigid_b_);
-
-	if (joint_manager_)
-		joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
 	return true;
 }
 
@@ -405,7 +396,7 @@ Bool MMDJointObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 {
 	IOWriteField(display_type_);
 	IOWriteField(joint_mode_);
-	IOWriteField(joint_manager_);
+	IOWriteField(joint_manager_data_);
 	IOWriteField(link_rigid_a_);
 	IOWriteField(link_rigid_b_);
 

@@ -275,9 +275,16 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 	if (bone_mode_ == bone_mode)
 		return;
 
-	if (bone_mode == BONE_MODE_ANIM)
+	if (bone_mode == BONE_MODE_EDIT)
 	{
 		// TODO: Save to mmd_node_
+		if (bone_object_)
+			bone_object_->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
+	}
+	else
+	{
+		if (bone_object_)
+			bone_object_->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	}
 
 	bone_mode_ = bone_mode;

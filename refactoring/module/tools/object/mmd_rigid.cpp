@@ -10,7 +10,6 @@ Description:	C4D MMD rigid object
 
 #include "pch.h"
 #include "mmd_rigid.h"
-#include "mmd_bone_manager.h"
 #include "mmd_rigid_manager.h"
 
 SDK2024_ConstExpr Vector g_pmx_rigid_colors[16] =
@@ -161,7 +160,7 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 	if (const auto cid = ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
     {
 		settings = description->GetParameterI(cid, nullptr);
-		if (settings != nullptr && rigid_manager_)
+		if (settings && rigid_manager_data_)
 		{
 			settings->SetContainer(DESC_CYCLE, rigid_manager_data_->GetBoneItems());
 		}
@@ -496,18 +495,11 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 
 	BaseObject* prev_object = op->GetPred();
 	BaseObject* up_object = op->GetUp();
-	BaseObject* rigid_manager = rigid_manager_;
 
-	if (up_object == nullptr && rigid_manager != nullptr)
-	{
-		op->Remove();
-		op->InsertUnderLast(rigid_manager);
-	}
-
-	const Int32 prev_object_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
+	Bool update_rigid_list = false;
 	if (up_object != nullptr && up_object->IsInstanceOf(ID_O_MMD_RIGID_MANAGER))
 	{
-		if (prev_object == nullptr)
+		if (!prev_object)
 		{
 			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), "0"_s, DESCFLAGS_SET::NONE);
 		}
@@ -519,20 +511,14 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 			}
 			GeData data;
 			prev_object->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), data, DESCFLAGS_GET::NONE);
-			const String RigidIndex = data.GetString();
-			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), String::IntToString(RigidIndex.ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
-		}
-
-		if (rigid_manager == nullptr)
-		{
-			rigid_manager_ = up_object;
-			rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
+			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), String::IntToString(data.GetString().ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
+			update_rigid_list = true;
 		}
 	}
 
-	if (const Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != prev_object_index && rigid_manager_ != nullptr)
+	if (update_rigid_list && rigid_manager_data_)
 	{
-		rigid_manager_->Message(ID_O_MMD_RIGID, nullptr);
+		rigid_manager_data_->UpdateRigidList();
 	}
 
 	if (!m_protection_tag)
@@ -579,14 +565,12 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(m_physics_mode);
 	IOReadField(m_rigid_shape_type);
 	IOReadField(m_rigid_group_id);
-	IOReadField(rigid_manager_);
+	IOReadField(rigid_manager_data_);
 	IOReadField(m_protection_tag);
 
 	UpdateRigidPhysics(m_physics_mode);
 	UpdateRigidShape(bc, m_rigid_shape_type);
 	UpdateRigidGroup(m_rigid_group_id);
-	rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
-
 	return true;
 }
 
@@ -597,7 +581,7 @@ Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 	IOWriteField(m_physics_mode);
 	IOWriteField(m_rigid_shape_type);
 	IOWriteField(m_rigid_group_id);
-	IOWriteField(rigid_manager_);
+	IOWriteField(rigid_manager_data_);
 	IOWriteField(m_protection_tag);
 
 	return true;
@@ -617,7 +601,6 @@ Bool MMDRigidObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeL
 	destObject->m_physics_mode = m_physics_mode;
 	destObject->m_rigid_shape_type = m_rigid_shape_type;
 	destObject->m_rigid_group_id = m_rigid_group_id;
-	destObject->rigid_manager_ = rigid_manager_;
 	destObject->rigid_manager_data_ = rigid_manager_data_;
 
 	return true;
@@ -633,22 +616,9 @@ void MMDRigidObject::HandleRigidModeChange(Int32 mode)
 	if (m_rigid_mode == mode)
 		return;
 
-	if (mode == RIGID_MODE_ANIM)
+	if (mode == RIGID_MODE_EDIT)
 	{
-		// TODO: Save to mmd_rigid_body
-
-		if (m_protection_tag)
-		{
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), true, DESCFLAGS_SET::NONE);
-		}
-	}
-	else
-	{
+		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
 		if (m_protection_tag)
 		{
 			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), false, DESCFLAGS_SET::NONE);
@@ -657,6 +627,20 @@ void MMDRigidObject::HandleRigidModeChange(Int32 mode)
 			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), false, DESCFLAGS_SET::NONE);
 			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), false, DESCFLAGS_SET::NONE);
 			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), false, DESCFLAGS_SET::NONE);
+		}
+	}
+	else
+	{
+		// TODO: Save to mmd_rigid_body
+		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
+		if (m_protection_tag)
+		{
+			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
+			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), true, DESCFLAGS_SET::NONE);
+			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), true, DESCFLAGS_SET::NONE);
+			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), true, DESCFLAGS_SET::NONE);
+			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), true, DESCFLAGS_SET::NONE);
+			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), true, DESCFLAGS_SET::NONE);
 		}
 	}
 

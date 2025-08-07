@@ -1,5 +1,9 @@
 #pragma once
 
+class MMDJointManagerObject;
+class MMDBoneManagerObject;
+class MMDRigidManagerObject;
+
 namespace io_util
 {
 /**
@@ -232,6 +236,10 @@ template<> inline bool ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>(HyperFile
 	return true;
 }
 
+template<> Bool ReadData<MMDBoneManagerObject*>(HyperFile* hf, MMDBoneManagerObject*& data);
+template<> Bool ReadData<MMDRigidManagerObject*>(HyperFile* hf, MMDRigidManagerObject*& data);
+template<> Bool ReadData<MMDJointManagerObject*>(HyperFile* hf, MMDJointManagerObject*& data);
+
 WRITE_DATA_FUNC(Int32)
 WRITE_DATA_FUNC(Int64)
 WRITE_DATA_FUNC(Float32)
@@ -264,9 +272,11 @@ template<> inline bool WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>>(HyperFil
 	return true;
 }
 
+template<> Bool WriteData<MMDBoneManagerObject*>(HyperFile* hf, MMDBoneManagerObject* const& data);
+template<> Bool WriteData<MMDRigidManagerObject*>(HyperFile* hf, MMDRigidManagerObject* const& data);
+template<> Bool WriteData<MMDJointManagerObject*>(HyperFile* hf, MMDJointManagerObject* const& data);
+
 }
 
 #define IOReadField(x) if (!io_util::ReadData(hf, x)) return false
 #define IOWriteField(x) if (!io_util::WriteData(hf, x)) return false
-
-

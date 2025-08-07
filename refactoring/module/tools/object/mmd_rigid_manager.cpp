@@ -15,25 +15,36 @@ Description:	MMD rigid root object
 #include "mmd_bone_manager.h"
 #include "mmd_rigid.h"
 
+template<> Bool io_util::ReadData<MMDRigidManagerObject*>(HyperFile* hf, MMDRigidManagerObject*& data)
+{
+	BaseObject* manager = nullptr;
+	if (!ReadData(hf, manager)) return false;
+	data = manager->GetNodeData<MMDRigidManagerObject>();
+	return true;
+}
+
+template<> Bool io_util::WriteData<MMDRigidManagerObject*>(HyperFile* hf, MMDRigidManagerObject* const& data)
+{
+	if (!WriteData(hf, reinterpret_cast<BaseObject*>(data->Get()))) return false;
+	return true;
+}
+
 Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
 		return false;
 	};
 	IOReadField(m_rigid_name_index_);
-	IOReadField(bone_manager_);
-	IOReadField(joint_manager_);
+	IOReadField(bone_manager_data_);
 	if (!io_util::ReadHashMap(hf, rigid_list_))
 		return false;
-	bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
 	return SUPER::Read(node, hf, level);
 }
 
 Bool MMDRigidManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
 	IOWriteField(m_rigid_name_index_);
-	IOWriteField(bone_manager_);
-	IOWriteField(joint_manager_);
+	IOWriteField(bone_manager_data_);
 	if (!io_util::WriteHashMap(hf, rigid_list_))
 		return false;
 	return SUPER::Write(node, hf);
@@ -47,9 +58,7 @@ Bool MMDRigidManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* sno
 	};
 	auto const dest_object = reinterpret_cast<MMDRigidManagerObject*>(dest);
 	dest_object->m_rigid_name_index_ = m_rigid_name_index_;
-	dest_object->bone_manager_ = bone_manager_;
 	dest_object->bone_manager_data_ = bone_manager_data_;
-	dest_object->joint_manager_ = joint_manager_;
 	for (const auto& entry : rigid_list_)
 	{
 		auto& link = dest_object->rigid_list_.InsertKey(entry.GetKey())iferr_return;
@@ -90,7 +99,7 @@ BaseObject* MMDRigidManagerObject::AddRigid(const String& name, GeListNode* node
 Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
-	return true;
+		return true;
 	};
 	switch (type)
 	{
@@ -102,29 +111,6 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
-	case ID_O_MMD_RIGID:
-	{
-		const auto op = reinterpret_cast<BaseObject*>(node);
-		rigid_items_.FlushAll();
-		rigid_items_.SetString(-1, "-"_s);
-		rigid_list_.Reset();
-		GeData ge_data;
-		BaseObject* node_ = op->GetDown();
-		while (node_)
-		{
-			if (node_->GetType() == ID_O_MMD_RIGID)
-			{
-				node_->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), ge_data, DESCFLAGS_GET::NONE);
-				Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
-				this->rigid_items_.SetString(rigid_index, node_->GetName());
-				auto& link = rigid_list_.InsertKey(rigid_index)iferr_return;
-				link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
-				(*link)->SetLink(node_);
-			}
-			node_ = node_->GetNext();
-		}
-		break;
-	}
 	case ID_O_MMD_MODEL:
 	{
 		if (const auto msg = static_cast<MMDModelRootObjectMsg*>(data))
@@ -132,24 +118,18 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			switch (msg->msg_type)
 			{
 			case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
+			{
+				if(msg->object_type == ManagerObjectType::BONE_MANAGER)
 				{
-					if(msg->object_type == ManagerObjectType::BONE_MANAGER)
-					{
-						bone_manager_ = msg->object;
-						bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
-					}
-					else if (msg->object_type == ManagerObjectType::JOINT_MANAGER)
-					{
-						joint_manager_ = msg->object;
-					}
-					break;
+					bone_manager_data_ = msg->object->GetNodeData<MMDBoneManagerObject>();
 				}
+				break;
+			}
 			case MMDModelRootObjectMsgType::MODEL_MODE_CHANGE:
-				{
-					auto flag = DESCFLAGS_SET::NONE;
-					node->SetParameter(ConstDescID(DescLevel(RIGID_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
-					break;
-				}
+			{
+				node->SetParameter(ConstDescID(DescLevel(RIGID_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
+				break;
+			}
 			case MMDModelRootObjectMsgType::DEFAULT:
 				break;
 			}
@@ -225,6 +205,33 @@ BaseObject* MMDRigidManagerObject::FindRigid(const Int32 index) const
 	return nullptr;
 }
 
+Bool MMDRigidManagerObject::UpdateRigidList()
+{
+	iferr_scope_handler{
+		return false;
+	};
+	const auto op = reinterpret_cast<BaseObject*>(Get());
+	rigid_items_.FlushAll();
+	rigid_items_.SetString(-1, "-"_s);
+	rigid_list_.Reset();
+	GeData ge_data;
+	BaseObject* node_ = op->GetDown();
+	while (node_)
+	{
+		if (node_->GetType() == ID_O_MMD_RIGID)
+		{
+			node_->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), ge_data, DESCFLAGS_GET::NONE);
+			Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
+			this->rigid_items_.SetString(rigid_index, node_->GetName());
+			auto& link = rigid_list_.InsertKey(rigid_index)iferr_return;
+			link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
+			(*link)->SetLink(node_);
+		}
+		node_ = node_->GetNext();
+	}
+	return true;
+}
+
 const BaseContainer& MMDRigidManagerObject::GetRigidItems() const
 {
 	return rigid_items_;
@@ -264,6 +271,9 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 
 	position_multiple_ = static_cast<float>(setting.position_multiple);
 
+	rigid_items_.FlushAll();
+	rigid_items_.SetString(-1, "-"_s);
+
 	const auto rigid_count = pmx_file.m_rigidbodies.size();
 	for (size_t rigid_index = 0; rigid_index < rigid_count; ++rigid_index)
 	{
@@ -276,10 +286,9 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 		if (const auto rigid_node = rigid_object->GetNodeData<MMDRigidObject>())
 		{
 			rigid_node->mmd_rigidbody_ = (*pmx_rigidbodies)[rigid_index].get();
-			rigid_node->rigid_manager_ = reinterpret_cast<BaseObject*>(Get());
 			rigid_node->rigid_manager_data_ = this;
 		}
-
+		rigid_items_.SetString(static_cast<Int32>(rigid_index), name_local);
 		const maxon::String name_universal{ pmx_rigidbody.m_englishName.c_str() };
 		SetRigidParameter<RIGID_NAME_LOCAL>(rigid_object, name_local);
 		SetRigidParameter<RIGID_NAME_UNIVERSAL>(rigid_object, name_universal);

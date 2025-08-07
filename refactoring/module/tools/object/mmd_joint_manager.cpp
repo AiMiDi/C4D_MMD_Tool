@@ -9,13 +9,26 @@ Description:	MMD joint root object
 **************************************************************************/
 
 #include "pch.h"
+#include "mmd_joint.h"
 #include "mmd_joint_manager.h"
 #include "mmd_bone_manager.h"
 #include "mmd_rigid_manager.h"
-
-#include "mmd_joint.h"
 #include "mmd_model_manager.h"
 #include "description/OMMDJoint.h"
+
+template<> Bool io_util::ReadData<MMDJointManagerObject*>(HyperFile* hf, MMDJointManagerObject*& data)
+{
+	BaseObject* manager = nullptr;
+	if (!ReadData(hf, manager)) return false;
+	data = manager->GetNodeData<MMDJointManagerObject>();
+	return true;
+}
+
+template<> Bool io_util::WriteData<MMDJointManagerObject*>(HyperFile* hf, MMDJointManagerObject* const& data)
+{
+	if (!WriteData(hf, reinterpret_cast<BaseObject*>(data->Get()))) return false;
+	return true;
+}
 
 NodeData* MMDJointManagerObject::Alloc()
 {
@@ -25,20 +38,16 @@ NodeData* MMDJointManagerObject::Alloc()
 Bool MMDJointManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	IOReadField(joint_name_index_);
-	IOReadField(bone_manager_);
-	IOReadField(rigid_manager_);
-	if (bone_manager_)
-		bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
-	if (rigid_manager_)
-		rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
+	IOReadField(bone_manager_data_);
+	IOReadField(rigid_manager_data_);
 	return SUPER::Read(node, hf, level);
 }
 
 Bool MMDJointManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
 	IOWriteField(joint_name_index_);
-	IOWriteField(bone_manager_);
-	IOWriteField(rigid_manager_);
+	IOWriteField(bone_manager_data_);
+	IOWriteField(rigid_manager_data_);
 	return SUPER::Write(node, hf);
 }
 
@@ -46,9 +55,7 @@ Bool MMDJointManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* sno
 	AliasTrans* trn) SDK2024_Const
 {
 	auto const dest_object = reinterpret_cast<MMDJointManagerObject*>(dest);
-	dest_object->bone_manager_ = bone_manager_;
 	dest_object->bone_manager_data_ = bone_manager_data_;
-	dest_object->rigid_manager_ = rigid_manager_;
 	dest_object->rigid_manager_data_ = rigid_manager_data_;
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
@@ -65,7 +72,7 @@ BaseObject* MMDJointManagerObject::AddJoint(const String& name, GeListNode* node
 				new_joint->SetName(new_joint->GetName() + "." + String::IntToString(joint_name_index_++));
 			else
 				new_joint->SetName(name);
-
+			new_joint->GetNodeData<MMDJointObject>()->joint_manager_data_ = this;
 			new_joint->InsertUnder(node);
 			{
 				MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_DISPLAY_CHANGE, bc->GetInt32(JOINT_DISPLAY_TYPE), 0);
@@ -106,27 +113,26 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					case MMDModelRootObjectMsgType::MANAGER_OBJECT_UPDATE:
 					{
-						switch (msg->object_type)
+						if (msg->object)
 						{
-						case ManagerObjectType::BONE_MANAGER:
+							switch (msg->object_type)
 							{
-								bone_manager_ = msg->object;
-								if (bone_manager_)
-									bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
+							case ManagerObjectType::BONE_MANAGER:
+								{
+									bone_manager_data_ = msg->object->GetNodeData<MMDBoneManagerObject>();
+									break;
+								}
+							case ManagerObjectType::RIGID_MANAGER:
+								{
+									rigid_manager_data_ = msg->object->GetNodeData<MMDRigidManagerObject>();
+									break;
+								}
+							case ManagerObjectType::DEFAULT:
+							case ManagerObjectType::MESH_MANAGER:
+							case ManagerObjectType::JOINT_MANAGER:
+							case ManagerObjectType::MODEL_MANAGER:
 								break;
 							}
-						case ManagerObjectType::RIGID_MANAGER:
-							{
-								rigid_manager_ = msg->object;
-								if (rigid_manager_)
-									rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
-								break;
-							}
-						case ManagerObjectType::DEFAULT:
-						case ManagerObjectType::MESH_MANAGER:
-						case ManagerObjectType::JOINT_MANAGER:
-						case ManagerObjectType::MODEL_MANAGER:
-							break;
 						}
 						break;
 					}
@@ -209,7 +215,6 @@ Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 
 		if (const auto joint_node = joint_object->GetNodeData<MMDJointObject>())
 		{
-			joint_node->joint_manager_ = reinterpret_cast<BaseObject*>(Get());
 			joint_node->joint_manager_data_ = this;
 			joint_node->mmd_joint_ = (*pmx_joints)[joint_index].get();
 		}

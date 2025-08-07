@@ -44,7 +44,7 @@ class MMDMeshManagerObject final : public MMDManagerObject
 	BaseObject* model_manager_ = nullptr;
 	maxon::HashMap<BaseTag*, Int32> mesh_morph_mode_;
 
-	libmmd::MMDMorphManager* morph_manager_;
+	libmmd::MMDMorphManager* mmd_morph_manager_;
 	maxon::HashMap<String, Int32> mesh_morph_name_;
 	maxon::BaseArray<Int32> morph_manager_index_;
 	maxon::BaseArray<maxon::PointerArray<MorphUIData>> mesh_morph_data_;

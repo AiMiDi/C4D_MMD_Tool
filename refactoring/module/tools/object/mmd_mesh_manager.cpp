@@ -214,12 +214,12 @@ EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		}
 	}
 
-	if (mesh_mode_ == MESH_MODE_VMD && morph_manager_)
+	if (mesh_mode_ == MESH_MODE_VMD && mmd_morph_manager_)
 	{
 		const auto morph_manager_count = morph_manager_index_.GetCount();
 		for (int i = 0; i < morph_manager_count; ++i)
 		{
-			const auto strength = morph_manager_->GetMorph(i)->GetWeight();
+			const auto strength = mmd_morph_manager_->GetMorph(i)->GetWeight();
 			if (const auto mesh_morph_data_index = morph_manager_index_[i]; mesh_morph_data_index != -1)
 			{
 				const auto& sub_morphs = mesh_morph_data_[mesh_morph_data_index];
@@ -297,7 +297,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 		return false;
 	};
 
-	morph_manager_ = pmx_model->GetMorphManager();
+	mmd_morph_manager_ = pmx_model->GetMorphManager();
 	const auto& pmx_faces = pmx_file.m_faces;
 	const auto& pmx_vertices = pmx_file.m_vertices;
 	const auto& pmx_materials = pmx_file.m_materials;
@@ -1361,9 +1361,9 @@ void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op)
 		}
 	}
 	if (need_update_morph) {
-		if (morph_manager_)
+		if (mmd_morph_manager_)
 		{
-			const auto morph_count = static_cast<Int>(morph_manager_->GetMorphCount());
+			const auto morph_count = static_cast<Int>(mmd_morph_manager_->GetMorphCount());
 			morph_manager_index_.SetCapacityHint(morph_count)iferr_return;
 			for (Int32 index = 0; index < morph_count; index++)
 			{
@@ -1371,7 +1371,7 @@ void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op)
 			}
 			for (const auto &entry : mesh_morph_name_.Begin())
 			{
-				morph_manager_index_[static_cast<Int32>(morph_manager_->FindMorphIndex(string_util::GetStdString(entry.GetKey())))] = entry.GetValue();
+				morph_manager_index_[static_cast<Int32>(mmd_morph_manager_->FindMorphIndex(string_util::GetStdString(entry.GetKey())))] = entry.GetValue();
 			}
 		}
 		if (model_manager_)
