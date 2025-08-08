@@ -314,7 +314,7 @@ DRAWRESULT MMDJointObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 	return SUPER::Draw(op, drawpass, bd, bh);
 }
 
-void MMDJointObject::HandleJointHierarchyUpdate(BaseObject* op)
+void MMDJointObject::HandleJointIndexUpdate(BaseObject* op)
 {
 	if (const BaseObject* up_object = op->GetUp(); up_object && up_object->IsInstanceOf(g_mmd_joint_object_id))
 	{
@@ -341,7 +341,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 
 	if (joint_mode_ == JOINT_MODE_EDIT)
 	{
-		HandleJointHierarchyUpdate(op);
+		HandleJointIndexUpdate(op);
 	}
 	else if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
 	{

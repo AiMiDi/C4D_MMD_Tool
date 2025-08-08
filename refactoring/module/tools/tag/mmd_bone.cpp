@@ -370,7 +370,7 @@ static Int32 GetTagBoneIndex(const BaseTag* tag)
 	return data.GetString().ToInt32(nullptr);
 }
 
-void MMDBoneTag::HandleBoneHierarchyUpdate(BaseContainer* const bc, BaseObject* bone_manager_object) const
+void MMDBoneTag::HandleBoneIndexUpdate(BaseContainer* const bc, BaseObject* bone_manager_object) const
 {
 	if (!bone_object_)
 		return;
@@ -470,7 +470,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 				SetBoneDisplay(bc, msg);
 				break;
 			case MMDBoneManagerObjectMsgType::BONE_HIERARCHY_UPDATE:
-				HandleBoneHierarchyUpdate(bc, msg->bone_manager_object);
+				HandleBoneIndexUpdate(bc, msg->bone_manager_object);
 				break;
 			case MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE:
 				HandleBoneModeChange(msg->bone_mode);
@@ -765,7 +765,7 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 		if (!bc)
 			return EXECUTIONRESULT::OK;
 
-		HandleBoneHierarchyUpdate(bc, reinterpret_cast<BaseObject*>(bone_manager_data_->Get()));
+		HandleBoneIndexUpdate(bc, reinterpret_cast<BaseObject*>(bone_manager_data_->Get()));
 	}
 	else if (bone_mode_ == BONE_MODE_VMD && mmd_node_)
 	{

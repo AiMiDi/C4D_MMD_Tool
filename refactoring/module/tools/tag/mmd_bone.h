@@ -210,5 +210,5 @@ private:
 	 * @param[in] bc The BaseContainer containing the data instance.
 	 * @param[in] bone_manager_object The MMDBoneRootObjectMsg containing the root object message.
 	 */
-	void HandleBoneHierarchyUpdate(BaseContainer* bc, BaseObject* bone_manager_object) const;
+	void HandleBoneIndexUpdate(BaseContainer* bc, BaseObject* bone_manager_object) const;
 };

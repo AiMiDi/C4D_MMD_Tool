@@ -523,8 +523,9 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	}
 
 	if (m_rigid_mode == RIGID_MODE_EDIT)
+	{
 		HandleRigidIndexUpdate(op);
-
+	}
 	else if (m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
 	{
 		const auto transform = mmd_rigidbody_->GetTransform();

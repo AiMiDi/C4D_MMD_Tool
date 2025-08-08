@@ -36,7 +36,7 @@ public:
 	void HandleJointModeChange(Int32 mode);
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
-	static void HandleJointHierarchyUpdate(BaseObject* op);
+	static void HandleJointIndexUpdate(BaseObject* op);
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
