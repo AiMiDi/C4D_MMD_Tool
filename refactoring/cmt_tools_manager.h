@@ -8,8 +8,7 @@ Description:	tools manager
 
 **************************************************************************/
 
-#ifndef CMT_TOOLS_MANAGER_H__
-#define CMT_TOOLS_MANAGER_H__
+#pragma once
 
 #include "cmt_tools_setting.h"
 
@@ -24,4 +23,3 @@ namespace CMTToolsManager
 	bool ExportPMXModel (const CMTToolsSetting::ModelExport&  setting);
 }
 
-#endif // !CMT_TOOLS_MANAGER_H__

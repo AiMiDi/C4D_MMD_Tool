@@ -8,8 +8,7 @@ Description:	UserArea Utils for images
 
 **************************************************************************/
 
-#ifndef IMAGES_USER_AREA_UTIL_H__
-#define IMAGES_USER_AREA_UTIL_H__
+#pragma once
 
 #if API_VERSION >= 2024900
 using namespace cinema;
@@ -31,5 +30,3 @@ public:
 		DrawBitmap(m_bitmap, x1, y1, x2, y2, 0, 0, m_width, m_high, BMP_NORMALSCALED | BMP_ALLOWALPHA);
 	}
 };
-
-#endif // !IMAGES_USER_AREA_UTIL_H__

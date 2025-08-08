@@ -133,7 +133,7 @@ void LoadModelLog::LogOK()
 BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<libmmd::VMDCameraAnimation> animation)
 {
 	// create camera
-	BaseObject* vmd_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
+	BaseObject* vmd_camera = BaseObject::Alloc(g_mmd_camera_object_id);
 	if (!vmd_camera)
 		return nullptr;
 
@@ -180,7 +180,7 @@ BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& 
 		camera_obj = convected_camera_;
 	}
 	// 选择对象为vmd摄像机则直接使用
-	else if (select_object->IsInstanceOf(ID_O_MMD_CAMERA))
+	else if (select_object->IsInstanceOf(g_mmd_camera_object_id))
 	{
 		camera_obj = select_object;
 	}
@@ -201,7 +201,7 @@ BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& 
 
 BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
 {
-	BaseObject* vmd_camera = BaseObject::Alloc(ID_O_MMD_CAMERA);
+	BaseObject* vmd_camera = BaseObject::Alloc(g_mmd_camera_object_id);
 	if(!vmd_camera)
 		return nullptr;
 	if(!vmd_camera->GetNodeData<MMDCamera>()->ConversionCamera(setting))
@@ -228,7 +228,7 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 		return false;
 	}
 
-	if (!select_object->IsInstanceOf(ID_O_MMD_MODEL))
+	if (!select_object->IsInstanceOf(g_mmd_model_manager_object_id))
 	{
 		LoadVmdMotionLog::LogNotMMDModelError();
 		return false;
@@ -255,7 +255,7 @@ Bool CMTSceneManager::SaveVMDMotion(const CMTToolsSetting::MotionExport& setting
 BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
 	// create model
-	BaseObject* object = BaseObject::Alloc(ID_O_MMD_MODEL);
+	BaseObject* object = BaseObject::Alloc(g_mmd_model_manager_object_id);
 	if (!object)
 		return nullptr;
 
@@ -286,7 +286,7 @@ BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& se
 		return nullptr;
 	}
 
-	if (select_object->IsInstanceOf(ID_O_MMD_MODEL))
+	if (select_object->IsInstanceOf(g_mmd_model_manager_object_id))
 	{
 		if(auto* pmx_model_data = select_object->GetNodeData<MMDModelManagerObject>(); !pmx_model_data->SavePMX(data, setting))
 		{
@@ -316,5 +316,5 @@ void CMTSceneManager::AddMMDCamera(SDK2024_Const BaseObject* camera)
 
 CMTSceneManager* CMTSceneManager::GetSceneManager(const BaseDocument* Document)
 {
-	return Document->FindSceneHook(ID_SCENE_HOOK_CMT_SCENE_MANAGER)->GetNodeData<CMTSceneManager>();
+	return Document->FindSceneHook(g_cmt_scene_manager_scene_hook_id)->GetNodeData<CMTSceneManager>();
 }

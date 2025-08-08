@@ -1,5 +1,4 @@
-#ifndef CMT_MARCO_H__
-#define CMT_MARCO_H__
+#pragma once
 
 #ifndef CMT_DISALLOW_COPY_AND_ASSIGN_BODY
 //----------------------------------------------------------------------------------------
@@ -104,7 +103,7 @@
 #define CINEMA_NAMESPASE cinema::
 using namespace cinema;
 #else
-#define CINEMA_NAMESPASE 
+#define CINEMA_NAMESPASE
 #endif
 
 using MMDModel = libmmd::MMDModelWithoutBuffered;
@@ -115,4 +114,3 @@ using MMDModelPtr = std::shared_ptr<MMDModel>;
 using PMXModelPtr = std::shared_ptr<PMXModel>;
 using PMDModelPtr = std::shared_ptr<PMDModel>;
 
-#endif // !CMT_MARCO_H__

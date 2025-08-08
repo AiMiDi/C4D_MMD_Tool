@@ -8,8 +8,7 @@ Description:	DESC
 
 **************************************************************************/
 
-#ifndef MMD_BONE_ROOT_H__
-#define MMD_BONE_ROOT_H__
+#pragma once
 
 #include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
@@ -19,23 +18,21 @@ class MMDModelManagerObject;
 
 namespace CMTToolsSetting
 {
+	struct ModelImport;
 	struct ModelExport;
 	struct MotionImport;
-	struct ModelImport;
 }
 
-/*
-type 0: update BoneRoot;
-type 1: set bone display type;
-type 2: bone index change;
-type 3: bone morph change;
-*/
 enum class MMDBoneManagerObjectMsgType : int8_t
 {
 	DEFAULT = -1,
+	// bone display type change
 	SET_BONE_DISPLAY_UPDATE,
+	// bone hierarchy change
 	BONE_HIERARCHY_UPDATE,
+	// bone morph change
 	BONE_MORPH_CHANGE,
+	// bone mode change
 	BONE_MODE_CHANGE
 };
 struct MMDBoneManagerObjectMsg
@@ -43,24 +40,24 @@ struct MMDBoneManagerObjectMsg
 
 	MMDBoneManagerObjectMsgType type;
 	Int32	display_type;
-	BaseObject* bond_root_object;
+	BaseObject* bone_manager_object;
 	Int32	bone_mode;
 
 	explicit MMDBoneManagerObjectMsg(
-		const MMDBoneManagerObjectMsgType type_ = MMDBoneManagerObjectMsgType::DEFAULT,
-		const Int32 display_type_ = BONE_DISPLAY_TYPE_ON,
-		BaseObject* BoneRoot_ = nullptr,
-		const Int32 bone_mode_ = BONE_MODE_ANIM) :
-		type(type_),
-		display_type(display_type_),
-		bond_root_object(BoneRoot_),
-	    bone_mode(bone_mode_)
+		const MMDBoneManagerObjectMsgType in_type = MMDBoneManagerObjectMsgType::DEFAULT,
+		const Int32 in_display_mode = BONE_DISPLAY_TYPE_ON,
+		BaseObject* in_bone_manager_object = nullptr,
+		const Int32 in_bone_mode = BONE_MODE_ANIM) :
+		type(in_type),
+		display_type(in_display_mode),
+		bone_manager_object(in_bone_manager_object),
+	    bone_mode(in_bone_mode)
 	    {}
 };
 class MMDBoneManagerObject final : public MMDManagerObject
 {
-	Int32 bone_name_index = 0;
-	Float position_multiple = 1.0;
+	Int32 bone_name_index_ = 0;
+	Float position_multiple_ = 1.0;
 	BaseObject* model_manager_ = nullptr;
 
 	libmmd::MMDMorphManager* mmd_morph_manager_ = nullptr;
@@ -85,7 +82,7 @@ public:
 	[[nodiscard]] BaseTag* FindBone(Int32 index) const;
 	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
 	const BaseContainer& GetBoneItems() const;
-	const Float& GetPositionMultiple() const { return position_multiple; }
+	const Float& GetPositionMultiple() const { return position_multiple_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
@@ -96,5 +93,3 @@ private:
 	bool HandleMMDBoneTagMessage(GeListNode* node, void* data);
 	bool HandleBoneIndexChangeMessage(GeListNode* node);
 };
-
-#endif // !MMD_BONE_ROOT_H__

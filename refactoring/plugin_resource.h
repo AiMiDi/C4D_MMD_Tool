@@ -8,29 +8,28 @@ Description:	plugin load resource
 
 **************************************************************************/
 
-#ifndef PLUGIN_RESOURCE_H__
-#define PLUGIN_RESOURCE_H__
+#pragma once
+
 
 /*------------Plugin ID------------*/
 //	GUI
-constexpr auto ID_COMMAND_CMT_TOOL = 1056563;
+constexpr auto g_cmt_command_id = 1056563;
 
 //	Entity
-constexpr auto ID_O_MMD_MODEL		= 1056724;
-constexpr auto ID_T_MMD_MATERIAL	= 1056725;
-constexpr auto ID_T_MMD_DISPLAY		= 1056721;
-constexpr auto ID_T_MMD_BONE		= 1056720;
-constexpr auto ID_O_MMD_RIGID		= 1056722;
-constexpr auto ID_O_MMD_JOINT		= 1056723;
-constexpr auto ID_O_MMD_CAMERA		= 1056978;
-constexpr auto ID_O_MMD_MESH_MANAGER	= 1057943;
-constexpr auto ID_O_MMD_BONE_MANAGER	= 1057944;
-constexpr auto ID_O_MMD_RIGID_MANAGER	= 1057945;
-constexpr auto ID_O_MMD_JOINT_MANAGER	= 1057946;
+constexpr auto g_mmd_model_manager_object_id		= 1056724;
+//constexpr auto ID_T_MMD_MATERIAL	= 1056725;
+//constexpr auto ID_T_MMD_DISPLAY		= 1056721;
+constexpr auto g_mmd_bone_tag_id		= 1056720;
+constexpr auto g_mmd_rigid_object_id		= 1056722;
+constexpr auto g_mmd_joint_object_id		= 1056723;
+constexpr auto g_mmd_camera_object_id		= 1056978;
+constexpr auto g_mmd_bone_manager_object_id	= 1057944;
+constexpr auto g_mmd_mesh_manager_object_id	= 1057943;
+constexpr auto g_mmd_rigid_manager_object_id	= 1057945;
+constexpr auto g_mmd_joint_manager_object_id	= 1057946;
 
 //	Util
-constexpr auto ID_SCENE_HOOK_CMT_SCENE_MANAGER = 1057017;
-constexpr auto ID_L_MMD_VMD_IMPORT             = 1057489;
-constexpr auto ID_E_MMD_VMD_EXPORT             = 1057490;
+constexpr auto g_cmt_scene_manager_scene_hook_id = 1057017;
+constexpr auto g_mmd_vmd_loader_id             = 1057489;
+constexpr auto g_mmd_vmd_export_id             = 1057490;
 
-#endif // !PLUGIN_RESOURCE_H__

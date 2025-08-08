@@ -72,9 +72,6 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 	return true;
 }
 
-MMDBoneTagMsg::MMDBoneTagMsg(const MMDBoneTagMsgType type): type(type)
-{}
-
 NodeData* MMDBoneTag::Alloc()
 {
 	return NewObj(MMDBoneTag).GetValue();
@@ -366,67 +363,75 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 	}
 }
 
-void MMDBoneTag::HandleBoneHierarchyUpdate(BaseContainer* const data_instance_bc, const MMDBoneManagerObjectMsg* msg)
+static Int32 GetTagBoneIndex(const BaseTag* tag)
 {
-	bone_manager_ = msg->bond_root_object;
-	if (bone_object_) {
-		BaseObject* up_obj = bone_object_->GetUp();
-		BaseObject* prev_obj = bone_object_->GetPred();
-		const Int32	prev_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
-		if (up_obj)
-		{
-			GeData Ge_data;
-			if (!up_obj->IsInstanceOf(ID_O_MMD_BONE_MANAGER))
-			{
-				SDK2024_Const BaseTag* up_tag = up_obj->GetTag(ID_T_MMD_BONE);
-				if (up_tag)
-				{
-					up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-					data_instance_bc->SetData(PMX_BONE_PARENT_BONE_INDEX, Ge_data);
-				}
-				if (prev_obj == nullptr)
-				{
-					if (up_tag != nullptr)
-					{
-						up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-						data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
-					}
-				}
-				else {
-					BaseObject* lase_obj = prev_obj;
-					while (lase_obj->GetDownLast() != nullptr)
-					{
-						lase_obj = lase_obj->GetDownLast();
-					}
+	GeData data;
+	tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), data, DESCFLAGS_GET::NONE);
+	return data.GetString().ToInt32(nullptr);
+}
 
-					if (SDK2024_Const BaseTag* last_tag = lase_obj->GetTag(ID_T_MMD_BONE); last_tag != nullptr)
-					{
-						last_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-						data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
-					}
-				}
-			}
-			else {
-				if (prev_obj == nullptr)
-				{
-					data_instance_bc->SetString(PMX_BONE_INDEX, "0"_s);
-				}
-				else {
-					if (SDK2024_Const BaseTag* prev_tag = prev_obj->GetTag(ID_T_MMD_BONE); prev_tag != nullptr)
-					{
-						prev_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), Ge_data, DESCFLAGS_GET::NONE);
-						data_instance_bc->SetString(PMX_BONE_INDEX, String::IntToString(Ge_data.GetString().ToInt32(nullptr) + 1));
-					}
-				}
-			}
+void MMDBoneTag::HandleBoneHierarchyUpdate(BaseContainer* const bc, BaseObject* bone_manager_object) const
+{
+	if (!bone_object_)
+		return;
+
+	BaseObject* up_obj = bone_object_->GetUp();
+	BaseObject* prev_obj = bone_object_->GetPred();
+	const Int32 prev_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
+
+	if (!up_obj)
+	{
+		bc->SetString(PMX_BONE_INDEX, "0"_s);
+		if (prev_index != 0 && bone_manager_object != nullptr)
+			bone_manager_object->Message(g_mmd_bone_tag_id, nullptr);
+		return;
+	}
+
+	Int32 new_bone_index = -1;
+
+	if (up_obj->IsInstanceOf(g_mmd_bone_manager_object_id))
+	{
+		if (prev_obj)
+		{
+			if (SDK2024_Const BaseTag* prev_tag = prev_obj->GetTag(g_mmd_bone_tag_id); prev_tag)
+				new_bone_index = GetTagBoneIndex(prev_tag) + 1;
 		}
-		else {
-			data_instance_bc->SetString(PMX_BONE_INDEX, "0"_s);
+		else
+		{
+			new_bone_index = 0;
+			bc->SetString(PMX_BONE_PARENT_BONE_INDEX, "-1"_s);
 		}
-		bool error = false;
-		if (const Int32 now_index = data_instance_bc->GetString(PMX_BONE_INDEX).ToInt32(&error);
-			!error && now_index != prev_index && bone_manager_ != nullptr)
-			bone_manager_->Message(ID_T_MMD_BONE, nullptr);
+	}
+	else
+	{
+		SDK2024_Const BaseTag* up_tag = up_obj->GetTag(g_mmd_bone_tag_id);
+		if (up_tag)
+		{
+			GeData data;
+			up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), data, DESCFLAGS_GET::NONE);
+			bc->SetData(PMX_BONE_PARENT_BONE_INDEX, data);
+		}
+
+		if (prev_obj)
+		{
+			BaseObject* last_obj = prev_obj;
+			while (last_obj->GetDownLast())
+				last_obj = last_obj->GetDownLast();
+
+			if (SDK2024_Const BaseTag* last_tag = last_obj->GetTag(g_mmd_bone_tag_id); last_tag)
+				new_bone_index = GetTagBoneIndex(last_tag) + 1;
+		}
+		else if (up_tag)
+		{
+			new_bone_index = GetTagBoneIndex(up_tag) + 1;
+		}
+	}
+
+	if (prev_index != new_bone_index)
+	{
+		bc->SetString(PMX_BONE_INDEX, String::IntToString(new_bone_index));
+		if (bone_manager_object != nullptr)
+			bone_manager_object->Message(g_mmd_bone_tag_id, nullptr);
 	}
 }
 
@@ -435,15 +440,15 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 	iferr_scope_handler{
 		return true;
 	};
-	const auto data_instance_bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
-	if (!data_instance_bc)
+	const auto bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	if (!bc)
 	{
 		return true;
 	}
 	switch (type)
 	{
 	case MSG_DESCRIPTION_CHECKUPDATE:
-		HandleDescriptionUpdate(node, data_instance_bc, static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id);
+		HandleDescriptionUpdate(node, bc, static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id);
 		break;
 	case MSG_MENUPREPARE:
 		if (const auto doc = static_cast<BaseDocument*>(data); doc)
@@ -456,16 +461,16 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 			}
 		}
 		break;
-	case  ID_O_MMD_BONE_MANAGER:
+	case  g_mmd_bone_manager_object_id:
 		if (const auto* msg = static_cast<MMDBoneManagerObjectMsg*>(data); msg)
 		{
 			switch (msg->type)
 			{
 			case MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE:
-				SetBoneDisplay(data_instance_bc, msg);
+				SetBoneDisplay(bc, msg);
 				break;
 			case MMDBoneManagerObjectMsgType::BONE_HIERARCHY_UPDATE:
-				HandleBoneHierarchyUpdate(data_instance_bc, msg);
+				HandleBoneHierarchyUpdate(bc, msg->bone_manager_object);
 				break;
 			case MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE:
 				HandleBoneModeChange(msg->bone_mode);
@@ -732,15 +737,6 @@ bool MMDBoneTag::CreateBoneLockTag()
 	return true;
 }
 
-void MMDBoneTag::HandleBoneLockUpdate(const Bool allow_rotate, const Bool allow_translate)
-{
-	if (!protection_tag_)
-		if (!CreateBoneLockTag())
-			return;
-	SetRotationLock(!allow_rotate);
-	SetPositionLock(!allow_translate);
-}
-
 void MMDBoneTag::SetRotationLock(const bool flag) const
 {
 	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
@@ -755,35 +751,28 @@ void MMDBoneTag::SetPositionLock(const bool flag) const
 	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
 }
 
-EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority,
-                                    EXECUTIONFLAGS flags)
+EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
-	if (!tag || !op || !bone_manager_node_)
+	if (!op)
 		return EXECUTIONRESULT::OK;
-
-	/*BaseContainer* bc = tag->GetDataInstance();
-	if (!bc)
-		return EXECUTIONRESULT::OK;*/
 
 	if(!bone_object_)
 		bone_object_ = op;
 
-	if(!bone_tag_)
-		bone_tag_ = tag;
+	if (bone_mode_ == BONE_MODE_EDIT)
+	{
+		const auto bc = tag->GetDataInstance();
+		if (!bc)
+			return EXECUTIONRESULT::OK;
 
-	/*const auto allow_rotate = bc->GetBool(PMX_BONE_ROTATABLE);
-	const auto allow_translate = bc->GetBool(PMX_BONE_TRANSLATABLE);
-	const auto append_rotate = bc->GetBool(PMX_BONE_INHERIT_ROTATION);
-	const auto append_translate = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION);*/
-
-	//HandleBoneLockUpdate(allow_rotate, allow_translate);
-
-	if (bone_mode_ == BONE_MODE_VMD && mmd_node_)
+		HandleBoneHierarchyUpdate(bc, reinterpret_cast<BaseObject*>(bone_manager_data_->Get()));
+	}
+	else if (bone_mode_ == BONE_MODE_VMD && mmd_node_)
 	{
 		const auto& transform = mmd_node_->GetLocalTransform();
 		const auto translate = xyz(transform[3]) - mmd_node_->GetInitialTranslate();
 
-		bone_object_->SetRelMl(Matrix{Vector(translate[0],translate[1],-translate[2]) * bone_manager_node_->GetPositionMultiple(),
+		bone_object_->SetRelMl(Matrix{Vector(translate[0],translate[1],-translate[2]) * bone_manager_data_->GetPositionMultiple(),
 		   Vector(transform[0][0],transform[0][1],transform[0][2]),
 		   Vector(transform[1][0],transform[1][1],transform[1][2]),
 		   Vector(transform[2][0],transform[2][1],transform[2][2]) });
@@ -794,13 +783,13 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
-	IOReadField(bone_manager_);
+	IOReadField(bone_manager_data_);
 	return SUPER::Read(node, hf, level);
 }
 
 Bool MMDBoneTag::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	IOWriteField(bone_manager_);
+	IOWriteField(bone_manager_data_);
 	return SUPER::Write(node, hf);
 }
 

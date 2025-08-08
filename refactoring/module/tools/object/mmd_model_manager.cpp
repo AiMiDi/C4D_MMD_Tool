@@ -398,7 +398,7 @@ void MMDModelManagerObject::RefreshMorph()
 static void SendObjectUpdateMessage(BaseObject* dst, BaseObject* obj, const ManagerObjectType& type)
 {
 	MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE, type, obj);
-	dst->Message(ID_O_MMD_MODEL, &msg);
+	dst->Message(g_mmd_model_manager_object_id, &msg);
 }
 
 Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
@@ -416,13 +416,13 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 		BaseObject* node = *nodes.Pop();
 		if (node != nullptr)
 		{
-			if (node->IsInstanceOf(ID_O_MMD_JOINT_MANAGER))
+			if (node->IsInstanceOf(g_mmd_joint_manager_object_id))
 				joint_manager = node;
-			else if (node->IsInstanceOf(ID_O_MMD_RIGID_MANAGER))
+			else if (node->IsInstanceOf(g_mmd_rigid_manager_object_id))
 				rigid_manager = node;
-			else if (node->IsInstanceOf(ID_O_MMD_BONE_MANAGER))
+			else if (node->IsInstanceOf(g_mmd_bone_manager_object_id))
 				bone_manager = node;
-			else if (node->IsInstanceOf(ID_O_MMD_MESH_MANAGER))
+			else if (node->IsInstanceOf(g_mmd_mesh_manager_object_id))
 				mesh_manager = node;
 			iferr(nodes.Push(node->GetNext())) return false;
 		}
@@ -432,7 +432,7 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 	if (!bone_manager_) {
 		if (!bone_manager)
 		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
+			BaseObject* tmp = BaseObject::Alloc(g_mmd_bone_manager_object_id);
 			tmp->InsertUnder(op);
 			bone_manager_ = tmp;
 		}
@@ -445,7 +445,7 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 	if (!mesh_manager_) {
 		if (!mesh_manager)
 		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
+			BaseObject* tmp = BaseObject::Alloc(g_mmd_mesh_manager_object_id);
 			tmp->InsertUnder(op);
 			mesh_manager_ = tmp;
 		}
@@ -458,7 +458,7 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 	if (!rigid_manager_) {
 		if (!rigid_manager)
 		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
+			BaseObject* tmp = BaseObject::Alloc(g_mmd_rigid_manager_object_id);
 			tmp->InsertUnder(op);
 			rigid_manager_ = tmp;
 		}
@@ -471,7 +471,7 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 	if (!joint_manager_) {
 		if (!joint_manager)
 		{
-			BaseObject* tmp = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
+			BaseObject* tmp = BaseObject::Alloc(g_mmd_joint_manager_object_id);
 			tmp->InsertUnder(op);
 			joint_manager_ = tmp;
 		}
@@ -670,28 +670,28 @@ Bool MMDModelManagerObject::CreateManagers()
 	{
 		if (bone_manager_ == nullptr)
 		{
-			BaseObject* bone_root_object = BaseObject::Alloc(ID_O_MMD_BONE_MANAGER);
+			BaseObject* bone_root_object = BaseObject::Alloc(g_mmd_bone_manager_object_id);
 			bone_root_object->InsertUnder(op);
 			bone_manager_ = bone_root_object;
 			bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
 		}
 		if (mesh_manager_ == nullptr)
 		{
-			BaseObject* mesh_root_object = BaseObject::Alloc(ID_O_MMD_MESH_MANAGER);
+			BaseObject* mesh_root_object = BaseObject::Alloc(g_mmd_mesh_manager_object_id);
 			mesh_root_object->InsertUnder(op);
 			mesh_manager_ = mesh_root_object;
 			mesh_manager_data_ = mesh_manager_->GetNodeData<MMDMeshManagerObject>();
 		}
 		if (rigid_manager_ == nullptr)
 		{
-			BaseObject* rigid_root_object = BaseObject::Alloc(ID_O_MMD_RIGID_MANAGER);
+			BaseObject* rigid_root_object = BaseObject::Alloc(g_mmd_rigid_manager_object_id);
 			rigid_root_object->InsertUnder(op);
 			rigid_manager_ = rigid_root_object;
 			rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
 		}
 		if (joint_manager_ == nullptr)
 		{
-			BaseObject* joint_root_object = BaseObject::Alloc(ID_O_MMD_JOINT_MANAGER);
+			BaseObject* joint_root_object = BaseObject::Alloc(g_mmd_joint_manager_object_id);
 			joint_root_object->InsertUnder(op);
 			joint_manager_ = joint_root_object;
 			joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
@@ -1033,7 +1033,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	iferr_scope_handler{ return SUPER::Message(node,type,data); };
 	switch (type)
 	{
-	case ID_O_MMD_MESH_MANAGER:
+	case g_mmd_mesh_manager_object_id:
 	{
 		if (static_cast<MMDMeshManagerObjectMsg*>(data)->type == MMDMeshManagerObjectMsgType::MESH_MORPH_CHANGE)
 		{
@@ -1041,7 +1041,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
-	case ID_O_MMD_BONE_MANAGER:
+	case g_mmd_bone_manager_object_id:
 	{
 		if (static_cast<MMDBoneManagerObjectMsg*>(data)->type == MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE)
 		{
@@ -1171,7 +1171,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		{
 			model_mode_ = t_data.GetInt32();
 			MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, model_mode_);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_MODEL, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_model_manager_object_id, &msg);
 			break;
 		}
 		case MODEL_ANIM_LIST:

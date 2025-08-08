@@ -8,8 +8,7 @@ Description:    CMT tools setting struct.
 
 **************************************************************************/
 
-#ifndef CMT_TOOLS_SETTING_H__
-#define CMT_TOOLS_SETTING_H__
+#pragma once
 
 #include "pch.h"
 
@@ -117,5 +116,3 @@ namespace CMTToolsSetting
 		explicit ModelExport(BaseDocument* document) : BaseSetting(document) {}
 	};
 }
-
-#endif //!CMT_TOOLS_SETTING_H__

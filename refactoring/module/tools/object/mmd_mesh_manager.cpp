@@ -180,7 +180,7 @@ Bool MMDMeshManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 
 Bool MMDMeshManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
-	if (type == ID_O_MMD_MODEL)
+	if (type == g_mmd_model_manager_object_id)
 	{
 		const auto msg = static_cast<MMDModelManagerObjectMsg*>(data);
 		switch (msg->msg_type)
@@ -208,7 +208,7 @@ EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 {
 	if (!model_manager_)
 	{
-		if (BaseObject* up_object = op->GetUp(); up_object->IsInstanceOf(ID_O_MMD_MODEL))
+		if (BaseObject* up_object = op->GetUp(); up_object->IsInstanceOf(g_mmd_model_manager_object_id))
 		{
 			model_manager_ = up_object;
 		}
@@ -1376,7 +1376,7 @@ void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op)
 		if (model_manager_)
 		{
 			MMDMeshManagerObjectMsg msg{ MMDMeshManagerObjectMsgType::MESH_MORPH_CHANGE };
-			model_manager_->Message(ID_O_MMD_MESH_MANAGER, &msg);
+			model_manager_->Message(g_mmd_mesh_manager_object_id, &msg);
 		}
 	}
 }

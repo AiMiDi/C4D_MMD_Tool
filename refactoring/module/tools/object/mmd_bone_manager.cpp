@@ -40,7 +40,7 @@ Bool MMDBoneManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snod
 		return false;
 	};
 	auto const dest_object = reinterpret_cast<MMDBoneManagerObject*>(dest);
-	dest_object->bone_name_index = bone_name_index;
+	dest_object->bone_name_index_ = bone_name_index_;
 	for (const auto& entry : bone_list_)
 	{
 		auto& link = dest_object->bone_list_.InsertKey(entry.GetKey())iferr_return;
@@ -55,7 +55,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	iferr_scope_handler{
 		return false;
 	};
-	IOReadField(bone_name_index);
+	IOReadField(bone_name_index_);
 	IOReadField(model_manager_);
 	if (!io_util::ReadHashMap(hf, bone_list_))
 		return false;
@@ -64,7 +64,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 Bool MMDBoneManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	IOWriteField(bone_name_index);
+	IOWriteField(bone_name_index_);
 	IOWriteField(model_manager_);
 	if (!io_util::WriteHashMap(hf, bone_list_))
 		return false;
@@ -85,7 +85,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg { MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ON };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_OFF:
@@ -93,7 +93,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_OFF);
 			op->SetRenderMode(MODE_OFF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_OFF };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_MOVABLE:
@@ -101,7 +101,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_MOVABLE };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_VISIBLE:
@@ -109,7 +109,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_VISIBLE };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_ROTATABLE:
@@ -117,7 +117,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ROTATABLE };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_ENABLED:
@@ -125,7 +125,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ENABLED };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 			break;
 		}
 		case BONE_DISPLAY_TYPE_IK:
@@ -133,7 +133,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			op->SetEditorMode(MODE_UNDEF);
 			op->SetRenderMode(MODE_UNDEF);
 			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_IK };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 			break;
 		}
 		default:
@@ -143,7 +143,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 	case BONE_MODE:
 	{
 		MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, t_data.GetInt32());
-		node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, ID_O_MMD_BONE_MANAGER, &msg);
+		node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 		break;
 	}
 	default:
@@ -161,7 +161,7 @@ void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, voi
 		{
 			return;
 		}
-		const auto new_bone_tag = new_bone->MakeTag(ID_T_MMD_BONE);
+		const auto new_bone_tag = new_bone->MakeTag(g_mmd_bone_tag_id);
 		if(!new_bone_tag)
 		{
 			return;
@@ -171,11 +171,9 @@ void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, voi
 		{
 			return;
 		}
-		new_bone->SetName(new_bone->GetName() + "." + String::IntToString(bone_name_index++));
-		new_bone_node->bone_tag_ = new_bone_tag;
+		new_bone->SetName(new_bone->GetName() + "." + String::IntToString(bone_name_index_++));
 		new_bone_node->bone_object_ = new_bone;
-		new_bone_node->bone_manager_ = reinterpret_cast<BaseObject*>(node);
-		new_bone_node->bone_manager_node_ = this;
+		new_bone_node->bone_manager_data_ = this;
 		new_bone_node->RefreshColor();
 		new_bone->InsertUnder(node);
 	}
@@ -200,7 +198,7 @@ bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	if (need_update_morph && model_manager_)
 	{
 		MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE };
-		model_manager_->Message(ID_O_MMD_BONE_MANAGER, &msg);
+		model_manager_->Message(g_mmd_bone_manager_object_id, &msg);
 	}
 	return true;
 }
@@ -223,7 +221,7 @@ bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node)
 		{
 			if (node_->GetType() == Ojoint)
 			{
-				if (SDK2024_Const BaseTag* node_bone_tag = node_->GetTag(ID_T_MMD_BONE); node_bone_tag != nullptr)
+				if (SDK2024_Const BaseTag* node_bone_tag = node_->GetTag(g_mmd_bone_tag_id); node_bone_tag != nullptr)
 				{
 					GeData ge_data;
 					node_bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), ge_data, DESCFLAGS_GET::NONE);
@@ -261,13 +259,13 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		HandleDescriptionCommandMessage(node, data);
 		break;
 	}
-	case ID_T_MMD_BONE:
+	case g_mmd_bone_tag_id:
 	{
 		if (!HandleMMDBoneTagMessage(node, data))
 			return SUPER::Message(node, type, data);
 		break;
 	}
-	case ID_O_MMD_MODEL:
+	case g_mmd_model_manager_object_id:
 	{
 		if (const auto* msg = static_cast<MMDModelManagerObjectMsg*>(data); msg != nullptr)
 		{
@@ -336,7 +334,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		return false;
 	};
 
-	position_multiple = setting.position_multiple;
+	position_multiple_ = setting.position_multiple;
 
 	const auto& pmx_bones = pmx_file.m_bones;
 	const auto pmx_bone_num = pmx_bones.size();
@@ -353,7 +351,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		BaseObject* new_bone = BaseObject::Alloc(Ojoint);
 		if (new_bone == nullptr)
 			continue;
-		new_bone->MakeTag(ID_T_MMD_BONE);
+		new_bone->MakeTag(g_mmd_bone_tag_id);
 		bone_list.Append(new_bone)iferr_return;
 	}
 
@@ -366,15 +364,12 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		if(!bone_object)
 			continue;
 
-		const auto bone_tag = bone_object->GetTag(ID_T_MMD_BONE);
+		const auto bone_tag = bone_object->GetTag(g_mmd_bone_tag_id);
 		const auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
 
-		// init bone tag
-		bone_tag_node->bone_tag_ = bone_tag;
 		bone_tag_node->bone_object_ = bone_object;
 		bone_tag_node->mmd_node_ = mmd_node_manager_->GetMMDNode(mmd_bone_index);
-		bone_tag_node->bone_manager_ = reinterpret_cast<BaseObject*>(Get());
-		bone_tag_node->bone_manager_node_ = this;
+		bone_tag_node->bone_manager_data_ = this;
 
 		// bone name
 		const maxon::String bone_name_local{ mmd_bone.m_name.c_str() };

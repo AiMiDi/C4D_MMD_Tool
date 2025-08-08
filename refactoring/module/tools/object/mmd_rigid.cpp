@@ -386,7 +386,7 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
-	case  ID_O_MMD_RIGID_MANAGER:
+	case  g_mmd_rigid_manager_object_id:
 	{
 		if (const auto* msg = static_cast<MMDRigidRootObjectMsg*>(data); msg)
 		{
@@ -479,57 +479,53 @@ DRAWRESULT MMDRigidObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 	return SUPER::Draw(op, drawpass, bd, bh);
 }
 
-EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
-	EXECUTIONFLAGS flags)
+void MMDRigidObject::HandleRigidIndexUpdate(BaseObject* op) const
 {
-	if (op == nullptr || doc == nullptr)
+	if (const BaseObject* up_object = op->GetUp(); !up_object || !up_object->IsInstanceOf(g_mmd_rigid_manager_object_id))
+		return;
+
+	if (BaseObject* prev_object = op->GetPred(); !prev_object)
 	{
-		return EXECUTIONRESULT::OK;
+		op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), "0"_s, DESCFLAGS_SET::NONE);
 	}
-
-	const BaseContainer* bc = op->GetDataInstance();
-	if (bc == nullptr)
+	else
 	{
-		return EXECUTIONRESULT::OK;
-	}
+		while (prev_object != nullptr && !prev_object->IsInstanceOf(g_mmd_rigid_object_id))
+			prev_object = prev_object->GetPred();
 
-	BaseObject* prev_object = op->GetPred();
-	BaseObject* up_object = op->GetUp();
+		GeData data;
+		if (!prev_object->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), data, DESCFLAGS_GET::NONE))
+			return;
 
-	Bool update_rigid_list = false;
-	if (up_object != nullptr && up_object->IsInstanceOf(ID_O_MMD_RIGID_MANAGER))
-	{
-		if (!prev_object)
-		{
-			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), "0"_s, DESCFLAGS_SET::NONE);
-		}
-		else
-		{
-			while (prev_object != nullptr && !prev_object->IsInstanceOf(ID_O_MMD_RIGID))
-			{
-				prev_object = prev_object->GetPred();
-			}
-			GeData data;
-			prev_object->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), data, DESCFLAGS_GET::NONE);
-			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), String::IntToString(data.GetString().ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
-			update_rigid_list = true;
-		}
-	}
+		const auto rigid_index = data.GetString().ToInt32(nullptr) + 1;
+		if (!op->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), data, DESCFLAGS_GET::NONE))
+			return;
 
-	if (update_rigid_list && rigid_manager_data_)
-	{
+		if (rigid_index == data.GetString().ToInt32(nullptr))
+			return;
+
+		if (!op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), String::IntToString(rigid_index), DESCFLAGS_SET::NONE))
+			return;
+
+		if (!rigid_manager_data_)
+			return;
+
 		rigid_manager_data_->UpdateRigidList();
 	}
+}
 
-	if (!m_protection_tag)
+EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
+                                        EXECUTIONFLAGS flags)
+{
+	if (op == nullptr)
 	{
-		m_protection_tag = op->MakeTag(Tprotection);
-		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		m_protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-		m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
+		return EXECUTIONRESULT::OK;
 	}
 
-	if (m_rigid_mode == RIGID_MODE_VMD && m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
+	if (m_rigid_mode == RIGID_MODE_EDIT)
+		HandleRigidIndexUpdate(op);
+
+	else if (m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
 	{
 		const auto transform = mmd_rigidbody_->GetTransform();
 		op->SetMl(Matrix{
@@ -566,7 +562,6 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(m_rigid_shape_type);
 	IOReadField(m_rigid_group_id);
 	IOReadField(rigid_manager_data_);
-	IOReadField(m_protection_tag);
 
 	UpdateRigidPhysics(m_physics_mode);
 	UpdateRigidShape(bc, m_rigid_shape_type);
@@ -582,7 +577,6 @@ Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 	IOWriteField(m_rigid_shape_type);
 	IOWriteField(m_rigid_group_id);
 	IOWriteField(rigid_manager_data_);
-	IOWriteField(m_protection_tag);
 
 	return true;
 }
@@ -619,29 +613,13 @@ void MMDRigidObject::HandleRigidModeChange(Int32 mode)
 	if (mode == RIGID_MODE_EDIT)
 	{
 		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
-		if (m_protection_tag)
-		{
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), false, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), false, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), false, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), false, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), false, DESCFLAGS_SET::NONE);
-		}
+
 	}
 	else
 	{
 		// TODO: Save to mmd_rigid_body
 		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
-		if (m_protection_tag)
-		{
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), true, DESCFLAGS_SET::NONE);
-			m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), true, DESCFLAGS_SET::NONE);
-		}
+
 	}
 
 	m_rigid_mode = mode;

@@ -8,10 +8,7 @@ Description:	math util
 
 **************************************************************************/
 
-#ifndef MATH_UTIL_H__
-#define MATH_UTIL_H__
-
-#include "pch.h"
+#pragma once
 
 namespace math_util
 {
@@ -46,20 +43,20 @@ namespace math_util
 		// pitch(y - axis rotation)
 		const Float sinr_cosp = 2.0 * (static_cast<double>(quaternion[3] * quaternion[1]) +
 			static_cast<double>(quaternion[0] * quaternion[2]));
-		const Float cosr_cosp = 1.0 - (2.0 * (static_cast<double>(quaternion[0] * quaternion[0]) + 
+		const Float cosr_cosp = 1.0 - (2.0 * (static_cast<double>(quaternion[0] * quaternion[0]) +
 			static_cast<double>(quaternion[1] * quaternion[1])));
 		const Float pitch = -atan2(sinr_cosp, cosr_cosp);
 
 		// yaw(z - axis rotation)
-		const Float siny_cosp = 2.0 * (static_cast<double>(-quaternion[3] * quaternion[2]) - 
+		const Float siny_cosp = 2.0 * (static_cast<double>(-quaternion[3] * quaternion[2]) -
 			static_cast<double>(quaternion[0] * quaternion[1]));
-		const Float cosy_cosp = 1.0 - (2.0 * (static_cast<double>(quaternion[0] * quaternion[0]) + 
+		const Float cosy_cosp = 1.0 - (2.0 * (static_cast<double>(quaternion[0] * quaternion[0]) +
 			static_cast<double>(quaternion[2] * quaternion[2])));
 		const Float yaw = atan2(siny_cosp, cosy_cosp);
 
 		// roll(x - axis rotation)
 		Float roll;
-		if (const Float sinp = 2.0 * (static_cast<double>(quaternion[2] * quaternion[1]) - 
+		if (const Float sinp = 2.0 * (static_cast<double>(quaternion[2] * quaternion[1]) -
 			static_cast<double>(quaternion[3] *quaternion[0])); sinp >= 1.0)
 		{
 			// use 90 degrees if out of range
@@ -98,5 +95,3 @@ namespace math_util
 		return maxon::Vec3<float>{ maxon::SafeConvert<float>(pitch), maxon::SafeConvert<float>(-roll), maxon::SafeConvert<float>(yaw) };
 	}
 }
-
-#endif // !MATH_UTIL_H__

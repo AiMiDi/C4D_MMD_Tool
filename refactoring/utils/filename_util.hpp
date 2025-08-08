@@ -4,14 +4,11 @@ Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
 Date:			2022/7/2
 File:			Filename_util.hpp
-Description:	Filename utils 
+Description:	Filename utils
 
 **************************************************************************/
 
-#ifndef FILENAME_UTIL_H__
-#define FILENAME_UTIL_H__
-
-#include "pch.h"
+#pragma once
 
 namespace filename_util
 {
@@ -64,5 +61,3 @@ namespace filename_util
 		return true;
 	}
 }
-
-#endif // !FILENAME_UTIL_H__

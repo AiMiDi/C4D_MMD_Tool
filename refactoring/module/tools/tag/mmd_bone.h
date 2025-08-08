@@ -8,18 +8,18 @@ Description:	DESC
 
 **************************************************************************/
 
-#ifndef MMD_BONE_H__
-#define MMD_BONE_H__
+#pragma once
+
 #include "description/OMMDBoneManager.h"
 
 class MMDBoneManagerObject;
+struct MMDBoneManagerObjectMsg;
 
 namespace CMTToolsSetting
 {
 	struct MotionImport;
 }
 
-struct MMDBoneManagerObjectMsg;
 
 enum class MMDBoneTagMsgType : int8_t
 {
@@ -31,7 +31,7 @@ class MMDBoneTagMsg
 {
 public:
 	MMDBoneTagMsgType type;
-	explicit MMDBoneTagMsg(const MMDBoneTagMsgType type = MMDBoneTagMsgType::DEFAULT);
+	explicit MMDBoneTagMsg(const MMDBoneTagMsgType in_type = MMDBoneTagMsgType::DEFAULT) : type(in_type){}
 	virtual ~MMDBoneTagMsg() = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTagMsg)
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDBoneTagMsg)
@@ -47,22 +47,18 @@ public:
  */
 class MMDBoneTag final : public TagData
 {
+	// Bone MMD node
 	libmmd::MMDNode* mmd_node_ = nullptr;
-
-	// Bone root object
-	BaseObject* bone_manager_ = nullptr;
-	MMDBoneManagerObject* bone_manager_node_ = nullptr;
+	// Bone manager ObjectData
+	MMDBoneManagerObject* bone_manager_data_ = nullptr;
 	// Corresponding bone object
 	BaseObject* bone_object_ = nullptr;
-	// Bone tag
-	BaseTag* bone_tag_ = nullptr;
 	// Protection tag for limiting bone movement
 	BaseTag* protection_tag_ = nullptr;
-
+	// Bone mode
 	Int32 bone_mode_ = BONE_MODE_ANIM;
 
 	friend class MMDBoneManagerObject;
-
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTag)
 	CMT_DEFAULT_MOVE_BODY(MMDBoneTag)
 	INSTANCEOF(MMDBoneTag, TagData)
@@ -173,13 +169,6 @@ private:
 	bool CreateBoneLockTag();
 
 	/**
-	 * @brief Handles bone lock updates for the MMDBoneTag.
-	 * @param allow_rotate
-	 * @param allow_translate
-	 */
-	void HandleBoneLockUpdate(Bool allow_rotate, Bool allow_translate);
-
-	/**
 	 * @brief Handles description updates for the MMDBoneTag.
 	 * @param[in] node The GeListNode representing the MMDBoneTag.
 	 * @param[in] bc The BaseContainer containing the description data.
@@ -218,10 +207,8 @@ private:
 	 * This function is responsible for updating the bone root properties based on
 	 * the provided data instance and root object message.
 	 *
-	 * @param[in] data_instance_bc The BaseContainer containing the data instance.
-	 * @param[in] msg The MMDBoneRootObjectMsg containing the root object message.
+	 * @param[in] bc The BaseContainer containing the data instance.
+	 * @param[in] bone_manager_object The MMDBoneRootObjectMsg containing the root object message.
 	 */
-	void HandleBoneHierarchyUpdate(BaseContainer* data_instance_bc, const MMDBoneManagerObjectMsg* msg);
+	void HandleBoneHierarchyUpdate(BaseContainer* bc, BaseObject* bone_manager_object) const;
 };
-
-#endif // MMD_BONE_H__

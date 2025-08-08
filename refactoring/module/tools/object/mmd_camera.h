@@ -8,8 +8,7 @@ Description:	C4D MMD camera object
 
 **************************************************************************/
 
-#ifndef MMD_CAMERA_H__
-#define MMD_CAMERA_H__
+#pragma once
 
 #include "cmt_tools_setting.h"
 
@@ -109,5 +108,3 @@ private:
 
 	TrackObjectArray GetTrackObjects(GeListNode* node) const;
 };
-
-#endif // !MMD_CAMERA_H__

@@ -8,8 +8,7 @@ Description:	scene manager
 
 **************************************************************************/
 
-#ifndef CMT_SCENE_MANAGER_H__
-#define CMT_SCENE_MANAGER_H__
+#pragma once
 
 #include "cmt_tools_setting.h"
 
@@ -119,5 +118,3 @@ private:
 	BaseLinkArray SceneCameraArray;
 
 };
-
-#endif // !CMT_SCENE_MANAGER_H__

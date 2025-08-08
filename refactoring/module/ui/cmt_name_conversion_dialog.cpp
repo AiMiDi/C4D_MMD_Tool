@@ -467,7 +467,7 @@ String NameConversion::Conver(const String& src, const Bool use_universal)
 Bool NameConversion::CheckUpdate()
 {
 	UpdateNameConversionDialog dialog(*this);
-	dialog.Open(DLG_TYPE::MODAL, ID_COMMAND_CMT_TOOL, -1, -1, 0, 0, 1);
+	dialog.Open(DLG_TYPE::MODAL, g_cmt_command_id, -1, -1, 0, 0, 1);
 	return true;
 }
 

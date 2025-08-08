@@ -74,7 +74,7 @@ BaseObject* MMDRigidManagerObject::AddRigid(const String& name, libmmd::MMDRigid
 		node = Get();
 	if (const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance())
 	{
-		if (BaseObject* new_rigid = BaseObject::Alloc(ID_O_MMD_RIGID))
+		if (BaseObject* new_rigid = BaseObject::Alloc(g_mmd_rigid_object_id))
 		{
 			if (name.IsEmpty())
 				new_rigid->SetName(new_rigid->GetName() + "." + String::IntToString(m_rigid_name_index_++));
@@ -88,11 +88,11 @@ BaseObject* MMDRigidManagerObject::AddRigid(const String& name, libmmd::MMDRigid
 			new_rigid->InsertUnder(node);
 			{
 				MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, bc->GetInt32(RIGID_DISPLAY_TYPE));
-				new_rigid->Message(ID_O_MMD_RIGID_MANAGER, &msg);
+				new_rigid->Message(g_mmd_rigid_manager_object_id, &msg);
 			}
 			{
 				MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF,bc->GetInt32(RIGID_MODE));
-				new_rigid->Message(ID_O_MMD_RIGID_MANAGER, &msg);
+				new_rigid->Message(g_mmd_rigid_manager_object_id, &msg);
 			}
 			return new_rigid;
 		}
@@ -115,7 +115,7 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
-	case ID_O_MMD_MODEL:
+	case g_mmd_model_manager_object_id:
 	{
 		if (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data))
 		{
@@ -158,13 +158,13 @@ Bool MMDRigidManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case RIGID_DISPLAY_TYPE_OFF:
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_OFF);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_rigid_manager_object_id, &msg);
 			break;
 		}
 		case RIGID_DISPLAY_TYPE_ON:
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_ON);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_rigid_manager_object_id, &msg);
 			CreateDisplayTag(node);
 			m_display_tag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE)), DISPLAYTAG_SDISPLAY_GOURAUD, DESCFLAGS_SET::NONE);
 			break;
@@ -172,7 +172,7 @@ Bool MMDRigidManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case RIGID_DISPLAY_TYPE_WIRE:
 		{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, RIGID_DISPLAY_TYPE_WIRE);
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_rigid_manager_object_id, &msg);
 			CreateDisplayTag(node);
 			m_display_tag->SetParameter(ConstDescID(DescLevel(DISPLAYTAG_SDISPLAYMODE)), DISPLAYTAG_SDISPLAY_NOSHADING, DESCFLAGS_SET::NONE);
 			break;
@@ -185,7 +185,7 @@ Bool MMDRigidManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	case RIGID_MODE:
 	{
 			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, t_data.GetInt32());
-			node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_RIGID_MANAGER, &msg);
+			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_rigid_manager_object_id, &msg);
 			break;
 	}
 	default:
@@ -222,7 +222,7 @@ Bool MMDRigidManagerObject::UpdateRigidList()
 	BaseObject* node_ = op->GetDown();
 	while (node_)
 	{
-		if (node_->GetType() == ID_O_MMD_RIGID)
+		if (node_->GetType() == g_mmd_rigid_object_id)
 		{
 			node_->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), ge_data, DESCFLAGS_GET::NONE);
 			Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);

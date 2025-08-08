@@ -9,8 +9,7 @@ Description:	morph UI data util
 **************************************************************************/
 
 
-#ifndef MORPH_UI_DATA_UTIL_H__
-#define MORPH_UI_DATA_UTIL_H__
+#pragma once
 
 class MorphUIData final
 {
@@ -53,4 +52,3 @@ public:
 	}
 };
 
-#endif // !MORPH_UI_DATA_UTIL_H__

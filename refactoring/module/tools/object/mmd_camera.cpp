@@ -58,7 +58,7 @@ Bool MMDCamera::InitCamera(GeListNode* node)
 		auto* down_obj = reinterpret_cast<BaseObject*>(node->GetDown());
 		while (down_obj)
 		{
-			if(down_obj->GetType() == Ocamera && UniqueIDReader::FindUniqueID(down_obj, ID_O_MMD_CAMERA))
+			if(down_obj->GetType() == Ocamera && UniqueIDReader::FindUniqueID(down_obj, g_mmd_camera_object_id))
 			{
 				camera_ = down_obj;
 				return true;
@@ -68,7 +68,7 @@ Bool MMDCamera::InitCamera(GeListNode* node)
 
 		camera_ = BaseObject::Alloc(Ocamera);
 		camera_->SetName("Camera"_s);
-		UniqueIDWriter::AddUniqueID(camera_, "CMT::MMDCamera"_s, ID_O_MMD_CAMERA);
+		UniqueIDWriter::AddUniqueID(camera_, "CMT::MMDCamera"_s, g_mmd_camera_object_id);
 		protection_tag_ = BaseTag::Alloc(Tprotection);
 		protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
 		protection_tag_->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);

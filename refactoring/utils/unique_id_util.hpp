@@ -8,10 +8,7 @@ Description:	Unique ID util
 
 **************************************************************************/
 
-#ifndef UNIQUE_ID_UTIL_H__
-#define UNIQUE_ID_UTIL_H__
-
-#include "pch.h"
+#pragma once
 
 class UniqueIDReader
 {
@@ -49,5 +46,3 @@ public:
 		return bl->AddUniqueID(appid, id_writer.m_cstr, id_writer.m_bytes);
 	}
 };
-
-#endif // !UNIQUE_ID_UTIL_H__

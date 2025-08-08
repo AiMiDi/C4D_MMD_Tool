@@ -8,8 +8,8 @@ Description:	MMD joint root object
 
 **************************************************************************/
 
-#ifndef MMD_JOINT_ROOT_H__
-#define MMD_JOINT_ROOT_H__
+#pragma once
+
 #include "mmd_manager.hpp"
 #include "description/OMMDJointManager.h"
 
@@ -72,5 +72,3 @@ public:
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 };
-
-#endif // !MMD_JOINT_ROOT_H__

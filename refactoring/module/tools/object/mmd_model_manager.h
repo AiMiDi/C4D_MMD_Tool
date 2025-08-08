@@ -8,8 +8,7 @@ Description:	MMD model object
 
 **************************************************************************/
 
-#ifndef MMD_MODEL_H__
-#define MMD_MODEL_H__
+#pragma once
 
 #include "CMTSceneManager.h"
 #include "description/OMMDModelManager.h"
@@ -174,5 +173,3 @@ private:
 	//Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	Bool DeleteVMDAnimation();
 };
-
-#endif // !MMD_MODEL_H__

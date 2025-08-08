@@ -8,8 +8,7 @@ Description:	MMD mesh root object
 
 **************************************************************************/
 
-#ifndef MMD_MESH_ROOT_H__
-#define MMD_MESH_ROOT_H__
+#pragma once
 
 #include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
@@ -78,5 +77,3 @@ public:
 private:
 	void RefreshMeshMorphData(BaseObject* op);
 };
-
-#endif // !MMD_MESH_ROOT_H__

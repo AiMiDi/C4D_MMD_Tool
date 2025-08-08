@@ -159,7 +159,7 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		break;
 	}
 #endif
-	case  ID_O_MMD_JOINT_MANAGER:
+	case  g_mmd_joint_manager_object_id:
 	{
 		if (const auto* msg = static_cast<MMDJointRootObjectMsg*>(data); msg)
 		{
@@ -314,47 +314,36 @@ DRAWRESULT MMDJointObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 	return SUPER::Draw(op, drawpass, bd, bh);
 }
 
-EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
-	EXECUTIONFLAGS flags)
+void MMDJointObject::HandleJointHierarchyUpdate(BaseObject* op)
 {
-	if (op == nullptr || doc == nullptr)
+	if (const BaseObject* up_object = op->GetUp(); up_object && up_object->IsInstanceOf(g_mmd_joint_object_id))
 	{
-		return EXECUTIONRESULT::OK;
-	}
-/*
-	BaseObject* up_object = op->GetUp();
-
-	if (up_object == nullptr && joint_manager_ != nullptr)
-	{
-		op->Remove();
-		op->InsertUnderLast(joint_manager_);
-	}
-
-	if (up_object != nullptr && up_object->IsInstanceOf(ID_O_MMD_JOINT_MANAGER))
-	{
-
-		SDK2024_Const BaseObject* PredObject = op->GetPred();
-		if (PredObject == nullptr)
+		if (SDK2024_Const BaseObject* pred_object = op->GetPred(); !pred_object)
 		{
 			op->SetParameter(ConstDescID(DescLevel(JOINT_INDEX)), "0"_s, DESCFLAGS_SET::NONE);
 		}
 		else
 		{
 			GeData data;
-			PredObject->GetParameter(ConstDescID(DescLevel(JOINT_INDEX)), data, DESCFLAGS_GET::NONE);
-			const String RigidIndex = data.GetString();
-			op->SetParameter(ConstDescID(DescLevel(JOINT_INDEX)), String::IntToString(RigidIndex.ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
+			pred_object->GetParameter(ConstDescID(DescLevel(JOINT_INDEX)), data, DESCFLAGS_GET::NONE);
+			op->SetParameter(ConstDescID(DescLevel(JOINT_INDEX)), String::IntToString(data.GetString().ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
 		}
-
-		if (joint_manager_ == nullptr)
-		{
-			joint_manager_ = up_object;
-			joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
-		}
-
 	}
-*/
-	if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
+}
+
+EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
+                                        EXECUTIONFLAGS flags)
+{
+	if (!op)
+	{
+		return EXECUTIONRESULT::OK;
+	}
+
+	if (joint_mode_ == JOINT_MODE_EDIT)
+	{
+		HandleJointHierarchyUpdate(op);
+	}
+	else if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
 	{
 		const auto joint_position = mmd_joint_->GetPosition();
 		op->SetAbsPos(Vector(joint_position.x, joint_position.y, joint_position.z) * joint_manager_data_->GetPositionMultiple());

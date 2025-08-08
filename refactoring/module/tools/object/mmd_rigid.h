@@ -8,8 +8,7 @@ Description:	C4D MMD rigid object
 
 **************************************************************************/
 
-#ifndef MMD_RIGID_H__
-#define MMD_RIGID_H__
+#pragma once
 
 #include "description/OMMDRigid.h"
 #include "description/OMMDRigidManager.h"
@@ -24,7 +23,6 @@ class MMDRigidObject final : public ObjectData
 	Int32		m_rigid_shape_type = SPHERICAL;
 	Int32		m_rigid_group_id = RIGID_GROUP_0;
 
-	BaseTag*	m_protection_tag = nullptr;
 	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
 	libmmd::MMDRigidBody* mmd_rigidbody_ = nullptr;
 
@@ -44,6 +42,7 @@ public:
 
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
+	void HandleRigidIndexUpdate(BaseObject* op) const;
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
@@ -66,5 +65,3 @@ private:
 	void UpdateRigidPhysics(Int32 physics_mode);
 	void UpdateRigidGroup(Int32 rigid_group);
 };
-
-#endif

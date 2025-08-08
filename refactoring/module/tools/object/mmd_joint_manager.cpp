@@ -66,7 +66,7 @@ BaseObject* MMDJointManagerObject::AddJoint(const String& name, libmmd::MMDJoint
 		node = Get();
 	if (const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance())
 	{
-		if (BaseObject* new_joint = BaseObject::Alloc(ID_O_MMD_JOINT))
+		if (BaseObject* new_joint = BaseObject::Alloc(g_mmd_joint_object_id))
 		{
 			if (name.IsEmpty())
 				new_joint->SetName(new_joint->GetName() + "." + String::IntToString(joint_name_index_++));
@@ -81,11 +81,11 @@ BaseObject* MMDJointManagerObject::AddJoint(const String& name, libmmd::MMDJoint
 			new_joint->InsertUnder(node);
 			{
 				MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_DISPLAY_CHANGE, bc->GetInt32(JOINT_DISPLAY_TYPE), 0);
-				new_joint->Message(ID_O_MMD_JOINT_MANAGER, &msg);
+				new_joint->Message(g_mmd_joint_manager_object_id, &msg);
 			}
 			{
 				MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, bc->GetInt32(JOINT_MODE));
-				new_joint->Message(ID_O_MMD_JOINT_MANAGER, &msg);
+				new_joint->Message(g_mmd_joint_manager_object_id, &msg);
 			}
 			return new_joint;
 		}
@@ -110,7 +110,7 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		break;
 	}
-	case ID_O_MMD_MODEL:
+	case g_mmd_model_manager_object_id:
 	{
 			if (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data); msg != nullptr)
 			{
@@ -165,13 +165,13 @@ Bool MMDJointManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	case JOINT_DISPLAY_TYPE:
 	{
 		MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_DISPLAY_CHANGE, t_data.GetInt32(), 0);
-		node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_MANAGER, &msg);
+		node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_joint_manager_object_id, &msg);
 		break;
 	}
 	case JOINT_MODE:
 	{
 		MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, t_data.GetInt32());
-		node->MultiMessage(MULTIMSG_ROUTE::DOWN, ID_O_MMD_JOINT_MANAGER, &msg);
+		node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_joint_manager_object_id, &msg);
 		break;
 	}
 	default:
