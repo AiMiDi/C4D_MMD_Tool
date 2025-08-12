@@ -647,6 +647,7 @@ case PMX_BONE_LAYER:
 		break;
 	}
 	case PMX_BONE_IS_IK:
+	{
 		is_IK = bc->GetBool(PMX_BONE_IS_IK);
 		const auto state = reinterpret_cast<BaseList2D*>(Get())->GetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), true);
 		if (is_IK)
@@ -654,6 +655,7 @@ case PMX_BONE_LAYER:
 		else
 			reinterpret_cast<BaseList2D*>(Get())->SetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), DESCIDSTATE::HIDDEN | state);
 		[[fallthrough]];
+	}
 	case PMX_BONE_IS_FIXED_AXIS: [[fallthrough]];
 	case PMX_BONE_INHERIT_ROTATION: [[fallthrough]];
 	case PMX_BONE_INHERIT_TRANSLATION:
