@@ -30,6 +30,23 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Cache SDK Frameworks
+      uses: actions/cache@v3
+      with:
+        path: sdk_${{matrix.version}}/frameworks
+        key: ${{ runner.os }}-sdk-${{ matrix.version }}-frameworks-${{ hashFiles('sdk_${{matrix.version}}/frameworks/**') }}
+        restore-keys: |
+          ${{ runner.os }}-sdk-${{ matrix.version }}-frameworks-
+
+    - name: Cache Dependency Build
+      uses: actions/cache@v3
+      with:
+        path: |
+          dependency/*/build
+        key: ${{ runner.os }}-dependency-build-${{ hashFiles('dependency/*/CMakeLists.txt', 'dependency/*/src/**', 'dependency/*/include/**') }}
+        restore-keys: |
+          ${{ runner.os }}-dependency-build-
+
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
 
