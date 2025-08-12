@@ -28,10 +28,10 @@ jobs:
         version: [ '2024' ]
         
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
 
     - name: Cache SDK Frameworks
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: sdk_${{matrix.version}}/frameworks
         key: ${{ runner.os }}-sdk-${{ matrix.version }}-frameworks-${{ hashFiles('sdk_${{matrix.version}}/frameworks/**') }}
@@ -39,7 +39,7 @@ jobs:
           ${{ runner.os }}-sdk-${{ matrix.version }}-frameworks-
 
     - name: Cache Dependency Build
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           dependency/*/build
@@ -48,7 +48,7 @@ jobs:
           ${{ runner.os }}-dependency-build-
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v2
 
     - name: Run init.bat
       run: ./init.bat
