@@ -38,7 +38,7 @@ cmake --install . --config Debug --prefix ../../install
 cmake --build . --config Release -j
 cmake --install . --config Release --prefix ../../install
 cd ../..
-cd ./saba
+cd ./libMMD
 mkdir build 
 cd build
 cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install" -D LIBMMD_BULLET_ROOT="../../install" -D LIBMMD_ENABLE_TEST=off -D LIBMMD_INSTALL=on
