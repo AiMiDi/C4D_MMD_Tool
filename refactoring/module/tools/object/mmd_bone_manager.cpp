@@ -383,7 +383,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		const auto& bone_position = mmd_bone.m_position;
 		Vector position(bone_position[0], bone_position[1], bone_position[2]);
 
-		auto add_bone_to_root = [&bone_object, &bone_tag, &position, &setting, this]()
+		auto add_bone_to_manager = [&bone_object, &bone_tag, &position, &setting, this]()
 		{
 			position *= setting.position_multiple;
 			bone_object->SetFrozenPos(position);
@@ -394,7 +394,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		// set parent bone
 		if (const auto parent_bone_index = mmd_bone.m_parentBoneIndex; parent_bone_index == -1)
 		{
-			add_bone_to_root();
+			add_bone_to_manager();
 		}
 		else
 		{
@@ -410,7 +410,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 			}
 			else
 			{
-				add_bone_to_root();
+				add_bone_to_manager();
 			}
 		}
 		//bone_tag_node->HandleBoneIndexUpdate(bone_tag, bone_object, bone_tag->GetDataInstance());
@@ -456,7 +456,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_POSITION)), Vector(tail_position[0], tail_position[1], tail_position[2]) * setting.position_multiple, DESCFLAGS_SET::NONE);
 		}
 
-		/// inherit bone
+		/// append bone
 
 		// set have append rotation
 		const auto have_append_rotation = static_cast<uint16_t>(mmd_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AppendRotate);
@@ -514,82 +514,94 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		/// IK
 
 		// set is IK
-		const auto is_ik = static_cast<uint16_t>(mmd_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::IK);
-		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IS_IK)), is_ik, DESCFLAGS_SET::NONE);
+		const auto& is_IK = bone_tag_node->is_IK = static_cast<uint16_t>(mmd_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::IK);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IS_IK)), is_IK, DESCFLAGS_SET::NONE);
 
-		if(is_ik)
+		if(is_IK)
 		{
-			/*const auto& ik_array = pmx_bone.m_ikLinks;
-			const auto ik_bone_num = ik_array.size();
-			if(ik_bone_num == 0)
-				return true;
-			if(const auto ik_begin_bone = bone_list[ik_array[ik_bone_num - 1].m_ikBoneIndex]; ik_begin_bone)
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IK_TARGET_BONE_INDEX)), mmd_bone.m_ikTargetBoneIndex, DESCFLAGS_SET::NONE);
+			MAXON_SCOPE // set IK target link
 			{
-				// create ik tag
-				BaseTag* ik_tag = ik_begin_bone->MakeTag(1019561); // Ik tag ID : 1019561
-				if(setting.import_english)
+				BaseLink* ik_target_link = BaseLink::Alloc();
+				ik_target_link->SetLink(bone_list[mmd_bone.m_ikTargetBoneIndex]);
+				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IK_TARGET_BONE_LINK)), ik_target_link, DESCFLAGS_SET::NONE);
+			}
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IK_ITERATION)), mmd_bone.m_ikIterationCount, DESCFLAGS_SET::NONE);
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IK_UNIT_ANGLE)), mmd_bone.m_ikLimit, DESCFLAGS_SET::NONE);
+			if (DynamicDescription* const dynamic_description = bone_tag->GetDynamicDescriptionWritable())
+			{
+/*			pmx bone ik link UI:
+ *			pmx_bone_ik_link_grp
+ *			|-- ik_bone_index_grp
+ *				|-- ik_bone_index
+ *				|-- ik_bone_link
+ *			|-- pmx_bone_ik_link_enable_limit
+ *			|-- pmx_bone_ik_link_limit_min
+ *			|-- pmx_bone_ik_link_limit_max
+ */
+				const auto pmx_bone_ik_link_num = mmd_bone.m_ikLinks.size();
+				for (size_t i = 0; i < pmx_bone_ik_link_num; ++i)
 				{
-					ik_tag->SetName(bone_name_universal);
-				}
-				else
-				{
-					ik_tag->SetName(bone_name_local);
-				}
-				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_SOLVER)), ID_CA_IK_TAG_SOLVER_3D, DESCFLAGS_SET::NONE);
-				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_PREFERRED_WEIGHT)), 1, DESCFLAGS_SET::NONE);
+					const auto& pmx_bone_ik_link = mmd_bone.m_ikLinks[i];
 
-				// set target link
-				AutoAlloc<BaseLink> target_link;
-				target_link->SetLink(bone_object);
-				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TARGET)), target_link.Release(), DESCFLAGS_SET::NONE);
+					BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
+					bc.SetString(DESC_NAME, String(pmx_bones[pmx_bone_ik_link.m_ikBoneIndex].m_name.c_str()));
+					bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(PMX_BONE_IK_LINKS_GRP))));
+					const auto pmx_bone_ik_link_grp = dynamic_description->Alloc(bc);
 
-				// set tip link
-				AutoAlloc<BaseLink> tip_link;
-				if(const auto ik_target_bone = bone_list[pmx_bone.m_ikTargetBoneIndex]; ik_target_bone)
-				{
-					tip_link->SetLink(ik_target_bone);
-				}
-				ik_tag->SetParameter(ConstDescID(DescLevel(ID_CA_IK_TAG_TIP)), tip_link.Release(), DESCFLAGS_SET::NONE);
-
-				// add to model_root description
-				if(!model_manager_->GetNodeData<MMDModelManagerObject>()->AddIKBoneDescription(bone_name_local, ik_tag))
-					return false;
-
-				// set ik limit
-				for (auto ik_link_bone_index = size_t(); ik_link_bone_index < ik_bone_num; ++ik_link_bone_index)
-				{
-					const auto& pmx_ik_link_bone = ik_array[ik_link_bone_index];
-					if(const auto ik_link_bone = bone_list[pmx_ik_link_bone.m_ikBoneIndex]; ik_link_bone)
+					MAXON_SCOPE // IK bone group
 					{
-						if(!pmx_ik_link_bone.m_enableLimit)
-							continue;
+						bc = GetCustomDataTypeDefault(DTYPE_GROUP);
+						bc.SetData(DESC_PARENTGROUP, DescIDGeData(pmx_bone_ik_link_grp));
+						bc.SetInt32(DESC_COLUMNS, 2);
+						const auto ik_bone_index_grp = dynamic_description->Alloc(bc);
 
-						const auto& limit_min = pmx_ik_link_bone.m_limitMin;
-						const auto& limit_max = pmx_ik_link_bone.m_limitMax;
+						bc = GetCustomDataTypeDefault(DTYPE_LONG);
+						bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE));
+						bc.SetInt32(DESC_DEFAULT, pmx_bone_ik_link.m_ikBoneIndex);
+						bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+						bc.SetData(DESC_PARENTGROUP, DescIDGeData(ik_bone_index_grp));
+						dynamic_description->Alloc(bc);
 
-						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_MIN_ROT)),
-							Vector(limit_min[0], limit_min[1], limit_min[2]) * setting.position_multiple, DESCFLAGS_SET::NONE);
-						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_MAX_ROT)),
-							Vector(limit_max[0], limit_max[1], limit_max[2]) * setting.position_multiple, DESCFLAGS_SET::NONE);
-						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_H)), 1, DESCFLAGS_SET::NONE);
-						ik_link_bone->SetParameter(ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_IK_USE_ROT_B)), 1, DESCFLAGS_SET::NONE);
+						bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
+						MAXON_SCOPE // set IK bone link
+						{
+							BaseLink* ik_bone_link = BaseLink::Alloc();
+							ik_bone_link->SetLink(bone_list[pmx_bone_ik_link.m_ikBoneIndex]);
+							bc.SetData(DESC_DEFAULT, ik_bone_link);
+						}
+						bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+						bc.SetData(DESC_PARENTGROUP, DescIDGeData(ik_bone_index_grp));
+						dynamic_description->Alloc(bc);
 					}
+
+					bc = GetCustomDataTypeDefault(DTYPE_BOOL);
+					bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT));
+					bc.SetBool(DESC_DEFAULT, pmx_bone_ik_link.m_enableLimit);
+					bc.SetData(DESC_PARENTGROUP, DescIDGeData(pmx_bone_ik_link_grp));
+
+					bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
+					bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN));
+					bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMin.x, pmx_bone_ik_link.m_limitMin.y, pmx_bone_ik_link.m_limitMin.z));
+					bc.SetData(DESC_PARENTGROUP, DescIDGeData(pmx_bone_ik_link_grp));
+
+					bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
+					bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX));
+					bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMax.x, pmx_bone_ik_link.m_limitMax.y, pmx_bone_ik_link.m_limitMax.z));
+					bc.SetData(DESC_PARENTGROUP, DescIDGeData(pmx_bone_ik_link_grp));
 				}
-			}*/
+			}
 		}
 	}
 
 	// send bone index change msg
-	{
-		/*MMDBoneTagBoneIndexChangeMsg msg;
-		Get()->Message(ID_T_MMD_BONE, &msg);*/
-	}
+	HandleBoneIndexChangeMessage(Get());
 
 	// send description check update msg
 	{
 		DescriptionCheckUpdate msg;
-		static auto msg_descid = ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK));
-		msg.descid = &msg_descid;
+		static auto desc_id = ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK));
+		msg.descid = &desc_id;
 		Get()->MultiMessage(MULTIMSG_ROUTE::BROADCAST, MSG_DESCRIPTION_CHECKUPDATE, &msg);
 	}
 

@@ -56,6 +56,10 @@ STRINGTABLE
 	IDS_MSG_RENAME_OK "OK";
 	IDS_MSG_RENAME_CANCEL "Cancel";
 	IDS_CMT_VMD_ANIM_NONE "-- No animation --";
+	IDS_CMT_MODEL_MANAGER_IK_BONE "IK link bone";
+	IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT "Enable limit";
+	IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN "Min limit";
+	IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX "Max limit";
 
 	IDS_NAME_CONVER_UPDATA_TITLE "Manually confirm English(If it is not filled in, it will be generated automatically.)";
 	IDS_NAME_CONVER_NAMEMAP_NAME "English config file";

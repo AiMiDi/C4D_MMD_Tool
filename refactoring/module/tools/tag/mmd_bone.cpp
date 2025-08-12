@@ -647,8 +647,15 @@ case PMX_BONE_LAYER:
 		break;
 	}
 	case PMX_BONE_IS_IK:
-	case PMX_BONE_IS_FIXED_AXIS:
-	case PMX_BONE_INHERIT_ROTATION:
+		is_IK = bc->GetBool(PMX_BONE_IS_IK);
+		const auto state = reinterpret_cast<BaseList2D*>(Get())->GetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), true);
+		if (is_IK)
+			reinterpret_cast<BaseList2D*>(Get())->SetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), ~DESCIDSTATE::HIDDEN & state);
+		else
+			reinterpret_cast<BaseList2D*>(Get())->SetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), DESCIDSTATE::HIDDEN | state);
+		[[fallthrough]];
+	case PMX_BONE_IS_FIXED_AXIS: [[fallthrough]];
+	case PMX_BONE_INHERIT_ROTATION: [[fallthrough]];
 	case PMX_BONE_INHERIT_TRANSLATION:
 	{
 		RefreshColor(node);
@@ -663,7 +670,7 @@ case PMX_BONE_LAYER:
 Bool MMDBoneTag::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
 	const BaseContainer* itemdesc) SDK2024_Const
 {
-	if (bone_mode_ == BONE_MODE_ANIM)
+	if (bone_mode_ != BONE_MODE_EDIT)
 		return false;
 
 	GeData ge_data;

@@ -49,6 +49,14 @@ STRINGTABLE TMMDBone
 	PMX_BONE_LOCAL_X "Bone local X";
 	PMX_BONE_LOCAL_Z "Bone local Z";
 
+	PMX_BONE_IK_GRP "IK";
+	PMX_BONE_IK_TARGET_BONE_INDEX "IK target bone";
+	PMX_BONE_IK_TARGET_BONE_LINK "";
+	PMX_BONE_IK_ITERATION "Iteration count";
+	PMX_BONE_IK_UNIT_ANGLE "Unit angle";
+	PMX_BONE_IK_LINKS_GRP "IK links";
+	PMX_BONE_IK_LINK_ADD_BUTTON "Add IK link";
+
 	PMX_BONE_MORPH_GRP "Bone morph";
 	PMX_BONE_MORPH_ADD_NAME "Bone morph name";
 	PMX_BONE_MORPH_ADD_BUTTON "Add bone morph";

@@ -57,6 +57,8 @@ class MMDBoneTag final : public TagData
 	BaseTag* protection_tag_ = nullptr;
 	// Bone mode
 	Int32 bone_mode_ = BONE_MODE_ANIM;
+	// Is IK
+	Bool is_IK = false;
 
 	friend class MMDBoneManagerObject;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTag)
