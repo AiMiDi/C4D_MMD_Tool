@@ -1,0 +1,1 @@
+maxon.IoDualInOutputStreamInterface	"net.maxon.interface.iodualinoutputstream"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\iostream_dualinoutput.h(21,7)	InOutputStreamInterface	GetInputStream,GetOutputStream,SetInputStream,SetOutputStream	

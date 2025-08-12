@@ -10,18 +10,18 @@ void MMDMaterialManager::SetTextureRelativePath(const Filename& texture_relative
 	m_texture_relative_path = texture_relative_path;
 }
 
-Bool MMDMaterialManager::LoadPMXTexture(const libmmd::pmx_model::pmx_texture_array& pmx_texture_array)
+Bool MMDMaterialManager::LoadPMXTextures(const std::vector<libmmd::PMXTexture>& pmx_textures)
 {
 	m_texture_path_array.Reset();
-	const auto texture_count = pmx_texture_array.size();
+	const auto texture_count = pmx_textures.size();
 	iferr(m_texture_path_array.SetCapacityHint(static_cast<Int>(texture_count)))
 	{
 		return false;
 	}
 	for (auto texture_index = decltype(texture_count){}; texture_index < texture_count; ++texture_index)
 	{
-		const auto& texture = pmx_texture_array[texture_index];
-		String texture_path_str(texture.get_texture_path().c_str());
+		const auto& [m_textureName] = pmx_textures[texture_index];
+		String texture_path_str(m_textureName.c_str());
 		Filename texture_path(texture_path_str);
 		if(texture_path.IsPopulated() && !GeFExist(texture_path))
 		{
@@ -34,14 +34,14 @@ Bool MMDMaterialManager::LoadPMXTexture(const libmmd::pmx_model::pmx_texture_arr
 	return true;
 }
 
-BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::pmx_material& pmx_material, const uint64_t material_index, const CMTToolsSetting::ModelImport& setting)
+BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::PMXMaterial& pmx_material, const uint64_t material_index, const maxon::String& material_name, const CMTToolsSetting::ModelImport& setting)
 {
 	BaseMaterial* base_material = nullptr;
 
 	// base color texture
 	bool has_texture = false;
 	bool has_alpha_channel = false;
-	const auto texture_index = pmx_material.get_texture_index();
+	const auto texture_index = pmx_material.m_textureIndex;
 	if (texture_index != -1 && texture_index < m_texture_path_array.GetCount())
 	{
 		const auto& texture_path = m_texture_path_array[texture_index];
@@ -75,7 +75,7 @@ BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::pmx_material& pm
 			return material;
 		base_material = material;
 
-		const auto& color = pmx_material.get_diffuse_color();
+		const auto& color = pmx_material.m_diffuse;
 		if (has_texture)
 		{
 			BaseChannel* base_color_channel = material->GetChannel(CHANNEL_COLOR);
@@ -127,21 +127,7 @@ BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::pmx_material& pm
 	}
 
 	// set material name
-	if (setting.import_english)
-	{
-		if (const maxon::String material_name_universal(pmx_material.get_material_name_universal().c_str()); material_name_universal.IsEmpty())
-		{
-			base_material->SetName("Material_" + String::UIntToString(material_index));
-		}
-		else
-		{
-			base_material->SetName(material_name_universal);
-		}
-	}
-	else
-	{
-		base_material->SetName(maxon::String(pmx_material.get_material_name_local().c_str()));
-	}
+	base_material->SetName(material_name);
 
 	return base_material;
 }

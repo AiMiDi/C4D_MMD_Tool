@@ -8,13 +8,16 @@ Description:	Time Utils with hash
 
 **************************************************************************/
 
-#ifndef TIME_UTIL_H__
-#define TIME_UTIL_H__
+#pragma once
 
 #if API_VERSION < 23000
 namespace maxon {
     using HashInt = UInt;
 }
+#endif
+
+#if API_VERSION >= 2024900
+using namespace cinema;
 #endif
 
 //  HashTime
@@ -31,4 +34,3 @@ public:
 	HashTime(const BaseTime& time) : BaseTime(time) {}
 };
 
-#endif // !TIME_UTIL_H__

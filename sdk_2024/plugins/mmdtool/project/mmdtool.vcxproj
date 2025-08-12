@@ -76,14 +76,14 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;YAML_CPP_STATIC_DEFINE=1;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>libMMD_Debug_static.lib;yaml-cpp_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMMD_Debug.lib;yaml-cpp_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -95,14 +95,14 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;YAML_CPP_STATIC_DEFINE=1;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>libMMD_static.lib;yaml-cpp.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMMD.lib;yaml-cpp.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -163,19 +163,20 @@
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_config_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model_manager.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -197,41 +198,42 @@
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\core\cmt_marco.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_interpolator.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_material.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_manager.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_root.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\pch.h" />
     <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h" />
     <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\io_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\string_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\MMDCamera.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneRoot.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDCamera.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJoint.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJointRoot.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshRoot.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModel.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJointManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModelManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigid.h" />
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidRoot.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\TMMDBone.h" />
   </ItemGroup>
   <ItemGroup>
@@ -263,11 +265,7 @@
     <None Include="..\..\..\..\res\S24_up\strings_zh-CN\dialogs\DLG_CMT_VMD_IMPORT.str" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\..\..\res\S24_up\description\MMDCamera.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDBoneRoot.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
@@ -279,15 +277,15 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJointRoot.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJointManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDMeshRoot.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDModel.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDModelManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
@@ -295,7 +293,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigidRoot.res">
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Resource>

@@ -8,28 +8,21 @@ Description:	C4D MMD camera object
 
 **************************************************************************/
 
-#ifndef MMD_CAMERA_H__
-#define MMD_CAMERA_H__
+#pragma once
 
 #include "cmt_tools_setting.h"
-#include "description/OMMDCamera.h"
-#include "module/tools/mmd_interpolator.hpp"
 
-using MMDCameraBase = MMDInterpolatorNode<ObjectData, 8, VMD_CAM_OBJ_INTERPOLATOR_NUM, VMD_CAM_OBJ_SPLINE, VMD_CAM_OBJ_CURVE_TYPE, VMD_CAM_OBJ_FRAME_AT, VMD_CAM_OBJ_FRAME_AT_STR>;
-
-class MMDCamera final : public MMDCameraBase
+class MMDCamera final : public ObjectData
 {
-	INSTANCEOF(MMDCamera, MMDCameraBase)
+	INSTANCEOF(MMDCamera, ObjectData)
 
-	// Default camera distance
-	inline static Float default_distance = 0;
+	static constexpr size_t track_count = 8;
 
 	// Maintained camera object
-	BaseObject* m_camera = nullptr;
-	BaseTag*    m_protection_tag = nullptr;
+	BaseObject* camera_ = nullptr;
+	BaseTag*      protection_tag_ = nullptr;
 
-	std::once_flag m_init_flag{};
-	bool m_is_setup_spline_callback = false;
+	std::once_flag added_to_manager_flag_{};
 
 	enum track_enum : uint8_t
 	{
@@ -76,39 +69,26 @@ public:
 	 */
 	MMDCamera& operator=(MMDCamera&& other) noexcept;
 
-public:
 	// Get maintained camera object
 	[[nodiscard]] BaseObject* GetCamera() const;
 
 	// Initialize camera object
-	Bool CameraInit(GeListNode* node = nullptr);
+	Bool InitCamera(GeListNode* node = nullptr);
 
-	Bool LoadVMDCamera(const libmmd::vmd_animation& vmd_data, const CMTToolsSetting::CameraImport& setting);
+	Bool LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>& animation, const CMTToolsSetting::CameraImport& setting);
 
-	Bool SaveVMDCamera(libmmd::vmd_animation* vmd_data, const CMTToolsSetting::CameraExport& setting);
+	Bool SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::CameraExport& setting);
 
 	// Convert a normal camera to a MMD camera
 	Bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
-	Bool DeleteAllKeyFrame(GeListNode* node = nullptr) override;
-
 	// Generating function
 	static NodeData* Alloc();
 
-private:
-	bool ConversionCameraCurve(CCurve* src_curve_position, const size_t& curve_type, const Int32& frame_count, const Float& fps);
-
-	static TrackDescIDArray GetTrackDescIDsImpl();
-
-	static void AddToSceneManager(BaseObject* object);
-public:
 	// Object initialization
 	Bool Init(GeListNode* node SDK2024_InitParaName) override;
 
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
-
-	// Called to override the writing of parameters. The callback function used to call SplineData.
-	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 
 	// Called when a node receives messages.
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
@@ -118,15 +98,13 @@ public:
 
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 
-protected:
-	TrackDescIDArray GetTrackDescIDs() override;
+private:
+	using TrackDescIDArray = std::array<const DescID, track_count>;
+	using TrackObjectArray = std::array<BaseObject*, track_count>;
 
-	TrackObjectArray GetTrackObjects(GeListNode* node) override;
+	static void AddToSceneManager(BaseObject* object);
 
-	CurrentValuesArray GetCurrentValues(GeListNode* node) override;
+	static TrackDescIDArray GetTrackDescIDs();
 
-	InterpolatorTrackTableArray GetTrackInterpolatorMap() override;
+	TrackObjectArray GetTrackObjects(GeListNode* node) const;
 };
-
-
-#endif // !MMD_CAMERA_H__

@@ -17,9 +17,9 @@ public:
 	~MMDMaterialManager() = default;
 
 	void SetTextureRelativePath(const Filename& texture_relative_path);
-	Bool LoadPMXTexture(const libmmd::pmx_model::pmx_texture_array& pmx_texture_array);
-	BaseMaterial* LoadPMXMaterial(const libmmd::pmx_material& pmx_material,
-	                              const uint64_t material_index, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadPMXTextures(const std::vector<libmmd::PMXTexture>& pmx_textures);
+	BaseMaterial* LoadPMXMaterial(const libmmd::PMXMaterial& pmx_material,
+	                              const uint64_t material_index, const maxon::String& material_name, const CMTToolsSetting::ModelImport& setting);
 private:
 
 };

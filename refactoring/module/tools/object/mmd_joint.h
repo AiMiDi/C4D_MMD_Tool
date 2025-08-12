@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Luc
@@ -8,18 +8,19 @@ Description:	C4D MMD joint object
 
 **************************************************************************/
 
-#ifndef MMD_JOINT_H__
-#define MMD_JOINT_H__
-#include "description/OMMDJointRoot.h"
+#pragma once
+
+#include "mmd_joint_manager.h"
+#include "description/OMMDJointManager.h"
 
 class MMDJointObject final : public ObjectData
 {
-	Int32	m_display_type = JOINT_DISPLAY_TYPE_OFF;
-	Int32	m_joint_mode = JOINT_MODE_ANIM;
-	BaseObject* m_joint_root = nullptr;
-	BaseObject* m_link_rigid_a = nullptr;
-	BaseObject* m_link_rigid_b = nullptr;
-	BaseTag* protection_tag = nullptr;
+	Int32	display_type_ = JOINT_DISPLAY_TYPE_OFF;
+	Int32	joint_mode_ = JOINT_MODE_ANIM;
+	BaseObject* link_rigid_a_ = nullptr;
+	BaseObject* link_rigid_b_ = nullptr;
+	libmmd::MMDJoint* mmd_joint_ = nullptr;
+	MMDJointManagerObject* joint_manager_data_ = nullptr;
 
 	MMDJointObject() = default;
 	~MMDJointObject() override = default;
@@ -32,18 +33,17 @@ public:
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
 	Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
+	void HandleJointModeChange(Int32 mode);
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
+	static void HandleJointIndexUpdate(BaseObject* op);
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
-
 	static NodeData* Alloc();
-
+	friend class MMDJointManagerObject;
 private:
 	static void DrawBox(const BaseObject* op, BaseDraw* bd, const BaseContainer* bc, Bool wire);
 };
-
-#endif

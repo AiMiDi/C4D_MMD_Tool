@@ -1,0 +1,4 @@
+//---Code Signing---
+//CODE_SIGN_IDENTITY = var_sign_identiy
+//DEVELOPMENT_TEAM = var_dev_team
+//CODE_SIGN_STYLE = var_style

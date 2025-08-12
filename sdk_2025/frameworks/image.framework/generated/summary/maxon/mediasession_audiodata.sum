@@ -1,0 +1,1 @@
+maxon.MediaStreamAudioDataExportInterface	"net.maxon.image.interface.mediastreamaudiodataexport"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\image.framework\source\maxon\mediasession_audiodata.h(17,7)	MediaStreamInterface	FinishStream,GetAudioObject,InitStream,InitWithAudioData,SetCallbackHandler	

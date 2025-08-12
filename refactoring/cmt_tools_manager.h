@@ -8,20 +8,18 @@ Description:	tools manager
 
 **************************************************************************/
 
-#ifndef CMT_TOOLS_MANAGER_H__
-#define CMT_TOOLS_MANAGER_H__
+#pragma once
 
 #include "cmt_tools_setting.h"
 
-namespace CMTToolsManager 
+namespace CMTToolsManager
 {
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting);
 	bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting);
-	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting);
+	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting, BaseObject* select_object = nullptr);
 	bool ExportVMDMotion(const CMTToolsSetting::MotionExport& setting);
 	bool ImportPMXModel (const CMTToolsSetting::ModelImport&  setting);
 	bool ExportPMXModel (const CMTToolsSetting::ModelExport&  setting);
-}	    
+}
 
-#endif // !CMT_TOOLS_MANAGER_H__

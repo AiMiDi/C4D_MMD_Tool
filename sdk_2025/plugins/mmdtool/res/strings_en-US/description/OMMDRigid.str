@@ -1,0 +1,80 @@
+STRINGTABLE OMMDRigid
+{	
+	OMMDRigid "MMD Rigid Object";
+	PMX_RIGID_OBJ_GRP "MMD Rigid body";
+	RIGID_INDEX "    Rigid body index";
+	RIGID_GROUP_ID "Rigid body group";
+	RIGID_NAME_LOCAL "Rigid body local name";
+	RIGID_NAME_UNIVERSAL "Rigid body universal name";
+	RIGID_NAME_IS "Rigid body display name";
+    RIGID_RELATED_BONE_GRP "Rigid body bound bone";
+	RIGID_RELATED_BONE_INDEX "Rigid body bound bone index";
+	RIGID_RELATED_BONE_LINK "";
+
+	RIGID_SIZE_POSTURE_GRP "Rigid body size/posture";
+	RIGID_SHAPE_TYPE "Rigid body shape";
+	RIGID_PHYSICS_MODE "Rigid body physical mode";
+	RIGID_SHAPE_SIZE "    Rigid body size";
+	RIGID_SHAPE_POSITION "    Rigid body position";
+	RIGID_SHAPE_POSITION_X "x";
+	RIGID_SHAPE_POSITION_Y "y";
+	RIGID_SHAPE_POSITION_Z "z";
+	RIGID_SHAPE_ROTATION "    Rigid body potation";
+	RIGID_SHAPE_ROTATION_X "x";
+	RIGID_SHAPE_ROTATION_Y "y";
+	RIGID_SHAPE_ROTATION_Z "z";
+
+	RIGID_NON_COLLISION_GROUP_GRP "Rigid body non-collision group";
+	RIGID_NON_COLLISION_GROUP_0 "1";
+	RIGID_NON_COLLISION_GROUP_1 "2";
+	RIGID_NON_COLLISION_GROUP_2 "3";
+	RIGID_NON_COLLISION_GROUP_3 "4";
+	RIGID_NON_COLLISION_GROUP_4 "5";
+	RIGID_NON_COLLISION_GROUP_5 "6";
+	RIGID_NON_COLLISION_GROUP_6 "7";
+	RIGID_NON_COLLISION_GROUP_7 "8";
+	RIGID_NON_COLLISION_GROUP_8 "9";
+	RIGID_NON_COLLISION_GROUP_9 "10";
+	RIGID_NON_COLLISION_GROUP_10 "11";
+	RIGID_NON_COLLISION_GROUP_11 "12";
+	RIGID_NON_COLLISION_GROUP_12 "13";
+	RIGID_NON_COLLISION_GROUP_13 "14";
+	RIGID_NON_COLLISION_GROUP_14 "15";
+	RIGID_NON_COLLISION_GROUP_15 "16";
+
+	RIGID_PHYSICAL_PARAMETER_GRP "Rigid body physical parameters";
+	RIGID_MASS "Rigid body mass";
+	RIGID_REPULSION "Rigid body reaction force";
+	RIGID_FRICTION_FORCE "Rigid body friction force";
+	RIGID_MOVE_ATTENUATION "Rigid body movement attenuation";
+	RIGID_ROTATION_DAMPING "Rigid body rotation damping";
+
+	RIGID_NAME_IS_LOCAL "local name";
+	RIGID_NAME_IS_UNIVERSAL "universal name";
+
+	SPHERICAL "spherical";
+	BOX "box";
+	CAPLETS "caplets";
+
+	TRACK_BONES "track bones";
+	PHYSICAL_CALCULUS "physical calculus";
+	PHYSICS_AND_BONES "physics and bones";
+	
+	RIGID_GROUP_0 "1";
+	RIGID_GROUP_1 "2";
+	RIGID_GROUP_2 "3";
+	RIGID_GROUP_3 "4";
+	RIGID_GROUP_4 "5";
+	RIGID_GROUP_5 "6";
+	RIGID_GROUP_6 "7";
+	RIGID_GROUP_7 "8";
+	RIGID_GROUP_8 "9";
+	RIGID_GROUP_9 "10";
+	RIGID_GROUP_10 "11";
+	RIGID_GROUP_11 "12";
+	RIGID_GROUP_12 "13";
+	RIGID_GROUP_13 "14";
+	RIGID_GROUP_14 "15";
+	RIGID_GROUP_15 "16";
+	RIGID_BONE_NONE "-";
+}

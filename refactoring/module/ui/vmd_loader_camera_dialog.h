@@ -8,8 +8,7 @@ Description:	vmd data loader dialog
 
 **************************************************************************/
 
-#ifndef VMD_LOADER_DATA_DIALOG_H__
-#define VMD_LOADER_DATA_DIALOG_H__
+#pragma once
 
 #include "pch.h"
 
@@ -28,4 +27,3 @@ public:
 	Bool Command(Int32 id, const BaseContainer& msg) override;
 };
 
-#endif // !VMD_LOADER_DATA_DIALOG_H__

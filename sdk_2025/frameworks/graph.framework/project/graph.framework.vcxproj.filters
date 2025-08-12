@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="generated">
+      <UniqueIdentifier>{BF805522-531C-9C5A-0000-5284111A998F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\hxx">
+      <UniqueIdentifier>{BF805522-531C-9C5A-8ACC-618A6830A19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{BF805522-531C-9C5A-0000-0000CA90681B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon">
+      <UniqueIdentifier>{BF805522-531C-9C5A-29DB-81C65E166B42}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <Filter>generated\hxx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\maxon\graph.cpp">
+      <Filter>source\maxon</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\graph.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\graph_helper.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\graph_selection.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\graphattribs.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\nodepath.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

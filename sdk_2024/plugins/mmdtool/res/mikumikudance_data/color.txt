@@ -1,0 +1,77 @@
+MMD color setting file
+Change only number. An excessive new-line or delete line causes an error.
+Number is order red,green,blue, and is the range of 0 to 255.
+
+character color
+255,255,255
+
+background upper & lower
+128,128,128
+84,84,84
+
+bone/frame manipulation upper & lower
+100,50,50
+40,20,20
+
+frame manipulation upper & lower
+70,70,70
+20,20,20
+
+Interpolation curve upper & lower
+70,70,70
+20,20,20
+
+model manipulation upper & lower
+100,50,50
+40,20,20
+
+camera, bone manipulation upper & lower
+50,50,100
+20,20,30
+
+light, facial manipulation upper & lower
+50,100,50
+20,30,20
+
+accessory manipulation upper & lower
+100,100,50
+40,40,20
+
+view upper & lower
+50,50,100
+20,20,40
+
+play, vol upper & lower
+70,70,70
+20,20,20
+
+frame background 1,2,line
+19,19,19
+55,55,60
+160,65,13
+
+frame name 1,2,line
+166,124,82
+151,109,67
+100,0,0
+
+frame selected 1,2
+84,19,19
+105,55,60
+
+frame vertical line 1,5,now
+75,75,75
+150,150,255
+150,255,150
+
+frame character color
+0,0,0
+
+frame selected character
+255,100,100
+
+self shadow color
+70,70,70
+20,20,20
+
+end

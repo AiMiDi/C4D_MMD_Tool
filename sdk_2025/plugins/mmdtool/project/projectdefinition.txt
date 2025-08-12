@@ -1,0 +1,19 @@
+Platform=Win64;OSX
+Type=DLL
+
+// API dependencies
+APIS=\
+cinema.framework;\
+core.framework;\
+image.framework;\
+math.framework;
+
+// C4D component
+C4D=true
+
+stylecheck=false
+
+// Custom ID
+ModuleId=net.aimidi.mmdtool
+
+Encoding=UTF-8

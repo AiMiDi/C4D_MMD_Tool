@@ -84,28 +84,13 @@
     <ClCompile Include="..\..\..\..\refactoring\CMTSceneManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.cpp">
-      <Filter>source\module\MMD</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp">
       <Filter>source\module\tools\loader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.cpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.cpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.cpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp">
@@ -114,10 +99,26 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp">
       <Filter>source\module\tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp">
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.cpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.cpp">
       <Filter>source\module\tools\object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,38 +171,14 @@
     <ClInclude Include="..\..\..\..\refactoring\module\core\cmt_marco.h">
       <Filter>source\module\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\MMD\vmd_interpolator.h">
-      <Filter>source\module\MMD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_interpolator.hpp">
-      <Filter>source\module\tools</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.h">
       <Filter>source\module\tools\object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.h">
       <Filter>source\module\tools\loader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_root.h">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_root.h">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_root.h">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h">
       <Filter>source\module\tools\object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_root.h">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\S24_up\description\MMDCamera.h">
-      <Filter>res\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneRoot.h">
-      <Filter>res\description</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDCamera.h">
       <Filter>res\description</Filter>
@@ -209,19 +186,7 @@
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJoint.h">
       <Filter>res\description</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJointRoot.h">
-      <Filter>res\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshRoot.h">
-      <Filter>res\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModel.h">
-      <Filter>res\description</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigid.h">
-      <Filter>res\description</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidRoot.h">
       <Filter>res\description</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\res\S24_up\description\TMMDBone.h">
@@ -233,17 +198,42 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp">
       <Filter>source\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_root.hpp">
-      <Filter>source\module\tools\object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_material.h">
       <Filter>source\module\tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.h">
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.h" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\string_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.h">
       <Filter>source\module\tools\object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.h">
       <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJointManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModelManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_manager.hpp">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.h">
+      <Filter>source\module\tools\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\refactoring\utils\io_util.hpp">
+      <Filter>source\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -333,33 +323,20 @@
     <Resource Include="..\..\..\..\res\S24_up\dialogs\DLG_CMT_TOOL.res">
       <Filter>res\dialogs</Filter>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\MMDCamera.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDBoneRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
     <Resource Include="..\..\..\..\res\S24_up\description\OMMDCamera.res">
       <Filter>res\description</Filter>
     </Resource>
     <Resource Include="..\..\..\..\res\S24_up\description\OMMDJoint.res">
       <Filter>res\description</Filter>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJointRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDMeshRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDModel.res">
-      <Filter>res\description</Filter>
-    </Resource>
     <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigid.res">
       <Filter>res\description</Filter>
     </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigidRoot.res">
-      <Filter>res\description</Filter>
-    </Resource>
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.res" />
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJointManager.res" />
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.res" />
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDModelManager.res" />
+    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.res" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\res\S24_up\description\TMMDBone.res">

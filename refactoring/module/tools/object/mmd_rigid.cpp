@@ -10,8 +10,7 @@ Description:	C4D MMD rigid object
 
 #include "pch.h"
 #include "mmd_rigid.h"
-#include "mmd_bone_root.h"
-#include "mmd_rigid_root.h"
+#include "mmd_rigid_manager.h"
 
 SDK2024_ConstExpr Vector g_pmx_rigid_colors[16] =
 {
@@ -40,7 +39,7 @@ SDK2024_ConstExpr Vector g_pmx_rigid_wire_colors[3] =
 	Vector(255, 255, 150) / 255,
 };
 
-MMDRigidObject::MMDRigidObject() : m_draw_color(MakeObjectColorProperties(g_pmx_rigid_colors[0], ID_BASEOBJECT_USECOLOR_ALWAYS, true))
+MMDRigidObject::MMDRigidObject() : draw_color_(MakeObjectColorProperties(g_pmx_rigid_colors[0], ID_BASEOBJECT_USECOLOR_ALWAYS, true))
 {}
 
 Bool MMDRigidObject::Init(GeListNode* node SDK2024_InitParaName)
@@ -49,7 +48,7 @@ Bool MMDRigidObject::Init(GeListNode* node SDK2024_InitParaName)
 	{
 		return false;
 	}
-	
+
 	BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
 	if (!bc)
 	{
@@ -97,13 +96,13 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 			{
 				settings->SetString(DESC_SHORT_NAME, GeLoadString(IDS_RIGID_SHAPE_SIZE_R));
 			}
-				
+
 			settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_SHAPE_SIZE_Y)), nullptr);
 			if (settings != nullptr)
 			{
 				settings->SetBool(DESC_HIDE, true);
 			}
-				
+
 			settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_SHAPE_SIZE_Z)), nullptr);
 			if (settings != nullptr)
 			{
@@ -118,13 +117,13 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 			{
 				settings->SetString(DESC_SHORT_NAME, GeLoadString(IDS_RIGID_SHAPE_SIZE_L));
 			}
-				
+
 			settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_SHAPE_SIZE_Y)), nullptr);
 			if (settings != nullptr)
 			{
 				settings->SetString(DESC_SHORT_NAME, GeLoadString(IDS_RIGID_SHAPE_SIZE_H));
 			}
-				
+
 			settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_SHAPE_SIZE_Z)), nullptr);
 			if (settings != nullptr)
 			{
@@ -138,13 +137,13 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 			{
 				settings->SetString(DESC_SHORT_NAME, GeLoadString(IDS_RIGID_SHAPE_SIZE_R));
 			}
-				
+
 			settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_SHAPE_SIZE_Y)), nullptr);
 			if (settings != nullptr)
 			{
 				settings->SetString(DESC_SHORT_NAME, GeLoadString(IDS_RIGID_SHAPE_SIZE_H));
 			}
-				
+
 			settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_SHAPE_SIZE_Z)), nullptr);
 			if (settings != nullptr)
 			{
@@ -157,90 +156,77 @@ Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 		}
 	}
 
-	settings = description->GetParameterI(ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)), nullptr);
-	if (settings != nullptr && m_rigid_root)
-	{
-		settings->SetContainer(DESC_CYCLE, m_rigid_root->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->GetBoneItems());
-	}
+	const DescID* const single_id = description->GetSingleDescID();
+	if (const auto cid = ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
+    {
+		settings = description->GetParameterI(cid, nullptr);
+		if (settings && rigid_manager_data_)
+		{
+			settings->SetContainer(DESC_CYCLE, rigid_manager_data_->GetBoneItems());
+		}
+    }
 
 	flags |= DESCFLAGS_DESC::LOADED;
 	return SUPER::GetDDescription(node, description, flags);
 }
 
-void ResetAutoFreeObject(AutoFree<BaseObject>& object, BaseObject* new_object)
+struct BoxType
 {
-	object.Free();
-	object.Assign(new_object);
-}
+	constexpr static Int32 type =  Ocube;
 
-void SetBoxSize(const BaseContainer* bc, BaseObject* object)
+	static void InitParameter(const BaseContainer* bc, BaseObject* object)
+	{
+		object->SetParameter(ConstDescID(DescLevel(PRIM_CUBE_LEN)), Vector(bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Z) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Y) * 2), DESCFLAGS_SET::NONE);
+	}
+};
+
+struct SphericalType
 {
-	object->SetParameter(ConstDescID(DescLevel(PRIM_CUBE_LEN)), Vector(bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Z) * 2, bc->GetFloat(RIGID_SHAPE_SIZE_Y) * 2), DESCFLAGS_SET::NONE);
-}
+	constexpr static Int32 type = Osphere;
 
-void SetSphericalSize(const BaseContainer* bc, BaseObject* object)
+	static void InitParameter(const BaseContainer* bc, BaseObject* object)
+	{
+		object->SetParameter(ConstDescID(DescLevel(PRIM_SPHERE_RAD)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
+	}
+};
+
+struct CaplsuleType
 {
-	object->SetParameter(ConstDescID(DescLevel(PRIM_SPHERE_RAD)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
-}
+	constexpr static Int32 type =  Ocapsule;
 
-void SetCaplsuleSize(const BaseContainer* bc, BaseObject* object)
-{
-	object->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_RADIUS)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
-	object->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_HEIGHT)), bc->GetFloat(RIGID_SHAPE_SIZE_Y) + bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, DESCFLAGS_SET::NONE);
-}
+	static void InitParameter(const BaseContainer* bc, BaseObject* object)
+	{
+		object->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_RADIUS)), bc->GetData(RIGID_SHAPE_SIZE_X), DESCFLAGS_SET::NONE);
+		object->SetParameter(ConstDescID(DescLevel(PRIM_CAPSULE_HEIGHT)), bc->GetFloat(RIGID_SHAPE_SIZE_Y) + bc->GetFloat(RIGID_SHAPE_SIZE_X) * 2, DESCFLAGS_SET::NONE);
+	}
+};
 
-void MMDRigidObject::ResetRigidType(const Int32 type, const std::function<void(BaseObject*)>& func)
+template <typename Type>
+void MMDRigidObject::ResetRigidType(const BaseContainer* bc)
 {
 	ModelingCommandData cd;
 	cd.doc = GetActiveDocument();
-	const AutoFree draw_parameter_object(BaseObject::Alloc(type));
-	func(draw_parameter_object);
+	const AutoFree draw_parameter_object(BaseObject::Alloc(Type::type));
+	Type::InitParameter(bc, draw_parameter_object);
 	cd.op = draw_parameter_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	ResetAutoFreeObject(m_draw_mesh_object, reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
-	m_draw_mesh_object->SetPhong(true, true, 0.7853982);
+	draw_mesh_object_.Free();
+	draw_mesh_object_.Assign(reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
+	draw_mesh_object_->SetPhong(true, true, 0.7853982);
 }
 
-void MMDRigidObject::SetBoxRigid(const BaseContainer* bc)
-{
-	ResetRigidType(Ocube, [this, bc](auto&& PH1) { ::SetBoxSize(bc, std::forward<decltype(PH1)>(PH1)); });
-}
-
-void MMDRigidObject::SetSphericalRigid(const BaseContainer* bc)
-{
-	ResetRigidType(Osphere, [this, bc](auto&& PH1) { ::SetSphericalSize(bc, std::forward<decltype(PH1)>(PH1)); });
-}
-
-void MMDRigidObject::SetCaplsuleRigid(const BaseContainer* bc)
-{
-	ResetRigidType(Ocapsule, [this, bc](auto&& PH1) { ::SetCaplsuleSize(bc, std::forward<decltype(PH1)>(PH1)); });
-}
-
-void MMDRigidObject::SetRigidSize(const Int32 type, const std::function<void(BaseObject*)>& func)
+template <typename Type>
+void MMDRigidObject::SetRigidSize(const BaseContainer* bc)
 {
 	ModelingCommandData cd;
 	cd.doc = GetActiveDocument();
-	const AutoFree draw_parameter_object(BaseObject::Alloc(type));
-	func(draw_parameter_object);
+	const AutoFree draw_parameter_object(BaseObject::Alloc(Type::type));
+	Type::InitParameter(bc, draw_parameter_object);
 	cd.op = draw_parameter_object;
 	SendModelingCommand(MCOMMAND_CURRENTSTATETOOBJECT, cd);
-	ResetAutoFreeObject(m_draw_mesh_object, reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
-	m_draw_mesh_object->SetPhong(true, true, 0.7853982);
-}
-
-void MMDRigidObject::SetBoxSize(const BaseContainer* bc)
-{
-	SetRigidSize(Ocube, [this, bc](auto&& PH1) { ::SetBoxSize(bc, std::forward<decltype(PH1)>(PH1)); });
-}
-
-void MMDRigidObject::SetSphericalSize(const BaseContainer* bc)
-{
-	SetRigidSize(Osphere, [this, bc](auto&& PH1) { ::SetSphericalSize(bc, std::forward<decltype(PH1)>(PH1)); });
-}
-
-void MMDRigidObject::SetCaplsuleSize(const BaseContainer* bc)
-{
-	SetRigidSize(Ocapsule, [this, bc](auto&& PH1) { ::SetCaplsuleSize(bc, std::forward<decltype(PH1)>(PH1)); });
+	draw_mesh_object_.Free();
+	draw_mesh_object_.Assign(reinterpret_cast<BaseObject*>(cd.result->GetIndex(0)));
+	draw_mesh_object_->SetPhong(true, true, 0.7853982);
 }
 
 Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
@@ -264,8 +250,6 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	}
 	case RIGID_RELATED_BONE_INDEX:
 	{
-		related_bone = m_rigid_root->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->
-		                                                   FindBone(t_data.GetInt32())->GetObject();
 		break;
 	}
 	case RIGID_PHYSICS_MODE:
@@ -287,59 +271,9 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 Bool MMDRigidObject::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data,
                                   const DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const
 {
-	switch (id[0].id)
-	{
-	case ID_BASEOBJECT_REL_POSITION:
-	case ID_BASEOBJECT_REL_ROTATION:
-	case ID_BASEOBJECT_FROZEN_POSITION:
-	case ID_BASEOBJECT_FROZEN_ROTATION:
-	case RIGID_RELATED_BONE_INDEX:
-	case RIGID_PHYSICS_MODE:
-	case RIGID_GROUP_ID:
-	case RIGID_SHAPE_TYPE:
-	case RIGID_SHAPE_SIZE_X:
-	case RIGID_SHAPE_SIZE_Y:
-	case RIGID_SHAPE_SIZE_Z:
-	case RIGID_SHAPE_POSITION_X:
-	case RIGID_SHAPE_POSITION_Y:
-	case RIGID_SHAPE_POSITION_Z:
-	case RIGID_SHAPE_ROTATION_X:
-	case RIGID_SHAPE_ROTATION_Y:
-	case RIGID_SHAPE_ROTATION_Z:
-	case RIGID_MASS:
-	case RIGID_REPULSION:
-	case RIGID_FRICTION_FORCE:
-	case RIGID_MOVE_ATTENUATION:
-	case RIGID_ROTATION_DAMPING:
-	case RIGID_NON_COLLISION_GROUP_0:
-	case RIGID_NON_COLLISION_GROUP_1:
-	case RIGID_NON_COLLISION_GROUP_2:
-	case RIGID_NON_COLLISION_GROUP_3:
-	case RIGID_NON_COLLISION_GROUP_4:
-	case RIGID_NON_COLLISION_GROUP_5:
-	case RIGID_NON_COLLISION_GROUP_6:
-	case RIGID_NON_COLLISION_GROUP_7:
-	case RIGID_NON_COLLISION_GROUP_8:
-	case RIGID_NON_COLLISION_GROUP_9:
-	case RIGID_NON_COLLISION_GROUP_10:
-	case RIGID_NON_COLLISION_GROUP_11:
-	case RIGID_NON_COLLISION_GROUP_12:
-	case RIGID_NON_COLLISION_GROUP_13:
-	case RIGID_NON_COLLISION_GROUP_14:
-	case RIGID_NON_COLLISION_GROUP_15:
-	{
-		if (m_rigid_mode == RIGID_MODE_ANIM)
-		{
-			return false;
-		}
-		return true;
-	}
-	case ID_BASEOBJECT_REL_SCALE:
-	case ID_BASEOBJECT_FROZEN_SCALE:
+	if (m_rigid_mode == RIGID_MODE_ANIM || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
 		return false;
-	default:
-		break;
-	}
+
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
 }
 
@@ -349,20 +283,14 @@ void MMDRigidObject::UpdateRigidShape(const BaseContainer* bc, const Int32 rigid
 	switch (m_rigid_shape_type)
 	{
 	case SPHERICAL:
-		{
-			SetSphericalRigid(bc);
-			break;
-		}
+		ResetRigidType<SphericalType>(bc);
+		break;
 	case BOX:
-		{
-			SetBoxRigid(bc);
-			break;
-		}
+		ResetRigidType<BoxType>(bc);
+		break;
 	case CAPLETS:
-		{
-			SetCaplsuleRigid(bc);
-			break;
-		}
+		ResetRigidType<CaplsuleType>(bc);
+		break;
 	default:
 		break;
 	}
@@ -373,20 +301,14 @@ void MMDRigidObject::UpdateRigidSize(const BaseContainer* bc)
 	switch (m_rigid_shape_type)
 	{
 	case SPHERICAL:
-		{
-			SetSphericalSize(bc);
-			break;
-		}
+		SetRigidSize<SphericalType>(bc);
+		break;
 	case BOX:
-		{
-			SetBoxSize(bc);
-			break;
-		}
+		SetRigidSize<BoxType>(bc);
+		break;
 	case CAPLETS:
-		{
-			SetCaplsuleSize(bc);
-			break;
-		}
+		SetRigidSize<CaplsuleType>(bc);
+		break;
 	default:
 		break;
 	}
@@ -397,7 +319,7 @@ void MMDRigidObject::UpdateRigidPhysics(Int32 physics_mode)
 	m_physics_mode = physics_mode;
 	if (m_display_type == RIGID_DISPLAY_TYPE_WIRE)
 	{
-		m_draw_color.color = g_pmx_rigid_wire_colors[m_physics_mode];
+		draw_color_.color = g_pmx_rigid_wire_colors[m_physics_mode];
 	}
 }
 
@@ -406,7 +328,7 @@ void MMDRigidObject::UpdateRigidGroup(const Int32 rigid_group)
 	m_rigid_group_id = rigid_group;
 	if (m_display_type != RIGID_DISPLAY_TYPE_WIRE)
 	{
-		m_draw_color.color = g_pmx_rigid_colors[m_rigid_group_id];
+		draw_color_.color = g_pmx_rigid_colors[m_rigid_group_id];
 	}
 }
 
@@ -428,22 +350,12 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 		settings._colorMode = 1;
 		settings._customColor = maxon::Color(g_pmx_rigid_colors[m_rigid_group_id]);
 
-		CustomIconGetIdDelegate getIdCallback = [this]()->Int32
+		CustomIconGetIdDelegate get_id_callback = [this]()->Int32
 			{
-				switch (m_rigid_shape_type)
-				{
-				case SPHERICAL:
-					return Osphere;
-				case BOX:
-					return Ocube;
-				case CAPLETS:
-					return Ocapsule;
-				default:
-					break;
-				}
-				return Osphere;
+				static Int32 rigid_shape_type_to_object_type[3] = {Osphere, Ocube, Ocapsule};
+				return rigid_shape_type_to_object_type[m_rigid_shape_type];
 			};
-		GetCustomIcon(*cid, settings, false, &getIdCallback);
+		GetCustomIcon(*cid, settings, false, &get_id_callback);
 		break;
 	}
 #endif
@@ -455,93 +367,37 @@ Bool MMDRigidObject::Message(GeListNode* node, Int32 type, void* data)
 			return false;
 		switch (id)
 		{
-		case RIGID_SHAPE_TYPE:
-		{
-			UpdateRigidShape(bc, bc->GetInt32(RIGID_SHAPE_TYPE));
-			break;
-		}
-		case RIGID_SHAPE_SIZE_X:
-		case RIGID_SHAPE_SIZE_Y:
-		case RIGID_SHAPE_SIZE_Z:
-		{
-			UpdateRigidSize(bc);
-			break;
-		}
-		case RIGID_RELATED_BONE_INDEX:
-		{
-			related_bone = m_rigid_root->GetNodeData<MMDRigidRootObject>()->GetBoneRoot()->GetNodeData<MMDBoneRootObject>()->
-			                             FindBone(bc->GetInt32(RIGID_RELATED_BONE_INDEX))->GetObject();
-			break;
-		}
-		case RIGID_PHYSICS_MODE:
-		{
-			UpdateRigidPhysics(bc->GetInt32(RIGID_PHYSICS_MODE));
-			break;
-		}
-		case RIGID_GROUP_ID:
-		{
-			UpdateRigidGroup(bc->GetInt32(RIGID_GROUP_ID));
-			break;
-		}
-		default:
-			break;
+			case RIGID_SHAPE_TYPE:
+				UpdateRigidShape(bc, bc->GetInt32(RIGID_SHAPE_TYPE));
+				break;
+			case RIGID_SHAPE_SIZE_X: [[fallthrough]];
+			case RIGID_SHAPE_SIZE_Y: [[fallthrough]];
+			case RIGID_SHAPE_SIZE_Z:
+				UpdateRigidSize(bc);
+				break;
+			case RIGID_PHYSICS_MODE:
+				UpdateRigidPhysics(bc->GetInt32(RIGID_PHYSICS_MODE));
+				break;
+			case RIGID_GROUP_ID:
+				UpdateRigidGroup(bc->GetInt32(RIGID_GROUP_ID));
+				break;
+			default:
+				break;
 		}
 		break;
 	}
-	case  ID_O_MMD_RIGID_ROOT:
+	case  g_mmd_rigid_manager_object_id:
 	{
 		if (const auto* msg = static_cast<MMDRigidRootObjectMsg*>(data); msg)
 		{
 			switch (msg->type)
 			{
 			case MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE:
-			{
 				m_display_type = msg->display_type;
 				break;
-			}
 			case MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE:
-			{
-				const auto op = reinterpret_cast<BaseObject*>(node);
-				if (m_rigid_mode == RIGID_MODE_EDIT && msg->rigid_mode == RIGID_MODE_ANIM)
-				{
-					m_original_position = op->GetAbsPos();
-					m_original_rotation = op->GetAbsRot();
-					if (related_bone != nullptr)
-					{
-						m_relative_bone_position = op->GetAbsPos() - related_bone->GetAbsPos();
-						m_relative_bone_rotation = op->GetAbsRot() - related_bone->GetAbsRot();
-					}
-				}
-				else if (m_rigid_mode == RIGID_MODE_ANIM && msg->rigid_mode == RIGID_MODE_EDIT)
-				{
-					op->SetAbsPos(m_original_position);
-					op->SetAbsRot(m_original_rotation);
-				}
-
-				m_rigid_mode = msg->rigid_mode;
-				if (m_protection_tag)
-				{
-					if (m_rigid_mode == RIGID_MODE_ANIM)
-					{
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), true, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), true, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), true, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), true, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), true, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), true, DESCFLAGS_SET::NONE);
-					}
-					else
-					{
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), false, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), false, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), false, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), false, DESCFLAGS_SET::NONE);
-						m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), false, DESCFLAGS_SET::NONE);
-					}
-				}
+				HandleRigidModeChange(msg->rigid_mode);
 				break;
-			}
 			case MMDRigidRootObjectMsgType::DEFAULT:
 				break;
 			}
@@ -572,19 +428,19 @@ DRAWRESULT MMDRigidObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 		{
 		case RIGID_DISPLAY_TYPE_ON:
 		{
-			if (m_draw_mesh_object)
+			if (draw_mesh_object_)
 			{
 					if (op == GetActiveDocument()->GetActiveObject())
 					{
-						m_draw_color.xray = false;
-						m_draw_mesh_object->SetColorProperties(&m_draw_color);
-						bd->DrawObject(bh, m_draw_mesh_object, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
+						draw_color_.xray = false;
+						draw_mesh_object_->SetColorProperties(&draw_color_);
+						bd->DrawObject(bh, draw_mesh_object_, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
 					}
 					else
 					{
-						m_draw_color.xray = true;
-						m_draw_mesh_object->SetColorProperties(&m_draw_color);
-						bd->DrawObject(bh, m_draw_mesh_object, DRAWOBJECT::USE_OBJECT_COLOR | DRAWOBJECT::XRAY_ON, drawpass);
+						draw_color_.xray = true;
+						draw_mesh_object_->SetColorProperties(&draw_color_);
+						bd->DrawObject(bh, draw_mesh_object_, DRAWOBJECT::USE_OBJECT_COLOR | DRAWOBJECT::XRAY_ON, drawpass);
 					}
 			}
 			else
@@ -595,19 +451,19 @@ DRAWRESULT MMDRigidObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 		}
 		case RIGID_DISPLAY_TYPE_WIRE:
 		{
-			if (m_draw_mesh_object)
+			if (draw_mesh_object_)
 			{
 				if (op == GetActiveDocument()->GetActiveObject())
 				{
 					ObjectColorProperties objColor = MakeObjectColorProperties(Vector(1, 0.21, 0.21), ID_BASEOBJECT_USECOLOR_ALWAYS, false);
-					m_draw_mesh_object->SetColorProperties(&objColor);
-					bd->DrawObject(bh, m_draw_mesh_object, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
+					draw_mesh_object_->SetColorProperties(&objColor);
+					bd->DrawObject(bh, draw_mesh_object_, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
 				}
 				else
 				{
-					m_draw_color.xray = false;
-					m_draw_mesh_object->SetColorProperties(&m_draw_color);
-					bd->DrawObject(bh, m_draw_mesh_object, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
+					draw_color_.xray = false;
+					draw_mesh_object_->SetColorProperties(&draw_color_);
+					bd->DrawObject(bh, draw_mesh_object_, DRAWOBJECT::USE_OBJECT_COLOR, drawpass);
 				}
 			}
 			else
@@ -623,98 +479,63 @@ DRAWRESULT MMDRigidObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 	return SUPER::Draw(op, drawpass, bd, bh);
 }
 
-EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
-	EXECUTIONFLAGS flags)
+void MMDRigidObject::HandleRigidIndexUpdate(BaseObject* op) const
 {
-	if (op == nullptr || doc == nullptr)
+	if (const BaseObject* up_object = op->GetUp(); !up_object || !up_object->IsInstanceOf(g_mmd_rigid_manager_object_id))
+		return;
+
+	if (BaseObject* prev_object = op->GetPred(); !prev_object)
+	{
+		op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), "0"_s, DESCFLAGS_SET::NONE);
+	}
+	else
+	{
+		while (prev_object != nullptr && !prev_object->IsInstanceOf(g_mmd_rigid_object_id))
+			prev_object = prev_object->GetPred();
+
+		GeData data;
+		if (!prev_object->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), data, DESCFLAGS_GET::NONE))
+			return;
+
+		const auto rigid_index = data.GetString().ToInt32(nullptr) + 1;
+		if (!op->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), data, DESCFLAGS_GET::NONE))
+			return;
+
+		if (rigid_index == data.GetString().ToInt32(nullptr))
+			return;
+
+		if (!op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), String::IntToString(rigid_index), DESCFLAGS_SET::NONE))
+			return;
+
+		if (!rigid_manager_data_)
+			return;
+
+		rigid_manager_data_->UpdateRigidList();
+	}
+}
+
+EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
+                                        EXECUTIONFLAGS flags)
+{
+	if (op == nullptr)
 	{
 		return EXECUTIONRESULT::OK;
 	}
 
-	const BaseContainer* bc = static_cast<BaseList2D*>(op)->GetDataInstance();
-	if (bc == nullptr)
+	if (m_rigid_mode == RIGID_MODE_EDIT)
 	{
-		return EXECUTIONRESULT::OK;
+		HandleRigidIndexUpdate(op);
+	}
+	else if (m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
+	{
+		const auto transform = mmd_rigidbody_->GetTransform();
+		op->SetMl(Matrix{
+		   Vector(transform[3][0],transform[3][1],-transform[3][2]) * rigid_manager_data_->GetPositionMultiple(),
+		   Vector(transform[0][0],transform[0][1],-transform[0][2]),
+		   Vector(transform[1][0],transform[1][1],-transform[1][2]),
+		   Vector(transform[2][0],transform[2][1],-transform[2][2]) });
 	}
 
-	BaseObject* pred_object = op->GetPred();
-	BaseObject* UpObject = op->GetUp();
-	BaseObject* rigid_root_object = m_rigid_root;
-
-	if (UpObject == nullptr && rigid_root_object != nullptr)
-	{
-		op->Remove();
-		op->InsertUnderLast(rigid_root_object);
-	}
-
-	const Int32 pred_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr);
-	if (UpObject != nullptr && UpObject->IsInstanceOf(ID_O_MMD_RIGID_ROOT))
-	{
-		if (pred_object == nullptr)
-		{
-			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), "0"_s, DESCFLAGS_SET::NONE);
-		}
-		else
-		{
-			while (pred_object != nullptr && !pred_object->IsInstanceOf(ID_O_MMD_RIGID))
-			{
-				pred_object = pred_object->GetPred();
-			}
-			GeData data;
-			pred_object->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), data, DESCFLAGS_GET::NONE);
-			const String RigidIndex = data.GetString();
-			op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), String::IntToString(RigidIndex.ToInt32(nullptr) + 1), DESCFLAGS_SET::NONE);
-		}
-
-		if (rigid_root_object == nullptr)
-		{
-			m_rigid_root = UpObject;
-		}
-	}
-
-	if (const Int32 now_index = bc->GetString(RIGID_INDEX).ToInt32(nullptr); now_index != pred_index && m_rigid_root != nullptr)
-	{
-		m_rigid_root->Message(ID_O_MMD_RIGID, nullptr);
-	}
-		
-	if (!m_protection_tag)
-	{
-		m_protection_tag = op->MakeTag(Tprotection);
-		m_protection_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-		m_protection_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-		m_protection_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
-	}
-
-	if (m_rigid_mode == RIGID_MODE_ANIM)
-	{
-		switch (m_physics_mode)
-		{
-		case TRACK_BONES:
-		{
-			if (related_bone != nullptr)
-			{
-				op->SetAbsPos(related_bone->GetAbsPos() + m_relative_bone_position);
-				op->SetAbsRot(related_bone->GetAbsRot() + m_relative_bone_rotation);
-			}
-			break;
-		}
-		case PHYSICAL_CALCULUS:
-		{
-			if (related_bone != nullptr)
-			{
-				related_bone->SetAbsPos(op->GetAbsPos() - m_relative_bone_position);
-				related_bone->SetAbsRot(op->GetAbsRot() - m_relative_bone_rotation);
-			}
-			break;
-		}
-		case PHYSICS_AND_BONES:
-		{
-			break;
-		}
-		default:
-			break;
-		}
-	}
 	return EXECUTIONRESULT::OK;
 }
 
@@ -724,7 +545,7 @@ Bool MMDRigidObject::AddToExecution(BaseObject* op, PriorityList* list)
 	{
 		return true;
 	}
-	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::NONE);
+	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::EXPRESSION);
 	return true;
 }
 
@@ -736,84 +557,27 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return false;
 	}
 
-	hf->ReadInt32(&m_display_type);
-	hf->ReadInt32(&m_rigid_mode);
-	hf->ReadInt32(&m_physics_mode);
+	IOReadField(m_display_type);
+	IOReadField(m_rigid_mode);
+	IOReadField(m_physics_mode);
+	IOReadField(m_rigid_shape_type);
+	IOReadField(m_rigid_group_id);
+	IOReadField(rigid_manager_data_);
+
 	UpdateRigidPhysics(m_physics_mode);
-
-	hf->ReadInt32(&m_rigid_shape_type);
 	UpdateRigidShape(bc, m_rigid_shape_type);
-
-	hf->ReadInt32(&m_rigid_group_id);
 	UpdateRigidGroup(m_rigid_group_id);
-
-	hf->ReadVector(&m_original_position);
-	hf->ReadVector(&m_original_rotation);
-	hf->ReadVector(&m_relative_bone_position);
-	hf->ReadVector(&m_relative_bone_rotation);
-	AutoAlloc<BaseLink> link;
-
-	if (link == nullptr)
-	{
-		return false;
-	}
-
-	if (!link->Read(hf))
-	{
-		return false;
-	}
-	m_rigid_root = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
-
-	if (!link->Read(hf))
-	{
-		return false;
-	}
-	related_bone = reinterpret_cast<BaseObject*>(link->GetLink(GetActiveDocument()));
-
-	if (!link->Read(hf))
-	{
-		return false;
-	}
-	m_protection_tag = reinterpret_cast<BaseTag*>(link->GetLink(GetActiveDocument()));
-
 	return true;
 }
 
 Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
 {
-	hf->WriteInt32(m_display_type);
-	hf->WriteInt32(m_rigid_mode);
-	hf->WriteInt32(m_physics_mode);
-	hf->WriteInt32(m_rigid_shape_type);
-	hf->WriteInt32(m_rigid_group_id);
-	hf->WriteVector(m_original_position);
-	hf->WriteVector(m_original_rotation);
-	hf->WriteVector(m_relative_bone_position);
-	hf->WriteVector(m_relative_bone_rotation);
-
-	AutoAlloc<BaseLink> link;
-	if (link == nullptr)
-	{
-		return false;
-	}
-
-	link->SetLink(m_rigid_root);
-	if (!link->Write(hf))
-	{
-		return false;
-	}
-
-	link->SetLink(related_bone);
-	if (!link->Write(hf))
-	{
-		return false;
-	}
-
-	link->SetLink(m_protection_tag);
-	if (!link->Write(hf))
-	{
-		return false;
-	}
+	IOWriteField(m_display_type);
+	IOWriteField(m_rigid_mode);
+	IOWriteField(m_physics_mode);
+	IOWriteField(m_rigid_shape_type);
+	IOWriteField(m_rigid_group_id);
+	IOWriteField(rigid_manager_data_);
 
 	return true;
 }
@@ -832,12 +596,7 @@ Bool MMDRigidObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeL
 	destObject->m_physics_mode = m_physics_mode;
 	destObject->m_rigid_shape_type = m_rigid_shape_type;
 	destObject->m_rigid_group_id = m_rigid_group_id;
-	destObject->m_rigid_root = m_rigid_root;
-	destObject->related_bone = related_bone;
-	destObject->m_original_position = m_original_position;
-	destObject->m_original_rotation = m_original_rotation;
-	destObject->m_relative_bone_position = m_relative_bone_position;
-	destObject->m_relative_bone_rotation = m_relative_bone_rotation;
+	destObject->rigid_manager_data_ = rigid_manager_data_;
 
 	return true;
 }
@@ -847,7 +606,22 @@ NodeData* MMDRigidObject::Alloc()
 	return NewObjClear(MMDRigidObject);
 }
 
-BaseObject* MMDRigidObject::GetRootObject() const
+void MMDRigidObject::HandleRigidModeChange(Int32 mode)
 {
-	return m_rigid_root;
+	if (m_rigid_mode == mode)
+		return;
+
+	if (mode == RIGID_MODE_EDIT)
+	{
+		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
+
+	}
+	else
+	{
+		// TODO: Save to mmd_rigid_body
+		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
+
+	}
+
+	m_rigid_mode = mode;
 }

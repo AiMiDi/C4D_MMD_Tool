@@ -8,11 +8,12 @@ Description:	C4D MMD rigid object
 
 **************************************************************************/
 
-#ifndef MMD_RIGID_H__
-#define MMD_RIGID_H__
+#pragma once
 
 #include "description/OMMDRigid.h"
-#include "description/OMMDRigidRoot.h"
+#include "description/OMMDRigidManager.h"
+
+class MMDRigidManagerObject;
 
 class MMDRigidObject final : public ObjectData
 {
@@ -21,17 +22,13 @@ class MMDRigidObject final : public ObjectData
 	Int32		m_physics_mode = TRACK_BONES;
 	Int32		m_rigid_shape_type = SPHERICAL;
 	Int32		m_rigid_group_id = RIGID_GROUP_0;
-	BaseTag*	m_protection_tag = nullptr;
-	AutoFree<BaseObject> m_draw_mesh_object;
 
-	BaseObject* m_rigid_root = nullptr;
-	BaseObject* related_bone = nullptr;
+	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
+	libmmd::MMDRigidBody* mmd_rigidbody_ = nullptr;
 
-	Vector m_original_position = Vector();
-	Vector m_original_rotation = Vector();
-	Vector m_relative_bone_position = Vector();
-	Vector m_relative_bone_rotation = Vector();
-	ObjectColorProperties m_draw_color;
+	AutoFree<BaseObject> draw_mesh_object_;
+	ObjectColorProperties draw_color_;
+
 	MMDRigidObject();
 	~MMDRigidObject() override = default;
 	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDRigidObject)
@@ -45,6 +42,7 @@ public:
 
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
+	void HandleRigidIndexUpdate(BaseObject* op) const;
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
@@ -52,22 +50,18 @@ public:
 	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
 
 	static NodeData* Alloc();
-	BaseObject* GetRootObject() const;
+	friend class MMDRigidManagerObject;
 private:
-	void ResetRigidType(Int32 type, const std::function<void(BaseObject*)>& func);
-	void SetSphericalRigid(const BaseContainer* bc);
-	void SetBoxRigid(const BaseContainer* bc);
-	void SetCaplsuleRigid(const BaseContainer* bc);
+	void HandleRigidModeChange(Int32 mode);
 
-	void SetRigidSize(Int32 type, const std::function<void(BaseObject*)>& func);
-	void SetSphericalSize(const BaseContainer* bc);
-	void SetBoxSize(const BaseContainer* bc);
-	void SetCaplsuleSize(const BaseContainer* bc);
+	template <typename Size>
+	void ResetRigidType(const BaseContainer* bc);
+
+	template <typename Type>
+	void SetRigidSize(const BaseContainer* bc);
 
 	void UpdateRigidShape(const BaseContainer* bc, Int32 rigid_shape_type);
 	void UpdateRigidSize(const BaseContainer* bc);
 	void UpdateRigidPhysics(Int32 physics_mode);
 	void UpdateRigidGroup(Int32 rigid_group);
 };
-
-#endif

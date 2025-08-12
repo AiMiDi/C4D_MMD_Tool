@@ -8,11 +8,9 @@ Description:	CMT tools main dialog.
 
 **************************************************************************/
 
-#ifndef CMT_TOOL_DIALOG_H__
-#define CMT_TOOL_DIALOG_H__
+#pragma once
 
 #include "pch.h"
-
 
 class CMTToolDialog final : public GeDialog
 {
@@ -41,7 +39,7 @@ class CMTToolCommand final : public CommandData
 public:
 	Bool RestoreLayout(void* secret) override
 	{
-		return cmd_tool_dialog.RestoreLayout(ID_COMMAND_CMT_TOOL, 0, secret);
+		return cmd_tool_dialog.RestoreLayout(g_cmt_command_id, 0, secret);
 	}
 #if API_VERSION >= 21000
 	Bool Execute(BaseDocument* doc, GeDialog* parentManager) override
@@ -64,4 +62,3 @@ public:
 #endif
 };
 
-#endif //CMT_TOOL_DIALOG_H__

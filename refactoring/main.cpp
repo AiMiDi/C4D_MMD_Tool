@@ -10,25 +10,27 @@ Description:	Entrance of the plugin
 
 #include "pch.h"
 
-#include "cmt_tools_config_manager.h"
 #include "register_entity.h"
+#include "cmt_tools_config_manager.h"
+#include "module/ui/cmt_name_conversion_dialog.h"
 
-Bool PluginStart()
+Bool CINEMA_NAMESPASE PluginStart()
 {
 	if (!cmt_register::RegisterPlugin())
 	{
 		return FALSE;
 	}
+	UpdateNameConversionDialog::Init();
 	CMTToolConfigManager::GetInstance().InitConfigManager();
 	return TRUE;
 }
 
-void PluginEnd()
+void CINEMA_NAMESPASE PluginEnd()
 {
 	CMTToolConfigManager::GetInstance().SaveConfig();
 }
 
-Bool PluginMessage(Int32 id, void* data)
+Bool CINEMA_NAMESPASE PluginMessage(Int32 id, void* data)
 {
 	switch (id)
 	{

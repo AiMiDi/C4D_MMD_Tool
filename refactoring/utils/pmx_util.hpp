@@ -8,8 +8,7 @@ Description:	PMX util
 
 **************************************************************************/
 
-#ifndef PMX_UTIL_H__
-#define PMX_UTIL_H__
+#pragma once
 
 #include "pch.h"
 
@@ -134,7 +133,7 @@ public:
 	bool operator()(BaseFile* const file, UInt32& out_index) const
 	{
 		// 3种长度不同的Index
-		switch (m_index_size) 
+		switch (m_index_size)
 		{
 		case 1:
 		{
@@ -165,5 +164,4 @@ public:
 	}
 };
 
-#endif // !PMX_UTIL_H__
 

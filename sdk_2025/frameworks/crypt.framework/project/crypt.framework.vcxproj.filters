@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="generated">
+      <UniqueIdentifier>{A327271A-42AF-F07A-0000-5284111A998F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\hxx">
+      <UniqueIdentifier>{A327271A-42AF-F07A-8ACC-618A6830A19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{A327271A-42AF-F07A-0000-0000CA90681B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon">
+      <UniqueIdentifier>{A327271A-42AF-F07A-29DB-81C65E166B42}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <Filter>generated\hxx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\maxon\cryptography_hash.cpp">
+      <Filter>source\maxon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\maxon\cryptography_key.cpp">
+      <Filter>source\maxon</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\cryptography.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\cryptography_hash.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\cryptography_key.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\cryptography_ssh.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\cryptography_ssl.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\datacompression.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maxon\fileformat_zip.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

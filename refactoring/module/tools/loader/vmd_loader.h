@@ -8,8 +8,7 @@ Description:	vmd data loader
 
 **************************************************************************/
 
-#ifndef _VMD_LOADER_H_
-#define _VMD_LOADER_H_
+#pragma once
 
 #include "pch.h"
 
@@ -23,12 +22,10 @@ public:
 	Bool Identify(BaseSceneLoader* node, const Filename& name, UChar* probe, Int32 size) override;
 
 	FILEERROR Load(BaseSceneLoader* node, const Filename& name, BaseDocument* doc, SCENEFILTER filterflags, maxon::String* error, BaseThread* bt) override;
-	
+
 	static NodeData* Alloc()
 	{
 		return NewObjClear(VMDLoaderData);
 	}
 
 };
-
-#endif // !_VMD_LOADER_H_

@@ -1,5 +1,4 @@
-#ifndef PCH_H__
-#define PCH_H__
+#pragma once
 
 // std
 #include <optional>
@@ -10,6 +9,7 @@
 #include <cassert>
 #include <memory>
 #include <mutex>
+#include <future>
 #include <unordered_set>
 #include <unordered_map>
 
@@ -34,8 +34,14 @@
 
 // The third party
 #include "yaml-cpp/yaml.h"
-#include "libMMD/libmmd_assets.h"
-#include "libMMD/libmmd_conversion.h"
+#include "libMMD/Model/MMD/PMXFile.h"
+#include "libMMD/Model/MMD/PMXModel.h"
+#include "libMMD/Model/MMD/PMDFile.h"
+#include "libMMD/Model/MMD/PMDModel.h"
+#include "libMMD/Model/MMD/VMDFile.h"
+#include "libMMD/Model/MMD/VMDAnimation.h"
+#include "libMMD/Model/MMD/VMDCameraAnimation.h"
+#include "libMMD/Model/MMD/MMDPhysics.h"
 
 // symbols
 #include "c4d_symbols.h"
@@ -45,7 +51,7 @@
 #include "utils/time_util.hpp"
 #include "utils/images_user_area_util.hpp"
 #include "utils/filename_util.hpp"
+#include "utils/string_util.hpp"
+#include "utils/io_util.hpp"
 
 #include "module/core/cmt_marco.h"
-
-#endif // !PCH_H__

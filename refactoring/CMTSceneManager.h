@@ -8,11 +8,9 @@ Description:	scene manager
 
 **************************************************************************/
 
-#ifndef CMT_SCENE_MANAGER_H__
-#define CMT_SCENE_MANAGER_H__
+#pragma once
 
 #include "cmt_tools_setting.h"
-
 
 struct IOLog
 {
@@ -27,18 +25,18 @@ struct LoadVmdCameraLog : IOLog
 {
 	UInt camera_frame_number;
 
-	void LogOK() const;
+	void LogOK();
 	static void LogNotCameraError();
 };
 
 struct SaveVmdCameraLog : IOLog
 {
-	void LogOK() const;
+	void LogOK();
 };
 
 struct ConversionVmdCameraLog : IOLog
 {
-	void LogOK() const;
+	void LogOK();
 };
 
 struct LoadVmdMotionLog : IOLog
@@ -60,7 +58,7 @@ struct SaveVmdMotionLog : IOLog
 {
 };
 
-struct LoadPmxModelLog : IOLog
+struct LoadModelLog : IOLog
 {
 	String model_name_local;
 	String comments_local;
@@ -74,13 +72,14 @@ struct LoadPmxModelLog : IOLog
 	UInt bone_data_count = 0;
 	UInt morph_data_count = 0;
 
-	void Set(const libmmd::pmx_model& model, const CMTToolsSetting::ModelImport& setting);
-	void LogOK() const;
+	void Set(const MMDModelPtr& model, const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting);
+	void LogOK();
+	static void LogMMDDataPathErr();
 };
 
 struct SavePmxModelLog : IOLog
 {
-	
+
 };
 
 class CMTSceneManager final : SceneHookData
@@ -101,21 +100,21 @@ public:
 		return NewObjClear(CMTSceneManager);
 	}
 
-	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, const libmmd::vmd_animation& data);
-	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::vmd_animation* data);
+	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<libmmd::VMDCameraAnimation> animation);
+	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::VMDFile& data);
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
-	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::vmd_animation& data, LoadVmdMotionLog& log);
+	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log, BaseObject* select_object = nullptr);
+	static Bool SaveVMDMotion(const CMTToolsSetting::MotionExport& setting,  libmmd::VMDFile&  data, SaveVmdMotionLog& log);
 
-	static BaseObject* LoadPMXModel(const CMTToolsSetting::ModelImport& setting, const libmmd::pmx_model& data);
+	static BaseObject* LoadPMXModel(const libmmd::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
+	static BaseObject* SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::PMXFile& data);
 
-	void AddMMDCamera(BaseObject* camera);
+	void AddMMDCamera(SDK2024_Const BaseObject* camera);
 
 	static CMTSceneManager* GetSceneManager(const BaseDocument* Document);
 
 private:
 	BaseLinkArray SceneCameraArray;
-	
-};
 
-#endif // !CMT_SCENE_MANAGER_H__
+};

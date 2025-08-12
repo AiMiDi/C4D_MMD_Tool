@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="generated">
+      <UniqueIdentifier>{42E6AC5B-56E6-ACF2-0000-5284111A998F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\hxx">
+      <UniqueIdentifier>{42E6AC5B-56E6-ACF2-8ACC-618A6830A19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{42E6AC5B-56E6-ACF2-0000-0000CA90681B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\maxon">
+      <UniqueIdentifier>{42E6AC5B-56E6-ACF2-29DB-81C65E166B42}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\generated\hxx\register.cpp">
+      <Filter>generated\hxx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\maxon\gfx_image_ocio.h">
+      <Filter>source\maxon</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
