@@ -41,10 +41,10 @@ jobs:
         git submodule status
       shell: powershell
 
-    - name: Cache SDK Frameworks
+    - name: Cache SDK Frameworks Object
       uses: actions/cache@v4
       with:
-        path: sdk_${{matrix.version}}/frameworks
+        path: sdk_${{matrix.version}}/plugins/project/_obj/**/*.framework
         key: ${{ runner.os }}-sdk-${{ matrix.version }}-frameworks-${{ hashFiles('sdk_${{matrix.version}}/frameworks/**') }}
         restore-keys: |
           ${{ runner.os }}-sdk-${{ matrix.version }}-frameworks
