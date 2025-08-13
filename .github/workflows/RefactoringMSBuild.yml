@@ -2,8 +2,6 @@ name: RefactoringMSBuild
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "refactoring" ]
   pull_request:
     branches: [ "refactoring" ]
 
@@ -66,7 +64,7 @@ jobs:
 
     - name: Build Dependency
       if: steps.cache-dependency.outputs.cache-hit != 'true'
-      run: ./init.bat
+      run: ./init.bat Release
       shell: cmd
 
     - name: Build
