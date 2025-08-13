@@ -30,7 +30,15 @@ jobs:
     steps:
     - uses: actions/checkout@v5
       with:
-        submodules: recursive
+        submodules: true
+
+    - name: Get submodules hash
+      id: submodules-hash
+      run: |
+        $submoduleHash = git submodule status | ForEach-Object { $_.Split(' ')[0] } | Sort-Object | Out-String | ForEach-Object { [System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($_)) | ForEach-Object { $_.ToString("x2") } } -join ""
+        echo "hash=$submoduleHash" >> $env:GITHUB_OUTPUT
+        echo "Submodules hash: $submoduleHash"
+      shell: powershell
 
     - name: Cache SDK Frameworks
       uses: actions/cache@v4
@@ -38,7 +46,7 @@ jobs:
         path: sdk_${{matrix.version}}/frameworks
         key: ${{ runner.os }}-sdk-${{ matrix.version }}-frameworks-${{ hashFiles('sdk_${{matrix.version}}/frameworks/**') }}
         restore-keys: |
-          ${{ runner.os }}-sdk-${{ matrix.version }}-frameworks-
+          ${{ runner.os }}-sdk-${{ matrix.version }}-frameworks
 
     - name: Cache Dependency Build
       id: cache-dependency
@@ -46,14 +54,14 @@ jobs:
       with:
         path: |
           dependency/install
-        key: ${{ runner.os }}-dependency-build-${{ hashFiles('dependency/*/CMakeLists.txt', 'dependency/*/src/**', 'dependency/*/include/**') }}
+        key: ${{ runner.os }}-dependency-build-${{ steps.submodules-hash.outputs.hash }}
         restore-keys: |
-          ${{ runner.os }}-dependency-build-
+          ${{ runner.os }}-dependency-build
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
 
-    - name: Run init.bat
+    - name: Build Dependency
       if: steps.cache-dependency.outputs.cache-hit != 'true'
       run: ./init.bat
       shell: cmd
