@@ -7,13 +7,6 @@ on:
   pull_request:
     branches: [ "refactoring" ]
 
-env:
-
-  # Configuration type to build.
-  # You can convert this to a build matrix if you need coverage of multiple configuration types.
-  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-  BUILD_CONFIGURATION: Release
-
 permissions:
   contents: read
 
@@ -35,10 +28,9 @@ jobs:
     - name: Get submodules hash
       id: submodules-hash
       run: |
-        # 获取所有子模块的提交哈希
         $commits = git submodule status | ForEach-Object { $_.Trim().Split(' ')[0].TrimStart(' +') }
         $allCommits = ($commits | Sort-Object) -join ""
-        # 生成组合哈希
+
         $bytes = [System.Text.Encoding]::UTF8.GetBytes($allCommits)
         $hasher = [System.Security.Cryptography.SHA256]::Create()
         $hashBytes = $hasher.ComputeHash($bytes)
@@ -48,7 +40,6 @@ jobs:
         echo "Submodules hash: $submoduleHash"
         echo "Individual commits: $($commits -join ', ')"
         
-        # 显示详细信息
         git submodule status
       shell: powershell
 
@@ -80,6 +71,4 @@ jobs:
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ./sdk_${{matrix.version}}/plugins/project/plugins.sln
+      run: msbuild /m /p:Configuration=Release ./sdk_${{matrix.version}}/plugins/project/plugins.sln
