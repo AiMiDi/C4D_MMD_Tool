@@ -35,9 +35,21 @@ jobs:
     - name: Get submodules hash
       id: submodules-hash
       run: |
-        $submoduleHash = git submodule status | ForEach-Object { $_.Split(' ')[0] } | Sort-Object | Out-String | ForEach-Object { [System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($_)) | ForEach-Object { $_.ToString("x2") } } -join ""
+        # 获取所有子模块的提交哈希
+        $commits = git submodule status | ForEach-Object { $_.Trim().Split(' ')[0].TrimStart(' +') }
+        $allCommits = ($commits | Sort-Object) -join ""
+        # 生成组合哈希
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($allCommits)
+        $hasher = [System.Security.Cryptography.SHA256]::Create()
+        $hashBytes = $hasher.ComputeHash($bytes)
+        $submoduleHash = ($hashBytes | ForEach-Object { $_.ToString("x2") }) -join ""
+        
         echo "hash=$submoduleHash" >> $env:GITHUB_OUTPUT
         echo "Submodules hash: $submoduleHash"
+        echo "Individual commits: $($commits -join ', ')"
+        
+        # 显示详细信息
+        git submodule status
       shell: powershell
 
     - name: Cache SDK Frameworks
