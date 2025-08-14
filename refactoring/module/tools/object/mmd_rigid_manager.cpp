@@ -117,27 +117,9 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	}
 	case g_mmd_model_manager_object_id:
 	{
-		if (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data))
+		if (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data); msg && msg->msg_type == MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE)
 		{
-			switch (msg->msg_type)
-			{
-			case MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE:
-			{
-				if(msg->object_type == ManagerObjectType::BONE_MANAGER)
-				{
-					bone_manager_data_ = msg->object->GetNodeData<MMDBoneManagerObject>();
-				}
-				break;
-			}
-			case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
-			{
-				node->SetParameter(ConstDescID(DescLevel(RIGID_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
-				break;
-			}
-			case MMDModelManagerObjectMsgType::DEFAULT:
-				break;
-			}
-
+			node->SetParameter(ConstDescID(DescLevel(RIGID_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
 		}
 		break;
 	}

@@ -42,16 +42,6 @@ public:
 	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(EditorSubMorphDialog)
 };
 
-enum class ManagerObjectType : uint8_t
-{
-	DEFAULT,
-	MESH_MANAGER,
-	BONE_MANAGER,
-	RIGID_MANAGER,
-	JOINT_MANAGER,
-	MODEL_MANAGER
-};
-
 enum class MMDModelManagerObjectMsgType : uint8_t
 {
 	DEFAULT,
@@ -62,13 +52,11 @@ enum class MMDModelManagerObjectMsgType : uint8_t
 struct MMDModelManagerObjectMsg
 {
 	MMDModelManagerObjectMsgType msg_type;
-	ManagerObjectType	object_type;
 	BaseObject* object;
 	Int32	model_mode;
 
-	explicit MMDModelManagerObjectMsg(const MMDModelManagerObjectMsgType msg_type_ = MMDModelManagerObjectMsgType::DEFAULT,
-	                            const ManagerObjectType object_type_ = ManagerObjectType::DEFAULT, BaseObject* object_ = nullptr,const Int32 model_mode_ = MODEL_MODE_ANIM)
-		:msg_type(msg_type_), object_type(object_type_), object(object_), model_mode(model_mode_) {}
+	explicit MMDModelManagerObjectMsg(const MMDModelManagerObjectMsgType msg_type_ = MMDModelManagerObjectMsgType::DEFAULT, BaseObject* object_ = nullptr, const Int32 model_mode_ = MODEL_MODE_ANIM)
+		:msg_type(msg_type_), object(object_), model_mode(model_mode_) {}
 };
 
 enum class MMDModelRootDynamicDescriptionType : uint8_t
@@ -149,7 +137,7 @@ public:
 	void SetMMDModel(const MMDModelPtr& model);
 	Bool CreateManagers();
 	Bool UpdateManagers(BaseObject* op = nullptr);
-	BaseObject* GetManagerObject(const ManagerObjectType type) const;
+	BaseObject* GetMeshManagerObject() const { return mesh_manager_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;

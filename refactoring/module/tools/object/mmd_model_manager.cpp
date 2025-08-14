@@ -395,9 +395,9 @@ void MMDModelManagerObject::RefreshMorph()
 	//}
 }
 
-static void SendObjectUpdateMessage(BaseObject* dst, BaseObject* obj, const ManagerObjectType& type)
+static void SendObjectUpdateMessage(BaseObject* dst, BaseObject* obj)
 {
-	MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE, type, obj);
+	MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE, obj);
 	dst->Message(g_mmd_model_manager_object_id, &msg);
 }
 
@@ -483,17 +483,12 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 	}
 	if (send_message)
 	{
-		SendObjectUpdateMessage(bone_manager_,op, ManagerObjectType::MODEL_MANAGER);
-		SendObjectUpdateMessage(bone_manager_,rigid_manager_, ManagerObjectType::RIGID_MANAGER);
-		SendObjectUpdateMessage(bone_manager_,joint_manager_, ManagerObjectType::JOINT_MANAGER);
+		SendObjectUpdateMessage(bone_manager_, op);
+		SendObjectUpdateMessage(mesh_manager_, op);
 
-		SendObjectUpdateMessage(mesh_manager_,op, ManagerObjectType::MODEL_MANAGER);
-
-		SendObjectUpdateMessage(rigid_manager_,bone_manager_, ManagerObjectType::BONE_MANAGER);
-		SendObjectUpdateMessage(rigid_manager_,joint_manager_, ManagerObjectType::JOINT_MANAGER);
-
-		SendObjectUpdateMessage(joint_manager_,bone_manager_, ManagerObjectType::BONE_MANAGER);
-		SendObjectUpdateMessage(joint_manager_,rigid_manager_, ManagerObjectType::RIGID_MANAGER);
+		rigid_manager_data_->bone_manager_data_ = bone_manager_data_;
+		joint_manager_data_->bone_manager_data_ = bone_manager_data_;
+		joint_manager_data_->rigid_manager_data_ = rigid_manager_data_;
 	}
 	return true;
 }
@@ -674,6 +669,7 @@ Bool MMDModelManagerObject::CreateManagers()
 			bone_root_object->InsertUnder(op);
 			bone_manager_ = bone_root_object;
 			bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
+			bone_manager_data_->model_manager_ = reinterpret_cast<BaseObject*>(this);
 		}
 		if (mesh_manager_ == nullptr)
 		{
@@ -681,6 +677,7 @@ Bool MMDModelManagerObject::CreateManagers()
 			mesh_root_object->InsertUnder(op);
 			mesh_manager_ = mesh_root_object;
 			mesh_manager_data_ = mesh_manager_->GetNodeData<MMDMeshManagerObject>();
+			mesh_manager_data_->model_manager_ = reinterpret_cast<BaseObject*>(this);
 		}
 		if (rigid_manager_ == nullptr)
 		{
@@ -688,6 +685,8 @@ Bool MMDModelManagerObject::CreateManagers()
 			rigid_root_object->InsertUnder(op);
 			rigid_manager_ = rigid_root_object;
 			rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
+			rigid_manager_data_->bone_manager_data_ = bone_manager_data_;
+
 		}
 		if (joint_manager_ == nullptr)
 		{
@@ -695,29 +694,12 @@ Bool MMDModelManagerObject::CreateManagers()
 			joint_root_object->InsertUnder(op);
 			joint_manager_ = joint_root_object;
 			joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
+			joint_manager_data_->bone_manager_data_ = bone_manager_data_;
+			joint_manager_data_->rigid_manager_data_ = rigid_manager_data_;
 		}
 		return true;
 	}
 	return false;
-}
-
-BaseObject* MMDModelManagerObject::GetManagerObject(const ManagerObjectType type) const
-{
-	switch (type)
-	{
-	case ManagerObjectType::MESH_MANAGER:
-		return mesh_manager_;
-	case ManagerObjectType::BONE_MANAGER:
-		return bone_manager_;
-	case ManagerObjectType::RIGID_MANAGER:
-		return rigid_manager_;
-	case ManagerObjectType::JOINT_MANAGER:
-		return joint_manager_;
-
-	case ManagerObjectType::DEFAULT:
-	case ManagerObjectType::MODEL_MANAGER:;
-	}
-	return nullptr;
 }
 
 Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
@@ -1170,7 +1152,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case MODEL_MODE:
 		{
 			model_mode_ = t_data.GetInt32();
-			MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE, ManagerObjectType::DEFAULT, nullptr, model_mode_);
+			MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE, nullptr, model_mode_);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_model_manager_object_id, &msg);
 			break;
 		}

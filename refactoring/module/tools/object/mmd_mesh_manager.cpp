@@ -182,20 +182,14 @@ Bool MMDMeshManagerObject::Message(GeListNode* node, Int32 type, void* data)
 {
 	if (type == g_mmd_model_manager_object_id)
 	{
-		const auto msg = static_cast<MMDModelManagerObjectMsg*>(data);
-		switch (msg->msg_type)
+		switch (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data); msg->msg_type)
 		{
 		case MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE:
-		{
-			if (msg->object_type == ManagerObjectType::MODEL_MANAGER)
-				model_manager_ = msg->object;
+			model_manager_ = msg->object;
 			break;
-		}
 		case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
-		{
 			node->SetParameter(ConstDescID(DescLevel(MESH_MODE)),msg->model_mode, DESCFLAGS_SET::NONE);
 			break;
-		}
 		case MMDModelManagerObjectMsgType::DEFAULT:
 			break;
 		}

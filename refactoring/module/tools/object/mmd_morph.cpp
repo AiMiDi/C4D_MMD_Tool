@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "mmd_morph.h"
 #include "mmd_model_manager.h"
 #include "mmd_mesh_manager.h"
@@ -235,16 +235,16 @@ inline void FlipMorph::UpdateMorph(MMDModelManagerObject& model)
 
 inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
 {
-	if (BaseObject* mesh_root = model.GetManagerObject(ManagerObjectType::MESH_MANAGER))
+	if (BaseObject* mesh_manager = model.GetMeshManagerObject())
 	{
-		mesh_root->GetNodeData<MMDMeshManagerObject>()->SetMorphStrength(m_name, GetStrength(model.Get()));
+		mesh_manager->GetNodeData<MMDMeshManagerObject>()->SetMorphStrength(m_name, GetStrength(model.Get()));
 	}
 
 }
 
 inline void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
 {
-	/*if (BaseObject* bone_root = model.GetManagerObject(ManagerObjectType::BONE_MANAGER))
+	/*if (BaseObject* bone_root = model.GetMeshManagerObject(ManagerObjectType::BONE_MANAGER))
 	{
 		bone_root->GetNodeData<MMDBoneManagerObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
 	}*/

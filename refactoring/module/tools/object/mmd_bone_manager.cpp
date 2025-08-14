@@ -184,7 +184,6 @@ bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	iferr_scope_handler{
 		return false;
 	};
-	Bool need_update_morph = false;
 	switch (static_cast<MMDBoneTagMsg*>(data)->type)
 	{
 	case MMDBoneTagMsgType::BONE_INDEX_CHANGE:
@@ -195,7 +194,7 @@ bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	case MMDBoneTagMsgType::DEFAULT:
 		break;
 	}
-	if (need_update_morph && model_manager_)
+	if (model_manager_)
 	{
 		MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE };
 		model_manager_->Message(g_mmd_bone_manager_object_id, &msg);
@@ -212,38 +211,34 @@ bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node)
 	bone_items_.FlushAll();
 	bone_items_.SetString(-1, "-"_s);
 	bone_list_.Reset();
-	maxon::Queue<BaseObject*> nodes;
-	iferr(nodes.Push(op)) return true;
-	while (!nodes.IsEmpty())
+	maxon::Queue<BaseObject*> objects;
+	objects.Push(op)iferr_return;
+	while (!objects.IsEmpty())
 	{
-		BaseObject* node_ = *nodes.Pop();
-		while (node_)
+		BaseObject* object = *objects.Pop();
+		while (object)
 		{
-			if (node_->GetType() == Ojoint)
+			if (object->GetType() == Ojoint)
 			{
-				if (SDK2024_Const BaseTag* node_bone_tag = node_->GetTag(g_mmd_bone_tag_id); node_bone_tag != nullptr)
+				if (SDK2024_Const BaseTag* node_bone_tag = object->GetTag(g_mmd_bone_tag_id); node_bone_tag != nullptr)
 				{
 					GeData ge_data;
 					node_bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), ge_data, DESCFLAGS_GET::NONE);
 					const auto bone_index = node_bone_tag->GetNodeData<MMDBoneTag>()->GetBoneIndex();
-					bone_items_.SetString(bone_index, node_->GetName());
+					bone_items_.SetString(bone_index, object->GetName());
 					auto& link = bone_list_.InsertKey(bone_index)iferr_return;
 					link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
 					(*link)->SetLink(node_bone_tag);
 				}
 			}
-			iferr(nodes.Push(node_->GetDown()))
-				return true;
-			if (node_ != op)
-			{
-				node_ = node_->GetNext();
-			}
-			else {
+			objects.Push(object->GetDown())iferr_return;
+			if (object != op)
+				object = object->GetNext();
+			else 
 				break;
-			}
 		}
 	}
-	nodes.Reset();
+	objects.Reset();
 	return true;
 }
 
@@ -271,20 +266,12 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		{
 			switch (msg->msg_type)
 			{
-
 				case MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE:
-				{
-					if (msg->object_type == ManagerObjectType::MODEL_MANAGER)
-					{
-						model_manager_ = msg->object;
-					}
+					model_manager_ = msg->object;
 					break;
-				}
 				case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
-				{
 					node->SetParameter(ConstDescID(DescLevel(BONE_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
 					break;
-				}
 				case MMDModelManagerObjectMsgType::DEFAULT:
 					break;
 			}
