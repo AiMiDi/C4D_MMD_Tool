@@ -10,7 +10,11 @@ Description:	CMT tools main dialog.
 
 #pragma once
 
-#include "pch.h"
+#include <c4d.h>
+#include <c4d_symbols.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
+#include "utils/images_user_area_util.hpp"
 
 class CMTToolDialog final : public GeDialog
 {

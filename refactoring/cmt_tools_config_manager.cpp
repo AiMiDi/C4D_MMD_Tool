@@ -8,7 +8,9 @@ Description:	Manager of plugin configuration
 
 **************************************************************************/
 
-#include "pch.h"
+#include <c4d.h>
+#include <fstream>
+#include "module/core/cmt_marco.h"
 #include "cmt_tools_config_manager.h"
 
 void CMTToolConfigManager::InitDialog(GeDialog* dlg)
@@ -72,10 +74,11 @@ void CMTToolConfigManager::InitConfig(Int32 id)
 void CMTToolConfigManager::InitConfigManager()
 {
 	auto& config = m_config;
-	try {
-		config = YAML::LoadFile(m_config_path);
+	std::ifstream fin(m_config_path);
+	if (fin.is_open()) {
+		config = YAML::Load(fin);
 	}
-	catch (YAML::BadFile&) {
+	else {
 		ApplicationOutput("Failed to load the YAML file!"_s);
 		config.reset();
 		for (int config_id = k_config_id_begin; config_id < k_config_id_end; ++config_id)

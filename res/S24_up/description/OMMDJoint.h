@@ -1,7 +1,7 @@
 #ifndef _PMX_JOINT_OBJ_H_
 #define _PMX_JOINT_OBJ_H_
 
-enum
+enum : int
 {
 	OMMDJoint_GRP = 1000,
 	JOINT_INDEX,

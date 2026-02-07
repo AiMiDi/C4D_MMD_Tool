@@ -17,3 +17,5 @@ stylecheck=false
 ModuleId=net.aimidi.mmdtool
 
 Encoding=UTF-8
+
+ExceptionHandling=true

@@ -1,8 +1,0 @@
-#if 1
-namespace maxon
-{
-#ifndef MAXON_REGISTRATION_EXCLUDE_INTERFACES
-	PRIVATE_MAXON_DATATYPE_REGISTER_ENUM(ASSET_UPDATE_POLICY, "net.maxon.datatype.enum.asset_update_policy", SIZEOF(ASSET_UPDATE_POLICY), false, "NEVER\0EXPLICIT\0IMPLICIT\0", const maxon::UInt64 values[] = {(maxon::UInt64) ASSET_UPDATE_POLICY::NEVER, (maxon::UInt64) ASSET_UPDATE_POLICY::EXPLICIT, (maxon::UInt64) ASSET_UPDATE_POLICY::IMPLICIT})
-#endif
-}
-#endif

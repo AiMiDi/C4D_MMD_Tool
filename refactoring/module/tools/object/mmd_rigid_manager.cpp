@@ -8,10 +8,9 @@ Description:	MMD rigid root object
 
 **************************************************************************/
 
-#include "pch.h"
+#include "plugin_resource.h"
 #include "mmd_model_manager.h"
 #include "mmd_rigid_manager.h"
-
 #include "mmd_bone_manager.h"
 #include "mmd_rigid.h"
 
@@ -41,7 +40,7 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDRigidManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
+SDK2024_Write(MMDRigidManagerObject)
 {
 	IOWriteField(m_rigid_name_index_);
 	IOWriteField(bone_manager_data_);
@@ -50,8 +49,7 @@ Bool MMDRigidManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 	return SUPER::Write(node, hf);
 }
 
-Bool MMDRigidManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
-	AliasTrans* trn) SDK2024_Const
+SDK2024_CopyTo(MMDRigidManagerObject)
 {
 	iferr_scope_handler{
 		return false;

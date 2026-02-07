@@ -8,12 +8,17 @@ Description:	DESC
 
 **************************************************************************/
 
-#include "pch.h"
+#include <c4d.h>
+#include <c4d_symbols.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
 #include "mmd_bone_manager.h"
 #include "cmt_tools_setting.h"
 #include "mmd_model_manager.h"
 #include "description/TMMDBone.h"
+#include "maxon/queue.h"
 #include "module/tools/tag/mmd_bone.h"
+#include "utils/string_util.hpp"
 
 template<> Bool io_util::ReadData<MMDBoneManagerObject*>(HyperFile* hf, MMDBoneManagerObject*& data)
 {
@@ -34,7 +39,7 @@ NodeData* MMDBoneManagerObject::Alloc()
 	return NewObjClear(MMDBoneManagerObject);
 }
 
-Bool MMDBoneManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
+SDK2024_CopyTo(MMDBoneManagerObject)
 {
 	iferr_scope_handler{
 		return false;
@@ -62,7 +67,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDBoneManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
+SDK2024_Write(MMDBoneManagerObject)
 {
 	IOWriteField(bone_name_index_);
 	IOWriteField(model_manager_);
@@ -234,7 +239,7 @@ bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node)
 			objects.Push(object->GetDown())iferr_return;
 			if (object != op)
 				object = object->GetNext();
-			else 
+			else
 				break;
 		}
 	}
@@ -533,13 +538,13 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 
 					BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 					bc.SetString(DESC_NAME, String(pmx_bones[pmx_bone_ik_link.m_ikBoneIndex].m_name.c_str()));
-					bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(PMX_BONE_IK_LINKS_GRP))));
+					bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(PMX_BONE_IK_LINKS_GRP))));
 					const auto pmx_bone_ik_link_grp = dynamic_description->Alloc(bc);
 
 					MAXON_SCOPE // IK bone group
 					{
 						bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-						bc.SetData(DESC_PARENTGROUP, DescIDGeData(pmx_bone_ik_link_grp));
+						bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
 						bc.SetInt32(DESC_COLUMNS, 2);
 						const auto ik_bone_index_grp = dynamic_description->Alloc(bc);
 
@@ -547,7 +552,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 						bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE));
 						bc.SetInt32(DESC_DEFAULT, pmx_bone_ik_link.m_ikBoneIndex);
 						bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
-						bc.SetData(DESC_PARENTGROUP, DescIDGeData(ik_bone_index_grp));
+						bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ik_bone_index_grp));
 						dynamic_description->Alloc(bc);
 
 						bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
@@ -558,24 +563,24 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 							bc.SetData(DESC_DEFAULT, ik_bone_link);
 						}
 						bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
-						bc.SetData(DESC_PARENTGROUP, DescIDGeData(ik_bone_index_grp));
+						bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ik_bone_index_grp));
 						dynamic_description->Alloc(bc);
 					}
 
 					bc = GetCustomDataTypeDefault(DTYPE_BOOL);
 					bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT));
 					bc.SetBool(DESC_DEFAULT, pmx_bone_ik_link.m_enableLimit);
-					bc.SetData(DESC_PARENTGROUP, DescIDGeData(pmx_bone_ik_link_grp));
+					bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
 
 					bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
 					bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN));
 					bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMin.x, pmx_bone_ik_link.m_limitMin.y, pmx_bone_ik_link.m_limitMin.z));
-					bc.SetData(DESC_PARENTGROUP, DescIDGeData(pmx_bone_ik_link_grp));
+					bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
 
 					bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
 					bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX));
 					bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMax.x, pmx_bone_ik_link.m_limitMax.y, pmx_bone_ik_link.m_limitMax.z));
-					bc.SetData(DESC_PARENTGROUP, DescIDGeData(pmx_bone_ik_link_grp));
+					bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
 				}
 			}
 		}

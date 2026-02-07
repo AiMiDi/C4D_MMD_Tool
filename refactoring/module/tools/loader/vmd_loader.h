@@ -10,7 +10,8 @@ Description:	vmd data loader
 
 #pragma once
 
-#include "pch.h"
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
 
 /**
 * @brief VMD data loader scene loader plugins,inherit from SceneLoaderData

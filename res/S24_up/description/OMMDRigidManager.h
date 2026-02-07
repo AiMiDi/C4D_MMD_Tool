@@ -1,6 +1,6 @@
 #ifndef _O_MMD_RIGID_MANAGER_H_
 #define _O_MMD_RIGID_MANAGER_H_
-enum
+enum : int
 {
 	RIGID_MANAGER_GRP = 1000,
 	RIGID_DISPLAY_TYPE,

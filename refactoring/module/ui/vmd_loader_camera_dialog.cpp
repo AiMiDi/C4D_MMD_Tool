@@ -8,9 +8,9 @@ Description:	vmd data loader dialog
 
 **************************************************************************/
 
-#include "pch.h"
-#include "vmd_loader_camera_dialog.h"
 
+#include <c4d_symbols.h>
+#include "vmd_loader_camera_dialog.h"
 #include "cmt_tools_manager.h"
 #include "cmt_tools_setting.h"
 

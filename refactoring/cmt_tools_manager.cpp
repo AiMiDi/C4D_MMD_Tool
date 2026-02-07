@@ -8,10 +8,11 @@ Description:	tools manager
 
 **************************************************************************/
 
-#include "pch.h"
+
 #include "cmt_tools_manager.h"
 #include "CMTSceneManager.h"
 #include "module/ui/cmt_name_conversion_dialog.h"
+#include "utils/string_util.hpp"
 
 namespace CMTToolsManager
 {

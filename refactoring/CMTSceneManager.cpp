@@ -8,9 +8,9 @@ Description:	scene manager
 
 **************************************************************************/
 
-#include "pch.h"
-
 #include "CMTSceneManager.h"
+#include <c4d_symbols.h>
+#include "plugin_resource.h"
 #include "module/tools/object/mmd_camera.h"
 #include "module/tools/object/mmd_model_manager.h"
 

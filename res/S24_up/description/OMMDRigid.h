@@ -1,7 +1,7 @@
 #ifndef _PMX_RIGID_OBJ_H_
 #define _PMX_RIGID_OBJ_H_
 
-enum
+enum : int
 {
 	PMX_RIGID_OBJ_GRP = 10000,
 	RIGID_INDEX,

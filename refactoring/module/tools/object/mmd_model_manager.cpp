@@ -8,15 +8,21 @@ Description:	MMD model object
 
 **************************************************************************/
 
-#include "pch.h"
+#include <c4d.h>
+#include <c4d_symbols.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
 #include "mmd_model_manager.h"
-
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
 #include "mmd_bone_manager.h"
 #include "mmd_joint_manager.h"
 #include "mmd_mesh_manager.h"
 #include "mmd_rigid_manager.h"
+#include "maxon/queue.h"
+#include "utils/filename_util.hpp"
+#include "utils/string_util.hpp"
+
 #define COL_NAME 'name'
 
 Bool EditorSubMorphDialog::CreateLayout()
@@ -208,7 +214,7 @@ MMDModelManagerObject::AddMorphHelper::~AddMorphHelper()
 	*m_model->update_morph_.Write() = true;
 }
 
-Bool MMDModelManagerObject::Init(GeListNode* node SDK2024_InitParaName)
+SDK2024_Init(MMDModelManagerObject)
 {
 	if (node == nullptr)
 		return false;
@@ -275,7 +281,7 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	*is_morph_initialized_.Write() = true;
 	return true;
 }
-Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const {
+SDK2024_Write(MMDModelManagerObject) {
 
 	IOWriteField(bone_manager_);
 	IOWriteField(mesh_manager_);
@@ -293,7 +299,7 @@ Bool MMDModelManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 		return false;
 	return true;
 }
-Bool MMDModelManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
+SDK2024_CopyTo(MMDModelManagerObject)
 {
 	const auto destObject = reinterpret_cast<MMDModelManagerObject*>(dest);
 	destObject->bone_manager_ = bone_manager_;
@@ -994,7 +1000,7 @@ Bool MMDModelManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION - 1, EXECUTIONFLAGS::EXPRESSION);
 	return true;
 }
-Bool MMDModelManagerObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const
+SDK2024_GetDDescription(MMDModelManagerObject)
 {
 	if (!description->LoadDescription(node->GetType()))
 		return false;

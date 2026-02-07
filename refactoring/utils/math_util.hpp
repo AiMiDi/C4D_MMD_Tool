@@ -10,6 +10,10 @@ Description:	math util
 
 #pragma once
 
+#include <array>
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
+
 namespace math_util
 {
 	/**

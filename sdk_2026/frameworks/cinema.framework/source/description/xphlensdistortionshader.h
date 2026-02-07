@@ -1,0 +1,11 @@
+#ifndef XPHLENSDISTORTIONSHADER_H__
+#define XPHLENSDISTORTIONSHADER_H__
+
+#include "phlensdistortion.h"
+
+enum
+{
+	LENSDISTORTIONSHADER_TEXTURE = 2000,
+};
+
+#endif // XPHLENSDISTORTIONSHADER_H__

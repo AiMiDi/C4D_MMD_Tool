@@ -1,6 +1,6 @@
 #ifndef _PMX_MODEL_MANAGER_H_
 #define _PMX_MODEL_MANAGER_H_
-enum
+enum : int
 {
 	MODEL_INFO_GRP = 1000,
 	MODEL_NAME_LOCAL,

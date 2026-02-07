@@ -1,6 +1,5 @@
 release/
 dependency/install/
-
 setup/Output/
 
 *.xdl64
@@ -8,10 +7,12 @@ setup/Output/
 .vs/
 .idea/
 _obj/
-frameworks/
 
 # Created by https://www.toptal.com/developers/gitignore/api/c++,vs,rider
 # Edit at https://www.toptal.com/developers/gitignore?templates=c++,vs,rider
+
+# SDK frameworks - track essential source/headers, ignore build-generated content
+sdk_*/frameworks/*/generated/
 
 ### C++ ###
 # Prerequisites
@@ -479,4 +480,18 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# End of https://www.toptal.com/developers/gitignore/api/c++,vs,rider
+# SDK generated intermediate files
+sdk_*/plugins/mmdtool/source/
+sdk_*/plugins/mmdtool/res/
+sdk_*/plugins/mmdtool/generated/
+sdk_*/_build*/
+sdk_*/plugins/mmdtool/*.manifest
+sdk_*/plugins/mmdtool/project/*.vcxproj.user
+
+# CMake build directories
+_build*/
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+

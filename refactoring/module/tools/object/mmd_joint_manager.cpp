@@ -8,7 +8,9 @@ Description:	MMD joint root object
 
 **************************************************************************/
 
-#include "pch.h"
+#include <c4d.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
 #include "mmd_joint.h"
 #include "mmd_joint_manager.h"
 #include "mmd_bone_manager.h"
@@ -43,7 +45,7 @@ Bool MMDJointManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDJointManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
+SDK2024_Write(MMDJointManagerObject)
 {
 	IOWriteField(joint_name_index_);
 	IOWriteField(bone_manager_data_);
@@ -51,8 +53,7 @@ Bool MMDJointManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf)
 	return SUPER::Write(node, hf);
 }
 
-Bool MMDJointManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
-	AliasTrans* trn) SDK2024_Const
+SDK2024_CopyTo(MMDJointManagerObject)
 {
 	auto const dest_object = reinterpret_cast<MMDJointManagerObject*>(dest);
 	dest_object->bone_manager_data_ = bone_manager_data_;

@@ -10,7 +10,6 @@ Description:	plugin load resource
 
 #pragma once
 
-
 /*------------Plugin ID------------*/
 //	GUI
 constexpr auto g_cmt_command_id = 1056563;

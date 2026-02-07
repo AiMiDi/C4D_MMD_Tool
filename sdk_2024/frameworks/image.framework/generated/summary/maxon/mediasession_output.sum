@@ -1,3 +1,0 @@
-maxon.MediaOutputInterface	"net.maxon.image.interface.mediaoutput"	D:\code\C4D_MMD_Tool\sdk_2024\frameworks\image.framework\source\maxon\mediasession_output.h(37,7)	MediaConverterInterface	CallSelectionHandler,GetSelectionHandler,ResetConverter,SetSelectionHandler	
-maxon.MediaOutputTextureInterface	"net.maxon.image.interface.mediaoutputtexture"	D:\code\C4D_MMD_Tool\sdk_2024\frameworks\image.framework\source\maxon\mediasession_output.h(77,7)	MediaOutputInterface	SetOutputTexture	
-maxon.MediaOutputUrlInterface	"net.maxon.image.interface.mediaoutputurl"	D:\code\C4D_MMD_Tool\sdk_2024\frameworks\image.framework\source\maxon\mediasession_output.h(129,7)	MediaOutputInterface	CheckBitmapSize,EditSystemOptions,GetFileFormat,GetOutputUrl,SetOutputUrl	

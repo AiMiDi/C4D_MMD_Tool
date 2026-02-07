@@ -10,11 +10,16 @@ Description:	MMD manager object
 
 #pragma once
 
+#include <c4d.h>
+#include <utils/io_util.hpp>
+#include "module/core/cmt_marco.h"
+
 class MMDManagerObject : public ObjectData
 {
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDManagerObject)
-	CMT_DEFAULT_MOVE_BODY(MMDManagerObject)
-	INSTANCEOF(MMDRootObject, ObjectData)
+public:
+	MMDManagerObject(const MMDManagerObject&) = delete; void operator =(const MMDManagerObject&) = delete;
+	MMDManagerObject(MMDManagerObject&& other) noexcept : ObjectData(other) {} MMDManagerObject& operator =(MMDManagerObject&&) noexcept = default;
+	typedef ObjectData SUPER;
 protected:
 	MMDManagerObject() = default;
 	~MMDManagerObject() override = default;
@@ -43,14 +48,14 @@ protected:
 		}
 	}
 
-	Bool Init(GeListNode* node SDK2024_InitParaName) override
+	SDK2024_InitOverride
 	{
 		if (!node)
 			return false;
 		node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 		CreateLockTag(node);
 		CreateDisplayTag(node);
-		return SUPER::Init(node SDK2024_InitPara);
+		return SDK2024_SuperInit;
 	}
 
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override
@@ -60,7 +65,7 @@ protected:
 		return SUPER::Read(node, hf, level);
 	}
 
-	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override
+	SDK2024_WriteOverride
 	{
 		IOWriteField(m_display_tag);
 		IOWriteField(m_protection_tag);

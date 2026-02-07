@@ -8,14 +8,17 @@ Description:	C4D MMD camera object
 
 **************************************************************************/
 
-
-#include "pch.h"
+#include <c4d.h>
+#include <c4d_symbols.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
 #include "mmd_camera.h"
-
-#include <functional>
-
 #include "CMTSceneManager.h"
+#include "tprotection.h"
+#include "maxon/sortedarray.h"
 #include "utils/unique_id_util.hpp"
+#include "utils/time_util.hpp"
+#include <functional>
 
 MMDCamera::MMDCamera(MMDCamera&& other) noexcept
 	: ObjectData()
@@ -431,7 +434,7 @@ NodeData* MMDCamera::Alloc()
 	return NewObjClear(MMDCamera);
 }
 
-Bool MMDCamera::Init(GeListNode* node SDK2024_InitParaName)
+SDK2024_Init(MMDCamera)
 {
 	if (node == nullptr)
 		return false;
@@ -439,7 +442,7 @@ Bool MMDCamera::Init(GeListNode* node SDK2024_InitParaName)
 	return true;
 }
 
-Bool MMDCamera::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const
+SDK2024_CopyTo(MMDCamera)
 {
 	if (camera_)
 	{

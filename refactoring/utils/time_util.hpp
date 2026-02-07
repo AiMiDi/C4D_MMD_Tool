@@ -10,14 +10,13 @@ Description:	Time Utils with hash
 
 #pragma once
 
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
+
 #if API_VERSION < 23000
 namespace maxon {
     using HashInt = UInt;
 }
-#endif
-
-#if API_VERSION >= 2024900
-using namespace cinema;
 #endif
 
 //  HashTime

@@ -1,1 +1,0 @@
-maxon.CommandObserverInterface	"net.maxon.command.interface.observer"	D:\C4DSDK\C4D_MMDTool\sdk_s26\frameworks\command.framework\source\maxon\commandobservable.h(28,7)	ObserverObjectInterface	ObservableCommandInvoked,ObservableCommandInvokedInfo,ObservableCommandPrepareInfo,ObservableCommandStatus	

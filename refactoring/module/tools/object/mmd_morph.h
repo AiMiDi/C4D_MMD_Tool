@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
+
 class MMDModelManagerObject;
 
 enum class MMDMorphType : uint8_t

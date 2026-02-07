@@ -68,14 +68,14 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	friend MMDModelManagerObject;
 	MMDBoneManagerObject() = default;
 	~MMDBoneManagerObject() override = default;
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneManagerObject)
-	CMT_DEFAULT_MOVE_BODY(MMDBoneManagerObject)
-	INSTANCEOF(MMDBoneRootObject, MMDManagerObject)
-public:
+	public:
+	typedef MMDManagerObject SUPER;
 	static NodeData* Alloc();
-	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
+	MMDBoneManagerObject(const MMDBoneManagerObject&) = delete; void operator =(const MMDBoneManagerObject&) = delete;
+	MMDBoneManagerObject(MMDBoneManagerObject&& other) noexcept : MMDManagerObject(std::forward<MMDBoneManagerObject>(other)) {} MMDBoneManagerObject& operator =(MMDBoneManagerObject&&) noexcept = default;
+	SDK2024_CopyToOverride;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
-	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
+	SDK2024_WriteOverride;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 

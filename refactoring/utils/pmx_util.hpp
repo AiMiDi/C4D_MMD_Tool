@@ -10,7 +10,10 @@ Description:	PMX util
 
 #pragma once
 
-#include "pch.h"
+#include <c4d.h>
+#include <cassert>
+#include <string>
+#include "module/core/cmt_marco.h"
 
 class PMXTextReader
 {

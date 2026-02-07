@@ -1,0 +1,9 @@
+_build*/
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+.vs/
+.idea/
+_obj/
+

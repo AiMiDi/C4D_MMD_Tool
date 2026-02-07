@@ -1,6 +1,4 @@
-#include "pch.h"
 #include "register_entity.h"
-
 #include "CMTSceneManager.h"
 #include "module/ui/cmt_tools_dialog.h"
 #include "module/tools/loader/vmd_loader.h"

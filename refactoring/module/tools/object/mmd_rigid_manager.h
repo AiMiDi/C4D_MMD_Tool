@@ -10,9 +10,12 @@ Description:	MMD rigid root object
 
 #pragma once
 
+#include <c4d.h>
 #include "mmd_manager.hpp"
 #include "cmt_tools_setting.h"
 #include "description/OMMDRigidManager.h"
+#include "module/core/cmt_marco.h"
+#include "libMMD/Model/MMD/PMXModel.h"
 
 class MMDRigidObject;
 class MMDModelManagerObject;
@@ -53,8 +56,8 @@ class MMDRigidManagerObject final : public MMDManagerObject
 public:
 	static NodeData* Alloc();
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
-	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
-	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
+	SDK2024_WriteOverride;
+	SDK2024_CopyToOverride;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 

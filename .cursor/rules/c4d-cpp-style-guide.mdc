@@ -1,0 +1,70 @@
+---
+description: Cinema 4D C++ SDK coding style guide (based on Maxon official style guide)
+globs: "**/*.{cpp,h,hpp}"
+alwaysApply: false
+---
+
+# Cinema 4D C++ Style Guide
+
+Reference: https://developers.maxon.net/docs/cpp/2026_1_0/page_maxonapi_style_guide.html
+
+## C++ Standard & Restrictions
+
+- Target: C++20, but **no** concepts, coroutines, modules, or spaceship operator
+- **Do not use the std library** (exceptions disabled by default). Use Maxon API equivalents:
+  - `maxon::String` instead of `std::string`
+  - `maxon::BaseArray` instead of `std::vector`
+  - `maxon::UniqueRef` instead of `std::unique_ptr`
+- Use `MAXON_LIKELY`/`MAXON_UNLIKELY` instead of `[[likely]]`/`[[unlikely]]`
+- Use `MAXON_WARN_UNUSED` instead of `[[nodiscard]]`
+
+## Data Types
+
+Always use C4D types: `Int32`, `Int64`, `Int`, `Float32`, `Float64`, `Float`, `Bool`, `Char`, `String`, `Vector`, `Matrix`.
+Use `Int` for indices and sizes. Avoid `unsigned` types unless clearly needed. Use `SIZEOF` instead of `sizeof`.
+
+## Naming Conventions
+
+- **Classes/Types**: UpperCamelCase, e.g. `MyNewClass`
+- **Variables**: lowerCamelCase, e.g. `numErrors`, `polygonIndex`
+- **Class member variables**: leading underscore, e.g. `_value`, `_index` (private/protected)
+- **Global variables**: `g_` prefix, e.g. `g_var`
+- **Constants/Macros/Enums**: ALL_CAPS, e.g. `MY_NUMBER`
+- **Template parameters**: ALL_CAPS, use `typename` not `class`
+- **Enum classes**: ALL_CAPS name, elements do not repeat the enum name
+- Filenames: all lowercase, no spaces or special characters
+
+## Formatting
+
+- Tab width: 2, tabs only at beginning of lines
+- Braces on their own line, aligned with `if`/`class`/`for`
+- Always start a new line after `if`/`for`; no assignments inside `if`
+- `switch`: indent `case` one level; each case must end with `break`/`return`/`MAXON_SWITCH_FALLTHROUGH`
+- `public`/`protected`/`private` aligned with `class`
+- Pointer asterisk grouped to type: `Int* ptr`
+- `#if`/`#ifdef` directives start at column 0
+
+## Class Design
+
+- Layout order: public → protected → private; methods before data members
+- Constructor only sets initial values; complex init goes in `Init()` method
+- Single-argument constructors must use `explicit`
+- Default to `MAXON_DISALLOW_COPY_AND_ASSIGN`; implement `CopyFrom` when copying is needed
+- Mark input reference parameters `const`; mark getter methods `const`
+
+## Error Handling
+
+- Every memory allocation must be checked
+- Use `NewObj()`/`DeleteObj()` for objects, `NewMem()`/`DeleteMem()` for raw memory
+- Floating-point division must check for zero divisor
+- Watch for overflow in type conversions (especially Float→Int, Int32 multiplication→Int64)
+
+## Other Key Points
+
+- Use `constexpr` instead of `#define` for constants
+- Use `static_cast`/`const_cast`/`reinterpret_cast` instead of C-style casts
+- Avoid `goto`, floating-point for-loop increments, ANSI C routines (memset/printf etc.)
+- Iterate containers with `const` reference: `for (const auto& item : container)`
+- GUI operations must never run in a thread
+- Prefer references and smart pointers over raw pointers
+- Comments should describe "why", not "what"; avoid redundant comments

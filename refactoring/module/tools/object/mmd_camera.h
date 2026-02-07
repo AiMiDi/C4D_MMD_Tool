@@ -10,6 +10,7 @@ Description:	C4D MMD camera object
 
 #pragma once
 
+#include <libMMD/Model/MMD/VMDCameraAnimation.h>
 #include "cmt_tools_setting.h"
 
 class MMDCamera final : public ObjectData
@@ -86,9 +87,9 @@ public:
 	static NodeData* Alloc();
 
 	// Object initialization
-	Bool Init(GeListNode* node SDK2024_InitParaName) override;
+	SDK2024_InitOverride;
 
-	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
+	SDK2024_CopyToOverride;
 
 	// Called when a node receives messages.
 	Bool Message(GeListNode* node, Int32 type, void* data) override;

@@ -10,6 +10,8 @@ Description:	C4D MMD rigid object
 
 #pragma once
 
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
 #include "description/OMMDRigid.h"
 #include "description/OMMDRigidManager.h"
 
@@ -35,10 +37,10 @@ class MMDRigidObject final : public ObjectData
 	CMT_DEFAULT_MOVE_BODY(MMDRigidObject)
 	INSTANCEOF(MMDRigidObject, ObjectData)
 public:
-	Bool Init(GeListNode* node SDK2024_InitParaName) override;
-	Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
+	SDK2024_InitOverride;
+	SDK2024_GetDDescriptionOverride;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
-	Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
+	SDK2024_GetDEnablingOverride;
 
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
@@ -46,8 +48,8 @@ public:
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
-	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
-	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
+	SDK2024_WriteOverride;
+	SDK2024_CopyToOverride;
 
 	static NodeData* Alloc();
 	friend class MMDRigidManagerObject;

@@ -10,7 +10,8 @@ Description:	Entrance all the resource
 
 #pragma once
 
-#include "pch.h"
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
 
 namespace cmt_register
 {

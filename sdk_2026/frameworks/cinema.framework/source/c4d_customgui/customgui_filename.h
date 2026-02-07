@@ -1,0 +1,74 @@
+/////////////////////////////////////////////////////////////
+// Cinema 4D SDK                                           //
+/////////////////////////////////////////////////////////////
+// (c) MAXON Computer GmbH, all rights reserved            //
+/////////////////////////////////////////////////////////////
+
+#ifndef CUSTOMGUI_FILENAME_H__
+#define CUSTOMGUI_FILENAME_H__
+
+#include "customgui_base.h"
+#include "c4d_basecontainer.h"
+#include "c4d_gui.h"
+
+namespace cinema
+{
+
+/// Filename custom GUI ID.
+#define CUSTOMGUI_FILENAME 1000478
+
+/// @addtogroup FILENAME_CUSTOMGUISETTINGS
+/// @ingroup CUSTOMGUISETTINGS
+/// @{
+#define FILENAME_DIRECTORY	         10000 ///< ::Bool Directory chooser mode.
+#define FILENAME_TEXTURE		         10001 ///< ::Bool Texture mode.
+#define FILENAME_SAVE				         10002 ///< ::Bool Save mode for chooser.
+#define FILENAME_READONLY		         10003 ///< ::Bool Read-only mode for the edit text field.
+#define FILENAME_NOSELECT		         10004 ///< ::Bool Hides the file selection button.
+#define FILENAME_TOKENPOPUP          10005 ///< ::Bool Displays the token popup. @since R17.048
+#define FILENAME_HELPSTRING          10006 ///< ::String Shows a help string in the text field when empty. @since 2023.100
+#define FILENAME_ASSETBROWSER_SELECT 10007 ///< ::Bool Adds extra button to select a file/asset from a popup asset browser. @since 2025.1
+#define FILENAME_TITLE               10008 ///< ::String Specify title when select a file/asset from a popup asset browser. @since 2026.0
+#define FILENAME_FORCESUFFIX         10009 ///< ::String Specify forced suffix when save file. @since 2026.0
+/// @}
+
+//----------------------------------------------------------------------------------------
+/// Filename custom GUI (@ref CUSTOMGUI_FILENAME).\n
+/// Here are the settings: @enumerateEnum{FILENAME_CUSTOMGUISETTINGS}
+//----------------------------------------------------------------------------------------
+class FilenameCustomGui : public BaseCustomGui<CUSTOMGUI_FILENAME>
+{
+	FilenameCustomGui();
+	~FilenameCustomGui();
+
+public:
+};
+
+/// @cond IGNORE
+
+// INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF
+// INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF
+// INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF
+
+#ifndef _INTERNAL_DEF_
+class iFilenameCustomGui : public iBaseCustomGui
+{
+	iFilenameCustomGui(const BaseContainer& settings, CUSTOMGUIPLUGIN* plugin) : iBaseCustomGui(settings, plugin) {	}
+};
+#else
+class iFilenameCustomGui;
+#endif
+
+struct CustomGuiFilenameLib : public BaseCustomGuiLib
+{
+};
+
+// INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF
+// INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF
+// INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF
+
+/// @endcond
+
+} // namespace cinema
+
+#endif // CUSTOMGUI_FILENAME_H__

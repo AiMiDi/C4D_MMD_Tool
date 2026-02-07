@@ -10,7 +10,13 @@ Description:	Manager of plugin configuration
 
 #pragma once
 
-#include "pch.h"
+#include <c4d.h>
+#include <c4d_symbols.h>
+#include <cassert>
+#include <string>
+#include <variant>
+#include "module/core/cmt_marco.h"
+#include "yaml-cpp/yaml.h"
 
 /**
  * \brief CMT configuration Manager. Responsible for saving GUI configuration.
@@ -48,16 +54,16 @@ public:
 		id -= DLG_CMT_TOOL_ID_BEGIN;
 		assert(id >= 0 && id < k_default_config_table_size);
 		auto& [default_config_name, default_config_value] = k_default_config_table[id];
-		try
+		const T& config_value = std::get<T>(default_config_value);
+		auto node = m_config[default_config_name];
+		if (node.IsDefined() && !node.IsNull())
 		{
-			return m_config[default_config_name].as<T>();
+			T result{};
+			if (YAML::convert<T>::decode(node, result))
+				return result;
 		}
-		catch (YAML::BadConversion&)
-		{
-			const T& config_value = std::get<T>(default_config_value);
-			m_config[default_config_name] = config_value;
-			return config_value;
-		}
+		m_config[default_config_name] = config_value;
+		return config_value;
 	}
 	/**
 	 * \brief Set configuration entry value.
@@ -104,13 +110,13 @@ private:
 	 */
 	YAML::Node m_config;
 
-	inline static constexpr int k_config_id_begin = DLG_CMT_TOOL_ID_BEGIN;
-	inline static constexpr int k_config_id_end = DLG_CMT_TOOL_ID_END;
-	inline static constexpr int k_default_config_table_size = k_config_id_end - k_config_id_begin;
+	static constexpr int k_config_id_begin = DLG_CMT_TOOL_ID_BEGIN;
+	static constexpr int k_config_id_end = DLG_CMT_TOOL_ID_END;
+	static constexpr int k_default_config_table_size = k_config_id_end - k_config_id_begin;
 	/**
 	* \brief Configuration entry initial value table.
 	*/
-	inline static constexpr confin_item_type k_default_config_table[k_default_config_table_size]
+	static constexpr confin_item_type k_default_config_table[k_default_config_table_size]
 	{
 		{{"DLG_CMT_TOOL_CAMERA_IMPORT_SIZE"},{8.5f}},
 		{{"DLG_CMT_TOOL_CAMERA_IMPORT_OFFSET"},{0.f}},

@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "mmd_material.h"
 #include "cmt_tools_setting.h"
 #include "xcolor.h"

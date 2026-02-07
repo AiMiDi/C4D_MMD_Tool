@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
@@ -60,8 +60,8 @@ class MMDJointManagerObject final : public MMDManagerObject
 public:
 	static NodeData* Alloc();
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
-	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
-	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
+	SDK2024_WriteOverride;
+	SDK2024_CopyToOverride;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	const Float32& GetPositionMultiple() const { return position_multiple_; }

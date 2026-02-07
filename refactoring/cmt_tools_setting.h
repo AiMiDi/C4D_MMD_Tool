@@ -10,7 +10,8 @@ Description:    CMT tools setting struct.
 
 #pragma once
 
-#include "pch.h"
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
 
 namespace CMTToolsSetting
 {

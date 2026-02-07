@@ -1,7 +1,0 @@
-maxon.IoErrorInterface	"net.maxon.interface.ioerror"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\iostreams.h(26,7)	ErrorInterface	GetUrl,SetUrl	
-maxon.FileFormatErrorInterface	"net.maxon.interface.fileformaterror"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\iostreams.h(99,7)	IoErrorInterface		
-maxon.UnknownFileSizeErrorInterface	"net.maxon.interface.unknownfilesizeerror"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\iostreams.h(118,7)	ErrorInterface		
-maxon.BaseStreamInterface	"net.maxon.interface.basestream"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\iostreams.h(127,7)	DataDictionaryObjectInterface	Close,DisableBuffering,GetPosition,GetStreamLength,Seek,SeekSupported	
-maxon.InputStreamInterface	"net.maxon.interface.inputstream"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\iostreams.h(207,7)	BaseStreamInterface	BytesAvailable,ReadEOS,Skip	
-maxon.OutputStreamInterface	"net.maxon.interface.outputstream"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\iostreams.h(249,7)	BaseStreamInterface	Flush,Write	
-maxon.InOutputStreamInterface	"net.maxon.interface.inoutputstream"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\iostreams.h(273,7)	InputStreamInterface,OutputStreamInterface		

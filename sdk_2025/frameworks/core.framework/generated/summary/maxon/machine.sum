@@ -1,1 +1,0 @@
-maxon.MachineInterface	"net.maxon.interface.machine"	D:\code\aimidi\C4D_MMD_Tool\sdk_2025\frameworks\core.framework\source\maxon\machine.h(40,7)	ObserverObjectInterface	GetInterface,GetMachineInfo,GetState,GetUniqueId,ObservableActivationChanged,ObservablePrivateSplashMessageReceived,SetState,ToString	

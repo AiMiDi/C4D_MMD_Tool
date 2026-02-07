@@ -8,13 +8,11 @@ Description:	Entrance of the plugin
 
 **************************************************************************/
 
-#include "pch.h"
-
 #include "register_entity.h"
 #include "cmt_tools_config_manager.h"
 #include "module/ui/cmt_name_conversion_dialog.h"
 
-Bool CINEMA_NAMESPASE PluginStart()
+Bool CINEMA_NAMESPACE PluginStart()
 {
 	if (!cmt_register::RegisterPlugin())
 	{
@@ -25,26 +23,26 @@ Bool CINEMA_NAMESPASE PluginStart()
 	return TRUE;
 }
 
-void CINEMA_NAMESPASE PluginEnd()
+void CINEMA_NAMESPACE PluginEnd()
 {
 	CMTToolConfigManager::GetInstance().SaveConfig();
 }
 
-Bool CINEMA_NAMESPASE PluginMessage(Int32 id, void* data)
+Bool CINEMA_NAMESPACE PluginMessage(Int32 id, void* data)
 {
 	switch (id)
 	{
-	case (C4DPL_INIT_SYS):
+	case C4DPL_INIT_SYS:
 	{
 		if (!g_resource.Init())
 		{
 			//	no resource
-			return(FALSE);
+			return false;
 		}
-		return(TRUE);
+		return true;
 	}
 	default: ;
 	}
 
-	return(FALSE);
+	return false;
 }

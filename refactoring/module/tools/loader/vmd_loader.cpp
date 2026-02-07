@@ -8,9 +8,14 @@ Description:	vmd data loader
 
 **************************************************************************/
 
-#include "pch.h"
+#include <c4d.h>
+#include <c4d_symbols.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
 #include "vmd_loader.h"
+#include <libMMD/Model/MMD/SjisToUnicode.h>
 #include "module/ui/vmd_loader_camera_dialog.h"
+#include "utils/filename_util.hpp"
 
 Bool VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, UChar* probe, Int32 size)
 {

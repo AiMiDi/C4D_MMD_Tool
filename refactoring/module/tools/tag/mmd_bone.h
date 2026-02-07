@@ -10,6 +10,8 @@ Description:	DESC
 
 #pragma once
 
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
 #include "description/OMMDBoneManager.h"
 
 class MMDBoneManagerObject;
@@ -33,8 +35,8 @@ public:
 	MMDBoneTagMsgType type;
 	explicit MMDBoneTagMsg(const MMDBoneTagMsgType in_type = MMDBoneTagMsgType::DEFAULT) : type(in_type){}
 	virtual ~MMDBoneTagMsg() = default;
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTagMsg)
-	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDBoneTagMsg)
+	MMDBoneTagMsg(const MMDBoneTagMsg&) = delete; void operator =(const MMDBoneTagMsg&) = delete;
+	MMDBoneTagMsg(MMDBoneTagMsg&&) = delete; void operator =(MMDBoneTagMsg&&) = delete;
 };
 
 /**
@@ -61,11 +63,12 @@ class MMDBoneTag final : public TagData
 	Bool is_IK = false;
 
 	friend class MMDBoneManagerObject;
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDBoneTag)
-	CMT_DEFAULT_MOVE_BODY(MMDBoneTag)
-	INSTANCEOF(MMDBoneTag, TagData)
 
 public:
+	MMDBoneTag(const MMDBoneTag&) = delete; void operator =(const MMDBoneTag&) = delete;
+	MMDBoneTag(MMDBoneTag&&) noexcept = default; MMDBoneTag& operator =(MMDBoneTag&&) noexcept = default;
+	typedef TagData SUPER;
+
 	/**
 	 * @brief Default constructor for MMDBoneTag.
 	 */
@@ -88,7 +91,7 @@ public:
 	 * @param[in] isCloneInit The initialization parameters.
 	 * @return true if initialization is successful, false otherwise.
 	 */
-	Bool Init(GeListNode* node SDK2024_InitParaName) override;
+	SDK2024_InitOverride;
 
 	/**
 	 * @brief Handles messages sent to the MMDBoneTag.
@@ -118,7 +121,7 @@ public:
 	 * @param[in] itemdesc The description of the item.
 	 * @return The enabling status of the parameter.
 	 */
-	Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
+	SDK2024_GetDEnablingOverride;
 
 	/**
 	 * @brief Executes the MMDBoneTag.
@@ -147,7 +150,7 @@ public:
 	 * @param[in] hf The HyperFile to write to.
 	 * @return true if the MMDBoneTag is written successfully, false otherwise.
 	 */
-	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
+	SDK2024_WriteOverride;
 
 	/**
 	 * @brief Refreshes the color of the MMDBoneTag.

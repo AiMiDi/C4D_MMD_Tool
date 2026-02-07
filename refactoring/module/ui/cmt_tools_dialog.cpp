@@ -8,11 +8,12 @@ Description:	CMT tools main dialog.
 
 **************************************************************************/
 
-#include "pch.h"
+
 #include "cmt_tools_dialog.h"
 #include "cmt_tools_setting.h"
 #include "cmt_tools_config_manager.h"
 #include "cmt_tools_manager.h"
+#include "utils/filename_util.hpp"
 
 inline void CMTToolDialog::GetItem(const Int32 id, Float& value) const
 {

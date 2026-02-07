@@ -1,0 +1,20 @@
+# The Cinema 4D SDK can load module paths from a text file. By default this is not necessary,
+# as modules are loaded by default from the MAXON_SDK_MODULES_DIR. Module files are case insensitive. 
+# Lines that start with the hashtag character are interpreted as comments; inline comments are not 
+# supported.
+
+# A module path is defined by just placing a path onto a new line. Paths can be both relative and 
+# absolute, where by default relative paths are interpreted in relation to the MAXON_SDK_ROOT_DIR.
+# d:/documents/code/my_plugin
+# plugins/example.assets
+# ../../foo/bar
+
+# Finally, the root directory in relation to which relative paths are set can be overwritten using
+# the root keyword. A root keyword will apply until it is overwritten by a new root keyword. Roots
+# must be absolute paths.
+# root = d:/downloads/sdk
+
+# Loading the modules of the Cinema 4D SDK could look like this, where we load all modules relative
+# to the current root dir (which is still the default root dir).
+plugins/mmdtool
+

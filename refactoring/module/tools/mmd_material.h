@@ -1,5 +1,10 @@
 #pragma once
 
+#include <c4d.h>
+#include <vector>
+#include "module/core/cmt_marco.h"
+#include "libMMD/Model/MMD/PMXFile.h"
+
 namespace CMTToolsSetting
 {
 	struct ModelImport;

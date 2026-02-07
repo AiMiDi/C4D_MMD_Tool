@@ -10,8 +10,12 @@ Description:	MMD model object
 
 #pragma once
 
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
 #include "CMTSceneManager.h"
 #include "description/OMMDModelManager.h"
+#include "maxon/pointerarray.h"
+#include "utils/images_user_area_util.hpp"
 
 class IMorph;
 class MMDBoneManagerObject;
@@ -38,8 +42,8 @@ class EditorSubMorphDialog final : public GeDialog
 public:
 	EditorSubMorphDialog(MMDModelManagerObject* model, IMorph* morph) : m_morph(morph), m_model(model) {}
 	~EditorSubMorphDialog() override = default;
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(EditorSubMorphDialog)
-	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(EditorSubMorphDialog)
+	EditorSubMorphDialog(const EditorSubMorphDialog&) = delete; void operator =(const EditorSubMorphDialog&) = delete;
+	EditorSubMorphDialog(EditorSubMorphDialog&&) = delete; void operator =(EditorSubMorphDialog&&) = delete;
 };
 
 enum class MMDModelManagerObjectMsgType : uint8_t
@@ -98,27 +102,29 @@ class MMDModelManagerObject final : public ObjectData
 
 	MMDModelManagerObject();
 	friend MMDModelManagerObject;
-	CMT_DISALLOW_COPY_AND_ASSIGN_BODY(MMDModelManagerObject)
-	CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(MMDModelManagerObject)
-	INSTANCEOF(MMDModelRootObject, ObjectData)
+
 public:
+	MMDModelManagerObject(const MMDModelManagerObject&) = delete; void operator =(const MMDModelManagerObject&) = delete;
+	MMDModelManagerObject(MMDModelManagerObject&&) = delete; void operator =(MMDModelManagerObject&&) = delete;
+	typedef ObjectData SUPER;
+
 	class AddMorphHelper
 	{
 		MMDModelManagerObject* m_model = nullptr;
-		CMT_DISALLOW_COPY_AND_ASSIGN_BODY(AddMorphHelper)
-		CMT_DISALLOW_MOVE_AND_ASSIGN_BODY(AddMorphHelper)
-	public:
+		public:
+		AddMorphHelper(const AddMorphHelper&) = delete; void operator =(const AddMorphHelper&) = delete;
+		AddMorphHelper(AddMorphHelper&&) = delete; void operator =(AddMorphHelper&&) = delete;
 		explicit AddMorphHelper(MMDModelManagerObject* model);
 		~AddMorphHelper();
 	};
 
 	~MMDModelManagerObject() override = default;
 	static NodeData* Alloc();
-	Bool Init(GeListNode* node SDK2024_InitParaName) override;
+	SDK2024_InitOverride;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
-	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
-	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
-	Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
+	SDK2024_WriteOverride;
+	SDK2024_CopyToOverride;
+	SDK2024_GetDDescriptionOverride;
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
@@ -155,7 +161,11 @@ private:
 	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it);
 	void RefreshMorph();
 	Bool ReadMorph(HyperFile* hf);
-	Bool WriteMorph(HyperFile* hf) SDK2024_Const;
+#if API_VERSION < 2024000
+	Bool WriteMorph(HyperFile* hf);
+#else
+	Bool WriteMorph(HyperFile* hf) const;
+#endif
 	Bool CopyMorph(MMDModelManagerObject* dst) const;
 	//Bool SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	//Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);

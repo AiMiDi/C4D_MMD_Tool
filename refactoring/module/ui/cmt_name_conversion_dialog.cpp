@@ -1,6 +1,12 @@
-#include "pch.h"
-#include "cmt_name_conversion_dialog.h"
+#include <fstream>
+#include <c4d.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
 #include "c4d_symbols.h"
+#include "yaml-cpp/yaml.h"
+#include "utils/string_util.hpp"
+#include "cmt_name_conversion_dialog.h"
+
 
 template<>
 struct YAML::convert<String> {
@@ -60,9 +66,9 @@ Bool UpdateNameConversionDialog::CreateLayout()
 	ScrollGroupBegin(1000, BFH_SCALEFIT, SCROLLGROUP_VERT | SCROLLGROUP_BORDERIN, 0, 300);
 	GroupBegin(1001, BFH_CENTER, 1, 1, ""_s, 0, 0, 300);
 	unregulated_name_.Reset();
-	for (String i : name_conversion_.updata_name_conversion_)
+	for (const String& i : name_conversion_.updata_name_conversion_)
 	{
-		auto i_ptr = name_conversion_.local_to_universal_name_lookup_table_.Find(i);
+		const auto i_ptr = name_conversion_.local_to_universal_name_lookup_table_.Find(i);
 		if (i_ptr == nullptr && !i.IsEmpty())
 		{
 			unregulated_name_.Append(i)iferr_return;
@@ -409,17 +415,17 @@ Bool NameConversion::LoadConfig(const Filename& filename)
 {
 	local_to_universal_name_lookup_table_.Reset();
 	universal_to_local_name_lookup_table_.Reset();
-	try {
-		YAML::Node config = YAML::LoadFile(string_util::GetStdString(filename.GetString()));
+	std::ifstream fin(string_util::GetStdString(filename.GetString()));
+	if (fin.is_open()) {
+		YAML::Node config = YAML::Load(fin);
 		for (YAML::const_iterator it = config.begin(); it != config.end(); ++it)
 		{
 			iferr(local_to_universal_name_lookup_table_.Insert(it->first.as<String>(), it->second.as<String>())) return false;
 			iferr(local_to_universal_name_lookup_table_.Insert(it->second.as<String>(), it->first.as<String>())) return false;
 		}
 	}
-	catch (YAML::BadFile&) {
+	else {
 		GePrint("Failed to load the YAML file!"_s);
-		//std::ofstream file_out(string_util::GetStdString(fn.GetString()));
 	}
 	return true;
 }

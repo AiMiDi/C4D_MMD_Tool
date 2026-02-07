@@ -1,5 +1,9 @@
 #pragma once
 
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
+#include "utils/images_user_area_util.hpp"
+
 class UpdateNameConversionDialog;
 
 class NameConversion final

@@ -1,7 +1,7 @@
 #ifndef _PMX_BONE_TAG_H_
 #define _PMX_BONE_TAG_H_
 
-enum
+enum : int
 {
 	PMX_BONE_INFO_GRP = 10000,
 	PMX_BONE_INDEX,
@@ -69,4 +69,4 @@ enum
 	PMX_BONE_TAIL_IS_INDEX = 1,//是连接相对位置
 
 };
-#endif _PMX_BONE_TAG_H_
+#endif // _PMX_BONE_TAG_H_

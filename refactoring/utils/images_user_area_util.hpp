@@ -10,9 +10,8 @@ Description:	UserArea Utils for images
 
 #pragma once
 
-#if API_VERSION >= 2024900
-using namespace cinema;
-#endif
+#include <c4d.h>
+#include "module/core/cmt_marco.h"
 
 class ImagesUserArea final : public GeUserArea
 {

@@ -77,8 +77,10 @@
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
@@ -96,8 +98,10 @@
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;YAML_CPP_STATIC_DEFINE;LIBMMD_STATIC=1;PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
@@ -159,30 +163,56 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\refactoring\CMTSceneManager.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\cmt_tools_config_manager.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\cmt_tools_manager.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\CMTSceneManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\cmt_tools_config_manager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\cmt_tools_manager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\main.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_model_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\refactoring\register_entity.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\register_entity.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\generated\hxx\interface_registration.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -206,7 +236,7 @@
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_manager.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.h" />
@@ -214,7 +244,6 @@
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
-    <ClInclude Include="..\..\..\..\refactoring\pch.h" />
     <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h" />
     <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp" />
@@ -222,19 +251,9 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
-    <ClInclude Include="..\..\..\..\refactoring\utils\string_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
     <ClInclude Include="..\res\c4d_symbols.h" />
-    <ClInclude Include="..\res\description\OMMDBoneManager.h" />
-    <ClInclude Include="..\res\description\OMMDCamera.h" />
-    <ClInclude Include="..\res\description\OMMDJoint.h" />
-    <ClInclude Include="..\res\description\OMMDJointManager.h" />
-    <ClInclude Include="..\res\description\OMMDMeshManager.h" />
-    <ClInclude Include="..\res\description\OMMDModelManager.h" />
-    <ClInclude Include="..\res\description\OMMDRigid.h" />
-    <ClInclude Include="..\res\description\OMMDRigidManager.h" />
-    <ClInclude Include="..\res\description\TMMDBone.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">

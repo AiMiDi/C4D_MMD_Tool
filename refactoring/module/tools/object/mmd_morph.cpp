@@ -1,4 +1,6 @@
-#include "pch.h"
+#include <c4d.h>
+#include <c4d_symbols.h>
+#include "module/core/cmt_marco.h"
 #include "mmd_morph.h"
 #include "mmd_model_manager.h"
 #include "mmd_mesh_manager.h"
@@ -254,7 +256,7 @@ inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetString(DESC_NAME, m_name);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_GROUP_GRP))));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_GROUP_GRP))));
 	m_grp_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, m_name);
@@ -265,26 +267,26 @@ inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetFloat(DESC_MINSLIDER, 0.);
 	bc.SetFloat(DESC_STEP, 0.01);
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_grp_id));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetInt32(DESC_COLUMNS, 3);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_grp_id));
 	m_button_grp_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_EDITOR));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_button_grp_id));
 	m_button_editor_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_EDITOR_BUTTON, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_button_grp_id));
 	m_button_delete_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_DELETE_BUTTON, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_button_grp_id));
 	m_button_rename_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_RENAME_BUTTON, morph_id);
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 
@@ -294,7 +296,7 @@ inline void FlipMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetString(DESC_NAME, m_name);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_FLIP_GRP))));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_FLIP_GRP))));
 	m_grp_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, m_name);
@@ -305,26 +307,26 @@ inline void FlipMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetFloat(DESC_MINSLIDER, 0.);
 	bc.SetFloat(DESC_STEP, 0.01);
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_grp_id));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetInt32(DESC_COLUMNS, 3);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_grp_id));
 	m_button_grp_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_EDITOR));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_button_grp_id));
 	m_button_editor_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_EDITOR_BUTTON, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_button_grp_id));
 	m_button_delete_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_DELETE_BUTTON, morph_id);
 	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
 	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(m_button_grp_id));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_button_grp_id));
 	m_button_rename_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_RENAME_BUTTON, morph_id);
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
@@ -340,7 +342,7 @@ inline void MeshMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetFloat(DESC_MINSLIDER, 0.);
 	bc.SetFloat(DESC_STEP, 0.01);
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_MESH_GRP))));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_MESH_GRP))));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
@@ -356,7 +358,7 @@ inline void BoneMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetFloat(DESC_MINSLIDER, 0.);
 	bc.SetFloat(DESC_STEP, 0.01);
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
-	bc.SetData(DESC_PARENTGROUP, DescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_BONE_GRP))));
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_BONE_GRP))));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }

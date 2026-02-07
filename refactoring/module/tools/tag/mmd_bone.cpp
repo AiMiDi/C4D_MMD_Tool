@@ -8,9 +8,15 @@ Description:	DESC
 
 **************************************************************************/
 
-#include "pch.h"
+#include <c4d.h>
+#include <c4d_symbols.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
 #include "mmd_bone.h"
 
+#include "customgui_priority.h"
+#include "ocajoint.h"
+#include "tprotection.h"
 #include "maxon/quaternion.h"
 #include "description/TMMDBone.h"
 #include "module/tools/object/mmd_bone_manager.h"
@@ -76,8 +82,7 @@ NodeData* MMDBoneTag::Alloc()
 {
 	return NewObj(MMDBoneTag).GetValue();
 }
-
-Bool MMDBoneTag::Init(GeListNode* node SDK2024_InitParaName)
+SDK2024_Init(MMDBoneTag)
 {
 	if (!node)
 		return false;
@@ -102,7 +107,7 @@ Bool MMDBoneTag::Init(GeListNode* node SDK2024_InitParaName)
 
 	if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
 	{
-		if (auto* pd = DataGetCustomDataType(priority, PriorityData, CUSTOMGUI_PRIORITY_DATA))
+		if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
 		{
 			pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_ANIMATION);
 			pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 2);
@@ -110,7 +115,7 @@ Bool MMDBoneTag::Init(GeListNode* node SDK2024_InitParaName)
 		}
 	}
 
-	return SUPER::Init(node SDK2024_InitPara);
+	return SDK2024_SuperInit;
 }
 
 void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const bc, const Int32 id)
@@ -637,12 +642,12 @@ case PMX_BONE_LAYER:
 	{
 		if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
 		{
-			if (auto* pd = DataGetCustomDataType(priority, PriorityData, CUSTOMGUI_PRIORITY_DATA))
-			{
-				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, t_data);
-				pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
-				bc->SetData(EXPRESSION_PRIORITY, priority);
-			}
+		if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
+		{
+			pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, t_data);
+			pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
+			bc->SetData(EXPRESSION_PRIORITY, priority);
+		}
 		}
 		break;
 	}
@@ -669,8 +674,7 @@ case PMX_BONE_LAYER:
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 
-Bool MMDBoneTag::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
-	const BaseContainer* itemdesc) SDK2024_Const
+SDK2024_GetDEnabling(MMDBoneTag)
 {
 	if (bone_mode_ != BONE_MODE_EDIT)
 		return false;
@@ -796,7 +800,7 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDBoneTag::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
+SDK2024_Write(MMDBoneTag)
 {
 	IOWriteField(bone_manager_data_);
 	return SUPER::Write(node, hf);

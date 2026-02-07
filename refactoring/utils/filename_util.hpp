@@ -10,6 +10,9 @@ Description:	Filename utils
 
 #pragma once
 
+#include <c4d.h>
+#include <c4d_symbols.h>
+
 namespace filename_util
 {
 #if API_VERSION >= 2024900

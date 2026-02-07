@@ -8,15 +8,27 @@ Description:	MMD mesh root object
 
 **************************************************************************/
 
-#include "pch.h"
+#include <c4d.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
 #include "mmd_mesh_manager.h"
-
 #include "CMTSceneManager.h"
+#include "lib_ca.h"
 #include "mmd_bone_manager.h"
 #include "mmd_model_manager.h"
 #include "tcaposemorph.h"
 #include "description/OMMDMeshManager.h"
+#include "maxon/parallelfor.h"
+#include "maxon/queue.h"
 #include "module/tools/mmd_material.h"
+#include "utils/string_util.hpp"
+
+namespace cinema
+{
+	class CAWeightTag;
+	class CAMorph;
+	class CAPoseMorphTag;
+}
 
 NodeData* MMDMeshManagerObject::Alloc()
 {
@@ -62,7 +74,7 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return SUPER::Read(node, hf, level);
 }
 
-Bool MMDMeshManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
+SDK2024_Write(MMDMeshManagerObject)
 {
 	IOWriteField(mesh_mode_);
 	IOWriteField(model_manager_);
@@ -82,8 +94,7 @@ Bool MMDMeshManagerObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) 
 	return SUPER::Write(node, hf);
 }
 
-Bool MMDMeshManagerObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
-	AliasTrans* trn) SDK2024_Const
+SDK2024_CopyTo(MMDMeshManagerObject)
 {
 	iferr_scope_handler{
 		return false;
@@ -885,13 +896,19 @@ Bool MMDMeshManagerObject::LoadPMX(
 					const auto& pmx_surface_vertex_c = pmx_surface.m_vertices[2];
 
 					if (!vertex_index_map.Contains(pmx_surface_vertex_a))
+					{
 						vertex_index_map.Insert(pmx_surface_vertex_a, part_vertex_count++)iferr_return;
+					}
 
 					if (!vertex_index_map.Contains(pmx_surface_vertex_b))
+					{
 						vertex_index_map.Insert(pmx_surface_vertex_b, part_vertex_count++)iferr_return;
+					}
 
 					if (!vertex_index_map.Contains(pmx_surface_vertex_c))
+					{
 						vertex_index_map.Insert(pmx_surface_vertex_c, part_vertex_count++)iferr_return;
+					}
 				}
 				maxon::BaseArray<uint32_t> pmx_vertex_index_array;
 				for (const auto& vertex_index : vertex_index_map.GetKeys())

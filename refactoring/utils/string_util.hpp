@@ -10,6 +10,10 @@ Description:	std string util
 
 #pragma once
 
+#include <c4d.h>
+#include <string>
+#include "module/core/cmt_marco.h"
+
 namespace string_util
 {
 	static std::string GetStdString(const maxon::String& str)

@@ -8,9 +8,14 @@ Description:	C4D MMD rigid object
 
 **************************************************************************/
 
-#include "pch.h"
+#include <c4d.h>
+#include <c4d_symbols.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
+#include "customgui_iconchooser.h"
 #include "mmd_rigid.h"
 #include "mmd_rigid_manager.h"
+#include "libMMD/Model/MMD/MMDPhysics.h"
 
 SDK2024_ConstExpr Vector g_pmx_rigid_colors[16] =
 {
@@ -42,7 +47,7 @@ SDK2024_ConstExpr Vector g_pmx_rigid_wire_colors[3] =
 MMDRigidObject::MMDRigidObject() : draw_color_(MakeObjectColorProperties(g_pmx_rigid_colors[0], ID_BASEOBJECT_USECOLOR_ALWAYS, true))
 {}
 
-Bool MMDRigidObject::Init(GeListNode* node SDK2024_InitParaName)
+SDK2024_Init(MMDRigidObject)
 {
 	if (!node)
 	{
@@ -72,7 +77,7 @@ Bool MMDRigidObject::Init(GeListNode* node SDK2024_InitParaName)
 	return true;
 }
 
-Bool MMDRigidObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const
+SDK2024_GetDDescription(MMDRigidObject)
 {
 	if (!(node && description))
 	{
@@ -268,8 +273,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 
-Bool MMDRigidObject::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data,
-                                  const DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const
+SDK2024_GetDEnabling(MMDRigidObject)
 {
 	if (m_rigid_mode == RIGID_MODE_ANIM || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
 		return false;
@@ -570,7 +574,7 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return true;
 }
 
-Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
+SDK2024_Write(MMDRigidObject)
 {
 	IOWriteField(m_display_type);
 	IOWriteField(m_rigid_mode);
@@ -582,8 +586,7 @@ Bool MMDRigidObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK202
 	return true;
 }
 
-Bool MMDRigidObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
-	AliasTrans* trn) SDK2024_Const
+SDK2024_CopyTo(MMDRigidObject)
 {
 	auto* const destObject = reinterpret_cast<MMDRigidObject*>(dest);
 	if (destObject == nullptr)

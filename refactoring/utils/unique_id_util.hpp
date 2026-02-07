@@ -10,6 +10,10 @@ Description:	Unique ID util
 
 #pragma once
 
+#include <c4d.h>
+#include <tuple>
+#include "module/core/cmt_marco.h"
+
 class UniqueIDReader
 {
 public:

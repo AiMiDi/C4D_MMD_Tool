@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Luc
@@ -29,18 +29,18 @@ class MMDJointObject final : public ObjectData
 	INSTANCEOF(MMDJointObject, ObjectData)
 
 public:
-	Bool Init(GeListNode* node SDK2024_InitParaName) override;
+	SDK2024_InitOverride;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
-	Bool GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const override;
-	Bool GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags, const BaseContainer* itemdesc) SDK2024_Const override;
+	SDK2024_GetDDescriptionOverride;
+	SDK2024_GetDEnablingOverride;
 	void HandleJointModeChange(Int32 mode);
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
 	static void HandleJointIndexUpdate(BaseObject* op);
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
-	Bool CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags, AliasTrans* trn) SDK2024_Const override;
+	SDK2024_CopyToOverride;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
-	Bool Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const override;
+	SDK2024_WriteOverride;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	static NodeData* Alloc();
 	friend class MMDJointManagerObject;

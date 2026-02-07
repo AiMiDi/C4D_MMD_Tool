@@ -8,13 +8,16 @@ Description:	C4D MMD joint object
 
 **************************************************************************/
 
-#include "pch.h"
-
+#include <c4d.h>
+#include "plugin_resource.h"
+#include "module/core/cmt_marco.h"
 #include "mmd_joint.h"
+#include "customgui_iconchooser.h"
 #include "description/OMMDJoint.h"
 #include "module/tools/object/mmd_bone_manager.h"
 #include "module/tools/object/mmd_joint_manager.h"
 #include "module/tools/object/mmd_rigid_manager.h"
+#include <libMMD/Model/MMD/MMDPhysics.h>
 
 SDK2024_ConstExpr Vector g_pmx_joint_colors[6] =
 {
@@ -26,7 +29,7 @@ SDK2024_ConstExpr Vector g_pmx_joint_colors[6] =
 		Vector(255, 155, 230) / 255
 };
 
-Bool MMDJointObject::Init(GeListNode* node SDK2024_InitParaName)
+SDK2024_Init(MMDJointObject)
 {
 	if (!node)
 	{
@@ -46,7 +49,7 @@ Bool MMDJointObject::Init(GeListNode* node SDK2024_InitParaName)
 	bc->SetInt32(JOINT_LINK_RIGID_B_INDEX, -1);
 	bc->SetInt32(JOINT_ATTITUDE_USE_BONE_INDEX, -1);
 
-	return SUPER::Init(node SDK2024_InitPara);
+	return SDK2024_SuperInit;
 }
 
 Bool MMDJointObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
@@ -69,7 +72,7 @@ Bool MMDJointObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	return ObjectData::SetDParameter(node, id, t_data, flags);
 }
 
-Bool MMDJointObject::GetDDescription(SDK2024_Const GeListNode* node, Description* description, DESCFLAGS_DESC& flags) SDK2024_Const
+SDK2024_GetDDescription(MMDJointObject)
 {
 	if (!node || !description)
 	{
@@ -108,8 +111,7 @@ Bool MMDJointObject::GetDDescription(SDK2024_Const GeListNode* node, Description
 	return SUPER::GetDDescription(node, description, flags);
 }
 
-Bool MMDJointObject::GetDEnabling(SDK2024_Const GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_ENABLE flags,
-								  const BaseContainer* itemdesc) SDK2024_Const
+SDK2024_GetDEnabling(MMDJointObject)
 {
 	if (joint_mode_ == JOINT_MODE_ANIM || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
 		return false;
@@ -352,8 +354,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	return EXECUTIONRESULT::OK;
 }
 
-Bool MMDJointObject::CopyTo(NodeData* dest, SDK2024_Const GeListNode* snode, GeListNode* dnode, COPYFLAGS flags,
-	AliasTrans* trn) SDK2024_Const
+SDK2024_CopyTo(MMDJointObject)
 {
 	const auto destObject = reinterpret_cast<MMDJointObject*>(dest);
 
@@ -381,7 +382,7 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	return true;
 }
 
-Bool MMDJointObject::Write(SDK2024_Const GeListNode* node, HyperFile* hf) SDK2024_Const
+SDK2024_Write(MMDJointObject)
 {
 	IOWriteField(display_type_);
 	IOWriteField(joint_mode_);

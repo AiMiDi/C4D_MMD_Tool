@@ -11,6 +11,10 @@ Description:	morph UI data util
 
 #pragma once
 
+#include <c4d.h>
+#include <utils/io_util.hpp>
+#include "module/core/cmt_marco.h"
+
 class MorphUIData final
 {
 	DescID strength_id;
