@@ -130,7 +130,10 @@ set(maxon_prebuildEvents.LINUX.RELEASE [=[]=])
 # MSVC
 # Override SDK's /Wall with /W4 (high but practical warning level).
 # SDK adds /Wall with BEFORE, so /W4 here takes precedence as it appears later on the command line.
-set(maxon_additionalCompileOptions.MSVC.CPP /W4)
+# /wd4471: suppress "forward declaration of unscoped enum must have underlying type" - our shared
+#          description headers use anonymous enums (enum { ... }) for backward compat with SDK 2025.
+# /utf-8:  treat source files as UTF-8 (description headers contain Chinese comments).
+set(maxon_additionalCompileOptions.MSVC.CPP /W4 /wd4471 /utf-8)
 set(maxon_additionalCompileOptions.MSVC.C )
 
 # GCC

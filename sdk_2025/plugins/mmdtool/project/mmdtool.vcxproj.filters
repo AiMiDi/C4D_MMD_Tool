@@ -215,5 +215,32 @@
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.h">
       <Filter>source\module\ui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDCamera.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJoint.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModelManager.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJointManager.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigid.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\TMMDBone.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.h">
+      <Filter>res\description</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

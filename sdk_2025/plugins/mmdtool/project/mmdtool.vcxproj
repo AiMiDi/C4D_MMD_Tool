@@ -81,6 +81,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Sync</ExceptionHandling>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <WarningLevel>Level4</WarningLevel>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
@@ -102,6 +104,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Sync</ExceptionHandling>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <WarningLevel>Level4</WarningLevel>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
@@ -253,6 +257,15 @@
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDCamera.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJoint.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJointManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDModelManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigid.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\description\TMMDBone.h" />
     <ClInclude Include="..\res\c4d_symbols.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
