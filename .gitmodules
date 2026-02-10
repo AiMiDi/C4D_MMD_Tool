@@ -10,3 +10,6 @@
 [submodule "dependency/libMMD"]
 	path = dependency/libMMD
 	url = https://github.com/AiMiDi/libMMD.git
+[submodule "dependency/eigen"]
+	path = dependency/eigen
+	url = https://gitlab.com/libeigen/eigen.git
