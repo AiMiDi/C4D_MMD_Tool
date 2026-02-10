@@ -192,35 +192,35 @@ Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file,
 		SetJointParameter<JOINT_LINK_RIGID_A_INDEX>(joint_object, pmx_joint.m_rigidbodyAIndex);
 		SetJointParameter<JOINT_LINK_RIGID_B_INDEX>(joint_object, pmx_joint.m_rigidbodyBIndex);
 
-		SetJointParameter<JOINT_ATTITUDE_POSITION_X>(joint_object, pmx_joint.m_translate.x);
-		SetJointParameter<JOINT_ATTITUDE_POSITION_Y>(joint_object, pmx_joint.m_translate.y);
-		SetJointParameter<JOINT_ATTITUDE_POSITION_Z>(joint_object, pmx_joint.m_translate.z);
+		SetJointParameter<JOINT_ATTITUDE_POSITION_X>(joint_object, pmx_joint.m_translate.x());
+		SetJointParameter<JOINT_ATTITUDE_POSITION_Y>(joint_object, pmx_joint.m_translate.y());
+		SetJointParameter<JOINT_ATTITUDE_POSITION_Z>(joint_object, pmx_joint.m_translate.z());
 
-		SetJointParameter<JOINT_ATTITUDE_ROTATION_X>(joint_object, pmx_joint.m_rotate.x);
-		SetJointParameter<JOINT_ATTITUDE_ROTATION_Y>(joint_object, pmx_joint.m_rotate.y);
-		SetJointParameter<JOINT_ATTITUDE_ROTATION_Z>(joint_object, pmx_joint.m_rotate.z);
+		SetJointParameter<JOINT_ATTITUDE_ROTATION_X>(joint_object, pmx_joint.m_rotate.x());
+		SetJointParameter<JOINT_ATTITUDE_ROTATION_Y>(joint_object, pmx_joint.m_rotate.y());
+		SetJointParameter<JOINT_ATTITUDE_ROTATION_Z>(joint_object, pmx_joint.m_rotate.z());
 
-		SetJointParameter<JOINT_PARAMETER_POSITION_X_MIN>(joint_object, pmx_joint.m_translateLowerLimit.x);
-		SetJointParameter<JOINT_PARAMETER_POSITION_Y_MIN>(joint_object, pmx_joint.m_translateLowerLimit.y);
-		SetJointParameter<JOINT_PARAMETER_POSITION_Z_MIN>(joint_object, pmx_joint.m_translateLowerLimit.z);
-		SetJointParameter<JOINT_PARAMETER_POSITION_X_MAX>(joint_object, pmx_joint.m_translateUpperLimit.x);
-		SetJointParameter<JOINT_PARAMETER_POSITION_Y_MAX>(joint_object, pmx_joint.m_translateUpperLimit.y);
-		SetJointParameter<JOINT_PARAMETER_POSITION_Z_MAX>(joint_object, pmx_joint.m_translateUpperLimit.z);
+		SetJointParameter<JOINT_PARAMETER_POSITION_X_MIN>(joint_object, pmx_joint.m_translateLowerLimit.x());
+		SetJointParameter<JOINT_PARAMETER_POSITION_Y_MIN>(joint_object, pmx_joint.m_translateLowerLimit.y());
+		SetJointParameter<JOINT_PARAMETER_POSITION_Z_MIN>(joint_object, pmx_joint.m_translateLowerLimit.z());
+		SetJointParameter<JOINT_PARAMETER_POSITION_X_MAX>(joint_object, pmx_joint.m_translateUpperLimit.x());
+		SetJointParameter<JOINT_PARAMETER_POSITION_Y_MAX>(joint_object, pmx_joint.m_translateUpperLimit.y());
+		SetJointParameter<JOINT_PARAMETER_POSITION_Z_MAX>(joint_object, pmx_joint.m_translateUpperLimit.z());
 
-		SetJointParameter<JOINT_PARAMETER_ROTATION_X_MIN>(joint_object, pmx_joint.m_rotateLowerLimit.x);
-		SetJointParameter<JOINT_PARAMETER_ROTATION_Y_MIN>(joint_object, pmx_joint.m_rotateLowerLimit.y);
-		SetJointParameter<JOINT_PARAMETER_ROTATION_Z_MIN>(joint_object, pmx_joint.m_rotateLowerLimit.z);
-		SetJointParameter<JOINT_PARAMETER_ROTATION_X_MAX>(joint_object, pmx_joint.m_rotateUpperLimit.x);
-		SetJointParameter<JOINT_PARAMETER_ROTATION_Y_MAX>(joint_object, pmx_joint.m_rotateUpperLimit.y);
-		SetJointParameter<JOINT_PARAMETER_ROTATION_Z_MAX>(joint_object, pmx_joint.m_rotateUpperLimit.z);
+		SetJointParameter<JOINT_PARAMETER_ROTATION_X_MIN>(joint_object, pmx_joint.m_rotateLowerLimit.x());
+		SetJointParameter<JOINT_PARAMETER_ROTATION_Y_MIN>(joint_object, pmx_joint.m_rotateLowerLimit.y());
+		SetJointParameter<JOINT_PARAMETER_ROTATION_Z_MIN>(joint_object, pmx_joint.m_rotateLowerLimit.z());
+		SetJointParameter<JOINT_PARAMETER_ROTATION_X_MAX>(joint_object, pmx_joint.m_rotateUpperLimit.x());
+		SetJointParameter<JOINT_PARAMETER_ROTATION_Y_MAX>(joint_object, pmx_joint.m_rotateUpperLimit.y());
+		SetJointParameter<JOINT_PARAMETER_ROTATION_Z_MAX>(joint_object, pmx_joint.m_rotateUpperLimit.z());
 
-		SetJointParameter<JOINT_SPRING_POSITION_X>(joint_object, pmx_joint.m_springTranslateFactor.x);
-		SetJointParameter<JOINT_SPRING_POSITION_Y>(joint_object, pmx_joint.m_springTranslateFactor.y);
-		SetJointParameter<JOINT_SPRING_POSITION_Z>(joint_object, pmx_joint.m_springTranslateFactor.z);
+		SetJointParameter<JOINT_SPRING_POSITION_X>(joint_object, pmx_joint.m_springTranslateFactor.x());
+		SetJointParameter<JOINT_SPRING_POSITION_Y>(joint_object, pmx_joint.m_springTranslateFactor.y());
+		SetJointParameter<JOINT_SPRING_POSITION_Z>(joint_object, pmx_joint.m_springTranslateFactor.z());
 
-		SetJointParameter<JOINT_SPRING_ROTATION_X>(joint_object, pmx_joint.m_springRotateFactor.x);
-		SetJointParameter<JOINT_SPRING_ROTATION_Y>(joint_object, pmx_joint.m_springRotateFactor.y);
-		SetJointParameter<JOINT_SPRING_ROTATION_Z>(joint_object, pmx_joint.m_springRotateFactor.z);
+		SetJointParameter<JOINT_SPRING_ROTATION_X>(joint_object, pmx_joint.m_springRotateFactor.x());
+		SetJointParameter<JOINT_SPRING_ROTATION_Y>(joint_object, pmx_joint.m_springRotateFactor.y());
+		SetJointParameter<JOINT_SPRING_ROTATION_Z>(joint_object, pmx_joint.m_springRotateFactor.z());
 	}
 
 	return true;

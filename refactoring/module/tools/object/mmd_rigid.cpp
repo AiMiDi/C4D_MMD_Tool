@@ -534,10 +534,10 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	{
 		const auto transform = mmd_rigidbody_->GetTransform();
 		op->SetMl(Matrix{
-		   Vector(transform[3][0],transform[3][1],-transform[3][2]) * rigid_manager_data_->GetPositionMultiple(),
-		   Vector(transform[0][0],transform[0][1],-transform[0][2]),
-		   Vector(transform[1][0],transform[1][1],-transform[1][2]),
-		   Vector(transform[2][0],transform[2][1],-transform[2][2]) });
+		   Vector(transform(0,3),transform(1,3),transform(2,3)) * rigid_manager_data_->GetPositionMultiple(),
+		   Vector(transform(0,0),transform(1,0),transform(2,0)),
+		   Vector(transform(0,1),transform(1,1),transform(2,1)),
+		   Vector(transform(0,2),transform(1,2),transform(2,2)) });
 	}
 
 	return EXECUTIONRESULT::OK;

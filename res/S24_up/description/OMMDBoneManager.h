@@ -1,6 +1,6 @@
 #ifndef _O_MMD_BONE_MANAGER_H_
 #define _O_MMD_BONE_MANAGER_H_
-enum : int
+enum
 {
 	BONE_MANAGER_GRP = 1000,
 	BONE_DISPLAY_TYPE,

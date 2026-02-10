@@ -348,7 +348,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	else if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
 	{
 		const auto joint_position = mmd_joint_->GetPosition();
-		op->SetAbsPos(Vector(joint_position.x, joint_position.y, joint_position.z) * joint_manager_data_->GetPositionMultiple());
+		op->SetAbsPos(Vector(joint_position.x(), joint_position.y(), joint_position.z()) * joint_manager_data_->GetPositionMultiple());
 	}
 
 	return EXECUTIONRESULT::OK;

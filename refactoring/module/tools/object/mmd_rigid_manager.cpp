@@ -276,18 +276,18 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 		SetRigidParameter<RIGID_PHYSICS_MODE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_op));
 		SetRigidParameter<RIGID_SHAPE_TYPE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_shape));
 
-		const auto shape_size = pmx_rigidbody.m_shapeSize * position_multiple_;
-		SetRigidParameter<RIGID_SHAPE_SIZE_X>(rigid_object, shape_size.x);
-		SetRigidParameter<RIGID_SHAPE_SIZE_Y>(rigid_object, shape_size.y);
-		SetRigidParameter<RIGID_SHAPE_SIZE_Z>(rigid_object, shape_size.z);
+		const Eigen::Vector3f shape_size = pmx_rigidbody.m_shapeSize * position_multiple_;
+		SetRigidParameter<RIGID_SHAPE_SIZE_X>(rigid_object, shape_size.x());
+		SetRigidParameter<RIGID_SHAPE_SIZE_Y>(rigid_object, shape_size.y());
+		SetRigidParameter<RIGID_SHAPE_SIZE_Z>(rigid_object, shape_size.z());
 
-		SetRigidParameter<RIGID_SHAPE_POSITION_X>(rigid_object, pmx_rigidbody.m_translate.x);
-		SetRigidParameter<RIGID_SHAPE_POSITION_Y>(rigid_object, pmx_rigidbody.m_translate.y);
-		SetRigidParameter<RIGID_SHAPE_POSITION_Z>(rigid_object, pmx_rigidbody.m_translate.z);
+		SetRigidParameter<RIGID_SHAPE_POSITION_X>(rigid_object, pmx_rigidbody.m_translate.x());
+		SetRigidParameter<RIGID_SHAPE_POSITION_Y>(rigid_object, pmx_rigidbody.m_translate.y());
+		SetRigidParameter<RIGID_SHAPE_POSITION_Z>(rigid_object, pmx_rigidbody.m_translate.z());
 
-		SetRigidParameter<RIGID_SHAPE_ROTATION_X>(rigid_object, pmx_rigidbody.m_rotate.x);
-		SetRigidParameter<RIGID_SHAPE_ROTATION_Y>(rigid_object, pmx_rigidbody.m_rotate.y);
-		SetRigidParameter<RIGID_SHAPE_ROTATION_Z>(rigid_object, pmx_rigidbody.m_rotate.z);
+		SetRigidParameter<RIGID_SHAPE_ROTATION_X>(rigid_object, pmx_rigidbody.m_rotate.x());
+		SetRigidParameter<RIGID_SHAPE_ROTATION_Y>(rigid_object, pmx_rigidbody.m_rotate.y());
+		SetRigidParameter<RIGID_SHAPE_ROTATION_Z>(rigid_object, pmx_rigidbody.m_rotate.z());
 
 		SetNonCollisionGroups(rigid_object, pmx_rigidbody.m_collisionGroup, std::make_integer_sequence<int, 16>{});
 

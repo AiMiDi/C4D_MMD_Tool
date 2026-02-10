@@ -1,7 +1,7 @@
 #ifndef C4D_SYMBOLS_H__
 #define C4D_SYMBOLS_H__
 //msg str
-enum : int
+enum
 {
 	IDS_MES_OPENFILE = 10000,
 	IDS_MES_SAVEFILE,
@@ -49,7 +49,7 @@ enum : int
 	IDS_MES_DELETE_CAM_ALL_CURVE,
 };
 //tool str
-enum : int
+enum
 {
 	IDS_CMT_TOOL_TITLE,
 	IDS_CMT_TOOL_SIZE,
@@ -154,7 +154,7 @@ enum : int
 	IDS_NAME_CONVER_CANCEL
 };
 //tag obj str
-enum : int
+enum
 {
 	IDS_T_MMD_MATERIAL,
 	IDS_T_MMD_BONE,
@@ -174,7 +174,7 @@ enum : int
 	IDS_RIGID_SHAPE_SIZE_H,
 };
 //dialog
-enum : int
+enum
 {
 	DLG_CMT_TOOL = 1056563,
 	DLG_CMT_VMD_IMPORT = 1057489,

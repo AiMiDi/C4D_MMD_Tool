@@ -1,6 +1,6 @@
 #ifndef _O_MMD_JOINT_MANAGER_H_
 #define _O_MMD_JOINT_MANAGER_H_
-enum : int
+enum
 {
 	JOINT_MANAGER_GRP = 1000,
 	JOINT_DISPLAY_TYPE,

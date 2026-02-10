@@ -388,7 +388,10 @@ void MMDBoneTag::HandleBoneIndexUpdate(BaseContainer* const bc, BaseObject* bone
 	{
 		bc->SetString(PMX_BONE_INDEX, "0"_s);
 		if (prev_index != 0 && bone_manager_object != nullptr)
-			bone_manager_object->Message(g_mmd_bone_tag_id, nullptr);
+		{
+			MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_INDEX_CHANGE);
+			bone_manager_object->Message(g_mmd_bone_tag_id, &msg);
+		}
 		return;
 	}
 
@@ -436,7 +439,10 @@ void MMDBoneTag::HandleBoneIndexUpdate(BaseContainer* const bc, BaseObject* bone
 	{
 		bc->SetString(PMX_BONE_INDEX, String::IntToString(new_bone_index));
 		if (bone_manager_object != nullptr)
-			bone_manager_object->Message(g_mmd_bone_tag_id, nullptr);
+		{
+			MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_INDEX_CHANGE);
+			bone_manager_object->Message(g_mmd_bone_tag_id, &msg);
+		}
 	}
 }
 
@@ -783,12 +789,14 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	else if (bone_mode_ == BONE_MODE_VMD && mmd_node_)
 	{
 		const auto& transform = mmd_node_->GetLocalTransform();
-		const auto translate = xyz(transform[3]) - mmd_node_->GetInitialTranslate();
+		const Eigen::Vector3f translate = transform.col(3).head<3>() - mmd_node_->GetInitialTranslate();
 
-		bone_object_->SetRelMl(Matrix{Vector(translate[0],translate[1],-translate[2]) * bone_manager_data_->GetPositionMultiple(),
-		   Vector(transform[0][0],transform[0][1],transform[0][2]),
-		   Vector(transform[1][0],transform[1][1],transform[1][2]),
-		   Vector(transform[2][0],transform[2][1],transform[2][2]) });
+		// libMMD now uses the same coordinate system as C4D (original PMX coordinates).
+		// No coordinate conversion needed.
+		bone_object_->SetRelMl(Matrix{Vector(translate.x(),translate.y(),translate.z()) * bone_manager_data_->GetPositionMultiple(),
+		   Vector(transform(0,0), transform(1,0), transform(2,0)),
+		   Vector(transform(0,1), transform(1,1), transform(2,1)),
+		   Vector(transform(0,2), transform(1,2), transform(2,2)) });
 	}
 
 	return EXECUTIONRESULT::OK;

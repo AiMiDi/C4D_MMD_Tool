@@ -1,6 +1,6 @@
 #ifndef _O_MMD_MESH_MANAGER_H_
 #define _O_MMD_MESH_MANAGER_H_
-enum : int
+enum
 {
 	MESH_MANAGER_GRP = 1000,
 	MESH_DISPLAY_TYPE,
