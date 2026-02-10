@@ -229,9 +229,9 @@ inline T* GetCustomDataTypeWritable(GeData& data, [[maybe_unused]] Int32 customD
 
 #include "libMMD/Model/MMD/PMXModel.h"
 #include "libMMD/Model/MMD/PMDModel.h"
-using MMDModel = libmmd::MMDModelWithoutBuffered;
-using PMXModel = libmmd::PMXModelWithoutBuffered;
-using PMDModel = libmmd::PMDModelWithoutBuffered;
+using MMDModel = libmmd::MMDModel;
+using PMXModel = libmmd::PMXModel;
+using PMDModel = libmmd::PMDModel;
 #include <memory>
 using MMDModelPtr = std::shared_ptr<MMDModel>;
 using PMXModelPtr = std::shared_ptr<PMXModel>;

@@ -87,7 +87,7 @@ cd ../..
 cd ./libMMD
 mkdir build 
 cd build
-cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install" -D LIBMMD_BULLET_ROOT="../../install" -D LIBMMD_ENABLE_TEST=off -D LIBMMD_INSTALL=on
+cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install" -D LIBMMD_BULLET_ROOT="../../install" -D LIBMMD_EIGEN_ROOT="../../eigen" -D LIBMMD_ENABLE_TEST=off -D LIBMMD_INSTALL=on
 
 if "%BUILD_DEBUG%"=="1" (
     echo Building libMMD Debug version...

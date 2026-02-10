@@ -231,12 +231,12 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 				vmd_camera_key_frame_array.emplace_back(
 					frame_at + static_cast<uint32_t>(setting.time_offset),
 					maxon::SafeConvert<float>(get_curve_value(DISTANCE) * setting.position_multiple),
-					glm::vec3{ maxon::SafeConvert<float>(get_curve_value(POSITION_X) * setting.position_multiple),
+					Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(POSITION_X) * setting.position_multiple),
 					maxon::SafeConvert<float>(get_curve_value(POSITION_Y) * setting.position_multiple),
-					maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) },
-					glm::vec3{ maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
+					maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) ),
+					Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
 					maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
-					maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) },
+					maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) ),
 					static_cast<uint32_t>(get_curve_value(AOV)));
 			}
 			return true;
@@ -264,14 +264,14 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 				camera_key_frame.m_frame =time_at.GetFrame(30.) + static_cast<uint32_t>(setting.time_offset);
 
 				// position
-				camera_key_frame.m_interest = glm::vec3{ maxon::SafeConvert<float>(get_curve_value(POSITION_X) * setting.position_multiple),
-												maxon::SafeConvert<float>(get_curve_value(POSITION_Y) * setting.position_multiple),
-												maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) };
+			camera_key_frame.m_interest = Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(POSITION_X) * setting.position_multiple),
+											maxon::SafeConvert<float>(get_curve_value(POSITION_Y) * setting.position_multiple),
+											maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) );
 
 				// rotation
-				camera_key_frame.m_rotate = glm::vec3{ maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
-												maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
-												maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) };
+			camera_key_frame.m_rotate = Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
+											maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
+											maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) );
 				// distance
 				camera_key_frame.m_distance = maxon::SafeConvert<float>(get_curve_value(DISTANCE) * setting.position_multiple);
 
