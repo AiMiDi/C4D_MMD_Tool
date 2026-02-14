@@ -29,10 +29,11 @@
 			"toolset": "v143"
 		},
 		{
-			"name": "windows_vs2026",
-			"displayName": "Visual Studio 2026",
+			"name": "windows_vs2026_v145",
+			"displayName": "Visual Studio 2026 v145",
 			"generator": "Visual Studio 18 2026",
-			"binaryDir": "${sourceDir}/_build_vs2026"
+			"binaryDir": "${sourceDir}/_build_vs2026_v145",
+			"toolset": "v145"
 		},
 		{
 			"name": "windows_vs2022_clangcl",
