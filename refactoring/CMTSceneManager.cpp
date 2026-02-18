@@ -110,6 +110,11 @@ void LoadModelLog::LogMMDDataPathErr()
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MMD_DATA_ERR));
 }
 
+void LoadModelLog::LogLoadModelErr()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_LOAD_MODEL_ERR));
+}
+
 void LoadModelLog::LogOK()
 {
 	timing.Stop();

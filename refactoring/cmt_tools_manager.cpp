@@ -13,6 +13,7 @@ Description:	tools manager
 #include "CMTSceneManager.h"
 #include "module/ui/cmt_name_conversion_dialog.h"
 #include "utils/string_util.hpp"
+#include "utils/filename_util.hpp"
 
 namespace CMTToolsManager
 {
@@ -27,9 +28,15 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		const auto vmd_path= string_util::GetStdString(setting.fn.GetString());
+		std::vector<uint8_t> file_data;
+		if (!filename_util::ReadFileData(setting.fn, file_data))
+		{
+			LoadVmdCameraLog::LogReadFileErr();
+			return false;
+		}
+
 		libmmd::VMDFile vmd_file;
-		if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
+		if (!ReadVMDFile(&vmd_file, file_data.data(), file_data.size()))
 		{
 			LoadVmdCameraLog::LogReadFileErr();
 			return false;
@@ -84,9 +91,15 @@ namespace CMTToolsManager
 	{
 		LoadVmdMotionLog logger;
 
-		const auto vmd_path = string_util::GetStdString(setting.fn.GetString());
+		std::vector<uint8_t> file_data;
+		if (!filename_util::ReadFileData(setting.fn, file_data))
+		{
+			LoadVmdMotionLog::LogReadFileErr();
+			return false;
+		}
+
 		libmmd::VMDFile vmd_file;
-		if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
+		if (!ReadVMDFile(&vmd_file, file_data.data(), file_data.size()))
 		{
 			LoadVmdMotionLog::LogReadFileErr();
 			return false;
@@ -115,7 +128,6 @@ namespace CMTToolsManager
 		if(setting.fn.CheckSuffix("pmx"_s))
 		{
 			pmx_model = std::make_shared<PMXModel>();
-
 		}
 		else
 		{
@@ -129,26 +141,36 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		static auto mmd_data_filepath = GeGetPluginResourcePath() + Filename("\\mikumikudance_data");
+		static auto mmd_data_filepath = GeGetPluginResourcePath() + Filename("mikumikudance_data");
 		if (!GeFExist(mmd_data_filepath, true))
 		{
 			LoadModelLog::LogMMDDataPathErr();
 			return false;
 		}
 
-		libmmd::PMXFile pmx_file;
-		const std::string model_path = string_util::GetStdString(setting.fn.GetString());
-		if (!libmmd::ReadPMXFile(&pmx_file, model_path.c_str()))
+		std::vector<uint8_t> file_data;
+		if (!filename_util::ReadFileData(setting.fn, file_data))
 		{
+			GePrint(FormatString("Failed to read PMX file: @", setting.fn.GetString()));
 			LoadModelLog::LogReadFileErr();
 			return false;
 		}
 
-		static std::string mmd_data_path =  string_util::GetStdString(mmd_data_filepath.GetString());
-		if (const std::string model_dir = string_util::GetStdString(setting.fn.GetDirectory().GetString());
-			!pmx_model->LoadPMX(pmx_file, model_dir, mmd_data_path))
+		libmmd::PMXFile pmx_file;
+		std::string parse_error;
+		if (!libmmd::ReadPMXFile(&pmx_file, file_data.data(), file_data.size(), &parse_error))
 		{
+			GePrint(FormatString("PMX parse failed: @", String(parse_error.c_str())));
 			LoadModelLog::LogReadFileErr();
+			return false;
+		}
+
+		static std::string mmd_data_path = string_util::GetStdString(mmd_data_filepath.GetString());
+		const std::string model_dir = string_util::GetStdString(setting.fn.GetDirectory().GetString());
+		if (!pmx_model->LoadPMX(pmx_file, model_dir, mmd_data_path))
+		{
+			GePrint(FormatString("LoadPMX failed for: @", setting.fn.GetString()));
+			LoadModelLog::LogLoadModelErr();
 			return false;
 		}
 

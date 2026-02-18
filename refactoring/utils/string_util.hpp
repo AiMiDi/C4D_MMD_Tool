@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
 
 Copyright:Copyright(c) 2022-present, Aimidi & CMT contributors.
 Author:			Aimidi
@@ -16,7 +16,7 @@ Description:	std string util
 
 namespace string_util
 {
-	static std::string GetStdString(const maxon::String& str)
+	inline std::string GetStdString(const maxon::String& str)
 	{
 		if (str.IsEmpty())
 		{

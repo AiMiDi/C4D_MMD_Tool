@@ -1111,9 +1111,14 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					}
 				}
 				LoadVmdMotionLog logger;
-				const auto vmd_path = string_util::GetStdString(setting.fn.GetString());
+				std::vector<uint8_t> file_data;
+				if (!filename_util::ReadFileData(setting.fn, file_data))
+				{
+					LoadVmdMotionLog::LogReadFileErr();
+					break;
+				}
 				libmmd::VMDFile vmd_file;
-				if (!ReadVMDFile(&vmd_file, vmd_path.c_str()))
+				if (!ReadVMDFile(&vmd_file, file_data.data(), file_data.size()))
 				{
 					LoadVmdMotionLog::LogReadFileErr();
 					break;

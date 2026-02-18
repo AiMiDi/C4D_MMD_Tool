@@ -83,6 +83,7 @@ struct LoadModelLog : IOLog
 	void Set(const MMDModelPtr& model, const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting);
 	void LogOK();
 	static void LogMMDDataPathErr();
+	static void LogLoadModelErr();
 };
 
 struct SavePmxModelLog : IOLog
