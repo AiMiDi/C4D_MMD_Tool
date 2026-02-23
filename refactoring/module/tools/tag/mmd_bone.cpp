@@ -788,15 +788,14 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	}
 	else if (bone_mode_ == BONE_MODE_VMD && mmd_node_)
 	{
-		const auto& transform = mmd_node_->GetLocalTransform();
-		const Eigen::Vector3f translate = transform.col(3).head<3>() - mmd_node_->GetInitialTranslate();
+		const auto& local = mmd_node_->GetLocalTransform();
+		const Eigen::Vector3f translate = local.col(3).head<3>() - mmd_node_->GetInitialTranslate();
+		const auto pm = bone_manager_data_->GetPositionMultiple();
 
-		// libMMD now uses the same coordinate system as C4D (original PMX coordinates).
-		// No coordinate conversion needed.
-		bone_object_->SetRelMl(Matrix{Vector(translate.x(),translate.y(),translate.z()) * bone_manager_data_->GetPositionMultiple(),
-		   Vector(transform(0,0), transform(1,0), transform(2,0)),
-		   Vector(transform(0,1), transform(1,1), transform(2,1)),
-		   Vector(transform(0,2), transform(1,2), transform(2,2)) });
+		bone_object_->SetRelMl(Matrix{Vector(translate.x(), translate.y(), translate.z()) * pm,
+		   Vector(local(0,0), local(1,0), local(2,0)),
+		   Vector(local(0,1), local(1,1), local(2,1)),
+		   Vector(local(0,2), local(1,2), local(2,2)) });
 	}
 
 	return EXECUTIONRESULT::OK;

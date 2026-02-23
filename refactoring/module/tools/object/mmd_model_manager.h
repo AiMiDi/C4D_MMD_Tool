@@ -98,7 +98,8 @@ class MMDModelManagerObject final : public ObjectData
 	MMDModelPtr mmd_model_;
 	Int32 model_mode_ = MODEL_MODE_ANIM;
 	BaseTime prev_time_{-1};
-	Float32 fps_{ 1.f / 30.f };
+	Float32 fps_{ 30.f };
+	Bool is_animation_initialized_{ false };
 
 	MMDModelManagerObject();
 	friend MMDModelManagerObject;

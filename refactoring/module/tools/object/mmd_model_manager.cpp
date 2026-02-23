@@ -540,14 +540,17 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	{
 		if (const auto now_time = doc->GetTime(); prev_time_ != now_time)
 		{
+			fps_ = static_cast<Float32>(doc->GetFps());
+
 			if (animation_index_ != -1 && animation_index_ < animations_.GetCount())
 			{
 				const auto& [_, animation]  = animations_[animation_index_];
-				if (now_time == doc->GetMinTime())
+				if (!is_animation_initialized_ || now_time == doc->GetMinTime())
 				{
-					fps_ = static_cast<Float32>(doc->GetFps());
 					mmd_model_->InitializeAnimation();
-					animation->SyncPhysics(0.f);
+					const auto vmd_frame = static_cast<Float32>(now_time.Get() * fps_);
+					animation->SyncPhysics(vmd_frame);
+					is_animation_initialized_ = true;
 				}
 				mmd_model_->BeginAnimation();
 				mmd_model_->UpdateAllAnimation(animation.get(), static_cast<Float32>(now_time.Get() * fps_), 1.f / fps_);
@@ -555,9 +558,10 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			}
 			else
 			{
-				if (now_time == doc->GetMinTime())
+				if (!is_animation_initialized_ || now_time == doc->GetMinTime())
 				{
 					mmd_model_->InitializeAnimation();
+					is_animation_initialized_ = true;
 				}
 				mmd_model_->BeginAnimation();
 				mmd_model_->UpdateNodeAnimation(false);
@@ -1163,6 +1167,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case MODEL_MODE:
 		{
 			model_mode_ = t_data.GetInt32();
+			is_animation_initialized_ = false;
 			MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE, nullptr, model_mode_);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_model_manager_object_id, &msg);
 			break;
@@ -1170,6 +1175,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case MODEL_ANIM_LIST:
 		{
 			animation_index_ = t_data.GetInt32();
+			is_animation_initialized_ = false;
 			prev_time_ = BaseTime(-1.);
 			const auto doc = node->GetDocument();
 			doc->SetTime({});
