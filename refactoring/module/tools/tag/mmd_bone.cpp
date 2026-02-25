@@ -792,10 +792,14 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 		const Eigen::Vector3f translate = local.col(3).head<3>() - mmd_node_->GetInitialTranslate();
 		const auto pm = bone_manager_data_->GetPositionMultiple();
 
+		// MMD and C4D are both left-handed but with opposite Z directions
+		// (MMD Z+ into screen, C4D Z+ toward viewer).
+		// Position delta is in original space (same as frozen pos / mesh), no conversion needed.
+		// Rotation must be converted via S*R*S (S=diag(1,1,-1)) to match C4D's axis convention.
 		bone_object_->SetRelMl(Matrix{Vector(translate.x(), translate.y(), translate.z()) * pm,
-		   Vector(local(0,0), local(1,0), local(2,0)),
-		   Vector(local(0,1), local(1,1), local(2,1)),
-		   Vector(local(0,2), local(1,2), local(2,2)) });
+		   Vector( local(0,0),  local(1,0), -local(2,0)),
+		   Vector( local(0,1),  local(1,1), -local(2,1)),
+		   Vector(-local(0,2), -local(1,2),  local(2,2)) });
 	}
 
 	return EXECUTIONRESULT::OK;
