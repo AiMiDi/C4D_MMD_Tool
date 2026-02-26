@@ -545,15 +545,15 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			if (animation_index_ != -1 && animation_index_ < animations_.GetCount())
 			{
 				const auto& [_, animation]  = animations_[animation_index_];
+				const auto vmd_frame = static_cast<Float32>(now_time.Get() * fps_);
 				if (!is_animation_initialized_ || now_time == doc->GetMinTime())
 				{
 					mmd_model_->InitializeAnimation();
-					const auto vmd_frame = static_cast<Float32>(now_time.Get() * fps_);
-					animation->SyncPhysics(vmd_frame);
+					animation->SyncPhysics(vmd_frame, 30, 1.f / fps_);
 					is_animation_initialized_ = true;
 				}
 				mmd_model_->BeginAnimation();
-				mmd_model_->UpdateAllAnimation(animation.get(), static_cast<Float32>(now_time.Get() * fps_), 1.f / fps_);
+				mmd_model_->UpdateAllAnimation(animation.get(), vmd_frame, 1.f / fps_);
 				mmd_model_->EndAnimation();
 			}
 			else
