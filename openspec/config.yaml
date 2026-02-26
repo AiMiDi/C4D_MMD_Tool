@@ -1,0 +1,28 @@
+schema: spec-driven
+
+context: |
+  Cinema 4D plugin (C++) for importing and managing MMD (MikuMikuDance) data.
+  Supports PMX/PMD models and VMD/VPD animation formats.
+
+  Tech stack: C++17, Cinema 4D SDK (R2026), CMake (VS2022 v143)
+  Platform: Win64, macOS
+  Module ID: net.aimidi.mmdtool
+
+  Dependencies:
+  - libMMD (static) — MMD format parsing (PMX/PMD/VMD/VPD)
+  - bullet3 (static) — Physics engine (libMMD private dependency)
+  - yaml-cpp (static) — YAML config persistence
+  - GLM (header-only) — Math library (libMMD public dependency)
+
+  Source layout:
+  - refactoring/ — Active plugin source code
+  - res/S24_up/ — Plugin resources (descriptions, dialogs, strings)
+  - dependency/ — Third-party sources, compiled to dependency/install/
+
+  Conventions:
+  - SDK compatibility macros in module/core/cmt_marco.h
+  - Utils are header-only (.hpp) in refactoring/utils/
+  - Debug libraries use _Debug suffix (e.g. libMMD_Debug.lib)
+  - Error handling: iferr_scope_handler, iferr_return
+  - Memory: NewObj/NewObjClear, AutoFree/AutoAlloc
+  - Plugin IDs are registered at plugincafe.com
