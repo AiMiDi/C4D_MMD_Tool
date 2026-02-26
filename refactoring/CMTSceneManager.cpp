@@ -91,6 +91,31 @@ void LoadVmdMotionLog::LogSelectError()
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 }
 
+void SaveVmdMotionLog::LogOK()
+{
+	timing.Stop();
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_MOT_OK,
+		String::UIntToString(exported_bone_count),
+		String::UIntToString(exported_morph_count),
+		String::UIntToString(exported_frame_count),
+		String::FloatToString(timing.GetMilliseconds())));
+}
+
+void SaveVmdMotionLog::LogNotMMDModelError()
+{
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_MOT_TYPE_ERR));
+}
+
+void SaveVmdMotionLog::LogSelectError()
+{
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+}
+
+void SaveVmdMotionLog::LogNoAnimationError()
+{
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_MOT_NO_ANIM));
+}
+
 void LoadModelLog::Set(const MMDModelPtr& model, const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting)
 {
 	model_name_local = model->GetModelName().c_str();
@@ -255,7 +280,26 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 Bool CMTSceneManager::SaveVMDMotion(const CMTToolsSetting::MotionExport& setting, libmmd::VMDFile& data,
 	SaveVmdMotionLog& log)
 {
-	return false;
+	BaseObject* select_object = setting.doc->GetActiveObject();
+	if (select_object == nullptr)
+	{
+		SaveVmdMotionLog::LogSelectError();
+		return false;
+	}
+
+	if (!select_object->IsInstanceOf(g_mmd_model_manager_object_id))
+	{
+		SaveVmdMotionLog::LogNotMMDModelError();
+		return false;
+	}
+
+	if (!select_object->GetNodeData<MMDModelManagerObject>()->SaveVMDMotion(data, setting))
+	{
+		SaveVmdMotionLog::LogNoAnimationError();
+		return false;
+	}
+
+	return true;
 }
 
 BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)

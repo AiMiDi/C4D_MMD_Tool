@@ -15,6 +15,8 @@ Description:	tools manager
 #include "utils/string_util.hpp"
 #include "utils/filename_util.hpp"
 
+#include <set>
+
 namespace CMTToolsManager
 {
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
@@ -117,6 +119,32 @@ namespace CMTToolsManager
 
 	bool ExportVMDMotion(const CMTToolsSetting::MotionExport& setting)
 	{
+		SaveVmdMotionLog logger;
+
+		libmmd::VMDFile vmd_file;
+		if (!CMTSceneManager::SaveVMDMotion(setting, vmd_file, logger))
+		{
+			return false;
+		}
+
+		const auto vmd_path = string_util::GetStdString(setting.fn.GetString());
+		if (!WriteVMDFile(&vmd_file, vmd_path.c_str()))
+		{
+			SaveVmdMotionLog::LogWriteFileErr();
+			return false;
+		}
+
+		std::set<std::string> bone_names;
+		for (const auto& m : vmd_file.m_motions)
+			bone_names.insert(m.m_boneName.ToString());
+		std::set<std::string> morph_names;
+		for (const auto& m : vmd_file.m_morphs)
+			morph_names.insert(m.m_blendShapeName.ToString());
+		logger.exported_bone_count = bone_names.size();
+		logger.exported_morph_count = morph_names.size();
+		logger.exported_frame_count = vmd_file.m_motions.size() + vmd_file.m_morphs.size();
+
+		logger.LogOK();
 		return true;
 	}
 

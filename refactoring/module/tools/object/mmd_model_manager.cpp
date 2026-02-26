@@ -822,7 +822,12 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 
 Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
 {
-	return true;
+	if (animation_index_ < 0 || animation_index_ >= animations_.GetCount())
+		return false;
+	const auto& [_, animation] = animations_[animation_index_];
+	if (!animation)
+		return false;
+	return animation->Save(vmd_motion);
 }
 
 //Bool MMDModelManagerObject::SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data,

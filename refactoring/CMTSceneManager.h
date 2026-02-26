@@ -64,6 +64,14 @@ struct LoadVmdMotionLog : IOLog
 
 struct SaveVmdMotionLog : IOLog
 {
+	UInt64 exported_bone_count = 0;
+	UInt64 exported_morph_count = 0;
+	UInt64 exported_frame_count = 0;
+
+	void LogOK();
+	static void LogNotMMDModelError();
+	static void LogSelectError();
+	static void LogNoAnimationError();
 };
 
 struct LoadModelLog : IOLog
