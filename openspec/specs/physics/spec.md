@@ -67,6 +67,10 @@ MMDModelManagerObject::Execute() (per frame)
             └── Read back dynamic rigid body transforms → bone transforms
 ```
 
+## Coordinate Conversion (MMD → C4D)
+
+Rigid body transforms from libMMD are in original PMX space. `MMDRigidObject::Execute` converts to C4D by negating the Z row of the transform matrix (position Z negated, rotation Z components negated).
+
 ## Source Files
 
 | File | Role |

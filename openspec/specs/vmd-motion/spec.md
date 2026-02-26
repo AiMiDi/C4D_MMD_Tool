@@ -59,6 +59,13 @@ VMD file → libmmd::ReadVMDFile() → VMDFile
 2. libMMD resolves IK, inheritance, physics via bullet3
 3. Bone transforms are pushed to C4D joints via `MMDBoneTag`
 
+### Coordinate Conversion (MMD → C4D)
+
+libMMD outputs transforms in original PMX space (left-handed, Z+ into screen). C4D is also left-handed but with Z+ toward viewer. `MMDBoneTag::Execute` applies:
+
+- **Position delta**: Used directly (mesh, frozen positions, and deltas all share original PMX space).
+- **Rotation matrix**: Converted via `S*R*S` (`S=diag(1,1,-1)`) to flip X/Y rotation directions.
+
 ## Source Files
 
 | File | Role |

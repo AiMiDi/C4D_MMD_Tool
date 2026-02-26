@@ -12,7 +12,7 @@ context: |
   - libMMD (static) — MMD format parsing (PMX/PMD/VMD/VPD)
   - bullet3 (static) — Physics engine (libMMD private dependency)
   - yaml-cpp (static) — YAML config persistence
-  - GLM (header-only) — Math library (libMMD public dependency)
+  - Eigen (header-only) — Math library (libMMD public dependency)
 
   Source layout:
   - refactoring/ — Active plugin source code
