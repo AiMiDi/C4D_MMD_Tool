@@ -13,6 +13,8 @@ Description:	DESC
 #include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
 #include "description/OMMDBoneManager.h"
+#include "maxon/pointerarray.h"
+#include "utils/morph_ui_data_util.hpp"
 
 class MMDModelManagerObject;
 
@@ -63,6 +65,8 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	libmmd::MMDMorphManager* mmd_morph_manager_ = nullptr;
 	libmmd::MMDNodeManager* mmd_node_manager_ = nullptr;
 
+	maxon::HashMap<String, maxon::PointerArray<MorphUIData>> bone_morph_map_;
+
 	BaseContainer bone_items_;
 	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> bone_list_;
 	friend MMDModelManagerObject;
@@ -83,6 +87,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
 	const BaseContainer& GetBoneItems() const;
 	const Float& GetPositionMultiple() const { return position_multiple_; }
+	maxon::HashMap<String, maxon::PointerArray<MorphUIData>>& GetBoneMorphMap() { return bone_morph_map_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);

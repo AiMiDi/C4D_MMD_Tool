@@ -191,20 +191,104 @@ bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 	};
 	if(!data)
 		return false;
-	switch (static_cast<MMDBoneTagMsg*>(data)->type)
+	bool need_update_morph = false;
+	const auto* msg = static_cast<MMDBoneTagMsg*>(data);
+	switch (msg->type)
 	{
 	case MMDBoneTagMsgType::BONE_INDEX_CHANGE:
 		{
 			HandleBoneIndexChangeMessage(node);
 			break;
 		}
+	case MMDBoneTagMsgType::BONE_MORPH_ADD:
+	{
+		auto* entry = bone_morph_map_.Find(msg->name);
+		maxon::PointerArray<MorphUIData>* morph_list;
+		if (entry)
+		{
+			morph_list = &entry->GetValue();
+			for (const auto& hub : *morph_list)
+			{
+				if (hub.Compare(msg->bone_tag, msg->strength_id))
+					goto EXIT;
+			}
+		}
+		else
+		{
+			morph_list = &bone_morph_map_.InsertKey(msg->name)iferr_return;
+		}
+		morph_list->Append(MorphUIData(msg->bone_tag, msg->strength_id))iferr_return;
+		need_update_morph = true;
+		break;
+	}
+	case MMDBoneTagMsgType::BONE_MORPH_DELETE:
+	{
+		auto* entry = bone_morph_map_.Find(msg->name);
+		if (entry)
+		{
+			auto& morph_list = entry->GetValue();
+			for (Int i = 0; i < morph_list.GetCount(); i++)
+			{
+				if (morph_list[i].Compare(msg->bone_tag, msg->strength_id))
+				{
+					morph_list.Erase(i)iferr_return;
+					need_update_morph = true;
+					break;
+				}
+			}
+			if (morph_list.IsEmpty())
+			{
+				bone_morph_map_.Erase(msg->name)iferr_return;
+			}
+		}
+		break;
+	}
+	case MMDBoneTagMsgType::BONE_MORPH_RENAME:
+	{
+		auto* old_entry = bone_morph_map_.Find(msg->name_old);
+		if (old_entry)
+		{
+			auto& old_list = old_entry->GetValue();
+			for (Int i = 0; i < old_list.GetCount(); i++)
+			{
+				if (old_list[i].Compare(msg->bone_tag, msg->strength_id))
+				{
+					auto* new_entry = bone_morph_map_.Find(msg->name);
+					maxon::PointerArray<MorphUIData>* new_list;
+					if (new_entry)
+					{
+						new_list = &new_entry->GetValue();
+						for (const auto& hub : *new_list)
+						{
+							if (hub.Compare(msg->bone_tag, msg->strength_id))
+								goto EXIT;
+						}
+					}
+					else
+					{
+						new_list = &bone_morph_map_.InsertKey(msg->name)iferr_return;
+					}
+					new_list->Append(std::move(old_list[i]))iferr_return;
+					old_list.Erase(i)iferr_return;
+					need_update_morph = true;
+					break;
+				}
+			}
+			if (old_list.IsEmpty())
+			{
+				bone_morph_map_.Erase(msg->name_old)iferr_return;
+			}
+		}
+		break;
+	}
 	case MMDBoneTagMsgType::DEFAULT:
 		break;
 	}
-	if (model_manager_)
+EXIT:
+	if (need_update_morph && model_manager_)
 	{
-		MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE };
-		model_manager_->Message(g_mmd_bone_manager_object_id, &msg);
+		MMDBoneManagerObjectMsg morph_msg{ MMDBoneManagerObjectMsgType::BONE_MORPH_CHANGE };
+		model_manager_->Message(g_mmd_bone_manager_object_id, &morph_msg);
 	}
 	return true;
 }
@@ -601,38 +685,34 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 
 	if (setting.import_expression)
 	{
-		/*const auto& pmx_morph_array = pmx_file.get_pmx_morph_array();
-		const auto pmx_morph_num = pmx_morph_array.size();
-		for (auto morph_index = decltype(pmx_morph_num){}; morph_index < pmx_morph_num; ++morph_index)
+		for (const auto& pmx_morph : pmx_file.m_morphs)
 		{
-			const auto& pmx_morph = pmx_morph_array[morph_index];
-			if (pmx_morph.get_morph_offset_type() != libmmd::pmx_morph::morph_type::BONE)
+			if (pmx_morph.m_morphType != libmmd::PMXMorphType::Bone)
 				continue;
 
-			const maxon::String morph_name_local{ pmx_morph.get_morph_name_local().c_str() };
+			const maxon::String morph_name_local{ pmx_morph.m_name.c_str() };
 
-			const auto& pmx_bone_morph_offset_array = pmx_morph.get_morph_offset_array();
-			const auto pmx_bone_morph_offset_num = pmx_bone_morph_offset_array.size();
-
-			if (pmx_bone_morph_offset_num == 0)
+			if (pmx_morph.m_boneMorph.empty())
 				continue;
 
-			for (auto offset_index = decltype(pmx_bone_morph_offset_num){}; offset_index < pmx_bone_morph_offset_num; ++offset_index)
+			for (const auto& bone_offset : pmx_morph.m_boneMorph)
 			{
-				const auto& pmx_bone_morph_offset = reinterpret_cast<const libmmd::pmx_bone_morph_offset&>(pmx_bone_morph_offset_array[offset_index]);
-				if (const auto bone_tag = FindBone(pmx_bone_morph_offset.get_bone_index()); bone_tag)
+				if (const auto bone_tag = FindBone(bone_offset.m_boneIndex); bone_tag)
 				{
 					const auto bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
 					const auto added_morph_index = bone_tag_node->AddBoneMorph(morph_name_local);
-					if(added_morph_index == NOTOK)
+					if (added_morph_index == NOTOK)
 						continue;
-					const auto bone_translation = pmx_bone_morph_offset.get_bone_translation();
-					const auto bone_rotation = pmx_bone_morph_offset.get_bone_rotation();
-					bone_tag_node->SetBoneMorphTranslationNoCheck(added_morph_index, Vector(bone_translation[0], bone_translation[1], bone_translation[2]) * setting.position_multiple);
-					bone_tag_node->SetBoneMorphRotationNoCheck(added_morph_index, Vector(bone_rotation[0], bone_rotation[1], bone_rotation[2]));
+					const auto& pos = bone_offset.m_position;
+					const auto& quat = bone_offset.m_quaternion;
+					const auto euler = quat.toRotationMatrix().eulerAngles(0, 1, 2);
+					bone_tag_node->SetBoneMorphTranslationNoCheck(added_morph_index,
+						Vector(pos.x(), pos.y(), pos.z()) * setting.position_multiple);
+					bone_tag_node->SetBoneMorphRotationNoCheck(added_morph_index,
+						Vector(euler.x(), euler.y(), euler.z()));
 				}
 			}
-		}*/
+		}
 	}
 
 	return true;

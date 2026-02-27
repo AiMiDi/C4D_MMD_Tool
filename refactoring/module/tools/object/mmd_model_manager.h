@@ -145,6 +145,7 @@ public:
 	Bool CreateManagers();
 	Bool UpdateManagers(BaseObject* op = nullptr);
 	BaseObject* GetMeshManagerObject() const { return mesh_manager_; }
+	BaseObject* GetBoneManagerObject() const { return bone_manager_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;

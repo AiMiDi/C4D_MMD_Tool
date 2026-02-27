@@ -20,6 +20,210 @@ Description:	DESC
 #include "maxon/quaternion.h"
 #include "description/TMMDBone.h"
 #include "module/tools/object/mmd_bone_manager.h"
+#include "libMMD/Model/MMD/MMDIkSolver.h"
+
+Bool BoneMorphTagData::Write(HyperFile* hf) SDK2024_Const
+{
+	IOWriteField(grp_id);
+	IOWriteField(strength_id);
+	IOWriteField(translation_id);
+	IOWriteField(rotation_id);
+	IOWriteField(button_grp_id);
+	IOWriteField(button_delete_id);
+	IOWriteField(button_rename_id);
+	IOWriteField(name);
+	return true;
+}
+
+Bool BoneMorphTagData::Read(HyperFile* hf)
+{
+	IOReadField(grp_id);
+	IOReadField(strength_id);
+	IOReadField(translation_id);
+	IOReadField(rotation_id);
+	IOReadField(button_grp_id);
+	IOReadField(button_delete_id);
+	IOReadField(button_rename_id);
+	IOReadField(name);
+	return true;
+}
+
+Int32 MMDBoneTag::AddBoneMorph(String morph_name)
+{
+	iferr_scope_handler{ return NOTOK; };
+
+	if (morph_name.IsEmpty())
+	{
+		morph_name = "morph_" + String::IntToString(bone_morph_name_index_);
+		bone_morph_name_index_++;
+	}
+
+	auto* tag = static_cast<BaseTag*>(Get());
+	DynamicDescription* ddesc = tag->GetDynamicDescriptionWritable();
+	if (!ddesc)
+		return NOTOK;
+
+	auto& data = bone_morph_data_arr_.Append()iferr_return;
+
+	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
+	bc.SetString(DESC_NAME, morph_name);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(PMX_BONE_MORPH_GRP))));
+	data.grp_id = ddesc->Alloc(bc);
+
+	bc = GetCustomDataTypeDefault(DTYPE_REAL);
+	bc.SetString(DESC_NAME, morph_name);
+	bc.SetFloat(DESC_MAX, 1.);
+	bc.SetFloat(DESC_MIN, 0.);
+	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
+	bc.SetFloat(DESC_MAXSLIDER, 1.);
+	bc.SetFloat(DESC_MINSLIDER, 0.);
+	bc.SetFloat(DESC_STEP, 0.01);
+	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(data.grp_id));
+	data.strength_id = ddesc->Alloc(bc);
+
+	bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
+	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_TRANSLATION));
+	bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(data.grp_id));
+	data.translation_id = ddesc->Alloc(bc);
+
+	bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
+	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_BONE_ROTATION));
+	bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(data.grp_id));
+	data.rotation_id = ddesc->Alloc(bc);
+
+	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
+	bc.SetInt32(DESC_COLUMNS, 2);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(data.grp_id));
+	data.button_grp_id = ddesc->Alloc(bc);
+
+	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
+	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_DELETE));
+	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(data.button_grp_id));
+	data.button_delete_id = ddesc->Alloc(bc);
+
+	bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
+	bc.SetString(DESC_NAME, GeLoadString(IDS_MORPH_RENAME));
+	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(data.button_grp_id));
+	data.button_rename_id = ddesc->Alloc(bc);
+
+	const Int32 index = static_cast<Int32>(bone_morph_data_arr_.GetCount() - 1);
+	bone_morph_button_id_map_.Insert(data.button_delete_id, index)iferr_return;
+	bone_morph_button_id_map_.Insert(data.button_rename_id, index)iferr_return;
+
+	if (bone_manager_data_)
+	{
+		MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_MORPH_ADD, morph_name, data.strength_id, tag);
+		reinterpret_cast<BaseObject*>(bone_manager_data_->Get())->Message(g_mmd_bone_tag_id, &msg);
+	}
+
+	data.name = std::move(morph_name);
+
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (GeIsMainThread())
+		EventAdd();
+
+	return index;
+}
+
+Bool MMDBoneTag::SetBoneMorphTranslationNoCheck(const Int32 id, const Vector translation)
+{
+	if (id < 0 || id >= bone_morph_data_arr_.GetCount())
+		return false;
+	return Get()->SetParameter(bone_morph_data_arr_[id].translation_id, translation, DESCFLAGS_SET::NONE);
+}
+
+Bool MMDBoneTag::SetBoneMorphRotationNoCheck(const Int32 id, const Vector rotation)
+{
+	if (id < 0 || id >= bone_morph_data_arr_.GetCount())
+		return false;
+	return Get()->SetParameter(bone_morph_data_arr_[id].rotation_id, rotation, DESCFLAGS_SET::NONE);
+}
+
+void MMDBoneTag::HandleBoneMorphButtonCommand(const DescID& desc_id)
+{
+	iferr_scope_handler{ return; };
+
+	auto* button_ptr = bone_morph_button_id_map_.Find(desc_id);
+	if (!button_ptr)
+		return;
+
+	const Int32 morph_index = button_ptr->GetValue();
+	if (morph_index < 0 || morph_index >= bone_morph_data_arr_.GetCount())
+		return;
+
+	auto& morph_data = bone_morph_data_arr_[morph_index];
+	auto* tag = static_cast<BaseTag*>(Get());
+	DynamicDescription* ddesc = tag->GetDynamicDescriptionWritable();
+	if (!ddesc)
+		return;
+
+	if (desc_id == morph_data.button_delete_id)
+	{
+		if (!QuestionDialog(IDS_MES_BONE_MORPH_DELETE, morph_data.name))
+			return;
+
+		ddesc->Remove(morph_data.button_delete_id);
+		ddesc->Remove(morph_data.button_rename_id);
+		ddesc->Remove(morph_data.button_grp_id);
+		ddesc->Remove(morph_data.rotation_id);
+		ddesc->Remove(morph_data.translation_id);
+		ddesc->Remove(morph_data.strength_id);
+		ddesc->Remove(morph_data.grp_id);
+
+		bone_morph_button_id_map_.Erase(morph_data.button_delete_id)iferr_return;
+		bone_morph_button_id_map_.Erase(morph_data.button_rename_id)iferr_return;
+		for (auto& entry : bone_morph_button_id_map_)
+		{
+			if (entry.GetValue() > morph_index)
+				entry.GetValue()--;
+		}
+
+		if (bone_manager_data_)
+		{
+			MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_MORPH_DELETE, morph_data.name, morph_data.strength_id, tag);
+			reinterpret_cast<BaseObject*>(bone_manager_data_->Get())->Message(g_mmd_bone_tag_id, &msg);
+		}
+
+		bone_morph_data_arr_.Erase(morph_index)iferr_return;
+
+		SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+		if (GeIsMainThread())
+			EventAdd();
+	}
+	else if (desc_id == morph_data.button_rename_id)
+	{
+		String new_name;
+		if (!RenameDialog(&new_name))
+			return;
+		if (new_name.IsEmpty())
+			return;
+
+		BaseContainer descbc = *ddesc->Find(morph_data.grp_id);
+		descbc.SetString(DESC_NAME, new_name);
+		ddesc->Set(morph_data.grp_id, descbc, nullptr);
+
+		descbc = *ddesc->Find(morph_data.strength_id);
+		descbc.SetString(DESC_NAME, new_name);
+		ddesc->Set(morph_data.strength_id, descbc, nullptr);
+
+		if (bone_manager_data_)
+		{
+			MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_MORPH_RENAME, new_name, morph_data.strength_id, tag, morph_data.name);
+			reinterpret_cast<BaseObject*>(bone_manager_data_->Get())->Message(g_mmd_bone_tag_id, &msg);
+		}
+
+		morph_data.name = std::move(new_name);
+
+		SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+		if (GeIsMainThread())
+			EventAdd();
+	}
+}
 
 Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 {
@@ -458,6 +662,21 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 	}
 	switch (type)
 	{
+	case MSG_DESCRIPTION_COMMAND:
+	{
+		const auto dc = static_cast<DescriptionCommand*>(data);
+		if (dc->_descId[0].id == PMX_BONE_MORPH_ADD_BUTTON)
+		{
+			GeData ge_data;
+			node->GetParameter(ConstDescID(DescLevel(PMX_BONE_MORPH_ADD_NAME)), ge_data, DESCFLAGS_GET::NONE);
+			AddBoneMorph(ge_data.GetString());
+		}
+		else
+		{
+			HandleBoneMorphButtonCommand(dc->_descId);
+		}
+		break;
+	}
 	case MSG_DESCRIPTION_CHECKUPDATE:
 		HandleDescriptionUpdate(node, bc, static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id);
 		break;
@@ -792,14 +1011,36 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 		const Eigen::Vector3f translate = local.col(3).head<3>() - mmd_node_->GetInitialTranslate();
 		const auto pm = bone_manager_data_->GetPositionMultiple();
 
-		// MMD and C4D are both left-handed but with opposite Z directions
-		// (MMD Z+ into screen, C4D Z+ toward viewer).
-		// Position delta is in original space (same as frozen pos / mesh), no conversion needed.
-		// Rotation must be converted via S*R*S (S=diag(1,1,-1)) to match C4D's axis convention.
 		bone_object_->SetRelMl(Matrix{Vector(translate.x(), translate.y(), translate.z()) * pm,
 		   Vector( local(0,0),  local(1,0), -local(2,0)),
 		   Vector( local(0,1),  local(1,1), -local(2,1)),
 		   Vector(-local(0,2), -local(1,2),  local(2,2)) });
+	}
+	else if (bone_mode_ == BONE_MODE_ANIM && !bone_morph_data_arr_.IsEmpty())
+	{
+		GeData ge_data;
+		op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), ge_data, DESCFLAGS_GET::NONE);
+		Vector op_position = ge_data.GetVector() - prev_position_;
+		prev_position_ = Vector();
+		op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), ge_data, DESCFLAGS_GET::NONE);
+		Vector op_rotation = ge_data.GetVector() - prev_rotation_;
+		prev_rotation_ = Vector();
+
+		for (const auto& morph : bone_morph_data_arr_)
+		{
+			Float strength = 0;
+			if (tag->GetParameter(morph.strength_id, ge_data, DESCFLAGS_GET::NONE))
+				strength = ge_data.GetFloat();
+
+			if (tag->GetParameter(morph.translation_id, ge_data, DESCFLAGS_GET::NONE))
+				prev_position_ += ge_data.GetVector() * strength;
+
+			if (tag->GetParameter(morph.rotation_id, ge_data, DESCFLAGS_GET::NONE))
+				prev_rotation_ += ge_data.GetVector() * strength;
+		}
+
+		op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), op_position + prev_position_, DESCFLAGS_SET::NONE);
+		op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), op_rotation + prev_rotation_, DESCFLAGS_SET::NONE);
 	}
 
 	return EXECUTIONRESULT::OK;
@@ -807,13 +1048,29 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
+	iferr_scope_handler{ return false; };
 	IOReadField(bone_manager_data_);
+	IOReadField(bone_morph_name_index_);
+	if (!io_util::ReadLinearContainer(hf, bone_morph_data_arr_))
+		return false;
+	for (Int32 i = 0; i < bone_morph_data_arr_.GetCount(); i++)
+	{
+		auto& d = bone_morph_data_arr_[i];
+		DescID del_id = d.button_delete_id;
+		DescID ren_id = d.button_rename_id;
+		bone_morph_button_id_map_.Insert(std::move(del_id), i)iferr_return;
+		bone_morph_button_id_map_.Insert(std::move(ren_id), i)iferr_return;
+	}
 	return SUPER::Read(node, hf, level);
 }
 
 SDK2024_Write(MMDBoneTag)
 {
 	IOWriteField(bone_manager_data_);
+	IOWriteField(bone_morph_name_index_);
+	const auto& morph_arr_ref = bone_morph_data_arr_;
+	if (!io_util::WriteLinearContainer(hf, morph_arr_ref))
+		return false;
 	return SUPER::Write(node, hf);
 }
 

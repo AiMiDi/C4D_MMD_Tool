@@ -394,11 +394,14 @@ void MMDModelManagerObject::RefreshMorph()
 	{
 		AddMorph(MMDMorphType::MESH, name);
 	}
-	//auto& bone_morph_map = m_bone_root->GetNodeData<MMDBoneManagerObject>()->GetBoneMorphData();
-	//for (auto& name : bone_morph_map.GetKeys())
-	//{
-	//	AddMorph(MMDMorphType::BONE, name);
-	//}
+	if (bone_manager_)
+	{
+		auto& bone_morph_map = bone_manager_->GetNodeData<MMDBoneManagerObject>()->GetBoneMorphMap();
+		for (auto& name : bone_morph_map.GetKeys())
+		{
+			AddMorph(MMDMorphType::BONE, name);
+		}
+	}
 }
 
 static void SendObjectUpdateMessage(BaseObject* dst, BaseObject* obj)

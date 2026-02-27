@@ -4,6 +4,7 @@
 #include "mmd_morph.h"
 #include "mmd_model_manager.h"
 #include "mmd_mesh_manager.h"
+#include "mmd_bone_manager.h"
 #include "description/OMMDModelManager.h"
 
 inline Bool IMorph::Read(HyperFile* hf)
@@ -246,10 +247,17 @@ inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
 
 inline void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
 {
-	/*if (BaseObject* bone_root = model.GetMeshManagerObject(ManagerObjectType::BONE_MANAGER))
+	if (BaseObject* bone_manager = model.GetBoneManagerObject())
 	{
-		bone_root->GetNodeData<MMDBoneManagerObject>()->SetBoneMorphStrength(m_name, GetStrength(model.Get()));
-	}*/
+		auto& bone_morph_map = bone_manager->GetNodeData<MMDBoneManagerObject>()->GetBoneMorphMap();
+		if (auto* entry = bone_morph_map.Find(m_name))
+		{
+			for (auto& hub : entry->GetValue())
+			{
+				hub.SetStrength(GetStrength(model.Get()));
+			}
+		}
+	}
 }
 
 inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)

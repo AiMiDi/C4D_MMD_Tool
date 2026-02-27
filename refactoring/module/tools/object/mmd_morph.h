@@ -27,7 +27,7 @@ public:
 
 	IMorph& operator=(const IMorph&) = delete;
 	IMorph& operator=(IMorph&& other) noexcept = default;
-
+ 
 	[[nodiscard]] const String& GetName() const { return m_name; }
 	Float GetStrength(SDK2024_Const GeListNode* node) const;
 	Bool SetStrength(GeListNode* node, const Float& strength) const;

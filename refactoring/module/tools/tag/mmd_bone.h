@@ -13,6 +13,9 @@ Description:	DESC
 #include <c4d.h>
 #include "module/core/cmt_marco.h"
 #include "description/OMMDBoneManager.h"
+#include "maxon/pointerarray.h"
+
+namespace libmmd { class MMDIkSolver; }
 
 class MMDBoneManagerObject;
 struct MMDBoneManagerObjectMsg;
@@ -23,17 +26,50 @@ namespace CMTToolsSetting
 }
 
 
+struct BoneMorphTagData
+{
+	DescID	grp_id;
+	DescID	strength_id;
+	DescID	translation_id;
+	DescID	rotation_id;
+	DescID	button_grp_id;
+	DescID	button_delete_id;
+	DescID	button_rename_id;
+	String	name;
+
+	BoneMorphTagData() = default;
+	BoneMorphTagData(const BoneMorphTagData&) = delete;
+	BoneMorphTagData& operator=(const BoneMorphTagData&) = delete;
+	BoneMorphTagData(BoneMorphTagData&& other) noexcept = default;
+	BoneMorphTagData& operator=(BoneMorphTagData&& other) noexcept = default;
+
+	Bool Write(HyperFile* hf) SDK2024_Const;
+	Bool Read(HyperFile* hf);
+};
+
 enum class MMDBoneTagMsgType : int8_t
 {
 	DEFAULT = -1,
 	BONE_INDEX_CHANGE,
+	BONE_MORPH_ADD,
+	BONE_MORPH_DELETE,
+	BONE_MORPH_RENAME
 };
 
 class MMDBoneTagMsg
 {
 public:
 	MMDBoneTagMsgType type;
-	explicit MMDBoneTagMsg(const MMDBoneTagMsgType in_type = MMDBoneTagMsgType::DEFAULT) : type(in_type){}
+	String name;
+	String name_old;
+	BaseTag* bone_tag = nullptr;
+	DescID strength_id;
+
+	explicit MMDBoneTagMsg(const MMDBoneTagMsgType in_type = MMDBoneTagMsgType::DEFAULT) : type(in_type) {}
+	MMDBoneTagMsg(MMDBoneTagMsgType in_type, const String& name_, const DescID& strength_id_, BaseTag* tag_)
+		: type(in_type), name(name_), bone_tag(tag_), strength_id(strength_id_) {}
+	MMDBoneTagMsg(MMDBoneTagMsgType in_type, const String& name_, const DescID& strength_id_, BaseTag* tag_, const String& old_name_)
+		: type(in_type), name(name_), name_old(old_name_), bone_tag(tag_), strength_id(strength_id_) {}
 	virtual ~MMDBoneTagMsg() = default;
 	MMDBoneTagMsg(const MMDBoneTagMsg&) = delete; void operator =(const MMDBoneTagMsg&) = delete;
 	MMDBoneTagMsg(MMDBoneTagMsg&&) = delete; void operator =(MMDBoneTagMsg&&) = delete;
@@ -61,6 +97,13 @@ class MMDBoneTag final : public TagData
 	Int32 bone_mode_ = BONE_MODE_ANIM;
 	// Is IK
 	Bool is_IK = false;
+
+	// Bone morph data
+	Int32 bone_morph_name_index_ = 0;
+	maxon::PointerArray<BoneMorphTagData> bone_morph_data_arr_;
+	maxon::HashMap<DescID, Int32> bone_morph_button_id_map_;
+	Vector prev_position_;
+	Vector prev_rotation_;
 
 	friend class MMDBoneManagerObject;
 
@@ -166,7 +209,12 @@ public:
 	 */
 	Int32 GetBoneIndex() const;
 
+	Int32 AddBoneMorph(String morph_name = {});
+	Bool SetBoneMorphTranslationNoCheck(Int32 id, Vector translation);
+	Bool SetBoneMorphRotationNoCheck(Int32 id, Vector rotation);
+
 private:
+	void HandleBoneMorphButtonCommand(const DescID& desc_id);
 	/**
 	 * @brief Creates a bone lock tag for the MMDBoneTag.
 	 * @return true if the bone lock tag is created successfully, false otherwise.
