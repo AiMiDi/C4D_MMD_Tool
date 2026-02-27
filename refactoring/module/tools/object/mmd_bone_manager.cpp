@@ -597,6 +597,8 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 
 		if(is_IK)
 		{
+			if (auto* pmx_node = static_cast<libmmd::PMXNode*>(mmd_node_manager_->GetMMDNode(mmd_bone_index)))
+				bone_tag_node->ik_solver_ = pmx_node->GetIKSolver();
 			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IK_TARGET_BONE_INDEX)), mmd_bone.m_ikTargetBoneIndex, DESCFLAGS_SET::NONE);
 			MAXON_SCOPE // set IK target link
 			{
@@ -653,20 +655,26 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 						dynamic_description->Alloc(bc);
 					}
 
-					bc = GetCustomDataTypeDefault(DTYPE_BOOL);
-					bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT));
-					bc.SetBool(DESC_DEFAULT, pmx_bone_ik_link.m_enableLimit);
-					bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
+				bc = GetCustomDataTypeDefault(DTYPE_BOOL);
+				bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT));
+				bc.SetBool(DESC_DEFAULT, pmx_bone_ik_link.m_enableLimit);
+				bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+				bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
+				dynamic_description->Alloc(bc);
 
-					bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
-					bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN));
-					bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMin.x(), pmx_bone_ik_link.m_limitMin.y(), pmx_bone_ik_link.m_limitMin.z()));
-					bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
+				bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
+				bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN));
+				bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMin.x(), pmx_bone_ik_link.m_limitMin.y(), pmx_bone_ik_link.m_limitMin.z()));
+				bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+				bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
+				dynamic_description->Alloc(bc);
 
-					bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
-					bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX));
-					bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMax.x(), pmx_bone_ik_link.m_limitMax.y(), pmx_bone_ik_link.m_limitMax.z()));
-					bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
+				bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
+				bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX));
+				bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMax.x(), pmx_bone_ik_link.m_limitMax.y(), pmx_bone_ik_link.m_limitMax.z()));
+				bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+				bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
+				dynamic_description->Alloc(bc);
 				}
 			}
 		}

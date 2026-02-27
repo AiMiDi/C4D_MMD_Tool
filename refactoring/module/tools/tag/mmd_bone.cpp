@@ -476,6 +476,99 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	}
 }
 
+void MMDBoneTag::RebuildIKChains()
+{
+	if (!ik_solver_ || !bone_manager_data_)
+		return;
+
+	const BaseTag* tag = Get();
+	if (!tag)
+		return;
+
+	const DynamicDescription* dyn_desc = tag->GetDynamicDescriptionReadable();
+	if (!dyn_desc)
+		return;
+
+	const String name_ik_bone = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE);
+	const String name_enable_limit = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT);
+	const String name_limit_min = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN);
+	const String name_limit_max = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX);
+
+	struct ChainEntry
+	{
+		Int32 bone_index = -1;
+		Bool enable_limit = false;
+		Vector limit_min;
+		Vector limit_max;
+	};
+	maxon::BaseArray<ChainEntry> entries;
+
+	void* browse_handle = dyn_desc->BrowseInit();
+	DescID dyn_id;
+	const BaseContainer* dyn_bc = nullptr;
+
+	while (dyn_desc->BrowseGetNext(browse_handle, &dyn_id, &dyn_bc))
+	{
+		if (!dyn_bc)
+			continue;
+
+		const String name = dyn_bc->GetString(DESC_NAME);
+		GeData value;
+
+		if (name == name_ik_bone)
+		{
+			ChainEntry entry;
+			if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
+				entry.bone_index = value.GetInt32();
+			entries.Append(std::move(entry)) iferr_ignore("IK chain rebuild"_s);
+		}
+		else if (!entries.IsEmpty())
+		{
+			auto& cur = entries[entries.GetCount() - 1];
+			if (name == name_enable_limit)
+			{
+				if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
+					cur.enable_limit = value.GetBool();
+			}
+			else if (name == name_limit_min)
+			{
+				if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
+					cur.limit_min = value.GetVector();
+			}
+			else if (name == name_limit_max)
+			{
+				if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
+					cur.limit_max = value.GetVector();
+			}
+		}
+	}
+	dyn_desc->BrowseFree(browse_handle);
+
+	if (entries.IsEmpty())
+		return;
+
+	ik_solver_->ClearIKChains();
+	for (const auto& entry : entries)
+	{
+		if (const BaseTag* chain_tag = bone_manager_data_->FindBone(entry.bone_index))
+		{
+			if (auto* chain_node = chain_tag->GetNodeData<MMDBoneTag>(); chain_node && chain_node->mmd_node_)
+			{
+				if (entry.enable_limit)
+				{
+					const Eigen::Vector3f lmin(static_cast<float>(entry.limit_min.x), static_cast<float>(entry.limit_min.y), static_cast<float>(entry.limit_min.z));
+					const Eigen::Vector3f lmax(static_cast<float>(entry.limit_max.x), static_cast<float>(entry.limit_max.y), static_cast<float>(entry.limit_max.z));
+					ik_solver_->AddIKChain(chain_node->mmd_node_, true, lmin, lmax);
+				}
+				else
+				{
+					ik_solver_->AddIKChain(chain_node->mmd_node_);
+				}
+			}
+		}
+	}
+}
+
 void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 {
 	if (bone_mode_ == bone_mode)
@@ -483,12 +576,14 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 
 	if (bone_mode == BONE_MODE_EDIT)
 	{
-		// TODO: Save to mmd_node_
 		if (bone_object_)
 			bone_object_->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
 	}
 	else
 	{
+		if (bone_mode_ == BONE_MODE_EDIT && is_IK)
+			RebuildIKChains();
+
 		if (bone_object_)
 			bone_object_->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	}
@@ -876,9 +971,35 @@ case PMX_BONE_LAYER:
 		}
 		break;
 	}
+	case PMX_BONE_IK_ITERATION:
+	{
+		if (ik_solver_)
+			ik_solver_->SetIterateCount(static_cast<uint32_t>(t_data.GetInt32()));
+		break;
+	}
+	case PMX_BONE_IK_UNIT_ANGLE:
+	{
+		if (ik_solver_)
+			ik_solver_->SetLimitAngle(static_cast<float>(t_data.GetFloat()));
+		break;
+	}
+	case PMX_BONE_IK_TARGET_BONE_INDEX:
+	{
+		if (ik_solver_ && bone_manager_data_)
+		{
+			if (const BaseTag* target_tag = bone_manager_data_->FindBone(t_data.GetInt32()))
+			{
+				if (auto* target_tag_node = target_tag->GetNodeData<MMDBoneTag>(); target_tag_node && target_tag_node->mmd_node_)
+					ik_solver_->SetTargetNode(target_tag_node->mmd_node_);
+			}
+		}
+		break;
+	}
 	case PMX_BONE_IS_IK:
 	{
-		is_IK = bc->GetBool(PMX_BONE_IS_IK);
+		is_IK = t_data.GetBool();
+		if (ik_solver_)
+			ik_solver_->Enable(is_IK);
 		const auto state = reinterpret_cast<BaseList2D*>(Get())->GetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), true);
 		if (is_IK)
 			reinterpret_cast<BaseList2D*>(Get())->SetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), ~DESCIDSTATE::HIDDEN & state);

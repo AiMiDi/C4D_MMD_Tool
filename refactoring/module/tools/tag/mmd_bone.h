@@ -87,6 +87,8 @@ class MMDBoneTag final : public TagData
 {
 	// Bone MMD node
 	libmmd::MMDNode* mmd_node_ = nullptr;
+	// IK solver (non-null only for IK bones)
+	libmmd::MMDIkSolver* ik_solver_ = nullptr;
 	// Bone manager ObjectData
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
 	// Corresponding bone object
@@ -230,6 +232,8 @@ private:
 	void HandleDescriptionUpdate(GeListNode* node, BaseContainer* bc, Int32 id);
 
 	void HandleBoneModeChange(Int32 bone_mode);
+
+	void RebuildIKChains();
 
 	/**
 	 * @brief Sets the rotation lock for the MMDBoneTag.
