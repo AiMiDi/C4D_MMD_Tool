@@ -69,4 +69,4 @@ enum
 	PMX_BONE_TAIL_IS_INDEX = 1,//是连接相对位置
 
 };
-#endif _PMX_BONE_TAG_H_
+#endif // _PMX_BONE_TAG_H_

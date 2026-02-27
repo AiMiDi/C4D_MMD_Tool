@@ -355,6 +355,47 @@ inline void MeshMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
+UVMorph::UVMorph(String name, DescID strength_id) : IMorph(std::move(name), std::move(strength_id))
+{}
+
+UVMorph::UVMorph(UVMorph&& other) noexcept : IMorph(std::move(other))
+{}
+
+inline void UVMorph::UpdateMorph(MMDModelManagerObject& model)
+{
+	if (BaseObject* mesh_manager = model.GetMeshManagerObject())
+	{
+		mesh_manager->GetNodeData<MMDMeshManagerObject>()->SetMorphStrength(m_name, GetStrength(model.Get()));
+	}
+}
+
+inline void UVMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+{
+	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
+	bc.SetString(DESC_NAME, m_name);
+	bc.SetFloat(DESC_MAX, 1.);
+	bc.SetFloat(DESC_MIN, 0.);
+	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
+	bc.SetFloat(DESC_MAXSLIDER, 1.);
+	bc.SetFloat(DESC_MINSLIDER, 0.);
+	bc.SetFloat(DESC_STEP, 0.01);
+	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_UV_GRP))));
+	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+}
+
+inline void UVMorph::DeleteMorphUI(MMDModelManagerObject& model)
+{
+	model.DeleteDynamicDescription(m_strength_id);
+
+	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (::GeIsMainThread())
+	{
+		::EventAdd();
+	}
+}
+
 inline void BoneMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);

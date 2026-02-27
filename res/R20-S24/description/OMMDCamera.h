@@ -5,4 +5,4 @@ enum
 
 };
 
-#endif _VMD_CAM_OBJ_H_
+#endif // _VMD_CAM_OBJ_H_

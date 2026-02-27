@@ -48,6 +48,7 @@ class MMDMeshManagerObject final : public MMDManagerObject
 
 	libmmd::MMDMorphManager* mmd_morph_manager_;
 	maxon::HashMap<String, Int32> mesh_morph_name_;
+	maxon::HashSet<String> uv_morph_names_;
 	maxon::BaseArray<Int32> morph_manager_index_;
 	maxon::BaseArray<maxon::PointerArray<MorphUIData>> mesh_morph_data_;
 
@@ -69,6 +70,7 @@ public:
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 
 	[[nodiscard]] const maxon::HashMap<String, Int32>& GetMeshMorphData() const;
+	[[nodiscard]] const maxon::HashSet<String>& GetUVMorphNames() const;
 	Bool SetMorphStrength(const String& morph_name, const Float& strength);
 	Bool LoadPMX(
 		const libmmd::PMXFile& pmx_file,

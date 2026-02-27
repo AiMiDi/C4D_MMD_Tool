@@ -22,6 +22,7 @@ STRINGTABLE OMMDModelManager
 			MODEL_MORPH_FLIP_ADD_NAME "Add flip morph name";
 			MODEL_MORPH_FLIP_ADD_BUTTON "Add flip morph";
 		MODEL_MORPH_MESH_GRP "Vertex morph";
+		MODEL_MORPH_UV_GRP "UV morph";
 		MODEL_MORPH_BONE_GRP "Bone morph";
 	MODEL_ANIM_NONE "-- No animation --";
 	MODEL_MODE_EDIT "Edit mode";

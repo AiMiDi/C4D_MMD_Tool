@@ -481,11 +481,11 @@ void MMDBoneTag::RebuildIKChains()
 	if (!ik_solver_ || !bone_manager_data_)
 		return;
 
-	const BaseTag* tag = Get();
+	auto* tag = static_cast<BaseTag*>(Get());
 	if (!tag)
 		return;
 
-	const DynamicDescription* dyn_desc = tag->GetDynamicDescriptionReadable();
+	DynamicDescription* dyn_desc = tag->GetDynamicDescriptionWritable();
 	if (!dyn_desc)
 		return;
 

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <c4d.h>
 #include "module/core/cmt_marco.h"
@@ -11,7 +11,8 @@ enum class MMDMorphType : uint8_t
 	GROUP = 1,
 	FLIP = 1 << 1,
 	MESH = 1 << 2,
-	BONE = 1 << 3
+	BONE = 1 << 3,
+	UV = 1 << 4
 };
 
 class IMorph
@@ -138,6 +139,23 @@ public:
 	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
 	void DeleteMorphUI(MMDModelManagerObject& model) override;
 	MMDMorphType GetType() const override { return MMDMorphType::MESH; }
+};
+
+class UVMorph final : public IMorph
+{
+public:
+	explicit UVMorph(String name = {}, DescID strength_id = {});
+	UVMorph(const UVMorph&) = delete;
+	UVMorph(UVMorph&& other) noexcept;
+	~UVMorph() override = default;
+
+	UVMorph& operator=(const UVMorph&) = delete;
+	UVMorph& operator=(UVMorph&& other) noexcept = default;
+
+	void UpdateMorph(MMDModelManagerObject& model) override;
+	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelManagerObject& model) override;
+	MMDMorphType GetType() const override { return MMDMorphType::UV; }
 };
 
 class BoneMorph final : public IMorph

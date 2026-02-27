@@ -71,6 +71,18 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	if (!io_util::ReadLinearContainer(hf, mesh_morph_data_))
 		return false;
 
+	Int64 uv_count = 0;
+	if (!hf->ReadInt64(&uv_count))
+		return SUPER::Read(node, hf, level);
+	uv_morph_names_.Reset();
+	for (Int64 i = 0; i < uv_count; ++i)
+	{
+		String s;
+		if (!io_util::ReadData(hf, s))
+			return false;
+		uv_morph_names_.Insert(s)iferr_return;
+	}
+
 	return SUPER::Read(node, hf, level);
 }
 
@@ -91,6 +103,14 @@ SDK2024_Write(MMDMeshManagerObject)
 	if (!io_util::WriteLinearContainer(hf, mesh_morph_data_))
 		return false;
 
+	if (!hf->WriteInt64(uv_morph_names_.GetCount()))
+		return false;
+	for (const auto& name : uv_morph_names_)
+	{
+		if (!io_util::WriteData(hf, name))
+			return false;
+	}
+
 	return SUPER::Write(node, hf);
 }
 
@@ -108,6 +128,10 @@ SDK2024_CopyTo(MMDMeshManagerObject)
 	for (const auto& entry : mesh_morph_name_)
 	{
 		dest_object->mesh_morph_name_.Insert(entry.GetKey(), entry.GetValue())iferr_return;
+	}
+	for (const auto& name : uv_morph_names_)
+	{
+		dest_object->uv_morph_names_.Insert(name)iferr_return;
 	}
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
@@ -251,6 +275,11 @@ Bool MMDMeshManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 const maxon::HashMap<String, Int32>& MMDMeshManagerObject::GetMeshMorphData() const
 {
 	return mesh_morph_name_;
+}
+
+const maxon::HashSet<String>& MMDMeshManagerObject::GetUVMorphNames() const
+{
+	return uv_morph_names_;
 }
 
 Bool MMDMeshManagerObject::SetMorphStrength(const String& morph_name, const Float& strength)
@@ -668,6 +697,8 @@ Bool MMDMeshManagerObject::LoadPMX(
 					morph->SetName(maxon::String{ pmx_morph.m_name.c_str() });
 
 					morph->Store(setting.doc, morph_tag, CAMORPH_DATA_FLAGS::ASTAG);
+
+					uv_morph_names_.Insert(maxon::String{ pmx_morph.m_name.c_str() })iferr_return;
 
 					// set morph node to end
 					CAMorphNode* morph_node = morph->GetFirst();
@@ -1163,6 +1194,8 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 					if (uv_morphs.empty())
 						continue;
+
+					uv_morph_names_.Insert(pmx_morph_name)iferr_return;
 
 					// vertex_index -> uv offset
 					maxon::HashMap<Int32, std::tuple<CAMorphNode*, Vector>> morph_uv_map;

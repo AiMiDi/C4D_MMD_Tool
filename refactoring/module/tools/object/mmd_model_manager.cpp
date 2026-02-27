@@ -389,10 +389,13 @@ void MMDModelManagerObject::RefreshMorph()
 	{
 		DeleteMorph(it);
 	}
-	auto& mesh_morph_map = mesh_manager_->GetNodeData<MMDMeshManagerObject>()->GetMeshMorphData();
+	auto* mesh_manager_data = mesh_manager_->GetNodeData<MMDMeshManagerObject>();
+	auto& mesh_morph_map = mesh_manager_data->GetMeshMorphData();
+	const auto& uv_morph_names = mesh_manager_data->GetUVMorphNames();
 	for (auto& name : mesh_morph_map.GetKeys())
 	{
-		AddMorph(MMDMorphType::MESH, name);
+		const auto morph_type = uv_morph_names.Find(name) ? MMDMorphType::UV : MMDMorphType::MESH;
+		AddMorph(morph_type, name);
 	}
 	if (bone_manager_)
 	{
@@ -1227,6 +1230,13 @@ Int MMDModelManagerObject::AddMorph(const MMDMorphType& morph_type, String morph
 			morph_name = FormatString("Mesh morph @", GetMorphNamedNumber());
 		}
 		morph = NewObj(MeshMorph, morph_name)iferr_return;
+		break;
+	case MMDMorphType::UV:
+		if (morph_name.IsEmpty())
+		{
+			morph_name = FormatString("UV morph @", GetMorphNamedNumber());
+		}
+		morph = NewObj(UVMorph, morph_name)iferr_return;
 		break;
 	case MMDMorphType::BONE:
 
