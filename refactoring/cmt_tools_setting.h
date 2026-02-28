@@ -82,6 +82,7 @@ namespace CMTToolsSetting
 			Standard,
 			RedShift,
 			Octane,
+			Corona,
 		};
 
 		Float	position_multiple{};

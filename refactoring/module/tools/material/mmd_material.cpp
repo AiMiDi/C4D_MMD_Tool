@@ -1,5 +1,8 @@
 #include "mmd_material.h"
 #include "mmd_standard_material.h"
+#include "mmd_redshift_material.h"
+#include "mmd_octane_material.h"
+#include "mmd_corona_material.h"
 #include "cmt_tools_setting.h"
 #include "utils/io_util.hpp"
 #include "utils/string_util.hpp"
@@ -215,9 +218,11 @@ BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::PMXMaterial& pmx
 	case CMTToolsSetting::ModelImport::material_type::Standard:
 		return CreateStandardMaterialFromPMX(pmx_material, m_texture_path_array, material_name);
 	case CMTToolsSetting::ModelImport::material_type::RedShift:
-		break;
+		return CreateRedShiftMaterialFromPMX(pmx_material, m_texture_path_array, material_name);
 	case CMTToolsSetting::ModelImport::material_type::Octane:
-		break;
+		return CreateOctaneMaterialFromPMX(pmx_material, m_texture_path_array, material_name);
+	case CMTToolsSetting::ModelImport::material_type::Corona:
+		return CreateCoronaMaterialFromPMX(pmx_material, m_texture_path_array, material_name);
 	}
 	return nullptr;
 }

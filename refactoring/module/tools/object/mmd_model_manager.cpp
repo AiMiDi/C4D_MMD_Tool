@@ -16,6 +16,9 @@ Description:	MMD model object
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
 #include "module/tools/material/mmd_standard_material.h"
+#include "module/tools/material/mmd_redshift_material.h"
+#include "module/tools/material/mmd_octane_material.h"
+#include "module/tools/material/mmd_corona_material.h"
 #include "mmd_bone_manager.h"
 #include "mmd_joint_manager.h"
 #include "mmd_mesh_manager.h"
@@ -1314,6 +1317,15 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					case MODEL_MATERIAL_CREATE_TYPE_STANDARD:
 						new_mat = CreateStandardMaterialFromData(mat);
 						break;
+					case MODEL_MATERIAL_CREATE_TYPE_REDSHIFT:
+						new_mat = CreateRedShiftMaterialFromData(mat);
+						break;
+					case MODEL_MATERIAL_CREATE_TYPE_OCTANE:
+						new_mat = CreateOctaneMaterialFromData(mat);
+						break;
+					case MODEL_MATERIAL_CREATE_TYPE_CORONA:
+						new_mat = CreateCoronaMaterialFromData(mat);
+						break;
 					default:
 						break;
 					}
@@ -1343,7 +1355,33 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					{
 						BaseMaterial* linked_mat = static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc));
 						if (linked_mat)
+						{
 							SyncToStandardMaterial(mat, linked_mat);
+							SyncToRedShiftMaterial(mat, linked_mat);
+							SyncToOctaneMaterial(mat, linked_mat);
+							SyncToCoronaMaterial(mat, linked_mat);
+						}
+						EventAdd();
+					}
+				}
+				break;
+			}
+			case MODEL_MATERIAL_REVERSE_SYNC_BUTTON:
+			{
+				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
+				{
+					auto& mat = material_list_[material_selection_index_];
+					BaseDocument* doc = node->GetDocument();
+					if (doc && mat.material_link && *mat.material_link)
+					{
+						BaseMaterial* linked_mat = static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc));
+						if (linked_mat)
+						{
+							ReadFromStandardMaterial(linked_mat, mat);
+							ReadFromRedShiftMaterial(linked_mat, mat);
+							ReadFromOctaneMaterial(linked_mat, mat);
+							ReadFromCoronaMaterial(linked_mat, mat);
+						}
 						EventAdd();
 					}
 				}
@@ -1509,7 +1547,12 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 						? static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc))
 						: nullptr;
 					if (linked_mat)
+					{
 						SyncToStandardMaterial(mat, linked_mat);
+						SyncToRedShiftMaterial(mat, linked_mat);
+						SyncToOctaneMaterial(mat, linked_mat);
+						SyncToCoronaMaterial(mat, linked_mat);
+					}
 					return true;
 				}
 			}
@@ -1535,6 +1578,7 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 	case MODEL_MATERIAL_CREATE_TYPE:
 		return material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount();
 	case MODEL_MATERIAL_SYNC_BUTTON:
+	case MODEL_MATERIAL_REVERSE_SYNC_BUTTON:
 		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
 		{
 			const auto& mat = material_list_[material_selection_index_];

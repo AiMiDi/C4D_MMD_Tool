@@ -155,3 +155,50 @@ void SyncToStandardMaterial(const MMDMaterialData& data, BaseMaterial* material)
 	Float specular_width = maxon::Clamp01(data.specular_power / 100.0);
 	mat->SetParameter(ConstDescID(DescLevel(MATERIAL_SPECULAR_WIDTH)), specular_width, DESCFLAGS_SET::NONE);
 }
+
+void ReadFromStandardMaterial(const BaseMaterial* material, MMDMaterialData& data)
+{
+	if (!material || !material->IsInstanceOf(Mmaterial))
+		return;
+	Material* mat = const_cast<Material*>(static_cast<const Material*>(material));
+	data.name_local = mat->GetName();
+	BaseDocument* doc = mat->GetDocument();
+	BaseChannel* color_ch = mat->GetChannel(CHANNEL_COLOR);
+	if (color_ch)
+	{
+		BaseContainer bc = color_ch->GetData();
+		if (bc.GetString(BASECHANNEL_TEXTURE).IsEmpty())
+		{
+			GeData gd;
+			if (mat->GetParameter(ConstDescID(DescLevel(MATERIAL_COLOR_SHADER)), gd, DESCFLAGS_GET::NONE))
+			{
+				BaseShader* sh = static_cast<BaseShader*>(gd.GetLink(doc));
+				if (sh && sh->IsInstanceOf(Xcolor))
+				{
+					GeData color_data;
+					if (sh->GetParameter(ConstDescID(DescLevel(COLORSHADER_COLOR)), color_data, DESCFLAGS_GET::NONE))
+						data.diffuse_rgb = color_data.GetVector();
+				}
+			}
+		}
+	}
+	BaseChannel* alpha_ch = mat->GetChannel(CHANNEL_ALPHA);
+	if (alpha_ch)
+	{
+		BaseContainer ac = alpha_ch->GetData();
+		if (ac.GetString(BASECHANNEL_TEXTURE).IsEmpty())
+		{
+			GeData gd;
+			if (mat->GetParameter(ConstDescID(DescLevel(MATERIAL_ALPHA_SHADER)), gd, DESCFLAGS_GET::NONE))
+			{
+				BaseShader* ash = static_cast<BaseShader*>(gd.GetLink(doc));
+				if (ash && ash->IsInstanceOf(Xcolor))
+				{
+					GeData brightness_data;
+					if (ash->GetParameter(ConstDescID(DescLevel(COLORSHADER_BRIGHTNESS)), brightness_data, DESCFLAGS_GET::NONE))
+						data.diffuse_alpha = brightness_data.GetFloat();
+				}
+			}
+		}
+	}
+}

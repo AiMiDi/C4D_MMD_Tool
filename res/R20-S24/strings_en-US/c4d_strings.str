@@ -51,6 +51,8 @@ STRINGTABLE
 	IDS_MES_EXPORT_MOT_NO_ANIM "No active animation to export";
 	IDS_MES_EXPORT_MOT_OK "Successfully exported # bone's and # morph's # Frame(s) at # ms!";
 
+	IDS_MES_RENDERER_NOT_INSTALLED "# renderer is not installed, cannot create material!";
+
 	IDS_MORPH_BONE_TRANSLATION "Bone translation";
 	IDS_MORPH_BONE_ROTATION "Bone rotation";
 	IDS_MORPH_DELETE "Delete morph";

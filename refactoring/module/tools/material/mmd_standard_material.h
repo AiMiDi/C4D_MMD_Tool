@@ -12,3 +12,6 @@ BaseMaterial* CreateStandardMaterialFromData(const MMDMaterialData& data);
 
 /** 将 MMD 材质数据同步到 C4D 标准材质（颜色、Alpha、反射、名称）。 */
 void SyncToStandardMaterial(const MMDMaterialData& data, BaseMaterial* material);
+
+/** 从 C4D 标准材质读取 diffuse/alpha 属性回写到 MMD 材质数据。 */
+void ReadFromStandardMaterial(const BaseMaterial* material, MMDMaterialData& data);

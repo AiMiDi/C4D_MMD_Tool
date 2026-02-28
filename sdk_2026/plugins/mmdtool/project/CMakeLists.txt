@@ -45,6 +45,7 @@ set(maxon_targetFrameworkDependencies
   core.framework
   image.framework
   math.framework
+  nodespace.framework
 )
 set(maxon_targetPublicCompileDefinitions USE_API_MAXON)
 set(maxon_targetPrivateCompileDefinitions MAXON_CMAKE_BUILD MAXON_MODULE_ID="net.aimidi.mmdtool")
