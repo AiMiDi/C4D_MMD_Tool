@@ -192,6 +192,11 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		GetItem(DLG_CMT_TOOL_MODEL_IMPORT_MULTIPART, setting.import_multipart);
 		GetItem(DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH, setting.import_english);
 		GetItem(DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK, setting.import_english_check);
+		{
+			Int32 mat_type_val = 0;
+			GetItem(DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE, mat_type_val);
+			setting.import_material_type = static_cast<CMTToolsSetting::ModelImport::material_type>(mat_type_val);
+		}
 		if (!filename_util::SelectSuffixImportFile(setting.fn, "pmx"_s))
 		{
 			return false;

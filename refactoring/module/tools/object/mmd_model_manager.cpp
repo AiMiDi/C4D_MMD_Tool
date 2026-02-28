@@ -15,6 +15,7 @@ Description:	MMD model object
 #include "mmd_model_manager.h"
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
+#include "module/tools/material/mmd_standard_material.h"
 #include "mmd_bone_manager.h"
 #include "mmd_joint_manager.h"
 #include "mmd_mesh_manager.h"
@@ -278,6 +279,24 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	if (!ReadMorph(hf))
 		return false;
 
+	if (level >= 1)
+	{
+		Int64 mat_count = 0;
+		if (hf->ReadInt64(&mat_count) && mat_count >= 0 && mat_count <= 10000)
+		{
+			iferr(material_list_.Resize(0))
+				return false;
+			for (Int64 i = 0; i < mat_count; ++i)
+			{
+				MMDMaterialData mat;
+				if (!mat.Read(hf))
+					return false;
+				iferr(material_list_.Append(std::move(mat)))
+					return false;
+			}
+		}
+	}
+
 	*is_morph_initialized_.Write() = true;
 	return true;
 }
@@ -297,6 +316,11 @@ SDK2024_Write(MMDModelManagerObject) {
 
 	if (!WriteMorph(hf))
 		return false;
+	if (!hf->WriteInt64(material_list_.GetCount()))
+		return false;
+	for (Int32 i = 0; i < material_list_.GetCount(); ++i)
+		if (!material_list_[i].Write(hf))
+			return false;
 	return true;
 }
 SDK2024_CopyTo(MMDModelManagerObject)
@@ -312,6 +336,17 @@ SDK2024_CopyTo(MMDModelManagerObject)
 		return false;
 	if (!CopyMorph(destObject))
 		return false;
+	iferr(destObject->material_list_.Resize(0))
+		return false;
+	destObject->material_selection_index_ = material_selection_index_;
+	for (Int32 i = 0; i < material_list_.GetCount(); ++i)
+	{
+		MMDMaterialData copy;
+		if (!material_list_[i].CopyTo(copy))
+			return false;
+		iferr(destObject->material_list_.Append(std::move(copy)))
+			return false;
+	}
 	return true;
 }
 Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
@@ -762,6 +797,9 @@ void MMDModelManagerObject::ImportDisplayFrames(const libmmd::PMXFile& pmx_file)
 Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
 	SetMMDModel(pmx_model);
+	iferr(material_list_.Resize(0))
+		return false;
+	material_selection_index_ = -1;
 
 	if (BaseContainer* bc = reinterpret_cast<BaseList2D*>(Get())->GetDataInstance())
 	{
@@ -817,9 +855,26 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	return true;
 }
 
+Bool MMDModelManagerObject::AddMaterial(const libmmd::PMXMaterial& pmx_material, BaseMaterial* c4d_material)
+{
+	iferr_scope_handler { return false; };
+	MMDMaterialData mat;
+	mat.FromPMX(pmx_material);
+	if (c4d_material)
+	{
+		auto link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
+		if (link_result == maxon::FAILED)
+			return false;
+		mat.material_link = link_result.GetValue();
+		if (mat.material_link && *mat.material_link)
+			(*mat.material_link)->SetLink(c4d_material);
+	}
+	material_list_.Append(std::move(mat)) iferr_return;
+	return true;
+}
+
 Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
 {
-
 	if (setting.export_bone && bone_manager_)
 		if (const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data && !bone_manager_data->SavePMX(pmx_file, setting))
 			return false;
@@ -827,6 +882,14 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 	if (setting.export_polygon && mesh_manager_)
 		if (const auto mesh_manager_data = mesh_manager_->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->SavePMX(pmx_file, setting))
 			return false;
+
+	const Int32 mat_count = material_list_.GetCount();
+	if (mat_count > 0)
+	{
+		pmx_file.m_materials.resize(static_cast<size_t>(mat_count));
+		for (Int32 i = 0; i < mat_count; ++i)
+			material_list_[i].ToPMX(pmx_file.m_materials[static_cast<size_t>(i)]);
+	}
 	return true;
 }
 
@@ -1085,6 +1148,12 @@ SDK2024_GetDDescription(MMDModelManagerObject)
 		return false;
 	if (BaseContainer* settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_ANIM_LIST)), nullptr))
 		settings->SetContainer(DESC_CYCLE, animation_items_);
+	material_list_items_.FlushAll();
+	material_list_items_.SetString(MODEL_MATERIAL_NONE, GeLoadString(IDS_MODEL_MATERIAL_NONE));
+	for (Int32 i = 0; i < material_list_.GetCount(); ++i)
+		material_list_items_.SetString(i, FormatString("@: @", i, material_list_[i].name_local));
+	if (BaseContainer* mat_settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_MATERIAL_LIST)), nullptr))
+		mat_settings->SetContainer(DESC_CYCLE, material_list_items_);
 	const DescID* single_id = description->GetSingleDescID();
 	if (const auto cid = ConstDescID(DescLevel(MODEL_INFO_GRP)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
 	{
@@ -1231,6 +1300,55 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				DeleteVMDAnimation();
 				break;
 			}
+			case MODEL_MATERIAL_CREATE_BUTTON:
+			{
+				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
+				{
+					auto& mat = material_list_[material_selection_index_];
+					GeData type_data;
+					node->GetParameter(ConstDescID(DescLevel(MODEL_MATERIAL_CREATE_TYPE)), type_data, DESCFLAGS_GET::NONE);
+					const Int32 create_type = type_data.GetInt32();
+					BaseMaterial* new_mat = nullptr;
+					switch (create_type)
+					{
+					case MODEL_MATERIAL_CREATE_TYPE_STANDARD:
+						new_mat = CreateStandardMaterialFromData(mat);
+						break;
+					default:
+						break;
+					}
+					if (new_mat)
+					{
+						BaseDocument* doc = node->GetDocument();
+						if (doc)
+						{
+							doc->InsertMaterial(new_mat);
+							if (!mat.material_link)
+								mat.material_link = NewObj(AutoAlloc<BaseLink>).GetValue();
+							if (mat.material_link && *mat.material_link)
+								(*mat.material_link)->SetLink(new_mat);
+							EventAdd();
+						}
+					}
+				}
+				break;
+			}
+			case MODEL_MATERIAL_SYNC_BUTTON:
+			{
+				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
+				{
+					auto& mat = material_list_[material_selection_index_];
+					BaseDocument* doc = node->GetDocument();
+					if (doc && mat.material_link && *mat.material_link)
+					{
+						BaseMaterial* linked_mat = static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc));
+						if (linked_mat)
+							SyncToStandardMaterial(mat, linked_mat);
+						EventAdd();
+					}
+				}
+				break;
+			}
 			default:
 				break;
 			}
@@ -1247,6 +1365,60 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		break;
 	}
 	return SUPER::Message(node, type, data);
+}
+
+Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& id, GeData& t_data, DESCFLAGS_GET& flags) const
+{
+	switch (id[0].id)
+	{
+	case MODEL_MATERIAL_LIST:
+		t_data.SetInt32(material_selection_index_);
+		return true;
+	default:
+		break;
+	}
+	const Int32 sel = material_selection_index_;
+	if (sel < 0 || sel >= material_list_.GetCount())
+		return SUPER::GetDParameter(node, id, t_data, flags);
+	const MMDMaterialData& m = material_list_[sel];
+	switch (id[0].id)
+	{
+	case MODEL_MATERIAL_LINK:
+		if (m.material_link && *m.material_link)
+		{
+			const BaseDocument* doc = node->GetDocument();
+			t_data.SetBaseList2D(const_cast<BaseList2D*>(doc ? (*m.material_link)->GetLink(doc) : nullptr));
+		}
+		else
+			t_data.SetBaseList2D(nullptr);
+		return true;
+	case MODEL_MATERIAL_NAME_LOCAL: t_data.SetString(m.name_local); return true;
+	case MODEL_MATERIAL_NAME_UNIVERSAL: t_data.SetString(m.name_universal); return true;
+	case MODEL_MATERIAL_DIFFUSE_COLOR: t_data.SetVector(m.diffuse_rgb); return true;
+	case MODEL_MATERIAL_DIFFUSE_ALPHA: t_data.SetFloat(m.diffuse_alpha); return true;
+	case MODEL_MATERIAL_SPECULAR_COLOR: t_data.SetVector(m.specular); return true;
+	case MODEL_MATERIAL_SPECULAR_POWER: t_data.SetFloat(m.specular_power); return true;
+	case MODEL_MATERIAL_AMBIENT_COLOR: t_data.SetVector(m.ambient); return true;
+	case MODEL_MATERIAL_DRAW_BOTH_FACE: t_data.SetInt32(m.draw_both_face ? 1 : 0); return true;
+	case MODEL_MATERIAL_DRAW_GROUND_SHADOW: t_data.SetInt32(m.draw_ground_shadow ? 1 : 0); return true;
+	case MODEL_MATERIAL_DRAW_CAST_SELF_SHADOW: t_data.SetInt32(m.draw_cast_self_shadow ? 1 : 0); return true;
+	case MODEL_MATERIAL_DRAW_RECEIVE_SELF_SHADOW: t_data.SetInt32(m.draw_receive_self_shadow ? 1 : 0); return true;
+	case MODEL_MATERIAL_DRAW_VERTEX_COLOR: t_data.SetInt32(m.draw_vertex_color ? 1 : 0); return true;
+	case MODEL_MATERIAL_EDGE_ENABLED: t_data.SetInt32(m.edge_enabled ? 1 : 0); return true;
+	case MODEL_MATERIAL_EDGE_SIZE: t_data.SetFloat(m.edge_size); return true;
+	case MODEL_MATERIAL_EDGE_COLOR: t_data.SetVector(m.edge_color_rgb); return true;
+	case MODEL_MATERIAL_EDGE_ALPHA: t_data.SetFloat(m.edge_color_alpha); return true;
+	case MODEL_MATERIAL_TEXTURE_INDEX: t_data.SetInt32(m.texture_index); return true;
+	case MODEL_MATERIAL_SPHERE_TEXTURE_INDEX: t_data.SetInt32(m.sphere_texture_index); return true;
+	case MODEL_MATERIAL_SPHERE_MODE: t_data.SetInt32(m.sphere_mode); return true;
+	case MODEL_MATERIAL_TOON_MODE: t_data.SetInt32(m.toon_mode); return true;
+	case MODEL_MATERIAL_TOON_TEXTURE_INDEX: t_data.SetInt32(m.toon_texture_index); return true;
+	case MODEL_MATERIAL_MEMO: t_data.SetString(m.memo); return true;
+	case MODEL_MATERIAL_FACE_COUNT: t_data.SetInt32(m.num_face_vertices / 3); return true;
+	default:
+		break;
+	}
+	return SUPER::GetDParameter(node, id, t_data, flags);
 }
 
 Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
@@ -1277,8 +1449,106 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			}
 			break;
 		}
+		case MODEL_MATERIAL_LIST:
+			material_selection_index_ = t_data.GetInt32();
+			break;
+		default:
+		{
+			Bool material_handled = false;
+			if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
+			{
+				MMDMaterialData& mat = material_list_[material_selection_index_];
+				switch (id[0].id)
+				{
+				case MODEL_MATERIAL_LINK:
+				{
+					BaseDocument* doc = node->GetDocument();
+					BaseMaterial* link_mat = static_cast<BaseMaterial*>(t_data.GetLink(doc));
+					if (!mat.material_link || !*mat.material_link)
+					{
+						auto link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
+						if (link_result == maxon::FAILED)
+							break;
+						mat.material_link = link_result.GetValue();
+						if (mat.material_link && *mat.material_link)
+							(*mat.material_link)->SetLink(link_mat);
+					}
+					else
+						(*mat.material_link)->SetLink(link_mat);
+					material_handled = true;
+					break;
+				}
+				case MODEL_MATERIAL_NAME_LOCAL: mat.name_local = t_data.GetString(); material_handled = true; break;
+				case MODEL_MATERIAL_NAME_UNIVERSAL: mat.name_universal = t_data.GetString(); material_handled = true; break;
+				case MODEL_MATERIAL_DIFFUSE_COLOR: mat.diffuse_rgb = t_data.GetVector(); material_handled = true; break;
+				case MODEL_MATERIAL_DIFFUSE_ALPHA: mat.diffuse_alpha = t_data.GetFloat(); material_handled = true; break;
+				case MODEL_MATERIAL_SPECULAR_COLOR: mat.specular = t_data.GetVector(); material_handled = true; break;
+				case MODEL_MATERIAL_SPECULAR_POWER: mat.specular_power = t_data.GetFloat(); material_handled = true; break;
+				case MODEL_MATERIAL_AMBIENT_COLOR: mat.ambient = t_data.GetVector(); material_handled = true; break;
+				case MODEL_MATERIAL_DRAW_BOTH_FACE: mat.draw_both_face = t_data.GetBool(); material_handled = true; break;
+				case MODEL_MATERIAL_DRAW_GROUND_SHADOW: mat.draw_ground_shadow = t_data.GetBool(); material_handled = true; break;
+				case MODEL_MATERIAL_DRAW_CAST_SELF_SHADOW: mat.draw_cast_self_shadow = t_data.GetBool(); material_handled = true; break;
+				case MODEL_MATERIAL_DRAW_RECEIVE_SELF_SHADOW: mat.draw_receive_self_shadow = t_data.GetBool(); material_handled = true; break;
+				case MODEL_MATERIAL_DRAW_VERTEX_COLOR: mat.draw_vertex_color = t_data.GetBool(); material_handled = true; break;
+				case MODEL_MATERIAL_EDGE_ENABLED: mat.edge_enabled = t_data.GetBool(); material_handled = true; break;
+				case MODEL_MATERIAL_EDGE_SIZE: mat.edge_size = t_data.GetFloat(); material_handled = true; break;
+				case MODEL_MATERIAL_EDGE_COLOR: mat.edge_color_rgb = t_data.GetVector(); material_handled = true; break;
+				case MODEL_MATERIAL_EDGE_ALPHA: mat.edge_color_alpha = t_data.GetFloat(); material_handled = true; break;
+				case MODEL_MATERIAL_TEXTURE_INDEX: mat.texture_index = t_data.GetInt32(); material_handled = true; break;
+				case MODEL_MATERIAL_SPHERE_TEXTURE_INDEX: mat.sphere_texture_index = t_data.GetInt32(); material_handled = true; break;
+				case MODEL_MATERIAL_SPHERE_MODE: mat.sphere_mode = t_data.GetInt32(); material_handled = true; break;
+				case MODEL_MATERIAL_TOON_MODE: mat.toon_mode = t_data.GetInt32(); material_handled = true; break;
+				case MODEL_MATERIAL_TOON_TEXTURE_INDEX: mat.toon_texture_index = t_data.GetInt32(); material_handled = true; break;
+				case MODEL_MATERIAL_MEMO: mat.memo = t_data.GetString(); material_handled = true; break;
+				default: break;
+				}
+				if (material_handled)
+				{
+					BaseDocument* doc = node->GetDocument();
+					BaseMaterial* linked_mat = doc && mat.material_link && *mat.material_link
+						? static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc))
+						: nullptr;
+					if (linked_mat)
+						SyncToStandardMaterial(mat, linked_mat);
+					return true;
+				}
+			}
+			if (material_handled)
+				return true;
+			break;
+		}
 	}
 	return ObjectData::SetDParameter(node, id, t_data, flags);
+}
+
+SDK2024_GetDEnabling(MMDModelManagerObject)
+{
+	switch (id[0].id)
+	{
+	case MODEL_MATERIAL_EDGE_SIZE:
+	case MODEL_MATERIAL_EDGE_COLOR:
+	case MODEL_MATERIAL_EDGE_ALPHA:
+		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
+			return material_list_[material_selection_index_].edge_enabled;
+		return false;
+	case MODEL_MATERIAL_CREATE_BUTTON:
+	case MODEL_MATERIAL_CREATE_TYPE:
+		return material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount();
+	case MODEL_MATERIAL_SYNC_BUTTON:
+		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
+		{
+			const auto& mat = material_list_[material_selection_index_];
+			if (mat.material_link && *mat.material_link)
+			{
+				BaseDocument* doc = node->GetDocument();
+				return doc && (*mat.material_link)->GetLink(doc) != nullptr;
+			}
+		}
+		return false;
+	default:
+		break;
+	}
+	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
 }
 
 Int MMDModelManagerObject::AddMorph(const MMDMorphType& morph_type, String morph_name, bool is_add_morph_ui, Int32 panel)

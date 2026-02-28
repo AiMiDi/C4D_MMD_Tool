@@ -14,6 +14,7 @@ Description:	MMD model object
 #include "module/core/cmt_marco.h"
 #include "CMTSceneManager.h"
 #include "description/OMMDModelManager.h"
+#include "module/tools/material/mmd_material.h"
 #include "maxon/pointerarray.h"
 #include "utils/images_user_area_util.hpp"
 
@@ -95,6 +96,10 @@ class MMDModelManagerObject final : public ObjectData
 	BaseContainer animation_items_;
 	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> animations_;
 
+	maxon::BaseArray<MMDMaterialData> material_list_;
+	Int32 material_selection_index_ = -1;
+	mutable BaseContainer material_list_items_;
+
 	MMDModelPtr mmd_model_;
 	Int32 model_mode_ = MODEL_MODE_ANIM;
 	BaseTime prev_time_{-1};
@@ -129,7 +134,9 @@ public:
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
+	Bool GetDParameter(const GeListNode* node, const DescID& id, GeData& t_data, DESCFLAGS_GET& flags) const override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
+	SDK2024_GetDEnablingOverride;
 
 	AddMorphHelper BeginMorphChange();
 	Int ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& pmx_morph, Int32 panel = 0);
@@ -150,6 +157,8 @@ public:
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 	void ImportDisplayFrames(const libmmd::PMXFile& pmx_file);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;
+
+	Bool AddMaterial(const libmmd::PMXMaterial& pmx_material, BaseMaterial* c4d_material);
 
 	Bool LoadVMDMotion(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log, const Bool merge = false);
 	Bool SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const;

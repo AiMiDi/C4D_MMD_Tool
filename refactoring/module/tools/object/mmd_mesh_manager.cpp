@@ -20,7 +20,7 @@ Description:	MMD mesh root object
 #include "description/OMMDMeshManager.h"
 #include "maxon/parallelfor.h"
 #include "maxon/queue.h"
-#include "module/tools/mmd_material.h"
+#include "module/tools/material/mmd_material.h"
 #include "utils/string_util.hpp"
 
 namespace cinema
@@ -870,9 +870,10 @@ Bool MMDMeshManagerObject::LoadPMX(
 			polygon_selection_tag->SetName(material_name);
 			mesh_object->InsertTag(polygon_selection_tag);
 
+			BaseMaterial* material = nullptr;
 			if (setting.import_material)
 			{
-				const auto material = material_manager->LoadPMXMaterial(pmx_material, material_index, material_name, setting);
+				material = material_manager->LoadPMXMaterial(pmx_material, material_index, material_name, setting);
 				if (!material)
 					return false;
 				setting.doc->InsertMaterial(material);
@@ -886,6 +887,9 @@ Bool MMDMeshManagerObject::LoadPMX(
 				texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), material_name, DESCFLAGS_SET::NONE);
 				mesh_object->InsertTag(texture_tag, polygon_selection_tag);
 			}
+			if (BaseObject* model_op = static_cast<BaseObject*>(Get()->GetUp()))
+				if (MMDModelManagerObject* model_data = model_op->GetNodeData<MMDModelManagerObject>())
+					model_data->AddMaterial(pmx_material, material);
 
 			surface_begin_index += part_face_num;
 		}
@@ -927,9 +931,10 @@ Bool MMDMeshManagerObject::LoadPMX(
 			mesh_object->SetName(material_name);
 			mesh_object->InsertUnder(Get());
 
+			BaseMaterial* material = nullptr;
 			if (setting.import_material)
 			{
-				const auto material = material_manager->LoadPMXMaterial(pmx_material, material_index, material_name, setting);
+				material = material_manager->LoadPMXMaterial(pmx_material, material_index, material_name, setting);
 				if (!material)
 					return false;
 				setting.doc->InsertMaterial(material);
@@ -942,6 +947,9 @@ Bool MMDMeshManagerObject::LoadPMX(
 				texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_PROJECTION)), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
 				mesh_object->InsertTag(texture_tag);
 			}
+			if (BaseObject* model_op = static_cast<BaseObject*>(Get()->GetUp()))
+				if (MMDModelManagerObject* model_data = model_op->GetNodeData<MMDModelManagerObject>())
+					model_data->AddMaterial(pmx_material, material);
 
 			// if import_weights is true, create weight tag
 			CAWeightTag* weight_tag = nullptr;

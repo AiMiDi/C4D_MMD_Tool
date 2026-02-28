@@ -581,6 +581,17 @@ DIALOG DLG_CMT_TOOL {
                                 ALIGN_LEFT;
                             }
 
+                            COMBOBOX DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE {
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+
+                                CHILDS {
+                                    DLG_CMT_MATERIAL_TYPE_STANDARD, IDS_CMT_MATERIAL_TYPE_STANDARD;
+                                    DLG_CMT_MATERIAL_TYPE_REDSHIFT, IDS_CMT_MATERIAL_TYPE_REDSHIFT;
+                                    DLG_CMT_MATERIAL_TYPE_OCTANE, IDS_CMT_MATERIAL_TYPE_OCTANE;
+                                }
+                            }
+
                             CHECKBOX DLG_CMT_TOOL_MODEL_IMPORT_BONE {
                                 NAME IDS_CMT_TOOL_MODEL_IMPORT_BONE;
                                 SIZE 180, 13;

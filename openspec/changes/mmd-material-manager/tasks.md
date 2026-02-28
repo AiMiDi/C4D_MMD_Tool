@@ -1,0 +1,55 @@
+## 1. 目录结构与数据定义
+
+- [x] 1.1 新建 `refactoring/module/tools/material/` 目录，将现有 `mmd_material.h/cpp` 迁移到该目录下，并重构为纯数据结构文件：在 `material/mmd_material.h/cpp` 中定义 `MMDMaterialData` 结构体，包含完整 PMX 材质字段（diffuse/specular/ambient/draw flags/edge/texture indices/sphere mode/toon/memo/face count）和 `AutoAlloc<BaseLink>` 材质链接；保留 `MMDMaterialManager` 中与纹理路径管理相关的逻辑
+- [x] 1.2 实现 `MMDMaterialData::FromPMX(const libmmd::PMXMaterial&)` 方法，从 PMXMaterial 映射所有字段，包括从 `PMXDrawModeFlags` 位标志提取各 draw_* 布尔值
+- [x] 1.3 实现 `MMDMaterialData::ToPMX(libmmd::PMXMaterial&)` 方法，将所有字段写回 PMXMaterial，包括将 draw_* 布尔值合并为 `PMXDrawModeFlags` 位标志
+- [x] 1.4 实现 `MMDMaterialData` 的 Read/Write 序列化方法（从/到 HyperFile），按固定顺序读写所有字段和 BaseLink
+- [x] 1.5 实现 `MMDMaterialData` 的 CopyTo 深拷贝方法
+
+## 2. 资源文件（描述/字符串）
+
+- [x] 2.1 在 `OMMDModelManager.h` 中新增材质管理相关的所有描述 ID 枚举值（MODEL_MATERIAL_GRP, MODEL_MATERIAL_LIST, MODEL_MATERIAL_LINK, MODEL_MATERIAL_NAME_LOCAL, MODEL_MATERIAL_NAME_UNIVERSAL, 所有颜色/标志/轮廓线/纹理/备注/面数 ID，以及 CYCLE 枚举值）
+- [x] 2.2 在 `OMMDModelManager.res` 中新增 `MODEL_MATERIAL_GRP` 分组及所有子属性的 UI 定义（包括材质列表 CYCLE、LINK、STRING、COLOR、REAL、BOOL、LONG 等控件）
+- [x] 2.3 在 `strings_zh-CN/description/OMMDModelManager.str` 中新增所有材质相关属性的中文字符串
+- [x] 2.4 在 `strings_en-US/description/OMMDModelManager.str` 中新增所有材质相关属性的英文字符串
+
+## 3. MMDModelManagerObject 集成
+
+- [x] 3.1 在 `MMDModelManagerObject` 类中新增材质管理相关的成员变量：`maxon::BaseArray<MMDMaterialData>` 材质列表、`Int32` 当前选中索引、`BaseContainer` 材质列表 CYCLE items
+- [x] 3.2 在 `GetDDescription` 中动态填充材质列表 CYCLE 的选项（遍历材质列表，设置 "索引: 名称" 格式）
+- [x] 3.3 在 `GetDParameter` 中实现材质属性的动态值读取——根据当前选中索引从 `MMDMaterialData` 读取对应字段值返回
+- [x] 3.4 在 `SetDParameter` 中实现材质属性的动态值写入——将用户修改的值写入当前选中的 `MMDMaterialData`，并触发同步逻辑
+- [x] 3.5 在 `Read` 方法中添加材质数据的反序列化（检测 level 兼容旧版文件），在 `Write` 方法中添加序列化
+- [x] 3.6 在 `CopyTo` 方法中添加材质列表的深拷贝
+
+## 4. PMX 导入集成
+
+- [x] 4.1 重构 `MMDMeshManagerObject::LoadPMX` 中的材质导入流程，在创建 C4D 材质后，调用 `MMDModelManagerObject` 的接口将 `MMDMaterialData` 和 `BaseMaterial` 引用添加到材质列表
+- [x] 4.2 在 `MMDModelManagerObject` 中添加 `AddMaterial(const libmmd::PMXMaterial& pmx_material, BaseMaterial* c4d_material)` 接口方法
+
+## 5. PMX 导出集成
+
+- [x] 5.1 在 `MMDModelManagerObject::SavePMX` 中添加从材质列表读取 `MMDMaterialData` 并通过 `ToPMX` 写入 `PMXFile::m_materials` 的逻辑
+
+## 6. 标准材质同步
+
+- [x] 6.1 新建 `refactoring/module/tools/material/mmd_standard_material.h/cpp`，将现有 `MMDMaterialManager::LoadPMXMaterial` 中标准材质创建逻辑（`case Standard` 分支）迁移到此文件
+- [x] 6.2 在 `mmd_standard_material.cpp` 中实现 `SyncToStandardMaterial(const MMDMaterialData& data, BaseMaterial* material)` 函数，将 MMD 材质属性同步到 C4D 标准材质（扩散色→颜色通道, Alpha→透明通道, 反射色→反射通道, 材质名称→SetName）
+- [x] 6.3 在 `SetDParameter` 的材质属性写入逻辑中，修改完 `MMDMaterialData` 后根据材质类型调用对应同步函数将变更推送到关联的 C4D 材质
+
+## 7. 导入工具对话框——材质类型选择
+
+- [x] 7.1 在 `c4d_symbols.h` 中新增 `DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE` 符号 ID
+- [x] 7.2 在 `DLG_CMT_TOOL.res` 的模型导入设置区域新增 `COMBOBOX DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE` 控件，选项为标准材质(0)/RedShift(1)/Octane(2)
+- [x] 7.3 在 `DLG_CMT_TOOL.str`（中文/英文）中新增材质类型下拉框及各选项的字符串
+- [x] 7.4 在 `cmt_tools_dialog.cpp` 的 `InitDialog` 中初始化 COMBOBOX 默认选中标准材质
+- [x] 7.5 在 `cmt_tools_dialog.cpp` 的导入按钮处理逻辑中通过 `GetItem` 读取选中值并写入 `setting.import_material_type`
+
+## 8. 材质管理 UI——创建材质按钮
+
+- [x] 8.1 在 `OMMDModelManager.h` 中新增 `MODEL_MATERIAL_CREATE_TYPE`、`MODEL_MATERIAL_CREATE_BUTTON`、`MODEL_MATERIAL_SYNC_BUTTON` 及创建类型 CYCLE 枚举值的描述 ID
+- [x] 8.2 在 `OMMDModelManager.res` 的 `MODEL_MATERIAL_GRP` 中新增创建材质类型下拉框（CYCLE: 标准/RS/OC）、创建材质按钮、同步材质按钮
+- [x] 8.3 在 `OMMDModelManager.str`（中文/英文）中新增创建材质类型/创建按钮/同步按钮的字符串
+- [x] 8.4 在 `MMDModelManagerObject::Message` 中处理 `MODEL_MATERIAL_CREATE_BUTTON` 的 `MSG_DESCRIPTION_COMMAND`：读取 `MODEL_MATERIAL_CREATE_TYPE`，根据类型调用对应的 `CreateStandardMaterialFromPMX`（或未来 RS/OC 函数）创建新材质，将其插入文档材质列表，更新当前 `MMDMaterialData` 的 `material_link`
+- [x] 8.5 在 `MMDModelManagerObject::Message` 中处理 `MODEL_MATERIAL_SYNC_BUTTON` 的 `MSG_DESCRIPTION_COMMAND`：读取关联材质，调用 `SyncToStandardMaterial` 将当前 MMD 材质属性完整同步到 C4D 材质
+- [x] 8.6 在 `GetDEnabling` 中添加逻辑：当未选中材质时，创建材质按钮和同步材质按钮为灰色不可点击；同步按钮在 `material_link` 为空时也为灰色
