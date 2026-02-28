@@ -102,28 +102,6 @@ if "%BUILD_RELEASE%"=="1" (
 )
 
 cd ../..
-cd ./yaml-cpp 
-mkdir build
-cd build
-cmake ..  -G "Ninja Multi-Config" ^
--D CMAKE_DEBUG_POSTFIX="_Debug" ^
--D CMAKE_INSTALL_PREFIX="../../install" ^
--D YAML_CPP_BUILD_TESTS=Off ^
--D YAML_CPP_BUILD_TOOLS=Off
-
-if "%BUILD_DEBUG%"=="1" (
-    echo Building yaml-cpp Debug version...
-    cmake --build . --config Debug -j
-    cmake --install . --config Debug --prefix ../../install
-)
-
-if "%BUILD_RELEASE%"=="1" (
-    echo Building yaml-cpp Release version...
-    cmake --build . --config Release -j
-    cmake --install . --config Release --prefix ../../install
-)
-
-cd ../..
 cd ./libMMD
 mkdir build 
 cd build

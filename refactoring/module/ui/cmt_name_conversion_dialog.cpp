@@ -1,22 +1,11 @@
-#include <fstream>
 #include <c4d.h>
 #include "plugin_resource.h"
 #include "module/core/cmt_marco.h"
 #include "c4d_symbols.h"
-#include "yaml-cpp/yaml.h"
+#include "utils/json_util.hpp"
 #include "utils/string_util.hpp"
 #include "cmt_name_conversion_dialog.h"
 
-
-template<>
-struct YAML::convert<String> {
-	static bool decode(const Node& node, String& rhs)
-	{
-		const auto str = node.as<std::string>();
-		rhs.SetCString(str.c_str(), -1, STRINGENCODING::UTF8);
-		return true;
-	}
-};
 
 enum
 {
@@ -41,12 +30,12 @@ UpdateNameConversionDialog::UpdateNameConversionDialog(NameConversion& name_conv
 	bf->Init(*name_mapping_config_dirname_, BROWSEFILES_CALCSIZE);
 	while (bf->GetNext())
 	{
-		if (auto filename = bf->GetFilename(); !bf->IsDir() && filename.CheckSuffix("yaml"_s))
+		if (auto filename = bf->GetFilename(); !bf->IsDir() && filename.CheckSuffix("json"_s))
 		{
 			std::ignore = name_mapping_config_.Append(std::move(filename));
 		}
 	}
-	default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
+	default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.json"_s);
 	default_name_mapping_config_index_ = default_name_mapping_config_index_ == NOTOK ? 0 : default_name_mapping_config_index_;
 	name_conversion_.LoadConfig(*name_mapping_config_dirname_ + name_mapping_config_[default_name_mapping_config_index_]);
 }
@@ -170,9 +159,11 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 		maxon::HashMap<String, String>& universal_to_local_name_lookup_table = name_conversion_.universal_to_local_name_lookup_table_;
 		Int32 fn_index = 0;
 		GetInt32(DLG_NAME_CONVER_NAMEMAP, fn_index);
-		std::ofstream file_out(string_util::GetStdString((*name_mapping_config_dirname_ + name_mapping_config_[fn_index]).GetString()), std::ios_base::app);
+		const Filename file_path = *name_mapping_config_dirname_ + name_mapping_config_[fn_index];
+
+		cmt_json::JsonObject existing = cmt_json::ReadJsonFile(file_path);
+
 		const Int32	conversion_count = static_cast<Int32>(unregulated_name_.GetCount());
-		YAML::Node	config;
 		for (Int32 i = 0; i < conversion_count; i++)
 		{
 			const String& key = unregulated_name_[i];
@@ -181,16 +172,15 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 			if (value.IsEmpty())
 			{
 				iferr(local_to_universal_name_lookup_table.Insert(key, FormatString("bone_@", i))) return false;
-				iferr(universal_to_local_name_lookup_table.Insert(FormatString("ボーン_@", i), key)) return false;
+				iferr(universal_to_local_name_lookup_table.Insert(FormatString(String(u"\u30dc\u30fc\u30f3_@"), i), key)) return false;
 			}
 			else {
 				iferr(local_to_universal_name_lookup_table.Insert(key, value)) return false;
 				iferr(universal_to_local_name_lookup_table.Insert(value, key)) return false;
-				config[string_util::GetStdString(key)] = string_util::GetStdString(value);
+				existing[string_util::GetStdString(key)] = string_util::GetStdString(value);
 			}
 		}
-		file_out << '\n' << config;
-		file_out.close();
+		cmt_json::WriteJsonFile(file_path, existing);
 		Close();
 		break;
 	}
@@ -222,7 +212,7 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 						iferr(name_mapping_config_.Append(bf->GetFilename())) continue;
 					}
 				}
-				default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
+				default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.json"_s);
 				default_name_mapping_config_index_ = default_name_mapping_config_index_ == NOTOK ? 0 : default_name_mapping_config_index_;
 				FreeChildren(DLG_NAME_CONVER_NAMEMAP);
 				Int32 fnCount = 0;
@@ -308,12 +298,12 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 	{
 		String fn_s;
 		GetString(DLG_NAME_CONVER_NEW, fn_s);
-		Filename fn = *name_mapping_config_dirname_ + Filename(fn_s + ".yaml");
+		Filename fn = *name_mapping_config_dirname_ + Filename(fn_s + ".json");
 		if (GeFExist(fn))
 		{
 			if (!QuestionDialog(IDS_MES_INQUIRY_OVERWRITING_FILE))
 			{
-				auto add_fn_index = name_mapping_config_.FindIndex(fn_s + ".yaml");
+				auto add_fn_index = name_mapping_config_.FindIndex(fn_s + ".json");
 				add_fn_index = add_fn_index == NOTOK ? add_fn_index : default_name_mapping_config_index_;
 				SetInt32(DLG_NAME_CONVER_NAMEMAP, static_cast<Int32>(add_fn_index));
 				LoadNameMappingConfig();
@@ -334,9 +324,9 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 				iferr(name_mapping_config_.Append(bf->GetFilename())) continue;
 			}
 		}
-		default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
+		default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.json"_s);
 		default_name_mapping_config_index_ = default_name_mapping_config_index_ == NOTOK ? 0 : default_name_mapping_config_index_;
-		auto add_fn_index = name_mapping_config_.FindIndex(fn_s + ".yaml");
+		auto add_fn_index = name_mapping_config_.FindIndex(fn_s + ".json");
 		default_name_mapping_config_index_ = add_fn_index == NOTOK ? add_fn_index : default_name_mapping_config_index_;
 		FreeChildren(DLG_NAME_CONVER_NAMEMAP);
 		Int32 fnCount = 0;
@@ -353,12 +343,12 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 	{
 		String fn_s;
 		GetString(DLG_NAME_CONVER_NEW, fn_s);
-		Filename fn = *name_mapping_config_dirname_ + Filename(fn_s + ".yaml");
+		Filename fn = *name_mapping_config_dirname_ + Filename(fn_s + ".json");
 		if (GeFExist(fn))
 		{
 			if (!QuestionDialog(IDS_MES_INQUIRY_OVERWRITING_FILE))
 			{
-				auto increment_fn_index = name_mapping_config_.FindIndex(fn_s + ".yaml");
+				auto increment_fn_index = name_mapping_config_.FindIndex(fn_s + ".json");
 				increment_fn_index = increment_fn_index == NOTOK ? increment_fn_index : default_name_mapping_config_index_;
 				SetInt32(DLG_NAME_CONVER_NAMEMAP, static_cast<Int32>(increment_fn_index));
 				LoadNameMappingConfig();
@@ -378,9 +368,9 @@ Bool UpdateNameConversionDialog::Command(Int32 id, const BaseContainer& msg)
 				iferr(name_mapping_config_.Append(bf->GetFilename())) continue;
 			}
 		}
-		default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.yaml"_s);
+		default_name_mapping_config_index_ = name_mapping_config_.FindIndex("default.json"_s);
 		default_name_mapping_config_index_ = default_name_mapping_config_index_ == NOTOK ? 0 : default_name_mapping_config_index_;
-		auto increment_fn_index = name_mapping_config_.FindIndex(fn_s + ".yaml");
+		auto increment_fn_index = name_mapping_config_.FindIndex(fn_s + ".json");
 		increment_fn_index = increment_fn_index == NOTOK ? increment_fn_index : default_name_mapping_config_index_;
 		FreeChildren(DLG_NAME_CONVER_NAMEMAP);
 		Int32 fnCount = 0;
@@ -415,17 +405,24 @@ Bool NameConversion::LoadConfig(const Filename& filename)
 {
 	local_to_universal_name_lookup_table_.Reset();
 	universal_to_local_name_lookup_table_.Reset();
-	std::ifstream fin(string_util::GetStdString(filename.GetString()));
-	if (fin.is_open()) {
-		YAML::Node config = YAML::Load(fin);
-		for (YAML::const_iterator it = config.begin(); it != config.end(); ++it)
+	cmt_json::JsonObject config = cmt_json::ReadJsonFile(filename);
+	if (!config.empty())
+	{
+		for (const auto& [key, value] : config)
 		{
-			iferr(local_to_universal_name_lookup_table_.Insert(it->first.as<String>(), it->second.as<String>())) return false;
-			iferr(local_to_universal_name_lookup_table_.Insert(it->second.as<String>(), it->first.as<String>())) return false;
+			if (auto* str_val = std::get_if<std::string>(&value))
+			{
+				String c4d_key, c4d_value;
+				c4d_key.SetCString(key.c_str(), -1, STRINGENCODING::UTF8);
+				c4d_value.SetCString(str_val->c_str(), -1, STRINGENCODING::UTF8);
+				iferr(local_to_universal_name_lookup_table_.Insert(c4d_key, c4d_value)) return false;
+				iferr(universal_to_local_name_lookup_table_.Insert(c4d_value, c4d_key)) return false;
+			}
 		}
 	}
-	else {
-		GePrint("Failed to load the YAML file!"_s);
+	else
+	{
+		GePrint("Failed to load the JSON config file!"_s);
 	}
 	return true;
 }

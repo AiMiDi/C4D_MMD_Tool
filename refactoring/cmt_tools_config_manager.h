@@ -16,7 +16,7 @@ Description:	Manager of plugin configuration
 #include <string>
 #include <variant>
 #include "module/core/cmt_marco.h"
-#include "yaml-cpp/yaml.h"
+#include "utils/json_util.hpp"
 
 /**
  * \brief CMT configuration Manager. Responsible for saving GUI configuration.
@@ -24,7 +24,7 @@ Description:	Manager of plugin configuration
 class CMTToolConfigManager
 {
 	typedef std::variant<bool, int, double> config_types;
-	typedef std::tuple<const char*, config_types> confin_item_type;
+	typedef std::tuple<const char*, config_types> config_item_type;
 
 	~CMTToolConfigManager() = default;
 	CMTToolConfigManager() = default;
@@ -55,12 +55,11 @@ public:
 		assert(id >= 0 && id < k_default_config_table_size);
 		auto& [default_config_name, default_config_value] = k_default_config_table[id];
 		const T& config_value = std::get<T>(default_config_value);
-		auto node = m_config[default_config_name];
-		if (node.IsDefined() && !node.IsNull())
+		auto it = m_config.find(default_config_name);
+		if (it != m_config.end())
 		{
-			T result{};
-			if (YAML::convert<T>::decode(node, result))
-				return result;
+			if (auto* p = std::get_if<T>(&it->second))
+				return *p;
 		}
 		m_config[default_config_name] = config_value;
 		return config_value;
@@ -102,13 +101,11 @@ private:
 	/**
 	 * \brief Configuration file path.
 	 */
-	const std::string m_config_path{
-		(GeGetPluginResourcePath() + Filename("cmt_config.yaml")).GetString().GetCStringCopy(STRINGENCODING::UTF8)
-	};
+	const Filename m_config_path{ GeGetPluginResourcePath() + Filename("cmt_config.json") };
 	/**
-	 * \brief Configuration YAML root node.
+	 * \brief Configuration data store.
 	 */
-	YAML::Node m_config;
+	cmt_json::JsonObject m_config;
 
 	static constexpr int k_config_id_begin = DLG_CMT_TOOL_ID_BEGIN;
 	static constexpr int k_config_id_end = DLG_CMT_TOOL_ID_END;
@@ -116,7 +113,7 @@ private:
 	/**
 	* \brief Configuration entry initial value table.
 	*/
-	static constexpr confin_item_type k_default_config_table[k_default_config_table_size]
+	static constexpr config_item_type k_default_config_table[k_default_config_table_size]
 	{
 		{{"DLG_CMT_TOOL_CAMERA_IMPORT_SIZE"},{8.5f}},
 		{{"DLG_CMT_TOOL_CAMERA_IMPORT_OFFSET"},{0.f}},

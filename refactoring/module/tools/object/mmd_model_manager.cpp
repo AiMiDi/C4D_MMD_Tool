@@ -1540,7 +1540,7 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 			const auto& mat = material_list_[material_selection_index_];
 			if (mat.material_link && *mat.material_link)
 			{
-				BaseDocument* doc = node->GetDocument();
+				SDK2024_Const BaseDocument* doc = node->GetDocument();
 				return doc && (*mat.material_link)->GetLink(doc) != nullptr;
 			}
 		}

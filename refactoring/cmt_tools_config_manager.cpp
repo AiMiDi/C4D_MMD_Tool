@@ -9,7 +9,6 @@ Description:	Manager of plugin configuration
 **************************************************************************/
 
 #include <c4d.h>
-#include <fstream>
 #include "module/core/cmt_marco.h"
 #include "cmt_tools_config_manager.h"
 
@@ -73,14 +72,10 @@ void CMTToolConfigManager::InitConfig(Int32 id)
 
 void CMTToolConfigManager::InitConfigManager()
 {
-	auto& config = m_config;
-	std::ifstream fin(m_config_path);
-	if (fin.is_open()) {
-		config = YAML::Load(fin);
-	}
-	else {
-		ApplicationOutput("Failed to load the YAML file!"_s);
-		config.reset();
+	m_config = cmt_json::ReadJsonFile(m_config_path);
+	if (m_config.empty())
+	{
+		ApplicationOutput("Failed to load config file, using defaults."_s);
 		for (int config_id = k_config_id_begin; config_id < k_config_id_end; ++config_id)
 		{
 			InitConfig(config_id);
@@ -91,9 +86,5 @@ void CMTToolConfigManager::InitConfigManager()
 
 void CMTToolConfigManager::SaveConfig() const
 {
-	std::ofstream fout(m_config_path);
-	if (fout.is_open()) {
-		fout << m_config;
-	}
-	fout.close();
+	cmt_json::WriteJsonFile(m_config_path, m_config);
 }

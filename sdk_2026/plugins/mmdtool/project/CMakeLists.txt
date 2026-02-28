@@ -56,11 +56,10 @@ set(maxon_targetSourceDirectories source res)
 set(maxon_targetRegisterGeneratedFileNames register.cpp interface_registration.cpp)
 set(maxon_targetTypeViewerFiles )
 # Third-party library configuration:
-#   YAML_CPP_STATIC_DEFINE  - yaml-cpp is statically linked; prevent __declspec(dllimport)
 #   BT_THREADSAFE=1         - Bullet Physics thread safety
 #   BT_USE_DOUBLE_PRECISION - Bullet Physics double precision (matches MMD coordinate system)
 #   LIBMMD_STATIC=1         - libMMD is statically linked
-set(maxon_additionalDefinitions YAML_CPP_STATIC_DEFINE BT_THREADSAFE=1 BT_USE_DOUBLE_PRECISION LIBMMD_STATIC=1)
+set(maxon_additionalDefinitions BT_THREADSAFE=1 BT_USE_DOUBLE_PRECISION LIBMMD_STATIC=1)
 set(maxon_enableRTTI OFF)
 set(maxon_enableExceptionHandling ON)
 
