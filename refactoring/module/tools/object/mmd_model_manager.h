@@ -132,7 +132,7 @@ public:
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 
 	AddMorphHelper BeginMorphChange();
-	Int ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& pmx_morph);
+	Int ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& pmx_morph, Int32 panel = 0);
 
 	DescID AddDynamicDescription(const BaseContainer& bc, const MMDModelRootDynamicDescriptionType& type, Int index);
 	void DeleteDynamicDescription(const DescID& id);
@@ -148,6 +148,7 @@ public:
 	BaseObject* GetBoneManagerObject() const { return bone_manager_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
+	void ImportDisplayFrames(const libmmd::PMXFile& pmx_file);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;
 
 	Bool LoadVMDMotion(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log, const Bool merge = false);
@@ -156,7 +157,7 @@ public:
 private:
 	Int32 GetMorphNamedNumber();
 	bool DeleteMorphImpl(IMorph& morph, const Int morph_index);
-	Int AddMorph(const MMDMorphType& morph_type, String morph_name = {}, bool is_add_morph_ui = true);
+	Int AddMorph(const MMDMorphType& morph_type, String morph_name = {}, bool is_add_morph_ui = true, Int32 panel = 0);
 	void RenameMorph(const String& name);
 	void UpdateMorph(IMorph& morph);
 	void DeleteMorph(Int morph_index);

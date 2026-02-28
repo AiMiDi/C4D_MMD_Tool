@@ -308,6 +308,9 @@ SDK2024_Init(MMDBoneTag)
 	bc->SetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE, 0.0);
 	bc->SetVector(PMX_BONE_LOCAL_X, Vector(1, 0, 0));
 	bc->SetVector(PMX_BONE_LOCAL_Z, Vector(0, 0, 1));
+	bc->SetBool(PMX_BONE_INHERIT_LOCAL, false);
+	bc->SetBool(PMX_BONE_OUTER_PARENT, false);
+	bc->SetInt32(PMX_BONE_OUTER_PARENT_KEY, 0);
 
 	if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
 	{

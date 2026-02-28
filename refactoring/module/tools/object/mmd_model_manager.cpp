@@ -581,7 +581,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	return EXECUTIONRESULT::OK;
 }
 
-Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& pmx_morph)
+Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& pmx_morph, Int32 panel)
 {
 	Int morph_id = -1;
 	iferr_scope_handler{ return morph_id; };
@@ -589,7 +589,7 @@ Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& p
 	{
 	case libmmd::PMXMorphType::Group:
 	{
-		morph_id = AddMorph(MMDMorphType::GROUP, String(pmx_morph.m_name.c_str()));
+		morph_id = AddMorph(MMDMorphType::GROUP, String(pmx_morph.m_name.c_str()), true, panel);
 		auto& morph = morph_data_[morph_id];
 		for (const auto& [morph_index, weight] : pmx_morph.m_groupMorph)
 		{
@@ -599,7 +599,7 @@ Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& p
 	}
 	case libmmd::PMXMorphType::Flip:
 	{
-		morph_id = AddMorph(MMDMorphType::FLIP, String(pmx_morph.m_name.c_str()));
+		morph_id = AddMorph(MMDMorphType::FLIP, String(pmx_morph.m_name.c_str()), true, panel);
 		auto& morph = morph_data_[morph_id];
 		for (const auto& [morph_index, weight] : pmx_morph.m_flipMorph)
 		{
@@ -718,9 +718,60 @@ Bool MMDModelManagerObject::CreateManagers()
 	return false;
 }
 
+void MMDModelManagerObject::ImportDisplayFrames(const libmmd::PMXFile& pmx_file)
+{
+	DynamicDescription* const dynamic_description = Get()->GetDynamicDescriptionWritable();
+	if (!dynamic_description)
+		return;
+
+	const auto& display_frames = pmx_file.m_displayFrames;
+	for (const auto& frame : display_frames)
+	{
+		BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
+		bc.SetString(DESC_NAME, String(frame.m_name.c_str()));
+		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_GRP))));
+		const auto frame_grp = dynamic_description->Alloc(bc);
+
+		for (const auto& target : frame.m_targets)
+		{
+			String entry_text;
+			if (target.m_type == libmmd::PMXDisplayFrame::TargetType::BoneIndex)
+			{
+				if (target.m_index >= 0 && static_cast<size_t>(target.m_index) < pmx_file.m_bones.size())
+					entry_text = FormatString("[Bone] @", String(pmx_file.m_bones[target.m_index].m_name.c_str()));
+				else
+					entry_text = FormatString("[Bone] @", String::IntToString(target.m_index));
+			}
+			else
+			{
+				if (target.m_index >= 0 && static_cast<size_t>(target.m_index) < pmx_file.m_morphs.size())
+					entry_text = FormatString("[Morph] @", String(pmx_file.m_morphs[target.m_index].m_name.c_str()));
+				else
+					entry_text = FormatString("[Morph] @", String::IntToString(target.m_index));
+			}
+
+			bc = GetCustomDataTypeDefault(DTYPE_STATICTEXT);
+			bc.SetString(DESC_NAME, entry_text);
+			bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+			bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(frame_grp));
+			dynamic_description->Alloc(bc);
+		}
+	}
+}
+
 Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
 	SetMMDModel(pmx_model);
+
+	if (BaseContainer* bc = reinterpret_cast<BaseList2D*>(Get())->GetDataInstance())
+	{
+		bc->SetString(MODEL_NAME_LOCAL, maxon::String{ pmx_file.m_info.m_modelName.c_str() });
+		bc->SetString(MODEL_NAME_UNIVERSAL, maxon::String{ pmx_file.m_info.m_englishModelName.c_str() });
+		bc->SetString(COMMENTS_LOCAL, maxon::String{ pmx_file.m_info.m_comment.c_str() });
+		bc->SetString(COMMENTS_UNIVERSAL, maxon::String{ pmx_file.m_info.m_englishComment.c_str() });
+		bc->SetFloat(PMX_VERSION, pmx_file.m_header.m_version);
+	}
+
 	maxon::BaseArray<BaseObject*> bone_list;
 	auto morph_change_helper = BeginMorphChange();
 
@@ -738,6 +789,8 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	if(!joint_manager_data_ || !joint_manager_data_->LoadPMX(pmx_file, setting))
 		return false;
 
+	ImportDisplayFrames(pmx_file);
+
 	if (setting.import_expression)
 	{
 		const auto& pmx_morph_array = pmx_file.m_morphs;
@@ -745,9 +798,20 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 		for (auto morph_index = decltype(pmx_morph_num){}; morph_index < pmx_morph_num; ++morph_index)
 		{
 			const auto& pmx_morph = pmx_morph_array[morph_index];
-			if (const auto& morph_offset_type = pmx_morph.m_morphType;
-				morph_offset_type == libmmd::PMXMorphType::Group || morph_offset_type == libmmd::PMXMorphType::Flip)
-				ImportGroupAndFlipMorph(pmx_morph);
+			const auto& morph_offset_type = pmx_morph.m_morphType;
+			const auto panel = static_cast<Int32>(pmx_morph.m_controlPanel);
+			if (morph_offset_type == libmmd::PMXMorphType::Group || morph_offset_type == libmmd::PMXMorphType::Flip)
+			{
+				ImportGroupAndFlipMorph(pmx_morph, panel);
+			}
+			else if (morph_offset_type == libmmd::PMXMorphType::Material)
+			{
+				AddMorph(MMDMorphType::MATERIAL, String(pmx_morph.m_name.c_str()), true, panel);
+			}
+			else if (morph_offset_type == libmmd::PMXMorphType::Impluse)
+			{
+				AddMorph(MMDMorphType::IMPULSE, String(pmx_morph.m_name.c_str()), true, panel);
+			}
 		}
 	}
 	return true;
@@ -1110,6 +1174,20 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				AddMorph(MMDMorphType::FLIP, ge_data.GetString());
 				break;
 			}
+			case MODEL_MORPH_MATERIAL_ADD_BUTTON:
+			{
+				GeData ge_data;
+				node->GetParameter(ConstDescID(DescLevel(MODEL_MORPH_MATERIAL_ADD_NAME)), ge_data, DESCFLAGS_GET::NONE);
+				AddMorph(MMDMorphType::MATERIAL, ge_data.GetString());
+				break;
+			}
+			case MODEL_MORPH_IMPULSE_ADD_BUTTON:
+			{
+				GeData ge_data;
+				node->GetParameter(ConstDescID(DescLevel(MODEL_MORPH_IMPULSE_ADD_NAME)), ge_data, DESCFLAGS_GET::NONE);
+				AddMorph(MMDMorphType::IMPULSE, ge_data.GetString());
+				break;
+			}
 			case MODEL_ANIM_MERGE_VMD_BUTTON: [[fallthrough]];
 			case MODEL_ANIM_LOAD_VMD_BUTTON:
 			{
@@ -1203,7 +1281,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	return ObjectData::SetDParameter(node, id, t_data, flags);
 }
 
-Int MMDModelManagerObject::AddMorph(const MMDMorphType& morph_type, String morph_name, bool is_add_morph_ui)
+Int MMDModelManagerObject::AddMorph(const MMDMorphType& morph_type, String morph_name, bool is_add_morph_ui, Int32 panel)
 {
 	Int index = -1;
 	iferr_scope_handler{ return index; };
@@ -1239,18 +1317,32 @@ Int MMDModelManagerObject::AddMorph(const MMDMorphType& morph_type, String morph
 		morph = NewObj(UVMorph, morph_name)iferr_return;
 		break;
 	case MMDMorphType::BONE:
-
 		if (morph_name.IsEmpty())
 		{
 			morph_name = FormatString("Bone morph @", GetMorphNamedNumber());
 		}
 		morph = NewObj(BoneMorph, morph_name)iferr_return;
 		break;
+	case MMDMorphType::MATERIAL:
+		if (morph_name.IsEmpty())
+		{
+			morph_name = FormatString("Material morph @", GetMorphNamedNumber());
+		}
+		morph = NewObj(MaterialMorph, morph_name)iferr_return;
+		break;
+	case MMDMorphType::IMPULSE:
+		if (morph_name.IsEmpty())
+		{
+			morph_name = FormatString("Impulse morph @", GetMorphNamedNumber());
+		}
+		morph = NewObj(ImpulseMorph, morph_name)iferr_return;
+		break;
 	case MMDMorphType::DEFAULT:
 		break;
 	}
 	if(!morph)
 		return index;
+	morph->SetPanel(panel);
 	morph_data_.AppendPtr(morph)iferr_return;
 	index = morph_data_.GetIndex(*morph);
 	iferr(morph_name_.Insert(morph_name, index))

@@ -126,6 +126,30 @@ IMorph::IMorph(IMorph&& other) noexcept:
 	m_strength_id(std::move(other.m_strength_id))
 {}
 
+void IMorph::AddPanelUI(MMDModelManagerObject& model, Int morph_id, const DescID& parent_grp)
+{
+	if (m_panel <= 0)
+		return;
+	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_LONG);
+	bc.SetString(DESC_NAME, "panel"_s);
+	bc.SetInt32(DESC_DEFAULT, m_panel);
+	bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+	BaseContainer cycle;
+	cycle.SetString(1, "眉"_s);
+	cycle.SetString(2, "目"_s);
+	cycle.SetString(3, "口"_s);
+	cycle.SetString(4, "其他"_s);
+	bc.SetContainer(DESC_CYCLE, cycle);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(parent_grp));
+	m_panel_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
+}
+
+void IMorph::DeletePanelUI(MMDModelManagerObject& model)
+{
+	if (m_panel_id.GetDepth() > 0)
+		model.DeleteDynamicDescription(m_panel_id);
+}
+
 inline Float IMorph::GetStrength(SDK2024_Const GeListNode* node) const
 {
 	GeData ge_data;
@@ -277,6 +301,7 @@ inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
 	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_grp_id));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
+	AddPanelUI(model, morph_id, m_grp_id);
 	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetInt32(DESC_COLUMNS, 3);
 	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_grp_id));
@@ -297,7 +322,6 @@ inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_button_grp_id));
 	m_button_rename_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_RENAME_BUTTON, morph_id);
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-
 }
 
 inline void FlipMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
@@ -317,6 +341,7 @@ inline void FlipMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
 	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_grp_id));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_GRP, morph_id);
+	AddPanelUI(model, morph_id, m_grp_id);
 	bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetInt32(DESC_COLUMNS, 3);
 	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(m_grp_id));
@@ -352,6 +377,7 @@ inline void MeshMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
 	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_MESH_GRP))));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
+	AddPanelUI(model, morph_id, ConstDescID(DescLevel(MODEL_MORPH_MESH_GRP)));
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
@@ -382,11 +408,13 @@ inline void UVMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
 	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_UV_GRP))));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
+	AddPanelUI(model, morph_id, ConstDescID(DescLevel(MODEL_MORPH_UV_GRP)));
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
 inline void UVMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
+	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);
 
 	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
@@ -409,6 +437,7 @@ inline void BoneMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
 	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_BONE_GRP))));
 	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
+	AddPanelUI(model, morph_id, ConstDescID(DescLevel(MODEL_MORPH_BONE_GRP)));
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
@@ -418,6 +447,7 @@ inline void GroupMorph::DeleteMorphUI(MMDModelManagerObject& model)
 	model.DeleteDynamicDescription(m_button_delete_id);
 	model.DeleteDynamicDescription(m_button_rename_id);
 	model.DeleteDynamicDescription(m_button_grp_id);
+	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);
 	model.DeleteDynamicDescription(m_grp_id);
 
@@ -434,6 +464,7 @@ inline void FlipMorph::DeleteMorphUI(MMDModelManagerObject& model)
 	model.DeleteDynamicDescription(m_button_delete_id);
 	model.DeleteDynamicDescription(m_button_rename_id);
 	model.DeleteDynamicDescription(m_button_grp_id);
+	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);
 	model.DeleteDynamicDescription(m_grp_id);
 
@@ -446,6 +477,7 @@ inline void FlipMorph::DeleteMorphUI(MMDModelManagerObject& model)
 
 inline void MeshMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
+	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);
 
 	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
@@ -463,6 +495,7 @@ BoneMorph::BoneMorph(BoneMorph&& other) noexcept: IMorph(std::move(other))
 
 inline void BoneMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
+	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);
 
 	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
@@ -495,4 +528,78 @@ inline void GroupMorph::AddSubMorphNoCheck(Int id, const Float weight)
 inline auto FlipMorph::AddSubMorphNoCheck(Int id, const Float weight) -> void
 {
 	std::ignore = m_data.Insert(id, weight);
+}
+
+MaterialMorph::MaterialMorph(String name, DescID strength_id) : IMorph(std::move(name), std::move(strength_id))
+{}
+
+MaterialMorph::MaterialMorph(MaterialMorph&& other) noexcept : IMorph(std::move(other))
+{}
+
+inline void MaterialMorph::UpdateMorph(MMDModelManagerObject& model)
+{}
+
+inline void MaterialMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+{
+	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
+	bc.SetString(DESC_NAME, m_name);
+	bc.SetFloat(DESC_MAX, 1.);
+	bc.SetFloat(DESC_MIN, 0.);
+	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
+	bc.SetFloat(DESC_MAXSLIDER, 1.);
+	bc.SetFloat(DESC_MINSLIDER, 0.);
+	bc.SetFloat(DESC_STEP, 0.01);
+	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_MATERIAL_GRP))));
+	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
+	AddPanelUI(model, morph_id, ConstDescID(DescLevel(MODEL_MORPH_MATERIAL_GRP)));
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+}
+
+inline void MaterialMorph::DeleteMorphUI(MMDModelManagerObject& model)
+{
+	DeletePanelUI(model);
+	model.DeleteDynamicDescription(m_strength_id);
+	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (::GeIsMainThread())
+	{
+		::EventAdd();
+	}
+}
+
+ImpulseMorph::ImpulseMorph(String name, DescID strength_id) : IMorph(std::move(name), std::move(strength_id))
+{}
+
+ImpulseMorph::ImpulseMorph(ImpulseMorph&& other) noexcept : IMorph(std::move(other))
+{}
+
+inline void ImpulseMorph::UpdateMorph(MMDModelManagerObject& model)
+{}
+
+inline void ImpulseMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+{
+	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
+	bc.SetString(DESC_NAME, m_name);
+	bc.SetFloat(DESC_MAX, 1.);
+	bc.SetFloat(DESC_MIN, 0.);
+	bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_REALSLIDER);
+	bc.SetFloat(DESC_MAXSLIDER, 1.);
+	bc.SetFloat(DESC_MINSLIDER, 0.);
+	bc.SetFloat(DESC_STEP, 0.01);
+	bc.SetInt32(DESC_UNIT, DESC_UNIT_PERCENT);
+	bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_MORPH_IMPULSE_GRP))));
+	m_strength_id = model.AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::MORPH_STRENGTH, morph_id);
+	AddPanelUI(model, morph_id, ConstDescID(DescLevel(MODEL_MORPH_IMPULSE_GRP)));
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+}
+
+inline void ImpulseMorph::DeleteMorphUI(MMDModelManagerObject& model)
+{
+	DeletePanelUI(model);
+	model.DeleteDynamicDescription(m_strength_id);
+	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (::GeIsMainThread())
+	{
+		::EventAdd();
+	}
 }

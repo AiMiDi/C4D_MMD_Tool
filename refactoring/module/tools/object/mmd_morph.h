@@ -12,7 +12,9 @@ enum class MMDMorphType : uint8_t
 	FLIP = 1 << 1,
 	MESH = 1 << 2,
 	BONE = 1 << 3,
-	UV = 1 << 4
+	UV = 1 << 4,
+	MATERIAL = 1 << 5,
+	IMPULSE = 1 << 6
 };
 
 class IMorph
@@ -20,6 +22,7 @@ class IMorph
 protected:
 	String m_name;
 	DescID m_strength_id;
+	Int32 m_panel = 0;
 public:
 	explicit IMorph(String name = {}, DescID strength_id = {});
 	IMorph(const IMorph&) = delete;
@@ -30,6 +33,8 @@ public:
 	IMorph& operator=(IMorph&& other) noexcept = default;
  
 	[[nodiscard]] const String& GetName() const { return m_name; }
+	[[nodiscard]] Int32 GetPanel() const { return m_panel; }
+	void SetPanel(Int32 panel) { m_panel = panel; }
 	Float GetStrength(SDK2024_Const GeListNode* node) const;
 	Bool SetStrength(GeListNode* node, const Float& strength) const;
 	DescID GetStrengthDescID();
@@ -47,6 +52,11 @@ public:
 	virtual Bool Read(HyperFile* hf);
 	virtual Bool Write(HyperFile* hf) SDK2024_Const;
 	virtual Bool CopyTo(IMorph* dest) const;
+
+protected:
+	DescID m_panel_id;
+	void AddPanelUI(MMDModelManagerObject& model, Int morph_id, const DescID& parent_grp);
+	void DeletePanelUI(MMDModelManagerObject& model);
 };
 
 class GroupMorph final : public IMorph
@@ -173,4 +183,38 @@ public:
 	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
 	void DeleteMorphUI(MMDModelManagerObject& model) override;
 	MMDMorphType GetType() const override { return MMDMorphType::BONE; }
+};
+
+class MaterialMorph final : public IMorph
+{
+public:
+	explicit MaterialMorph(String name = {}, DescID strength_id = {});
+	MaterialMorph(const MaterialMorph&) = delete;
+	MaterialMorph(MaterialMorph&& other) noexcept;
+	~MaterialMorph() override = default;
+
+	MaterialMorph& operator=(const MaterialMorph&) = delete;
+	MaterialMorph& operator=(MaterialMorph&& other) noexcept = default;
+
+	void UpdateMorph(MMDModelManagerObject& model) override;
+	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelManagerObject& model) override;
+	MMDMorphType GetType() const override { return MMDMorphType::MATERIAL; }
+};
+
+class ImpulseMorph final : public IMorph
+{
+public:
+	explicit ImpulseMorph(String name = {}, DescID strength_id = {});
+	ImpulseMorph(const ImpulseMorph&) = delete;
+	ImpulseMorph(ImpulseMorph&& other) noexcept;
+	~ImpulseMorph() override = default;
+
+	ImpulseMorph& operator=(const ImpulseMorph&) = delete;
+	ImpulseMorph& operator=(ImpulseMorph&& other) noexcept = default;
+
+	void UpdateMorph(MMDModelManagerObject& model) override;
+	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
+	void DeleteMorphUI(MMDModelManagerObject& model) override;
+	MMDMorphType GetType() const override { return MMDMorphType::IMPULSE; }
 };

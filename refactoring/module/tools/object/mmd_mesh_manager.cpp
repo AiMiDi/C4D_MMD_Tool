@@ -602,10 +602,79 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 		}
 
-		// if import_expression is true, create morph ta
+		// create edge magnitude VertexMapTag
+		{
+			VertexMapTag* edge_map_tag = VertexMapTag::Alloc(static_cast<Int32>(vertex_count));
+			if (edge_map_tag)
+			{
+				edge_map_tag->SetName("\u8F6E\u5ED3\u500D\u7387"_s);
+				Float32* edge_data = edge_map_tag->GetDataAddressW();
+				for (auto vi = decltype(vertex_count){}; vi < vertex_count; ++vi)
+				{
+					edge_data[vi] = pmx_vertices[vi].m_edgeMag;
+				}
+				mesh_object->InsertTag(edge_map_tag);
+			}
+		}
+
+		// create SDEF VertexColorTags if any SDEF vertices exist
+		{
+			bool has_sdef = false;
+			for (auto vi = decltype(vertex_count){}; vi < vertex_count; ++vi)
+			{
+				if (pmx_vertices[vi].m_weightType == libmmd::PMXVertexWeight::SDEF)
+				{
+					has_sdef = true;
+					break;
+				}
+			}
+			if (has_sdef)
+			{
+				VertexColorTag* tag_c = VertexColorTag::Alloc(static_cast<Int32>(vertex_count));
+				VertexColorTag* tag_r0 = VertexColorTag::Alloc(static_cast<Int32>(vertex_count));
+				VertexColorTag* tag_r1 = VertexColorTag::Alloc(static_cast<Int32>(vertex_count));
+				if (tag_c && tag_r0 && tag_r1)
+				{
+					tag_c->SetName("SDEF_C"_s);
+					tag_r0->SetName("SDEF_R0"_s);
+					tag_r1->SetName("SDEF_R1"_s);
+
+					tag_c->SetPerPointMode(true);
+					tag_r0->SetPerPointMode(true);
+					tag_r1->SetPerPointMode(true);
+
+					VertexColorHandle handle_c = tag_c->GetDataAddressW();
+					VertexColorHandle handle_r0 = tag_r0->GetDataAddressW();
+					VertexColorHandle handle_r1 = tag_r1->GetDataAddressW();
+
+					for (auto vi = decltype(vertex_count){}; vi < vertex_count; ++vi)
+					{
+						const auto& v = pmx_vertices[vi];
+						maxon::ColorA32 col_c, col_r0, col_r1;
+						if (v.m_weightType == libmmd::PMXVertexWeight::SDEF)
+						{
+							col_c = maxon::ColorA32(v.m_sdefC.x(), v.m_sdefC.y(), v.m_sdefC.z(), 1.0f);
+							col_r0 = maxon::ColorA32(v.m_sdefR0.x(), v.m_sdefR0.y(), v.m_sdefR0.z(), 1.0f);
+							col_r1 = maxon::ColorA32(v.m_sdefR1.x(), v.m_sdefR1.y(), v.m_sdefR1.z(), 1.0f);
+						}
+						else
+						{
+							col_c = col_r0 = col_r1 = maxon::ColorA32(0, 0, 0, 1.0f);
+						}
+						VertexColorTag::Set(handle_c, nullptr, nullptr, static_cast<Int32>(vi), col_c);
+						VertexColorTag::Set(handle_r0, nullptr, nullptr, static_cast<Int32>(vi), col_r0);
+						VertexColorTag::Set(handle_r1, nullptr, nullptr, static_cast<Int32>(vi), col_r1);
+					}
+					mesh_object->InsertTag(tag_c);
+					mesh_object->InsertTag(tag_r0);
+					mesh_object->InsertTag(tag_r1);
+				}
+			}
+		}
+
+		// if import_expression is true, create morph tag
 		if (setting.import_expression)
 		{
-			// create morph tag
 			CAPoseMorphTag* morph_tag = CAPoseMorphTag::Alloc();
 			if (!morph_tag)
 				return false;

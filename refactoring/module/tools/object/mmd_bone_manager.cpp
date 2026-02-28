@@ -516,6 +516,16 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_PHYSICS_AFTER_DEFORM)),
 			static_cast<uint16_t>(mmd_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::DeformAfterPhysics), DESCFLAGS_SET::NONE);
 
+		// set append local
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_LOCAL)),
+			static_cast<bool>(static_cast<uint16_t>(mmd_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::AppendLocal)), DESCFLAGS_SET::NONE);
+
+		// set outer parent
+		const auto have_outer_parent = static_cast<bool>(static_cast<uint16_t>(mmd_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::DeformOuterParent));
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_OUTER_PARENT)), have_outer_parent, DESCFLAGS_SET::NONE);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_OUTER_PARENT_KEY)),
+			have_outer_parent ? mmd_bone.m_keyValue : 0, DESCFLAGS_SET::NONE);
+
 		/// tail
 
 		// set tail use index
