@@ -7,17 +7,43 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A045BF0E5C0E2B337C010000 /* libmisc.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C0E2B337C000000 /* libmisc.framework.a */; };
 		A045BF0E5C1B997EB2010000 /* libmodeling_geom.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C1B997EB2000000 /* libmodeling_geom.framework.a */; };
+		A045BF0E5C2E184480010000 /* libasset.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C2E184480000000 /* libasset.framework.a */; };
 		A045BF0E5C4287392B010000 /* libimage.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C4287392B000000 /* libimage.framework.a */; };
 		A045BF0E5C6542540E010000 /* libmesh_misc.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C6542540E000000 /* libmesh_misc.framework.a */; };
+		A045BF0E5C674A74D4010000 /* libnodespace.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C674A74D4000000 /* libnodespace.framework.a */; };
 		A045BF0E5C8A3C2298010000 /* libmath.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5C8A3C2298000000 /* libmath.framework.a */; };
+		A045BF0E5CA8336F01010000 /* libnodes.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5CA8336F01000000 /* libnodes.framework.a */; };
 		A045BF0E5CD80552BB010000 /* interface_registration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5CD80552BB000000 /* interface_registration.cpp */; };
 		A045BF0E5CD93CCD9F010000 /* register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A045BF0E5CD93CCD9F000000 /* register.cpp */; };
 		A045BF0E5CF470FF41010000 /* libcinema.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5CF470FF41000000 /* libcinema.framework.a */; };
 		A045BF0E5CF4AB3A6F010000 /* libcore.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5CF4AB3A6F000000 /* libcore.framework.a */; };
+		A045BF0E5CFC123D5E010000 /* libgraph.framework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A045BF0E5CFC123D5E000000 /* libgraph.framework.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A045BF0E5C0E2B337C040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5C0E2B337C020000 /* misc.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA30E2B337C7B0000;
+			remoteInfo = misc.framework;
+		};
+		A045BF0E5C0E2B337C040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5C0E2B337C020000 /* misc.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA30E2B337C7B0100;
+			remoteInfo = "misc.framework static library";
+		};
+		A045BF0E5C0E2B337C050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5C0E2B337C020000 /* misc.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA30E2B337C000000;
+			remoteInfo = misc.framework;
+		};
 		A045BF0E5C1B997EB2040000 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A045BF0E5C1B997EB2020000 /* modeling_geom.framework.xcodeproj */;
@@ -38,6 +64,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = A08C5CDEA31B997EB2000000;
 			remoteInfo = modeling_geom.framework;
+		};
+		A045BF0E5C2E184480040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5C2E184480020000 /* asset.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA32E1844807B0000;
+			remoteInfo = asset.framework;
+		};
+		A045BF0E5C2E184480040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5C2E184480020000 /* asset.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA32E1844807B0100;
+			remoteInfo = "asset.framework static library";
+		};
+		A045BF0E5C2E184480050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5C2E184480020000 /* asset.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA32E184480000000;
+			remoteInfo = asset.framework;
 		};
 		A045BF0E5C4287392B040000 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -81,6 +128,27 @@
 			remoteGlobalIDString = A08C5CDEA36542540E000000;
 			remoteInfo = mesh_misc.framework;
 		};
+		A045BF0E5C674A74D4040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5C674A74D4020000 /* nodespace.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3674A74D47B0000;
+			remoteInfo = nodespace.framework;
+		};
+		A045BF0E5C674A74D4040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5C674A74D4020000 /* nodespace.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3674A74D47B0100;
+			remoteInfo = "nodespace.framework static library";
+		};
+		A045BF0E5C674A74D4050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5C674A74D4020000 /* nodespace.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3674A74D4000000;
+			remoteInfo = nodespace.framework;
+		};
 		A045BF0E5C8A3C2298040000 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A045BF0E5C8A3C2298020000 /* math.framework.xcodeproj */;
@@ -101,6 +169,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = A08C5CDEA38A3C2298000000;
 			remoteInfo = math.framework;
+		};
+		A045BF0E5CA8336F01040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5CA8336F01020000 /* nodes.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3A8336F017B0000;
+			remoteInfo = nodes.framework;
+		};
+		A045BF0E5CA8336F01040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5CA8336F01020000 /* nodes.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3A8336F017B0100;
+			remoteInfo = "nodes.framework static library";
+		};
+		A045BF0E5CA8336F01050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5CA8336F01020000 /* nodes.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3A8336F01000000;
+			remoteInfo = nodes.framework;
 		};
 		A045BF0E5CF470FF41040000 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -144,19 +233,45 @@
 			remoteGlobalIDString = A08C5CDEA3F4AB3A6F000000;
 			remoteInfo = core.framework;
 		};
+		A045BF0E5CFC123D5E040000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5CFC123D5E020000 /* graph.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3FC123D5E7B0000;
+			remoteInfo = graph.framework;
+		};
+		A045BF0E5CFC123D5E040100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5CFC123D5E020000 /* graph.framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C5CDEA3FC123D5E7B0100;
+			remoteInfo = "graph.framework static library";
+		};
+		A045BF0E5CFC123D5E050000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A045BF0E5CFC123D5E020000 /* graph.framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A08C5CDEA3FC123D5E000000;
+			remoteInfo = graph.framework;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A045BF0E5C00000000000000 /* debugbase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = debugbase.xcconfig; path = ../../../frameworks/settings/debugbase.xcconfig; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C00000000050000 /* releasebase.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = releasebase.xcconfig; path = ../../../frameworks/settings/releasebase.xcconfig; sourceTree = SOURCE_ROOT; };
+		A045BF0E5C0E2B337C020000 /* misc.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = misc.framework.xcodeproj; path = ../../../frameworks/misc.framework/project/misc.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C1B997EB2020000 /* modeling_geom.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = modeling_geom.framework.xcodeproj; path = ../../../frameworks/modeling_geom.framework/project/modeling_geom.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A045BF0E5C2E184480020000 /* asset.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = asset.framework.xcodeproj; path = ../../../frameworks/asset.framework/project/asset.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C4287392B020000 /* image.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = image.framework.xcodeproj; path = ../../../frameworks/image.framework/project/image.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C6542540E020000 /* mesh_misc.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mesh_misc.framework.xcodeproj; path = ../../../frameworks/mesh_misc.framework/project/mesh_misc.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A045BF0E5C674A74D4020000 /* nodespace.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = nodespace.framework.xcodeproj; path = ../../../frameworks/nodespace.framework/project/nodespace.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5C8A3C2298020000 /* math.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = math.framework.xcodeproj; path = ../../../frameworks/math.framework/project/math.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A045BF0E5CA8336F01020000 /* nodes.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = nodes.framework.xcodeproj; path = ../../../frameworks/nodes.framework/project/nodes.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CD80552BB000000 /* interface_registration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interface_registration.cpp; path = ../generated/hxx/interface_registration.cpp; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CD93CCD9F000000 /* register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = register.cpp; path = ../generated/hxx/register.cpp; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CF470FF41020000 /* cinema.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cinema.framework.xcodeproj; path = ../../../frameworks/cinema.framework/project/cinema.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A045BF0E5CF4AB3A6F020000 /* core.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = core.framework.xcodeproj; path = ../../../frameworks/core.framework/project/core.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A045BF0E5CFC123D5E020000 /* graph.framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = graph.framework.xcodeproj; path = ../../../frameworks/graph.framework/project/graph.framework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		A08C5CDEA345BF0E5C7B0000 /* mmdtool.xlib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mmdtool.xlib; sourceTree = BUILT_PRODUCTS_DIR; };
 		A08C5CDEA345BF0E5C7B0100 /* libmmdtool_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmmdtool_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -166,12 +281,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A045BF0E5C0E2B337C010000 /* libmisc.framework.a in Frameworks */,
 				A045BF0E5C1B997EB2010000 /* libmodeling_geom.framework.a in Frameworks */,
+				A045BF0E5C2E184480010000 /* libasset.framework.a in Frameworks */,
 				A045BF0E5C4287392B010000 /* libimage.framework.a in Frameworks */,
 				A045BF0E5C6542540E010000 /* libmesh_misc.framework.a in Frameworks */,
+				A045BF0E5C674A74D4010000 /* libnodespace.framework.a in Frameworks */,
 				A045BF0E5C8A3C2298010000 /* libmath.framework.a in Frameworks */,
+				A045BF0E5CA8336F01010000 /* libnodes.framework.a in Frameworks */,
 				A045BF0E5CF470FF41010000 /* libcinema.framework.a in Frameworks */,
 				A045BF0E5CF4AB3A6F010000 /* libcore.framework.a in Frameworks */,
+				A045BF0E5CFC123D5E010000 /* libgraph.framework.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,12 +301,17 @@
 		A045BF0E5C00000000140000 /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				A045BF0E5C2E184480020000 /* asset.framework.xcodeproj */,
 				A045BF0E5CF470FF41020000 /* cinema.framework.xcodeproj */,
 				A045BF0E5CF4AB3A6F020000 /* core.framework.xcodeproj */,
+				A045BF0E5CFC123D5E020000 /* graph.framework.xcodeproj */,
 				A045BF0E5C4287392B020000 /* image.framework.xcodeproj */,
 				A045BF0E5C8A3C2298020000 /* math.framework.xcodeproj */,
 				A045BF0E5C6542540E020000 /* mesh_misc.framework.xcodeproj */,
+				A045BF0E5C0E2B337C020000 /* misc.framework.xcodeproj */,
 				A045BF0E5C1B997EB2020000 /* modeling_geom.framework.xcodeproj */,
+				A045BF0E5CA8336F01020000 /* nodes.framework.xcodeproj */,
+				A045BF0E5C674A74D4020000 /* nodespace.framework.xcodeproj */,
 			);
 			name = libs;
 			sourceTree = "<group>";
@@ -219,6 +344,15 @@
 			name = products;
 			sourceTree = "<group>";
 		};
+		A045BF0E5C0E2B337C280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A045BF0E5C0E2B337C000000 /* libmisc.framework.a */,
+				A045BF0E5C0E2B337C000100 /* libmisc.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
 		A045BF0E5C111A998F000000 /* generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +371,15 @@
 			name = products;
 			sourceTree = "<group>";
 		};
+		A045BF0E5C2E184480280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A045BF0E5C2E184480000000 /* libasset.framework.a */,
+				A045BF0E5C2E184480000100 /* libasset.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
 		A045BF0E5C4287392B280000 /* products */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,6 +394,15 @@
 			children = (
 				A045BF0E5C6542540E000000 /* libmesh_misc.framework.a */,
 				A045BF0E5C6542540E000100 /* libmesh_misc.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A045BF0E5C674A74D4280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A045BF0E5C674A74D4000000 /* libnodespace.framework.a */,
+				A045BF0E5C674A74D4000100 /* libnodespace.framework_static.a */,
 			);
 			name = products;
 			sourceTree = "<group>";
@@ -274,6 +426,15 @@
 			name = products;
 			sourceTree = "<group>";
 		};
+		A045BF0E5CA8336F01280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A045BF0E5CA8336F01000000 /* libnodes.framework.a */,
+				A045BF0E5CA8336F01000100 /* libnodes.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
 		A045BF0E5CF470FF41280000 /* products */ = {
 			isa = PBXGroup;
 			children = (
@@ -288,6 +449,15 @@
 			children = (
 				A045BF0E5CF4AB3A6F000000 /* libcore.framework.a */,
 				A045BF0E5CF4AB3A6F000100 /* libcore.framework_static.a */,
+			);
+			name = products;
+			sourceTree = "<group>";
+		};
+		A045BF0E5CFC123D5E280000 /* products */ = {
+			isa = PBXGroup;
+			children = (
+				A045BF0E5CFC123D5E000000 /* libgraph.framework.a */,
+				A045BF0E5CFC123D5E000100 /* libgraph.framework_static.a */,
 			);
 			name = products;
 			sourceTree = "<group>";
@@ -317,12 +487,17 @@
 			buildRules = (
 			);
 			dependencies = (
+				A045BF0E5C2E184480370000 /* PBXTargetDependency */,
 				A045BF0E5CF470FF41370000 /* PBXTargetDependency */,
 				A045BF0E5CF4AB3A6F370000 /* PBXTargetDependency */,
+				A045BF0E5CFC123D5E370000 /* PBXTargetDependency */,
 				A045BF0E5C4287392B370000 /* PBXTargetDependency */,
 				A045BF0E5C8A3C2298370000 /* PBXTargetDependency */,
 				A045BF0E5C6542540E370000 /* PBXTargetDependency */,
+				A045BF0E5C0E2B337C370000 /* PBXTargetDependency */,
 				A045BF0E5C1B997EB2370000 /* PBXTargetDependency */,
+				A045BF0E5CA8336F01370000 /* PBXTargetDependency */,
+				A045BF0E5C674A74D4370000 /* PBXTargetDependency */,
 			);
 			name = mmdtool;
 			productName = mmdtool;
@@ -350,12 +525,20 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = A045BF0E5C2E184480280000 /* products */;
+					ProjectRef = A045BF0E5C2E184480020000 /* asset.framework.xcodeproj */;
+				},
+				{
 					ProductGroup = A045BF0E5CF470FF41280000 /* products */;
 					ProjectRef = A045BF0E5CF470FF41020000 /* cinema.framework.xcodeproj */;
 				},
 				{
 					ProductGroup = A045BF0E5CF4AB3A6F280000 /* products */;
 					ProjectRef = A045BF0E5CF4AB3A6F020000 /* core.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A045BF0E5CFC123D5E280000 /* products */;
+					ProjectRef = A045BF0E5CFC123D5E020000 /* graph.framework.xcodeproj */;
 				},
 				{
 					ProductGroup = A045BF0E5C4287392B280000 /* products */;
@@ -370,8 +553,20 @@
 					ProjectRef = A045BF0E5C6542540E020000 /* mesh_misc.framework.xcodeproj */;
 				},
 				{
+					ProductGroup = A045BF0E5C0E2B337C280000 /* products */;
+					ProjectRef = A045BF0E5C0E2B337C020000 /* misc.framework.xcodeproj */;
+				},
+				{
 					ProductGroup = A045BF0E5C1B997EB2280000 /* products */;
 					ProjectRef = A045BF0E5C1B997EB2020000 /* modeling_geom.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A045BF0E5CA8336F01280000 /* products */;
+					ProjectRef = A045BF0E5CA8336F01020000 /* nodes.framework.xcodeproj */;
+				},
+				{
+					ProductGroup = A045BF0E5C674A74D4280000 /* products */;
+					ProjectRef = A045BF0E5C674A74D4020000 /* nodespace.framework.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -382,6 +577,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		A045BF0E5C0E2B337C000000 /* libmisc.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmisc.framework.a;
+			remoteRef = A045BF0E5C0E2B337C040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A045BF0E5C0E2B337C000100 /* libmisc.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmisc.framework_static.a;
+			remoteRef = A045BF0E5C0E2B337C040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		A045BF0E5C1B997EB2000000 /* libmodeling_geom.framework.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -394,6 +603,20 @@
 			fileType = archive.ar;
 			path = libmodeling_geom.framework_static.a;
 			remoteRef = A045BF0E5C1B997EB2040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A045BF0E5C2E184480000000 /* libasset.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libasset.framework.a;
+			remoteRef = A045BF0E5C2E184480040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A045BF0E5C2E184480000100 /* libasset.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libasset.framework_static.a;
+			remoteRef = A045BF0E5C2E184480040100 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A045BF0E5C4287392B000000 /* libimage.framework.a */ = {
@@ -424,6 +647,20 @@
 			remoteRef = A045BF0E5C6542540E040100 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		A045BF0E5C674A74D4000000 /* libnodespace.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libnodespace.framework.a;
+			remoteRef = A045BF0E5C674A74D4040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A045BF0E5C674A74D4000100 /* libnodespace.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libnodespace.framework_static.a;
+			remoteRef = A045BF0E5C674A74D4040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		A045BF0E5C8A3C2298000000 /* libmath.framework.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -436,6 +673,20 @@
 			fileType = archive.ar;
 			path = libmath.framework_static.a;
 			remoteRef = A045BF0E5C8A3C2298040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A045BF0E5CA8336F01000000 /* libnodes.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libnodes.framework.a;
+			remoteRef = A045BF0E5CA8336F01040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A045BF0E5CA8336F01000100 /* libnodes.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libnodes.framework_static.a;
+			remoteRef = A045BF0E5CA8336F01040100 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A045BF0E5CF470FF41000000 /* libcinema.framework.a */ = {
@@ -464,6 +715,20 @@
 			fileType = archive.ar;
 			path = libcore.framework_static.a;
 			remoteRef = A045BF0E5CF4AB3A6F040100 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A045BF0E5CFC123D5E000000 /* libgraph.framework.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libgraph.framework.a;
+			remoteRef = A045BF0E5CFC123D5E040000 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A045BF0E5CFC123D5E000100 /* libgraph.framework_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libgraph.framework_static.a;
+			remoteRef = A045BF0E5CFC123D5E040100 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -499,10 +764,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A045BF0E5C0E2B337C370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = misc.framework;
+			targetProxy = A045BF0E5C0E2B337C050000 /* PBXContainerItemProxy */;
+		};
 		A045BF0E5C1B997EB2370000 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = modeling_geom.framework;
 			targetProxy = A045BF0E5C1B997EB2050000 /* PBXContainerItemProxy */;
+		};
+		A045BF0E5C2E184480370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = asset.framework;
+			targetProxy = A045BF0E5C2E184480050000 /* PBXContainerItemProxy */;
 		};
 		A045BF0E5C4287392B370000 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -514,10 +789,20 @@
 			name = mesh_misc.framework;
 			targetProxy = A045BF0E5C6542540E050000 /* PBXContainerItemProxy */;
 		};
+		A045BF0E5C674A74D4370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = nodespace.framework;
+			targetProxy = A045BF0E5C674A74D4050000 /* PBXContainerItemProxy */;
+		};
 		A045BF0E5C8A3C2298370000 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = math.framework;
 			targetProxy = A045BF0E5C8A3C2298050000 /* PBXContainerItemProxy */;
+		};
+		A045BF0E5CA8336F01370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = nodes.framework;
+			targetProxy = A045BF0E5CA8336F01050000 /* PBXContainerItemProxy */;
 		};
 		A045BF0E5CF470FF41370000 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -529,6 +814,11 @@
 			name = core.framework;
 			targetProxy = A045BF0E5CF4AB3A6F050000 /* PBXContainerItemProxy */;
 		};
+		A045BF0E5CFC123D5E370000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = graph.framework;
+			targetProxy = A045BF0E5CFC123D5E050000 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -538,6 +828,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = YES;
 				EXCLUDED_SOURCE_FILE_NAMES = "";
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					USE_API_MAXON,
@@ -546,7 +837,7 @@
 				);
 				INSTALL_PATH = /..;
 				MAXON_ROOTDIR = ../../../;
-				USER_HEADER_SEARCH_PATHS = "../generated/hxx $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/modeling_geom.framework/source/** $(MAXON_ROOTDIR)frameworks/modeling_geom.framework/generated/hxx $(inherited)";
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/asset.framework/source/** $(MAXON_ROOTDIR)frameworks/asset.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/graph.framework/source/** $(MAXON_ROOTDIR)frameworks/graph.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/misc.framework/source/** $(MAXON_ROOTDIR)frameworks/misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/modeling_geom.framework/source/** $(MAXON_ROOTDIR)frameworks/modeling_geom.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/nodes.framework/source/** $(MAXON_ROOTDIR)frameworks/nodes.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/nodespace.framework/source/** $(MAXON_ROOTDIR)frameworks/nodespace.framework/generated/hxx $(inherited)";
 			};
 			name = Debug;
 		};
@@ -556,6 +847,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = YES;
 				EXCLUDED_SOURCE_FILE_NAMES = "";
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					USE_API_MAXON,
@@ -564,7 +856,7 @@
 				);
 				INSTALL_PATH = /..;
 				MAXON_ROOTDIR = ../../../;
-				USER_HEADER_SEARCH_PATHS = "../generated/hxx $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/modeling_geom.framework/source/** $(MAXON_ROOTDIR)frameworks/modeling_geom.framework/generated/hxx $(inherited)";
+				USER_HEADER_SEARCH_PATHS = "../generated/hxx $(MAXON_ROOTDIR)frameworks/core.framework/source/** $(MAXON_ROOTDIR)frameworks/core.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/asset.framework/source/** $(MAXON_ROOTDIR)frameworks/asset.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/cinema.framework/source/** $(MAXON_ROOTDIR)frameworks/cinema.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/graph.framework/source/** $(MAXON_ROOTDIR)frameworks/graph.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/image.framework/source/** $(MAXON_ROOTDIR)frameworks/image.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/math.framework/source/** $(MAXON_ROOTDIR)frameworks/math.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/source/** $(MAXON_ROOTDIR)frameworks/mesh_misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/misc.framework/source/** $(MAXON_ROOTDIR)frameworks/misc.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/modeling_geom.framework/source/** $(MAXON_ROOTDIR)frameworks/modeling_geom.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/nodes.framework/source/** $(MAXON_ROOTDIR)frameworks/nodes.framework/generated/hxx $(MAXON_ROOTDIR)frameworks/nodespace.framework/source/** $(MAXON_ROOTDIR)frameworks/nodespace.framework/generated/hxx $(inherited)";
 			};
 			name = Release;
 		};

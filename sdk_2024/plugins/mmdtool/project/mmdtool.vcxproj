@@ -40,8 +40,13 @@
     <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\image.framework\project\image.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\math.framework\project\math.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\nodespace.framework\project\nodespace.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\mesh_misc.framework\project\mesh_misc.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\modeling_geom.framework\project\modeling_geom.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\nodes.framework\project\nodes.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\graph.framework\project\graph.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\misc.framework\project\misc.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\asset.framework\project\asset.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
@@ -50,8 +55,13 @@
     <Import Project="$(MAXON_ROOTDIR)\frameworks\core.framework\project\core.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\image.framework\project\image.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\math.framework\project\math.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\nodespace.framework\project\nodespace.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\mesh_misc.framework\project\mesh_misc.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\modeling_geom.framework\project\modeling_geom.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\nodes.framework\project\nodes.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\graph.framework\project\graph.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\misc.framework\project\misc.framework.includes.props" />
+    <Import Project="$(MAXON_ROOTDIR)\frameworks\asset.framework\project\asset.framework.includes.props" />
     <Import Project="$(MAXON_ROOTDIR)\frameworks\settings\sourceprocessor.buildevent" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -77,13 +87,14 @@
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;YAML_CPP_STATIC_DEFINE=1;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>libMMD_Debug.lib;yaml-cpp_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMMD_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -95,14 +106,15 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;YAML_CPP_STATIC_DEFINE=1;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries />
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>libMMD.lib;yaml-cpp.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMMD.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles />
@@ -141,6 +153,14 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\nodespace.framework\project\nodespace.framework.vcxproj">
+      <Project>{876D8A6F-63D4-F5D0-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
     <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\mesh_misc.framework\project\mesh_misc.framework.vcxproj">
       <Project>{3A883A00-61CC-D50A-0009-38CB8C5CDEA3}</Project>
       <Private>true</Private>
@@ -157,6 +177,38 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\nodes.framework\project\nodes.framework.vcxproj">
+      <Project>{20E84835-FF3D-CDFD-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\graph.framework\project\graph.framework.vcxproj">
+      <Project>{BF805522-531C-9C5A-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\misc.framework\project\misc.framework.vcxproj">
+      <Project>{EDBA06FB-951B-0500-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="$(MAXON_ROOTDIR)\frameworks\asset.framework\project\asset.framework.vcxproj">
+      <Project>{9F228E72-8522-A37C-0009-38CB8C5CDEA3}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\refactoring\CMTSceneManager.cpp" />
@@ -164,7 +216,11 @@
     <ClCompile Include="..\..\..\..\refactoring\cmt_tools_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\main.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\tools\mmd_material.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\material\mmd_corona_material.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\material\mmd_material.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\material\mmd_octane_material.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\material\mmd_redshift_material.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\material\mmd_standard_material.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp" />
@@ -175,22 +231,12 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.cpp" />
-    <ClCompile Include="..\..\..\..\refactoring\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\refactoring\register_entity.cpp" />
-    <ClCompile Include="..\generated\hxx\interface_registration.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\generated\hxx\register.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\generated\hxx\interface_registration.cpp" />
+    <ClCompile Include="..\generated\hxx\register.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\CMTSceneManager.h" />
@@ -199,33 +245,48 @@
     <ClInclude Include="..\..\..\..\refactoring\cmt_tools_setting.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\core\cmt_marco.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\loader\vmd_loader.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\mmd_material.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\material\mmd_corona_material.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\material\mmd_material.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\material\mmd_octane_material.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\material\mmd_redshift_material.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\material\mmd_standard_material.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_manager.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_model_manager.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_manager.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_morph.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\object\mmd_rigid_manager.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\tools\tag\mmd_bone.h" />
-    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_name_conversion_dialog.h" />
+    <ClInclude Include="..\..\..\..\refactoring\module\ui\cmt_tools_dialog.h" />
     <ClInclude Include="..\..\..\..\refactoring\module\ui\vmd_loader_camera_dialog.h" />
-    <ClInclude Include="..\..\..\..\refactoring\pch.h" />
     <ClInclude Include="..\..\..\..\refactoring\plugin_resource.h" />
     <ClInclude Include="..\..\..\..\refactoring\register_entity.h" />
     <ClInclude Include="..\..\..\..\refactoring\utils\filename_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\images_user_area_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\io_util.hpp" />
+    <ClInclude Include="..\..\..\..\refactoring\utils\json_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\math_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\morph_ui_data_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\pmx_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\string_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\time_util.hpp" />
     <ClInclude Include="..\..\..\..\refactoring\utils\unique_id_util.hpp" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\c4d_symbols.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDBoneManager.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDCamera.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJoint.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDJointManager.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDMeshManager.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDModelManager.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigid.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\OMMDRigidManager.h" />
+    <ClInclude Include="..\..\..\..\res\R20-S24\description\TMMDBone.h" />
+    <ClInclude Include="..\..\..\..\res\S24_up\c4d_symbols.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDCamera.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDJoint.h" />
@@ -236,83 +297,12 @@
     <ClInclude Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.h" />
     <ClInclude Include="..\..\..\..\res\S24_up\description\TMMDBone.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\c4d_strings.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\MMDCamera.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDBoneRoot.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDCamera.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDJoint.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDJointRoot.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDMeshRoot.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDModel.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDRigid.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\OMMDRigidRoot.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\description\TMMDBone.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\dialogs\DLG_CMT_TOOL.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_en-US\dialogs\DLG_CMT_VMD_IMPORT.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\c4d_strings.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\MMDCamera.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDBoneRoot.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDCamera.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDJoint.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDJointRoot.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDMeshRoot.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDModel.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDRigid.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\OMMDRigidRoot.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\description\TMMDBone.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\dialogs\DLG_CMT_TOOL.str" />
-    <None Include="..\..\..\..\res\S24_up\strings_zh-CN\dialogs\DLG_CMT_VMD_IMPORT.str" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDBoneManager.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDCamera.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJoint.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDJointManager.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDMeshManager.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDModelManager.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigid.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\description\OMMDRigidManager.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Text Include="..\..\..\..\res\S24_up\description\TMMDBone.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Text>
-    <Resource Include="..\..\..\..\res\S24_up\dialogs\DLG_CMT_TOOL.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-    <Resource Include="..\..\..\..\res\S24_up\dialogs\DLG_CMT_VMD_IMPORT.res">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Resource>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="AfterClean">
     <RemoveDir Directories="$(ProjectDir)..\generated" ContinueOnError="true" />
     <Message Text="Removing generated folder: $(ProjectDir)..\generated" Importance="high" ContinueOnError="true" />
+  </Target>
+  <Target Name="CreateResLink" AfterTargets="Link">
+    <Exec Command="if not exist &quot;$(ProjectDir)..\res&quot; mklink /J &quot;$(ProjectDir)..\res&quot; &quot;$(ProjectDir)..\..\..\..\res\S24_up&quot;" />
   </Target>
 </Project>

@@ -1,19 +1,19 @@
+// NOTE: This file is NOT parsed by the build system because a custom CMakeLists.txt
+// exists in the same directory. It is kept here as a reference for the plugin's
+// basic identity and build settings. All actual build configuration is in CMakeLists.txt.
+
 Platform=Win64;OSX
 Type=DLL
 
-// API dependencies
 APIS=\
 cinema.framework;\
 core.framework;\
 image.framework;\
-math.framework;
+math.framework;\
+nodespace.framework;
 
-// C4D component
 C4D=true
-
 stylecheck=false
-
-// Custom ID
+ExceptionHandling=true
 ModuleId=net.aimidi.mmdtool
-
 Encoding=UTF-8

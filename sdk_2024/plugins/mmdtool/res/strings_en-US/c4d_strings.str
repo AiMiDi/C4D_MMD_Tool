@@ -41,10 +41,17 @@ STRINGTABLE
 	IDS_MES_DELETE_BONE_ANIM "Do you want to delete all the bone animation data of the model?";
 	IDS_MES_DELETE_MORPH_ANIM "Do you want to delete all the morph animation data of the model?";
     IDS_MES_IMPORT_VMD_CAM_ONLY "Only support the drag and drop import of camera animation VMD files.Please open the plug-in GUI to import the model animation!";
+	IDS_MES_IMPORT_LOAD_MODEL_ERR "Failed to load model!";
 	IDS_MES_DELETE_BONE_CURVE "Do you want to delete this key frame of the bone?";
 	IDS_MES_DELETE_BONE_ALL_CURVE "Do you want to delete all the key frame of the bone?";
 	IDS_MES_DELETE_CAM_CURVE "Do you want to delete this key frame of the Camera?";
 	IDS_MES_DELETE_CAM_ALL_CURVE "Do you want to delete all the key frame of the Camera?";
+
+	IDS_MES_EXPORT_MOT_TYPE_ERR "Please select an MMD model object";
+	IDS_MES_EXPORT_MOT_NO_ANIM "No active animation to export";
+	IDS_MES_EXPORT_MOT_OK "Successfully exported # bone's and # morph's # Frame(s) at # ms!";
+
+	IDS_MES_RENDERER_NOT_INSTALLED "# renderer is not installed, cannot create material!";
 
 	IDS_MORPH_BONE_TRANSLATION "Bone translation";
 	IDS_MORPH_BONE_ROTATION "Bone rotation";
@@ -56,6 +63,7 @@ STRINGTABLE
 	IDS_MSG_RENAME_OK "OK";
 	IDS_MSG_RENAME_CANCEL "Cancel";
 	IDS_CMT_VMD_ANIM_NONE "-- No animation --";
+	IDS_MODEL_MATERIAL_NONE "-- No material --";
 	IDS_CMT_MODEL_MANAGER_IK_BONE "IK link bone";
 	IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT "Enable limit";
 	IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN "Min limit";
