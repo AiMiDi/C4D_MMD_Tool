@@ -723,7 +723,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 						continue;
 					const auto& pos = bone_offset.m_position;
 					const auto& quat = bone_offset.m_quaternion;
-					const auto euler = quat.toRotationMatrix().eulerAngles(0, 1, 2);
+					const auto euler = quat.toRotationMatrix().canonicalEulerAngles(0, 1, 2);
 					bone_tag_node->SetBoneMorphTranslationNoCheck(added_morph_index,
 						Vector(pos.x(), pos.y(), pos.z()) * setting.position_multiple);
 					bone_tag_node->SetBoneMorphRotationNoCheck(added_morph_index,

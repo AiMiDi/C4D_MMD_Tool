@@ -1136,9 +1136,9 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 		const auto pm = bone_manager_data_->GetPositionMultiple();
 
 		bone_object_->SetRelMl(Matrix{Vector(translate.x(), translate.y(), translate.z()) * pm,
-		   Vector( local(0,0),  local(1,0), -local(2,0)),
-		   Vector( local(0,1),  local(1,1), -local(2,1)),
-		   Vector(-local(0,2), -local(1,2),  local(2,2)) });
+		   Vector(local(0,0), local(1,0), local(2,0)),
+		   Vector(local(0,1), local(1,1), local(2,1)),
+		   Vector(local(0,2), local(1,2), local(2,2)) });
 	}
 	else if (bone_mode_ == BONE_MODE_ANIM && !bone_morph_data_arr_.IsEmpty())
 	{
