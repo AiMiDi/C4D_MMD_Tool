@@ -1411,6 +1411,7 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 	{
 	case MODEL_MATERIAL_LIST:
 		t_data.SetInt32(material_selection_index_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
 		return true;
 	default:
 		break;
@@ -1429,30 +1430,31 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 		}
 		else
 			t_data.SetBaseList2D(nullptr);
+		flags |= DESCFLAGS_GET::PARAM_GET;
 		return true;
-	case MODEL_MATERIAL_NAME_LOCAL: t_data.SetString(m.name_local); return true;
-	case MODEL_MATERIAL_NAME_UNIVERSAL: t_data.SetString(m.name_universal); return true;
-	case MODEL_MATERIAL_DIFFUSE_COLOR: t_data.SetVector(m.diffuse_rgb); return true;
-	case MODEL_MATERIAL_DIFFUSE_ALPHA: t_data.SetFloat(m.diffuse_alpha); return true;
-	case MODEL_MATERIAL_SPECULAR_COLOR: t_data.SetVector(m.specular); return true;
-	case MODEL_MATERIAL_SPECULAR_POWER: t_data.SetFloat(m.specular_power); return true;
-	case MODEL_MATERIAL_AMBIENT_COLOR: t_data.SetVector(m.ambient); return true;
-	case MODEL_MATERIAL_DRAW_BOTH_FACE: t_data.SetInt32(m.draw_both_face ? 1 : 0); return true;
-	case MODEL_MATERIAL_DRAW_GROUND_SHADOW: t_data.SetInt32(m.draw_ground_shadow ? 1 : 0); return true;
-	case MODEL_MATERIAL_DRAW_CAST_SELF_SHADOW: t_data.SetInt32(m.draw_cast_self_shadow ? 1 : 0); return true;
-	case MODEL_MATERIAL_DRAW_RECEIVE_SELF_SHADOW: t_data.SetInt32(m.draw_receive_self_shadow ? 1 : 0); return true;
-	case MODEL_MATERIAL_DRAW_VERTEX_COLOR: t_data.SetInt32(m.draw_vertex_color ? 1 : 0); return true;
-	case MODEL_MATERIAL_EDGE_ENABLED: t_data.SetInt32(m.edge_enabled ? 1 : 0); return true;
-	case MODEL_MATERIAL_EDGE_SIZE: t_data.SetFloat(m.edge_size); return true;
-	case MODEL_MATERIAL_EDGE_COLOR: t_data.SetVector(m.edge_color_rgb); return true;
-	case MODEL_MATERIAL_EDGE_ALPHA: t_data.SetFloat(m.edge_color_alpha); return true;
-	case MODEL_MATERIAL_TEXTURE_INDEX: t_data.SetInt32(m.texture_index); return true;
-	case MODEL_MATERIAL_SPHERE_TEXTURE_INDEX: t_data.SetInt32(m.sphere_texture_index); return true;
-	case MODEL_MATERIAL_SPHERE_MODE: t_data.SetInt32(m.sphere_mode); return true;
-	case MODEL_MATERIAL_TOON_MODE: t_data.SetInt32(m.toon_mode); return true;
-	case MODEL_MATERIAL_TOON_TEXTURE_INDEX: t_data.SetInt32(m.toon_texture_index); return true;
-	case MODEL_MATERIAL_MEMO: t_data.SetString(m.memo); return true;
-	case MODEL_MATERIAL_FACE_COUNT: t_data.SetInt32(m.num_face_vertices / 3); return true;
+	case MODEL_MATERIAL_NAME_LOCAL: t_data.SetString(m.name_local); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_NAME_UNIVERSAL: t_data.SetString(m.name_universal); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_DIFFUSE_COLOR: t_data.SetVector(m.diffuse_rgb); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_DIFFUSE_ALPHA: t_data.SetFloat(m.diffuse_alpha); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_SPECULAR_COLOR: t_data.SetVector(m.specular); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_SPECULAR_POWER: t_data.SetFloat(m.specular_power); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_AMBIENT_COLOR: t_data.SetVector(m.ambient); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_DRAW_BOTH_FACE: t_data.SetInt32(m.draw_both_face ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_DRAW_GROUND_SHADOW: t_data.SetInt32(m.draw_ground_shadow ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_DRAW_CAST_SELF_SHADOW: t_data.SetInt32(m.draw_cast_self_shadow ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_DRAW_RECEIVE_SELF_SHADOW: t_data.SetInt32(m.draw_receive_self_shadow ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_DRAW_VERTEX_COLOR: t_data.SetInt32(m.draw_vertex_color ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_EDGE_ENABLED: t_data.SetInt32(m.edge_enabled ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_EDGE_SIZE: t_data.SetFloat(m.edge_size); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_EDGE_COLOR: t_data.SetVector(m.edge_color_rgb); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_EDGE_ALPHA: t_data.SetFloat(m.edge_color_alpha); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_TEXTURE_INDEX: t_data.SetInt32(m.texture_index); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_SPHERE_TEXTURE_INDEX: t_data.SetInt32(m.sphere_texture_index); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_SPHERE_MODE: t_data.SetInt32(m.sphere_mode); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_TOON_MODE: t_data.SetInt32(m.toon_mode); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_TOON_TEXTURE_INDEX: t_data.SetInt32(m.toon_texture_index); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_MEMO: t_data.SetString(m.memo); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_FACE_COUNT: t_data.SetInt32(m.num_face_vertices / 3); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	default:
 		break;
 	}
@@ -1553,6 +1555,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 						SyncToOctaneMaterial(mat, linked_mat);
 						SyncToCoronaMaterial(mat, linked_mat);
 					}
+					flags |= DESCFLAGS_SET::PARAM_SET;
 					return true;
 				}
 			}

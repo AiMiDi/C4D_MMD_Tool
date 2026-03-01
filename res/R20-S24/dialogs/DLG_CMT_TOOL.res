@@ -548,6 +548,31 @@ DIALOG DLG_CMT_TOOL {
                             }
                         }
 
+                        GROUP DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE_GRP {
+                            SIZE 350, 10;
+                            CENTER_H;
+                            COLUMNS 2;
+                            ROWS 1;
+
+                            STATICTEXT DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE_NAME {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE;
+                                SIZE 100, 10;
+                                ALIGN_LEFT;
+                            }
+
+                            COMBOBOX DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE {
+                                SIZE 250, 13;
+                                ALIGN_LEFT;
+
+                                CHILDS {
+                                    DLG_CMT_MATERIAL_TYPE_STANDARD, IDS_CMT_MATERIAL_TYPE_STANDARD;
+                                    DLG_CMT_MATERIAL_TYPE_REDSHIFT, IDS_CMT_MATERIAL_TYPE_REDSHIFT;
+                                    DLG_CMT_MATERIAL_TYPE_OCTANE, IDS_CMT_MATERIAL_TYPE_OCTANE;
+                                    DLG_CMT_MATERIAL_TYPE_CORONA, IDS_CMT_MATERIAL_TYPE_CORONA;
+                                }
+                            }
+                        }
+
                         GROUP DLG_CMT_TOOL_MODEL_IMPORT_SETTING_GRP {
                             NAME IDS_CMT_TOOL_IMPORT_SETTING_GRP;
                             SIZE 350, 0;
@@ -579,18 +604,6 @@ DIALOG DLG_CMT_TOOL {
                                 NAME IDS_CMT_TOOL_MODEL_IMPORT_MATERIAL;
                                 SIZE 180, 13;
                                 ALIGN_LEFT;
-                            }
-
-                            COMBOBOX DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE {
-                                SIZE 180, 13;
-                                ALIGN_LEFT;
-
-                                CHILDS {
-                                    DLG_CMT_MATERIAL_TYPE_STANDARD, IDS_CMT_MATERIAL_TYPE_STANDARD;
-                                    DLG_CMT_MATERIAL_TYPE_REDSHIFT, IDS_CMT_MATERIAL_TYPE_REDSHIFT;
-                                    DLG_CMT_MATERIAL_TYPE_OCTANE, IDS_CMT_MATERIAL_TYPE_OCTANE;
-                                    DLG_CMT_MATERIAL_TYPE_CORONA, IDS_CMT_MATERIAL_TYPE_CORONA;
-                                }
                             }
 
                             CHECKBOX DLG_CMT_TOOL_MODEL_IMPORT_BONE {
