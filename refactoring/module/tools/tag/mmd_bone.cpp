@@ -824,6 +824,34 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	}
 	switch (id[0].id)
 	{
+	case PMX_BONE_IK_GRP:
+		if (id.GetDepth() >= 2)
+		{
+			switch (id[1].id)
+			{
+			case PMX_BONE_IK_ITERATION:
+				if (ik_solver_)
+					ik_solver_->SetIterateCount(static_cast<uint32_t>(t_data.GetInt32()));
+				return SUPER::SetDParameter(node, id, t_data, flags);
+			case PMX_BONE_IK_UNIT_ANGLE:
+				if (ik_solver_)
+					ik_solver_->SetLimitAngle(static_cast<float>(t_data.GetFloat()));
+				return SUPER::SetDParameter(node, id, t_data, flags);
+			case PMX_BONE_IK_TARGET_BONE_INDEX:
+				if (ik_solver_ && bone_manager_data_)
+				{
+					if (const BaseTag* target_tag = bone_manager_data_->FindBone(t_data.GetInt32()))
+					{
+						if (auto* target_tag_node = target_tag->GetNodeData<MMDBoneTag>(); target_tag_node && target_tag_node->mmd_node_)
+							ik_solver_->SetTargetNode(target_tag_node->mmd_node_);
+					}
+				}
+				return SUPER::SetDParameter(node, id, t_data, flags);
+			default:
+				break;
+			}
+		}
+		break;
 	case PMX_BONE_ROTATABLE:
 	{
 		if (!bone_object_)

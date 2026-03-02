@@ -616,8 +616,17 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 				ik_target_link->SetLink(bone_list[mmd_bone.m_ikTargetBoneIndex]);
 				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IK_TARGET_BONE_LINK)), ik_target_link, DESCFLAGS_SET::NONE);
 			}
-			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IK_ITERATION)), mmd_bone.m_ikIterationCount, DESCFLAGS_SET::NONE);
-			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_IK_UNIT_ANGLE)), mmd_bone.m_ikLimit, DESCFLAGS_SET::NONE);
+			// 直接写容器并同步 solver，避免 SetParameter 在描述未就绪时崩溃
+			if (BaseContainer* const bc = bone_tag->GetDataInstance())
+			{
+				bc->SetInt32(PMX_BONE_IK_ITERATION, mmd_bone.m_ikIterationCount);
+				bc->SetFloat(PMX_BONE_IK_UNIT_ANGLE, static_cast<Float>(mmd_bone.m_ikLimit));
+			}
+			if (bone_tag_node->ik_solver_)
+			{
+				bone_tag_node->ik_solver_->SetIterateCount(static_cast<uint32_t>(mmd_bone.m_ikIterationCount));
+				bone_tag_node->ik_solver_->SetLimitAngle(static_cast<float>(mmd_bone.m_ikLimit));
+			}
 			if (DynamicDescription* const dynamic_description = bone_tag->GetDynamicDescriptionWritable())
 			{
 /*			pmx bone ik link UI:

@@ -36,8 +36,6 @@ void MMDMaterialData::FromPMX(const libmmd::PMXMaterial& pmx_material)
 	edge_color_rgb.z = pmx_material.m_edgeColor[2];
 	edge_color_alpha = pmx_material.m_edgeColor[3];
 	edge_size = pmx_material.m_edgeSize;
-	texture_index = pmx_material.m_textureIndex;
-	sphere_texture_index = pmx_material.m_sphereTextureIndex;
 	sphere_mode = static_cast<Int32>(pmx_material.m_sphereMode);
 	toon_mode = static_cast<Int32>(pmx_material.m_toonMode);
 	toon_texture_index = pmx_material.m_toonTextureIndex;
@@ -74,8 +72,8 @@ void MMDMaterialData::ToPMX(libmmd::PMXMaterial& pmx_material) const
 	pmx_material.m_edgeColor[2] = edge_color_rgb.z;
 	pmx_material.m_edgeColor[3] = edge_color_alpha;
 	pmx_material.m_edgeSize = edge_size;
-	pmx_material.m_textureIndex = texture_index;
-	pmx_material.m_sphereTextureIndex = sphere_texture_index;
+	pmx_material.m_textureIndex = -1; // TODO: path to index conversion
+	pmx_material.m_sphereTextureIndex = -1; // TODO: path to index conversion
 	pmx_material.m_sphereMode = static_cast<libmmd::PMXSphereMode>(sphere_mode);
 	pmx_material.m_toonMode = static_cast<libmmd::PMXToonMode>(toon_mode);
 	pmx_material.m_toonTextureIndex = toon_texture_index;
@@ -101,7 +99,9 @@ Bool MMDMaterialData::Read(HyperFile* hf)
 	draw_vertex_color = draw_flags[4];
 	if (!ReadData(hf, edge_enabled) || !ReadData(hf, edge_color_rgb) || !ReadData(hf, edge_color_alpha) || !ReadData(hf, edge_size))
 		return false;
-	if (!ReadData(hf, texture_index) || !ReadData(hf, sphere_texture_index) || !ReadData(hf, sphere_mode) || !ReadData(hf, toon_mode) || !ReadData(hf, toon_texture_index))
+	if (!ReadData(hf, texture_path) || !ReadData(hf, sphere_texture_path) || !ReadData(hf, sphere_mode) || !ReadData(hf, toon_mode) || !ReadData(hf, toon_texture_index))
+		return false;
+	if (!ReadData(hf, toon_texture_path))
 		return false;
 	if (!ReadData(hf, memo) || !ReadData(hf, num_face_vertices))
 		return false;
@@ -130,7 +130,9 @@ Bool MMDMaterialData::Write(HyperFile* hf) const
 		return false;
 	if (!WriteData(hf, edge_enabled) || !WriteData(hf, edge_color_rgb) || !WriteData(hf, edge_color_alpha) || !WriteData(hf, edge_size))
 		return false;
-	if (!WriteData(hf, texture_index) || !WriteData(hf, sphere_texture_index) || !WriteData(hf, sphere_mode) || !WriteData(hf, toon_mode) || !WriteData(hf, toon_texture_index))
+	if (!WriteData(hf, texture_path) || !WriteData(hf, sphere_texture_path) || !WriteData(hf, sphere_mode) || !WriteData(hf, toon_mode) || !WriteData(hf, toon_texture_index))
+		return false;
+	if (!WriteData(hf, toon_texture_path))
 		return false;
 	if (!WriteData(hf, memo) || !WriteData(hf, num_face_vertices))
 		return false;
@@ -164,11 +166,12 @@ Bool MMDMaterialData::CopyTo(MMDMaterialData& dest) const
 	dest.edge_color_rgb = edge_color_rgb;
 	dest.edge_color_alpha = edge_color_alpha;
 	dest.edge_size = edge_size;
-	dest.texture_index = texture_index;
-	dest.sphere_texture_index = sphere_texture_index;
+	dest.texture_path = texture_path;
+	dest.sphere_texture_path = sphere_texture_path;
 	dest.sphere_mode = sphere_mode;
 	dest.toon_mode = toon_mode;
 	dest.toon_texture_index = toon_texture_index;
+	dest.toon_texture_path = toon_texture_path;
 	dest.memo = memo;
 	dest.num_face_vertices = num_face_vertices;
 	if (material_link && *material_link)

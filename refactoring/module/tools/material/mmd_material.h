@@ -28,11 +28,12 @@ struct MMDMaterialData
 	Vector edge_color_rgb;
 	Float edge_color_alpha = 1.f;
 	Float edge_size = 0.f;
-	Int32 texture_index = -1;
-	Int32 sphere_texture_index = -1;
+	String texture_path;
+	String sphere_texture_path;
 	Int32 sphere_mode = 0; // 0=无效 1=乘算 2=加算 3=子纹理
 	Int32 toon_mode = 0;   // 0=独立 1=共用
 	Int32 toon_texture_index = -1;
+	String toon_texture_path;
 	String memo;
 	Int32 num_face_vertices = 0;
 	maxon::StrongRef<AutoAlloc<BaseLink>> material_link;
@@ -58,6 +59,7 @@ public:
 
 	void SetTextureRelativePath(const Filename& texture_relative_path);
 	Bool LoadPMXTextures(const std::vector<libmmd::PMXTexture>& pmx_textures);
+	const maxon::BaseArray<Filename>& GetTexturePaths() const { return m_texture_path_array; }
 	BaseMaterial* LoadPMXMaterial(const libmmd::PMXMaterial& pmx_material,
 	                             const uint64_t material_index, const maxon::String& material_name, const CMTToolsSetting::ModelImport& setting);
 };

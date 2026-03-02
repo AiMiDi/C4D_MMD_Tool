@@ -11,7 +11,6 @@ context: |
   Dependencies:
   - libMMD (static) — MMD format parsing (PMX/PMD/VMD/VPD)
   - bullet3 (static) — Physics engine (libMMD private dependency)
-  - yaml-cpp (static) — YAML config persistence
   - Eigen (header-only) — Math library (libMMD public dependency)
 
   Source layout:
@@ -26,3 +25,13 @@ context: |
   - Error handling: iferr_scope_handler, iferr_return
   - Memory: NewObj/NewObjClear, AutoFree/AutoAlloc
   - Plugin IDs are registered at plugincafe.com
+
+  Language: Simplified Chinese
+  - All output must be written in Simplified Chinese. 
+  - Add a brief English description document when archiving.
+
+  Test:
+  - add test case and test description for the changes of libMMD and make sure the changes pass all tests.
+
+rules:
+  - must follow the C4D SDK development documentation: https://developers.maxon.net/docs/cpp/2026_1_0/index.html

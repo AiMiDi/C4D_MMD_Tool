@@ -889,7 +889,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			}
 			if (BaseObject* model_op = static_cast<BaseObject*>(Get()->GetUp()))
 				if (MMDModelManagerObject* model_data = model_op->GetNodeData<MMDModelManagerObject>())
-					model_data->AddMaterial(pmx_material, material);
+					model_data->AddMaterial(pmx_material, material, material_manager->GetTexturePaths());
 
 			surface_begin_index += part_face_num;
 		}
@@ -949,7 +949,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			}
 			if (BaseObject* model_op = static_cast<BaseObject*>(Get()->GetUp()))
 				if (MMDModelManagerObject* model_data = model_op->GetNodeData<MMDModelManagerObject>())
-					model_data->AddMaterial(pmx_material, material);
+					model_data->AddMaterial(pmx_material, material, material_manager->GetTexturePaths());
 
 			// if import_weights is true, create weight tag
 			CAWeightTag* weight_tag = nullptr;

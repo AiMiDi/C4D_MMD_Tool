@@ -772,26 +772,40 @@ void MMDModelManagerObject::ImportDisplayFrames(const libmmd::PMXFile& pmx_file)
 
 		for (const auto& target : frame.m_targets)
 		{
-			String entry_text;
+			String type_label;
+			String name_text;
 			if (target.m_type == libmmd::PMXDisplayFrame::TargetType::BoneIndex)
 			{
+				type_label = "[Bone]"_s;
 				if (target.m_index >= 0 && static_cast<size_t>(target.m_index) < pmx_file.m_bones.size())
-					entry_text = FormatString("[Bone] @", String(pmx_file.m_bones[target.m_index].m_name.c_str()));
+					name_text = String(pmx_file.m_bones[target.m_index].m_name.c_str());
 				else
-					entry_text = FormatString("[Bone] @", String::IntToString(target.m_index));
+					name_text = String::IntToString(target.m_index);
 			}
 			else
 			{
+				type_label = "[Morph]"_s;
 				if (target.m_index >= 0 && static_cast<size_t>(target.m_index) < pmx_file.m_morphs.size())
-					entry_text = FormatString("[Morph] @", String(pmx_file.m_morphs[target.m_index].m_name.c_str()));
+					name_text = String(pmx_file.m_morphs[target.m_index].m_name.c_str());
 				else
-					entry_text = FormatString("[Morph] @", String::IntToString(target.m_index));
+					name_text = String::IntToString(target.m_index);
 			}
 
-			bc = GetCustomDataTypeDefault(DTYPE_STATICTEXT);
-			bc.SetString(DESC_NAME, entry_text);
-			bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+			bc = GetCustomDataTypeDefault(DTYPE_GROUP);
+			bc.SetInt32(DESC_COLUMNS, 2);
 			bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(frame_grp));
+			const auto row_grp = dynamic_description->Alloc(bc);
+
+			bc = GetCustomDataTypeDefault(DTYPE_STATICTEXT);
+			bc.SetString(DESC_NAME, type_label);
+			bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+			bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
+			dynamic_description->Alloc(bc);
+
+			bc = GetCustomDataTypeDefault(DTYPE_STATICTEXT);
+			bc.SetString(DESC_NAME, name_text);
+			bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+			bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
 			dynamic_description->Alloc(bc);
 		}
 	}
@@ -858,11 +872,29 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	return true;
 }
 
-Bool MMDModelManagerObject::AddMaterial(const libmmd::PMXMaterial& pmx_material, BaseMaterial* c4d_material)
+Bool MMDModelManagerObject::AddMaterial(const libmmd::PMXMaterial& pmx_material, BaseMaterial* c4d_material,
+                                        const maxon::BaseArray<Filename>& texture_paths)
 {
 	iferr_scope_handler { return false; };
 	MMDMaterialData mat;
 	mat.FromPMX(pmx_material);
+	const auto tex_idx = pmx_material.m_textureIndex;
+	if (tex_idx >= 0 && tex_idx < texture_paths.GetCount())
+		mat.texture_path = texture_paths[tex_idx].GetString();
+	const auto sphere_idx = pmx_material.m_sphereTextureIndex;
+	if (sphere_idx >= 0 && sphere_idx < texture_paths.GetCount())
+		mat.sphere_texture_path = texture_paths[sphere_idx].GetString();
+	if (mat.toon_texture_index >= 0)
+	{
+		if (mat.toon_mode == 1)
+		{
+			Char buf[20];
+			snprintf(buf, sizeof(buf), "toon%02d.bmp", static_cast<int>(mat.toon_texture_index + 1));
+			mat.toon_texture_path = (GeGetPluginResourcePath() + Filename("mikumikudance_data") + Filename(buf)).GetString();
+		}
+		else if (mat.toon_texture_index < texture_paths.GetCount())
+			mat.toon_texture_path = texture_paths[mat.toon_texture_index].GetString();
+	}
 	if (c4d_material)
 	{
 		auto link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
@@ -1412,13 +1444,16 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 	case MODEL_MATERIAL_LIST:
 		t_data.SetInt32(material_selection_index_);
 		flags |= DESCFLAGS_GET::PARAM_GET;
-		return true;
+		return SUPER::GetDParameter(node, id, t_data, flags);
 	default:
 		break;
 	}
 	const Int32 sel = material_selection_index_;
 	if (sel < 0 || sel >= material_list_.GetCount())
+	{
+		flags |= DESCFLAGS_GET::PARAM_GET;
 		return SUPER::GetDParameter(node, id, t_data, flags);
+	}
 	const MMDMaterialData& m = material_list_[sel];
 	switch (id[0].id)
 	{
@@ -1431,14 +1466,14 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 		else
 			t_data.SetBaseList2D(nullptr);
 		flags |= DESCFLAGS_GET::PARAM_GET;
-		return true;
+		return SUPER::GetDParameter(node, id, t_data, flags);
 	case MODEL_MATERIAL_NAME_LOCAL: t_data.SetString(m.name_local); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	case MODEL_MATERIAL_NAME_UNIVERSAL: t_data.SetString(m.name_universal); flags |= DESCFLAGS_GET::PARAM_GET; return true;
-	case MODEL_MATERIAL_DIFFUSE_COLOR: t_data.SetVector(m.diffuse_rgb); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_DIFFUSE_COLOR: HandleDescGetVector(id, m.diffuse_rgb, t_data, flags); return true;
 	case MODEL_MATERIAL_DIFFUSE_ALPHA: t_data.SetFloat(m.diffuse_alpha); flags |= DESCFLAGS_GET::PARAM_GET; return true;
-	case MODEL_MATERIAL_SPECULAR_COLOR: t_data.SetVector(m.specular); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_SPECULAR_COLOR: HandleDescGetVector(id, m.specular, t_data, flags); return true;
 	case MODEL_MATERIAL_SPECULAR_POWER: t_data.SetFloat(m.specular_power); flags |= DESCFLAGS_GET::PARAM_GET; return true;
-	case MODEL_MATERIAL_AMBIENT_COLOR: t_data.SetVector(m.ambient); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_AMBIENT_COLOR: HandleDescGetVector(id, m.ambient, t_data, flags); return true;
 	case MODEL_MATERIAL_DRAW_BOTH_FACE: t_data.SetInt32(m.draw_both_face ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	case MODEL_MATERIAL_DRAW_GROUND_SHADOW: t_data.SetInt32(m.draw_ground_shadow ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	case MODEL_MATERIAL_DRAW_CAST_SELF_SHADOW: t_data.SetInt32(m.draw_cast_self_shadow ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
@@ -1446,15 +1481,26 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 	case MODEL_MATERIAL_DRAW_VERTEX_COLOR: t_data.SetInt32(m.draw_vertex_color ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	case MODEL_MATERIAL_EDGE_ENABLED: t_data.SetInt32(m.edge_enabled ? 1 : 0); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	case MODEL_MATERIAL_EDGE_SIZE: t_data.SetFloat(m.edge_size); flags |= DESCFLAGS_GET::PARAM_GET; return true;
-	case MODEL_MATERIAL_EDGE_COLOR: t_data.SetVector(m.edge_color_rgb); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_EDGE_COLOR: HandleDescGetVector(id, m.edge_color_rgb, t_data, flags); return true;
 	case MODEL_MATERIAL_EDGE_ALPHA: t_data.SetFloat(m.edge_color_alpha); flags |= DESCFLAGS_GET::PARAM_GET; return true;
-	case MODEL_MATERIAL_TEXTURE_INDEX: t_data.SetInt32(m.texture_index); flags |= DESCFLAGS_GET::PARAM_GET; return true;
-	case MODEL_MATERIAL_SPHERE_TEXTURE_INDEX: t_data.SetInt32(m.sphere_texture_index); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_TEXTURE_PATH: t_data.SetString(m.texture_path); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_SPHERE_TEXTURE_PATH: t_data.SetString(m.sphere_texture_path); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	case MODEL_MATERIAL_SPHERE_MODE: t_data.SetInt32(m.sphere_mode); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	case MODEL_MATERIAL_TOON_MODE: t_data.SetInt32(m.toon_mode); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	case MODEL_MATERIAL_TOON_TEXTURE_INDEX: t_data.SetInt32(m.toon_texture_index); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_TOON_TEXTURE_PATH:
+		if (m.toon_texture_index >= 0 && m.toon_texture_path.IsEmpty())
+		{
+			Char buf[20];
+			snprintf(buf, sizeof(buf), "toon%02d.bmp", static_cast<int>(m.toon_texture_index + 1));
+			t_data.SetString((GeGetPluginResourcePath() + Filename("mikumikudance_data") + Filename(buf)).GetString());
+		}
+		else
+			t_data.SetString(m.toon_texture_path);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
 	case MODEL_MATERIAL_MEMO: t_data.SetString(m.memo); flags |= DESCFLAGS_GET::PARAM_GET; return true;
-	case MODEL_MATERIAL_FACE_COUNT: t_data.SetInt32(m.num_face_vertices / 3); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_FACE_COUNT: t_data.SetString(String::IntToString(m.num_face_vertices / 3)); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	default:
 		break;
 	}
@@ -1534,11 +1580,16 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 				case MODEL_MATERIAL_EDGE_SIZE: mat.edge_size = t_data.GetFloat(); material_handled = true; break;
 				case MODEL_MATERIAL_EDGE_COLOR: mat.edge_color_rgb = t_data.GetVector(); material_handled = true; break;
 				case MODEL_MATERIAL_EDGE_ALPHA: mat.edge_color_alpha = t_data.GetFloat(); material_handled = true; break;
-				case MODEL_MATERIAL_TEXTURE_INDEX: mat.texture_index = t_data.GetInt32(); material_handled = true; break;
-				case MODEL_MATERIAL_SPHERE_TEXTURE_INDEX: mat.sphere_texture_index = t_data.GetInt32(); material_handled = true; break;
+				case MODEL_MATERIAL_TEXTURE_PATH: mat.texture_path = t_data.GetString(); material_handled = true; break;
+				case MODEL_MATERIAL_SPHERE_TEXTURE_PATH: mat.sphere_texture_path = t_data.GetString(); material_handled = true; break;
 				case MODEL_MATERIAL_SPHERE_MODE: mat.sphere_mode = t_data.GetInt32(); material_handled = true; break;
 				case MODEL_MATERIAL_TOON_MODE: mat.toon_mode = t_data.GetInt32(); material_handled = true; break;
 				case MODEL_MATERIAL_TOON_TEXTURE_INDEX: mat.toon_texture_index = t_data.GetInt32(); material_handled = true; break;
+				case MODEL_MATERIAL_TOON_TEXTURE_PATH:
+					if (mat.toon_texture_index == -1)
+						mat.toon_texture_path = t_data.GetString();
+					material_handled = true;
+					break;
 				case MODEL_MATERIAL_MEMO: mat.memo = t_data.GetString(); material_handled = true; break;
 				default: break;
 				}
@@ -1576,6 +1627,10 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 	case MODEL_MATERIAL_EDGE_ALPHA:
 		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
 			return material_list_[material_selection_index_].edge_enabled;
+		return false;
+	case MODEL_MATERIAL_TOON_TEXTURE_PATH:
+		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
+			return material_list_[material_selection_index_].toon_texture_index == -1;
 		return false;
 	case MODEL_MATERIAL_CREATE_BUTTON:
 	case MODEL_MATERIAL_CREATE_TYPE:
