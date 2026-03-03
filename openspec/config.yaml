@@ -35,3 +35,4 @@ context: |
 
 rules:
   - must follow the C4D SDK development documentation: https://developers.maxon.net/docs/cpp/2026_1_0/index.html
+  - SDK compatibility: All code that involves differences across SDK versions must be handled through compatible macros or utility functions in module/core/cmt_marco.h. Read cmt_marco.h before writing new code, and give priority to existing compatible facilities (such as MakeDescIDGeData, GetCustomDataTypeWritable, SDK2024_Const, etc.); If you encounter new API differences, you should add compatible macros/functions in cmt_marco.h instead of writing code for a specific SDK version directly.

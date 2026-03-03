@@ -64,6 +64,32 @@ struct MMDModelManagerObjectMsg
 		:msg_type(msg_type_), object(object_), model_mode(model_mode_) {}
 };
 
+enum class DisplayFrameTargetType : uint8_t
+{
+	Bone,
+	Morph
+};
+
+struct DisplayFrameTargetData
+{
+	DisplayFrameTargetType type = DisplayFrameTargetType::Bone;
+	Int32 index = 0;
+};
+
+struct DisplayFrameData
+{
+	String name;
+	String name_universal;
+	Bool is_special = false;
+	maxon::BaseArray<DisplayFrameTargetData> targets;
+
+	void FromPMX(const libmmd::PMXDisplayFrame& pmx_frame);
+	void ToPMX(libmmd::PMXDisplayFrame& pmx_frame) const;
+	Bool Read(HyperFile* hf);
+	Bool Write(HyperFile* hf) const;
+	Bool CopyTo(DisplayFrameData& dest) const;
+};
+
 enum class MMDModelRootDynamicDescriptionType : uint8_t
 {
 	MORPH_GRP,
@@ -71,7 +97,10 @@ enum class MMDModelRootDynamicDescriptionType : uint8_t
 	MORPH_EDITOR_BUTTON,
 	MORPH_DELETE_BUTTON,
 	MORPH_RENAME_BUTTON,
-	IK_BONE_LINK
+	IK_BONE_LINK,
+	DISPLAY_FRAME_DELETE_BUTTON,
+	DISPLAY_FRAME_MOVE_UP_BUTTON,
+	DISPLAY_FRAME_MOVE_DOWN_BUTTON
 };
 
 class MMDModelManagerObject final : public ObjectData
@@ -99,6 +128,10 @@ class MMDModelManagerObject final : public ObjectData
 	maxon::BaseArray<MMDMaterialData> material_list_;
 	Int32 material_selection_index_ = -1;
 	mutable BaseContainer material_list_items_;
+
+	maxon::BaseArray<DisplayFrameData> display_frame_list_;
+	Int32 display_frame_selection_index_ = -1;
+	mutable BaseContainer display_frame_items_;
 
 	MMDModelPtr mmd_model_;
 	Int32 model_mode_ = MODEL_MODE_ANIM;
@@ -156,6 +189,7 @@ public:
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 	void ImportDisplayFrames(const libmmd::PMXFile& pmx_file);
+	void RebuildDisplayFrameUI();
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;
 
 	Bool AddMaterial(const libmmd::PMXMaterial& pmx_material, BaseMaterial* c4d_material,

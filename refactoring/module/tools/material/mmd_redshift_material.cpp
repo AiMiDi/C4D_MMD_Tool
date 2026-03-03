@@ -66,14 +66,20 @@ BaseMaterial* CreateRedShiftMaterialFromPMX(const libmmd::PMXMaterial& pmx_mater
 	const maxon::BaseArray<Filename>& texture_paths, const maxon::String& material_name)
 {
 #if API_VERSION >= 2024000
-	iferr_scope_handler { return nullptr; };
-
 	BaseMaterial* material = BaseMaterial::Alloc(ID_REDSHIFT_MATERIAL);
 	if (!material)
 	{
 		MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, "RedShift"_s));
 		return nullptr;
 	}
+
+	iferr_scope_handler
+	{
+		GePrint("[MMD] RS material graph setup failed: "_s + err.GetMessage());
+		BaseMaterial::Free(material);
+		MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, "RedShift"_s));
+		return nullptr;
+	};
 
 	auto* node_mat = static_cast<NodeMaterial*>(material);
 	if (!node_mat->HasSpace(g_redshiftId))
@@ -85,6 +91,8 @@ BaseMaterial* CreateRedShiftMaterialFromPMX(const libmmd::PMXMaterial& pmx_mater
 	auto matNode = FindStandardMaterialNode(graph) iferr_return;
 	if (matNode.IsValid())
 	{
+		auto transaction = graph.BeginTransaction() iferr_return;
+
 		const auto& color = pmx_material.m_diffuse;
 		const maxon::Color64 baseColor(color.x(), color.y(), color.z());
 		SetPortValue(matNode, rs_base_color, baseColor) iferr_return;
@@ -92,6 +100,8 @@ BaseMaterial* CreateRedShiftMaterialFromPMX(const libmmd::PMXMaterial& pmx_mater
 		const Float64 alpha = static_cast<Float64>(color.w());
 		const maxon::Color64 opacityColor(alpha, alpha, alpha);
 		SetPortValue(matNode, rs_opacity_color, opacityColor) iferr_return;
+
+		transaction.Commit() iferr_return;
 	}
 
 	material->SetName(material_name);
@@ -107,14 +117,20 @@ BaseMaterial* CreateRedShiftMaterialFromPMX(const libmmd::PMXMaterial& pmx_mater
 BaseMaterial* CreateRedShiftMaterialFromData(const MMDMaterialData& data)
 {
 #if API_VERSION >= 2024000
-	iferr_scope_handler { return nullptr; };
-
 	BaseMaterial* material = BaseMaterial::Alloc(ID_REDSHIFT_MATERIAL);
 	if (!material)
 	{
 		MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, "RedShift"_s));
 		return nullptr;
 	}
+
+	iferr_scope_handler
+	{
+		GePrint("[MMD] RS material graph setup failed: "_s + err.GetMessage());
+		BaseMaterial::Free(material);
+		MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, "RedShift"_s));
+		return nullptr;
+	};
 
 	auto* node_mat = static_cast<NodeMaterial*>(material);
 	if (!node_mat->HasSpace(g_redshiftId))
@@ -126,12 +142,16 @@ BaseMaterial* CreateRedShiftMaterialFromData(const MMDMaterialData& data)
 	auto matNode = FindStandardMaterialNode(graph) iferr_return;
 	if (matNode.IsValid())
 	{
+		auto transaction = graph.BeginTransaction() iferr_return;
+
 		const maxon::Color64 baseColor(data.diffuse_rgb.x, data.diffuse_rgb.y, data.diffuse_rgb.z);
 		SetPortValue(matNode, rs_base_color, baseColor) iferr_return;
 
 		const Float64 alpha = static_cast<Float64>(data.diffuse_alpha);
 		const maxon::Color64 opacityColor(alpha, alpha, alpha);
 		SetPortValue(matNode, rs_opacity_color, opacityColor) iferr_return;
+
+		transaction.Commit() iferr_return;
 	}
 
 	material->SetName(data.name_local);
@@ -159,12 +179,16 @@ void SyncToRedShiftMaterial(const MMDMaterialData& data, BaseMaterial* material)
 	auto matNode = FindStandardMaterialNode(graph) iferr_return;
 	if (matNode.IsValid())
 	{
+		auto transaction = graph.BeginTransaction() iferr_return;
+
 		const maxon::Color64 baseColor(data.diffuse_rgb.x, data.diffuse_rgb.y, data.diffuse_rgb.z);
 		SetPortValue(matNode, rs_base_color, baseColor) iferr_return;
 
 		const Float64 alpha = static_cast<Float64>(data.diffuse_alpha);
 		const maxon::Color64 opacityColor(alpha, alpha, alpha);
 		SetPortValue(matNode, rs_opacity_color, opacityColor) iferr_return;
+
+		transaction.Commit() iferr_return;
 	}
 #else
 	(void)data;

@@ -300,6 +300,24 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		}
 	}
 
+	if (level >= 2)
+	{
+		Int64 df_count = 0;
+		if (hf->ReadInt64(&df_count) && df_count >= 0 && df_count <= 10000)
+		{
+			iferr(display_frame_list_.Resize(0))
+				return false;
+			for (Int64 i = 0; i < df_count; ++i)
+			{
+				DisplayFrameData df;
+				if (!df.Read(hf))
+					return false;
+				iferr(display_frame_list_.Append(std::move(df)))
+					return false;
+			}
+		}
+	}
+
 	*is_morph_initialized_.Write() = true;
 	return true;
 }
@@ -323,6 +341,11 @@ SDK2024_Write(MMDModelManagerObject) {
 		return false;
 	for (Int32 i = 0; i < material_list_.GetCount(); ++i)
 		if (!material_list_[i].Write(hf))
+			return false;
+	if (!hf->WriteInt64(display_frame_list_.GetCount()))
+		return false;
+	for (Int32 i = 0; i < display_frame_list_.GetCount(); ++i)
+		if (!display_frame_list_[i].Write(hf))
 			return false;
 	return true;
 }
@@ -348,6 +371,17 @@ SDK2024_CopyTo(MMDModelManagerObject)
 		if (!material_list_[i].CopyTo(copy))
 			return false;
 		iferr(destObject->material_list_.Append(std::move(copy)))
+			return false;
+	}
+	iferr(destObject->display_frame_list_.Resize(0))
+		return false;
+	destObject->display_frame_selection_index_ = display_frame_selection_index_;
+	for (Int32 i = 0; i < display_frame_list_.GetCount(); ++i)
+	{
+		DisplayFrameData copy;
+		if (!display_frame_list_[i].CopyTo(copy))
+			return false;
+		iferr(destObject->display_frame_list_.Append(std::move(copy)))
 			return false;
 	}
 	return true;
@@ -758,57 +792,138 @@ Bool MMDModelManagerObject::CreateManagers()
 
 void MMDModelManagerObject::ImportDisplayFrames(const libmmd::PMXFile& pmx_file)
 {
-	DynamicDescription* const dynamic_description = Get()->GetDynamicDescriptionWritable();
-	if (!dynamic_description)
-		return;
-
-	const auto& display_frames = pmx_file.m_displayFrames;
-	for (const auto& frame : display_frames)
+	iferr(display_frame_list_.Resize(0)) return;
+	for (const auto& frame : pmx_file.m_displayFrames)
 	{
-		BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-		bc.SetString(DESC_NAME, String(frame.m_name.c_str()));
-		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_GRP))));
-		const auto frame_grp = dynamic_description->Alloc(bc);
+		DisplayFrameData df;
+		df.FromPMX(frame);
+		iferr(display_frame_list_.Append(std::move(df))) return;
+	}
+	display_frame_selection_index_ = display_frame_list_.GetCount() > 0 ? 0 : -1;
+	RebuildDisplayFrameUI();
+}
 
-		for (const auto& target : frame.m_targets)
+void MMDModelManagerObject::RebuildDisplayFrameUI()
+{
+	DynamicDescription* const dd = Get()->GetDynamicDescriptionWritable();
+	if (!dd) return;
+
+	const DescID entries_grp_id = ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_ENTRIES_GRP));
+
+	for (auto it = desc_id_map_.Begin(); it != desc_id_map_.End();)
+	{
+		const auto& dtype = it->GetValue().first;
+		if (dtype == MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_DELETE_BUTTON ||
+			dtype == MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_MOVE_UP_BUTTON ||
+			dtype == MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_MOVE_DOWN_BUTTON)
 		{
-			String type_label;
-			String name_text;
-			if (target.m_type == libmmd::PMXDisplayFrame::TargetType::BoneIndex)
+			dd->Remove(it->GetKey());
+			it = desc_id_map_.Erase(it);
+		}
+		else
+			++it;
+	}
+
+	{
+		void* handle = dd->BrowseInit();
+		DescID browse_id;
+		const BaseContainer* browse_bc = nullptr;
+		maxon::BaseArray<DescID> to_remove;
+		while (dd->BrowseGetNext(handle, &browse_id, &browse_bc))
+		{
+			if (!browse_bc) continue;
+			const DescID* parent_id_ptr = GetContainerCustomDataType<DescID>(*browse_bc, DESC_PARENTGROUP, CUSTOMDATATYPE_DESCID);
+			if (parent_id_ptr && *parent_id_ptr == entries_grp_id)
+				to_remove.Append(browse_id) iferr_ignore("append failed"_s);
+		}
+		dd->BrowseFree(handle);
+		for (const auto& rid : to_remove)
+		{
+			maxon::BaseArray<DescID> children;
+			handle = dd->BrowseInit();
+			while (dd->BrowseGetNext(handle, &browse_id, &browse_bc))
 			{
-				type_label = "[Bone]"_s;
-				if (target.m_index >= 0 && static_cast<size_t>(target.m_index) < pmx_file.m_bones.size())
-					name_text = String(pmx_file.m_bones[target.m_index].m_name.c_str());
-				else
-					name_text = String::IntToString(target.m_index);
+				if (!browse_bc) continue;
+				const DescID* pid = GetContainerCustomDataType<DescID>(*browse_bc, DESC_PARENTGROUP, CUSTOMDATATYPE_DESCID);
+				if (pid && *pid == rid)
+					children.Append(browse_id) iferr_ignore("append failed"_s);
 			}
-			else
-			{
-				type_label = "[Morph]"_s;
-				if (target.m_index >= 0 && static_cast<size_t>(target.m_index) < pmx_file.m_morphs.size())
-					name_text = String(pmx_file.m_morphs[target.m_index].m_name.c_str());
-				else
-					name_text = String::IntToString(target.m_index);
-			}
-
-			bc = GetCustomDataTypeDefault(DTYPE_GROUP);
-			bc.SetInt32(DESC_COLUMNS, 2);
-			bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(frame_grp));
-			const auto row_grp = dynamic_description->Alloc(bc);
-
-			bc = GetCustomDataTypeDefault(DTYPE_STATICTEXT);
-			bc.SetString(DESC_NAME, type_label);
-			bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
-			bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
-			dynamic_description->Alloc(bc);
-
-			bc = GetCustomDataTypeDefault(DTYPE_STATICTEXT);
-			bc.SetString(DESC_NAME, name_text);
-			bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
-			bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
-			dynamic_description->Alloc(bc);
+			dd->BrowseFree(handle);
+			for (const auto& cid : children)
+				dd->Remove(cid);
+			dd->Remove(rid);
 		}
 	}
+
+	const Int32 sel = display_frame_selection_index_;
+	if (sel < 0 || sel >= display_frame_list_.GetCount())
+		return;
+
+	const auto& frame = display_frame_list_[sel];
+	BaseContainer bc;
+
+	for (Int32 i = 0; i < frame.targets.GetCount(); ++i)
+	{
+		const auto& target = frame.targets[i];
+		const String type_label = (target.type == DisplayFrameTargetType::Bone)
+			? "[Bone] "_s : "[Morph] "_s;
+		String target_name = String::IntToString(target.index);
+		if (target.type == DisplayFrameTargetType::Bone && bone_manager_data_)
+		{
+			target_name = bone_manager_data_->GetBoneItems().GetString(target.index, target_name);
+		}
+		else if (target.type == DisplayFrameTargetType::Morph)
+		{
+			for (const auto& entry : morph_name_)
+			{
+				if (entry.GetValue() == static_cast<Int>(target.index))
+				{
+					target_name = entry.GetKey();
+					break;
+				}
+			}
+		}
+
+		bc = GetCustomDataTypeDefault(DTYPE_GROUP);
+		bc.SetInt32(DESC_COLUMNS, 4);
+		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(entries_grp_id));
+		const auto row_grp = dd->Alloc(bc);
+
+		bc = GetCustomDataTypeDefault(DTYPE_STATICTEXT);
+		bc.SetString(DESC_NAME, type_label + target_name);
+		bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+		bc.SetBool(DESC_SCALEH, true);
+		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
+		dd->Alloc(bc);
+
+		bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
+		bc.SetString(DESC_NAME, "\u2191"_s);
+		bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
+		bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
+		const DescID up_id = dd->Alloc(bc);
+		iferr(desc_id_map_.Insert(up_id, {MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_MOVE_UP_BUTTON, i})) {}
+
+		bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
+		bc.SetString(DESC_NAME, "\u2193"_s);
+		bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
+		bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
+		const DescID down_id = dd->Alloc(bc);
+		iferr(desc_id_map_.Insert(down_id, {MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_MOVE_DOWN_BUTTON, i})) {}
+
+		bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
+		bc.SetString(DESC_NAME, "-"_s);
+		bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
+		bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
+		const DescID del_id = dd->Alloc(bc);
+		iferr(desc_id_map_.Insert(del_id, {MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_DELETE_BUTTON, i})) {}
+	}
+
+	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (::GeIsMainThread())
+		::EventAdd();
 }
 
 Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
@@ -924,6 +1039,14 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 		pmx_file.m_materials.resize(static_cast<size_t>(mat_count));
 		for (Int32 i = 0; i < mat_count; ++i)
 			material_list_[i].ToPMX(pmx_file.m_materials[static_cast<size_t>(i)]);
+	}
+
+	const Int32 df_count = display_frame_list_.GetCount();
+	if (df_count > 0)
+	{
+		pmx_file.m_displayFrames.resize(static_cast<size_t>(df_count));
+		for (Int32 i = 0; i < df_count; ++i)
+			display_frame_list_[i].ToPMX(pmx_file.m_displayFrames[static_cast<size_t>(i)]);
 	}
 	return true;
 }
@@ -1189,6 +1312,39 @@ SDK2024_GetDDescription(MMDModelManagerObject)
 		material_list_items_.SetString(i, FormatString("@: @", i, material_list_[i].name_local));
 	if (BaseContainer* mat_settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_MATERIAL_LIST)), nullptr))
 		mat_settings->SetContainer(DESC_CYCLE, material_list_items_);
+
+	display_frame_items_.FlushAll();
+	display_frame_items_.SetString(MODEL_DISPLAY_FRAME_NONE, GeLoadString(IDS_MODEL_DISPLAY_FRAME_NONE));
+	for (Int32 i = 0; i < display_frame_list_.GetCount(); ++i)
+		display_frame_items_.SetString(i, FormatString("@: @", i, display_frame_list_[i].name));
+	if (BaseContainer* df_settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_LIST)), nullptr))
+		df_settings->SetContainer(DESC_CYCLE, display_frame_items_);
+
+	if (BaseContainer* add_target_settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_ADD_TARGET)), nullptr))
+	{
+		BaseContainer target_cycle;
+		GeData add_type_data;
+		Get()->GetParameter(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_ADD_TYPE)), add_type_data, DESCFLAGS_GET::NONE);
+		const Int32 add_type = add_type_data.GetInt32();
+		if (add_type == MODEL_DISPLAY_FRAME_ADD_TYPE_BONE && bone_manager_data_)
+		{
+			const BaseContainer& bone_items = bone_manager_data_->GetBoneItems();
+			for (Int32 idx = 0; ; ++idx)
+			{
+				const Int32 bc_id = bone_items.GetIndexId(idx);
+				if (bc_id == NOTOK) break;
+				if (bc_id >= 0)
+					target_cycle.SetString(bc_id, bone_items.GetString(bc_id));
+			}
+		}
+		else if (add_type == MODEL_DISPLAY_FRAME_ADD_TYPE_MORPH)
+		{
+			for (const auto& entry : morph_name_)
+				target_cycle.SetString(static_cast<Int32>(entry.GetValue()), entry.GetKey());
+		}
+		add_target_settings->SetContainer(DESC_CYCLE, target_cycle);
+	}
+
 	const DescID* single_id = description->GetSingleDescID();
 	if (const auto cid = ConstDescID(DescLevel(MODEL_INFO_GRP)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
 	{
@@ -1258,6 +1414,48 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				case MMDModelRootDynamicDescriptionType::MORPH_GRP:
 				case MMDModelRootDynamicDescriptionType::IK_BONE_LINK:
 					break;
+				case MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_DELETE_BUTTON:
+				{
+					const Int entry_index = desc_id_ptr->GetValue().second;
+					if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+					{
+						auto& targets = display_frame_list_[display_frame_selection_index_].targets;
+						if (entry_index >= 0 && entry_index < static_cast<Int>(targets.GetCount()))
+						{
+							targets.Erase(entry_index)iferr_ignore("erase failed");
+							RebuildDisplayFrameUI();
+						}
+					}
+					break;
+				}
+				case MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_MOVE_UP_BUTTON:
+				{
+					const Int entry_index = desc_id_ptr->GetValue().second;
+					if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+					{
+						auto& targets = display_frame_list_[display_frame_selection_index_].targets;
+						if (entry_index > 0 && entry_index < static_cast<Int>(targets.GetCount()))
+						{
+							std::swap(targets[entry_index], targets[entry_index - 1]);
+							RebuildDisplayFrameUI();
+						}
+					}
+					break;
+				}
+				case MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_MOVE_DOWN_BUTTON:
+				{
+					const Int entry_index = desc_id_ptr->GetValue().second;
+					if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+					{
+						auto& targets = display_frame_list_[display_frame_selection_index_].targets;
+						if (entry_index >= 0 && entry_index < static_cast<Int>(targets.GetCount()) - 1)
+						{
+							std::swap(targets[entry_index], targets[entry_index + 1]);
+							RebuildDisplayFrameUI();
+						}
+					}
+					break;
+				}
 				}
 			}
 		}
@@ -1290,6 +1488,46 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				GeData ge_data;
 				node->GetParameter(ConstDescID(DescLevel(MODEL_MORPH_IMPULSE_ADD_NAME)), ge_data, DESCFLAGS_GET::NONE);
 				AddMorph(MMDMorphType::IMPULSE, ge_data.GetString());
+				break;
+			}
+			case MODEL_DISPLAY_FRAME_ADD_BUTTON:
+			{
+				if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+				{
+					GeData type_data, target_data;
+					node->GetParameter(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_ADD_TYPE)), type_data, DESCFLAGS_GET::NONE);
+					node->GetParameter(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_ADD_TARGET)), target_data, DESCFLAGS_GET::NONE);
+				DisplayFrameTargetData td;
+				td.type = (type_data.GetInt32() == MODEL_DISPLAY_FRAME_ADD_TYPE_BONE)
+					? DisplayFrameTargetType::Bone : DisplayFrameTargetType::Morph;
+				td.index = target_data.GetInt32();
+				iferr(display_frame_list_[display_frame_selection_index_].targets.Append(td)) break;
+					RebuildDisplayFrameUI();
+				}
+				break;
+			}
+			case MODEL_DISPLAY_FRAME_NEW_BUTTON:
+			{
+				GeData name_data;
+				node->GetParameter(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_NEW_NAME)), name_data, DESCFLAGS_GET::NONE);
+				DisplayFrameData df;
+				df.name = name_data.GetString();
+				if (df.name.IsEmpty())
+					df.name = FormatString("Frame @", display_frame_list_.GetCount());
+				iferr(display_frame_list_.Append(std::move(df))) break;
+				display_frame_selection_index_ = static_cast<Int32>(display_frame_list_.GetCount()) - 1;
+				RebuildDisplayFrameUI();
+				break;
+			}
+			case MODEL_DISPLAY_FRAME_DELETE_BUTTON:
+			{
+				if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+				{
+					display_frame_list_.Erase(display_frame_selection_index_)iferr_ignore("erase failed");
+					if (display_frame_selection_index_ >= display_frame_list_.GetCount())
+						display_frame_selection_index_ = static_cast<Int32>(display_frame_list_.GetCount()) - 1;
+					RebuildDisplayFrameUI();
+				}
 				break;
 			}
 			case MODEL_ANIM_MERGE_VMD_BUTTON: [[fallthrough]];
@@ -1419,6 +1657,87 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				}
 				break;
 			}
+			case MODEL_MATERIAL_MOVE_UP_BUTTON:
+			{
+				if (material_selection_index_ > 0 && material_selection_index_ < material_list_.GetCount())
+				{
+					std::swap(material_list_[material_selection_index_], material_list_[material_selection_index_ - 1]);
+					material_selection_index_--;
+					EventAdd();
+				}
+				break;
+			}
+			case MODEL_MATERIAL_MOVE_DOWN_BUTTON:
+			{
+				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount() - 1)
+				{
+					std::swap(material_list_[material_selection_index_], material_list_[material_selection_index_ + 1]);
+					material_selection_index_++;
+					EventAdd();
+				}
+				break;
+			}
+			case MODEL_MATERIAL_DELETE_BUTTON:
+			{
+				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
+				{
+					auto& mat = material_list_[material_selection_index_];
+					BaseDocument* doc = node->GetDocument();
+					if (doc && mat.mesh_link && *mat.mesh_link)
+					{
+						BaseObject* mesh_obj = static_cast<BaseObject*>((*mat.mesh_link)->GetLink(doc));
+						if (mesh_obj)
+						{
+							if (mat.selection_name.IsPopulated())
+							{
+								for (BaseTag* tag = mesh_obj->GetFirstTag(); tag; tag = tag->GetNext())
+								{
+									if (tag->GetType() == Tpolygonselection && tag->GetName() == mat.selection_name)
+									{
+										tag->Remove();
+										BaseTag::Free(tag);
+										break;
+									}
+								}
+								for (BaseTag* tag = mesh_obj->GetFirstTag(); tag; tag = tag->GetNext())
+								{
+									if (tag->GetType() == Ttexture)
+									{
+										GeData sel_data;
+										tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), sel_data, DESCFLAGS_GET::NONE);
+										if (sel_data.GetString() == mat.selection_name)
+										{
+											tag->Remove();
+											BaseTag::Free(tag);
+											break;
+										}
+									}
+								}
+							}
+							else
+							{
+								mesh_obj->Remove();
+								BaseObject::Free(mesh_obj);
+							}
+						}
+					}
+					material_list_.Erase(material_selection_index_) iferr_ignore("erase failed"_s);
+					if (material_selection_index_ >= material_list_.GetCount())
+						material_selection_index_ = static_cast<Int32>(material_list_.GetCount()) - 1;
+					EventAdd();
+				}
+				break;
+			}
+			case MODEL_MATERIAL_ADD_BUTTON:
+			{
+				MMDMaterialData new_mat;
+				new_mat.name_local = FormatString("Material @", material_list_.GetCount());
+				iferr(material_list_.Append(std::move(new_mat)))
+					break;
+				material_selection_index_ = static_cast<Int32>(material_list_.GetCount()) - 1;
+				EventAdd();
+				break;
+			}
 			default:
 				break;
 			}
@@ -1445,6 +1764,24 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 		t_data.SetInt32(material_selection_index_);
 		flags |= DESCFLAGS_GET::PARAM_GET;
 		return SUPER::GetDParameter(node, id, t_data, flags);
+	case MODEL_DISPLAY_FRAME_LIST:
+		t_data.SetInt32(display_frame_selection_index_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return SUPER::GetDParameter(node, id, t_data, flags);
+	case MODEL_DISPLAY_FRAME_NAME_LOCAL:
+		if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+			t_data.SetString(display_frame_list_[display_frame_selection_index_].name);
+		else
+			t_data.SetString(""_s);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
+	case MODEL_DISPLAY_FRAME_NAME_UNIVERSAL:
+		if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+			t_data.SetString(display_frame_list_[display_frame_selection_index_].name_universal);
+		else
+			t_data.SetString(""_s);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
 	default:
 		break;
 	}
@@ -1501,6 +1838,17 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 		return true;
 	case MODEL_MATERIAL_MEMO: t_data.SetString(m.memo); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	case MODEL_MATERIAL_FACE_COUNT: t_data.SetString(String::IntToString(m.num_face_vertices / 3)); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+	case MODEL_MATERIAL_MESH_LINK:
+		if (m.mesh_link && *m.mesh_link)
+		{
+			const BaseDocument* doc = node->GetDocument();
+			t_data.SetBaseList2D(const_cast<BaseList2D*>(doc ? (*m.mesh_link)->GetLink(doc) : nullptr));
+		}
+		else
+			t_data.SetBaseList2D(nullptr);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return SUPER::GetDParameter(node, id, t_data, flags);
+	case MODEL_MATERIAL_SELECTION: t_data.SetString(m.selection_name); flags |= DESCFLAGS_GET::PARAM_GET; return true;
 	default:
 		break;
 	}
@@ -1537,6 +1885,26 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		}
 		case MODEL_MATERIAL_LIST:
 			material_selection_index_ = t_data.GetInt32();
+			break;
+		case MODEL_DISPLAY_FRAME_LIST:
+			display_frame_selection_index_ = t_data.GetInt32();
+			RebuildDisplayFrameUI();
+			break;
+		case MODEL_DISPLAY_FRAME_NAME_LOCAL:
+			if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+			{
+				display_frame_list_[display_frame_selection_index_].name = t_data.GetString();
+				flags |= DESCFLAGS_SET::PARAM_SET;
+				return true;
+			}
+			break;
+		case MODEL_DISPLAY_FRAME_NAME_UNIVERSAL:
+			if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+			{
+				display_frame_list_[display_frame_selection_index_].name_universal = t_data.GetString();
+				flags |= DESCFLAGS_SET::PARAM_SET;
+				return true;
+			}
 			break;
 		default:
 		{
@@ -1583,14 +1951,55 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 				case MODEL_MATERIAL_TEXTURE_PATH: mat.texture_path = t_data.GetString(); material_handled = true; break;
 				case MODEL_MATERIAL_SPHERE_TEXTURE_PATH: mat.sphere_texture_path = t_data.GetString(); material_handled = true; break;
 				case MODEL_MATERIAL_SPHERE_MODE: mat.sphere_mode = t_data.GetInt32(); material_handled = true; break;
-				case MODEL_MATERIAL_TOON_MODE: mat.toon_mode = t_data.GetInt32(); material_handled = true; break;
-				case MODEL_MATERIAL_TOON_TEXTURE_INDEX: mat.toon_texture_index = t_data.GetInt32(); material_handled = true; break;
+				case MODEL_MATERIAL_TOON_MODE:
+				{
+					mat.toon_mode = t_data.GetInt32();
+					if (mat.toon_mode == 1 && mat.toon_texture_index >= 0)
+					{
+						Char buf[20];
+						snprintf(buf, sizeof(buf), "toon%02d.bmp", static_cast<int>(mat.toon_texture_index + 1));
+						mat.toon_texture_path = (GeGetPluginResourcePath() + Filename("mikumikudance_data") + Filename(buf)).GetString();
+					}
+					material_handled = true;
+					break;
+				}
+				case MODEL_MATERIAL_TOON_TEXTURE_INDEX:
+				{
+					mat.toon_texture_index = t_data.GetInt32();
+					if (mat.toon_mode == 1 && mat.toon_texture_index >= 0)
+					{
+						Char buf[20];
+						snprintf(buf, sizeof(buf), "toon%02d.bmp", static_cast<int>(mat.toon_texture_index + 1));
+						mat.toon_texture_path = (GeGetPluginResourcePath() + Filename("mikumikudance_data") + Filename(buf)).GetString();
+					}
+					material_handled = true;
+					break;
+				}
 				case MODEL_MATERIAL_TOON_TEXTURE_PATH:
 					if (mat.toon_texture_index == -1)
 						mat.toon_texture_path = t_data.GetString();
 					material_handled = true;
 					break;
 				case MODEL_MATERIAL_MEMO: mat.memo = t_data.GetString(); material_handled = true; break;
+				case MODEL_MATERIAL_MESH_LINK:
+				{
+					BaseDocument* doc = node->GetDocument();
+					BaseObject* link_obj = static_cast<BaseObject*>(t_data.GetLink(doc));
+					if (!mat.mesh_link || !*mat.mesh_link)
+					{
+						auto link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
+						if (link_result == maxon::FAILED)
+							break;
+						mat.mesh_link = link_result.GetValue();
+						if (mat.mesh_link && *mat.mesh_link)
+							(*mat.mesh_link)->SetLink(link_obj);
+					}
+					else
+						(*mat.mesh_link)->SetLink(link_obj);
+					material_handled = true;
+					break;
+				}
+				case MODEL_MATERIAL_SELECTION: mat.selection_name = t_data.GetString(); material_handled = true; break;
 				default: break;
 				}
 				if (material_handled)
@@ -1622,18 +2031,36 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 {
 	switch (id[0].id)
 	{
+	case MODEL_DISPLAY_FRAME_NAME_LOCAL:
+	case MODEL_DISPLAY_FRAME_NAME_UNIVERSAL:
+	case MODEL_DISPLAY_FRAME_ADD_TYPE:
+	case MODEL_DISPLAY_FRAME_ADD_TARGET:
+	case MODEL_DISPLAY_FRAME_ADD_BUTTON:
+		return display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount();
+	case MODEL_DISPLAY_FRAME_DELETE_BUTTON:
+		return display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount();
 	case MODEL_MATERIAL_EDGE_SIZE:
 	case MODEL_MATERIAL_EDGE_COLOR:
 	case MODEL_MATERIAL_EDGE_ALPHA:
 		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
 			return material_list_[material_selection_index_].edge_enabled;
 		return false;
+	case MODEL_MATERIAL_TOON_TEXTURE_INDEX:
+		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
+			return material_list_[material_selection_index_].toon_mode == 1;
+		return false;
 	case MODEL_MATERIAL_TOON_TEXTURE_PATH:
 		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
-			return material_list_[material_selection_index_].toon_texture_index == -1;
+			return material_list_[material_selection_index_].toon_mode == 0;
 		return false;
 	case MODEL_MATERIAL_CREATE_BUTTON:
 	case MODEL_MATERIAL_CREATE_TYPE:
+		return material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount();
+	case MODEL_MATERIAL_MOVE_UP_BUTTON:
+		return material_selection_index_ > 0;
+	case MODEL_MATERIAL_MOVE_DOWN_BUTTON:
+		return material_selection_index_ >= 0 && material_selection_index_ < static_cast<Int32>(material_list_.GetCount()) - 1;
+	case MODEL_MATERIAL_DELETE_BUTTON:
 		return material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount();
 	case MODEL_MATERIAL_SYNC_BUTTON:
 	case MODEL_MATERIAL_REVERSE_SYNC_BUTTON:

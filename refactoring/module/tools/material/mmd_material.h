@@ -37,6 +37,8 @@ struct MMDMaterialData
 	String memo;
 	Int32 num_face_vertices = 0;
 	maxon::StrongRef<AutoAlloc<BaseLink>> material_link;
+	maxon::StrongRef<AutoAlloc<BaseLink>> mesh_link;
+	String selection_name;
 
 	void FromPMX(const libmmd::PMXMaterial& pmx_material);
 	void ToPMX(libmmd::PMXMaterial& pmx_material) const;

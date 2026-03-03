@@ -53,3 +53,32 @@
 - [x] 8.4 在 `MMDModelManagerObject::Message` 中处理 `MODEL_MATERIAL_CREATE_BUTTON` 的 `MSG_DESCRIPTION_COMMAND`：读取 `MODEL_MATERIAL_CREATE_TYPE`，根据类型调用对应的 `CreateStandardMaterialFromPMX`（或未来 RS/OC 函数）创建新材质，将其插入文档材质列表，更新当前 `MMDMaterialData` 的 `material_link`
 - [x] 8.5 在 `MMDModelManagerObject::Message` 中处理 `MODEL_MATERIAL_SYNC_BUTTON` 的 `MSG_DESCRIPTION_COMMAND`：读取关联材质，调用 `SyncToStandardMaterial` 将当前 MMD 材质属性完整同步到 C4D 材质
 - [x] 8.6 在 `GetDEnabling` 中添加逻辑：当未选中材质时，创建材质按钮和同步材质按钮为灰色不可点击；同步按钮在 `material_link` 为空时也为灰色
+
+## 9. Toon 模式控制索引/路径启用状态与自动路径更新
+
+- [x] 9.1 在 `OMMDModelManager.h` 中新增 `MODEL_MATERIAL_TOON_01` ~ `MODEL_MATERIAL_TOON_10` CYCLE 枚举值（值 0-9）
+- [x] 9.2 在 `OMMDModelManager.res` 中将 `MODEL_MATERIAL_TOON_TEXTURE_INDEX` 改为 LONG CYCLE 下拉框，选项为 toon01.bmp ~ toon10.bmp
+- [x] 9.3 在 `OMMDModelManager.str`（中英文共 4 个文件）中新增 `MODEL_MATERIAL_TOON_01` ~ `MODEL_MATERIAL_TOON_10` 字符串
+- [x] 9.4 在 `GetDEnabling` 中：`MODEL_MATERIAL_TOON_TEXTURE_INDEX` 在 `toon_mode == 1`（共用）时启用，`toon_mode == 0`（独立）时禁用；`MODEL_MATERIAL_TOON_TEXTURE_PATH` 在 `toon_mode == 0` 时启用，`toon_mode == 1` 时禁用
+- [x] 9.5 在 `SetDParameter` 的 `MODEL_MATERIAL_TOON_TEXTURE_INDEX` case 中，写入 `toon_texture_index` 后当 `toon_mode == 1` 时根据新索引值拼接 `GeGetPluginResourcePath() + "mikumikudance_data/toonXX.bmp"` 更新 `toon_texture_path`
+- [x] 9.6 在 `SetDParameter` 的 `MODEL_MATERIAL_TOON_MODE` case 中，当 toon_mode 变更为共用且 `toon_texture_index >= 0` 时，同样重新生成 `toon_texture_path`
+
+## 10. 材质 Mesh 关联与列表管理按钮
+
+- [x] 10.1 在 `MMDMaterialData` 中新增 `mesh_link`（`maxon::StrongRef<AutoAlloc<BaseLink>>`）和 `selection_name`（`String`）字段，并更新 Read/Write/CopyTo 序列化
+- [x] 10.2 在 `OMMDModelManager.h` 中新增 `MODEL_MATERIAL_MESH_LINK`、`MODEL_MATERIAL_SELECTION`、`MODEL_MATERIAL_DELETE_BUTTON`、`MODEL_MATERIAL_MOVE_UP_BUTTON`、`MODEL_MATERIAL_MOVE_DOWN_BUTTON`、`MODEL_MATERIAL_ADD_BUTTON` 描述 ID
+- [x] 10.3 在 `OMMDModelManager.res` 中将 `MODEL_MATERIAL_LIST` 改为 `GROUP { COLUMNS 2; }` 布局：左侧材质列表 CYCLE，右侧嵌套 `GROUP { COLUMNS 4; }` 放置 ↑↓×+ 四个按钮；在材质名称之后添加 `LINK MODEL_MATERIAL_MESH_LINK` 和 `STRING MODEL_MATERIAL_SELECTION`
+- [x] 10.4 在 `OMMDModelManager.str`（中英文共 4 个文件）中新增 mesh link / 选集 / 四个按钮的字符串
+- [x] 10.5 在 `GetDParameter` / `SetDParameter` 中添加 `MODEL_MATERIAL_MESH_LINK` 和 `MODEL_MATERIAL_SELECTION` 的读写处理
+- [x] 10.6 在 `Message` 中处理 `MODEL_MATERIAL_MOVE_UP_BUTTON` / `MODEL_MATERIAL_MOVE_DOWN_BUTTON`：交换 `material_list_` 中相邻元素并更新选中索引
+- [x] 10.7 在 `Message` 中处理 `MODEL_MATERIAL_DELETE_BUTTON`：删除当前材质条目，有 selection_name 时仅删除选集和纹理标签，否则删除整个 mesh 对象
+- [x] 10.8 在 `Message` 中处理 `MODEL_MATERIAL_ADD_BUTTON`：添加新的空 `MMDMaterialData` 条目并选中
+- [x] 10.9 在 `GetDEnabling` 中添加：↑按钮在 `index <= 0` 时禁用；↓按钮在 `index >= count - 1` 时禁用；×按钮在无选中材质时禁用
+
+## 11. Mesh-材质同步
+
+- [ ] 11.1 在 `MMDModelManagerObject` 中设计 mesh-材质同步的触发时机，在 `Message` 中监听 `MSG_CHANGE` 或 `CheckDirty` 检测子对象结构变化
+- [ ] 11.2 实现同步逻辑：遍历 `MMDMeshManagerObject` 下 mesh 子对象的 `TextureTag`，收集所有引用的 `BaseMaterial`，与 `material_list_` 的 `material_link` 对比
+- [ ] 11.3 对于新出现的材质（在 mesh 上但不在 `material_list_` 中）：创建新的 `MMDMaterialData` 条目，设置 `material_link`，初始化默认 MMD 属性
+- [ ] 11.4 对于消失的材质（在 `material_list_` 中但 mesh 上不再引用）：从 `material_list_` 中移除对应条目
+- [ ] 11.5 同步后刷新 `material_list_items_` CYCLE 列表和 `material_selection_index_`

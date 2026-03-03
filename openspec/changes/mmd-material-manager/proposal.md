@@ -22,6 +22,9 @@
 - 导入工具对话框（`DLG_CMT_TOOL`）新增**转换材质类型**下拉框，允许用户选择导入时创建的材质类型（标准/RedShift/Octane），当前默认且仅支持标准材质
 - MMD 材质管理界面新增**创建材质**按钮和转换材质类型下拉框，支持从当前 MMD 材质属性创建新的 C4D 材质并自动更新 `material_link`
 - MMD 材质管理界面新增**同步材质**按钮，将当前 UI 上的 MMD 材质属性手动同步到 `material_link` 关联的 C4D 材质
+- 用户修改 `MODEL_MATERIAL_TOON_TEXTURE_INDEX` 时自动更新 `MODEL_MATERIAL_TOON_TEXTURE_PATH`（根据 toon_mode 和索引值重新生成路径）
+- 在材质列表下拉框旁新增 **↑**/**↓** 两个排序按钮，用于调整材质在选择框中的顺序
+- 当 `MMDMeshManagerObject` 下的 mesh 对象发生增删或其关联材质变更时，自动同步更新 MMD 材质列表（新增/删除/更新对应条目）
 
 ## Capabilities
 
@@ -30,6 +33,8 @@
 - `material-data-model`: MMD 材质数据的持久化存储模型，包括 Read/Write/CopyTo 序列化、材质列表管理、与 C4D 材质的 BaseLink 关联
 - `material-manager-ui`: 在 MMDModelManagerObject 属性管理器中的材质管理 UI，包括材质列表选择、属性编辑区、动态描述系统
 - `material-sync`: 材质属性修改到 C4D 材质的同步逻辑，以及 PMX 导入/导出时的数据转换
+- `material-list-reorder`: 材质列表排序功能，通过 ↑↓ 按钮调整材质顺序
+- `material-mesh-sync`: 材质列表与 mesh 对象的同步机制，当子 mesh 变更时自动更新材质列表
 
 ### Modified Capabilities
 

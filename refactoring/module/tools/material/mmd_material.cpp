@@ -115,6 +115,18 @@ Bool MMDMaterialData::Read(HyperFile* hf)
 	}
 	else
 		material_link = maxon::StrongRef<AutoAlloc<BaseLink>>();
+	Bool has_mesh_link = false;
+	if (!hf->ReadBool(&has_mesh_link))
+		return false;
+	if (has_mesh_link)
+	{
+		if (!ReadData(hf, mesh_link))
+			return false;
+	}
+	else
+		mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>();
+	if (!ReadData(hf, selection_name))
+		return false;
 	return true;
 }
 
@@ -144,6 +156,16 @@ Bool MMDMaterialData::Write(HyperFile* hf) const
 		if (!WriteData(hf, material_link))
 			return false;
 	}
+	const Bool has_mesh_link = mesh_link && *mesh_link;
+	if (!hf->WriteBool(has_mesh_link))
+		return false;
+	if (has_mesh_link)
+	{
+		if (!WriteData(hf, mesh_link))
+			return false;
+	}
+	if (!WriteData(hf, selection_name))
+		return false;
 	return true;
 }
 
@@ -183,6 +205,16 @@ Bool MMDMaterialData::CopyTo(MMDMaterialData& dest) const
 	}
 	else
 		dest.material_link = maxon::StrongRef<AutoAlloc<BaseLink>>();
+	if (mesh_link && *mesh_link)
+	{
+		dest.mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create() iferr_return;
+		if (!dest.mesh_link || !*dest.mesh_link)
+			return false;
+		(*dest.mesh_link)->SetLink((*mesh_link)->ForceGetLink());
+	}
+	else
+		dest.mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>();
+	dest.selection_name = selection_name;
 	return true;
 }
 

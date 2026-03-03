@@ -209,6 +209,18 @@ inline GeData MakeDescIDGeData(const DescID& id)
 #endif
 }
 
+/// Gets a const custom data type from a BaseContainer by parameter ID.
+/// In SDK < 2024, uses GetCustomDataType(id, datatypeId); in SDK >= 2024, uses GetCustomDataType<T>(id).
+template<typename T>
+inline const T* GetContainerCustomDataType(const BaseContainer& bc, Int32 id, [[maybe_unused]] Int32 datatypeId)
+{
+#if API_VERSION < 2024000
+    return static_cast<const T*>(bc.GetCustomDataType(id, datatypeId));
+#else
+    return bc.GetCustomDataType<T>(id);
+#endif
+}
+
 /// Gets a writable custom data type pointer from GeData, using the correct API for the current SDK version.
 /// @tparam T The custom data type to retrieve (e.g. PriorityData).
 /// @param data The GeData instance to extract from.

@@ -874,18 +874,19 @@ Bool MMDMeshManagerObject::LoadPMX(
 			if (setting.import_material)
 			{
 				material = material_manager->LoadPMXMaterial(pmx_material, material_index, material_name, setting);
-				if (!material)
-					return false;
-				setting.doc->InsertMaterial(material);
+				if (material)
+				{
+					setting.doc->InsertMaterial(material);
 
-				const auto texture_tag = TextureTag::Alloc();
-				if (!texture_tag)
-					return false;
-				texture_tag->SetName(material_name);
-				texture_tag->SetMaterial(material);
-				texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_PROJECTION)), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
-				texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), material_name, DESCFLAGS_SET::NONE);
-				mesh_object->InsertTag(texture_tag, polygon_selection_tag);
+					const auto texture_tag = TextureTag::Alloc();
+					if (!texture_tag)
+						return false;
+					texture_tag->SetName(material_name);
+					texture_tag->SetMaterial(material);
+					texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_PROJECTION)), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
+					texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), material_name, DESCFLAGS_SET::NONE);
+					mesh_object->InsertTag(texture_tag, polygon_selection_tag);
+				}
 			}
 			if (BaseObject* model_op = static_cast<BaseObject*>(Get()->GetUp()))
 				if (MMDModelManagerObject* model_data = model_op->GetNodeData<MMDModelManagerObject>())
@@ -935,17 +936,18 @@ Bool MMDMeshManagerObject::LoadPMX(
 			if (setting.import_material)
 			{
 				material = material_manager->LoadPMXMaterial(pmx_material, material_index, material_name, setting);
-				if (!material)
-					return false;
-				setting.doc->InsertMaterial(material);
+				if (material)
+				{
+					setting.doc->InsertMaterial(material);
 
-				const auto texture_tag = TextureTag::Alloc();
-				if (!texture_tag)
-					return false;
-				texture_tag->SetName(material_name);
-				texture_tag->SetMaterial(material);
-				texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_PROJECTION)), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
-				mesh_object->InsertTag(texture_tag);
+					const auto texture_tag = TextureTag::Alloc();
+					if (!texture_tag)
+						return false;
+					texture_tag->SetName(material_name);
+					texture_tag->SetMaterial(material);
+					texture_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_PROJECTION)), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
+					mesh_object->InsertTag(texture_tag);
+				}
 			}
 			if (BaseObject* model_op = static_cast<BaseObject*>(Get()->GetUp()))
 				if (MMDModelManagerObject* model_data = model_op->GetNodeData<MMDModelManagerObject>())
