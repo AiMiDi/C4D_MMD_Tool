@@ -58,7 +58,7 @@ namespace
 	{
 		return RegisterObjectPlugin(g_mmd_mesh_manager_object_id, GeLoadString(IDS_O_MMD_MESH_MANAGER), PLUGINFLAG_HIDEPLUGINMENU | OBJECT_CALL_ADDEXECUTION, MMDMeshManagerObject::Alloc, "OMMDMeshManager"_s, AutoBitmap("OMMDMeshManager.png"_s), 0);
 	}
-
+					
 	Bool RegisterMMDRigidManager()
 	{
 		return RegisterObjectPlugin(g_mmd_rigid_manager_object_id, GeLoadString(IDS_O_MMD_RIGID_MANAGER), PLUGINFLAG_HIDEPLUGINMENU , MMDRigidManagerObject::Alloc, "OMMDRigidManager"_s, AutoBitmap("OMMDRigidManager.png"_s), 0);

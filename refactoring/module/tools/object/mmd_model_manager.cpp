@@ -232,6 +232,7 @@ SDK2024_Init(MMDModelManagerObject)
 	bc->SetString(COMMENTS_LOCAL, "description"_s);
 	bc->SetString(COMMENTS_UNIVERSAL, "description"_s);
 	bc->SetInt32(MODEL_ANIM_LIST, -1);
+	bc->SetInt32(MODEL_MATERIAL_LIST, MODEL_MATERIAL_NONE);
 	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
 	return true;
 }
@@ -352,6 +353,7 @@ SDK2024_Write(MMDModelManagerObject) {
 SDK2024_CopyTo(MMDModelManagerObject)
 {
 	const auto destObject = reinterpret_cast<MMDModelManagerObject*>(dest);
+	destObject->model_mode_ = model_mode_;
 	destObject->bone_manager_ = bone_manager_;
 	destObject->joint_manager_ = joint_manager_;
 	destObject->rigid_manager_ = rigid_manager_;
@@ -891,7 +893,6 @@ void MMDModelManagerObject::RebuildDisplayFrameUI()
 
 		bc = GetCustomDataTypeDefault(DTYPE_STATICTEXT);
 		bc.SetString(DESC_NAME, type_label + target_name);
-		bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
 		bc.SetBool(DESC_SCALEH, true);
 		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
 		dd->Alloc(bc);
@@ -899,7 +900,7 @@ void MMDModelManagerObject::RebuildDisplayFrameUI()
 		bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 		bc.SetString(DESC_NAME, "\u2191"_s);
 		bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-		bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+		bc.SetBool(DESC_FITH, true);
 		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
 		const DescID up_id = dd->Alloc(bc);
 		iferr(desc_id_map_.Insert(up_id, {MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_MOVE_UP_BUTTON, i})) {}
@@ -907,7 +908,7 @@ void MMDModelManagerObject::RebuildDisplayFrameUI()
 		bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 		bc.SetString(DESC_NAME, "\u2193"_s);
 		bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-		bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+		bc.SetBool(DESC_FITH, true);
 		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
 		const DescID down_id = dd->Alloc(bc);
 		iferr(desc_id_map_.Insert(down_id, {MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_MOVE_DOWN_BUTTON, i})) {}
@@ -915,7 +916,7 @@ void MMDModelManagerObject::RebuildDisplayFrameUI()
 		bc = GetCustomDataTypeDefault(DTYPE_BUTTON);
 		bc.SetString(DESC_NAME, "-"_s);
 		bc.SetInt32(DESC_CUSTOMGUI, CUSTOMGUI_BUTTON);
-		bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
+		bc.SetBool(DESC_FITH, true);
 		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(row_grp));
 		const DescID del_id = dd->Alloc(bc);
 		iferr(desc_id_map_.Insert(del_id, {MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_DELETE_BUTTON, i})) {}
@@ -1345,6 +1346,21 @@ SDK2024_GetDDescription(MMDModelManagerObject)
 		add_target_settings->SetContainer(DESC_CYCLE, target_cycle);
 	}
 
+	if (model_mode_ != MODEL_MODE_EDIT)
+	{
+		constexpr Int32 morph_add_ids[] = {
+			MODEL_MORPH_GROUP_ADD_NAME, MODEL_MORPH_GROUP_ADD_BUTTON,
+			MODEL_MORPH_FLIP_ADD_NAME, MODEL_MORPH_FLIP_ADD_BUTTON,
+			MODEL_MORPH_MATERIAL_ADD_NAME, MODEL_MORPH_MATERIAL_ADD_BUTTON,
+			MODEL_MORPH_IMPULSE_ADD_NAME, MODEL_MORPH_IMPULSE_ADD_BUTTON
+		};
+		for (const auto desc_id : morph_add_ids)
+		{
+			if (BaseContainer* settings = description->GetParameterI(CreateDescID(DescLevel(desc_id)), nullptr))
+				settings->SetBool(DESC_HIDE, true);
+		}
+	}
+
 	const DescID* single_id = description->GetSingleDescID();
 	if (const auto cid = ConstDescID(DescLevel(MODEL_INFO_GRP)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
 	{
@@ -1760,14 +1776,22 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 {
 	switch (id[0].id)
 	{
+	case MODEL_MODE:
+		t_data.SetInt32(model_mode_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
+	case MODEL_ANIM_LIST:
+		t_data.SetInt32(animation_index_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
 	case MODEL_MATERIAL_LIST:
 		t_data.SetInt32(material_selection_index_);
 		flags |= DESCFLAGS_GET::PARAM_GET;
-		return SUPER::GetDParameter(node, id, t_data, flags);
+		return true;
 	case MODEL_DISPLAY_FRAME_LIST:
 		t_data.SetInt32(display_frame_selection_index_);
 		flags |= DESCFLAGS_GET::PARAM_GET;
-		return SUPER::GetDParameter(node, id, t_data, flags);
+		return true;
 	case MODEL_DISPLAY_FRAME_NAME_LOCAL:
 		if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
 			t_data.SetString(display_frame_list_[display_frame_selection_index_].name);
@@ -2029,6 +2053,10 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 
 SDK2024_GetDEnabling(MMDModelManagerObject)
 {
+	if (id[0].id >= MODEL_MATERIAL_NAME_LOCAL && id[0].id < MODEL_MATERIAL_ADD_BUTTON)
+	{
+		return material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount();
+	}
 	switch (id[0].id)
 	{
 	case MODEL_DISPLAY_FRAME_NAME_LOCAL:
@@ -2036,7 +2064,6 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 	case MODEL_DISPLAY_FRAME_ADD_TYPE:
 	case MODEL_DISPLAY_FRAME_ADD_TARGET:
 	case MODEL_DISPLAY_FRAME_ADD_BUTTON:
-		return display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount();
 	case MODEL_DISPLAY_FRAME_DELETE_BUTTON:
 		return display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount();
 	case MODEL_MATERIAL_EDGE_SIZE:
@@ -2048,10 +2075,6 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 	case MODEL_MATERIAL_TOON_TEXTURE_INDEX:
 		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
 			return material_list_[material_selection_index_].toon_mode == 1;
-		return false;
-	case MODEL_MATERIAL_TOON_TEXTURE_PATH:
-		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
-			return material_list_[material_selection_index_].toon_mode == 0;
 		return false;
 	case MODEL_MATERIAL_CREATE_BUTTON:
 	case MODEL_MATERIAL_CREATE_TYPE:
