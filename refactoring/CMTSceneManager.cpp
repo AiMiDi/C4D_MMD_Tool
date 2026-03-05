@@ -304,24 +304,40 @@ Bool CMTSceneManager::SaveVMDMotion(const CMTToolsSetting::MotionExport& setting
 
 BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
 {
-	// create model
 	BaseObject* object = BaseObject::Alloc(g_mmd_model_manager_object_id);
 	if (!object)
 		return nullptr;
 
 	setting.doc->InsertObject(object, nullptr, nullptr);
 
-	// init model
 	object->SetName(setting.fn.GetFileString());
 	auto* pmx_model_data = object->GetNodeData<MMDModelManagerObject>();
 	pmx_model_data->CreateManagers();
 	pmx_model_data->UpdateManagers();
 
-	// set model with pmx data
-	pmx_model_data->LoadPMX(pmx_file, pmx_model, setting);
+	BaseMaterial* last_mat_before = nullptr;
+	for (BaseMaterial* m = setting.doc->GetFirstMaterial(); m; m = static_cast<BaseMaterial*>(m->GetNext()))
+		last_mat_before = m;
+
+	if (!pmx_model_data->LoadPMX(pmx_file, pmx_model, setting))
+	{
+		BaseMaterial* mat = last_mat_before
+			? static_cast<BaseMaterial*>(last_mat_before->GetNext())
+			: setting.doc->GetFirstMaterial();
+		while (mat)
+		{
+			BaseMaterial* next = static_cast<BaseMaterial*>(mat->GetNext());
+			mat->Remove();
+			BaseMaterial::Free(mat);
+			mat = next;
+		}
+		object->Remove();
+		BaseObject::Free(object);
+		EventAdd();
+		return nullptr;
+	}
 
 	EventAdd();
-
 	return object;
 }
 

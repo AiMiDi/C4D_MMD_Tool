@@ -27,10 +27,7 @@ BaseMaterial* CreateOctaneMaterialFromPMX(const libmmd::PMXMaterial& pmx_materia
 {
 	BaseMaterial* material = BaseMaterial::Alloc(ID_OCTANE_DIFFUSE_MATERIAL);
 	if (!material)
-	{
-		MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, "Octane"_s));
 		return nullptr;
-	}
 
 	bool has_texture = false;
 	bool has_alpha_channel = false;
@@ -131,10 +128,7 @@ BaseMaterial* CreateOctaneMaterialFromData(const MMDMaterialData& data)
 {
 	BaseMaterial* material = BaseMaterial::Alloc(ID_OCTANE_DIFFUSE_MATERIAL);
 	if (!material)
-	{
-		MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, "Octane"_s));
 		return nullptr;
-	}
 
 	material->SetParameter(ConstDescID(DescLevel(OCT_MAT_USE_COLOR)), true, DESCFLAGS_SET::NONE);
 	material->SetParameter(ConstDescID(DescLevel(OCT_MAT_USE_OPACITY)), true, DESCFLAGS_SET::NONE);

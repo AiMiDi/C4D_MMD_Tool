@@ -21,10 +21,7 @@ BaseMaterial* CreateCoronaMaterialFromPMX(const libmmd::PMXMaterial& pmx_materia
 {
 	BaseMaterial* material = BaseMaterial::Alloc(ID_CORONA_MATERIAL);
 	if (!material)
-	{
-		MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, "Corona"_s));
 		return nullptr;
-	}
 
 	bool has_texture = false;
 	bool has_alpha_channel = false;
@@ -105,10 +102,7 @@ BaseMaterial* CreateCoronaMaterialFromData(const MMDMaterialData& data)
 {
 	BaseMaterial* material = BaseMaterial::Alloc(ID_CORONA_MATERIAL);
 	if (!material)
-	{
-		MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, "Corona"_s));
 		return nullptr;
-	}
 
 	material->SetParameter(ConstDescID(DescLevel(CORONA_MATERIAL_DIFFUSE)), true, DESCFLAGS_SET::NONE);
 	material->SetParameter(ConstDescID(DescLevel(CORONA_MATERIAL_ALPHA)), true, DESCFLAGS_SET::NONE);
