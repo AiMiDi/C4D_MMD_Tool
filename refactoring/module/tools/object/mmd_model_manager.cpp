@@ -626,11 +626,16 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		{
 			fps_ = static_cast<Float32>(doc->GetFps());
 
+			const Float64 time_diff = now_time.Get() - prev_time_.Get();
+			const Float64 frame_time = 1.0 / static_cast<Float64>(fps_);
+			const Bool needs_physics_reset = !is_animation_initialized_ || now_time == doc->GetMinTime()
+				|| (time_diff < frame_time * 0.5 || time_diff > frame_time * 1.5);
+
 			if (animation_index_ != -1 && animation_index_ < animations_.GetCount())
 			{
 				const auto& [_, animation]  = animations_[animation_index_];
 				const auto vmd_frame = static_cast<Float32>(now_time.Get() * fps_);
-				if (!is_animation_initialized_ || now_time == doc->GetMinTime())
+				if (needs_physics_reset)
 				{
 					mmd_model_->InitializeAnimation();
 					animation->SyncPhysics(vmd_frame, 30, 1.f / fps_);
@@ -642,7 +647,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			}
 			else
 			{
-				if (!is_animation_initialized_ || now_time == doc->GetMinTime())
+				if (needs_physics_reset)
 				{
 					mmd_model_->InitializeAnimation();
 					is_animation_initialized_ = true;
