@@ -525,7 +525,6 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 		else {
 			bone_manager_ = bone_manager;
 		}
-		bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
 		send_message = true;
 	}
 	if (!mesh_manager_) {
@@ -538,7 +537,6 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 		else {
 			mesh_manager_ = mesh_manager;
 		}
-		mesh_manager_data_ = mesh_manager_->GetNodeData<MMDMeshManagerObject>();
 		send_message = true;
 	}
 	if (!rigid_manager_) {
@@ -551,7 +549,6 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 		else {
 			rigid_manager_ = rigid_manager;
 		}
-		rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
 		send_message = true;
 	}
 	if (!joint_manager_) {
@@ -564,15 +561,21 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 		else {
 			joint_manager_ = joint_manager;
 		}
-		joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
 		send_message = true;
 	}
+	bone_manager_data_ = bone_manager_ ? bone_manager_->GetNodeData<MMDBoneManagerObject>() : nullptr;
+	mesh_manager_data_ = mesh_manager_ ? mesh_manager_->GetNodeData<MMDMeshManagerObject>() : nullptr;
+	rigid_manager_data_ = rigid_manager_ ? rigid_manager_->GetNodeData<MMDRigidManagerObject>() : nullptr;
+	joint_manager_data_ = joint_manager_ ? joint_manager_->GetNodeData<MMDJointManagerObject>() : nullptr;
 	if (send_message)
 	{
 		SendObjectUpdateMessage(bone_manager_, op);
 		SendObjectUpdateMessage(mesh_manager_, op);
-
+	}
+	if (rigid_manager_data_)
 		rigid_manager_data_->bone_manager_data_ = bone_manager_data_;
+	if (joint_manager_data_)
+	{
 		joint_manager_data_->bone_manager_data_ = bone_manager_data_;
 		joint_manager_data_->rigid_manager_data_ = rigid_manager_data_;
 	}
@@ -593,12 +596,13 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 	const auto manager_read = *is_manager_read_.Read();
 
-	if (!manager_read)
-		if (!UpdateManagers(op))
-			return EXECUTIONRESULT::OK;
+	if (!UpdateManagers(op))
+		return EXECUTIONRESULT::OK;
 
 	if(manager_read)
 	{
+		if (bone_manager_data_)
+			bone_manager_data_->HandleBoneIndexChangeMessage(bone_manager_);
 		*is_manager_read_.Write() = false;
 	}
 
@@ -870,9 +874,27 @@ void MMDModelManagerObject::RebuildDisplayFrameUI()
 		const String type_label = (target.type == DisplayFrameTargetType::Bone)
 			? "[Bone] "_s : "[Morph] "_s;
 		String target_name = String::IntToString(target.index);
-		if (target.type == DisplayFrameTargetType::Bone && bone_manager_data_)
+		const MMDBoneManagerObject* bmd_ui = bone_manager_data_;
+		if (!bmd_ui)
 		{
-			target_name = bone_manager_data_->GetBoneItems().GetString(target.index, target_name);
+			if (bone_manager_)
+				bmd_ui = bone_manager_->GetNodeData<MMDBoneManagerObject>();
+			if (!bmd_ui)
+			{
+				auto* op = static_cast<BaseObject*>(Get());
+				for (BaseObject* child = op->GetDown(); child; child = child->GetNext())
+				{
+					if (child->IsInstanceOf(g_mmd_bone_manager_object_id))
+					{
+						bmd_ui = child->GetNodeData<MMDBoneManagerObject>();
+						break;
+					}
+				}
+			}
+		}
+		if (target.type == DisplayFrameTargetType::Bone && bmd_ui)
+		{
+			target_name = bmd_ui->GetBoneItems().GetString(target.index, target_name);
 		}
 		else if (target.type == DisplayFrameTargetType::Morph)
 		{
@@ -922,6 +944,7 @@ void MMDModelManagerObject::RebuildDisplayFrameUI()
 		iferr(desc_id_map_.Insert(del_id, {MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_DELETE_BUTTON, i})) {}
 	}
 
+	Get()->SetDirty(DIRTYFLAGS::DESCRIPTION);
 	::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 	if (::GeIsMainThread())
 		::EventAdd();
@@ -1324,29 +1347,88 @@ SDK2024_GetDDescription(MMDModelManagerObject)
 	if (BaseContainer* add_target_settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_ADD_TARGET)), nullptr))
 	{
 		BaseContainer target_cycle;
-		GeData add_type_data;
-		Get()->GetParameter(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_ADD_TYPE)), add_type_data, DESCFLAGS_GET::NONE);
-		const Int32 add_type = add_type_data.GetInt32();
-		if (add_type == MODEL_DISPLAY_FRAME_ADD_TYPE_BONE && bone_manager_data_)
+		const Int32 add_type = display_frame_add_type_;
+		BaseContainer used_bones;
+		BaseContainer used_morphs;
+		for (const auto& frame : display_frame_list_)
 		{
-			const BaseContainer& bone_items = bone_manager_data_->GetBoneItems();
-			for (Int32 idx = 0; ; ++idx)
+			for (const auto& t : frame.targets)
 			{
-				const Int32 bc_id = bone_items.GetIndexId(idx);
-				if (bc_id == NOTOK) break;
-				if (bc_id >= 0)
-					target_cycle.SetString(bc_id, bone_items.GetString(bc_id));
+				if (t.type == DisplayFrameTargetType::Bone)
+					used_bones.SetBool(t.index, true);
+				else
+					used_morphs.SetBool(t.index, true);
+			}
+		}
+		const MMDBoneManagerObject* bmd = bone_manager_data_;
+		if (!bmd)
+		{
+			if (bone_manager_)
+				bmd = bone_manager_->GetNodeData<MMDBoneManagerObject>();
+			if (!bmd)
+			{
+				for (SDK2024_Const BaseObject* child = reinterpret_cast<SDK2024_Const BaseObject*>(node)->GetDown(); child; child = child->GetNext())
+				{
+					if (child->IsInstanceOf(g_mmd_bone_manager_object_id))
+					{
+						bmd = child->GetNodeData<MMDBoneManagerObject>();
+						break;
+					}
+				}
+			}
+		}
+		if (add_type == MODEL_DISPLAY_FRAME_ADD_TYPE_BONE && bmd)
+		{
+			SDK2024_Const BaseDocument* bone_doc = bmd->Get()->GetDocument();
+			if (!bone_doc) bone_doc = reinterpret_cast<SDK2024_Const BaseObject*>(node)->GetDocument();
+			for (const auto& entry : bmd->bone_list_)
+			{
+				const Int32 bone_index = static_cast<Int32>(entry.GetKey());
+				if (bone_index >= 0 && !used_bones.GetBool(bone_index))
+				{
+					String bone_name = String::IntToString(bone_index);
+					if (entry.GetValue() && *entry.GetValue())
+					{
+						if (const BaseTag* tag = static_cast<const BaseTag*>((*entry.GetValue())->GetLink(bone_doc)))
+							if (const BaseObject* obj = tag->GetObject())
+								bone_name = obj->GetName();
+					}
+					target_cycle.SetString(bone_index, bone_name);
+				}
 			}
 		}
 		else if (add_type == MODEL_DISPLAY_FRAME_ADD_TYPE_MORPH)
 		{
 			for (const auto& entry : morph_name_)
-				target_cycle.SetString(static_cast<Int32>(entry.GetValue()), entry.GetKey());
+			{
+				const Int32 morph_index = static_cast<Int32>(entry.GetValue());
+				if (!used_morphs.GetBool(morph_index))
+					target_cycle.SetString(morph_index, entry.GetKey());
+			}
+		}
+		const Int32 first_id = target_cycle.GetIndexId(0);
+		display_frame_add_target_empty_ = (first_id == NOTOK);
+		if (!display_frame_add_target_empty_)
+		{
+			Bool found = false;
+			for (Int32 idx = 0; ; ++idx)
+			{
+				const Int32 cid = target_cycle.GetIndexId(idx);
+				if (cid == NOTOK) break;
+				if (cid == display_frame_add_target_) { found = true; break; }
+			}
+			if (!found)
+				display_frame_add_target_ = first_id;
 		}
 		add_target_settings->SetContainer(DESC_CYCLE, target_cycle);
 	}
 
-	if (model_mode_ != MODEL_MODE_EDIT)
+	if (model_mode_ == MODEL_MODE_VMD)
+	{
+		if (BaseContainer* settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_MORPH_GRP)), nullptr))
+			settings->SetBool(DESC_HIDE, true);
+	}
+	else if (model_mode_ != MODEL_MODE_EDIT)
 	{
 		constexpr Int32 morph_add_ids[] = {
 			MODEL_MORPH_GROUP_ADD_NAME, MODEL_MORPH_GROUP_ADD_BUTTON,
@@ -1508,15 +1590,13 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			}
 			case MODEL_DISPLAY_FRAME_ADD_BUTTON:
 			{
-				if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
+				if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount()
+				&& !display_frame_add_target_empty_)
 				{
-					GeData type_data, target_data;
-					node->GetParameter(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_ADD_TYPE)), type_data, DESCFLAGS_GET::NONE);
-					node->GetParameter(ConstDescID(DescLevel(MODEL_DISPLAY_FRAME_ADD_TARGET)), target_data, DESCFLAGS_GET::NONE);
 				DisplayFrameTargetData td;
-				td.type = (type_data.GetInt32() == MODEL_DISPLAY_FRAME_ADD_TYPE_BONE)
+				td.type = (display_frame_add_type_ == MODEL_DISPLAY_FRAME_ADD_TYPE_BONE)
 					? DisplayFrameTargetType::Bone : DisplayFrameTargetType::Morph;
-				td.index = target_data.GetInt32();
+				td.index = display_frame_add_target_;
 				iferr(display_frame_list_[display_frame_selection_index_].targets.Append(td)) break;
 					RebuildDisplayFrameUI();
 				}
@@ -1574,7 +1654,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					LoadVmdMotionLog::LogReadFileErr();
 					break;
 				}
-				if(LoadVMDMotion(vmd_file, setting, logger, id == MODEL_ANIM_MERGE_VMD_BUTTON))
+				if (!LoadVMDMotion(vmd_file, setting, logger, id == MODEL_ANIM_MERGE_VMD_BUTTON))
 				{
 					break;
 				}
@@ -1679,6 +1759,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					std::swap(material_list_[material_selection_index_], material_list_[material_selection_index_ - 1]);
 					material_selection_index_--;
+					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 					EventAdd();
 				}
 				break;
@@ -1689,6 +1770,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					std::swap(material_list_[material_selection_index_], material_list_[material_selection_index_ + 1]);
 					material_selection_index_++;
+					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 					EventAdd();
 				}
 				break;
@@ -1740,6 +1822,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					material_list_.Erase(material_selection_index_) iferr_ignore("erase failed"_s);
 					if (material_selection_index_ >= material_list_.GetCount())
 						material_selection_index_ = static_cast<Int32>(material_list_.GetCount()) - 1;
+					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 					EventAdd();
 				}
 				break;
@@ -1751,6 +1834,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				iferr(material_list_.Append(std::move(new_mat)))
 					break;
 				material_selection_index_ = static_cast<Int32>(material_list_.GetCount()) - 1;
+				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 				EventAdd();
 				break;
 			}
@@ -1804,6 +1888,14 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 			t_data.SetString(display_frame_list_[display_frame_selection_index_].name_universal);
 		else
 			t_data.SetString(""_s);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
+	case MODEL_DISPLAY_FRAME_ADD_TYPE:
+		t_data.SetInt32(display_frame_add_type_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
+	case MODEL_DISPLAY_FRAME_ADD_TARGET:
+		t_data.SetInt32(display_frame_add_target_);
 		flags |= DESCFLAGS_GET::PARAM_GET;
 		return true;
 	default:
@@ -1929,6 +2021,15 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 				flags |= DESCFLAGS_SET::PARAM_SET;
 				return true;
 			}
+			break;
+		case MODEL_DISPLAY_FRAME_ADD_TYPE:
+			display_frame_add_type_ = t_data.GetInt32();
+			node->SetDirty(DIRTYFLAGS::DESCRIPTION);
+			::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+			EventAdd();
+			break;
+		case MODEL_DISPLAY_FRAME_ADD_TARGET:
+			display_frame_add_target_ = t_data.GetInt32();
 			break;
 		default:
 		{
@@ -2063,9 +2164,11 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 	case MODEL_DISPLAY_FRAME_NAME_UNIVERSAL:
 	case MODEL_DISPLAY_FRAME_ADD_TYPE:
 	case MODEL_DISPLAY_FRAME_ADD_TARGET:
-	case MODEL_DISPLAY_FRAME_ADD_BUTTON:
 	case MODEL_DISPLAY_FRAME_DELETE_BUTTON:
 		return display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount();
+	case MODEL_DISPLAY_FRAME_ADD_BUTTON:
+		return display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount()
+			&& !display_frame_add_target_empty_;
 	case MODEL_MATERIAL_EDGE_SIZE:
 	case MODEL_MATERIAL_EDGE_COLOR:
 	case MODEL_MATERIAL_EDGE_ALPHA:

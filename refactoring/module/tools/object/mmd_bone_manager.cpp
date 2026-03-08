@@ -315,7 +315,8 @@ bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node)
 				{
 					GeData ge_data;
 					node_bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), ge_data, DESCFLAGS_GET::NONE);
-					const auto bone_index = node_bone_tag->GetNodeData<MMDBoneTag>()->GetBoneIndex();
+					const Int32 bone_index_from_node = node_bone_tag->GetNodeData<MMDBoneTag>()->GetBoneIndex();
+					const auto bone_index = (bone_index_from_node >= 0) ? bone_index_from_node : ge_data.GetString().ToInt32(nullptr);
 					bone_items_.SetString(bone_index, object->GetName());
 					auto& link = bone_list_.InsertKey(bone_index)iferr_return;
 					link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
@@ -790,6 +791,27 @@ Bool MMDBoneManagerObject::SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSet
 
 const BaseContainer& MMDBoneManagerObject::GetBoneItems() const
 {
+	if (bone_items_.GetIndexId(0) == NOTOK ||
+		(bone_items_.GetIndexId(0) == -1 && bone_items_.GetIndexId(1) == NOTOK))
+	{
+		bone_items_.FlushAll();
+		bone_items_.SetString(-1, "-"_s);
+		SDK2024_Const BaseDocument* doc = Get()->GetDocument();
+		if (!doc)
+			doc = GetActiveDocument();
+		for (const auto& entry : bone_list_)
+		{
+			if (entry.GetValue() && *entry.GetValue())
+			{
+				const BaseTag* tag = static_cast<const BaseTag*>((*entry.GetValue())->GetLink(doc));
+				if (tag)
+				{
+					if (const BaseObject* obj = tag->GetObject())
+						bone_items_.SetString(entry.GetKey(), obj->GetName());
+				}
+			}
+		}
+	}
 	return bone_items_;
 }
 

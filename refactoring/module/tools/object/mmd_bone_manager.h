@@ -67,7 +67,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 
 	maxon::HashMap<String, maxon::PointerArray<MorphUIData>> bone_morph_map_;
 
-	BaseContainer bone_items_;
+	mutable BaseContainer bone_items_;
 	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> bone_list_;
 	friend MMDModelManagerObject;
 	MMDBoneManagerObject() = default;

@@ -131,6 +131,9 @@ class MMDModelManagerObject final : public ObjectData
 
 	maxon::BaseArray<DisplayFrameData> display_frame_list_;
 	Int32 display_frame_selection_index_ = -1;
+	Int32 display_frame_add_type_ = 0;
+	mutable Int32 display_frame_add_target_ = 0;
+	mutable Bool display_frame_add_target_empty_ = true;
 	mutable BaseContainer display_frame_items_;
 
 	MMDModelPtr mmd_model_;
