@@ -86,8 +86,7 @@ cmake ..  -G "Ninja Multi-Config" ^
 -D BUILD_EXTRAS=Off ^
 -D USE_GRAPHICAL_BENCHMARK=Off ^
 -D BUILD_PYBULLET=Off ^
--D BULLET2_MULTITHREADING=ON ^
--D BULLET2_USE_PPL_MULTITHREADING=ON
+-D BULLET2_MULTITHREADING=ON
 
 if "%BUILD_DEBUG%"=="1" (
     echo Building bullet3 Debug version...
