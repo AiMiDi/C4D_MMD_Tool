@@ -533,12 +533,11 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	else if (m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
 	{
 		const auto transform = mmd_rigidbody_->GetTransform();
-		// Convert from MMD coordinate space to C4D (Z axis is opposite)
 		op->SetMl(Matrix{
-		   Vector(transform(0,3),transform(1,3),-transform(2,3)) * rigid_manager_data_->GetPositionMultiple(),
-		   Vector(transform(0,0),transform(1,0),-transform(2,0)),
-		   Vector(transform(0,1),transform(1,1),-transform(2,1)),
-		   Vector(transform(0,2),transform(1,2),-transform(2,2)) });
+		   Vector(transform(0,3),transform(1,3),transform(2,3)) * rigid_manager_data_->GetPositionMultiple(),
+		   Vector(transform(0,0),transform(1,0),transform(2,0)),
+		   Vector(transform(0,1),transform(1,1),transform(2,1)),
+		   Vector(transform(0,2),transform(1,2),transform(2,2)) });
 	}
 
 	return EXECUTIONRESULT::OK;
