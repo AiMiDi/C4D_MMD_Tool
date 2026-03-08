@@ -5,6 +5,7 @@ setlocal enabledelayedexpansion
 set "BUILD_DEBUG=0"
 set "BUILD_RELEASE=0"
 set "TOOLSET="
+set "ENABLE_TEST=0"
 
 :parse_args
 if "%~1"=="" goto :done_args
@@ -24,11 +25,16 @@ if /i "%~1"=="Debug" (
     set "TOOLSET=v145"
     shift
     goto :parse_args
+) else if /i "%~1"=="-test" (
+    set "ENABLE_TEST=1"
+    shift
+    goto :parse_args
 ) else (
     echo Error: Invalid argument "%~1"
-    echo Usage: init.bat [Debug^|Release] [v143^|v145]
+    echo Usage: init.bat [Debug^|Release] [v143^|v145] [-test]
     echo   Build config: Debug, Release, or both if omitted
     echo   Toolset: v143 ^(VS 2022^), v145 ^(VS 2026^), or auto-detect if omitted
+    echo   -test: Enable building and running libMMD tests
     pause
     exit /b 1
 )
@@ -40,7 +46,7 @@ if "%BUILD_DEBUG%"=="0" if "%BUILD_RELEASE%"=="0" (
     set "BUILD_RELEASE=1"
 )
 
-echo Build config: Debug=%BUILD_DEBUG% Release=%BUILD_RELEASE% Toolset=%TOOLSET%
+echo Build config: Debug=%BUILD_DEBUG% Release=%BUILD_RELEASE% Toolset=%TOOLSET% Test=%ENABLE_TEST%
 
 git submodule update --init --recursive
 :: Find latest Visual Studio installation
@@ -85,8 +91,7 @@ cmake ..  -G "Ninja Multi-Config" ^
 -D BUILD_BULLET3=Off ^
 -D BUILD_EXTRAS=Off ^
 -D USE_GRAPHICAL_BENCHMARK=Off ^
--D BUILD_PYBULLET=Off ^
--D BULLET2_MULTITHREADING=ON
+-D BUILD_PYBULLET=Off
 
 if "%BUILD_DEBUG%"=="1" (
     echo Building bullet3 Debug version...
@@ -104,18 +109,22 @@ cd ../..
 cd ./libMMD
 mkdir build 
 cd build
-cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install" -D LIBMMD_BULLET_ROOT="../../install" -D LIBMMD_ENABLE_TEST=on -D LIBMMD_INSTALL=on
+set "TEST_FLAG=off"
+if "%ENABLE_TEST%"=="1" set "TEST_FLAG=on"
+cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install" -D LIBMMD_BULLET_ROOT="../../install" -D LIBMMD_ENABLE_TEST=%TEST_FLAG% -D LIBMMD_INSTALL=on
 
 if "%BUILD_DEBUG%"=="1" (
     echo Building libMMD Debug version...
     cmake --build . --config Debug -j
-    echo Running libMMD tests ^(Debug^)...
-    ctest -C Debug --output-on-failure
-    if errorlevel 1 (
-        echo [ERROR] libMMD Debug tests failed!
-        cd ../..
-        pause
-        exit /b 1
+    if "%ENABLE_TEST%"=="1" (
+        echo Running libMMD tests ^(Debug^)...
+        ctest -C Debug --output-on-failure
+        if errorlevel 1 (
+            echo [ERROR] libMMD Debug tests failed!
+            cd ../..
+            pause
+            exit /b 1
+        )
     )
     cmake --install . --config Debug --prefix ../../install
 )
@@ -123,13 +132,15 @@ if "%BUILD_DEBUG%"=="1" (
 if "%BUILD_RELEASE%"=="1" (
     echo Building libMMD Release version...
     cmake --build . --config Release -j
-    echo Running libMMD tests ^(Release^)...
-    ctest -C Release --output-on-failure
-    if errorlevel 1 (
-        echo [ERROR] libMMD Release tests failed!
-        cd ../..
-        pause
-        exit /b 1
+    if "%ENABLE_TEST%"=="1" (
+        echo Running libMMD tests ^(Release^)...
+        ctest -C Release --output-on-failure
+        if errorlevel 1 (
+            echo [ERROR] libMMD Release tests failed!
+            cd ../..
+            pause
+            exit /b 1
+        )
     )
     cmake --install . --config Release --prefix ../../install
 )
