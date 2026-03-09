@@ -115,7 +115,7 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data); msg && msg->msg_type == MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE)
 		{
-			node->SetParameter(ConstDescID(DescLevel(JOINT_MODE)),msg->model_mode, DESCFLAGS_SET::NONE);
+			node->SetParameter(ConstDescID(DescLevel(JOINT_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
 		}
 		break;
 	}

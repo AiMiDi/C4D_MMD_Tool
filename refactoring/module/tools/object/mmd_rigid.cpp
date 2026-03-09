@@ -275,7 +275,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 
 SDK2024_GetDEnabling(MMDRigidObject)
 {
-	if (m_rigid_mode == RIGID_MODE_ANIM || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
+	if (m_rigid_mode != RIGID_MODE_EDIT || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
 		return false;
 
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);

@@ -113,7 +113,7 @@ SDK2024_GetDDescription(MMDJointObject)
 
 SDK2024_GetDEnabling(MMDJointObject)
 {
-	if (joint_mode_ == JOINT_MODE_ANIM || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
+	if (joint_mode_ != JOINT_MODE_EDIT || id[0].id == ID_BASEOBJECT_REL_SCALE || id[0].id == ID_BASEOBJECT_FROZEN_SCALE)
 		return false;
 
 	return SUPER::GetDEnabling(node, id, t_data, flags, itemdesc);
@@ -124,9 +124,14 @@ void MMDJointObject::HandleJointModeChange(const Int32 mode)
 	if (joint_mode_ == mode)
 		return;
 
-	if (joint_mode_ == JOINT_MODE_EDIT)
+	if (mode == JOINT_MODE_EDIT)
+	{
+		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
+	}
+	else
 	{
 		// TODO: Save to mmd_joint
+		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	}
 
 	joint_mode_ = mode;

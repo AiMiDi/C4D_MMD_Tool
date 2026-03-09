@@ -338,6 +338,10 @@ BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const
 	}
 
 	EventAdd();
+	if (setting.import_material == DLG_CMT_MATERIAL_TYPE_REDSHIFT)
+	{
+		CallCommand(1040218);
+	}
 	return object;
 }
 
