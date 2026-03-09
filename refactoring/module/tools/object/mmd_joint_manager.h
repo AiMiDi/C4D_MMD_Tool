@@ -71,4 +71,7 @@ public:
 	BaseObject* AddJoint(const String& name, libmmd::MMDJoint* mmd_joint, GeListNode* node = nullptr);
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
+
+	Bool RebuildJoints(libmmd::MMDPhysicsManager* physics_manager);
+	void ReconnectJointPointers(libmmd::MMDPhysicsManager* physics_manager);
 };

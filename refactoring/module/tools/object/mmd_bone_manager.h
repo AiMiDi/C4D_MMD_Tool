@@ -17,6 +17,7 @@ Description:	DESC
 #include "utils/morph_ui_data_util.hpp"
 
 class MMDModelManagerObject;
+namespace libmmd { class PMXModel; }
 
 namespace CMTToolsSetting
 {
@@ -91,6 +92,9 @@ class MMDBoneManagerObject final : public MMDManagerObject
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
+
+	Bool RebuildNodes(libmmd::PMXModel* model);
+	void ReconnectNodePointers(libmmd::MMDNodeManager* node_manager, libmmd::MMDIKManager* ik_manager);
 
 private:
 	void CreateDisplayTag(GeListNode* node) override;

@@ -124,6 +124,7 @@ class MMDModelManagerObject final : public ObjectData
 	Int32 animation_index_ = -1;
 	BaseContainer animation_items_;
 	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> animations_;
+	maxon::BaseArray<std::pair<String, std::vector<uint8_t>>> pending_vmd_data_;
 
 	maxon::BaseArray<MMDMaterialData> material_list_;
 	Int32 material_selection_index_ = -1;
@@ -141,6 +142,7 @@ class MMDModelManagerObject final : public ObjectData
 	BaseTime prev_time_{-1};
 	Float32 fps_{ 30.f };
 	Bool is_animation_initialized_{ false };
+	maxon::Synchronized<Bool> is_runtime_initialized_;
 
 	MMDModelManagerObject();
 	friend MMDModelManagerObject;
@@ -220,4 +222,5 @@ private:
 	//Bool SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	//Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	Bool DeleteVMDAnimation();
+	Bool RebuildRuntime();
 };

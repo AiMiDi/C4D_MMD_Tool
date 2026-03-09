@@ -17,6 +17,7 @@ Description:	MMD joint root object
 #include "mmd_rigid_manager.h"
 #include "mmd_model_manager.h"
 #include "description/OMMDJoint.h"
+#include "libMMD/Model/MMD/MMDPhysics.h"
 
 template<> Bool io_util::ReadData<MMDJointManagerObject*>(HyperFile* hf, MMDJointManagerObject*& data)
 {
@@ -229,4 +230,137 @@ Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file,
 MMDBoneManagerObject* MMDJointManagerObject::GetBoneManager() const
 {
 	return bone_manager_data_;
+}
+
+Bool MMDJointManagerObject::RebuildJoints(libmmd::MMDPhysicsManager* physics_manager)
+{
+	if (!physics_manager)
+		return false;
+
+	auto* rigid_bodies = physics_manager->GetRigidBodys();
+	if (!rigid_bodies)
+		return false;
+
+	const auto op = reinterpret_cast<BaseObject*>(Get());
+
+	std::vector<std::pair<Int32, BaseObject*>> sorted_children;
+	for (BaseObject* child = op->GetDown(); child; child = child->GetNext())
+	{
+		if (child->GetType() == g_mmd_joint_object_id)
+		{
+			GeData ge_data;
+			child->GetParameter(ConstDescID(DescLevel(JOINT_INDEX)), ge_data, DESCFLAGS_GET::NONE);
+			const Int32 joint_index = ge_data.GetString().ToInt32(nullptr);
+			sorted_children.emplace_back(joint_index, child);
+		}
+	}
+	std::sort(sorted_children.begin(), sorted_children.end(),
+		[](const auto& a, const auto& b) { return a.first < b.first; });
+
+	for (const auto& [joint_index, child] : sorted_children)
+	{
+		const BaseContainer* bc = child->GetDataInstance();
+		if (!bc)
+			return false;
+
+		auto* jt = physics_manager->AddJoint();
+
+		const Eigen::Vector3f translate(
+			static_cast<float>(bc->GetFloat(JOINT_ATTITUDE_POSITION_X)),
+			static_cast<float>(bc->GetFloat(JOINT_ATTITUDE_POSITION_Y)),
+			static_cast<float>(bc->GetFloat(JOINT_ATTITUDE_POSITION_Z))
+		);
+		const Eigen::Vector3f rotate(
+			static_cast<float>(bc->GetFloat(JOINT_ATTITUDE_ROTATION_X)),
+			static_cast<float>(bc->GetFloat(JOINT_ATTITUDE_ROTATION_Y)),
+			static_cast<float>(bc->GetFloat(JOINT_ATTITUDE_ROTATION_Z))
+		);
+		const Eigen::Vector3f translateLowerLimit(
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_POSITION_X_MIN)),
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_POSITION_Y_MIN)),
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_POSITION_Z_MIN))
+		);
+		const Eigen::Vector3f translateUpperLimit(
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_POSITION_X_MAX)),
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_POSITION_Y_MAX)),
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_POSITION_Z_MAX))
+		);
+		const Eigen::Vector3f rotateLowerLimit(
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_ROTATION_X_MIN)),
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_ROTATION_Y_MIN)),
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_ROTATION_Z_MIN))
+		);
+		const Eigen::Vector3f rotateUpperLimit(
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_ROTATION_X_MAX)),
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_ROTATION_Y_MAX)),
+			static_cast<float>(bc->GetFloat(JOINT_PARAMETER_ROTATION_Z_MAX))
+		);
+		const Eigen::Vector3f springTranslate(
+			static_cast<float>(bc->GetFloat(JOINT_SPRING_POSITION_X)),
+			static_cast<float>(bc->GetFloat(JOINT_SPRING_POSITION_Y)),
+			static_cast<float>(bc->GetFloat(JOINT_SPRING_POSITION_Z))
+		);
+		const Eigen::Vector3f springRotate(
+			static_cast<float>(bc->GetFloat(JOINT_SPRING_ROTATION_X)),
+			static_cast<float>(bc->GetFloat(JOINT_SPRING_ROTATION_Y)),
+			static_cast<float>(bc->GetFloat(JOINT_SPRING_ROTATION_Z))
+		);
+
+		const auto rigidAIndex = bc->GetInt32(JOINT_LINK_RIGID_A_INDEX);
+		const auto rigidBIndex = bc->GetInt32(JOINT_LINK_RIGID_B_INDEX);
+
+		const libmmd::MMDRigidBody* rbA = nullptr;
+		const libmmd::MMDRigidBody* rbB = nullptr;
+		if (rigidAIndex >= 0 && static_cast<size_t>(rigidAIndex) < rigid_bodies->size())
+			rbA = (*rigid_bodies)[rigidAIndex].get();
+		if (rigidBIndex >= 0 && static_cast<size_t>(rigidBIndex) < rigid_bodies->size())
+			rbB = (*rigid_bodies)[rigidBIndex].get();
+
+		if (rbA && rbB)
+		{
+			if (!jt->CreateJoint(translate, rotate,
+				translateLowerLimit, translateUpperLimit,
+				rotateLowerLimit, rotateUpperLimit,
+				springTranslate, springRotate,
+				rbA, rbB))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+void MMDJointManagerObject::ReconnectJointPointers(libmmd::MMDPhysicsManager* physics_manager)
+{
+	if (!physics_manager)
+		return;
+
+	auto* joints = physics_manager->GetJoints();
+	if (!joints)
+		return;
+
+	const auto op = reinterpret_cast<BaseObject*>(Get());
+
+	std::vector<std::pair<Int32, BaseObject*>> sorted_children;
+	for (BaseObject* child = op->GetDown(); child; child = child->GetNext())
+	{
+		if (child->GetType() == g_mmd_joint_object_id)
+		{
+			GeData ge_data;
+			child->GetParameter(ConstDescID(DescLevel(JOINT_INDEX)), ge_data, DESCFLAGS_GET::NONE);
+			const Int32 joint_index = ge_data.GetString().ToInt32(nullptr);
+			sorted_children.emplace_back(joint_index, child);
+		}
+	}
+	std::sort(sorted_children.begin(), sorted_children.end(),
+		[](const auto& a, const auto& b) { return a.first < b.first; });
+
+	for (size_t i = 0; i < sorted_children.size() && i < joints->size(); ++i)
+	{
+		auto* joint_data = sorted_children[i].second->GetNodeData<MMDJointObject>();
+		joint_data->mmd_joint_ = (*joints)[i].get();
+		joint_data->joint_manager_data_ = this;
+	}
 }

@@ -58,7 +58,6 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return false;
 	};
 	IOReadField(mesh_mode_);
-	IOReadField(model_manager_);
 
 	if (!io_util::ReadHashMap(hf, mesh_morph_mode_))
 		return false;
@@ -90,7 +89,6 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 SDK2024_Write(MMDMeshManagerObject)
 {
 	IOWriteField(mesh_mode_);
-	IOWriteField(model_manager_);
 
 	if (!io_util::WriteHashMap(hf, mesh_morph_mode_))
 		return false;
@@ -121,7 +119,6 @@ SDK2024_CopyTo(MMDMeshManagerObject)
 		return false;
 	};
 	auto const dest_object = reinterpret_cast<MMDMeshManagerObject*>(dest);
-	dest_object->model_manager_ = model_manager_;
 	for (const auto& entry : mesh_morph_mode_)
 	{
 		dest_object->mesh_morph_mode_.Insert(entry.GetKey(), entry.GetValue())iferr_return;

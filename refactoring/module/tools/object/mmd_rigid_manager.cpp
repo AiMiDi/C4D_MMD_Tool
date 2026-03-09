@@ -13,6 +13,7 @@ Description:	MMD rigid root object
 #include "mmd_rigid_manager.h"
 #include "mmd_bone_manager.h"
 #include "mmd_rigid.h"
+#include "libMMD/Model/MMD/MMDPhysics.h"
 
 template<> Bool io_util::ReadData<MMDRigidManagerObject*>(HyperFile* hf, MMDRigidManagerObject*& data)
 {
@@ -299,5 +300,137 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 	}
 
 	return true;
+}
+
+namespace
+{
+	template <Int32 ID>
+	Float32 GetRigidFloat(const BaseContainer* bc)
+	{
+		return static_cast<Float32>(bc->GetFloat(ID));
+	}
+
+	uint16_t ReadCollisionGroupMask(const BaseContainer* bc)
+	{
+		uint16_t mask = 0;
+		for (int i = 0; i < 16; ++i)
+		{
+			if (bc->GetInt32(RIGID_NON_COLLISION_GROUP_0 + i))
+				mask |= static_cast<uint16_t>(1 << i);
+		}
+		return mask;
+	}
+}
+
+Bool MMDRigidManagerObject::RebuildRigidBodies(libmmd::MMDModel* model)
+{
+	if (!model)
+		return false;
+
+	auto* physics_manager = model->GetPhysicsManager();
+	auto* node_manager = model->GetNodeManager();
+	if (!physics_manager || !node_manager)
+		return false;
+
+	const auto op = reinterpret_cast<BaseObject*>(Get());
+
+	std::vector<std::pair<Int32, BaseObject*>> sorted_children;
+	for (BaseObject* child = op->GetDown(); child; child = child->GetNext())
+	{
+		if (child->GetType() == g_mmd_rigid_object_id)
+		{
+			GeData ge_data;
+			child->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), ge_data, DESCFLAGS_GET::NONE);
+			const Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
+			sorted_children.emplace_back(rigid_index, child);
+		}
+	}
+	std::sort(sorted_children.begin(), sorted_children.end(),
+		[](const auto& a, const auto& b) { return a.first < b.first; });
+
+	for (const auto& [rigid_index, child] : sorted_children)
+	{
+		const BaseContainer* bc = child->GetDataInstance();
+		if (!bc)
+			return false;
+
+		auto* rb = physics_manager->AddRigidBody();
+
+		const auto shape = static_cast<libmmd::PMXRigidbody::Shape>(bc->GetInt32(RIGID_SHAPE_TYPE));
+		const Eigen::Vector3f shapeSize(
+			GetRigidFloat<RIGID_SHAPE_SIZE_X>(bc) / position_multiple_,
+			GetRigidFloat<RIGID_SHAPE_SIZE_Y>(bc) / position_multiple_,
+			GetRigidFloat<RIGID_SHAPE_SIZE_Z>(bc) / position_multiple_
+		);
+		const Eigen::Vector3f translate(
+			GetRigidFloat<RIGID_SHAPE_POSITION_X>(bc),
+			GetRigidFloat<RIGID_SHAPE_POSITION_Y>(bc),
+			GetRigidFloat<RIGID_SHAPE_POSITION_Z>(bc)
+		);
+		const Eigen::Vector3f rotate(
+			GetRigidFloat<RIGID_SHAPE_ROTATION_X>(bc),
+			GetRigidFloat<RIGID_SHAPE_ROTATION_Y>(bc),
+			GetRigidFloat<RIGID_SHAPE_ROTATION_Z>(bc)
+		);
+
+		const auto mass = GetRigidFloat<RIGID_MASS>(bc);
+		const auto linearDamping = GetRigidFloat<RIGID_MOVE_ATTENUATION>(bc);
+		const auto angularDamping = GetRigidFloat<RIGID_ROTATION_DAMPING>(bc);
+		const auto repulsion = GetRigidFloat<RIGID_REPULSION>(bc);
+		const auto friction = GetRigidFloat<RIGID_FRICTION_FORCE>(bc);
+
+		const auto op_mode = static_cast<libmmd::PMXRigidbody::Operation>(bc->GetInt32(RIGID_PHYSICS_MODE));
+		const auto group = static_cast<uint8_t>(bc->GetInt32(RIGID_GROUP_ID));
+		const auto collisionGroup = ReadCollisionGroupMask(bc);
+
+		const auto boneIndex = bc->GetInt32(RIGID_RELATED_BONE_INDEX);
+		libmmd::MMDNode* node = nullptr;
+		if (boneIndex >= 0 && static_cast<size_t>(boneIndex) < node_manager->GetNodeCount())
+		{
+			node = node_manager->GetMMDNode(static_cast<size_t>(boneIndex));
+		}
+
+		if (!rb->Create(shape, shapeSize, translate, rotate,
+			mass, linearDamping, angularDamping, repulsion, friction,
+			op_mode, group, collisionGroup, model, node))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void MMDRigidManagerObject::ReconnectRigidBodyPointers(libmmd::MMDPhysicsManager* physics_manager)
+{
+	if (!physics_manager)
+		return;
+
+	auto* rigid_bodies = physics_manager->GetRigidBodys();
+	if (!rigid_bodies)
+		return;
+
+	const auto op = reinterpret_cast<BaseObject*>(Get());
+
+	std::vector<std::pair<Int32, BaseObject*>> sorted_children;
+	for (BaseObject* child = op->GetDown(); child; child = child->GetNext())
+	{
+		if (child->GetType() == g_mmd_rigid_object_id)
+		{
+			GeData ge_data;
+			child->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), ge_data, DESCFLAGS_GET::NONE);
+			const Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
+			sorted_children.emplace_back(rigid_index, child);
+		}
+	}
+	std::sort(sorted_children.begin(), sorted_children.end(),
+		[](const auto& a, const auto& b) { return a.first < b.first; });
+
+	for (size_t i = 0; i < sorted_children.size() && i < rigid_bodies->size(); ++i)
+	{
+		auto* rigid_data = sorted_children[i].second->GetNodeData<MMDRigidObject>();
+		rigid_data->mmd_rigidbody_ = (*rigid_bodies)[i].get();
+		rigid_data->rigid_manager_data_ = this;
+	}
 }
 

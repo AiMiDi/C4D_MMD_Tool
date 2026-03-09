@@ -82,7 +82,7 @@ CONTAINER OMMDModelManager {
 
 			GROUP {
 				COLUMNS 5;
-
+				
 				LONG MODEL_MATERIAL_LIST {
 					ANIM OFF;
 					SCALE_H;

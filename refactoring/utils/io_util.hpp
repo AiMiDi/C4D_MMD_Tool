@@ -159,7 +159,10 @@ bool WriteHashMap(HyperFile* hf, const maxon::HashMap<K, V>& container)
 {
 	static_assert(std::is_base_of_v<BaseList2D, T>, "T must be derived from BaseList2D");
 	AutoAlloc<BaseLink> link;
-	link->SetLink(data);
+	if (!link)
+		return false;
+	if (data)
+		link->SetLink(data);
 	return link->Write(hf);
 }
 
@@ -176,6 +179,8 @@ bool WriteHashMap(HyperFile* hf, const maxon::HashMap<K, V>& container)
 {
 	static_assert(std::is_base_of_v<BaseList2D, T>, "T must be derived from BaseList2D");
 	AutoAlloc<BaseLink> link;
+	if (!link)
+		return false;
 	if (!link->Read(hf))
 		return false;
 	data = reinterpret_cast<T*>(link->ForceGetLink());

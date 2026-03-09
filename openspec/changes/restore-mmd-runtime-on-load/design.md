@@ -104,3 +104,54 @@ Execute()
 - **[libmmd 改动范围]** 需要为 libmmd 添加 builder 接口，这是对第三方依赖的修改 → 缓解：libmmd 是项目内部维护的库，不影响外部依赖；新接口是纯增量添加，不修改现有接口
 - **[VMD 数据大小]** 复杂动画的 VMD 数据可能较大，增加场景文件体积 → 缓解：VMD 格式本身紧凑；典型 VMD 文件为数百 KB 到几 MB，相对于 C4D 场景文件可接受
 - **[向后兼容]** Read 的 level 递增后，新版本保存的场景无法被旧版本打开 → 缓解：这是 Cinema 4D 插件的标准做法；旧版本打开新场景时跳过未知 level 的数据
+
+---
+
+## Phase 2: C4D 插件端实现改进
+
+### Context
+
+Phase 1 的基础实现（`RebuildRuntime`、VMD 序列化、子对象重连）已完成。代码审查发现了以下需要修复的问题：
+
+1. **`Write()` 在 RebuildRuntime 前保存会丢失 VMD 数据**：`Write()` 从 `animations_` 序列化，但 `Read()` 后 `RebuildRuntime()` 执行前 `animations_` 为空，VMD 数据仅存在于 `pending_vmd_data_`。如果在首次 `Execute()` 前保存场景（例如加载后立即保存），所有 VMD 动画数据丢失。
+2. **`Execute()` 忽略 `RebuildRuntime()` 返回值**：当前代码调用 `RebuildRuntime()` 但不检查返回值，失败时静默继续，`mmd_model_` 保持 nullptr。
+3. **刚体/关节重建顺序不确定**：`RebuildRigidBodies` 和 `RebuildJoints` 通过 `GetDown()`/`GetNext()` 遍历子对象，该顺序是场景层级顺序，可能与 `RIGID_INDEX` 不同。关节通过 `JOINT_LINK_RIGID_A_INDEX`/`JOINT_LINK_RIGID_B_INDEX` 引用刚体数组索引，如果创建顺序不匹配则会连接到错误的刚体。
+4. **`is_runtime_initialized_` 线程安全**：其他类似标志（`is_manager_read_`、`is_morph_initialized_`、`update_morph_`）使用 `maxon::Synchronized<Bool>`，但 `is_runtime_initialized_` 使用裸 `bool`。
+5. **文档时间未恢复**：`LoadVMDMotion()` 在加载 VMD 后更新 `doc->SetMaxTime()` 和 `SetLoopMaxTime()`，但 `RebuildRuntime()` 的 VMD 恢复逻辑没有执行此操作。
+
+### 决策 6：Write() 的 VMD 数据回退
+
+**选择**：在 `Write()` 中，当 `animations_` 为空且 `pending_vmd_data_` 不为空时，直接从 `pending_vmd_data_` 序列化。
+
+**理由**：场景加载后如果用户在首次 Execute() 前保存（例如批量处理场景），`animations_` 尚未从 `pending_vmd_data_` 恢复。直接从 `pending_vmd_data_` 写入可以保证数据不丢失。
+
+**实现**：
+
+```
+Write():
+  if (animations_.GetCount() > 0)
+    // 现有逻辑：从 animations_ 序列化
+  else if (pending_vmd_data_.GetCount() > 0)
+    // 回退：直接写入 pending_vmd_data_ 中的名称和二进制数据
+  else
+    // 写入 anim_count = 0
+```
+
+### 决策 7：刚体/关节按索引排序重建
+
+**选择**：在 `RebuildRigidBodies` 和 `ReconnectRigidBodyPointers` 中，按 `RIGID_INDEX` 排序后创建刚体，而非按子对象层级顺序。
+
+**理由**：关节的 `JOINT_LINK_RIGID_A_INDEX` / `JOINT_LINK_RIGID_B_INDEX` 是刚体在 `MMDPhysicsManager` 数组中的索引。如果刚体创建顺序与原始导入顺序不同，关节会引用到错误的刚体。
+
+**实现**：先收集所有子对象及其 `RIGID_INDEX`，按 `RIGID_INDEX` 排序后再依次创建。关节侧同理。
+
+### 决策 8：RebuildRuntime 错误处理
+
+**选择**：在 `Execute()` 中检查 `RebuildRuntime()` 的返回值，失败时通过 `StatusSetBar` 显示错误信息，并将 `is_runtime_initialized_` 设为 true 防止每帧重试。
+
+**理由**：重复的失败重试没有意义（每帧都会失败），且会严重影响性能。用户需要知道重建失败以采取行动（如重新导入）。
+
+### Risks / Trade-offs (Phase 2)
+
+- **[Write 回退复杂度]** `Write()` 需要处理两个数据源，增加了代码路径 → 缓解：两个路径的数据格式完全相同（名称 + 二进制），只是来源不同
+- **[排序开销]** 刚体/关节按索引排序需要额外的排序步骤 → 缓解：排序发生在重建阶段，仅执行一次，且数据量小（通常 < 100 个刚体）

@@ -70,5 +70,8 @@ public:
 	const Float32& GetPositionMultiple() const { return position_multiple_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
+
+	Bool RebuildRigidBodies(libmmd::MMDModel* model);
+	void ReconnectRigidBodyPointers(libmmd::MMDPhysicsManager* physics_manager);
 };
 

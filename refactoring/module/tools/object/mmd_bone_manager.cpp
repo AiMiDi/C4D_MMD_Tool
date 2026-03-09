@@ -19,6 +19,7 @@ Description:	DESC
 #include "maxon/queue.h"
 #include "module/tools/tag/mmd_bone.h"
 #include "utils/string_util.hpp"
+#include "libMMD/Model/MMD/PMXModel.h"
 
 template<> Bool io_util::ReadData<MMDBoneManagerObject*>(HyperFile* hf, MMDBoneManagerObject*& data)
 {
@@ -46,6 +47,7 @@ SDK2024_CopyTo(MMDBoneManagerObject)
 	};
 	auto const dest_object = reinterpret_cast<MMDBoneManagerObject*>(dest);
 	dest_object->bone_name_index_ = bone_name_index_;
+	dest_object->position_multiple_ = position_multiple_;
 	for (const auto& entry : bone_list_)
 	{
 		auto& link = dest_object->bone_list_.InsertKey(entry.GetKey())iferr_return;
@@ -61,18 +63,18 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return false;
 	};
 	IOReadField(bone_name_index_);
-	IOReadField(model_manager_);
 	if (!io_util::ReadHashMap(hf, bone_list_))
 		return false;
+		IOReadField(position_multiple_);
 	return SUPER::Read(node, hf, level);
 }
 
 SDK2024_Write(MMDBoneManagerObject)
 {
 	IOWriteField(bone_name_index_);
-	IOWriteField(model_manager_);
 	if (!io_util::WriteHashMap(hf, bone_list_))
 		return false;
+	IOWriteField(position_multiple_);
 	return SUPER::Write(node, hf);
 }
 
@@ -813,6 +815,296 @@ const BaseContainer& MMDBoneManagerObject::GetBoneItems() const
 		}
 	}
 	return bone_items_;
+}
+
+Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
+{
+	iferr_scope_handler{
+		return false;
+	};
+	if (bone_list_.IsEmpty())
+		return true;
+
+	std::vector<Int32> sorted_indices;
+	for (const auto& entry : bone_list_)
+		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
+	std::sort(sorted_indices.begin(), sorted_indices.end());
+
+	const Int32 bone_count = static_cast<Int32>(sorted_indices.size());
+
+	for (Int32 i = 0; i < bone_count; ++i)
+	{
+		if (sorted_indices[i] != i)
+			return false;
+	}
+
+	auto* node_manager = model->GetNodeManager();
+
+	// Pass 1: create nodes with basic properties
+	for (Int32 i = 0; i < bone_count; ++i)
+	{
+		BaseTag* tag = FindBone(i);
+		if (!tag) continue;
+
+		const BaseContainer* bc = tag->GetDataInstance();
+		if (!bc) continue;
+
+		auto* node = model->AddNode();
+		node->SetName(string_util::GetStdString(bc->GetString(PMX_BONE_NAME_LOCAL)));
+		node->SetDeformDepth(bc->GetInt32(PMX_BONE_LAYER));
+		node->EnableDeformAfterPhysics(bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM));
+	}
+
+	// Recover raw PMX positions for each bone
+	const Float pm = (position_multiple_ != 0.0) ? position_multiple_ : 1.0;
+	maxon::BaseArray<Eigen::Vector3f> raw_positions;
+	raw_positions.Resize(bone_count)iferr_return;
+
+	for (Int32 i = 0; i < bone_count; ++i)
+	{
+		BaseTag* tag = FindBone(i);
+		if (!tag) continue;
+
+		const BaseContainer* bc = tag->GetDataInstance();
+		if (!bc) continue;
+
+		const Vector c4d_pos = bc->GetVector(PMX_BONE_POSITION);
+
+		bool error = false;
+		const Int32 parent_bone_index = bc->GetString(PMX_BONE_PARENT_BONE_INDEX).ToInt32(&error);
+
+		if (error || parent_bone_index < 0)
+		{
+			raw_positions[i] = Eigen::Vector3f(
+				static_cast<float>(c4d_pos.x / pm),
+				static_cast<float>(c4d_pos.y / pm),
+				static_cast<float>(c4d_pos.z / pm));
+		}
+		else
+		{
+			raw_positions[i] = Eigen::Vector3f(
+				static_cast<float>(c4d_pos.x),
+				static_cast<float>(c4d_pos.y),
+				static_cast<float>(c4d_pos.z));
+		}
+	}
+
+	// Pass 2: hierarchy and transforms
+	for (Int32 i = 0; i < bone_count; ++i)
+	{
+		BaseTag* tag = FindBone(i);
+		if (!tag) continue;
+
+		const BaseContainer* bc = tag->GetDataInstance();
+		if (!bc) continue;
+
+		auto* node = static_cast<libmmd::PMXNode*>(node_manager->GetMMDNode(i));
+
+		bool error = false;
+		const Int32 parent_bone_index = bc->GetString(PMX_BONE_PARENT_BONE_INDEX).ToInt32(&error);
+		if (error) continue;
+
+		if (parent_bone_index >= 0 && parent_bone_index < bone_count)
+		{
+			auto* parent_node = node_manager->GetMMDNode(parent_bone_index);
+			parent_node->AddChild(node);
+			node->SetTranslate(raw_positions[i] - raw_positions[parent_bone_index]);
+		}
+		else
+		{
+			node->SetTranslate(raw_positions[i]);
+		}
+
+		Eigen::Matrix4f init = Eigen::Matrix4f::Identity();
+		init.block<3,1>(0,3) = raw_positions[i];
+		node->SetGlobalTransform(init);
+		node->CalculateInverseInitTransform();
+	}
+
+	// Pass 3: append properties + SaveInitialTRS
+	for (Int32 i = 0; i < bone_count; ++i)
+	{
+		BaseTag* tag = FindBone(i);
+		if (!tag) continue;
+
+		const BaseContainer* bc = tag->GetDataInstance();
+		if (!bc) continue;
+
+		auto* node = static_cast<libmmd::PMXNode*>(node_manager->GetMMDNode(i));
+
+		const bool has_inherit_rot = bc->GetBool(PMX_BONE_INHERIT_ROTATION);
+		const bool has_inherit_trans = bc->GetBool(PMX_BONE_INHERIT_TRANSLATION);
+		node->EnableAppendRotate(has_inherit_rot);
+		node->EnableAppendTranslate(has_inherit_trans);
+
+		if (has_inherit_rot || has_inherit_trans)
+		{
+			node->EnableAppendLocal(bc->GetBool(PMX_BONE_INHERIT_LOCAL));
+			node->SetAppendWeight(static_cast<float>(bc->GetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE)));
+
+			GeData link_data;
+			tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link_data, DESCFLAGS_GET::NONE);
+			if (const BaseLink* link = link_data.GetBaseLink())
+			{
+				if (BaseList2D* linked_obj = link->GetLink(tag->GetDocument()))
+				{
+					auto* append_obj = static_cast<BaseObject*>(linked_obj);
+					if (SDK2024_Const BaseTag* append_tag = append_obj->GetTag(g_mmd_bone_tag_id))
+					{
+						GeData idx_data;
+						append_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), idx_data, DESCFLAGS_GET::NONE);
+						bool idx_error = false;
+						const Int32 append_index = idx_data.GetString().ToInt32(&idx_error);
+						if (!idx_error && append_index >= 0 && append_index < bone_count)
+							node->SetAppendNode(static_cast<libmmd::PMXNode*>(node_manager->GetMMDNode(append_index)));
+					}
+				}
+			}
+		}
+
+		node->SaveInitialTRS();
+	}
+
+	// Pass 4: IK solvers
+	const String name_ik_bone = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE);
+	const String name_enable_limit = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT);
+	const String name_limit_min = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN);
+	const String name_limit_max = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX);
+
+	for (Int32 i = 0; i < bone_count; ++i)
+	{
+		BaseTag* tag = FindBone(i);
+		if (!tag) continue;
+
+		const BaseContainer* bc = tag->GetDataInstance();
+		if (!bc || !bc->GetBool(PMX_BONE_IS_IK)) continue;
+
+		auto* solver = model->AddIKSolver();
+		auto* ik_node = static_cast<libmmd::PMXNode*>(node_manager->GetMMDNode(i));
+		solver->SetIKNode(ik_node);
+		ik_node->SetIKSolver(solver);
+
+		const Int32 target_index = bc->GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX);
+		if (target_index >= 0 && target_index < static_cast<Int32>(node_manager->GetNodeCount()))
+			solver->SetTargetNode(node_manager->GetMMDNode(target_index));
+
+		solver->SetIterateCount(static_cast<uint32_t>(bc->GetInt32(PMX_BONE_IK_ITERATION)));
+		solver->SetLimitAngle(static_cast<float>(bc->GetFloat(PMX_BONE_IK_UNIT_ANGLE)));
+
+		DynamicDescription* dyn_desc = tag->GetDynamicDescriptionWritable();
+		if (dyn_desc)
+		{
+			struct ChainEntry
+			{
+				Int32 bone_idx = -1;
+				Bool enable_limit = false;
+				Vector limit_min;
+				Vector limit_max;
+			};
+			maxon::BaseArray<ChainEntry> entries;
+
+			void* browse_handle = dyn_desc->BrowseInit();
+			DescID dyn_id;
+			const BaseContainer* dyn_bc = nullptr;
+
+			while (dyn_desc->BrowseGetNext(browse_handle, &dyn_id, &dyn_bc))
+			{
+				if (!dyn_bc) continue;
+
+				const String name = dyn_bc->GetString(DESC_NAME);
+				GeData value;
+
+				if (name == name_ik_bone)
+				{
+					ChainEntry entry;
+					if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
+						entry.bone_idx = value.GetInt32();
+					entries.Append(std::move(entry))iferr_ignore("IK chain rebuild"_s);
+				}
+				else if (!entries.IsEmpty())
+				{
+					auto& cur = entries[entries.GetCount() - 1];
+					if (name == name_enable_limit)
+					{
+						if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
+							cur.enable_limit = value.GetBool();
+					}
+					else if (name == name_limit_min)
+					{
+						if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
+							cur.limit_min = value.GetVector();
+					}
+					else if (name == name_limit_max)
+					{
+						if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
+							cur.limit_max = value.GetVector();
+					}
+				}
+			}
+			dyn_desc->BrowseFree(browse_handle);
+
+			for (const auto& entry : entries)
+			{
+				if (entry.bone_idx < 0 || entry.bone_idx >= static_cast<Int32>(node_manager->GetNodeCount()))
+					continue;
+				auto* chain_node = node_manager->GetMMDNode(entry.bone_idx);
+				if (!chain_node) continue;
+
+				if (entry.enable_limit)
+				{
+					const Eigen::Vector3f lmin(
+						static_cast<float>(entry.limit_min.x),
+						static_cast<float>(entry.limit_min.y),
+						static_cast<float>(entry.limit_min.z));
+					const Eigen::Vector3f lmax(
+						static_cast<float>(entry.limit_max.x),
+						static_cast<float>(entry.limit_max.y),
+						static_cast<float>(entry.limit_max.z));
+					solver->AddIKChain(chain_node, true, lmin, lmax);
+				}
+				else
+				{
+					solver->AddIKChain(chain_node);
+				}
+				chain_node->EnableIK(true);
+			}
+		}
+
+		solver->BuildChainPath();
+	}
+
+	model->SortNodes();
+	return true;
+}
+
+void MMDBoneManagerObject::ReconnectNodePointers(libmmd::MMDNodeManager* node_manager, libmmd::MMDIKManager* ik_manager)
+{
+	for (const auto& entry : bone_list_)
+	{
+		const Int32 bone_index = static_cast<Int32>(entry.GetKey());
+		if (bone_index < 0 || bone_index >= static_cast<Int32>(node_manager->GetNodeCount()))
+			continue;
+
+		BaseTag* tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+		if (!tag) continue;
+
+		auto* bone_tag = tag->GetNodeData<MMDBoneTag>();
+		if (!bone_tag) continue;
+
+		bone_tag->mmd_node_ = node_manager->GetMMDNode(bone_index);
+		bone_tag->bone_object_ = tag->GetObject();
+		bone_tag->bone_manager_data_ = this;
+
+		const BaseContainer* bc = tag->GetDataInstance();
+		if (bc && bc->GetBool(PMX_BONE_IS_IK) && bone_tag->mmd_node_)
+		{
+			auto* pmx_node = static_cast<libmmd::PMXNode*>(bone_tag->mmd_node_);
+			bone_tag->ik_solver_ = pmx_node->GetIKSolver();
+			bone_tag->is_IK = true;
+		}
+	}
+
+	mmd_node_manager_ = node_manager;
 }
 
 void MMDBoneManagerObject::CreateDisplayTag(GeListNode* node)

@@ -26,6 +26,7 @@ Description:	MMD model object
 #include "maxon/queue.h"
 #include "utils/filename_util.hpp"
 #include "utils/string_util.hpp"
+#include "libMMD/Model/MMD/MMDPhysics.h"
 
 #define COL_NAME 'name'
 
@@ -283,40 +284,78 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	if (!ReadMorph(hf))
 		return false;
 
-	if (level >= 1)
+	Int64 mat_count = 0;
+	if (hf->ReadInt64(&mat_count) && mat_count >= 0 && mat_count <= 10000)
 	{
-		Int64 mat_count = 0;
-		if (hf->ReadInt64(&mat_count) && mat_count >= 0 && mat_count <= 10000)
+		iferr(material_list_.Resize(0))
+			return false;
+		for (Int64 i = 0; i < mat_count; ++i)
 		{
-			iferr(material_list_.Resize(0))
+			MMDMaterialData mat;
+			if (!mat.Read(hf))
 				return false;
-			for (Int64 i = 0; i < mat_count; ++i)
-			{
-				MMDMaterialData mat;
-				if (!mat.Read(hf))
-					return false;
-				iferr(material_list_.Append(std::move(mat)))
-					return false;
-			}
+			iferr(material_list_.Append(std::move(mat)))
+				return false;
 		}
 	}
 
-	if (level >= 2)
+	Int64 df_count = 0;
+	if (hf->ReadInt64(&df_count) && df_count >= 0 && df_count <= 10000)
 	{
-		Int64 df_count = 0;
-		if (hf->ReadInt64(&df_count) && df_count >= 0 && df_count <= 10000)
+		iferr(display_frame_list_.Resize(0))
+			return false;
+		for (Int64 i = 0; i < df_count; ++i)
 		{
-			iferr(display_frame_list_.Resize(0))
+			DisplayFrameData df;
+			if (!df.Read(hf))
 				return false;
-			for (Int64 i = 0; i < df_count; ++i)
-			{
-				DisplayFrameData df;
-				if (!df.Read(hf))
-					return false;
-				iferr(display_frame_list_.Append(std::move(df)))
-					return false;
-			}
+			iferr(display_frame_list_.Append(std::move(df)))
+				return false;
 		}
+	}
+
+	Int32 anim_idx = -1;
+	if (!hf->ReadInt32(&anim_idx))
+		return false;
+
+	Int64 anim_count = 0;
+	if (!hf->ReadInt64(&anim_count))
+		return false;
+
+	if (anim_idx >= static_cast<Int32>(anim_count))
+		anim_idx = -1;
+	animation_index_ = anim_idx;
+
+	iferr(pending_vmd_data_.Resize(0))
+		return false;
+	animation_items_.FlushAll();
+	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
+
+	for (Int64 i = 0; i < anim_count; ++i)
+	{
+		String name;
+		if (!hf->ReadString(&name))
+			return false;
+
+		Int64 size = 0;
+		if (!hf->ReadInt64(&size))
+			return false;
+
+		std::vector<uint8_t> data;
+		if (size > 0)
+		{
+			void* mem = nullptr;
+			Int mem_size = 0;
+			if (!hf->ReadMemory(&mem, &mem_size))
+				return false;
+			data.resize(static_cast<size_t>(mem_size));
+			CopyMem(mem, data.data(), mem_size);
+			DeleteMem(mem);
+		}
+
+		iferr(pending_vmd_data_.Append(std::make_pair(name, std::move(data))))
+			return false;
+		animation_items_.SetString(static_cast<Int32>(i), name);
 	}
 
 	*is_morph_initialized_.Write() = true;
@@ -348,6 +387,59 @@ SDK2024_Write(MMDModelManagerObject) {
 	for (Int32 i = 0; i < display_frame_list_.GetCount(); ++i)
 		if (!display_frame_list_[i].Write(hf))
 			return false;
+
+	if (!hf->WriteInt32(animation_index_))
+		return false;
+
+	if (animations_.GetCount() > 0)
+	{
+		const auto anim_count = static_cast<Int64>(animations_.GetCount());
+		if (!hf->WriteInt64(anim_count))
+			return false;
+		for (Int64 i = 0; i < anim_count; ++i)
+		{
+			const auto& [name, animation] = animations_[i];
+			if (!hf->WriteString(name))
+				return false;
+			libmmd::VMDFile vmd_file;
+			std::vector<uint8_t> vmd_data;
+			if (animation && animation->Save(vmd_file) && libmmd::WriteVMDFile(&vmd_file, vmd_data))
+			{
+				if (!hf->WriteInt64(static_cast<Int64>(vmd_data.size())))
+					return false;
+				if (!hf->WriteMemory(vmd_data.data(), static_cast<Int>(vmd_data.size())))
+					return false;
+			}
+			else
+			{
+				if (!hf->WriteInt64(0))
+					return false;
+			}
+		}
+	}
+	else if (pending_vmd_data_.GetCount() > 0)
+	{
+		if (!hf->WriteInt64(static_cast<Int64>(pending_vmd_data_.GetCount())))
+			return false;
+		for (const auto& [name, vmd_data] : pending_vmd_data_)
+		{
+			if (!hf->WriteString(name))
+				return false;
+			if (!hf->WriteInt64(static_cast<Int64>(vmd_data.size())))
+				return false;
+			if (!vmd_data.empty())
+			{
+				if (!hf->WriteMemory(vmd_data.data(), static_cast<Int>(vmd_data.size())))
+					return false;
+			}
+		}
+	}
+	else
+	{
+		if (!hf->WriteInt64(0))
+			return false;
+	}
+
 	return true;
 }
 SDK2024_CopyTo(MMDModelManagerObject)
@@ -386,6 +478,25 @@ SDK2024_CopyTo(MMDModelManagerObject)
 		iferr(destObject->display_frame_list_.Append(std::move(copy)))
 			return false;
 	}
+
+	destObject->animation_index_ = animation_index_;
+	destObject->animation_items_ = animation_items_;
+	iferr(destObject->pending_vmd_data_.Resize(0))
+		return false;
+	for (Int32 i = 0; i < animations_.GetCount(); ++i)
+	{
+		const auto& [name, animation] = animations_[i];
+		std::vector<uint8_t> vmd_data;
+		if (animation)
+		{
+			libmmd::VMDFile vmd_file;
+			if (animation->Save(vmd_file))
+				libmmd::WriteVMDFile(&vmd_file, vmd_data);
+		}
+		iferr(destObject->pending_vmd_data_.Append(std::make_pair(name, std::move(vmd_data))))
+			return false;
+	}
+
 	return true;
 }
 Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
@@ -604,6 +715,15 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		if (bone_manager_data_)
 			bone_manager_data_->HandleBoneIndexChangeMessage(bone_manager_);
 		*is_manager_read_.Write() = false;
+	}
+
+	if (!*is_runtime_initialized_.Read() && !mmd_model_)
+	{
+		if (!RebuildRuntime())
+		{
+			StatusSetText(GeLoadString(IDS_CMT_VMD_REBUILD_FAILED));
+		}
+		*is_runtime_initialized_.Write() = true;
 	}
 
 	if (!*is_morph_initialized_.Read())
@@ -1307,6 +1427,99 @@ Bool MMDModelManagerObject::DeleteVMDAnimation()
 	const auto node = Get();
 	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
 	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index_, DESCFLAGS_SET::NONE);
+	return true;
+}
+
+Bool MMDModelManagerObject::RebuildRuntime()
+{
+	iferr_scope_handler{ return false; };
+
+	auto pmx_model = std::make_shared<PMXModel>();
+
+	if (bone_manager_data_)
+	{
+		if (!bone_manager_data_->RebuildNodes(pmx_model.get()))
+			return false;
+	}
+
+	auto* physics_manager = pmx_model->GetPhysicsManager();
+	if (!physics_manager->Create())
+		return false;
+
+	if (rigid_manager_data_)
+	{
+		if (!rigid_manager_data_->RebuildRigidBodies(pmx_model.get()))
+			return false;
+
+		auto* physics = physics_manager->GetMMDPhysics();
+		auto* rigid_bodies = physics_manager->GetRigidBodys();
+		if (physics && rigid_bodies)
+		{
+			for (const auto& rb : *rigid_bodies)
+				physics->AddRigidBody(rb.get());
+		}
+	}
+
+	if (joint_manager_data_)
+	{
+		if (!joint_manager_data_->RebuildJoints(physics_manager))
+			return false;
+
+		auto* physics = physics_manager->GetMMDPhysics();
+		auto* joints = physics_manager->GetJoints();
+		if (physics && joints)
+		{
+			for (const auto& jt : *joints)
+				physics->AddJoint(jt.get());
+		}
+	}
+
+	SetMMDModel(pmx_model);
+
+	for (const auto& [name, vmd_data] : pending_vmd_data_)
+	{
+		if (vmd_data.empty())
+			continue;
+
+		libmmd::VMDFile vmd_file;
+		if (!libmmd::ReadVMDFile(&vmd_file, vmd_data.data(), vmd_data.size()))
+			continue;
+
+		auto vmd_animation = std::make_unique<libmmd::VMDAnimation>();
+		if (!vmd_animation->Create(pmx_model))
+			continue;
+		if (!vmd_animation->Add(vmd_file))
+			continue;
+
+		animations_.Append(std::make_pair(name, std::move(vmd_animation)))iferr_return;
+	}
+	iferr(pending_vmd_data_.Resize(0)) {}
+
+	if (animation_index_ >= 0 && animation_index_ < animations_.GetCount())
+	{
+		const auto& animation = animations_[animation_index_].second;
+		if (animation)
+		{
+			if (auto* doc = Get()->GetDocument())
+			{
+				const BaseTime max_time(animation->GetMaxKeyTime(), 30.);
+				doc->SetMaxTime(max_time);
+				doc->SetLoopMaxTime(max_time);
+			}
+		}
+	}
+
+	if (bone_manager_data_)
+		bone_manager_data_->ReconnectNodePointers(pmx_model->GetNodeManager(), pmx_model->GetIKManager());
+	if (rigid_manager_data_)
+		rigid_manager_data_->ReconnectRigidBodyPointers(physics_manager);
+	if (joint_manager_data_)
+		joint_manager_data_->ReconnectJointPointers(physics_manager);
+
+	pmx_model->ResetPhysics();
+	*is_runtime_initialized_.Write() = true;
+	is_animation_initialized_ = false;
+
 	return true;
 }
 
