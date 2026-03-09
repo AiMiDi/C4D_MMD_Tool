@@ -86,22 +86,64 @@ BaseMaterial* CreateStandardMaterialFromData(const MMDMaterialData& data)
 	if (!material)
 		return nullptr;
 
-	BaseShader* color_shader = BaseShader::Alloc(Xcolor);
-	if (color_shader)
+	bool has_texture = false;
+	bool has_alpha_channel = false;
+	const Filename texture_path(data.texture_path);
+	if (texture_path.IsPopulated() && GeFExist(texture_path))
 	{
-		color_shader->SetParameter(ConstDescID(DescLevel(COLORSHADER_COLOR)), data.diffuse_rgb, DESCFLAGS_SET::NONE);
-		material->SetParameter(ConstDescID(DescLevel(MATERIAL_COLOR_SHADER)), color_shader, DESCFLAGS_SET::NONE);
-		material->InsertShader(color_shader);
+		has_texture = true;
+		AutoAlloc<BaseBitmap> bitmap;
+		if (bitmap && bitmap->Init(texture_path) == IMAGERESULT::OK)
+		{
+			if (bitmap->GetChannelCount() &&
+				(texture_path.GetSuffix().ToLower().Compare("png"_s) == maxon::COMPARERESULT::EQUAL ||
+				 texture_path.GetSuffix().ToLower().Compare("tga"_s) == maxon::COMPARERESULT::EQUAL))
+				has_alpha_channel = true;
+		}
+	}
+
+	if (has_texture)
+	{
+		BaseChannel* base_color_channel = material->GetChannel(CHANNEL_COLOR);
+		if (base_color_channel)
+		{
+			BaseContainer base_color_container = base_color_channel->GetData();
+			base_color_container.SetString(BASECHANNEL_TEXTURE, texture_path.GetString());
+			base_color_channel->SetData(base_color_container);
+		}
+	}
+	else
+	{
+		BaseShader* color_shader = BaseShader::Alloc(Xcolor);
+		if (color_shader)
+		{
+			color_shader->SetParameter(ConstDescID(DescLevel(COLORSHADER_COLOR)), data.diffuse_rgb, DESCFLAGS_SET::NONE);
+			material->SetParameter(ConstDescID(DescLevel(MATERIAL_COLOR_SHADER)), color_shader, DESCFLAGS_SET::NONE);
+			material->InsertShader(color_shader);
+		}
 	}
 
 	material->SetChannelState(CHANNEL_ALPHA, true);
-	BaseShader* alpha_shader = BaseShader::Alloc(Xcolor);
-	if (alpha_shader)
+	BaseChannel* alpha_channel = material->GetChannel(CHANNEL_ALPHA);
+	if (alpha_channel)
 	{
-		alpha_shader->SetParameter(ConstDescID(DescLevel(COLORSHADER_COLOR)), Vector(1, 1, 1), DESCFLAGS_SET::NONE);
-		alpha_shader->SetParameter(ConstDescID(DescLevel(COLORSHADER_BRIGHTNESS)), data.diffuse_alpha, DESCFLAGS_SET::NONE);
-		material->SetParameter(ConstDescID(DescLevel(MATERIAL_ALPHA_SHADER)), alpha_shader, DESCFLAGS_SET::NONE);
-		material->InsertShader(alpha_shader);
+		if (has_alpha_channel)
+		{
+			BaseContainer alpha_container = alpha_channel->GetData();
+			alpha_container.SetString(BASECHANNEL_TEXTURE, texture_path.GetString());
+			alpha_channel->SetData(alpha_container);
+		}
+		else
+		{
+			BaseShader* alpha_shader = BaseShader::Alloc(Xcolor);
+			if (alpha_shader)
+			{
+				alpha_shader->SetParameter(ConstDescID(DescLevel(COLORSHADER_COLOR)), Vector(1, 1, 1), DESCFLAGS_SET::NONE);
+				alpha_shader->SetParameter(ConstDescID(DescLevel(COLORSHADER_BRIGHTNESS)), data.diffuse_alpha, DESCFLAGS_SET::NONE);
+				material->SetParameter(ConstDescID(DescLevel(MATERIAL_ALPHA_SHADER)), alpha_shader, DESCFLAGS_SET::NONE);
+				material->InsertShader(alpha_shader);
+			}
+		}
 	}
 
 	material->SetChannelState(CHANNEL_SPECULAR, true);

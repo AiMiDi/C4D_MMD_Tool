@@ -203,6 +203,37 @@ BaseMaterial* CreateRedShiftMaterialFromPMX(const libmmd::PMXMaterial& pmx_mater
 BaseMaterial* CreateRedShiftMaterialFromData(const MMDMaterialData& data)
 {
 #if API_VERSION >= 2024000
+	bool has_texture = false;
+	bool has_alpha_channel = false;
+	const Filename texture_path(data.texture_path);
+	if (texture_path.IsPopulated() && GeFExist(texture_path))
+	{
+		has_texture = true;
+		AutoAlloc<BaseBitmap> bitmap;
+		if (bitmap && bitmap->Init(texture_path) == IMAGERESULT::OK)
+		{
+			if (bitmap->GetChannelCount() > 0)
+			{
+				BaseBitmap* alpha_bmp = bitmap->GetInternalChannel();
+				if (alpha_bmp)
+				{
+					const Int32 w = bitmap->GetBw();
+					const Int32 h = bitmap->GetBh();
+					for (Int32 y = 0; y < h && !has_alpha_channel; ++y)
+					{
+						for (Int32 x = 0; x < w && !has_alpha_channel; ++x)
+						{
+							UInt16 val = 0;
+							bitmap->GetAlphaPixel(alpha_bmp, x, y, &val);
+							if (val < 255)
+								has_alpha_channel = true;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	BaseMaterial* material = BaseMaterial::Alloc(Mmaterial);
 	if (!material)
 		return nullptr;
@@ -223,12 +254,36 @@ BaseMaterial* CreateRedShiftMaterialFromData(const MMDMaterialData& data)
 	{
 		auto transaction = graph.BeginTransaction() iferr_return;
 
-		const maxon::Color64 baseColor(data.diffuse_rgb.x, data.diffuse_rgb.y, data.diffuse_rgb.z);
-		SetPortValue(matNode, rs_base_color, baseColor) iferr_return;
+		if (has_texture)
+		{
+			auto texNode = graph.AddChild(maxon::Id(), k_textureSamplerAssetId) iferr_return;
 
-		const Float64 alpha = static_cast<Float64>(data.diffuse_alpha);
-		const maxon::Color64 opacityColor(alpha, alpha, alpha);
-		SetPortValue(matNode, rs_opacity_color, opacityColor) iferr_return;
+			const maxon::Url textureUrl = MaxonConvert(texture_path, MAXONCONVERTMODE::READ);
+			const auto texInputs = texNode.GetInputs() iferr_return;
+			const auto tex0Port = texInputs.FindChild(rs_tex0) iferr_return;
+			if (tex0Port.IsValid())
+			{
+				const auto pathPort = tex0Port.FindChild(rs_tex0_path) iferr_return;
+				if (pathPort.IsValid())
+					pathPort.SetPortValue(textureUrl) iferr_return;
+			}
+
+			ConnectOutputToInput(texNode, rs_tex_outcolor, matNode, rs_base_color) iferr_return;
+
+			if (has_alpha_channel)
+			{
+				ConnectOutputToInput(texNode, rs_tex_outcolor, matNode, rs_opacity_color) iferr_return;
+			}
+		}
+		else
+		{
+			const maxon::Color64 baseColor(data.diffuse_rgb.x, data.diffuse_rgb.y, data.diffuse_rgb.z);
+			SetPortValue(matNode, rs_base_color, baseColor) iferr_return;
+
+			const Float64 alpha = static_cast<Float64>(data.diffuse_alpha);
+			const maxon::Color64 opacityColor(alpha, alpha, alpha);
+			SetPortValue(matNode, rs_opacity_color, opacityColor) iferr_return;
+		}
 
 		transaction.Commit() iferr_return;
 	}
