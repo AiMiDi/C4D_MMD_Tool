@@ -6,6 +6,7 @@ set "BUILD_DEBUG=0"
 set "BUILD_RELEASE=0"
 set "TOOLSET="
 set "ENABLE_TEST=0"
+set "ENABLE_AVX2=1"
 
 :parse_args
 if "%~1"=="" goto :done_args
@@ -46,7 +47,7 @@ if "%BUILD_DEBUG%"=="0" if "%BUILD_RELEASE%"=="0" (
     set "BUILD_RELEASE=1"
 )
 
-echo Build config: Debug=%BUILD_DEBUG% Release=%BUILD_RELEASE% Toolset=%TOOLSET% Test=%ENABLE_TEST%
+echo Build config: Debug=%BUILD_DEBUG% Release=%BUILD_RELEASE% Toolset=%TOOLSET% Test=%ENABLE_TEST% AVX2=%ENABLE_AVX2%
 
 git submodule update --init --recursive
 :: Find latest Visual Studio installation
@@ -111,7 +112,9 @@ mkdir build
 cd build
 set "TEST_FLAG=off"
 if "%ENABLE_TEST%"=="1" set "TEST_FLAG=on"
-cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install" -D LIBMMD_BULLET_ROOT="../../install" -D LIBMMD_ENABLE_TEST=%TEST_FLAG% -D LIBMMD_INSTALL=on
+set "AVX2_FLAG=off"
+if "%ENABLE_AVX2%"=="1" set "AVX2_FLAG=on"
+cmake ..  -G "Ninja Multi-Config" -D CMAKE_DEBUG_POSTFIX="_Debug" -D CMAKE_INSTALL_PREFIX="../../install" -D LIBMMD_BULLET_ROOT="../../install" -D LIBMMD_ENABLE_TEST=%TEST_FLAG% -D LIBMMD_ENABLE_AVX2=%AVX2_FLAG% -D LIBMMD_INSTALL=on
 
 if "%BUILD_DEBUG%"=="1" (
     echo Building libMMD Debug version...
