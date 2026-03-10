@@ -29,6 +29,16 @@ SDK2024_ConstExpr Vector g_pmx_joint_colors[6] =
 		Vector(255, 155, 230) / 255
 };
 
+MMDJointManagerObject* MMDJointObject::GetJointManager() const
+{
+	if (!joint_manager_data_)
+	{
+		if (auto* obj = io_util::ResolveObjectLink(joint_manager_link_))
+			joint_manager_data_ = obj->GetNodeData<MMDJointManagerObject>();
+	}
+	return joint_manager_data_;
+}
+
 SDK2024_Init(MMDJointObject)
 {
 	if (!node)
@@ -58,12 +68,14 @@ Bool MMDJointObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	{
 	case JOINT_LINK_RIGID_A_INDEX:
 	{
-		link_rigid_a_ = joint_manager_data_->GetRigidManager()->FindRigid(t_data.GetInt32());
+		if (auto* mgr = GetJointManager())
+			link_rigid_a_->SetLink(mgr->GetRigidManager()->FindRigid(t_data.GetInt32()));
 		break;
 	}
 	case JOINT_LINK_RIGID_B_INDEX:
 	{
-		link_rigid_b_ = joint_manager_data_->GetRigidManager()->FindRigid(t_data.GetInt32());
+		if (auto* mgr = GetJointManager())
+			link_rigid_b_->SetLink(mgr->GetRigidManager()->FindRigid(t_data.GetInt32()));
 		break;
 	}
 	default:
@@ -84,27 +96,27 @@ SDK2024_GetDDescription(MMDJointObject)
 		return false;
 	}
 
-	if (joint_manager_data_)
+	if (auto* mgr = GetJointManager())
 	{
 		BaseContainer* settings = description->GetParameterI(ConstDescID(DescLevel(JOINT_LINK_RIGID_A_INDEX)), nullptr);
 
 		if (settings != nullptr)
 		{
-			settings->SetContainer(DESC_CYCLE, joint_manager_data_->GetRigidManager()->GetRigidItems());
+			settings->SetContainer(DESC_CYCLE, mgr->GetRigidManager()->GetRigidItems());
 		}
 
 		settings = description->GetParameterI(ConstDescID(DescLevel(JOINT_LINK_RIGID_B_INDEX)), nullptr);
 
 		if (settings != nullptr)
 		{
-			settings->SetContainer(DESC_CYCLE, joint_manager_data_->GetRigidManager()->GetRigidItems());
+			settings->SetContainer(DESC_CYCLE, mgr->GetRigidManager()->GetRigidItems());
 		}
 
 		settings = description->GetParameterI(ConstDescID(DescLevel(JOINT_ATTITUDE_USE_BONE_INDEX)), nullptr);
 
 		if (settings != nullptr)
 		{
-			settings->SetContainer(DESC_CYCLE, joint_manager_data_->GetBoneManager()->GetBoneItems());
+			settings->SetContainer(DESC_CYCLE, mgr->GetBoneManager()->GetBoneItems());
 		}
 	}
 	flags |= DESCFLAGS_DESC::LOADED;
@@ -198,22 +210,25 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		{
 		case JOINT_LINK_RIGID_SET_NAME_BUTTON:
 		{
-			String name = "<->"_s;
-			if (const BaseObject* a_rigid_object = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX)))
+			if (auto* mgr = GetJointManager())
 			{
-				name = a_rigid_object->GetName() + name;
+				String name = "<->"_s;
+				if (const BaseObject* a_rigid_object = mgr->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX)))
+				{
+					name = a_rigid_object->GetName() + name;
+				}
+				if (const BaseObject* b_rigid_object = mgr->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX)))
+				{
+					name = name + b_rigid_object->GetName();
+				}
+				reinterpret_cast<BaseObject*>(node)->SetName(name);
 			}
-			if (const BaseObject* b_rigid_object = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX)))
-			{
-				name = name + b_rigid_object->GetName();
-			}
-
-			reinterpret_cast<BaseObject*>(node)->SetName(name);
 			break;
 		}
 		case JOINT_ATTITUDE_USE_BONE_BUTTON:
 		{
-			if (const auto bone_ptr = joint_manager_data_->GetBoneManager()->FindBone(bc->GetInt32(JOINT_ATTITUDE_USE_BONE_INDEX)))
+			if (auto* mgr = GetJointManager(); mgr)
+			if (const auto bone_ptr = mgr->GetBoneManager()->FindBone(bc->GetInt32(JOINT_ATTITUDE_USE_BONE_INDEX)))
 			{
 				reinterpret_cast<BaseObject*>(node)->SetAbsPos(bone_ptr->GetObject()->GetAbsPos());
 			}
@@ -258,12 +273,14 @@ Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
 		{
 		case JOINT_LINK_RIGID_A_INDEX:
 		{
-			link_rigid_a_ = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX));
+			if (auto* mgr = GetJointManager())
+				link_rigid_a_->SetLink(mgr->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX)));
 			break;
 		}
 		case JOINT_LINK_RIGID_B_INDEX:
 		{
-			link_rigid_b_ = joint_manager_data_->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX));
+			if (auto* mgr = GetJointManager())
+				link_rigid_b_->SetLink(mgr->GetRigidManager()->FindRigid(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX)));
 			break;
 		}
 		default:
@@ -353,7 +370,8 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	else if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
 	{
 		const auto joint_position = mmd_joint_->GetPosition();
-		op->SetAbsPos(Vector(joint_position.x(), joint_position.y(), joint_position.z()) * joint_manager_data_->GetPositionMultiple());
+		if (auto* mgr = GetJointManager())
+			op->SetAbsPos(Vector(joint_position.x(), joint_position.y(), joint_position.z()) * mgr->GetPositionMultiple());
 	}
 
 	return EXECUTIONRESULT::OK;
@@ -368,9 +386,12 @@ SDK2024_CopyTo(MMDJointObject)
 		return false;
 	}
 
-	destObject->joint_manager_data_ = joint_manager_data_;
-	destObject->link_rigid_a_ = link_rigid_a_;
-	destObject->link_rigid_b_ = link_rigid_b_;
+	if (joint_manager_link_)
+		joint_manager_link_->CopyTo(destObject->joint_manager_link_, flags, trn);
+	if (link_rigid_a_)
+		link_rigid_a_->CopyTo(destObject->link_rigid_a_, flags, trn);
+	if (link_rigid_b_)
+		link_rigid_b_->CopyTo(destObject->link_rigid_b_, flags, trn);
 	destObject->joint_mode_ = joint_mode_;
 	destObject->display_type_ = display_type_;
 
@@ -381,7 +402,7 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	IOReadField(display_type_);
 	IOReadField(joint_mode_);
-	IOReadField(joint_manager_data_);
+	IOReadField(joint_manager_link_);
 	IOReadField(link_rigid_a_);
 	IOReadField(link_rigid_b_);
 	return true;
@@ -391,7 +412,7 @@ SDK2024_Write(MMDJointObject)
 {
 	IOWriteField(display_type_);
 	IOWriteField(joint_mode_);
-	IOWriteField(joint_manager_data_);
+	IOWriteField(joint_manager_link_);
 	IOWriteField(link_rigid_a_);
 	IOWriteField(link_rigid_b_);
 

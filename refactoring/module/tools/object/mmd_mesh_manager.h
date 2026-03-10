@@ -43,7 +43,7 @@ struct MMDMeshManagerObjectMsg
 class MMDMeshManagerObject final : public MMDManagerObject
 {
 	Int32 mesh_mode_ = MESH_MODE_ANIM;
-	BaseObject* model_manager_ = nullptr;
+	AutoAlloc<BaseLink> model_manager_;
 	maxon::HashMap<BaseTag*, Int32> mesh_morph_mode_;
 
 	libmmd::MMDMorphManager* mmd_morph_manager_;

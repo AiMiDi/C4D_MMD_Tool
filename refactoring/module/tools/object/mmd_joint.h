@@ -17,10 +17,13 @@ class MMDJointObject final : public ObjectData
 {
 	Int32	display_type_ = JOINT_DISPLAY_TYPE_OFF;
 	Int32	joint_mode_ = JOINT_MODE_ANIM;
-	BaseObject* link_rigid_a_ = nullptr;
-	BaseObject* link_rigid_b_ = nullptr;
+	AutoAlloc<BaseLink> link_rigid_a_;
+	AutoAlloc<BaseLink> link_rigid_b_;
+	AutoAlloc<BaseLink> joint_manager_link_;
 	libmmd::MMDJoint* mmd_joint_ = nullptr;
-	MMDJointManagerObject* joint_manager_data_ = nullptr;
+	mutable MMDJointManagerObject* joint_manager_data_ = nullptr;
+
+	MMDJointManagerObject* GetJointManager() const;
 
 	MMDJointObject() = default;
 	~MMDJointObject() override = default;

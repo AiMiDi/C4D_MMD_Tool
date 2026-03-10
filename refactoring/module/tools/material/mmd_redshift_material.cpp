@@ -265,7 +265,9 @@ BaseMaterial* CreateRedShiftMaterialFromData(const MMDMaterialData& data)
 			{
 				const auto pathPort = tex0Port.FindChild(rs_tex0_path) iferr_return;
 				if (pathPort.IsValid())
+				{
 					pathPort.SetPortValue(textureUrl) iferr_return;
+				}
 			}
 
 			ConnectOutputToInput(texNode, rs_tex_outcolor, matNode, rs_base_color) iferr_return;

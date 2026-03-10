@@ -3,10 +3,6 @@
 #include <c4d.h>
 #include "module/core/cmt_marco.h"
 
-class MMDJointManagerObject;
-class MMDBoneManagerObject;
-class MMDRigidManagerObject;
-
 namespace io_util
 {
 /**
@@ -224,6 +220,11 @@ template<> inline bool ReadData<BaseContainer>(HyperFile* hf, BaseContainer& dat
 template<> inline bool ReadData<BaseTime>(HyperFile* hf, BaseTime& data) { return hf->ReadTime(&data); }
 template<> inline bool ReadData<BaseTag*>(HyperFile* hf, BaseTag*& data){ return ReadBaseList2D(hf, data); }
 template<> inline bool ReadData<BaseObject*>(HyperFile* hf, BaseObject*& data){ return ReadBaseList2D(hf, data); }
+template<> inline bool ReadData<AutoAlloc<BaseLink>>(HyperFile* hf, AutoAlloc<BaseLink>& data)
+{
+	if (!data) return false;
+	return data->Read(hf);
+}
 template<> inline bool ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>(HyperFile* hf, maxon::StrongRef<AutoAlloc<BaseLink>>& data)
 {
 	iferr_scope_handler{
@@ -243,10 +244,6 @@ template<> inline bool ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>(HyperFile
 		return false;
 	return true;
 }
-
-template<> Bool ReadData<MMDBoneManagerObject*>(HyperFile* hf, MMDBoneManagerObject*& data);
-template<> Bool ReadData<MMDRigidManagerObject*>(HyperFile* hf, MMDRigidManagerObject*& data);
-template<> Bool ReadData<MMDJointManagerObject*>(HyperFile* hf, MMDJointManagerObject*& data);
 
 WRITE_DATA_FUNC(Int32)
 WRITE_DATA_FUNC(Int64)
@@ -270,6 +267,11 @@ template<> inline bool WriteData<BaseContainer>(HyperFile* hf, const BaseContain
 template<> inline bool WriteData<BaseTime>(HyperFile* hf, const BaseTime& data) { return hf->WriteTime(data); }
 template<> inline bool WriteData<BaseTag*>(HyperFile* hf, BaseTag* const& data){ return WriteBaseList2D(hf, data); }
 template<> inline bool WriteData<BaseObject*>(HyperFile* hf, BaseObject* const& data){ return WriteBaseList2D(hf, data); }
+template<> inline bool WriteData<AutoAlloc<BaseLink>>(HyperFile* hf, const AutoAlloc<BaseLink>& data)
+{
+	if (!data) return false;
+	return data->Write(hf);
+}
 template<> inline bool WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>>(HyperFile* hf, const maxon::StrongRef<AutoAlloc<BaseLink>>& data)
 {
 	if (!data || !(*data))
@@ -280,9 +282,10 @@ template<> inline bool WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>>(HyperFil
 	return true;
 }
 
-template<> Bool WriteData<MMDBoneManagerObject*>(HyperFile* hf, MMDBoneManagerObject* const& data);
-template<> Bool WriteData<MMDRigidManagerObject*>(HyperFile* hf, MMDRigidManagerObject* const& data);
-template<> Bool WriteData<MMDJointManagerObject*>(HyperFile* hf, MMDJointManagerObject* const& data);
+inline BaseObject* ResolveObjectLink(const AutoAlloc<BaseLink>& link)
+{
+	return link ? static_cast<BaseObject*>(link->ForceGetLink()) : nullptr;
+}
 
 }
 

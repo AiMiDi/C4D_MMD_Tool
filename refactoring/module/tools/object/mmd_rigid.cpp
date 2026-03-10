@@ -17,6 +17,16 @@ Description:	C4D MMD rigid object
 #include "mmd_rigid_manager.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 
+MMDRigidManagerObject* MMDRigidObject::GetRigidManager() const
+{
+	if (!rigid_manager_data_)
+	{
+		if (auto* obj = io_util::ResolveObjectLink(rigid_manager_link_))
+			rigid_manager_data_ = obj->GetNodeData<MMDRigidManagerObject>();
+	}
+	return rigid_manager_data_;
+}
+
 SDK2024_ConstExpr Vector g_pmx_rigid_colors[16] =
 {
 		Vector(255, 212, 127) / 255,
@@ -165,9 +175,10 @@ SDK2024_GetDDescription(MMDRigidObject)
 	if (const auto cid = ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)); single_id == nullptr || cid.IsPartOf(*single_id, nullptr))
     {
 		settings = description->GetParameterI(cid, nullptr);
-		if (settings && rigid_manager_data_)
+		if (settings)
+		if (auto* mgr = GetRigidManager())
 		{
-			settings->SetContainer(DESC_CYCLE, rigid_manager_data_->GetBoneItems());
+			settings->SetContainer(DESC_CYCLE, mgr->GetBoneItems());
 		}
     }
 
@@ -511,10 +522,8 @@ void MMDRigidObject::HandleRigidIndexUpdate(BaseObject* op) const
 		if (!op->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)), String::IntToString(rigid_index), DESCFLAGS_SET::NONE))
 			return;
 
-		if (!rigid_manager_data_)
-			return;
-
-		rigid_manager_data_->UpdateRigidList();
+		if (auto* mgr = GetRigidManager())
+			mgr->UpdateRigidList();
 	}
 }
 
@@ -533,8 +542,10 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	else if (m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
 	{
 		const auto transform = mmd_rigidbody_->GetTransform();
+		const auto* mgr = GetRigidManager();
+		const auto pos_mul = mgr ? mgr->GetPositionMultiple() : 1.f;
 		op->SetMl(Matrix{
-		   Vector(transform(0,3),transform(1,3),transform(2,3)) * rigid_manager_data_->GetPositionMultiple(),
+		   Vector(transform(0,3),transform(1,3),transform(2,3)) * pos_mul,
 		   Vector(transform(0,0),transform(1,0),transform(2,0)),
 		   Vector(transform(0,1),transform(1,1),transform(2,1)),
 		   Vector(transform(0,2),transform(1,2),transform(2,2)) });
@@ -566,7 +577,7 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(m_physics_mode);
 	IOReadField(m_rigid_shape_type);
 	IOReadField(m_rigid_group_id);
-	IOReadField(rigid_manager_data_);
+	IOReadField(rigid_manager_link_);
 
 	UpdateRigidPhysics(m_physics_mode);
 	UpdateRigidShape(bc, m_rigid_shape_type);
@@ -581,7 +592,7 @@ SDK2024_Write(MMDRigidObject)
 	IOWriteField(m_physics_mode);
 	IOWriteField(m_rigid_shape_type);
 	IOWriteField(m_rigid_group_id);
-	IOWriteField(rigid_manager_data_);
+	IOWriteField(rigid_manager_link_);
 
 	return true;
 }
@@ -599,7 +610,8 @@ SDK2024_CopyTo(MMDRigidObject)
 	destObject->m_physics_mode = m_physics_mode;
 	destObject->m_rigid_shape_type = m_rigid_shape_type;
 	destObject->m_rigid_group_id = m_rigid_group_id;
-	destObject->rigid_manager_data_ = rigid_manager_data_;
+	if (rigid_manager_link_)
+		rigid_manager_link_->CopyTo(destObject->rigid_manager_link_, flags, trn);
 
 	return true;
 }

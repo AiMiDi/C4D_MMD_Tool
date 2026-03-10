@@ -89,7 +89,9 @@ class MMDBoneTag final : public TagData
 	libmmd::MMDNode* mmd_node_ = nullptr;
 	// IK solver (non-null only for IK bones)
 	libmmd::MMDIkSolver* ik_solver_ = nullptr;
-	// Bone manager ObjectData
+	// Bone manager link (persistent cache)
+	AutoAlloc<BaseLink> bone_manager_link_;
+	// Bone manager ObjectData (runtime cache)
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
 	// Corresponding bone object
 	BaseObject* bone_object_ = nullptr;
@@ -230,6 +232,8 @@ private:
 	 * @param[in] id The ID of the description.
 	 */
 	void HandleDescriptionUpdate(GeListNode* node, BaseContainer* bc, Int32 id);
+
+	MMDBoneManagerObject* GetBoneManager();
 
 	void HandleBoneModeChange(Int32 bone_mode);
 

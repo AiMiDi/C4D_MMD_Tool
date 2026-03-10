@@ -48,6 +48,8 @@ class MMDJointManagerObject final : public MMDManagerObject
 {
 	Int32 joint_name_index_ = 1;
 	Float32 position_multiple_ = 1.f;
+	AutoAlloc<BaseLink> bone_manager_link_;
+	AutoAlloc<BaseLink> rigid_manager_link_;
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
 	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
 	libmmd::MMDPhysicsManager* mmd_physics_manager_ = nullptr;
@@ -66,8 +68,8 @@ public:
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	const Float32& GetPositionMultiple() const { return position_multiple_; }
 
-	MMDBoneManagerObject* GetBoneManager() const;
-	MMDRigidManagerObject* GetRigidManager() const;
+	MMDBoneManagerObject* GetBoneManager();
+	MMDRigidManagerObject* GetRigidManager();
 	BaseObject* AddJoint(const String& name, libmmd::MMDJoint* mmd_joint, GeListNode* node = nullptr);
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);

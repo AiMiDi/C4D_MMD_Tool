@@ -115,10 +115,10 @@ Int32 MMDBoneTag::AddBoneMorph(String morph_name)
 	bone_morph_button_id_map_.Insert(data.button_delete_id, index)iferr_return;
 	bone_morph_button_id_map_.Insert(data.button_rename_id, index)iferr_return;
 
-	if (bone_manager_data_)
+	if (auto* mgr = GetBoneManager())
 	{
 		MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_MORPH_ADD, morph_name, data.strength_id, tag);
-		reinterpret_cast<BaseObject*>(bone_manager_data_->Get())->Message(g_mmd_bone_tag_id, &msg);
+		reinterpret_cast<BaseObject*>(mgr->Get())->Message(g_mmd_bone_tag_id, &msg);
 	}
 
 	data.name = std::move(morph_name);
@@ -183,10 +183,10 @@ void MMDBoneTag::HandleBoneMorphButtonCommand(const DescID& desc_id)
 				entry.GetValue()--;
 		}
 
-		if (bone_manager_data_)
+		if (auto* mgr = GetBoneManager())
 		{
 			MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_MORPH_DELETE, morph_data.name, morph_data.strength_id, tag);
-			reinterpret_cast<BaseObject*>(bone_manager_data_->Get())->Message(g_mmd_bone_tag_id, &msg);
+			reinterpret_cast<BaseObject*>(mgr->Get())->Message(g_mmd_bone_tag_id, &msg);
 		}
 
 		bone_morph_data_arr_.Erase(morph_index)iferr_return;
@@ -211,10 +211,10 @@ void MMDBoneTag::HandleBoneMorphButtonCommand(const DescID& desc_id)
 		descbc.SetString(DESC_NAME, new_name);
 		ddesc->Set(morph_data.strength_id, descbc, nullptr);
 
-		if (bone_manager_data_)
+		if (auto* mgr = GetBoneManager())
 		{
 			MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_MORPH_RENAME, new_name, morph_data.strength_id, tag, morph_data.name);
-			reinterpret_cast<BaseObject*>(bone_manager_data_->Get())->Message(g_mmd_bone_tag_id, &msg);
+			reinterpret_cast<BaseObject*>(mgr->Get())->Message(g_mmd_bone_tag_id, &msg);
 		}
 
 		morph_data.name = std::move(new_name);
@@ -280,6 +280,26 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 		op->SetColorProperties(&objColor);
 	}
 	return true;
+}
+
+MMDBoneManagerObject* MMDBoneTag::GetBoneManager()
+{
+	if (!bone_manager_data_)
+		if (auto* obj = io_util::ResolveObjectLink(bone_manager_link_))
+			bone_manager_data_ = obj->GetNodeData<MMDBoneManagerObject>();
+	if (!bone_manager_data_)
+	{
+		if (auto* tag = static_cast<BaseTag*>(Get()))
+			if (auto* host = tag->GetObject())
+				if (auto* parent = host->GetUp())
+					if (parent->IsInstanceOf(g_mmd_bone_manager_object_id))
+					{
+						bone_manager_data_ = parent->GetNodeData<MMDBoneManagerObject>();
+						if (bone_manager_data_)
+							bone_manager_link_->SetLink(parent);
+					}
+	}
+	return bone_manager_data_;
 }
 
 NodeData* MMDBoneTag::Alloc()
@@ -481,7 +501,7 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 
 void MMDBoneTag::RebuildIKChains()
 {
-	if (!ik_solver_ || !bone_manager_data_)
+	if (!ik_solver_ || !GetBoneManager())
 		return;
 
 	auto* tag = static_cast<BaseTag*>(Get());
@@ -553,7 +573,7 @@ void MMDBoneTag::RebuildIKChains()
 	ik_solver_->ClearIKChains();
 	for (const auto& entry : entries)
 	{
-		if (const BaseTag* chain_tag = bone_manager_data_->FindBone(entry.bone_index))
+		if (const BaseTag* chain_tag = GetBoneManager()->FindBone(entry.bone_index))
 		{
 			if (auto* chain_node = chain_tag->GetNodeData<MMDBoneTag>(); chain_node && chain_node->mmd_node_)
 			{
@@ -838,9 +858,10 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 					ik_solver_->SetLimitAngle(static_cast<float>(t_data.GetFloat()));
 				return SUPER::SetDParameter(node, id, t_data, flags);
 			case PMX_BONE_IK_TARGET_BONE_INDEX:
-				if (ik_solver_ && bone_manager_data_)
+				if (ik_solver_)
+				if (auto* mgr = GetBoneManager())
 				{
-					if (const BaseTag* target_tag = bone_manager_data_->FindBone(t_data.GetInt32()))
+					if (const BaseTag* target_tag = mgr->FindBone(t_data.GetInt32()))
 					{
 						if (auto* target_tag_node = target_tag->GetNodeData<MMDBoneTag>(); target_tag_node && target_tag_node->mmd_node_)
 							ik_solver_->SetTargetNode(target_tag_node->mmd_node_);
@@ -1016,9 +1037,10 @@ case PMX_BONE_LAYER:
 	}
 	case PMX_BONE_IK_TARGET_BONE_INDEX:
 	{
-		if (ik_solver_ && bone_manager_data_)
+		if (ik_solver_)
+		if (auto* mgr = GetBoneManager())
 		{
-			if (const BaseTag* target_tag = bone_manager_data_->FindBone(t_data.GetInt32()))
+			if (const BaseTag* target_tag = mgr->FindBone(t_data.GetInt32()))
 			{
 				if (auto* target_tag_node = target_tag->GetNodeData<MMDBoneTag>(); target_tag_node && target_tag_node->mmd_node_)
 					ik_solver_->SetTargetNode(target_tag_node->mmd_node_);
@@ -1155,13 +1177,14 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 		if (!bc)
 			return EXECUTIONRESULT::OK;
 
-		HandleBoneIndexUpdate(bc, reinterpret_cast<BaseObject*>(bone_manager_data_->Get()));
+		if (auto* mgr = GetBoneManager())
+			HandleBoneIndexUpdate(bc, reinterpret_cast<BaseObject*>(mgr->Get()));
 	}
 	else if (bone_mode_ == BONE_MODE_VMD && mmd_node_)
 	{
 		const auto& local = mmd_node_->GetLocalTransform();
 		const Eigen::Vector3f translate = local.col(3).head<3>() - mmd_node_->GetInitialTranslate();
-		const auto pm = bone_manager_data_->GetPositionMultiple();
+		const auto pm = GetBoneManager() ? GetBoneManager()->GetPositionMultiple() : 1.f;
 
 		bone_object_->SetRelMl(Matrix{Vector(translate.x(), translate.y(), translate.z()) * pm,
 		   Vector(local(0,0), local(1,0), local(2,0)),
@@ -1201,7 +1224,7 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{ return false; };
-	IOReadField(bone_manager_data_);
+	IOReadField(bone_manager_link_);
 	IOReadField(bone_morph_name_index_);
 	if (!io_util::ReadLinearContainer(hf, bone_morph_data_arr_))
 		return false;
@@ -1218,7 +1241,7 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 SDK2024_Write(MMDBoneTag)
 {
-	IOWriteField(bone_manager_data_);
+	IOWriteField(bone_manager_link_);
 	IOWriteField(bone_morph_name_index_);
 	const auto& morph_arr_ref = bone_morph_data_arr_;
 	if (!io_util::WriteLinearContainer(hf, morph_arr_ref))

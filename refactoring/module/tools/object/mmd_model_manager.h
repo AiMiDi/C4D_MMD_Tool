@@ -109,10 +109,10 @@ class MMDModelManagerObject final : public ObjectData
 	maxon::Synchronized<Bool> is_morph_initialized_;
 	maxon::Synchronized<Bool> is_manager_read_;
 	Int32 morph_named_number_ = 0;
-	BaseObject* mesh_manager_ = nullptr;
-	BaseObject* bone_manager_ = nullptr;
-	BaseObject* rigid_manager_ = nullptr;
-	BaseObject* joint_manager_ = nullptr;
+	AutoAlloc<BaseLink> mesh_manager_;
+	AutoAlloc<BaseLink> bone_manager_;
+	AutoAlloc<BaseLink> rigid_manager_;
+	AutoAlloc<BaseLink> joint_manager_;
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
 	MMDMeshManagerObject* mesh_manager_data_ = nullptr;
 	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
@@ -189,8 +189,13 @@ public:
 	void SetMMDModel(const MMDModelPtr& model);
 	Bool CreateManagers();
 	Bool UpdateManagers(BaseObject* op = nullptr);
-	BaseObject* GetMeshManagerObject() const { return mesh_manager_; }
-	BaseObject* GetBoneManagerObject() const { return bone_manager_; }
+	BaseObject* GetMeshManagerObject() const { return mesh_manager_ ? static_cast<BaseObject*>(mesh_manager_->ForceGetLink()) : nullptr; }
+	BaseObject* GetBoneManagerObject() const { return bone_manager_ ? static_cast<BaseObject*>(bone_manager_->ForceGetLink()) : nullptr; }
+
+	MMDBoneManagerObject* GetBoneManagerData();
+	MMDMeshManagerObject* GetMeshManagerData();
+	MMDRigidManagerObject* GetRigidManagerData();
+	MMDJointManagerObject* GetJointManagerData();
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
 	void ImportDisplayFrames(const libmmd::PMXFile& pmx_file);

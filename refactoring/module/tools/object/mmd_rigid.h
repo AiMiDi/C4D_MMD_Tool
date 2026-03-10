@@ -25,8 +25,11 @@ class MMDRigidObject final : public ObjectData
 	Int32		m_rigid_shape_type = SPHERICAL;
 	Int32		m_rigid_group_id = RIGID_GROUP_0;
 
-	MMDRigidManagerObject* rigid_manager_data_ = nullptr;
+	AutoAlloc<BaseLink> rigid_manager_link_;
+	mutable MMDRigidManagerObject* rigid_manager_data_ = nullptr;
 	libmmd::MMDRigidBody* mmd_rigidbody_ = nullptr;
+
+	MMDRigidManagerObject* GetRigidManager() const;
 
 	AutoFree<BaseObject> draw_mesh_object_;
 	ObjectColorProperties draw_color_;

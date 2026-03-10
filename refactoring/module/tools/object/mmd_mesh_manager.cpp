@@ -58,6 +58,7 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return false;
 	};
 	IOReadField(mesh_mode_);
+	IOReadField(model_manager_);
 
 	if (!io_util::ReadHashMap(hf, mesh_morph_mode_))
 		return false;
@@ -89,6 +90,7 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 SDK2024_Write(MMDMeshManagerObject)
 {
 	IOWriteField(mesh_mode_);
+	IOWriteField(model_manager_);
 
 	if (!io_util::WriteHashMap(hf, mesh_morph_mode_))
 		return false;
@@ -218,7 +220,7 @@ Bool MMDMeshManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		switch (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data); msg->msg_type)
 		{
 		case MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE:
-			model_manager_ = msg->object;
+			model_manager_->SetLink(msg->object);
 			break;
 		case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
 			node->SetParameter(ConstDescID(DescLevel(MESH_MODE)),msg->model_mode, DESCFLAGS_SET::NONE);
@@ -233,19 +235,22 @@ Bool MMDMeshManagerObject::Message(GeListNode* node, Int32 type, void* data)
 EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
 	EXECUTIONFLAGS flags)
 {
-	if (!model_manager_)
+	if (!io_util::ResolveObjectLink(model_manager_))
 	{
 		if (BaseObject* up_object = op->GetUp(); up_object->IsInstanceOf(g_mmd_model_manager_object_id))
 		{
-			model_manager_ = up_object;
+			model_manager_->SetLink(up_object);
 		}
 	}
 
 	if (mesh_mode_ == MESH_MODE_VMD && mmd_morph_manager_)
 	{
 		const auto morph_manager_count = morph_manager_index_.GetCount();
+		const auto mmd_morph_manager_count = mmd_morph_manager_->GetMorphCount();
 		for (int i = 0; i < morph_manager_count; ++i)
 		{
+			if(i >= mmd_morph_manager_count)
+				continue;
 			const auto strength = mmd_morph_manager_->GetMorph(i)->GetWeight();
 			if (const auto mesh_morph_data_index = morph_manager_index_[i]; mesh_morph_data_index != -1)
 			{
@@ -1514,10 +1519,10 @@ void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op)
 				morph_manager_index_[static_cast<Int32>(mmd_morph_manager_->FindMorphIndex(string_util::GetStdString(entry.GetKey())))] = entry.GetValue();
 			}
 		}
-		if (model_manager_)
+		if (auto* model_mgr = io_util::ResolveObjectLink(model_manager_))
 		{
 			MMDMeshManagerObjectMsg msg{ MMDMeshManagerObjectMsgType::MESH_MORPH_CHANGE };
-			model_manager_->Message(g_mmd_mesh_manager_object_id, &msg);
+			model_mgr->Message(g_mmd_mesh_manager_object_id, &msg);
 		}
 	}
 }

@@ -15,27 +15,12 @@ Description:	MMD rigid root object
 #include "mmd_rigid.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 
-template<> Bool io_util::ReadData<MMDRigidManagerObject*>(HyperFile* hf, MMDRigidManagerObject*& data)
-{
-	BaseObject* manager = nullptr;
-	if (!ReadData(hf, manager)) return false;
-	data = manager->GetNodeData<MMDRigidManagerObject>();
-	return true;
-}
-
-template<> Bool io_util::WriteData<MMDRigidManagerObject*>(HyperFile* hf, MMDRigidManagerObject* const& data)
-{
-	if (!WriteData(hf, reinterpret_cast<BaseObject*>(data->Get()))) return false;
-	return true;
-}
-
 Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{
 		return false;
 	};
 	IOReadField(m_rigid_name_index_);
-	IOReadField(bone_manager_data_);
 	if (!io_util::ReadHashMap(hf, rigid_list_))
 		return false;
 	return SUPER::Read(node, hf, level);
@@ -44,7 +29,6 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 SDK2024_Write(MMDRigidManagerObject)
 {
 	IOWriteField(m_rigid_name_index_);
-	IOWriteField(bone_manager_data_);
 	if (!io_util::WriteHashMap(hf, rigid_list_))
 		return false;
 	return SUPER::Write(node, hf);
@@ -57,7 +41,6 @@ SDK2024_CopyTo(MMDRigidManagerObject)
 	};
 	auto const dest_object = reinterpret_cast<MMDRigidManagerObject*>(dest);
 	dest_object->m_rigid_name_index_ = m_rigid_name_index_;
-	dest_object->bone_manager_data_ = bone_manager_data_;
 	for (const auto& entry : rigid_list_)
 	{
 		auto& link = dest_object->rigid_list_.InsertKey(entry.GetKey())iferr_return;
@@ -82,6 +65,7 @@ BaseObject* MMDRigidManagerObject::AddRigid(const String& name, libmmd::MMDRigid
 
 			const auto new_rigid_data = new_rigid->GetNodeData<MMDRigidObject>();
 			new_rigid_data->rigid_manager_data_ = this;
+			new_rigid_data->rigid_manager_link_->SetLink(reinterpret_cast<BaseObject*>(Get()));
 			new_rigid_data->mmd_rigidbody_ = mmd_rigidbody;
 
 			new_rigid->InsertUnder(node);
@@ -222,9 +206,28 @@ const BaseContainer& MMDRigidManagerObject::GetRigidItems() const
 	return rigid_items_;
 }
 
-const BaseContainer& MMDRigidManagerObject::GetBoneItems() const
+const BaseContainer& MMDRigidManagerObject::GetBoneItems()
 {
-	return bone_manager_data_->GetBoneItems();
+	return GetBoneManagerData()->GetBoneItems();
+}
+
+MMDBoneManagerObject* MMDRigidManagerObject::GetBoneManagerData()
+{
+	if (!bone_manager_data_)
+		if (auto* obj = io_util::ResolveObjectLink(bone_manager_link_))
+			bone_manager_data_ = obj->GetNodeData<MMDBoneManagerObject>();
+	if (!bone_manager_data_)
+	{
+		if (auto* parent = reinterpret_cast<BaseObject*>(Get())->GetUp())
+			if (parent->IsInstanceOf(g_mmd_model_manager_object_id))
+				if (auto* model = parent->GetNodeData<MMDModelManagerObject>())
+					if (auto* mgr = model->GetBoneManagerData())
+					{
+						bone_manager_data_ = mgr;
+						bone_manager_link_->SetLink(reinterpret_cast<BaseObject*>(mgr->Get()));
+					}
+	}
+	return bone_manager_data_;
 }
 
 namespace
@@ -345,6 +348,7 @@ Bool MMDRigidManagerObject::RebuildRigidBodies(libmmd::MMDModel* model)
 			sorted_children.emplace_back(rigid_index, child);
 		}
 	}
+	GePrint(FormatString("[CMT] RebuildRigidBodies: found @ rigid objects", sorted_children.size()));
 	std::sort(sorted_children.begin(), sorted_children.end(),
 		[](const auto& a, const auto& b) { return a.first < b.first; });
 
@@ -431,6 +435,7 @@ void MMDRigidManagerObject::ReconnectRigidBodyPointers(libmmd::MMDPhysicsManager
 		auto* rigid_data = sorted_children[i].second->GetNodeData<MMDRigidObject>();
 		rigid_data->mmd_rigidbody_ = (*rigid_bodies)[i].get();
 		rigid_data->rigid_manager_data_ = this;
+		rigid_data->rigid_manager_link_->SetLink(reinterpret_cast<BaseObject*>(Get()));
 	}
 }
 

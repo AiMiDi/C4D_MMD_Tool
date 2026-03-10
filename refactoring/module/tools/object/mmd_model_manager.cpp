@@ -241,10 +241,10 @@ SDK2024_Init(MMDModelManagerObject)
 template<>
 bool inline io_util::ReadData<maxon::Pair<MMDModelRootDynamicDescriptionType, Int>>(HyperFile* hf, maxon::Pair<MMDModelRootDynamicDescriptionType, Int>& data)
 {
-	if (UChar type = 0; !ReadData(hf, type))
-		data.first = static_cast<MMDModelRootDynamicDescriptionType>(type);
-	else
+	UChar type = 0;
+	if (!ReadData(hf, type))
 		return false;
+	data.first = static_cast<MMDModelRootDynamicDescriptionType>(type);
 
 	if (!ReadData(hf, data.second))
 		return false;
@@ -266,6 +266,7 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	{
 		return false;
 	};
+	GePrint(FormatString("[CMT] Read: begin, level=@", level));
 	IOReadField(bone_manager_);
 	IOReadField(mesh_manager_);
 	IOReadField(rigid_manager_);
@@ -274,94 +275,149 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	*is_manager_read_.Write() = true;
 
 	IOReadField(morph_named_number_);
+	GePrint(FormatString("[CMT] Read: managers+morph_named OK, morph_named_number=@", morph_named_number_));
 
 	if (!io_util::ReadHashMap(hf, desc_id_map_))
+	{
+		GePrint("[CMT] Read: FAILED at desc_id_map_"_s);
 		return false;
+	}
 
 	if (!io_util::ReadHashMap(hf, morph_name_))
+	{
+		GePrint("[CMT] Read: FAILED at morph_name_"_s);
 		return false;
+	}
+	GePrint(FormatString("[CMT] Read: hashmaps OK, desc_id=@, morph_name=@", desc_id_map_.GetCount(), morph_name_.GetCount()));
 
 	if (!ReadMorph(hf))
+	{
+		GePrint("[CMT] Read: FAILED at ReadMorph"_s);
 		return false;
+	}
+	GePrint(FormatString("[CMT] Read: morphs OK, count=@", morph_data_.GetCount()));
 
 	Int64 mat_count = 0;
 	if (hf->ReadInt64(&mat_count) && mat_count >= 0 && mat_count <= 10000)
 	{
+		GePrint(FormatString("[CMT] Read: reading @ materials", mat_count));
 		iferr(material_list_.Resize(0))
 			return false;
 		for (Int64 i = 0; i < mat_count; ++i)
 		{
 			MMDMaterialData mat;
 			if (!mat.Read(hf))
+			{
+				GePrint(FormatString("[CMT] Read: FAILED at material @", i));
 				return false;
+			}
 			iferr(material_list_.Append(std::move(mat)))
 				return false;
 		}
+		GePrint(FormatString("[CMT] Read: materials OK, loaded @", material_list_.GetCount()));
+	}
+	else
+	{
+		GePrint(FormatString("[CMT] Read: mat_count read failed or invalid (@)", mat_count));
 	}
 
 	Int64 df_count = 0;
 	if (hf->ReadInt64(&df_count) && df_count >= 0 && df_count <= 10000)
 	{
+		GePrint(FormatString("[CMT] Read: reading @ display frames", df_count));
 		iferr(display_frame_list_.Resize(0))
 			return false;
 		for (Int64 i = 0; i < df_count; ++i)
 		{
 			DisplayFrameData df;
 			if (!df.Read(hf))
+			{
+				GePrint(FormatString("[CMT] Read: FAILED at display frame @", i));
 				return false;
+			}
 			iferr(display_frame_list_.Append(std::move(df)))
 				return false;
 		}
+		GePrint(FormatString("[CMT] Read: display frames OK, loaded @", display_frame_list_.GetCount()));
+	}
+	else
+	{
+		GePrint(FormatString("[CMT] Read: df_count read failed or invalid (@)", df_count));
 	}
 
-	Int32 anim_idx = -1;
-	if (!hf->ReadInt32(&anim_idx))
-		return false;
-
-	Int64 anim_count = 0;
-	if (!hf->ReadInt64(&anim_count))
-		return false;
-
-	if (anim_idx >= static_cast<Int32>(anim_count))
-		anim_idx = -1;
-	animation_index_ = anim_idx;
-
-	iferr(pending_vmd_data_.Resize(0))
-		return false;
 	animation_items_.FlushAll();
 	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
+	animation_index_ = -1;
+	iferr(pending_vmd_data_.Resize(0))
+		return false;
 
-	for (Int64 i = 0; i < anim_count; ++i)
+	GePrint(FormatString("[CMT] Read: attempting animation data, level=@", level));
+
+	Int32 anim_idx = -1;
+	if (hf->ReadInt32(&anim_idx))
 	{
-		String name;
-		if (!hf->ReadString(&name))
-			return false;
-
-		Int64 size = 0;
-		if (!hf->ReadInt64(&size))
-			return false;
-
-		std::vector<uint8_t> data;
-		if (size > 0)
+		Int64 anim_count = 0;
+		if (hf->ReadInt64(&anim_count) && anim_count > 0 && anim_count <= 10000)
 		{
-			void* mem = nullptr;
-			Int mem_size = 0;
-			if (!hf->ReadMemory(&mem, &mem_size))
-				return false;
-			data.resize(static_cast<size_t>(mem_size));
-			CopyMem(mem, data.data(), mem_size);
-			DeleteMem(mem);
-		}
+			GePrint(FormatString("[CMT] Read: anim_idx=@, anim_count=@", anim_idx, anim_count));
+			if (anim_idx >= static_cast<Int32>(anim_count))
+				anim_idx = -1;
+			animation_index_ = anim_idx;
 
-		iferr(pending_vmd_data_.Append(std::make_pair(name, std::move(data))))
-			return false;
-		animation_items_.SetString(static_cast<Int32>(i), name);
+			for (Int64 i = 0; i < anim_count; ++i)
+			{
+				String name;
+				if (!hf->ReadString(&name))
+				{
+					GePrint(FormatString("[CMT] Read: failed to read name at index @", i));
+					break;
+				}
+
+				Int64 size = 0;
+				if (!hf->ReadInt64(&size))
+				{
+					GePrint(FormatString("[CMT] Read: failed to read size at index @", i));
+					break;
+				}
+
+				std::vector<uint8_t> data;
+				if (size > 0)
+				{
+					void* mem = nullptr;
+					Int mem_size = 0;
+					if (!hf->ReadMemory(&mem, &mem_size))
+					{
+						GePrint(FormatString("[CMT] Read: failed to read memory at index @, expected size=@", i, size));
+						break;
+					}
+					data.resize(static_cast<size_t>(mem_size));
+					CopyMem(mem, data.data(), mem_size);
+					DeleteMem(mem);
+				}
+
+				GePrint(FormatString("[CMT] Read: anim[@] name='@' data_size=@", i, name, data.size()));
+				iferr(pending_vmd_data_.Append(std::make_pair(name, std::move(data))))
+					break;
+				animation_items_.SetString(static_cast<Int32>(i), name);
+			}
+		}
+		else
+		{
+			GePrint(FormatString("[CMT] Read: no animations (anim_count=@)", anim_count));
+		}
+	}
+	else
+	{
+		GePrint("[CMT] Read: ReadInt32 for anim_idx failed (old format?)"_s);
 	}
 
+	GePrint(FormatString("[CMT] Read: done. pending_vmd=@, animation_index=@", pending_vmd_data_.GetCount(), animation_index_));
 	*is_morph_initialized_.Write() = true;
 	return true;
 }
 SDK2024_Write(MMDModelManagerObject) {
+
+	GePrint("[CMT] Write: begin"_s);
 
 	IOWriteField(bone_manager_);
 	IOWriteField(mesh_manager_);
@@ -388,6 +444,8 @@ SDK2024_Write(MMDModelManagerObject) {
 		if (!display_frame_list_[i].Write(hf))
 			return false;
 
+	GePrint(FormatString("[CMT] Write: anim_index=@, animations=@, pending=@", animation_index_, animations_.GetCount(), pending_vmd_data_.GetCount()));
+
 	if (!hf->WriteInt32(animation_index_))
 		return false;
 
@@ -405,6 +463,7 @@ SDK2024_Write(MMDModelManagerObject) {
 			std::vector<uint8_t> vmd_data;
 			if (animation && animation->Save(vmd_file) && libmmd::WriteVMDFile(&vmd_file, vmd_data))
 			{
+				GePrint(FormatString("[CMT] Write: anim[@] name='@' size=@", i, name, vmd_data.size()));
 				if (!hf->WriteInt64(static_cast<Int64>(vmd_data.size())))
 					return false;
 				if (!hf->WriteMemory(vmd_data.data(), static_cast<Int>(vmd_data.size())))
@@ -412,6 +471,7 @@ SDK2024_Write(MMDModelManagerObject) {
 			}
 			else
 			{
+				GePrint(FormatString("[CMT] Write: anim[@] name='@' SERIALIZE FAILED, writing size=0", i, name));
 				if (!hf->WriteInt64(0))
 					return false;
 			}
@@ -419,10 +479,12 @@ SDK2024_Write(MMDModelManagerObject) {
 	}
 	else if (pending_vmd_data_.GetCount() > 0)
 	{
+		GePrint(FormatString("[CMT] Write: using pending_vmd_data path, count=@", pending_vmd_data_.GetCount()));
 		if (!hf->WriteInt64(static_cast<Int64>(pending_vmd_data_.GetCount())))
 			return false;
 		for (const auto& [name, vmd_data] : pending_vmd_data_)
 		{
+			GePrint(FormatString("[CMT] Write: pending '@' size=@", name, vmd_data.size()));
 			if (!hf->WriteString(name))
 				return false;
 			if (!hf->WriteInt64(static_cast<Int64>(vmd_data.size())))
@@ -436,20 +498,26 @@ SDK2024_Write(MMDModelManagerObject) {
 	}
 	else
 	{
+		GePrint("[CMT] Write: no animations to write"_s);
 		if (!hf->WriteInt64(0))
 			return false;
 	}
 
+	GePrint("[CMT] Write: done OK"_s);
 	return true;
 }
 SDK2024_CopyTo(MMDModelManagerObject)
 {
 	const auto destObject = reinterpret_cast<MMDModelManagerObject*>(dest);
 	destObject->model_mode_ = model_mode_;
-	destObject->bone_manager_ = bone_manager_;
-	destObject->joint_manager_ = joint_manager_;
-	destObject->rigid_manager_ = rigid_manager_;
-	destObject->mesh_manager_ = mesh_manager_;
+	if (bone_manager_)
+		bone_manager_->CopyTo(destObject->bone_manager_, flags, trn);
+	if (joint_manager_)
+		joint_manager_->CopyTo(destObject->joint_manager_, flags, trn);
+	if (rigid_manager_)
+		rigid_manager_->CopyTo(destObject->rigid_manager_, flags, trn);
+	if (mesh_manager_)
+		mesh_manager_->CopyTo(destObject->mesh_manager_, flags, trn);
 	iferr(destObject->desc_id_map_.CopyFrom(desc_id_map_))
 		return false;
 	iferr(destObject->morph_name_.CopyFrom(morph_name_))
@@ -483,18 +551,38 @@ SDK2024_CopyTo(MMDModelManagerObject)
 	destObject->animation_items_ = animation_items_;
 	iferr(destObject->pending_vmd_data_.Resize(0))
 		return false;
-	for (Int32 i = 0; i < animations_.GetCount(); ++i)
+	if (animations_.GetCount() > 0)
 	{
-		const auto& [name, animation] = animations_[i];
-		std::vector<uint8_t> vmd_data;
-		if (animation)
+		GePrint(FormatString("[CMT] CopyTo: copying @ animations to pending_vmd_data", animations_.GetCount()));
+		for (Int32 i = 0; i < animations_.GetCount(); ++i)
 		{
-			libmmd::VMDFile vmd_file;
-			if (animation->Save(vmd_file))
-				libmmd::WriteVMDFile(&vmd_file, vmd_data);
+			const auto& [name, animation] = animations_[i];
+			std::vector<uint8_t> vmd_data;
+			if (animation)
+			{
+				libmmd::VMDFile vmd_file;
+				if (animation->Save(vmd_file))
+					libmmd::WriteVMDFile(&vmd_file, vmd_data);
+			}
+			GePrint(FormatString("[CMT] CopyTo: anim '@' -> vmd_data size=@", name, vmd_data.size()));
+			iferr(destObject->pending_vmd_data_.Append(std::make_pair(name, std::move(vmd_data))))
+				return false;
 		}
-		iferr(destObject->pending_vmd_data_.Append(std::make_pair(name, std::move(vmd_data))))
-			return false;
+	}
+	else if (pending_vmd_data_.GetCount() > 0)
+	{
+		GePrint(FormatString("[CMT] CopyTo: copying @ pending_vmd_data entries", pending_vmd_data_.GetCount()));
+		for (const auto& [name, vmd_data] : pending_vmd_data_)
+		{
+			std::vector<uint8_t> data_copy(vmd_data);
+			GePrint(FormatString("[CMT] CopyTo: pending '@' size=@", name, data_copy.size()));
+			iferr(destObject->pending_vmd_data_.Append(std::make_pair(name, std::move(data_copy))))
+				return false;
+		}
+	}
+	else
+	{
+		GePrint("[CMT] CopyTo: no animation data to copy"_s);
 	}
 
 	return true;
@@ -561,11 +649,8 @@ MMDModelManagerObject::AddMorphHelper MMDModelManagerObject::BeginMorphChange()
 	return AddMorphHelper{this};
 }
 
-MMDModelManagerObject::MMDModelManagerObject()
+MMDModelManagerObject::MMDModelManagerObject() : update_morph_(true), is_morph_initialized_(false), is_manager_read_(false), is_runtime_initialized_(false)
 {
-	*update_morph_.Write() = true;
-	*is_morph_initialized_.Write() = false;
-	*is_manager_read_.Write() = false;
 }
 
 void MMDModelManagerObject::RefreshMorph()
@@ -574,7 +659,9 @@ void MMDModelManagerObject::RefreshMorph()
 	{
 		DeleteMorph(it);
 	}
-	auto* mesh_manager_data = mesh_manager_->GetNodeData<MMDMeshManagerObject>();
+	auto* mesh_mgr = io_util::ResolveObjectLink(mesh_manager_);
+	if (!mesh_mgr) return;
+	auto* mesh_manager_data = mesh_mgr->GetNodeData<MMDMeshManagerObject>();
 	auto& mesh_morph_map = mesh_manager_data->GetMeshMorphData();
 	const auto& uv_morph_names = mesh_manager_data->GetUVMorphNames();
 	for (auto& name : mesh_morph_map.GetKeys())
@@ -582,9 +669,9 @@ void MMDModelManagerObject::RefreshMorph()
 		const auto morph_type = uv_morph_names.Find(name) ? MMDMorphType::UV : MMDMorphType::MESH;
 		AddMorph(morph_type, name);
 	}
-	if (bone_manager_)
+	if (auto* bone_mgr = io_util::ResolveObjectLink(bone_manager_))
 	{
-		auto& bone_morph_map = bone_manager_->GetNodeData<MMDBoneManagerObject>()->GetBoneMorphMap();
+		auto& bone_morph_map = bone_mgr->GetNodeData<MMDBoneManagerObject>()->GetBoneMorphMap();
 		for (auto& name : bone_morph_map.GetKeys())
 		{
 			AddMorph(MMDMorphType::BONE, name);
@@ -626,69 +713,81 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 	}
 	nodes.Reset();
 	Bool send_message = false;
-	if (!bone_manager_) {
+	if (!io_util::ResolveObjectLink(bone_manager_)) {
 		if (!bone_manager)
 		{
 			BaseObject* tmp = BaseObject::Alloc(g_mmd_bone_manager_object_id);
 			tmp->InsertUnder(op);
-			bone_manager_ = tmp;
+			bone_manager_->SetLink(tmp);
 		}
 		else {
-			bone_manager_ = bone_manager;
+			bone_manager_->SetLink(bone_manager);
 		}
 		send_message = true;
 	}
-	if (!mesh_manager_) {
+	if (!io_util::ResolveObjectLink(mesh_manager_)) {
 		if (!mesh_manager)
 		{
 			BaseObject* tmp = BaseObject::Alloc(g_mmd_mesh_manager_object_id);
 			tmp->InsertUnder(op);
-			mesh_manager_ = tmp;
+			mesh_manager_->SetLink(tmp);
 		}
 		else {
-			mesh_manager_ = mesh_manager;
+			mesh_manager_->SetLink(mesh_manager);
 		}
 		send_message = true;
 	}
-	if (!rigid_manager_) {
+	if (!io_util::ResolveObjectLink(rigid_manager_)) {
 		if (!rigid_manager)
 		{
 			BaseObject* tmp = BaseObject::Alloc(g_mmd_rigid_manager_object_id);
 			tmp->InsertUnder(op);
-			rigid_manager_ = tmp;
+			rigid_manager_->SetLink(tmp);
 		}
 		else {
-			rigid_manager_ = rigid_manager;
+			rigid_manager_->SetLink(rigid_manager);
 		}
 		send_message = true;
 	}
-	if (!joint_manager_) {
+	if (!io_util::ResolveObjectLink(joint_manager_)) {
 		if (!joint_manager)
 		{
 			BaseObject* tmp = BaseObject::Alloc(g_mmd_joint_manager_object_id);
 			tmp->InsertUnder(op);
-			joint_manager_ = tmp;
+			joint_manager_->SetLink(tmp);
 		}
 		else {
-			joint_manager_ = joint_manager;
+			joint_manager_->SetLink(joint_manager);
 		}
 		send_message = true;
 	}
-	bone_manager_data_ = bone_manager_ ? bone_manager_->GetNodeData<MMDBoneManagerObject>() : nullptr;
-	mesh_manager_data_ = mesh_manager_ ? mesh_manager_->GetNodeData<MMDMeshManagerObject>() : nullptr;
-	rigid_manager_data_ = rigid_manager_ ? rigid_manager_->GetNodeData<MMDRigidManagerObject>() : nullptr;
-	joint_manager_data_ = joint_manager_ ? joint_manager_->GetNodeData<MMDJointManagerObject>() : nullptr;
+	auto* bone_mgr_obj = io_util::ResolveObjectLink(bone_manager_);
+	auto* mesh_mgr_obj = io_util::ResolveObjectLink(mesh_manager_);
+	auto* rigid_mgr_obj = io_util::ResolveObjectLink(rigid_manager_);
+	auto* joint_mgr_obj = io_util::ResolveObjectLink(joint_manager_);
+	bone_manager_data_ = bone_mgr_obj ? bone_mgr_obj->GetNodeData<MMDBoneManagerObject>() : nullptr;
+	mesh_manager_data_ = mesh_mgr_obj ? mesh_mgr_obj->GetNodeData<MMDMeshManagerObject>() : nullptr;
+	rigid_manager_data_ = rigid_mgr_obj ? rigid_mgr_obj->GetNodeData<MMDRigidManagerObject>() : nullptr;
+	joint_manager_data_ = joint_mgr_obj ? joint_mgr_obj->GetNodeData<MMDJointManagerObject>() : nullptr;
 	if (send_message)
 	{
-		SendObjectUpdateMessage(bone_manager_, op);
-		SendObjectUpdateMessage(mesh_manager_, op);
+		if (bone_mgr_obj) SendObjectUpdateMessage(bone_mgr_obj, op);
+		if (mesh_mgr_obj) SendObjectUpdateMessage(mesh_mgr_obj, op);
 	}
 	if (rigid_manager_data_)
+	{
 		rigid_manager_data_->bone_manager_data_ = bone_manager_data_;
+		if (bone_mgr_obj)
+			rigid_manager_data_->bone_manager_link_->SetLink(bone_mgr_obj);
+	}
 	if (joint_manager_data_)
 	{
 		joint_manager_data_->bone_manager_data_ = bone_manager_data_;
 		joint_manager_data_->rigid_manager_data_ = rigid_manager_data_;
+		if (bone_mgr_obj)
+			joint_manager_data_->bone_manager_link_->SetLink(bone_mgr_obj);
+		if (auto* rigid_obj = io_util::ResolveObjectLink(rigid_manager_))
+			joint_manager_data_->rigid_manager_link_->SetLink(rigid_obj);
 	}
 	return true;
 }
@@ -710,20 +809,33 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	if (!UpdateManagers(op))
 		return EXECUTIONRESULT::OK;
 
-	if(manager_read)
-	{
-		if (bone_manager_data_)
-			bone_manager_data_->HandleBoneIndexChangeMessage(bone_manager_);
-		*is_manager_read_.Write() = false;
-	}
-
 	if (!*is_runtime_initialized_.Read() && !mmd_model_)
 	{
+		GePrint(FormatString("[CMT] Execute: triggering RebuildRuntime. bone_mgr=@, rigid_mgr=@, joint_mgr=@, pending_vmd=@",
+			bone_manager_data_ != nullptr, rigid_manager_data_ != nullptr, joint_manager_data_ != nullptr, pending_vmd_data_.GetCount()));
 		if (!RebuildRuntime())
 		{
+			GePrint("[CMT] Execute: RebuildRuntime FAILED"_s);
 			StatusSetText(GeLoadString(IDS_CMT_VMD_REBUILD_FAILED));
 		}
+		else
+		{
+			GePrint(FormatString("[CMT] Execute: RebuildRuntime OK. mmd_model=@, animations=@", mmd_model_ != nullptr, animations_.GetCount()));
+		}
 		*is_runtime_initialized_.Write() = true;
+
+		if (manager_read)
+		{
+			if (bone_manager_data_)
+				bone_manager_data_->HandleBoneIndexChangeMessage(io_util::ResolveObjectLink(bone_manager_));
+			*is_manager_read_.Write() = false;
+		}
+	}
+	else if(manager_read)
+	{
+		if (bone_manager_data_)
+			bone_manager_data_->HandleBoneIndexChangeMessage(io_util::ResolveObjectLink(bone_manager_));
+		*is_manager_read_.Write() = false;
 	}
 
 	if (!*is_morph_initialized_.Read())
@@ -757,6 +869,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				const auto vmd_frame = static_cast<Float32>(now_time.Get() * fps_);
 				if (needs_physics_reset)
 				{
+					GePrint(FormatString("[CMT] Execute: VMD playback init, frame=@, anim_idx=@", vmd_frame, animation_index_));
 					mmd_model_->InitializeAnimation();
 					animation->SyncPhysics(vmd_frame, 30, 1.f / fps_);
 					is_animation_initialized_ = true;
@@ -882,39 +995,44 @@ Bool MMDModelManagerObject::CreateManagers()
 	const BaseDocument* doc = GetActiveDocument();
 	if (const auto op = reinterpret_cast<BaseObject*>(Get()); op != nullptr && doc != nullptr)
 	{
-		if (bone_manager_ == nullptr)
+		if (!io_util::ResolveObjectLink(bone_manager_))
 		{
 			BaseObject* bone_root_object = BaseObject::Alloc(g_mmd_bone_manager_object_id);
 			bone_root_object->InsertUnder(op);
-			bone_manager_ = bone_root_object;
-			bone_manager_data_ = bone_manager_->GetNodeData<MMDBoneManagerObject>();
-			bone_manager_data_->model_manager_ = reinterpret_cast<BaseObject*>(this);
+			bone_manager_->SetLink(bone_root_object);
+			bone_manager_data_ = bone_root_object->GetNodeData<MMDBoneManagerObject>();
+			bone_manager_data_->model_manager_->SetLink(op);
 		}
-		if (mesh_manager_ == nullptr)
+		if (!io_util::ResolveObjectLink(mesh_manager_))
 		{
 			BaseObject* mesh_root_object = BaseObject::Alloc(g_mmd_mesh_manager_object_id);
 			mesh_root_object->InsertUnder(op);
-			mesh_manager_ = mesh_root_object;
-			mesh_manager_data_ = mesh_manager_->GetNodeData<MMDMeshManagerObject>();
-			mesh_manager_data_->model_manager_ = reinterpret_cast<BaseObject*>(this);
+			mesh_manager_->SetLink(mesh_root_object);
+			mesh_manager_data_ = mesh_root_object->GetNodeData<MMDMeshManagerObject>();
+			mesh_manager_data_->model_manager_->SetLink(op);
 		}
-		if (rigid_manager_ == nullptr)
+		if (!io_util::ResolveObjectLink(rigid_manager_))
 		{
 			BaseObject* rigid_root_object = BaseObject::Alloc(g_mmd_rigid_manager_object_id);
 			rigid_root_object->InsertUnder(op);
-			rigid_manager_ = rigid_root_object;
-			rigid_manager_data_ = rigid_manager_->GetNodeData<MMDRigidManagerObject>();
+			rigid_manager_->SetLink(rigid_root_object);
+			rigid_manager_data_ = rigid_root_object->GetNodeData<MMDRigidManagerObject>();
 			rigid_manager_data_->bone_manager_data_ = bone_manager_data_;
-
+			if (auto* bone_obj = io_util::ResolveObjectLink(bone_manager_))
+				rigid_manager_data_->bone_manager_link_->SetLink(bone_obj);
 		}
-		if (joint_manager_ == nullptr)
+		if (!io_util::ResolveObjectLink(joint_manager_))
 		{
 			BaseObject* joint_root_object = BaseObject::Alloc(g_mmd_joint_manager_object_id);
 			joint_root_object->InsertUnder(op);
-			joint_manager_ = joint_root_object;
-			joint_manager_data_ = joint_manager_->GetNodeData<MMDJointManagerObject>();
+			joint_manager_->SetLink(joint_root_object);
+			joint_manager_data_ = joint_root_object->GetNodeData<MMDJointManagerObject>();
 			joint_manager_data_->bone_manager_data_ = bone_manager_data_;
 			joint_manager_data_->rigid_manager_data_ = rigid_manager_data_;
+			if (auto* bone_obj = io_util::ResolveObjectLink(bone_manager_))
+				joint_manager_data_->bone_manager_link_->SetLink(bone_obj);
+			if (auto* rigid_obj = io_util::ResolveObjectLink(rigid_manager_))
+				joint_manager_data_->rigid_manager_link_->SetLink(rigid_obj);
 		}
 		return true;
 	}
@@ -1002,8 +1120,8 @@ void MMDModelManagerObject::RebuildDisplayFrameUI()
 		const MMDBoneManagerObject* bmd_ui = bone_manager_data_;
 		if (!bmd_ui)
 		{
-			if (bone_manager_)
-				bmd_ui = bone_manager_->GetNodeData<MMDBoneManagerObject>();
+			if (auto* bone_mgr = io_util::ResolveObjectLink(bone_manager_))
+				bmd_ui = bone_mgr->GetNodeData<MMDBoneManagerObject>();
 			if (!bmd_ui)
 			{
 				auto* op = static_cast<BaseObject*>(Get());
@@ -1174,13 +1292,15 @@ Bool MMDModelManagerObject::AddMaterial(const libmmd::PMXMaterial& pmx_material,
 
 Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
 {
-	if (setting.export_bone && bone_manager_)
-		if (const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data && !bone_manager_data->SavePMX(pmx_file, setting))
-			return false;
+	if (setting.export_bone)
+		if (auto* bone_mgr = io_util::ResolveObjectLink(bone_manager_))
+			if (const auto bmd = bone_mgr->GetNodeData<MMDBoneManagerObject>(); bmd && !bmd->SavePMX(pmx_file, setting))
+				return false;
 
-	if (setting.export_polygon && mesh_manager_)
-		if (const auto mesh_manager_data = mesh_manager_->GetNodeData<MMDMeshManagerObject>(); mesh_manager_data && !mesh_manager_data->SavePMX(pmx_file, setting))
-			return false;
+	if (setting.export_polygon)
+		if (auto* mesh_mgr = io_util::ResolveObjectLink(mesh_manager_))
+			if (const auto mmd = mesh_mgr->GetNodeData<MMDMeshManagerObject>(); mmd && !mmd->SavePMX(pmx_file, setting))
+				return false;
 
 	const Int32 mat_count = material_list_.GetCount();
 	if (mat_count > 0)
@@ -1206,6 +1326,7 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	{
 		return false;
 	};
+	GePrint(FormatString("[CMT] LoadVMDMotion: mmd_model_=@, animations_count=@, merge=@", mmd_model_ != nullptr, animations_.GetCount(), merge));
 	const auto animation_name = setting.fn.GetFileString();
 	libmmd::VMDAnimation* vmd_animation;
 	if (!merge)
@@ -1213,11 +1334,13 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 		auto new_vmd_animation = std::make_unique<libmmd::VMDAnimation>();
 		if (!new_vmd_animation)
 		{
+			GePrint("[CMT] LoadVMDMotion: alloc VMDAnimation FAILED"_s);
 			LoadVmdMotionLog::LogOutMem();
 			return false;
 		}
 		if (!new_vmd_animation->Create(mmd_model_))
 		{
+			GePrint(FormatString("[CMT] LoadVMDMotion: VMDAnimation::Create FAILED, mmd_model_=@", mmd_model_ != nullptr));
 			LoadVmdMotionLog::LogOutMem();
 			return false;
 		}
@@ -1434,27 +1557,46 @@ Bool MMDModelManagerObject::RebuildRuntime()
 {
 	iferr_scope_handler{ return false; };
 
+	GePrint("[CMT] RebuildRuntime: begin"_s);
+
 	auto pmx_model = std::make_shared<PMXModel>();
 
 	if (bone_manager_data_)
 	{
+		GePrint("[CMT] RebuildRuntime: rebuilding nodes..."_s);
 		if (!bone_manager_data_->RebuildNodes(pmx_model.get()))
+		{
+			GePrint("[CMT] RebuildRuntime: RebuildNodes FAILED"_s);
 			return false;
+		}
+		GePrint(FormatString("[CMT] RebuildRuntime: RebuildNodes OK, node_count=@", pmx_model->GetNodeManager()->GetNodeCount()));
+	}
+	else
+	{
+		GePrint("[CMT] RebuildRuntime: no bone_manager_data_, skipping nodes"_s);
 	}
 
 	auto* physics_manager = pmx_model->GetPhysicsManager();
 	if (!physics_manager->Create())
+	{
+		GePrint("[CMT] RebuildRuntime: PhysicsManager::Create FAILED"_s);
 		return false;
+	}
 
 	if (rigid_manager_data_)
 	{
+		GePrint("[CMT] RebuildRuntime: rebuilding rigid bodies..."_s);
 		if (!rigid_manager_data_->RebuildRigidBodies(pmx_model.get()))
+		{
+			GePrint("[CMT] RebuildRuntime: RebuildRigidBodies FAILED"_s);
 			return false;
+		}
 
 		auto* physics = physics_manager->GetMMDPhysics();
 		auto* rigid_bodies = physics_manager->GetRigidBodys();
 		if (physics && rigid_bodies)
 		{
+			GePrint(FormatString("[CMT] RebuildRuntime: adding @ rigid bodies to physics", rigid_bodies->size()));
 			for (const auto& rb : *rigid_bodies)
 				physics->AddRigidBody(rb.get());
 		}
@@ -1462,38 +1604,61 @@ Bool MMDModelManagerObject::RebuildRuntime()
 
 	if (joint_manager_data_)
 	{
+		GePrint("[CMT] RebuildRuntime: rebuilding joints..."_s);
 		if (!joint_manager_data_->RebuildJoints(physics_manager))
+		{
+			GePrint("[CMT] RebuildRuntime: RebuildJoints FAILED"_s);
 			return false;
+		}
 
 		auto* physics = physics_manager->GetMMDPhysics();
 		auto* joints = physics_manager->GetJoints();
 		if (physics && joints)
 		{
+			GePrint(FormatString("[CMT] RebuildRuntime: adding @ joints to physics", joints->size()));
 			for (const auto& jt : *joints)
 				physics->AddJoint(jt.get());
 		}
 	}
 
 	SetMMDModel(pmx_model);
+	GePrint("[CMT] RebuildRuntime: SetMMDModel done"_s);
 
+	GePrint(FormatString("[CMT] RebuildRuntime: restoring @ pending VMD animations", pending_vmd_data_.GetCount()));
 	for (const auto& [name, vmd_data] : pending_vmd_data_)
 	{
 		if (vmd_data.empty())
+		{
+			GePrint(FormatString("[CMT] RebuildRuntime: skipping empty VMD '@'", name));
 			continue;
+		}
 
 		libmmd::VMDFile vmd_file;
 		if (!libmmd::ReadVMDFile(&vmd_file, vmd_data.data(), vmd_data.size()))
+		{
+			GePrint(FormatString("[CMT] RebuildRuntime: ReadVMDFile FAILED for '@' (size=@)", name, vmd_data.size()));
 			continue;
+		}
 
 		auto vmd_animation = std::make_unique<libmmd::VMDAnimation>();
 		if (!vmd_animation->Create(pmx_model))
+		{
+			GePrint(FormatString("[CMT] RebuildRuntime: VMDAnimation::Create FAILED for '@'", name));
 			continue;
+		}
 		if (!vmd_animation->Add(vmd_file))
+		{
+			GePrint(FormatString("[CMT] RebuildRuntime: VMDAnimation::Add FAILED for '@'", name));
 			continue;
+		}
 
+		GePrint(FormatString("[CMT] RebuildRuntime: restored VMD '@' OK", name));
 		animations_.Append(std::make_pair(name, std::move(vmd_animation)))iferr_return;
 	}
 	iferr(pending_vmd_data_.Resize(0)) {}
+
+	for (Int32 i = 0; i < animations_.GetCount(); ++i)
+		animation_items_.SetString(i, animations_[i].first);
 
 	if (animation_index_ >= 0 && animation_index_ < animations_.GetCount())
 	{
@@ -1507,6 +1672,9 @@ Bool MMDModelManagerObject::RebuildRuntime()
 				doc->SetLoopMaxTime(max_time);
 			}
 		}
+
+		Get()->SetParameter(ConstDescID(DescLevel(MODEL_MODE)), MODEL_MODE_VMD, DESCFLAGS_SET::NONE);
+		GePrint("[CMT] RebuildRuntime: restored model_mode to VMD"_s);
 	}
 
 	if (bone_manager_data_)
@@ -1520,12 +1688,45 @@ Bool MMDModelManagerObject::RebuildRuntime()
 	*is_runtime_initialized_.Write() = true;
 	is_animation_initialized_ = false;
 
+	GePrint(FormatString("[CMT] RebuildRuntime: complete. animations=@, mmd_model=@", animations_.GetCount(), mmd_model_ != nullptr));
 	return true;
 }
 
 Int32 MMDModelManagerObject::GetMorphNamedNumber()
 {
 	return morph_named_number_++;
+}
+
+MMDBoneManagerObject* MMDModelManagerObject::GetBoneManagerData()
+{
+	if (!bone_manager_data_)
+		if (auto* obj = io_util::ResolveObjectLink(bone_manager_))
+			bone_manager_data_ = obj->GetNodeData<MMDBoneManagerObject>();
+	return bone_manager_data_;
+}
+
+MMDMeshManagerObject* MMDModelManagerObject::GetMeshManagerData()
+{
+	if (!mesh_manager_data_)
+		if (auto* obj = io_util::ResolveObjectLink(mesh_manager_))
+			mesh_manager_data_ = obj->GetNodeData<MMDMeshManagerObject>();
+	return mesh_manager_data_;
+}
+
+MMDRigidManagerObject* MMDModelManagerObject::GetRigidManagerData()
+{
+	if (!rigid_manager_data_)
+		if (auto* obj = io_util::ResolveObjectLink(rigid_manager_))
+			rigid_manager_data_ = obj->GetNodeData<MMDRigidManagerObject>();
+	return rigid_manager_data_;
+}
+
+MMDJointManagerObject* MMDModelManagerObject::GetJointManagerData()
+{
+	if (!joint_manager_data_)
+		if (auto* obj = io_util::ResolveObjectLink(joint_manager_))
+			joint_manager_data_ = obj->GetNodeData<MMDJointManagerObject>();
+	return joint_manager_data_;
 }
 
 NodeData* MMDModelManagerObject::Alloc()
@@ -1581,8 +1782,8 @@ SDK2024_GetDDescription(MMDModelManagerObject)
 		const MMDBoneManagerObject* bmd = bone_manager_data_;
 		if (!bmd)
 		{
-			if (bone_manager_)
-				bmd = bone_manager_->GetNodeData<MMDBoneManagerObject>();
+			if (auto* bone_mgr = io_util::ResolveObjectLink(bone_manager_))
+				bmd = bone_mgr->GetNodeData<MMDBoneManagerObject>();
 			if (!bmd)
 			{
 				for (SDK2024_Const BaseObject* child = reinterpret_cast<SDK2024_Const BaseObject*>(node)->GetDown(); child; child = child->GetNext())
@@ -1852,11 +2053,11 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					break;
 				}
-				if (bone_manager_)
+				if (auto* bone_mgr = io_util::ResolveObjectLink(bone_manager_))
 				{
-					if (const auto bone_manager_data = bone_manager_->GetNodeData<MMDBoneManagerObject>(); bone_manager_data)
+					if (const auto bmd = bone_mgr->GetNodeData<MMDBoneManagerObject>(); bmd)
 					{
-						setting.position_multiple = bone_manager_data->GetPositionMultiple();
+						setting.position_multiple = bmd->GetPositionMultiple();
 					}
 				}
 				LoadVmdMotionLog logger;

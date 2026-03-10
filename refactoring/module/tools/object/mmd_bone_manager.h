@@ -61,7 +61,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 {
 	Int32 bone_name_index_ = 0;
 	Float position_multiple_ = 1.0;
-	BaseObject* model_manager_ = nullptr;
+	AutoAlloc<BaseLink> model_manager_;
 
 	libmmd::MMDMorphManager* mmd_morph_manager_ = nullptr;
 	libmmd::MMDNodeManager* mmd_node_manager_ = nullptr;

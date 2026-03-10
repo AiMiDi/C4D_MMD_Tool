@@ -19,20 +19,6 @@ Description:	MMD joint root object
 #include "description/OMMDJoint.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 
-template<> Bool io_util::ReadData<MMDJointManagerObject*>(HyperFile* hf, MMDJointManagerObject*& data)
-{
-	BaseObject* manager = nullptr;
-	if (!ReadData(hf, manager)) return false;
-	data = manager->GetNodeData<MMDJointManagerObject>();
-	return true;
-}
-
-template<> Bool io_util::WriteData<MMDJointManagerObject*>(HyperFile* hf, MMDJointManagerObject* const& data)
-{
-	if (!WriteData(hf, reinterpret_cast<BaseObject*>(data->Get()))) return false;
-	return true;
-}
-
 NodeData* MMDJointManagerObject::Alloc()
 {
 	return NewObjClear(MMDJointManagerObject);
@@ -41,24 +27,17 @@ NodeData* MMDJointManagerObject::Alloc()
 Bool MMDJointManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	IOReadField(joint_name_index_);
-	IOReadField(bone_manager_data_);
-	IOReadField(rigid_manager_data_);
 	return SUPER::Read(node, hf, level);
 }
 
 SDK2024_Write(MMDJointManagerObject)
 {
 	IOWriteField(joint_name_index_);
-	IOWriteField(bone_manager_data_);
-	IOWriteField(rigid_manager_data_);
 	return SUPER::Write(node, hf);
 }
 
 SDK2024_CopyTo(MMDJointManagerObject)
 {
-	auto const dest_object = reinterpret_cast<MMDJointManagerObject*>(dest);
-	dest_object->bone_manager_data_ = bone_manager_data_;
-	dest_object->rigid_manager_data_ = rigid_manager_data_;
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
@@ -74,10 +53,9 @@ BaseObject* MMDJointManagerObject::AddJoint(const String& name, libmmd::MMDJoint
 				new_joint->SetName(new_joint->GetName() + "." + String::IntToString(joint_name_index_++));
 			else
 				new_joint->SetName(name);
-			new_joint->GetNodeData<MMDJointObject>()->joint_manager_data_ = this;
-
 			const auto new_joint_data = new_joint->GetNodeData<MMDJointObject>();
 			new_joint_data->joint_manager_data_ = this;
+			new_joint_data->joint_manager_link_->SetLink(reinterpret_cast<BaseObject*>(Get()));
 			new_joint_data->mmd_joint_ = mmd_joint;
 
 			new_joint->InsertUnder(node);
@@ -148,8 +126,22 @@ Bool MMDJointManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	return SUPER::SetDParameter(node, id, t_data, flags);
 }
 
-MMDRigidManagerObject* MMDJointManagerObject::GetRigidManager() const
+MMDRigidManagerObject* MMDJointManagerObject::GetRigidManager()
 {
+	if (!rigid_manager_data_)
+		if (auto* obj = io_util::ResolveObjectLink(rigid_manager_link_))
+			rigid_manager_data_ = obj->GetNodeData<MMDRigidManagerObject>();
+	if (!rigid_manager_data_)
+	{
+		if (auto* parent = reinterpret_cast<BaseObject*>(Get())->GetUp())
+			if (parent->IsInstanceOf(g_mmd_model_manager_object_id))
+				if (auto* model = parent->GetNodeData<MMDModelManagerObject>())
+					if (auto* mgr = model->GetRigidManagerData())
+					{
+						rigid_manager_data_ = mgr;
+						rigid_manager_link_->SetLink(reinterpret_cast<BaseObject*>(mgr->Get()));
+					}
+	}
 	return rigid_manager_data_;
 }
 
@@ -227,8 +219,22 @@ Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file,
 	return true;
 }
 
-MMDBoneManagerObject* MMDJointManagerObject::GetBoneManager() const
+MMDBoneManagerObject* MMDJointManagerObject::GetBoneManager()
 {
+	if (!bone_manager_data_)
+		if (auto* obj = io_util::ResolveObjectLink(bone_manager_link_))
+			bone_manager_data_ = obj->GetNodeData<MMDBoneManagerObject>();
+	if (!bone_manager_data_)
+	{
+		if (auto* parent = reinterpret_cast<BaseObject*>(Get())->GetUp())
+			if (parent->IsInstanceOf(g_mmd_model_manager_object_id))
+				if (auto* model = parent->GetNodeData<MMDModelManagerObject>())
+					if (auto* mgr = model->GetBoneManagerData())
+					{
+						bone_manager_data_ = mgr;
+						bone_manager_link_->SetLink(reinterpret_cast<BaseObject*>(mgr->Get()));
+					}
+	}
 	return bone_manager_data_;
 }
 
@@ -254,6 +260,7 @@ Bool MMDJointManagerObject::RebuildJoints(libmmd::MMDPhysicsManager* physics_man
 			sorted_children.emplace_back(joint_index, child);
 		}
 	}
+	GePrint(FormatString("[CMT] RebuildJoints: found @ joint objects", sorted_children.size()));
 	std::sort(sorted_children.begin(), sorted_children.end(),
 		[](const auto& a, const auto& b) { return a.first < b.first; });
 
@@ -362,5 +369,6 @@ void MMDJointManagerObject::ReconnectJointPointers(libmmd::MMDPhysicsManager* ph
 		auto* joint_data = sorted_children[i].second->GetNodeData<MMDJointObject>();
 		joint_data->mmd_joint_ = (*joints)[i].get();
 		joint_data->joint_manager_data_ = this;
+		joint_data->joint_manager_link_->SetLink(reinterpret_cast<BaseObject*>(Get()));
 	}
 }
