@@ -1,6 +1,3 @@
-[submodule "dependency/yaml-cpp"]
-	path = dependency/yaml-cpp
-	url = https://github.com/jbeder/yaml-cpp.git
 [submodule "dependency/bullet3"]
 	path = dependency/bullet3
 	url = https://github.com/bulletphysics/bullet3.git
