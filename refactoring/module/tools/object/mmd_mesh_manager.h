@@ -52,6 +52,8 @@ class MMDMeshManagerObject final : public MMDManagerObject
 	maxon::BaseArray<Int32> morph_manager_index_;
 	maxon::BaseArray<maxon::PointerArray<MorphUIData>> mesh_morph_data_;
 
+	maxon::Synchronized<Bool> needs_morph_data_refresh_;
+
 	MMDMeshManagerObject() = default;
 	~MMDMeshManagerObject() override = default;
 
@@ -78,5 +80,5 @@ public:
 		const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting);
 private:
-	void RefreshMeshMorphData(BaseObject* op);
+	void RefreshMeshMorphData(BaseObject* op, bool suppress_change_message = false);
 };

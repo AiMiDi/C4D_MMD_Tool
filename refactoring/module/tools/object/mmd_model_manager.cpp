@@ -562,7 +562,7 @@ SDK2024_CopyTo(MMDModelManagerObject)
 }
 Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
 {
-	iferr_scope_handler{ return nullptr; };
+	iferr_scope_handler{ return false; };
 	auto morph_change_helper = BeginMorphChange();
 	Int data_count = 0;
 	if (!hf->ReadInt64(&data_count))
@@ -570,18 +570,24 @@ Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
 	for (Int i = 0; i < data_count; ++i)
 	{
 		MMDMorphType type;
-		// Read morph type
 		if (!hf->ReadUChar(reinterpret_cast<UChar*>(&type)))
 			return false;
 
-		// Add morph
-		const auto morph_index = AddMorph(type, {}, false);
-		auto& morph = morph_data_[morph_index];
-
-		// Read morph data
-		morph.Read(hf);
+		IMorph* morph = nullptr;
+		switch (type)
+		{
+		case MMDMorphType::GROUP:    morph = NewObj(GroupMorph) iferr_return; break;
+		case MMDMorphType::FLIP:     morph = NewObj(FlipMorph) iferr_return; break;
+		case MMDMorphType::MESH:     morph = NewObj(MeshMorph) iferr_return; break;
+		case MMDMorphType::UV:       morph = NewObj(UVMorph) iferr_return; break;
+		case MMDMorphType::BONE:     morph = NewObj(BoneMorph) iferr_return; break;
+		case MMDMorphType::MATERIAL: morph = NewObj(MaterialMorph) iferr_return; break;
+		case MMDMorphType::IMPULSE:  morph = NewObj(ImpulseMorph) iferr_return; break;
+		default: return false;
+		}
+		morph_data_.AppendPtr(morph) iferr_return;
+		morph->Read(hf);
 	}
-
 
 	return true;
 }
@@ -833,7 +839,8 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			if (animation_index_ != -1 && animation_index_ < animations_.GetCount())
 			{
 				const auto& [_, animation]  = animations_[animation_index_];
-				const auto vmd_frame = static_cast<Float32>(now_time.Get() * fps_);
+				constexpr Float32 vmd_fps = 30.0f;
+				const auto vmd_frame = static_cast<Float32>(now_time.Get() * vmd_fps);
 				if (!animation->GetApplyIKEnable())
 				{
 					auto* ik_manager = mmd_model_->GetIKManager();
@@ -856,7 +863,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				if (needs_physics_reset)
 				{
 					mmd_model_->InitializeAnimation();
-					animation->SyncPhysics(vmd_frame, 30, 1.f / fps_);
+					animation->SyncPhysics(vmd_frame, 10, 1.f / fps_);
 					is_animation_initialized_ = true;
 				}
 				mmd_model_->BeginAnimation();
@@ -1715,6 +1722,12 @@ Bool MMDModelManagerObject::RebuildRuntime()
 			for (const auto& jt : *joints)
 				physics->AddJoint(jt.get());
 		}
+	}
+
+	for (const auto& morph : morph_data_)
+	{
+		auto* pmx_morph = pmx_model->AddMorph();
+		pmx_morph->SetName(string_util::GetStdString(morph.GetName()));
 	}
 
 	SetMMDModel(pmx_model);

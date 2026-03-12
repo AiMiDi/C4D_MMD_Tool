@@ -84,6 +84,7 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		uv_morph_names_.Insert(s)iferr_return;
 	}
 
+	*needs_morph_data_refresh_.Write() = true;
 	return SUPER::Read(node, hf, level);
 }
 
@@ -241,6 +242,16 @@ EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		{
 			model_manager_->SetLink(up_object);
 		}
+	}
+
+	if (*needs_morph_data_refresh_.Read())
+	{
+		mesh_morph_mode_.Reset();
+		mesh_morph_name_.Reset();
+		mesh_morph_data_.Reset();
+		morph_manager_index_.Reset();
+		RefreshMeshMorphData(op, true);
+		*needs_morph_data_refresh_.Write() = false;
 	}
 
 	if (mesh_mode_ == MESH_MODE_VMD && mmd_morph_manager_)
@@ -1417,7 +1428,7 @@ Bool MMDMeshManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSett
 	return false;
 }
 
-void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op)
+void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op, bool suppress_change_message)
 {
 	iferr_scope_handler{};
 
@@ -1519,10 +1530,13 @@ void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op)
 				morph_manager_index_[static_cast<Int32>(mmd_morph_manager_->FindMorphIndex(string_util::GetStdString(entry.GetKey())))] = entry.GetValue();
 			}
 		}
-		if (auto* model_mgr = io_util::ResolveObjectLink(model_manager_))
+		if (!suppress_change_message)
 		{
-			MMDMeshManagerObjectMsg msg{ MMDMeshManagerObjectMsgType::MESH_MORPH_CHANGE };
-			model_mgr->Message(g_mmd_mesh_manager_object_id, &msg);
+			if (auto* model_mgr = io_util::ResolveObjectLink(model_manager_))
+			{
+				MMDMeshManagerObjectMsg msg{ MMDMeshManagerObjectMsgType::MESH_MORPH_CHANGE };
+				model_mgr->Message(g_mmd_mesh_manager_object_id, &msg);
+			}
 		}
 	}
 }
