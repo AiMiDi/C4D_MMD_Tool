@@ -55,7 +55,7 @@ CMTToolsManager::ImportPMXModel(ModelImport setting)
 | `import_multipart` | Bool | — | Split mesh by material |
 | `import_english` | Bool | — | Use English bone names |
 | `import_english_check` | Bool | — | Verify English name availability |
-| `import_material_type` | enum | Standard | Standard / RedShift / Octane |
+| `import_material_type` | enum | Standard | Standard / RedShift / Octane / Corona |
 
 ## Data Mapping: PMX → C4D
 
@@ -63,7 +63,10 @@ CMTToolsManager::ImportPMXModel(ModelImport setting)
 |----------|-------------------|
 | Model | MMDModelManagerObject |
 | Bone | Joint object + MMDBoneTag |
+| Bone flags (AppendLocal, OuterParent) | MMDBoneTag parameters |
 | Vertex/Face | PolygonObject |
+| Vertex edgeMag | VertexMapTag ("轮廓倍率") |
+| Vertex SDEF C/R0/R1 | 3× VertexColorTag ("SDEF_C/R0/R1") |
 | Material | BaseMaterial (Standard) |
 | Texture | BaseShader (bitmap) |
 | Rigid body | MMDRigidObject |
@@ -72,6 +75,32 @@ CMTToolsManager::ImportPMXModel(ModelImport setting)
 | Morph (flip) | FlipMorph in model |
 | Morph (vertex) | MeshMorph on mesh |
 | Morph (bone) | BoneMorph on bones |
+| Morph (material) | MaterialMorph in model |
+| Morph (impulse) | ImpulseMorph in model |
+| Morph panel (m_controlPanel) | CYCLE parameter per morph |
+| Display frame | DisplayFrameData in model |
+
+## Extended Import Fields
+
+### Bone Extended Parameters
+
+`MMDBoneManagerObject::LoadPMX` reads additional bone flags:
+- AppendLocal (0x0080) → `PMX_BONE_INHERIT_LOCAL`
+- DeformOuterParent (0x2000) → `PMX_BONE_OUTER_PARENT`
+- m_keyValue → `PMX_BONE_OUTER_PARENT_KEY`
+
+### Morph Extended Parameters
+
+Each morph stores its `m_controlPanel` value (1=眉, 2=目, 3=口, 4=其他) as a CYCLE "panel" parameter. Material (`PMXMorphType::Material`) and impulse (`PMXMorphType::Impluse`) morph types are imported into dedicated groups.
+
+### Vertex Extended Data
+
+- **Edge magnitude**: Per-vertex `m_edgeMag` stored in VertexMapTag named "轮廓倍率"
+- **SDEF data**: For SDEF weight-type vertices, C/R0/R1 vectors stored in 3 VertexColorTags ("SDEF_C", "SDEF_R0", "SDEF_R1"), XYZ → RGB channels
+
+### Display Frames
+
+`MMDModelManagerObject::LoadPMX` iterates `pmx_file.m_displayFrames`, creating `DisplayFrameData` entries with frame name, type, and bone/morph member references.
 
 ## Export Status
 
@@ -88,4 +117,4 @@ CMTToolsManager::ImportPMXModel(ModelImport setting)
 | `module/tools/object/mmd_mesh_manager.cpp` | Mesh import |
 | `module/tools/object/mmd_rigid_manager.cpp` | Rigid body import |
 | `module/tools/object/mmd_joint_manager.cpp` | Joint import |
-| `module/tools/mmd_material.cpp` | Material creation |
+| `module/tools/material/mmd_material.cpp` | Material creation and texture loading |

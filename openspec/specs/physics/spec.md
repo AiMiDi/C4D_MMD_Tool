@@ -49,6 +49,24 @@ Each PMX joint becomes a `MMDJointObject` child of `MMDJointManagerObject`.
 | Spring position | Spring constants for translation |
 | Spring rotation | Spring constants for rotation |
 
+## Parametric Creation (Runtime Rebuild)
+
+### MMDRigidBody Parametric Create
+
+`MMDRigidBody` supports creation from individual C4D parameters (shape, size, position, rotation, mass, friction, restitution, damping, physics mode, collision group/mask) instead of a `PMXRigidbody` struct. Used for scene-reload runtime rebuild. Result is equivalent to creation from `PMXRigidbody`.
+
+### MMDJoint Parametric Create
+
+`MMDJoint` supports creation from individual C4D parameters (position, rotation, position limits, rotation limits, spring constants, two `MMDRigidBody*` references) instead of a `PMXJoint` struct. Used for scene-reload runtime rebuild. Result is equivalent to creation from `PMXJoint`.
+
+### MMDRigidObject Reverse Build
+
+`MMDRigidObject` extracts physics parameters from its C4D BaseContainer (shape, size, mass, friction, restitution, damping, collision group, etc.) to create a corresponding `MMDRigidBody` during runtime rebuild. The rigid body is correctly associated with its bound bone node.
+
+### MMDJointObject Reverse Build
+
+`MMDJointObject` extracts joint parameters from its C4D BaseContainer (position/rotation limits, spring constants, connected rigid body references) to create a corresponding `MMDJoint` during runtime rebuild. The joint is correctly associated with its two connected rigid bodies.
+
 ## Simulation Flow
 
 ```

@@ -78,6 +78,34 @@ Root object representing a complete PMX model.
 - Stores VMD camera keyframes as C4D animation tracks
 - Separate from the model hierarchy (scene-level object)
 
+## Runtime Rebuild on Scene Load
+
+When a scene file is opened and `mmd_model_` is nullptr, the system automatically rebuilds the complete `libmmd::PMXModel` runtime object from serialized C4D sub-object data.
+
+### RebuildRuntime() Flow
+
+`MMDModelManagerObject::RebuildRuntime()` orchestrates the full rebuild:
+1. Creates empty `PMXModel`
+2. Rebuilds node tree from bone tags (`MMDBoneManagerObject::RebuildNodes()`)
+3. Rebuilds rigid bodies from rigid objects (`MMDRigidManagerObject::RebuildRigidBodies()`) — sorted by `RIGID_INDEX`
+4. Rebuilds joints from joint objects (`MMDJointManagerObject::RebuildJoints()`) — sorted by joint index
+5. Calls `SetMMDModel()` to distribute pointers to child managers
+6. Reconnects sub-object runtime pointers (`ReconnectNodePointers`, `ReconnectRigidBodyPointers`, `ReconnectJointPointers`)
+7. Restores VMD animations from staged binary data
+8. Updates document time range (`SetMaxTime`, `SetLoopMaxTime`)
+
+### Execute() Integration
+
+`Execute()` checks `is_runtime_initialized_` (thread-safe `maxon::Synchronized<Bool>`). On first call after `Read()`, triggers `RebuildRuntime()` and sets flag to true. Failure displays error via `StatusSetBar()` and sets flag to prevent per-frame retries.
+
+### Pointer Reconnection
+
+After rebuild, each sub-object's libmmd pointer is reconnected:
+- `MMDBoneTag::mmd_node_` → rebuilt `PMXNode`
+- `MMDBoneTag::ik_solver_` → rebuilt `MMDIkSolver`
+- `MMDRigidObject::mmd_rigidbody_` → rebuilt `MMDRigidBody`
+- `MMDJointObject::mmd_joint_` → rebuilt `MMDJoint`
+
 ## Inter-Manager Communication
 
 Managers communicate via message structs:

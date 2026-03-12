@@ -100,7 +100,8 @@ enum class MMDModelRootDynamicDescriptionType : uint8_t
 	IK_BONE_LINK,
 	DISPLAY_FRAME_DELETE_BUTTON,
 	DISPLAY_FRAME_MOVE_UP_BUTTON,
-	DISPLAY_FRAME_MOVE_DOWN_BUTTON
+	DISPLAY_FRAME_MOVE_DOWN_BUTTON,
+	IK_SOLVER_ENABLE
 };
 
 class MMDModelManagerObject final : public ObjectData
@@ -136,6 +137,8 @@ class MMDModelManagerObject final : public ObjectData
 	mutable Int32 display_frame_add_target_ = 0;
 	mutable Bool display_frame_add_target_empty_ = true;
 	mutable BaseContainer display_frame_items_;
+
+	maxon::HashMap<String, Bool> ik_solver_enable_states_;
 
 	MMDModelPtr mmd_model_;
 	Int32 model_mode_ = MODEL_MODE_ANIM;
@@ -228,5 +231,8 @@ private:
 	//Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	Bool DeleteVMDAnimation();
 	Bool RebuildRuntime();
+	void BuildIKSolverUI();
+	void ApplyIKSolverStates();
+	void ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting);
 	void SyncSubManagerScale(Float pm);
 };

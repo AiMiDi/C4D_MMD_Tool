@@ -48,7 +48,8 @@ Plugin IDs are defined in `plugin_resource.h`. Additionally `g_mmd_vmd_export_id
 ## Config Manager (`cmt_tools_config_manager`)
 
 - Singleton pattern
-- Persists GUI settings to `cmt_config.yaml` via yaml-cpp
+- Persists GUI settings to `cmt_config.json` via `utils/json_util.hpp`
+- Internal storage: `cmt_json::JsonObject m_config` (`std::unordered_map<std::string, JsonValue>`)
 - Config ID range: `DLG_CMT_TOOL_ID_BEGIN` (10000) to `DLG_CMT_TOOL_ID_END`
 - API: `GetConfig<T>(id)`, `SetConfig<T>(id, value)`, `InitDialog()`, `SaveConfig()`
 
@@ -64,15 +65,18 @@ Typed setting structs under `CMTToolsSetting` namespace:
 | `CameraConversion` | distance, use_rotation, src_cam |
 | `MotionImport` | position_multiple, time_offset, import flags (motion/morph/model_info/local_name/physical), delete_previous, detail_report |
 | `MotionExport` | position_multiple, time_offset, use_rotation, export flags, use_bake |
-| `ModelImport` | position_multiple, import flags (polygon/normal/uv/material/bone/weights/ik/inherit/expression/multipart/english), material_type (Standard/RedShift/Octane) |
+| `ModelImport` | position_multiple, import flags (polygon/normal/uv/material/bone/weights/ik/inherit/expression/multipart/english), import_material_type (Standard/RedShift/Octane/Corona) |
 | `ModelExport` | position_multiple, export flags |
 
 ## SDK Compatibility (`module/core/cmt_marco.h`)
 
-- Version constants: `kSDK2024`, `kSDK2026`
-- Compatibility macros for Init/Write/CopyTo/GetDDescription/GetDEnabling method signatures
-- `SDK2024_Const` macro for const-correctness differences between SDK versions
-- Type aliases: `MMDModelPtr`, `PMXModelPtr`, `PMDModelPtr`
+- Version constants: `kSDKVersion`, `kSDK2024`, `kSDK2026`, `kSDKHasIconColorize`, `kSDKHasCinemaNamespace`
+- Method signature macros: `CMT_Init`, `CMT_Write`, `CMT_CopyTo`, `CMT_GetDDescription`, `CMT_GetDEnabling` for SDK version differences
+- Const-correctness macros: `SDK2024_Const`, `SDK2024_ConstExpr`
+- API remapping macros: `ConstDescID`, `CreateDescID`, `GetDynamicDescriptionWritable`, `GetWritableBaseSelect`, `SDK2024_ToPointer`, `SDK2024_Append`, `SDK2024_Move`
+- Compatibility helpers: `MakeObjectColorProperties`, `MakeDescIDGeData`, `GetContainerCustomDataType`, `GetCustomDataTypeWritable`
+- Namespace compatibility: `CINEMA_NAMESPACE`, `using namespace cinema`
+- Type aliases: `MMDModel`, `PMXModel`, `PMDModel`, `MMDModelPtr`, `PMXModelPtr`, `PMDModelPtr`
 
 ## Source Files
 
@@ -83,6 +87,6 @@ Typed setting structs under `CMTToolsSetting` namespace:
 | `plugin_resource.h` | Plugin ID constants |
 | `CMTSceneManager.h/cpp` | Scene hook (import/export coordinator) |
 | `cmt_tools_manager.h/cpp` | High-level import/export API |
-| `cmt_tools_config_manager.h/cpp` | YAML config persistence |
+| `cmt_tools_config_manager.h/cpp` | JSON config persistence |
 | `cmt_tools_setting.h` | Setting structs |
 | `module/core/cmt_marco.h` | SDK macros, type aliases |

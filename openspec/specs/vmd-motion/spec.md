@@ -52,6 +52,21 @@ VMD file → libmmd::ReadVMDFile() → VMDFile
 | `export_model_info` | true | Export model info |
 | `use_bake` | true | Bake animation before export |
 
+## Animation Storage & Persistence
+
+`MMDModelManagerObject` stores `animations_` array of VMD animations. Animation data is persisted across scene save/reload cycles, restoring to the same state after reload.
+
+### Save-Reload-Playback Cycle
+
+- On save: `Write()` serializes animation count, names, and VMD binary data (via `VMDAnimation::Save(VMDFile&)` + `WriteVMDFile()`) to HyperFile
+- On reload: `Read()` deserializes VMD binary data into temporary buffer (`pending_vmd_data_`)
+- On first `Execute()`: `RebuildRuntime()` restores `VMDAnimation` objects from pending data, then releases buffer
+- After restore: `animation_index_` and `animation_items_` are correctly restored; animations play as before save
+
+### VMD Binary Data Staging
+
+During `Read()`, VMD binary data is staged in `pending_vmd_data_` until runtime rebuild completes. The buffer is released after successful or failed rebuild.
+
 ## Animation Playback
 
 `MMDModelManagerObject::Execute()` evaluates VMD animations each frame:

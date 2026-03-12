@@ -337,6 +337,12 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: df_count read failed or invalid (@)", df_count);
 	}
 
+	if (!io_util::ReadHashMap(hf, ik_solver_enable_states_))
+	{
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: FAILED at ik_solver_enable_states_");
+		return false;
+	}
+
 	animation_items_.FlushAll();
 	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
 	animation_index_ = -1;
@@ -389,7 +395,6 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 				animation_items_.SetString(static_cast<Int32>(i), name);
 			}
 		}
-		}
 	}
 
 	*is_morph_initialized_.Write() = true;
@@ -421,6 +426,9 @@ SDK2024_Write(MMDModelManagerObject) {
 	for (Int32 i = 0; i < display_frame_list_.GetCount(); ++i)
 		if (!display_frame_list_[i].Write(hf))
 			return false;
+
+	if (!io_util::WriteHashMap(hf, ik_solver_enable_states_))
+		return false;
 
 	if (!hf->WriteInt32(animation_index_))
 		return false;
@@ -517,6 +525,9 @@ SDK2024_CopyTo(MMDModelManagerObject)
 		iferr(destObject->display_frame_list_.Append(std::move(copy)))
 			return false;
 	}
+
+	iferr(destObject->ik_solver_enable_states_.CopyFrom(ik_solver_enable_states_))
+		return false;
 
 	destObject->animation_index_ = animation_index_;
 	destObject->animation_items_ = animation_items_;
@@ -823,6 +834,25 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			{
 				const auto& [_, animation]  = animations_[animation_index_];
 				const auto vmd_frame = static_cast<Float32>(now_time.Get() * fps_);
+				if (!animation->GetApplyIKEnable())
+				{
+					auto* ik_manager = mmd_model_->GetIKManager();
+					if (ik_manager)
+					{
+						for (const auto& [desc_id, pair] : desc_id_map_)
+						{
+							if (pair.first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+							{
+								GeData value;
+								if (op->GetParameter(desc_id, value, DESCFLAGS_GET::NONE))
+								{
+									if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(pair.second)))
+										solver->Enable(value.GetBool());
+								}
+							}
+						}
+					}
+				}
 				if (needs_physics_reset)
 				{
 					mmd_model_->InitializeAnimation();
@@ -903,6 +933,109 @@ void MMDModelManagerObject::DeleteDynamicDescription(const DescID& id)
 		return;
 	dynamic_description->Remove(id);
 	std::ignore = desc_id_map_.Erase(id);
+}
+
+void MMDModelManagerObject::BuildIKSolverUI()
+{
+	if (!mmd_model_)
+		return;
+	auto* ik_manager = mmd_model_->GetIKManager();
+	if (!ik_manager)
+		return;
+	const auto solver_count = ik_manager->GetIKSolverCount();
+	for (size_t i = 0; i < solver_count; ++i)
+	{
+		auto* solver = ik_manager->GetMMDIKSolver(i);
+		if (!solver)
+			continue;
+		const String solver_name(solver->GetName().c_str());
+		BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BOOL);
+		bc.SetString(DESC_NAME, solver_name);
+		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_IK_GRP))));
+		auto id = AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE, static_cast<Int>(i));
+		Get()->SetParameter(id, GeData(true), DESCFLAGS_SET::NONE);
+	}
+	ApplyIKSolverStates();
+}
+
+void MMDModelManagerObject::ApplyIKSolverStates()
+{
+	if (!mmd_model_)
+		return;
+	auto* ik_manager = mmd_model_->GetIKManager();
+	if (!ik_manager)
+		return;
+	auto* node = Get();
+	for (const auto& [desc_id, pair] : desc_id_map_)
+	{
+		if (pair.first != MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+			continue;
+		auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(pair.second));
+		if (!solver)
+			continue;
+		const auto* state_entry = ik_solver_enable_states_.Find(String(solver->GetName().c_str()));
+		if (!state_entry)
+			continue;
+		const Bool enabled = state_entry->GetValue();
+		solver->Enable(enabled);
+		if (node)
+			node->SetParameter(desc_id, GeData(enabled), DESCFLAGS_SET::NONE);
+	}
+}
+
+void MMDModelManagerObject::ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting)
+{
+	if (!mmd_model_ || vmd_file.m_iks.empty())
+		return;
+	auto* ik_manager = mmd_model_->GetIKManager();
+	if (!ik_manager)
+		return;
+	auto* op = static_cast<BaseObject*>(Get());
+	if (!op)
+		return;
+
+	maxon::HashMap<String, DescID> ik_name_to_desc_id;
+	for (const auto& [desc_id, pair] : desc_id_map_)
+	{
+		if (pair.first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+		{
+			if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(pair.second)))
+			{
+				iferr(ik_name_to_desc_id.Insert(String(solver->GetName().c_str()), desc_id)) {}
+			}
+		}
+	}
+
+	for (const auto& ik : vmd_file.m_iks)
+	{
+		for (const auto& ik_info : ik.m_ikInfos)
+		{
+			const String ik_name(ik_info.m_name.ToUtf8String().c_str());
+			const auto* entry = ik_name_to_desc_id.Find(ik_name);
+			if (!entry)
+				continue;
+			const DescID& desc_id = entry->GetValue();
+
+			CTrack* track = op->FindCTrack(desc_id);
+			if (!track)
+			{
+				track = CTrack::Alloc(op, desc_id);
+				if (!track)
+					continue;
+				op->InsertTrackSorted(track);
+			}
+			CCurve* curve = track->GetCurve();
+			if (!curve)
+				continue;
+
+			const BaseTime frame_time(static_cast<Float>(ik.m_frame) + setting.time_offset, 30.0);
+			CKey* key = curve->AddKey(frame_time);
+			if (!key)
+				continue;
+			key->SetValue(curve, ik_info.m_enable ? 1.0 : 0.0);
+			key->SetInterpolation(curve, CINTERPOLATION::STEP);
+		}
+	}
 }
 
 Int MMDModelManagerObject::GetMorphNum() const
@@ -1190,6 +1323,8 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	if(!joint_manager_data_ || !joint_manager_data_->LoadPMX(pmx_file, setting))
 		return false;
 
+	BuildIKSolverUI();
+
 	ImportDisplayFrames(pmx_file);
 
 	if (setting.import_expression)
@@ -1322,6 +1457,12 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	{
 		LoadVmdMotionLog::LogReadFileErr();
 		return false;
+	}
+
+	if (!vmd_file.m_iks.empty())
+	{
+		ImportVMDIKKeyframes(vmd_file, setting);
+		vmd_animation->SetApplyIKEnable(false);
 	}
 
 	log.imported_bone_count = vmd_file.m_motions.size();
@@ -1624,6 +1765,8 @@ Bool MMDModelManagerObject::RebuildRuntime()
 		Get()->SetParameter(ConstDescID(DescLevel(MODEL_MODE)), MODEL_MODE_VMD, DESCFLAGS_SET::NONE);
 	}
 
+	ApplyIKSolverStates();
+
 	if (bone_manager_data_)
 	{
 		bone_manager_data_->ReconnectNodePointers(pmx_model->GetNodeManager(), pmx_model->GetIKManager());
@@ -1881,6 +2024,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				case MMDModelRootDynamicDescriptionType::MORPH_STRENGTH:
 				case MMDModelRootDynamicDescriptionType::MORPH_GRP:
 				case MMDModelRootDynamicDescriptionType::IK_BONE_LINK:
+				case MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE:
 					break;
 				case MMDModelRootDynamicDescriptionType::DISPLAY_FRAME_DELETE_BUTTON:
 				{
@@ -2269,6 +2413,7 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 	default:
 		break;
 	}
+
 	const Int32 sel = material_selection_index_;
 	if (sel < 0 || sel >= material_list_.GetCount())
 	{
@@ -2406,6 +2551,27 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			break;
 		default:
 		{
+			if (id[0].id == ID_USERDATA)
+			{
+				if (const auto* entry = desc_id_map_.Find(id))
+				{
+					const auto& [type, solver_index] = entry->GetValue();
+					if (type == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+					{
+						const Bool enabled = t_data.GetBool();
+						if (mmd_model_)
+						{
+							if (auto* solver = mmd_model_->GetIKManager()->GetMMDIKSolver(static_cast<size_t>(solver_index)))
+							{
+								solver->Enable(enabled);
+								iferr(ik_solver_enable_states_.Insert(String(solver->GetName().c_str()), enabled)) {}
+							}
+						}
+						return SUPER::SetDParameter(node, id, t_data, flags);
+					}
+				}
+			}
+
 			Bool material_handled = false;
 			if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
 			{
@@ -2527,6 +2693,14 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 
 SDK2024_GetDEnabling(MMDModelManagerObject)
 {
+	if (id[0].id == ID_USERDATA)
+	{
+		if (const auto* entry = desc_id_map_.Find(id))
+		{
+			if (entry->GetValue().first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+				return true;
+		}
+	}
 	if (id[0].id >= MODEL_MATERIAL_NAME_LOCAL && id[0].id < MODEL_MATERIAL_ADD_BUTTON)
 	{
 		return material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount();

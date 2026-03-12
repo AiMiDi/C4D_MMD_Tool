@@ -13,35 +13,39 @@ Defined in `module/ui/cmt_name_conversion_dialog.h/cpp` (coupled with dialog).
 | Method | Description |
 |--------|-------------|
 | `Init()` | Static initialization at plugin start |
-| `InitConver()` | Loads conversion table from YAML |
+| `LoadConfig(filename)` | Loads conversion table from JSON file into lookup tables |
+| `InitConver(str, op)` | Registers a bone name (`op=true`) or checks existence (`op=false`) |
 | `Conver(name)` | Converts a bone name using loaded table |
 | `AutoUpdate()` | Auto-update conversion when switching configs |
 
 ### UpdateNameConversionDialog
 
-UI dialog for managing name conversion configurations. Allows users to select and edit conversion YAML files.
+UI dialog for managing name conversion configurations. Allows users to select and edit conversion JSON files. Browses `name_conversion/` directory for `.json` files via `CheckSuffix("json")`.
 
 ## Configuration Files
 
-YAML files stored in `res/S24_up/name_conversion/`:
+JSON files stored in `res/S24_up/name_conversion/`:
 
 | File | Purpose |
 |------|---------|
-| `default.yaml` | Standard Japanese → English mapping |
-| `UE5.yaml` | Japanese → UE5 convention mapping |
+| `default.json` | Standard Japanese → English mapping |
+| `UE5.json` | Japanese → UE5 convention mapping |
 
 ### Format
 
-Each YAML file maps Japanese bone names to target names:
+Each JSON file maps Japanese bone names to target names:
 
-```yaml
-センター: center
-上半身: upper_body
-下半身: lower_body
-首: neck
-頭: head
-# ... etc
+```json
+{
+  "センター": "center",
+  "上半身": "upper body",
+  "下半身": "lower body",
+  "首": "neck",
+  "頭": "head"
+}
 ```
+
+Read/written via `cmt_json::ReadJsonFile()` / `cmt_json::WriteJsonFile()` from `utils/json_util.hpp`.
 
 ## Usage in Import
 
@@ -54,5 +58,6 @@ Each YAML file maps Japanese bone names to target names:
 | File | Role |
 |------|------|
 | `module/ui/cmt_name_conversion_dialog.h/cpp` | NameConversion logic + dialog UI |
-| `res/S24_up/name_conversion/default.yaml` | Default mapping table |
-| `res/S24_up/name_conversion/UE5.yaml` | UE5 mapping table |
+| `utils/json_util.hpp` | JSON read/write utilities |
+| `res/S24_up/name_conversion/default.json` | Default mapping table |
+| `res/S24_up/name_conversion/UE5.json` | UE5 mapping table |
