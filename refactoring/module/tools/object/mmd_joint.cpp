@@ -369,9 +369,16 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	}
 	else if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
 	{
-		const auto joint_position = mmd_joint_->GetPosition();
+		const auto transform = mmd_joint_->GetTransform();
 		if (auto* mgr = GetJointManager())
-			op->SetAbsPos(Vector(joint_position.x(), joint_position.y(), joint_position.z()) * mgr->GetPositionMultiple());
+		{
+			const auto pos_mul = mgr->GetPositionMultiple();
+			op->SetMl(Matrix{
+				Vector(transform(0,3),transform(1,3),transform(2,3)) * pos_mul,
+				Vector(transform(0,0),transform(1,0),transform(2,0)),
+				Vector(transform(0,1),transform(1,1),transform(2,1)),
+				Vector(transform(0,2),transform(1,2),transform(2,2)) });
+		}
 	}
 
 	return EXECUTIONRESULT::OK;
