@@ -73,9 +73,9 @@ SDK2024_Init(MMDRigidObject)
 	node->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 
 	bc->SetInt32(RIGID_RELATED_BONE_INDEX, -1);
-	bc->SetFloat(RIGID_SHAPE_SIZE_X, 17.);
-	bc->SetFloat(RIGID_SHAPE_SIZE_Y, 17.);
-	bc->SetFloat(RIGID_SHAPE_SIZE_Z, 17.);
+	bc->SetFloat(RIGID_SHAPE_SIZE_X, 2.);
+	bc->SetFloat(RIGID_SHAPE_SIZE_Y, 2.);
+	bc->SetFloat(RIGID_SHAPE_SIZE_Z, 2.);
 	bc->SetFloat(RIGID_MASS, 1.);
 	bc->SetFloat(RIGID_FRICTION_FORCE, 0.5);
 	bc->SetFloat(RIGID_MOVE_ATTENUATION, 0.5);
@@ -247,41 +247,32 @@ void MMDRigidObject::SetRigidSize(const BaseContainer* bc)
 
 Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
+	if (!SUPER::SetDParameter(node, id, t_data, flags))
+		return false;
+
 	const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
 	if(!bc)
-		return false;
+		return true;
 	switch (id[0].id)
 	{
 	case RIGID_SHAPE_TYPE:
-	{
 		UpdateRigidShape(bc, t_data.GetInt32());
 		break;
-	}
 	case RIGID_SHAPE_SIZE_X:
 	case RIGID_SHAPE_SIZE_Y:
 	case RIGID_SHAPE_SIZE_Z:
-	{
 		UpdateRigidSize(bc);
 		break;
-	}
-	case RIGID_RELATED_BONE_INDEX:
-	{
-		break;
-	}
 	case RIGID_PHYSICS_MODE:
-	{
 		UpdateRigidPhysics(t_data.GetInt32());
 		break;
-	}
 	case RIGID_GROUP_ID:
-	{
 		UpdateRigidGroup(t_data.GetInt32());
 		break;
-	}
 	default:
 		break;
 	}
-	return SUPER::SetDParameter(node, id, t_data, flags);
+	return true;
 }
 
 SDK2024_GetDEnabling(MMDRigidObject)
@@ -542,10 +533,8 @@ EXECUTIONRESULT MMDRigidObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	else if (m_display_type != RIGID_DISPLAY_TYPE_OFF && mmd_rigidbody_)
 	{
 		const auto transform = mmd_rigidbody_->GetTransform();
-		const auto* mgr = GetRigidManager();
-		const auto pos_mul = mgr ? mgr->GetPositionMultiple() : 1.f;
-		op->SetMl(Matrix{
-		   Vector(transform(0,3),transform(1,3),transform(2,3)) * pos_mul,
+		op->SetRelMl(Matrix{
+		   Vector(transform(0,3),transform(1,3),transform(2,3)),
 		   Vector(transform(0,0),transform(1,0),transform(2,0)),
 		   Vector(transform(0,1),transform(1,1),transform(2,1)),
 		   Vector(transform(0,2),transform(1,2),transform(2,2)) });

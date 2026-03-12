@@ -63,6 +63,7 @@ STRINGTABLE
 	IDS_MSG_RENAME_OK "OK";
 	IDS_MSG_RENAME_CANCEL "Cancel";
 	IDS_CMT_VMD_ANIM_NONE "-- No animation --";
+	IDS_CMT_VMD_REBUILD_FAILED "MMD runtime rebuild failed";
 	IDS_MODEL_MATERIAL_NONE "-- No material --";
 	IDS_MODEL_DISPLAY_FRAME_NONE "-- No frame --";
 	IDS_CMT_MODEL_MANAGER_IK_BONE "IK link bone";

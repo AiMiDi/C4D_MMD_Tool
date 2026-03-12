@@ -47,7 +47,6 @@ struct MMDJointRootObjectMsg
 class MMDJointManagerObject final : public MMDManagerObject
 {
 	Int32 joint_name_index_ = 1;
-	Float32 position_multiple_ = 1.f;
 	AutoAlloc<BaseLink> bone_manager_link_;
 	AutoAlloc<BaseLink> rigid_manager_link_;
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
@@ -66,7 +65,6 @@ public:
 	SDK2024_CopyToOverride;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
-	const Float32& GetPositionMultiple() const { return position_multiple_; }
 
 	MMDBoneManagerObject* GetBoneManager();
 	MMDRigidManagerObject* GetRigidManager();

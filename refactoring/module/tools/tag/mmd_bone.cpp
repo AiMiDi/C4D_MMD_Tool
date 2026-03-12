@@ -587,9 +587,11 @@ void MMDBoneTag::RebuildIKChains()
 				{
 					ik_solver_->AddIKChain(chain_node->mmd_node_);
 				}
+				chain_node->mmd_node_->EnableIK(true);
 			}
 		}
 	}
+	ik_solver_->BuildChainPath();
 }
 
 void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
@@ -1184,9 +1186,8 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	{
 		const auto& local = mmd_node_->GetLocalTransform();
 		const Eigen::Vector3f translate = local.col(3).head<3>() - mmd_node_->GetInitialTranslate();
-		const auto pm = GetBoneManager() ? GetBoneManager()->GetPositionMultiple() : 1.f;
 
-		bone_object_->SetRelMl(Matrix{Vector(translate.x(), translate.y(), translate.z()) * pm,
+		bone_object_->SetRelMl(Matrix{Vector(translate.x(), translate.y(), translate.z()),
 		   Vector(local(0,0), local(1,0), local(2,0)),
 		   Vector(local(0,1), local(1,1), local(2,1)),
 		   Vector(local(0,2), local(1,2), local(2,2)) });

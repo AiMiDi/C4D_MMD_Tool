@@ -58,7 +58,7 @@ BaseObject* MMDJointManagerObject::AddJoint(const String& name, libmmd::MMDJoint
 			new_joint_data->joint_manager_link_->SetLink(reinterpret_cast<BaseObject*>(Get()));
 			new_joint_data->mmd_joint_ = mmd_joint;
 
-			new_joint->InsertUnder(node);
+			new_joint->InsertUnderLast(node);
 			{
 				MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_DISPLAY_CHANGE, bc->GetInt32(JOINT_DISPLAY_TYPE), 0);
 				new_joint->Message(g_mmd_joint_manager_object_id, &msg);
@@ -164,8 +164,6 @@ Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file,
 	if (!pmx_joints)
 		return false;
 
-	position_multiple_ = static_cast<float>(setting.position_multiple);
-
 	const auto joint_count = pmx_file.m_joints.size();
 	for (size_t joint_index = 0; joint_index < joint_count; ++joint_index)
 	{
@@ -174,6 +172,9 @@ Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file,
 		const auto joint_object = AddJoint(name_local, (*pmx_joints)[joint_index].get());
 		if (!joint_object)
 			return false;
+
+		joint_object->SetParameter(ConstDescID(DescLevel(JOINT_INDEX)),
+			String::IntToString(static_cast<Int32>(joint_index)), DESCFLAGS_SET::NONE);
 
 		const maxon::String name_universal{ pmx_joint.m_englishName.c_str() };
 		SetJointParameter<JOINT_NAME_LOCAL>(joint_object, name_local);
@@ -260,15 +261,50 @@ Bool MMDJointManagerObject::RebuildJoints(libmmd::MMDPhysicsManager* physics_man
 			sorted_children.emplace_back(joint_index, child);
 		}
 	}
-	GePrint(FormatString("[CMT] RebuildJoints: found @ joint objects", sorted_children.size()));
-	std::sort(sorted_children.begin(), sorted_children.end(),
+	std::stable_sort(sorted_children.begin(), sorted_children.end(),
 		[](const auto& a, const auto& b) { return a.first < b.first; });
+
+	Int32 created = 0, skipped_invalid = 0, skipped_self = 0, failed = 0;
 
 	for (const auto& [joint_index, child] : sorted_children)
 	{
 		const BaseContainer* bc = child->GetDataInstance();
 		if (!bc)
 			return false;
+
+		const auto rigidAIndex = bc->GetInt32(JOINT_LINK_RIGID_A_INDEX);
+		const auto rigidBIndex = bc->GetInt32(JOINT_LINK_RIGID_B_INDEX);
+
+		auto* joint_data = child->GetNodeData<MMDJointObject>();
+		if (joint_data)
+		{
+			if (auto* rigid_mgr = GetRigidManager())
+			{
+				joint_data->link_rigid_a_->SetLink(rigid_mgr->FindRigid(rigidAIndex));
+				joint_data->link_rigid_b_->SetLink(rigid_mgr->FindRigid(rigidBIndex));
+			}
+		}
+
+		const libmmd::MMDRigidBody* rbA = nullptr;
+		const libmmd::MMDRigidBody* rbB = nullptr;
+		if (rigidAIndex >= 0 && static_cast<size_t>(rigidAIndex) < rigid_bodies->size())
+			rbA = (*rigid_bodies)[rigidAIndex].get();
+		if (rigidBIndex >= 0 && static_cast<size_t>(rigidBIndex) < rigid_bodies->size())
+			rbB = (*rigid_bodies)[rigidBIndex].get();
+
+		if (!rbA || !rbB)
+		{
+			physics_manager->AddJoint();
+			++skipped_invalid;
+			continue;
+		}
+
+		if (rigidAIndex == rigidBIndex)
+		{
+			physics_manager->AddJoint();
+			++skipped_self;
+			continue;
+		}
 
 		auto* jt = physics_manager->AddJoint();
 
@@ -313,30 +349,25 @@ Bool MMDJointManagerObject::RebuildJoints(libmmd::MMDPhysicsManager* physics_man
 			static_cast<float>(bc->GetFloat(JOINT_SPRING_ROTATION_Z))
 		);
 
-		const auto rigidAIndex = bc->GetInt32(JOINT_LINK_RIGID_A_INDEX);
-		const auto rigidBIndex = bc->GetInt32(JOINT_LINK_RIGID_B_INDEX);
-
-		const libmmd::MMDRigidBody* rbA = nullptr;
-		const libmmd::MMDRigidBody* rbB = nullptr;
-		if (rigidAIndex >= 0 && static_cast<size_t>(rigidAIndex) < rigid_bodies->size())
-			rbA = (*rigid_bodies)[rigidAIndex].get();
-		if (rigidBIndex >= 0 && static_cast<size_t>(rigidBIndex) < rigid_bodies->size())
-			rbB = (*rigid_bodies)[rigidBIndex].get();
-
-		if (rbA && rbB)
+		if (!jt->CreateJoint(translate, rotate,
+			translateLowerLimit, translateUpperLimit,
+			rotateLowerLimit, rotateUpperLimit,
+			springTranslate, springRotate,
+			rbA, rbB))
 		{
-			if (!jt->CreateJoint(translate, rotate,
-				translateLowerLimit, translateUpperLimit,
-				rotateLowerLimit, rotateUpperLimit,
-				springTranslate, springRotate,
-				rbA, rbB))
-			{
-				return false;
-			}
+			++failed;
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildJoints[@]: CreateJoint FAILED, name='@' rbA=@ rbB=@",
+				joint_index, child->GetName(), rigidAIndex, rigidBIndex);
+		}
+		else
+		{
+			++created;
 		}
 	}
 
-	return true;
+	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildJoints: total=@ created=@ skipped_invalid=@ skipped_self=@ failed=@",
+		sorted_children.size(), created, skipped_invalid, skipped_self, failed);
+	return failed == 0;
 }
 
 void MMDJointManagerObject::ReconnectJointPointers(libmmd::MMDPhysicsManager* physics_manager)
@@ -361,7 +392,7 @@ void MMDJointManagerObject::ReconnectJointPointers(libmmd::MMDPhysicsManager* ph
 			sorted_children.emplace_back(joint_index, child);
 		}
 	}
-	std::sort(sorted_children.begin(), sorted_children.end(),
+	std::stable_sort(sorted_children.begin(), sorted_children.end(),
 		[](const auto& a, const auto& b) { return a.first < b.first; });
 
 	for (size_t i = 0; i < sorted_children.size() && i < joints->size(); ++i)

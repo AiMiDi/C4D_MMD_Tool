@@ -68,7 +68,7 @@ BaseObject* MMDRigidManagerObject::AddRigid(const String& name, libmmd::MMDRigid
 			new_rigid_data->rigid_manager_link_->SetLink(reinterpret_cast<BaseObject*>(Get()));
 			new_rigid_data->mmd_rigidbody_ = mmd_rigidbody;
 
-			new_rigid->InsertUnder(node);
+			new_rigid->InsertUnderLast(node);
 			{
 				MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_DISPLAY_CHANGE, bc->GetInt32(RIGID_DISPLAY_TYPE));
 				new_rigid->Message(g_mmd_rigid_manager_object_id, &msg);
@@ -254,8 +254,6 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 	if (!pmx_rigidbodies)
 		return false;
 
-	position_multiple_ = static_cast<float>(setting.position_multiple);
-
 	rigid_items_.FlushAll();
 	rigid_items_.SetString(-1, "-"_s);
 
@@ -269,6 +267,9 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 		if (!rigid_object)
 			return false;
 
+		rigid_object->SetParameter(ConstDescID(DescLevel(RIGID_INDEX)),
+			String::IntToString(static_cast<Int32>(rigid_index)), DESCFLAGS_SET::NONE);
+
 		rigid_items_.SetString(static_cast<Int32>(rigid_index), name_local);
 		const maxon::String name_universal{ pmx_rigidbody.m_englishName.c_str() };
 		SetRigidParameter<RIGID_NAME_LOCAL>(rigid_object, name_local);
@@ -280,14 +281,15 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 		SetRigidParameter<RIGID_PHYSICS_MODE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_op));
 		SetRigidParameter<RIGID_SHAPE_TYPE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_shape));
 
-		const Eigen::Vector3f shape_size = pmx_rigidbody.m_shapeSize * position_multiple_;
+		const Eigen::Vector3f& shape_size = pmx_rigidbody.m_shapeSize;
 		SetRigidParameter<RIGID_SHAPE_SIZE_X>(rigid_object, shape_size.x());
 		SetRigidParameter<RIGID_SHAPE_SIZE_Y>(rigid_object, shape_size.y());
 		SetRigidParameter<RIGID_SHAPE_SIZE_Z>(rigid_object, shape_size.z());
 
-		SetRigidParameter<RIGID_SHAPE_POSITION_X>(rigid_object, pmx_rigidbody.m_translate.x());
-		SetRigidParameter<RIGID_SHAPE_POSITION_Y>(rigid_object, pmx_rigidbody.m_translate.y());
-		SetRigidParameter<RIGID_SHAPE_POSITION_Z>(rigid_object, pmx_rigidbody.m_translate.z());
+		const Eigen::Vector3f& translate = pmx_rigidbody.m_translate;
+		SetRigidParameter<RIGID_SHAPE_POSITION_X>(rigid_object, translate.x());
+		SetRigidParameter<RIGID_SHAPE_POSITION_Y>(rigid_object, translate.y());
+		SetRigidParameter<RIGID_SHAPE_POSITION_Z>(rigid_object, translate.z());
 
 		SetRigidParameter<RIGID_SHAPE_ROTATION_X>(rigid_object, pmx_rigidbody.m_rotate.x());
 		SetRigidParameter<RIGID_SHAPE_ROTATION_Y>(rigid_object, pmx_rigidbody.m_rotate.y());
@@ -301,6 +303,9 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 		SetRigidParameter<RIGID_MOVE_ATTENUATION>(rigid_object, pmx_rigidbody.m_translateDimmer);
 		SetRigidParameter<RIGID_ROTATION_DAMPING>(rigid_object, pmx_rigidbody.m_rotateDimmer);
 	}
+
+	if (!UpdateRigidList())
+		return false;
 
 	return true;
 }
@@ -348,8 +353,7 @@ Bool MMDRigidManagerObject::RebuildRigidBodies(libmmd::MMDModel* model)
 			sorted_children.emplace_back(rigid_index, child);
 		}
 	}
-	GePrint(FormatString("[CMT] RebuildRigidBodies: found @ rigid objects", sorted_children.size()));
-	std::sort(sorted_children.begin(), sorted_children.end(),
+	std::stable_sort(sorted_children.begin(), sorted_children.end(),
 		[](const auto& a, const auto& b) { return a.first < b.first; });
 
 	for (const auto& [rigid_index, child] : sorted_children)
@@ -362,9 +366,9 @@ Bool MMDRigidManagerObject::RebuildRigidBodies(libmmd::MMDModel* model)
 
 		const auto shape = static_cast<libmmd::PMXRigidbody::Shape>(bc->GetInt32(RIGID_SHAPE_TYPE));
 		const Eigen::Vector3f shapeSize(
-			GetRigidFloat<RIGID_SHAPE_SIZE_X>(bc) / position_multiple_,
-			GetRigidFloat<RIGID_SHAPE_SIZE_Y>(bc) / position_multiple_,
-			GetRigidFloat<RIGID_SHAPE_SIZE_Z>(bc) / position_multiple_
+			GetRigidFloat<RIGID_SHAPE_SIZE_X>(bc),
+			GetRigidFloat<RIGID_SHAPE_SIZE_Y>(bc),
+			GetRigidFloat<RIGID_SHAPE_SIZE_Z>(bc)
 		);
 		const Eigen::Vector3f translate(
 			GetRigidFloat<RIGID_SHAPE_POSITION_X>(bc),
@@ -402,6 +406,9 @@ Bool MMDRigidManagerObject::RebuildRigidBodies(libmmd::MMDModel* model)
 		}
 	}
 
+	if (!UpdateRigidList())
+		return false;
+
 	return true;
 }
 
@@ -427,7 +434,7 @@ void MMDRigidManagerObject::ReconnectRigidBodyPointers(libmmd::MMDPhysicsManager
 			sorted_children.emplace_back(rigid_index, child);
 		}
 	}
-	std::sort(sorted_children.begin(), sorted_children.end(),
+	std::stable_sort(sorted_children.begin(), sorted_children.end(),
 		[](const auto& a, const auto& b) { return a.first < b.first; });
 
 	for (size_t i = 0; i < sorted_children.size() && i < rigid_bodies->size(); ++i)

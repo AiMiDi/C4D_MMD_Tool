@@ -232,6 +232,7 @@ SDK2024_Init(MMDModelManagerObject)
 	bc->SetString(MODEL_NAME_UNIVERSAL, "model"_s);
 	bc->SetString(COMMENTS_LOCAL, "description"_s);
 	bc->SetString(COMMENTS_UNIVERSAL, "description"_s);
+	bc->SetFloat(MODEL_POSITION_MULTIPLE, 8.5);
 	bc->SetInt32(MODEL_ANIM_LIST, -1);
 	bc->SetInt32(MODEL_MATERIAL_LIST, MODEL_MATERIAL_NONE);
 	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
@@ -266,7 +267,6 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	{
 		return false;
 	};
-	GePrint(FormatString("[CMT] Read: begin, level=@", level));
 	IOReadField(bone_manager_);
 	IOReadField(mesh_manager_);
 	IOReadField(rigid_manager_);
@@ -275,32 +275,27 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	*is_manager_read_.Write() = true;
 
 	IOReadField(morph_named_number_);
-	GePrint(FormatString("[CMT] Read: managers+morph_named OK, morph_named_number=@", morph_named_number_));
 
 	if (!io_util::ReadHashMap(hf, desc_id_map_))
 	{
-		GePrint("[CMT] Read: FAILED at desc_id_map_"_s);
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: FAILED at desc_id_map_");
 		return false;
 	}
 
 	if (!io_util::ReadHashMap(hf, morph_name_))
 	{
-		GePrint("[CMT] Read: FAILED at morph_name_"_s);
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: FAILED at morph_name_");
 		return false;
 	}
-	GePrint(FormatString("[CMT] Read: hashmaps OK, desc_id=@, morph_name=@", desc_id_map_.GetCount(), morph_name_.GetCount()));
 
 	if (!ReadMorph(hf))
 	{
-		GePrint("[CMT] Read: FAILED at ReadMorph"_s);
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: FAILED at ReadMorph");
 		return false;
 	}
-	GePrint(FormatString("[CMT] Read: morphs OK, count=@", morph_data_.GetCount()));
-
 	Int64 mat_count = 0;
 	if (hf->ReadInt64(&mat_count) && mat_count >= 0 && mat_count <= 10000)
 	{
-		GePrint(FormatString("[CMT] Read: reading @ materials", mat_count));
 		iferr(material_list_.Resize(0))
 			return false;
 		for (Int64 i = 0; i < mat_count; ++i)
@@ -308,23 +303,21 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			MMDMaterialData mat;
 			if (!mat.Read(hf))
 			{
-				GePrint(FormatString("[CMT] Read: FAILED at material @", i));
+				DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: FAILED at material @", i);
 				return false;
 			}
 			iferr(material_list_.Append(std::move(mat)))
 				return false;
 		}
-		GePrint(FormatString("[CMT] Read: materials OK, loaded @", material_list_.GetCount()));
 	}
 	else
 	{
-		GePrint(FormatString("[CMT] Read: mat_count read failed or invalid (@)", mat_count));
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: mat_count read failed or invalid (@)", mat_count);
 	}
 
 	Int64 df_count = 0;
 	if (hf->ReadInt64(&df_count) && df_count >= 0 && df_count <= 10000)
 	{
-		GePrint(FormatString("[CMT] Read: reading @ display frames", df_count));
 		iferr(display_frame_list_.Resize(0))
 			return false;
 		for (Int64 i = 0; i < df_count; ++i)
@@ -332,17 +325,16 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			DisplayFrameData df;
 			if (!df.Read(hf))
 			{
-				GePrint(FormatString("[CMT] Read: FAILED at display frame @", i));
+				DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: FAILED at display frame @", i);
 				return false;
 			}
 			iferr(display_frame_list_.Append(std::move(df)))
 				return false;
 		}
-		GePrint(FormatString("[CMT] Read: display frames OK, loaded @", display_frame_list_.GetCount()));
 	}
 	else
 	{
-		GePrint(FormatString("[CMT] Read: df_count read failed or invalid (@)", df_count));
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: df_count read failed or invalid (@)", df_count);
 	}
 
 	animation_items_.FlushAll();
@@ -351,15 +343,12 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	iferr(pending_vmd_data_.Resize(0))
 		return false;
 
-	GePrint(FormatString("[CMT] Read: attempting animation data, level=@", level));
-
 	Int32 anim_idx = -1;
 	if (hf->ReadInt32(&anim_idx))
 	{
 		Int64 anim_count = 0;
 		if (hf->ReadInt64(&anim_count) && anim_count > 0 && anim_count <= 10000)
 		{
-			GePrint(FormatString("[CMT] Read: anim_idx=@, anim_count=@", anim_idx, anim_count));
 			if (anim_idx >= static_cast<Int32>(anim_count))
 				anim_idx = -1;
 			animation_index_ = anim_idx;
@@ -369,14 +358,14 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 				String name;
 				if (!hf->ReadString(&name))
 				{
-					GePrint(FormatString("[CMT] Read: failed to read name at index @", i));
+					DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: failed to read name at index @", i);
 					break;
 				}
 
 				Int64 size = 0;
 				if (!hf->ReadInt64(&size))
 				{
-					GePrint(FormatString("[CMT] Read: failed to read size at index @", i));
+					DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: failed to read size at index @", i);
 					break;
 				}
 
@@ -387,7 +376,7 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 					Int mem_size = 0;
 					if (!hf->ReadMemory(&mem, &mem_size))
 					{
-						GePrint(FormatString("[CMT] Read: failed to read memory at index @, expected size=@", i, size));
+						DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: failed to read memory at index @, expected size=@", i, size);
 						break;
 					}
 					data.resize(static_cast<size_t>(mem_size));
@@ -395,29 +384,18 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 					DeleteMem(mem);
 				}
 
-				GePrint(FormatString("[CMT] Read: anim[@] name='@' data_size=@", i, name, data.size()));
-				iferr(pending_vmd_data_.Append(std::make_pair(name, std::move(data))))
+			iferr(pending_vmd_data_.Append(std::make_pair(name, std::move(data))))
 					break;
 				animation_items_.SetString(static_cast<Int32>(i), name);
 			}
 		}
-		else
-		{
-			GePrint(FormatString("[CMT] Read: no animations (anim_count=@)", anim_count));
 		}
 	}
-	else
-	{
-		GePrint("[CMT] Read: ReadInt32 for anim_idx failed (old format?)"_s);
-	}
 
-	GePrint(FormatString("[CMT] Read: done. pending_vmd=@, animation_index=@", pending_vmd_data_.GetCount(), animation_index_));
 	*is_morph_initialized_.Write() = true;
 	return true;
 }
 SDK2024_Write(MMDModelManagerObject) {
-
-	GePrint("[CMT] Write: begin"_s);
 
 	IOWriteField(bone_manager_);
 	IOWriteField(mesh_manager_);
@@ -444,8 +422,6 @@ SDK2024_Write(MMDModelManagerObject) {
 		if (!display_frame_list_[i].Write(hf))
 			return false;
 
-	GePrint(FormatString("[CMT] Write: anim_index=@, animations=@, pending=@", animation_index_, animations_.GetCount(), pending_vmd_data_.GetCount()));
-
 	if (!hf->WriteInt32(animation_index_))
 		return false;
 
@@ -463,7 +439,6 @@ SDK2024_Write(MMDModelManagerObject) {
 			std::vector<uint8_t> vmd_data;
 			if (animation && animation->Save(vmd_file) && libmmd::WriteVMDFile(&vmd_file, vmd_data))
 			{
-				GePrint(FormatString("[CMT] Write: anim[@] name='@' size=@", i, name, vmd_data.size()));
 				if (!hf->WriteInt64(static_cast<Int64>(vmd_data.size())))
 					return false;
 				if (!hf->WriteMemory(vmd_data.data(), static_cast<Int>(vmd_data.size())))
@@ -471,7 +446,7 @@ SDK2024_Write(MMDModelManagerObject) {
 			}
 			else
 			{
-				GePrint(FormatString("[CMT] Write: anim[@] name='@' SERIALIZE FAILED, writing size=0", i, name));
+				DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Write: anim[@] name='@' SERIALIZE FAILED, writing size=0", i, name);
 				if (!hf->WriteInt64(0))
 					return false;
 			}
@@ -479,12 +454,10 @@ SDK2024_Write(MMDModelManagerObject) {
 	}
 	else if (pending_vmd_data_.GetCount() > 0)
 	{
-		GePrint(FormatString("[CMT] Write: using pending_vmd_data path, count=@", pending_vmd_data_.GetCount()));
 		if (!hf->WriteInt64(static_cast<Int64>(pending_vmd_data_.GetCount())))
 			return false;
 		for (const auto& [name, vmd_data] : pending_vmd_data_)
 		{
-			GePrint(FormatString("[CMT] Write: pending '@' size=@", name, vmd_data.size()));
 			if (!hf->WriteString(name))
 				return false;
 			if (!hf->WriteInt64(static_cast<Int64>(vmd_data.size())))
@@ -498,12 +471,10 @@ SDK2024_Write(MMDModelManagerObject) {
 	}
 	else
 	{
-		GePrint("[CMT] Write: no animations to write"_s);
 		if (!hf->WriteInt64(0))
 			return false;
 	}
 
-	GePrint("[CMT] Write: done OK"_s);
 	return true;
 }
 SDK2024_CopyTo(MMDModelManagerObject)
@@ -553,7 +524,6 @@ SDK2024_CopyTo(MMDModelManagerObject)
 		return false;
 	if (animations_.GetCount() > 0)
 	{
-		GePrint(FormatString("[CMT] CopyTo: copying @ animations to pending_vmd_data", animations_.GetCount()));
 		for (Int32 i = 0; i < animations_.GetCount(); ++i)
 		{
 			const auto& [name, animation] = animations_[i];
@@ -564,27 +534,19 @@ SDK2024_CopyTo(MMDModelManagerObject)
 				if (animation->Save(vmd_file))
 					libmmd::WriteVMDFile(&vmd_file, vmd_data);
 			}
-			GePrint(FormatString("[CMT] CopyTo: anim '@' -> vmd_data size=@", name, vmd_data.size()));
-			iferr(destObject->pending_vmd_data_.Append(std::make_pair(name, std::move(vmd_data))))
+		iferr(destObject->pending_vmd_data_.Append(std::make_pair(name, std::move(vmd_data))))
 				return false;
 		}
 	}
 	else if (pending_vmd_data_.GetCount() > 0)
 	{
-		GePrint(FormatString("[CMT] CopyTo: copying @ pending_vmd_data entries", pending_vmd_data_.GetCount()));
 		for (const auto& [name, vmd_data] : pending_vmd_data_)
 		{
 			std::vector<uint8_t> data_copy(vmd_data);
-			GePrint(FormatString("[CMT] CopyTo: pending '@' size=@", name, data_copy.size()));
 			iferr(destObject->pending_vmd_data_.Append(std::make_pair(name, std::move(data_copy))))
 				return false;
 		}
 	}
-	else
-	{
-		GePrint("[CMT] CopyTo: no animation data to copy"_s);
-	}
-
 	return true;
 }
 Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
@@ -811,16 +773,10 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 	if (!*is_runtime_initialized_.Read() && !mmd_model_)
 	{
-		GePrint(FormatString("[CMT] Execute: triggering RebuildRuntime. bone_mgr=@, rigid_mgr=@, joint_mgr=@, pending_vmd=@",
-			bone_manager_data_ != nullptr, rigid_manager_data_ != nullptr, joint_manager_data_ != nullptr, pending_vmd_data_.GetCount()));
 		if (!RebuildRuntime())
 		{
-			GePrint("[CMT] Execute: RebuildRuntime FAILED"_s);
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Execute: RebuildRuntime FAILED");
 			StatusSetText(GeLoadString(IDS_CMT_VMD_REBUILD_FAILED));
-		}
-		else
-		{
-			GePrint(FormatString("[CMT] Execute: RebuildRuntime OK. mmd_model=@, animations=@", mmd_model_ != nullptr, animations_.GetCount()));
 		}
 		*is_runtime_initialized_.Write() = true;
 
@@ -869,7 +825,6 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				const auto vmd_frame = static_cast<Float32>(now_time.Get() * fps_);
 				if (needs_physics_reset)
 				{
-					GePrint(FormatString("[CMT] Execute: VMD playback init, frame=@, anim_idx=@", vmd_frame, animation_index_));
 					mmd_model_->InitializeAnimation();
 					animation->SyncPhysics(vmd_frame, 30, 1.f / fps_);
 					is_animation_initialized_ = true;
@@ -988,6 +943,12 @@ void MMDModelManagerObject::SetMMDModel(const MMDModelPtr& model)
 	{
 		joint_manager_data_->mmd_physics_manager_ = mmd_model_->GetPhysicsManager();
 	}
+}
+
+void MMDModelManagerObject::SyncSubManagerScale(const Float pm)
+{
+	if (auto* op = reinterpret_cast<BaseObject*>(Get()))
+		op->SetAbsScale(Vector(pm, pm, pm));
 }
 
 Bool MMDModelManagerObject::CreateManagers()
@@ -1207,7 +1168,10 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 		bc->SetString(COMMENTS_LOCAL, maxon::String{ pmx_file.m_info.m_comment.c_str() });
 		bc->SetString(COMMENTS_UNIVERSAL, maxon::String{ pmx_file.m_info.m_englishComment.c_str() });
 		bc->SetFloat(PMX_VERSION, pmx_file.m_header.m_version);
+		bc->SetFloat(MODEL_POSITION_MULTIPLE, setting.position_multiple);
 	}
+
+	SyncSubManagerScale(setting.position_multiple);
 
 	maxon::BaseArray<BaseObject*> bone_list;
 	auto morph_change_helper = BeginMorphChange();
@@ -1326,7 +1290,6 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	{
 		return false;
 	};
-	GePrint(FormatString("[CMT] LoadVMDMotion: mmd_model_=@, animations_count=@, merge=@", mmd_model_ != nullptr, animations_.GetCount(), merge));
 	const auto animation_name = setting.fn.GetFileString();
 	libmmd::VMDAnimation* vmd_animation;
 	if (!merge)
@@ -1334,13 +1297,11 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 		auto new_vmd_animation = std::make_unique<libmmd::VMDAnimation>();
 		if (!new_vmd_animation)
 		{
-			GePrint("[CMT] LoadVMDMotion: alloc VMDAnimation FAILED"_s);
 			LoadVmdMotionLog::LogOutMem();
 			return false;
 		}
 		if (!new_vmd_animation->Create(mmd_model_))
 		{
-			GePrint(FormatString("[CMT] LoadVMDMotion: VMDAnimation::Create FAILED, mmd_model_=@", mmd_model_ != nullptr));
 			LoadVmdMotionLog::LogOutMem();
 			return false;
 		}
@@ -1557,38 +1518,35 @@ Bool MMDModelManagerObject::RebuildRuntime()
 {
 	iferr_scope_handler{ return false; };
 
-	GePrint("[CMT] RebuildRuntime: begin"_s);
-
 	auto pmx_model = std::make_shared<PMXModel>();
 
 	if (bone_manager_data_)
 	{
-		GePrint("[CMT] RebuildRuntime: rebuilding nodes..."_s);
 		if (!bone_manager_data_->RebuildNodes(pmx_model.get()))
 		{
-			GePrint("[CMT] RebuildRuntime: RebuildNodes FAILED"_s);
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: RebuildNodes FAILED");
 			return false;
 		}
-		GePrint(FormatString("[CMT] RebuildRuntime: RebuildNodes OK, node_count=@", pmx_model->GetNodeManager()->GetNodeCount()));
-	}
-	else
-	{
-		GePrint("[CMT] RebuildRuntime: no bone_manager_data_, skipping nodes"_s);
 	}
 
 	auto* physics_manager = pmx_model->GetPhysicsManager();
 	if (!physics_manager->Create())
 	{
-		GePrint("[CMT] RebuildRuntime: PhysicsManager::Create FAILED"_s);
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: PhysicsManager::Create FAILED");
 		return false;
+	}
+
+	{
+		const auto* bc = reinterpret_cast<BaseList2D*>(Get())->GetDataInstance();
+		const Float pm = bc ? bc->GetFloat(MODEL_POSITION_MULTIPLE, 8.5) : 8.5;
+		SyncSubManagerScale(pm);
 	}
 
 	if (rigid_manager_data_)
 	{
-		GePrint("[CMT] RebuildRuntime: rebuilding rigid bodies..."_s);
 		if (!rigid_manager_data_->RebuildRigidBodies(pmx_model.get()))
 		{
-			GePrint("[CMT] RebuildRuntime: RebuildRigidBodies FAILED"_s);
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: RebuildRigidBodies FAILED");
 			return false;
 		}
 
@@ -1596,7 +1554,6 @@ Bool MMDModelManagerObject::RebuildRuntime()
 		auto* rigid_bodies = physics_manager->GetRigidBodys();
 		if (physics && rigid_bodies)
 		{
-			GePrint(FormatString("[CMT] RebuildRuntime: adding @ rigid bodies to physics", rigid_bodies->size()));
 			for (const auto& rb : *rigid_bodies)
 				physics->AddRigidBody(rb.get());
 		}
@@ -1604,10 +1561,9 @@ Bool MMDModelManagerObject::RebuildRuntime()
 
 	if (joint_manager_data_)
 	{
-		GePrint("[CMT] RebuildRuntime: rebuilding joints..."_s);
 		if (!joint_manager_data_->RebuildJoints(physics_manager))
 		{
-			GePrint("[CMT] RebuildRuntime: RebuildJoints FAILED"_s);
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: RebuildJoints FAILED");
 			return false;
 		}
 
@@ -1615,44 +1571,36 @@ Bool MMDModelManagerObject::RebuildRuntime()
 		auto* joints = physics_manager->GetJoints();
 		if (physics && joints)
 		{
-			GePrint(FormatString("[CMT] RebuildRuntime: adding @ joints to physics", joints->size()));
 			for (const auto& jt : *joints)
 				physics->AddJoint(jt.get());
 		}
 	}
 
 	SetMMDModel(pmx_model);
-	GePrint("[CMT] RebuildRuntime: SetMMDModel done"_s);
-
-	GePrint(FormatString("[CMT] RebuildRuntime: restoring @ pending VMD animations", pending_vmd_data_.GetCount()));
 	for (const auto& [name, vmd_data] : pending_vmd_data_)
 	{
 		if (vmd_data.empty())
-		{
-			GePrint(FormatString("[CMT] RebuildRuntime: skipping empty VMD '@'", name));
 			continue;
-		}
 
 		libmmd::VMDFile vmd_file;
 		if (!libmmd::ReadVMDFile(&vmd_file, vmd_data.data(), vmd_data.size()))
 		{
-			GePrint(FormatString("[CMT] RebuildRuntime: ReadVMDFile FAILED for '@' (size=@)", name, vmd_data.size()));
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: ReadVMDFile FAILED for '@' (size=@)", name, vmd_data.size());
 			continue;
 		}
 
 		auto vmd_animation = std::make_unique<libmmd::VMDAnimation>();
 		if (!vmd_animation->Create(pmx_model))
 		{
-			GePrint(FormatString("[CMT] RebuildRuntime: VMDAnimation::Create FAILED for '@'", name));
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: VMDAnimation::Create FAILED for '@'", name);
 			continue;
 		}
 		if (!vmd_animation->Add(vmd_file))
 		{
-			GePrint(FormatString("[CMT] RebuildRuntime: VMDAnimation::Add FAILED for '@'", name));
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: VMDAnimation::Add FAILED for '@'", name);
 			continue;
 		}
 
-		GePrint(FormatString("[CMT] RebuildRuntime: restored VMD '@' OK", name));
 		animations_.Append(std::make_pair(name, std::move(vmd_animation)))iferr_return;
 	}
 	iferr(pending_vmd_data_.Resize(0)) {}
@@ -1674,11 +1622,14 @@ Bool MMDModelManagerObject::RebuildRuntime()
 		}
 
 		Get()->SetParameter(ConstDescID(DescLevel(MODEL_MODE)), MODEL_MODE_VMD, DESCFLAGS_SET::NONE);
-		GePrint("[CMT] RebuildRuntime: restored model_mode to VMD"_s);
 	}
 
 	if (bone_manager_data_)
+	{
 		bone_manager_data_->ReconnectNodePointers(pmx_model->GetNodeManager(), pmx_model->GetIKManager());
+		if (animation_index_ >= 0 && animation_index_ < animations_.GetCount())
+			bone_manager_data_->SetAllBoneMode(BONE_MODE_VMD);
+	}
 	if (rigid_manager_data_)
 		rigid_manager_data_->ReconnectRigidBodyPointers(physics_manager);
 	if (joint_manager_data_)
@@ -1688,7 +1639,7 @@ Bool MMDModelManagerObject::RebuildRuntime()
 	*is_runtime_initialized_.Write() = true;
 	is_animation_initialized_ = false;
 
-	GePrint(FormatString("[CMT] RebuildRuntime: complete. animations=@, mmd_model=@", animations_.GetCount(), mmd_model_ != nullptr));
+	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: complete. animations=@, mmd_model=@", animations_.GetCount(), mmd_model_ != nullptr);
 	return true;
 }
 
@@ -2048,18 +1999,16 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			case MODEL_ANIM_MERGE_VMD_BUTTON: [[fallthrough]];
 			case MODEL_ANIM_LOAD_VMD_BUTTON:
 			{
-				CMTToolsSetting::MotionImport setting(GetActiveDocument());
-				if(!filename_util::SelectSuffixImportFile(setting.fn, "vmd"_s))
-				{
-					break;
-				}
-				if (auto* bone_mgr = io_util::ResolveObjectLink(bone_manager_))
-				{
-					if (const auto bmd = bone_mgr->GetNodeData<MMDBoneManagerObject>(); bmd)
-					{
-						setting.position_multiple = bmd->GetPositionMultiple();
-					}
-				}
+			CMTToolsSetting::MotionImport setting(GetActiveDocument());
+			if(!filename_util::SelectSuffixImportFile(setting.fn, "vmd"_s))
+			{
+				break;
+			}
+			{
+				const auto* bc = reinterpret_cast<BaseList2D*>(Get())->GetDataInstance();
+				if (bc)
+					setting.position_multiple = bc->GetFloat(MODEL_POSITION_MULTIPLE, 8.5);
+			}
 				LoadVmdMotionLog logger;
 				std::vector<uint8_t> file_data;
 				if (!filename_util::ReadFileData(setting.fn, file_data))
@@ -2323,7 +2272,6 @@ Bool MMDModelManagerObject::GetDParameter(const GeListNode* node, const DescID& 
 	const Int32 sel = material_selection_index_;
 	if (sel < 0 || sel >= material_list_.GetCount())
 	{
-		flags |= DESCFLAGS_GET::PARAM_GET;
 		return SUPER::GetDParameter(node, id, t_data, flags);
 	}
 	const MMDMaterialData& m = material_list_[sel];
@@ -2394,10 +2342,16 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 {
 	switch (id[0].id)
 	{
+		case MODEL_POSITION_MULTIPLE:
+		{
+			SyncSubManagerScale(t_data.GetFloat());
+			break;
+		}
 		case MODEL_MODE:
 		{
 			model_mode_ = t_data.GetInt32();
 			is_animation_initialized_ = false;
+			prev_time_ = BaseTime(-1.);
 			MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE, nullptr, model_mode_);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_model_manager_object_id, &msg);
 			break;

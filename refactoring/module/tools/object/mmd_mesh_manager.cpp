@@ -458,7 +458,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 		if (!mesh_object)
 			return false;
 		mesh_object->SetName("Mesh"_s);
-		mesh_object->InsertUnder(this->Get());
+		mesh_object->InsertUnderLast(this->Get());
 
 		const auto mesh_object_points = ToPoint(mesh_object)->GetPointW();
 		const auto mesh_object_polygons = ToPoly(mesh_object)->GetPolygonW();
@@ -489,7 +489,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			{
 				return false;
 			}
-			morph_skin_object->InsertUnder(mesh_object);
+			morph_skin_object->InsertUnderLast(mesh_object);
 		}
 
 		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertices, &setting, &mesh_object_points, &weight_tag, &vertex_weight_data](const decltype(vertex_count) vertex_index)
@@ -499,9 +499,9 @@ Bool MMDMeshManagerObject::LoadPMX(
 			// add vertex position
 			auto& mesh_object_point = mesh_object_points[vertex_index];
 			const auto& pmx_vertex_position = pmx_vertex.m_position;
-			mesh_object_point.x = pmx_vertex_position[0] * setting.position_multiple;
-			mesh_object_point.y = pmx_vertex_position[1] * setting.position_multiple;
-			mesh_object_point.z = pmx_vertex_position[2] * setting.position_multiple;
+			mesh_object_point.x = pmx_vertex_position[0];
+			mesh_object_point.y = pmx_vertex_position[1];
+			mesh_object_point.z = pmx_vertex_position[2];
 
 			if (setting.import_weights)
 			{
@@ -734,12 +734,12 @@ Bool MMDMeshManagerObject::LoadPMX(
 					// add morph point
 					for (const auto& [vertex_index, position] : position_morphs)
 					{
-						morph_node->SetPoint(vertex_index,
-							Vector(position[0], position[1], position[2]) * setting.position_multiple);
-					}
+					morph_node->SetPoint(vertex_index,
+							Vector(position[0], position[1], position[2]));
+				}
 
-					morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
-					morph_tag->UpdateMorphs();
+				morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
+				morph_tag->UpdateMorphs();
 					morph_tag->Message(MSG_UPDATE);
 					morph->SetStrength(0);
 					break;
@@ -943,7 +943,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 			PolygonObject* mesh_object = PolygonObject::Alloc(part_vertices_num, part_face_num);
 			mesh_object->SetName(material_name);
-			mesh_object->InsertUnder(Get());
+			mesh_object->InsertUnderLast(Get());
 
 			BaseMaterial* material = nullptr;
 			if (setting.import_material)
@@ -1002,7 +1002,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				{
 					return false;
 				}
-				morph_skin_object->InsertUnder(mesh_object);
+				morph_skin_object->InsertUnderLast(mesh_object);
 			}
 
 			// create morph tag
@@ -1066,11 +1066,11 @@ Bool MMDMeshManagerObject::LoadPMX(
 					const auto & c4d_vertex_index = vertex_index_map.Find(pmx_vertex_index)->GetValue();
 					auto & mesh_object_point = mesh_object_points[c4d_vertex_index];
 					const auto & pmx_vertex_position = pmx_vertex.m_position;
-					mesh_object_point.x = pmx_vertex_position[0] * setting.position_multiple;
-					mesh_object_point.y = pmx_vertex_position[1] * setting.position_multiple;
-					mesh_object_point.z = pmx_vertex_position[2] * setting.position_multiple;
+				mesh_object_point.x = pmx_vertex_position[0];
+				mesh_object_point.y = pmx_vertex_position[1];
+				mesh_object_point.z = pmx_vertex_position[2];
 
-					if (setting.import_expression)
+				if (setting.import_expression)
 					{
 						vertex_info_map.Write([&pmx_vertex_index, &c4d_vertex_index, &mesh_object, &setting, &morph_tag_infos](maxon::HashMap<uint64_t, vertex_info>& map)->maxon::Result<void>
 						{
@@ -1280,7 +1280,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 							}
 
 							morph_node->SetPoint(vertex_index,
-								Vector(position[0], position[1], position[2]) * setting.position_multiple);
+								Vector(position[0], position[1], position[2]));
 						}
 					}
 

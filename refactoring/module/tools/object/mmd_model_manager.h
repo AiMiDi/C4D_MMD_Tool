@@ -228,4 +228,5 @@ private:
 	//Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
 	Bool DeleteVMDAnimation();
 	Bool RebuildRuntime();
+	void SyncSubManagerScale(Float pm);
 };

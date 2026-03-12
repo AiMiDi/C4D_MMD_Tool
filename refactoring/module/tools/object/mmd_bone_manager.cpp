@@ -33,7 +33,6 @@ SDK2024_CopyTo(MMDBoneManagerObject)
 	};
 	auto const dest_object = reinterpret_cast<MMDBoneManagerObject*>(dest);
 	dest_object->bone_name_index_ = bone_name_index_;
-	dest_object->position_multiple_ = position_multiple_;
 	for (const auto& entry : bone_list_)
 	{
 		auto& link = dest_object->bone_list_.InsertKey(entry.GetKey())iferr_return;
@@ -51,12 +50,9 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(bone_name_index_);
 	if (!io_util::ReadHashMap(hf, bone_list_))
 	{
-		GePrint("[CMT] BoneManager::Read: FAILED at bone_list_"_s);
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] BoneManager::Read: FAILED at bone_list_");
 		return false;
 	}
-	GePrint(FormatString("[CMT] BoneManager::Read: bone_list_ count=@, position_multiple will follow", bone_list_.GetCount()));
-		IOReadField(position_multiple_);
-	GePrint(FormatString("[CMT] BoneManager::Read: OK, bones=@, pos_mult=@", bone_list_.GetCount(), position_multiple_));
 	return SUPER::Read(node, hf, level);
 }
 
@@ -65,7 +61,6 @@ SDK2024_Write(MMDBoneManagerObject)
 	IOWriteField(bone_name_index_);
 	if (!io_util::WriteHashMap(hf, bone_list_))
 		return false;
-	IOWriteField(position_multiple_);
 	return SUPER::Write(node, hf);
 }
 
@@ -296,14 +291,9 @@ bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node)
 		return false;
 	};
 	const auto op = reinterpret_cast<BaseObject*>(node);
-	GePrint(FormatString("[CMT] HandleBoneIndexChange: op='@' type=@ children_exist=@",
-		op->GetName(), op->GetType(), op->GetDown() != nullptr));
 	bone_items_.FlushAll();
 	bone_items_.SetString(-1, "-"_s);
 	bone_list_.Reset();
-	Int32 total_visited = 0;
-	Int32 joints_found = 0;
-	Int32 bones_with_tag = 0;
 	maxon::Queue<BaseObject*> objects;
 	objects.Push(op)iferr_return;
 	while (!objects.IsEmpty())
@@ -311,13 +301,10 @@ bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node)
 		BaseObject* object = *objects.Pop();
 		while (object)
 		{
-			total_visited++;
 			if (object->GetType() == Ojoint)
 			{
-				joints_found++;
 				if (SDK2024_Const BaseTag* node_bone_tag = object->GetTag(g_mmd_bone_tag_id); node_bone_tag != nullptr)
 				{
-					bones_with_tag++;
 					GeData ge_data;
 					node_bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), ge_data, DESCFLAGS_GET::NONE);
 					const Int32 bone_index_from_node = node_bone_tag->GetNodeData<MMDBoneTag>()->GetBoneIndex();
@@ -336,8 +323,6 @@ bool MMDBoneManagerObject::HandleBoneIndexChangeMessage(GeListNode* node)
 		}
 	}
 	objects.Reset();
-	GePrint(FormatString("[CMT] HandleBoneIndexChange: visited=@, joints=@, bones_with_tag=@, bone_list=@",
-		total_visited, joints_found, bones_with_tag, bone_list_.GetCount()));
 	return true;
 }
 
@@ -420,8 +405,6 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		return false;
 	};
 
-	position_multiple_ = setting.position_multiple;
-
 	const auto& pmx_bones = pmx_file.m_bones;
 	const auto pmx_bone_num = pmx_bones.size();
 	if (pmx_bone_num == 0)
@@ -470,9 +453,8 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		const auto& bone_position = mmd_bone.m_position;
 		Vector position(bone_position[0], bone_position[1], bone_position[2]);
 
-		auto add_bone_to_manager = [&bone_object, &bone_tag, &position, &setting, this]()
+		auto add_bone_to_manager = [&bone_object, &bone_tag, &position, this]()
 		{
-			position *= setting.position_multiple;
 			bone_object->SetFrozenPos(position);
 			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), position, DESCFLAGS_SET::NONE);
 			bone_object->InsertUnder(Get());
@@ -487,11 +469,9 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		{
 			if (const auto parent_bone = bone_list[parent_bone_index]; parent_bone)
 			{
-				// set child position
 				bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), position, DESCFLAGS_SET::NONE);
 				const auto& parent_position = pmx_bones[parent_bone_index].m_position;
 				position -= Vector(parent_position[0], parent_position[1], parent_position[2]);
-				position *= setting.position_multiple;
 				bone_object->SetFrozenPos(position);
 				bone_object->InsertUnder(parent_bone);
 			}
@@ -550,7 +530,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		{
 			// set tail position
 			const auto& tail_position = mmd_bone.m_positionOffset;
-			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_POSITION)), Vector(tail_position[0], tail_position[1], tail_position[2]) * setting.position_multiple, DESCFLAGS_SET::NONE);
+			bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_POSITION)), Vector(tail_position[0], tail_position[1], tail_position[2]), DESCFLAGS_SET::NONE);
 		}
 
 		/// append bone
@@ -669,7 +649,8 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 						bc.SetInt32(DESC_DEFAULT, pmx_bone_ik_link.m_ikBoneIndex);
 						bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
 						bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ik_bone_index_grp));
-						dynamic_description->Alloc(bc);
+						const auto ik_bone_idx_id = dynamic_description->Alloc(bc);
+						bone_tag->SetParameter(ik_bone_idx_id, GeData(static_cast<Int32>(pmx_bone_ik_link.m_ikBoneIndex)), DESCFLAGS_SET::NONE);
 
 						bc = GetCustomDataTypeDefault(DTYPE_BASELISTLINK);
 						MAXON_SCOPE // set IK bone link
@@ -680,7 +661,13 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 						}
 						bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
 						bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ik_bone_index_grp));
-						dynamic_description->Alloc(bc);
+						const auto ik_bone_link_id = dynamic_description->Alloc(bc);
+						MAXON_SCOPE
+						{
+							BaseLink* ik_bone_link = BaseLink::Alloc();
+							ik_bone_link->SetLink(bone_list[pmx_bone_ik_link.m_ikBoneIndex]);
+							bone_tag->SetParameter(ik_bone_link_id, GeData(ik_bone_link), DESCFLAGS_SET::NONE);
+						}
 					}
 
 				bc = GetCustomDataTypeDefault(DTYPE_BOOL);
@@ -688,21 +675,26 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 				bc.SetBool(DESC_DEFAULT, pmx_bone_ik_link.m_enableLimit);
 				bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
 				bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
-				dynamic_description->Alloc(bc);
+				const auto enable_limit_id = dynamic_description->Alloc(bc);
+				bone_tag->SetParameter(enable_limit_id, GeData(pmx_bone_ik_link.m_enableLimit), DESCFLAGS_SET::NONE);
 
 				bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
 				bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN));
-				bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMin.x(), pmx_bone_ik_link.m_limitMin.y(), pmx_bone_ik_link.m_limitMin.z()));
+				const Vector limit_min(pmx_bone_ik_link.m_limitMin.x(), pmx_bone_ik_link.m_limitMin.y(), pmx_bone_ik_link.m_limitMin.z());
+				bc.SetVector(DESC_DEFAULT, limit_min);
 				bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
 				bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
-				dynamic_description->Alloc(bc);
+				const auto limit_min_id = dynamic_description->Alloc(bc);
+				bone_tag->SetParameter(limit_min_id, GeData(limit_min), DESCFLAGS_SET::NONE);
 
 				bc = GetCustomDataTypeDefault(DTYPE_VECTOR);
 				bc.SetString(DESC_NAME, GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX));
-				bc.SetVector(DESC_DEFAULT, Vector(pmx_bone_ik_link.m_limitMax.x(), pmx_bone_ik_link.m_limitMax.y(), pmx_bone_ik_link.m_limitMax.z()));
+				const Vector limit_max(pmx_bone_ik_link.m_limitMax.x(), pmx_bone_ik_link.m_limitMax.y(), pmx_bone_ik_link.m_limitMax.z());
+				bc.SetVector(DESC_DEFAULT, limit_max);
 				bc.SetInt32(DESC_ANIMATE, DESC_ANIMATE_OFF);
 				bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(pmx_bone_ik_link_grp));
-				dynamic_description->Alloc(bc);
+				const auto limit_max_id = dynamic_description->Alloc(bc);
+				bone_tag->SetParameter(limit_max_id, GeData(limit_max), DESCFLAGS_SET::NONE);
 				}
 			}
 		}
@@ -743,7 +735,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 					const auto& quat = bone_offset.m_quaternion;
 					const auto euler = quat.toRotationMatrix().canonicalEulerAngles(0, 1, 2);
 					bone_tag_node->SetBoneMorphTranslationNoCheck(added_morph_index,
-						Vector(pos.x(), pos.y(), pos.z()) * setting.position_multiple);
+						Vector(pos.x(), pos.y(), pos.z()));
 					bone_tag_node->SetBoneMorphRotationNoCheck(added_morph_index,
 						Vector(euler.x(), euler.y(), euler.z()));
 				}
@@ -828,7 +820,6 @@ Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
 	iferr_scope_handler{
 		return false;
 	};
-	GePrint(FormatString("[CMT] RebuildNodes: bone_list_ count=@", bone_list_.GetCount()));
 	if (bone_list_.IsEmpty())
 		return true;
 
@@ -843,7 +834,7 @@ Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
 	{
 		if (sorted_indices[i] != i)
 		{
-			GePrint(FormatString("[CMT] RebuildNodes: index gap at i=@, sorted_indices[i]=@", i, sorted_indices[i]));
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildNodes: index gap at i=@, sorted_indices[i]=@", i, sorted_indices[i]);
 			return false;
 		}
 	}
@@ -856,7 +847,9 @@ Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
 	{
 		BaseTag* tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
 		if (tag && tag->GetObject())
+		{
 			obj_to_bone_index.Insert(tag->GetObject(), static_cast<Int32>(entry.GetKey()))iferr_return;
+		}
 	}
 
 	// Determine parent bone index for each bone from C4D joint hierarchy
@@ -875,14 +868,6 @@ Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
 			parent_indices[i] = found->GetValue();
 	}
 
-	Int32 root_count = 0, child_count = 0;
-	for (Int32 i = 0; i < bone_count; ++i)
-	{
-		if (parent_indices[i] < 0) root_count++;
-		else child_count++;
-	}
-	GePrint(FormatString("[CMT] RebuildNodes: parent indices resolved from C4D hierarchy. roots=@, children=@", root_count, child_count));
-
 	// Pass 1: create nodes with basic properties
 	for (Int32 i = 0; i < bone_count; ++i)
 	{
@@ -898,8 +883,6 @@ Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
 		node->EnableDeformAfterPhysics(bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM));
 	}
 
-	// Recover raw PMX positions for each bone
-	const Float pm = (position_multiple_ != 0.0) ? position_multiple_ : 1.0;
 	maxon::BaseArray<Eigen::Vector3f> raw_positions;
 	raw_positions.Resize(bone_count)iferr_return;
 
@@ -912,21 +895,10 @@ Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
 		if (!bc) continue;
 
 		const Vector c4d_pos = bc->GetVector(PMX_BONE_POSITION);
-
-		if (parent_indices[i] < 0)
-		{
-			raw_positions[i] = Eigen::Vector3f(
-				static_cast<float>(c4d_pos.x / pm),
-				static_cast<float>(c4d_pos.y / pm),
-				static_cast<float>(c4d_pos.z / pm));
-		}
-		else
-		{
-			raw_positions[i] = Eigen::Vector3f(
-				static_cast<float>(c4d_pos.x),
-				static_cast<float>(c4d_pos.y),
-				static_cast<float>(c4d_pos.z));
-		}
+		raw_positions[i] = Eigen::Vector3f(
+			static_cast<float>(c4d_pos.x),
+			static_cast<float>(c4d_pos.y),
+			static_cast<float>(c4d_pos.z));
 	}
 
 	// Pass 2: hierarchy and transforms
@@ -941,16 +913,18 @@ Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
 		auto* node = static_cast<libmmd::PMXNode*>(node_manager->GetMMDNode(i));
 		const Int32 parent_bone_index = parent_indices[i];
 
+		Eigen::Vector3f node_translate;
 		if (parent_bone_index >= 0 && parent_bone_index < bone_count)
 		{
 			auto* parent_node = node_manager->GetMMDNode(parent_bone_index);
 			parent_node->AddChild(node);
-			node->SetTranslate(raw_positions[i] - raw_positions[parent_bone_index]);
+			node_translate = raw_positions[i] - raw_positions[parent_bone_index];
 		}
 		else
 		{
-			node->SetTranslate(raw_positions[i]);
+			node_translate = raw_positions[i];
 		}
+		node->SetTranslate(node_translate);
 
 		Eigen::Matrix4f init = Eigen::Matrix4f::Identity();
 		init.block<3,1>(0,3) = raw_positions[i];
@@ -1004,6 +978,7 @@ Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
 	const String name_enable_limit = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT);
 	const String name_limit_min = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN);
 	const String name_limit_max = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX);
+	Int32 ik_solver_count = 0;
 
 	for (Int32 i = 0; i < bone_count; ++i)
 	{
@@ -1102,18 +1077,22 @@ Bool MMDBoneManagerObject::RebuildNodes(libmmd::PMXModel* model)
 				}
 				chain_node->EnableIK(true);
 			}
+
 		}
 
 		solver->BuildChainPath();
+		++ik_solver_count;
 	}
 
+	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildNodes: IK solvers created=@", ik_solver_count);
 	model->SortNodes();
-	GePrint(FormatString("[CMT] RebuildNodes: complete. nodes=@", model->GetNodeManager()->GetNodeCount()));
+	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildNodes: complete. nodes=@", model->GetNodeManager()->GetNodeCount());
 	return true;
 }
 
 void MMDBoneManagerObject::ReconnectNodePointers(libmmd::MMDNodeManager* node_manager, libmmd::MMDIKManager* ik_manager)
 {
+	maxon::HashMap<BaseObject*, Int32> obj_to_index;
 	for (const auto& entry : bone_list_)
 	{
 		const Int32 bone_index = static_cast<Int32>(entry.GetKey());
@@ -1131,16 +1110,106 @@ void MMDBoneManagerObject::ReconnectNodePointers(libmmd::MMDNodeManager* node_ma
 		bone_tag->bone_manager_data_ = this;
 		bone_tag->bone_manager_link_->SetLink(reinterpret_cast<BaseObject*>(Get()));
 
+		tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), String::IntToString(bone_index), DESCFLAGS_SET::NONE);
+		if (tag->GetObject())
+		{
+			obj_to_index.Insert(tag->GetObject(), bone_index)iferr_ignore("");
+		}
+
 		const BaseContainer* bc = tag->GetDataInstance();
 		if (bc && bc->GetBool(PMX_BONE_IS_IK) && bone_tag->mmd_node_)
 		{
 			auto* pmx_node = static_cast<libmmd::PMXNode*>(bone_tag->mmd_node_);
 			bone_tag->ik_solver_ = pmx_node->GetIKSolver();
 			bone_tag->is_IK = true;
+			const auto state = tag->GetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), true);
+			tag->SetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), ~DESCIDSTATE::HIDDEN & state);
+		}
+		else
+		{
+			const auto state = tag->GetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), true);
+			tag->SetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), DESCIDSTATE::HIDDEN | state);
+		}
+	}
+
+	for (const auto& entry : bone_list_)
+	{
+		BaseTag* tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+		if (!tag || !tag->GetObject()) continue;
+
+		BaseObject* parent_obj = tag->GetObject()->GetUp();
+		if (parent_obj)
+		{
+			if (auto* found = obj_to_index.Find(parent_obj))
+				tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_PARENT_BONE_INDEX)), String::IntToString(found->GetValue()), DESCFLAGS_SET::NONE);
+			else
+				tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_PARENT_BONE_INDEX)), "-1"_s, DESCFLAGS_SET::NONE);
+		}
+		else
+		{
+			tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_PARENT_BONE_INDEX)), "-1"_s, DESCFLAGS_SET::NONE);
 		}
 	}
 
 	mmd_node_manager_ = node_manager;
+
+	Int32 mismatch_count = 0;
+	for (const auto& entry : bone_list_)
+	{
+		const Int32 bone_index = static_cast<Int32>(entry.GetKey());
+		if (bone_index < 0 || bone_index >= static_cast<Int32>(node_manager->GetNodeCount()))
+			continue;
+
+		BaseTag* tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+		if (!tag || !tag->GetObject()) continue;
+
+		auto* mmd_node = node_manager->GetMMDNode(bone_index);
+		if (!mmd_node) continue;
+
+		const Int32 mmd_parent_idx = mmd_node->GetParent()
+			? static_cast<Int32>(mmd_node->GetParent()->GetIndex()) : -1;
+
+		Int32 c4d_parent_idx = -1;
+		if (BaseObject* parent_obj = tag->GetObject()->GetUp())
+		{
+			if (auto* found = obj_to_index.Find(parent_obj))
+				c4d_parent_idx = found->GetValue();
+		}
+
+		if (mmd_parent_idx != c4d_parent_idx)
+		{
+			if (mismatch_count < 10)
+				DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] MISMATCH bone[@] '@': libmmd_parent=@ c4d_parent=@",
+					bone_index, String(mmd_node->GetName().c_str()), mmd_parent_idx, c4d_parent_idx);
+			mismatch_count++;
+		}
+
+		const String c4d_name = tag->GetDataInstance()->GetString(PMX_BONE_NAME_LOCAL);
+		const String mmd_name(mmd_node->GetName().c_str());
+		if (c4d_name != mmd_name)
+		{
+			if (mismatch_count < 10)
+				DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] NAME MISMATCH bone[@]: c4d='@' libmmd='@'",
+					bone_index, c4d_name, mmd_name);
+			mismatch_count++;
+		}
+	}
+	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] ReconnectNodePointers: verified @ bones, @ mismatches",
+		bone_list_.GetCount(), mismatch_count);
+}
+
+void MMDBoneManagerObject::SetAllBoneMode(const Int32 mode)
+{
+	for (const auto& entry : bone_list_)
+	{
+		BaseTag* tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+		if (!tag) continue;
+
+		auto* bone_tag = tag->GetNodeData<MMDBoneTag>();
+		if (!bone_tag) continue;
+
+		bone_tag->HandleBoneModeChange(mode);
+	}
 }
 
 void MMDBoneManagerObject::CreateDisplayTag(GeListNode* node)

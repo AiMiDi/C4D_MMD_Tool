@@ -60,7 +60,6 @@ struct MMDBoneManagerObjectMsg
 class MMDBoneManagerObject final : public MMDManagerObject
 {
 	Int32 bone_name_index_ = 0;
-	Float position_multiple_ = 1.0;
 	AutoAlloc<BaseLink> model_manager_;
 
 	libmmd::MMDMorphManager* mmd_morph_manager_ = nullptr;
@@ -87,7 +86,6 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	[[nodiscard]] BaseTag* FindBone(Int32 index) const;
 	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
 	const BaseContainer& GetBoneItems() const;
-	const Float& GetPositionMultiple() const { return position_multiple_; }
 	maxon::HashMap<String, maxon::PointerArray<MorphUIData>>& GetBoneMorphMap() { return bone_morph_map_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
@@ -95,6 +93,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 
 	Bool RebuildNodes(libmmd::PMXModel* model);
 	void ReconnectNodePointers(libmmd::MMDNodeManager* node_manager, libmmd::MMDIKManager* ik_manager);
+	void SetAllBoneMode(Int32 mode);
 
 private:
 	void CreateDisplayTag(GeListNode* node) override;

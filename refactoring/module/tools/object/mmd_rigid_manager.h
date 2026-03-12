@@ -42,7 +42,6 @@ struct MMDRigidRootObjectMsg
 class MMDRigidManagerObject final : public MMDManagerObject
 {
 	Int32 m_rigid_name_index_ = 1;
-	Float32 position_multiple_ = 1.0;
 	AutoAlloc<BaseLink> bone_manager_link_;
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
 	libmmd::MMDPhysicsManager* mmd_physics_manager_ = nullptr;
@@ -69,7 +68,6 @@ public:
 	const BaseContainer& GetRigidItems() const;
 	const BaseContainer& GetBoneItems();
 	MMDBoneManagerObject* GetBoneManagerData();
-	const Float32& GetPositionMultiple() const { return position_multiple_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 

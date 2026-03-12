@@ -316,7 +316,9 @@ DRAWRESULT MMDJointObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 		}
 		if (const BaseContainer* bc = op->GetDataInstance(); bc)
 		{
-			bd->SetMatrix_Matrix(nullptr, op->GetMg());
+			auto m = op->GetMg();
+			m.sqmat = m.sqmat.GetNormalized();
+			bd->SetMatrix_Matrix(nullptr, m);
 			switch (display_type_)
 			{
 			case JOINT_DISPLAY_TYPE_ON:
@@ -370,15 +372,11 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	else if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
 	{
 		const auto transform = mmd_joint_->GetTransform();
-		if (auto* mgr = GetJointManager())
-		{
-			const auto pos_mul = mgr->GetPositionMultiple();
-			op->SetMl(Matrix{
-				Vector(transform(0,3),transform(1,3),transform(2,3)) * pos_mul,
-				Vector(transform(0,0),transform(1,0),transform(2,0)),
-				Vector(transform(0,1),transform(1,1),transform(2,1)),
-				Vector(transform(0,2),transform(1,2),transform(2,2)) });
-		}
+		op->SetRelMl(Matrix{
+			Vector(transform(0,3),transform(1,3),transform(2,3)),
+			Vector(transform(0,0),transform(1,0),transform(2,0)),
+			Vector(transform(0,1),transform(1,1),transform(2,1)),
+			Vector(transform(0,2),transform(1,2),transform(2,2)) });
 	}
 
 	return EXECUTIONRESULT::OK;

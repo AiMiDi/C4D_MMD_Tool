@@ -8,6 +8,7 @@ STRINGTABLE OMMDModelManager
 	COMMENTS_UNIVERSAL "Universal comments";
 	MODEL_MODE "Mode";
 	PMX_VERSION "Version";
+	MODEL_POSITION_MULTIPLE "Position Multiple";
 	MODEL_ANIM_GRP "Animation";
 		MODEL_ANIM_LIST "Animation list";
 		MODEL_ANIM_MERGE_VMD_BUTTON "Merge VMD to selected VMD animation";
