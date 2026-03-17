@@ -846,12 +846,13 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 					auto* ik_manager = mmd_model_->GetIKManager();
 					if (ik_manager)
 					{
-						for (const auto& [desc_id, pair] : desc_id_map_)
+						for (const auto& entry : desc_id_map_)
 						{
+							const auto& pair = entry.GetValue();
 							if (pair.first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
 							{
 								GeData value;
-								if (op->GetParameter(desc_id, value, DESCFLAGS_GET::NONE))
+								if (op->GetParameter(entry.GetKey(), value, DESCFLAGS_GET::NONE))
 								{
 									if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(pair.second)))
 										solver->Enable(value.GetBool());
@@ -973,8 +974,9 @@ void MMDModelManagerObject::ApplyIKSolverStates()
 	if (!ik_manager)
 		return;
 	auto* node = Get();
-	for (const auto& [desc_id, pair] : desc_id_map_)
+	for (const auto& entry : desc_id_map_)
 	{
+		const auto& pair = entry.GetValue();
 		if (pair.first != MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
 			continue;
 		auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(pair.second));
@@ -986,7 +988,7 @@ void MMDModelManagerObject::ApplyIKSolverStates()
 		const Bool enabled = state_entry->GetValue();
 		solver->Enable(enabled);
 		if (node)
-			node->SetParameter(desc_id, GeData(enabled), DESCFLAGS_SET::NONE);
+			node->SetParameter(entry.GetKey(), GeData(enabled), DESCFLAGS_SET::NONE);
 	}
 }
 
@@ -1002,13 +1004,14 @@ void MMDModelManagerObject::ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file
 		return;
 
 	maxon::HashMap<String, DescID> ik_name_to_desc_id;
-	for (const auto& [desc_id, pair] : desc_id_map_)
+	for (const auto& entry : desc_id_map_)
 	{
+		const auto& pair = entry.GetValue();
 		if (pair.first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
 		{
 			if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(pair.second)))
 			{
-				iferr(ik_name_to_desc_id.Insert(String(solver->GetName().c_str()), desc_id)) {}
+				iferr(ik_name_to_desc_id.Insert(String(solver->GetName().c_str()), entry.GetKey())) {}
 			}
 		}
 	}
@@ -1361,6 +1364,7 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 }
 
 Bool MMDModelManagerObject::AddMaterial(const libmmd::PMXMaterial& pmx_material, BaseMaterial* c4d_material,
+                                        BaseObject* mesh_object, const String& selection_name,
                                         const maxon::BaseArray<Filename>& texture_paths)
 {
 	iferr_scope_handler { return false; };
@@ -1392,6 +1396,16 @@ Bool MMDModelManagerObject::AddMaterial(const libmmd::PMXMaterial& pmx_material,
 		if (mat.material_link && *mat.material_link)
 			(*mat.material_link)->SetLink(c4d_material);
 	}
+	if (mesh_object)
+	{
+		auto link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
+		if (link_result == maxon::FAILED)
+			return false;
+		mat.mesh_link = link_result.GetValue();
+		if (mat.mesh_link && *mat.mesh_link)
+			(*mat.mesh_link)->SetLink(mesh_object);
+	}
+	mat.selection_name = selection_name;
 	material_list_.Append(std::move(mat)) iferr_return;
 	return true;
 }
@@ -2910,4 +2924,136 @@ void MMDModelManagerObject::DeleteMorph(maxon::EraseIterator<maxon::PointerArray
 	if (const Int morph_index = it.FindIndex(morph); !DeleteMorphImpl(morph, morph_index))
 		return;
 	it.Erase();
+}
+
+void MMDModelManagerObject::SyncMaterialsList()
+{
+	BaseObject* mesh_mgr = GetMeshManagerObject();
+	if (!mesh_mgr) return;
+
+	BaseDocument* doc = mesh_mgr->GetDocument();
+	if (!doc) return;
+
+	struct MatRef {
+		BaseMaterial* mat = nullptr;
+		BaseObject* mesh = nullptr;
+		String selection;
+	};
+	maxon::BaseArray<MatRef> active_refs;
+
+	for (BaseObject* child = mesh_mgr->GetDown(); child; child = child->GetNext())
+	{
+		if (!child->IsInstanceOf(Opolygon))
+			continue;
+		for (BaseTag* tag = child->GetFirstTag(); tag; tag = tag->GetNext())
+		{
+			if (tag->GetType() == Ttexture)
+			{
+				GeData mat_data;
+				tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_MATERIAL)), mat_data, DESCFLAGS_GET::NONE);
+				BaseMaterial* mat = static_cast<BaseMaterial*>(mat_data.GetLink(doc));
+				if (mat)
+				{
+					GeData sel_data;
+					tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), sel_data, DESCFLAGS_GET::NONE);
+					MatRef ref;
+					ref.mat = mat;
+					ref.mesh = child;
+					ref.selection = sel_data.GetString();
+					active_refs.Append(ref) iferr_ignore("append failed");
+				}
+			}
+		}
+	}
+
+	Bool changed = false;
+
+	// Remove unreferenced materials
+	for (Int32 i = material_list_.GetCount() - 1; i >= 0; --i)
+	{
+		auto& mmd_mat = material_list_[i];
+		BaseMaterial* linked_mat = (mmd_mat.material_link && *mmd_mat.material_link) ? static_cast<BaseMaterial*>((*mmd_mat.material_link)->GetLink(doc)) : nullptr;
+		BaseObject* linked_mesh = (mmd_mat.mesh_link && *mmd_mat.mesh_link) ? static_cast<BaseObject*>((*mmd_mat.mesh_link)->GetLink(doc)) : nullptr;
+		
+		Bool found = false;
+		for (const auto& ref : active_refs)
+		{
+			if (ref.mat == linked_mat && ref.mesh == linked_mesh && ref.selection == mmd_mat.selection_name)
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+		{
+			material_list_.Erase(i) iferr_ignore("erase failed");
+			changed = true;
+		}
+	}
+
+	// Add new materials
+	for (const auto& ref : active_refs)
+	{
+		Bool found = false;
+		for (Int32 i = 0; i < material_list_.GetCount(); ++i)
+		{
+			auto& mmd_mat = material_list_[i];
+			BaseMaterial* linked_mat = (mmd_mat.material_link && *mmd_mat.material_link) ? static_cast<BaseMaterial*>((*mmd_mat.material_link)->GetLink(doc)) : nullptr;
+			BaseObject* linked_mesh = (mmd_mat.mesh_link && *mmd_mat.mesh_link) ? static_cast<BaseObject*>((*mmd_mat.mesh_link)->GetLink(doc)) : nullptr;
+			
+			if (ref.mat == linked_mat && ref.mesh == linked_mesh && ref.selection == mmd_mat.selection_name)
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+		{
+			MMDMaterialData new_mat;
+			new_mat.name_local = ref.mat->GetName();
+			new_mat.name_universal = ref.mat->GetName();
+			
+			auto mat_link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
+			if (mat_link_result != maxon::FAILED)
+			{
+				new_mat.material_link = mat_link_result.GetValue();
+				if (new_mat.material_link && *new_mat.material_link)
+					(*new_mat.material_link)->SetLink(ref.mat);
+			}
+
+			auto mesh_link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
+			if (mesh_link_result != maxon::FAILED)
+			{
+				new_mat.mesh_link = mesh_link_result.GetValue();
+				if (new_mat.mesh_link && *new_mat.mesh_link)
+					(*new_mat.mesh_link)->SetLink(ref.mesh);
+			}
+			
+			new_mat.selection_name = ref.selection;
+			
+			new_mat.diffuse_rgb = Vector(1, 1, 1);
+			new_mat.diffuse_alpha = 1.0;
+			new_mat.ambient = Vector(0.5, 0.5, 0.5);
+			new_mat.specular = Vector(0, 0, 0);
+			new_mat.specular_power = 5.0;
+
+			material_list_.Append(std::move(new_mat)) iferr_ignore("append failed");
+			changed = true;
+		}
+	}
+
+	if (changed)
+	{
+		if (material_selection_index_ >= material_list_.GetCount())
+			material_selection_index_ = static_cast<Int32>(material_list_.GetCount()) - 1;
+		if (material_selection_index_ < 0 && material_list_.GetCount() > 0)
+			material_selection_index_ = 0;
+			
+		Get()->SetDirty(DIRTYFLAGS::DESCRIPTION);
+		::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+		if (::GeIsMainThread())
+			::EventAdd();
+	}
 }
