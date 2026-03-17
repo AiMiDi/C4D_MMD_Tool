@@ -90,6 +90,9 @@
     <ClCompile Include="..\..\..\..\refactoring\register_entity.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_display_frame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\refactoring\CMTSceneManager.h">

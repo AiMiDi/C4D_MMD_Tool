@@ -145,25 +145,26 @@ refactoring/module/tools/material/
 **选择**: 
 - 在 `MMDMaterialData` 中新增 `mesh_link` 和 `selection_name` 字段，关联材质所属的 mesh 对象及选集标签名
 - 在材质列表旁使用 `GROUP { COLUMNS 2; }` 布局：左侧材质列表 CYCLE，右侧嵌套 `GROUP { COLUMNS 4; }` 放置 ↑ ↓ × + 四个按钮
-- × 删除按钮行为：删除当前 MMD 材质条目，同时删除关联的 mesh 对象；若 `selection_name` 非空则仅删除对应的选集标签和纹理标签
-- + 添加按钮：创建新的空 `MMDMaterialData` 条目并选中
+- × 删除按钮（-）行为：弹出提示框告知用户会删除对应的 mesh。用户确认后，若 `selection_name` 非空，则删除选集对应多边形部分；如果没有选集，则移除整个 mesh 对象。此操作需加入 Undo 系统。
+- + 添加按钮（+）行为：手动触发材质列表更新。对比当前 `material_list_` 和实际的 mesh 对象/选集。若发现新的对象或选集，则将其添加到材质列表并创建新的 MMD 材质数据；若无新增，则添加按钮无效。
 
 **理由**:
 - mesh_link 和 selection_name 建立了材质与场景中几何体的关联，便于定位和管理
 - 四按钮布局提供完整的列表 CRUD 操作
-- 删除时区分"整个 mesh"和"选集中的部分 mesh"，避免误删除其他材质的几何体
+- 删除操作涉及实际几何体的修改，提供确认框和 Undo 支持可防止误操作并提供安全保障
+- 将添加操作从单纯的“新建空条目”改为“手动从场景同步新增材质”，更符合实际工作流，并优化性能
 
 ### 决策 11：Mesh-材质同步机制
 
-**选择**: 在 `MMDModelManagerObject::Execute` 或 `Message(MSG_MULTI_CLEARSUGGESTEDFOLDER)` 中检测子 mesh 的材质变化，与当前 `material_list_` 对比，自动增删和更新条目
+**选择**: 放弃全自动的增量同步，改为“手动添加同步 + 自动删除检测”相结合的机制：
+1. **添加同步（手动）**：如决策10所述，用户点击 `+` 按钮时对比列表和 mesh，如有对象或者选集新增情况，添加到材质列表并添加新的 MMD 材质。
+2. **删除检测（自动）**：在 `MMDModelManagerObject::Execute` 等合适的时机，检测子 mesh 对象或者选集是否被删除。如果发现已被删除，则自动移除对应的 list 条目和 MMD 材质 data。
 
 **理由**:
-- 用户可能在 C4D 中手动添加/删除 mesh 或更换 mesh 的材质贴图标签，MMD 材质列表需要保持同步
-- 通过遍历 `MMDMeshManagerObject` 下的 mesh 子对象，收集其所有 `TextureTag` 指向的 `BaseMaterial`，与 `material_list_` 中的 `material_link` 对比
-- 新出现的材质添加到列表（初始化基础 MMD 属性），消失的材质从列表中移除
-- 已有材质的 `material_link` 发生变化时更新对应条目
+- 手动触发新增同步可以避免频繁遍历场景节点造成的性能开销，同时让用户明确知道何时添加了新材质管理条目
+- 自动检测删除则能保证数据有效性，避免持有悬空指针（无效的 mesh 或 material link）
 
-**风险**: 频繁检测可能影响性能，应使用脏标记（dirty flag）或仅在场景结构变化时触发
+**风险**: 自动删除检测需轻量化，只需校验现有链接的有效性，避免性能开销。
 
 ## Risks / Trade-offs
 
@@ -171,5 +172,5 @@ refactoring/module/tools/material/
 - **[Risk] 序列化版本兼容** → 在 `Read` 方法中使用 level 参数检测是否存在材质数据段，缺失时跳过（向后兼容）
 - **[Risk] BaseLink 在材质被手动删除后失效** → 在 `Execute` 或 `GetDParameter` 中检查 link 有效性，无效时显示为空
 - **[Risk] 大量材质时性能问题** → CYCLE 列表和数据数组均为 O(1) 索引访问，不存在性能瓶颈；典型 PMX 模型材质数量在 10-50 个范围内
-- **[Risk] Mesh-材质同步的性能开销** → 使用脏标记避免每帧检测，仅在 `MSG_CHANGE` 或场景结构变化时触发同步
+- **[Risk] Mesh-材质同步的性能开销** → 采用手动添加同步（点击+按钮）避免了频繁的场景遍历开销，自动删除检测仅需校验现有链接的有效性，开销极小
 - **[Risk] 材质排序后序列化兼容** → 排序只改变数组内元素顺序，不影响序列化格式

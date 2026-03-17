@@ -88,7 +88,7 @@
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;YAML_CPP_STATIC_DEFINE=1;LIBMMD_STATIC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -108,7 +108,7 @@
       <AdditionalIncludeDirectories>../generated/hxx;../../../../res/S24_up;../../../../refactoring;../../../../dependency/install/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <PreprocessorDefinitions>MAXON_MODULE_ID="net.aimidi.mmdtool";PRIVATE_MODULE_net_aimidi_mmdtool;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -223,6 +223,7 @@
     <ClCompile Include="..\..\..\..\refactoring\module\tools\material\mmd_standard_material.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_bone_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_camera.cpp" />
+    <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_display_frame.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_joint_manager.cpp" />
     <ClCompile Include="..\..\..\..\refactoring\module\tools\object\mmd_mesh_manager.cpp" />

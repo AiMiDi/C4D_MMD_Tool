@@ -309,6 +309,11 @@ Bool MMDMeshManagerObject::SetMorphStrength(const String& morph_name, const Floa
 	return true;
 }
 
+void MMDMeshManagerObject::RequestMorphDataRefresh()
+{
+	*needs_morph_data_refresh_.Write() = true;
+}
+
 struct morph_tag_info
 {
 	CAPoseMorphTag* morph_tag = nullptr;

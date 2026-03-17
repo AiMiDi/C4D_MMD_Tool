@@ -236,4 +236,6 @@ private:
 	void ApplyIKSolverStates();
 	void ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting);
 	void SyncSubManagerScale(Float pm);
+	void SyncMaterialsList();
+	void PruneDeletedMaterialEntries(BaseDocument* doc);
 };

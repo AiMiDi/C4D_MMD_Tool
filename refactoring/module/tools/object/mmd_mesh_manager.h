@@ -74,6 +74,7 @@ public:
 	[[nodiscard]] const maxon::HashMap<String, Int32>& GetMeshMorphData() const;
 	[[nodiscard]] const maxon::HashSet<String>& GetUVMorphNames() const;
 	Bool SetMorphStrength(const String& morph_name, const Float& strength);
+	void RequestMorphDataRefresh();
 	Bool LoadPMX(
 		const libmmd::PMXFile& pmx_file,
 		const maxon::BaseArray<BaseObject*>& bone_list,

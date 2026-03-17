@@ -52,6 +52,7 @@ STRINGTABLE
 	IDS_MES_EXPORT_MOT_OK "Successfully exported # bone's and # morph's # Frame(s) at # ms!";
 
 	IDS_MES_RENDERER_NOT_INSTALLED "# renderer is not installed, cannot create material!";
+	IDS_MES_MATERIAL_DELETE_CONFIRM "This will delete the corresponding mesh or polygon selection. Continue?";
 
 	IDS_MORPH_BONE_TRANSLATION "Bone translation";
 	IDS_MORPH_BONE_ROTATION "Bone rotation";
@@ -63,7 +64,9 @@ STRINGTABLE
 	IDS_MSG_RENAME_OK "OK";
 	IDS_MSG_RENAME_CANCEL "Cancel";
 	IDS_CMT_VMD_ANIM_NONE "-- No animation --";
+	IDS_CMT_VMD_REBUILD_FAILED "MMD runtime rebuild failed";
 	IDS_MODEL_MATERIAL_NONE "-- No material --";
+	IDS_MODEL_DISPLAY_FRAME_NONE "-- No frame --";
 	IDS_CMT_MODEL_MANAGER_IK_BONE "IK link bone";
 	IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT "Enable limit";
 	IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN "Min limit";

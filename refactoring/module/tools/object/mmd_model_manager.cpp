@@ -2318,63 +2318,187 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			{
 				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
 				{
+					if (!QuestionDialog(IDS_MES_MATERIAL_DELETE_CONFIRM))
+						break;
 					auto& mat = material_list_[material_selection_index_];
 					BaseDocument* doc = node->GetDocument();
-					if (doc && mat.mesh_link && *mat.mesh_link)
+					if (doc)
 					{
-						BaseObject* mesh_obj = static_cast<BaseObject*>((*mat.mesh_link)->GetLink(doc));
-						if (mesh_obj)
+						doc->StartUndo();
+						doc->AddUndo(UNDOTYPE::CHANGE, node);
+						if (mat.mesh_link && *mat.mesh_link)
 						{
-							if (mat.selection_name.IsPopulated())
+							BaseObject* mesh_obj = static_cast<BaseObject*>((*mat.mesh_link)->GetLink(doc));
+							if (mesh_obj)
 							{
-								for (BaseTag* tag = mesh_obj->GetFirstTag(); tag; tag = tag->GetNext())
+								if (mat.selection_name.IsPopulated())
 								{
-									if (tag->GetType() == Tpolygonselection && tag->GetName() == mat.selection_name)
+									SelectionTag* sel_tag = nullptr;
+									for (BaseTag* tag = mesh_obj->GetFirstTag(); tag; tag = tag->GetNext())
 									{
-										tag->Remove();
-										BaseTag::Free(tag);
-										break;
-									}
-								}
-								for (BaseTag* tag = mesh_obj->GetFirstTag(); tag; tag = tag->GetNext())
-								{
-									if (tag->GetType() == Ttexture)
-									{
-										GeData sel_data;
-										tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), sel_data, DESCFLAGS_GET::NONE);
-										if (sel_data.GetString() == mat.selection_name)
+										if (tag->GetType() == Tpolygonselection && tag->GetName() == mat.selection_name)
 										{
-											tag->Remove();
-											BaseTag::Free(tag);
+											sel_tag = static_cast<SelectionTag*>(tag);
 											break;
 										}
 									}
+									if (sel_tag)
+									{
+										PolygonObject* poly_obj = ToPoly(mesh_obj);
+										if (poly_obj)
+										{
+											doc->AddUndo(UNDOTYPE::CHANGE, mesh_obj);
+											const BaseSelect* poly_sel_const = poly_obj->GetPolygonS();
+											BaseSelect* poly_sel = const_cast<BaseSelect*>(poly_sel_const);
+											if (poly_sel)
+											{
+												poly_sel->DeselectAll();
+												const_cast<BaseSelect*>(sel_tag->GetBaseSelect())->CopyTo(poly_sel);
+												ModelingCommandData mcd;
+												mcd.doc = doc;
+												mcd.op = mesh_obj;
+												mcd.mode = MODELINGCOMMANDMODE::POLYGONSELECTION;
+												if (SendModelingCommand(MCOMMAND_DELETE, mcd))
+												{
+													BaseContainer opt;
+													opt.SetBool(MDATA_OPTIMIZE_UNUSEDPOINTS, true);
+													mcd.bc = &opt;
+													mcd.mode = MODELINGCOMMANDMODE::ALL;
+													SendModelingCommand(MCOMMAND_OPTIMIZE, mcd);
+												}
+											}
+										}
+										doc->AddUndo(UNDOTYPE::DELETEOBJ, sel_tag);
+										sel_tag->Remove();
+										BaseTag* tmp_sel_tag = sel_tag;
+										BaseTag::Free(tmp_sel_tag);
+									}
+									for (BaseTag* tag = mesh_obj->GetFirstTag(); tag; tag = tag->GetNext())
+									{
+										if (tag->GetType() == Ttexture)
+										{
+											GeData sel_data;
+											tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), sel_data, DESCFLAGS_GET::NONE);
+											if (sel_data.GetString() == mat.selection_name)
+											{
+												doc->AddUndo(UNDOTYPE::DELETEOBJ, tag);
+												tag->Remove();
+												BaseTag::Free(tag);
+												break;
+											}
+										}
+									}
 								}
-							}
-							else
-							{
-								mesh_obj->Remove();
-								BaseObject::Free(mesh_obj);
+								else
+								{
+									doc->AddUndo(UNDOTYPE::DELETEOBJ, mesh_obj);
+									mesh_obj->Remove();
+									BaseObject::Free(mesh_obj);
+								}
 							}
 						}
 					}
 					material_list_.Erase(material_selection_index_) iferr_ignore("erase failed"_s);
 					if (material_selection_index_ >= material_list_.GetCount())
 						material_selection_index_ = static_cast<Int32>(material_list_.GetCount()) - 1;
+					if (mesh_manager_data_)
+					{
+						mesh_manager_data_->RequestMorphDataRefresh();
+						*is_morph_initialized_.Write() = false;
+					}
 					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 					EventAdd();
+					if (doc)
+						doc->EndUndo();
 				}
 				break;
 			}
 			case MODEL_MATERIAL_ADD_BUTTON:
 			{
-				MMDMaterialData new_mat;
-				new_mat.name_local = FormatString("Material @", material_list_.GetCount());
-				iferr(material_list_.Append(std::move(new_mat)))
+				BaseDocument* doc = node->GetDocument();
+				BaseObject* mesh_mgr_obj = GetMeshManagerObject();
+				if (!doc || !mesh_mgr_obj)
 					break;
-				material_selection_index_ = static_cast<Int32>(material_list_.GetCount()) - 1;
-				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
-				EventAdd();
+				auto HasMaterialEntry = [this, doc](BaseObject* mesh_obj, const String& sel_name) -> Bool
+				{
+					for (const auto& m : material_list_)
+					{
+						if (!m.mesh_link || !*m.mesh_link)
+							continue;
+						if (static_cast<BaseObject*>((*m.mesh_link)->GetLink(doc)) != mesh_obj)
+							continue;
+						if ((sel_name.IsEmpty() && m.selection_name.IsEmpty()) ||
+							(sel_name.IsPopulated() && m.selection_name == sel_name))
+							return true;
+					}
+					return false;
+				};
+				Bool added = false;
+				doc->StartUndo();
+				doc->AddUndo(UNDOTYPE::CHANGE, node);
+				for (BaseObject* child = mesh_mgr_obj->GetDown(); child; child = child->GetNext())
+				{
+					if (child->GetType() != Opolygon)
+						continue;
+					Bool has_sel_tags = false;
+					for (BaseTag* tag = child->GetFirstTag(); tag; tag = tag->GetNext())
+					{
+						if (tag->GetType() == Tpolygonselection)
+						{
+							has_sel_tags = true;
+							const String tag_name = tag->GetName();
+							if (!HasMaterialEntry(child, tag_name))
+							{
+								MMDMaterialData new_mat;
+								new_mat.name_local = new_mat.name_universal = tag_name;
+								new_mat.mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
+								if (new_mat.mesh_link && *new_mat.mesh_link)
+									(*new_mat.mesh_link)->SetLink(child);
+								new_mat.selection_name = tag_name;
+								BaseMaterial* c4d_mat = CreateStandardMaterialFromData(new_mat);
+								if (c4d_mat)
+								{
+									doc->InsertMaterial(c4d_mat);
+									doc->AddUndo(UNDOTYPE::NEWOBJ, c4d_mat);
+									new_mat.material_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
+									if (new_mat.material_link && *new_mat.material_link)
+										(*new_mat.material_link)->SetLink(c4d_mat);
+								}
+								iferr(material_list_.Append(std::move(new_mat)))
+									break;
+								added = true;
+							}
+						}
+					}
+					if (!has_sel_tags && !HasMaterialEntry(child, ""_s))
+					{
+						MMDMaterialData new_mat;
+						new_mat.name_local = new_mat.name_universal = child->GetName();
+						new_mat.mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
+						if (new_mat.mesh_link && *new_mat.mesh_link)
+							(*new_mat.mesh_link)->SetLink(child);
+						new_mat.selection_name = ""_s;
+						BaseMaterial* c4d_mat = CreateStandardMaterialFromData(new_mat);
+						if (c4d_mat)
+						{
+							doc->InsertMaterial(c4d_mat);
+							doc->AddUndo(UNDOTYPE::NEWOBJ, c4d_mat);
+							new_mat.material_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
+							if (new_mat.material_link && *new_mat.material_link)
+								(*new_mat.material_link)->SetLink(c4d_mat);
+						}
+						iferr(material_list_.Append(std::move(new_mat)))
+							break;
+						added = true;
+					}
+				}
+				if (added)
+				{
+					material_selection_index_ = static_cast<Int32>(material_list_.GetCount()) - 1;
+					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+					EventAdd();
+				}
+				doc->EndUndo();
 				break;
 			}
 			default:
@@ -2969,7 +3093,7 @@ void MMDModelManagerObject::SyncMaterialsList()
 	Bool changed = false;
 
 	// Remove unreferenced materials
-	for (Int32 i = material_list_.GetCount() - 1; i >= 0; --i)
+	for (Int32 i = static_cast<Int32>(material_list_.GetCount()) - 1; i >= 0; --i)
 	{
 		auto& mmd_mat = material_list_[i];
 		BaseMaterial* linked_mat = (mmd_mat.material_link && *mmd_mat.material_link) ? static_cast<BaseMaterial*>((*mmd_mat.material_link)->GetLink(doc)) : nullptr;
@@ -3016,7 +3140,7 @@ void MMDModelManagerObject::SyncMaterialsList()
 			new_mat.name_universal = ref.mat->GetName();
 			
 			auto mat_link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
-			if (mat_link_result != maxon::FAILED)
+			if (mat_link_result == maxon::OK)
 			{
 				new_mat.material_link = mat_link_result.GetValue();
 				if (new_mat.material_link && *new_mat.material_link)
@@ -3024,7 +3148,7 @@ void MMDModelManagerObject::SyncMaterialsList()
 			}
 
 			auto mesh_link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
-			if (mesh_link_result != maxon::FAILED)
+			if (mesh_link_result == maxon::OK)
 			{
 				new_mat.mesh_link = mesh_link_result.GetValue();
 				if (new_mat.mesh_link && *new_mat.mesh_link)

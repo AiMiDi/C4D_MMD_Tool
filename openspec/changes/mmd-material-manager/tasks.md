@@ -71,14 +71,13 @@
 - [x] 10.4 在 `OMMDModelManager.str`（中英文共 4 个文件）中新增 mesh link / 选集 / 四个按钮的字符串
 - [x] 10.5 在 `GetDParameter` / `SetDParameter` 中添加 `MODEL_MATERIAL_MESH_LINK` 和 `MODEL_MATERIAL_SELECTION` 的读写处理
 - [x] 10.6 在 `Message` 中处理 `MODEL_MATERIAL_MOVE_UP_BUTTON` / `MODEL_MATERIAL_MOVE_DOWN_BUTTON`：交换 `material_list_` 中相邻元素并更新选中索引
-- [x] 10.7 在 `Message` 中处理 `MODEL_MATERIAL_DELETE_BUTTON`：删除当前材质条目，有 selection_name 时仅删除选集和纹理标签，否则删除整个 mesh 对象
-- [x] 10.8 在 `Message` 中处理 `MODEL_MATERIAL_ADD_BUTTON`：添加新的空 `MMDMaterialData` 条目并选中
+- [x] 10.7 在 `Message` 中处理 `MODEL_MATERIAL_DELETE_BUTTON`（-按钮）：弹出提示框告知用户将删除对应 mesh。用户确认后开启 Undo，若有 selection_name 则删除选集对应多边形部分并移除条目，否则移除整个 mesh 对象及条目，最后结束 Undo
+- [x] 10.8 在 `Message` 中处理 `MODEL_MATERIAL_ADD_BUTTON`（+按钮）：手动触发材质列表同步。对比当前列表和 mesh 对象，若发现新增对象或选集，则添加到列表并创建新 MMD 材质，否则按钮操作无效
 - [x] 10.9 在 `GetDEnabling` 中添加：↑按钮在 `index <= 0` 时禁用；↓按钮在 `index >= count - 1` 时禁用；×按钮在无选中材质时禁用
 
-## 11. Mesh-材质同步
+## 11. Mesh-材质同步（删除检测）
 
-- [ ] 11.1 在 `MMDModelManagerObject` 中设计 mesh-材质同步的触发时机，在 `Message` 中监听 `MSG_CHANGE` 或 `CheckDirty` 检测子对象结构变化
-- [ ] 11.2 实现同步逻辑：遍历 `MMDMeshManagerObject` 下 mesh 子对象的 `TextureTag`，收集所有引用的 `BaseMaterial`，与 `material_list_` 的 `material_link` 对比
-- [ ] 11.3 对于新出现的材质（在 mesh 上但不在 `material_list_` 中）：创建新的 `MMDMaterialData` 条目，设置 `material_link`，初始化默认 MMD 属性
-- [ ] 11.4 对于消失的材质（在 `material_list_` 中但 mesh 上不再引用）：从 `material_list_` 中移除对应条目
-- [ ] 11.5 同步后刷新 `material_list_items_` CYCLE 列表和 `material_selection_index_`
+- [x] 11.1 在 `MMDModelManagerObject` 的 `Execute` 或 `Message` 中设计检测时机，校验子 mesh 和选集的存在性
+- [x] 11.2 实现删除检测逻辑：遍历 `material_list_`，检查 `mesh_link` 对应的对象以及 `selection_name` 对应的选集是否被外部删除
+- [x] 11.3 对于检测到被删除的 mesh 对象或选集：自动从 `material_list_` 中移除对应的 MMD 材质数据条目
+- [x] 11.4 清理结束后刷新 `material_list_items_` CYCLE 列表和 `material_selection_index_`
