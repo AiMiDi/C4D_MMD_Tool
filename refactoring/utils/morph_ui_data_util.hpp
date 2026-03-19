@@ -54,5 +54,15 @@ public:
 			return;
 		morph_tag->SetParameter(strength_id, strength, DESCFLAGS_SET::NONE);
 	}
+
+	[[nodiscard]] Float GetStrength() const
+	{
+		if (!morph_tag)
+			return 0.0;
+		GeData ge_data;
+		if (!morph_tag->GetParameter(strength_id, ge_data, DESCFLAGS_GET::NONE))
+			return 0.0;
+		return ge_data.GetFloat();
+	}
 };
 

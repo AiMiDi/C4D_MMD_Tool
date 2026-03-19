@@ -2,34 +2,18 @@
 #include "mmd_material.h"
 #include "xcolor.h"
 
-BaseMaterial* CreateStandardMaterialFromPMX(const libmmd::PMXMaterial& pmx_material,
+BaseMaterial* MMDStandardMaterialAdapter::CreateFromPMX(const libmmd::PMXMaterial& pmx_material,
 	const maxon::BaseArray<Filename>& texture_paths, const maxon::String& material_name)
 {
-	BaseMaterial* base_material = nullptr;
-	bool has_texture = false;
-	bool has_alpha_channel = false;
+	const auto tex_info = MMDMaterialAdapter::DetectTextureFromPMX(pmx_material, texture_paths);
+	const bool has_texture = tex_info.has_texture;
+	const bool has_alpha_channel = tex_info.has_alpha;
 	const auto texture_index = pmx_material.m_textureIndex;
-	if (texture_index != -1 && texture_index < texture_paths.GetCount())
-	{
-		const auto& texture_path = texture_paths[texture_index];
-		if (GeFExist(texture_path))
-		{
-			has_texture = true;
-			AutoAlloc<BaseBitmap> bitmap;
-			if (bitmap && bitmap->Init(texture_path) == IMAGERESULT::OK)
-			{
-				if (bitmap->GetChannelCount() &&
-					(texture_path.GetSuffix().ToLower().Compare("png"_s) == maxon::COMPARERESULT::EQUAL ||
-					 texture_path.GetSuffix().ToLower().Compare("tga"_s) == maxon::COMPARERESULT::EQUAL))
-					has_alpha_channel = true;
-			}
-		}
-	}
 
 	Material* material = Material::Alloc();
 	if (!material)
 		return nullptr;
-	base_material = material;
+	BaseMaterial* base_material = material;
 
 	const auto& color = pmx_material.m_diffuse;
 	if (has_texture)
@@ -80,27 +64,16 @@ BaseMaterial* CreateStandardMaterialFromPMX(const libmmd::PMXMaterial& pmx_mater
 	return base_material;
 }
 
-BaseMaterial* CreateStandardMaterialFromData(const MMDMaterialData& data)
+BaseMaterial* MMDStandardMaterialAdapter::CreateFromData(const MMDMaterialData& data)
 {
 	Material* material = Material::Alloc();
 	if (!material)
 		return nullptr;
 
-	bool has_texture = false;
-	bool has_alpha_channel = false;
+	const auto tex_info = MMDMaterialAdapter::DetectTextureFromData(data);
+	const bool has_texture = tex_info.has_texture;
+	const bool has_alpha_channel = tex_info.has_alpha;
 	const Filename texture_path(data.texture_path);
-	if (texture_path.IsPopulated() && GeFExist(texture_path))
-	{
-		has_texture = true;
-		AutoAlloc<BaseBitmap> bitmap;
-		if (bitmap && bitmap->Init(texture_path) == IMAGERESULT::OK)
-		{
-			if (bitmap->GetChannelCount() &&
-				(texture_path.GetSuffix().ToLower().Compare("png"_s) == maxon::COMPARERESULT::EQUAL ||
-				 texture_path.GetSuffix().ToLower().Compare("tga"_s) == maxon::COMPARERESULT::EQUAL))
-				has_alpha_channel = true;
-		}
-	}
 
 	if (has_texture)
 	{
@@ -155,7 +128,7 @@ BaseMaterial* CreateStandardMaterialFromData(const MMDMaterialData& data)
 	return material;
 }
 
-void SyncToStandardMaterial(const MMDMaterialData& data, BaseMaterial* material)
+void MMDStandardMaterialAdapter::SyncTo(const MMDMaterialData& data, BaseMaterial* material)
 {
 	if (!material || !material->IsInstanceOf(Mmaterial))
 		return;
@@ -198,7 +171,7 @@ void SyncToStandardMaterial(const MMDMaterialData& data, BaseMaterial* material)
 	mat->SetParameter(ConstDescID(DescLevel(MATERIAL_SPECULAR_WIDTH)), specular_width, DESCFLAGS_SET::NONE);
 }
 
-void ReadFromStandardMaterial(const BaseMaterial* material, MMDMaterialData& data)
+void MMDStandardMaterialAdapter::ReadFrom(const BaseMaterial* material, MMDMaterialData& data)
 {
 	if (!material || !material->IsInstanceOf(Mmaterial))
 		return;
@@ -209,7 +182,12 @@ void ReadFromStandardMaterial(const BaseMaterial* material, MMDMaterialData& dat
 	if (color_ch)
 	{
 		BaseContainer bc = color_ch->GetData();
-		if (bc.GetString(BASECHANNEL_TEXTURE).IsEmpty())
+		String tex_path = bc.GetString(BASECHANNEL_TEXTURE);
+		if (tex_path.IsPopulated())
+		{
+			data.texture_path = tex_path;
+		}
+		else
 		{
 			GeData gd;
 			if (mat->GetParameter(ConstDescID(DescLevel(MATERIAL_COLOR_SHADER)), gd, DESCFLAGS_GET::NONE))
@@ -243,4 +221,10 @@ void ReadFromStandardMaterial(const BaseMaterial* material, MMDMaterialData& dat
 			}
 		}
 	}
+	GeData spec_color;
+	if (mat->GetParameter(ConstDescID(DescLevel(MATERIAL_SPECULAR_COLOR)), spec_color, DESCFLAGS_GET::NONE))
+		data.specular = spec_color.GetVector();
+	GeData spec_width;
+	if (mat->GetParameter(ConstDescID(DescLevel(MATERIAL_SPECULAR_WIDTH)), spec_width, DESCFLAGS_GET::NONE))
+		data.specular_power = spec_width.GetFloat() * 100.0;
 }

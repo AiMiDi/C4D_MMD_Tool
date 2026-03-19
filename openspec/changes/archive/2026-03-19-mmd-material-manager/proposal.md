@@ -24,7 +24,7 @@
 - MMD 材质管理界面新增**同步材质**按钮，将当前 UI 上的 MMD 材质属性手动同步到 `material_link` 关联的 C4D 材质
 - 用户修改 `MODEL_MATERIAL_TOON_TEXTURE_INDEX` 时自动更新 `MODEL_MATERIAL_TOON_TEXTURE_PATH`（根据 toon_mode 和索引值重新生成路径）
 - 在材质列表下拉框旁新增 **↑**/**↓** 两个排序按钮，用于调整材质在选择框中的顺序
-- 材质列表新增 **+**/**-** 列表管理按钮：**+ 按钮**用于手动对比 list 和 mesh，添加新增的选集/对象条目及 MMD 材质；**- 按钮**弹出提示确认后删除对应的多边形或对象，并加入 Undo 系统
+- 材质列表新增 **+**/**-** 列表管理按钮：**+ 按钮**用于手动对比 list 和 mesh，添加新增的选集/对象条目及 MMD 材质——若 mesh 已有 C4D 材质则引用并反向读取属性，否则创建新材质和 TextureTag（选集需指定 `TEXTURETAG_RESTRICTION`）；**- 按钮**弹出提示确认后删除对应的多边形或对象，并加入 Undo 系统
 - 当子 mesh 对象或选集被外部操作删除时，自动检测并移除对应的 MMD 材质列表条目
 
 ## Capabilities

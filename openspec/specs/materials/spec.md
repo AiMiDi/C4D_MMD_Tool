@@ -56,16 +56,16 @@ Defined in `module/tools/material/mmd_material.h/cpp`. Used during PMX import.
 
 Selected via `ModelImport::import_material_type` enum (Standard/RedShift/Octane/Corona).
 
-### Per-Renderer Functions
+### Material Adapter System
 
-Each renderer provides:
+Material operations use the `MMDMaterialAdapter` pattern to detect the material type dynamically and delegate reading/writing to the specific renderer's adapter implementation.
 
-| Function | Description |
-|----------|-------------|
-| `Create*MaterialFromPMX()` | Creates C4D material from PMX data + textures (import time) |
-| `Create*MaterialFromData()` | Creates C4D material from `MMDMaterialData` (UI create button) |
-| `SyncTo*Material()` | Pushes MMD data → C4D material |
-| `ReadFrom*Material()` | Pulls C4D material → MMD data |
+| Adapter Method | Description |
+|----------------|-------------|
+| `CreateFromPMX()` | Creates C4D material from PMX data + textures (import time) |
+| `CreateFromData()` | Creates C4D material from `MMDMaterialData` (UI create button) |
+| `SyncTo()` | Pushes MMD data → C4D material |
+| `ReadFrom()` | Pulls C4D material → MMD data |
 
 ## PMX Material Properties
 
@@ -91,11 +91,11 @@ The attribute manager exposes material editing in `MODEL_MATERIAL_GRP`:
 | Material list CYCLE | Select material by "index: name" |
 | ↑ / ↓ buttons | Reorder materials |
 | × button | Delete material entry (and related mesh/selection) |
-| + button | Add new empty material entry |
+| + button | Add material to mesh (reverse syncs if mesh has material, creates new C4D material otherwise) |
 | Material link | Link to C4D BaseMaterial |
 | Mesh link | Link to associated mesh object |
 | Selection name | Polygon selection tag name |
-| Create button | Create C4D material from current MMDMaterialData (type selectable) |
+| Create button | Create C4D material from current MMDMaterialData (type selectable and remembers last import choice) |
 | Sync button | Push MMD data → C4D material |
 | Reverse sync button | Pull C4D material → MMD data |
 | All PMX fields | Editable in attribute manager (colors, flags, edge, textures, etc.) |

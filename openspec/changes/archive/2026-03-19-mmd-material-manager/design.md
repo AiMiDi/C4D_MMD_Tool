@@ -146,7 +146,10 @@ refactoring/module/tools/material/
 - 在 `MMDMaterialData` 中新增 `mesh_link` 和 `selection_name` 字段，关联材质所属的 mesh 对象及选集标签名
 - 在材质列表旁使用 `GROUP { COLUMNS 2; }` 布局：左侧材质列表 CYCLE，右侧嵌套 `GROUP { COLUMNS 4; }` 放置 ↑ ↓ × + 四个按钮
 - × 删除按钮（-）行为：弹出提示框告知用户会删除对应的 mesh。用户确认后，若 `selection_name` 非空，则删除选集对应多边形部分；如果没有选集，则移除整个 mesh 对象。此操作需加入 Undo 系统。
-- + 添加按钮（+）行为：手动触发材质列表更新。对比当前 `material_list_` 和实际的 mesh 对象/选集。若发现新的对象或选集，则将其添加到材质列表并创建新的 MMD 材质数据；若无新增，则添加按钮无效。
+- + 添加按钮（+）行为：手动触发材质列表更新。对比当前 `material_list_` 和实际的 mesh 对象/选集。若发现新的对象或选集：
+  - 若该 mesh/选集已有 `Ttexture` 标签且关联了 C4D 材质：引用该已有材质并调用 `ReadFromStandardMaterial` 将颜色、纹理等属性反向更新到 MMD 材质数据
+  - 若该 mesh/选集无材质：根据新建的 MMD 材质数据调用 `CreateStandardMaterialFromData` 生成 C4D 材质，插入文档，并在 mesh 上创建 `TextureTag`（如为选集则设置 `TEXTURETAG_RESTRICTION` 指定选集名）
+  - 若无新增，则添加按钮无效。
 
 **理由**:
 - mesh_link 和 selection_name 建立了材质与场景中几何体的关联，便于定位和管理
@@ -157,7 +160,7 @@ refactoring/module/tools/material/
 ### 决策 11：Mesh-材质同步机制
 
 **选择**: 放弃全自动的增量同步，改为“手动添加同步 + 自动删除检测”相结合的机制：
-1. **添加同步（手动）**：如决策10所述，用户点击 `+` 按钮时对比列表和 mesh，如有对象或者选集新增情况，添加到材质列表并添加新的 MMD 材质。
+1. **添加同步（手动）**：如决策10所述，用户点击 `+` 按钮时对比列表和 mesh，如有对象或选集新增情况：若 mesh 已有 `Ttexture` 标签指向现有 C4D 材质，则引用该材质并反向读取属性到 MMD 数据；否则创建新 C4D 材质和 TextureTag。
 2. **删除检测（自动）**：在 `MMDModelManagerObject::Execute` 等合适的时机，检测子 mesh 对象或者选集是否被删除。如果发现已被删除，则自动移除对应的 list 条目和 MMD 材质 data。
 
 **理由**:
@@ -165,6 +168,36 @@ refactoring/module/tools/material/
 - 自动检测删除则能保证数据有效性，避免持有悬空指针（无效的 mesh 或 material link）
 
 **风险**: 自动删除检测需轻量化，只需校验现有链接的有效性，避免性能开销。
+
+### 决策 12：Adapter 设计模式重构
+
+**选择**: 将各渲染器的 4 个 free function 重构为 `MMDMaterialAdapter` 抽象基类 + 4 个渲染器子类（`MMDStandardMaterialAdapter` / `MMDRedShiftMaterialAdapter` / `MMDOctaneMaterialAdapter` / `MMDCoronaMaterialAdapter`）。
+
+基类提供：
+- 4 个纯虚方法：`CreateFromPMX` / `CreateFromData` / `SyncTo` / `ReadFrom`
+- 静态工厂 `Create(type)` / `CreateFor(material)` + 检测 `DetectType(material)`
+- 共享工具 `DetectTextureFromPMX` / `DetectTextureFromData`（提取原 4 个 `CreateFromPMX` 中重复的纹理/Alpha 检测逻辑）
+- 保留 `SyncToMaterial` / `ReadFromMaterial` / `CreateMaterialFromData` 便捷 free function（内部创建 adapter），保持调用方兼容性
+
+**检测逻辑**（参考 D5 `d5_plugin_manager.cpp:399-436` 的 switch 结构）：
+```
+switch (material->GetType())
+  case Mmaterial:
+    if (IsNodeBased() && HasSpace(redshiftId)) → RedShift (3.5+)
+    else → Standard
+  case ID_REDSHIFT_MATERIAL → RedShift (3.0)
+  case ID_OCTANE_DIFFUSE_MATERIAL → Octane
+  case ID_CORONA_MATERIAL → Corona
+  default → Unknown
+```
+
+**理由**:
+- 消除 RedShift 材质（`Mmaterial` 类型 + RS node space）与 Standard 检查的重叠问题
+- Adapter 模式提供接口约束，新增渲染器只需继承基类、实现 4 个方法、在工厂注册
+- 共享纹理检测消除 80%+ 重复代码
+- 便捷 free function 保持调用方兼容性
+
+**替代方案**: 保持 free function + switch 分发——功能等价但缺乏接口约束，新增渲染器需修改多个 switch
 
 ## Risks / Trade-offs
 

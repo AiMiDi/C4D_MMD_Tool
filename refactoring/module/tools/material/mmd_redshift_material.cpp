@@ -93,7 +93,7 @@ namespace
 }
 #endif
 
-BaseMaterial* CreateRedShiftMaterialFromPMX(const libmmd::PMXMaterial& pmx_material,
+BaseMaterial* MMDRedShiftMaterialAdapter::CreateFromPMX(const libmmd::PMXMaterial& pmx_material,
 	const maxon::BaseArray<Filename>& texture_paths, const maxon::String& material_name)
 {
 #if API_VERSION >= 2024000
@@ -200,7 +200,7 @@ BaseMaterial* CreateRedShiftMaterialFromPMX(const libmmd::PMXMaterial& pmx_mater
 #endif
 }
 
-BaseMaterial* CreateRedShiftMaterialFromData(const MMDMaterialData& data)
+BaseMaterial* MMDRedShiftMaterialAdapter::CreateFromData(const MMDMaterialData& data)
 {
 #if API_VERSION >= 2024000
 	bool has_texture = false;
@@ -298,7 +298,7 @@ BaseMaterial* CreateRedShiftMaterialFromData(const MMDMaterialData& data)
 #endif
 }
 
-void SyncToRedShiftMaterial(const MMDMaterialData& data, BaseMaterial* material)
+void MMDRedShiftMaterialAdapter::SyncTo(const MMDMaterialData& data, BaseMaterial* material)
 {
 #if API_VERSION >= 2024000
 	if (!IsRedShiftMaterial(material))
@@ -332,7 +332,7 @@ void SyncToRedShiftMaterial(const MMDMaterialData& data, BaseMaterial* material)
 #endif
 }
 
-void ReadFromRedShiftMaterial(const BaseMaterial* material, MMDMaterialData& data)
+void MMDRedShiftMaterialAdapter::ReadFrom(const BaseMaterial* material, MMDMaterialData& data)
 {
 #if API_VERSION >= 2024000
 	if (!IsRedShiftMaterial(material))

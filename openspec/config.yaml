@@ -29,6 +29,7 @@ context: |
   Language: Simplified Chinese
   - All output must be written in Simplified Chinese. 
   - Add a brief English description document when archiving.
+  - specs are written in English.
 
   Test:
   - add test case and test description for the changes of libMMD and make sure the changes pass all tests.

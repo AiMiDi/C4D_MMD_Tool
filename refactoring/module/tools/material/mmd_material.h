@@ -1,6 +1,7 @@
 #pragma once
 
 #include <c4d.h>
+#include <memory>
 #include "module/core/cmt_marco.h"
 #include "libMMD/Model/MMD/PMXFile.h"
 
@@ -46,6 +47,44 @@ struct MMDMaterialData
 	Bool Write(HyperFile* hf) const;
 	Bool CopyTo(MMDMaterialData& dest) const;
 };
+
+enum class MMDRendererMaterialType { Unknown, Standard, RedShift, Octane, Corona };
+
+/** MMD 材质适配器基类：统一各渲染器材质的创建、同步、读取接口。 */
+class MMDMaterialAdapter
+{
+public:
+	virtual ~MMDMaterialAdapter() = default;
+
+	virtual BaseMaterial* CreateFromPMX(const libmmd::PMXMaterial& pmx_material,
+		const maxon::BaseArray<Filename>& texture_paths, const maxon::String& material_name) = 0;
+	virtual BaseMaterial* CreateFromData(const MMDMaterialData& data) = 0;
+	virtual void SyncTo(const MMDMaterialData& data, BaseMaterial* material) = 0;
+	virtual void ReadFrom(const BaseMaterial* material, MMDMaterialData& data) = 0;
+
+	static std::unique_ptr<MMDMaterialAdapter> Create(MMDRendererMaterialType type);
+	static std::unique_ptr<MMDMaterialAdapter> CreateFor(const BaseMaterial* material);
+	static MMDRendererMaterialType DetectType(const BaseMaterial* material);
+
+protected:
+	struct TextureInfo
+	{
+		bool has_texture = false;
+		bool has_alpha = false;
+	};
+	static TextureInfo DetectTextureFromPMX(
+		const libmmd::PMXMaterial& pmx_material, const maxon::BaseArray<Filename>& texture_paths);
+	static TextureInfo DetectTextureFromData(const MMDMaterialData& data);
+};
+
+/** 便捷封装：根据材质类型自动分发，将 MMD 数据同步到 C4D 材质。 */
+void SyncToMaterial(const MMDMaterialData& data, BaseMaterial* material);
+
+/** 便捷封装：根据材质类型自动分发，从 C4D 材质反向读取属性到 MMD 数据。 */
+void ReadFromMaterial(const BaseMaterial* material, MMDMaterialData& data);
+
+/** 便捷封装：根据渲染器类型创建 C4D 材质。 */
+BaseMaterial* CreateMaterialFromData(const MMDMaterialData& data, MMDRendererMaterialType type);
 
 /** 导入时辅助：纹理路径解析与 PMX 材质转 C4D 材质（标准材质逻辑见 mmd_standard_material）。 */
 class MMDMaterialManager final

@@ -60,6 +60,7 @@ Panel is displayed as a CYCLE parameter per morph in the attribute manager.
 - `AddMorphHelper` — helper for adding morphs via UI
 - `MorphUIData` (in `utils/morph_ui_data_util.hpp`) — serialization of morph tag/DescID data for the attribute manager
 - Morph groups in attribute manager: `MODEL_MORPH_MESH_GRP`, `MODEL_MORPH_UV_GRP`, `MODEL_MORPH_BONE_GRP`, `MODEL_MORPH_MATERIAL_GRP`, `MODEL_MORPH_IMPULSE_GRP`
+- Morph UI ordering in the Attribute Manager: Group, Flip, Mesh, UV, Bone.
 - Material and Impulse groups have dedicated add-name input and add button
 
 ## VMD Morph Animation

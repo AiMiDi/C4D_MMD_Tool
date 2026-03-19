@@ -221,6 +221,7 @@ private:
 	void DeleteMorph(Int morph_index);
 	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it);
 	void RefreshMorph();
+	void SyncMorphSlidersFromTags();
 	Bool ReadMorph(HyperFile* hf);
 #if API_VERSION < 2024000
 	Bool WriteMorph(HyperFile* hf);

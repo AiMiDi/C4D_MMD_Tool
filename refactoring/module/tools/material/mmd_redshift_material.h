@@ -3,11 +3,13 @@
 #include <c4d.h>
 #include "module/tools/material/mmd_material.h"
 
-BaseMaterial* CreateRedShiftMaterialFromPMX(const libmmd::PMXMaterial& pmx_material,
-	const maxon::BaseArray<Filename>& texture_paths, const maxon::String& material_name);
-
-BaseMaterial* CreateRedShiftMaterialFromData(const MMDMaterialData& data);
-
-void SyncToRedShiftMaterial(const MMDMaterialData& data, BaseMaterial* material);
-
-void ReadFromRedShiftMaterial(const BaseMaterial* material, MMDMaterialData& data);
+/** RedShift 材质适配器：使用像素采样检测 alpha，与基类 suffix 检测不同。 */
+class MMDRedShiftMaterialAdapter final : public MMDMaterialAdapter
+{
+public:
+	BaseMaterial* CreateFromPMX(const libmmd::PMXMaterial& pmx_material,
+		const maxon::BaseArray<Filename>& texture_paths, const maxon::String& material_name) override;
+	BaseMaterial* CreateFromData(const MMDMaterialData& data) override;
+	void SyncTo(const MMDMaterialData& data, BaseMaterial* material) override;
+	void ReadFrom(const BaseMaterial* material, MMDMaterialData& data) override;
+};

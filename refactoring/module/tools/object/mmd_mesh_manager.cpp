@@ -126,14 +126,11 @@ SDK2024_CopyTo(MMDMeshManagerObject)
 	{
 		dest_object->mesh_morph_mode_.Insert(entry.GetKey(), entry.GetValue())iferr_return;
 	}
-	for (const auto& entry : mesh_morph_name_)
-	{
-		dest_object->mesh_morph_name_.Insert(entry.GetKey(), entry.GetValue())iferr_return;
-	}
 	for (const auto& name : uv_morph_names_)
 	{
 		dest_object->uv_morph_names_.Insert(name)iferr_return;
 	}
+	*dest_object->needs_morph_data_refresh_.Write() = true;
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
 
@@ -263,7 +260,8 @@ EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 			if(i >= mmd_morph_manager_count)
 				continue;
 			const auto strength = mmd_morph_manager_->GetMorph(i)->GetWeight();
-			if (const auto mesh_morph_data_index = morph_manager_index_[i]; mesh_morph_data_index != -1)
+			if (const auto mesh_morph_data_index = morph_manager_index_[i];
+				mesh_morph_data_index != -1 && mesh_morph_data_index < mesh_morph_data_.GetCount())
 			{
 				const auto& sub_morphs = mesh_morph_data_[mesh_morph_data_index];
 				for (const auto& sub_morph : sub_morphs)
@@ -301,7 +299,10 @@ Bool MMDMeshManagerObject::SetMorphStrength(const String& morph_name, const Floa
 	const auto morph_ptr = mesh_morph_name_.Find(morph_name);
 	if (!morph_ptr)
 		return false;
-	const auto& sub_morphs = mesh_morph_data_[morph_ptr->GetSecond()];
+	const auto index = morph_ptr->GetSecond();
+	if (index < 0 || index >= mesh_morph_data_.GetCount())
+		return false;
+	const auto& sub_morphs = mesh_morph_data_[index];
 	for (const auto& sub_morph : sub_morphs)
 	{
 		sub_morph.SetStrength(strength);
@@ -309,9 +310,34 @@ Bool MMDMeshManagerObject::SetMorphStrength(const String& morph_name, const Floa
 	return true;
 }
 
+Bool MMDMeshManagerObject::GetMorphStrength(const String& morph_name, Float& out_strength) const
+{
+	const auto morph_ptr = mesh_morph_name_.Find(morph_name);
+	if (!morph_ptr)
+		return false;
+	const auto index = morph_ptr->GetSecond();
+	if (index < 0 || index >= mesh_morph_data_.GetCount())
+		return false;
+	const auto& sub_morphs = mesh_morph_data_[index];
+	if (sub_morphs.GetCount() == 0)
+		return false;
+	out_strength = sub_morphs[0].GetStrength();
+	return true;
+}
+
 void MMDMeshManagerObject::RequestMorphDataRefresh()
 {
 	*needs_morph_data_refresh_.Write() = true;
+}
+
+void MMDMeshManagerObject::ForceRefreshMorphData(BaseObject* op)
+{
+	mesh_morph_mode_.Reset();
+	mesh_morph_name_.Reset();
+	mesh_morph_data_.Reset();
+	morph_manager_index_.Reset();
+	RefreshMeshMorphData(op, true);
+	*needs_morph_data_refresh_.Write() = false;
 }
 
 struct morph_tag_info

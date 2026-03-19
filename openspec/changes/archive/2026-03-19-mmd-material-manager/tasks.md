@@ -72,7 +72,9 @@
 - [x] 10.5 在 `GetDParameter` / `SetDParameter` 中添加 `MODEL_MATERIAL_MESH_LINK` 和 `MODEL_MATERIAL_SELECTION` 的读写处理
 - [x] 10.6 在 `Message` 中处理 `MODEL_MATERIAL_MOVE_UP_BUTTON` / `MODEL_MATERIAL_MOVE_DOWN_BUTTON`：交换 `material_list_` 中相邻元素并更新选中索引
 - [x] 10.7 在 `Message` 中处理 `MODEL_MATERIAL_DELETE_BUTTON`（-按钮）：弹出提示框告知用户将删除对应 mesh。用户确认后开启 Undo，若有 selection_name 则删除选集对应多边形部分并移除条目，否则移除整个 mesh 对象及条目，最后结束 Undo
-- [x] 10.8 在 `Message` 中处理 `MODEL_MATERIAL_ADD_BUTTON`（+按钮）：手动触发材质列表同步。对比当前列表和 mesh 对象，若发现新增对象或选集，则添加到列表并创建新 MMD 材质，否则按钮操作无效
+- [x] 10.8 在 `Message` 中处理 `MODEL_MATERIAL_ADD_BUTTON`（+按钮）：手动触发材质列表同步。对比当前列表和 mesh 对象，若发现新增对象或选集，根据 mesh 是否已有材质分两种处理：
+  - [x] 10.8.1 扩展 `ReadFromStandardMaterial` 以读取纹理路径（颜色通道、Alpha 通道贴图路径）和高光属性（颜色、宽度）到 MMD 数据
+  - [x] 10.8.2 重写 `MODEL_MATERIAL_ADD_BUTTON` 处理逻辑：查找 mesh 上匹配选集的 `Ttexture` 标签——若已有材质则引用并调用 `ReadFromStandardMaterial` 反向更新；若无材质则调用 `CreateStandardMaterialFromData` 创建新 C4D 材质，插入文档，并在 mesh 上创建 `TextureTag`（选集需设置 `TEXTURETAG_RESTRICTION`）
 - [x] 10.9 在 `GetDEnabling` 中添加：↑按钮在 `index <= 0` 时禁用；↓按钮在 `index >= count - 1` 时禁用；×按钮在无选中材质时禁用
 
 ## 11. Mesh-材质同步（删除检测）
@@ -81,3 +83,13 @@
 - [x] 11.2 实现删除检测逻辑：遍历 `material_list_`，检查 `mesh_link` 对应的对象以及 `selection_name` 对应的选集是否被外部删除
 - [x] 11.3 对于检测到被删除的 mesh 对象或选集：自动从 `material_list_` 中移除对应的 MMD 材质数据条目
 - [x] 11.4 清理结束后刷新 `material_list_items_` CYCLE 列表和 `material_selection_index_`
+
+## 12. Adapter 设计模式重构
+
+- [x] 12.1 在 `mmd_material.h` 中定义 `MMDMaterialAdapter` 抽象基类（`CreateFromPMX`/`CreateFromData`/`SyncTo`/`ReadFrom` 纯虚方法 + `Create`/`CreateFor`/`DetectType` 静态工厂 + `TextureInfo` + 共享纹理检测），保留便捷 free function 声明
+- [x] 12.2 在 `mmd_material.cpp` 中实现 `DetectType`（参考 D5 `d5_plugin_manager.cpp:399-436`）、`Create`/`CreateFor` 工厂、共享 `DetectTextureFromPMX`/`DetectTextureFromData`、便捷 free function
+- [x] 12.3 将 `mmd_standard_material.h/cpp` 从 free function 改为 `MMDStandardMaterialAdapter` 类
+- [x] 12.4 将 `mmd_redshift_material.h/cpp` 从 free function 改为 `MMDRedShiftMaterialAdapter` 类
+- [x] 12.5 将 `mmd_octane_material.h/cpp` 从 free function 改为 `MMDOctaneMaterialAdapter` 类
+- [x] 12.6 将 `mmd_corona_material.h/cpp` 从 free function 改为 `MMDCoronaMaterialAdapter` 类
+- [x] 12.7 更新 `mmd_model_manager.cpp` 和 `MMDMaterialManager::LoadPMXMaterial` 使用便捷分发函数和 adapter 工厂

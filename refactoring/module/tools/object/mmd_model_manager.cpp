@@ -15,10 +15,7 @@ Description:	MMD model object
 #include "mmd_model_manager.h"
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
-#include "module/tools/material/mmd_standard_material.h"
-#include "module/tools/material/mmd_redshift_material.h"
-#include "module/tools/material/mmd_octane_material.h"
-#include "module/tools/material/mmd_corona_material.h"
+#include "module/tools/material/mmd_material.h"
 #include "mmd_bone_manager.h"
 #include "mmd_joint_manager.h"
 #include "mmd_mesh_manager.h"
@@ -658,6 +655,24 @@ void MMDModelManagerObject::RefreshMorph()
 	}
 }
 
+void MMDModelManagerObject::SyncMorphSlidersFromTags()
+{
+	if (!mesh_manager_data_)
+		return;
+	GeListNode* node = Get();
+	if (!node)
+		return;
+	for (auto& morph : morph_data_)
+	{
+		const auto type = morph.GetType();
+		if (type != MMDMorphType::MESH && type != MMDMorphType::UV)
+			continue;
+		Float tag_strength = 0.0;
+		if (mesh_manager_data_->GetMorphStrength(morph.GetName(), tag_strength))
+			morph.SetStrength(node, tag_strength);
+	}
+}
+
 static void SendObjectUpdateMessage(BaseObject* dst, BaseObject* obj)
 {
 	MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MANAGER_OBJECT_UPDATE, obj);
@@ -813,7 +828,13 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 	if (!*is_morph_initialized_.Read())
 	{
+		if (mesh_manager_data_)
+		{
+			if (auto* mesh_mgr_obj = io_util::ResolveObjectLink(mesh_manager_))
+				mesh_manager_data_->ForceRefreshMorphData(mesh_mgr_obj);
+		}
 		RefreshMorph();
+		SyncMorphSlidersFromTags();
 		*is_morph_initialized_.Write() = true;
 	}
 
@@ -1312,6 +1333,7 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 		bc->SetString(COMMENTS_UNIVERSAL, maxon::String{ pmx_file.m_info.m_englishComment.c_str() });
 		bc->SetFloat(PMX_VERSION, pmx_file.m_header.m_version);
 		bc->SetFloat(MODEL_POSITION_MULTIPLE, setting.position_multiple);
+		bc->SetInt32(MODEL_MATERIAL_CREATE_TYPE, static_cast<Int32>(setting.import_material_type));
 	}
 
 	SyncSubManagerScale(setting.position_multiple);
@@ -2215,25 +2237,13 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					auto& mat = material_list_[material_selection_index_];
 					GeData type_data;
 					node->GetParameter(ConstDescID(DescLevel(MODEL_MATERIAL_CREATE_TYPE)), type_data, DESCFLAGS_GET::NONE);
-					const Int32 create_type = type_data.GetInt32();
-					BaseMaterial* new_mat = nullptr;
-					switch (create_type)
-					{
-					case MODEL_MATERIAL_CREATE_TYPE_STANDARD:
-						new_mat = CreateStandardMaterialFromData(mat);
-						break;
-					case MODEL_MATERIAL_CREATE_TYPE_REDSHIFT:
-						new_mat = CreateRedShiftMaterialFromData(mat);
-						break;
-					case MODEL_MATERIAL_CREATE_TYPE_OCTANE:
-						new_mat = CreateOctaneMaterialFromData(mat);
-						break;
-					case MODEL_MATERIAL_CREATE_TYPE_CORONA:
-						new_mat = CreateCoronaMaterialFromData(mat);
-						break;
-					default:
-						break;
-					}
+					constexpr MMDRendererMaterialType type_map[] = {
+						MMDRendererMaterialType::Standard, MMDRendererMaterialType::RedShift,
+						MMDRendererMaterialType::Octane,   MMDRendererMaterialType::Corona
+					};
+					const Int32 type_idx = type_data.GetInt32();
+					const MMDRendererMaterialType rt = (type_idx >= 0 && type_idx < 4) ? type_map[type_idx] : MMDRendererMaterialType::Standard;
+					BaseMaterial* new_mat = CreateMaterialFromData(mat, rt);
 					if (new_mat)
 					{
 						BaseDocument* doc = node->GetDocument();
@@ -2260,12 +2270,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					{
 						BaseMaterial* linked_mat = static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc));
 						if (linked_mat)
-						{
-							SyncToStandardMaterial(mat, linked_mat);
-							SyncToRedShiftMaterial(mat, linked_mat);
-							SyncToOctaneMaterial(mat, linked_mat);
-							SyncToCoronaMaterial(mat, linked_mat);
-						}
+							SyncToMaterial(mat, linked_mat);
 						EventAdd();
 					}
 				}
@@ -2281,12 +2286,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					{
 						BaseMaterial* linked_mat = static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc));
 						if (linked_mat)
-						{
-							ReadFromStandardMaterial(linked_mat, mat);
-							ReadFromRedShiftMaterial(linked_mat, mat);
-							ReadFromOctaneMaterial(linked_mat, mat);
-							ReadFromCoronaMaterial(linked_mat, mat);
-						}
+							ReadFromMaterial(linked_mat, mat);
 						EventAdd();
 					}
 				}
@@ -2433,6 +2433,75 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					}
 					return false;
 				};
+				auto FindExistingMaterial = [doc](BaseObject* mesh_obj, const String& sel_name) -> BaseMaterial*
+				{
+					for (BaseTag* tag = mesh_obj->GetFirstTag(); tag; tag = tag->GetNext())
+					{
+						if (tag->GetType() != Ttexture)
+							continue;
+						GeData sel_data;
+						tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), sel_data, DESCFLAGS_GET::NONE);
+						if (sel_data.GetString() != sel_name)
+							continue;
+						GeData mat_data;
+						tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_MATERIAL)), mat_data, DESCFLAGS_GET::NONE);
+						BaseMaterial* mat = static_cast<BaseMaterial*>(mat_data.GetLink(doc));
+						if (mat)
+							return mat;
+					}
+					return nullptr;
+				};
+				GeData type_data;
+				node->GetParameter(ConstDescID(DescLevel(MODEL_MATERIAL_CREATE_TYPE)), type_data, DESCFLAGS_GET::NONE);
+				constexpr MMDRendererMaterialType type_map[] = {
+					MMDRendererMaterialType::Standard, MMDRendererMaterialType::RedShift,
+					MMDRendererMaterialType::Octane,   MMDRendererMaterialType::Corona
+				};
+				const Int32 type_idx = type_data.GetInt32();
+				const MMDRendererMaterialType create_type = (type_idx >= 0 && type_idx < 4) ? type_map[type_idx] : MMDRendererMaterialType::Standard;
+				auto AddMaterialEntry = [&](BaseObject* child, const String& sel_name, const String& display_name) -> Bool
+				{
+					MMDMaterialData new_mat;
+					new_mat.name_local = new_mat.name_universal = display_name;
+					new_mat.mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
+					if (new_mat.mesh_link && *new_mat.mesh_link)
+						(*new_mat.mesh_link)->SetLink(child);
+					new_mat.selection_name = sel_name;
+					BaseMaterial* existing_mat = FindExistingMaterial(child, sel_name);
+					if (existing_mat)
+					{
+						ReadFromMaterial(existing_mat, new_mat);
+						new_mat.material_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
+						if (new_mat.material_link && *new_mat.material_link)
+							(*new_mat.material_link)->SetLink(existing_mat);
+					}
+					else
+					{
+						BaseMaterial* c4d_mat = CreateMaterialFromData(new_mat, create_type);
+						if (c4d_mat)
+						{
+							doc->InsertMaterial(c4d_mat);
+							doc->AddUndo(UNDOTYPE::NEWOBJ, c4d_mat);
+							new_mat.material_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
+							if (new_mat.material_link && *new_mat.material_link)
+								(*new_mat.material_link)->SetLink(c4d_mat);
+							TextureTag* tex_tag = TextureTag::Alloc();
+							if (tex_tag)
+							{
+								tex_tag->SetName(display_name);
+								tex_tag->SetMaterial(c4d_mat);
+								tex_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_PROJECTION)), TEXTURETAG_PROJECTION_UVW, DESCFLAGS_SET::NONE);
+								if (sel_name.IsPopulated())
+									tex_tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), sel_name, DESCFLAGS_SET::NONE);
+								child->InsertTag(tex_tag);
+								doc->AddUndo(UNDOTYPE::NEWOBJ, tex_tag);
+							}
+						}
+					}
+					iferr(material_list_.Append(std::move(new_mat)))
+						return false;
+					return true;
+				};
 				Bool added = false;
 				doc->StartUndo();
 				doc->AddUndo(UNDOTYPE::CHANGE, node);
@@ -2449,47 +2518,15 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 							const String tag_name = tag->GetName();
 							if (!HasMaterialEntry(child, tag_name))
 							{
-								MMDMaterialData new_mat;
-								new_mat.name_local = new_mat.name_universal = tag_name;
-								new_mat.mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
-								if (new_mat.mesh_link && *new_mat.mesh_link)
-									(*new_mat.mesh_link)->SetLink(child);
-								new_mat.selection_name = tag_name;
-								BaseMaterial* c4d_mat = CreateStandardMaterialFromData(new_mat);
-								if (c4d_mat)
-								{
-									doc->InsertMaterial(c4d_mat);
-									doc->AddUndo(UNDOTYPE::NEWOBJ, c4d_mat);
-									new_mat.material_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
-									if (new_mat.material_link && *new_mat.material_link)
-										(*new_mat.material_link)->SetLink(c4d_mat);
-								}
-								iferr(material_list_.Append(std::move(new_mat)))
-									break;
-								added = true;
+								if (AddMaterialEntry(child, tag_name, tag_name))
+									added = true;
 							}
 						}
 					}
 					if (!has_sel_tags && !HasMaterialEntry(child, ""_s))
 					{
-						MMDMaterialData new_mat;
-						new_mat.name_local = new_mat.name_universal = child->GetName();
-						new_mat.mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
-						if (new_mat.mesh_link && *new_mat.mesh_link)
-							(*new_mat.mesh_link)->SetLink(child);
-						new_mat.selection_name = ""_s;
-						BaseMaterial* c4d_mat = CreateStandardMaterialFromData(new_mat);
-						if (c4d_mat)
-						{
-							doc->InsertMaterial(c4d_mat);
-							doc->AddUndo(UNDOTYPE::NEWOBJ, c4d_mat);
-							new_mat.material_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
-							if (new_mat.material_link && *new_mat.material_link)
-								(*new_mat.material_link)->SetLink(c4d_mat);
-						}
-						iferr(material_list_.Append(std::move(new_mat)))
-							break;
-						added = true;
+						if (AddMaterialEntry(child, ""_s, child->GetName()))
+							added = true;
 					}
 				}
 				if (added)
@@ -2824,12 +2861,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 						? static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc))
 						: nullptr;
 					if (linked_mat)
-					{
-						SyncToStandardMaterial(mat, linked_mat);
-						SyncToRedShiftMaterial(mat, linked_mat);
-						SyncToOctaneMaterial(mat, linked_mat);
-						SyncToCoronaMaterial(mat, linked_mat);
-					}
+						SyncToMaterial(mat, linked_mat);
 					flags |= DESCFLAGS_SET::PARAM_SET;
 					return true;
 				}

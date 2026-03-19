@@ -10,6 +10,7 @@
 - 在 `material_type` 枚举中新增 `Corona`，UI 中新增 Corona 选项
 - 填充 `LoadPMXMaterial` 中 RS/OC/Corona case 分支
 - 集成到创建/同步按钮和 `SetDParameter` 同步分发
+- 重构为 Adapter 设计模式：`MMDMaterialAdapter` 抽象基类 + 4 个渲染器子类（Standard/RedShift/Octane/Corona），统一 `CreateFromPMX`/`CreateFromData`/`SyncTo`/`ReadFrom` 接口，提取共享纹理检测到基类；`DetectType` 静态检测（参考 D5 `d5_plugin_manager.cpp`）+ `Create`/`CreateFor` 工厂方法；保留 `SyncToMaterial`/`ReadFromMaterial`/`CreateMaterialFromData` 便捷 free function
 - **渲染器未安装时**：`BaseMaterial::Alloc` 返回 nullptr 时弹出 `MessageDialog` 警告用户渲染器未安装，并取消导入流程（`LoadPMXMaterial` 返回 nullptr，上层中止导入）
 
 ## Capabilities
@@ -21,6 +22,7 @@
 - `renderer-not-installed-warning`: 渲染器未安装时弹窗警告并取消导入
 - `reverse-sync`: 从关联的 C4D 材质读取 diffuse 颜色/alpha 回写到 MMD 材质数据
 - `default-rs-2024`: C4D 2024+ 版本默认选择 RedShift 渲染器
+- `material-adapter-pattern`: Adapter 设计模式的材质系统架构，基类 + 子类 + 工厂 + 共享纹理检测，消除 RS/Standard 类型重叠和 80%+ 重复代码
 
 ### Modified Capabilities
 

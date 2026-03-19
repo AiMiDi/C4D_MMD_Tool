@@ -9,6 +9,123 @@
 
 using namespace io_util;
 
+namespace
+{
+	constexpr auto ID_REDSHIFT_MATERIAL = 1036224;
+	constexpr auto ID_OCTANE_DIFFUSE_MATERIAL = 1029501;
+	constexpr auto ID_CORONA_MATERIAL = 1032100;
+#if API_VERSION >= 2024000
+	constexpr maxon::LiteralId k_redshiftSpaceId("com.redshift3d.redshift4c4d.class.nodespace");
+#endif
+}
+
+MMDRendererMaterialType MMDMaterialAdapter::DetectType(const BaseMaterial* material)
+{
+	if (!material)
+		return MMDRendererMaterialType::Unknown;
+	switch (material->GetType())
+	{
+	case Mmaterial:
+	{
+#if API_VERSION >= 2024000
+		if (material->IsNodeBased())
+		{
+			auto* node_mat = static_cast<NodeMaterial*>(const_cast<BaseMaterial*>(material));
+			if (node_mat && node_mat->HasSpace(k_redshiftSpaceId))
+				return MMDRendererMaterialType::RedShift;
+		}
+#endif
+		return MMDRendererMaterialType::Standard;
+	}
+	case ID_REDSHIFT_MATERIAL:
+		return MMDRendererMaterialType::RedShift;
+	case ID_OCTANE_DIFFUSE_MATERIAL:
+		return MMDRendererMaterialType::Octane;
+	case ID_CORONA_MATERIAL:
+		return MMDRendererMaterialType::Corona;
+	default:
+		return MMDRendererMaterialType::Unknown;
+	}
+}
+
+MMDMaterialAdapter::TextureInfo MMDMaterialAdapter::DetectTextureFromPMX(
+	const libmmd::PMXMaterial& pmx_material, const maxon::BaseArray<Filename>& texture_paths)
+{
+	TextureInfo info{};
+	const auto texture_index = pmx_material.m_textureIndex;
+	if (texture_index == -1 || texture_index >= texture_paths.GetCount())
+		return info;
+	const auto& texture_path = texture_paths[texture_index];
+	if (!GeFExist(texture_path))
+		return info;
+	info.has_texture = true;
+	AutoAlloc<BaseBitmap> bitmap;
+	if (bitmap && bitmap->Init(texture_path) == IMAGERESULT::OK)
+	{
+		if (bitmap->GetChannelCount() &&
+			(texture_path.GetSuffix().ToLower().Compare("png"_s) == maxon::COMPARERESULT::EQUAL ||
+			 texture_path.GetSuffix().ToLower().Compare("tga"_s) == maxon::COMPARERESULT::EQUAL))
+			info.has_alpha = true;
+	}
+	return info;
+}
+
+MMDMaterialAdapter::TextureInfo MMDMaterialAdapter::DetectTextureFromData(const MMDMaterialData& data)
+{
+	TextureInfo info{};
+	const Filename texture_path(data.texture_path);
+	if (!texture_path.IsPopulated() || !GeFExist(texture_path))
+		return info;
+	info.has_texture = true;
+	AutoAlloc<BaseBitmap> bitmap;
+	if (bitmap && bitmap->Init(texture_path) == IMAGERESULT::OK)
+	{
+		if (bitmap->GetChannelCount() &&
+			(texture_path.GetSuffix().ToLower().Compare("png"_s) == maxon::COMPARERESULT::EQUAL ||
+			 texture_path.GetSuffix().ToLower().Compare("tga"_s) == maxon::COMPARERESULT::EQUAL))
+			info.has_alpha = true;
+	}
+	return info;
+}
+
+std::unique_ptr<MMDMaterialAdapter> MMDMaterialAdapter::Create(MMDRendererMaterialType type)
+{
+	switch (type)
+	{
+	case MMDRendererMaterialType::Standard: return std::make_unique<MMDStandardMaterialAdapter>();
+	case MMDRendererMaterialType::RedShift: return std::make_unique<MMDRedShiftMaterialAdapter>();
+	case MMDRendererMaterialType::Octane:   return std::make_unique<MMDOctaneMaterialAdapter>();
+	case MMDRendererMaterialType::Corona:   return std::make_unique<MMDCoronaMaterialAdapter>();
+	default:                                return nullptr;
+	}
+}
+
+std::unique_ptr<MMDMaterialAdapter> MMDMaterialAdapter::CreateFor(const BaseMaterial* material)
+{
+	const auto type = DetectType(material);
+	return type != MMDRendererMaterialType::Unknown ? Create(type) : nullptr;
+}
+
+void SyncToMaterial(const MMDMaterialData& data, BaseMaterial* material)
+{
+	auto adapter = MMDMaterialAdapter::CreateFor(material);
+	if (adapter)
+		adapter->SyncTo(data, material);
+}
+
+void ReadFromMaterial(const BaseMaterial* material, MMDMaterialData& data)
+{
+	auto adapter = MMDMaterialAdapter::CreateFor(material);
+	if (adapter)
+		adapter->ReadFrom(material, data);
+}
+
+BaseMaterial* CreateMaterialFromData(const MMDMaterialData& data, MMDRendererMaterialType type)
+{
+	auto adapter = MMDMaterialAdapter::Create(type);
+	return adapter ? adapter->CreateFromData(data) : nullptr;
+}
+
 void MMDMaterialData::FromPMX(const libmmd::PMXMaterial& pmx_material)
 {
 	name_local = String(pmx_material.m_name.c_str());
@@ -248,16 +365,14 @@ Bool MMDMaterialManager::LoadPMXTextures(const std::vector<libmmd::PMXTexture>& 
 
 BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::PMXMaterial& pmx_material, const uint64_t material_index, const maxon::String& material_name, const CMTToolsSetting::ModelImport& setting)
 {
+	MMDRendererMaterialType create_type = MMDRendererMaterialType::Standard;
 	switch (setting.import_material_type)
 	{
-	case CMTToolsSetting::ModelImport::material_type::Standard:
-		return CreateStandardMaterialFromPMX(pmx_material, m_texture_path_array, material_name);
-	case CMTToolsSetting::ModelImport::material_type::RedShift:
-		return CreateRedShiftMaterialFromPMX(pmx_material, m_texture_path_array, material_name);
-	case CMTToolsSetting::ModelImport::material_type::Octane:
-		return CreateOctaneMaterialFromPMX(pmx_material, m_texture_path_array, material_name);
-	case CMTToolsSetting::ModelImport::material_type::Corona:
-		return CreateCoronaMaterialFromPMX(pmx_material, m_texture_path_array, material_name);
+	case CMTToolsSetting::ModelImport::material_type::Standard: create_type = MMDRendererMaterialType::Standard; break;
+	case CMTToolsSetting::ModelImport::material_type::RedShift: create_type = MMDRendererMaterialType::RedShift; break;
+	case CMTToolsSetting::ModelImport::material_type::Octane:   create_type = MMDRendererMaterialType::Octane;   break;
+	case CMTToolsSetting::ModelImport::material_type::Corona:   create_type = MMDRendererMaterialType::Corona;   break;
 	}
-	return nullptr;
+	auto adapter = MMDMaterialAdapter::Create(create_type);
+	return adapter ? adapter->CreateFromPMX(pmx_material, m_texture_path_array, material_name) : nullptr;
 }

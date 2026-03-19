@@ -22,32 +22,17 @@ namespace
 	constexpr auto IMAGETEXTURE_FILE = 1000;
 }
 
-BaseMaterial* CreateOctaneMaterialFromPMX(const libmmd::PMXMaterial& pmx_material,
+BaseMaterial* MMDOctaneMaterialAdapter::CreateFromPMX(const libmmd::PMXMaterial& pmx_material,
 	const maxon::BaseArray<Filename>& texture_paths, const maxon::String& material_name)
 {
 	BaseMaterial* material = BaseMaterial::Alloc(ID_OCTANE_DIFFUSE_MATERIAL);
 	if (!material)
 		return nullptr;
 
-	bool has_texture = false;
-	bool has_alpha_channel = false;
+	const auto tex_info = MMDMaterialAdapter::DetectTextureFromPMX(pmx_material, texture_paths);
+	const bool has_texture = tex_info.has_texture;
+	const bool has_alpha_channel = tex_info.has_alpha;
 	const auto texture_index = pmx_material.m_textureIndex;
-	if (texture_index != -1 && texture_index < texture_paths.GetCount())
-	{
-		const auto& texture_path = texture_paths[texture_index];
-		if (GeFExist(texture_path))
-		{
-			has_texture = true;
-			AutoAlloc<BaseBitmap> bitmap;
-			if (bitmap && bitmap->Init(texture_path) == IMAGERESULT::OK)
-			{
-				if (bitmap->GetChannelCount() &&
-					(texture_path.GetSuffix().ToLower().Compare("png"_s) == maxon::COMPARERESULT::EQUAL ||
-					 texture_path.GetSuffix().ToLower().Compare("tga"_s) == maxon::COMPARERESULT::EQUAL))
-					has_alpha_channel = true;
-			}
-		}
-	}
 
 	const auto& color = pmx_material.m_diffuse;
 	const Vector diffuse_rgb(color.x(), color.y(), color.z());
@@ -124,7 +109,7 @@ BaseMaterial* CreateOctaneMaterialFromPMX(const libmmd::PMXMaterial& pmx_materia
 	return material;
 }
 
-BaseMaterial* CreateOctaneMaterialFromData(const MMDMaterialData& data)
+BaseMaterial* MMDOctaneMaterialAdapter::CreateFromData(const MMDMaterialData& data)
 {
 	BaseMaterial* material = BaseMaterial::Alloc(ID_OCTANE_DIFFUSE_MATERIAL);
 	if (!material)
@@ -153,7 +138,7 @@ BaseMaterial* CreateOctaneMaterialFromData(const MMDMaterialData& data)
 	return material;
 }
 
-void SyncToOctaneMaterial(const MMDMaterialData& data, BaseMaterial* material)
+void MMDOctaneMaterialAdapter::SyncTo(const MMDMaterialData& data, BaseMaterial* material)
 {
 	if (!material || material->GetType() != ID_OCTANE_DIFFUSE_MATERIAL)
 		return;
@@ -183,7 +168,7 @@ void SyncToOctaneMaterial(const MMDMaterialData& data, BaseMaterial* material)
 	}
 }
 
-void ReadFromOctaneMaterial(const BaseMaterial* material, MMDMaterialData& data)
+void MMDOctaneMaterialAdapter::ReadFrom(const BaseMaterial* material, MMDMaterialData& data)
 {
 	if (!material || material->GetType() != ID_OCTANE_DIFFUSE_MATERIAL)
 		return;
