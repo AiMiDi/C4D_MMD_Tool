@@ -616,6 +616,13 @@ Bool MMDModelManagerObject::CopyMorph(MMDModelManagerObject* dst) const
 		if (!morph.CopyTo(new_morph))
 			return true;
 		new_morph->AddMorphUI(*dst, new_morph_index);
+		if (GeListNode* const dst_node = dst->Get())
+		{
+			Float src_strength = 0.0;
+			if (GeListNode* const src_node = const_cast<MMDModelManagerObject*>(this)->Get())
+				src_strength = morph.GetStrength(src_node);
+			new_morph->SetStrength(dst_node, src_strength);
+		}
 	}
 	return true;
 }
@@ -3012,8 +3019,13 @@ Int MMDModelManagerObject::AddMorph(const MMDMorphType& morph_type, String morph
 		index = -1;
 		return index;
 	}
-	if(is_add_morph_ui)
+	if (is_add_morph_ui)
+	{
 		morph->AddMorphUI(*this, index);
+		// Dynamic DTYPE_REAL defaults to 1.0; MMD morph weight is 0 until posed.
+		if (GeListNode* const self = Get())
+			morph->SetStrength(self, 0.0);
+	}
 	return index;
 }
 

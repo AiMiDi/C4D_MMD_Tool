@@ -25,6 +25,24 @@ Description:	MMD mesh root object
 #include "module/tools/material/mmd_material.h"
 #include "utils/string_util.hpp"
 
+namespace
+{
+	/// Pose morph slider used by MorphUIData comes from tag GetMorphID; CAMorph::SetStrength alone may not
+	/// persist that parameter, so SyncMorphSlidersFromTags still read the default 1.0.
+	static void ZeroPoseMorphSlider(CAPoseMorphTag* morph_tag, CAMorph* morph)
+	{
+		if (!morph_tag || !morph)
+			return;
+		morph->SetStrength(0.);
+		const Int32 morph_idx = morph_tag->GetMorphIndex(morph);
+		if (morph_idx >= 0)
+		{
+			const DescID slider_id = morph_tag->GetMorphID(morph_idx);
+			morph_tag->SetParameter(slider_id, GeData(0.0), DESCFLAGS_SET::NONE);
+		}
+	}
+}
+
 namespace cinema
 {
 	class CAWeightTag;
@@ -784,7 +802,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
 				morph_tag->UpdateMorphs();
 					morph_tag->Message(MSG_UPDATE);
-					morph->SetStrength(0);
+					ZeroPoseMorphSlider(morph_tag, morph);
 					break;
 				}
 				case libmmd::PMXMorphType::UV: [[fallthrough]];
@@ -868,7 +886,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
 					morph_tag->UpdateMorphs();
 					morph_tag->Message(MSG_UPDATE);
-					morph->SetStrength(0);
+					ZeroPoseMorphSlider(morph_tag, morph);
 					break;
 				}
 				case libmmd::PMXMorphType::Flip:
@@ -1446,6 +1464,11 @@ Bool MMDMeshManagerObject::LoadPMX(
 					morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
 				}
 				morph_tag->UpdateMorphs();
+				for (Int32 morph_index = 1; morph_index < morph_tag_count; ++morph_index)
+				{
+					if (CAMorph* morph = morph_tag->GetMorph(morph_index))
+						ZeroPoseMorphSlider(morph_tag, morph);
+				}
 				morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_MODE)), ID_CA_POSE_MODE_ANIMATE, DESCFLAGS_SET::NONE);
 			}
 		}

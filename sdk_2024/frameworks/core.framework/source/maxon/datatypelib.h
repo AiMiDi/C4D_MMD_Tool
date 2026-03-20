@@ -200,12 +200,12 @@ public:
 
 	MAXON_OPERATOR_INEQUALITY(InternedId);
 
-#ifndef _HAS_CPP20_COMPARISONS
 	Bool operator ==(const Id& other) const
 	{
 		return _id && *_id == other;
 	}
 
+#ifndef _HAS_CPP20_COMPARISONS
 	Bool operator !=(const Id& other) const
 	{
 		return !this->operator ==(other);

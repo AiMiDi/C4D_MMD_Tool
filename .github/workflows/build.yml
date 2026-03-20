@@ -57,7 +57,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           # workflow_call: optional ref; push/dispatch: never read inputs (undefined outside workflow_call)
           ref: ${{ github.event_name == 'workflow_call' && (inputs.ref != '' && inputs.ref || github.ref) || github.ref }}
@@ -65,7 +65,7 @@ jobs:
 
       - name: Cache prebuilt dependencies
         id: deps-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: _build_msvc/cmt_deps_prebuilt
           key: deps-prebuilt-${{ runner.os }}-${{ hashFiles('dependency/**', 'cmake/mmdtool_plugin_dependencies.cmake') }}
@@ -98,7 +98,7 @@ jobs:
         run: cmake --build --preset "${{ matrix.build_preset }}"
 
       - name: Upload plugin output
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build-${{ runner.os }}-${{ matrix.sdk }}
           path: _build_msvc/${{ matrix.sdk }}/bin/Release/plugins/mmdtool/

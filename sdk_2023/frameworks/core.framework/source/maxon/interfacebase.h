@@ -610,12 +610,12 @@ template <typename S1, typename S2> inline Bool operator ==(const RefBaseFn<S1>&
 	constexpr Bool COW = MAXON_IS_COW_KIND(S1::Handler::KIND);
 	static_assert(COW == MAXON_IS_COW_KIND(S2::Handler::KIND), "Comparison of mixed COW/non-COW reference types.");
 	using BASE = typename std::conditional<S1_IS_BASE, S1, S2>::type::ReferencedType;
-	return RefCompare<COW, true>::template IsEqual(reinterpret_cast<const BASE*>(a.GetPointer()), reinterpret_cast<const BASE*>(b.GetPointer()));
+	return RefCompare<COW, true>::IsEqual(reinterpret_cast<const BASE*>(a.GetPointer()), reinterpret_cast<const BASE*>(b.GetPointer()));
 }
 
 template <typename S> inline Bool operator ==(const RefBaseFn<S>& a, std::nullptr_t)
 {
-	return RefCompare<MAXON_IS_COW_KIND(S::Handler::KIND), true>::template IsEqual(a.GetPointer(), static_cast<const typename S::ReferencedType*>(nullptr));
+	return RefCompare<MAXON_IS_COW_KIND(S::Handler::KIND), true>::IsEqual(a.GetPointer(), static_cast<const typename S::ReferencedType*>(nullptr));
 }
 #endif
 
