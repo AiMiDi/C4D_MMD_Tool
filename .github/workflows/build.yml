@@ -1,0 +1,102 @@
+# Root CMake workflow: same presets as locally (CMakePresets.json), override CMT_SDK_DIR per matrix cell.
+# Matrix = one parallel job per (OS × sdk) — 8 SDKs × 2 OS = 16 jobs (subject to org concurrency limits).
+
+name: Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to checkout (e.g. tag ref for releases)
+        type: string
+        required: false
+        default: ""
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CMAKE_BUILD_PARALLEL_LEVEL: 4
+
+jobs:
+  matrix-build:
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+        sdk:
+          - sdk_r20
+          - sdk_r21
+          - sdk_r23
+          - sdk_r25
+          - sdk_2023
+          - sdk_2024
+          - sdk_2025
+          - sdk_2026
+        include:
+          - os: windows-latest
+            configure_preset: dev-windows
+            build_preset: workflow-release
+            deps_generator: "Visual Studio 17 2022"
+            deps_generator_extra: -A x64 -T v143
+          - os: macos-latest
+            configure_preset: dev-macos
+            build_preset: workflow-release-macos
+            deps_generator: Xcode
+            deps_generator_extra: -DCMAKE_OSX_ARCHITECTURES=arm64;x86_64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # workflow_call: optional ref; push/dispatch: never read inputs (undefined outside workflow_call)
+          ref: ${{ github.event_name == 'workflow_call' && (inputs.ref != '' && inputs.ref || github.ref) || github.ref }}
+          submodules: recursive
+
+      - name: Cache prebuilt dependencies
+        id: deps-cache
+        uses: actions/cache@v4
+        with:
+          path: _build_msvc/cmt_deps_prebuilt
+          key: deps-prebuilt-${{ runner.os }}-${{ hashFiles('dependency/**', 'cmake/mmdtool_plugin_dependencies.cmake') }}
+
+      - name: Build dependencies (on cache miss)
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: |
+          cmake -S dependency -B _build_msvc/cmt_deps \
+            -G "${{ matrix.deps_generator }}" \
+            ${{ matrix.deps_generator_extra }} \
+            "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt/lib" \
+            "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt/lib"
+          cmake --build _build_msvc/cmt_deps --config Release
+
+      - name: Configure root (preset + prebuilt deps)
+        run: |
+          cmake --preset "${{ matrix.configure_preset }}" \
+            -D "CMT_SDK_DIR=${{ github.workspace }}/${{ matrix.sdk }}" \
+            -D CMT_SDK_BUILD_CONFIG=Release \
+            -D CMT_WITH_DEPENDENCY_SUBDIR=OFF \
+            -D "CMT_DEPS_PREBUILT_DIR=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt"
+
+      - name: Build cmt-workflow (Release)
+        run: cmake --build --preset "${{ matrix.build_preset }}"
+
+      - name: Upload plugin output
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ runner.os }}-${{ matrix.sdk }}
+          path: _build_msvc/${{ matrix.sdk }}/bin/Release/plugins/mmdtool/
+          retention-days: 7
+          if-no-files-found: error

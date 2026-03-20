@@ -1,0 +1,171 @@
+# Tag release: reusable Build (cmt-workflow artifacts) → Inno Setup (Windows) → zip (macOS) → GitHub Release.
+# Local packaging: cmake --preset package-windows && cmake --build --preset inno-installer (see DEVELOPMENT.md, CMakeUserPresets.json).
+
+name: Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: package-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build (reusable)
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    with:
+      ref: ${{ github.ref }}
+
+  package-windows:
+    needs: build
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout (resources for installer)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          submodules: recursive
+
+      - name: Download Windows build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-Windows-*
+          path: ${{ github.workspace }}/_dl
+          merge-multiple: false
+
+      - name: Layout _build_msvc for installer_script.iss
+        run: |
+          set -euo pipefail
+          for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026; do
+            mkdir -p "_build_msvc/${sdk}/bin/Release/plugins/mmdtool"
+            src="_dl/build-Windows-${sdk}"
+            if [ -d "$src" ]; then
+              cp -R "$src"/* "_build_msvc/${sdk}/bin/Release/plugins/mmdtool/"
+            else
+              echo "Missing artifact: $src" >&2
+              exit 1
+            fi
+          done
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
+      - name: Compute version from tag
+        id: ver
+        shell: bash
+        run: |
+          V="${GITHUB_REF_NAME#v}"
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+
+      - name: Run ISCC
+        shell: bash
+        run: |
+          set -euo pipefail
+          ISCC=""
+          for p in "/c/Program Files/Inno Setup 6/ISCC.exe" "/c/Program Files (x86)/Inno Setup 6/ISCC.exe"; do
+            if [ -f "$p" ]; then ISCC="$p"; break; fi
+          done
+          if [ -z "$ISCC" ]; then echo "ISCC.exe not found" >&2; exit 1; fi
+          "$ISCC" \
+            /DPluginVersion="${{ steps.ver.outputs.version }}" \
+            /DSdkBuildDir=_build_msvc \
+            /DSdkBinConfig=Release \
+            "${{ github.workspace }}/setup/Common/installer_script.iss"
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: setup/Common/Output/*.exe
+          if-no-files-found: error
+
+  package-macos:
+    needs: build
+    runs-on: macos-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout (res/)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          submodules: recursive
+
+      - name: Download macOS build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-macOS-*
+          path: ${{ github.workspace }}/_dl
+          merge-multiple: false
+
+      - name: Zip per-SDK plugin + matching res
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          res_for_sdk() {
+            case "$1" in
+              sdk_r20|sdk_r21|sdk_r23) echo "R20-S24" ;;
+              *)                       echo "S24_up"  ;;
+            esac
+          }
+          for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026; do
+            src="_dl/build-macOS-${sdk}"
+            if [ ! -d "$src" ]; then echo "Missing $src" >&2; exit 1; fi
+            res_dir="res/$(res_for_sdk "$sdk")"
+            rm -rf "pkg/${sdk}"
+            mkdir -p "pkg/${sdk}/mmdtool"
+            cp -R "$src"/* "pkg/${sdk}/mmdtool/"
+            cp -R "$res_dir" "pkg/${sdk}/mmdtool/res"
+            (cd "pkg/${sdk}" && zip -r "${{ github.workspace }}/dist/MMD_Tool_${sdk}_macOS.zip" mmdtool)
+          done
+
+      - name: Upload macOS zip artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-zips
+          path: dist/*.zip
+          if-no-files-found: error
+
+  release:
+    needs: [package-windows, package-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download installer
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-installer
+          path: ${{ github.workspace }}/assets
+
+      - name: Download macOS zips
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-zips
+          path: ${{ github.workspace }}/assets
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: |
+            ## Changelog
+
+            _Add release notes here._
+
+            Built from commit `${{ github.sha }}`.
+          files: |
+            assets/*.exe
+            assets/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
