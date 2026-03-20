@@ -304,7 +304,7 @@ const GeData* SearchPluginMenuResource(const maxon::String& identifier)
 		if (id == MENURESOURCE_SUBMENU)
 		{
 			const BaseContainer* dc = dat->GetContainer();
-			if (dc && dc->GetString(MENURESOURCE_SUBTITLE) == identifier)
+			if (dc && dc->GetString(MENURESOURCE_SUBTITLE) == String(identifier))
 			{
 				last = dat;
 				break;
@@ -332,7 +332,7 @@ const GeData* SearchPluginSubMenuResource(const maxon::String& identifier, BaseC
 		if (id == MENURESOURCE_SUBMENU)
 		{
 			const BaseContainer* dc = dat->GetContainer();
-			if (dc && dc->GetString(MENURESOURCE_SUBTITLE) == identifier)
+			if (dc && dc->GetString(MENURESOURCE_SUBTITLE) == String(identifier))
 			{
 				last = dat;
 				break;
@@ -340,7 +340,7 @@ const GeData* SearchPluginSubMenuResource(const maxon::String& identifier, BaseC
 		}
 		else if (id == MENURESOURCE_COMMAND)
 		{
-			if (dat && dat->GetString() == identifier)
+			if (dat && dat->GetString() == String(identifier))
 			{
 				last = dat;
 				break;
@@ -370,7 +370,7 @@ Bool SearchMenuResource(const BaseContainer* bc, const maxon::String& searchstr)
 		}
 		else if (id == MENURESOURCE_COMMAND)
 		{
-			if (dat->GetString() == searchstr)
+			if (dat->GetString() == String(searchstr))
 				return true;
 		}
 	}
