@@ -2,6 +2,7 @@
 #define TUPLE_H__
 
 #include "maxon/apibase.h"
+#include <tuple>
 
 namespace maxon
 {
@@ -752,6 +753,20 @@ public:
 		return reinterpret_cast<typename Pack::template At<I>::type&>(this->GetMember((typename std::integral_constant<UInt32, I>::type*) nullptr));
 	}
 
+	// stylecheck.naming=false
+
+	template <Int I> typename std::add_const<typename Pack::template At<I>::type>::type& get() const
+	{
+		return Get<I>();
+	}
+
+	template <Int I> typename Pack::template At<I>::type& get()
+	{
+		return Get<I>();
+	}
+
+	// stylecheck.naming=true
+
 	//----------------------------------------------------------------------------------------
 	/// Returns element with type ELEMENTTYPE. Equivalent to TupleGet<ELEMENTTYPE>(*this).
 	//----------------------------------------------------------------------------------------
@@ -1155,6 +1170,7 @@ template <typename ... TYPES> inline auto ToTuple(TYPES&& ... args) -> Tuple<typ
 /// Tie takes a variable number of references and returns them packed as tuple of references.
 /// This allows to leverage useful tuple operations, i.e. element-wise converting assignment.
 /// Tie is the equivalent of std::tie for std::tuple.
+/// @note To ignore an element, use @ref Ignore as placeholder.
 ///
 /// The following example shows how to return a tuple of values from a function and use
 /// Tie to simplify the unpacking:
@@ -1373,5 +1389,18 @@ struct TupleElementCompare
 };
 
 } // namespace maxon
+
+namespace std
+{
+template <std::size_t I, typename... T>
+struct tuple_element<I, maxon::Tuple<T...>> : maxon::Tuple<T...>::Pack::template At<I>
+{
+};
+
+template <typename... T>
+struct tuple_size<maxon::Tuple<T...>> : std::integral_constant<std::size_t, sizeof...(T)>
+{
+};
+}
 
 #endif // TUPLE_H__

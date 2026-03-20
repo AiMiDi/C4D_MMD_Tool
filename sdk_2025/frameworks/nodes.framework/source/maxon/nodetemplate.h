@@ -274,7 +274,7 @@ public:
 	/// value stops yielding of further arguments. For parameters which have both a default and a
 	/// deduced/explicit value only the deduced/explicit value is reported.
 	/// @param[in] receiver						A callback which receives the arguments.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	template <typename OP> Result<Bool> GetPathArguments(OP&& receiver) const
 	{
@@ -424,7 +424,7 @@ public:
 	/// @b{You must not override it.}
 	///
 	/// @param[in] parent							The parent instantiation context, this defines the node system class to use
-	///																as well as the asset repository for asset resolution.
+	/// 															as well as the asset repository for asset resolution.
 	/// @param[in] args								Arguments to parametrize the instantiation.
 	/// @return												A new node system which is the instantiation of this template for the given arguments.
 	//----------------------------------------------------------------------------------------
@@ -456,7 +456,7 @@ public:
 	/// Yields all possible template parameter configurations for this template. Templates can implement
 	/// this method if they have a finite number of instantiations.
 	/// @param[in] receiver						A callback which receives the configurations.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> PrivateGetConfigurations(const ValueReceiver<const TemplateArguments&>& receiver) const;
 
@@ -483,7 +483,7 @@ public:
 	/// by NodeSystemClass::InstantiateImpl.
 	///
 	/// @param[in] parent							The parent instantiation context.
-	///																You can reach all enclosing instantiation contexts through parent, this helps to prevent infinite recursions.
+	/// 															You can reach all enclosing instantiation contexts through parent, this helps to prevent infinite recursions.
 	/// @param[in] args								Arguments to parametrize the instantiation.
 	/// @return												A new node system which is the instantiation of this template for the given arguments.
 	/// @MAXON_ANNOTATION{refclass=false}
@@ -571,8 +571,8 @@ MAXON_ATTRIBUTE(AssetMetaData, InstantiateContextMeta, "net.maxon.node.nodesyste
 //----------------------------------------------------------------------------------------
 /// An InstantiationTrace is used as argument for NodeTemplate::Instantiate to track the
 /// nesting of calls to that method and prevent infinite recursions. Whenever an
-/// implementation of NodeTemplateInterface::InstantiateImpl calls that method itself, it has to check
-/// before that the current instantiation hasn't already been made in an enclosing call
+/// implementation of NodeTemplateInterface::InstantiateImpl instantiates a template itself and there's the risk
+/// of an infinite recursion, it has to check before that the current instantiation hasn't already been made in an enclosing call
 /// (because then we'd run into an infinite recursion), and it has to add the current
 /// instantiation to the trace:
 /// @code
@@ -599,6 +599,27 @@ class InstantiationTrace
 {
 public:
 	//----------------------------------------------------------------------------------------
+	/// Starts a new instantiation trace. You should only use this constructor if there's no enclosing
+	/// instantiation, so if you don't have access to an InstantiationTrace with which your code has been called.
+	/// @param[in] cls								The node system class to use.
+	/// @param[in] repo								The asset repository to use for lookup of assets.
+	//----------------------------------------------------------------------------------------
+	InstantiationTrace(const NodeSystemClass& cls, const AssetRepositoryRef& repo) : _class(reinterpret_cast<const ForwardRef<NodeSystemClass>&>(cls)), _repository(repo), _context()
+	{
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Starts a new instantiation trace. You should only use this constructor if there's no enclosing
+	/// instantiation, so if you don't have access to an InstantiationTrace with which your code has been called.
+	/// @param[in] cls								The node system class to use.
+	/// @param[in] repo								The asset repository to use for lookup of assets.
+	/// @param[in] additionalContext	Supplementary instantiation context parameters.
+	//----------------------------------------------------------------------------------------
+	InstantiationTrace(const NodeSystemClass& cls, const AssetRepositoryRef& repo, const DataDictionary& additionalContext) : _class(reinterpret_cast<const ForwardRef<NodeSystemClass>&>(cls)), _repository(repo), _context(additionalContext)
+	{
+	}
+
+	//----------------------------------------------------------------------------------------
 	/// Extends an instantiation trace by a further element. This can be used within
 	/// NodeTemplateInterface::InstantiateImpl when another instantiation is made, see InstantiationTrace.
 	/// @param[in] parent							The parent InstantiationTrace.
@@ -616,7 +637,7 @@ public:
 	/// @param[in] t									A node template.
 	/// @param[in] args								Template arguments for t.
 	/// @param[in] extra							This pointer has to match the extra value given for the InstantiationTrace constructor.
-	/// @return												true if (t, args, extra) is already contained in this trace, false otherwise.
+	/// @return												True if (t, args, extra) is already contained in this trace, false otherwise.
 	//----------------------------------------------------------------------------------------
 	Bool Contains(const NodeTemplate& t, const TemplateArguments& args, const void* extra) const
 	{
@@ -628,7 +649,7 @@ public:
 	/// This is to prevent infinite recursions when a NodeTemplate instantiates another NodeTemplate, see InstantiationTrace.
 	/// @param[in] t									A node template.
 	/// @param[in] extra							This pointer has to match the extra value given for the InstantiationTrace constructor.
-	/// @return												true if (t, extra) is already contained in this trace (ignoring template arguments), false otherwise.
+	/// @return												True if (t, extra) is already contained in this trace (ignoring template arguments), false otherwise.
 	//----------------------------------------------------------------------------------------
 	Bool Contains(const NodeTemplate& t, const void* extra) const
 	{
@@ -641,7 +662,7 @@ public:
 	/// @param[in] t									The identifier of a node template.
 	/// @param[in] args								Template arguments for t.
 	/// @param[in] extra							This pointer has to match the extra value given for the InstantiationTrace constructor.
-	/// @return												true if (t, args, extra) is already contained in this trace, false otherwise.
+	/// @return												True if (t, args, extra) is already contained in this trace, false otherwise.
 	//----------------------------------------------------------------------------------------
 	Bool Contains(const Id& t, const TemplateArguments& args, const void* extra) const
 	{
@@ -671,25 +692,6 @@ public:
 	const DataDictionary& GetAdditionalContext() const
 	{
 		return _context;
-	}
-
-	//----------------------------------------------------------------------------------------
-	/// Constructs the beginning of an instantiation trace.
-	/// @param[in] cls								The node system class to use.
-	/// @param[in] repo								The asset repository to use for lookup of assets.
-	//----------------------------------------------------------------------------------------
-	InstantiationTrace(const NodeSystemClass& cls, const AssetRepositoryRef& repo) : _class(reinterpret_cast<const ForwardRef<NodeSystemClass>&>(cls)), _repository(repo), _context()
-	{
-	}
-
-	//----------------------------------------------------------------------------------------
-	/// Constructs the beginning of an instantiation trace.
-	/// @param[in] cls								The node system class to use.
-	/// @param[in] repo								The asset repository to use for lookup of assets.
-	/// @param[in] additionalContext	Supplementary instantiation context parameters.
-	//----------------------------------------------------------------------------------------
-	InstantiationTrace(const NodeSystemClass& cls, const AssetRepositoryRef& repo, const DataDictionary& additionalContext) : _class(reinterpret_cast<const ForwardRef<NodeSystemClass>&>(cls)), _repository(repo), _context(additionalContext)
-	{
 	}
 
 	//----------------------------------------------------------------------------------------

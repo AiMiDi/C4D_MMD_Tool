@@ -1,5 +1,5 @@
-#ifndef MATH_NODES_H__
-#define MATH_NODES_H__
+#ifndef NODES_MATH_H__
+#define NODES_MATH_H__
 
 #include "maxon/fid.h"
 #include "maxon/vector.h"
@@ -1397,4 +1397,4 @@ namespace PATTERN
 	
 #include "nodes_math2.hxx"
 
-#endif // MATH_NODES_H__
+#endif // NODES_MATH_H__

@@ -153,7 +153,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Converts this node path into its textual notation and appends this to the given CString.
-	/// @see ToCString
+	/// @see ToCString.
 	/// @param[in,out] str						The CString to append to.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> AppendToCString(CString& str) const;
@@ -328,8 +328,8 @@ public:
 	/// @param[in] index							The index within this path.
 	/// @param[in] translation				A mapping from old identifiers to new identifiers.
 	/// @return												A path with the replaced identifier (or this path if no
-	///																replacement was found in translation),
-	///																and a Bool which is true if and only if a replacement has occurred.
+	/// 															replacement was found in translation),
+	/// 															and a Bool which is true if and only if a replacement has occurred.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Tuple<NodePath, Bool>> Translate(Int index, const HashMap<InternedId, InternedId>& translation) const;
 
@@ -407,7 +407,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Checks if this path identifies a @ref Port "top-level port". A top-level port is a port
 	/// which is not nested within another port, but a direct child of the input or output port list of a node.
-	/// @see GetTopLevelPort
+	/// @see GetTopLevelPort.
 	/// @return												True if this path stands for a top-level port, false otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool IsTopLevelPort() const;

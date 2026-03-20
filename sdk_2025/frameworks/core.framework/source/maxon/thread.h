@@ -652,7 +652,7 @@ template <typename FN> static auto ExecuteOnMainThreadFallback(FN&& fn) -> declt
 /// The job is always guaranteed to be executed and this method will only return an error
 /// if the lambda does.
 /// @param[in] fn									Lambda object with the code to be executed.
-/// @param[in] waitMode						DONT_WAIT if you don't want to wait, otherwise it defines the waitMode of the operation. Useful values are WAITMODE::RETURN_ON_CANCEL if you want to return on thrread cancelation to prevent dead locks
+/// @param[in] waitMode						DONT_WAIT if you don't want to wait, otherwise it defines the waitMode of the operation. Useful values are WAITMODE::RETURN_ON_CANCEL if you want to return on thrread cancelation to prevent dead locks.
 /// @param[in] timeout						The time to wait for the execution (infinite by default). 
 /// @return												Return value of the lambda.
 //----------------------------------------------------------------------------------------

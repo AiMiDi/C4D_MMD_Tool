@@ -16,7 +16,7 @@ context: |
   Source layout:
   - refactoring/ — Active plugin source code
   - res/S24_up/ — Plugin resources (descriptions, dialogs, strings)
-  - dependency/ — Third-party sources, compiled to dependency/install/
+  - dependency/ — Third-party sources (Bullet3, libMMD); built via CMake add_subdirectory, no install prefix required
 
   Conventions:
   - SDK compatibility macros in module/core/cmt_marco.h
@@ -31,10 +31,27 @@ context: |
   - Add a brief English description document when archiving.
   - specs are written in English.
 
+  Docs:
+  - C4D SDK: https://developers.maxon.net/docs/cpp/2026_1_0/index.html
+  - Code Style Guide: https://developers.maxon.net/docs/cpp/2026_1_0/page_maxonapi_style_guide.html
+
   Test:
   - add test case and test description for the changes of libMMD and make sure the changes pass all tests.
 
 rules:
-  - must follow the C4D SDK development documentation: https://developers.maxon.net/docs/cpp/2026_1_0/index.html
-  - SDK compatibility: All code that involves differences across SDK versions must be handled through compatible macros or utility functions in module/core/cmt_marco.h. Read cmt_marco.h before writing new code, and give priority to existing compatible facilities (such as MakeDescIDGeData, GetCustomDataTypeWritable, SDK2024_Const, etc.); If you encounter new API differences, you should add compatible macros/functions in cmt_marco.h instead of writing code for a specific SDK version directly.
-  - When a requirement change or an increase is noticed, it is necessary to update the document and the requirement change document synchronously, and update the task list in the requirement change document.
+  proposal:
+    - "Must follow the C4D SDK development documentation and Code Style Guide."
+    - "SDK compatibility: All code that involves differences across SDK versions must be handled through compatible macros or utility functions in module/core/cmt_marco.h. Read cmt_marco.h before writing new code, and give priority to existing compatible facilities (such as MakeDescIDGeData, GetCustomDataTypeWritable, SDK2024_Const, etc.). If you encounter new API differences, add compatible macros/functions in cmt_marco.h instead of writing code for a specific SDK version directly."
+    - "When a requirement change or an increase is noticed, update the document and the requirement change document synchronously, and update the task list in the requirement change document."
+  design:
+    - "Must follow the C4D SDK development documentation and Code Style Guide."
+    - "SDK compatibility: All code that involves differences across SDK versions must be handled through compatible macros or utility functions in module/core/cmt_marco.h. Read cmt_marco.h before writing new code, and give priority to existing compatible facilities (such as MakeDescIDGeData, GetCustomDataTypeWritable, SDK2024_Const, etc.). If you encounter new API differences, add compatible macros/functions in cmt_marco.h instead of writing code for a specific SDK version directly."
+    - "When a requirement change or an increase is noticed, update the document and the requirement change document synchronously, and update the task list in the requirement change document."
+  specs:
+    - "Must follow the C4D SDK development documentation and Code Style Guide."
+    - "SDK compatibility: All code that involves differences across SDK versions must be handled through compatible macros or utility functions in module/core/cmt_marco.h. Read cmt_marco.h before writing new code, and give priority to existing compatible facilities (such as MakeDescIDGeData, GetCustomDataTypeWritable, SDK2024_Const, etc.). If you encounter new API differences, add compatible macros/functions in cmt_marco.h instead of writing code for a specific SDK version directly."
+    - "When a requirement change or an increase is noticed, update the document and the requirement change document synchronously, and update the task list in the requirement change document."
+  tasks:
+    - "Must follow the C4D SDK development documentation and Code Style Guide."
+    - "SDK compatibility: All code that involves differences across SDK versions must be handled through compatible macros or utility functions in module/core/cmt_marco.h. Read cmt_marco.h before writing new code, and give priority to existing compatible facilities (such as MakeDescIDGeData, GetCustomDataTypeWritable, SDK2024_Const, etc.). If you encounter new API differences, add compatible macros/functions in cmt_marco.h instead of writing code for a specific SDK version directly."
+    - "When a requirement change or an increase is noticed, update the document and the requirement change document synchronously, and update the task list in the requirement change document."

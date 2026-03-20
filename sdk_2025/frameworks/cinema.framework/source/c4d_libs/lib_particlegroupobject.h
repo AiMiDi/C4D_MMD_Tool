@@ -118,7 +118,7 @@ public:
 	const maxon::Block<Float32> GetParticleRadiiW();
 	//----------------------------------------------------------------------------------------
 	/// Returns the distances traversed of the particles. If the count is 0 but the particles positions exist, it means this attribute was not allocated.
-	/// @return                       The particle distance traversed as a continuous memory block.
+	/// @return												The particle distance traversed as a continuous memory block.
 	//----------------------------------------------------------------------------------------
 	const maxon::Block<const Float32> GetParticleDistancesTraversedR() const;
 	const maxon::Block<Float32> GetParticleDistancesTraversedW();
@@ -157,6 +157,18 @@ public:
 		return GetAttributeChannel(channelAttribute.Get());
 	}
 
+	//----------------------------------------------------------------------------------------
+	/// Returns the a list of system channel ids - default attributes.
+	/// idReceiver[in]								a value receiver that will be called with the channel ids and their datatype.
+	/// @return												OK on success.
+	//----------------------------------------------------------------------------------------
+	maxon::Result<void> GetSystemAttributeChannelIds(const maxon::ValueReceiver<const maxon::Tuple<maxon::InternedId, maxon::DataType, maxon::String>&>& idReceiver) const;
+
+	//----------------------------------------------------------------------------------------
+	/// Returns a single group index for a particle group object (multi groups excluded and will return -1). The single particle groups start at 1 as 0 is reserved for the root group.
+	/// @return												The group index of the simulation, -1 if it wasn't found or the simulation has not started.
+	//----------------------------------------------------------------------------------------
+	Int32 GetParticleGroupIndex() const;
 	/// @}
 };
 
@@ -197,6 +209,8 @@ struct ParticleGroupObjectLib : public C4DLibrary
 	const maxon::Block<const maxon::Quaternion<Float32>>(iParticleGroupObject::* GetParticleAlignmentsC)() const;
 	const maxon::StridedBlock<const Vector32>(iParticleGroupObject::* GetParticleAngularVelocitiesC)() const;
 	maxon::Data(iParticleGroupObject::*GetAttributeChannel)(const maxon::InternedId& channelId) const;
+	maxon::Result<void>(iParticleGroupObject::*GetSystemAttributeChannelIds)(const maxon::ValueReceiver<const maxon::Tuple<maxon::InternedId, maxon::DataType, maxon::String>&>& idReceiver) const;
+	Int32(iParticleGroupObject::*GetParticleGroupIndex)() const;
 };
 
 // INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF

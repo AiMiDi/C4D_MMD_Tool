@@ -358,7 +358,7 @@ private:
 		}
 #endif
 		// automatically correct the flags if a POD type is detected
-		HelperClass<SORTCLASS, ITERATOR, CONTENT, (BASESORTFLAGS) ((Int)FLAGS | (STD_IS_REPLACEMENT(pod, CONTENT) ? (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS : 0))> help;
+		HelperClass<SORTCLASS, ITERATOR, CONTENT, (BASESORTFLAGS) ((Int)FLAGS | (STD_IS_REPLACEMENT(trivially_copyable, CONTENT) ? (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS : 0))> help;
 
 		ITERATOR end = start + count;
 		help.IntroSortLoop(static_cast<const SORTCLASS*>(this), start, end, Log2(count) * 2);

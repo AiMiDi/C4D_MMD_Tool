@@ -447,9 +447,6 @@ enum class ERROR_TYPE
 //----------------------------------------------------------------------------------------
 #ifdef MAXON_COMPILER_MSVC
 	const Error* CreateErrorPtr(MAXON_SOURCE_LOCATION_DECLARATION, ERROR_TYPE type);
-#elif (defined MAXON_COMPILER_INTEL)
-	// The ICC knows pure, but at least V15 is not able to omit CreateErrorPtr.
-	__declspec(pure) const Error* CreateErrorPtr(MAXON_SOURCE_LOCATION_DECLARATION, ERROR_TYPE type);
 #else
 	// returns_nonnull requires at least GCC 4.9  or Clang 3.5
 	#if !defined(MAXON_COMPILER_GCC) || (MAXON_COMPILER_GCC >= 490)
@@ -781,24 +778,7 @@ public:
 
 	using typename Super::DeleteType;
 
-#if defined(MAXON_COMPILER_INTEL) // Intel bug (MAXON_IS_COW_KIND doesn't work)
-	//----------------------------------------------------------------------------------------
-	/// Constructs a Result object with the given error. The result value will be initialized
-	/// as a default value.
-	/// @param[in] error							Error object to use for the Result.
-	//----------------------------------------------------------------------------------------
-	MAXON_IMPLICIT Result(const Error& error) : Super() { this->_error._error = PrivateSystemSetCurrentError(error); }
-
-	//----------------------------------------------------------------------------------------
-	/// Constructs a Result object with the given error. The result value will be initialized
-	/// as a default value.
-	/// @param[in] error							Error object to use for the Result.
-	//----------------------------------------------------------------------------------------
-	MAXON_IMPLICIT Result(Error&& error) : Super() { this->_error._error = PrivateSystemSetCurrentError(std::move(error)); }
-	#define PRIVATE_MAXON_ENABLE_IF_ERROR(TYPE) typename std::enable_if<std::remove_reference<E>::type::DirectlyReferencedType::HasBaseDetector::template Check<ErrorInterface>::value, TYPE>::type
-#else
 	#define PRIVATE_MAXON_ENABLE_IF_ERROR(TYPE) typename std::enable_if<std::remove_reference<E>::type::DirectlyReferencedType::HasBaseDetector::template Check<ErrorInterface>::value && MAXON_IS_COW_KIND(std::remove_reference<E>::type::Handler::KIND), TYPE>::type
-#endif
 
 #if defined(MAXON_COMPILER_GCC)
 	// MSVC seems to only generate copy constructor
@@ -1017,7 +997,7 @@ public:
 
 	template <typename E> Result(DeleteType value, E&& error, PRIVATE_MAXON_ENABLE_IF_ERROR_DUMMY) = delete;
 
-#if defined(MAXON_COMPILER_MSVC) || defined(MAXON_COMPILER_INTEL)
+#if defined(MAXON_COMPILER_MSVC)
 	// prevent Bool -> Result<void> conversion for MSVC
 	explicit Result(typename std::conditional<STD_IS_REPLACEMENT(same, typename std::decay<RESULT_TYPE>::type, Bool) || STD_IS_REPLACEMENT(void, RESULT_TYPE), volatile DummyParamType&&, Bool>::type) = delete;
 	MAXON_IMPLICIT Result(typename std::conditional<STD_IS_REPLACEMENT(void, RESULT_TYPE), Bool, const volatile DummyParamType&&>::type) = delete;

@@ -48,7 +48,7 @@ struct Tetrahedron
 	/// @param[in] point1							Point index one of the triangle.
 	/// @param[in] point2							Point index two of the triangle.
 	/// @param[in] point3							Point index three of the triangle.
-	/// @return												The tetrahedron face index of the the point indices
+	/// @return												The tetrahedron face index of the the point indices.
 	//----------------------------------------------------------------------------------------
 	Int32 GetFaceWithPoints(Int32 point1, Int32 point2, Int32 point3) const;
 
@@ -96,7 +96,7 @@ struct Tetrahedron
 
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the internal tetrahedron face index of the face with the input neighbor index
+	/// Gets the internal tetrahedron face index of the face with the input neighbor index.
 	/// @param[in] neighbor						The neighbor index.
 	/// @return												The face index of the face with the neighbor index as neighbor.
 	//----------------------------------------------------------------------------------------

@@ -1362,15 +1362,15 @@ class Parser(object):
                                 base = type[:pos]
                                 scope = self.summary.lookup(owner.qname('.'), True)
                                 base = scope.lookup(base)
+                                tparamCount = 0
                                 if isinstance(base, Class) and base.generic:
-                                    # we have to split the template arguments into the template part and the generic part
                                     tparamCount = base.template or 0
-                                    args, dummy = splitComma(type[pos+1:])
-                                    if len(args) > tparamCount:
-                                        type = type[:pos]
-                                        if tparamCount:
-                                            type += '<' + ', '.join(args[:tparamCount]) + '>'
-                                        gen = ''.join(', ' + a for a in args[tparamCount:])
+                                args, dummy = splitComma(type[pos+1:])
+                                if len(args) > tparamCount:
+                                    type = type[:pos]
+                                    if tparamCount:
+                                        type += '<' + ', '.join(args[:tparamCount]) + '>'
+                                    gen = ''.join(', ' + a for a in args[tparamCount:])
                             cls.baseInterfaces.append((type, gen))
                             t = self.lex.getNoEof()
                             t.expect([',', ')'])
@@ -1859,7 +1859,7 @@ class Parser(object):
             optionsCopy = args.stylecheckOptions.copy()
             try:
                 if not args.encoding:
-                    f = open(file, 'rU')
+                    f = open(file, 'r')
                     source = f.read()
                 else:
                     enc = args.encoding
@@ -1870,7 +1870,7 @@ class Parser(object):
                             # getpreferredencoding reports us-ascii when called from Xcode because Xcode doesn't set all environment variables 
                             enc = 'utf-8'
                     if sys.version_info.major >= 3:
-                        f = open(file, 'rU', encoding=enc)
+                        f = open(file, 'r', encoding=enc)
                         source = f.read()
                     else:
                         import codecs
@@ -2162,7 +2162,7 @@ def filterDoxygen(file):
             imgDir = os.path.join(doxDir, 'tmpimg')
             break
         doxDir = parent
-    f = open(file, 'rU')
+    f = open(file, 'r')
     parts = []
     dox = file.endswith('.dox')
     escape = ['@', '\\']
@@ -2380,7 +2380,7 @@ def recurse(args, dir):
     if os.path.isfile(projDefPath):
         b = not args.publicframeworks
         if not b: 
-            projDef = open(projDefPath, 'rU')
+            projDef = open(projDefPath, 'r')
             keys, m = parseProjectDefinition(projDef)
             projDef.close()
             b = m.get('publicframework', False) 
@@ -2409,6 +2409,7 @@ def main():
     parser.add_argument('--doxygen', action='store_true', help='Work as Doxygen filter. In this case a source file has to be specified instead of the directory, and the filtered file goes to stdout.')
     parser.add_argument('--publicframeworks', action='store_true', help='Process only frameworks with publicframework=true in their projectdefinition.txt.')
     parser.add_argument('--generatedroot', action='store', help='Changes the root folder for generated files (may only be used for modules, not for frameworks).')
+    parser.add_argument('--frameworkroot', action='append', help='An additional directory which contains framework subdirectories. This option can be given multiple times.')
     args = parser.parse_args()
 
     if not args.doxygen:
@@ -2502,7 +2503,7 @@ def process(args):
 
     optionLines = []
     # read projectdefinition.txt and look for source processor options
-    projDef = open(projDefPath, 'rU')
+    projDef = open(projDefPath, 'r')
     for line in projDef:
         optionLines.append(line)
     projDef.close()

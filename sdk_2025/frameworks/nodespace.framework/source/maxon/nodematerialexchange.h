@@ -240,8 +240,8 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Loads and parses the data description of material and inserts the defined default values into a DataDictionary.
 	/// This method caches once-loaded description for performance.
-	/// @param[in] materialType			The (bundle) type of the material representation.
-	/// @return											The parameter set on success.
+	/// @param[in] materialType				The (bundle) type of the material representation.
+	/// @return												The parameter set on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<DataDictionary> LoadMaterialDefaults(const Id& materialType);
 
@@ -249,12 +249,12 @@ public:
 	/// Initializes the exchange representation for a node material. 
 	/// This method is called immediately after a change to the node graph by the viewport.
 	/// In this method it is safe to access the original node graph.
-	/// @param[in] intent						The intention behind the material exchange request.
-	/// @param[in] materialType			The (bundle) type of the external material representation.
-	/// @param[in] graph						The node graph of the node material.
-	/// @param[in] endNodePath			The path to the end node as it is known to C4D.
-	/// @param[in] soloNodePath			The path to the solo node as it is known to C4D.
-	/// @return											OK on success.
+	/// @param[in] intent							The intention behind the material exchange request.
+	/// @param[in] materialType				The (bundle) type of the external material representation.
+	/// @param[in] graph							The node graph of the node material.
+	/// @param[in] endNodePath				The path to the end node as it is known to C4D.
+	/// @param[in] soloNodePath				The path to the solo node as it is known to C4D.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Initialize(const Id& intent, const Id& materialType, const NodesGraphModelRef& graph, const NodePath& endNodePath, const NodePath& soloNodePath);
 
@@ -278,8 +278,8 @@ public:
 	/// request.Set(maxon::nodes::PREVIEWIMAGEREQUEST::PROVIDER, ViewportTextureProviderExample::GetClass()) iferr_return;
 	/// @endcode
 	///
-	/// @param[in,out] request			The data container of the preview request that is handed over to the PreviewImageProviderInterface::Initialize() method.
-	/// @return											OK on success.
+	/// @param[in,out] request				The data container of the preview request that is handed over to the PreviewImageProviderInterface::Initialize() method.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> ConfigureTextureProviderRequest(DataDictionaryObjectRef request);
 };
@@ -298,10 +298,10 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Populates a node graph based on the provided material data. The destination BaseDocument is provided for context.
-	/// @param[out] graph					The node graph to fill with nodes, connections and values.
-	/// @param[in] materialData		The material data to import from.
-	/// @param[in] baseDocument		The scene into which the material is imported.
-	/// @return										OK on success.
+	/// @param[out] graph							The node graph to fill with nodes, connections and values.
+	/// @param[in] materialData				The material data to import from.
+	/// @param[in] baseDocument				The scene into which the material is imported.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Import(NodesGraphModelRef& graph, const material::MaterialExchangeData& materialData, cinema::BaseDocument& baseDocument);
 };

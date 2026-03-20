@@ -46,7 +46,7 @@ template <typename T> struct ABIParamType<T, typename std::enable_if<STD_IS_REPL
 /// <tt>ABIReturnType<T>::type</tt> is an erased type which is compatible with T with respect to the calling
 /// convention of the ABI when used for a return value.
 ///
-/// @see ABIParamType
+/// @see ABIParamType.
 ///
 /// @tparam T											Type for which the erased, ABI-compatible return type shall be determined.
 //----------------------------------------------------------------------------------------

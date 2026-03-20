@@ -235,7 +235,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @allocatesA{falloff}
-	/// @param[in] parentBc						Container of the parent object where all data is stored
+	/// @param[in] parentBc						Container of the parent object where all data is stored.
 	/// @param[in] cType							(Optional) the type.
 	/// @return												@allocReturn{falloff}
 	//----------------------------------------------------------------------------------------
@@ -336,7 +336,7 @@ public:
 	/// @param[in] op									Optional object used to set the matrix if given, and if no container is given for @formatParam{bc}, its container will be used instead.
 	/// @return												@trueIfOtherwiseFalse{successful}
 	//----------------------------------------------------------------------------------------
-	Bool InitFalloff(BaseDocument* doc = nullptr, BaseObject* op = nullptr);
+	Bool InitFalloff(const BaseDocument* doc = nullptr, const BaseObject* op = nullptr);
 
 	Bool InitFalloff(const BaseDocument* doc, const BaseObject* op, FalloffDataData& data) const;
 
@@ -351,7 +351,7 @@ public:
 	/// @param[in] op									The object.
 	/// @param[in] inputs							The point array to sample.
 	/// @param[in] flags							The sampling flags.
-	/// @return												true if it succeeds, false if it fails.
+	/// @return												True if it succeeds, false if it fails.
 	//----------------------------------------------------------------------------------------
 	Bool PreSample(const BaseList2D* op, const BaseDocument* doc, const FieldInput& inputs, FieldOutput& result, const FalloffDataData& data, FIELDSAMPLE_FLAG flags) const;
 
@@ -368,8 +368,8 @@ public:
 	/// @param[in] usespline					Use the GUI spline if it exists (default, ignored with pre-sampling).
 	/// @param[in] weight							Weight offset. Equivalent of adding this value to the falloff result
 	/// 															before clamping (optional, ignored with fields).
-	/// @param[in] op									the object (ignored with pre-sampling).
-	/// @param[in] index							zero-based index of the sample (when using pre-sampling).
+	/// @param[in] op									The object (ignored with pre-sampling).
+	/// @param[in] index							Zero-based index of the sample (when using pre-sampling).
 	//----------------------------------------------------------------------------------------
 	void Sample(const BaseList2D* op, const Vector& p, Float* result, const FieldOutput* fieldSamples, const FalloffDataData& data, Bool usespline = true, Float weight = 0.0_f, Int index = NOTOK) const;
 
@@ -502,7 +502,7 @@ public:
 	Bool IsFields() const;
 
 	//----------------------------------------------------------------------------------------
-	/// When working with Fields this retrieves the current display channel flags for the FieldList
+	/// When working with Fields this retrieves the current display channel flags for the FieldList.
 	/// @return												The channel flags.
 	//----------------------------------------------------------------------------------------
 	FIELDLIST_FLAGS GetChannelFlags() const;

@@ -1,5 +1,5 @@
-#ifndef CONVERSION_NODES_H__
-#define CONVERSION_NODES_H__
+#ifndef NODES_CONVERSION_H__
+#define NODES_CONVERSION_H__
 
 #include "maxon/fid.h"
 #include "maxon/vector.h"
@@ -340,4 +340,4 @@ namespace PATTERN
 	
 #include "nodes_conversion2.hxx"
 
-#endif // CONVERSION_NODES_H__
+#endif // NODES_CONVERSION_H__

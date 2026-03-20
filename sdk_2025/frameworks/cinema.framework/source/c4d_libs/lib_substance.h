@@ -467,7 +467,7 @@ void* GetSubstanceInput(BaseList2D* const asset, void* const graph, void* const 
 /// @param[out] type							The output type ID. Only valid if return value != @formatConstant{nullptr}.
 /// @param[out] name							The name of the returned output. Only valid if return value != @formatConstant{nullptr}.
 /// @param[in,out] bmpPtr					A pointer to a BaseBitmap pointer. If not @formatConstant{nullptr}, a pointer to a clone of the output channel bitmap will be returned here. @callerOwnsPointed{BaseBitmap}. Only valid if return value != @formatConstant{nullptr}.
-/// @return												A pointer to identify the output, may not be dereferenced, @cinemaOwnsPointed{output}, or nullptr if output is not available
+/// @return												A pointer to identify the output, may not be dereferenced, @cinemaOwnsPointed{output}, or nullptr if output is not available.
 //----------------------------------------------------------------------------------------
 void* GetSubstanceOutput(BaseList2D* const asset, void* const graph, void* const prevOutput, UInt32& outputUid, SUBSTANCE_OUTPUT_TYPE& type, String& name, BaseBitmap** bmpPtr);
 

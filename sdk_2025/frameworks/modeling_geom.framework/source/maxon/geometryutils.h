@@ -57,12 +57,12 @@ class GeometryUtilsInterface
 public:
 	//----------------------------------------------------------------------------------------
 	/// Remaps a value from one range to another.
-	/// @param[in] value 					The value to remap.
-	/// @param[in] from1 					First bound of source range.
-	/// @param[in] to1 						Second bound of source range.
-	/// @param[in] from2 					First bound of destination range.
-	/// @param[in] to2 						Second bound of destination range.
-	/// @return 									The remapped value.
+	/// @param[in] value							The value to remap.
+	/// @param[in] from1							First bound of source range.
+	/// @param[in] to1								Second bound of source range.
+	/// @param[in] from2							First bound of destination range.
+	/// @param[in] to2								Second bound of destination range.
+	/// @return												The remapped value.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Float LinearRemapToRange(Float value, Float from1, Float to1, Float from2, Float to2);
 
@@ -109,13 +109,13 @@ public:
 	/// plane and which passes through the origin of the world coordinate system.
 	/// @param[in] points							Points 3D positions to project.
 	/// @param[in] normal							The normal vector of the plane onto which to project the points.
-	/// @param[in, out] basisVector0	First basis vector of the 2D plane coordinate system.
-	/// @param[in, out] basisVector1	Second basis vector of the 2D plane coordinate system.
+	/// @param[in,out] basisVector0		First basis vector of the 2D plane coordinate system.
+	/// @param[in,out] basisVector1		Second basis vector of the 2D plane coordinate system.
 	/// @param[out] translate					Translation vector between the projection plane origin (which is
-	///																the world CS origin) and the best fit plane origin (which is
-	///																the orthogonal projection of the world CS origin to the fit plane).
-	///																In other words, translation vector is the distance vector between
-	///																the projection plane an the best fit planes.
+	/// 															the world CS origin) and the best fit plane origin (which is
+	/// 															the orthogonal projection of the world CS origin to the fit plane).
+	/// 															In other words, translation vector is the distance vector between
+	/// 															the projection plane an the best fit planes.
 	/// @param[in] checkDegenerated		If true try to avoid cases where the resulting 2d outline contains coincident vertices.
 	/// @param[out] outPoints					Array containing 2D projected points positions.
 	/// @param[out] computeBasis			Compute basis vectors from the normal and the input points if enabled.
@@ -224,7 +224,7 @@ public:
 	/// @param[in] next								The next point.
 	/// @param[in] pred								The prev point.
 	/// @param[in] up									Up vector or the normal of the polygon.
-	/// @return												The detectected state
+	/// @return												The detectected state.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD GEOMETRY_TEST_EXACT IsVertexConvexExact(const Vector& vertex, const Vector& next, const Vector& pred, const Vector& up = Vector(0, 1, 0), Float epsilon = GeomConstants::EPSILON4);
 
@@ -264,7 +264,7 @@ public:
 	/// @param[in] vertex							The vertex to check.
 	/// @param[in] next								The next point.
 	/// @param[in] pred								The prev point.
-	/// @return												The detectected state
+	/// @return												The detectected state.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD GEOMETRY_TEST_EXACT IsVertexConvexExact2D(const Vector2d& vertex, const Vector2d& next, const Vector2d& pred, Float epsilon = GeomConstants::EPSILON4);
 
@@ -275,8 +275,8 @@ public:
 	/// @param[in] b									Triangle vertex B.
 	/// @param[in] c									Triangle vertex C.
 	/// @return												The barycentric point coordinate.
-	///																'x' component of the vector is the coordinate of the point @p c,
-	///																'y' component of the vector is the coordinate of the point @p b.
+	/// 															'x' component of the vector is the coordinate of the point @p c,
+	/// 															'y' component of the vector is the coordinate of the point @p b.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Vector2d CalculateBarycentricCoordinate(const Vector& point, const Vector& a, const Vector& b, const Vector& c);
 
@@ -783,7 +783,7 @@ public:
 	/// @param[in] a									Triangle point A.
 	/// @param[in] b									Triangle point B.
 	/// @param[in] c									Triangle point C.
-	/// @param[in] normal             The reference normal to calculate the sign.
+	/// @param[in] normal							The reference normal to calculate the sign.
 	/// @return												Unsigned triangle area.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Float CalculateSignedTriangleArea(const Vector& a, const Vector& b, const Vector& c, const Vector& normal);
@@ -801,7 +801,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Calculates the perimeter length for an outline defined by a loop of points in outlinePoints.
 	/// @param[in] outlinePoints			An array with a point sequence defining the perimeter.
-	/// @return												The perimeter
+	/// @return												The perimeter.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Float CalculatePerimeterLength2D(const Block<const Vector2d>& outlinePoints);
 
@@ -809,7 +809,7 @@ public:
 	/// Determines whether outline defined by a loop of points is would clockwise or not
 	/// This is only meaningful if the loop has no self crossings.
 	/// @param[in] outlinePoints			An array with a point sequence defining the perimeter.
-	/// @return												Whether loop is wound clockwise
+	/// @return												Whether loop is wound clockwise.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Bool> IsWoundClockwise2D(const Block<const Vector2d>& outlinePoints);
 
@@ -817,7 +817,7 @@ public:
 	/// Calculates the centroid coordinates for an outline defined by a loop of points in outlinePoints.
 	/// @param[in] outlinePoints			An array with a point sequence.
 	/// @param[out] area							If non-null, then pointed value is set to the enclosed area.
-	/// @param[out] windingPolarity 	If non-null, then pointed value contains the winding direction of the loop.
+	/// @param[out] windingPolarity		If non-null, then pointed value contains the winding direction of the loop.
 	/// @return												The centroid coordinates.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Vector2d CalculateOutlineCentroidAndArea2D(const Block<const Vector2d>& outlinePoints, Float* area = nullptr, Bool* windingPolarity = nullptr);
@@ -826,10 +826,10 @@ public:
 	/// Calculates the centroid coordinates for an outline with optional holes, defined by loop(s) of vertices.
 	/// @param[in] loopVertices				An array with one or more point sequences which define perimeter loop followed by any hole loops. All loops are ASSUMED to neither overlap nor intersect, and first loop must enclose all others.
 	/// @param[in] loopVertexCounts		An array containing the number of vertices in each loop. If no holes, then this will be a single value equal to the number of entries in loopVertices.
-	/// @param[in] includeHolesInCogCalcs If true, the holes are considered in calculation of the centroid position. If false, only the first loop (outer perimeter) is considered.
+	/// @param[in] includeHolesInCogCalcs	If true, the holes are considered in calculation of the centroid position. If false, only the first loop (outer perimeter) is considered.
 	/// @param[out] overallArea				If non-null, then pointed value is set to the enclosed area. Holes are ALWAYS considered in this calculation.
-	/// @param[out] loopSoloAreas 		If non-null, then pointed array contains the areas enclosed by each loop in isolation. Overall area is then the first value minus the sum of the rest.
-	/// @param[out] windingPolarity	 	If non-null, then pointed array contains the winding direction of each loop.
+	/// @param[out] loopSoloAreas			If non-null, then pointed array contains the areas enclosed by each loop in isolation. Overall area is then the first value minus the sum of the rest.
+	/// @param[out] windingPolarity		If non-null, then pointed array contains the winding direction of each loop.
 	/// @return												The centroid coordinates.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Vector2d> CalculateMultiOutlineCentroidAndAreas2D(const Block<const Vector2d>& loopVertices, const Block<const Int>& loopVertexCounts, Bool includeHolesInCogCalcs, Float* overallArea = nullptr, BaseArray<Float>* loopSoloAreas = nullptr, BaseArray<Bool>* windingPolarity = nullptr);
@@ -838,7 +838,7 @@ public:
 	/// Calculates the convex hull for an outline, defined by a loop of vertices
 	/// Note that the polygon is assumed to be non-self intersecting, and with edges formed by the vertices in order.
 	/// In particular, the vertices are NOT treated as a 'sea of points' - but instead as defining edges; order matters!
-	/// @param[in] outlinePoints			An array with a point sequence representing the perimeter of the polgon
+	/// @param[in] outlinePoints			An array with a point sequence representing the perimeter of the polgon.
 	/// @return												BaseArray containing the indices of the input array corresponding to the vertices of the convex hull of the polygon.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<Int>> CalculateConvexHull2D(const Block<const Vector2d>& outlinePoints);
@@ -847,7 +847,7 @@ public:
 	/// Decomposes an outline defined by a loop of vertices into a set of convex parts
 	/// Note that the polygon is assumed to be non-self intersecting, and with edges formed by the vertices in order.
 	/// In particular, the vertices are NOT treated as a 'sea of points' - but instead as defining edges; order matters!
-	/// @param[in] outlinePoints			An array with a point sequence representing the perimeter of the polgon
+	/// @param[in] outlinePoints			An array with a point sequence representing the perimeter of the polgon.
 	/// @return												BaseArray containing BaseArray of indices of the input array corresponding to the vertices of each of the convex parts of.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<BaseArray<Int>>> CalculateConvexDecomposition2D(const Block<const Vector2d>& outlinePoints);
@@ -856,7 +856,7 @@ public:
 	/// Given a loop of vertices, this performs in-place cleaning operations.
 	/// - Duplicated consecutive vertices are removed.
 	/// - Colinear and anti-colinear vertices are removed.
-	/// @param[in] outlinePoints			An array with a point sequence representing the perimeter of the polgon
+	/// @param[in] outlinePoints			An array with a point sequence representing the perimeter of the polgon.
 	/// @param[in] maintainStart			If false, then vertex order is rotated such that the first vertex lies on the convex hull. (If it is true, then starting vertex remains unchanged, unless that vertex was removed during cleaning. In this case the new start vertex is the first vertex after that which survived.)
 	/// @return												Whether any changes were made.
 	//----------------------------------------------------------------------------------------
@@ -865,20 +865,20 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Given two loops of vertices which represent two convex polygons, this calculates the corresponding No-Fit Polygon
 	/// NFP of convex polygons never contain internal holes, only the main perimeter, hence only ever a single returned edge loop.
-	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first convex polygon
-	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second convex polygon
+	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first convex polygon.
+	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second convex polygon.
 	/// @param[in] relativeBToA				If true, returned NFP is the result of moving polygon B relative to polygon A. If false then A relative to B.
-	/// @return												The resulting NoFit polygon
+	/// @return												The resulting NoFit polygon.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<Vector2d>> CalculateNoFitPolygonForConvex(const Block<const Vector2d>& outlinePointsA, const Block<const Vector2d>& outlinePointsB, Bool relativeBToA = true);
 
 	//----------------------------------------------------------------------------------------
 	/// Given two loops of vertices which represent two polygons, this calculates the corresponding No-Fit Polygon using the sliding method.
 	/// Internal holes are NOT generated, only the main perimeter, hence only ever a single returned edge loop.
-	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first polygon
-	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second polygon
+	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first polygon.
+	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second polygon.
 	/// @param[in] relativeBToA				If true, returned NFP is the result of moving polygon B relative to polygon A. If false then A relative to B.
-	/// @return												The resulting NoFit polygon
+	/// @return												The resulting NoFit polygon.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<Vector2d>> CalculateNoFitPolygonUsingSliding(const Block<const Vector2d>& outlinePointsA, const Block<const Vector2d>& outlinePointsB, Bool relativeBToA = true);
 
@@ -887,42 +887,42 @@ public:
 	/// Internal holes are NOT generated, only the main perimeter, hence only ever a single returned edge loop.
 	/// @param[in] outlinePointsCcwA	An array with a point sequence representing the perimeter of the first polygon. This must be counterclockwise wound.
 	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second polygon. This must be clockwise wound.
-	/// @return												The resulting Inner-Fit polygon
+	/// @return												The resulting Inner-Fit polygon.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<Vector2d>> CalculateInnerFitPolygonUsingSliding(const Block<const Vector2d>& outlinePointsCcwA, const Block<const Vector2d>& outlinePointsB);
 
 	//----------------------------------------------------------------------------------------
 	/// Given two loops of vertices which represent two convex polygons, this calculates the corresponding No-Fit Polygon
 	/// NFP of convex polygons never contain internal holes, only the main perimeter, hence only ever a single returned edge loop.
-	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first convex polygon
-	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second convex polygon
+	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first convex polygon.
+	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second convex polygon.
 	/// @param[in] transformA					Transformation to be applied to vertices in A prior to calculation.
 	/// @param[in] transformB					Transformation to be applied to vertices in B prior to calculation.
 	/// @param[in] relativeBToA				If true, returned NFP is the result of moving polygon B relative to polygon A. If false then A relative to B.
-	/// @return												The resulting NoFit polygon
+	/// @return												The resulting NoFit polygon.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<Vector2d>> CalculateNoFitPolygonForConvex(const Block<const Vector2d>& outlinePointsA, const Block<const Vector2d>& outlinePointsB, const Matrix2d& transformA, const Matrix2d& transformB, Bool relativeBToA = true);
 
 	//----------------------------------------------------------------------------------------
 	/// Given two loops of vertices which represent two polygons, this calculates the corresponding No-Fit Polygon using the sliding method.
 	/// Internal holes are NOT generated, only the main perimeter, hence only ever a single returned edge loop.
-	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first polygon
-	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second polygon
+	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first polygon.
+	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second polygon.
 	/// @param[in] transformA					Transformation to be applied to vertices in A prior to calculation.
 	/// @param[in] transformB					Transformation to be applied to vertices in B prior to calculation.
 	/// @param[in] relativeBToA				If true, returned NFP is the result of moving polygon B relative to polygon A. If false then A relative to B.
-	/// @return												The resulting NoFit polygon
+	/// @return												The resulting NoFit polygon.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<Vector2d>> CalculateNoFitPolygonUsingSliding(const Block<const Vector2d>& outlinePointsA, const Block<const Vector2d>& outlinePointsB, const Matrix2d& transformA, const Matrix2d& transformB, Bool relativeBToA = true);
 
 	//----------------------------------------------------------------------------------------
 	/// Given two loops of vertices which represent two polygon outlines, this calculates the union.
-	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first polygon
-	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second polygon
-	/// @param[in] includeHolesInResult		If true, then if union shape contains holes, then these are also calculated and returned. If false then only the outer perimeter is returned.
+	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first polygon.
+	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second polygon.
+	/// @param[in] includeHolesInResult	If true, then if union shape contains holes, then these are also calculated and returned. If false then only the outer perimeter is returned.
 	/// @param[in] createOuterLoop		If true, then attempt to generate an outer loop before looking for holes. Otherwise just generate holes.
 	/// @return												The resulting union. If this contains multiple loops the first is the outer perimeter and all others represent internal loops (holes).
-	///																If this is empty, then the outlines do not overlap.
+	/// 															If this is empty, then the outlines do not overlap.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<BaseArray<Vector2d>>> CalculateUnionOfPolygons(const Block<const Vector2d>& outlinePointsA, const Block<const Vector2d>& outlinePointsB, Bool includeHolesInResult, Bool createOuterLoop = true);
 
@@ -932,15 +932,15 @@ public:
 	///   If intersectionPoint2 is nullptr then the midpoint of the intersection range will be returned via 'intersectionPoint'
 	///		If intersectionPoint2 is non-null, then the start of the intersection range will be returned via 'intersectionPoint', and the end via '*intersectionPoint2'
 	/// 
-	/// @param[in]	segment1Point1			First segment point.
-	/// @param[in]	segment1Point2			First segment point.
-	/// @param[in]	segment2Point1			Second segment point.
-	/// @param[in]	segment2Point2			Second segment point.
-	/// @param[out] intersectionPoint		Calculated intersection point in xy plane. For parallel intersection segments this is the start or mid-point of the overlapping region - see above.
-	/// @param[out] areParallel					If non null, routine sets to true or false to indicate whether the line segments were detected to be parallel.
+	/// @param[in] segment1Point1			First segment point.
+	/// @param[in] segment1Point2			First segment point.
+	/// @param[in] segment2Point1			Second segment point.
+	/// @param[in] segment2Point2			Second segment point.
+	/// @param[out] intersectionPoint	Calculated intersection point in xy plane. For parallel intersection segments this is the start or mid-point of the overlapping region - see above.
+	/// @param[out] areParallel				If non null, routine sets to true or false to indicate whether the line segments were detected to be parallel.
 	/// @param[out] intersectionPoint2	If non null, and segments are colinear and overlapping,  then is the end of the overlapping region.
-	/// @param[in]	tolerance						Geometric tolerance for the operation.
-	/// @return													True if the segments intersect in 2D.
+	/// @param[in] tolerance					Geometric tolerance for the operation.
+	/// @return												True if the segments intersect in 2D.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool IntersectsSegmentsExact2D(const Vector2d& segment1Point1, const Vector2d& segment1Point2, const Vector2d& segment2Point1, const Vector2d& segment2Point2, Vector2d& intersectionPoint, Bool& areParallel, Vector2d* intersectionPoint2 = nullptr, Float tolerance = 0.0_f);
 
@@ -948,9 +948,9 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Given two boundary loops of vertices WHICH ARE KNOWN TO CONTAIN NO INTERSECTIONS, this determines the relative
 	/// containment state of the two loops.
-	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first polygon
-	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second polygon
-	/// @return												The containment state
+	/// @param[in] outlinePointsA			An array with a point sequence representing the perimeter of the first polygon.
+	/// @param[in] outlinePointsB			An array with a point sequence representing the perimeter of the second polygon.
+	/// @return												The containment state.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD LOOP_OVERLAP_STATE GetContainmentStateForNonIntersectingLoops(const Block<const Vector2d>& outlinePointsA, const Block<const Vector2d>& outlinePointsB);
 
@@ -958,34 +958,35 @@ public:
 	/// Given two boundary loops of vertices, this determines whether the two loops are the same shape.
 	/// They are deemed to be the same if there are the same number of vertices, and the pairwise vertices
 	/// have the same coordinates to within the tolerance distance.
-	/// @param[in] loopA			An array with a point sequence representing the first loop
-	/// @param[in] loopB			An array with a point sequence representing the second loop
-	/// @param[in] allowCyclicRotation			If true, then cyclically rotated loops are considered equivalent, i.e. the loops don't have to start on the same vertices 
-	///																			for a match to be found. Loops which match, but have opposing winding directions are also considered to be a match when this is true.
-	///																			If false then vertices with the same indices must have the same coordinates to declare a match.
+	/// @param[in] loopA							An array with a point sequence representing the first loop.
+	/// @param[in] loopB							An array with a point sequence representing the second loop.
+	/// @param[in] allowCyclicRotation	If true, then cyclically rotated loops are considered equivalent, i.e. the loops don't have to start on the same vertices 
+	/// 															for a match to be found. Loops which match, but have opposing winding directions are also considered to be a match when this is true.
+	/// 															If false then vertices with the same indices must have the same coordinates to declare a match.
 	/// @param[in] ignoreTranslationOffset	If true then any translational offset between the loops is ignored. I.e. the same shapes at different offsets will be considered to match.
-	/// @param[in] tol				The position tolerance. If vertices differ by more than this in either x or y then they are considered to be different and non-matching.
-	/// @return								Whether the loops represent the same shape.
+	/// @param[in] tol								The position tolerance. If vertices differ by more than this in either x or y then they are considered to be different and non-matching.
+	/// @return												Whether the loops represent the same shape.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool AreLoopsEqualToWithinTolerance(const Block<const Vector2d>& loopA, const Block<const Vector2d>& loopB, Bool allowCyclicRotation = true, Bool ignoreTranslationOffset = true, maxon::Float tol = maxon::GeomConstants::EPSILON5);
 
 	
 	//----------------------------------------------------------------------------------------
 	/// Given a set of vertices, returns indices of vertices which lie on each of the maximal extents.
-	/// @param[in] verts			The set of vertices
-	/// @param[out] minIdxX		The index of a vertex with minimum X extent
-	/// @param[out] maxIdxX		The index of a vertex with maximum X extent
-	/// @param[out] minIdxY		The index of a vertex with minimum Y extent
-	/// @param[out] maxIdxY		The index of a vertex with minimum Y extent
-	/// @param[in]	findMostCounterClockwise	If true then when multiple vertices lie on the same extent, the most counterclockwise one will be the one whose index is returned.
+	/// @param[in] verts							The set of vertices.
+	/// @param[out] minIdxX						The index of a vertex with minimum X extent.
+	/// @param[out] maxIdxX						The index of a vertex with maximum X extent.
+	/// @param[out] minIdxY						The index of a vertex with minimum Y extent.
+	/// @param[out] maxIdxY						The index of a vertex with minimum Y extent.
+	/// @param[in] findMostCounterClockwise	If true then when multiple vertices lie on the same extent, the most counterclockwise one will be the one whose index is returned.
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD void CalculateBoundingBoxIndices(const Block<const Vector2d>& verts, Int& minIdxX, Int& maxIdxX, Int& minIdxY, Int& maxIdxY, Bool findMostCounterClockwise);
 
 	//----------------------------------------------------------------------------------------
 	/// Given a set of vertices, this determines whether the vertices are co-linear (lie in the same line)
 	/// They are deemed not to be co-linear if there exists a triangle whose area is greater than the given tolerance. 
-	/// @param[in] points			The set of vertices.
-	/// @param[in] tol				The triangle area tolerance. If area of the triangle formed by three vertices is greater than the tolerance, the vertices are not co-linear.
-	/// @return								Whether the loops are co-linear.
+	/// @param[in] points							The set of vertices.
+	/// @param[in] tol								The triangle area tolerance. If area of the triangle formed by three vertices is greater than the tolerance, the vertices are not co-linear.
+	/// @return												Whether the loops are co-linear.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool ArePointsCoLinearWithinTolerance(const Block<const Vector>& points, maxon::Float tol = maxon::GeomConstants::EPSILON5);
 };

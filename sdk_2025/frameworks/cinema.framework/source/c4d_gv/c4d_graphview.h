@@ -2591,7 +2591,7 @@ const String GvGetOperatorTitle(const GvNode *bn, Int32 string_id);
 //----------------------------------------------------------------------------------------
 /// Frees value tables allocated with the direct versions of the GvBuildValuesTable() functions.
 /// @param[in] bn									The node. @callerOwnsPointed{GvNode}
-/// @param[out] ports							TODO: (Sdkteam) describe
+/// @param[out] ports							TODO: (Sdkteam) describe.
 //----------------------------------------------------------------------------------------
 void GvFreeValuesTable(GvNode *bn, maxon::BaseArray<GvValue*>& ports);
 
@@ -2607,7 +2607,7 @@ void GvFreeValuesTable(GvNode *bn, GvValuesInfo &info);
 /// Use GvCalculateInValuesTable() to calculate the values, and then get the values from @formatParam{ports}.\n
 /// Free the values table with GvFreeValuesTable().
 /// @param[in] bn									The node. @callerOwnsPointed{GvNode}
-/// @param[in] ports							TODO: (Sdkteam) describe
+/// @param[in] ports							TODO: (Sdkteam) describe.
 /// @param[in] c									The current calculation helper. @callerOwnsPointed{calculation helper}
 /// @param[in] r									The current run helper. @callerOwnsPointed{run helper}
 /// @param[in] ids								A zero terminated array of port IDs or one of these constants: @enumerateEnum{GV_PORTS}
@@ -2618,7 +2618,7 @@ Bool GvBuildInValuesTable(GvNode *bn, maxon::BaseArray<GvValue*>& ports, GvCalc 
 //----------------------------------------------------------------------------------------
 /// Builds an output values table for @formatParam{bn}. Then set the values in ports. Free the values table with GvFreeValuesTable().
 /// @param[in] bn									The node. @callerOwnsPointed{GvNode}
-/// @param[out] ports							TODO: (Sdkteam) describe
+/// @param[out] ports							TODO: (Sdkteam) describe.
 /// @return												@trueIfOtherwiseFalse{successful}
 //----------------------------------------------------------------------------------------
 Bool GvBuildOutPortsTable(GvNode *bn, maxon::BaseArray<GvPort*>& ports);
@@ -2626,8 +2626,8 @@ Bool GvBuildOutPortsTable(GvNode *bn, maxon::BaseArray<GvPort*>& ports);
 //----------------------------------------------------------------------------------------
 /// A combination of GvBuildInValuesTable() and GvBuildOutPortsTable().
 /// @param[in] bn									The node. @callerOwnsPointed{GvNode}
-/// @param[out] in_ports					TODO: (Sdkteam) describe
-/// @param[out] out_ports					TODO: (Sdkteam) describe
+/// @param[out] in_ports					TODO: (Sdkteam) describe.
+/// @param[out] out_ports					TODO: (Sdkteam) describe.
 /// @return												@trueIfOtherwiseFalse{successful}
 //----------------------------------------------------------------------------------------
 Bool GvBuildValuesTable(GvNode *bn, maxon::BaseArray<GvPort*>& in_ports, maxon::BaseArray<GvPort*>& out_ports);

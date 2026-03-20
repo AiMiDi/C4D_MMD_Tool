@@ -57,7 +57,7 @@ public:
 	/// @name Init/Free
 	/// @{
 
-    //----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------
     /// Called when a new instance of the node type is being allocated.
     ///
     /// The parameters of a node must be initialized in this method. NodeData::Init is being called
@@ -78,9 +78,9 @@ public:
 	/// }
 	/// @endcode
 	/// @note If the node data class has a constructor it is called as usual before, but at that time there is no GeListNode link established.
-	/// @param[in] node	    The GeListNode connected with the NodeData instance. Equal to Get(). Provided for speed and convenience. @cinemaOwnsPointed{node}
-	/// @return	            @trueIfOtherwiseFalse{the @formatParam{node} was initialized}
-	//----------------------------------------------------------------------------------------
+		/// @param[in] node								The GeListNode connected with the NodeData instance. Equal to Get(). Provided for speed and convenience. @cinemaOwnsPointed{node}
+		/// @return												@trueIfOtherwiseFalse{the @formatParam{node} was initialized}
+		//----------------------------------------------------------------------------------------
 	virtual Bool Init(GeListNode* node, Bool isCloneInit);
 
 	//----------------------------------------------------------------------------------------
@@ -341,12 +341,12 @@ public:
 
 	virtual maxon::Result<Bool> GetAccessedObjects(const BaseList2D* node, METHOD_ID method, AccessedObjectsCallback& access) const;
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Called to group subsequent changes (e.g., calls to SetParameter). The grouping ends when the lifetime
 	/// of the returned GenericData ends. You can override this function if your code has to do some costly update
 	/// and you want to prevent this for intermediate changes.
-	/// @return									An object to control the lifetime of the grouping.
-	//-------------------------------------------------------------------------------------------------
+	/// @return												An object to control the lifetime of the grouping.
+	//----------------------------------------------------------------------------------------
 	virtual maxon::Result<maxon::GenericData> GroupChanges(BaseList2D* node);
 };
 

@@ -37,7 +37,7 @@ ConstData::ConstData(const DataType& typeInfo, const Generic* dataPtr) : ConstDa
 {
 }
 
-ConstData& ConstData::operator=(ConstData&& src)
+ConstData& ConstData::operator =(ConstData&& src)
 {
 	if (_dataPtr == src._ownedData.PrivateGetPtr())
 	{

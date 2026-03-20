@@ -2,7 +2,6 @@
 #define APPLICATION_H__
 
 #include "maxon/url.h"
-#include "maxon/module.h"
 #include "maxon/datadictionary.h"
 #include "maxon/observable.h"
 
@@ -122,12 +121,7 @@ enum class APPLICATION_URLTYPE
 	/// Cineware AE plug-in generates a lite.cert file at this location.
 	/// Used for placing and reading the Lite certification file.
 	//----------------------------------------------------------------------------------------
-	PREFS_DIR_STATIC,
-
-	//----------------------------------------------------------------------------------------
-	/// Path to the test data file within g_testDataDir.
-	//----------------------------------------------------------------------------------------
-	TESTDATA_DIR
+	PREFS_DIR_STATIC
 
 } MAXON_ENUM_LIST(APPLICATION_URLTYPE, "net.maxon.datatype.enum.application_urltype");
 
@@ -232,8 +226,10 @@ public:
 
 	static MAXON_METHOD Bool GetFeature(APPLICATIONFEATURE feature);
 
+	//----------------------------------------------------------------------------------------
 	/// @param[in] feature						The feature to set or clear.
-	/// @param[in] value							The value of the feature
+	/// @param[in] value							The value of the feature.
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD void SetFeature(APPLICATIONFEATURE feature, Bool value);
 
 	//----------------------------------------------------------------------------------------
@@ -244,7 +240,7 @@ public:
 	static MAXON_METHOD Result<void> GetVersion(Int& version, String& buildID);
 
 	//----------------------------------------------------------------------------------------
-	/// Formats the Int version returned by GetVersion() into a string with the 2023 (and later) format
+	/// Formats the Int version returned by GetVersion() into a string with the 2023 (and later) format.
 	/// @param[in] rawVersionNumber		The version to be formatted.
 	/// @return												The formatted string.
 	//----------------------------------------------------------------------------------------
@@ -253,7 +249,7 @@ public:
 #ifdef MAXON_TARGET_WINDOWS
 	//----------------------------------------------------------------------------------------
 	/// Get the subsystem of the application (Windows only)
-	/// @return												The current subsystem of the current process
+	/// @return												The current subsystem of the current process.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD SUBSYSTEM GetWindowsSubsystem();
 #endif
@@ -268,16 +264,16 @@ public:
 	/// RegisterSystemUrlSchemeHandler description. Depending on the operating system you can specify if the current application is the receiving application (e.g. windows).
 	/// OSX for instance handles this on it's own and the application is always the receiving application.
 	/// @param[in] urlScheme					Url scheme to register e.g. "c4d" to open all urls starting with "c4d://"
-	/// @param[in] reassignApplication True if the application should be reassigned to the url scheme handler. False just register the handler in case the application is the receiving instance.
-	/// @param[in] callback						Callback which is triggered if the url protocol handler receives the url
-	/// @return                       OK on success.
+	/// @param[in] reassignApplication	True if the application should be reassigned to the url scheme handler. False just register the handler in case the application is the receiving instance.
+	/// @param[in] callback						Callback which is triggered if the url protocol handler receives the url.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> RegisterSystemUrlSchemeHandler(const Id& urlScheme, Bool reassignApplication, Delegate<void(const Url&)>&& callback);
 
 	//----------------------------------------------------------------------------------------
 	/// Check if the current application is assigned to the system url scheme handler for the given url scheme.
 	/// @param[in] urlScheme					Url scheme to check e.g "c4d". 
-	/// @return												True if the current application is the system url scheme handler for the given url scheme
+	/// @return												True if the current application is the system url scheme handler for the given url scheme.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool CheckSystemUrlSchemeHandlerIsCurrent(const Id& urlScheme);
 

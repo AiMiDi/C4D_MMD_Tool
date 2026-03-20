@@ -632,7 +632,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Formats a Int64 value as a memory information.
 	/// @param[in] v									The size of bytes that should be formated as memory text.
-	/// @param[in] mebibytes					defines if a value of 1343443 is either output as "1.28 MiB" (mebibytes) or "1.34 MB" (megabytes).
+	/// @param[in] mebibytes					Defines if a value of 1343443 is either output as "1.28 MiB" (mebibytes) or "1.34 MB" (megabytes).
 	/// @return												String object for the given mem value.
 	//----------------------------------------------------------------------------------------
 	static MAXON_FUNCTION REFTYPE MemorySizeToString(Int64 v, Bool mebibytes = true);
@@ -1085,7 +1085,7 @@ public:
 	/// @param[in] converter					String encoder or decoder that should be applied to the conversion.
 	/// @return												The converted string.
 	//----------------------------------------------------------------------------------------
-	template <typename SCR=StreamConversionRef> MAXON_FUNCTION Result<String> ConvertString(const SCR& converter) const;
+	template <typename SCR = StreamConversionRef> MAXON_FUNCTION Result<String> ConvertString(const SCR& converter) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a "prettified" version of this string where line breaks and indentations are added
@@ -1163,7 +1163,7 @@ public:
 	MAXON_METHOD Result<void> GetCStringAppendArray(const NonConstArray<Char>& array) const;
 
 	//----------------------------------------------------------------------------------------
-	/// Disconnected the cstring internally and returns the memory
+	/// Disconnected the cstring internally and returns the memory.
 	/// @return												The length of the corresponding 8-bit string for the given encoding. the \0 byte is not counted.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Block<Char>> Disconnect();
@@ -1393,6 +1393,27 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
+	/// Constructor from `wchar_t` array.
+	/// @param[in] str								UTF-16 character block.
+	/// @param[in] count							Number of characters, -1 to auto detect the length of the string (search for the first 0).
+	//----------------------------------------------------------------------------------------
+	explicit String(const wchar_t* str, Int count)
+	{
+		if (SetWChar(str, count) == FAILED)
+			*this = nullptr;
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Constructor from `wchar_t` block.
+	/// @param[in] str								wchar_t character block.
+	//----------------------------------------------------------------------------------------
+	explicit String(const Block<const wchar_t>& str)
+	{
+		if (SetWChar(str.GetFirst(), str.GetCount()) == FAILED)
+			*this = nullptr;
+	}
+
+	//----------------------------------------------------------------------------------------
 	/// Constructs a string consisting of #prefix followed by an \@ sign and the hex-formatted #ptr.
 	/// @param[in] prefix							The prefix for the string.
 	/// @param[in] ptr								A pointer.
@@ -1523,6 +1544,42 @@ public:
 	/// @return												String containing the line ending ("\r\n" or "\n").
 	//----------------------------------------------------------------------------------------
 	static const String& GetLineEnd();
+
+	//----------------------------------------------------------------------------------------
+	/// Initializes the String with the given `wchar_t` character string.
+	/// @param[in] buffer							Pointer to the buffer with the string.
+	/// @param[in] count							Number of valid characters in the buffer.
+	/// 															A count of -1 calculates the string length automatically, terminating when \0 is found.
+	/// @return												OK on success.
+	//----------------------------------------------------------------------------------------
+	MAXON_FUNCTION Result<void> SetWChar(const wchar_t* buffer, Int count = -1)
+	{
+#ifdef MAXON_TARGET_WINDOWS
+		return SetUtf16(reinterpret_cast<const Utf16Char*>(buffer), count);
+#else
+		return SetUtf32(reinterpret_cast<const Utf32Char*>(buffer), count);
+#endif
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Returns a copy of the string as a `wchar_t` character array. The string will be \0 - terminated.
+	/// @return												A copy of the character string.
+	//----------------------------------------------------------------------------------------
+	MAXON_FUNCTION Result<BaseArray<wchar_t>> GetWChar() const
+	{
+		iferr_scope;
+		BaseArray<wchar_t> asWChar;
+#ifdef MAXON_TARGET_WINDOWS
+		SysCharArray stringData = GetSystemEncoding() iferr_return;
+#else
+		Utf32CharBuffer stringData;
+		stringData.Connect(Block<Utf32Char>(nullptr, 0));
+		GetUtf32(stringData) iferr_return;
+#endif
+		auto block = stringData.Disconnect();
+		asWChar.Connect(Block<wchar_t>((wchar_t*)block.GetFirst(), block.GetCount()));
+		return std::move(asWChar);
+	}
 
 private:
 	void operator ->() const;
@@ -1885,17 +1942,21 @@ template <typename T> inline String ToStringHelper(const T* object, const Format
 
 template <typename T> inline typename std::enable_if<!STD_IS_REPLACEMENT(enum, T), String>::type ToString(const T& object, const FormatStatement* formatStatement, Bool checkDataType = true)
 {
-	return ToStringHelper(Dereference<T>::GetPointer(object), formatStatement, (Int*) checkDataType);
+	using Deref = Dereference<T>;
+	if constexpr (Deref::DEREFERENCED)
+	{
+		const auto* ptr = Deref::GetPointer(object);
+		return ptr ? ToString(*ptr, formatStatement, checkDataType) : "nullptr"_s;
+	}
+	else
+	{
+		return ToStringHelper(Deref::GetPointer(object), formatStatement, (Int*) checkDataType);
+	}
 }
 
 template <typename T> inline typename std::enable_if<STD_IS_REPLACEMENT(enum, T), String>::type ToString(const T& object, const FormatStatement* formatStatement, Bool checkDataType = true)
 {
 	return StringInterface::PrivateEnumToString(GetEnumInfo<T>(), UInt64(object), formatStatement);
-}
-
-template <typename T> inline typename std::enable_if<!STD_IS_REPLACEMENT(function, T), String>::type ToString(const T* object, const FormatStatement* formatStatement)
-{
-	return ToStringHelper(object, formatStatement, (Int*) 1);
 }
 
 template <typename T> inline String GlobalToString(const T& object, const FormatStatement* formatStatement, Bool checkDataType) { return ToString(object, formatStatement, checkDataType); }
@@ -2455,7 +2516,7 @@ template <typename ITERATABLETYPE, typename REFTYPE> MAXON_WARN_UNUSED static RE
 
 //----------------------------------------------------------------------------------------
 /// AppendStringWithSeparator description concats strings with a separator if the target string is already populated.
-/// @param[in, out] base					Destination string to append to.
+/// @param[in,out] base						Destination string to append to.
 /// @param[in] add								String to add.
 /// @param[in] delimiter					String to add if 'base' and 'add' is populated.
 //----------------------------------------------------------------------------------------
@@ -2475,7 +2536,7 @@ inline void AppendStringWithSeparator(STRINGTYPE& base, const STRINGTYPE& add, c
 /// @param[in] base								String to append to.
 /// @param[in] add								String to add.
 /// @param[in] delimiter					String to add if 'base' and 'add' is populated.
-/// @return                       Concatenated String.
+/// @return												Concatenated String.
 //----------------------------------------------------------------------------------------
 template <typename STRINGTYPE>
 inline STRINGTYPE AddStringWithSeparator(const STRINGTYPE& base, const STRINGTYPE& add, const STRINGTYPE& delimiter)

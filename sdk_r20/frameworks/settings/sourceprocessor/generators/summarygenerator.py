@@ -27,7 +27,7 @@ def process(args, file, root):
     if not root:
         return None
     fdir, basename = os.path.split(file)
-    dir = os.path.join(args.directory, 'generated', 'summary')
+    dir = os.path.join(args.generated, 'summary')
 
     basename, ext = os.path.splitext(basename)
     if ext != '.h':
@@ -50,7 +50,7 @@ def done(args, results, sources, msg, err):
     # We have to proceed even in case of an error: The error might be caused by an outdated summary information of the current project,
     # so we'd never get rid of the error if we didn't update the summary information.
     cleanupGeneratedFiles(args, 'summary', lambda e: e == '.sum' and '.h', sources)
-    dir = os.path.join(args.directory, 'generated', 'summary')
+    dir = os.path.join(args.generated, 'summary')
     all = dict()
     for root, dirs, files in os.walk(dir):
         for file in files:

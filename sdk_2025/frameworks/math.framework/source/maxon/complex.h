@@ -96,49 +96,49 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Computes the squared magnitude/length/norm in the Argand plane.
-	/// @return												length
+	/// @return												Length.
 	//----------------------------------------------------------------------------------------
 	T GetSquaredLength() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Computes the magnitude/length/norm in the Argand plane.
-	/// @return												length
+	/// @return												Length.
 	//----------------------------------------------------------------------------------------
 	T GetLength() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Computes the angle of the complex vector in the Argand plane.
-	/// @return												phase
+	/// @return												Phase.
 	//----------------------------------------------------------------------------------------
 	T GetPhase() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Get a complex vector with normalized length in the Argand plane.
-	/// @return												normalized complex vector
+	/// @return												Normalized complex vector.
 	//----------------------------------------------------------------------------------------
 	Complex GetNormalized() const;
 
 	//----------------------------------------------------------------------------------------
-	/// Get the complex conjugate of a complex vector
-	/// @return												complex conjugate
+	/// Get the complex conjugate of a complex vector.
+	/// @return												Complex conjugate.
 	//----------------------------------------------------------------------------------------
 	Complex GetConjugate() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Compute the square root.
-	/// @return												square root of vector
+	/// @return												Square root of vector.
 	//----------------------------------------------------------------------------------------
 	Complex GetSqrt() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Compute the natural logarithm.
-	/// @return												Log of complex vector. Returns an error if length of vector is zero
+	/// @return												Log of complex vector. Returns an error if length of vector is zero.
 	//----------------------------------------------------------------------------------------
 	Result<Complex> GetLog() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Divides the complex value by another complex value.
-	/// @param[in] divisor						divisor
+	/// @param[in] divisor						Divisor.
 	/// @return												The divided result. Returns an error if divisor is zero.
 	//----------------------------------------------------------------------------------------
 	Result<Complex> GetDivision(const Complex& divisor) const;
@@ -376,58 +376,58 @@ template <typename T> Result<void> Complex<T>::DescribeIO(const DataSerializeInt
 // ----------------- get real/imag value helper functions --------------------
 //----------------------------------------------------------------------------------------
 /// Get the real part of a value no matter if this is a Complex or Float value.
-/// @param[in] val								input value
-/// @return												real value
+/// @param[in] val								Input value.
+/// @return												Real value.
 //----------------------------------------------------------------------------------------
 template <typename T> static T ComplexGetReal(const Complex<T>& val) { return val.real; }
 
 //----------------------------------------------------------------------------------------
 /// Get the real part of a value no matter if this is a Complex or Float value.
-/// @param[in] val								input value
-/// @return												real value
+/// @param[in] val								Input value.
+/// @return												Real value.
 //----------------------------------------------------------------------------------------
 template <typename T> static T ComplexGetReal(const T& val) { return val; }
 
 //----------------------------------------------------------------------------------------
 /// Get the imaginary part of a value no matter if this is a Complex or Float value. In the latter case the function will return 0.0
-/// @param[in] val								input value
-/// @return												real value
+/// @param[in] val								Input value.
+/// @return												Real value.
 //----------------------------------------------------------------------------------------
 template <typename T> static T ComplexGetImag(const Complex<T>& val) {	return val.imag; }
 
 //----------------------------------------------------------------------------------------
 /// Get the imaginary part of a value no matter if this is a Complex or Float value. In the latter case the function will return 0.0
-/// @param[in] val								input value
-/// @return												real value
+/// @param[in] val								Input value.
+/// @return												Real value.
 //----------------------------------------------------------------------------------------
 template <typename T> static T ComplexGetImag(const T& val) { return 0.0; }
 
 // ----------------- assign real/imag value to complex value --------------------
 //----------------------------------------------------------------------------------------
 /// Set the real part of a value no matter if this is a Complex or Float value.
-/// @param[in] dst								destination value
-/// @param[in] val								real value to be set
+/// @param[in] dst								Destination value.
+/// @param[in] val								Real value to be set.
 //----------------------------------------------------------------------------------------
 template <typename T1, typename T2> static void ComplexSetReal(Complex<T1>& dst, const T2& val) { dst.real = (T1) val; }
 
 //----------------------------------------------------------------------------------------
 /// Set the real part of a value no matter if this is a Complex or Float value.
-/// @param[in] dst								destination value
-/// @param[in] val								real value to be set
+/// @param[in] dst								Destination value.
+/// @param[in] val								Real value to be set.
 //----------------------------------------------------------------------------------------
 template <typename T1, typename T2> static void ComplexSetReal(T1& dst, const T2& val) { dst = (T1) val; }
 
 //----------------------------------------------------------------------------------------
-/// Set the imaginary part of a value no matter if this is a Complex or Float value. In the latter case the function will do nothing
-/// @param[in] dst								destination value
-/// @param[in] val								imaginary value to be set
+/// Set the imaginary part of a value no matter if this is a Complex or Float value. In the latter case the function will do nothing.
+/// @param[in] dst								Destination value.
+/// @param[in] val								Imaginary value to be set.
 //----------------------------------------------------------------------------------------
 template <typename T1, typename T2> static void ComplexSetImag(Complex<T1>& dst, const T2& val) { dst.imag = (T1) val; }
 
 //----------------------------------------------------------------------------------------
-/// Set the imaginary part of a value no matter if this is a Complex or Float value. In the latter case the function will do nothing
-/// @param[in] dst								destination value
-/// @param[in] val								imaginary value to be set
+/// Set the imaginary part of a value no matter if this is a Complex or Float value. In the latter case the function will do nothing.
+/// @param[in] dst								Destination value.
+/// @param[in] val								Imaginary value to be set.
 //----------------------------------------------------------------------------------------
 template <typename T1, typename T2> static void ComplexSetImag(T1& dst, const T2& val) { }
 

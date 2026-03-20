@@ -38,17 +38,17 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Checks if a file supports a given file format.
 	/// @param[in] url								Url to detect.
-	/// @param[in] flags							see FILEFORMATDETECTIONFLAGS.
-	/// @param[in] limitDetection			Datatype to limit the detection e.g. MediaInputRef, nodes::NodeSystem
-	/// @return                       OK on success.
+	/// @param[in] flags							See FILEFORMATDETECTIONFLAGS.
+	/// @param[in] limitDetection			Datatype to limit the detection e.g. MediaInputRef, nodes::NodeSystem.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> DetectFile(const Url& url, FILEFORMATDETECTIONFLAGS flags, const Block<const DataType>& limitDetection);
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if a file supports a given file format. Helper function to simplify usage e.g. DetectFile<MediaInputRef>().
 	/// @param[in] url								Url to detect.
-	/// @param[in] flags							see FILEFORMATDETECTIONFLAGS.
-	/// @return                       OK on success.
+	/// @param[in] flags							See FILEFORMATDETECTIONFLAGS.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	template <typename... LIMITTYPES> MAXON_WARN_UNUSED MAXON_FUNCTION Result<Bool> DetectFile(const Url& url, FILEFORMATDETECTIONFLAGS flags);
 };

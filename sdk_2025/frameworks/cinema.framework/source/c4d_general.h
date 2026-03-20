@@ -53,6 +53,11 @@ Bool PopupEditText(Int32 screenx, Int32 screeny, Int32 width, Int32 height, cons
 void RestartApplication(const Utf16Char* param = nullptr, Int32 exitcode = 0, const Utf16Char** path = nullptr);
 
 //----------------------------------------------------------------------------------------
+/// @markPrivate
+//----------------------------------------------------------------------------------------
+void ShowApplicationWindow(Bool visible);
+
+//----------------------------------------------------------------------------------------
 /// Sets the exit code returned by @C4D when it exits.
 /// @param[in] exitCode						The exit code.
 //----------------------------------------------------------------------------------------
@@ -389,14 +394,14 @@ maxon::Result<maxon::String> ExportLicenses();
 /// @param[in] licenseItemId			Id to check.
 /// @param[in] versionNumber			Current version number of the feature. '0' if no version number is required.
 /// @param[in] checkOnly					True if the license should only checked for availability. In that case the license will not be consumed and displayed only in error case.
-/// @param[in] licenseUpdateCallback Callback which will be triggered with each license update for this type.
+/// @param[in] licenseUpdateCallback	Callback which will be triggered with each license update for this type.
 /// @return												OK on success.
 //----------------------------------------------------------------------------------------
 maxon::Result<void> AddLicenseItem(const maxon::InternedId& licenseItemId, Float versionNumber, Bool checkOnly, maxon::CustomLicenseItemDelegate&& licenseUpdateCallback);
 
 //----------------------------------------------------------------------------------------
 /// CheckLicenseFeature queries certain license features. This includes predefined is as well as license items added with AddLicenseItem().
-/// @param[in] featureId					Id to check. e.g. ENTITLEMENTFEATURES::ISBETA
+/// @param[in] featureId					Id to check. e.g. ENTITLEMENTFEATURES::ISBETA.
 /// @return												OK on success.
 //----------------------------------------------------------------------------------------
 maxon::Bool CheckLicenseFeature(const maxon::InternedId& featureId);
@@ -683,21 +688,21 @@ void llMotor(void* adr, Int cnt = 1);
 /// @param[in] handler						The background handler.
 /// @param[in] tdata							The private data. This will be passed on to the handler.
 /// @param[in] typeclass					@uniquePluginID\n
-///																There can be many handlers with the same class as long as they have different @formatParam{tdata}.
+/// 															There can be many handlers with the same class as long as they have different @formatParam{tdata}.
 /// @param[in] priority						The handler priority. Higher absolute values are evaluated before lower. A negative value means that it does not block positive priorities.\n
-///																Examples:
-///																@code
-///																#define BACKGROUNDHANDLER_PRIORITY_RENDERACTIVEMATERIAL			 5000
-///																#define BACKGROUNDHANDLER_PRIORITY_REDRAWVIEW								 4000
-///																#define BACKGROUNDHANDLER_PRIORITY_RENDERINACTIVEMATERIALS	 3000
-///																#define BACKGROUNDHANDLER_PRIORITY_RENDEREXTERNAL						-1000
-///																#define BACKGROUNDHANDLER_PRIORITY_REDRAWANTS								-2000
-///																#define BACKGROUNDHANDLER_PRIORITY_PREVIEWCACHE							 6000
-///																#define BACKGROUNDHANDLER_PRIORITY_PREVIEWCACHE_ANIMATION		 2000
-///																#define BACKGROUNDHANDLER_PRIORITY_PREVIEWCACHE_ASYNC				 3500
-///																@endcode
-///																The external render thread (output window) does not block the editor display.\n
-///																However, if e.g. an inactive material is being rendered the view will not be redrawn until the other thread finishes.
+/// 															Examples:
+/// 															@code
+/// 															#define BACKGROUNDHANDLER_PRIORITY_RENDERACTIVEMATERIAL			 5000
+/// 															#define BACKGROUNDHANDLER_PRIORITY_REDRAWVIEW								 4000
+/// 															#define BACKGROUNDHANDLER_PRIORITY_RENDERINACTIVEMATERIALS	 3000
+/// 															#define BACKGROUNDHANDLER_PRIORITY_RENDEREXTERNAL						-1000
+/// 															#define BACKGROUNDHANDLER_PRIORITY_REDRAWANTS								-2000
+/// 															#define BACKGROUNDHANDLER_PRIORITY_PREVIEWCACHE							 6000
+/// 															#define BACKGROUNDHANDLER_PRIORITY_PREVIEWCACHE_ANIMATION		 2000
+/// 															#define BACKGROUNDHANDLER_PRIORITY_PREVIEWCACHE_ASYNC				 3500
+/// 															@endcode
+/// 															The external render thread (output window) does not block the editor display.\n
+/// 															However, if e.g. an inactive material is being rendered the view will not be redrawn until the other thread finishes.
 //----------------------------------------------------------------------------------------
 void GeAddBackgroundHandler(BackgroundHandler* handler, void* tdata, Int32 typeclass, Int32 priority);
 
@@ -713,9 +718,9 @@ Bool GeRemoveBackgroundHandler(void* tdata, Int32 typeclass);
 /// Stops all running background threads of the given @formatParam{typeclass}. If @formatParam{typeclass}==@em 0 all threads are stopped.
 /// @param[in] typeclass					The type class ID to stop, or @em 0 for all classes.
 /// @param[in] flags							If @formatParam{typeclass} is @ref BACKGROUNDHANDLER_TYPECLASS_C4D then the flags have the following meaning:: @enumerateEnum{BACKGROUNDHANDLERFLAGS}\n
-///																For own type classes define flags as needed, they will be routed to the background handler function.\n
-///																For example @c GeStopBackgroundThreads(BACKGROUNDHANDLER_TYPECLASS_C4D, BACKGROUNDHANDLER_FLAGS_EDITORRENDDER) will only stop the editor renderer (if it was running).\n
-///																@c GeStopBackgroundThreads(0, BACKGROUNDHANDLERFLAGS::SHUTDOWN) will kill anything running.
+/// 															For own type classes define flags as needed, they will be routed to the background handler function.\n
+/// 															For example @c GeStopBackgroundThreads(BACKGROUNDHANDLER_TYPECLASS_C4D, BACKGROUNDHANDLER_FLAGS_EDITORRENDDER) will only stop the editor renderer (if it was running).\n
+/// 															@c GeStopBackgroundThreads(0, BACKGROUNDHANDLERFLAGS::SHUTDOWN) will kill anything running.
 /// @param[in] thread							Optional thread or nullptr. If passed the return value can be false if the thread is stopped while it is trying to acquire the resources for this call.
 //----------------------------------------------------------------------------------------
 Bool GeStopBackgroundThreads(Int32 typeclass, BACKGROUNDHANDLERFLAGS flags, BaseThread* thread);
@@ -754,6 +759,16 @@ Bool ShowBitmap(const Filename& fn);
 /// @return												@trueIfOtherwiseFalse{successful}
 //----------------------------------------------------------------------------------------
 Bool ShowBitmap(BaseBitmap* bm);
+
+//----------------------------------------------------------------------------------------
+/// Displays a bitmap into the Picture Viewer.
+/// @note The bitmap will be copied for display.
+/// @warning Must be called from the main thread.
+/// @param[in] bm									The bitmap to display.
+/// @param[in] name								The bitmap name to display in the picture viewer.
+/// @return												@trueIfOtherwiseFalse{successful}
+//----------------------------------------------------------------------------------------
+Bool ShowBitmap(BaseBitmap* bm, const String& name);
 
 //----------------------------------------------------------------------------------------
 /// Stops all running threads.
@@ -832,7 +847,7 @@ void StatusSetNetText(const maxon::String& str);
 /// Adds a custom event. Results in a @c CoreMessage().
 /// @see The article @link page_manual_coremessages Core Messages@endlink for more information.
 /// @param[in] messageid					The message ID. @uniquePluginID\n
-///																Use a unique plugin ID to make sure that there is no collision.
+/// 															Use a unique plugin ID to make sure that there is no collision.
 /// @param[in] p1									The first private data for the sent message.
 /// @param[in] p2									The second private data for the sent message.
 //----------------------------------------------------------------------------------------
@@ -939,16 +954,16 @@ Bool DrawViews(DRAWFLAGS flags, BaseDraw* bd = nullptr);
 ///   BaseObject* result = static_cast<BaseObject*>(data.result->GetIndex(0));
 ///   ...
 /// @endcode
-/// @param[in] command The identifier of the command to execute. See @ref MCOMMAND, @ref ModelingToolsParameters, @ref ModelingToolsNoParameters.
-/// @param[in] data The data for the command. Can be filled with the result for some commands.
-/// @return @trueIfOtherwiseFalse{the command was executed}
+/// @param[in] command						The identifier of the command to execute. See @ref MCOMMAND, @ref ModelingToolsParameters, @ref ModelingToolsNoParameters.
+/// @param[in] data								The data for the command. Can be filled with the result for some commands.
+/// @return												@trueIfOtherwiseFalse{the command was executed}
 //----------------------------------------------------------------------------------------
 Bool SendModelingCommand(Int32 command, ModelingCommandData& data);
 
 //----------------------------------------------------------------------------------------
 /// Retrieves the global texture paths.
 /// @param[in] docPath						The path of the document. This will be used to complete relative texture paths.\n
-///																Pass nullptr if you want to get the unmodified paths only.
+/// 															Pass nullptr if you want to get the unmodified paths only.
 /// @return												The global texture paths for @C4D.
 //----------------------------------------------------------------------------------------
 maxon::Result<TexturePathList> GetGlobalTexturePaths(const Filename* docPath);
@@ -1008,13 +1023,13 @@ BaseContainer* GetWorldContainerInstance();
 
 //----------------------------------------------------------------------------------------
 /// Gets additional world container data (see GetWorldContainerInstance).
-/// @param[out]	bc								A container which receives the data. the container is not cleared before data is written.
+/// @param[out] bc								A container which receives the data. the container is not cleared before data is written.
 //----------------------------------------------------------------------------------------
 void GetAdditionalWorldContainerData(BaseContainer& bc);
 
 //----------------------------------------------------------------------------------------
 /// Retrieves the recent documents list.
-/// @param[in] isBodyPaint						Set to reteive BodyPaint's list.
+/// @param[in] isBodyPaint				Set to reteive BodyPaint's list.
 /// @return												The recent documents list.
 //----------------------------------------------------------------------------------------
 maxon::Result<maxon::BaseArray<maxon::Url>> GetRecentDocumentsList(Bool isBodyPaint);
@@ -1162,7 +1177,7 @@ Filename GeFilterSetSuffix(const Filename& name, Int32 id);
 /// Identifies the file in @formatParam{name}.
 /// @param[in] name								The file to check.
 /// @param[in] probe							The start of a small chunk of data from the start of the file for testing this file type.\n
-///																Usually the probe size is @em 1024 bytes. @callerOwnsPointed{data}
+/// 															Usually the probe size is @em 1024 bytes. @callerOwnsPointed{data}
 /// @param[in] probesize					The size of the @formatParam{probe} array.
 /// @param[in] recognition				The identification flags: @enumerateEnum{IDENTIFYFILE}
 /// @param[in] bp									For image formats this is filled with a pointer to the image loader that was identified.
@@ -1173,7 +1188,7 @@ IDENTIFYFILE GeIdentifyFile(const Filename& name, UChar* probe, Int32 probesize,
 //----------------------------------------------------------------------------------------
 /// Retrieves the list head for scripts (@ref ID_COFFEESCRIPT).
 /// @param[in] type								Currently @em 0 is user scripts and @em 1 is system scripts.\n
-///																The user scripts are located in library/scripts whereas system scripts are in resource/scripts.)
+/// 															The user scripts are located in library/scripts whereas system scripts are in resource/scripts.)
 /// @return												The script list head. @cinemaOwnsPointed{list head}
 //----------------------------------------------------------------------------------------
 GeListHead* GetScriptHead(Int32 type);
@@ -1379,7 +1394,7 @@ inline void _GeDebugBreak(Int32 line, const Char* file) { C4DOS_Ge->GeDebugBreak
 /// Prints a string to the debug console using @c vsprintf() syntax.
 /// @note Requires that the API is build in debug mode i.e. @c MAXON_TARGET_DEBUG is defined.
 /// @param[in] s									The string to print. Limited to @em 2048 characters.\n
-///																Following parameters are format for @c vsprintf().
+/// 															Following parameters are format for @c vsprintf().
 //----------------------------------------------------------------------------------------
 void GeDebugOut(const Char* s, ...);
 
@@ -1733,13 +1748,13 @@ String FormatNumber(const GeData& val, Int32 format, Int32 fps, Bool bUnit = tru
 
 //----------------------------------------------------------------------------------------
 /// Converts a string to a data value of type ::Float or ::Int32.
-/// @param[in] text							The string to convert to a value.
-/// @param[in] format						The format: @enumerateEnum{FORMAT_NUMBERS}
-/// @param[in] fps							The frames per second, for time values.
+/// @param[in] text								The string to convert to a value.
+/// @param[in] format							The format: @enumerateEnum{FORMAT_NUMBERS}
+/// @param[in] fps								The frames per second, for time values.
 /// @param[in] lengthunit					Can be used to override the units conversion. By default it will use the document's units.\n
-/// 										For example a string of @em "50" will result in @em 0.5 if the document's units are Meters and the unit display setting is centimeters.\n
-/// 										If @formatParam{lengthunit} is specified its value will be used instead of the document's units setting.
-/// @return									The converted value.
+/// 															For example a string of @em "50" will result in @em 0.5 if the document's units are Meters and the unit display setting is centimeters.\n
+/// 															If @formatParam{lengthunit} is specified its value will be used instead of the document's units setting.
+/// @return												The converted value.
 //----------------------------------------------------------------------------------------
 GeData StringToNumber(const maxon::String& text, Int32 format, Int32 fps, const LENGTHUNIT* lengthunit = nullptr);
 
@@ -1802,6 +1817,11 @@ void EndAdministratorPrivileges();
 void RestartApplication(const Utf16Char* param = nullptr, Int32 exitcode = 0, const Utf16Char** path = nullptr);
 
 //----------------------------------------------------------------------------------------
+/// @markPrivate
+//----------------------------------------------------------------------------------------
+void ShowApplicationWindow(Bool visible);
+
+//----------------------------------------------------------------------------------------
 /// Sets the exit code returned by @C4D when it exits.
 /// @param[in] exitCode						The exit code.
 //----------------------------------------------------------------------------------------
@@ -1813,8 +1833,14 @@ void SetExitCode(Int32 exitCode);
 void GeUpdateUI();
 
 //----------------------------------------------------------------------------------------
+/// Updates the palette icons.
+/// @param[in] onlyActive					Set to @formatConst{true} to update only the active icons, set to @formatConst{false} to update all icons.
 //----------------------------------------------------------------------------------------
-/// Returns the type of viewport that is currently active
+void UpdateIcons(Bool onlyActive = true);
+
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+/// Returns the type of viewport that is currently active.
 /// @return												The type of active viewport: @enumerateEnum{VIEWPORTTYPE}
 //----------------------------------------------------------------------------------------
 VIEWPORTTYPE GeGetActiveViewportType();

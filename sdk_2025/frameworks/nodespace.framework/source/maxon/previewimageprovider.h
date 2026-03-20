@@ -139,10 +139,10 @@ class PreviewImageProviderRef;
 
 namespace PREVIEWIMAGEREQUEST
 {
-	///----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Enum used to specify the scaling policy for baking or exporting textures
 	/// ALSO DEFINED IN exchange.framework/source/maxon/material/materialexport.h
-	///----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	enum class TextureResize
 	{
 		ALWAYS = 0,	///< Legacy behaviour. Textures should be up- and downscaled to the requested texture dimensions.
@@ -239,6 +239,66 @@ namespace PREVIEWIMAGEREQUEST
 } // namespace PREVIEWIMAGEREQUEST
 
 //----------------------------------------------------------------------------------------
+/// Defines a single tile of a Udim image. Instances that have been returned (c.f. TakeOutput)
+/// are expected to be immutable to allow safe shared ownership of the pixel data.
+//----------------------------------------------------------------------------------------
+struct UdimTileData
+{
+	//----------------------------------------------------------------------------------------
+	/// The udim coordinate that this tile corresponds to. Indexing of UDIM tiles starts at (0, 0)
+	//----------------------------------------------------------------------------------------
+	IntVector2d _udimCoordinate;
+
+	//----------------------------------------------------------------------------------------
+	/// The udim tile image size in width and height. Its product has to match the size of @_udimSamplesFloat32Linear, i.e.
+	/// _udimImageSize.x * _udimImageSize.y = _udimSamplesFloat32Linear->GetCount().
+	//----------------------------------------------------------------------------------------
+	IntVector2d _udimImageSize;
+
+	//----------------------------------------------------------------------------------------
+	/// The pixel data of the result preview image in linear color space.
+	/// Pixels are defined as (r, g, b, a) values in row-major order.
+	//----------------------------------------------------------------------------------------
+	SamplesFloat32ConstRef _udimSamplesFloat32Linear;
+};
+
+//----------------------------------------------------------------------------------------
+/// Additional convenience definitions for the immutable udim preview image and related metadata.
+//----------------------------------------------------------------------------------------
+using UdimTileMap = BaseArray<Int>;
+using UdimTileMapRef = StrongRef<UdimTileMap>;
+using UdimTileMapConstRef = StrongRef<const UdimTileMap>;
+using UdimTileDataArray = BaseArray<UdimTileData>;
+using UdimTileDataArrayRef = StrongRef<UdimTileDataArray>;
+using UdimTileDataArrayConstRef = StrongRef<const UdimTileDataArray>;
+
+//----------------------------------------------------------------------------------------
+/// Defines a result Udim image. Instances that have been returned (c.f. TakeOutput) are expected to be
+/// immutable to allow safe shared ownership of the pixel data.
+///
+/// Each udim image consists of multiple images.
+/// Each image (udim tile) specifies it's dimensions, the pixel array, and the U-V tile coordinate that
+/// defines which range of U-V space it corresponds to.
+//----------------------------------------------------------------------------------------
+struct PreviewImageProviderOutputUdimImage
+{
+	//----------------------------------------------------------------------------------------
+	/// Defines whether this preview result is final for the current state of the subject within the the node graph.
+	/// A final state can then be used for cache revival later on and may be waited for by blocking preview request calls, e.g.
+	/// coming from the HW Renderer or from viewport with an enabled "Animate Preview" setting for the respective node material.
+	//----------------------------------------------------------------------------------------
+	Bool _isFinal = true;
+
+	//----------------------------------------------------------------------------------------
+	/// Contains the compact tile image data for all udim tiles.
+	/// Different tiles are allowed to be of different sizes.
+	//----------------------------------------------------------------------------------------
+	UdimTileDataArrayConstRef _udimTileArray;
+};
+
+MAXON_DATATYPE(PreviewImageProviderOutputUdimImage, "net.maxon.nodes.datatype.previewimageprovideroutputudimimage");
+
+//----------------------------------------------------------------------------------------
 /// Defines a result image. Instances that have been returned (c.f. TakeOutput) are expected to be 
 /// immutable to allow safe shared ownership of the pixel data.
 //----------------------------------------------------------------------------------------
@@ -312,9 +372,9 @@ struct PreviewImageProviderOutput
 
 	//----------------------------------------------------------------------------------------
 	/// Sets a result image under the provided key. For viewport support it is expected to store under the requested maxon::Id's from PREVIEWIMAGEREQUEST::TEXTUREIDS. 
-	/// @param[in] key				The key under which the image is stored.
-	/// @param[in] image			The (immutable) preview image.
-	/// @return								OK on success.
+	/// @param[in] key								The key under which the image is stored.
+	/// @param[in] image							The (immutable) preview image.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	template <typename KEY>
 	Result<void> SetArrayResult(const KEY& key, const PreviewImageProviderOutputImage& image)
@@ -326,10 +386,10 @@ struct PreviewImageProviderOutput
 
 	//----------------------------------------------------------------------------------------
 	/// Sets a result image under the default key. This storage location is read by GUI components where no image stacks are requested.
-	/// @param[in] image			The (immutable) preview image.
-	/// @return								OK on success.
+	/// @param[in] image							The (immutable) preview image.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
-	Result<void>SetResult(const PreviewImageProviderOutputImage& image)
+	Result<void> SetResult(const PreviewImageProviderOutputImage& image)
 	{
 		iferr_scope;
 		_results.Set(Id(), image) iferr_return;
@@ -339,7 +399,7 @@ struct PreviewImageProviderOutput
 	//----------------------------------------------------------------------------------------
 	/// Returns the container for all preview images. It can be assumed that entries are of type
 	/// Tuple<KEY=maxon::Data, VALUE=maxon::nodes::PreviewImageProviderOutputImage> where KEY is often, but not always of type maxon::Id.
-	/// @return								The preview image container.
+	/// @return												The preview image container.
 	//----------------------------------------------------------------------------------------
 	const DataDictionary& GetResults() const
 	{
@@ -348,11 +408,73 @@ struct PreviewImageProviderOutput
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the preview image stored under the default key.
-	/// @return								The preview image..
+	/// @return												The preview image..
 	//----------------------------------------------------------------------------------------
 	const PreviewImageProviderOutputImage GetResult() const
 	{
 		return _results.Get(Id(), PreviewImageProviderOutputImage());
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Checks whether the value stored under the specified key represents a Udim Image.
+	/// @param[in] key								The key under which the image is stored.
+	/// @return												@trueIfOtherwiseFalse{An image under the specified key exists, and it is a Udim image}
+	//----------------------------------------------------------------------------------------
+	template <typename KEY>
+	Bool IsUdimResult(const KEY& key) const
+	{
+		ifnoerr (const Data& dat = _results.GetData(ConstDataPtr(key)))
+		{
+			if (dat.GetType() == GetDataType<PreviewImageProviderOutputUdimImage>())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Checks whether the value stored under the default key represents a Udim Image.
+	/// @return												@trueIfOtherwiseFalse{An image under the default key exists, and it is a Udim image}
+	//----------------------------------------------------------------------------------------
+	Bool IsUdimResult() const
+	{
+		return IsUdimResult(Id());
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Sets a result udim image under the provided key. For viewport support it is expected to store under the requested maxon::Id's from PREVIEWIMAGEREQUEST::TEXTUREIDS.
+	/// @param[in] key								The key under which the udim image is stored.
+	/// @param[in] image							The (immutable) preview udim image.
+	/// @return												OK on success.
+	//----------------------------------------------------------------------------------------
+	template <typename KEY>
+	Result<void> SetUdimArrayResult(const KEY& key, const PreviewImageProviderOutputUdimImage& image)
+	{
+		iferr_scope;
+		_results.Set(key, image) iferr_return;
+		return OK;
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Sets a result udim image under the default key. This storage location is read by GUI components where no image stacks are requested.
+	/// @param[in] image							The (immutable) preview udim image.
+	/// @return												OK on success.
+	//----------------------------------------------------------------------------------------
+	Result<void> SetUdimResult(const PreviewImageProviderOutputUdimImage& image)
+	{
+		iferr_scope;
+		_results.Set(Id(), image) iferr_return;
+		return OK;
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Returns the preview udim image stored under the default key.
+	/// @return												The preview image.
+	//----------------------------------------------------------------------------------------
+	const PreviewImageProviderOutputUdimImage GetUdimResult() const
+	{
+		return _results.Get(Id(), PreviewImageProviderOutputUdimImage());
 	}
 
 private:
@@ -405,9 +527,9 @@ public:
 	/// and the parallel round-robin based scheduling manager.
 	/// It is therefore recommended to keep this method light-weight and perform heavier computations
 	/// during the first call to @ComputeIteration.
-	/// @param[in] request			The request containing information about how to bake or render which node.
-	/// @param[in] numThreads		The recommended maximum number of threads to use during @ComputeIteration.
-	/// @return									OK on success.
+	/// @param[in] request						The request containing information about how to bake or render which node.
+	/// @param[in] numThreads					The recommended maximum number of threads to use during @ComputeIteration.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Initialize(const DataDictionaryObjectRef& request, Int numThreads);
 
@@ -423,8 +545,8 @@ public:
 	///
 	/// Note that ComputeIteration may be again after being cancelled in a prior call, fulfilling
 	/// the use case of pause and resume.
-	/// @param[in] parentThread		Query the caller for cancellation state.
-	/// @return										OK on success.
+	/// @param[in] parentThread				Query the caller for cancellation state.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> ComputeIteration(const JobRef& parentThread); 
 
@@ -433,7 +555,7 @@ public:
 	/// It is therefore prohibited to change the contents of the attaches SamplesFloat32Linear buffers after return.
 	/// In case progressively refined results are provided, we recommend to copy over data from previous
 	/// iterations that have been returned earlier.
-	/// @return										The preview image result that is dispatched to listeners.
+	/// @return												The preview image result that is dispatched to listeners.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<PreviewImageProviderOutput> TakeOutput();
 };

@@ -32,8 +32,8 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Resizes the matrix to contain new_xcnt*new_ycnt elements.
 	/// If new_xcnt or new_ycnt differ from the existing values the internal array is expanded.
-	/// @param[in] new_xcnt						new number of columns
-	/// @param[in] new_ycnt						new number of rows
+	/// @param[in] new_xcnt						New number of columns.
+	/// @param[in] new_ycnt						New number of rows.
 	//----------------------------------------------------------------------------------------
 	Result<void> Resize(Int new_xcnt, Int new_ycnt)
 	{
@@ -57,7 +57,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Copy matrix elements from src matrix.
 	/// The number of rows and columns are resized if necessary.
-	/// @param[in] src								source matrix
+	/// @param[in] src								Source matrix.
 	//----------------------------------------------------------------------------------------
 	Result<void> CopyFrom(const MatrixNxM& src)
 	{
@@ -72,9 +72,9 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Operator to access a matrix element.
-	/// @param[in] x									column
-	/// @param[in] y									row
-	/// @return												matrix element value
+	/// @param[in] x									Column.
+	/// @param[in] y									Row.
+	/// @return												Matrix element value.
 	//----------------------------------------------------------------------------------------
 	TYPE& operator()(Int x, Int y)
 	{
@@ -85,9 +85,9 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Operator to access a matrix element.
-	/// @param[in] x									column
-	/// @param[in] y									row
-	/// @return												matrix element value
+	/// @param[in] x									Column.
+	/// @param[in] y									Row.
+	/// @return												Matrix element value.
 	//----------------------------------------------------------------------------------------
 	const TYPE& operator()(const Int x, const Int y) const
 	{
@@ -98,7 +98,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Get number of columns.
-	/// @return												number of columns
+	/// @return												Number of columns.
 	//----------------------------------------------------------------------------------------
 	Int GetXCount() const
 	{
@@ -107,7 +107,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Get number of rows.
-	/// @return												number of rows
+	/// @return												Number of rows.
 	//----------------------------------------------------------------------------------------
 	Int GetYCount() const
 	{

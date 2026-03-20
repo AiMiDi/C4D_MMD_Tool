@@ -1394,7 +1394,7 @@ def process(args, file, root):
     if cpp:
         basename = basename + '_cpp'
 
-    hxx = os.path.join(args.directory, 'generated')
+    hxx = args.generated
     hxx = os.path.join(hxx, 'hxx')
     makeDir(hxx)
     hxx1 = os.path.join(hxx, basename + '1.hxx')
@@ -1462,7 +1462,7 @@ def processesFilesWithError():
 def done(args, results, sources, msg, err):
     if err:
         return (msg, err)
-    hxx = os.path.join(args.directory, 'generated')
+    hxx = args.generated
     hxx = os.path.join(hxx, 'hxx')
     makeDir(hxx)
 

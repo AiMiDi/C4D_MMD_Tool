@@ -193,7 +193,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Creates and associates a shader with the material.
 	/// @param[in] type								The type of shader to create: @enumerateEnum{ShaderTypes}
-	/// @param[in] id									The material shader id the shader will be assigned to, e.g. MATERIAL_COLOR_SHADER
+	/// @param[in] id									The material shader id the shader will be assigned to, e.g. MATERIAL_COLOR_SHADER.
 	/// @param[in] pred								The previous shader to insert the tag after, or @formatConstant{nullptr} if the tag should be inserted at the start of the tag list. @callerOwnsPointed{tag}
 	/// @return												The new tag, or @formatConstant{nullptr} if failed. @theOwnsPointed{object,tag}
 	//----------------------------------------------------------------------------------------
@@ -403,53 +403,53 @@ private:
 
 public:
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Checks whether the node space under the provided id was instantiated for the material.
-	/// @param[in] spaceId									The id of the node space.
-	/// @return															Returns true if the node space exists, false otherwise.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The id of the node space.
+	/// @return												Returns true if the node space exists, false otherwise.
+	//----------------------------------------------------------------------------------------
 	Bool HasSpace(const maxon::Id& spaceId) const { return C4DOS_Mt->HasSpace(*this, spaceId); }
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Returns the node path to the material end node.
-	/// @param[in] spaceId									The id of the node space.
-	/// @param[out] result									The path to the material end node.
-	/// @return															OK on success, or IllegalStateError if the material does not have this space.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The id of the node space.
+	/// @param[out] result						The path to the material end node.
+	/// @return												OK on success, or IllegalStateError if the material does not have this space.
+	//----------------------------------------------------------------------------------------
 	maxon::Result<void> GetMaterialNodePath(const maxon::Id& spaceId, maxon::NodePath& result) const { return C4DOS_Mt->GetMaterialNodePath(*this, spaceId, result); }
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Returns the node path to the solo node.
-	/// @param[in] spaceId									The id of the node space.
-	/// @param[out] result									The path to the solo node, empty if nothing was soloed.
-	/// @return															OK on success, or IllegalStateError if the material does not have this space.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The id of the node space.
+	/// @param[out] result						The path to the solo node, empty if nothing was soloed.
+	/// @return												OK on success, or IllegalStateError if the material does not have this space.
+	//----------------------------------------------------------------------------------------
 	maxon::Result<void> GetSoloNodePath(const maxon::Id& spaceId, maxon::NodePath& result) const { return C4DOS_Mt->GetSoloNodePath(*this, spaceId, result); }
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the corresponding BaseList element for a GraphNode.
-	/// @param[in] spaceId									The id of the node space.
-	/// @param[in] nodePath									Absolute Path to the Node.
-	/// @return															BaseList2D element. The return value can be nullptr if there's no corresponding element, or if it refers to an inner node.
+	/// @param[in] spaceId						The id of the node space.
+	/// @param[in] nodePath						Absolute Path to the Node.
+	/// @return												BaseList2D element. The return value can be nullptr if there's no corresponding element, or if it refers to an inner node.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<const BaseList2D*> GetBaseListForNode(const maxon::Id& spaceId, const maxon::NodePath& nodePath) const { return C4DOS_Mt->GetBaseListForNode(*this, spaceId, nodePath); }
 
 	//----------------------------------------------------------------------------------------
 	/// Calculates the DescID for a given port.
-	/// @param[in] spaceId									The id of the node space.
-	/// @param[in] node											The node that owns the port.
-	/// @param[in] port											The port.
-	/// @param[out] result									The description ID of the port.
-	/// @return															OK on success. If no description representation exists an error will be returned.
+	/// @param[in] spaceId						The id of the node space.
+	/// @param[in] node								The node that owns the port.
+	/// @param[in] port								The port.
+	/// @param[out] result						The description ID of the port.
+	/// @return												OK on success. If no description representation exists an error will be returned.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> GetDescIDForNodePort(const maxon::Id& spaceId, const maxon::GraphNode& node, const maxon::GraphNode& port, DescID& result) const { return C4DOS_Mt->GetDescIDForNodePort(*this, spaceId, node, port, result);	}
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Determines the paths pointing to directories that are used to reference images by relative path in a particular BaseDocument.
-	/// @param[in] secondaryPath									(Optional) allows to provide the DOCUMENT_SECONDARYPATH.
-	/// @param[in] documentPath										The path of the BaseDocument.
-	/// @param[out] result												The set of paths in which the images may be located.
-	/// @return																		OK on success, or OutOfMemoryError if the allocation failed.
+	/// @param[in] secondaryPath			(Optional) allows to provide the DOCUMENT_SECONDARYPATH.
+	/// @param[in] documentPath				The path of the BaseDocument.
+	/// @param[out] result						The set of paths in which the images may be located.
+	/// @return												OK on success, or OutOfMemoryError if the allocation failed.
 	///
 	/// Generally, the usage is as follows:
 	/// @code
@@ -463,51 +463,51 @@ public:
 	/// @code
 	/// maxon::Url secondaryPath = maxon::MaxonConvert(doc->GetDataInstanceRef().GetFilename(DOCUMENT_SECONDARYPATH), maxon::MAXONCONVERTMODE::NONE);
 	/// @endcode
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	static maxon::Result<void> GetTextureSearchPaths(const maxon::Url& secondaryPath, const maxon::Url& documentPath, maxon::BaseArray<maxon::Url>& result) { return C4DOS_Mt->GetTextureSearchPaths(secondaryPath, documentPath, result); }
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Returns the material owner of the provided graph.
 	/// Please note that the returned BaseMaterial is only safe for access in the usual places of the API. You must avoid
 	/// to perform read or write access to it in an arbitrary worker thread.
-	/// @param[in] graph										The node graph of the owner.
-	/// @return															Returns the owner of the node graph, null if unknown or on failure to retrieve.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] graph							The node graph of the owner.
+	/// @return												Returns the owner of the node graph, null if unknown or on failure to retrieve.
+	//----------------------------------------------------------------------------------------
 	static BaseMaterial* GetMaterial(const maxon::nodes::NodesGraphModelRef& graph) { return C4DOS_Mt->GetMaterial(graph); }
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Returns the node graph for the provided node space id.
-	/// @param[in] spaceId									The id of the node space.
-	/// @return															Returns the node graph, or IllegalStateError if the material does not have this space.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The id of the node space.
+	/// @return												Returns the node graph, or IllegalStateError if the material does not have this space.
+	//----------------------------------------------------------------------------------------
 	maxon::Result<const maxon::nodes::NodesGraphModelRef&> GetGraph(const maxon::Id& spaceId) const { return C4DOS_Mt->GetGraph(*this, spaceId); }
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Creates a node graph for the provided node space identifier if a graph does not already exist.
-	/// @param[in] spaceId									The id of the node space.
-	/// @return															OK on success, or error on failure of graph creation.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The id of the node space.
+	/// @return												OK on success, or error on failure of graph creation.
+	//----------------------------------------------------------------------------------------
 	[[deprecated("Use CreateDefaultGraph or CreateEmptyGraph.")]] maxon::Result<void> AddGraph(const maxon::Id& spaceId) { return C4DOS_Mt->AddGraph(*this, spaceId); }
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Creates a node graph populated with default nodes for the provided node space identifier if a graph does not already exist.
-	/// @param[in] spaceId									The id of the node space.
-	/// @return															OK on success, or error on failure of graph creation.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The id of the node space.
+	/// @return												OK on success, or error on failure of graph creation.
+	//----------------------------------------------------------------------------------------
 	maxon::Result<void> CreateDefaultGraph(const maxon::Id& spaceId) { return C4DOS_Mt->CreateDefaultGraph(*this, spaceId); }
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Creates an empty node graph for the provided node space identifier if a graph does not already exist.
-	/// @param[in] spaceId									The id of the node space.
-	/// @return															OK on success, or error on failure of graph creation.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The id of the node space.
+	/// @return												OK on success, or error on failure of graph creation.
+	//----------------------------------------------------------------------------------------
 	maxon::Result<void> CreateEmptyGraph(const maxon::Id& spaceId) { return C4DOS_Mt->CreateEmptyGraph(*this, spaceId); }
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Removes a node graph for the provided node space id if there is a graph.
-	/// @param[in] spaceId									The id of the node space.
-	/// @return															OK on success, or error if removal fails.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The id of the node space.
+	/// @return												OK on success, or error if removal fails.
+	//----------------------------------------------------------------------------------------
 	maxon::Result<void> RemoveGraph(const maxon::Id& spaceId) { return C4DOS_Mt->RemoveGraph(*this, spaceId); }
 
 	//----------------------------------------------------------------------------------------
@@ -515,6 +515,7 @@ public:
 	/// @param[in] spaceId						The id of the node space.
 	/// @param[in] uuid								Uuid to find.
 	/// @return												BaseList2D object on success.
+	//----------------------------------------------------------------------------------------
 	maxon::Result<BaseList2D*> UuidToBaseList2D(const maxon::Id& spaceId, const maxon::Uuid& uuid) const { return C4DOS_Mt->UuidToBaseList2D(*this, spaceId, uuid); }
 
 	//----------------------------------------------------------------------------------------

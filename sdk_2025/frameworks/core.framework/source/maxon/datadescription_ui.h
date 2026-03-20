@@ -4,6 +4,7 @@
 #include "maxon/basearray.h"
 #include "maxon/datadescriptiondefinitiondatabase.h"
 #include "maxon/string.h"
+#include "maxon/uuid.h"
 
 //----------------------------------------------------------------------------------------
 // BEGIN - auto generated code, do not edit
@@ -35,7 +36,8 @@ namespace DESCRIPTION
 			/// Accept list for link fields. It's possible to use symbolic names like Obase, Ocamera.
 			MAXON_ATTRIBUTE(Array<Id>, BASELINK_ACCEPT, "net.maxon.description.ui.base.baselink.accept");
 
-			/// ID of the group into which the attribute should be assigned
+			/// Identifier of the group into which the attribute is assigned.
+			/// Groups can be parented in another group as well.
 			MAXON_ATTRIBUTE(InternedId, GROUPID, "net.maxon.description.ui.base.groupid");
 
 			MAXON_ATTRIBUTE(Bool, SHOWGROUPINPORTLIST, "net.maxon.description.ui.base.showgroupinportlist");
@@ -135,6 +137,10 @@ namespace DESCRIPTION
 			/// True if the attribute should be hidden when the object is displayed as inline object
 			MAXON_ATTRIBUTE(Bool, HIDEWHENINLINE, "net.maxon.description.ui.base.hidewheninline");
 
+			MAXON_ATTRIBUTE(Int, INEXCLUDE_DEFAULTFLAGS, "net.maxon.description.ui.base.inexclude.defaultflags");
+
+			MAXON_ATTRIBUTE(MAXON_MACROARG_TYPE(Array<Tuple<Int, Int>>), INEXCLUDE_FLAGS, "net.maxon.description.ui.base.inexclude.flags");
+
 			/// True if the string should be a multiline text.
 			MAXON_ATTRIBUTE(Bool, MULTILINETITLE, "net.maxon.description.ui.base.multilinetitle");
 
@@ -170,8 +176,8 @@ namespace DESCRIPTION
 			/// uniquenumber - the unique number of the node.
 			/// {{any attribute}} - value of the attribute
 			/// examples:
-			/// {{assetid}}.{{uniquenumber}} -> Bitmap.1
-			/// {{url}} || {{assetid}}.{{uniquenumber}} -> app.png if url is given, otherwise Bitmap.1
+			/// {{assetid}} -> Bitmap.1
+			/// {{url}} || {{assetid}} -> app.png if url is given, otherwise Bitmap.1
 			MAXON_ATTRIBUTE(CString, DEFAULTNAME, "net.maxon.description.ui.info.defaultname");
 		}
 
@@ -294,8 +300,8 @@ public:
 	/// id of the icon
 	Id _commandShortcutId;
 
-	/// id of the icon
-	Id _iconId;
+	/// The source of the icon. Either an icon id, or url.
+	Data _iconSource;
 
 	/// id of the associated C4D command
 	Id _commandId;
@@ -331,7 +337,7 @@ public:
 		_identifierOriginal = src._identifierOriginal;
 		_name = src._name;
 		_commandShortcutId = src._commandShortcutId;
-		_iconId = src._iconId;
+		_iconSource.CopyFrom(src._iconSource) iferr_return;
 		_commandId = src._commandId;
 		_flags = src._flags;
 		_commandContext = src._commandContext;
@@ -342,6 +348,12 @@ public:
 	}
 };
 
+//----------------------------------------------------------------------------------------
+/// Entries in the DataDictionary of the inexclude list (DataDictionary)
+//----------------------------------------------------------------------------------------
+MAXON_INTERNED_ID("inexclude.objects", InExcludeObjectList); 	// DataDict of [ String(index) : {Uuid, Int}  ]
+MAXON_INTERNED_ID("inexclude.object.uuid", InExcludeObjectUuid);	// Uuid
+MAXON_INTERNED_ID("inexclude.object.flags", InExcludeObjectFlags);	// Int
 
 //----------------------------------------------------------------------------------------
 /// Tuple which stores the parameters (DataDictionary) of a function call and provides the GetDataCallbackType to evaluate conditions.

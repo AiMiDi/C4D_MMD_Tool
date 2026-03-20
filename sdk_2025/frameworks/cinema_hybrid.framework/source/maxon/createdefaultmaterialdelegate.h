@@ -22,13 +22,13 @@ namespace maxon
 /// // Register Sketch & Toon material
 /// Bool RegisterToonUpMat()
 /// {
-/// 	return RegisterMaterialPlugin(ID_TOONUP_MAT, GeLoadString(IDS_TOONUPMAT), PLUGINFLAG_MATERIAL_SHOW_IN_DEFAULT_MENU | PLUGINFLAG_HIDEPLUGINMENU | PLUGINFLAG_HIDE, ToonUpMat::Alloc, "Mtoonup"_s, TOONUP_LEVEL_ID);
+/// 	return RegisterMaterialPlugin(Msketch, GeLoadString(IDS_TOONUPMAT), PLUGINFLAG_MATERIAL_SHOW_IN_DEFAULT_MENU | PLUGINFLAG_HIDEPLUGINMENU | PLUGINFLAG_HIDE, ToonUpMat::Alloc, "Mtoonup"_s, TOONUP_LEVEL_ID);
 /// }
 ///
 /// // Register create material delegate
 /// namespace maxon
 /// {
-/// MAXON_DECLARATION_REGISTER(CreateMaterialWithDataDelegates, NumToString<ID_TOONUP_MAT>::value)
+/// MAXON_DECLARATION_REGISTER(CreateMaterialWithDataDelegates, NumToString<Msketch>::value)
 /// {
 /// 	CreateMaterialWithDataDelegate delegate = [](::BaseDocument* doc, const Data& textureUrlOrColor) -> ::BaseMaterial*
 /// 	{
@@ -37,11 +37,11 @@ namespace maxon
 /// 		//-----------------------------------------------------------
 ///
 /// 		// First try to create a user preset default material
-/// 		BaseMaterial* mat = (BaseMaterial*)AssetCreationInterface::GetDefaultObject(ToSingletonBlock(ID_TOONUP_MAT), doc);
+/// 		BaseMaterial* mat = (BaseMaterial*)AssetCreationInterface::GetDefaultObject(ToSingletonBlock(Msketch), doc);
 /// 		if (!mat)
 /// 		{
 /// 			// There is no default preset material: create a new one.
-/// 			mat = BaseMaterial::Alloc(ID_TOONUP_MAT);
+/// 			mat = BaseMaterial::Alloc(Msketch);
 /// 			if (!mat)
 /// 			{
 /// 				CriticalStop("Hair material creation error: out of memory");
@@ -59,7 +59,7 @@ namespace maxon
 /// 			//-----------------------------------------------------------
 ///
 /// 			// Activate "Texture" checkbox
-/// 			mat->SetParameter(ConstDescID(DescLevel(OUTLINEMAT_COLOR_TEXTURE)), true, DESCFLAGS_SET::NONE);
+/// 			mat->SetParameter(ConstDescIDLevel(OUTLINEMAT_COLOR_TEXTURE), true, DESCFLAGS_SET::NONE);
 ///
 /// 			// Set texture url
 /// 			BaseContainer* bc = mat->GetDataInstance();
@@ -78,7 +78,7 @@ namespace maxon
 /// 				mat->InsertShader(newShader);
 ///
 /// 				// Set parameter link
-/// 				mat->SetParameter(ConstDescID(DescLevel(OUTLINEMAT_COLOR_TEXTURE_LINK)), newShader, DESCFLAGS_SET::NONE);
+/// 				mat->SetParameter(ConstDescIDLevel(OUTLINEMAT_COLOR_TEXTURE_LINK), newShader, DESCFLAGS_SET::NONE);
 /// 			}
 /// 		}
 /// 		else
@@ -90,10 +90,10 @@ namespace maxon
 /// 				//-----------------------------------------------------------
 ///
 /// 				// Set main color
-/// 				mat->SetParameter(ConstDescID(DescLevel(OUTLINEMAT_COLOR)), color.GetColor3().GetVector(), DESCFLAGS_SET::NONE);
+/// 				mat->SetParameter(ConstDescIDLevel(OUTLINEMAT_COLOR), color.GetColor3().GetVector(), DESCFLAGS_SET::NONE);
 ///
 /// 				// Set transparency from alpha component
-/// 				mat->SetParameter(ConstDescID(DescLevel(OUTLINEMAT_OPACITY)), color.a, DESCFLAGS_SET::NONE);
+/// 				mat->SetParameter(ConstDescIDLevel(OUTLINEMAT_OPACITY), color.a, DESCFLAGS_SET::NONE);
 /// 			}
 /// 		}
 ///
@@ -136,15 +136,15 @@ public:
 	///	 return RegisterVideoPostPlugin(PYSICAL_RENDERER_ID, GeLoadString(IDS_PHYSICAL_RENDERER), PLUGINFLAG_VIDEOPOST_ISRENDERER, PhysicalRender::Alloc, "Physical render"_s, 0, VPPRIORITY_EXTERNAL);
 	/// }
 	/// @endcode
-	/// @param[in] rendererId			The renderer ID.
-	/// @param[in] materialId			The material ID.
+	/// @param[in] rendererId					The renderer ID.
+	/// @param[in] materialId					The material ID.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD void SetRendererDefaultMaterial(Int32 rendererId, Int32 materialId);
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the material ID that has been defined for the renderer ID. @see SetRendererDefaultMaterial
-	/// @param[in] rendererId			The renderer ID to query the material ID from.
-	/// @return The material ID.
+	/// Gets the material ID that has been defined for the renderer ID. @see SetRendererDefaultMaterial.
+	/// @param[in] rendererId					The renderer ID to query the material ID from.
+	/// @return												The material ID.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Int32 GetRendererDefaultMaterial(Int32 rendererId);
 };
@@ -154,4 +154,4 @@ public:
 
 } // namespace maxon
 
-#endif	// CREATEDEFAULTMATERIALDELEGATE_H__
+#endif // CREATEDEFAULTMATERIALDELEGATE_H__

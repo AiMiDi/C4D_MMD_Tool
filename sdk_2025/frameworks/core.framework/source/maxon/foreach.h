@@ -234,7 +234,7 @@ template <typename I> inline ReverseIterator<typename GetIteratorType<typename s
 /// point to another iteration value after function completion.
 ///
 /// @see maxon::Iterable
-/// @see @$ref foreach
+/// @see @$ref foreach.
 ///
 /// @tparam ITERATOR							The class which implements the foreach protocol, ForEachIterator should be its base class.
 /// @tparam SUPER									This is used as base class of ForEachIterator.
@@ -312,7 +312,7 @@ public:
 	///
 	/// @warning This is a non-const function which uses this iterator for the iteration.
 	//----------------------------------------------------------------------------------------
-	template <typename T> MAXON_ATTRIBUTE_FORCE_INLINE Bool Contains(const T& v)
+	template <typename T> MAXON_ATTRIBUTE_FORCE_INLINE Bool Contains(const T& v) const
 	{
 		return static_cast<ITERATOR*>(this)->FindIndex(v) >= 0;
 	}
@@ -342,6 +342,11 @@ public:
 	MAXON_ATTRIBUTE_FORCE_INLINE Wrapper begin()
 	{
 		return Wrapper(static_cast<ITERATOR*>(this));
+	}
+
+	MAXON_ATTRIBUTE_FORCE_INLINE Wrapper begin() const
+	{
+		return Wrapper(const_cast<ITERATOR*>(static_cast<const ITERATOR*>(this)));
 	}
 
 	static MAXON_ATTRIBUTE_FORCE_INLINE PRIVATE_MAXON_RBF_SENTINEL(Wrapper) end()

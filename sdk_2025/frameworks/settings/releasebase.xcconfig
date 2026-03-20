@@ -28,7 +28,7 @@ STRIP_STYLE = non-global
 
 //---Linking---
 DEAD_CODE_STRIPPING = YES
-DYLIB_INSTALL_NAME_BASE = /R2024
+DYLIB_INSTALL_NAME_BASE = /R2025
 LD_DYLIB_INSTALL_NAME = $(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)	// dlopen identifies libs using this install name. Therefore it has to be different for major releases, otherwise the OS caching will return the wrong library depending on load order if multiple version are present.
 
 //---Search Paths---

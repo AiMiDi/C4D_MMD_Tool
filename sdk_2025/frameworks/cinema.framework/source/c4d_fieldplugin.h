@@ -161,7 +161,7 @@ public:
 	/// not correctly done then any changes made by the developer or user will not be stored within the GUI.
 	/// @param[in] layer							The layer a convenience value, equivalent to Get().
 	/// @param[in] comp								The layer data to compare with.
-	/// @return												true if equal, false if not.
+	/// @return												True if equal, false if not.
 	//----------------------------------------------------------------------------------------
 	virtual Bool IsEqual(const FieldLayer& layer, const FieldLayerData& comp) const { return true; }
 
@@ -188,7 +188,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Called to update the dirtiness of the Fieldlayer.  Use layer->SetDirty(FLAGS) to set the dirtiness as
-	/// required
+	/// required.
 	/// @param[in] layer							The layer.
 	/// @param[in] doc								The document.
 	//----------------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ void FillFieldLayerPlugin(FIELDLAYERPLUGIN& np, DataAllocator* npalloc, Int32 in
 //----------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------
-/// Registers a FieldObject plugin
+/// Registers a FieldObject plugin.
 /// @param[in] id									@uniquePluginID.
 /// @param[in] name								The name of the plugin.\n To affect the order that plugins are displayed in menus
 /// 															add <i>"#$n"</i> as a prefix to this name, where @em n is a number.\n Lower numbers
@@ -276,7 +276,7 @@ void FillFieldLayerPlugin(FIELDLAYERPLUGIN& np, DataAllocator* npalloc, Int32 in
 Bool RegisterFieldPlugin(Int32 id, const maxon::String& name, const maxon::String& help, Int32 info, DataAllocator* g, const maxon::String& description, BaseBitmap* icon, Int32 disklevel);
 
 //----------------------------------------------------------------------------------------
-/// Registers a FieldLayer plugin
+/// Registers a FieldLayer plugin.
 /// @param[in] id									@uniquePluginID.
 /// @param[in] name								The name of the plugin.\n To affect the order that plugins are displayed in
 /// 															menus add <i>"#$n"</i> as a prefix to this name, where

@@ -166,13 +166,13 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// PresetLoadArgs copy constructor.
-	/// @param[in] src							data to copy.
+	/// @param[in] src								Data to copy.
 	//----------------------------------------------------------------------------------------
 	PresetLoadArgs(const PresetLoadArgs& src);
 
 	//----------------------------------------------------------------------------------------
 	/// SetPointer sets a pointer.
-	/// @param[in] pointer						pointer to set.
+	/// @param[in] pointer						Pointer to set.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	Result<void> SetPointer(void* pointer);
@@ -208,7 +208,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// PresetSaveArgs copy constructor.
-	/// @param[in] src								data to copy.
+	/// @param[in] src								Data to copy.
 	//----------------------------------------------------------------------------------------
 	PresetSaveArgs(const PresetSaveArgs& src);
 
@@ -250,7 +250,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// LoadPreset loads the preset into memory.
-	/// @param[in] preset							Preset to load
+	/// @param[in] preset							Preset to load.
 	/// @param[in] target							Arguments to use when loading the preset.
 	/// @return												True on success.
 	//----------------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// CreateNewPresetSettings creates the new preset of this type.
-	/// @param[in] args								see CreatePresetAssetStruct.
+	/// @param[in] args								See CreatePresetAssetStruct.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> CreateNewPresetSettings(CreatePresetAssetStruct& args) const;
@@ -455,7 +455,7 @@ public:
 	/// CreatePresetAssetStruct description.
 	/// @param[in] name								Name of the asset/preset.
 	/// @param[in] sourceData					Source data to copy into the asset.
-	/// @param[in] resolveDependenciesDelegate helper delegate to resolve dependencies.
+	/// @param[in] resolveDependenciesDelegate	Helper delegate to resolve dependencies.
 	/// @param[in] parentCategory			Parent category to set.
 	/// @param[in] saveRepository			Repository to save the asset in.
 	/// @param[in] lookupRepository		Repository to search for dependencies.

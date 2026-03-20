@@ -23,6 +23,7 @@ class CrashHandler
 	MAXON_INTERFACE_NONVIRTUAL(CrashHandler, MAXON_REFERENCE_STATIC, "net.maxon.interface.crashhandler");
 public:
 	using CallbackPtr = void (*)(const CrashReportState& crashState);
+	using GetBuildIdPtr = const Char* (*)(const Char* moduleName);
 
 	//----------------------------------------------------------------------------------------
 	/// Sets a callback that will be invoked when a thread has crashed. Usually the callback
@@ -80,6 +81,19 @@ public:
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> ResolveBugReport(const Url& report, const Url& symbolFileArchives, const Url& temporaryDir);
+
+	/// @brief Writes the call stack to a file.
+	static MAXON_METHOD void DumpCallStacks(FILE* file, const CrashReportState& state);
+
+	/// @brief Writes the module list to a file.
+	static MAXON_METHOD void DumpLoadedModules(FILE* file, const CrashReportState& state, GetBuildIdPtr getBuildId);
+
+	/// @brief Writes the exception description to a file.
+	static MAXON_METHOD void DumpException(FILE* file, const CrashReportState& state);
+
+	/// @brief Writes the critical log to a file.
+	static MAXON_METHOD void DumpCriticalLog(FILE* file);
+
 
 	//----------------------------------------------------------------------------------------
 	/// Invokes the observer(s) with the url of the crash data directory.

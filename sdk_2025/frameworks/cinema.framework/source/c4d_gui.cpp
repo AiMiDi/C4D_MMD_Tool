@@ -235,17 +235,17 @@ Bool GeDialog::SendParentMessage(const BaseContainer& msg, Bool receiveSelf)
 	return C4DOS_Cd->SendParentMessage(cd, &msg, receiveSelf);
 }
 
-Int32 GeDialog::GetId()
+Int32 GeDialog::GetId() const
 {
 	return C4DOS_Cd->GetID(Get());
 }
 
-Bool GeDialog::IsOpen()
+Bool GeDialog::IsOpen() const
 {
 	return C4DOS_Cd->AddGadget(cd, DIALOG_ISOPEN, 0, nullptr, 0, 0, 0, 0, nullptr, nullptr);
 }
 
-Bool GeDialog::IsVisible()
+Bool GeDialog::IsVisible() const
 {
 	return C4DOS_Cd->AddGadget(cd, DIALOG_ISVISIBLE, 0, nullptr, 0, 0, 0, 0, nullptr, nullptr);
 }
@@ -1032,30 +1032,22 @@ Bool GeDialog::GroupBorderSpace(Int32 left, Int32 top, Int32 right, Int32 bottom
 
 Bool GeDialog::SetGroupBackgroundColor(Int32 colorId)
 {
-	if (!cd)
-		return false;
-	return C4DOS_Cd->SetGroupBackgroundColor(cd, colorId);
+	return false;
 }
 
 Bool GeDialog::SetGroupBackgroundColor(Int32 r, Int32 g, Int32 b)
 {
-	if (!cd)
-		return false;
-	return C4DOS_Cd->SetGroupBackgroundColorRGB(cd, r, g, b);
+	return false;
 }
 
 Bool GeDialog::SetGroupInnerBackgroundColor(Int32 colorId)
 {
-	if (!cd)
-		return false;
-	return C4DOS_Cd->SetGroupInnerBackgroundColor(cd, colorId);
+	return false;
 }
 
 Bool GeDialog::SetGroupInnerBackgroundColor(Int32 r, Int32 g, Int32 b)
 {
-	if (!cd)
-		return false;
-	return C4DOS_Cd->SetGroupInnerBackgroundColorRGB(cd, r, g, b);
+	return false;
 }
 
 Bool GeDialog::AttachUserArea(GeUserArea& ua, const GadgetPtr& id, USERAREAFLAGS userareaflags)
@@ -1551,6 +1543,16 @@ void GeUserArea::DrawBezierFill(const Vector2d& startPoint, const maxon::Block<c
 	C4DOS_Cu->DrawBezierFill(cu, startPoint, bezierPoints, closed);
 }
 
+void GeUserArea::DrawBezierLine(const maxon::BezierPath& path, Float lineWidth, LINESTYLE lineStyle)
+{
+	C4DOS_Cu->DrawBezierLinePath(cu, path, lineWidth, lineStyle);
+}
+
+void GeUserArea::DrawBezierFill(const maxon::BezierPath& path)
+{
+	C4DOS_Cu->DrawBezierFillPath(cu, path);
+}
+
 void GeUserArea::DrawPolyLine(const maxon::Block<const Vector2d>& p, Bool closed, Float lineWidth, LINESTYLE lineStyle)
 {
 	C4DOS_Cu->DrawPolyLine(cu, p, closed, lineWidth, lineStyle);
@@ -1586,6 +1588,16 @@ void GeUserArea::DrawFrame(Int32 x1, Int32 y1, Int32 x2, Int32 y2, Float lineWid
 	C4DOS_Cu->DrawFrame(cu, x1, y1, x2, y2, lineWidth, lineStyle);
 }
 
+void GeUserArea::DrawRoundedFrame(Int32 x1, Int32 y1, Int32 x2, Int32 y2, const Vector2d& radius, Float lineWidth, LINESTYLE lineStyle)
+{
+	C4DOS_Cu->DrawRoundedFrame(cu, x1, y1, x2, y2, radius, lineWidth, lineStyle);
+}
+
+void GeUserArea::DrawRoundedRectangle(Int32 x1, Int32 y1, Int32 x2, Int32 y2, const Vector2d& radius)
+{
+	C4DOS_Cu->DrawRoundedRectangle(cu, x1, y1, x2, y2, radius);
+}
+
 void GeUserArea::DrawSetPen(const GeData& d)
 {
 	if (d.GetType() == DA_VECTOR)
@@ -1613,12 +1625,11 @@ Vector GeUserArea::DrawGetPenColor(Int32 id) const
 
 void GeUserArea::DrawSetPenToParentBackgroundColor()
 {
-	DrawSetPen(GetParentBackgroundColor());
 }
 
 GeData GeUserArea::GetParentBackgroundColor() const
 {
-	return C4DOS_Cd->CBF_GetParentBackgroundColor(reinterpret_cast<CBaseFrame*>(cu));
+	return GeData();
 }
 
 void GeUserArea::DrawSetOpacity(Float opacity)
@@ -1629,6 +1640,16 @@ void GeUserArea::DrawSetOpacity(Float opacity)
 Bool GeUserArea::GetColorRGB(Int32 colorid, Int32& r, Int32& g, Int32& b) const
 {
 	return C4DOS_Cd->CBF_GetColorRGB(reinterpret_cast<CBaseFrame*>(cu), colorid, r, g, b);
+}
+
+Bool GeUserArea::GetColorRGBA(Int32 colorid, Int32& r, Int32& g, Int32& b, Int32& a) const
+{
+	return C4DOS_Cd->CBF_GetColorRGBA(reinterpret_cast<CBaseFrame*>(cu), colorid, r, g, b, a);
+}
+
+Bool GeUserArea::GetBackgroundColorRGB(Int32& r, Int32& g, Int32& b) const
+{
+	return false;
 }
 
 void GeUserArea::ActivateFading(Int32 milliseconds)
@@ -1784,6 +1805,11 @@ void GeUserArea::DrawText(const maxon::String& txt, Int32 x, Int32 y, Int32 flag
 void GeUserArea::DrawBitmap(BaseBitmap* bmp, Int32 wx, Int32 wy, Int32 ww, Int32 wh, Int32 x, Int32 y, Int32 w, Int32 h, Int32 mode)
 {
 	C4DOS_Cu->DrawBitmap(cu, bmp, wx, wy, ww, wh, x, y, w, h, mode);
+}
+
+void GeUserArea::DrawBitmapRounded(BaseBitmap* bmp, Int32 wx, Int32 wy, Int32 ww, Int32 wh, Int32 x, Int32 y, Int32 w, Int32 h, Int32 mode, Float32 radius)
+{
+	C4DOS_Cu->DrawBitmapRounded(cu, bmp, wx, wy, ww, wh, x, y, w, h, mode, radius);
 }
 
 void GeUserArea::DrawImageRef(maxon::ImageBaseRef& imageRef, Float wx, Float wy, Float ww, Float wh, Float opacity, maxon::IMAGEINTERPOLATIONMODE mode)
@@ -2285,9 +2311,19 @@ void GeDialog::HandleHelpString(const BaseContainer& msg, BaseContainer& result,
 	result.SetString(RESULT_HELP1, sym);
 }
 
-Bool GeDialog::GetColorRGB(Int32 colorid, Int32& r, Int32& g, Int32& b)
+Bool GeDialog::GetColorRGB(Int32 colorid, Int32& r, Int32& g, Int32& b) const
 {
 	return C4DOS_Cd->CBF_GetColorRGB((CBaseFrame*)Get(), colorid, r, g, b);
+}
+
+Bool GeDialog::GetColorRGBA(Int32 colorid, Int32& r, Int32& g, Int32& b, Int32& a) const
+{
+	return C4DOS_Cd->CBF_GetColorRGBA((CBaseFrame*)Get(), colorid, r, g, b, a);
+}
+
+Bool GeDialog::GetBackgroundColorRGB(Int32& r, Int32& g, Int32& b)
+{
+	return false;
 }
 
 void GeDialog::SetDefaultColor(const GadgetPtr& id, Int32 colorid, Int32 mapid)

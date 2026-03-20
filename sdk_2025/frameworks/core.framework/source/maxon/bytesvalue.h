@@ -208,7 +208,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Return the number of bits.
-	/// @return												value in bits
+	/// @return												Value in bits.
 	//----------------------------------------------------------------------------------------
 	Int64 GetBits() const
 	{
@@ -216,8 +216,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the BytesValue
-	/// @return												value in bytes
+	/// Get the BytesValue.
+	/// @return												Value in bytes.
 	//----------------------------------------------------------------------------------------
 	Int64 GetBytes() const
 	{
@@ -225,8 +225,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Set the BytesValue
-	/// @param[in] bytes							byte value
+	/// Set the BytesValue.
+	/// @param[in] bytes							Byte value.
 	//----------------------------------------------------------------------------------------
 	void SetBytes(Int64 bytes)
 	{
@@ -234,8 +234,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the BytesValue
-	/// @return												value in kilobytes (KB)
+	/// Get the BytesValue.
+	/// @return												Value in kilobytes (KB)
 	//----------------------------------------------------------------------------------------
 	Float32 GetKilobytes() const
 	{
@@ -243,8 +243,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the BytesValue
-	/// @return												value in kibibytes (KiB)
+	/// Get the BytesValue.
+	/// @return												Value in kibibytes (KiB)
 	//----------------------------------------------------------------------------------------
 	Float32 GetKibibytes() const
 	{
@@ -252,8 +252,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the BytesValue
-	/// @return												value in megabytes (MB)
+	/// Get the BytesValue.
+	/// @return												Value in megabytes (MB)
 	//----------------------------------------------------------------------------------------
 	Float32 GetMegabytes() const
 	{
@@ -261,8 +261,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the BytesValue
-	/// @return												value in mebibytes (MiB)
+	/// Get the BytesValue.
+	/// @return												Value in mebibytes (MiB)
 	//----------------------------------------------------------------------------------------
 	Float32 GetMebibytes() const
 	{
@@ -270,8 +270,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the BytesValue
-	/// @return												value in gigabytes (GB)
+	/// Get the BytesValue.
+	/// @return												Value in gigabytes (GB)
 	//----------------------------------------------------------------------------------------
 	Float32 GetGigabytes() const
 	{
@@ -279,8 +279,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the BytesValue
-	/// @return												value in gibibytes (GiB)
+	/// Get the BytesValue.
+	/// @return												Value in gibibytes (GiB)
 	//----------------------------------------------------------------------------------------
 	Float32 GetGibibytes() const
 	{
@@ -288,8 +288,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the BytesValue
-	/// @return												value in terrabytes (TB)
+	/// Get the BytesValue.
+	/// @return												Value in terrabytes (TB)
 	//----------------------------------------------------------------------------------------
 	Float32 GetTerabytes() const
 	{
@@ -297,8 +297,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the BytesValue
-	/// @return												value in tebibytes (TiB)
+	/// Get the BytesValue.
+	/// @return												Value in tebibytes (TiB)
 	//----------------------------------------------------------------------------------------
 	Float32 GetTebibytes() const
 	{

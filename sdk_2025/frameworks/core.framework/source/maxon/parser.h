@@ -59,7 +59,7 @@ public:
 	/// ConvertFromJWT converts a JWT token into a json DataDictionary. For more details of JWT see https://jwt.io/
 	/// @param[in] nameOrStream				JSON formated input stream or file url.
 	/// @param[in] flags							See JWTPARSERFLAGS.
-	/// @param[in] objects				ValueReceiver which receives all processed DataDictionaries.
+	/// @param[in] objects						ValueReceiver which receives all processed DataDictionaries.
 	/// @param[out] originalToken			[Optional] Returns the original token memory read from the stream.
 	/// @return												OK on success. If successful it's guaranteed that at least one DataDictionary was found.
 	//----------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ public:
 	/// ConvertFromJSON parses a json string into DataDictionary representation.
 	/// @param[in] parserData					JSON formated string to precess.
 	/// @param[in] flags							See JSONPARSERFLAGS.
-	/// @param[in] stringDecoding				ValueReceiver which receives all processed DataDictionaries.
+	/// @param[in] stringDecoding			ValueReceiver which receives all processed DataDictionaries.
 	/// @param[in] objects						ValueReceiver which receives all processed DataDictionaries.
 	/// @return												OK on success. If successful it's guaranteed that at least one DataDictionary was found.
 	//----------------------------------------------------------------------------------------
@@ -91,13 +91,14 @@ public:
 	/// @param[in] stringEncoding			String encoding to use.
 	/// @param[in] dict								Data to write.
 	/// @param[in] niceFormatting			True to have nice formatting with indents and new lines. False to get compact format (smaller filesize).
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> WriteFile(UrlOrOutputStream&& out, const StringEncodingRef& stringEncoding, const DataDictionary& dict, Bool niceFormatting);
 	
 	//----------------------------------------------------------------------------------------
 	/// GetFileExtension gives the file extension of the parser.
-	/// @return the file extension as a string.
+	/// @return												The file extension as a string.
+	//----------------------------------------------------------------------------------------
 	MAXON_METHOD String GetFileExtension() const;
 };
 

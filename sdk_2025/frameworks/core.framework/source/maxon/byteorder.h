@@ -44,15 +44,13 @@ MAXON_ATTRIBUTE_FORCE_INLINE Int16 SwapByteOrder(Int16 data)
 //----------------------------------------------------------------------------------------
 MAXON_ATTRIBUTE_FORCE_INLINE UInt32	SwapByteOrder(UInt32 data)
 {
-#if defined(MAXON_COMPILER_CLANG) && defined(MAXON_TARGET_CPU_X86)
+#if defined(MAXON_COMPILER_CLANG)
 	return __builtin_bswap32(data);
 #elif defined(MAXON_COMPILER_GCC) && defined(MAXON_TARGET_CPU_X86)
 	__asm__("bswap   %0" : "+r" (data));
 	return data;
 #elif (MAXON_COMPILER_MSVC >= 1400)
 	return _byteswap_ulong(data);
-#elif defined(MAXON_COMPILER_INTEL)
-	return (UInt32) _bswap((Int32)data);
 #else	// fallback for other compilers or architectures
 	return (UInt32)((((UInt32)(data) & 0xff000000) >> 24) |
 									(((UInt32)(data) & 0x00ff0000) >> 8) |
@@ -77,12 +75,10 @@ MAXON_ATTRIBUTE_FORCE_INLINE Int32 SwapByteOrder(Int32 data)
 //----------------------------------------------------------------------------------------
 MAXON_ATTRIBUTE_FORCE_INLINE UInt64 SwapByteOrder(UInt64 data)
 {
-#if defined(MAXON_COMPILER_CLANG) && defined(MAXON_TARGET_CPU_X86)
+#if defined(MAXON_COMPILER_CLANG)
 	return __builtin_bswap64(data);
 #elif (MAXON_COMPILER_MSVC >= 1400)
 	return _byteswap_uint64(data);
-#elif defined(MAXON_COMPILER_INTEL)
-	return (UInt64) _bswap64((Int64)data);
 #else	// fallback for other compilers or architectures
 	return (UInt64)((((UInt64)(data) & 0xff00000000000000ULL) >> 56) |
 									(((UInt64)(data) & 0x00ff000000000000ULL) >> 40) |

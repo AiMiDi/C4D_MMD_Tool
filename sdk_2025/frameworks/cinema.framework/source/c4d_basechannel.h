@@ -182,16 +182,16 @@ public:
 	/// Bakes the shader into a BaseBitmap
 	/// @since R21
 	/// @param[out] outBmp						The BaseBitmap that is baked into.
-	/// @param[in] 	doc								The document.
-	/// @param[in] 	parentThread			The parent thread used to check for interruption @callerOwnsPointed{BaseThread}
-	/// @param[in] 	doAlpha						Pass true if alpha should be considered.
-	/// @param[in] 	colorSpace				The documents colorspace.
-	/// @param[in] 	linearworkflow		Pass true when LWF is enabled.
-	/// @param[in] 	useHDR						Pass true when HDR should be considered.
-	/// @param[in] 	xmin							The min in x.
-	/// @param[in] 	xmax							The max in x.
-	/// @param[in] 	ymin							The min in y.
-	/// @param[in] 	ymax							The max in y.
+	/// @param[in] doc								The document.
+	/// @param[in] parentThread				The parent thread used to check for interruption @callerOwnsPointed{BaseThread}
+	/// @param[in] doAlpha						Pass true if alpha should be considered.
+	/// @param[in] colorSpace					The documents colorspace.
+	/// @param[in] linearworkflow			Pass true when LWF is enabled.
+	/// @param[in] useHDR							Pass true when HDR should be considered.
+	/// @param[in] xmin								The min in x.
+	/// @param[in] xmax								The max in x.
+	/// @param[in] ymin								The min in y.
+	/// @param[in] ymax								The max in y.
 	/// @return												@trueIfOtherwiseFalse{baking succeeded}
 	//----------------------------------------------------------------------------------------
 	Bool BakeShaderIntoBaseBitmap(BaseBitmap& outBmp, BaseDocument& doc, BaseThread* parentThread, Bool doAlpha, Int32 colorSpace, Bool linearworkflow, Bool useHDR, Int xmin, Int xmax, Int ymin, Int ymax)

@@ -117,7 +117,7 @@ public:
 	{
 		MAXON_ASSERT_STANDARD_LAYOUT(SimdBlock);
 		Int mmask = GetMultiplicityMask();
-		return *(T*) ((Char*) _ptr + (index & ~mmask) * _stride + ((index & mmask) << _logComponentSize));
+		return *NextByByteOffset(_ptr, (index & ~mmask) * _stride + ((index & mmask) << _logComponentSize));
 	}
 
 	const StridedBlock<T>& ToBlock() const
@@ -189,7 +189,7 @@ public:
 	T* GetPtr(Int index) const
 	{
 		MAXON_ASSERT_STANDARD_LAYOUT(SimdBlock);
-		return MAXON_LIKELY(_stride == SIZEOF(StrideType)) ? (T*) ((StrideType*) this->_ptr + index) : (T*) ((Char*) this->_ptr + index * _stride);
+		return MAXON_LIKELY(_stride == SIZEOF(StrideType)) ? (T*) ((StrideType*) this->_ptr + index) : NextByByteOffset(this->_ptr, index * _stride);
 	}
 
 private:
@@ -337,12 +337,6 @@ MAXON_REGISTRY(DataType, DataTypes, "net.maxon.registry.datatypes");
 //----------------------------------------------------------------------------------------
 #define MAXON_DATATYPE_REGISTER(type) PRIVATE_MAXON_DATATYPE_REGISTER(type, maxon::DataType::Primary(dt), maxon::VALUEKIND::NONE)
 
-#ifdef MAXON_COMPILER_INTEL
-	#define PRIVATE_MAXON_DATATYPE_LOCAL_STATIC static
-#else
-	#define PRIVATE_MAXON_DATATYPE_LOCAL_STATIC
-#endif
-
 //----------------------------------------------------------------------------------------
 /// MAXON_DATATYPE_LOCAL can be used for DataType declarations which need not be publicly visible
 /// in a header file. It comprises the declaration (which would normally done by MAXON_DATATYPE
@@ -354,7 +348,7 @@ MAXON_REGISTRY(DataType, DataTypes, "net.maxon.registry.datatypes");
 //----------------------------------------------------------------------------------------
 #define MAXON_DATATYPE_LOCAL(type, id) \
 	constexpr inline const maxon::Char* DT_##type##_CppName() { return nullptr; } \
-	PRIVATE_MAXON_DATATYPE_LOCAL_STATIC PRIVATE_MAXON_DATATYPE(type, id); \
+	PRIVATE_MAXON_DATATYPE(type, id); \
 	PRIVATE_MAXON_DECLARATION_REGISTER_DECLARATION(DT_##type,, id); \
 	MAXON_DATATYPE_REGISTER(type)
 
@@ -692,15 +686,9 @@ template <GET_DATATYPE_POLICY POLICY, typename T, typename = typename T::StructT
 
 template <GET_DATATYPE_POLICY POLICY, typename R, typename... ARGS> inline Result<DelegateDataType> PrivateGetDataType(Delegate<R(ARGS...)>**, OverloadRank2)
 {
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning disable 177
-#endif
 	Result<DataType> types[] = {CheckedGetDataType<ARGS, POLICY>::Get()..., {}};
 	auto stub = &reflection::DelegateHandlerStub<R, ARGS...>::Invoke;
 	return DataTypeLib::GetDelegateType(CheckedGetDataType<R, POLICY>::Get(), {types, sizeof...(ARGS)}, &reflection::Invocation<R, ARGS...>::InvokeDelegate, reinterpret_cast<void* const&>(stub));
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning disable 177
-#endif
 }
 
 /// @private

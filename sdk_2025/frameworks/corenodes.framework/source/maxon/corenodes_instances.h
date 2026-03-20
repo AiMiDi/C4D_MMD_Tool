@@ -228,7 +228,7 @@ public:
 		OPTIONAL_INPUT = 1 << 13,
 		KEEP_VALUES = 1 << 14,
 		NEW_UNIQUE_NAME = 1 << 15,
-		TIME_LOOP = 1 << 16,
+		TIMESTEP = 1 << 16,													///< Set for a micro node which shall be executed as part of the state transition from one time step to the next, see also EXECUTION_MODE.
 		UNDERSCORE_NUMBER_PREFIX = 1 << 17,
 		WRAPPER_HIDDEN = 1 << 18,
 		WRAPPER_KEEP_LETTER_CASE = 1 << 19,
@@ -255,7 +255,7 @@ public:
 
 		WRAPPER_FLAGS = WRAPPER_HIDDEN | WRAPPER_KEEP_LETTER_CASE | WRAPPER_LAMBDA | WRAPPER_USE_ATTRIBUTE_RESOURCES | WRAPPER_FIXED_VARIADIC | WRAPPER_COPIED_VARIADIC | WRAPPER_INNER_DOMAIN | WRAPPER_OUTER_DOMAIN | WRAPPER_ENCLOSING_DOMAIN | WRAPPER_STREAM | WRAPPER_CONTEXT,
 		PORT_MODIFIERS = PERMANENT | CACHED | OPTIONAL_INPUT | WRAPPER_FLAGS | NO_FACTOR_NODES,
-		MODIFIERS = PORT_MODIFIERS | COMMUTATIVE | FIX_DOMAIN | STATE_ACCESS | OUTER_DOMAIN | SUSPEND | INDEPENDENT | FACTOR_REFERENCE | TIME_LOOP,
+		MODIFIERS = PORT_MODIFIERS | COMMUTATIVE | FIX_DOMAIN | STATE_ACCESS | OUTER_DOMAIN | SUSPEND | INDEPENDENT | FACTOR_REFERENCE | TIMESTEP,
 		PORTINFO_FLAGS = WRAPPER_FLAGS,
 		ALL = -1
 	} MAXON_ENUM_FLAGS_CLASS(FLAGS);
@@ -594,7 +594,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Sets the compiler additional attributes. Usually set by CompilerInterface::Compile.
-	/// @param[in] data						The compiler additional attributes for this node.
+	/// @param[in] data								The compiler additional attributes for this node.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void SetCompilationData(DataDictionary&& data);
 
@@ -828,12 +828,17 @@ public:
 		return std::move(ports.GetPorts());
 	}
 
-	template <typename VARIADIC_ACCESS, typename MN> MAXON_FUNCTION Result<BaseArray<typename VARIADIC_ACCESS::VPort::PortIdType>> AddVariadicPort(VARIADIC_ACCESS MN::* acc, const Block<const Member>& members, MicroNode::FLAGS flags = MicroNode::FLAGS::NONE, PORT_MODE mode = PORT_MODE::NONE, WIRETYPE wires = WIRETYPE::DEFAULT)
+	template <typename VARIADIC_ACCESS, typename MN> MAXON_FUNCTION Result<BaseArray<typename VARIADIC_ACCESS::VPort::PortIdType>> AddVariadicPort(VARIADIC_ACCESS MN::* acc, const CString& prefix, const Block<const Member>& members, MicroNode::FLAGS flags = MicroNode::FLAGS::NONE, PORT_MODE mode = PORT_MODE::NONE, WIRETYPE wires = WIRETYPE::DEFAULT)
 	{
 		iferr_scope;
-		typename VARIADIC_ACCESS::VPort ports = VARIADIC_ACCESS::VPort::Create(GetParentGroup(), members, flags) iferr_return;
+		typename VARIADIC_ACCESS::VPort ports = VARIADIC_ACCESS::VPort::Create(GetParentGroup(), prefix, members, flags) iferr_return;
 		ports.ConnectMicroNode(MicroNodePtr<MN>(this), acc, mode, wires) iferr_return;
 		return std::move(ports.GetPorts());
+	}
+
+	template <typename VARIADIC_ACCESS, typename MN> MAXON_FUNCTION Result<BaseArray<typename VARIADIC_ACCESS::VPort::PortIdType>> AddVariadicPort(VARIADIC_ACCESS MN::* acc, const Block<const Member>& members, MicroNode::FLAGS flags = MicroNode::FLAGS::NONE, PORT_MODE mode = PORT_MODE::NONE, WIRETYPE wires = WIRETYPE::DEFAULT)
+	{
+		return AddVariadicPort<VARIADIC_ACCESS, MN>(acc, CString::DefaultValue(), members, flags, mode, wires);
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -962,7 +967,7 @@ public:
 	/// MicroNodeGroupInterface::GetPort.
 	///
 	/// @param[in] parentPort					One of the ports declared by a MAXON_PORT macro within the enclosing group.
-	///																A parentheses pair, possibly including indices, is needed after the identifier, see example.
+	/// 															A parentheses pair, possibly including indices, is needed after the identifier, see example.
 	/// @param[in] wires							The wires to use for the export connection. Already existing wires aren't changed.
 	/// 															Wires which aren't supported by this micro node are ignored.
 	/// @param[in] index							The index of the parameter of this micro node which shall be exported.

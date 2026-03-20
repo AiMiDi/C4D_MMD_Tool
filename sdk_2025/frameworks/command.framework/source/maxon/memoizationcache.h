@@ -28,7 +28,7 @@ public:
 	/// @param[in] hash								Unique hash of the cache object.
 	/// @param[in] lambda							Delegate which is called to create an object if no cache was found for the given hash.
 	/// @param[out] created						Returns True if no cache was found and the object was created.
-	/// @return                       GenericData on success. This points to the original data. The caller is responsible to clone the data.
+	/// @return												GenericData on success. This points to the original data. The caller is responsible to clone the data.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<GenericDataRef> Get(LiteralId&& type, const void* documentRelated, Int runId, UniqueHash hash, const Delegate<Result<GenericDataRef>()>& lambda, Bool& created = BoolLValue());
 
@@ -43,10 +43,10 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns the current cache usage by type, count etc.
 	/// @param[out] result						The given HashMap is filled in the function call. 
-	///																LiteralId - the MemoizationTypes::...,
-	///																Int cnt - the number of entries of the cache,
-	///																Int mem - memory usage by this entry.
-	/// @return                       OK on success.
+	/// 															LiteralId - the MemoizationTypes::...,
+	/// 															Int cnt - the number of entries of the cache,
+	/// 															Int mem - memory usage by this entry.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> GetStatistics(HashMap<Id, Tuple<Int /*cnt*/, Int /*mem*/>>& result);
 };

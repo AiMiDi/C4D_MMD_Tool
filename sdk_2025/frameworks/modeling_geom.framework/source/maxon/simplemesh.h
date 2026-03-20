@@ -165,4 +165,4 @@ inline INDEXTYPE GetSuccessor(INDEXTYPE index, COUNT vertexCount)
 
 } // namespace maxon
 
-#endif // MESH_H__
+#endif // SIMPLEMESH_H__

@@ -53,6 +53,7 @@ namespace cinema
 #define BC_ID_CLONE_DATA_ARRAY		1019427			///< maxon::Data(maxon::BaseArray<MultiInstanceEntry>). 1 mograph entry per instance. used by Multi-instance and cloner
 #define BC_ID_COLOR_MODE					440000075		///< Color mode.
 
+#define MSG_CALL_EXECUTE 1064273 ///< Message send from the cloner to selected expressions to call their execute function. @since 2025.1
 // ids for the color shader tag
 struct MultiInstanceEntry
 {

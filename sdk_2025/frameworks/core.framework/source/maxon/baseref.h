@@ -22,7 +22,6 @@ template <typename REFERENCE> class WeakRef;
 namespace details
 {
 inline StrongReferenceCounter& PrivateGetReferenceCounter(const void* obj);
-template <typename T> inline void PrivateFreeWithDestructor(const T* obj);
 void PrivateAddWeakReference(WeakRefBase& weakRef, const void* target);
 template <typename T, typename... ARGS> inline ResultPtr<T> NewObjWithLocation(MAXON_SOURCE_LOCATION_DECLARATION, ARGS&&... args);
 }
@@ -279,7 +278,19 @@ public:
 	{
 		if (src != _object)
 		{
-			HANDLER::ChangeTarget(_object, src);
+			T* old = _object;
+
+			if (MAXON_LIKELY(src != nullptr))
+			{
+				HANDLER::AddReference(src);
+			}
+
+			_object = src;
+
+			if (old)
+			{
+				HANDLER::RemoveReference(old);
+			}
 		}
 		return *this;
 	}
@@ -292,7 +303,8 @@ public:
 		// speedup assignment (prevent unneccesary write if already nullptr)
 		if (_object != nullptr)
 		{
-			HANDLER::ChangeTarget(_object, (T*)nullptr);
+			HANDLER::RemoveReference(_object);
+			_object = nullptr;
 		}
 		return *this;
 	}
@@ -363,7 +375,15 @@ public:
 	BaseRef& operator =(BaseRef&& src)
 	{
 		if (this != &src)
-			HANDLER::MoveTarget(src._object, _object);
+		{
+			T* const oldTarget = _object;
+			_object = src._object;
+			src._object = nullptr;
+			if (oldTarget)
+			{
+				HANDLER::RemoveReference(oldTarget);
+			}
+		}
 		return *this;
 	}
 
@@ -381,7 +401,6 @@ public:
 		if (_object)
 			HANDLER::RemoveReference(_object);
 
-		// Cannot use MoveTarget because src has a different handler and might even be an interface reference
 		_object = maxon::HasErasedBase<typename REF::ReferencedType, ReferencedType>::Cast(src.GetPointer());
 		src.PrivateSetPointer(nullptr);
 
@@ -519,11 +538,23 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Lets the BaseRef point to another freshly allocated object. This performs the necessary operations for removing the reference to the
 	/// current pointee and adding the reference to the new pointee.
-	/// @param[in] src								New pointer, may be nullptr.
+	/// @param[in] newPtr							New pointer, may be nullptr.
 	//----------------------------------------------------------------------------------------
-	void PrivateSetTarget(ResultPtr<T> src)
+	void PrivateSetTarget(T* newPtr)
 	{
-		HANDLER::ChangeTarget(_object, src);
+		T* old = _object;
+
+		if (MAXON_LIKELY(newPtr != nullptr))
+		{
+			HANDLER::InitialReference(newPtr);
+		}
+
+		_object = newPtr;
+
+		if (old)
+		{
+			HANDLER::RemoveReference(old);
+		}
 	}
 
 	void PrivateSetPointer(T* ptr)
@@ -590,32 +621,6 @@ public:
 	{
 	}
 
-	//----------------------------------------------------------------------------------------
-	/// Changes the target of the pointer.
-	/// @param[in] o									Reference to the pointer to the old object.
-	/// @param[in] newTarget					Pointer to the new target object.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void ChangeTarget(T*& o, T* newTarget)
-	{
-		o = newTarget;
-	}
-
-	template <typename T> static void ChangeTarget(T*& o, ResultPtr<T> newTarget)
-	{
-		return ChangeTarget(o, newTarget.GetPointer());
-	}
-
-	//----------------------------------------------------------------------------------------
-	/// Moves a target from one pointer to another.
-	/// @param[in] srcReference				Reference to the source object pointer.
-	/// @param[in] dstReference				Reference to the destination object pointer.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void MoveTarget(T*& srcReference, T*& dstReference)
-	{
-		dstReference = srcReference;
-		srcReference = nullptr;
-	}
-
 	template <typename R> static ResultRef<typename R::ReferencedType> MakeWritable(R& ref, Bool resetOnError) { return ref.GetPointer(); }
 
 	static constexpr VALUEKIND KIND = VALUEKIND::POINTER_FLAGS;
@@ -668,7 +673,15 @@ public:
 	//----------------------------------------------------------------------------------------
 	template <typename T> static void InitialReference(const T* o)
 	{
-		InitialReferenceImpl(o, (typename HasInitialReference<T>::type*) nullptr);
+		if constexpr (HasInitialReference<T>::value)
+		{
+			o->InitialReference();
+		}
+		else
+		{
+			DebugAssert(maxon::details::PrivateGetReferenceCounter(o) == 0, "Only for freshly allocated objects, not already referenced objects.");
+			maxon::details::PrivateGetReferenceCounter(o).SetRelaxed(1);
+		}
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -677,7 +690,14 @@ public:
 	//----------------------------------------------------------------------------------------
 	template <typename T> static void AddReference(const T* o)
 	{
-		AddReferenceImpl(o, (typename HasAddReference<T>::type*) nullptr);
+		if constexpr (HasAddReference<T>::value)
+		{
+			o->AddReference();
+		}
+		else
+		{
+			maxon::details::PrivateGetReferenceCounter(o).Inc();
+		}
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -686,12 +706,30 @@ public:
 	//----------------------------------------------------------------------------------------
 	template <typename T> static MAXON_ATTRIBUTE_FORCE_INLINE void RemoveReference(const T* o)
 	{
-		RemoveReferenceImpl(o, (typename HasRemoveReference<T>::type*) nullptr);
+		if constexpr (HasRemoveReference<T>::value)
+		{
+			o->RemoveReference();
+		}
+		else
+		{
+			if (MAXON_UNLIKELY(maxon::details::PrivateGetReferenceCounter(o).Dec()))
+			{
+				T* ptr = const_cast<T*>(o);
+				PrivateDeleteObj(ptr);
+			}
+		}
 	}
 
 	template <typename T> static void AddWeakReference(const T* o, WeakRefBase& weakRef)
 	{
-		AddWeakReferenceImpl(o, weakRef, (typename HasAddReference<T>::type*) nullptr);
+		if constexpr (HasAddReference<T>::value)
+		{
+			o->AddWeakReference(weakRef);
+		}
+		else
+		{
+			maxon::details::PrivateAddWeakReference(weakRef, o);
+		}
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -702,147 +740,31 @@ public:
 	//----------------------------------------------------------------------------------------
 	template <typename T> static Bool CreateStrongReference(const T* o)
 	{
-		return CreateStrongReferenceImpl(o, (typename HasAddReference<T>::type*) nullptr);
+		if constexpr (HasAddReference<T>::value)
+		{
+			return o->CreateStrongReference();
+		}
+		else
+		{
+			return maxon::details::PrivateGetReferenceCounter(o).ConditionalInc();
+		}
 	}
 
 	template <typename T> static StrongReferenceCounter& GetReferenceCounter(const T* o)
 	{
-		return GetReferenceCounterImpl(o, (typename HasAddReference<T>::type*) nullptr);
+		if constexpr (HasAddReference<T>::value)
+		{
+			return o->GetReferenceCounter();
+		}
+		else
+		{
+			return maxon::details::PrivateGetReferenceCounter(o);
+		}
 	}
 
 	template <typename R> static ResultRef<typename R::ReferencedType> MakeWritable(R& ref, Bool resetOnError) { return ref.GetPointer(); }
 
-	//----------------------------------------------------------------------------------------
-	/// Changes the target of the reference (removes it from the old target and adds it to the new one).
-	/// @param[in] o									Reference to the pointer to the old object.
-	/// @param[in] newTarget					Pointer to the new target object.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void ChangeTarget(T*& o, T* newTarget)
-	{
-		T* old = o;
-
-		if (newTarget)
-			AddReference(newTarget);
-
-		o = newTarget;
-
-		if (old)
-			RemoveReference(old);
-	}
-
-	//----------------------------------------------------------------------------------------
-	/// Changes the target of the reference to a yet unreferenced object.
-	/// @param[in] o									Reference to the pointer to the old object.
-	/// @param[in] newTarget					Pointer to a just allocated unreferenced target object.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void ChangeTarget(T*& o, ResultMemT<T*> newTarget)
-	{
-		T* old = o;
-		T* newPtr = newTarget.GetPointer();
-
-		if (MAXON_LIKELY(newPtr != nullptr))
-		{
-			DebugAssert(GetReferenceCounter(newPtr) == 0, "Only for freshly allocated objects, not already referenced objects.");
-			InitialReference(newPtr);
-		}
-
-		o = newPtr;
-
-		if (old)
-			RemoveReference(old);
-	}
-
-	//----------------------------------------------------------------------------------------
-	/// Moves a target from one BaseRef to another.
-	/// This is being called when a BaseRef is moved to another BaseRef using operator =(&&).
-	/// @param[in] srcReference				Reference to the source object pointer.
-	/// @param[in] dstReference				Reference to the destination object pointer.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void MoveTarget(T*& srcReference, T*& dstReference)
-	{
-		T* target = srcReference;
-		T* oldTarget = dstReference;
-
-		srcReference = nullptr;
-		dstReference = target;
-
-		// Remove reference to the old target of the destination.
-		if (oldTarget)
-			RemoveReference(oldTarget);
-	}
-
 	static constexpr VALUEKIND KIND = VALUEKIND::STRONG_REFERENCE | VALUEKIND::INT_SIZE_OR_LESS | VALUEKIND::ZERO_INITIALIZED | VALUEKIND::TRIVIALLY_EQUATABLE | VALUEKIND::TRIVIALLY_HASHABLE | VALUEKIND::REF_OR_POINTER;
-
-private:
-
-	template <typename T> static void InitialReferenceImpl(const T* obj, std::false_type*)
-	{
-		maxon::details::PrivateGetReferenceCounter(obj).SetRelaxed(1);
-	}
-
-	template <typename T> static void InitialReferenceImpl(const T* obj, std::true_type*)
-	{
-		obj->InitialReference();
-	}
-
-	template <typename T> static void AddReferenceImpl(const T* obj, std::false_type*)
-	{
-		maxon::details::PrivateGetReferenceCounter(obj).Inc();
-	}
-
-	template <typename T> static void AddReferenceImpl(const T* obj, std::true_type*)
-	{
-		obj->AddReference();
-	}
-
-	template <typename T> static MAXON_ATTRIBUTE_NO_INLINE void PrivateRemoveReferenceImpl(const T* obj)
-	{
-		maxon::details::PrivateFreeWithDestructor(obj);
-	}
-
-	template <typename T> static MAXON_ATTRIBUTE_FORCE_INLINE void RemoveReferenceImpl(const T* obj, std::false_type*)
-	{
-		if (MAXON_UNLIKELY(maxon::details::PrivateGetReferenceCounter(obj).Dec()))
-		{
-			PrivateRemoveReferenceImpl(obj);
-		}
-	}
-
-	template <typename T> static MAXON_ATTRIBUTE_FORCE_INLINE void RemoveReferenceImpl(const T* obj, std::true_type*)
-	{
-		obj->RemoveReference();
-	}
-
-	template <typename T> static Bool CreateStrongReferenceImpl(const T* obj, std::false_type*)
-	{
-		return maxon::details::PrivateGetReferenceCounter(obj).ConditionalInc();
-	}
-
-	template <typename T> static Bool CreateStrongReferenceImpl(const T* obj, std::true_type*)
-	{
-		return obj->CreateStrongReference();
-	}
-
-	template <typename T> static void AddWeakReferenceImpl(const T* obj, WeakRefBase& weakRef, std::false_type*)
-	{
-		maxon::details::PrivateAddWeakReference(weakRef, obj);
-	}
-
-	template <typename T> static void AddWeakReferenceImpl(const T* obj, WeakRefBase& weakRef, std::true_type*)
-	{
-		obj->AddWeakReference(weakRef);
-	}
-
-	template <typename T> static StrongReferenceCounter& GetReferenceCounterImpl(const T* obj, std::false_type*)
-	{
-		return maxon::details::PrivateGetReferenceCounter(obj);
-	}
-
-	template <typename T> static StrongReferenceCounter& GetReferenceCounterImpl(const T* obj, std::true_type*)
-	{
-		return obj->GetReferenceCounter();
-	}
-
 };
 
 
@@ -884,7 +806,7 @@ public:
 			else
 				o = NewObjCopy(T, *o).GetPointer();
 			if (MAXON_LIKELY(resetOnError || o))
-				ref.PrivateSetTarget(ResultPtr<typename R::ReferencedType>(o));
+				ref.PrivateSetTarget(o);
 			DebugAssert(!o || (GetReferenceCounter(o) == 1));
 			return o;
 		}
@@ -912,7 +834,7 @@ public:
 		using T = typename std::remove_const<typename R::ReferencedType>::type;
 		T* o = NewObj(T).GetPointer();
 		if (MAXON_LIKELY(o))
-			ref.PrivateSetTarget(ResultPtr<typename R::ReferencedType>(o));
+			ref.PrivateSetTarget(o);
 		DebugAssert(!o || (GetReferenceCounter(o) == 1));
 		return o;
 	}
@@ -945,7 +867,7 @@ public:
 		}
 
 		if (MAXON_LIKELY(o))
-			ref.PrivateSetTarget(ResultPtr<typename R::ReferencedType>(o));
+			ref.PrivateSetTarget(o);
 		DebugAssert(!o || (GetReferenceCounter(o) == 1));
 		return o;
 	}
@@ -995,31 +917,6 @@ public:
 	template <typename T> static void RemoveReference(const T* o);
 
 	template <typename T> static void AddWeakReference(const T* o, WeakRefBase& weakRef) { maxon::details::PrivateAddWeakReference(weakRef, o); }
-
-	template <typename T> static void ChangeTarget(T*& o, T* n)
-	{
-		T* old = o;
-
-		if (n)
-			AddReference(n);
-
-		o = n;
-
-		if (old)
-			RemoveReference(old);
-	}
-
-	template <typename T> static void ChangeTarget(T*& o, ResultPtr<T> newTarget)
-	{
-		return ChangeTarget(o, newTarget.GetPointer());
-	}
-
-	template <typename T> static void MoveTarget(T*& srcReference, T*& dstReference)
-	{
-		RemoveReference(dstReference);
-		dstReference = srcReference;
-		srcReference = nullptr;
-	}
 
 	template <typename R> static ResultRef<typename R::ReferencedType> MakeWritable(R& ref, Bool resetOnError) { return ref.GetPointer(); }
 };
@@ -1091,7 +988,18 @@ public:
 	BaseRef& operator =(T* src)
 	{
 		if (src != _mem)
-			H::ChangeTarget(*(RawMem<T>**)&_mem, (RawMem<T>*) src);
+		{
+			if (src)
+			{
+				H::AddReference((RawMem<T>*) src);
+			}
+			T* old = _mem;
+			_mem = src;
+			if (old)
+			{
+				H::RemoveReference((RawMem<T>*) old);
+			}
+		}
 		return *this;
 	}
 	BaseRef& operator =(std::nullptr_t src) { return this->operator =(static_cast<T*>(nullptr)); }

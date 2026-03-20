@@ -23,10 +23,10 @@ namespace cinema
 /// @addtogroup QUICKTAB_CUSTOMGUISETTINGS
 /// @ingroup CUSTOMGUISETTINGS
 /// @{
-#define QUICKTAB_BAR							C4D_FOUR_BYTE(0,'b','a','r')	///< ::Int32 Bar mode (0=off, 1=on, 2=non-bold, 3=special separator look). Set @formatConstant{true} for group title bars.
+#define QUICKTAB_BAR							C4D_FOUR_BYTE(0,'b','a','r')	///< ::Int32 Bar mode (0=off, 1=on, 2=non-bold, 3=special separator look, 4=special separator compact look, 5=same as 3 but without ident). Set @formatConstant{true} for group title bars.
 #define QUICKTAB_BARTITLE					'btit'			///< String Title for bar mode.
 #define QUICKTAB_SHOWSINGLE				'ssgl'			///< ::Bool Show single items.
-#define QUICKTAB_SPRINGINGFOLDERS	'sprn'			///< ::Bool Allow springing folders (activate quicktabs on drag and drop).
+#define QUICKTAB_SPRINGINGFOLDERS	'sprn'			///< ::Bool Allow springing folders (activate quicktabs on drag and drop). Default value is @formatConstant{true};
 #define QUICKTAB_SEPARATOR				'sepa'			///< ::Bool Draw separator.
 #define QUICKTAB_BARSUBGROUP			'subg'			///< ::Bool Handle as subgroup. Like bar mode, but with fold arrow icon. Implies @ref QUICKTAB_BAR. Call @link QuickTabCustomGui::IsSelected@endlink(0) to get fold state.
 #define QUICKTAB_BARLAYERCOLOR		'lycl'			///< ::Bool Show layer color.
@@ -34,7 +34,8 @@ namespace cinema
 #define QUICKTAB_BGCOLOR					'bgco'			///< ::Vector or ::Int32 Color RGB or ID.
 #define QUICKTAB_NOMULTISELECT		'noml'			///< ::Bool No multiple tab selection.
 #define QUICKTAB_ALTERNATIVECOLOR 'altc'			///< ::Int32 Use an alternative color (color ID from color preferences).
-#define QUICKTAB_LMB_LIKE_RMB		  'lmrm'			///< ::Bool If true, left mouse button click only changes the clicked tab state, the rest of selected/unselected tabs remain unchanged (so it behaves like right mouse button click). @since 2023.000
+#define QUICKTAB_LMB_LIKE_RMB		  'lmrm'			///< ::Bool If @formatConstant{true}, left mouse button click only changes the clicked tab state, the rest of selected/unselected tabs remain unchanged (so it behaves like right mouse button click). @since 2023.000
+#define QUICKTAB_INDENT_LEVEL		  'ilvl'			///< ::Int32 The depth level, e.g. 0, 1, 2... to indent the text. Requires @ref QUICKTAB_BAR set to 4 and @ref QUICKTAB_BARSUBGROUP set to true.
 
 /// @}
 

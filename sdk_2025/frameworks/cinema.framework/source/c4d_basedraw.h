@@ -221,6 +221,12 @@ public:
 	/// @return												The painter mesh.
 	//----------------------------------------------------------------------------------------
 	BaseObject* GetPainterMesh(Bool& enabled) const { return C4DOS_Br->GetPainterMesh(this, enabled); }
+
+	//----------------------------------------------------------------------------------------
+	/// Checks if the current object is drawn in renderinstance mode, i.e. one of the.
+	/// @return												@trueIfOtherwiseFalse{the current object is drawn in renderinstance mode}
+	//----------------------------------------------------------------------------------------
+	Bool IsRenderInstanceMode() const { return C4DOS_Br->BbIsRenderInstanceMode(this); }
 };
 
 
@@ -280,7 +286,7 @@ public:
 	/// @param[out] cr								Is assigned the first visible right pixel position.
 	/// @param[out] cb								Is assigned the first visible bottom pixel position.
 	//----------------------------------------------------------------------------------------
-	void GetFrame(Int32* cl, Int32* ct, Int32* cr, Int32* cb);
+	void GetFrame(Int32* cl, Int32* ct, Int32* cr, Int32* cb) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Assigns the dimension in pixels of the safe frame (the frame which is rendered) to the passed pointers. The coordinates are relative to the upper left corner of the view.
@@ -289,7 +295,7 @@ public:
 	/// @param[out] cr								Is assigned the first visible right pixel position.
 	/// @param[out] cb								Is assigned the first visible bottom pixel position.
 	//----------------------------------------------------------------------------------------
-	void GetSafeFrame(Int32* cl, Int32* ct, Int32* cr, Int32* cb);
+	void GetSafeFrame(Int32* cl, Int32* ct, Int32* cr, Int32* cb) const;
 
 	/// @}
 
@@ -763,9 +769,10 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Convenience method to get parameters.\n
+	/// Calling this function should be avoided if possible, since it creates a temporary DescID object. Use GetParameter with a ConstDescID instead.
 	/// Here is his simple implementation:
 	/// @code
-	/// GeData BaseDraw::GetParameterData(Int32 id)
+	/// GeData BaseDraw::GetParameterData(Int32 id) const
 	/// {
 	/// 	GeData t_data;
 	/// 	BaseList2D::GetParameter(DescLevel(id), t_data, DESCFLAGS_GET::NONE);
@@ -775,7 +782,14 @@ public:
 	/// @param[in] id									A parameter ID. See @em dbasedraw.h description file.
 	/// @return												The parameter data for @formatParam{id}.
 	//----------------------------------------------------------------------------------------
-	GeData GetParameterData(Int32 id);
+	GeData GetParameterData(Int32 id) const;
+
+	//----------------------------------------------------------------------------------------
+	/// Gets a parameer of a BaseDraw.
+	/// @param[in] id									A parameter ID. See @em dbasedraw.h description file.
+	/// @return												The parameter data for @formatParam{id}.
+	//----------------------------------------------------------------------------------------
+	GeData GetParameterData(const DescID& id) const;
 
 	/// @}
 
@@ -814,14 +828,14 @@ public:
 	/// @param[in] doc								The document to get the scene camera from. @callerOwnsPointed{document}
 	/// @return												The scene camera, or @formatConstant{nullptr} if no scene camera is used.
 	//----------------------------------------------------------------------------------------
-	const BaseObject* GetSceneCamera(const BaseDocument* doc) { return C4DOS_Br->GetSceneCamera(this, doc); }
+	const BaseObject* GetSceneCamera(const BaseDocument* doc) const { return C4DOS_Br->GetSceneCamera(this, doc); }
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the current scene camera from the passed document.
 	/// @param[in] doc								The document to get the scene camera from. @callerOwnsPointed{document}
 	/// @return												The scene camera, or @formatConstant{nullptr} if no scene camera is used.
 	//----------------------------------------------------------------------------------------
-	BaseObject* GetSceneCamera(BaseDocument* doc) { return const_cast<BaseObject*>(C4DOS_Br->GetSceneCamera(this, doc)); }
+	BaseObject* GetSceneCamera(BaseDocument* doc) const { return const_cast<BaseObject*>(C4DOS_Br->GetSceneCamera(this, doc)); }
 
 	//----------------------------------------------------------------------------------------
 	/// Sets a new scene camera. If @formatParam{op} is @formatConstant{nullptr}, the editor camera is used.
@@ -871,14 +885,14 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Check if there will be a pyro preview drawn
 	/// @since 2023.200
-	/// @return												True if there is at least one Pyro preview being drawn
+	/// @return												True if there is at least one Pyro preview being drawn.
 	//----------------------------------------------------------------------------------------
 	Bool DrawsPyro() const { return C4DOS_Br->DrawsPyro(this); }
 
 	//----------------------------------------------------------------------------------------
 	/// Check if there will be a shaded volume object drawn
 	/// @since 2023.200
-	/// @return												True if there is at least one shaded volume object being drawn
+	/// @return												True if there is at least one shaded volume object being drawn.
 	//----------------------------------------------------------------------------------------
 	Bool DrawsVolume() const { return C4DOS_Br->DrawsVolume(this); }
 
@@ -928,6 +942,12 @@ public:
 	/// @markPrivate
 	//----------------------------------------------------------------------------------------
 	void InitLegacyDrawport() { C4DOS_Br->InitLegacyDrawport(this); }
+
+	//----------------------------------------------------------------------------------------
+	/// Initializes for Redshift drawing.
+	/// @markPrivate
+	//----------------------------------------------------------------------------------------
+	void InitRedshiftDraw() { C4DOS_Br->InitRedshiftDraw(this); }
 
 	//----------------------------------------------------------------------------------------
 	/// @markPrivate
@@ -1286,7 +1306,7 @@ public:
 	/// @param[in] op									BaseObject used to extract the bounding box.
 	/// @param[in] mg									Global Matrix for the BoundingBox (may differ from op)
 	/// @param[in] bh									The base draw help. @callerOwnsPointed{base draw help}.
-	/// @param[in] shading						If @formatConstant{true} the shader is applied
+	/// @param[in] shading						If @formatConstant{true} the shader is applied.
 	/// @param[in] colorOverride			Use specified color. If null, object color is used.
 	//----------------------------------------------------------------------------------------
 	void DrawBoundingBox(BaseObject* op, const Matrix& mg, BaseDrawHelp* bh, Bool shading, Vector* colorOverride = nullptr) { C4DOS_Br->DrawBoundingBox(*this, op, mg, bh, shading, colorOverride); }
@@ -1347,8 +1367,8 @@ public:
 	//----------------------------------------------------------------------------------------
 	DRAWRESULT DrawObject(BaseDrawHelp* bh, BaseObject* op, DRAWOBJECT flags, DRAWPASS drawpass, BaseObject* parent = nullptr, const Vector& col = Vector(.5)) { return C4DOS_Br->DrawPObject(this, bh, op, flags | DRAWOBJECT::PRIVATE_ANY, drawpass, parent, col); }
 
-	void DrawAnimationPath(BaseDocument *doc, BaseObject *op, const Matrix &upmg, Bool showActivation, Bool global, DRAWPASS drawpass, const BaseDrawHelp *bh) { C4DOS_Br->DrawAnimationPath(this, doc, op, upmg, showActivation, global, drawpass, bh); }
-	void DrawBoxEdges(BaseDocument *doc, BaseObject *op, const Matrix &mg, Bool inversez, Bool inherit, Int32 vis, Bool child) { C4DOS_Br->DrawBoxEdges(this, doc, op, mg, inversez, inherit, vis, child); }
+	void DrawAnimationPath(const BaseDocument *doc, BaseObject *op, const Matrix &upmg, Bool showActivation, Bool global, DRAWPASS drawpass, const BaseDrawHelp *bh) { C4DOS_Br->DrawAnimationPath(this, doc, op, upmg, showActivation, global, drawpass, bh); }
+	void DrawBoxEdges(const BaseDocument *doc, BaseObject *op, const Matrix &mg, Bool inversez, Bool inherit, Int32 vis, Bool child) { C4DOS_Br->DrawBoxEdges(this, doc, op, mg, inversez, inherit, vis, child); }
 
 	//----------------------------------------------------------------------------------------
 	/// @markPrivate
@@ -1640,7 +1660,7 @@ public:
 	/// This is a bit field derived from the edit state description flags in @em dbasedraw.res. To set the display filter you have to use the description flags with @link C4DAtom::SetParameter() SetParameter()@endlink.
 	/// @return												The edit state: @enumerateEnum{DISPLAYEDITSTATE}
 	//----------------------------------------------------------------------------------------
-	DISPLAYEDITSTATE GetEditState() { return C4DOS_Br->GetEditState(this); }
+	DISPLAYEDITSTATE GetEditState() const { return C4DOS_Br->GetEditState(this); }
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the EditorWindow for this base draw.
@@ -1812,10 +1832,7 @@ public:
 	/// Gets the underlying drawport context.
 	/// @param[out] context						The context.
 	//----------------------------------------------------------------------------------------
-	void GetDrawportContext(maxon::DrawportContextRef& context) const
-	{
-		C4DOS_Br->GetDrawportContext(this, context);
-	}
+	void GetDrawportContext(maxon::DrawportContextRef& context) const { C4DOS_Br->GetDrawportContext(this, context); }
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the color framebuffer.
@@ -1825,8 +1842,8 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Renders the viewport to a 32 bit ImageRef without post effects.
-	/// @param[in] image					The image to write to.
-	/// @param[in] colorProfile		Use this to force a color profile on the returned image. Defaults to current render space if passing an empty profile.
+	/// @param[in] image							The image to write to.
+	/// @param[in] colorProfile				Use this to force a color profile on the returned image. Defaults to current render space if passing an empty profile.
 	//----------------------------------------------------------------------------------------
 	void RenderViewportWithoutPostEffects(maxon::ImageRef& image, const maxon::ColorProfile& colorProfile) const { C4DOS_Br->RenderViewportWithoutPostEffects(this, image, colorProfile); }
 
@@ -1835,6 +1852,13 @@ public:
 	/// @return												Colorspace index.
 	//----------------------------------------------------------------------------------------
 	static Int32 GetColorSpaceFromDocumentIndex() { return C4DOS_Br->GetColorSpaceFromDocumentIndex(); }
+
+	//----------------------------------------------------------------------------------------
+	/// Deletes all viewport textures.
+	/// @param[in] doc								The document to iterate.
+	/// @param[in] mat								If mat is nullptr, all viewport textures of all materials are deleted, otherwise only the specified material.
+	//----------------------------------------------------------------------------------------
+	static void DeleteAllViewportTextures(BaseDocument* doc, BaseMaterial* mat) { C4DOS_Br->DeleteAllViewportTextures(doc, mat); }
 };
 
 
@@ -2194,6 +2218,21 @@ public:
 	//----------------------------------------------------------------------------------------
 	Bool GetCameraCoordinates(Float x, Float y, Float z, Vector& v) const;
 
+	//----------------------------------------------------------------------------------------
+	/// @brief Picks the material at the given pixel coordinates.
+	/// @note Polygon selections, generators and instances are supported. If the object under the mouse
+	/// has no material, the function will try to deduce it from his parent objects.
+	/// @param[in] bd									The viewport base draw. @callerOwnsPointed{base draw}
+	/// @param[in] doc								The document. @callerOwnsPointed{document}
+	/// @param[in] x									The X position of the picking circle within the viewport.
+	/// @param[in] y									The Y position of the picking circle within the viewport.
+	/// @param[in] radius							The radius in pixels for the search.
+	/// @param[out] pickedMaterial		The picked material, nullptr in case of default material.
+	/// @param[out] pickedObject			The top picked object, doesn't mean it has the pickedMaterial attached, the function
+	/// 															can iterate on his hierarchy children or parents to found the material at that pixel.
+	/// @return												@trueIfOtherwiseFalse{the object picking succeeded even if no material was found}
+	//----------------------------------------------------------------------------------------
+	static Bool PickMaterial(BaseDraw* bd, BaseDocument* doc, Int32 x, Int32 y, Int32 radius, BaseMaterial*& pickedMaterial, BaseObject*& pickedObject);
 	/// @}
 };
 

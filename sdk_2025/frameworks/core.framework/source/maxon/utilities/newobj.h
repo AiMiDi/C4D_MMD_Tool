@@ -13,7 +13,12 @@ class DefaultAllocator;
 namespace details
 {
 
-template <typename T> void PrivateFreeWithDestructor(const T* obj);
+// This function is called by DeleteObj and similar functions.
+// The default implementation in system.h calls System::PrivateFreeWithDestructor.
+// You can overload the function for types which need special handling for DeleteObj,
+// the overloads will be found using argument-dependent lookup.
+template <typename T> inline void PrivateFreeWithDestructor(const T* obj, OverloadRank0);
+
 Bool PrivateClearAllWeakReferences(const void* obj);
 
 template <Bool IS_DELETABLE> class ForwardFree
@@ -26,7 +31,7 @@ template <> class ForwardFree<true>
 {
 public:
 	// Call System::FreeWithDestructor to destruct the object and release memory.
-	template <typename T> static void FreeWithDestructor(T* o) { PrivateFreeWithDestructor(o); }
+	template <typename T> static void FreeWithDestructor(T* o) { PrivateFreeWithDestructor(o, OVERLOAD_MAX_RANK); }
 };
 
 template <typename T> class NewDelete
@@ -155,29 +160,31 @@ template <typename T, typename... ARGS> inline ResultPtr<T> NewObjT(ARGS&&... ar
 /// THREADSAFE.
 /// @param[in,out] obj						Object pointer (can be nullptr, will be nullptr after return)
 //----------------------------------------------------------------------------------------
-// originally we used auto*& objectToDelete, but that doesn't work as the Intel Compiler has a bug that shows lots of warnings and MSVC has a bug where it doesn't link anymore
 #define DeleteObj(obj) \
 	do { \
 		typename std::remove_reference<decltype(obj)>::type& objectToDelete = obj; \
 		if (objectToDelete) \
 		{ \
-			using NewDeleteType = maxon::details::NewDelete<std::remove_pointer_t<std::remove_reference_t<decltype(objectToDelete)>>>; \
-			using CtorType = typename NewDeleteType::ConstructorType; \
-			if constexpr (STD_IS_REPLACEMENT(destructible, CtorType)) \
-			{ \
-				NewDeleteType::AllocType::Free(objectToDelete); \
-			} \
-			else \
-			{ \
-				if (maxon::details::PrivateClearAllWeakReferences(objectToDelete)) \
-				{ \
-					reinterpret_cast<CtorType*>(MAXON_REMOVE_CONST(objectToDelete))->~CtorType(); \
-					NewDeleteType::AllocatorType::Free(objectToDelete); \
-				} \
-			} \
+			PrivateDeleteObj(objectToDelete); \
 			objectToDelete = nullptr; \
 		} \
 	} while (false) // while ensures that the user needs to set a semicolon after DeleteObj
+
+#define PrivateDeleteObj(objectToDelete) \
+	using NewDeleteType = maxon::details::NewDelete<std::remove_pointer_t<std::remove_reference_t<decltype(objectToDelete)>>>; \
+	using CtorType = typename NewDeleteType::ConstructorType; \
+	if constexpr (STD_IS_REPLACEMENT(destructible, CtorType)) \
+	{ \
+		NewDeleteType::AllocType::Free(objectToDelete); \
+	} \
+			else /* happens when destructor isn't public and current context is a friend */ \
+	{ \
+		if (maxon::details::PrivateClearAllWeakReferences(objectToDelete)) \
+		{ \
+			reinterpret_cast<CtorType*>(MAXON_REMOVE_CONST(objectToDelete))->~CtorType(); \
+			NewDeleteType::AllocatorType::Free(objectToDelete); \
+		} \
+	}
 
 //----------------------------------------------------------------------------------------
 /// Deletes an object. This calls the destructor and frees memory afterwards.

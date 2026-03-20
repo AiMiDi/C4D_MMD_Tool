@@ -92,6 +92,17 @@ public:
 	{
 		return HalfFloat((Float32)*this * (Float32)other);
 	}
+
+	MAXON_ATTRIBUTE_FORCE_INLINE HalfFloat operator*(Float32 other)
+	{
+		return HalfFloat((Float32)*this * other);
+	}
+
+	MAXON_ATTRIBUTE_FORCE_INLINE HalfFloat operator*=(Float32 other)
+	{
+		*this = *this * other;
+		return *this;
+	}
 	
 	MAXON_ATTRIBUTE_FORCE_INLINE HalfFloat operator/(const HalfFloat& other)
 	{

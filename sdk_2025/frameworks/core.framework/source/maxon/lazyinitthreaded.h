@@ -110,7 +110,7 @@ public:
 	/// THREADSAFE.
 	/// @param[in] fn									Method (usually a lambda) to initialize something, must return Result<void>.
 	/// @param[in] options						OPTIONS::FORWARD_CANCELLATION by default.
-	/// @return												True/OK if initialization was successful or object has already been initialized, otherwise result of
+	/// @return												True/OK if initialization was successful or object has already been initialized, otherwise result of.
 	/// failed initialization.
 	//----------------------------------------------------------------------------------------
 	template <typename FN> MAXON_ATTRIBUTE_FORCE_INLINE auto Init(FN&& fn, OPTIONS options = OPTIONS::DEFAULT) -> decltype(fn())
@@ -150,9 +150,9 @@ public:
 						if ((options & OPTIONS::NO_EXCLUSIVE_RESOURCE) == OPTIONS::NONE)
 							ThreadServices::ThreadedExclusiveResource(-1, previousResource);
 
-						// Delete reference from the cancellation forwarder.
-						if (cancellationObserver)
-							cancellationObserver->DestinationHasFinishedNotification();
+						// Remove cancellation observer from the caller job.
+						if (cancellationObserver && callerJob)
+							callerJob->ObservableCancelled().RemoveObserver(cancellationObserver) iferr_cannot_fail("The observable and the caller job must be valid");
 
 						return fnResult;
 					};
@@ -351,7 +351,7 @@ private:
 		}
 		Result<void> operator()()
 		{
-			// Forward the cancellation to the destination job and removed its reference.
+			// Forward the cancellation to the destination job and remove its reference (to break a reference cycle).
 			JobRef job = _destinationJob;
 			_destinationJob = nullptr;
 			job.Cancel();
@@ -359,13 +359,8 @@ private:
 			return OK;
 		}
 
-		void DestinationHasFinishedNotification()
-		{
-			_destinationJob = nullptr;
-		}
-
 	private:
-		ThreadSafeRef<JobRef> _destinationJob;
+		JobRef _destinationJob;
 	};
 
 private:

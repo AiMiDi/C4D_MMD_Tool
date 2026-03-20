@@ -200,7 +200,7 @@ void C4D_Falloff::SetTime(BaseTime time)
 	(reinterpret_cast<iC4D_Falloff*>(this)->*(flib->SetTime))(time);
 }
 
-Bool C4D_Falloff::InitFalloff(BaseDocument* doc, BaseObject* op)
+Bool C4D_Falloff::InitFalloff(const BaseDocument* doc, const BaseObject* op)
 {
 	FalloffControlLib* flib = CheckFalloffLib(LIBOFFSET(FalloffControlLib, InitFalloff));
 	if (!flib || !flib->InitFalloff)

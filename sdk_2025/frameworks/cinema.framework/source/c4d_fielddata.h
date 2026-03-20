@@ -169,7 +169,7 @@ struct FieldOutput
 	void Flush();
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the number of elements in the FieldOutput
+	/// Gets the number of elements in the FieldOutput.
 	/// @return												The count.
 	//----------------------------------------------------------------------------------------
 	inline Int GetCount() const { return _count; }
@@ -232,7 +232,7 @@ struct FieldOutput
 	/// Reset the sample's data to default values, optionally only the deactivated content too. Values are
 	/// reset to 0, colors to 1.0, direction to 0, deactivated to 0.
 	/// @param[in] deactivatedOnly		True to deactivated only.
-	/// @param[in] deactivatedState		(Optional) The state the deactivated should be cleared to
+	/// @param[in] deactivatedState		(Optional) The state the deactivated should be cleared to.
 	//----------------------------------------------------------------------------------------
 	void ClearMemory(Bool deactivatedOnly = true, Bool deactivatedState = false);
 
@@ -242,7 +242,7 @@ struct FieldOutput
 	/// @param[in] startIdx						Array clear start index.
 	/// @param[in] count							Number of array items to reset to default value.
 	/// @param[in] deactivatedOnly		True to deactivated only.
-	/// @param[in] deactivatedState		(Optional) The state the deactivated should be cleared to
+	/// @param[in] deactivatedState		(Optional) The state the deactivated should be cleared to.
 	//----------------------------------------------------------------------------------------
 	void ClearMemory(Int startIdx, Int count, Bool deactivatedOnly, Bool deactivatedState);
 
@@ -399,7 +399,7 @@ template <Bool CONSTBLOCK> struct FieldOutputBlockTemplate
 	/// Reset the sample's data to default values, optionally only the deactivated content too. Values are
 	/// reset to 0, colors to 1.0, direction to 0, deactivated to 0.
 	/// @param[in] deactivatedOnly		True to deactivated only.
-	/// @param[in] deactivatedState		(Optional) The state the deactivated should be cleared to
+	/// @param[in] deactivatedState		(Optional) The state the deactivated should be cleared to.
 	//----------------------------------------------------------------------------------------
 	void ClearMemory(Bool deactivatedOnly = true, Bool deactivatedState = false);
 
@@ -409,7 +409,7 @@ template <Bool CONSTBLOCK> struct FieldOutputBlockTemplate
 	/// @param[in] startIdx						Array clear start index.
 	/// @param[in] count							Number of array items to reset to default value.
 	/// @param[in] deactivatedOnly		True to deactivated only.
-	/// @param[in] deactivatedState		(Optional) The state the deactivated should be cleared to
+	/// @param[in] deactivatedState		(Optional) The state the deactivated should be cleared to.
 	//----------------------------------------------------------------------------------------
 	void ClearMemory(Int startIdx, Int count, Bool deactivatedOnly, Bool deactivatedState);
 
@@ -475,7 +475,7 @@ public:
 	FieldInput() = default;
 
 	//----------------------------------------------------------------------------------------
-	/// Constructor with single position value
+	/// Constructor with single position value.
 	/// @param[in] pos								The position.
 	/// @param[in] transform					(Optional) The transform matrix required to convert the position and direction inputs to global space.
 	//----------------------------------------------------------------------------------------
@@ -497,7 +497,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Constructor with single position and direction
+	/// Constructor with single position and direction.
 	/// @param[in] pos								The position.
 	/// @param[in] dir								The direction that the sample is facing in space.
 	/// @param[in] transform					(Optional) The transform matrix required to convert the position and direction inputs to global space.
@@ -521,7 +521,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Constructor with single position, direction and UVW entry
+	/// Constructor with single position, direction and UVW entry.
 	/// @param[in] pos								The position array to sample.
 	/// @param[in] dir								The direction array to sample.
 	/// @param[in] uvw								The uvw array to sample.
@@ -594,7 +594,7 @@ public:
 	FieldInput(const FieldInput& src) : MAXON_COPY_MEMBERS(_position, _direction, _uvw, _uniqueId, _blockCount, _blockOffset, _fullArraySize, _transform, _allocatedArraySize) { }
 
 	//----------------------------------------------------------------------------------------
-	/// Move constructor
+	/// Move constructor.
 	/// @param[in] src								Move source.
 	//----------------------------------------------------------------------------------------
 	FieldInput(FieldInput&& src) : MAXON_MOVE_MEMBERS(_position, _direction, _uvw, _uniqueId, _blockCount, _blockOffset, _fullArraySize, _transform, _allocatedArraySize) { }
@@ -619,7 +619,7 @@ public:
 	FieldInput GetSubBlock(Int offset, Int blockSize = FIELD_EXECUTION_BLOCK_SIZE) const;
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the number of elements in the FieldInput
+	/// Gets the number of elements in the FieldInput.
 	/// @return												The count.
 	//----------------------------------------------------------------------------------------
 	inline Int GetCount() const { return _blockCount; }
@@ -828,7 +828,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Adds a the object or it's cache parent parent to the stack if the object has a cache along with all object uniqueIP's to maintain a better path to the object.
-	/// @param[in] caller					The caller object or caller cache source to add to the stack ID.
+	/// @param[in] caller							The caller object or caller cache source to add to the stack ID.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> AddOrAddCacheParentObject(const BaseObject* caller);
@@ -1098,37 +1098,37 @@ class FieldLayer : public BaseList2D
 
 public:
 	//----------------------------------------------------------------------------------------
-	/// Gets the parent FieldLayer in the FieldList
-	/// @return												nullptr if there is no parent, else the parent.
+	/// Gets the parent FieldLayer in the FieldList.
+	/// @return												Nullptr if there is no parent, else the parent.
 	//----------------------------------------------------------------------------------------
 	FieldLayer* GetUp() const { return FLCall (GetUp)(); }
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the first child of the FieldLayer in the FieldList
-	/// @return												nullptr if there are no children, else the first child.
+	/// Gets the first child of the FieldLayer in the FieldList.
+	/// @return												Nullptr if there are no children, else the first child.
 	//----------------------------------------------------------------------------------------
 	FieldLayer* GetDown() const { return FLCall (GetDown)(); }
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the next FieldLayer in the FieldList
-	/// @return												nullptr if this is the final FieldLayer at the current level, otherwise the next sibling.
+	/// Gets the next FieldLayer in the FieldList.
+	/// @return												Nullptr if this is the final FieldLayer at the current level, otherwise the next sibling.
 	//----------------------------------------------------------------------------------------
 	FieldLayer* GetNext() const { return FLCall (GetNext)(); }
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the previous FieldLayer in the FieldList
-	/// @return												nullptr if this is the first FieldLayer at the current level, otherwise the previous sibling.
+	/// Gets the previous FieldLayer in the FieldList.
+	/// @return												Nullptr if this is the first FieldLayer at the current level, otherwise the previous sibling.
 	//----------------------------------------------------------------------------------------
 	FieldLayer* GetPred() const { return FLCall (GetPred)(); }
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the last child of the FieldLayer in the FieldList
-	/// @return												nullptr if there are no children, else the last child.
+	/// Gets the last child of the FieldLayer in the FieldList.
+	/// @return												Nullptr if there are no children, else the last child.
 	//----------------------------------------------------------------------------------------
 	FieldLayer* GetDownLast() const { return FLCall (GetDownLast)(); }
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the FieldLayer's strength in the FieldList
+	/// Gets the FieldLayer's strength in the FieldList.
 	/// @return												The strength in percent.
 	//----------------------------------------------------------------------------------------
 	Float GetStrength() const { return FLCall (GetStrength)(); }
@@ -1140,13 +1140,13 @@ public:
 	void SetStrength(Float strength) { FLCall (SetStrength)(strength); }
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the FieldLayers blending mode in the FieldList
+	/// Gets the FieldLayers blending mode in the FieldList.
 	/// @return												The blending mode, see Flbase.h/res.
 	//----------------------------------------------------------------------------------------
 	Int32 GetBlendingMode() const { return FLCall (GetBlendingMode)(); }
 
 	//----------------------------------------------------------------------------------------
-	/// Sets FieldLayer's blending mode
+	/// Sets FieldLayer's blending mode.
 	/// @param[in] blendingMode				The blending mode, see FLbase.h/res.
 	//----------------------------------------------------------------------------------------
 	void SetBlendingMode(Int32 blendingMode) { FLCall (SetBlendingMode)(blendingMode); }
@@ -1163,19 +1163,19 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the enable state flags for the layers channel, e.g. the overall on/off (enable) or value, color
-	/// and slope states
+	/// and slope states.
 	/// @return												The channel flags for the layer see FIELDLAYER_CHANNELFLAG.
 	//----------------------------------------------------------------------------------------
 	FIELDLAYER_CHANNELFLAG GetChannelFlags() const { return FLCall (GetChannelFlags)(); }
 
 	//----------------------------------------------------------------------------------------
-	/// Sets channel flags to the passed FIELDLAYER_CHANNELFLAG value
+	/// Sets channel flags to the passed FIELDLAYER_CHANNELFLAG value.
 	/// @param[in] flags							The flags state to be set for this layer.
 	//----------------------------------------------------------------------------------------
 	void SetChannelFlags(FIELDLAYER_CHANNELFLAG flags) { FLCall (SetChannelFlags)(flags); }
 
 	//----------------------------------------------------------------------------------------
-	/// Gets a specific channel enabling state flag for the layer. e.g. the enable, value, color or slope states
+	/// Gets a specific channel enabling state flag for the layer. e.g. the enable, value, color or slope states.
 	/// @param[in] flag								The flag to retrieve.
 	/// @return												True if the flag is set, False if it is clear.
 	//----------------------------------------------------------------------------------------
@@ -1183,7 +1183,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Sets a specific channel flag state for the layer, e.g. the overall enabling, value, color or slope
-	/// states
+	/// states.
 	/// @param[in] flag								The flag to set or clear.
 	/// @param[in] state							(Optional) True to set the state to on, False to disable (clear) the flag for the layer.
 	//----------------------------------------------------------------------------------------
@@ -1245,7 +1245,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// If the FieldLayer links to another object in scene this function should return that object.
-	/// This is used for it's GUI and to check dirtiness within the FieldList
+	/// This is used for it's GUI and to check dirtiness within the FieldList.
 	/// @param[in] doc								The document the FieldLayer belongs to.
 	/// @return												The linked object and potentially secondary data in a FieldLayerLink structure.
 	//----------------------------------------------------------------------------------------
@@ -1253,7 +1253,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// If the FieldLayer accepts a linked object then this function sets that object. This is used
-	/// for it's GUI and to check the dirtiness within the FieldList
+	/// for it's GUI and to check the dirtiness within the FieldList.
 	/// @param[in] link								A populated FieldLayerLink.
 	/// @return												True if it succeeds, false if it fails.
 	//----------------------------------------------------------------------------------------
@@ -1293,7 +1293,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Removes the mask on the FieldLayer, if no mask exists then this will do nothing.
-	/// @param[in]	deleteLayers			true to delete the layers in the mask, false to retain them so that when enabled again via AddMask the layers will reappear.
+	/// @param[in] deleteLayers				True to delete the layers in the mask, false to retain them so that when enabled again via AddMask the layers will reappear.
 	//----------------------------------------------------------------------------------------
 	void RemoveMask(Bool deleteLayers = true) { FLCall (RemoveMask)(deleteLayers); }
 

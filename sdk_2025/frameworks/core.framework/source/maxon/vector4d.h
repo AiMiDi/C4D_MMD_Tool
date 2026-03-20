@@ -108,11 +108,11 @@ namespace ColorTable
 
 //----------------------------------------------------------------------------------------
 /// Converts RGBA UInt [0, 255] values to a ColorA.
-/// @param[in] r          Red value.
-/// @param[in] g          Green value
-/// @param[in] b          Blue value.
-/// @param[in] a          Alpha value.
-/// @return               Converted ColorA.
+/// @param[in] r									Red value.
+/// @param[in] g									Green value.
+/// @param[in] b									Blue value.
+/// @param[in] a									Alpha value.
+/// @return												Converted ColorA.
 //----------------------------------------------------------------------------------------
 constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA IntToColor(UInt r, UInt g, UInt b, UInt a)
 {
@@ -121,10 +121,10 @@ constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA IntToColor(UInt r, UInt g, UInt b,
 
 //----------------------------------------------------------------------------------------
 /// Converts RGB UInt [0, 255] values to a ColorA.
-/// @param[in] r          Red value.
-/// @param[in] g          Green value
-/// @param[in] b          Blue value.
-/// @return               Converted ColorA.
+/// @param[in] r									Red value.
+/// @param[in] g									Green value.
+/// @param[in] b									Blue value.
+/// @return												Converted ColorA.
 //----------------------------------------------------------------------------------------
 constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA IntToColor(UInt r, UInt g, UInt b)
 {
@@ -133,11 +133,11 @@ constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA IntToColor(UInt r, UInt g, UInt b)
 
 //----------------------------------------------------------------------------------------
 /// Converts RGBA Float [0.0, 1.0] values to a ColorA.
-/// @param[in] r          Red value.
-/// @param[in] g          Green value
-/// @param[in] b          Blue value.
-/// @param[in] a          Alpha value.
-/// @return               Converted ColorA.
+/// @param[in] r									Red value.
+/// @param[in] g									Green value.
+/// @param[in] b									Blue value.
+/// @param[in] a									Alpha value.
+/// @return												Converted ColorA.
 //----------------------------------------------------------------------------------------
 constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA FloatToColor(Float r, Float g, Float b, Float a)
 {
@@ -146,10 +146,10 @@ constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA FloatToColor(Float r, Float g, Flo
 
 //----------------------------------------------------------------------------------------
 /// Converts RGB Float [0.0, 1.0] values to a ColorA.
-/// @param[in] r          Red value.
-/// @param[in] g          Green value
-/// @param[in] b          Blue value.
-/// @return               Converted ColorA.
+/// @param[in] r									Red value.
+/// @param[in] g									Green value.
+/// @param[in] b									Blue value.
+/// @return												Converted ColorA.
 //----------------------------------------------------------------------------------------
 constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA FloatToColor(Float r, Float g, Float b)
 {
@@ -158,9 +158,9 @@ constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA FloatToColor(Float r, Float g, Flo
 
 //----------------------------------------------------------------------------------------
 /// Sets the alpha value of a ColorA.
-/// @param[in] col        Given ColorA.
-/// @param[in] alpha      Alpha value.
-/// @return               Converted ColorA.
+/// @param[in] col								Given ColorA.
+/// @param[in] alpha							Alpha value.
+/// @return												Converted ColorA.
 //----------------------------------------------------------------------------------------
 constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA ColorSetAlpha(const ColorA& col, Float alpha)
 {
@@ -169,9 +169,9 @@ constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA ColorSetAlpha(const ColorA& col, F
 
 //----------------------------------------------------------------------------------------
 /// Multiplies a ColorA with an alpha value.
-/// @param[in] col        Given ColorA.
-/// @param[in] alpha      Multiply alpha value.
-/// @return               Converted ColorA.
+/// @param[in] col								Given ColorA.
+/// @param[in] alpha							Multiply alpha value.
+/// @return												Converted ColorA.
 //----------------------------------------------------------------------------------------
 constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA ColorMultiplyAlpha(const ColorA& col, Float alpha)
 {
@@ -180,10 +180,10 @@ constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA ColorMultiplyAlpha(const ColorA& c
 
 //----------------------------------------------------------------------------------------
 /// Blends two colors based on an alpha factor.
-/// @param[in] col1				First color.
-/// @param[in] col2				Second color.
-/// @param[in] alpha			Alpha blending factor. Valid range goes from 0.0 (Col1) to 1.0 (Col2).
-/// @return								Blended color.
+/// @param[in] col1								First color.
+/// @param[in] col2								Second color.
+/// @param[in] alpha							Alpha blending factor. Valid range goes from 0.0 (Col1) to 1.0 (Col2).
+/// @return												Blended color.
 //----------------------------------------------------------------------------------------
 constexpr MAXON_ATTRIBUTE_FORCE_INLINE Color BlendColors(const Color& col1, const Color& col2, Float alpha)
 {
@@ -192,10 +192,10 @@ constexpr MAXON_ATTRIBUTE_FORCE_INLINE Color BlendColors(const Color& col1, cons
 
 //----------------------------------------------------------------------------------------
 /// Blends two colors based on an alpha factor. Note: only RGB values are used, color alpha values are ignored.
-/// @param[in] col1				First color. Alpha is ignored.
-/// @param[in] col2				Second color. Alpha is ignored.
-/// @param[in] alpha			Alpha blending factor. Valid range goes from 0.0 (Col1) to 1.0 (Col2).
-/// @return								Blended color with an alpha value of 1.0.
+/// @param[in] col1								First color. Alpha is ignored.
+/// @param[in] col2								Second color. Alpha is ignored.
+/// @param[in] alpha							Alpha blending factor. Valid range goes from 0.0 (Col1) to 1.0 (Col2).
+/// @return												Blended color with an alpha value of 1.0.
 //----------------------------------------------------------------------------------------
 constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA BlendColors(const ColorA& col1, const ColorA& col2, Float alpha)
 {
@@ -204,10 +204,10 @@ constexpr MAXON_ATTRIBUTE_FORCE_INLINE ColorA BlendColors(const ColorA& col1, co
 
 //----------------------------------------------------------------------------------------
 /// Blend linear between two CanvasColors.
-/// @param[in] col1       First ColorA.
-/// @param[in] col2       Second ColorA.
-/// @param[in] blendValue Blend value [0.0, 1.0].
-/// @return               Blended ColorA value
+/// @param[in] col1								First ColorA.
+/// @param[in] col2								Second ColorA.
+/// @param[in] blendValue					Blend value [0.0, 1.0].
+/// @return												Blended ColorA value.
 //----------------------------------------------------------------------------------------
 template <typename COLORTYPE> constexpr MAXON_ATTRIBUTE_FORCE_INLINE COLORTYPE BlendColor(const COLORTYPE& col1, const COLORTYPE& col2, const typename COLORTYPE::ValueType blendValue)
 {
@@ -223,8 +223,8 @@ static const Float PERCEIVED_BRIGHTNESS_CUTOFF       = 0.5098; // Cutoff value f
 //----------------------------------------------------------------------------------------
 /// Gets the perceived brightness from the color.
 /// Source: http://stackoverflow.com/a/596243/1577282
-/// @param[in] color              The color whose perceived brightness will be calculated.
-/// @return                        The perceived brightness value.
+/// @param[in] color							The color whose perceived brightness will be calculated.
+/// @return												The perceived brightness value.
 //----------------------------------------------------------------------------------------
 MAXON_ATTRIBUTE_FORCE_INLINE Float GetPerceivedBrightness(const ColorA& color)
 {
@@ -234,9 +234,9 @@ MAXON_ATTRIBUTE_FORCE_INLINE Float GetPerceivedBrightness(const ColorA& color)
 //----------------------------------------------------------------------------------------
 /// Checks if a color is perceived as dark by the human eye.
 /// Source: http://www.nbdtech.com/Blog/archive/2008/04/27/Calculating-the-Perceived-Brightness-of-a-Color.aspx
-/// Source: https://robots.thoughtbot.com/closer-look-color-lightness
-/// @param[in] color              The color whose darkness will be evaluated.
-/// @return                        True: the color is perceived as dark, False: the color is perceived as light.
+/// Source: https://robots.thoughtbot.com/closer-look-color-lightness.
+/// @param[in] color							The color whose darkness will be evaluated.
+/// @return												True: the color is perceived as dark, False: the color is perceived as light.
 //----------------------------------------------------------------------------------------
 MAXON_ATTRIBUTE_FORCE_INLINE Bool IsColorPerceivedAsDark(const ColorA& color)
 {

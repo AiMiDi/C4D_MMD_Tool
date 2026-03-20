@@ -37,7 +37,7 @@ class BaseMaterial;
 /// Containers can store any GeData type, including custom data types. Use GetCustomDataType() to access these values in a safe manner.
 ///
 /// It is recommended to use the available containers to store your own values as well. That way they will be automatically saved.\n
-/// However, to store values in the top level of for example an object container, use a sub-container with a unique id from http://www.plugincafe.com. Inside this sub-container use whatever ids.\n
+/// However, to store values in the top level of for example an object container, use a sub-container with a unique id from developers.maxon.net. Inside this sub-container use whatever ids.\n
 ///
 /// @warning	Keep in mind that there is no guarantee for a value to be in the container. Use default values whenever possible when accessing container's ID data.\n
 ///						Use the typed access methods (for example GetBool()) whenever possible, instead of the low-level GetData().\n
@@ -53,6 +53,7 @@ private:
 	C4D_RESERVE_PRIVATE_TYPE(Int32, dummy3);
 	C4D_RESERVE_PRIVATE_TYPE(Int32, dummy4);
 	C4D_RESERVE_PRIVATE_TYPE(Int32, dummy5);
+	C4D_RESERVE_PRIVATE_TYPE(Bool, dummy6);
 
 public:
 	/// @name Constructor/Destructor
@@ -523,6 +524,73 @@ public:
 	/// @return												The link, or @formatConstant{nullptr} if there is no link stored. @theOwnsPointed{container,link}
 	//----------------------------------------------------------------------------------------
 	const BaseLink* GetBaseLink(Int32 id) const;
+
+	//----------------------------------------------------------------------------------------
+	/// Query multiple data elements at once.
+	/// This function is a much better alternative of GetDataPointers() or multiple GetXXXXX() calls.
+	/// You can use value.HasValue() to check if the value was found in the container.
+	/// use VI template for indirect access.
+	/// Use VD template direct access and writing the value to the desired location.
+	/// @param[in] args								Arguments to query.
+	/// Example:
+	/// #include "c4d_basecontainer_values.h"
+	/// VI<PHONGTAG_PHONG_ANGLELIMIT, Bool> angleLimit;
+	/// VI<PHONGTAG_PHONG_USEEDGES, Bool> useEdges;
+	/// Float angle = 0.0;
+	/// VI<PHONGTAG_STYLE, Int32> style;
+	/// phong->data.GetValues(angleLimit, useEdges, VD<PHONGTAG_PHONG_ANGLE, Float>(angle), style);
+	/// hasher.HashAndCombine(angleLimit.GetOrDefault());
+	/// hasher.HashAndCombine(useEdges.GetOrDefault());
+	/// hasher.HashAndCombine(angle.GetOrDefault());
+	/// hasher.HashAndCombine(style.GetOrDefault());
+	//----------------------------------------------------------------------------------------
+	template <typename... ARGS> MAXON_ATTRIBUTE_FORCE_INLINE void GetValues(ARGS&&... args) const
+	{
+		constexpr Int cnt = sizeof...(ARGS);
+		static constexpr Int32 ids[] = {std::decay<ARGS>::type::ids...};
+		const GeData* data[cnt];
+		GetDataPointers(ids, cnt, data);
+
+		// this is an important trick to prefetch the C4DOS_Gd pointer so that the compiler can reuse it from a register.
+		maxon::AtomicInt::LoadAcquire((Int volatile*)C4DOS_Gd);
+
+		Int i = 0;
+		maxon::ForEach{args.SetData(data[i++])...};
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Query multiple data elements at once.
+	/// This function is a much better alternative of GetDataPointers() or multiple GetXXXXX() calls.
+	/// You can use value.HasValue() to check if the value was found in the container.
+	/// use VI template for indirect access.
+	/// Use VD template direct access and writing the value to the desired location.
+	/// @param[in] offset							Offset which is added to each Id.
+	/// @param[in] args								Arguments to query.
+	/// Example:
+	/// #include "c4d_basecontainer_values.h"
+	/// VI<PHONGTAG_PHONG_ANGLELIMIT, Bool> angleLimit;
+	/// VI<PHONGTAG_PHONG_USEEDGES, Bool> useEdges;
+	/// Float angle = 0.0;
+	/// VI<PHONGTAG_STYLE, Int32> style;
+	/// phong->data.GetValues(angleLimit, useEdges, VD<PHONGTAG_PHONG_ANGLE, Float>(angle), style);
+	/// hasher.HashAndCombine(angleLimit.GetOrDefault());
+	/// hasher.HashAndCombine(useEdges.GetOrDefault());
+	/// hasher.HashAndCombine(angle.GetOrDefault());
+	/// hasher.HashAndCombine(style.GetOrDefault());
+	//----------------------------------------------------------------------------------------
+	template <typename... ARGS> MAXON_ATTRIBUTE_FORCE_INLINE void GetValuesWithOffset(Int32 offset, ARGS&&... args) const
+	{
+		constexpr Int cnt = sizeof...(ARGS);
+		Int32 ids[] = {(std::decay<ARGS>::type::ids + offset)...};
+		const GeData* data[cnt];
+		GetDataPointers(ids, cnt, data);
+
+		// this is an important trick to prefetch the C4DOS_Gd pointer so that the compiler can reuse it from a register.
+		maxon::AtomicInt::LoadAcquire((Int volatile*)C4DOS_Gd);
+
+		Int i = 0;
+		maxon::ForEach{args.SetData(data[i++])...};
+	}
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the CustomDataType value at the specified @formatParam{id}.

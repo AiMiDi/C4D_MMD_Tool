@@ -87,9 +87,9 @@ class LoggerTypeInterface : MAXON_INTERFACE_BASES(ObserverObjectInterface, DataD
 public:
 	//----------------------------------------------------------------------------------------
 	/// Implement function to consume string and write to a specified destination.
-	/// @param[in] str								The string to print. Might not contain \n if level is WRITEMETA::NONEWLINE
+	/// @param[in] str								The string to print. Might not contain \n if level is WRITEMETA::NONEWLINE.
 	/// @param[in] loc								Source location where the string entered the logger system.
-	/// @param[in] level							Meta flags
+	/// @param[in] level							Meta flags.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Write(const String& str, const SourceLocation& loc, WRITEMETA level = WRITEMETA::DEFAULT);
 
@@ -230,12 +230,12 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Add observer to get notified once a new logger got added.
-	/// @param[in] logger							The new logger
+	/// @param[in] logger							The new logger.
 	//----------------------------------------------------------------------------------------
 	MAXON_OBSERVABLE_STATIC(void, ObservableLoggerNew, (const LoggerRef& logger), ObservableCombinerRunAllComponent);
 
 	//----------------------------------------------------------------------------------------
-	/// Add a new logger to the system. Does the same as Loggers::Insert, but also triggers the observers
+	/// Add a new logger to the system. Does the same as Loggers::Insert, but also triggers the observers.
 	/// @param[in] module							The module which initiates the call. When the module is freed, the logger will be freed too.
 	/// @return												An array of pairs with logger types and the audience.
 	//----------------------------------------------------------------------------------------

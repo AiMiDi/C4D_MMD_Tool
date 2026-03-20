@@ -135,7 +135,7 @@ namespace maxon
 /// @param[in] ...								Arguments to be counted, this also supports an empty list which will return 0.
 /// @return												Number of arguments in the list.
 //----------------------------------------------------------------------------------------
-#if defined MAXON_COMPILER_MSVC || defined MAXON_COMPILER_INTEL
+#if defined MAXON_COMPILER_MSVC
 	#define MAXON_VA_NARGS(...) PRIVATE_MAXON_VA_NARGS((PRIVATE_MAXON_VA_NARGS_PREFIX_##__VA_ARGS__##PRIVATE_MAXON_VA_NARGS_POSTFIX, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
 	#define PRIVATE_MAXON_VA_NARGS(X) MAXON_ARG64 X
 	#define PRIVATE_MAXON_VA_NARGS_PREFIX_PRIVATE_MAXON_VA_NARGS_POSTFIX ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, 0
@@ -148,7 +148,7 @@ namespace maxon
 /// @param[in] ...								Arguments to be counted, this also supports an empty list which will return 0. otherwise 1.
 /// @return												0 or 1.
 //----------------------------------------------------------------------------------------
-#if defined MAXON_COMPILER_MSVC || defined MAXON_COMPILER_INTEL
+#if defined MAXON_COMPILER_MSVC
 	#define MAXON_VA_ARGS_POPULATED(...) PRIVATE_MAXON_VA_NARGS((PRIVATE_MAXON_VA_NARGS_PREFIX_##__VA_ARGS__##PRIVATE_MAXON_VA_NARGS_POSTFIX, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0))
 #else
 	#define MAXON_VA_ARGS_POPULATED(...) MAXON_EXPAND(MAXON_ARG64(, ##__VA_ARGS__, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0))

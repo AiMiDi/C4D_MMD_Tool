@@ -1,5 +1,5 @@
-#ifndef SIMPLE_OBSERVABLE_H__
-#define SIMPLE_OBSERVABLE_H__
+#ifndef OBSERVABLESIMPLE_H__
+#define OBSERVABLESIMPLE_H__
 
 #include "maxon/arwlock.h"
 #include "maxon/delegate.h"
@@ -210,4 +210,4 @@ public:
 
 }
 
-#endif // SIMPLE_OBSERVABLE_H__
+#endif // OBSERVABLESIMPLE_H__

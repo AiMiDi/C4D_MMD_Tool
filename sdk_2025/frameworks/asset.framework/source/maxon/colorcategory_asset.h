@@ -38,15 +38,15 @@ public:
 	/// GetColorCategory returns the color category of an asset.
 	/// @param[in] asset							Asset to use.
 	/// @param[in] lookupRepository		Repository to look up for dependencies.
-	/// @return                       Tuple<Id, Color>.
+	/// @return												Tuple<Id, Color>.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Tuple<Id, Color> GetColorCategory(const AssetDescription& asset, const AssetRepositoryRef& lookupRepository);
 
 	//----------------------------------------------------------------------------------------
 	/// SetColorCategory stores a color category for an asset.
-	/// @param[in] asset							Asset to modify
+	/// @param[in] asset							Asset to modify.
 	/// @param[in] category						Category to use.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> SetColorCategory(const AssetDescription& asset, const Id& category);
 };

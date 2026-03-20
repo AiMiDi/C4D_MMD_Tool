@@ -62,7 +62,7 @@ public:
 		while (--count >= 0)
 		{
 			PlacementNew<T, false>(dest);
-			dest = (Char*) dest + dstride;
+			AdvanceByByteOffset(dest, dstride);
 		}
 	}
 
@@ -74,7 +74,7 @@ public:
 		while (--count >= 0)
 		{
 			static_cast<const T*>(dest)->~T();
-			dest = (const Char*) dest + dstride;
+			AdvanceByByteOffset(dest, dstride);
 		}
 	}
 
@@ -89,8 +89,8 @@ public:
 		while (--count >= 0)
 		{
 			new (dest) T(std::move(*(T*) src));
-			src = (Char*) src + sstride;
-			dest = (Char*) dest + dstride;
+			AdvanceByByteOffset(src, sstride);
+			AdvanceByByteOffset(dest, dstride);
 		}
 	}
 
@@ -110,19 +110,19 @@ public:
 			while (--count >= 0)
 			{
 				*(T*) dest = std::move(*(T*) src);
-				src = (Char*) src + sstride;
-				dest = (Char*) dest + dstride;
+				AdvanceByByteOffset(src, sstride);
+				AdvanceByByteOffset(dest, dstride);
 			}
 		}
 		else
 		{
-			src = (Char*)src + (count * sstride);
-			dest = (Char*)dest + (count * dstride);
+			AdvanceByByteOffset(src, count * sstride);
+			AdvanceByByteOffset(dest, count * dstride);
 
 			while (--count >= 0)
 			{
-				src = (Char*)src - sstride;
-				dest = (Char*)dest - dstride;
+				AdvanceByByteOffset(src, -sstride);
+				AdvanceByByteOffset(dest, -dstride);
 				*(T*)dest = std::move(*(T*)src);
 			}
 		}
@@ -142,8 +142,8 @@ public:
 			{
 				return err;
 			}
-			src = (Char*) src + sstride;
-			dest = (Char*) dest + dstride;
+			AdvanceByByteOffset(src, sstride);
+			AdvanceByByteOffset(dest, dstride);
 		}
 		return OK;
 	}
@@ -273,7 +273,7 @@ template <typename T> struct DefaultDataTypeFunctionsCapabilityFlags
 };
 
 
-template <typename T> class DataTypeFunctions : public DefaultDataTypeFunctions<T, (SIZEOF(T) > SIZEOF(DataMemBlock)) ? DATATYPEMODE::BIG : (STD_IS_REPLACEMENT(pod, T) ? DATATYPEMODE::SMALLISPOD : DATATYPEMODE::SMALL)>
+template <typename T> class DataTypeFunctions : public DefaultDataTypeFunctions<T, (SIZEOF(T) > SIZEOF(DataMemBlock)) ? DATATYPEMODE::BIG : (STD_IS_REPLACEMENT(trivial, T) ? DATATYPEMODE::SMALLISPOD : DATATYPEMODE::SMALL)>
 {
 public:
 	using UT = UnderlyingType<T>;

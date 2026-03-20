@@ -53,57 +53,6 @@ public:
 		CFRelease(o);
 	}
 
-	//----------------------------------------------------------------------------------------
-	/// Changes the target of the pointer.
-	/// @param[in] o									Reference to the pointer to the old object.
-	/// @param[in] newTarget					Pointer to the new target object.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void ChangeTarget(T*& o, T* newTarget)
-	{
-		T* old = o;
-
-		if (newTarget)
-			AddReference(newTarget);
-
-		o = newTarget;
-
-		if (old)
-			RemoveReference(old);
-	}
-
-	//----------------------------------------------------------------------------------------
-	/// Changes the target of the reference to a created object returned from an ObjC call.
-	/// @param[in] o									Reference to the pointer to the old object.
-	/// @param[in] newTarget					Pointer to an already retained target object.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void ChangeTarget(T*& o, ResultMemT<T*> newTarget)
-	{
-		T* old = o;
-
-		// Nothing else to do here because newTarget was already retained by the ObjC runtime.
-		o = newTarget.GetPointer();
-
-		if (old)
-			RemoveReference(old);
-	}
-
-	//----------------------------------------------------------------------------------------
-	/// Moves a target from one pointer to another.
-	/// @param[in] srcReference				Reference to the source object pointer.
-	/// @param[in] dstReference				Reference to the destination object pointer.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void MoveTarget(T*& srcReference, T*& dstReference)
-	{
-		T* target = srcReference;
-		T* oldTarget = dstReference;
-
-		srcReference = nullptr;
-		dstReference = target;
-
-		if (oldTarget)
-			RemoveReference(oldTarget);
-	}
-
 	template <typename R> static ResultRef<typename R::ReferencedType> MakeWritable(R& ref, Bool resetOnError) { return ref.GetPointer(); }
 
 	static const VALUEKIND KIND = VALUEKIND::POINTER_FLAGS;
@@ -132,7 +81,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	CFStrongRef& operator =(T* src)
 	{
-		Super::PrivateSetTarget(ResultPtr<T>(src));
+		Super::PrivateSetTarget(src);
 		return *this;
 	}
 	CFStrongRef& operator =(const CFStrongRef& src) = default;
@@ -151,6 +100,13 @@ public:
 	REF* GetAddressOf()
 	{
 		return reinterpret_cast<REF*>(this);
+	}
+
+	void SetAndRetain(T* src)
+	{
+		if (src)
+			CFRetain(src);
+		this->operator =(src);
 	}
 };
 
@@ -177,59 +133,6 @@ public:
 	/// @param[in] o									Pointer to the referenced object, must not be nullptr.
 	//----------------------------------------------------------------------------------------
 	template <typename T> static void RemoveReference(T* o);
-
-	//----------------------------------------------------------------------------------------
-	/// Changes the target of the pointer.
-	/// @param[in] o									Reference to the pointer to the old object.
-	/// @param[in] newTarget					Pointer to the new target object.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void ChangeTarget(T*& o, T* newTarget)
-	{
-		T* old = o;
-
-		if (newTarget)
-			AddReference(newTarget);
-
-		o = newTarget;
-
-		if (old)
-			RemoveReference(old);
-	}
-
-	//----------------------------------------------------------------------------------------
-	/// Changes the target of the reference to a created object returned from an ObjC call.
-	/// @param[in] o									Reference to the pointer to the old object.
-	/// @param[in] newTarget					Pointer to an already retained target object.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void ChangeTarget(T*& o, ResultPtr<T> newTarget)
-	{
-		T* old = o;
-
-		// Nothing else to do here because newTarget was already retained by the ObjC runtime.
-		o = newTarget.GetPointer();
-
-		if (old)
-			RemoveReference(old);
-	}
-
-	//----------------------------------------------------------------------------------------
-	/// Moves a target from one BaseRef to another.
-	/// This is being called when a BaseRef is moved to another BaseRef using operator =(&&).
-	/// @param[in] srcReference				Reference to the source object pointer.
-	/// @param[in] dstReference				Reference to the destination object pointer.
-	//----------------------------------------------------------------------------------------
-	template <typename T> static void MoveTarget(T*& srcReference, T*& dstReference)
-	{
-		T* target = srcReference;
-		T* oldTarget = dstReference;
-
-		srcReference = nullptr;
-		dstReference = target;
-
-		// Remove reference to the old target of the destination.
-		if (oldTarget)
-			RemoveReference(oldTarget);
-	}
 
 	template <typename R> static ResultRef<typename R::ReferencedType> MakeWritable(R& ref, Bool resetOnError) { return ref.GetPointer(); }
 
@@ -332,7 +235,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	NSStrongRef& operator =(T* src)
 	{
-		Super::PrivateSetTarget(ResultPtr<T>(src));
+		Super::PrivateSetTarget(src);
 		return *this;
 	}
 	NSStrongRef& operator =(const NSStrongRef& src) = default;

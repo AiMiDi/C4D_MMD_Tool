@@ -278,6 +278,7 @@ class Parser(object):
         expectWhitespaceSep = None
         checkStatement = None
         checkConditional = None
+        checkReturn = None
         ifHasBlock = False
         prevToken = None
         prevPrevToken = None
@@ -435,6 +436,8 @@ class Parser(object):
                         checkConditional = t
                         result += t
                     else:
+                        if checkCode and t == 'return':
+                            checkReturn = True
                         if checkStatement:
                             if t == ';':
                                 checkStatement = None
@@ -446,6 +449,11 @@ class Parser(object):
                                 checkConditional = None
                             elif t == 'iferr_return' or t == 'iferr_handle':
                                 self.errors.append(t.pos, '' + t + ' cannot be used within the conditional expression ' + checkConditional + '.')
+                        if checkReturn:
+                            if t == ';':
+                                checkReturn = None
+                            elif t == 'iferr_return' or t == 'iferr_handle':
+                                self.errors.append(t.pos, '' + t + ' cannot be used in a return statement.')
                         if t in OPERATORS:
                             if self.args.stylecheck and self.args.stylecheckOptions.get('whitespace', True) and prevToken and prevToken.type != Token.WHITESPACE and prevToken != '\n':
                                 self.styleerrors.append(t.pos, 'Style guide requires whitespace before ' + t + '.')
@@ -1523,7 +1531,7 @@ class Parser(object):
                             if not kind.startswith('@'):
                                 t = self.lex.getNoEof(cls)
                                 if t != ';':
-                                    if not anonymous:
+                                    if not (anonymous and t != '}'):
                                         self.errors.append(t.pos, 'Expected ; immediately after definition of ' + kind + ', use a separate declaration for ' + t + '.')
                                     self.parseVariableDeclarationRest(cls, self.lex.getNoEof())
                             break
@@ -2082,7 +2090,7 @@ class Parser(object):
             except ParserError as pe:
                 errors.append(pe.sourcePosition, pe.originalMessage)
             except Exception as e:
-                errors.append(SourcePosition(file, 0, 1, -1), str(e))
+                errors.append(SourcePosition(file, 0, -1, -1), str(e)) # The position should be -1 so that is clear that the error is not in the source code.
                 exceptionOccurred = True
             finally:
                 args.stylecheckOptions = optionsCopy

@@ -21,22 +21,22 @@ class CategoryAssetInterface : MAXON_INTERFACE_BASES(AssetInterface)
 public:
 	//----------------------------------------------------------------------------------------
 	/// Create creates a new category asset.
-	/// @return                       CategoryAsset on success.
+	/// @return												CategoryAsset on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<CategoryAsset> Create();
 
 	//----------------------------------------------------------------------------------------
 	/// GetParentCategory returns the category id of the given asset.
 	/// @param[in] asset							Asset to investigate.
-	/// @return                       Category id on success.
+	/// @return												Category id on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Id GetParentCategory(const AssetDescription& asset);
 
 	//----------------------------------------------------------------------------------------
 	/// SetAssetCategory allows to move an asset into a category.
-	/// @param[in] asset							asset to move.
+	/// @param[in] asset							Asset to move.
 	/// @param[in] category						Category to use.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> SetAssetCategory(const AssetDescription& asset, const Id& category);
 
@@ -44,7 +44,7 @@ public:
 	/// GetAssetBreadcrumbString returns the asset parent categories as string.
 	/// @param[in] asset							Asset to investigate.
 	/// @param[in] repository					Repository to use.
-	/// @return                       Breadcrumb as string array. Example: "Category3, Category2, Category1". You can use this to create the final string: String x = JoinElements(array, " > "_s)
+	/// @return												Breadcrumb as string array. Example: "Category3, Category2, Category1". You can use this to create the final string: String x = JoinElements(array, " > "_s)
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<String>> GetAssetBreadcrumbString(const AssetDescription& asset, const AssetRepositoryRef& repository);
 };
@@ -70,6 +70,7 @@ MAXON_ATTRIBUTE(void, AssetCategoryMaterials         , "category_a1ba084a9eeedb9
 MAXON_ATTRIBUTE(void, AssetCategoryModels            , "category@3d2621c1bc48485aa2b7ceead989e421");
 MAXON_ATTRIBUTE(void, AssetCategoryHDRIS             , "category@b9c32d04a12d449ca1c758ddb3c695b0");
 MAXON_ATTRIBUTE(void, AssetCategoryExampleScenes     , "category@4e785a69ef3749738bfd9d2b191535d5");
+MAXON_ATTRIBUTE(void, AssetCategoryDefaultScenes     , "category@710902c4d01a4e7d9778e620ec05ee5b");
 MAXON_ATTRIBUTE(void, AssetCategoryNodes             , "category@52d8f01357834200aa0dc28f0e61bbb3");
 MAXON_ATTRIBUTE(void, AssetCategoryTextures          , "category@8c76a408c56f4b5ca9f585dbe0ece9b7");
 MAXON_ATTRIBUTE(void, AssetCategoryMotionCapture     , "category_910670e9c361d913");

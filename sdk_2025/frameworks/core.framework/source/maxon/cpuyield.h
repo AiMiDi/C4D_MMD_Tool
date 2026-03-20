@@ -3,10 +3,13 @@
 
 #include "maxon/apibase.h"
 
-#ifdef MAXON_TARGET_CPU_X86
-	#ifdef MAXON_TARGET_WINDOWS
+#if defined(MAXON_TARGET_WINDOWS)
+	// Only include intrin.h if necessary.
+	#if defined(MAXON_TARGET_CPU_X86) || !defined(MAXON_COMPILER_CLANG)
 		#include <intrin.h>
-	#else
+	#endif
+#else
+	#ifdef MAXON_TARGET_CPU_X86
 		#include <xmmintrin.h>
 	#endif
 #endif
@@ -143,12 +146,11 @@ private:
 
 #ifdef MAXON_TARGET_CPU_ARM
 	// stylecheck.naming=false
-	static inline void	_mm_pause()
+	static inline void _mm_pause()
 	{
 		for (Int j = 0; j < 16; j++)
-#ifdef _M_ARM64
-			asm volatile ("yield" : : : "memory");
-	//	__yield();
+#ifndef MAXON_COMPILER_CLANG
+			__yield();
 #else
 			asm volatile ("yield" : : : "memory");
 #endif

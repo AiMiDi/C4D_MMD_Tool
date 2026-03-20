@@ -587,7 +587,7 @@ template <typename CONTEXT, PARALLELFORFLAGS FLAGS, typename FROMTYPE, typename 
 
 //----------------------------------------------------------------------------------------
 /// Runs a complex parallelized for (i = from; i < to; i++) loop using dynamic distribution.
-/// @note CONTEXT must be derived from BreakContext
+/// @note CONTEXT must be derived from BreakContext.
 /// @param[in] tfrom							Start index.
 /// @param[in] to									End index (excluded)
 /// @param[in] init								Lambda being called in the thread context before the loop starts.

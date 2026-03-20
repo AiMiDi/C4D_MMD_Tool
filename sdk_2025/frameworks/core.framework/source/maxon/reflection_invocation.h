@@ -305,13 +305,6 @@ struct DelegateHandlerData
 	DataType type;
 	DelegateHandler handler;
 
-#if defined(MAXON_COMPILER_INTEL)
-	DelegateHandlerData() = default;
-	DelegateHandlerData(DelegateHandlerData&& src) : MAXON_MOVE_MEMBERS(type, handler) { }
-	MAXON_OPERATOR_MOVE_ASSIGNMENT(DelegateHandlerData);
-	DelegateHandlerData(const DataType& t, DelegateHandler&& h) : type(t), handler(std::move(h)) { }
-#endif
-
 	Result<void> CopyFrom(const DelegateHandlerData& src)
 	{
 		type = src.type;

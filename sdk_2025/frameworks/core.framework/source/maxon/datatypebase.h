@@ -150,7 +150,7 @@ public:
 	/// @param[in] type								Unique id of the data type.
 	/// @param[in] underlying					The underlying, layout-compatible type, may be nullptr.
 	/// @param[in] element						The element type (used e.g. for arrays or pointers), may be nullptr.
-	/// @param[in] defaultValue					Pointer to a default-constructed object of type T. The lifetime needs to be longer than the lifetime of the constructed DataTypeImpl object.
+	/// @param[in] defaultValue				Pointer to a default-constructed object of type T. The lifetime needs to be longer than the lifetime of the constructed DataTypeImpl object.
 	/// @param[in] dummy							Dummy variable to determine C.
 	/// @param[in] flags							Extra flags for the VALUEKIND of the datatype.
 	/// @param[in] impl								Pointer to the implementation if the datatype stands for a non-virtual interface, otherwise nullptr.
@@ -182,7 +182,7 @@ public:
 	/// @param[in] type								Unique id of the data type.
 	/// @param[in] underlying					The underlying, layout-compatible type, may be nullptr.
 	/// @param[in] element						The element type (used e.g. for arrays or pointers), may be nullptr.
-	/// @param[in] defaultValue					Pointer to a default-constructed object of the type. The lifetime needs to be longer than the lifetime of the constructed DataTypeImpl object.
+	/// @param[in] defaultValue				Pointer to a default-constructed object of the type. The lifetime needs to be longer than the lifetime of the constructed DataTypeImpl object.
 	/// @param[in] size								The size of the type.
 	/// @param[in] alignment					The alignment of the type.
 	/// @param[in] dummy							Dummy variable to determine C.
@@ -1058,7 +1058,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if a value of this type can be cast safely to a value of the @p other type.
-	/// @see IsCastableFrom
+	/// @see IsCastableFrom.
 	///
 	/// @param[in] other							Another data type.
 	/// @return												True if a value of this data type can be safely cast to a value of the @p other type.
@@ -1083,7 +1083,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Checks if a value of this type can safely be cast to a value of type @p T.
 	/// @see IsCastableFrom
-	/// @see IsBaseOfOrSame
+	/// @see IsBaseOfOrSame.
 	///
 	/// @tparam T											Another data type.
 	/// @return												True if a value of this data type can be safely cast to a value of type @p T.
@@ -1224,6 +1224,7 @@ template <typename T, GET_DATATYPE_POLICY POLICY = GET_DATATYPE_POLICY::NONE> in
 
 
 class TupleValue;
+class BlockMarker;
 
 //----------------------------------------------------------------------------------------
 /// General Data class. An object of this class can store every type of data as long as that
@@ -1568,8 +1569,10 @@ public:
 	String ToString(const FormatStatement* formatStatement = nullptr) const;
 
 	//----------------------------------------------------------------------------------------
-	/// Returns a readable string of the content.
-	/// @return												String that represents the content of Data.
+	/// @brief Compares this instance to `c` and returns the comparison result.
+	/// @details This largely does not support type abstraction, i.e., you cannot compare an int with a float and expect a result such as `GREATER` or `EQUAL` in a mathematical sense. When both entities are not of the same type, `ObjectInterface` reference entities are treated as greater than all other types. When both entities are not `ObjectInterface` types, the entities will be sorted by their type id.
+	/// @param[in] c									Other object.
+	/// @return												See COMPARERESULT.
 	//----------------------------------------------------------------------------------------
 	COMPARERESULT Compare(const Data& c) const;
 
@@ -1664,14 +1667,15 @@ private:
 
 	template <typename T> typename std::enable_if<GetCollectionKind<T>::value == COLLECTION_KIND::ARRAY, Result<T>>::type GetImpl(OverloadRank1);
 
-	template <typename T> typename SFINAEHelper<Result<T>, typename T::IsBlock>::type GetImpl(OverloadRank2)
+	template <typename T> typename std::enable_if<std::is_base_of_v<BlockMarker, T>, Result<T>>::type GetImpl(OverloadRank2)
 	{
 		T* ptr = GetPtr<T>();
 		if (!ptr)
 			return CreateError(MAXON_SOURCE_LOCATION, ERROR_TYPE::ILLEGAL_STATE);
 		return *ptr;
 	}
-	template <typename T> typename SFINAEHelper<Result<T>, typename T::IsBlock>::type GetImpl(OverloadRank2) const
+
+	template <typename T> typename std::enable_if<std::is_base_of_v<BlockMarker, T>, Result<T>>::type GetImpl(OverloadRank2) const
 	{
 		const T* ptr = GetPtr<T>();
 		if (!ptr)
@@ -1897,7 +1901,8 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Compares this object to a Data.
+	/// @brief Compares this instance to `c` and returns the comparison result.
+	/// @details This largely does not support type abstraction, i.e., you cannot compare an int with a float and expect a result such as `GREATER` or `EQUAL` in a mathematical sense. When both entities are not of the same type, `ObjectInterface` reference entities are treated as greater than all other types. When both entities are not `ObjectInterface` types, the entities will be sorted by their type id.
 	/// @param[in] c									Other object.
 	/// @return												See COMPARERESULT.
 	//----------------------------------------------------------------------------------------
@@ -2305,7 +2310,17 @@ public:
 		return *reinterpret_cast<const ConstDataPtr*>(this);
 	}
 
+	operator const ConstDataPtr&() const
+	{
+		return *reinterpret_cast<const ConstDataPtr*>(this);
+	}
+
 	const DataPtr& ToDataPtr() const
+	{
+		return *reinterpret_cast<const DataPtr*>(this);
+	}
+
+	operator const DataPtr&() const
 	{
 		return *reinterpret_cast<const DataPtr*>(this);
 	}

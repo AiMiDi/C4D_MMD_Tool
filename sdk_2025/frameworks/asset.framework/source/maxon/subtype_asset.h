@@ -29,7 +29,7 @@ public:
 	/// SetSubType stores the subtype of an asset.
 	/// @param[in] target							Asset to modify.
 	/// @param[in] subtype						Subtype to store.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> SetSubType(const AssetDescription& target, const Id& subtype);
 };
@@ -41,6 +41,7 @@ namespace ASSETMETADATA
 	MAXON_ATTRIBUTE(void, SubType_ENUM_MediaImage, "net.maxon.asset.subtype.mediaimage");
 	MAXON_ATTRIBUTE(void, SubType_ENUM_MediaMovie, "net.maxon.asset.subtype.mediamovie");
 	MAXON_ATTRIBUTE(void, SubType_ENUM_Object,		 "net.maxon.asset.subtype.object");
+	MAXON_ATTRIBUTE(void, SubType_ENUM_Laubwerk,	 "net.maxon.asset.subtype.object.laubwerk");
 	MAXON_ATTRIBUTE(void, SubType_ENUM_Material,	 "net.maxon.asset.subtype.material");
 	MAXON_ATTRIBUTE(void, SubType_ENUM_Scene,			 "net.maxon.asset.subtype.scene");
 }

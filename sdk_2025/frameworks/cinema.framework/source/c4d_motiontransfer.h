@@ -73,7 +73,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @destructsAlloc{MTCharacterBodyPart}
 	/// All the children will be freed.
-	/// @param[in,out] ptr							@theToDestruct{MTCharacterBodyPart}
+	/// @param[in,out] ptr						@theToDestruct{MTCharacterBodyPart}
 	//----------------------------------------------------------------------------------------
 	static void Free(MTCharacterBodyPart*& ptr);
 
@@ -85,33 +85,33 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Inserts the given child.
 	/// @param[in] child							Child to insert.
-	/// @return												OK on success
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> InsertChild(MTCharacterBodyPart* child);
 
 	//----------------------------------------------------------------------------------------
 	/// Deletes the child at the given index.
 	/// @param[in] index							Child index.
-	/// @return												OK on success
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> DeleteChild(Int index);
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the child at the given index.
 	/// @param[in] index							Child index.
-	/// @return												the child body part pointer on success.
+	/// @return												The child body part pointer on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<MTCharacterBodyPart*> GetChild(Int index) const { return _children[index]; }
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the child count.
-	/// @return												the child count.
+	/// @return												The child count.
 	//----------------------------------------------------------------------------------------
 	Int GetChildCount() const { return _children.GetCount(); }
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the parent pointer if any.
-	/// @return												parent pointer.
+	/// @return												Parent pointer.
 	//----------------------------------------------------------------------------------------
 	MTCharacterBodyPart* GetParent() const { return _parent; }
 
@@ -122,14 +122,14 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Sets the parameter for the body part.
-	/// @param[in] param							parameters.
+	/// @param[in] param							Parameters.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> SetParameters(const MTBodyPartParameters& param) { return _parameters.CopyFrom(param); }
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the parameters structure.
-	/// @return												the body part parameters.
+	/// @return												The body part parameters.
 	//----------------------------------------------------------------------------------------
 	MTBodyPartParameters& GetParameters() { return _parameters; }
 
@@ -165,7 +165,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @destructsAlloc{MTCharacterDefinition tag}
-	/// @param[in,out] tag							@theToDestruct{MTCharacterDefinition tag}
+	/// @param[in,out] tag						@theToDestruct{MTCharacterDefinition tag}
 	//----------------------------------------------------------------------------------------
 	static void Free(MTCharacterDefinitionTag*& tag);
 
@@ -179,7 +179,7 @@ public:
 	/// Automatic body part extraction for the skeleton.
 	/// This should be called only in the main thread.
 	/// @param[in] undo								Add Character definition to the undo stack before any changes.
-	/// @return												OK on success
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> ExtractSkeleton(Bool undo);
 
@@ -187,7 +187,7 @@ public:
 	/// Gets current skeleton pose and set it as rest pose.
 	/// This should be called only in the main thread.
 	/// @param[in] undo								Add Character definition to the undo stack before any changes.
-	/// @return												OK on success
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> ExtractRestPose(Bool undo);
 
@@ -195,7 +195,7 @@ public:
 	/// Applies the current rest pose.
 	/// This should be called only in the main thread.
 	/// @param[in] undo								Add Character definition to the undo stack before any changes.
-	/// @return												OK on success
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> ApplyRestPose(Bool undo);
 
@@ -203,7 +203,7 @@ public:
 	/// Clears the current rest pose.
 	/// This should be called only in the main thread.
 	/// @param[in] undo								Add Character definition to the undo stack before any changes.
-	/// @return												OK on success
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> ClearRestPose(Bool undo);
 
@@ -211,7 +211,7 @@ public:
 	/// Creates a solver and assign to the object owner.
 	/// This should be called only in the main thread.
 	/// @param[in] undo								Add Character definition to the undo stack before any changes.
-	/// @return												new created MTCharacterMotionTransferTag on success
+	/// @return												New created MTCharacterMotionTransferTag on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<BaseTag*> CreateSolver(Bool undo);
 	/// @}
@@ -221,8 +221,8 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a copy of the body part hierarchy.
-	/// Memory management is on the client side, use MTCharacterBodyPart::Free() to avoid Leaks
-	/// @return												MTCharacterBodyPart on success
+	/// Memory management is on the client side, use MTCharacterBodyPart::Free() to avoid Leaks.
+	/// @return												MTCharacterBodyPart on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<MTCharacterBodyPart*> GetRootBodyPart();
 
@@ -230,7 +230,7 @@ public:
 	/// Sets the body part hierarchy.
 	/// rootBodyPart is not kept, memory management is on the client side, use MTCharacterBodyPart::Free() to avoid Leaks.
 	/// @param[in] rootBodyPart				MTCharacterBodyPart representing the BodyPart hierarchy.
-	/// @return												OK on success
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> SetRootBodyPart(MTCharacterBodyPart& rootBodyPart);
 
@@ -254,7 +254,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @destructsAlloc{MTCharacterDefinition tags}
-	/// @param[in,out] tag							@theToDestruct{MTCharacterDefinition tag}
+	/// @param[in,out] tag						@theToDestruct{MTCharacterDefinition tag}
 	//----------------------------------------------------------------------------------------
 	static void Free(MTCharacterMotionTransferTag*& tag);
 

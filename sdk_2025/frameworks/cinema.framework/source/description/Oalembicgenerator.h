@@ -59,9 +59,15 @@ enum
 		
 	ALEMBIC_USE_CAMERAPARAMS = 1034,
 	// private / internal for ParticleGroupObject
-	ALEMBIC_OWNER_LINK = 1035
+	ALEMBIC_OWNER_LINK = 1035,
+	// -------------------------------------------------------------------------- 
+	ALEMBIC_POSITION_INTERPOLATION = 1036, 
+		ALEMBIC_POSITION_INTERPOLATION_LINEAR = 0, 
+		ALEMBIC_POSITION_INTERPOLATION_CUBIC = 1,
+		ALEMBIC_POSITION_INTERPOLATION_CUBIC_MONOTONE = 2,
+	ALEMBIC_POSITION_INTERPOLATION_CUBIC_WEIGHT = 1037,
 
-	// use for next entry = 1035 !
+	// use for next entry = 1038 !
 };
 
 #endif // OALEMBICGENERATOR_H__

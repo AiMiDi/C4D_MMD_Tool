@@ -15,4 +15,5 @@ STRINGTABLE OMMDMeshManager
 
 	MESH_MODE_EDIT "\u7f16\u8f91\u6a21\u5f0f";
     MESH_MODE_ANIM "\u52a8\u753b\u6a21\u5f0f";
+    MESH_MODE_VMD "VMD\u6a21\u5f0f";
 }

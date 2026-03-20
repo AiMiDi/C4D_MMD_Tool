@@ -1,0 +1,39 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 30,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "linux_ninja",
+      "displayName": "Linux Ninja",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/../_build_ninja/sdk_2023"
+    },
+    {
+      "name": "macos_universal_xcode",
+      "displayName": "Xcode macOS Universal",
+      "generator": "Xcode",
+      "binaryDir": "${sourceDir}/../_build_xcode/sdk_2023",
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "arm64;x86_64"
+      }
+    },
+    {
+      "name": "windows_vs2022_v143",
+      "displayName": "Visual Studio 2022 v143",
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "${sourceDir}/../_build_msvc/sdk_2023",
+      "toolset": "v143"
+    },
+    {
+      "name": "windows_vs2022_clangcl",
+      "displayName": "Visual Studio 2022 ClangCL",
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "${sourceDir}/../_build_clangcl/sdk_2023",
+      "toolset": "ClangCL"
+    }
+  ]
+}

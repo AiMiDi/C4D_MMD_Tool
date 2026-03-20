@@ -203,21 +203,17 @@ class Generator(object):
 
     def writeUse(self, useName, useParams, implModule):
         self.defs << '#if defined(MAXON_DEPENDENCY_ENABLE) && !defined(PRIVATE_MAXON_REGISTRATION_UNIT) && !defined(MAXON_DEPENDENCY_DISABLE_' + self.headerBasename + ')'
-        self.defs << '#ifdef MAXON_USE_REGISTER_FUNCTION'
-        self.defs << 'MAXON_STATIC_STORAGE(maxon::EntityUse, ' + useName + '); \\'
-        self.defs << 'MAXON_ATTRIBUTE_CONSTRUCTOR static void Register_' + useName + '() { new (' + useName + ') maxon::EntityUse(' + useParams + ', false); }'
-        self.defs << '#else // !MAXON_USE_REGISTER_FUNCTION'
         if implModule:
             mangled = 'PRIVATE_MODULE_' + implModule.replace('.', '_').replace('-', '_').replace(' ', '_').replace('"', '')
             # When MAXON_IMPLEMENTATION_MODULE is given for an interface, only frameworks and the implementation module itself need precise dependency tracking.
             self.defs << '#if defined(MAXON_API) || defined(' + mangled + ')'
         self.defs << 'static maxon::EntityUse ' + useName + '(' + useParams + ', false);'
         if implModule:
+            # Check for PRIVATE_MODULE_*_DEPENDENCY to avoid multiple MAXON_DEPENDENCY_ON_MODULE invocations in following includes.
             self.defs << '#elif !defined(' + mangled + '_DEPENDENCY)'
             self.defs << '#define ' + mangled + '_DEPENDENCY'
             self.defs << 'MAXON_DEPENDENCY_ON_MODULE(' + implModule + ');'
             self.defs << '#endif'
-        self.defs << '#endif // MAXON_USE_REGISTER_FUNCTION'
         self.defs << '#endif'
 
     def addObject(self, name, qname, id, ns, extra=0):
@@ -1268,8 +1264,14 @@ class Generator(object):
                         # The compiler will find the matching overload, and decltype gives us the reference function class. The double pointer is needed
                         # to make sure that the compiler is looking for exactly matching overloads (without pointers there could be conversion operators,
                         # with a single pointer a pointer to a derived class can be passed to a pointer of base class).
+                        # declaredBases helps to avoid double declarations when there are multiple MAXON_USING declarations for the same interface.
+                        declaredBases = set()
                         for uc, un in usings:
-                            self.decls << 'using decltype(PrivateBaseClass::PrivateLookupFn((' + uc + '**) nullptr))::' + un + ';'
+                            uc2 = ''.join([c if c.isalnum() else '_' for c in uc])
+                            if uc not in declaredBases:
+                                declaredBases.add(uc)
+                                self.decls << 'using RefFnClass_' + uc2 + ' = decltype(PrivateBaseClass::PrivateLookupFn((' + uc + '**) nullptr));'
+                            self.decls << 'using RefFnClass_' + uc2 + '::' + un + ';'
                         if cls.generic:
                             for p in cls.generic.params:
                                 if isinstance(p, TypeTemplateParam):

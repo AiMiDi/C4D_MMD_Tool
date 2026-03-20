@@ -103,7 +103,7 @@ public:
 	HashSet<InternedId> _conditionalIds;
 };
 
-#endif
+#endif // DESCTRANSLATION_PART
 
 } // namespace maxon
 

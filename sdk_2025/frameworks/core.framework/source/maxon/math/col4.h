@@ -322,9 +322,9 @@ template <typename T, Int STRIDE = 1> struct Col4
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the vector with absolute value for each entry
-	/// @param[in] v1									input vector to work on
-	/// @return												component wise absolute value vector of input vector
+	/// Returns the vector with absolute value for each entry.
+	/// @param[in] v1									Input vector to work on.
+	/// @return												Component wise absolute value vector of input vector.
 	//----------------------------------------------------------------------------------------
 	friend constexpr Unstrided Abs(const Col4& v1)
 	{

@@ -124,12 +124,10 @@ public:
 	static constexpr Char LLVM_MEMBER_INDEX = '2';
 	static constexpr Char LLVM_MEMBER_BLOCK_END = '3';
 
+	~FrameData();
+
 private:
 	FrameData(const FrameData* parent, const Frame* frame) : _parent(parent), _frame(frame)
-	{
-	}
-
-	~FrameData()
 	{
 	}
 

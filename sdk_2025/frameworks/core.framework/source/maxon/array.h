@@ -71,7 +71,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int GetBlock(Int index, SimdBlock<const TYPE>& block) const;
 
-	Int GetBlock(Int index, StridedBlock<const TYPE>& block) const
+	MAXON_FUNCTION Int GetBlock(Int index, StridedBlock<const TYPE>& block) const
 	{
 		SimdBlock<const TYPE> b;
 		Int bs = GetBlock(index, b);
@@ -229,7 +229,7 @@ public:
 			_blockEndIndex = _blockStartIndex + block.GetCount();
 			_stride = block.GetStride();
 			_index = start;
-			_ptr = (Type*)((Char*)block.GetFirst() + (start - _blockStartIndex) * _stride);
+			_ptr = NextByByteOffset(block.GetFirst(), (start - _blockStartIndex) * _stride);
 		}
 
 		IteratorTemplate(const IteratorTemplate& src) = default;
@@ -240,16 +240,10 @@ public:
 
 		MAXON_OPERATOR_COPY_ASSIGNMENT(IteratorTemplate);
 
-	#ifdef MAXON_COMPILER_INTEL
-	#pragma warning disable 597
-	#endif
 		operator IteratorTemplate<const COLLECTION_TYPE>&()
 		{
 			return *reinterpret_cast<IteratorTemplate<const COLLECTION_TYPE>*>(this);
 		}
-	#ifdef MAXON_COMPILER_INTEL
-	#pragma warning enable 597
-	#endif
 
 		Type& operator *() const
 		{
@@ -276,7 +270,7 @@ public:
 		// prefix operator ++ (increment and fetch)
 		IteratorTemplate& operator ++()
 		{
-			_ptr = (Type*)((Char*)_ptr + GetStride());
+			AdvanceByByteOffset(_ptr, GetStride());
 			++_index;
 			if (MAXON_UNLIKELY(_index == _blockEndIndex))
 			{
@@ -296,7 +290,7 @@ public:
 		// operator +=
 		IteratorTemplate& operator +=(Int i)
 		{
-			_ptr = (Type*)((Char*)_ptr + i * GetStride());
+			AdvanceByByteOffset(_ptr, i * GetStride());
 			_index += i;
 			ValidateBlock(true);
 			return *this;
@@ -305,7 +299,7 @@ public:
 		// prefix operator -- (decrement and fetch)
 		IteratorTemplate& operator --()
 		{
-			_ptr = (Type*)((Char*)_ptr - GetStride());
+			AdvanceByByteOffset(_ptr, -GetStride());
 			--_index;
 			if (MAXON_UNLIKELY(_index < _blockStartIndex))
 			{
@@ -325,7 +319,7 @@ public:
 		// operator -=
 		IteratorTemplate& operator -=(Int i)
 		{
-			_ptr = (Type*)((Char*)_ptr - i * GetStride());
+			AdvanceByByteOffset(_ptr, -i * GetStride());
 			_index -= i;
 			ValidateBlock(true);
 			return *this;
@@ -401,7 +395,7 @@ public:
 				_blockStartIndex = _array->GetBlock(_index, block);
 				_blockEndIndex = _blockStartIndex + block.GetCount();
 				_stride = block.GetStride();
-				_ptr = (Type*)((Char*)block.GetFirst() + (_index - _blockStartIndex) * _stride);
+				_ptr = NextByByteOffset(block.GetFirst(), (_index - _blockStartIndex) * _stride);
 			}
 		}
 
@@ -520,6 +514,10 @@ public:
 
 	MAXON_ADD_TO_COPY_ON_WRITE_REFERENCE_CLASS(
 		public: using ValueType = TYPE;
+	);
+
+	MAXON_ADD_TO_CONST_REFERENCE_CLASS(
+		public: using S::GetBlock;
 	);
 
 	using Super = StaticArrayInterface<TYPE>;
@@ -831,9 +829,6 @@ public:
 		return *reinterpret_cast<const ArrayInterface<T2>*>(this);
 	}
 
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning disable 597
-#endif
 	operator const ArrayInterface<const TYPE>&() const
 	{
 		return *(ArrayInterface<const TYPE>*) this;
@@ -848,9 +843,6 @@ public:
 	{
 		return *(ArrayInterface<typename std::conditional<STD_IS_REPLACEMENT(same, TYPE, Generic), DeleteReturnType02, Generic>::type>*) this;
 	}
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning enable 597
-#endif
 
 	operator const NonConstArray<TYPE>&()
 	{
@@ -1763,14 +1755,14 @@ public:
 	{
 		if (CONSTARRAY)
 			return FAILED;
-		return ResultMem(((ArrayType*) &_array)->InsertBlock(index, values) == OK);
+		return ResultMem(((ArrayType*) &_array)->Insert(index, values) == OK);
 	}
 
 	ResultMem Insert(Int index, const MoveBlock<ValueType>& values)
 	{
 		if (CONSTARRAY)
 			return FAILED;
-		return ResultMem(((ArrayType*) &_array)->InsertBlock(index, values) == OK);
+		return ResultMem(((ArrayType*) &_array)->Insert(index, values) == OK);
 	}
 
 	ResultRef<ValueType> Append()
@@ -1870,10 +1862,27 @@ public:
 
 	Result<void> CopyFrom(const ArrayInterface<ValueType>& other)
 	{
+		iferr_scope;
 		if (CONSTARRAY)
 			return CreateError(MAXON_SOURCE_LOCATION, ERROR_TYPE::NOT_IMPLEMENTED);
-		return ((ArrayType*) &_array)->CopyFrom(*((ArrayType*) &static_cast<const ArrayImpl&>(other)._array));
-	};
+
+		if (GetClassInfo() == other.PrivateGetClassInfo())
+		{
+			if constexpr (std::is_base_of_v<BlockMarker, ArrayType>)
+			{
+				return ((ArrayType*) &_array)->CopyValuesFrom(static_cast<const ArrayImpl&>(other).GetArray());
+			}
+			else
+			{
+				return ((ArrayType*) &_array)->CopyFrom(static_cast<const ArrayImpl&>(other).GetArray());
+			}
+		}
+
+		((ArrayType*) &_array)->Resize(other.GetCount(), COLLECTION_RESIZE_FLAGS::ON_GROW_FIT_TO_SIZE | COLLECTION_RESIZE_FLAGS::ON_RESIZE_UNSPECIFIED) iferr_return;
+		((ArrayType*) &_array)->CopyValuesFrom(other) iferr_return;
+
+		return OK;
+	}
 
 	Result<GenericContainerInterface*> MakeWritable(Bool copyContent) const
 	{
@@ -1886,7 +1895,7 @@ public:
 			return err;
 		if (copyContent)
 		{
-			iferr (((ArrayType*) &c->_array)->CopyFrom(*(ArrayType*) &_array))
+			iferr (AssignCopy(*(ArrayType*) &c->_array, GetArray()))
 			{
 				DeleteObj(c);
 				return err;

@@ -351,21 +351,21 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the ip v4 address and port in the passed sockaddr structure
-	/// @param[in,out] sockaddr							Pointer to sockaddr structure.
+	/// Returns the ip v4 address and port in the passed sockaddr structure.
+	/// @param[in,out] sockaddr				Pointer to sockaddr structure.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> GetIPv4AndPort(sockaddr_in* sockaddr) const;
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the ip v6 address and port in the passed sockaddr structure
-	/// @param[in,out] sockaddr							Pointer to sockaddr structure.
+	/// Returns the ip v6 address and port in the passed sockaddr structure.
+	/// @param[in,out] sockaddr				Pointer to sockaddr structure.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> GetIPv6AndPort(sockaddr_in6* sockaddr) const;
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the ip address and port based on the ip family choosen for this socket
-	/// @param[in,out] sockaddr							Pointer to sockaddr structure.
-	/// @param[in,out] len									Contains the length of the data returned in the sockaddr structure.
+	/// Returns the ip address and port based on the ip family choosen for this socket.
+	/// @param[in,out] sockaddr				Pointer to sockaddr structure.
+	/// @param[in,out] len						Contains the length of the data returned in the sockaddr structure.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> GetIPAndPort(sockaddr_storage* sockaddr, Int32& len) const;
 

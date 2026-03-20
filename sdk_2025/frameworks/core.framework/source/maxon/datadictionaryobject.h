@@ -84,7 +84,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	template <typename KEY> MAXON_FUNCTION Bool Contains(KEY&& key) const
 	{
-		iferr (Data data = GetData(ConvertKeyToDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
+		iferr (Data data = GetData(ConvertKeyToTrivialDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
 			return false;
 
 		return true;
@@ -129,7 +129,7 @@ public:
 	MAXON_FUNCTION Result<typename std::conditional<std::is_void<T>::value, typename IsFidClass<KEY>::type, T>::type> Get(KEY&& key) const
 	{
 		using TT = typename std::conditional<std::is_void<T>::value, typename IsFidClass<KEY>::type, T>::type;
-		iferr (Data data = DataDictionaryObjectInterface::GetData(ConvertKeyToDataPtr<DataDictionaryKeySet<typename REFCLASS::ReferencedType>, false>(std::forward<KEY>(key))))
+		iferr (Data data = DataDictionaryObjectInterface::GetData(ConvertKeyToTrivialDataPtr<DataDictionaryKeySet<typename REFCLASS::ReferencedType>, false>(std::forward<KEY>(key))))
 			return err;
 		iferr (auto&& res = data.template Get<TT>())
 			return err;
@@ -152,7 +152,7 @@ public:
 	MAXON_FUNCTION typename std::conditional<IsFidClass<KEY>::value&& GetCollectionKind<T>::value != COLLECTION_KIND::ARRAY, typename IsFidClass<KEY>::type, T>::type Get(KEY&& key, const T& defaultValue) const
 	{
 		using TT = typename std::conditional<IsFidClass<KEY>::value && GetCollectionKind<T>::value != COLLECTION_KIND::ARRAY, typename IsFidClass<KEY>::type, T>::type;
-		iferr (Data data = DataDictionaryObjectInterface::GetData(ConvertKeyToDataPtr<DataDictionaryKeySet<typename REFCLASS::ReferencedType>, false>(std::forward<KEY>(key))))
+		iferr (Data data = DataDictionaryObjectInterface::GetData(ConvertKeyToTrivialDataPtr<DataDictionaryKeySet<typename REFCLASS::ReferencedType>, false>(std::forward<KEY>(key))))
 			return defaultValue;
 		iferr (auto&& res = data.template Get<TT>())
 			return defaultValue;
@@ -177,7 +177,7 @@ public:
 		using TT = typename std::conditional<IsFidClass<KEY>::value&& GetCollectionKind<T>::value != COLLECTION_KIND::ARRAY, typename IsFidClass<KEY>::type, T>::type;
 		MAXON_WARNING_PUSH
 		MAXON_WARNING_DISABLE_REDUNDANT_MOVE
-		iferr (Data data = DataDictionaryObjectInterface::GetData(ConvertKeyToDataPtr<DataDictionaryKeySet<typename REFCLASS::ReferencedType>, false>(std::forward<KEY>(key))))
+		iferr (Data data = DataDictionaryObjectInterface::GetData(ConvertKeyToTrivialDataPtr<DataDictionaryKeySet<typename REFCLASS::ReferencedType>, false>(std::forward<KEY>(key))))
 			return std::move(defaultValue);
 		iferr (auto&& res = data.template Get<TT>())
 			return std::move(defaultValue);
@@ -208,7 +208,7 @@ public:
 	template <typename REFCLASS, typename T, typename KEY> MAXON_FUNCTION Result<void> Set(KEY&& key, T&& data)
 	{
 		static_assert(ValidKeyValuePairTrait<LiteralId>::IsValid<T, KEY>::value);
-		constexpr Bool IS_VALID_FID = IsFidClass<KEY>::value && !STD_IS_REPLACEMENT(same, typename IsFidClass<KEY>::type, Data);
+		[[maybe_unused]] constexpr Bool IS_VALID_FID = IsFidClass<KEY>::value && !STD_IS_REPLACEMENT(same, typename IsFidClass<KEY>::type, Data);
 		using TT = typename std::conditional<IS_VALID_FID, typename maxon::Substitute<T, typename IsFidClass<KEY>::type>::type, void>::type;
 		using TTT = typename std::conditional<std::is_same_v<TT, T>, void, TT>::type;
 		Data tmp;

@@ -27,9 +27,9 @@ public:
 	/// @param[in] target							Asset to add keywords.
 	/// @param[in] keywordId					Keyword Id to add.
 	/// @param[in] userScope					True to use ASSETMETADATA::UserKeywords other wise ASSETMETADATA::Keywords.
-	/// @param[in] updateUsageRepository True to update the last used time and use count.
-	/// @return                       True if a keyword was added. False if the keyword was not added - that means it already exists. 
-	///																Error if it was not possible to add the keyword.
+	/// @param[in] updateUsageRepository	True to update the last used time and use count.
+	/// @return												True if a keyword was added. False if the keyword was not added - that means it already exists. 
+	/// 															Error if it was not possible to add the keyword.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Bool> AddKeyword(const AssetDescription& target, const Id& keywordId, Bool userScope, const AssetRepositoryRef& updateUsageRepository);
 	
@@ -38,29 +38,29 @@ public:
 	/// @param[in] target							Asset to remove keywords.
 	/// @param[in] keywordId					Keyword Id to remove.
 	/// @param[in] userScope					True to use ASSETMETADATA::UserKeywords other wise ASSETMETADATA::Keywords.
-	/// @return                       True if a keyword was found and removed. False if the keyword was not found on the asset. Error if it was not possible to remove the keyword.
+	/// @return												True if a keyword was found and removed. False if the keyword was not found on the asset. Error if it was not possible to remove the keyword.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Bool> RemoveKeyword(const AssetDescription& target, const Id& keywordId, Bool userScope);
 
 	//----------------------------------------------------------------------------------------
-	/// HasKeyword returns if the asset has a given keyword assigned
+	/// HasKeyword returns if the asset has a given keyword assigned.
 	/// @param[in] target							Asset to search.
 	/// @param[in] keywordId					Keyword Id to search.
-	/// @return                       userScope type on success ASSETMETADATA::UserKeywords or ASSETMETADATA::Keywords. Id() if not found.
+	/// @return												UserScope type on success ASSETMETADATA::UserKeywords or ASSETMETADATA::Keywords. Id() if not found.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<LiteralId> HasKeyword(const AssetDescription& target, const Id& keywordId);
 
 	//----------------------------------------------------------------------------------------
 	/// IsFavouriteAsset returns true if the given asset is a favourite.
 	/// @param[in] ad									Asset to inspect.
-	/// @return                       True if favourite.
+	/// @return												True if favourite.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool IsFavouriteAsset(const AssetDescription& ad);
 
 	//----------------------------------------------------------------------------------------
 	/// GetDefaultAssetState checks if the given asset is a preset.
 	/// @param[in] ad									Asset to look at.
-	/// @return                       Tuple<Bool, Bool> on success. First: true if it is an preset, Second: True if the asset is the default asset.
+	/// @return												Tuple<Bool, Bool> on success. First: true if it is an preset, Second: True if the asset is the default asset.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Tuple<Bool, Bool>> GetDefaultAssetState(const AssetDescription& ad);
 
@@ -68,7 +68,7 @@ public:
 	/// GetDefaultAsset returns the default preset for the given type.
 	/// @param[in] type								Preset type.
 	/// @param[in] lookupRepository		Repository to search for.
-	/// @return                       AssetDescription on success.
+	/// @return												AssetDescription on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetDescription> GetDefaultAsset(const Id& type, const AssetRepositoryRef& lookupRepository);
 
@@ -76,14 +76,14 @@ public:
 	/// SetDefaultAsset sets the default state of the given preset asset. Every type can only have one preset as default.
 	/// @param[in] ad									Asset to modify.
 	/// @param[in] on									True to make this preset the default. False to make it no longer the default.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> SetDefaultAsset(const AssetDescription& ad, Bool on);
 
 	//----------------------------------------------------------------------------------------
 	/// IsFeaturedAsset returns true if the given asset is featured.
 	/// @param[in] ad									Asset to inspect.
-	/// @return                       True if featured.
+	/// @return												True if featured.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool IsFeaturedAsset(const AssetDescription& ad);
 };

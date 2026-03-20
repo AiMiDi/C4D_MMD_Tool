@@ -51,21 +51,21 @@ class TemplateArguments MAXON_FORWARD("maxon/nodetemplate.h");
 
 //----------------------------------------------------------------------------------------
 /// The type alias GNodeSelector selects between MutableGNode (mutable case) and GNode (read-only case).
-/// @tparam MUTABLE								true for MutableGNode, false for GNode
+/// @tparam MUTABLE								True for MutableGNode, false for GNode.
 //----------------------------------------------------------------------------------------
 template <Bool MUTABLE> using GNodeSelector = typename std::conditional<MUTABLE, MutableGNode, GNode>::type;
 
 
 //----------------------------------------------------------------------------------------
 /// The type alias PortListSelector selects between MutablePortList (mutable case) and PortList (read-only case).
-/// @tparam MUTABLE								true for MutablePortList, false for PortList
+/// @tparam MUTABLE								True for MutablePortList, false for PortList.
 //----------------------------------------------------------------------------------------
 template <Bool MUTABLE> using PortListSelector = typename std::conditional<MUTABLE, MutablePortList, PortList>::type;
 
 
 //----------------------------------------------------------------------------------------
 /// The type alias PortSelector selects between MutablePort (mutable case) and Port (read-only case).
-/// @tparam MUTABLE								true for MutablePort, false for Port
+/// @tparam MUTABLE								True for MutablePort, false for Port.
 //----------------------------------------------------------------------------------------
 template <Bool MUTABLE> using PortSelector = typename std::conditional<MUTABLE, MutablePort, Port>::type;
 
@@ -85,7 +85,7 @@ using MutableConnection = Tuple<MutablePort, Wires>;
 
 //----------------------------------------------------------------------------------------
 /// The type alias ConnectionSelector selects between MutableConnection (mutable case) and Connection (read-only case).
-/// @tparam MUTABLE								true for MutableConnection, false for Connection
+/// @tparam MUTABLE								True for MutableConnection, false for Connection.
 //----------------------------------------------------------------------------------------
 template <Bool MUTABLE> using ConnectionSelector = typename std::conditional<MUTABLE, MutableConnection, Connection>::type;
 
@@ -410,7 +410,7 @@ public:
 	/// systems hasn't been created this way. It's the same as the node system returned by
 	/// GetBase(). The remaining entries list the bases which have been added by AddBase().
 	/// @return												The bases of this node system, this will have at least one entry.
-	///																The first entry may be a null reference.
+	/// 															The first entry may be a null reference.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD const Block<const NodeSystem>& GetBases() const;
 
@@ -440,7 +440,7 @@ public:
 	/// Returns the node template which instantiated this node system. If this node system is no instantiation
 	/// of a node template, the method returns a null reference.
 	/// @see GetArguments
-	/// @see NodeTemplate::Instantiate
+	/// @see NodeTemplate::Instantiate.
 	/// @return												The node template which instantiated this node system, or a null reference.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD const NodeTemplate& GetTemplate() const;
@@ -448,7 +448,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns the template arguments which have been used for this instantiation of a node template
 	/// (if this node system is an instantiation of a node template at all).
-	/// @see GetTemplate
+	/// @see GetTemplate.
 	/// @return												The arguments of this node template instantiation.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD const TemplateArguments& GetArguments() const;
@@ -465,7 +465,7 @@ public:
 	/// Returns the root node of this node system as an immutable Node. You can traverse the node system
 	/// starting at the root, but you can't get write access to the node system via Node. For
 	/// write-access use the function BeginModification() instead.
-	/// @see @$ref usernodes_nodes
+	/// @see @$ref usernodes_nodes.
 	/// @return												The root node of this node system.
 	//----------------------------------------------------------------------------------------
 	MAXON_FUNCTION Node GetRoot() const;
@@ -560,7 +560,7 @@ public:
 	/// copy-on-write).
 	/// @param[in] stamp							A reference time stamp. Only modifications newer than this stamp are reported.
 	/// @param[in] receiver						Modifications are reported to this receiver.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetModificationsSince(TimeStamp stamp, const ValueReceiver<const GNode&, GraphModelRef::MODIFIED>& receiver) const;
 
@@ -588,9 +588,9 @@ public:
 	/// port is the same as the layer of its enclosing port.
 	///
 	/// @param[in] port								A path to a port of this node system. This may be a port
-	///																of the root node, but also of any other arbitrarily nested node.
+	/// 															of the root node, but also of any other arbitrarily nested node.
 	/// @return												The index of the layer of the (enclosing top-level-) port in the topological layering,
-	///																or a negative number if port doesn't point to a port.
+	/// 															or a negative number if port doesn't point to a port.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int GetTopologicalLayer(const NodePath& port) const;
 
@@ -601,10 +601,10 @@ public:
 	/// Yields all top-level ports of this node system to receiver in topological order.
 	/// This comprises really all top-level ports, so not only
 	/// ports of the root node, but also of its children and any other arbitrarily nested node.
-	/// @see GetTopologicalLayer
+	/// @see GetTopologicalLayer.
 	/// @param[in] reverseOrder				True if the ports shall be reported in reverse topological order, false otherwise.
 	/// @param[in] receiver						A callback which receives the top-level ports.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetTopLevelPorts(Bool reverseOrder, const ValueReceiver<const Port&>& receiver) const;
 
@@ -616,7 +616,7 @@ public:
 	/// @param[in] value							The new value for the attribute.
 	/// @param[in] list								An optional ChangeList to track the changes.
 	/// @param[in] checkAndInvalidate	True by default. Use false to suppress check, invalidation and update of time stamp.
-	///																False may only be used for attributes which aren't needed during @ref MutableRoot::Validate "validation".
+	/// 															False may only be used for attributes which aren't needed during @ref MutableRoot::Validate "validation".
 	/// @return												True if the value has been changed, false otherwise.
 	/// @MAXON_ANNOTATION{refclass=false}
 	//----------------------------------------------------------------------------------------
@@ -847,6 +847,39 @@ private:
 	friend class NodeSystemManagerImpl;
 	friend class NodeSystemBasedTemplateImpl;
 	friend class CoreNodeWrapperImpl;
+
+public:
+	//----------------------------------------------------------------------------------------
+	///	Derives data from the node system using the given delegate. If the method has been called before
+	/// with the same id, the previous result will be returned, so the delegate won't be executed again.
+	/// All cached computations are flushed when the node system is modified (when BeginModification is called).
+	/// The method must not be used while the node system is in mutable state.
+	/// @param[in] id									A unique identifier for the derivation delegate. A second call with the same id will return the previous result,
+	///																no matter what the delegate is on second call.
+	/// @param[in] derive							A delegate which implements the derivation.
+	/// @return												The result of the derivation.
+	/// @since R2025.400
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD Result<const GenericData&> GetDerivedData(const InternedId& id, const Delegate<Result<GenericData>(const NodeSystem& sys)>& derive) const;
+
+	//----------------------------------------------------------------------------------------
+	/// @copydoc GetDerivedData
+	/// @tparam T											The type of the derived value.
+	//----------------------------------------------------------------------------------------
+	template <typename T, typename LAMBDA> MAXON_FUNCTION Result<const T&> GetDerivedData(const InternedId& id, const LAMBDA& derive) const
+	{
+		iferr_scope;
+		const GenericData& d = GetDerivedData(id,
+			[&derive] (const NodeSystem& sys) -> Result<GenericData>
+			{
+				iferr_scope;
+				T value = derive(sys) iferr_return;
+				GenericData result;
+				result.Set(std::move(value)) iferr_return;
+				return result;
+			}) iferr_return;
+		return d.Get<T>();
+	}
 };
 
 
@@ -1150,7 +1183,7 @@ template <typename T> inline Result<T> ConstructGNodeResult(typename ConstIf<Nod
 
 //----------------------------------------------------------------------------------------
 /// The type alias NodeSelector selects between MutableNode (mutable case) and Node (read-only case).
-/// @tparam MUTABLE								true for MutableNode, false for Node
+/// @tparam MUTABLE								True for MutableNode, false for Node.
 //----------------------------------------------------------------------------------------
 template <Bool MUTABLE> using NodeSelector = typename std::conditional<MUTABLE, MutableNode, Node>::type;
 
@@ -1191,12 +1224,12 @@ public:
 	/// base node unless they have been marked as removed by MutableGNode::RemoveValue().
 	/// @param[in] mask								A mask to filter the attributes which shall be added to attribs.
 	/// 															The mask filter is split into two parts: You have to set at least one of the flags from GraphAttribute::FLAGS::TYPE_MASK
-	///																to determine which attribute types shall be taken into account at all.
-	///																Optionally you can add further flags, then these have to be matched too.
+	/// 															to determine which attribute types shall be taken into account at all.
+	/// 															Optionally you can add further flags, then these have to be matched too.
 	/// @param[in] attribs						The map to write the values to.
 	/// @param[in] includeInherited		Use true if attributes inherited from base node systems shall be added (the default).
 	/// @param[in] includeRemoved			Use true if removed attributes shall be added, too (false by default,
-	///																the corresponding attribute value to signal a removed attribute is empty).
+	/// 															the corresponding attribute value to signal a removed attribute is empty).
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	Result<void> GetValues(GraphAttribute::FLAGS mask, GraphAttributeMap& attribs, Bool includeInherited = true, Bool includeRemoved = false) const
@@ -1235,7 +1268,7 @@ public:
 	/// @param[in] attr								The attribute whose value shall be obtained.
 	/// @param[in] expectedType				The expected type of the value. May be nullptr, then no type-check is done.
 	/// @param[out] nesting						If a value is found, the %nesting of the node system which contained the value
-	///																is written to nesting.
+	/// 															is written to nesting.
 	/// @param[in] negativeRootNesting	If this is true #nesting will be set to -1 if the value is defined at the root
 	/// 															node system. This allows to distinguish between values which are set at the root
 	/// 															and those which are inherited from a base (they will report a nesting of 0).
@@ -1295,7 +1328,7 @@ public:
 	/// defined at this node itself or at one of its bases. If no value is found, nullptr is returned.
 	/// @param[in] attr								The attribute whose value shall be obtained.
 	/// @param[out] nesting						If a value is found, the %nesting of the node system which contained the value
-	///																is written to nesting, see GetValue(InternedId, DataType, Int).
+	/// 															is written to nesting, see GetValue(InternedId, DataType, Int).
 	/// @return												The value of attr for this g-node, or an empty Opt if this g-node has no value for the attribute.
 	//----------------------------------------------------------------------------------------
 	template <typename ATTR> Result<Opt<const typename ATTR::ValueType&>> GetValue(const ATTR& attr, Int& nesting) const
@@ -1319,7 +1352,7 @@ public:
 	/// @param[in] attr								The attribute whose values shall be obtained.
 	/// @param[in] expectedType				The expected type of the attribute. May be nullptr, then no type-check is done.
 	/// @param[in] receiver						A callback which receives the attribute values and their nestings.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetBaseValues(const InternedId& attr, const DataType& expectedType, const ValueReceiver<const ConstDataPtr&, Int>& receiver) const
 	{
@@ -1331,10 +1364,10 @@ public:
 	/// Reports all attribute modifications which have been made for this g-node since the given stamp to the receiver.
 	/// Only stored attributes will be reported, so to also check for new values of computed
 	/// attributes you should use GraphAttributeInterface::IsComputedFrom().
-	/// @see NodeSystemInterface::GetModificationsSince
+	/// @see NodeSystemInterface::GetModificationsSince.
 	/// @param[in] stamp							A reference time stamp. Only modifications newer than this stamp are reported.
 	/// @param[in] receiver						Modifications are reported to this receiver as a pair of the attribute identifier and the current value.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetAttributeModificationsSince(TimeStamp stamp, const ValueReceiver<InternedId, ConstDataPtr>& receiver) const
 	{
@@ -1361,7 +1394,7 @@ public:
 	/// Returns the enclosing (true) node to which this g-node belongs.
 	/// If this g-node is already a node, then it is returned itself.
 	/// @return												The enclosing node if this g-node is a port list or port,
-	///																otherwise this node itself.
+	/// 															otherwise this node itself.
 	//----------------------------------------------------------------------------------------
 	Result<NodeSelector<BASE::MUTABLE>> GetNode() const
 	{
@@ -1421,10 +1454,10 @@ public:
 	/// Yields all inner nodes of this g-node matching #mask in pre-order. The recursive traversal
 	/// stops at nodes which don't match #mask.
 	/// @param[in] mask								Mask to filter the tree traversal. Only nodes matching this mask are considered.
-	///																The node on which GetInnerNodes is called isn't checked for mask.
+	/// 															The node on which GetInnerNodes is called isn't checked for mask.
 	/// @param[in] includeThis				If true, the node on which GetInnerNodes is called is yielded to #receiver too.
 	/// @param[in] receiver						Inner nodes are reported to this value receiver.
-	/// @return												false if #receiver cancelled further evaluation, true otherwise.
+	/// @return												False if #receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetInnerNodes(NODE_KIND mask, Bool includeThis, const ValueReceiver<const GNodeSelector<BASE::MUTABLE>&>& receiver) const
 	{
@@ -1468,7 +1501,7 @@ public:
 	/// systems hasn't been created this way. It's the same as the node system returned by
 	/// GetBase(). The remaining entries list the bases which have been added by AddBase().
 	/// @return												The bases of this node system, this will have at least one entry.
-	///																The first entry may be a null reference.
+	/// 															The first entry may be a null reference.
 	//----------------------------------------------------------------------------------------
 	const Block<const NodeSystem>& GetBases() const
 	{
@@ -1626,8 +1659,8 @@ public:
 	/// @param[in] system							The node system to use.
 	/// @param[in] path								A path which points to a g-node in the given node system.
 	/// @param[in] check							A mask of the expected node kind(s).
-	///	@return												Usually OK (even when path doesn't exist),
-	///																but an IllegalArgumentError if path exists but doesn't match check.
+	/// @return												Usually OK (even when path doesn't exist),
+	/// 															but an IllegalArgumentError if path exists but doesn't match check.
 	//----------------------------------------------------------------------------------------
 	Result<void> InitFromPath(const NodeSystem& system, const NodePath& path, NODE_KIND check = NODE_KIND::ALL_MASK);
 
@@ -2004,7 +2037,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Advances this iterator to the next child node.
 	/// @return												OK on success, or an error. Advancing to the position
-	///																one behind the last child is no error.
+	/// 															one behind the last child is no error.
 	//----------------------------------------------------------------------------------------
 	Result<void> operator ++()
 	{
@@ -2140,7 +2173,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the input or output port list of this node, depending on dir.
-	/// @see @$ref usernodes_nodes
+	/// @see @$ref usernodes_nodes.
 	/// @param[in] dir								PORT_DIR::INPUT to return the input port list, PORT_DIR::OUTPUT to return the output port list.
 	/// @return												Port list of this node.
 	//----------------------------------------------------------------------------------------
@@ -2153,7 +2186,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns the input port list of this node. All top-level input ports of a node
 	/// can be found as children of its input port list.
-	/// @see @$ref usernodes_nodes
+	/// @see @$ref usernodes_nodes.
 	/// @return												Input port list of this node.
 	//----------------------------------------------------------------------------------------
 	Result<PortListSelector<BASE::MUTABLE>> GetInputs() const
@@ -2165,7 +2198,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns the output port list of this node. All top-level output ports of a node
 	/// can be found as children of its output port list.
-	/// @see @$ref usernodes_nodes
+	/// @see @$ref usernodes_nodes.
 	/// @return												Output port list of this node.
 	//----------------------------------------------------------------------------------------
 	Result<PortListSelector<BASE::MUTABLE>> GetOutputs() const
@@ -2187,7 +2220,7 @@ public:
 	///		...
 	///	}
 	/// @endcode
-	/// @see @$ref usernodes_nodes
+	/// @see @$ref usernodes_nodes.
 	/// @return												Iterator over the children of this node.
 	//----------------------------------------------------------------------------------------
 	Result<Iterator> GetChildren() const
@@ -2203,8 +2236,8 @@ public:
 	/// in the node system for the given path, this reference is set to a null reference.
 	/// @param[in] system							The node system to use.
 	/// @param[in] path								A path which points to a node in the given node system.
-	///	@return												Usually OK (even when path doesn't exist),
-	///																but an IllegalArgumentError if path exists but doesn't point to a true node.
+	/// @return												Usually OK (even when path doesn't exist),
+	/// 															but an IllegalArgumentError if path exists but doesn't point to a true node.
 	//----------------------------------------------------------------------------------------
 	template <typename PATH> Result<void> InitFromPath(typename maxon::nodes::details::NodeFunctionsSuper<BASE>::NodeSystemCtorParam system, PATH&& path)
 	{
@@ -2269,7 +2302,7 @@ public:
 	/// immutable references which are obtained through this Node) is only stored temporarily
 	/// and goes out of scope before the next modification is made,
 	/// see @ref usernodes_modifications.
-	///	@return												This node as a Node.
+	/// @return												This node as a Node.
 	//----------------------------------------------------------------------------------------
 	const Node& ToImmutable() const
 	{
@@ -2409,7 +2442,7 @@ public:
 	/// @param[in] base								The new base node system.
 	/// @param[in] list								An optional ChangeList to track the changes.
 	/// @return												A new change list which contains those parts of the original node system.
-	///																which couldn't be restored for the new base.
+	/// 															which couldn't be restored for the new base.
 	//----------------------------------------------------------------------------------------
 	Result<ChangeList> ReplaceBase(const NodeSystem& base, Opt<ChangeList&> list = {}) const;
 
@@ -2436,7 +2469,7 @@ public:
 	/// @param[in] portMap						An optional port mapping from old port paths to new port paths.
 	/// @param[in] list								An optional ChangeList to track the changes.
 	/// @return												A new change list which contains those parts of the original node system.
-	///																which couldn't be restored for the new base.
+	/// 															which couldn't be restored for the new base.
 	//----------------------------------------------------------------------------------------
 	Result<ChangeList> ReplaceChild(const InternedId& childId, const NodeSystem& base, const HashMap<NodePath, NodePath>& portMap = GetZeroRef<HashMap<NodePath, NodePath>>(), Opt<ChangeList&> list = {}) const;
 
@@ -2462,7 +2495,7 @@ public:
 	///   and the port given by the third path at the outside of the group.
 	///
 	/// @param[in] groupRoot					The MutableRoot of another (usually empty) node system which will become the group.
-	///																The function will clear this reference after successful creation of the group.
+	/// 															The function will clear this reference after successful creation of the group.
 	/// @param[in] groupId						Identifier for the new group within this node system (if empty, a UUID is chosen).
 	/// @param[in] selection					A selection of nodes, namely children of the root node. Identifiers for which no root child node exists are ignored.
 	/// @param[in] matchPorts					Use true (the default) to use existing ports of groupRoot for connections into the group if their identifiers match, or false to disable this behaviour.
@@ -2489,9 +2522,9 @@ public:
 	/// @param[in] validate						True (the default) if the node system shall be validated after the merge, false otherwise.
 	/// @param[in] list								An optional ChangeList to track the changes.
 	/// @return												The mapping from original identifiers of #other to the identifiers used for the merge:
-	///																- first contains the mapping of top-level nodes.
-	///																- second contains the mapping of top-level input ports.
-	///																- third contains the mapping of top-level output ports.
+	/// 															- first contains the mapping of top-level nodes.
+	/// 															- second contains the mapping of top-level input ports.
+	/// 															- third contains the mapping of top-level output ports.
 	//----------------------------------------------------------------------------------------
 	Result<HomogenousTupleType<3, HashMap<InternedId, InternedId>>> Merge(const NodeSystem& other, const AttributeValueConversion& conversion = {}, Bool validate = true, Opt<ChangeList&> list = {}) const
 	{
@@ -2508,9 +2541,9 @@ public:
 	/// @param[in] withConnections		True if incoming connections shall be duplicated as well, false otherwise.
 	/// @param[in] list								An optional ChangeList to track the changes.
 	/// @return												The mapping from original identifiers to the identifiers used for the merge:
-	///																- first contains the mapping of top-level nodes.
-	///																- second contains the mapping of top-level input ports.
-	///																- third contains the mapping of top-level output ports.
+	/// 															- first contains the mapping of top-level nodes.
+	/// 															- second contains the mapping of top-level input ports.
+	/// 															- third contains the mapping of top-level output ports.
 	//----------------------------------------------------------------------------------------
 	Result<HomogenousTupleType<3, HashMap<InternedId, InternedId>>> Duplicate(const Block<const NodePath>& selection, Bool withConnections, Opt<ChangeList&> list = {})
 	{
@@ -2579,7 +2612,7 @@ public:
 	/// whenever you have applied several modifications to the node system
 	/// which affect derived attributes and want the values of derived attributes to be up-to-date.
 	/// @see @$ref usernodes_modifications
-	/// @see @$ref usernodes_derivation
+	/// @see @$ref usernodes_derivation.
 	/// @param[in] list								An optional ChangeList to track the changes.
 	//----------------------------------------------------------------------------------------
 	Result<void> Validate(Opt<ChangeList&> list = {}) const;
@@ -2637,7 +2670,7 @@ public:
 	/// @param[in] inverse						Use true if the inverse of the change list shall be applied (for an undo), false otherwise.
 	/// @param[in] track							An optional ChangeList to track the changes.
 	/// @return												A new change list which contains those changes of toApply which couldn't be applied,
-	///																for example the change of an attribute value at a node which doesn't exist in the node system.
+	/// 															for example the change of an attribute value at a node which doesn't exist in the node system.
 	//----------------------------------------------------------------------------------------
 	Result<ChangeList> Apply(const ChangeList& toApply, Bool inverse, Opt<ChangeList&> track = {}) const
 	{
@@ -2774,7 +2807,7 @@ public:
 	///		...
 	///	}
 	/// @endcode
-	/// @see @$ref usernodes_nodes
+	/// @see @$ref usernodes_nodes.
 	/// @return												Iterator over the ports of this port list.
 	//----------------------------------------------------------------------------------------
 	Result<Iterator> GetPorts() const
@@ -2915,7 +2948,7 @@ public:
 	/// immutable references which are obtained through this PortList) is only stored temporarily
 	/// and goes out of scope before the next modification is made,
 	/// see @ref usernodes_modifications.
-	///	@return												This port list as a PortList.
+	/// @return												This port list as a PortList.
 	//----------------------------------------------------------------------------------------
 	const PortList& ToImmutable() const
 	{
@@ -3002,7 +3035,7 @@ public:
 	/// @param[out] conns							The receiver for the found connections.
 	/// @param[in] mask								Only yield connections whose wires match this mask.
 	/// @param[in] mode								Mode for GetConnections.
-	/// @return												false if #conns cancelled further evaluation, true otherwise.
+	/// @return												False if #conns cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetConnections(PORT_DIR dir, const ValueReceiver<const ConnectionSelector<BASE::MUTABLE>&>& conns, Wires mask = Wires::All(), NodeSystemInterface::GET_CONNECTIONS_MODE mode = NodeSystemInterface::GET_CONNECTIONS_MODE::CONNECTIONS) const
 	{
@@ -3028,7 +3061,7 @@ public:
 	/// Gets all attribute values of the connection from this port to target.
 	/// @param[in] target							The other end of the connection.
 	/// @param[out] receiver					All attribute values of the connection will be reported to the receiver.
-	/// @return												false if #receiver cancelled further evaluation, true otherwise.
+	/// @return												False if #receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetConnectionValues(const PortSelector<BASE::MUTABLE>& target, const ValueReceiver<CONNECTION_POSITION, const InternedId&, const ConstDataPtr&>& receiver) const
 	{
@@ -3072,7 +3105,7 @@ public:
 	/// Gets the value of the given attribute attr for the connection from this port to target. If there is no such
 	/// connection, the connection has no value for the attribute or the value doesn't have the expected type,
 	/// an empty Opt is returned.
-	/// @param[in] attr							 	The attribute whose value shall be obtained.
+	/// @param[in] attr								The attribute whose value shall be obtained.
 	/// @param[in] target							The other end of the connection.
 	/// @param[in] position						The connection position at which the attribute's value shall be obtained.
 	/// @return												The attribute value of the connection, may be an empty Opt.
@@ -3133,7 +3166,7 @@ public:
 	/// port is the same as the layer of its enclosing port.
 	///
 	/// @return												The index of the layer of this port (or its enclosing top-level port) in the topological layering,
-	///																or a negative number if this port reference doesn't point to a valid port.
+	/// 															or a negative number if this port reference doesn't point to a valid port.
 	//----------------------------------------------------------------------------------------
 	Int GetTopologicalLayer() const
 	{
@@ -3320,7 +3353,7 @@ public:
 	/// immutable references which are obtained through this Port) is only stored temporarily
 	/// and goes out of scope before the next modification is made,
 	/// see @ref usernodes_modifications.
-	///	@return												This port list as a Port.
+	/// @return												This port list as a Port.
 	//----------------------------------------------------------------------------------------
 	const Port& ToImmutable() const
 	{

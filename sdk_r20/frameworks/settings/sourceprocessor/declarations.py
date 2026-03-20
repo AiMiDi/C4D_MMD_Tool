@@ -157,7 +157,7 @@ def parseProjectDefinition(lines):
 
 def usedFrameworks(projectDir, selfAndRecursive, visited):
     projDefPath = os.path.join(projectDir, 'project', 'projectdefinition.txt')
-    projDef = open(projDefPath, 'rU')
+    projDef = open(projDefPath, 'r')
     keys, m = parseProjectDefinition(projDef)
     projDef.close()
     frameworks = m.get('apis', None)

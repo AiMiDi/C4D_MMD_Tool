@@ -32,47 +32,63 @@ enum class ICONFLAG
 /// Registers an icon from a bitmap.\n
 /// Optionally a sub-icon can be specified within a larger image by giving a rectangle from (@formatParam{x},@formatParam{y}) to (@formatParam{x}+@formatParam{w}, @formatParam{y}+@formatParam{h}).\n
 /// If no rectangle is specified the whole bitmap is used.
-/// @warning Unless @ref ICONFLAG::COPY is set make sure that @formatParam{pBmp} points to a bitmap that will always be available.
-/// @param[in] lIconID						@uniquePluginID
-/// @param[in] pBmp								The bitmap to use for the icon. @callerOwnsPointed{bitmap}
+/// @warning Unless @ref ICONFLAG::COPY is set make sure that @formatParam{bmp} points to a bitmap that will always be available.
+/// @param[in] iconId							@uniquePluginID
+/// @param[in] bmp								The bitmap to use for the icon. @callerOwnsPointed{bitmap}
 /// @param[in] x									Optional X coordinate of the top left corner of the sub-icon rectangle.
 /// @param[in] y									Optional Y coordinate of the top left corner of the sub-icon rectangle.
 /// @param[in] w									Optional width of the sub-icon rectangle.
 /// @param[in] h									Optional height of the sub-icon rectangle.
-/// @param[in] lFlags							The flags: @enumerateEnum{ICONFLAG}
+/// @param[in] flags							The flags: @enumerateEnum{ICONFLAG}
 /// @return												@trueIfOtherwiseFalse{the icon was registered}
 //----------------------------------------------------------------------------------------
-Bool RegisterIcon(Int32 lIconID, BaseBitmap *pBmp, Int32 x = 0, Int32 y = 0, Int32 w = -1, Int32 h = -1, ICONFLAG lFlags = ICONFLAG::NONE);
+Bool RegisterIcon(Int32 iconId, BaseBitmap* bmp, Int32 x = 0, Int32 y = 0, Int32 w = -1, Int32 h = -1, ICONFLAG flags = ICONFLAG::NONE);
 
 //----------------------------------------------------------------------------------------
 /// Registers an icon from an image file.\n
 /// Optionally a sub-icon can be specified within a larger image by giving a rectangle from (@formatParam{x},@formatParam{y}) to (@formatParam{x}+@formatParam{w}, @formatParam{y}+@formatParam{h}).\n
 /// If no rectangle is specified the whole bitmap is used.
-/// @param[in] lIconID						@uniquePluginID
+/// @param[in] iconId							@uniquePluginID
 /// @param[in] fn									The filename of the image file to use for the icon.
 /// @param[in] x									Optional X coordinate of the top left corner of the sub-icon rectangle.
 /// @param[in] y									Optional Y coordinate of the top left corner of the sub-icon rectangle.
 /// @param[in] w									Optional width of the sub-icon rectangle.
 /// @param[in] h									Optional height of the sub-icon rectangle.
-/// @param[in] lFlags							The flags: @enumerateEnum{ICONFLAG}
+/// @param[in] flags							The flags: @enumerateEnum{ICONFLAG}. Note that @ref ICONFLAG::COPY is not relevant in this context.
 /// @return												@trueIfOtherwiseFalse{the icon was registered}
 //----------------------------------------------------------------------------------------
-Bool RegisterIcon(Int32 lIconID, Filename fn, Int32 x = 0, Int32 y = 0, Int32 w = -1, Int32 h = -1, ICONFLAG lFlags = ICONFLAG::NONE); // always creates a copy (ICONFLAG::COPY set)
+Bool RegisterIcon(Int32 iconId, Filename fn, Int32 x = 0, Int32 y = 0, Int32 w = -1, Int32 h = -1, ICONFLAG flags = ICONFLAG::NONE);
 
 //----------------------------------------------------------------------------------------
-/// Retrieves an icon registered with RegisterIcon().
-/// @param[in] lIconID						The ID of the icon.
-/// @param[in,out] pData					Filled with information about the found icon. @callerOwnsPointed{icon data}
+/// Retrieves an icon registered with @ref RegisterIcon().
+/// @param[in] iconId							The ID of the icon.
+/// @param[in,out] data						Filled with information about the found icon. @callerOwnsPointed{icon data}
 /// @return												@trueIfOtherwiseFalse{the icon data was retrieved}
 //----------------------------------------------------------------------------------------
-Bool GetIcon(Int32 lIconID, IconData* pData);
+Bool GetIcon(Int32 iconId, IconData* data);
+
+//----------------------------------------------------------------------------------------
+/// Colorizes an icon registered with @ref RegisterIcon() in the given color. If @formatParam{color} is empty or not a valid, the icon will be restored (i.e. "de-colorized") to its original state.
+/// @param[in] iconId							The ID of the icon.
+/// @param[in] color							The color. Can be either a valid color ID from c4d_colors.h, e.g. @formatConstant{COLOR_BG} or a @ref Vector color in range @formatConstant{(0.0,1.0)} or an empty or invalid data, which will de-colorize the icon.
+/// @return												@trueIfOtherwiseFalse{the icon data was properly colorized}
+//----------------------------------------------------------------------------------------
+Bool ColorizeIcon(Int32 iconId, const GeData& color);
+
+//----------------------------------------------------------------------------------------
+/// Returns a colorized copy of the defined icon. If @formatParam{color} is empty or not a valid, the returned copied will be the original non-colorized version of the icon.
+/// @param[in] iconId							The ID of the icon.
+/// @param[in] color							The color. Can be either a valid color ID from c4d_colors.h, e.g. @formatConstant{COLOR_BG} or a @ref Vector color in range @formatConstant{(0.0,1.0)} or an empty or invalid data, which will return a non-colorized icon.
+/// @return												A colorized copy of the icon bitmap. @callerOwnsPointed{bitmap}.
+//----------------------------------------------------------------------------------------
+BaseBitmap* GetColorizedIcon(Int32 iconId, const GeData& color);
 
 //----------------------------------------------------------------------------------------
 /// Unregisters an icon registered with RegisterIcon().
-/// @param[in] lIconID						The ID of the icon.
+/// @param[in] iconId							The ID of the icon.
 /// @return												@trueIfOtherwiseFalse{the icon was unregistered}
 //----------------------------------------------------------------------------------------
-Bool UnregisterIcon(Int32 lIconID);
+Bool UnregisterIcon(Int32 iconId);
 
 /// Icon collection library ID.
 #define LIBRARY_ICON_COLLECTION		1009310
@@ -87,10 +103,12 @@ Bool UnregisterIcon(Int32 lIconID);
 
 struct IconCollectionLib : public C4DLibrary
 {
-	Bool			(*RegisterIconBitmap)(Int32 lIconID, BaseBitmap *pBmp, Int32 x, Int32 y, Int32 w, Int32 h, ICONFLAG lFlags);
-	Bool			(*RegisterIconFile	)(Int32 lIconID, Filename fn, Int32 x, Int32 y, Int32 w, Int32 h, ICONFLAG lFlags);
-	Bool			(*GetIcon)					(Int32 lIconID, IconData* pData);
-	Bool			(*UnregisterIcon		)(Int32 lIconID);
+	Bool				(*RegisterIconBitmap 	 )(Int32 iconId, BaseBitmap* bmp, Int32 x, Int32 y, Int32 w, Int32 h, ICONFLAG flags);
+	Bool				(*RegisterIconFile	 	 )(Int32 iconId, Filename fn, Int32 x, Int32 y, Int32 w, Int32 h, ICONFLAG flags);
+	Bool				(*GetIcon						 	 )(Int32 iconId, IconData* data);
+	Bool				(*UnregisterIcon		 	 )(Int32 iconId);
+	Bool				(*ColorizeIcon				 )(Int32 iconId, const GeData& color);
+	BaseBitmap*	(*GetColorizedIcon		 )(Int32 iconId, const GeData& color);
 };
 
 // INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF

@@ -1,9 +1,0 @@
-#ifndef VPSHARPENFILTER_H__
-#define VPSHARPENFILTER_H__
-
-enum
-{
-	VP_SHARPENFILTERSTRENGTH					=	1000
-};
-
-#endif // VPSHARPENFILTER_H__

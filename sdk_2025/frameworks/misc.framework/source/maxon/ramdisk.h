@@ -60,7 +60,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// IsInCache allows to detect if the url is cached.
 	/// @param[in] url								Url to detect.
-	/// @return                       returns the url of the cache if the file cached. If empty no cache exists.
+	/// @return												Returns the url of the cache if the file cached. If empty no cache exists.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Tuple<Bool, Url>> IsInCache(const Url& url);
 
@@ -78,8 +78,8 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// FindExisting returns an existing ram disk.
-	/// @param[in] ramdiskId					Id to find
-	/// @return                       RamDiskRef on success. Otherwise nullptr.
+	/// @param[in] ramdiskId					Id to find.
+	/// @return												RamDiskRef on success. Otherwise nullptr.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD RamDiskRef FindExisting(const String& ramdiskId);
 };

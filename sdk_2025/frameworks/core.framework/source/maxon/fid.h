@@ -546,6 +546,22 @@ inline typename std::enable_if<IsFidClass<KEY>::value, ConstDataPtr>::type Conve
 }
 
 
+template <typename RESTRICT, Bool ONLYFID, typename KEY>
+inline typename std::enable_if<!IsFidClass<KEY>::value, typename std::conditional<STD_IS_REPLACEMENT(reference, KEY) || STD_IS_REPLACEMENT(const, KEY), ConstDataPtr, MoveDataPtr>::type>::type ConvertKeyToTrivialDataPtr(KEY&& key)
+{
+	static_assert(!ONLYFID, "Only Fid are allowed here. Please use the correct FId type.");
+	// Not a FId argument
+	return typename std::conditional < STD_IS_REPLACEMENT(reference, KEY) || STD_IS_REPLACEMENT(const, KEY), ConstDataPtr, MoveDataPtr > ::type(std::forward<KEY>(key));
+}
+
+template <typename RESTRICT, Bool ONLYFID, typename KEY>
+inline typename std::enable_if<IsFidClass<KEY>::value, TrivialDataPtr>::type ConvertKeyToTrivialDataPtr(KEY&& key)
+{
+	static_assert(RESTRICT::template Check<decltype(TestRestriction(key, OVERLOAD_MAX_RANK))>::value, "Fid is restricted to a namespace. Please use FId from the restricted namespace only.");
+	// This is a FId argument
+	return TrivialDataPtr(GetDataType<std::decay_t<decltype(key.Get())>>(), (const Generic*)&key.Get());
+}
+
 class RESTRICT { };
 template <typename T> RESTRICT TestRestriction(T y, OverloadRank0);
 
@@ -557,8 +573,8 @@ namespace details
 //----------------------------------------------------------------------------------------
 /// @brief Value type validation class to that can be used to prevent certain types from being used as value type in containers.
 /// For instance, DataDictionary uses it to prevent use of LiteralId as value type (LiteralId is constexpr, cannot be de-serialized).
-/// @tparam ILLEGALTYPE					First illegal type to test.
-/// @tparam OTHERILLEGALTYPES		More illegal types. Optional.
+/// @tparam ILLEGALTYPE						First illegal type to test.
+/// @tparam OTHERILLEGALTYPES			More illegal types. Optional.
 //----------------------------------------------------------------------------------------
 template <typename ILLEGALTYPE, typename... OTHERILLEGALTYPES>
 class ValidKeyValuePairTraitHelper
@@ -568,9 +584,9 @@ public:
 //----------------------------------------------------------------------------------------
 /// @brief Verifies if the final value type is legal.
 /// Final value type can either be VALUETYPE or KEYTYPE::ValueType in case of a MAXON_ATTRIBUTE.
-/// @tparam VALUETYPE			Value type to be written to container.
-/// @tparam KEYTYPE				Key type used to write the value to the container.
-/// @return								True if the value is legal for all given illegal types.
+/// @tparam VALUETYPE							Value type to be written to container.
+/// @tparam KEYTYPE								Key type used to write the value to the container.
+/// @return												True if the value is legal for all given illegal types.
 //----------------------------------------------------------------------------------------
 	template <typename VALUETYPE, typename KEYTYPE>
 	static constexpr Bool IsValueTypeLegal()
@@ -615,7 +631,7 @@ public:
 
 //----------------------------------------------------------------------------------------
 /// @brief Type trait to be used in identification of acceptable key-value type pairs.
-/// @tparam ILLEGALTYPES			List of illegal types that the trait will search for.
+/// @tparam ILLEGALTYPES					List of illegal types that the trait will search for.
 //----------------------------------------------------------------------------------------
 template <typename... ILLEGALTYPES>
 class ValidKeyValuePairTrait

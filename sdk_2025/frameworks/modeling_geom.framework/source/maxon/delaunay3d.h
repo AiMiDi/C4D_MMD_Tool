@@ -45,7 +45,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Checks if Init() has been called.
 	/// THREADSAFE.
-	/// @return												true if Init() has beed called, false otherwise.
+	/// @return												True if Init() has beed called, false otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool IsInitialized();
 

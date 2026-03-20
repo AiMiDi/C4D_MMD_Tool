@@ -73,6 +73,13 @@ public:
 	/// @markPrivate
 	//----------------------------------------------------------------------------------------
 	void Draw(BaseDocument* doc, BaseDraw* bd, BaseDrawHelp* bh, BaseThread* bt, SCENEHOOKDRAW flags);
+
+	//----------------------------------------------------------------------------------------
+	/// Returns a pointer to this scene hook's data for the object @formatParam{op}, see RegisterSceneHookPlugin.
+	/// @param[in] op									An object.
+	/// @return											  Pointer to memory which @formatParam{op} holds for this scene hook.
+	//----------------------------------------------------------------------------------------
+	maxon::Generic* GetObjectData(BaseList2D* op);
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -261,6 +268,22 @@ public:
 	/// @param[in] pixelAspect				The ratio of a pixel's on-screen width to it's on-screen height.
 	//----------------------------------------------------------------------------------------
 	void SetResolution(Float width, Float height, Float pixelAspect);
+
+	//----------------------------------------------------------------------------------------
+	/// @brief GetRealFrameRate returns the calculated framerate taking the RDATA_FRAMERATE_SYNC_WITH_PROJECT into account.
+	/// @details if RDATA_FRAMERATE_SYNC_WITH_PROJECT is true the function returns the document settings frame rate. If false the value of RenderData framerate is used.
+	/// @param[in] doc								Document to take the frame rate from in case of RDATA_FRAMERATE_SYNC_WITH_PROJECT is true.
+	/// @return												Rounded Int32 value of the effective frame rate.
+	//----------------------------------------------------------------------------------------
+	Int32 GetRealFrameRate(const BaseDocument* doc) const;
+
+	//----------------------------------------------------------------------------------------
+	/// @brief GetRealFrameRate returns the calculated framerate taking the RDATA_FRAMERATE_SYNC_WITH_PROJECT into account.
+	/// @param[in] doc								Document to take the frame rate from in case of RDATA_FRAMERATE_SYNC_WITH_PROJECT is true.
+	/// @param[in] bc									Render data settings container. if RDATA_FRAMERATE_SYNC_WITH_PROJECT is false the frame rate is taken from bc->GetFloat(RDATA_FRAMERATE).
+	/// @return												Rounded Int32 value of the effective frame rate.
+	//----------------------------------------------------------------------------------------
+	static Int32 GetRealFrameRate(const BaseDocument* doc, const BaseContainer* bc);
 
 	/// @}
 };
@@ -1435,7 +1458,7 @@ public:
 	/// @param[in] bl									The object/tag/material that got inserted. It is used if @formatParam{type} is of one of the following values:
 	/// 															- @ref MSG_DOCUMENTINFO_TYPE_OBJECT_INSERT
 	/// 															- @ref MSG_DOCUMENTINFO_TYPE_TAG_INSERT
-	/// 															- @ref MSG_DOCUMENTINFO_TYPE_MATERIAL_INSERT
+	/// 															- @ref MSG_DOCUMENTINFO_TYPE_MATERIAL_INSERT.
 	/// @param[in] hooks_only					If @formatConstant{true} the message is sent to scene hooks only.
 	//----------------------------------------------------------------------------------------
 	void SendInfo(Int32 type, Int32 format, const Filename& fn, BaseList2D* bl, Bool hooks_only) { return C4DOS_Bd->SendInfo(this, type, format, fn, bl, hooks_only); }
@@ -1515,10 +1538,15 @@ public:
 
 	/// @markprivate
 	/// @since R22.000
-	void			SetMode(Int32 mode, const maxon::Id& group);
+	void SetMode(Int32 mode, const maxon::Id& group);
+
+	/// @}
+
+	/// @name Color Management
+	/// @{
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the path of the OCIO coniguration file.
+	/// Gets the path of the OCIO configuration file.
 	/// @since R2023.000
 	/// If fullPath is set to true, the full path is returned, otherwise the string that is entered in the document settings.
 	/// If the path is set to "$OCIO" by the user, the path is taken from the environment variable "OCIO".
@@ -1568,14 +1596,16 @@ public:
 	void GetActiveOcioColorSpacesNames(maxon::CString& renderingColorSpace, maxon::CString& displayColorSpace, maxon::CString& viewTransform, maxon::CString& viewTransformThumbnails) const;
 
 	//----------------------------------------------------------------------------------------
-	// Gets the names of all color spaces that are defined by the current configuration.
+	/// Gets the names of all color spaces that are defined by the current configuration.
+	//----------------------------------------------------------------------------------------
 	/// @since R2023.100
 	/// @return												An array containing the names of the color spaces.
 	//----------------------------------------------------------------------------------------
 	const maxon::BaseArray<maxon::CString>& GetOcioColorSpaceNames();
 
 	//----------------------------------------------------------------------------------------
-	// Gets the names of all rendering color spaces that are defined by the current configuration.
+	/// Gets the names of all rendering color spaces that are defined by the current configuration.
+	//----------------------------------------------------------------------------------------
 	/// @since R2023.100
 	/// @return												An array containing the names of the rendering color spaces.
 	//----------------------------------------------------------------------------------------
@@ -1583,6 +1613,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	// Gets the names of all color spaces as menu items to be used as a menu.
+	//----------------------------------------------------------------------------------------
 	/// @since R2023.200
 	/// @return												A BaseContainer containing the names of all color spaces.
 	//----------------------------------------------------------------------------------------
@@ -1590,6 +1621,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	// Gets the names of all view transforms that are defined by the current configuration.
+	//----------------------------------------------------------------------------------------
 	/// @since R2023.100
 	/// @return												An array containing the names of the view transforms.
 	//----------------------------------------------------------------------------------------
@@ -1597,6 +1629,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	// Gets the names of all display color spaces that are defined by the current configuration.
+	//----------------------------------------------------------------------------------------
 	/// @since R2023.100
 	/// @return												An array containing the names of the display color spaces.
 	//----------------------------------------------------------------------------------------
@@ -1604,23 +1637,25 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	// Gets the name of a color space that is defined by category and index. Returns an empty string if category or index are out of range.
+	//----------------------------------------------------------------------------------------
 	/// @since R2023.000
 	/// category must be one of these values: DOCUMENT_OCIO_INPUT_COLORSPACE, DOCUMENT_OCIO_RENDER_COLORSPACE, DOCUMENT_OCIO_VIEW_TRANSFORM,
 	/// DOCUMENT_OCIO_VIEW_TRANSFORM_THUMBNAILS or DOCUMENT_OCIO_DISPLAY_COLORSPACE.
 	/// @param[in] category						Category.
 	/// @param[in] index							Index within the list that is specified by category.
-	/// @return												An array containg the names of the display color spaces.
+	/// @return												The name of the corresponding colorspace.
 	//----------------------------------------------------------------------------------------
 	maxon::CString GetNameFromColorSpaceId(Int32 category, Int32 index) const;
 
 	//----------------------------------------------------------------------------------------
 	// Gets the index of a color space that is defined by category and its name. Returns NOTOK if category is out of range ot if the name does not exist.
+	//----------------------------------------------------------------------------------------
 	/// @since R2023.000
 	/// category must be one of these values: DOCUMENT_OCIO_INPUT_COLORSPACE, DOCUMENT_OCIO_RENDER_COLORSPACE, DOCUMENT_OCIO_VIEW_TRANSFORM,
 	/// DOCUMENT_OCIO_VIEW_TRANSFORM_THUMBNAILS or DOCUMENT_OCIO_DISPLAY_COLORSPACE.
 	/// @param[in] category						Category.
 	/// @param[in] name								Name of a color space within the list that is specified by category.
-	/// @return												An array containg the names of the display color spaces.
+	/// @return												The index of the corresponding colorspace.
 	//----------------------------------------------------------------------------------------
 	Int32 GetColorSpaceIdFromName(Int32 category, const maxon::CString& name) const;
 
@@ -1647,7 +1682,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Returns a fallback converter that can be used instead of a document specific OCIO converter in case of errors.
-	/// @return	The dummy color converter.
+	/// @return												The dummy color converter.
 	//----------------------------------------------------------------------------------------
 	static const OcioConverterRef& GetBasicColorConverter();
 
@@ -1664,11 +1699,13 @@ public:
 	//----------------------------------------------------------------------------------------
 	const OcioConverterRef& GetThumbnailColorConverter() const;
 
+	/// @}
+
 	//----------------------------------------------------------------------------------------
 	/// PrivateSetBaseRepository is a private functions to add a base asset repository base to the current document
 	/// document. This can be used for preview renderings to connect the textures/nodes from the local scene repository.
-	/// @param[in] baseRepo						repository to set as base in the current scene repository.
-	/// @return                       OK on success.
+	/// @param[in] baseRepo						Repository to set as base in the current scene repository.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> PrivateSetBaseRepository(const maxon::UpdatableAssetRepositoryRef& baseRepo);
 
@@ -1682,26 +1719,24 @@ public:
 	/// Checks if the scene contains uncached dynamics. Even the scene contains i.e. cloth, rope or dynamics objects/tags this
 	/// function still return false when all objects are cached.
 	///
-	/// @return			True if dynamics that are not cached are present, otherwise false.
+	/// @return												True if dynamics that are not cached are present, otherwise false.
 	//----------------------------------------------------------------------------------------
 	Bool HasUncachedDynamics() const { return BdCall(HasUncachedDynamics)(); }
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the scene contains any elements.
 	///
-	/// @return			True if the scene is considered empty.
+	/// @return												True if the scene is considered empty.
 	//----------------------------------------------------------------------------------------
 	Bool IsBlank() { return BdCall(IsBlank)(); }
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the scene contains uncached dynamic MoGraph effects. This includes field lists in deformers and effectors.
-	/// function return false when all objects are cached or no dynamic MoGraph effects were found
+	/// function return false when all objects are cached or no dynamic MoGraph effects were found.
 	///
-	/// @return			True if dynamic MoGraph elements that are not cached are present, otherwise false.
+	/// @return												True if dynamic MoGraph elements that are not cached are present, otherwise false.
 	//----------------------------------------------------------------------------------------
 	Bool HasUncachedDynamicMoGraph() const { return BdCall(HasUncachedDynamicMoGraph)(); }
-
-	/// @}
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -1942,6 +1977,16 @@ BaseDocument* IsolateObjects(BaseDocument* doc, const AtomArray& t_objects);
 //----------------------------------------------------------------------------------------
 RENDERRESULT RenderDocument(BaseDocument* doc, const BaseContainer& rdata, ProgressHook* prog, void* private_data, BaseBitmap* bmp, RENDERFLAGS renderflags, BaseThread* th, WriteProgressHook* wprog = nullptr, void* data = nullptr);
 
+//----------------------------------------------------------------------------------------
+/// @brief Bakes the OCIO transforms associated with `bmp` into the image.
+/// @details This primarily intended for baking OCIO data to sRGB for displaying purposes within Cinema 4D, as for 
+/// example baking RenderDocument images for the Picture Viewer.
+/// @param[in] bmp								Bitmap to bake. This should be the result of `RenderDocument`.
+/// @param[in] renderData					Render data that was used to render the document.
+/// @param[in] flags							Save bits.
+/// @return												Baked bitmap or `nullptr` if the bitmap does not need to be baked. The caller owns the pointed bitmap.
+//----------------------------------------------------------------------------------------
+maxon::Result<BaseBitmap*> BakeOcioViewToBitmap(BaseBitmap* bmp, const BaseContainer& renderData, SAVEBIT flags);
 
 //----------------------------------------------------------------------------------------
 /// Saves the document as a project (menu <i>"Save Project with Assets"</i>).
@@ -1960,7 +2005,7 @@ Bool SaveProject(BaseDocument* doc, SAVEPROJECT flags, Filename targetPath, maxo
 /// @param[in] allowDialogs				If @formatConstant{true} this function can open dialogs. For example a file select dialog will be opened if a node of the scene points to a file which does not exist anymore.
 /// @param[in] assets							Assigned the assets in document @formatParam{doc}.
 /// @param[out] lastPath					Filled with the last path used.\n
-///																If a file dialog is opened and the user selects the missing file on the hard disk, the folder of this asset is assigned to @formatParam{lastPath}.\n
+/// 															If a file dialog is opened and the user selects the missing file on the hard disk, the folder of this asset is assigned to @formatParam{lastPath}.\n
 /// 															The developer can store this value somewhere and pass it next time so @C4D know where to look first before asking the user again.
 /// @param[in] flags							Flags to decide which assets should be collected: @enumerateEnum{ASSETDATA_FLAG}
 /// @return												The result if all assets were collected: @enumerateEnum{GETALLASSETSRESULT}

@@ -78,7 +78,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the target that is linked to the weak link.
-	/// @return                       Target pointer, otherwise nullptr if the object was freed in the meanwhile.
+	/// @return												Target pointer, otherwise nullptr if the object was freed in the meanwhile.
 	//----------------------------------------------------------------------------------------
 	TYPE* Get() const
 	{
@@ -90,7 +90,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the target that is linked to the weak link.
-	/// @return                       Proxy for the target pointer, otherwise nullptr if the object was freed in the meanwhile.
+	/// @return												Proxy for the target pointer, otherwise nullptr if the object was freed in the meanwhile.
 	//----------------------------------------------------------------------------------------
 	WeakRawPtrProxy GetProxy() const
 	{

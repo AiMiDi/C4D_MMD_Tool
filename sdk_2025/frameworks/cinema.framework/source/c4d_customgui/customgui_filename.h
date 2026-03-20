@@ -20,13 +20,14 @@ namespace cinema
 /// @addtogroup FILENAME_CUSTOMGUISETTINGS
 /// @ingroup CUSTOMGUISETTINGS
 /// @{
-#define FILENAME_DIRECTORY	10000 ///< ::Bool Directory chooser mode.
-#define FILENAME_TEXTURE		10001 ///< ::Bool Texture mode.
-#define FILENAME_SAVE				10002 ///< ::Bool Save mode for chooser.
-#define FILENAME_READONLY		10003 ///< ::Bool Read-only mode for the edit text field.
-#define FILENAME_NOSELECT		10004 ///< ::Bool Hides the file selection button.
-#define FILENAME_TOKENPOPUP 10005 ///< ::Bool Displays the token popup. @since R17.048
-#define FILENAME_HELPSTRING 10006 ///< ::String Shows a help string in the text field when empty. @since 2023.100
+#define FILENAME_DIRECTORY	         10000 ///< ::Bool Directory chooser mode.
+#define FILENAME_TEXTURE		         10001 ///< ::Bool Texture mode.
+#define FILENAME_SAVE				         10002 ///< ::Bool Save mode for chooser.
+#define FILENAME_READONLY		         10003 ///< ::Bool Read-only mode for the edit text field.
+#define FILENAME_NOSELECT		         10004 ///< ::Bool Hides the file selection button.
+#define FILENAME_TOKENPOPUP          10005 ///< ::Bool Displays the token popup. @since R17.048
+#define FILENAME_HELPSTRING          10006 ///< ::String Shows a help string in the text field when empty. @since 2023.100
+#define FILENAME_ASSETBROWSER_SELECT 10007 ///< ::Bool Adds extra button to select a file/asset from a popup asset browser. @since 2025.1
 /// @}
 
 //----------------------------------------------------------------------------------------

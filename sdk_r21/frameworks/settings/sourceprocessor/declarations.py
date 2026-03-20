@@ -96,7 +96,7 @@ def operatorName(id):
 # Writes string s to file. If the file's content already equals s, nothing is done.
 def writeToFile(file, s):
     try:
-        f = open(file, 'rU')
+        f = open(file, 'r')
         current = f.read()
         f.close()
     except (KeyboardInterrupt, SystemExit):
@@ -171,7 +171,7 @@ def getFrameworkId(startDir, name):
     fwDir = findFrameworkDir(startDir, name)
     if fwDir:
         projDefPath = os.path.join(fwDir, 'project', 'projectdefinition.txt')
-        projDef = open(projDefPath, 'rU')
+        projDef = open(projDefPath, 'r')
         keys, m = parseProjectDefinition(projDef)
         projDef.close()
         id = m.get('moduleid', ('net.maxon.c4d.' if m.get('c4d', False) else 'net.maxon.') + name)
@@ -181,7 +181,7 @@ def getFrameworkId(startDir, name):
 def usedFrameworks(projectDir, selfAndRecursive, visited):
     projectDir = os.path.abspath(projectDir)
     projDefPath = os.path.join(projectDir, 'project', 'projectdefinition.txt')
-    projDef = open(projDefPath, 'rU')
+    projDef = open(projDefPath, 'r')
     keys, m = parseProjectDefinition(projDef)
     projDef.close()
     frameworks = m.get('apis', None)

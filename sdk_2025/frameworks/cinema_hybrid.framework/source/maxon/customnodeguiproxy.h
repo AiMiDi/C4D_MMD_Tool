@@ -68,18 +68,18 @@ public:
 	/// Creates an attribute manager attribute. This is just the "control dot", not the value itself.
 	/// Note that no artificial (or virtual) elements can be created. Only existing elements can be reordered.
 	/// This routine is should be called within CreateLayout.
-	/// @param[in] id											A valid DescID for the element. 
-	/// @param[out] resNeedsUnfoldGroup		Returns information if the element requires an open/close unfold element.
-	/// @param[in] objects								Optional parameter to set objects list. Nullptr to auto detect objects.
-	/// @param[in] flags									See ATTRIBUTEMANAGER::CREATEATTRIBUTEFLAGS.
-	/// @return														The created CustomGui element if successful.
+	/// @param[in] id									A valid DescID for the element. 
+	/// @param[out] resNeedsUnfoldGroup	Returns information if the element requires an open/close unfold element.
+	/// @param[in] objects						Optional parameter to set objects list. Nullptr to auto detect objects.
+	/// @param[in] flags							See ATTRIBUTEMANAGER::CREATEATTRIBUTEFLAGS.
+	/// @return												The created CustomGui element if successful.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<cinema::DescriptionPropertyCustomGui*> CreateAttribute(const cinema::DescID& id, Bool& resNeedsUnfoldGroup, const BaseArray<cinema::BaseList2D*>& objects, ATTRIBUTEMANAGER::CREATEATTRIBUTEFLAGS flags);
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the gadget base id of the attribute manager object.
-	/// @param[in] id											A valid DescID for the element. 
-	/// @return														Int32 with the gadget base id on success.
+	/// @param[in] id									A valid DescID for the element. 
+	/// @return												Int32 with the gadget base id on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Int32> GetAttributeGadgetBaseId(const cinema::DescID& id);
 
@@ -87,37 +87,38 @@ public:
 	/// Creates an attribute manager value. This is data value, not the "control dot".
 	/// Note that no artificial (or virtual) elements can be created. Only existing elements can be reordered.
 	/// This routine is should be called within CreateLayout.
-	/// @param[in] id											A valid DescID for the element. 
-	/// @param[in] objects								Optional parameter to set objects list. Nullptr to auto detect objects.
-	/// @return														OK on success.
+	/// @param[in] id									A valid DescID for the element. 
+	/// @param[in] objects						Optional parameter to set objects list. Nullptr to auto detect objects.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> CreateAttributeValue(const cinema::DescID& id, const BaseArray<cinema::BaseList2D*>& objects);
 
 	//----------------------------------------------------------------------------------------
 	/// Removes an attribute manager value from the current layout.
 	/// This routine is should be called between LayoutFlushGroup and LayoutChanged.
-	/// @param[in] id											A valid DescID for the element. 
-	/// @return														OK on success.
+	/// @param[in] id									A valid DescID for the element. 
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> RemoveAttributeValue(const cinema::DescID& id);
 
 	//----------------------------------------------------------------------------------------
 	/// Creates an open/close unfolding group.
 	/// This routine is should be called within CreateLayout.
-	/// @param[in] id											A valid DescID for the element. 
-	/// @param[in] objects								Optional parameter to set objects list. Nullptr to auto detect objects.
-	/// @param[in] setValues							True to set the parameters immediately (e.g. on update layouts). Should be false in CreateLayout calls.
-	/// @return														OK on success.
+	/// @param[in] id									A valid DescID for the element. 
+	/// @param[in] objects						Optional parameter to set objects list. Nullptr to auto detect objects.
+	/// @param[in] setValues					True to set the parameters immediately (e.g. on update layouts). Should be false in CreateLayout calls.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> CreateUnfoldGroup(const cinema::DescID& id, const BaseArray<cinema::BaseList2D*>* objects, Bool setValues);
 
+	//----------------------------------------------------------------------------------------
 	/// Installs callbacks to intercept an element's data access.
 	/// This routine is should be called within CreateLayout.
-	/// @param[in] id											A valid DescID for the element. 
-	/// @param[in] gadId									The dialog gadget Id. 
-	/// @param[in] setValueCallback				The callback that will be called when values are set. 
-	/// @param[in] changeValueCallback		The callback that will be called when values are modified. 
-	/// @return														OK on success.
+	/// @param[in] id									A valid DescID for the element. 
+	/// @param[in] gadId							The dialog gadget Id. 
+	/// @param[in] setValueCallback		The callback that will be called when values are set. 
+	/// @param[in] changeValueCallback	The callback that will be called when values are modified. 
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> ConnectAttributeValue(const cinema::DescID& id, Int32 gadId, const ATTRIBUTEMANAGER::SetValueCallback& setValueCallback, const ATTRIBUTEMANAGER::ChangeValueCallback& changeValueCallback);
 
@@ -125,33 +126,33 @@ public:
 	/// Forwards UI messages to the original element. This is necessary, so that e.g. the "control dot"
 	/// can work.
 	/// It is called within a CustomGui's Message (typically for BFM_ACTION).
-	/// @param[in] msg										The message to be forwarded.
-	/// @param[out] result								The result of the message. 
-	/// @return														The result value to be returned in Message().
+	/// @param[in] msg								The message to be forwarded.
+	/// @param[out] result						The result of the message. 
+	/// @return												The result value to be returned in Message().
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Int32> ForwardMessage(const cinema::BaseContainer& msg, cinema::BaseContainer& result);
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the list of objects that are currently shown in the attribute manager.
-	/// @param[in] baseDocument						The document.
-	/// @return														Array of objects.
+	/// @param[in] baseDocument				The document.
+	/// @return												Array of objects.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<BaseArray<cinema::BaseList2D*>> GetObjects(const cinema::BaseDocument& baseDocument) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a node for an object that is shown in the attribute manager.
-	/// @param[in] baseList								A valid object that is currently shown in the attribute manager.
-	/// @return														The corresponding node.
+	/// @param[in] baseList						A valid object that is currently shown in the attribute manager.
+	/// @return												The corresponding node.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<GraphNode> GetNode(const cinema::BaseList2D& baseList) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a translation map for an object that is shown in the attribute manager.
 	/// The translation map holds information to map e.g. DescIDs to port IDs of nodes.
-	/// @param[in] baseList								A valid object that is currently shown in the attribute manager.
-	/// @param[out] desc									When set, a call to bl.GetDescription() is made at first to update the translation structure,
-	/// 																	and the resulting description is written to desc.
-	/// @return														The translation map, will never be a null reference on success.
+	/// @param[in] baseList						A valid object that is currently shown in the attribute manager.
+	/// @param[out] desc							When set, a call to bl.GetDescription() is made at first to update the translation structure,
+	/// 															and the resulting description is written to desc.
+	/// @return												The translation map, will never be a null reference on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<DescTranslationRef> GetDescTranslation(const cinema::BaseList2D& baseList, cinema::Description* desc = nullptr) const;
 };
@@ -166,14 +167,18 @@ class CustomNodeGuiProxyInterface
 
 public:
 
+	//----------------------------------------------------------------------------------------
 	/// Creates the proxy to gain access to node-based elements in the attribute manager. 
 	/// @param[in] settings						The settings container.
 	/// @return												The reference to the proxy, can be nullptr on error.
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD CustomNodeGuiProxyRef Create(const cinema::BaseContainer& settings);
 
+	//----------------------------------------------------------------------------------------
 	/// Returns the DescIDs of all currently existing elements in the attribute manager that are associated with this gui proxy. 
 	/// @param[out] replacementIds		The container for the DescID collection.
 	/// @return												OK on success.
+	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> GetReplacementIds(BaseArray<cinema::DescID>& replacementIds) const;
 
 	//----------------------------------------------------------------------------------------
@@ -199,4 +204,4 @@ public:
 
 } // namespace maxon
 
-#endif // #define CUSTOMNODEGUIPROXY_H__
+#endif // CUSTOMNODEGUIPROXY_H__

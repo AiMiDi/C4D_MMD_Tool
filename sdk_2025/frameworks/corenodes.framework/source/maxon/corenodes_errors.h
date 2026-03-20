@@ -116,14 +116,14 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @brief Sets the node on which this error occurred.
 	/// It sets the CoreNode's handle and keeps the compiled CoreNode has a reference to extend the handle's lifetime.
-	/// @param[in] compiledGroup		The compiled CoreNode's CoreNodeBaseInterface.
-	/// @param[in] node							The CoreNode where error occurred.
+	/// @param[in] compiledGroup			The compiled CoreNode's CoreNodeBaseInterface.
+	/// @param[in] node								The CoreNode where error occurred.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void SetNode(const CoreNodeBaseInterface* compiledGroup, const NodeHandle* node);
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Reads the node on which this error occurred.
-	/// @return											The error's origin node.
+	/// @return												The error's origin node.
 	//----------------------------------------------------------------------------------------
 	// @MAXON_ANNOTATION{default = nullptr}
 	MAXON_METHOD const NodeHandle* GetNode() const;
@@ -141,7 +141,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Reads the optional port identifier of this error.
-	/// @see SetPort
+	/// @see SetPort.
 	/// @return												The port identifier. Can be empty.
 	//----------------------------------------------------------------------------------------
 	// @MAXON_ANNOTATION{default = maxon::GetZeroRef<InternedId>()}

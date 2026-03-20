@@ -71,7 +71,7 @@ enum class FONTCHOOSER_POPUP_RESULT
 /// 			If @formatParam{screenPositionX}=@em -2 and @formatParam{screenPositionY}=@em -2 the popup will be opened at the center of the screen.
 /// @param[in] font								The initial font container.
 /// @param[out] callback					Function called on user action with the result and the choosen font data. If FONTCHOOSER_POPUP_RESULT is OK, then choosen font is stored in the BaseContainer. If FONTCHOOSER_POPUP_RESULT is CANCEL, BaseContainer received is empty.
-/// @param[in] useReducedFontList	If true, restrict the available fonts to 'core' families only
+/// @param[in] useReducedFontList	If true, restrict the available fonts to 'core' families only.
 /// @param[in] screenPositionX		The Y position of the popup. See note above.
 /// @param[in] screenPositionY		The Y position of the popup. See note above.
 /// @return												@trueIfOtherwiseFalse{the popup opened successfully}
@@ -91,12 +91,14 @@ private:
 public:
 	//----------------------------------------------------------------------------------------
 	/// Retrieves the font container.
+	/// @warning This does not return a copy of the font container, but the actual container.
 	/// @return												The font container.
 	//----------------------------------------------------------------------------------------
 	BaseContainer GetFont() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Sets the font container.
+	/// @warning This does not copy the passed font container, but uses it directly.
 	/// @param[in] bc									The font container.
 	//----------------------------------------------------------------------------------------
 	void SetFont(const BaseContainer *bc);

@@ -45,11 +45,11 @@ public:
 	
 	//----------------------------------------------------------------------------------------
 	/// WatchDirectory description.
-	/// @param[in] url								Url of the directory to watch
+	/// @param[in] url								Url of the directory to watch.
 	/// @param[in] watchSubtree				True if the function should watch all sub directories.
 	/// @param[in] observer						Delegate which is triggered on file change detection.
-	/// @return                       FileMonitorItemRef on success. If watchSubtree is true then FileMonitorItemRef might return nullptr if the implementation 
-	///																doesn't support the watching the subtree.
+	/// @return												FileMonitorItemRef on success. If watchSubtree is true then FileMonitorItemRef might return nullptr if the implementation 
+	/// 															doesn't support the watching the subtree.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<FileMonitorItemRef> WatchDirectory(const Url& url, Bool watchSubtree, Observer&& observer);
 

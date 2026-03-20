@@ -38,7 +38,7 @@ public:
 	/// @param[in] url								Url to check.
 	/// @param[in] probeStream				Optional parameter that allows to read content in case that the url is a file.
 	/// 															This stream is not a plain file stream but wraps a memory cache stream which allows to seek and read already loaded data without overhead.
-	/// @param[in] flags							see FILEFORMATDETECTIONFLAGS.
+	/// @param[in] flags							See FILEFORMATDETECTIONFLAGS.
 	/// @return												Returns true if the url/stream fits to this file format implementation.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> Detect(const Url& url, const InputStreamRef& probeStream, FILEFORMATDETECTIONFLAGS flags) const;

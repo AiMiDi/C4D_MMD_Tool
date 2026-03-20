@@ -1,5 +1,5 @@
-#ifndef STRING_NODES_H__
-#define STRING_NODES_H__
+#ifndef NODES_STRING_H__
+#define NODES_STRING_H__
 
 #include "maxon/fid.h"
 #include "maxon/string.h"
@@ -416,4 +416,4 @@ namespace NODE
 	
 #include "nodes_string2.hxx"
 
-#endif // STRING_NODES_H__
+#endif // NODES_STRING_H__

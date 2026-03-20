@@ -145,7 +145,7 @@ public:
 //----------------------------------------------------------------------------------------
 /// CreateMemoryFileWithSuffix returns a url of a memory file to write into.
 /// @param[in] suffix							Optional suffix for the memory file.
-/// @return                       Url on success. this url can be used to write to.
+/// @return												Url on success. this url can be used to write to.
 //----------------------------------------------------------------------------------------
 inline Result<Url> CreateMemoryFileWithSuffix(const String& suffix = String())
 {

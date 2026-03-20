@@ -17,7 +17,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// SetAssetDescriptions setter for DndAsset data.
 	/// @param[in] assetDescriptions	Array with assets to drag around.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	Result<void> SetAssetDescriptions(const BaseArray<DndAsset>& assetDescriptions)
 	{
@@ -35,7 +35,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// GetAssetDescriptions getter to access the BaseArray<DndAsset>.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	const BaseArray<DndAsset>& GetAssetDescriptions() const
 	{
@@ -44,7 +44,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// GetAssetDescriptions getter to access the BaseArray<DndAsset>.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	BaseArray<DndAsset>& GetAssetDescriptions()
 	{
@@ -62,7 +62,7 @@ public:
 	
 	//----------------------------------------------------------------------------------------
 	/// GetLookupRepository getter function.
-	/// @return                       AssetRepositoryRef where to search for assets.
+	/// @return												AssetRepositoryRef where to search for assets.
 	//----------------------------------------------------------------------------------------
 	const AssetRepositoryRef& GetLookupRepository() const
 	{

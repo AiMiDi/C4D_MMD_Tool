@@ -186,7 +186,7 @@ class DescriptionCustomGui : public BaseCustomGui<CUSTOMGUI_DESCRIPTION>
 
 		//----------------------------------------------------------------------------------------
 		/// @markprivate Sets a lambda function that you can use to modify the description shown in the
-		/// attributes manager
+		/// attributes manager.
 		/// @param[in] func								The modification function.
 		/// @return												OK on success.
 		//----------------------------------------------------------------------------------------

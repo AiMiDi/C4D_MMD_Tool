@@ -5,7 +5,7 @@
 
 /// @file
 #ifdef MAXON_COMPILER_MSVC
-	#pragma warning( disable : 4643 )
+	#pragma warning(disable : 4643)
 #endif
 
 #ifndef _LIBCPP_BEGIN_NAMESPACE_STD 
@@ -25,10 +25,15 @@ namespace maxon
 /// @addtogroup STRUCTURES
 /// @{
 
+// Base class for all blocks, so one can check with std::is_base_of_v<BlockMarker, T> if T is a block.
+class BlockMarker
+{
+};
+
 //----------------------------------------------------------------------------------------
 /// Base class for Block.
 //----------------------------------------------------------------------------------------
-template <typename T, Bool STRIDED> class BlockBase
+template <typename T, Bool STRIDED> class BlockBase : public BlockMarker
 {
 public:
 	BlockBase(T* ptr, Int size, Int stride) : _ptr(ptr), _size(size), _stride(stride) { }
@@ -54,7 +59,7 @@ protected:
 };
 
 // specialization for the non-strided case
-template <typename T> class BlockBase<T, false>
+template <typename T> class BlockBase<T, false> : public BlockMarker
 {
 public:
 	BlockBase(T* ptr, Int size, Int stride = 0) : _ptr(ptr), _size(size) { }
@@ -121,16 +126,10 @@ public:
 	BaseIterator(const BaseIterator& src) = default;
 	BaseIterator& operator =(const BaseIterator& src) = default;
 
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning disable 597
-#endif
 	operator BaseIterator<typename std::add_const<COLLECTION>::type, STRIDED>&()
 	{
 		return *(BaseIterator<typename std::add_const<COLLECTION>::type, STRIDED>*) this;
 	}
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning enable 597
-#endif
 
 	//----------------------------------------------------------------------------------------
 	/// @return												true if the iterator points to an element.
@@ -278,7 +277,7 @@ public:
 	using Super = BaseIterator<COLLECTION, false>;
 	using ValueType = typename Super::ValueType;
 
-	BaseIterator(COLLECTION& a, Int index) : Super((ValueType*) ((Char*) a.GetFirst() + a.GetStride() * index)), _stride(a.GetStride()), _index(index)
+	BaseIterator(COLLECTION& a, Int index) : Super(NextByByteOffset(a.GetFirst(), a.GetStride() * index)), _stride(a.GetStride()), _index(index)
 	{
 	}
 
@@ -287,16 +286,10 @@ public:
 	BaseIterator(const BaseIterator& src) = default;
 	BaseIterator& operator =(const BaseIterator& src) = default;
 
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning disable 597
-#endif
 	operator BaseIterator<typename std::add_const<COLLECTION>::type, true>&()
 	{
 		return *(BaseIterator<typename std::add_const<COLLECTION>::type, true>*) this;
 	}
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning enable 597
-#endif
 
 	Bool operator ==(const BaseIterator& b) const
 	{
@@ -313,7 +306,7 @@ public:
 	// prefix operator ++ (increment and fetch)
 	BaseIterator& operator ++()
 	{
-		(Char*&) this->_data += _stride;
+		AdvanceByByteOffset(this->_data, _stride);
 		++_index;
 		return *this;
 	}
@@ -322,7 +315,7 @@ public:
 	BaseIterator operator ++(int)
 	{
 		ValueType* tmp = this->_data;
-		(Char*&) this->_data += _stride;
+		AdvanceByByteOffset(this->_data, _stride);
 		// use RVO
 		return BaseIterator(tmp, _index++, _stride);
 	}
@@ -330,7 +323,7 @@ public:
 	// operator +=
 	BaseIterator& operator +=(Int i)
 	{
-		(Char*&) this->_data += _stride * i;
+		AdvanceByByteOffset(this->_data, _stride * i);
 		_index += i;
 		return *this;
 	}
@@ -338,7 +331,7 @@ public:
 	// prefix operator -- (decrement and fetch)
 	BaseIterator& operator --()
 	{
-		(Char*&) this->_data -= _stride;
+		AdvanceByByteOffset(this->_data, -_stride);
 		--_index;
 		return *this;
 	}
@@ -347,7 +340,7 @@ public:
 	BaseIterator operator --(int)
 	{
 		ValueType* tmp = this->_data;
-		(Char*&) this->_data -= _stride;
+		AdvanceByByteOffset(this->_data, -_stride);
 		// use RVO
 		return BaseIterator(tmp, _index--, _stride);
 	}
@@ -355,7 +348,7 @@ public:
 	// operator -=
 	BaseIterator& operator -=(Int i)
 	{
-		(Char*&) this->_data -= _stride * i;
+		AdvanceByByteOffset(this->_data, -_stride * i);
 		_index -= i;
 		return *this;
 	}
@@ -364,13 +357,13 @@ public:
 	BaseIterator operator +(Int i) const
 	{
 		// use RVO
-		return BaseIterator((ValueType*) ((Char*) this->_data + _stride * i), _index + i, _stride);
+		return BaseIterator(NextByByteOffset(this->_data, _stride * i), _index + i, _stride);
 	}
 
 	BaseIterator operator -(Int i) const
 	{
 		// use RVO
-		return BaseIterator((ValueType*) ((Char*) this->_data - _stride * i), _index - i, _stride);
+		return BaseIterator(NextByByteOffset(this->_data, -_stride * i), _index - i, _stride);
 	}
 
 	Int operator -(const BaseIterator& b) const
@@ -384,8 +377,6 @@ protected:
 	Int _index; // we have to maintain a pointer and an index for the case of zero stride
 };
 
-
-template <typename T> using StridedBlock = Block<T, true>;
 
 //----------------------------------------------------------------------------------------
 /// A Block stands for a number of elements with a regular memory layout. It consists of
@@ -426,7 +417,6 @@ public:
 	static constexpr Bool GENERIC = STD_IS_REPLACEMENT(same, const T, const Generic);
 	static constexpr Bool CONSTBLOCK = STD_IS_REPLACEMENT(const, T);
 	using StrideType = typename std::conditional<GENERIC, Char, T>::type; // use this to determine the default stride (Generic is incomplete and can't be used)
-	using IsBlock = std::true_type; // allow to check templates if we have the Block class
 
 	using Iterator = BaseIterator<Block, STRIDED>;
 	using ConstIterator = BaseIterator<Block, STRIDED>;
@@ -762,11 +752,13 @@ public:
 				if (MAXON_UNLIKELY(res == FAILED))
 					return res;
 			}
-			*((Char**) &dest) += destStride;
-			*((Char**) &src) += otherStride;
+			AdvanceByByteOffset(dest, destStride);
+			AdvanceByByteOffset(src, otherStride);
 		}
 		return OK;
 	}
+
+	using Super::CopyValuesFrom;
 
 	template <typename T2, Bool S2, Bool M2> Result<void> ConstructValuesFrom(const Block<T2, S2, M2>& other)
 	{
@@ -789,30 +781,9 @@ public:
 				if (res == FAILED)
 					return res;
 			}
-			*((Char**) &dest) += destStride;
-			*((Char**) &src) += otherStride;
+			AdvanceByByteOffset(dest, destStride);
+			AdvanceByByteOffset(src, otherStride);
 		}
-		return OK;
-	}
-
-	template <typename COLLECTION> Result<void> CopyValuesFrom(const COLLECTION& other)
-	{
-		Int n = this->GetCount();
-		if (n != other.GetCount())
-			return CreateError(MAXON_SOURCE_LOCATION, ERROR_TYPE::ILLEGAL_ARGUMENT);
-		T* dest = GetFirst();
-		const Int destStride = this->GetStride();
-		for (const auto& i : other)
-		{
-			if (--n < 0)
-				return CreateError(MAXON_SOURCE_LOCATION, ERROR_TYPE::UNKNOWN);
-			Result<void> res = AssignCopy<T>(*dest, i);
-			if (res == FAILED)
-				return res;
-			*((Char**) &dest) += destStride;
-		}
-		if (n != 0)
-			return CreateError(MAXON_SOURCE_LOCATION, ERROR_TYPE::UNKNOWN);
 		return OK;
 	}
 
@@ -876,7 +847,7 @@ public:
 			for (Int c = this->GetCount(); c != 0; --c)
 			{
 				hash.HashAndCombine<HASH>(*p);
-				*((Char**) &p) += stride;
+				AdvanceByByteOffset(p, stride);
 			}
 		}
 	}
@@ -902,7 +873,7 @@ public:
 	{
 		MAXON_ASSERT_STANDARD_LAYOUT(Block);
 		static_assert(STRIDED || !GENERIC, "This function can't be used when T is Generic and no stride is given.");
-		return (!STRIDED || MAXON_LIKELY(this->PrivateGetStride() == SIZEOF(StrideType))) ? (T*) ((StrideType*) this->_ptr + index) : (T*) ((Char*) this->_ptr + index * this->PrivateGetStride());
+		return (!STRIDED || MAXON_LIKELY(this->PrivateGetStride() == SIZEOF(StrideType))) ? (T*) ((StrideType*) this->_ptr + index) : NextByByteOffset(this->_ptr, index * this->PrivateGetStride());
 	}
 
 private:

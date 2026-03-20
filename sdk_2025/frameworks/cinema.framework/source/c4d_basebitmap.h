@@ -1613,25 +1613,25 @@ BaseBitmap* InitResourceBitmap(Int32 resource_id);
 
 //----------------------------------------------------------------------------------------
 /// Gets a bitmap from a locklist.
-/// @param[in] doc									The document to which the locklist belongs.
-/// @param[in] fn										Filename of the texture.
-/// @param[in] frame								Frame number.
-/// @param[in] lsl									Layer set.
-/// @param[out] lockList						The locklist to which this bitmap belongs.
-/// @param[out] initRenderResult		Result of loading the textures. Can be nullptr.
-/// @return													The locklist bitmap.
+/// @param[in] doc								The document to which the locklist belongs.
+/// @param[in] fn									Filename of the texture.
+/// @param[in] frame							Frame number.
+/// @param[in] lsl								Layer set.
+/// @param[out] lockList					The locklist to which this bitmap belongs.
+/// @param[out] initRenderResult	Result of loading the textures. Can be nullptr.
+/// @return												The locklist bitmap.
 //----------------------------------------------------------------------------------------
 BaseBitmap* GetBitmapFromLockList(BaseDocument *doc, Filename &fn, Int32 frame, LayerSet *lsl, LockList*& lockList, INITRENDERRESULT* initRenderResult = nullptr);
 
 //----------------------------------------------------------------------------------------
 /// Unlocks a locklist. The parameter must be the same that was returned from GetBitmapFromLockList.
-/// @param[in] lockList							Locklist to unlock.
+/// @param[in] lockList						Locklist to unlock.
 //----------------------------------------------------------------------------------------
 void Unlock(LockList*& lockList);
 
 //----------------------------------------------------------------------------------------
 /// Checks if a locklist is marked for deletion.
-/// @param[in] lockList							Locklist to check.
+/// @param[in] lockList						Locklist to check.
 //----------------------------------------------------------------------------------------
 Bool IsMarkedForDeletion(const LockList* lockList);
 
@@ -1647,7 +1647,7 @@ maxon::Result<maxon::DataDictionary> GetImageSettingsDictionary(const BaseContai
 //----------------------------------------------------------------------------------------
 /// Replaces the DataDictionary in the BaseContainer.\n
 /// The DataDictionary stores the image format settings.
-/// @param[in] settings						Settings to replace
+/// @param[in] settings						Settings to replace.
 /// @param[out] data							BaseContainer to modify.
 /// @param[in] filterId						Filter id to separate settings between different filters.
 /// @return												OK on success.

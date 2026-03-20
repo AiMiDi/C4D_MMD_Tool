@@ -17,7 +17,7 @@
 #include "maxon/object.h"
 
 #ifdef MAXON_COMPILER_MSVC
-#pragma warning( disable : 4996)
+#pragma warning(disable : 4996)
 #endif // MAXON_COMPILER_MSVC
 
 namespace maxon

@@ -1,5 +1,5 @@
-#ifndef ALGORITHMS_PLAIN_H__
-#define ALGORITHMS_PLAIN_H__
+#ifndef ALGORITHMS_BASE_H__
+#define ALGORITHMS_BASE_H__
 
 #include "maxon/apibase.h"
 
@@ -102,4 +102,4 @@ inline auto RemoveIf(ITERATOR first, SENTINEL sentinel, PREDICATE pred) -> ITERA
 
 } // namespace maxon
 
-#endif // ALGORITHMS_PLAIN_H__
+#endif // ALGORITHMS_BASE_H__

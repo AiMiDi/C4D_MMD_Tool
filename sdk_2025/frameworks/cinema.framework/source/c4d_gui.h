@@ -31,6 +31,9 @@ namespace maxon
 class ImageBaseRef;
 enum class IMAGEINTERPOLATIONMODE;
 class OSFontObjectRef;
+
+template<typename TYPE> class BezierPathTemplate;
+using BezierPath = BezierPathTemplate<Vector2d>;
 }
 
 namespace cinema
@@ -99,7 +102,7 @@ typedef UChar OBSOLETE;
 #define C4DGUIPTR						(-1)	///< ID used for GadgetPtr when initialized with a gadget pointer.
 #define C4DGUINOPTR					(-2)	///< ID used for GadgetPtr when not initialized with a gadget pointer.
 #define C4DGUISCROLLPARENT	(-3)	///< ID used for parent GadgetPtr when retrieving the dimensions of the Dialog within a scrollgroup.
-#define C4DGUIWINDOWID			(-4)	///< ID used for GadgetPtr when querying the size of the window with GetItemDim().
+#define C4DGUIWINDOWID			(-4)	///< ID used for GadgetPtr when querying the size of the window with @ref GeDialog::GetItemDim() or when setting a default color at window level with @ref GeDialog::SetDefaultColor().
 
 //----------------------------------------------------------------------------------------
 /// Represents a gadget in a dialog.
@@ -354,7 +357,7 @@ public:
 	/// Sends a custom message to the parent dialog.
 	/// @see The article @link page_gui_messages GUI Messages@endlink for more information.
 	/// @param[in] msg								The message container.
-	/// @return												returns the result of the message
+	/// @return												Returns the result of the message.
 	//----------------------------------------------------------------------------------------
 	GeData SendParentMessageResult(const BaseContainer& msg);
 
@@ -485,16 +488,13 @@ public:
 	void DrawSetPen(const GeData& d);
 
 	//----------------------------------------------------------------------------------------
-	/// Sets the draw color to the parent group brackground color. @see GeUserArea::GetBackgroundColor().
-	/// @Note Use this instead of the Cinema API @c DrawSetPen(COLOR_BG). This is equivalent to @c DrawSetPen(GetParentBackgroundColor()).
+	/// @markDeprecated
 	//----------------------------------------------------------------------------------------
 	void DrawSetPenToParentBackgroundColor();
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the parent group background color. Can be either a color vector in range [0, 1] or a color constant of type Int32: @enumerateEnum{COLOR}
-	/// @note Take in mind the parent group color may be different than the Cinema API @ref COLOR_BG if either the flag @ref BFV_GRIDGROUP_ROUNDED_BACKGROUND is set or the parent group color has been customized with @ref GeDialog::SetGroupBackgroundColor() and @ref GeDialog::SetGroupInnerBackgroundColor().
-	/// @return												The parent group background color.
-	//----------------------------------------------------------------------------------------
+	/// @markDeprecated
+	///----------------------------------------------------------------------------------------
 	GeData GetParentBackgroundColor() const;
 
 	//----------------------------------------------------------------------------------------
@@ -549,6 +549,23 @@ public:
 	Bool GetColorRGB(Int32 colorid, Int32& r, Int32& g, Int32& b) const;
 
 	//----------------------------------------------------------------------------------------
+	/// Gets the RGBA values associated with a color constant.
+	/// @param[in] colorid						A color constant: @enumerateEnum{COLOR}
+	/// @param[out] r									Assigned the red component of the color.
+	/// @param[out] g									Assigned the green component of the color.
+	/// @param[out] b									Assigned the blue component of the color.
+	/// @param[out] a									Assigned the alpha component of the color.
+	/// @return												@trueIfOtherwiseFalse{successful}
+	//----------------------------------------------------------------------------------------
+	Bool GetColorRGBA(Int32 colorid, Int32& r, Int32& g, Int32& b, Int32& a) const;
+
+	//----------------------------------------------------------------------------------------
+	/// @markDeprecated
+	//----------------------------------------------------------------------------------------
+	Bool GetBackgroundColorRGB(Int32& r, Int32& g, Int32& b) const;
+
+
+	//----------------------------------------------------------------------------------------
 	/// Activates the fading.
 	/// @param[in] milliseconds				The time for the fading in milliseconds.
 	//----------------------------------------------------------------------------------------
@@ -578,6 +595,7 @@ public:
 	/// @param[in] x2									The X coordinate of the opposite corner.
 	/// @param[in] y2									The Y coordinate of the opposite corner.
 	/// @param[in] lineWidth					Line width to draw the line.
+	/// @param[in] lineStyle					Line style to draw the line.
 	//----------------------------------------------------------------------------------------
 	void DrawFrame(Int32 x1, Int32 y1, Int32 x2, Int32 y2, Float lineWidth = 1.0, LINESTYLE lineStyle = LINESTYLE::NORMAL);
 
@@ -589,6 +607,28 @@ public:
 	/// @param[in] y2									The Y coordinate of the opposite corner.
 	//----------------------------------------------------------------------------------------
 	void DrawRectangle(Int32 x1, Int32 y1, Int32 x2, Int32 y2);
+
+	//----------------------------------------------------------------------------------------
+	/// Draws a rounded rectangular frame with the current pen color between (@formatParam{x1},@formatParam{y1}) and (@formatParam{x2},@formatParam{y2}).
+	/// @param[in] x1									The X coordinate of the first corner.
+	/// @param[in] y1									The Y coordinate of the first corner.
+	/// @param[in] x2									The X coordinate of the opposite corner.
+	/// @param[in] y2									The Y coordinate of the opposite corner.
+	/// @param[in] radius							The rounded corner radius width and height.
+	/// @param[in] lineWidth					Line width to draw the line.
+	/// @param[in] lineStyle					Line style to draw the line.
+	//----------------------------------------------------------------------------------------
+	void DrawRoundedFrame(Int32 x1, Int32 y1, Int32 x2, Int32 y2, const Vector2d& radius, Float lineWidth = 1.0, LINESTYLE lineStyle = LINESTYLE::NORMAL);
+
+	//----------------------------------------------------------------------------------------
+	/// Fills a rounded rectangular area with the current pen color between (@formatParam{x1},@formatParam{y1}) and (@formatParam{x2},@formatParam{y2}).
+	/// @param[in] x1									The X coordinate of the first corner.
+	/// @param[in] y1									The Y coordinate of the first corner.
+	/// @param[in] x2									The X coordinate of the opposite corner.
+	/// @param[in] y2									The Y coordinate of the opposite corner.
+	/// @param[in] radius							The rounded corner radius width and height.
+	//----------------------------------------------------------------------------------------
+	void DrawRoundedRectangle(Int32 x1, Int32 y1, Int32 x2, Int32 y2, const Vector2d& radius);
 
 	//----------------------------------------------------------------------------------------
 	/// Draws a bitmap into the user area.\n
@@ -606,6 +646,24 @@ public:
 	/// @param[in] mode								Can be a combination of the following flags: @enumerateEnum{BMP}
 	//----------------------------------------------------------------------------------------
 	void DrawBitmap(BaseBitmap* bmp, Int32 wx, Int32 wy, Int32 ww, Int32 wh, Int32 x, Int32 y, Int32 w, Int32 h, Int32 mode);
+
+	//----------------------------------------------------------------------------------------
+	/// Draws a bitmap with rounded edges into the user area.\n
+	/// The region (@formatParam{x},@formatParam{y}) to (@formatParam{x}+@formatParam{w},@formatParam{y}+@formatParam{h}) from the bitmap will be scaled and transformed into the region (@formatParam{wx},@formatParam{wy}) to (@formatParam{wx}+@formatParam{ww},@formatParam{wy}+@formatParam{wh}) of the destination area.
+	/// @note ::BMP_ALLOWALPHA can be combined with the other @ref BMP modes for parameter @formatParam{mode}.
+	/// @param[in] bmp								The bitmap to draw. @callerOwnsPointed{bitmap}
+	/// @param[in] wx									The X coordinate of the upper left corner of the destination area.
+	/// @param[in] wy									The Y coordinate of the upper left corner of the destination area.
+	/// @param[in] ww									The width of the destination area.
+	/// @param[in] wh									The height of the destination area.
+	/// @param[in] x									The X coordinate of the upper left corner of the bitmap area.
+	/// @param[in] y									The Y coordinate of the upper left corner of the bitmap area.
+	/// @param[in] w									The width of the bitmap area.
+	/// @param[in] h									The height of the bitmap area.
+	/// @param[in] mode								Can be a combination of the following flags: @enumerateEnum{BMP}
+	/// @param[in] radius							The radius of the rounded edge.
+	//----------------------------------------------------------------------------------------
+	void DrawBitmapRounded(BaseBitmap* bmp, Int32 wx, Int32 wy, Int32 ww, Int32 wh, Int32 x, Int32 y, Int32 w, Int32 h, Int32 mode, Float32 radius);
 
 	//----------------------------------------------------------------------------------------
 	/// Draws a image into the user area.
@@ -631,13 +689,16 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Draws concatenated Bezier curves.
 	/// @param[in] startPoint					The XY coordinate of the upper left corner of the drawn curve.
-	/// @param[in] bezierPoints				An array containing a struct of Bezier curves points.\n
+	/// @param[in] bezierPoints				An array containing a struct of Bezier curves points.\n.
 	/// @param[in] closed							If @formatConstant{true}, the last point of the last segment connects back to the starting point (@formatParam{startPoint}).
 	/// @param[in] lineWidth					The width of the Bezier curve. Default 1.0.
-	/// @param[in] lineStyle          The line style of the Bezier curve.
+	/// @param[in] lineStyle					The line style of the Bezier curve.
 	//----------------------------------------------------------------------------------------
 	void DrawBezierLine(const Vector2d& startPoint, const maxon::Block<const BezierPoint>& bezierPoints, Bool closed, Float lineWidth = 1.0, LINESTYLE lineStyle = LINESTYLE::NORMAL);
 	void DrawBezierFill(const Vector2d& startPoint, const maxon::Block<const BezierPoint>& bezierPoints, Bool closed);
+
+	void DrawBezierLine(const maxon::BezierPath& path, Float lineWidth = 1.0, LINESTYLE lineStyle = LINESTYLE::NORMAL);
+	void DrawBezierFill(const maxon::BezierPath& path);
 
 	void DrawPolyLine(const maxon::Block<const Vector2d>& p, Bool closed, Float lineWidth = 1.0, LINESTYLE lineStyle = LINESTYLE::NORMAL);
 	void DrawPolyFill(const maxon::Block<const Vector2d>& p, Bool closed);
@@ -845,7 +906,7 @@ public:
 	/// @param[in] data								A pointer to the data passed.
 	/// @param[in] dragflags					The drag flags. @markPrivate
 	/// @return												@formatConstant{true} if the user moved the mouse and a drag and drop operation was initiated.\n
-	///																@formatConstant{false} if the user did not move the mouse, so that the original event is a normal mouse click event.
+	/// 															@formatConstant{false} if the user did not move the mouse, so that the original event is a normal mouse click event.
 	//----------------------------------------------------------------------------------------
 	Bool HandleMouseDrag(const BaseContainer& msg, Int32 type, void* data, Int32 dragflags);
 
@@ -924,7 +985,7 @@ public:
 	/// @param[out] mx								Assigned the X delta-coordinate of the mouse (the amount the mouse has moved).
 	/// @param[out] my								Assigned the Y delta-coordinate of the mouse (the amount the mouse has moved).
 	/// @param[out] channels					Assigned the channels values. See @link page_input_events Input Events@endlink.\n
-	///																Also contains these @ref PEN values: @enumerateEnum{PEN}
+	/// 															Also contains these @ref PEN values: @enumerateEnum{PEN}
 	/// @return												The mouse drag result: @enumerateEnum{MOUSEDRAGRESULT}
 	//----------------------------------------------------------------------------------------
 	MOUSEDRAGRESULT MouseDrag(Float* mx, Float* my, BaseContainer* channels);
@@ -1184,6 +1245,7 @@ public:
 	/// @return												The internal dialog.
 	//----------------------------------------------------------------------------------------
 	CDialog* Get() { return cd; }
+	const CDialog* Get() const { return cd; }
 #ifdef __API_INTERN__
 	Bool dontfree;
 	void Set(CDialog* set);
@@ -1277,7 +1339,7 @@ public:
 	/// @param[in] defaultw						The default width of the dialog in pixels.
 	/// @param[in] defaulth						The default height of the dialog in pixels.
 	/// @param[in] subid							The dialog sub-ID. This can be used to open several dialogs with a single command plugin for CommandData::ExecuteSubID().
-	/// @param[in] flags							See OPENDIALOGFLAGS
+	/// @param[in] flags							See OPENDIALOGFLAGS.
 	/// @return												@trueIfOtherwiseFalse{successful}
 	//----------------------------------------------------------------------------------------
 	Bool Open(DLG_TYPE dlgtype, Int32 pluginid, Int32 xpos = -1, Int32 ypos = -1, Int32 defaultw = 0, Int32 defaulth = 0, Int32 subid = 0, OPENDIALOGFLAGS flags = OPENDIALOGFLAGS::NONE);
@@ -1321,19 +1383,19 @@ public:
 	/// Gets the dialog ID.
 	/// @return												The dialog ID.
 	//----------------------------------------------------------------------------------------
-	Int32 GetId();
+	Int32 GetId() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the dialog is open.
 	/// @return												@trueIfOtherwiseFalse{the dialog is open}
 	//----------------------------------------------------------------------------------------
-	Bool IsOpen();
+	Bool IsOpen() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the dialog is visible.
 	/// @return												@trueIfOtherwiseFalse{the dialog is visible}
 	//----------------------------------------------------------------------------------------
-	Bool IsVisible();
+	Bool IsVisible() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the dialog is minimized (in the dock or task bar).
@@ -1358,7 +1420,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the title of the dialog window.
-	/// @return												The title
+	/// @return												The title.
 	//----------------------------------------------------------------------------------------
 	maxon::String GetTitle();
 
@@ -1983,10 +2045,28 @@ public:
 	/// @param[out] b									Assigned the blue component of the color.
 	/// @return												@trueIfOtherwiseFalse{successful}
 	//----------------------------------------------------------------------------------------
-	Bool GetColorRGB(Int32 colorid, Int32& r, Int32& g, Int32& b);
+	Bool GetColorRGB(Int32 colorid, Int32& r, Int32& g, Int32& b) const;
+	
+	//----------------------------------------------------------------------------------------
+	/// Gets the RGBA values associated with a color constant.
+	/// @param[in] colorid						A color constant: @enumerateEnum{COLOR}
+	/// @param[out] r									Assigned the red component of the color.
+	/// @param[out] g									Assigned the green component of the color.
+	/// @param[out] b									Assigned the blue component of the color.
+	/// @param[out] a									Assigned the alpha component of the color.
+	/// @return												@trueIfOtherwiseFalse{successful}
+	//----------------------------------------------------------------------------------------
+	Bool GetColorRGBA(Int32 colorid, Int32& r, Int32& g, Int32& b, Int32& a) const;
+
+	//----------------------------------------------------------------------------------------
+	/// @markDeprecated
+	//----------------------------------------------------------------------------------------
+	Bool GetBackgroundColorRGB(Int32& r, Int32& g, Int32& b);
 
 	//----------------------------------------------------------------------------------------
 	/// Sets the default color for GUI elements.
+	/// Use @formatParam{id} = 0 to set the default color of the last group created with @ref GeDialog::GroupBegin().
+	/// Use @formatParam{id} = @ref C4DGUIWINDOWID to set the default color at the window level.
 	/// @param[in] id									The control ID to set the color for.
 	/// @param[in] colorid						A color constant: @enumerateEnum{COLOR}
 	/// @param[in] mapid							The color map ID.
@@ -1995,6 +2075,8 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Sets the default color for GUI elements.
+	/// Use @formatParam{id} = 0 to set the default color of the last group created with @ref GeDialog::GroupBegin().
+	/// Use @formatParam{id} = @ref C4DGUIWINDOWID to set the default color at the window level.
 	/// @param[in] id									The control ID to set the color for.
 	/// @param[in] colorid						A color constant: @enumerateEnum{COLOR}
 	/// @param[in] color							The color to set.
@@ -2215,8 +2297,8 @@ public:
 	/// @param[in] initw							The initial width. Use SizePixChr() to set this value.
 	/// @param[in] inith							The initial height. Use SizePixChr() to set this value.
 	/// @param[in] specialalign				Used to quantize the width of the combo box.\n
-	///																If this is @formatConstant{true} then the width of the combo box will be a multiple of @formatParam{initw}.\n
-	///																For example if @formatParam{initw} is @em 60px and @formatParam{specialalign} is @formatConstant{true} the width will be @em 60, @em 120, @em 180px and so on.
+	/// 															If this is @formatConstant{true} then the width of the combo box will be a multiple of @formatParam{initw}.\n
+	/// 															For example if @formatParam{initw} is @em 60px and @formatParam{specialalign} is @formatConstant{true} the width will be @em 60, @em 120, @em 180px and so on.
 	/// @param[in] allowFiltering			True to allow keyboard filtering of the combobox list.
 	/// @return												The added gadget, or @formatConstant{nullptr} if an error occurred. @theOwnsPointed{dialog,gadget}
 	//----------------------------------------------------------------------------------------
@@ -2229,8 +2311,8 @@ public:
 	/// @param[in] initw							The initial width. Use SizePixChr() to set this value.
 	/// @param[in] inith							The initial height. Use SizePixChr() to set this value.
 	/// @param[in] specialalign				Used to quantize the width of the item.\n
-	///																If this is @formatConstant{true} then the width of the item will be a multiple of @formatParam{initw}.\n
-	///																For example if @formatParam{initw} is @em 60px and @formatParam{specialalign} is @formatConstant{true} the width will be @em 60, @em 120, @em 180px and so on.
+	/// 															If this is @formatConstant{true} then the width of the item will be a multiple of @formatParam{initw}.\n
+	/// 															For example if @formatParam{initw} is @em 60px and @formatParam{specialalign} is @formatConstant{true} the width will be @em 60, @em 120, @em 180px and so on.
 	/// @param[in] allowFiltering			True to allow keyboard filtering of the popup list.
 	/// @return												The added gadget, or @formatConstant{nullptr} if an error occurred. @theOwnsPointed{dialog,gadget}
 	//----------------------------------------------------------------------------------------
@@ -2320,7 +2402,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Adds a sub-dialog to the layout. Use AttachSubDialog() to assign a SubDialog object to the sub-dialog control.
-	/// @see SubDialog
+	/// @see SubDialog.
 	/// @param[in] id									The sub-dialog ID.
 	/// @param[in] flags							The layout flags: @link BFH_CENTER BFH@endlink @link BFV_CENTER BFV@endlink
 	/// @param[in] initw							The initial width. Use SizePixChr() to set this value.
@@ -2440,42 +2522,22 @@ public:
 	Bool GroupWeightsLoad(const GadgetPtr& id, const BaseContainer& weights);
 
 	//----------------------------------------------------------------------------------------
-	/// @markPrivate Allows to customize the current group background color.\n
-	/// If flag @ref BFV_GRIDGROUP_ROUNDED_BACKGROUND is used, this is the group outer color. To customize the group inner color use @ref GeDialog::SetGroupInnerBackgroundColor().
-	/// @note Must be called right after creating the group with @ref GeDialog::GroupBegin() and before adding any child to the group.
-	/// @param[in] colorId						A constant color ID. @see c4d_colors.h
-	/// @return												@trueIfOtherwiseFalse{the group color could be set}
+	/// @markDeprecated
 	//----------------------------------------------------------------------------------------
 	Bool SetGroupBackgroundColor(Int32 colorId);
 
 	//----------------------------------------------------------------------------------------
-	/// @markPrivate Allows to customize the current group background color.\n
-	/// If flag @ref BFV_GRIDGROUP_ROUNDED_BACKGROUND is used, this is the group outer color. To customize the group inner color use @ref GeDialog::SetGroupInnerBackgroundColor().
-	/// @note Must be called right after creating the group with @ref GeDialog::GroupBegin() and before adding any child to the group.
-	/// @param[in] r									Color red component in [0, 255] range.
-	/// @param[in] g									Color green component in [0, 255] range.
-	/// @param[in] b									Color blue component in [0, 255] range.
-	/// @return												@trueIfOtherwiseFalse{the group color could be set}
+	/// @markDeprecated
 	//----------------------------------------------------------------------------------------
 	Bool SetGroupBackgroundColor(Int32 r, Int32 g, Int32 b);
 
 	//----------------------------------------------------------------------------------------
-	/// @markPrivate Allows to customize the current inner group background color when flag @ref BFV_GRIDGROUP_ROUNDED_BACKGROUND is set.\n
-	/// To customize the group outer color use @ref GeDialog::SetGroupBackgroundColor().
-	/// @note Must be called right after creating the group with @ref GeDialog::GroupBegin() and before adding any child to the group.
-	/// @param[in] colorId						A constant color ID. @see c4d_colors.h
-	/// @return												@trueIfOtherwiseFalse{the group inner color could be set}
+	/// @markDeprecated
 	//----------------------------------------------------------------------------------------
 	Bool SetGroupInnerBackgroundColor(Int32 colorId);
 
 	//----------------------------------------------------------------------------------------
-	/// @markPrivate Allows to customize the current inner group background color when flag @ref BFV_GRIDGROUP_ROUNDED_BACKGROUND is set.\n
-	/// To customize the group outer color use @ref GeDialog::SetGroupBackgroundColor().
-	/// @note Must be called right after creating the group with @ref GeDialog::GroupBegin() and before adding any child to the group.
-	/// @param[in] r									Color red component in [0, 255] range.
-	/// @param[in] g									Color green component in [0, 255] range.
-	/// @param[in] b									Color blue component in [0, 255] range.
-	/// @return												@trueIfOtherwiseFalse{the group inner color could be set}
+	/// @markDeprecated
 	//----------------------------------------------------------------------------------------
 	Bool SetGroupInnerBackgroundColor(Int32 r, Int32 g, Int32 b);
 
@@ -2617,10 +2679,10 @@ public:
 	/// BeginLayoutChange simplifies the call of the combinations of LayoutFlushGroup()/LayoutChanged().
 	/// @param[in] gadget							Gadget to flush and re-layout.
 	/// @param[in] disableRedraws			True if all redraws should be disabled while the result object lives and result.CommitChanges() wasn't
-	///																called.
-	/// @param[in] doNotFlush			If true, existing elements persist and new elements are added at the end.
+	/// 															called.
+	/// @param[in] doNotFlush					If true, existing elements persist and new elements are added at the end.
 	/// @return												UpdateDialogRef on success. The returned object needs to be stored. Calling CommitChanges() will update
-	///																the dialog group again and if redraw were disabled it will re-enable the redraw.
+	/// 															the dialog group again and if redraw were disabled it will re-enable the redraw.
 	//----------------------------------------------------------------------------------------
 	UpdateDialogHelper BeginLayoutChange(const GadgetPtr& gadget, Bool disableRedraws, Bool doNotFlush = false);
 
@@ -2923,7 +2985,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the docking state of the dialog.
-	/// @return                       Bit mask of DIALOG_ISDOCKED and DIALOG_ISTABBED. 0 if the dialog is a individual window.
+	/// @return												Bit mask of DIALOG_ISDOCKED and DIALOG_ISTABBED. 0 if the dialog is a individual window.
 	//----------------------------------------------------------------------------------------
 	Int32 IsDockedOrTabbed();
 };
@@ -2963,7 +3025,7 @@ public:
 	/// @param[in] defaultw						The default width of the dialog in pixels.
 	/// @param[in] defaulth						The default height of the dialog in pixels.
 	/// @param[in] resizable					Set to @formatConstant{true} for resizable modal dialogs.
-	/// @param[in] flags							see OPENDIALOGFLAGS.
+	/// @param[in] flags							See OPENDIALOGFLAGS.
 	/// @return												@formatConstant{true} if @em OK was pressed or Close(true) was called.\n
 	/// 															@formatConstant{false} if @em Cancel was pressed or Close(false) was called.
 	//----------------------------------------------------------------------------------------
@@ -3106,7 +3168,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Constructor.
 	/// @note Usually only called from CustomGuiData::Alloc().
-	/// @param[in] settings						The settings container.
+	/// @param[in] settings						The settings container, passed via @formatConstant{customdata} parameter of @ref GeDialog::AddCustomGui. @see DROLDWIN_POS_W @see DROLDWIN_POS_H
 	/// @param[in] t_plugin						The plugin structure.
 	//----------------------------------------------------------------------------------------
 	iCustomGui(const BaseContainer& settings, CUSTOMGUIPLUGIN* t_plugin);
@@ -3661,7 +3723,7 @@ Bool GetBakeStatus();
 /// @param[in] texturesOnly				True to check for textures only.
 /// @param[in] updateUsage				True to update the usage stats of the asset.
 /// @param[in] loadUrl						True to show a modal progress dialog when files need to be downloaded.
-/// @return                       Filename on success. Filename IsEmpty() if no data was found.
+/// @return												Filename on success. Filename IsEmpty() if no data was found.
 //----------------------------------------------------------------------------------------
 Filename GetDnDFilename(const BaseContainer& msg, Int32 dragType, const void* dragObj, Bool texturesOnly, Bool updateUsage, Bool loadUrl);
 

@@ -53,7 +53,7 @@ template <typename T, typename CALLBACK> inline Result<T> GetDerivedMetaData(con
 	CString stamp;
 	MAXON_SCOPE
 	{
-		AssetMetaData meta = asset.GetMetaData();
+		const AssetMetaData& meta = asset.GetMetaData();
 		data = meta.Get(metaId) iferr_return;
 		stamp = meta.Get(ASSETMETADATA::DerivedMetaDataStamp).GetOrDefault() iferr_return;
 	}

@@ -139,13 +139,13 @@ public:
 	//-------------------------------------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<DataDictionary> TranslateDescription(DataDictionary description);
 
-	//-------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// @brief Applies the given graph #description to the given nodes #graph.
-	/// @param[in] graph					The nodes graph to apply the #description to.
-	/// @param[in] description		The graph description to apply to #graph.
-	/// @return All nodes in the graph after the description has been read as <String, GraphNode> pairs where the string
+	/// @param[in] graph							The nodes graph to apply the #description to.
+	/// @param[in] description				The graph description to apply to #graph.
+	/// @return												All nodes in the graph after the description has been read as <String, GraphNode> pairs where the string.
 	/// is the ID of the node. Primarily intended for the Python fronted.
-	//-------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<DataDictionary> ApplyDescription(NodesGraphModelRef& graph, DataDictionary description);
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -154,28 +154,28 @@ public:
 	[[deprecated("Use GetGraph instead")]] static MAXON_METHOD Result<nodes::NodesGraphModelRef> CreateGraph(cinema::BaseList2D* element, Id& nodeSpaceId, 
 		const Bool createEmpty, const String& name);
 
-	//-------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// @brief Returns the nodes graph for the given scene #element and #nodeSpaceId.
 	/// @details #element can be a `BaseDocument` (for the document wide scene nodes graph), a `BaseObject` (for capsules),
 	/// or a material (for material graphs), or nullptr (to create a material in the active document). When the passed 
 	/// element does not yet have a graph in the requested node space, it will be created.
-	/// @param[in] element The scene element to get the graph for. Can be `nullptr` to create a material in the active document.
-	/// @param[in] nodeSpaceId The node space to retrieve the graph for. When the empty ID is passed, it will default to the 
+	/// @param[in] element						The scene element to get the graph for. Can be `nullptr` to create a material in the active document.
+	/// @param[in] nodeSpaceId				The node space to retrieve the graph for. When the empty ID is passed, it will default to the 
 	/// active node space for materials and the neutron node space for everything else.
-	/// @param[in] createEmpty When #true, new graphs will be created as an empty graph, when #false the default graph will 
+	/// @param[in] createEmpty				When #true, new graphs will be created as an empty graph, when #false the default graph will 
 	/// be created.
-	/// @param[in] name The name to give the material which is created when #element is the `nullptr`.
-	/// @return The retrieved graph.
-	//-------------------------------------------------------------------------------------------------------------------
+	/// @param[in] name								The name to give the material which is created when #element is the `nullptr`.
+	/// @return												The retrieved graph.
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<nodes::NodesGraphModelRef> GetGraph(cinema::BaseList2D* element, Id& nodeSpaceId, 
 		const Bool createEmpty, const String& name);
 
-	//-------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// @brief Returns all material graphs in the given scene #doc which are in the given #nodeSpaceId.
-	/// @param[in] doc The document to get the material graphs from.
-	/// @param[in] nodeSpaceId The node space to retrieve the graphs for. Cannot be the empty ID.
-	/// @return All material graphs in the given scene #doc which are of the given #nodeSpaceId.
-	//-------------------------------------------------------------------------------------------------------------------
+	/// @param[in] doc								The document to get the material graphs from.
+	/// @param[in] nodeSpaceId				The node space to retrieve the graphs for. Cannot be the empty ID.
+	/// @return												All material graphs in the given scene #doc which are of the given #nodeSpaceId.
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<nodes::NodesGraphModelRef>> GetMaterialGraphs(const cinema::BaseDocument* const doc, const Id& nodeSpaceId);
 };
 

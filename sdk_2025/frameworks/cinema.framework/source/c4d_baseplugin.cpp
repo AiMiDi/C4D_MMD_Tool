@@ -21,7 +21,7 @@ void* BasePlugin::GetPluginStructure()
 	return Call(GetPluginStructure) ();
 }
 
-Int32 BasePlugin::GetInfo()
+Int32 BasePlugin::GetInfo() const
 {
 	return Call(GetInfo) ();
 }

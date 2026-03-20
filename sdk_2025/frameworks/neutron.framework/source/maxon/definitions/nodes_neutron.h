@@ -27,6 +27,12 @@ namespace ATTRIBUTE
 
 	}
 
+	namespace ENABLED
+	{
+		MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.attribute.enabled");
+
+	}
+
 	namespace FLAGS
 	{
 		MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.attribute.flags");
@@ -36,6 +42,12 @@ namespace ATTRIBUTE
 	namespace GEOMETRY
 	{
 		MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.attribute.geometry");
+
+	}
+
+	namespace GLOBALMATRIX
+	{
+		MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.attribute.globalmatrix");
 
 	}
 
@@ -69,9 +81,27 @@ namespace ATTRIBUTE
 
 	}
 
+	namespace OBJECTNAME
+	{
+		MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.attribute.objectname");
+
+	}
+
 	namespace OBJECTS
 	{
 		MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.attribute.objects");
+
+	}
+
+	namespace OBJECTTYPE
+	{
+		MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.attribute.objecttype");
+
+	}
+
+	namespace OBJECTTYPENAME
+	{
+		MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.attribute.objecttypename");
 
 	}
 
@@ -623,17 +653,18 @@ namespace NEUTRON
 			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.neutron.portbundle.extra");
 
 			MAXON_ATTRIBUTE(void, RESULT, "net.maxon.neutron.result");
-
-			MAXON_ATTRIBUTE(void, ADJUSTEDMATRIX, "adjustedmatrix");
-
-			MAXON_ATTRIBUTE(void, ADJUSTEDPARENTMATRIX, "adjustedparentmatrix");
 		}
 
 		namespace OBJECT
 		{
 			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.neutron.portbundle.object");
 
-			MAXON_ATTRIBUTE(void, MATRIX, "matrix");
+			MAXON_ATTRIBUTE(Matrix, MATRIX, "matrix");
+
+			MAXON_ATTRIBUTE(void, GEOMETRY, "geometry");
+
+			MAXON_ATTRIBUTE(Color, COLOR, "color");
+
 
 			MAXON_ATTRIBUTE(void, SQRMATRIX, "sqrmatrix");
 
@@ -641,15 +672,11 @@ namespace NEUTRON
 
 			MAXON_ATTRIBUTE(void, PARENTMATRIX, "parentmatrix");
 
-			MAXON_ATTRIBUTE(Bool, FILTER, "filter");
-
-			MAXON_ATTRIBUTE(void, GEOMETRY, "geometry");
+			MAXON_ATTRIBUTE(DataDictionary, MATERIAL, "material");
 
 			MAXON_ATTRIBUTE(void, CHILDREN, "children");
 
-			MAXON_ATTRIBUTE(void, COLOR, "color");
-
-			MAXON_ATTRIBUTE(void, MATERIAL, "material");
+			MAXON_ATTRIBUTE(Bool, FILTER, "filter");
 
 			MAXON_ATTRIBUTE(void, DOMAIN, "domain");
 

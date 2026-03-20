@@ -301,6 +301,8 @@ static constexpr Int InvalidArrayIndex = -1;
 static constexpr Int MAXON_FLEXIBLE_ARRAY_LENGTH = 1234; // Don't use 1 as this would allow the compiler to replace the index access array[index] by array[0]
 
 template <typename T, Bool STRIDED = false, Bool MOVE = false> class Block;
+template <typename T> using StridedBlock = Block<T, true>;
+
 class CString;
 class String;
 class FormatStatement;
@@ -340,8 +342,8 @@ using HashInt = UInt;
 /// Forces a compile-time evaluation of the constexpr expression X of integral type T.
 /// Sometimes this is needed to give the compiler a clue that the expression can be evaluated at run-time,
 /// which then can enable further optimization.
-/// @param T											Type of the expression (has to be an integral type).
-/// @param X											The expression.
+/// @param[in] T									Type of the expression (has to be an integral type).
+/// @param[in] X									The expression.
 /// @return												Compile-time constant value of the expression.
 //----------------------------------------------------------------------------------------
 #define MAXON_CONSTEXPR_EVAL(T, X) std::integral_constant<T, X>::value
@@ -460,7 +462,7 @@ public:
 	EmptyVirtualClass(EmptyVirtualClass&&) = default;
 
 	EmptyVirtualClass& operator =(const EmptyVirtualClass&) = default;
-	EmptyVirtualClass& operator=(EmptyVirtualClass&&) = default;
+	EmptyVirtualClass& operator =(EmptyVirtualClass&&) = default;
 
 	virtual ~EmptyVirtualClass()
 	{
@@ -492,17 +494,17 @@ class DeleteReturnType08;
 class DeleteReturnType09;
 
 //----------------------------------------------------------------------------------------
-/// Generic is an incomplete type which is used for parameter types of some interface functions.
-/// Generic* serves a similar purpose as void*, but is more type-safe as no implicit conversions
-/// from other pointer types to Generic* are defined.
+/// Generic is an incomplete type which is used for pointers and references to objects
+/// of generic type, i.e., of a type which is unknown at compile-time. Usually, such a
+/// pointer or reference comes along with a DataType to define the actual type at runtime.
+///
+/// Generic serves a similar purpose as void, but is more type-safe as no implicit conversions
+/// from other pointer types to Generic* are defined. In addition, Generic indicates that
+/// the pointer points to a valid object, while void is also used to point to uninitialized memory.
 //----------------------------------------------------------------------------------------
 class Generic;
 
-#ifdef MAXON_COMPILER_INTEL // they don't allow GenericArithmetic to be used in a union because it has a constructor, use a pointer type instead
-using GenericArithmetic = DummyParamType***;
-#else
 class GenericArithmetic;
-#endif
 
 //----------------------------------------------------------------------------------------
 /// This helper class can be used for two purposes: It allows to disable function templates based on the template arguments,
@@ -809,6 +811,31 @@ public:
 	using type = typename InheritConst<R, T>::type&&;
 };
 
+
+//----------------------------------------------------------------------------------------
+/// Advances a given pointer by a number of bytes. This can be used for memory blocks
+/// where the values of type T don't follow each other immediately, but with some padding
+/// or other data inbetween.
+/// @param[in,out] ptr						The pointer to advance.
+/// @param[in] offset							The offset in bytes to add to ptr.
+//----------------------------------------------------------------------------------------
+template <typename T> MAXON_ATTRIBUTE_FORCE_INLINE void AdvanceByByteOffset(T*& ptr, Int offset)
+{
+	reinterpret_cast<typename InheritConst<Char, T>::type*&>(ptr) += offset;
+}
+
+//----------------------------------------------------------------------------------------
+/// Adds a byte offset to a pointer and returns the new pointer. This can be used for memory blocks
+/// where the values of type T don't follow each other immediately, but with some padding
+/// or other data inbetween.
+/// @param[in] ptr								A pointer.
+/// @param[in] offset							The offset in bytes to add to ptr.
+/// @return												Pointer at the address ptr + offset.
+//----------------------------------------------------------------------------------------
+template <typename T> MAXON_ATTRIBUTE_FORCE_INLINE T* NextByByteOffset(T* ptr, Int offset)
+{
+	return reinterpret_cast<T*>(reinterpret_cast<typename InheritConst<Char, T>::type*>(ptr) + offset);
+}
 
 
 template <typename... T> struct ParameterPack;
@@ -1465,15 +1492,16 @@ template <typename T, Bool function> class DereferenceHelper<T, false, function>
 {
 public:
 	using type = T;
+	static constexpr Bool DEREFERENCED = false;
 
 	static const type* GetPointer(const T& ptr)
 	{
-		return &ptr;
+		return std::addressof(ptr);
 	}
 
 	static type* GetPointer(typename std::conditional<function || STD_IS_REPLACEMENT(const, T), DummyParamType&, T&>::type ptr)
 	{
-		return &ptr;
+		return std::addressof(ptr);
 	}
 };
 
@@ -1481,6 +1509,7 @@ template <typename T> class DereferenceHelper<T*, false, false>
 {
 public:
 	using type = T;
+	static constexpr Bool DEREFERENCED = true;
 
 	static const type* GetPointer(const T* ptr)
 	{
@@ -1497,6 +1526,7 @@ template <> class DereferenceHelper<std::nullptr_t, false, false>
 {
 public:
 	using type = void;
+	static constexpr Bool DEREFERENCED = true;
 
 	static std::nullptr_t GetPointer(std::nullptr_t)
 	{
@@ -1508,6 +1538,7 @@ template <typename T> class DereferenceHelper<T*, false, true>
 {
 public:
 	using type = T*;
+	static constexpr Bool DEREFERENCED = false;
 
 	static const type* GetPointer(T* const& ptr)
 	{
@@ -1519,6 +1550,7 @@ template <typename T> class DereferenceHelper<T, true, false>
 {
 public:
 	using type = typename T::ReferencedType;
+	static constexpr Bool DEREFERENCED = true;
 
 	static const type* GetPointer(const T& ptr)
 	{
@@ -1638,7 +1670,6 @@ public:
 };
 
 
-#ifndef MAXON_COMPILER_INTEL
 //----------------------------------------------------------------------------------------
 /// GenericArithmetic represents an abstract type to be used as base type of all arithmetic types.
 /// It is not the base in the sense of C++ (as there is no base type of, e.g., int), but
@@ -1654,7 +1685,6 @@ public:
 	HashInt GetHashCode() const { return 0; }
 	UniqueHash GetUniqueHashCode() const { return UniqueHash(); }
 };
-#endif
 
 /// @addtogroup DATATYPE
 /// @{
@@ -1695,7 +1725,7 @@ public:
 		return *(ThreadReferencedError*) &referencedError;
 	}
 
-	MAXON_ATTRIBUTE_FORCE_INLINE void operator=(const Error* error)
+	MAXON_ATTRIBUTE_FORCE_INLINE void operator =(const Error* error)
 	{
 		_error = error;
 	}
@@ -2285,7 +2315,7 @@ using InitMTable = SYSTEMBEHAVIORFLAGS (*)();
 	template <typename T> MAXON_ATTRIBUTE_FORCE_INLINE auto MAXON_CONCAT(NAME, Helper)(OverloadRank1, T& obj MAXON_MAKE_LIST(PRIVATE_MAXON_DETECT_MEMBER_HELPER1,,,, ##__VA_ARGS__)) -> decltype(NAME(obj MAXON_MAKE_LIST(PRIVATE_MAXON_DETECT_MEMBER_HELPER3,,,, ##__VA_ARGS__))) { return NAME(obj MAXON_MAKE_LIST(PRIVATE_MAXON_DETECT_MEMBER_HELPER3,,,, ##__VA_ARGS__)); } \
 	template <typename T> MAXON_ATTRIBUTE_FORCE_INLINE auto MAXON_CONCAT(NAME, Helper)(T& obj MAXON_MAKE_LIST(PRIVATE_MAXON_DETECT_MEMBER_HELPER1,,,, ##__VA_ARGS__)) -> decltype(MAXON_CONCAT(NAME, Helper)(OVERLOAD_MAX_RANK, obj MAXON_MAKE_LIST(PRIVATE_MAXON_DETECT_MEMBER_HELPER3,,,, ##__VA_ARGS__))) { return MAXON_CONCAT(NAME, Helper)(OVERLOAD_MAX_RANK, obj MAXON_MAKE_LIST(PRIVATE_MAXON_DETECT_MEMBER_HELPER3,,,, ##__VA_ARGS__)); }
 
-#if defined(MAXON_COMPILER_INTEL) || defined(MAXON_COMPILER_GCC) || defined(MAXON_COMPILER_CLANG)
+#if defined(MAXON_COMPILER_GCC) || defined(MAXON_COMPILER_CLANG)
 	template <typename T> MAXON_ATTRIBUTE_FORCE_INLINE auto GetMemorySizeHelper(OverloadRank2, T& obj) -> decltype(obj.GetMemorySize()) { return obj.GetMemorySize(); }
 // TODO: (Ole) Intel and GCC compilers doesn't work with the following line (SFINAE for expressions not well supported), check newer compiler versions
 //	template <typename T> MAXON_ATTRIBUTE_FORCE_INLINE auto GetMemorySizeHelper(OverloadRank1, T& obj) -> decltype(GetMemorySize(obj)) { return GetMemorySize(obj); }
@@ -2568,7 +2598,7 @@ template <typename T> struct TestForCopyFromMember
 	static_assert(!(isSupported && STD_IS_REPLACEMENT(copy_constructible, T)), "Class T has both a CopyFrom function and a copy constructor.");
 };
 
-#if defined(MAXON_COMPILER_INTEL) || defined(MAXON_COMPILER_MSVC) // Compilers don't handle correctly the deleted CopyFrom-function of Block
+#if defined(MAXON_COMPILER_MSVC) // Compilers don't handle correctly the deleted CopyFrom-function of Block
 template <typename T, Bool STRIDED, Bool MOVE> struct TestForCopyFromMember<Block<T, STRIDED, MOVE>>
 {
 	static const bool isSupported = false;
@@ -2664,7 +2694,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// needed for MAXON_IMPLEMENTATION
+	/// Needed for MAXON_IMPLEMENTATION.
 	/// @param[out] mem								Object will be constructed here (can be nullptr).
 	/// @param[in] src								Object to be moved or copied.
 	//----------------------------------------------------------------------------------------
@@ -2707,7 +2737,7 @@ template <typename T, typename ARG> MAXON_ATTRIBUTE_FORCE_INLINE auto NewCopy(T&
 	return ObjectConstructor<T, TestForCopyFromMember<T>::isSupported>::Copy(dst, src);
 }
 
-template <typename T, typename ARG> MAXON_ATTRIBUTE_FORCE_INLINE typename std::enable_if<!std::is_reference<ARG>::value ,ResultOk<void>>::type NewCopy(T& dst, ARG&& src)
+template <typename T, typename ARG> MAXON_ATTRIBUTE_FORCE_INLINE typename std::enable_if<!std::is_reference<ARG>::value , ResultOk<void>>::type NewCopy(T& dst, ARG&& src)
 {
 	new (&dst) T(std::forward<ARG>(src));
 	return OK;
@@ -2787,7 +2817,7 @@ template <typename T> inline void Reset(T& object)
 {
 	static_assert(!STD_IS_REPLACEMENT(polymorphic, T), "Reset is not supported for polymorphic types.");
 	object.T::~T();
-	PlacementNew<T, false>(&object);
+	PlacementNew<T, false>(std::addressof(object));
 }
 
 MAXON_MEMBERFUNCTION_DETECTOR(Init);
@@ -2942,6 +2972,16 @@ using BoolLValue = DefaultLValue<Bool>;
 #endif
 
 } // namespace maxon
+
+#ifdef MAXON_TARGET_WINDOWS
+	#include <malloc.h>
+#else
+	#include <alloca.h>
+#endif
+
+[[deprecated("#include \"maxon/stackalloc.h\" to use alloca() or the safe variant StackAlloc()/StackFree()")]] void* _allocadeprecated(size_t _Size);
+#undef alloca
+#define alloca(...) _allocadeprecated(__VA_ARGS__)
 
 // _f has to be redefined due to a bug in XCode.
 constexpr inline maxon::Float operator ""_f(long double f)

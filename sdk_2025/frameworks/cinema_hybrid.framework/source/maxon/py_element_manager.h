@@ -47,39 +47,39 @@ class PyElementManagerInterface : MAXON_INTERFACE_BASES(ObserverObjectInterface)
 public:
 	//----------------------------------------------------------------------------------------
 	/// Notify a new object being created and triggers ObservableNewEmbeddedElement after it is inserted in the tree.
-	/// @param[in] pyElem The Python Embedded Element to add into the tree.
+	/// @param[in] pyElem							The Python Embedded Element to add into the tree.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> EmbeddedElementAdded(PythonElementEmbeddedRef pyElem);
 
 	//----------------------------------------------------------------------------------------
 	/// Notify a python object being deleted and triggers ObservableDeletedEmbeddedElement before it is removed from the tree.
-	/// @param[in] pyElem The Python Embedded Element to add to the tree.
+	/// @param[in] pyElem							The Python Embedded Element to add to the tree.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> EmbeddedElementRemoved(PythonElementEmbeddedRef pyElem);
 
 	//----------------------------------------------------------------------------------------
 	/// Notify a python script being created and triggers ObservableNewScriptElement after it is inserted in the tree.
-	/// @param[in] pyElem The Python Script Element to add into the tree.
-	/// @param[in] parent An optional parent from the tree for the new Python Script Element added.
+	/// @param[in] pyElem							The Python Script Element to add into the tree.
+	/// @param[in] parent							An optional parent from the tree for the new Python Script Element added.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> ScriptElementAdded(PythonElementBaseRef pyElem, PythonElementBaseRef parent = PythonElementBaseRef::DefaultValue());
 
 	//----------------------------------------------------------------------------------------
 	/// Notify a python script being deleted and triggers ObservableDeletedScriptElement before it is removed from the tree.
-	/// @param[in] pyElem The Python Script Element to add to the tree.
+	/// @param[in] pyElem							The Python Script Element to add to the tree.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> ScriptElementRemoved(PythonElementBaseRef pyElem);
 
 	//----------------------------------------------------------------------------------------
 	/// Find a given Python Element, from a Path (can be a file path, or an URL with a c4dfs scheme)
-	/// @param[in] path		The path to search for.
+	/// @param[in] path								The path to search for.
 	/// @retun An optional Python Element if found.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Opt<PythonElementBaseRef>> FindPyElementByPath(const String path) const;
 	
 	//----------------------------------------------------------------------------------------
-	/// Find a given Python Embedded Element, from a given BaseList2D (can be a ScriptObject, or a regular Python object, like the Python Generator
-	/// @param[in] obj		The BaseList2D to search in the tree.
+	/// Find a given Python Embedded Element, from a given BaseList2D (can be a ScriptObject, or a regular Python object, like the Python Generator.
+	/// @param[in] obj								The BaseList2D to search in the tree.
 	/// @retun An optional Python Embedded Element if found.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Opt<PythonElementBaseRef>> FindPyElementByBaseList2D(const cinema::BaseList2D * obj) const;
@@ -130,4 +130,4 @@ MAXON_DECLARATION(Class<PyElementManagerRef>, PyElementManager, "net.maxon.py_el
 #include "py_element_manager2.hxx"
 
 }
-#endif
+#endif // PY_ELEMENT_MANAGER_H__

@@ -22,7 +22,7 @@ class DatabaseAssetInterface : MAXON_INTERFACE_BASES(AssetInterface)
 public:
 	//----------------------------------------------------------------------------------------
 	/// Create creates a new database asset.
-	/// @return                       DatabaseAsset on success.
+	/// @return												DatabaseAsset on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<DatabaseAsset> Create();
 	
@@ -32,7 +32,7 @@ public:
 	/// @param[in] language						Optional Language. Default is the program language.
 	/// @param[in] fallbackName				Fall back string of no name was found.
 	/// @param[in] addDetails					Add additional details (like database name/url) to the name.
-	/// @return                       String on success.
+	/// @return												String on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<String> GetRepositoryName(const AssetRepositoryRef& repository, const LanguageRef& language, const String& fallbackName, Bool addDetails);
 
@@ -41,7 +41,7 @@ public:
 	/// @param[in] repository					Asset repository to modify.
 	/// @param[in] name								Name to store.
 	/// @param[in] language						Optional Language. Default is the program language.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> SetRepositoryName(const AssetRepositoryRef& repository, const String& name, const LanguageRef& language);
 };

@@ -178,6 +178,7 @@ namespace DESCRIPTION
 			/// Set it for node ports which don't make sense for presets or for tool attributes which change a lot in usual workflows.
 			MAXON_ATTRIBUTE(Bool, EXCLUDEFROMPRESETS, "net.maxon.description.data.base.excludefrompresets");
 
+			MAXON_ATTRIBUTE(Bool, AUTOBUNDLECHILD, "net.maxon.description.data.base.autobundlechild");
 			/// Show why the element has warnings
 			MAXON_ATTRIBUTE(String, WARNINGS, "net.maxon.description.data.base.warnings");
 
@@ -236,6 +237,9 @@ namespace DESCRIPTION
 
 			/// True when the port bundle is dynamic, i.e., it may have missing or additional members.
 			MAXON_ATTRIBUTE(Bool, DYNAMICBUNDLE, "net.maxon.description.data.info.dynamicbundle");
+
+			/// All flagged ports will be added as child ports by default.
+			MAXON_ATTRIBUTE(Bool, ADDPORTSONCREATE, "net.maxon.description.data.info.addportsoncreate");
 
 			/// A version string. This can be used to check for dirtyness of data which is derived from the description.
 			MAXON_ATTRIBUTE(CString, VERSION, "version");

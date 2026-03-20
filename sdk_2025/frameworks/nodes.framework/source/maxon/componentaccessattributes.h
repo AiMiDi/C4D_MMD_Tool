@@ -86,6 +86,8 @@ namespace InPortComponentAccessTypes
 	MAXON_DECLARATION(ComponentAccessDef, ColorA64ComponentAccess, "net.maxon.node.registry.inportcomponentaccess.colora64");
 	MAXON_DECLARATION(ComponentAccessDef, StringComponentAccess, "net.maxon.node.registry.inportcomponentaccess.string");
 	MAXON_DECLARATION(ComponentAccessDef, CStringComponentAccess, "net.maxon.node.registry.inportcomponentaccess.cstring");
+	MAXON_DECLARATION(ComponentAccessDef, ArrayContainerObjectsComponentAccess, "net.maxon.node.registry.inportcomponentaccess.arraycontainerobjects");
+	MAXON_DECLARATION(ComponentAccessDef, CloningInfoComponentAccess, "net.maxon.node.registry.inportcomponentaccess.clonininfo");
 }
 
 MAXON_REGISTRY(ComponentAccessDef, OutPortComponentAccessTypes, "net.maxon.node.registry.outportcomponentaccess");
@@ -105,6 +107,8 @@ namespace OutPortComponentAccessTypes
 	MAXON_DECLARATION(ComponentAccessDef, ColorA64ComponentAccess, "net.maxon.node.registry.outportcomponentaccess.colora64");
 	MAXON_DECLARATION(ComponentAccessDef, StringComponentAccess, "net.maxon.node.registry.outportcomponentaccess.string");
 	MAXON_DECLARATION(ComponentAccessDef, CStringComponentAccess, "net.maxon.node.registry.outportcomponentaccess.cstring");
+	MAXON_DECLARATION(ComponentAccessDef, ArrayContainerObjectsComponentAccess, "net.maxon.node.registry.outportcomponentaccess.arraycontainerobjects");
+	MAXON_DECLARATION(ComponentAccessDef, CloningInfoComponentAccess, "net.maxon.node.registry.outportcomponentaccess.clonininfo");
 }
 
 #include "componentaccessattributes1.hxx"

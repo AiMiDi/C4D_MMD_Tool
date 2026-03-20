@@ -72,6 +72,7 @@ enum class WIRETYPE : UInt32
 
 	MODE_MASK = LAZY | CONSUMABLE_REQUEST, // All WIRETYPE flags which are copied from PORT_MODE
 
+	LCV_LINK = 1 << 19, // connects the two ends of an LCV feedback
 	CONTROL_BLOCK = 1 << 20,
 	VARLINK = 1 << 21, // connects front and back of a variable
 	BLOCK_NESTING = 1 << 22,
@@ -380,7 +381,7 @@ public:
 	/// @see IdBuilder constructors and templated Append as static Create is a combination of both.
 	/// @tparam INSTANTIATIONTYPE			The instantiation types to append.
 	/// @tparam BASETYPE							The type of #baseId (for calling constructor).
-	/// @param[in] baseId								The base identifier for this IdBuilder.
+	/// @param[in] baseId							The base identifier for this IdBuilder.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	template <typename... INSTANTIATIONTYPE, typename BASETYPE>

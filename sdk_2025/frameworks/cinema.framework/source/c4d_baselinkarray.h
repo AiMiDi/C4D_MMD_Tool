@@ -28,6 +28,11 @@ class BaseLinkArray : protected maxon::BaseArray<BaseLink*>
 	using SUPER = maxon::BaseArray<BaseLink*>;
 
 public:
+	BaseLinkArray() = default;
+	BaseLinkArray(BaseLinkArray&& src) = default;
+	
+	MAXON_OPERATOR_MOVE_ASSIGNMENT(BaseLinkArray);
+
 	/// @name Constructor/Destructor
 	/// @{
 

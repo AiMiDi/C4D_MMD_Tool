@@ -784,7 +784,7 @@ public:
 	/// @param[in] receiver						Modifications are reported to this receiver.
 	/// @param[in] filtered						With the default value of true the filter settings (if any) of this graph will be used,
 	/// 															so modifications to nodes which don't pass the filter aren't reported.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetModificationsSince(TimeStamp stamp, const ValueReceiver<const GraphNode&, MODIFIED>& receiver, Bool filtered = true);
 
@@ -824,7 +824,7 @@ public:
 	/// @param[in] list								Change list to apply.
 	/// @param[in] inverse						Use true if the inverse of the change list shall be applied (for an undo), false otherwise.
 	/// @return												A new change list which contains those changes of list which couldn't be applied,
-	///																for example the change of an attribute value at a node which doesn't exist in this graph.
+	/// 															for example the change of an attribute value at a node which doesn't exist in this graph.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<ChangeList> Apply(const ChangeList& list, Bool inverse);
 
@@ -844,9 +844,9 @@ public:
 	/// @param[in] conversion					An optional attribute conversion delegate, see NodeSystemInterface::ConvertAttributeValues.
 	/// @param[in] validate						True (the default) if the graph shall be validated after the merge, false otherwise.
 	/// @return												The mapping from original identifiers of #other to the identifiers used for the merge:
-	///																- first contains the mapping of top-level nodes.
-	///																- second contains the mapping of top-level input ports.
-	///																- third contains the mapping of top-level output ports.
+	/// 															- first contains the mapping of top-level nodes.
+	/// 															- second contains the mapping of top-level input ports.
+	/// 															- third contains the mapping of top-level output ports.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<HomogenousTupleType<3, HashMap<InternedId, InternedId>>> Merge(const GraphModelRef& other, const AttributeValueConversion& conversion = {}, Bool validate = true);
 
@@ -857,9 +857,9 @@ public:
 	/// @param[in] selection					A selection of nodes and ports. Nodes/ports which aren't direct children of this graph are ignored.
 	/// @param[in] withConnections		True if incoming connections shall be duplicated as well, false otherwise.
 	/// @return												The mapping from original identifiers to the identifiers used for the merge:
-	///																- first contains the mapping of top-level nodes.
-	///																- second contains the mapping of top-level input ports.
-	///																- third contains the mapping of top-level output ports.
+	/// 															- first contains the mapping of top-level nodes.
+	/// 															- second contains the mapping of top-level input ports.
+	/// 															- third contains the mapping of top-level output ports.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<HomogenousTupleType<3, HashMap<InternedId, InternedId>>> Duplicate(const Block<const GraphNode>& selection, Bool withConnections);
 
@@ -1039,9 +1039,9 @@ public:
 	///
 	/// If this transaction isn't active, nothing happens.
 	/// @param[in] userData						User data to pass to the observers of GraphModelInterface::ObservableTransactionCommitted.
-	///																This will be merged with all given user data of nested commits.
+	/// 															This will be merged with all given user data of nested commits.
 	/// @param[in] validate						If false, no validation of the graph is made when this transaction is a nested one.
-	///																This can be used to avoid unnecessary validations for nested transactions.
+	/// 															This can be used to avoid unnecessary validations for nested transactions.
 	//----------------------------------------------------------------------------------------
 	Result<void> Commit(const DataDictionary& userData = GetPtrSizedZeroRef<DataDictionary>(), Bool validate = true);
 
@@ -1163,7 +1163,7 @@ public:
 	/// as a single input port list and a single output port list. Otherwise, the children are
 	/// ports.
 	/// @param[in] callback						This callback will receive all children.
-	/// @return												false if #callback cancelled further evaluation, true otherwise.
+	/// @return												False if #callback cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetChildren(const ValueReceiver<const GraphNode&>& callback, NODE_KIND mask = NODE_KIND::ALL_MASK) const
 	{
@@ -1288,10 +1288,10 @@ public:
 	/// Yields all inner nodes of this node matching #mask in pre-order. The recursive traversal
 	/// stops at nodes which don't match #mask.
 	/// @param[in] mask								Mask to filter the tree traversal. Only nodes matching this mask are considered.
-	///																The node on which GetInnerNodes is called isn't checked for mask.
+	/// 															The node on which GetInnerNodes is called isn't checked for mask.
 	/// @param[in] includeThis				If true, the node on which GetInnerNodes is called is yielded to #receiver too.
 	/// @param[in] receiver						Inner nodes are reported to this value receiver.
-	/// @return												false if #receiver cancelled further evaluation, true otherwise.
+	/// @return												False if #receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetInnerNodes(NODE_KIND mask, Bool includeThis, const ValueReceiver<const GraphNode&>& receiver) const
 	{
@@ -1355,7 +1355,7 @@ public:
 	/// @param[in] conns							The receiver for the found connections.
 	/// @param[in] mask								Only yield connections whose wires match this mask.
 	/// @param[in] mode								Mode for GetConnections.
-	/// @return												false if #conns cancelled further evaluation, true otherwise.
+	/// @return												False if #conns cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetConnections(PORT_DIR dir, const ValueReceiver<const GraphConnection&>& conns, Wires mask = Wires::All(), GraphModelInterface::GET_CONNECTIONS_MODE mode = GraphModelInterface::GET_CONNECTIONS_MODE::CONNECTIONS) const
 	{
@@ -1380,7 +1380,7 @@ public:
 	/// Gets all attribute values of the connection from this port to target.
 	/// @param[in] target							The other end of the connection.
 	/// @param[out] receiver					All attribute values of the connection will be reported to the receiver.
-	/// @return												false if #receiver cancelled further evaluation, true otherwise.
+	/// @return												False if #receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetConnectionValues(const GraphNode& target, const ValueReceiver<CONNECTION_POSITION, const InternedId&, const ConstDataPtr&>& receiver) const
 	{
@@ -1711,7 +1711,7 @@ public:
 	/// @param[in] attr								The attribute whose value shall be set.
 	/// @param[in] value							The value for the attribute.
 	/// @param[in] checkAndInvalidate	True by default. Use false to suppress check, invalidation and update of time stamp.
-	///																False may only be used for attributes which aren't needed during @ref GraphModelInterface::Validate "validation".
+	/// 															False may only be used for attributes which aren't needed during @ref GraphModelInterface::Validate "validation".
 	/// @return												True if the value has been changed, false otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> SetValue(const InternedId& attr, ForwardingDataPtr&& value, Bool checkAndInvalidate = true) const
@@ -1865,10 +1865,10 @@ public:
 	/// Reports all attribute modifications which have been made for this node since the given stamp to the receiver.
 	/// Only stored attributes will be reported, so to also check for new values of computed
 	/// attributes you should use GraphAttributeInterface::IsComputedFrom().
-	/// @see GraphModelInterface::GetModificationsSince
+	/// @see GraphModelInterface::GetModificationsSince.
 	/// @param[in] stamp							A reference time stamp. Only modifications newer than this stamp are reported.
 	/// @param[in] receiver						Modifications are reported to this receiver as a pair of the attribute identifier and the current value.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetAttributeModificationsSince(TimeStamp stamp, const ValueReceiver<InternedId, ConstDataPtr>& receiver) const
 	{
@@ -1949,7 +1949,7 @@ public:
 	///
 	/// @param[in] attr								The attribute which shall be asked.
 	/// @param[in] receiver						All messages are reported to this receiver.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> GetMessages(const InternedId& attr, const ValueReceiver<const GraphMessage&>& receiver) const
 	{
@@ -1998,7 +1998,7 @@ public:
 	///   They have a valid graph and path to identify the node, but you can't call any function
 	///   which would require access to the node.
 	/// @return												True if this GraphNode points to a valid node,
-	///																false if it is a null node or a reference to a deleted node.
+	/// 															false if it is a null node or a reference to a deleted node.
 	//----------------------------------------------------------------------------------------
 	Bool IsValid() const
 	{
@@ -2205,7 +2205,7 @@ class GraphLib
 	MAXON_INTERFACE_NONVIRTUAL(GraphLib, MAXON_REFERENCE_STATIC, "net.maxon.graph.interface.graphlib", MAXON_IMPLEMENTATION_MODULE("net.maxon.nodes"));
 public:
 	//----------------------------------------------------------------------------------------
-	/// Creates a GraphAttribute with the given name and flags
+	/// Creates a GraphAttribute with the given name and flags.
 	/// @param[in] attr								The name of the attribute.
 	/// @param[in] flags							The flags of the attribute.
 	/// @return												A new GraphAttribute with the given name and flags.

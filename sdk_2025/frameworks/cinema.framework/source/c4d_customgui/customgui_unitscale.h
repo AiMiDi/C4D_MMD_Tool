@@ -141,7 +141,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the suffix shown in the UI for the set unit as a string.
-	/// @return												returns the string of the unit, empty string if failing.
+	/// @return												Returns the string of the unit, empty string if failing.
 	//----------------------------------------------------------------------------------------
 	String ToUnitString() const;
 	/// @}

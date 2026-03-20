@@ -75,7 +75,7 @@ public:
 	static MAXON_METHOD Result<Url> FindRepository(const AssetRepositoryRef& repository);
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the asset repository for a Url
+	/// Returns the asset repository for a Url.
 	/// @param[in] url								Url of the repository to find.
 	/// @return												Found repository (if any).
 	//----------------------------------------------------------------------------------------
@@ -107,9 +107,9 @@ public:
 	static MAXON_METHOD Url GetAssetDatabaseCachePath();
 
 	//----------------------------------------------------------------------------------------
-	/// SetAssetDatabaseCachePath sets a new cache path to store temporary downloaded objects
+	/// SetAssetDatabaseCachePath sets a new cache path to store temporary downloaded objects.
 	/// @param[in] cachePath					Path to set.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> SetAssetDatabaseCachePath(const Url& cachePath);
 
@@ -120,20 +120,20 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// ClearAssetDatabaseCache deletes the cache.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> ClearAssetDatabaseCache();
 
 	//----------------------------------------------------------------------------------------
 	/// WaitForDatabaseLoading waits for the execution of the database loading. Since this is async now during the startup and modification of database lists it gives the developer a chance to wait for that end.
-	/// @return                      True if loading is finished. False if canceled.
+	/// @return												True if loading is finished. False if canceled.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool WaitForDatabaseLoading();
 
 	//----------------------------------------------------------------------------------------
 	/// ReloadDatabases reloads the asset repositories from disk.
 	/// @param[in] forceReload				True if databases should be forces to be reloaded. False to only load new databases and remove unused.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> ReloadAssetRepositories(Bool forceReload);
 

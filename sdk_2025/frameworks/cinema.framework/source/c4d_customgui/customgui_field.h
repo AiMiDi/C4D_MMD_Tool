@@ -122,15 +122,15 @@ public:
 	/// @param[in] inputs							The points to sample, caller owns the object.
 	/// @param[out] outputs						The output, caller owns the object.
 	/// @param[in] info								The pre-filled FieldInfo, caller owns the object.
-	/// @param[in, out] extraData			The internal data of a sampling process provided by an sampling initialization function.
+	/// @param[in,out] extraData			The internal data of a sampling process provided by an sampling initialization function.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> DirectSample(const FieldInput& inputs, FieldOutputBlock& outputs, const FieldInfo& info, const maxon::GenericData& extraData) const;
 
 	//----------------------------------------------------------------------------------------
-	/// Direct free, must be called after DirectInitSampling
+	/// Direct free, must be called after DirectInitSampling.
 	/// @param[in] info								The pre-filled FieldInfo, caller owns the object.
-	/// @param[in, out] extraData			The internal data of a sampling process provided by an sampling initialization function.
+	/// @param[in,out] extraData			The internal data of a sampling process provided by an sampling initialization function.
 	//----------------------------------------------------------------------------------------
 	void DirectFreeSampling(const FieldInfo& info, maxon::GenericData& extraData) const;
 
@@ -195,14 +195,14 @@ public:
 	maxon::Result<void> FindByReference(FieldLayerLink link, BaseDocument* doc, maxon::BaseArray<FieldLayer*>& found) const;
 
 	//----------------------------------------------------------------------------------------
-	/// Sets the state of the FIELDLIST_FLAGS for this FieldList
+	/// Sets the state of the FIELDLIST_FLAGS for this FieldList.
 	/// @param[in] flags							The flags to set or clear.
 	/// @param[in] state							True to set the flag, false to clear it.
 	//----------------------------------------------------------------------------------------
 	void SetFlags(FIELDLIST_FLAGS flags, Bool state);
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the FIELDLIST_FLAGS for this FieldList
+	/// Gets the FIELDLIST_FLAGS for this FieldList.
 	/// @return												The complete set of flags.
 	//----------------------------------------------------------------------------------------
 	FIELDLIST_FLAGS GetFlags() const;
@@ -217,7 +217,7 @@ public:
 	Bool CheckFlag(FIELDLIST_FLAGS flag) const;
 
 	//----------------------------------------------------------------------------------------
-	/// Query if the FieldList has content i.e. any FieldLayers in it in order to determine if it's worth evaluation
+	/// Query if the FieldList has content i.e. any FieldLayers in it in order to determine if it's worth evaluation.
 	/// @param[in] channel						(Optional) The channels to check that content exists for.
 	/// @return												True if there are FieldLayers in the FieldList, false if not.
 	//----------------------------------------------------------------------------------------

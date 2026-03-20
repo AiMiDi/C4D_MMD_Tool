@@ -165,7 +165,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a clone of this map.
-	/// @param[in] copyContent			True if also the elements shall be cloned, false otherwise (then just a new object sharing the same MapInterface implementation is created).
+	/// @param[in] copyContent				True if also the elements shall be cloned, false otherwise (then just a new object sharing the same MapInterface implementation is created).
 	/// @return												Pointer to the new map object, nullptr if allocation or copying failed.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<MapInterface*> Clone(Bool copyContent = true) const;
@@ -250,9 +250,6 @@ public:
 		return *reinterpret_cast<const MapInterface<KT, VT>*>(this);
 	}
 
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning disable 597
-#endif
 	operator const MapInterface<K, const V>&() const
 	{
 		return *(MapInterface<K, const V>*) this;
@@ -267,9 +264,6 @@ public:
 	{
 		return *(MapInterface<Generic, typename std::conditional<STD_IS_REPLACEMENT(same, V, Generic), DeleteReturnType02, Generic>::type>*) this;
 	}
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning enable 597
-#endif
 
 	operator const NonConstMap<K, V>&()
 	{
@@ -320,16 +314,10 @@ public:
 
 		MAXON_OPERATOR_MOVE_ASSIGNMENT(IteratorTemplate);
 
-	#ifdef MAXON_COMPILER_INTEL
-	#pragma warning disable 597
-	#endif
 		operator IteratorTemplate<true>&()
 		{
 			return *(IteratorTemplate<true>*) this;
 		}
-	#ifdef MAXON_COMPILER_INTEL
-	#pragma warning enable 597
-	#endif
 
 		KeyType& GetKey() const
 		{

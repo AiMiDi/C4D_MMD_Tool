@@ -1,0 +1,57 @@
+# The Cinema 4D SDK can include modules and define path aliases from a custom file. This file is
+# specified with the configuration variable MAXON_SDK_CUSTOM_PATHS_FILE, and points by default to 
+# this file. Using a custom paths file is entirely optional and by default the configuration 
+# variable MAXON_SDK_MODULES_DIR is used to search for modules.
+
+# The syntax of custom path files is as follows:
+#
+#    1. Empty lines or lines only containing whitespace are ignored.
+#    2. Lines starting with a '#' are treated as comments and ignored.
+#    3. Lines starting with a 'ROOT' command set a new root directory.
+#    4. Lines starting with a 'MODULE' command define a module path to be loaded.
+#    5. Lines starting with a 'ALIAS' command define a path alias to be used in 
+#       projectdefinition.txt files.
+#
+# Before, between, and after commands can be one to many whitespaces. Commands are case SENSITIVE. 
+# Non-existing paths will lead to errors in CMake when parsing this file, as all paths will be
+# validated. Directory paths can be specified both as root/a/b and root/a/b/, i.e., the closing
+# slash is optional.
+#
+# WARNING: All commands in this file are commented out as this file is loaded by the SDK by 
+# default. Removing the # in front of a command will enable it. Make sure that your system / SDK
+# has the referenced paths, as non-existing paths will lead to errors.
+
+# The most common use case is to define module paths using the MODULE command, which will then be 
+# included by the CMake build system. All paths in path files can be relative, and the default root 
+# directory is the MAXON_SDK_ROOT_DIR, i.e., the directory containing at least the frameworks and 
+# CMake files. Setting module paths in this manner will disable to auto-including behavior of the
+# MAXON_SDK_MODULES_DIR variable. This however only does apply when the custom paths file does 
+# actually set any modules. A custom paths files which sets no modules can still be used in 
+# conjunction with the auto-including behavior of MAXON_SDK_MODULES_DIR.
+
+# Include the five modules included in the SDK by default, in relation to the default ROOT 
+# directory MAXON_SDK_ROOT_DIR.
+# MODULE plugins/example.assets
+# MODULE plugins/example.hello_world
+# MODULE plugins/example.image
+# MODULE plugins/example.main
+# MODULE plugins/example.migration_2024
+# MODULE plugins/example.nodes
+
+# All path commands can also use absolute paths and modules can be included from anywhere.
+# MODULE d:/projects/cinema/foo_plugin
+# MODULE ~/documents/code/bar_plugin
+
+# A new root directory in relation to which relative paths are set can be overwritten using
+# the ROOT command. It will apply until it is overwritten by a new root command.
+# ROOT d:/projects/cinema
+
+# This module would then be included from the d:/projects/cinema/ directory.
+# MODULE baz_plugin
+
+# Path files can also define path aliases using the ALIAS command. Path aliases can then later be 
+# used in projectdefinition.txt files. FOO would be an alias for `d:/projects/cinema/libs` and BAR 
+# would be an alias for `c:/libs`. Alias are only meant to be used for directories and not for
+# individual files.
+# ALIAS FOO libs
+# ALIAS BAR c:/libs

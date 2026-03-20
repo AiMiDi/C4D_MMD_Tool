@@ -50,31 +50,31 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Give the raw weight of the weighting algo.
-	/// @param[out] weights				The resulting autoweight array.
-	/// @param[in] doc						The base document.
-	/// @param[in] op							The polygon object.
-	/// @param[in] bones					A array of bone structure.
-	/// @param[in] autoWeightPointJointSelections		The point joint lock selection
-	/// @return										Error code if fail else OK.
+	/// @param[out] weights						The resulting autoweight array.
+	/// @param[in] doc								The base document.
+	/// @param[in] op									The polygon object.
+	/// @param[in] bones							A array of bone structure.
+	/// @param[in] autoWeightPointJointSelections	The point joint lock selection.
+	/// @return												Error code if fail else OK.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> CalculateWeights(BaseArray<BaseArray<Float>>& weights, cinema::BaseDocument* doc, cinema::PolygonObject* op, const BaseArray<Bone>& bones, AutoWeightPointJointSelections &autoWeightPointJointSelections);
 	
 	//----------------------------------------------------------------------------------------
 	/// Normalize the weights.
-	/// @param[out] weights													The resulting autoweight array.
-	/// @param[in] oldWeights												The previous weight array.
-	/// @param[in] autoWeightPointJointSelections		The point joint lock selection
-	/// @return																			Error code if fail else OK.
+	/// @param[out] weights						The resulting autoweight array.
+	/// @param[in] oldWeights					The previous weight array.
+	/// @param[in] autoWeightPointJointSelections	The point joint lock selection.
+	/// @return												Error code if fail else OK.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> NormalizeWeights(BaseArray<BaseArray<Float>>& weights, const BaseArray<BaseArray<Float>>& oldWeights, AutoWeightPointJointSelections &autoWeightPointJointSelections);
 	
 	//----------------------------------------------------------------------------------------
 	/// Run the smooth algorithm on the weights.
-	/// @param[out] weights														The resulting autoweight array.
-	/// @param[in] op																	The polygon object.
-	/// @param[in] oldWeights													The previous weight array.
-	/// @param[in] autoWeightPointJointSelections			The point joint lock selection.
-	/// @return																				Error code if fail else OK.
+	/// @param[out] weights						The resulting autoweight array.
+	/// @param[in] op									The polygon object.
+	/// @param[in] oldWeights					The previous weight array.
+	/// @param[in] autoWeightPointJointSelections	The point joint lock selection.
+	/// @return												Error code if fail else OK.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SmoothWeights(BaseArray<BaseArray<Float>>& weights, cinema::PolygonObject* op, const BaseArray<BaseArray<Float>>& oldWeights, AutoWeightPointJointSelections &autoWeightPointJointSelections);
 };
@@ -122,4 +122,4 @@ namespace AutoWeightAlgos
 } // namespace maxon
 
 
-#endif // Autoweight_H__
+#endif // AUTOWEIGHT_H__

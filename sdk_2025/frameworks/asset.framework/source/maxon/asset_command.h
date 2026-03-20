@@ -36,14 +36,14 @@ public:
 	/// Executes the command asset. @see ASSETMETADATA::AssetCommandExecuteDelegate.
 	/// @param[in] commandAsset				The command asset.
 	/// @param[in] withOptions				If command has options (@ref COMMAND_ASSET_STATE::HAS_OPTION), set to @formatConstant{true} to show the options dialog before executing the command asset.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> Execute(const AssetDescription& commandAsset, Bool withOptions);
 
 	//----------------------------------------------------------------------------------------
 	/// Queries the command asset state. @see ASSETMETADATA::AssetCommandQueryStateDelegate and @enumerateEnum{COMMAND_ASSET_STATE}.
 	/// @param[in] commandAsset				The command asset.
-	/// @return                       The state of the command asset. @enumerateEnum{COMMAND_ASSET_STATE}.
+	/// @return												The state of the command asset. @enumerateEnum{COMMAND_ASSET_STATE}.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<COMMAND_ASSET_STATE> QueryState(const AssetDescription& commandAsset);
 
@@ -56,23 +56,23 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Gets the command asset scopes, e.g. @ref ASSETMETADATA::CommandScopeMesh.
 	/// @param[in] commandAsset				The command asset.
-	/// @return                       Array with command scope IDs.
+	/// @return												Array with command scope IDs.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Array<Id>> GetCommandScopes(const AssetDescription& commandAsset);
 
 	//----------------------------------------------------------------------------------------
 	/// Adds the @formatParam{scope} into the @formatParam{scopeArray}.
 	/// @param[in] scope							The command asset scope ID.
-	/// @param[in, out] scopeArray		Array with scope IDs to ad the scope to.
-	/// @return                       @formatConstant{true} if the scope has been successfully added (it didn't exists in @formatParam{scopeArray}), @formatConstant{false} if the @formatParam{scope} already exists in the @formatParam{scopeArray}.
+	/// @param[in,out] scopeArray			Array with scope IDs to ad the scope to.
+	/// @return												@formatConstant{true} if the scope has been successfully added (it didn't exists in @formatParam{scopeArray}), @formatConstant{false} if the @formatParam{scope} already exists in the @formatParam{scopeArray}.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Bool> AddCommandScope(const Id& scope, Array<Id>& scopeArray);
 
 	//----------------------------------------------------------------------------------------
 	/// Removes the @formatParam{scope} out of the @formatParam{scopeArray}.
 	/// @param[in] scope							The command asset scope ID.
-	/// @param[in, out] scopeArray		Array with scope IDs to erase the scope from.
-	/// @return                       @formatConstant{true} if the scope has been successfully removed (it existed in @formatParam{scopeArray}), @formatConstant{false} if the @formatParam{scope} wasn't removed because @formatParam{scopeArray} doesn't contain it.
+	/// @param[in,out] scopeArray			Array with scope IDs to erase the scope from.
+	/// @return												@formatConstant{true} if the scope has been successfully removed (it existed in @formatParam{scopeArray}), @formatConstant{false} if the @formatParam{scope} wasn't removed because @formatParam{scopeArray} doesn't contain it.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Bool> EraseCommandScope(const Id& scope, Array<Id>& scopeArray);
 
@@ -80,7 +80,7 @@ public:
 	/// Stores the @formatParam{scopeArray} into the @formatParam{commandAsset} metadata in the built-in database in a persistent way.
 	/// @param[in] commandAsset				The command asset.
 	/// @param[in] scopeArray					Array with scope IDs to be stored.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> StoreCommandScopes(const AssetDescription& commandAsset, Array<Id>&& scopeArray);
 
@@ -88,28 +88,28 @@ public:
 	/// Checks whether @formatParam{commandAsset} has the @formatParam{scope} assigned.
 	/// @param[in] commandAsset				The command asset.
 	/// @param[in] scope							The Scope ID to check.
-	/// @return                       @trueIfOtherwiseFalse{@formatParam{commandAsset} contains the @formatParam{scope}}
+	/// @return												@trueIfOtherwiseFalse{@formatParam{commandAsset} contains the @formatParam{scope}}
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Bool> ContainsCommandScope(const AssetDescription& commandAsset, const Id& scope);
 
 	//----------------------------------------------------------------------------------------
 	/// Gets an array with all the names the @formatP of the scopes contained inChecks whether @formatParam{commandAsset} has the @formatParam{scope} assigned.
 	/// @param[in] commandAsset				The command asset.
-	/// @return                       Array with scope names.
+	/// @return												Array with scope names.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<String>> GetCommandScopeNames(const AssetDescription& commandAsset);
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the name of a command scope.
 	/// @param[in] scope							The command asset scope.
-	/// @return                       The scope name.
+	/// @return												The scope name.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD String GetCommandScopeName(const Id& scope);
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the command asset type, e.g. @ref ASSETMETADATA::CommandTypeCommand
+	/// Gets the command asset type, e.g. @ref ASSETMETADATA::CommandTypeCommand.
 	/// @param[in] commandAsset				The command asset.
-	/// @return                       The command asset type.
+	/// @return												The command asset type.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Id> GetCommandType(const AssetDescription& commandAsset);
 
@@ -117,21 +117,21 @@ public:
 	/// Gets the name of a command type.
 	/// @param[in] commandType				The command asset type.
 	/// @param[in] repository					The asset repository.
-	/// @return                       The command type name.
+	/// @return												The command type name.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<String> GetCommandTypeName(const Id& commandType, const AssetRepositoryRef& repository);
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if @formatParam{commandAsset} is of type Object, e.g. @ref ASSETMETADATA::CommandTypeObjectEffector.
 	/// @param[in] commandAsset				The command asset.
-	/// @return                       @trueIfOtherwiseFalse{@formatParam{commandAsset} is of type Object}
+	/// @return												@trueIfOtherwiseFalse{@formatParam{commandAsset} is of type Object}
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool AssetIsObjectCommandType(const AssetDescription& commandAsset);
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if @formatParam{commandType} is of type Object, e.g. @ref ASSETMETADATA::CommandTypeObjectEffector.
 	/// @param[in] commandType				The command type.
-	/// @return                       @trueIfOtherwiseFalse{@formatParam{commandType} is of type Object}
+	/// @return												@trueIfOtherwiseFalse{@formatParam{commandType} is of type Object}
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool IsObjectCommandType(const Id& commandType);
 
@@ -139,14 +139,14 @@ public:
 	/// Registers an array of @formatParam{scopes} for a legacy @formatParam{commandId}.
 	/// @param[in] commandId					The legacy command ID.
 	/// @param[in] scopes							The array with the scopes to assign to legacy command ID.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> RegisterLegacyCommandScopes(Int32 commandId, const BaseArray<Id>& scopes);
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the scopes registered to the legacy @formatParam{commandId}.
 	/// @param[in] commandId					The legacy command ID.
-	/// @return                       The array with the scopes assigned to legacy command ID
+	/// @return												The array with the scopes assigned to legacy command ID.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<BaseArray<Id>> GetRegisteredLegacyCommandScopes(Int32 commandId);
 
@@ -154,14 +154,14 @@ public:
 	/// Registers a command @formatParam{type} for a legacy @formatParam{commandId}, e.g. @ref ASSETMETADATA::CommandTypeObjectField.
 	/// @param[in] commandId					The legacy command ID.
 	/// @param[in] type								The command type to assign to @formatParam{commandId}.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> RegisterLegacyCommandType(Int32 commandId, const Id& type);
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the type registered to the legacy @formatParam{commandId}, e.g. @ref ASSETMETADATA::CommandTypeObjectField.
 	/// @param[in] commandId					The legacy command ID.
-	/// @return                       The command type assigned to @formatParam{commandId}.
+	/// @return												The command type assigned to @formatParam{commandId}.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Id GetRegisteredLegacyCommandType(Int32 commandId);
 };

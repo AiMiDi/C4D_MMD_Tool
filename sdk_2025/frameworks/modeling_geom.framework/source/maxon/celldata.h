@@ -70,14 +70,14 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Scales the current cell by a specific value.
-	/// @param[in] scaleValue					the amout the cell will be scaled by.
-	/// @return												if the scaling succeded.
+	/// @param[in] scaleValue					The amout the cell will be scaled by.
+	/// @return												If the scaling succeded.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> ScaleCell(Float scaleValue);
 
 	//----------------------------------------------------------------------------------------
 	/// This cell checks the current cell data structure and optimizes it.
-	/// @return												true if everything worked out, otherwise false.
+	/// @return												True if everything worked out, otherwise false.
 	//----------------------------------------------------------------------------------------
 	Result<Bool> FixGeometry();
 
@@ -170,14 +170,14 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Adds the data of a different cell to this one. Indices are translated.
-	/// @param[in] otherCell					The other cell whose data should be added
+	/// @param[in] otherCell					The other cell whose data should be added.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	Result<void> AddCellData(const CellData& otherCell);
 
 	//----------------------------------------------------------------------------------------
 	/// Calculates and returns the Axis Aligned Bounding Box of the cell.
-	/// @return												The Bounding Box of the cell
+	/// @return												The Bounding Box of the cell.
 	//----------------------------------------------------------------------------------------
 	Range<Vector> GetBoundingBox() const;
 

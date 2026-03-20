@@ -211,7 +211,7 @@ template <typename T> struct StrongCOWRefHandler::MakeWritableHelper<T, typename
 				return o;
 		}
 		if (MAXON_LIKELY(resetOnError || o))
-			ref.PrivateSetTarget(ResultPtr<typename R::ReferencedType>(o));
+			ref.PrivateSetTarget(o);
 		DebugAssert(!o || (GetReferenceCounter(o) == 1));
 		return o;
 	}

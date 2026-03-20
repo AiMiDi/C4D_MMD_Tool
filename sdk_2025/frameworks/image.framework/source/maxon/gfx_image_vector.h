@@ -35,14 +35,14 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Initialized the Vector image with the given url of an svg image.
 	/// @param[in] url								Url of a svg file to load.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Init(const Url& url);
 
 	//----------------------------------------------------------------------------------------
 	/// Initializes the image with a SVGDocument.
 	/// @param[in] svgDocument				The image.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Init(const SVGDocument& svgDocument);
 

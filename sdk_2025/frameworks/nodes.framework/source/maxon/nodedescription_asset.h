@@ -51,6 +51,11 @@ public:
 	/// @see DESCRIPTION::DATA::BASE::CLASSIFICATION.
 	MAXON_ATTRIBUTE_CLASS(Id, DefaultPortClassification, "net.maxon.node.assettype.context.defaultportclass");
 
+	/// @brief Defines the order index to be assigned to the first added port.
+	/// If not specified, new ports will be added starting at index 0.
+	/// @see ReqOrderIndex attribute.
+	MAXON_ATTRIBUTE_CLASS(Int, BaseOrderIndex, "net.maxon.node.assettype.context.baseorderindex");
+
 	//----------------------------------------------------------------------------------------
 	/// Creates a new NodeDescriptionAsset. Asset will be empty and should be stored in a repository
 	/// with AssetRepositoryInterface::StoreAsset to save it's content.

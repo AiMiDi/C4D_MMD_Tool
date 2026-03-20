@@ -84,6 +84,10 @@
 #define ID_MODELING_NORMALS_SMOOTH                          1060670       ///< Normal Editing Commands. Currently not used
 #define ID_MODELING_NORMALS_AVERAGE                         1060677       ///< Normal Editing Commands.
 
+#define ID_MODELING_UDIM_ROTATE_TOOL                        1064718       ///< UDIM rotate. See tooludimrotate.h
+#define ID_MODELING_UDIM_MOVE_TOOL                          1064719       ///< UDIM rotate. See tooludimmove.h
+#define ID_MODELING_UDIM_MOVE_TO_TILE_TOOL                  1064720       ///< UDIM rotate. See tooludimmovetotile.h
+
 /// @}
 
 /// @addtogroup ID_CAMERA_CONTAINERIDS
@@ -145,6 +149,7 @@
 #define ID_CAMERA_ZOOM																			1016009				///< Camera zoom.
 #define ID_CAMERA_ZOOM_IN																		1016010				///< Camera zoom in.
 #define ID_CAMERA_ZOOM_OUT																	1016011				///< Camera zoom out.
+#define ID_CAMERA_FREELOOK																	1064616				///< Camera freelook.
 
 #define ID_MODELING_AXIS																		200000087			///< Axis.
 #define ID_MODELING_MOVE																		200000088			///< Move.

@@ -11,7 +11,7 @@ enum
 	TAKEBASE_NOTES				= 10006,	// String
 	TAKEBASE_OVERRIDES		= 20000,	// link list
 	TAKEBASE_CHECK				=	20001,	// Bool take is checked
-
+	TAKEBASE_PROXYSYNCHMODE = 20010,	// Internal bool for svd proxy
 	TAKEBASE
 };
 

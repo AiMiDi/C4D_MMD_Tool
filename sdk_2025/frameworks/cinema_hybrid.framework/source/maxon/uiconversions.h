@@ -52,7 +52,7 @@ public:
 	/// @param[in] stringDescription	String description for the given entry and current language.
 	/// @param[in] mainId							DescID to use for this id.
 	/// @param[in] groupId						Group id to use for this entry.
-	/// @param[in] patchEntryFunc			call back which is called for each generated c4d description entry. This allows to patch several parameters from outside before adding to c4dDescription.
+	/// @param[in] patchEntryFunc			Call back which is called for each generated c4d description entry. This allows to patch several parameters from outside before adding to c4dDescription.
 	/// @param[in] translateIds				Translation table for all ids.
 	/// @param[in] parentIds					Parent ids to concatenate.
 	/// @param[in] parentFoldId				Parent fold id.
@@ -181,6 +181,7 @@ namespace UiConversions
 	MAXON_DECLARATION(UiConversions::EntryType, UiOcioColorSpace, "net.maxon.ui.ociocolorspace");
 	MAXON_DECLARATION(UiConversions::EntryType, UiScenePort, "net.maxon.ui.sceneport");
 	MAXON_DECLARATION(UiConversions::EntryType, UiTangents, "net.maxon.ui.tangents");
+	MAXON_DECLARATION(UiConversions::EntryType, UiInExclude, "net.maxon.ui.inexclude");
 }
 
 namespace CustomNodeGui

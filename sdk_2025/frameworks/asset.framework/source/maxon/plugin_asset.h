@@ -23,7 +23,7 @@ class PluginAssetInterface : MAXON_INTERFACE_BASES(AssetInterface)
 public:
 	//----------------------------------------------------------------------------------------
 	/// Create creates a new plugin asset.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<PluginAsset> Create();
 };

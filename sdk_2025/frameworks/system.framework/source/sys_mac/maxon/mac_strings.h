@@ -18,14 +18,14 @@ namespace maxon
 	//----------------------------------------------------------------------------------------
 	/// Converts a String to NSString.
 	/// @param[in] in									String object.
-	/// @return											ARC-managed NSString* (can contain nullptr).
+	/// @return												ARC-managed NSString* (can contain nullptr).
 	//----------------------------------------------------------------------------------------
 	NSString* ToNSStringARC(const String& in);
 
 	//----------------------------------------------------------------------------------------
 	/// Converts a CString to NSString.
 	/// @param[in] in									CString object.
-	/// @return											ARC-managed NSString* (can contain nullptr).
+	/// @return												ARC-managed NSString* (can contain nullptr).
 	//----------------------------------------------------------------------------------------
 	NSString* ToNSStringARC(const CString& in);
 

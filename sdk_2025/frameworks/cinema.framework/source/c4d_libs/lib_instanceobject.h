@@ -87,7 +87,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Set the reference object used for the multiple instances (INSTANCEOBJECT_LINK in BaseContainer).
-	/// @param[in] refObj							desired reference object.
+	/// @param[in] refObj							Desired reference object.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void>	SetReferenceObject(BaseObject* refObj);
 	/// @}
@@ -136,25 +136,25 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns an array of deformation matrices with one element for each instance.
-	/// @return			Pointer to the deformation matrix array. Owned by the InstanceObject.
+	/// @return												Pointer to the deformation matrix array. Owned by the InstanceObject.
 	//----------------------------------------------------------------------------------------
 	const maxon::BaseArray<Matrix>* GetInstanceDeformationMatrices() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns an array of undeformed matrices with one element for each instance.
-	/// @return			Pointer to the undeformed matrix array. Owned by the InstanceObject.
+	/// @return												Pointer to the undeformed matrix array. Owned by the InstanceObject.
 	//----------------------------------------------------------------------------------------
 	const maxon::BaseArray<Matrix>* GetInstanceUndeformedMatrices() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns an array of undeformed local matrices with one element for each instance.
-	/// @return			Pointer to the undeformed local matrix array. Owned by the InstanceObject.
+	/// @return												Pointer to the undeformed local matrix array. Owned by the InstanceObject.
 	//----------------------------------------------------------------------------------------
 	const maxon::BaseArray<Matrix>* GetInstanceUndeformedLocalMatrices() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Returns true if the instances have a deformation matrix.
-	/// @return			True if instances have a deformation matrix
+	/// @return												True if instances have a deformation matrix.
 	//----------------------------------------------------------------------------------------
 	Bool HasDeformationMatrices();
 
@@ -166,7 +166,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Return the Matrix dirtyID of the instance at the specified index.
 	/// @param[in] index							Instance index.
-	/// @return												dirty ID.
+	/// @return												Dirty ID.
 	//----------------------------------------------------------------------------------------
 	UInt32 GetMatrixDirtyID(UInt index) const;
 

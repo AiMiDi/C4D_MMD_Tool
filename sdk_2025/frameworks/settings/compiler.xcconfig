@@ -31,8 +31,9 @@ CLANG_ENABLE_OBJC_ARC = YES
 // You cannot use $(inherited) in an xcconfig file to get the value assigned for a variable from an imported xcconfig file.
 // To use that value you must use separate names and reference those variables in assignment.
 // For x86_64 -ffp-contract=on is disabled  because it costs about 1 % of performance for non-AVX code.
-OTHER_CPLUSPLUSFLAGS_BASE[arch=x86_64] = $(OTHER_CFLAGS) -fno-math-errno -faligned-allocation -Werror=shadow -Werror=unused-result -Werror=unused-value -Werror=return-type -Werror=return-stack-address -Werror=reinterpret-base-class -Wno-c++1z-extensions -Wno-c++20-extensions -Wno-ordered-compare-function-pointers
-OTHER_CPLUSPLUSFLAGS_BASE[arch=arm64] = $(OTHER_CFLAGS) -fno-math-errno -faligned-allocation -Werror=shadow -Werror=unused-result -Werror=unused-value -Werror=return-type -Werror=return-stack-address -Werror=reinterpret-base-class -Wno-c++1z-extensions -Wno-c++20-extensions -Wno-ordered-compare-function-pointers
+// For arm we need to disable -ffp-contract=off because this disabled FMA
+OTHER_CPLUSPLUSFLAGS_BASE[arch=x86_64] = $(OTHER_CFLAGS) -ffile-reproducible -fno-math-errno -faligned-allocation -Werror=shadow -Werror=unused-result -Werror=unused-value -Werror=return-type -Werror=return-stack-address -Werror=reinterpret-base-class -Wno-c++1z-extensions -Wno-c++20-extensions -Wno-ordered-compare-function-pointers
+OTHER_CPLUSPLUSFLAGS_BASE[arch=arm64]  = $(OTHER_CFLAGS) -ffile-reproducible -ffp-contract=off -fno-math-errno -faligned-allocation -Werror=shadow -Werror=unused-result -Werror=unused-value -Werror=return-type -Werror=return-stack-address -Werror=reinterpret-base-class -Wno-c++1z-extensions -Wno-c++20-extensions -Wno-ordered-compare-function-pointers
 OTHER_CPLUSPLUSFLAGS = $(OTHER_CPLUSPLUSFLAGS_BASE)
 
 OTHER_CFLAGS = $(OTHER_CFLAGS) -Wno-unknown-warning-option -Wno-deprecated-non-prototype

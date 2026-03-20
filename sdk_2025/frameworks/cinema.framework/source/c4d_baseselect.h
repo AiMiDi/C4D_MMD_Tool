@@ -338,6 +338,90 @@ public:
 	//----------------------------------------------------------------------------------------
 	Bool MoveSet(maxon::BaseArray<BaseSelectData>&& values) { return BsCall(MoveSet)(std::forward<maxon::BaseArray<BaseSelectData>>(values)); }
 
+	// Define an iterator class inside BaseSelect
+	class Iterator
+	{
+	public:
+		// special sentinel value to mark the end of the iterator
+		Iterator()
+			: _baseSelect(maxon::GetZeroRef<BaseSelect>())
+		{
+			_finished = true;
+		}
+
+		Iterator(const BaseSelect& baseSelect, Int32 maxValue = LIMIT<Int32>::MAX) : _baseSelect(baseSelect), _maxValue(maxValue)
+		{
+			_finished = !_baseSelect.GetRange(_r, _maxValue, &_a, &_b);
+		}
+
+		Int32 operator*() const
+		{
+			return _a;
+		}
+
+		Iterator& operator++()
+		{
+			if (_a < _b)
+			{
+				++_a;
+			}
+			else
+			{
+				++_r;
+				_finished = !_baseSelect.GetRange(_r, _maxValue, &_a, &_b);
+			}
+			return *this;
+		}
+
+		Bool operator !=(const PRIVATE_MAXON_RBF_SENTINEL(Iterator)& other) const
+		{
+			return !_finished;
+		}
+
+	private:
+		const BaseSelect& _baseSelect;
+		Int32 _maxValue = LIMIT<Int32>::MAX;
+		Int32 _r = 0;
+		Int32 _a = NOTOK, _b = NOTOK; // Current range bounds
+		Bool _finished = false;				// Tracks if the iterator has finished
+	};
+
+	Iterator begin() const
+	{
+		return Iterator(*this);
+	}
+
+	PRIVATE_MAXON_RBF_SENTINEL(Iterator) end() const
+	{
+		return {};
+	}
+	
+	class IndexIterator
+	{
+	public:
+		IndexIterator(const BaseSelect& baseSelect, Int32 maxValue) : _baseSelect(baseSelect), _maxValue(maxValue)
+		{
+		}
+
+		Iterator begin() const
+		{
+			return Iterator(_baseSelect, _maxValue);
+		}
+
+		PRIVATE_MAXON_RBF_SENTINEL(Iterator) end() const
+		{
+			return {};
+		}
+
+	private:
+		const BaseSelect& _baseSelect;
+		Int32 _maxValue = LIMIT<Int32>::MAX;
+	};
+
+	IndexIterator GetIndexIterator(Int32 maxValue = LIMIT<Int32>::MAX) const
+	{
+		return IndexIterator(*this, maxValue);
+	}
 	/// @}
 };
 

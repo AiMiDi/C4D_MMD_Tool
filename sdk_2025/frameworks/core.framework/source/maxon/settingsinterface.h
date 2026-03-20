@@ -53,7 +53,7 @@ public:
 	/// GetSettingsCopy returns a copy of all settings starting at the given level.
 	/// @param[in] optionalList				Optional list of ids of interest. If empty, everything is returned.
 	/// @param[in] accessLevel				Unused (for future extensions).
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<DataDictionary> GetSettingsCopy(const HashSet<Id>& optionalList, ACCESSLEVEL accessLevel = ACCESSLEVEL::ALL) const;
 
@@ -61,7 +61,7 @@ public:
 	/// GetSettings returns all settings on the current access level (see order above ACCESSLEVEL).
 	/// The settings contain all inherited settings from lower levels.
 	/// @param[in] accessLevel				ACCESSLEVEL to ask for.
-	/// @return                       SettingsRef on success.
+	/// @return												SettingsRef on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD SettingsRef GetSettings(ACCESSLEVEL accessLevel = ACCESSLEVEL::ALL);
 

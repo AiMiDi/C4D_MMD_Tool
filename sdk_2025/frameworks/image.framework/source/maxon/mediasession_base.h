@@ -69,9 +69,9 @@ namespace maxon
 ///     return true;
 ///   }, 0) iferr_return;
 /// @endcode
-/// @param[in] t                  object to iterate.
-/// @param[in] func                function which is called for each object.
-/// @return                        returns false if iteration should stop. otherwise true to continue.
+/// @param[in] t									Object to iterate.
+/// @param[in] func								Function which is called for each object.
+/// @return												Returns false if iteration should stop. otherwise true to continue.
 //----------------------------------------------------------------------------------------
 template <typename REFTYPE>
 static Result<Bool> MediaTraverseChildren(const REFTYPE& t, const ConstDataPtr& branch,
@@ -103,9 +103,9 @@ static Result<Bool> MediaTraverseChildren(const REFTYPE& t, const ConstDataPtr& 
 ///     return true;
 ///   }) iferr_return;
 /// @endcode
-/// @param[in] t                  object to iterate.
-/// @param[in] func                function which is called for each object.
-/// @return                        returns false if iteration should stop. otherwise true to continue.
+/// @param[in] t									Object to iterate.
+/// @param[in] func								Function which is called for each object.
+/// @return												Returns false if iteration should stop. otherwise true to continue.
 //----------------------------------------------------------------------------------------
 template <typename REFTYPE>
 static Result<Bool> MediaTraverseMeAndChildren(const REFTYPE& t, const REFTYPE& parent, const ConstDataPtr& branch,
@@ -272,7 +272,7 @@ class MediaBaseInterface : MAXON_INTERFACE_BASES(DataDictionaryObjectInterface, 
 
 public:
 	//----------------------------------------------------------------------------------------
-	/// PRIVATE
+	/// PRIVATE.
 	/// @param[in] session						MediaSession to be used with this connection.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------

@@ -14,7 +14,7 @@
 namespace cinema
 {
 
-// be sure to use a unique ID obtained from www.plugincafe.com
+// be sure to use a unique ID obtained from developers.maxon.net
 // reserved ID-range from 1015353 til 1015549
 #define ID_BASECURVE             1015549
 #define ID_BASESURFACE           1015548

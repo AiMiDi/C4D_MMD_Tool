@@ -1,5 +1,5 @@
-#ifndef COLOR_NODES_H__
-#define COLOR_NODES_H__
+#ifndef NODES_COLOR_H__
+#define NODES_COLOR_H__
 
 #include "maxon/fid.h"
 #include "maxon/vector.h"
@@ -726,4 +726,4 @@ namespace PATTERN
 	
 #include "nodes_color2.hxx"
 
-#endif // COLOR_NODES_H__
+#endif // NODES_COLOR_H__

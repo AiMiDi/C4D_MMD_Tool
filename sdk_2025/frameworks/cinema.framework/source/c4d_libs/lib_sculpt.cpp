@@ -5,6 +5,11 @@
 #include "lib_sculpt.h"
 #include "c4d_basedocument.h"
 #include "c4d_general.h"
+#include "maxon/configuration.h"
+
+
+MAXON_CONFIGURATION_BOOL(g_enableScupltModifyEditStates, true, maxon::CONFIGURATION_CATEGORY::DEVELOPMENT, "Modify Editstates with scuplttools.");
+
 
 namespace cinema
 {

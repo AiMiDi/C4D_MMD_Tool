@@ -32,7 +32,6 @@ namespace cinema
 /// @addtogroup Hair Type IDs
 /// @ingroup group_enumeration
 /// @{
-#define Ohair						1017305			///< Hair object type ID.
 #define Thairselection	1017746			///< Hair selection tag type ID.
 #define Thairvertex			1018329			///< Hair vertex tag type ID.
 #define VPhair					1017325			///< Hair video post type ID.
@@ -192,7 +191,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	void Free()
 	{
-		DeleteMem(m_pMap);
+		maxon::DefaultAllocator::Free(m_pMap);
 		m_GuideCount = 0;
 		m_Count = 0;
 		m_WeightCount = 0;

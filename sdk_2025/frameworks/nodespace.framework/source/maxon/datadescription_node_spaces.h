@@ -69,4 +69,4 @@ namespace maxon
 
 } // namespace maxon
 
-#endif // DATADESCRIPTION_NODES_H__
+#endif // DATADESCRIPTION_NODE_SPACES_H__

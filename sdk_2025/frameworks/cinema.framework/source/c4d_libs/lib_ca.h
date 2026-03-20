@@ -300,7 +300,7 @@ public:
 	/// @param[in] weight							The new weight.
 	/// @return												@trueIfOtherwiseFalse{successful}
 	//----------------------------------------------------------------------------------------
-	Bool SetWeight(Int32 index, Int32 pntindex, Float weight);
+	[[deprecated("don't use this slow function, use SetWeightMap() instead")]] Bool SetWeight(Int32 index, Int32 pntindex, Float weight);
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the dirty state of the weights.
@@ -441,17 +441,17 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Get the AutoWeightRef algorithm's index associated with the given id.
-	/// @param[in] doc			The active document.
-	/// @param[in] id				The autoweight id.
-	/// @return							The index of the autoweight id.
+	/// @param[in] doc								The active document.
+	/// @param[in] id									The autoweight id.
+	/// @return												The index of the autoweight id.
 	//----------------------------------------------------------------------------------------
 	static maxon::Result<Int32> GetAutoWeightAlgoIndex(BaseDocument* doc, const maxon::Id& id);
 
 	//----------------------------------------------------------------------------------------
 	/// Get the AutoWeightRef algorithm's id associated with the given index.
-	/// @param[in] doc			The active document.
-	/// @param[in] index		The autoweight int.
-	/// @return							The index of the autoweight id.
+	/// @param[in] doc								The active document.
+	/// @param[in] index							The autoweight int.
+	/// @return												The index of the autoweight id.
 	//----------------------------------------------------------------------------------------
 	static maxon::Result<maxon::Id> GetAutoWeightAlgoId(BaseDocument* doc, Int index);
 
@@ -465,18 +465,18 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Get autoweight dictionary of the Weight Manager.
-	/// @param[in] doc						The document for the Weight Manager. @callerOwnsPointed{BaseDocument}.
-	/// @param[in] autoweightId		The maxon id of the autoweight algorithm.
-	/// @return										The data dictionary with the autoweight parameters inside.
+	/// @param[in] doc								The document for the Weight Manager. @callerOwnsPointed{BaseDocument}.
+	/// @param[in] autoweightId				The maxon id of the autoweight algorithm.
+	/// @return												The data dictionary with the autoweight parameters inside.
 	//----------------------------------------------------------------------------------------
 	static maxon::Result<maxon::DataDictionary>GetAutoWeightDictionary(BaseDocument *doc, const maxon::Id& autoweightId);
 
 	//----------------------------------------------------------------------------------------
 	/// Set autoweight dictionary of the Weight Manager.
-	/// @param[in] doc						The document for the Weight Manager. @callerOwnsPointed{BaseDocument}.
-	/// @param[in] dataDictionary	The data dictionary with the autoweight parameters inside.
-	/// @param[in] autoweightId		The maxon id of the autoweight algorithm.
-	/// @return										OK on success.
+	/// @param[in] doc								The document for the Weight Manager. @callerOwnsPointed{BaseDocument}.
+	/// @param[in] dataDictionary			The data dictionary with the autoweight parameters inside.
+	/// @param[in] autoweightId				The maxon id of the autoweight algorithm.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static maxon::Result<void> SetAutoWeightDictionary(BaseDocument *doc, maxon::DataDictionary dataDictionary, maxon::Id autoweightId);
 
@@ -790,8 +790,8 @@ public:
 	/// @note Adds an undo.
 	/// @param[in] doc								The document for the Weight Manager. @callerOwnsPointed{BaseDocument}
 	/// @param[in] merge							@formatConstant{true} to merge with target weights, @formatConstant{false} to replace target weights:
-	///																- @formatConstant{true} adds the source weights to the target weights. For instance, source point with null weight does not affect the final result.
-	///																- @formatConstant{false} replaces all the target weights with the source weights including null source weights. For instance, all target weights are lost and replaced with source weights.
+	/// 															- @formatConstant{true} adds the source weights to the target weights. For instance, source point with null weight does not affect the final result.
+	/// 															- @formatConstant{false} replaces all the target weights with the source weights including null source weights. For instance, all target weights are lost and replaced with source weights.
 	/// @return												@trueIfOtherwiseFalse{successful}
 	//----------------------------------------------------------------------------------------
 	static Bool PasteWeights(BaseDocument *doc, Bool merge);
@@ -1700,7 +1700,7 @@ public:
     ///
     /// The value returned here indicates the maximum morph index, which is one less than this value due to being zero based.
     ///
-	/// @return	The number of available morphs.
+	/// @return												The number of available morphs.
 	//----------------------------------------------------------------------------------------
 	Int32 GetMorphCount() const;
 
@@ -1710,8 +1710,8 @@ public:
     /// The parameter @formatParam{index} is zero-based and index 0 will return the base morph,
     /// while the morphs starting from index 1 will be the user defined morphs.
     ///
-	/// @param[in] index			The morph index: @em 0 <= @formatParam{index} < GetMorphCount()
-	/// @return						The morph. @theOwnsPointed{tag,morph}
+	/// @param[in] index							The morph index: @em 0 <= @formatParam{index} < GetMorphCount()
+	/// @return												The morph. @theOwnsPointed{tag,morph}
 	//----------------------------------------------------------------------------------------
 	const CAMorph* GetMorph(Int32 index) const;
 
@@ -1720,7 +1720,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Retrieves the description ID for the morph slider at @formatParam{index}.
-	/// @param[in] index							        The morph index: @em 0 <= @formatParam{index} < GetMorphCount()
+	/// @param[in] index							The morph index: @em 0 <= @formatParam{index} < GetMorphCount()
 	/// @return												The description ID of the morph slider.
 	//----------------------------------------------------------------------------------------
 	DescID GetMorphID(Int32 index) const;
@@ -1897,6 +1897,15 @@ public:
 	//----------------------------------------------------------------------------------------
 	DescID GetMorphPSDID(Int32 index, Int32 psdAttributeID);
 
+	//----------------------------------------------------------------------------------------
+  /// Retrieves the edit morph node specified by @formatParam{index} which representes the visual state.
+  /// Just for internal use.
+  /// @private
+	/// @note A single morph can be applied to a hierarchy of objects, each has a representation in the morph as a CAMorphNode.
+	/// @param[in] index							The index of the requested morph node.
+	/// @return												The found morph node. @theOwnsPointed{tag,morph node}
+	//----------------------------------------------------------------------------------------
+	const CAMorphNode* FindEditNodeFromIndex(Int32 index) const;
 	/// @}
 };
 
@@ -2091,7 +2100,7 @@ public:
 	/// @param[in] op									The object.
 	/// @param[out] info							Assigned the brush object information.
 	/// @return												@trueIfOtherwiseFalse{successful}\n
-	///																@formatConstant{false} if object @formatParam{op} is not found in the cache.
+	/// 															@formatConstant{false} if object @formatParam{op} is not found in the cache.
 	//----------------------------------------------------------------------------------------
 	Bool GetObjectInfo(BaseObject *op, BrushObjectInfo &info);
 
@@ -2519,6 +2528,7 @@ struct CALibrary : public C4DLibrary
 	Bool(*pmorphSetNormalCount)(CAMorphNode* node, Int32 tindex, Int32 cnt);
 	void (*pmorphGetNormal)(const CAMorphNode* node, Int32 tindex, Int32 index, NormalStruct& ns);
 	void (*pmorphSetNormal)(CAMorphNode* node, Int32 tindex, Int32 index, const NormalStruct& ns);
+	const CAMorphNode* (*pmorphFindEditPoseFromIndex)(const CAPoseMorphTag* tag, Int32 index);
 };
 
 struct BrushBaseLibrary : public C4DLibrary

@@ -14,7 +14,8 @@ namespace cinema
 
 Filename::Filename()
 {
-	C4DOS_Fn->Init(this);
+	if (t_C4DOS_Fn)
+		C4DOS_Fn->Init(this);
 }
 
 Filename::Filename(const Char* string)

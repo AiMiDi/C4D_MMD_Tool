@@ -631,7 +631,7 @@ template <typename FN> inline auto ExecuteOnMainThread(FN&& fn, Bool wait) -> de
 				StaticJob(FN&& f) : _job(std::forward<FN>(f)) {}
 				UChar dummy[MAXON_FALSE_SHARING_SIZE - SIZEOF(StrongReferenceCounter)];
 				StrongReferenceCounter _referenceCount;
-				ClosureJob<FN, JOBCANCELLATION::AUTOMATIC, typename std::result_of<typename std::remove_reference<FN()>::type>::type> _job;
+				ClosureJob<FN, JOBCANCELLATION::AUTOMATIC, typename std::invoke_result<typename std::remove_reference<FN>::type>::type> _job;
 			} staticJob(std::forward<FN>(fn));
 
 			CpuYield yield(&staticJob);
@@ -647,11 +647,11 @@ template <typename FN> inline auto ExecuteOnMainThread(FN&& fn, Bool wait) -> de
 				yield.Pause();
 
 			staticJob._referenceCount.SetRelaxed(0);
-			return ExecuteOnMainThreadResult<typename std::result_of<typename std::remove_reference<FN()>::type>::type>::GetResult(staticJob._job.GetResult());
+			return ExecuteOnMainThreadResult<typename std::invoke_result<typename std::remove_reference<FN>::type>::type>::GetResult(staticJob._job.GetResult());
 		}
 		else if (wait)
 		{
-			return ExecuteOnMainThreadResult<typename std::result_of<typename std::remove_reference<FN()>::type>::type>::GetResult(job.GetResult());
+			return ExecuteOnMainThreadResult<typename std::invoke_result<typename std::remove_reference<FN>::type>::type>::GetResult(job.GetResult());
 		}
 	}
 

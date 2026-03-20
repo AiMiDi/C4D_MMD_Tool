@@ -200,9 +200,9 @@ public:
 		return GlobalToString(GetPointer(), format) + "/"_s + GlobalToString(GetTag(), format);
 	}
 
-	void PrivateSetTarget(ResultPtr<T> src)
+	void PrivateSetTarget(T* src)
 	{
-		SetPointer(src.GetPointer());
+		SetPointer(src);
 	}
 
 private:

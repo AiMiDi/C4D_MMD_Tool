@@ -1,0 +1,165 @@
+{
+	"version": 6,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 30,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "linux_ninja",
+			"displayName": "Linux Ninja",
+			"generator": "Ninja Multi-Config",
+			"binaryDir": "${sourceDir}/_build_ninja"
+		},
+		{
+			"name": "macos_universal_xcode",
+			"displayName": "Xcode macOS Universal",
+			"generator": "Xcode",
+			"binaryDir": "${sourceDir}/_build_xcode",
+			"cacheVariables": {
+				"CMAKE_OSX_ARCHITECTURES": "arm64;x86_64"
+			}
+		},
+		{
+			"name": "windows_vs2022_v143",
+			"displayName": "Visual Studio 2022 v143",
+			"generator": "Visual Studio 17 2022",
+			"binaryDir": "${sourceDir}/_build_msvc",
+			"toolset": "v143"
+		},
+		{
+			"name": "windows_vs2026_v145",
+			"displayName": "Visual Studio 2026 v145",
+			"generator": "Visual Studio 18 2026",
+			"binaryDir": "${sourceDir}/_build_msvc",
+			"toolset": "v145"
+		},
+		{
+			"name": "windows_vs2022_clangcl",
+			"displayName": "Visual Studio 2022 ClangCL",
+			"generator": "Visual Studio 17 2022",
+			"binaryDir": "${sourceDir}/_build_clangcl"
+		},
+		{
+			"name": "dev-windows",
+			"inherits": ["windows_vs2022_v143"],
+			"displayName": "CMT root — dev (Debug / sdk_2026 / no Inno)",
+			"binaryDir": "${sourceDir}/_build_msvc",
+			"cacheVariables": {
+				"CMT_SDK_DIR": "${sourceDir}/sdk_2026",
+				"CMT_SDK_BUILD_CONFIG": "Debug",
+				"CMT_SDK_BUILD_TARGET": "mmdtool"
+			}
+		},
+		{
+			"name": "package-windows",
+			"inherits": ["windows_vs2022_v143"],
+			"displayName": "CMT root — Release + Inno (override ISCC path or use CMakeUserPresets)",
+			"binaryDir": "${sourceDir}/_build_msvc",
+			"cacheVariables": {
+				"CMT_SDK_DIR": "${sourceDir}/sdk_2026",
+				"CMT_SDK_BUILD_CONFIG": "Release",
+				"CMT_SDK_BUILD_TARGET": "mmdtool",
+				"CMT_INNO_SETUP_ISCC": "C:/Program Files/Inno Setup 6/ISCC.exe",
+				"CMT_ISS_EXTRA_ARGS": ""
+			}
+		},
+		{
+			"name": "dev-linux",
+			"inherits": ["linux_ninja"],
+			"displayName": "CMT root — Linux dev (Ninja Multi-Config)",
+			"binaryDir": "${sourceDir}/_build_ninja",
+			"cacheVariables": {
+				"CMT_SDK_DIR": "${sourceDir}/sdk_2026",
+				"CMT_SDK_GENERATOR": "Ninja Multi-Config",
+				"CMT_SDK_SKIP_VS_A_AND_T": "ON",
+				"CMT_SDK_BUILD_CONFIG": "Debug",
+				"CMT_SDK_BUILD_TARGET": "mmdtool"
+			}
+		},
+		{
+			"name": "dev-macos",
+			"inherits": ["macos_universal_xcode"],
+			"displayName": "CMT root — macOS dev (Xcode Universal)",
+			"binaryDir": "${sourceDir}/_build_xcode",
+			"cacheVariables": {
+				"CMT_SDK_DIR": "${sourceDir}/sdk_2026",
+				"CMT_SDK_GENERATOR": "Xcode",
+				"CMT_SDK_SKIP_VS_A_AND_T": "ON",
+				"CMT_SDK_BUILD_CONFIG": "Debug",
+				"CMT_SDK_BUILD_TARGET": "mmdtool"
+			}
+		},
+		{
+			"name": "dev-windows-deps-test",
+			"inherits": ["dev-windows"],
+			"displayName": "CMT root — dependency/ + libMMD CTest (CMT_DEPS_ENABLE_LIBMMD_TESTS)",
+			"cacheVariables": {
+				"CMT_DEPS_ENABLE_LIBMMD_TESTS": "ON"
+			}
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "cmt-deps-build",
+			"configurePreset": "dev-windows",
+			"configuration": "Debug",
+			"targets": ["cmt-deps-build"]
+		},
+		{
+			"name": "cmt-deps-test",
+			"configurePreset": "dev-windows-deps-test",
+			"configuration": "Debug",
+			"targets": ["cmt-deps-test"]
+		},
+		{
+			"name": "workflow-dev",
+			"configurePreset": "dev-windows",
+			"configuration": "Debug",
+			"targets": ["cmt-workflow"]
+		},
+		{
+			"name": "workflow-package",
+			"configurePreset": "package-windows",
+			"configuration": "Release",
+			"targets": ["cmt-workflow"]
+		},
+		{
+			"name": "inno-installer",
+			"configurePreset": "package-windows",
+			"configuration": "Release",
+			"targets": ["cmt-package"]
+		},
+		{
+			"name": "cmt-deps-build-linux",
+			"configurePreset": "dev-linux",
+			"configuration": "Debug",
+			"targets": ["cmt-deps-build"]
+		},
+		{
+			"name": "workflow-dev-linux",
+			"configurePreset": "dev-linux",
+			"configuration": "Debug",
+			"targets": ["cmt-workflow"]
+		},
+		{
+			"name": "workflow-dev-macos",
+			"configurePreset": "dev-macos",
+			"configuration": "Debug",
+			"targets": ["cmt-workflow"]
+		},
+		{
+			"name": "workflow-release",
+			"configurePreset": "dev-windows",
+			"configuration": "Release",
+			"targets": ["cmt-workflow"]
+		},
+		{
+			"name": "workflow-release-macos",
+			"configurePreset": "dev-macos",
+			"configuration": "Release",
+			"targets": ["cmt-workflow"]
+		}
+	]
+}

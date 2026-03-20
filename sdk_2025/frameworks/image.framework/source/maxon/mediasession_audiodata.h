@@ -39,14 +39,14 @@ public:
 	MAXON_METHOD Result<void> SetCallbackHandler();
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation before loading a stream.
+	/// Called by the input media converter implementation before loading a stream.
 	/// @param[in] props							Properties of the image stream.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> InitStream(MediaStreamProperties& props);
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation when loading the stream is completed.
+	/// Called by the input media converter implementation when loading the stream is completed.
 	/// @param[in] props							Properties of the image stream.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------

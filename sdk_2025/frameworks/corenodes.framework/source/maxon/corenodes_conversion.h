@@ -55,8 +55,8 @@ MAXON_WARNING_POP
 //----------------------------------------------------------------------------------------
 /// Call to read the conversion flags that are appropriate for converting a scalar type into another.
 /// @see MAXON_CORENODE_REGISTER_CONVERSION.
-/// @tparam	DEST									Destination scalar type.
-/// @tparam	SRC										Source scalar type.
+/// @tparam DEST									Destination scalar type.
+/// @tparam SRC										Source scalar type.
 /// @return												The chosen conversion flags.
 //----------------------------------------------------------------------------------------
 template <typename DEST, typename SRC> inline CONVERSION_FLAGS GetScalarConversionFlags()
@@ -115,6 +115,7 @@ template <typename DEST, typename SRC> inline CONVERSION_FLAGS GetScalarConversi
 //! };
 //! 
 //! MAXON_CORENODE_REGISTER_CONVERSION(Float, TimeValue, CONVERSION_FLAGS::NONE);
+//----------------------------------------------------------------------------------------
 /// @endcode
 ///
 /// @warning

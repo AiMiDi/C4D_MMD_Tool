@@ -71,7 +71,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	template <typename KEY> MAXON_FUNCTION Bool Contains(KEY&& key) const
 	{
-		const Data* data = DataDictionaryInterface::PrivateGetData(ConvertKeyToDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key)));
+		const Data* data = DataDictionaryInterface::PrivateGetData(ConvertKeyToTrivialDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key)));
 		return data != nullptr;
 	}
 
@@ -149,7 +149,7 @@ public:
 	MAXON_FUNCTION Result<typename std::conditional<std::is_void<T>::value, typename IsFidClass<KEY>::type, T>::type> Get(KEY&& key) const
 	{
 		using TT = typename std::conditional<std::is_void<T>::value, typename IsFidClass<KEY>::type, T>::type;
-		iferr (Data data = DataDictionaryInterface::GetData(ConvertKeyToDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
+		iferr (Data data = DataDictionaryInterface::GetData(ConvertKeyToTrivialDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
 			return err;
 		iferr (auto&& res = data.template Get<TT>())
 			return err;
@@ -157,6 +157,26 @@ public:
 		MAXON_WARNING_DISABLE_REDUNDANT_MOVE
 		return std::move(res);
 		MAXON_WARNING_POP
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Get data stored under a specific key. If the key is not found an error will be returned.
+	/// This functions offers 2 possible calls. First using an FId "dict.Get(MAXCHINEINFO::COMPUTERNAME)" or second using any type directly together with the result type "dict.Get<String>(Int32(5))".
+	/// The data type needs to be registered.
+	/// @param[in] key								Key under which the data is stored.
+	/// @return												Data converted to the right type on success.
+	//----------------------------------------------------------------------------------------
+	template <typename T = void, typename KEY>
+	MAXON_FUNCTION Opt<const typename std::conditional<std::is_void<T>::value, typename IsFidClass<KEY>::type, T>::type&> GetRef(KEY&& key) const
+	{
+		using TT = typename std::conditional<std::is_void<T>::value, typename IsFidClass<KEY>::type, T>::type;
+		const Data* strData = DataDictionaryInterface::PrivateGetData(ConvertKeyToTrivialDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key)));
+		if (!strData)
+			return {};
+		const auto* res = strData->template GetPtr<TT>();
+		if (!res)
+			return {};
+		return *res;
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -171,7 +191,7 @@ public:
 	MAXON_FUNCTION typename std::conditional<IsFidClass<KEY>::value&& GetCollectionKind<T>::value != COLLECTION_KIND::ARRAY, typename IsFidClass<KEY>::type, T>::type Get(KEY&& key, const T& defaultValue) const
 	{
 		using TT = typename std::conditional<IsFidClass<KEY>::value && GetCollectionKind<T>::value != COLLECTION_KIND::ARRAY, typename IsFidClass<KEY>::type, T>::type;
-		iferr (Data data = DataDictionaryInterface::GetData(ConvertKeyToDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
+		iferr (Data data = DataDictionaryInterface::GetData(ConvertKeyToTrivialDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
 			return defaultValue;
 		iferr (auto&& res = data.template Get<TT>())
 			return defaultValue;
@@ -195,7 +215,7 @@ public:
 		using TT = typename std::conditional<IsFidClass<KEY>::value&& GetCollectionKind<T>::value != COLLECTION_KIND::ARRAY, typename IsFidClass<KEY>::type, T>::type;
 		MAXON_WARNING_PUSH
 		MAXON_WARNING_DISABLE_REDUNDANT_MOVE
-		iferr (Data data = DataDictionaryInterface::GetData(ConvertKeyToDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
+		iferr (Data data = DataDictionaryInterface::GetData(ConvertKeyToTrivialDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
 			return std::move(defaultValue);
 		iferr (auto&& res = data.template Get<TT>())
 			return std::move(defaultValue);
@@ -226,7 +246,7 @@ public:
 	template <typename T, typename KEY> MAXON_FUNCTION Result<void> Set(KEY&& key, T&& data)
 	{
 		static_assert(ValidKeyValuePairTrait<LiteralId>::IsValid<T, KEY>::value);
-		constexpr Bool IS_VALID_FID = IsFidClass<KEY>::value && !STD_IS_REPLACEMENT(same, typename IsFidClass<KEY>::type, Data);
+		[[maybe_unused]] constexpr Bool IS_VALID_FID = IsFidClass<KEY>::value && !STD_IS_REPLACEMENT(same, typename IsFidClass<KEY>::type, Data);
 		using TT = typename std::conditional<IS_VALID_FID, typename maxon::Substitute<T, typename IsFidClass<KEY>::type>::type, void>::type;
 		using TTT = typename std::conditional<std::is_same_v<TT, T>, void, TT>::type;
 		Data tmp;
@@ -256,7 +276,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	template <typename T, typename KEY> MAXON_FUNCTION Result<void> GetCopy(KEY&& key, T& dst) const
 	{
-		iferr (const Data& data = DataDictionaryInterface::GetData(ConvertKeyToDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
+		iferr (const Data& data = DataDictionaryInterface::GetData(ConvertKeyToTrivialDataPtr<IsDerived<maxon::RESTRICT>, false>(std::forward<KEY>(key))))
 			return err;
 		return GetCopyHelper(data, dst, OVERLOAD_MAX_RANK);
 	}
@@ -390,26 +410,6 @@ static Opt<TT> GetDataDescriptionValue2(ATTRIBUTETYPE&& attribute, const ConstDa
 		return Opt<TT>(NO_VALUE_TYPE::VALUE);
 	iferr (auto&& x = res.Get<TT>())
 		return Opt<TT>(NO_VALUE_TYPE::VALUE);
-	return std::move(x);
-}
-
-//----------------------------------------------------------------------------------------
-/// Returns the defined key value description of any attribute.
-/// Example usage:
-/// @code
-/// BaseArray<Tuple<Id, Data>> dataTypeList = GetDataDescriptionValueFromKey(DESCRIPTION::DATA::BASE::DATATYPE, DESCRIPTION::DATA::BASE::ENUM) iferr_return;
-/// @endcode
-/// @param[in] attribute					Attribute to find.
-/// @param[in] key								Value to return, e.g. DESCRIPTION::DATA::BASE::ENUM.
-/// @return												Requested value on success. The return type will be determined by the data type of KEY.
-//----------------------------------------------------------------------------------------
-template <typename ATTRIBUTETYPE, typename KEY>
-static Result<typename IsFidClass<KEY>::type> GetDataDescriptionValueFromKey(ATTRIBUTETYPE&& attribute, KEY&& key)
-{
-	iferr_scope;
-	using TT = typename IsFidClass<KEY>::type;
-	Data res = PrivateGetDataDescriptionValue(attribute.GetDatabaseScope(), attribute.Get(), ConstDataPtr(key.Get())) iferr_return;
-	auto&& x = res.Get<TT>() iferr_return;
 	return std::move(x);
 }
 

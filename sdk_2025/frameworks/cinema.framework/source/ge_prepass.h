@@ -195,7 +195,7 @@ enum class HOTKEYFLAGS
 #define FILTER_TIF_B3D						1110				///< TIFF @BP3D
 #define FILTER_PSB								1111				///< PSB
 #define FILTER_AVI								1122				///< AVI Movie
-#define FILTER_MOVIE							1125				///< QuickTime Movie
+#define FILTER_MOVIE							1125				///< MP4
 #define FILTER_HDR								1001379			///< HDR
 #define FILTER_EXR_LOAD						1016605			///< EXR (Load)
 #define FILTER_EXR								1016606			///< EXR
@@ -315,6 +315,8 @@ enum class SCENEFILTER
 	DOCUMENTPREFSONLY = (1 << 18),													///< Only load document preferences. If this flag is set, @ref SCENEFILTER::OBJECTS and @ref SCENEFILTER::MATERIALS are ignored. Does not work with @ref SCENEFILTER::PREVIEWONLY nor @ref SCENEFILTER::ONLY_RENDERDATA.
 	DOCUMENTINFOGUIALLOWED = (1 << 19),											///< Custom dialogs can be displayed while reacting to DocumentInfo Messages.
 	LOGUSAGE = (1 << 20),																		///< If set, the import format of loaded files is logged into the analytics. @since 2024.300
+	FROMASSETBROWSER = (1 << 21),														///< If set, the import was triggered by the asset browser
+	PRIVATE_SECURITY_FLAG = (1 << 30),											///< Internal Use only!!!
 	SUPPRESSOPTIONSDIALOG = (1 << 31),											///< Suppress the options dialog (if DIALOGSALLOWED was specified), so that errors would show up
 } MAXON_ENUM_FLAGS(SCENEFILTER);
 /// @}
@@ -329,8 +331,9 @@ enum class OVERVIEW
 	AKTU			= 1,
 	SCENE			= 2,
 	COMPLETE	= 3,
-	SELECTED	= 4
-} MAXON_ENUM_FLAGS(OVERVIEW);
+	SELECTED	= 4,
+	COMPLETE_SQUARE = 5 // only supported in function FrameScene - emulates a square view and then does @ref OVERVIEW::COMPLETE
+} MAXON_ENUM_LIST(OVERVIEW);
 /// @}
 
 /// @addtogroup GEMB
@@ -721,128 +724,129 @@ enum class PARTICLEFLAGS
 /// @see GeListNode::GetNBit() GeListNode::ChangeNBit()
 enum class NBIT
 {
-	NONE										= 0,			///< None.
+	NONE														= 0,			///< None.
 
-	TL1_FOLD								= 1,			///< Folding bit for Timeline 1.
-	TL2_FOLD								= 2,			///< Folding bit for Timeline 2.
-	TL3_FOLD								= 3,			///< Folding bit for Timeline 3.
-	TL4_FOLD								= 4,			///< Folding bit for Timeline 4.
+	TL1_FOLD												= 1,			///< Folding bit for Timeline 1.
+	TL2_FOLD												= 2,			///< Folding bit for Timeline 2.
+	TL3_FOLD												= 3,			///< Folding bit for Timeline 3.
+	TL4_FOLD												= 4,			///< Folding bit for Timeline 4.
 
-	TL1_SELECT							= 5,			///< Selection bit for Timeline 1.
-	TL2_SELECT							= 6,			///< Selection bit for Timeline 2.
-	TL3_SELECT							= 7,			///< Selection bit for Timeline 3.
-	TL4_SELECT							= 8,			///< Selection bit for Timeline 4.
+	TL1_SELECT											= 5,			///< Selection bit for Timeline 1.
+	TL2_SELECT											= 6,			///< Selection bit for Timeline 2.
+	TL3_SELECT											= 7,			///< Selection bit for Timeline 3.
+	TL4_SELECT											= 8,			///< Selection bit for Timeline 4.
 
-	TL1_TDRAW								= 9,			///< @markPrivate
-	TL2_TDRAW								= 10,			///< @markPrivate
-	TL3_TDRAW								= 11,			///< @markPrivate
-	TL4_TDRAW								= 12,			///< @markPrivate
+	TL1_TDRAW												= 9,			///< @markPrivate
+	TL2_TDRAW												= 10,			///< @markPrivate
+	TL3_TDRAW												= 11,			///< @markPrivate
+	TL4_TDRAW												= 12,			///< @markPrivate
 
-	CKEY_ACTIVE							= 13,			///< Active point of animation path in editor.
+	CKEY_ACTIVE											= 13,			///< Active point of animation path in editor.
 
-	OM1_FOLD								= 14,			///< Folding bit for Object Manager 1.
-	OM2_FOLD								= 15,			///< Folding bit for Object Manager 2.
-	OM3_FOLD								= 16,			///< Folding bit for Object Manager 3.
-	OM4_FOLD								= 17,			///< Folding bit for Object Manager 4.
+	OM1_FOLD												= 14,			///< Folding bit for Object Manager 1.
+	OM2_FOLD												= 15,			///< Folding bit for Object Manager 2.
+	OM3_FOLD												= 16,			///< Folding bit for Object Manager 3.
+	OM4_FOLD												= 17,			///< Folding bit for Object Manager 4.
 
-	TL1_FOLDTR							= 18,			///< Track folding for Timeline 1.
-	TL2_FOLDTR							= 19,			///< Track folding for Timeline 2.
-	TL3_FOLDTR							= 20,			///< Track folding for Timeline 3.
-	TL4_FOLDTR							= 21,			///< Track folding for Timeline 4.
+	TL1_FOLDTR											= 18,			///< Track folding for Timeline 1.
+	TL2_FOLDTR											= 19,			///< Track folding for Timeline 2.
+	TL3_FOLDTR											= 20,			///< Track folding for Timeline 3.
+	TL4_FOLDTR											= 21,			///< Track folding for Timeline 4.
 
-	TL1_FOLDFC							= 22,			///< F-Curve folding for Timeline 1.
-	TL2_FOLDFC							= 23,			///< F-Curve folding for Timeline 2.
-	TL3_FOLDFC							= 24,			///< F-Curve folding for Timeline 3.
-	TL4_FOLDFC							= 25,			///< F-Curve folding for Timeline 4.
+	TL1_FOLDFC											= 22,			///< F-Curve folding for Timeline 1.
+	TL2_FOLDFC											= 23,			///< F-Curve folding for Timeline 2.
+	TL3_FOLDFC											= 24,			///< F-Curve folding for Timeline 3.
+	TL4_FOLDFC											= 25,			///< F-Curve folding for Timeline 4.
 
-	SOURCEOPEN							= 26,			///< Source open in motion clip hierarchy tree.
+	SOURCEOPEN											= 26,			///< Source open in motion clip hierarchy tree.
 
-	TL1_HIDE								= 27,			///< Hide in Timeline 1.
-	TL2_HIDE								= 28,			///< Hide in Timeline 2.
-	TL3_HIDE								= 29,			///< Hide in Timeline 3.
-	TL4_HIDE								= 30,			///< Hide in Timeline 4.
+	TL1_HIDE												= 27,			///< Hide in Timeline 1.
+	TL2_HIDE												= 28,			///< Hide in Timeline 2.
+	TL3_HIDE												= 29,			///< Hide in Timeline 3.
+	TL4_HIDE												= 30,			///< Hide in Timeline 4.
 
-	SOLO_ANIM								= 31,			///< Solo animation.
-	SOLO_LAYER							= 32,			///< Solo layer.
+	SOLO_ANIM												= 31,			///< Solo animation.
+	SOLO_LAYER											= 32,			///< Solo layer.
 
-	TL1_SELECT2							= 33,			///< @markPrivate
-	TL2_SELECT2							= 34,			///< @markPrivate
-	TL3_SELECT2							= 35,			///< @markPrivate
-	TL4_SELECT2							= 36,			///< @markPrivate
+	TL1_SELECT2											= 33,			///< @markPrivate
+	TL2_SELECT2											= 34,			///< @markPrivate
+	TL3_SELECT2											= 35,			///< @markPrivate
+	TL4_SELECT2											= 36,			///< @markPrivate
 
-	SOLO_MOTION							= 37,			///< Solo motion.
+	SOLO_MOTION											= 37,			///< Solo motion.
 
-	CKEY_LOCK_T							= 38,			///< Lock key time.
-	CKEY_LOCK_V							= 39,			///< Lock key value.
-	CKEY_MUTE								= 40,			///< Mute key.
-	CKEY_CLAMP							= 41,			///< Clamp key tangents.
+	CKEY_LOCK_T											= 38,			///< Lock key time.
+	CKEY_LOCK_V											= 39,			///< Lock key value.
+	CKEY_MUTE												= 40,			///< Mute key.
+	CKEY_CLAMP											= 41,			///< Clamp key tangents.
 
-	CKEY_BREAK							= 42,			///< Break key tangents.
-	CKEY_KEEPVISUALANGLE		= 43,			///< Keep visual angle.
+	CKEY_BREAK											= 42,			///< Break key tangents.
+	CKEY_KEEPVISUALANGLE						= 43,			///< Keep visual angle.
 
-	CKEY_LOCK_O							= 44,			///< Lock key tangents angles.
-	CKEY_LOCK_L							= 45,			///< Lock key tangents length.
-	CKEY_AUTO								= 46,			///< Key auto tangents.
-	CKEY_ZERO_O_OLD					= 48,			///< @markDeprecated
-	CKEY_ZERO_L_OLD					= 49,			///< @markDeprecated
+	CKEY_LOCK_O											= 44,			///< Lock key tangents angles.
+	CKEY_LOCK_L											= 45,			///< Lock key tangents length.
+	CKEY_AUTO												= 46,			///< Key auto tangents.
+	CKEY_ZERO_O_OLD									= 48,			///< @markDeprecated
+	CKEY_ZERO_L_OLD									= 49,			///< @markDeprecated
 
 	// This is a legacy mode use TL(1-2-3-4)_SELECT2 instead.
-	TL1_FCSELECT						= 50,			///< F-Curve selection bit for Timeline 1.
-	TL2_FCSELECT						= 51,			///< F-Curve selection bit for Timeline 2.
-	TL3_FCSELECT						= 52,			///< F-Curve selection bit for Timeline 3.
-	TL4_FCSELECT						= 53,			///< F-Curve selection bit for Timeline 4.
+	TL1_FCSELECT										= 50,			///< F-Curve selection bit for Timeline 1.
+	TL2_FCSELECT										= 51,			///< F-Curve selection bit for Timeline 2.
+	TL3_FCSELECT										= 52,			///< F-Curve selection bit for Timeline 3.
+	TL4_FCSELECT										= 53,			///< F-Curve selection bit for Timeline 4.
 
-	CKEY_BREAKDOWN					= 54,			///< @markPrivate
+	CKEY_BREAKDOWN									= 54,			///< @markPrivate
 
-	TL1_FOLDMOTION					= 55,			///< Motion clip folding for Timeline 1.
-	TL2_FOLDMOTION					= 56,			///< Motion clip folding for Timeline 2.
-	TL3_FOLDMOTION					= 57,			///< Motion clip folding for Timeline 3.
-	TL4_FOLDMOTION					= 58,			///< Motion clip folding for Timeline 4.
+	TL1_FOLDMOTION									= 55,			///< Motion clip folding for Timeline 1.
+	TL2_FOLDMOTION									= 56,			///< Motion clip folding for Timeline 2.
+	TL3_FOLDMOTION									= 57,			///< Motion clip folding for Timeline 3.
+	TL4_FOLDMOTION									= 58,			///< Motion clip folding for Timeline 4.
 
-	TL1_SELECTMOTION				= 59,			///< Motion clip selection for Timeline 1.
-	TL2_SELECTMOTION				= 60,			///< Motion clip selection for Timeline 2.
-	TL3_SELECTMOTION				= 61,			///< Motion clip selection for Timeline 3.
-	TL4_SELECTMOTION				= 62,			///< Motion clip selection for Timeline 4.
+	TL1_SELECTMOTION								= 59,			///< Motion clip selection for Timeline 1.
+	TL2_SELECTMOTION								= 60,			///< Motion clip selection for Timeline 2.
+	TL3_SELECTMOTION								= 61,			///< Motion clip selection for Timeline 3.
+	TL4_SELECTMOTION								= 62,			///< Motion clip selection for Timeline 4.
 
-	OHIDE										= 63,				///< Hide object/tag in Object Manager or material in %Material Manager. @note OHIDE should not be used to store BaseList2Ds that do not interact with the user, as they clutter the manager and thus decrease its performance. Instead a special branch should be used to store these BaseList2Ds.
-	TL_TBAKE								= 64,			///< @markPrivate
+	OHIDE														= 63,				///< Hide object/tag in Object Manager or material in %Material Manager. @note OHIDE should not be used to store BaseList2Ds that do not interact with the user, as they clutter the manager and thus decrease its performance. Instead a special branch should be used to store these BaseList2Ds.
+	TL_TBAKE												= 64,			///< @markPrivate
 
-	TL1_FOLDSM							= 66,			///< @markPrivate
-	TL2_FOLDSM							= 67,			///< @markPrivate
-	TL3_FOLDSM							= 68,			///< @markPrivate
-	TL4_FOLDSM							= 69,			///< @markPrivate
+	TL1_FOLDSM											= 66,			///< @markPrivate
+	TL2_FOLDSM											= 67,			///< @markPrivate
+	TL3_FOLDSM											= 68,			///< @markPrivate
+	TL4_FOLDSM											= 69,			///< @markPrivate
 
-	SUBOBJECT								= 70,			///< @markPrivate
-	LINK_ACTIVE							= 71,			///< @markPrivate
-	THIDE										= 72,			///< Hide object in Timeline.
-	SUBOBJECT_AM						= 74,			///< @markPrivate
-	PROTECTION							= 75,			///< PSR protection.
-	NOANIM									= 76,			///< No animation.
-	NOSELECT								= 77,			///< No selection.
-	EHIDE										= 78,			///< Hide in viewport.
-	REF											= 79,			///< XRef.
-	REF_NO_DD								= 80,			///< XRef object no drag and drop. @markPrivate
-	REF_OHIDE								= 81,			///< XRef object hide. @markPrivate
-	NO_DD										= 82,			///< No drag and drop duplication.
-	HIDEEXCEPTVIEWSELECT		= 83,			///< Hide in viewport except to viewport select.
-	CKEY_WEIGHTEDTANGENT		= 84,			///< Weighted tangent. @since R17.032
-	CKEY_REMOVEOVERSHOOT		= 85,			///< Gradual clamp of tangent to avoid over shooting. @since R17.032
-	CKEY_AUTOWEIGHT					= 86,			///< Weight still adjusted even if angle is user defined. @since R17.032
-	TAKE_LOCK								= 87,			///< A node in an override group cannot be changed. @since R17.032
-	TAKE_OBJINGROUP					= 88,			///< The object is overridden by an override group. @since R17.032
-	TAKE_EGROUPOVERIDDEN		= 89,			///< The object editor visibility is overridden by an override group. @since R17.032
-	TAKE_RGROUPOVERIDDEN		= 90,			///< The object render visibility is overridden by an override group. @since R17.032
-	CKEY_BREAKDOWNCOLOR			= 91,			///< The key is a golden pose. @since R18
-	NO_DELETE								= 92,			///< No delete in Object Manager. @since R18
-	LOD_HIDE								= 93,			///< Used by LOD object to hide itself outside the view. @since R19
-	LOD_PRIVATECACHE				= 94,			///< @markPrivate @since R19
-	AHIDE_FOR_HOST					= 95,			///< Hide Tag data in Attribute Manager when host object selected (tabs otherwise automatically added) @since R20
-	NODE_TEMP								= 96,			///< @markPrivate @since R23
-	FORBID_COLOR_CONVERSION	= 97,			///< Don't do OCIO color conversion. @since 2023.100
-	TAG_ADDEDTOCACHE				= 98,			///< Tag was added to cache objects. @since 2023.100
-	TAG_PROXY								= 99,			///< A proxy tag. @since 2024.400
-	TAG_NEUTRON_PROXY				= 100,		///< A proxy tag generated by Neutron (set in addition to TAG_PROXY). @since 2024.400
-	MAX											= 100,		///< Maximum @ref NBIT.
+	SUBOBJECT												= 70,			///< @markPrivate
+	LINK_ACTIVE											= 71,			///< @markPrivate
+	THIDE														= 72,			///< Hide object in Timeline.
+	SUBOBJECT_AM										= 74,			///< @markPrivate
+	PROTECTION											= 75,			///< PSR protection.
+	NOANIM													= 76,			///< No animation.
+	NOSELECT												= 77,			///< No selection.
+	EHIDE														= 78,			///< Hide in viewport.
+	REF															= 79,			///< XRef.
+	REF_NO_DD												= 80,			///< XRef object no drag and drop. @markPrivate
+	REF_OHIDE												= 81,			///< XRef object hide. @markPrivate
+	NO_DD														= 82,			///< No drag and drop duplication.
+	HIDEEXCEPTVIEWSELECT						= 83,			///< Hide in viewport except to viewport select.
+	CKEY_WEIGHTEDTANGENT						= 84,			///< Weighted tangent. @since R17.032
+	CKEY_REMOVEOVERSHOOT						= 85,			///< Gradual clamp of tangent to avoid over shooting. @since R17.032
+	CKEY_AUTOWEIGHT									= 86,			///< Weight still adjusted even if angle is user defined. @since R17.032
+	TAKE_LOCK												= 87,			///< A node in an override group cannot be changed. @since R17.032
+	TAKE_OBJINGROUP									= 88,			///< The object is overridden by an override group. @since R17.032
+	TAKE_EGROUPOVERIDDEN						= 89,			///< The object editor visibility is overridden by an override group. @since R17.032
+	TAKE_RGROUPOVERIDDEN						= 90,			///< The object render visibility is overridden by an override group. @since R17.032
+	CKEY_BREAKDOWNCOLOR							= 91,			///< The key is a golden pose. @since R18
+	NO_DELETE												= 92,			///< No delete in Object Manager. @since R18
+	LOD_HIDE												= 93,			///< Used by LOD object to hide itself outside the view. @since R19
+	LOD_PRIVATECACHE								= 94,			///< @markPrivate @since R19
+	AHIDE_FOR_HOST									= 95,			///< Hide Tag data in Attribute Manager when host object selected (tabs otherwise automatically added) @since R20
+	NODE_TEMP												= 96,			///< @markPrivate @since R23
+	FORBID_COLOR_CONVERSION					= 97,			///< Don't do OCIO color conversion. @since 2023.100
+	TAG_ADDEDTOCACHE								= 98,			///< Tag was added to cache objects. @since 2023.100
+	TAG_PROXY												= 99,			///< A proxy tag. @since 2024.400
+	TAG_NEUTRON_PROXY								= 100,		///< A proxy tag generated by Neutron (set in addition to TAG_PROXY). @since 2024.400
+	PRIVATE_RESET_BIT_CONTROLOBJECT	= 101,		///< @markPrivate  @since 2025.300
+	MAX															= 101,		///< Maximum @ref NBIT.
 } MAXON_ENUM_LIST(NBIT);
 /// @}
 
@@ -885,9 +889,10 @@ enum class NBITCONTROL
 ///				BaseList2D::GetAllBits BaseList2D::SetAllBits
 /// @name Active bits
 /// @{
-#define BIT_ACTIVE	(1 << 1)			///< Active.
-#define BIT_ACTIVE2	(1 << 29)			///< @markPrivate
-#define BIT_ACTIVE3	(1 << 30)			///< @markPrivate @since R17.032
+#define BIT_ACTIVE	(1 << 1)						///< Active.
+#define BIT_ACTIVE2	(1 << 29)						///< @markPrivate
+#define BIT_ACTIVE3	(1 << 30)						///< @markPrivate @since R17.032
+#define BIT_PRIVATE_ANIMATED (1 << 31)	///< @markPrivate @since 2025.3
 /// @}
 /// @name Material Bits
 /// @{
@@ -1112,6 +1117,7 @@ static const Int Mnimbus = 300001076;
 #define Ofpsplineemitter	1062564			///< fp Spline Emitter
 #define Ofpgroup					1060887			///< fp Particles Group
 #define Ofpmultigroup			1062038			///< fp Multi Particles Group
+#define Ofpliquidfillemitter	1065301			///< fp Liquid Fill Emitter
 /// @addtogroup PrimitiveTypes Primitive Types
 /// @ingroup group_enumeration
 /// @{
@@ -1192,6 +1198,7 @@ static const Int Mnimbus = 300001076;
 #define Omgvoronoifracture	1036557		///< Voronoi Fracture.
 #define Omgtext							1019268		///< Text.
 #define Omgtracer						1018655		///< Tracer.
+#define Omgscatter					1064655		///< Scatter object.
 
 // MoGraph deformers
 #define Omgextrude				1019358			///< MoExtrude.
@@ -1402,6 +1409,7 @@ static const Int32 XstandardSpaceActivity = 1051374;
 #define Xpavement				1024945		///< Shader plugin 'Pavement'. @PublicExposure
 #define Xpolygonhair		1017667		///< Shader plugin 'Polygon Hair'. @PublicExposure
 #define Xspots					1012160		///< Shader plugin 'Spots'. @PublicExposure
+#define Ohair						1017305		///< Hair object type ID.
 
 /// @}
 
@@ -1480,6 +1488,8 @@ static const Int32 XstandardSpaceActivity = 1051374;
 #define Tcacheproxytagpolyselection		1051630		///< Cache proxy tag for polygon selection. @b Since R21; private for generators.
 #define Tcacheproxytagpointselection	1051631		///< Cache proxy tag for point selection. @b Since R21; private for generators.
 #define Tcacheproxytagedgeselection		1051632		///< Cache proxy tag for edge selection. @b Since R21; private for generators.
+#define Tcacheproxytagvertexcolor			1064921	
+#define Tcacheproxytagvertexmap				1064920	
 
 #define Tchardefinition			1054858		///< Character Definition Tag. @b Since R24
 #define Tcharmotiontransfer 1055068		///< Character Motion Transfer Tag. @b Since R24
@@ -2209,6 +2219,7 @@ enum class CREATEPLATONICVOLUMESETTINGS
 #define WPREF_UNITS_AUTOCONVERT	10002			///< ::Bool Auto Convert Units.
 #define WPREF_UNITS_USEUNITS		10003			///< ::Bool Use units.
 #define WPREF_RATIO							10005			///< ::Float Monitor aspect ratio.
+#define WPREF_UNITS_DECIMALS		10006			///< ::Int32 The number of decimals shown in the AM.
 #define WPREF_CENTER						1002			///< ::Bool Create new objects in view center.
 #define WPREF_TABLET						1005			///< ::Bool Private and to be deprecated.
 #define WPREF_LINK_SELECTION		1009			///< ::Bool
@@ -2315,6 +2326,14 @@ enum class CREATEPLATONICVOLUMESETTINGS
 #define WPREF_SCALEACCELERATION		1082			///< ::Float
 #define WPREF_ROTATEACCELERATION	1083			///< ::Float
 
+#define WPREF_FREELOOKSENSITIVITY  1200			///< ::Float
+#define WPREF_NAV_SPEED            1201			///< ::Float
+#define WPREF_FREELOOK_SMOOTHING   1202			///< ::Bool Enable motion smoothing when moving the freelook camera.
+#define WPREF_NAV_SMOOTHING        1203			///< ::Bool Enable smoothing when wasd-like navigation.
+#define WPREF_NAV_WALKMODE         1204			///< ::Bool Enable walking mode when in wasd-like navigation.
+#define WPREF_NAV_WALKMODE_HEIGHT  1205			///< ::Float Eye Height when in walk mode in cm;
+
+
 #define WPREF_COLOR_RGBRANGE	1102			///< ::Int32 RGB color range: @enumerateEnum{COLORSYSTEM_RANGE}
 
 #define WPREF_COLOR_MODE_COMPACT								1124		///< ::Int32 Compact Mode. @since R18
@@ -2406,17 +2425,18 @@ enum class CREATEPLATONICVOLUMESETTINGS
 /// @addtogroup WPREF_AUTOSAVE_DEST
 /// @ingroup group_enumeration
 /// @{
-#define WPREF_AUTOSAVE_DEST_BACKUPDIR		0
-#define WPREF_AUTOSAVE_DEST_USERDIR			1
-#define WPREF_AUTOSAVE_DEST_STARTUPDIR	2
+#define WPREF_AUTOSAVE_DEST_PROJECT			0
+#define WPREF_AUTOSAVE_DEST_CUSTOM			1
+#define WPREF_AUTOSAVE_DEST_USER				2
 /// @}
-#define WPREF_AUTOSAVE_DEST_PATH				1406			///< Filename
+#define WPREF_AUTOSAVE_DEST_PATH								1406			///< Filename if WPREF_AUTOSAVE_DEST is set to WPREF_AUTOSAVE_DEST_CUSTOM
 #define WPREF_COMMANDER_AT_CURSOR				1407			///< ::Bool
 #define WPREF_REALTIMEMATERIALS					1408			///< ::Bool @since R19
 #define WPREF_WATCHFOLDER_AUTOMOUNT_SEARCHPATHS 1410 ///< ::Bool True if search paths should be mounted automatically as watch folders
 #define WPREF_WATCHFOLDER_AUTOMOUNT_DOCUMENTS		1411 ///< ::Bool True if project relative watch folder paths should be mounted automatically as watch folders
 
 #define WPREF_DEFAULT_SCENE						1412	///< ::Int32 Default scene type.
+
 /// @addtogroup WPREF_DEFAULT_SCENE
 /// @ingroup group_enumeration
 /// @{
@@ -2425,6 +2445,17 @@ enum class CREATEPLATONICVOLUMESETTINGS
 #define WPREF_DEFAULT_SCENE_EXAMPLE1	2		///< Example scene #1.
 /// @}
 #define WPREF_DEFAULT_SCENE_CUSTOM_FILE 1413	///< Filename. @see WPREF_DEFAULT_SCENE_CUSTOM
+
+#define WPREF_BROWSER_WATCHFOLDERS_AUTORUN					1414
+#define WPREF_BROWSER_WATCHFOLDERS_AUTORUN_UNSECURE 1415
+#define WPREF_BROWSER_MXAI_ENABLED									1416
+#define WPREF_BROWSER_MXAI_IP												1417
+#define WPREF_BROWSER_MXAI_PORT											1418
+#define WPREF_BROWSER_MXAI_GPU_MODE									1419 // Int: 0 - Auto, 1 - Force on, 2 Force off
+	#define WPREF_BROWSER_MXAI_GPU_MODE_AUTO							0
+	#define WPREF_BROWSER_MXAI_GPU_MODE_FORCE_ON					1
+	#define WPREF_BROWSER_MXAI_GPU_MODE_FORCE_OFF					2
+#define WPREF_BROWSER_MXAI_DISCLAIMER_SHOWED				1420
 
 #define WPREF_PLUGINS											30006			///< BaseContainer
 #define WPREF_CPUCOUNT										30010			///< ::Int32 Number of CPUs.
@@ -2481,6 +2512,7 @@ enum class CREATEPLATONICVOLUMESETTINGS
 #define WPREF_IMEXPORT_OCIO_IMPORT_MODE_NAME		21096			///< String @since 2025.0
 #define WPREF_IMEXPORT_PY_DOC_UUID_STORAGE						21095 ///< @markPrivate @since 2024
 #define WPREF_IMEXPORT_OCIO_EXPORT_MODE_NAME		21097			///< String @since 2025.0
+#define WPREF_FILE_RENDER_OVERWRITE_DEFAULT			21098 ///< ::Int32 Defines the behavior when rendering and output files already exist: @enumerateEnum{WPREF_FILE_RENDER_OVERWRITE_DEFAULT} @since 2025.1
 
 #define WPREF_MODELING_MANAGER_TABS				22000			///< BaseContainer @markPrivate @since R21
 #define WPREF_MIGRATION_DIALOG_DATA				22010			///< BaseContainer @markPrivate @since R21
@@ -2509,21 +2541,23 @@ enum class CREATEPLATONICVOLUMESETTINGS
 #define WPREF_FILE_ASSETS_LINK_ASK						2			///< Always Ask.
 /// @}
 
+/// @addtogroup WPREF_FILE_RENDER_OVERWRITE_DEFAULT
+/// @ingroup group_enumeration
+/// @{
+#define WPREF_FILE_RENDER_OVERWRITE_DEFAULT_ASK							0	///< Ask the user what to do. 
+#define WPREF_FILE_RENDER_OVERWRITE_DEFAULT_OVERWRITE				1	///< Render all frames and overwrite all existing files.
+#define WPREF_FILE_RENDER_OVERWRITE_DEFAULT_NEVEROVERWRITE	2	///< Render all frames and never overwrite existing files. 
+#define WPREF_FILE_RENDER_OVERWRITE_DEFAULT_SKIP 						3	///< Skip rendering frames that would already exists on disk.
+/// @}
+
 #define WPREF_PV_RENDER_VIEW	430000690			///< ::Int32 The index id of the Picture Viewer dialog that receives render output.
 #define WPREF_PV_RECENT				465001804			///< For recent files in Picture Viewer.
 
 #define WPREF_COMMUNICATION_LIVELINK_ENABLED	465001648				///< ::Bool If the Livelink to AE should be enabled or disabled when Cinema is started. @since R17.048
 #define WPREF_COMMUNICATION_LIVELINK_PORT			465001649				///< ::Int32 The port used by the Livelink connection. @since R17.048
 
-#define WPREF_COMMUNICATION_QUICKSTART_DIALOG	465001650		///< ::Int32 Selects the Quick Start Dialog's auto-open behaviour: @enumerateEnum{WPREF_COMMUNICATION_QUICKSTART_DIALOG} @since 2025.0
-/// @addtogroup WPREF_COMMUNICATION_QUICKSTART_DIALOG
-/// @ingroup group_enumeration
-/// @{
-#define WPREF_COMMUNICATION_QUICKSTART_DIALOG_NONE	0			///< No Quick Start Dialog auto-opens.
-#define WPREF_COMMUNICATION_QUICKSTART_DIALOG_OLD		1			///< Classic Quick Start Dialog auto-opens.
-#define WPREF_COMMUNICATION_QUICKSTART_DIALOG_NEW		2			///< New Quick Start Dialog auto-opens.
-/// @}
-///
+#define WPREF_COMMUNICATION_QUICKSTART_DIALOG	465001650		///< ::Bool Toggles the C4D Home Dialog's auto-open behaviour
+
 #define WPREF_QUICKSTART_PREV_FEATURE_HIGHLIGHTING 465002000 ///< ::Int32 Stores the previous feature highlight setting. @markPrivate @since R24
 #define WPREF_QUICKSTART_LAST_UPDATE_VERSION 465003000 ///< ::Int32 Stores the last update version number seen by the quickstartdialog. @markPrivate @since R24
 
@@ -2829,7 +2863,8 @@ enum class EVENT
 	GLHACK										= (1 << 3),			///< @markPrivate
 	CAMERAEXPRESSION					= (1 << 4),			///< If set (and not @ref EVENT::NOEXPRESSION), the event will only update camera dependent expressions (for faster speed).
 	ENQUEUE_REDRAW						= (1 << 5),			///< Do not stop the current redraw if @ref DrawViews() is running at the moment. In that case enqueue the redraw after the current draw is done. @since R17.032
-	DONT_OVERWRITE_RENDERING	= (1 << 6)			///< If this flag is set, renderings will not be overwritten.
+	DONT_OVERWRITE_RENDERING	= (1 << 6),			///< If this flag is set, renderings will not be overwritten.
+	NO_PREPARE_SCENE					= (1 << 7)			///< Do not prepare the scene (no execution of expressions, no updates of generators/deformers, ...).
 } MAXON_ENUM_FLAGS(EVENT);
 /// @}
 
@@ -2857,6 +2892,7 @@ enum class DRAWFLAGS
 	PRIVATE_ONLYBACKGROUND				= (1 << 4),				///< @markPrivate
 	PRIVATE_NOBLIT								= (1 << 9),				///< @markPrivate
 	PRIVATE_OPENGLHACK						= (1 << 11),			///< @markPrivate
+	PRIVATE_NO_PREPARE_SCENE			= (1 << 20),			///< @markPrivate
 	PRIVATE_ONLY_PREPARE					= (1 << 21),			///< @markPrivate
 	PRIVATE_NO_3DCLIPPING					= (1 << 24),			///< @markPrivate
 	DONT_OVERWRITE_RENDERING			= (1 << 25),			///< @markPrivate
@@ -2894,7 +2930,7 @@ enum class SAVEDOCUMENTFLAGS
 	DIALOGSALLOWED			= (1 << 0),			///< Flag to inform that a dialog can be displayed. If this flag not set then no dialogs must be opened.
 	SAVEAS							= (1 << 1),			///< Forces a "Save As" and opens the file dialog.
 	DONTADDTORECENTLIST	= (1 << 2),			///< Do not add the saved document to the recent file list.
-	AUTOSAVE						= (1 << 3),			///< Sets the Auto Save mode. Files are not added to the recent file list and the document change star will not be reset.
+	AUTOSAVE						= (1 << 3),			///< Sets the Auto Save mode. Is usually used in conjunction with `DONTADDTORECENTLIST`.
 	SAVECACHES					= (1 << 4),			///< For @em Cineware export only. Caches of objects will also be written (only supported by @C4D file format).
 	EXPORTDIALOG				= (1 << 5),			///< Opens the Export dialog.
 	CRASHSITUATION			= (1 << 6),			///< This flag is passed to @C4D if a crash occurred.
@@ -3013,11 +3049,11 @@ enum class DRAW_TEXTUREFLAGS
 {
 	NONE												= 0x0,						///< None.
 
-	COLOR_IMAGE_TO_LINEAR				= 0x00000001,			///< Converts the embedded color profile to linear color space.
-	COLOR_SRGB_TO_LINEAR				= 0x00000002,			///< Converts from sRGB color space to linear color space.
-	COLOR_IMAGE_TO_SRGB					= 0x00000003,			///< Converts the embedded color profile to sRGB color space.
-	COLOR_LINEAR_TO_SRGB				= 0x00000004,			///< Converts from linear color space to sRGB color space.
-	COLOR_CORRECTION_MASK				= 0x0000000f,			///< Color correction mask.
+	PRIVATE_MAXON_DEPRECATED_ENUMVALUE(COLOR_IMAGE_TO_LINEAR,	0x00000001, "don't use"),		///< Converts the embedded color profile to linear color space.
+	PRIVATE_MAXON_DEPRECATED_ENUMVALUE(COLOR_SRGB_TO_LINEAR,	0x00000002, "don't use"),		///< Converts from sRGB color space to linear color space.
+	PRIVATE_MAXON_DEPRECATED_ENUMVALUE(COLOR_IMAGE_TO_SRGB,		0x00000003, "don't use"),		///< Converts the embedded color profile to sRGB color space.
+	PRIVATE_MAXON_DEPRECATED_ENUMVALUE(COLOR_LINEAR_TO_SRGB,	0x00000004, "don't use"),		///< Converts from linear color space to sRGB color space.
+	PRIVATE_MAXON_DEPRECATED_ENUMVALUE(COLOR_CORRECTION_MASK,	0x0000000f, "don't use"),		///< Color correction mask.
 
 	USE_PROFILE_COLOR						= 0x00000010,			///< Use color profile color.
 	ALLOW_FLOATINGPOINT					= 0x00000020,			///< Allow floating point textures (if supported).
@@ -3182,7 +3218,12 @@ enum class TOOLDRAWFLAGS
 #define VIEWCOLOR_SYMMETRY_PLANE_Z													117 ///< @since 2023.000
 #define VIEWCOLOR_PATTERN_SELECTION_HIGHLIGHT								118 ///< @since 2024.000
 #define VIEWCOLOR_PATTERN_SELECTION_DIRECTIONS							119 ///< @since 2024.000
-#define VIEWCOLOR_MAXCOLORS																	120
+#define VIEWCOLOR_UV_UDIM_TILE_OUTLINE											120 ///< @since 2025.300
+#define VIEWCOLOR_UV_UDIM_TILE_OVERLAY											121 ///< @since 2025.300
+#define VIEWCOLOR_UV_REFERENCE_CANVAS_INVALID								122 ///< @since 2025.300
+#define VIEWCOLOR_UV_POLYGONS_CROSSING_TILE									123 ///< @since 2025.300
+#define VIEWCOLOR_UV_STRETCH_MAP_NEUTRAL										124 ///< @since 2025.300
+#define VIEWCOLOR_MAXCOLORS																	125
 /// @}
 
 /// @addtogroup DIRTYFLAGS
@@ -3200,6 +3241,7 @@ enum class DIRTYFLAGS
 	CACHE					= (1 << 4),			///< Check if the cache of an object has been changed (rebuilt).
 	CHILDREN			= (1 << 5),			///< Check if the children are dirty.
 	DESCRIPTION		= (1 << 6),			///< Description changed.
+	VISIBILITY		= (1 << 7),			///< Similar to SELECT, but checks the visibility state.
 
 	SELECTION_OBJECTS		= (1 << 20),			///< For BaseDocument, object selections have changed.
 	SELECTION_TAGS			= (1 << 21),			///< For BaseDocument, tag selections have changed.
@@ -3307,12 +3349,13 @@ enum class CURVEINTERPOLATION_MODE
 /// @see Hierarchy::Run BaseDocument::ExecutePasses HierarchyHelp::GetBuildFlags
 enum class BUILDFLAGS : UInt16
 {
-	NONE							= 0,						///< None.
-	INTERNALRENDERER	= (1 << 1),			///< Rendering in the editor.
-	EXTERNALRENDERER	= (1 << 2),			///< Rendering externally.
-	ISOPARM						= (1 << 3),			///< Generate isoparm objects.
-	EXPORTONLY				= (1 << 4),			///< Exporting (e.g. Alembic).
-	INTERACTIVEEDITOR = (1 << 5),			///< currently running in the active viewport window (viewscheduler or mainthread)
+	NONE									= 0,						///< None.
+	INTERNALRENDERER			= (1 << 1),			///< Rendering in the editor.
+	EXTERNALRENDERER			= (1 << 2),			///< Rendering externally.
+	ISOPARM								= (1 << 3),			///< Generate isoparm objects.
+	EXPORTONLY						= (1 << 4),			///< Exporting (e.g. Alembic).
+	INTERACTIVEEDITOR			= (1 << 5),			///< currently running in the active viewport window (viewscheduler or mainthread)
+	PRIVATE_NO_CLEAR_PASS	= (1 << 6),			///< internal
 } MAXON_ENUM_FLAGS(BUILDFLAGS);
 /// @}
 
@@ -3323,16 +3366,32 @@ enum class BUILDFLAGS : UInt16
 /// @see PriorityList::Add ObjectData::Execute TagData::Execute SceneHookData::Execute
 enum class EXECUTIONFLAGS
 {
-	NONE						= 0,									///< None.
-	ANIMATION				= (1 << 1),						///< Animation is calculated.
-	EXPRESSION			= (1 << 2),						///< Expressions are calculated.
-	CACHEBUILDING		= (1 << 3),						///< Cache building is done.
-	CAMERAONLY			= (1 << 4),						///< Only camera dependent expressions shall be executed.
-	INDRAG					= (1 << 5),						///< Pipeline is done within scrubbing.
-	INMOVE					= (1 << 6),						///< Pipeline is done within moving.
-	RENDER					= (1 << 7),						///< The external renderer (Picture Viewer) is running.
-	ALLOW_PRIORITYSHIFT	= (1 << 8),				///< Allow to shift the priority with the priority shift tag. @markPrivate @since R18
-	PROFILING				= (1 << 9)						///< Pipeline is run with profiling enabled.
+	NONE											= 0,									///< None.
+	ANIMATION									= (1 << 1),						///< Animation is calculated.
+	EXPRESSION								= (1 << 2),						///< Expressions are calculated.
+	CACHEBUILDING							= (1 << 3),						///< Cache building is done.
+	CAMERAONLY								= (1 << 4),						///< Only camera dependent expressions shall be executed.
+	INDRAG										= (1 << 5),						///< Pipeline is done within scrubbing.
+	INMOVE										= (1 << 6),						///< Pipeline is done within moving.
+	RENDER										= (1 << 7),						///< The external renderer (Picture Viewer) is running.
+	ALLOW_PRIORITYSHIFT				= (1 << 8),						///< Allow to shift the priority with the priority shift tag. @markPrivate @since R18
+	PROFILING									= (1 << 9),						///< Pipeline is run with profiling enabled.
+
+	PREPASS										= (1 << 10),					///< Passed to calls to SceneHookData::Visit during pre-pass.
+	POSTPASS									= (1 << 11),					///< Passed to calls to SceneHookData::Visit during post-pass.
+
+	PASS_PRE									= (1 << 12),					///< Passed to the call to SceneHookData::Visit before pre/post-pass.
+	PASS_POST									= (1 << 13),					///< Passed to the call to SceneHookData::Visit after pre/post-pass.
+	PASS_OBJECT_PRE						= (1 << 14),					///< Passed to the call to SceneHookData::Visit during pre/post-pass when an object is entered.
+	PASS_OBJECT_POST					= (1 << 15),					///< Passed to the call to SceneHookData::Visit during pre/post-pass when an object is left.
+	PASS_FINALCACHE_PRE				= (1 << 16),					///< Passed to the call to SceneHookData::Visit during pre/post-pass when a final cache is entered (deform cache if that exists, otherwise cache).
+	PASS_FINALCACHE_POST			= (1 << 17),					///< Passed to the call to SceneHookData::Visit during pre/post-pass when a final cache is left (deform cache if that exists, otherwise cache).
+	PASS_DEFORMCACHE_PRE			= (1 << 18),					///< Passed to the call to SceneHookData::Visit during pre/post-pass when a deform cache is entered.
+	PASS_DEFORMCACHE_POST			= (1 << 19),					///< Passed to the call to SceneHookData::Visit during pre/post-pass when a deform cache is left.
+	PASS_CACHE_PRE						= (1 << 20),					///< Passed to the call to SceneHookData::Visit during pre/post-pass when a cache is entered.
+	PASS_CACHE_POST						= (1 << 21),					///< Passed to the call to SceneHookData::Visit during pre/post-pass when a cache is left.
+
+	PASS_ALL									= (1023 << 12),				///< Combination of all PASS_* flags.
 } MAXON_ENUM_FLAGS(EXECUTIONFLAGS);
 /// @}
 
@@ -3405,7 +3464,8 @@ enum class DESCFLAGS_SET
 	DONTFREESPLINECACHE		= (1 << 8),			///< @markPrivate @since R16.038
 	INDRAG								= (1 << 9),			///< Gadget (e.g. Slider) in dragging mode (not finished). @note Only used when DESCFLAGS_SET::USERINTERACTION is set. @since R17.053
 	INRESETTODEFAULT			= (1 << 10),		///< Set if the set operation is a "reset to default". @since R20.015
-	PRIVATE_SETRAWCOLORDATA		= (1 << 11)	///< If set, the raw internal color data will be set for nodes (no color conversion from srgb to linear) (works only with AMEmulationNode)
+	PRIVATE_SETRAWCOLORDATA	= (1 << 11),	///< If set, the raw internal color data will be set for nodes (no color conversion from srgb to linear) (works only with AMEmulationNode)
+	COLOR_SRGB						= (1 << 12)			///< Set to transform a color from SRGB to rendering space in case OCIO is enabled
 } MAXON_ENUM_FLAGS(DESCFLAGS_SET);
 /// @}
 
@@ -3430,6 +3490,7 @@ enum class HIERARCHYCLONEFLAGS
 	ASLINE		= (1 << 2),			///< Objects cloned as line objects.
 	ASSPLINE	= (1 << 3),			///< Objects cloned as splines.
 	ASVOLUME	= (1 << 4),			///< Objects cloned as volumes.
+	FORCE_CACHE_GENERATION	= (1 << 5),	///< Force cache generation even if object has his BIT_CONTROLOBJECT set.
 } MAXON_ENUM_FLAGS(HIERARCHYCLONEFLAGS);
 /// @}
 
@@ -3869,6 +3930,8 @@ enum class USERAREAFLAGS
 	#define HOTKEY_CAMERA_MOVE		13563				///< Camera move.
 	#define HOTKEY_CAMERA_SCALE		13564				///< Camera scale.
 	#define HOTKEY_CAMERA_ROTATE	13565				///< Camera rotate.
+	#define HOTKEY_CAMERA_FREELOOK 1064612		///< Camera freelook.
+
 
 	#define HOTKEY_OBJECT_MOVE		13566				///< Object move.
 	#define HOTKEY_OBJECT_SCALE		13567				///< Object scale.
@@ -4466,6 +4529,8 @@ enum class VERSIONTYPE
 
 	CPYTHON						= 14,			///< Python - The python executable. Runs without UI.
 	CPYTHON3					= 15,			///< Python 3 - The python executable. Runs without UI. Unused, use CPYTHON to address c4dpy
+
+	AECVIEWER					= 16,			///< AEC Viewer.
 } MAXON_ENUM_LIST(VERSIONTYPE);
 /// @}
 
@@ -4730,9 +4795,9 @@ enum class RENDERFLAGS
 	DONTANIMATE								= (1 << 10),		///< Do not animate document before rendering. This should only be used in combination with @ref RENDERFLAGS::PREVIEWRENDER.@since R17.032
 	PREVIEWSETTINGS						= (1 << 11),		///< Use preview settings. @since R19
 	RENDERQUEUEERRORS 				= (1 << 12),		///< Cancel Render Queue rendering if scene has missing assets. @markPrivate. @since R21
-	FORCE_LINEAR_COLOR_PROFILE= (1 << 13),		///< Force linear color profile.
+	FORCE_LINEAR_COLOR_PROFILE = (1 << 13),		///< Force linear color profile.
 
-	INTERNAL_USE_CURRENT_QUEUE= (1 << 30),		///< Internal flag which tells the renderer to use the current destination queue
+	INTERNAL_USE_CURRENT_QUEUE = (1 << 30),		///< Internal flag which tells the renderer to use the current destination queue
 	INTERNAL_SPECIAL_PREVIEW	= (1 << 31),		///< Internal flag for special preview rendering of node materials. do not use!
 } MAXON_ENUM_FLAGS(RENDERFLAGS);
 /// @}
@@ -4836,17 +4901,19 @@ enum class VIEWPORT_PICK_FLAGS
 /// @addtogroup SHADERPOPUP
 /// @ingroup group_enumeration
 /// @{
-#define SHADERPOPUP_SETSHADER					99989			///< Set a shader . @formatParam{param} points to a BaseShader. (param = @c reinterpret_cast<Int32>(shader))
-#define SHADERPOPUP_SETFILENAME				99990			///< Set a bitmap. @formatParam{param} points to a Filename. (param = @c reinterpret_cast<Int32>(&fn))
-#define SHADERPOPUP_LOADIMAGE					99991			///< Open file dialog and set user result.
-#define SHADERPOPUP_EDITPARAMS				99999			///< Edit shaders in the Attribute Manager.
-#define SHADERPOPUP_RELOADIMAGE				99998			///< Reload the image. (Only works for a single bitmap shader.)
-#define SHADERPOPUP_EDITIMAGE					99997			///< Edit image in external application. (Only works for a single bitmap shader.)
-#define SHADERPOPUP_LOCATEIMAGE				99996			///< Show image in finder/explorer. (Only works for a single bitmap shader.) @since R17.032
-#define SHADERPOPUP_COPYCHANNEL				99995			///< Copy the shader to the copy buffer. (Only works for a single shader.)
-#define SHADERPOPUP_PASTECHANNEL			99994			///< Paste the copy buffer. (Works for multiple shaders.)
-#define SHADERPOPUP_CREATENEWTEXTURE	99993			///< Create a new @BP3D texture. (Only works for a single shader.)
-#define SHADERPOPUP_CLEARSHADER				99992			///< Clear the shaders.
+#define SHADERPOPUP_SETSHADER						99989			///< Set a shader . @formatParam{param} points to a BaseShader. (param = @c reinterpret_cast<Int32>(shader))
+#define SHADERPOPUP_SETFILENAME					99990			///< Set a bitmap. @formatParam{param} points to a Filename. (param = @c reinterpret_cast<Int32>(&fn))
+#define SHADERPOPUP_LOADIMAGE						99991			///< Open file dialog and set user result.
+#define SHADERPOPUP_LOADASSET						99988			///< Open asset browser dialog and set user result.
+#define SHADERPOPUP_SEARCHSIMILARASSET	99987			///< Search for similar asset (AI)
+#define SHADERPOPUP_EDITPARAMS					99999			///< Edit shaders in the Attribute Manager.
+#define SHADERPOPUP_RELOADIMAGE					99998			///< Reload the image. (Only works for a single bitmap shader.)
+#define SHADERPOPUP_EDITIMAGE						99997			///< Edit image in external application. (Only works for a single bitmap shader.)
+#define SHADERPOPUP_LOCATEIMAGE					99996			///< Show image in finder/explorer. (Only works for a single bitmap shader.) @since R17.032
+#define SHADERPOPUP_COPYCHANNEL					99995			///< Copy the shader to the copy buffer. (Only works for a single shader.)
+#define SHADERPOPUP_PASTECHANNEL				99994			///< Paste the copy buffer. (Works for multiple shaders.)
+#define SHADERPOPUP_CREATENEWTEXTURE		99993			///< Create a new @BP3D texture. (Only works for a single shader.)
+#define SHADERPOPUP_CLEARSHADER					99992			///< Clear the shaders.
 /// @}
 
 /// @addtogroup DEFAULTFILENAME_SHADER
@@ -5217,6 +5284,7 @@ enum class DLG_TYPE
 	ASYNC_POPUP_RESIZEABLE,					///< Non-modal (asynchronous) dialog. Resizable popup dialog style (no menu bar).
 	ASYNC_POPUPEDIT,								///< Non-modal (asynchronous) dialog. Popup dialog style (no menu bar, no window frame).
 	ASYNC_TOOLBAR,									///< Non-modal (asynchronous) dialog. Toolbar style with no minimize/maximize buttons, but close button
+	ASYNC_TOOLBAR_NOTITLE, 					///< Non-modal (asynchronous) dialog. NO Toolbar style with no minimize/maximize buttons
 
 	ASYNC_FULLSCREEN_WORK = 30,			///< Non-modal (asynchronous) dialog. Fullscreen over desktop area.
 	ASYNC_FULLSCREEN_MONITOR,				///< Non-modal (asynchronous) dialog. Fullscreen over the whole monitor area.
@@ -5260,8 +5328,8 @@ enum class VPGETFRAGMENTS
 #define VPPhLensDistortion		1031709			///< Videopost Lens Distortion. @since R17.032
 
 #define MSG_2DCAMERASETTINGSCACHE 1034264 ///< Internal message for handling of non-destructive 2D Camera Navigation mode
-#define MSG_PH_2DTRACK_MODE_MCOMMAND_EXECUTE 1036105 // Assigned to Steve Baines for 'Msg TrkObj 2' from www.plugincafe.com on 151009.
-#define MSG_PH_2DTRACK_MODE_MCOMMAND_IS_ENABLED 1039952 // Assigned to Steve Baines from www.plugincafe.com on 170926
+#define MSG_PH_2DTRACK_MODE_MCOMMAND_EXECUTE 1036105 // Assigned to Steve Baines for 'Msg TrkObj 2' from developers.maxon.net on 151009.
+#define MSG_PH_2DTRACK_MODE_MCOMMAND_IS_ENABLED 1039952 // Assigned to Steve Baines from developers.maxon.net on 170926
 
 /// @addtogroup NAV2DCAMERASETTINGSCACHEMODE
 /// @ingroup group_enumeration
@@ -5410,10 +5478,10 @@ enum
 	DIALOG_GLOBALSTATUSBAR,									///< Adds a global status bar to the dialog
 	DIALOG_NOTEXTMENU,											///< Hides the text menu, useful to fill all the menu area with gadgets added with @ref GeDialog::GroupBeginInMenuLine()
 	DIALOG_FORCEALLOWMOUSEWHEEL,						///< Set to true to force to allow to receive mouse wheel events even if gadget is not on focus. @since 2023.200
-	DIALOG_SETGROUPBACKGROUNDCOLORID,				///< ::Int32 Sets the group background color ID. @since 2024.000
-	DIALOG_SETGROUPBACKGROUNDCOLORRGB,			///< ::Int32 red, ::Int32 green, ::Int32 blue. Sets the group background color RGB values. @since 2024.000
-	DIALOG_SETGROUPINNERBACKGROUNDCOLORID,	///< ::Int32 Sets the group inner background color ID. @since 2024.000
-	DIALOG_SETGROUPINNERBACKGROUNDCOLORRGB,	///< ::Int32 red, ::Int32 green, ::Int32 blue. Sets the group inner background color RGB values. @since 2024.000
+	DIALOG_SETGROUPBACKGROUNDCOLORID,				///< @markDeprecated
+	DIALOG_SETGROUPBACKGROUNDCOLORRGB,			///< @markDeprecated
+	DIALOG_SETGROUPINNERBACKGROUNDCOLORID,	///< @markDeprecated
+	DIALOG_SETGROUPINNERBACKGROUNDCOLORRGB,	///< @markDeprecated
 	DIALOG_ISELEMENTHIDDEN,									///< Returns @formatConstant{true} if the element is hidden, @formatConstant{false} if is visible. @since 2024.400
 	DIALOG_
 };
@@ -5471,6 +5539,8 @@ enum
 	LV_SHOWLINE									= 55,				///< Scroll line into the visible area.
 	LV_DRAGRECEIVE							= 56,				///< Drag receive.
 	LV_RMOUSEDOWN								= 57,				///< Mouse down at line, column.
+	LV_GETSCROLLSTATE						= 58,				///< @markInternal, returns the scroll offset in x/y (Int64(((xOff << 32) & 0xffffffff) | (yOff & 0xffffffff)))
+	LV_SETSCROLLSTATE						= 59,				///< @markInternal, restores the scroll offset 
 
 	LV_SIMPLE_SELECTIONCHANGED	= 100,			///< Simple listview: selection changed.
 	LV_SIMPLE_CHECKBOXCHANGED		= 101,			///< Simple listview: checkbox changed.
@@ -5517,7 +5587,7 @@ enum class NOTIFY_EVENT
 
 	COPY					= 107,
 	CACHE					= 108,
-	REMOVE				= 109,
+	REMOVE				= 109, ///< Can be sent by an object in a cache (a object in the cache of a generator inside an XREF). NotifyEventData.event_data will be a pointer to the object that was removed.
 	CLONE					= 110,
 	INSERT				= 111,
 	SELECTIONBIT	= 112,

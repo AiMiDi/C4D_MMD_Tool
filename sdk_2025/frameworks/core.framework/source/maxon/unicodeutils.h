@@ -56,6 +56,35 @@ enum class CHARACTERTYPE : UChar
 	CN, // Other, Not Assigned(no characters in the file have this property)
 } MAXON_ENUM_LIST(CHARACTERTYPE);
 
+enum class CHARACTERBIDITYPE : UChar
+{
+	UNKNOWN = 0,
+	AL,	 // Right-to-Left Arabic: Arabic script characters.
+	AN,	 // Arabic Number: Arabic-Indic digits.
+	B,	 // Paragraph Separator: Indicates the end of a paragraph.
+	BN,	 // Boundary Neutral: Characters that have no inherent directionality and don't affect surrounding characters.
+	CS,	 // Common Separator: Characters that separate numbers but are common across scripts, like the comma.
+	EN,	 // European Number: European digits (0-9).
+	ES,	 // European Separator: Characters that separate numbers in European scripts, such as the comma or period.
+	ET,	 // European Terminator: Characters that terminate numbers in European scripts, like currency symbols.
+	FSI, // First Strong Isolate: Isolates a segment with an initial strong character that defines its directionality.
+	L,	 // Left-to-Right: Characters that are written from left to right, like Latin, Cyrillic, and Greek scripts.
+	LRE, // Left-to-Right Embedding: Embeds left-to-right text within bidirectional text.
+	LRI, // Left-to-Right Isolate: Isolates a left-to-right text segment.
+	LRO, // Left-to-Right Override: Forces characters to be treated as left-to-right.
+	NSM, // Nonspacing Mark: Characters that are combining marks with no inherent directionality.
+	ON,	 // Other Neutral: Punctuation and other characters that don't have strong directionality.
+	PDF, // Pop Directional Format: Terminates the scope of the last LRE, RLE, LRO, or RLO.
+	PDI, // Pop Directional Isolate: Terminates the scope of the last LRI, RLI, or FSI.
+	R,	 // Right-to-Left: Characters that are written from right to left, such as Hebrew.
+	RLE, // Right-to-Left Embedding: Embeds right-to-left text within bidirectional text.
+	RLI, // Right-to-Left Isolate: Isolates a right-to-left text segment.
+	RLO, // Right-to-Left Override: Forces characters to be treated as right-to-left.
+	S,	 // Segment Separator: Used to separate segments within text. Example: Line Separator.
+	WS,	 // Whitespace: Space characters, tabs, and other whitespace.
+	WW,	 //  
+} MAXON_ENUM_LIST(CHARACTERBIDITYPE);
+
 //----------------------------------------------------------------------------------------
 /// This class handles unicode decompositions and correct string comparison using decomposition informations.
 //----------------------------------------------------------------------------------------
@@ -122,7 +151,7 @@ public:
 	static MAXON_METHOD COMPARERESULT UniCodeCompare(Utf32Char a, Utf32Char b);
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the type of a given unicode char. This can be used to determine if a character is a letter, number or symbol
+	/// Returns the type of a given unicode char. This can be used to determine if a character is a letter, number or symbol.
 	/// @param[in] chr								Character to find.
 	/// @return												CHARACTERTYPE of the character.
 	//----------------------------------------------------------------------------------------
@@ -148,6 +177,21 @@ public:
 	/// @return												Lowercase character of chr.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Utf32Char LowerCase(Utf32Char chr);
+
+	//----------------------------------------------------------------------------------------
+	/// Returns the bidirectional type of a given unicode char.
+	/// It can be used to determine the direction of a character in a bidirectional text (right-to-left).
+	/// @param[in] chr								Character to find.
+	/// @return												CHARACTERBIDITYPE of the character.
+	//----------------------------------------------------------------------------------------
+	static MAXON_METHOD CHARACTERBIDITYPE GetCharacterBiDiType(Utf32Char chr);
+
+	//----------------------------------------------------------------------------------------
+	/// Returns true if the string contains right-to-left characters (e.g. Arabic text). Only the first 50 characters of the string are checked.
+	/// @param[in] str								String to check.
+	/// @return												@trueOtherwiseFalse{if string is right-to-left}
+	//----------------------------------------------------------------------------------------
+	static MAXON_METHOD Bool IsRightToLeftString(const String& str);
 };
 
 // include auto generated header file here

@@ -113,4 +113,4 @@ namespace MATERIAL
 #include "datadescription_material_forger1.hxx"
 #include "datadescription_material_forger2.hxx"
 
-#endif // !DATADESCRIPTION_MATERIAL_FORGER_H__
+#endif // DATADESCRIPTION_MATERIAL_FORGER_H__

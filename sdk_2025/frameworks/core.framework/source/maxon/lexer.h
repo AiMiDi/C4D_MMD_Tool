@@ -245,7 +245,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Sets the quote characters that are used to detect Strings when LEXERSYMBOLFLAGS::ALLOWSTRINGS is used.
-	/// @param[in] quoteChar	Defines characters that is used to detect quoted strings. By Default this is "\"'".
+	/// @param[in] quoteChar					Defines characters that is used to detect quoted strings. By Default this is "\"'".
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void SetStringQuoteCharacters(const String& quoteChar);
 };

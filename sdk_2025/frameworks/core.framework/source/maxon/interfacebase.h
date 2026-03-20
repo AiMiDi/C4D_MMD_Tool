@@ -29,7 +29,7 @@ void PrivateSystemFree(void*);
 /// @param[in] info								Pointer to the not-yet initialized DataType object.
 /// @param[in] type								Interface identifier.
 /// @param[in] impl								The interface implementation info.
-/// @param[in] defaultValue					Pointer to a default value of the interface.
+/// @param[in] defaultValue				Pointer to a default value of the interface.
 #endif
 //----------------------------------------------------------------------------------------
 using DataTypeInitializer = Result<void>(*)(DataTypeImpl* info, Id&& type, const NonvirtualInterfaceImplementation* impl, const void* defaultValue);
@@ -630,12 +630,12 @@ template <typename S1, typename S2> inline Bool operator ==(const RefBaseFn<S1>&
 	constexpr Bool COW = MAXON_IS_COW_KIND(S1::Handler::KIND);
 	static_assert(COW == MAXON_IS_COW_KIND(S2::Handler::KIND), "Comparison of mixed COW/non-COW reference types.");
 	using BASE = typename std::conditional<S1_IS_BASE, S1, S2>::type::ReferencedType;
-	return RefCompare<COW, true>::template IsEqual(reinterpret_cast<const BASE*>(a.GetPointer()), reinterpret_cast<const BASE*>(b.GetPointer()));
+	return RefCompare<COW, true>::IsEqual(reinterpret_cast<const BASE*>(a.GetPointer()), reinterpret_cast<const BASE*>(b.GetPointer()));
 }
 
 template <typename S> inline Bool operator ==(const RefBaseFn<S>& a, std::nullptr_t)
 {
-	return RefCompare<MAXON_IS_COW_KIND(S::Handler::KIND), true>::template IsEqual(a.GetPointer(), static_cast<const typename S::ReferencedType*>(nullptr));
+	return RefCompare<MAXON_IS_COW_KIND(S::Handler::KIND), true>::IsEqual(a.GetPointer(), static_cast<const typename S::ReferencedType*>(nullptr));
 }
 #endif
 
@@ -1456,7 +1456,8 @@ template <Bool HAS_ERROR, Bool NEVER_NULLPTR, typename T> struct ReferenceFuncti
 		using IsImplementationType = std::true_type; \
 		static void Free(const volatile BaseInterface* object) \
 		{ \
-			maxon::details::PrivateFreeWithDestructor<C>(reinterpret_cast<const C*>(const_cast<const BaseInterface*>(object))); \
+			using namespace maxon::details; /* allow ADL for PrivateFreeWithDestructor */ \
+			PrivateFreeWithDestructor(reinterpret_cast<const C*>(const_cast<const BaseInterface*>(object)), OVERLOAD_MAX_RANK); \
 		} \
 		using BaseInterface::DefaultValuePtr
 
@@ -1618,7 +1619,8 @@ template <typename C> inline void ImplementationDestroyDefaultValue(const C*, Ov
 		maxon::ImplementationDestroyDefaultValue<C>(_defaultValue, OVERLOAD_MAX_RANK); \
 	}
 
-#if (defined _MSC_VER) && _MSC_VER >= 1939
+// Workaround for MSVC Visual Studio 2022 version 17.9
+#if (defined _MSC_VER) && _MSC_VER >= 1939 && !defined(__clang__)
 	#define PRIVATE_MAXON_EXTRA_TEMPLATE template<>
 #else
 	#define PRIVATE_MAXON_EXTRA_TEMPLATE
@@ -1881,6 +1883,7 @@ struct ClassInfoBase
 		const Interface* ToInterface() const { return this; } \
 		static C* Get(typename Interface::BaseInterface* object) { return (C*) object; } \
 		static const C* Get(const typename Interface::BaseInterface* object) { return (const C*) object; } \
+		static const maxon::ClassInfoBase* GetClassInfo() { return reinterpret_cast<const maxon::ClassInfoBase*>((&_clsMTable) + 1) - 1; } \
 		static C* GetOrNull(typename Interface::BaseInterface* object) { return (object && object->PrivateGetClassInfo() == (reinterpret_cast<const maxon::ClassInfoBase*>((&_clsMTable) + 1) - 1)) ? (C*) object : nullptr; } \
 		static const C* GetOrNull(const typename Interface::BaseInterface* object) { return (object && object->PrivateGetClassInfo() == (reinterpret_cast<const maxon::ClassInfoBase*>((&_clsMTable) + 1) - 1)) ? (const C*) object : nullptr; }
 
@@ -1893,8 +1896,8 @@ struct ClassInfoBase
 ///
 /// Don't forget to add MAXON_IMPLEMENTATION_SIMPLE_REGISTER below the implementation class.
 ///
-/// @param[in] C                                    Name of the implementation class (has to be the same as the surrounding class name).
-/// @param[in] BASE                                    Name of the class that is being derived from.
+/// @param[in] C									Name of the implementation class (has to be the same as the surrounding class name).
+/// @param[in] BASE								Name of the class that is being derived from.
 /// @see @ref svinterfaces
 /// @see MAXON_INTERFACE_SIMPLE_VIRTUAL
 //----------------------------------------------------------------------------------------
@@ -1912,7 +1915,7 @@ struct ClassInfoBase
 /// Don't forget to add MAXON_IMPLEMENTATION_SIMPLE_REGISTER below the implementation class.
 ///
 /// @param[in] C									Name of the implementation class (has to be the same as the surrounding class name).
-/// @param[in] BASE									Name of the base class.
+/// @param[in] BASE								Name of the base class.
 /// @see @ref svinterfaces
 /// @see MAXON_INTERFACE_SIMPLE_VIRTUAL
 //----------------------------------------------------------------------------------------
@@ -1942,13 +1945,7 @@ struct ClassInfoBase
 #define PRIVATE_PRIVATE_MAXON_GENERIC_REMOVE_VARIANCE
 
 #define PRIVATE_MAXON_GENERIC_A(...) PRIVATE_MAXON_GENERIC_B(__VA_ARGS__)
-
-#ifdef MAXON_COMPILER_INTEL
-	#define PRIVATE_MAXON_GENERIC_B(X) PRIVATE_MAXON_GENERIC_C(PRIVATE_##X)
-#else
-	#define PRIVATE_MAXON_GENERIC_B(...) PRIVATE_MAXON_GENERIC_C(PRIVATE_##__VA_ARGS__)
-#endif
-
+#define PRIVATE_MAXON_GENERIC_B(...) PRIVATE_MAXON_GENERIC_C(PRIVATE_##__VA_ARGS__)
 #define PRIVATE_MAXON_GENERIC_C(...) PRIVATE_MAXON_GENERIC_D(PRIVATE_MAXON_GENERIC_SWITCH_A(__VA_ARGS__), __VA_ARGS__)
 #define PRIVATE_MAXON_GENERIC_D(SWITCH, ...) SWITCH(__VA_ARGS__)
 

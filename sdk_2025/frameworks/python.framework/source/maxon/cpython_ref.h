@@ -109,7 +109,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns the internal NativePyObject with which the instance got initialized. No reference
 	/// count change is performed.
-	/// @return												Internal NativePyObject
+	/// @return												Internal NativePyObject.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD NativePyObject* GetPyObject() const;
 	
@@ -117,7 +117,7 @@ public:
 	/// Returns the internal NativePyObject with which the instance got initialized. Objects reference count
 	/// needs to be decremented if not used anymore. The wrapper reference becomes invalid, no
 	/// other function should be called, and it should be deleted soon as possible. GIL must be held.
-	/// @return												Internal NativePyObject
+	/// @return												Internal NativePyObject.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD NativePyObject* Disconnect();
 
@@ -392,11 +392,6 @@ public:
 	MAXON_IMPLICIT CPyRef(std::nullptr_t) { }
 };
 
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning(push)
-#pragma warning(disable:1418) // external function definition with no prior declaration
-#endif
-
 
 template <typename T>
 typename std::enable_if<STD_IS_REPLACEMENT(same, T, py::CPyRef), T>::type CPyCast(const CPyRef& o) // no real cast, but needed for Cast<T> where T can be CPyRef or another Python ref type
@@ -437,10 +432,6 @@ typename std::enable_if<STD_IS_REPLACEMENT(same, T, py::MPyDataRef), T>::type CP
 template <typename T>
 typename std::enable_if<STD_IS_REPLACEMENT(same, T, py::MPyCallerContextRef), T>::type CPyCast(const CPyRef& o);
 
-
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning(pop)
-#endif
 
 class CPyTypeRef : public CPyCompare<CPyTypeInterface::Reference>
 {
@@ -547,7 +538,7 @@ class CPyConstRef : public CPyRef
 
 public:
 	using Super::Super;
-	using Super::operator=;
+	using Super::operator =;
 
 	NativePyObject * Disconnect() = delete;
 };
@@ -558,7 +549,7 @@ class CPyTypeConstRef : public CPyTypeRef
 
 public:
 	using Super::Super;
-	using Super::operator=;
+	using Super::operator =;
 
 	NativePyObject * Disconnect() = delete;
 };

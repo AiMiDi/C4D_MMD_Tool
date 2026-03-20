@@ -71,57 +71,57 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Initializes the color converter.
-	/// @param[in] doc							The document from which the color settings are taken.
+	/// @param[in] doc								The document from which the color settings are taken.
 	/// @param[in] inputColorSpaceLowName	Name of the new input color space.
 	/// @param[in] inputColorSpaceHighName	Name of the new input color space.
 	/// @param[in] renderColorSpaceName	Name of the new input color space.
-	/// @param[in] flags						Conversion flags.
+	/// @param[in] flags							Conversion flags.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> Init(BaseDocument* doc, const maxon::CString& inputColorSpaceLowName, const maxon::CString& inputColorSpaceHighName, const maxon::CString& renderColorSpaceName,
 		CONVERSION_FLAGS flags = CONVERSION_FLAGS::ADD_UNDO);
 
 	//----------------------------------------------------------------------------------------
 	/// Initializes the color converter.
-	/// @param[in] config						The ocio to be used for conversion.
+	/// @param[in] config							The ocio to be used for conversion.
 	/// @param[in] inputColorSpaceLowName	Name of the new input color space.
 	/// @param[in] inputColorSpaceHighName	Name of the new input color space.
 	/// @param[in] renderColorSpaceName	Name of the new input color space.
-	/// @param[in] flags						Conversion flags.
+	/// @param[in] flags							Conversion flags.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> Init(const maxon::OcioConfig& config, const maxon::CString& inputColorSpaceLowName, const maxon::CString& inputColorSpaceHighName, const maxon::CString& renderColorSpaceName,
 		CONVERSION_FLAGS flags = CONVERSION_FLAGS::ADD_UNDO);
 
 	//----------------------------------------------------------------------------------------
 	/// Converts the colors of a single object.
-	/// @param[in] doc							The document from which the color settings are taken. This must be the same that was used to initialize this class.
-	/// @param[in] op								Object to convert.
+	/// @param[in] doc								The document from which the color settings are taken. This must be the same that was used to initialize this class.
+	/// @param[in] op									Object to convert.
 	/// @param[out] processedObjects	A HashSet that will contain all the converted objects when the function returns.
-	/// @return											true, if the object was converted, false otherwise.
+	/// @return												True, if the object was converted, false otherwise.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<Bool> ConvertObject(BaseDocument* doc, BaseList2D* op, maxon::HashSet<BaseList2D*>& processedObjects);
 
 	//----------------------------------------------------------------------------------------
-	/// Converts the colors of multiple objects
-	/// @param[in] doc							The document from which the color settings are taken. This must be the same that was used to initialize this class.
-	/// @param[in] objects					Objects to convert.
+	/// Converts the colors of multiple objects.
+	/// @param[in] doc								The document from which the color settings are taken. This must be the same that was used to initialize this class.
+	/// @param[in] objects						Objects to convert.
 	/// @param[out] processedObjects	A HashSet that will contain all the converted objects when the function returns.
-	/// @return											true, if at least one object was converted, false otherwise.
+	/// @return												True, if at least one object was converted, false otherwise.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<Bool> ConvertObjects(BaseDocument* doc, maxon::Block<BaseList2D*> objects, maxon::HashSet<BaseList2D*>& processedObjects);
 
 	//----------------------------------------------------------------------------------------
 	/// Converts colors for a single GeData.
-	/// @param[in] data							The data object to convert.
+	/// @param[in] data								The data object to convert.
 	/// @param[in] treatVectorAsColor	Treat vector types as color.
-	/// @return											true, if the data was converted, false otherwise.
+	/// @return												True, if the data was converted, false otherwise.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<Bool> ConvertData(GeData& data, Bool treatVectorAsColor = false);
 
 	//----------------------------------------------------------------------------------------
 	/// Converts the colors of multiple objects with generic delegates handling any application or context specific parts.
-	/// @param[in] objects					A list of objects that should be converted.
-	/// @param[in] addUndo					A Delegate that processes undo adding calls.
-	/// @return											true, if at least one object was converted, false otherwise.
+	/// @param[in] objects						A list of objects that should be converted.
+	/// @param[in] addUndo						A Delegate that processes undo adding calls.
+	/// @return												True, if at least one object was converted, false otherwise.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<Bool> ConvertObjectsGeneric(maxon::Block<BaseList2D*> objects, const maxon::Delegate<void(BaseList2D*)>& addUndo);
 };

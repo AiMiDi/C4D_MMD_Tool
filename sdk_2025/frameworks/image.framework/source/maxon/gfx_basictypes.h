@@ -69,7 +69,7 @@ MAXON_DATATYPE(DrawDimensionFloat, "net.maxon.image.drawdimensionfloat", MAXON_I
 template <typename T> struct DrawRect
 {
 public:
-  DrawRect(Vec2<T,1> positionValue, DrawDimension<T> sizeValue) : position(positionValue), size(sizeValue)
+  DrawRect(Vec2<T, 1> positionValue, DrawDimension<T> sizeValue) : position(positionValue), size(sizeValue)
   {
   }
 

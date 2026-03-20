@@ -432,7 +432,7 @@ template <typename T, typename COUNT> struct StrongCOWRefHandler::MakeWritableHe
 			return o;
 		}
 		if (MAXON_LIKELY(resetOnError || o))
-			ref.PrivateSetTarget(ResultPtr<const FlexibleArray<T, COUNT>>(o));
+			ref.PrivateSetTarget(o);
 		DebugAssert(!o || (GetReferenceCounter(o) == 1));
 		return o;
 	}

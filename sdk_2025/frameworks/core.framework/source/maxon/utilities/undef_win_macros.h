@@ -18,3 +18,4 @@
 #undef ABSOLUTE
 #undef FindWindow
 #undef FindWindowW
+#undef FreeModule

@@ -151,7 +151,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Constructs a Block which represent this polygon
+	/// Constructs a Block which represent this polygon.
 	/// @return												The polygon as block.
 	//----------------------------------------------------------------------------------------
 	const maxon::Block<const Int32> ToBlock() const
@@ -564,8 +564,8 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Gets the object's bounding box center in local space. This call combines the GetMp()/GetRad() in one call
 	/// and is much more performant if you need both values.
-	/// @param[out] mp								center of the object
-	/// @param[out] rad								radius of the object
+	/// @param[out] mp								Center of the object.
+	/// @param[out] rad								Radius of the object.
 	//----------------------------------------------------------------------------------------
 	void GetDimension(Vector& mp, Vector& rad) const
 	{
@@ -1023,7 +1023,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the selected display color of the object.
-	/// @return                       res.HasValue() if the color should be used. Otherwise no color is set (see ID_BASEOBJECT_USECOLOR_OFF).
+	/// @return												Res.HasValue() if the color should be used. Otherwise no color is set (see ID_BASEOBJECT_USECOLOR_OFF).
 	//----------------------------------------------------------------------------------------
 	maxon::Opt<maxon::Color> GetDisplayColor() const { return BoCall(GetDisplayColor)(); }
 
@@ -1379,20 +1379,20 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the undeformed local matrix.
-	/// @return											  The local matrix withouth deformation applied.
+	/// @return												The local matrix withouth deformation applied.
 	//----------------------------------------------------------------------------------------
 	const Matrix& GetUndeformedMl() const { return BoCall(GetUndeformedMl) (); }
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the inverse of the undeformed local matrix. It does not recompute it if the
 	/// undeformed local matrix is unchanged since last call.
-	/// @return											  The inverse of the local matrix withouth deformation applied.
+	/// @return												The inverse of the local matrix withouth deformation applied.
 	//----------------------------------------------------------------------------------------
 	const Matrix& GetUndeformedMlInverse() const { return BoCall(GetUndeformedMlInverse) (); }
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the global matrix without any matrix deformation applied in the hierarchy.
-	/// @return											  the global matrix without any matrix deformation applied in the hierarchy.
+	/// @return												The global matrix without any matrix deformation applied in the hierarchy.
 	//----------------------------------------------------------------------------------------
 	Matrix GetUndeformedMg() const { return BoCall(GetUndeformedMg) (); }
 
@@ -1527,7 +1527,7 @@ public:
 	/// @param[in] doc								Document in which the camera is.
 	/// @return												The camera's target distance.
 	//----------------------------------------------------------------------------------------
-	Float GetTargetDistance(BaseDocument* doc);
+	Float GetTargetDistance(const BaseDocument* doc);
 
 	/// @}
 
@@ -2134,7 +2134,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	void GetNgonEdgesCompact(UChar*& edges);
 
-		//----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Gets the number of edges in the object.
 	/// @note While this function may sound trivial and cheap, internally it is not. This function is very slow and not thread safe but caches the result for repeated calls. The cache is invalidated on geometry changes.
 	/// @return												The edges count.

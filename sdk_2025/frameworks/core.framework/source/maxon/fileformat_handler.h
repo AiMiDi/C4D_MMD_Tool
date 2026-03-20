@@ -112,7 +112,7 @@ public:
 	/// The first value in the array should be used first.
 	/// @param[in] url								Url to detect.
 	/// @param[in] limitDetection			Limit FileFormatHandler which return the given data types in their CreateHandler() call.
-	/// @param[in] flags							see FILEFORMATDETECTIONFLAGS.
+	/// @param[in] flags							See FILEFORMATDETECTIONFLAGS.
 	/// @param[in] detectedCallback		Every detected file format handler will call this callback before adding it to the result BaseArray<FileFormatHandler>. For details see DetectedCallback.
 	/// @return												Returns an array with FileFormatHandler which all can handle this url.
 	//----------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ public:
 	/// The first value in the array should be used first.
 	/// @tparam LIMITTYPES						List with reference types to limit the DetectAll call. E.g. DetectAll<MediaLoaderRef>(), DetectAll<MediaLoaderRef, MovieLoaderRef>().
 	/// @param[in] url								Url to detect.
-	/// @param[in] flags							see FILEFORMATDETECTIONFLAGS.
+	/// @param[in] flags							See FILEFORMATDETECTIONFLAGS.
 	/// @return												Returns an array with FileFormatHandler which all can handle this url.
 	//----------------------------------------------------------------------------------------
 	template <typename... LIMITTYPES> MAXON_WARN_UNUSED
@@ -133,7 +133,7 @@ public:
 	/// Detects the first available FileFormatHandler in the order of priority.
 	/// @tparam LIMITTYPES						List with reference types to limit the DetectAll call. E.g. DetectAll<MediaLoaderRef>(), DetectAll<MediaLoaderRef, MovieLoaderRef>().
 	/// @param[in] url								Url to detect.
-	/// @param[in] flags							see FILEFORMATDETECTIONFLAGS.
+	/// @param[in] flags							See FILEFORMATDETECTIONFLAGS.
 	/// @return												Returns a FileFormatHandler which can handle this url.
 	//----------------------------------------------------------------------------------------
 	template <typename... LIMITTYPES> MAXON_WARN_UNUSED

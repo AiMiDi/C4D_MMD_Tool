@@ -20,13 +20,24 @@ class DllRef;
 //----------------------------------------------------------------------------------------
 /// @see SystemProcessInterface::StartProcess().
 //----------------------------------------------------------------------------------------
+#ifdef MAXON_TARGET_WINDOWS
 enum class EXECUTEPROGRAMFLAGS
 {
-	NONE										= 0,
-	CAPTURELOGFILE					= 1 << 1,		///< The standard output will be routed into a file.
-	DONT_DELETE_LOGFILE			= 1 << 2,		///< The logfile will not be deleted at the end of the call.
-	HIDE_APPLICATION				= 1 << 4,		///< Starts the application in hidden mode (e.g. suppresses the console window when running under windows).
+	NONE													= 0,
+	CAPTURELOGFILE								= 1 << 1,	///< The standard output will be routed into a file.
+	DONT_DELETE_LOGFILE						= 1 << 2,	///< The logfile will not be deleted at the end of the call.
+	HIDE_APPLICATION							= 1 << 4,	///< Starts the application in hidden mode (e.g. suppresses the console window when running under windows).
+	KILL_IF_STARTING_PROCESS_ENDS = 1 << 5,	///< If the starting process ends, the process will be killed (windows only ATM!!!)
 } MAXON_ENUM_FLAGS(EXECUTEPROGRAMFLAGS);
+#else
+enum class EXECUTEPROGRAMFLAGS
+{
+	NONE													= 0,
+	CAPTURELOGFILE								= 1 << 1,	///< The standard output will be routed into a file.
+	DONT_DELETE_LOGFILE						= 1 << 2,	///< The logfile will not be deleted at the end of the call.
+	HIDE_APPLICATION							= 1 << 4,	///< Starts the application in hidden mode (e.g. suppresses the console window when running under windows).
+} MAXON_ENUM_FLAGS(EXECUTEPROGRAMFLAGS);
+#endif
 
 //----------------------------------------------------------------------------------------
 /// @see SystemProcessInterface::StartProcessAndWait().

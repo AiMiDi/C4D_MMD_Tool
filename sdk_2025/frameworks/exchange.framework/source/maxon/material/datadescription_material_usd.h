@@ -130,4 +130,4 @@ namespace maxon
 
 } // namespace maxon
 
-#endif
+#endif // DATADESCRIPTION_MATERIAL_USD_H__

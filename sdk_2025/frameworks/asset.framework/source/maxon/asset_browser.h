@@ -2,8 +2,8 @@
 #define ASSET_BROWSER_H__
 
 #include "maxon/assets.h"
-#include "maxon/lib_math.h"
-#include "maxon/valuereceiver.h"
+#include "maxon/vector.h"
+
 
 namespace maxon
 {
@@ -265,7 +265,6 @@ public:
 	MAXON_METHOD void SetCommanderBrowser(Bool isCommander);
 
 	MAXON_METHOD Bool IsCommanderBrowser();
-
 };
 
 #include "asset_browser1.hxx"

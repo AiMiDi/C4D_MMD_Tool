@@ -577,13 +577,13 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Retrieves the brush falloff for the brush point at @formatParam{index}.\n
-	/// The falloff is already adjusted by using the values from the stamp and stencil so it can be used directly to adjust the strength of an offset to add to the layer.\n
+	/// The falloff is already adjusted by using the values from the stamp and stencil so it can be used directly to adjust the strength of an offset to add to the layer.
 	/// @param[in] index							The index of the point on the SculptObject.\n
 	/// 															This index can be found for the current point using BrushPointData.pointIndex.
 	/// @param[out] pRetStencilColor	Assigned the color of the stencil. This saves an additional call to GetStencilColor().
 	/// @param[in] pCustomDistance		The custom distance to use.\n
 	/// 															Internally this method uses the distance that the point is from the hit point in its calculation (BrushPointData::distance).\n
-	/// 															Pass a value instead to use custom distance.\n
+	/// 															Pass a value instead to use custom distance.\n.
 	/// @return												The final falloff value that can be used to adjust the offset value.
 	//----------------------------------------------------------------------------------------
 	Float GetBrushFalloff(Int32 index, Vector32 *pRetStencilColor = nullptr, Float *pCustomDistance = nullptr);
@@ -694,7 +694,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the object being touched is a SculptObject (i.e. it has a SculptTag).
-	/// @return												trueIfOtherwiseFalse{it is a SculptObject}
+	/// @return												@trueIfOtherwiseFalse{it is a SculptObject}
 	//----------------------------------------------------------------------------------------
 	Bool IsSculptObject();
 
@@ -1163,7 +1163,7 @@ public:
 	/// {
 	///		public:
 	///		MySculptBrush(SculptBrushParams *pParams) : SculptBrushToolData(pParams) { }
-	///		virtual Int32 GetToolPluginId() const;									// Return the unique id for the plugin as obtained from www.plugincafe.com
+	///		virtual Int32 GetToolPluginId() const;									// Return the unique id for the plugin as obtained from developers.maxon.net
 	///		virtual const String GetResourceSymbol() const;					// Return the name of the resource file for the brush.
 	///																											// This is something like "toolmysculptbrush", where the resource file is "toolmysculptbrush.res".
 	///
@@ -1196,7 +1196,7 @@ public:
 /// {
 ///		public:
 ///		MySculptBrush(SculptBrushParams *pParams) : SculptBrushToolData(pParams) { }
-///		virtual Int32 GetToolPluginId() const;									// Return the unique ID for the plugin as obtained from www.plugincafe.com
+///		virtual Int32 GetToolPluginId() const;									// Return the unique ID for the plugin as obtained from developers.maxon.net
 ///		virtual const String GetResourceSymbol() const;					// Return the name of for resource file for for brush.
 ///																											/// This is something like "toolmysculptbrush", where the resource file is called "toolmysculptbrush.res"
 ///
@@ -1856,7 +1856,7 @@ public:
 	void Clear();
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the default brush data setting. These settings can be found in toolsculptbrushbase.h
+	/// Gets the default brush data setting. These settings can be found in toolsculptbrushbase.h.
 	/// @return												The container containing all the default brush settings.
 	//----------------------------------------------------------------------------------------
 	BaseContainer GetDefaultData();

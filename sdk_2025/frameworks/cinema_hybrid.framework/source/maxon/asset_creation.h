@@ -3,8 +3,10 @@
 
 #include "maxon/assets.h"
 #include "maxon/base_preset_asset.h"
-#include "maxon/matrix.h"
 #include "maxon/interface.h"
+#include "maxon/matrix.h"
+#include "maxon/observable.h"
+#include "maxon/weakrawptr.h"
 
 #ifdef __CINEMA_HYBRID_REFLECTION_INCLUDE__
 #include "lib_description.h"
@@ -135,11 +137,11 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// SaveMemFileAsAssetWithCopyAsset stores the given url as a asset.
 	/// @param[in] depResultUrl				Url of the asset to store.
-	/// @param[in] storeAssetStruct		see StoreAssetStruct.
+	/// @param[in] storeAssetStruct		See StoreAssetStruct.
 	/// @param[in] subType						SubType of the asset, e.g. ASSETMETADATA::SubType_ENUM_Object.
 	/// @param[in] dependencies				Dependencies to store with the assets.
 	/// @param[in] assetName					User readable name of the asset.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @return												Tuple<AssetDescription, Bool> on success. AssetDescription contains the new asset description, Bool is true if the asset is a new asset. False if the asset already existed.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Tuple<AssetDescription, Bool>> SaveMemFileAsAssetWithCopyAsset(const Url& depResultUrl, const StoreAssetStruct& storeAssetStruct, const InternedId& subType, const HashSet<AssetDependencyStruct>& dependencies, const String& assetName, Bool addAssetsIfNotInThisRepository);
@@ -156,7 +158,7 @@ public:
 	/// @param[in] animFps						If more than one image was given the preview will be stored as mp4 wih this frame rate.
 	/// @param[in] assetName					User readable name of the asset.
 	/// @param[in] localizedNames			Optional translated names of the asset in other languages. Id is the languageid from LanguageInterface.
-	/// @param[in] localizedAnnotations Optional translated descriptions of the asset in other languages. Id is the languageid from LanguageInterface.
+	/// @param[in] localizedAnnotations	Optional translated descriptions of the asset in other languages. Id is the languageid from LanguageInterface.
 	/// @param[in] copyMetaData				Metadata to copy.
 	/// @return												Tuple<AssetDescription, UpdatableAssetRepositoryRef> on success. AssetDescription of the new asset. UpdatableAssetRepositoryRef is a new temporary repository from which the asset can be moved into the target repository.
 	//----------------------------------------------------------------------------------------
@@ -185,7 +187,7 @@ public:
 	/// @param[in] animFps						If more than one image was given the preview will be stored as mp4 wih this frame rate.
 	/// @param[in] assetName					User readable name of the asset.
 	/// @param[in] localizedNames			Optional translated names of the asset in other languages. Id is the languageid from LanguageInterface.
-	/// @param[in] localizedAnnotations Optional translated descriptions of the asset in other languages. Id is the languageid from LanguageInterface.
+	/// @param[in] localizedAnnotations	Optional translated descriptions of the asset in other languages. Id is the languageid from LanguageInterface.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> SaveMetaDataForAsset(const AssetDescription& asset, const Id& parentCategory, const InternedId& subType, Bool calculateMetaData, const DataDictionary& metaProperties, const HashSet<AssetDependencyStruct>& dependencies, const BaseArray<Url>& previews, Float animFps, const String& assetName, const HashMap<Id, String>& localizedNames, const HashMap<Id, String>& localizedAnnotations);
@@ -200,7 +202,7 @@ public:
 	/// @param[in] versionString			User readable version string.
 	/// @param[in] createPreviewBitmapDelegate	Optional delegate to generate a preview preview bitmap when saving the asset.
 	/// @param[in] copyMetaData				Optional meta data to copy from another version.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @return												AssetDescription of the new asset on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetDescription> SaveDocumentAsset(cinema::BaseDocument* assetDoc, InternedId subType, Id newAssetId, const StoreAssetStruct& storeAssetStruct, const String& assetName, const String& versionString, const Delegate<Result<cinema::BaseBitmap*>()>& createPreviewBitmapDelegate, const AssetMetaData& copyMetaData, Bool addAssetsIfNotInThisRepository);
@@ -211,7 +213,7 @@ public:
 	/// @param[in] assetName					Human readable asset name.
 	/// @param[in] storeAssetStruct		Settings where to store the asset.
 	/// @param[in] dependencies				Optional dependencies to store along with the asset.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @return												Tuple<AssetDescription, Bool> on success. AssetDescription of the new asset. Bool is true if the asset was saved. False if it was already in the repository. In that case the AssetDescription is the one of the existing asset.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Tuple<AssetDescription, Bool>> SaveTextureAsset(const Url& imageUrl, const String& assetName, const StoreAssetStruct& storeAssetStruct, const HashSet<AssetDependencyStruct>& dependencies, Bool addAssetsIfNotInThisRepository);
@@ -227,10 +229,10 @@ public:
 	static MAXON_METHOD Result<void> GenerateImagePreview(const Url& imageUrl, const ValueReceiver<const Url&>& previews, Int32 previewW, Int32 previewH);
 
 	//----------------------------------------------------------------------------------------
-	/// GenerateScenePreviewImage generates the preview image of the given BaseDocument
+	/// GenerateScenePreviewImage generates the preview image of the given BaseDocument.
 	/// @param[in] doc								BaseDocument to preview.
 	/// @param[out] preview						BaseBitmap into which the preview should be rendered.
-	/// @param[in] flags							see GENERATESCENEPREVIEWIMAGEFLAGS.
+	/// @param[in] flags							See GENERATESCENEPREVIEWIMAGEFLAGS.
 	/// @param[in] previewW						Preview width.
 	/// @param[in] previewH						Preview height.
 	/// @return												OK on success.
@@ -246,7 +248,7 @@ public:
 	/// @param[in] assetName					Human readable name of the asset.
 	/// @param[in] assetVersion				Human readable version string.
 	/// @param[in] copyMetaData				Optional meta data to copy from another version.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @return												AssetDescription on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetDescription> CreateMaterialAsset(cinema::BaseDocument* activeDoc, cinema::BaseMaterial* mat, const StoreAssetStruct& storeAssetStruct,
@@ -261,7 +263,7 @@ public:
 	/// @param[in] assetName					Human readable name of the asset.
 	/// @param[in] assetVersion				Human readable version string.
 	/// @param[in] copyMetaData				Optional meta data to copy from another version.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetDescription> CreateObjectAsset(cinema::BaseObject* op, cinema::BaseDocument* activeDoc, const StoreAssetStruct& storeAssetStruct,
@@ -275,7 +277,7 @@ public:
 	/// @param[in] assetName					Human readable name of the asset.
 	/// @param[in] assetVersion				Human readable version string.
 	/// @param[in] copyMetaData				Optional meta data to copy from another version.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetDescription> CreateSceneAsset(cinema::BaseDocument* activeDoc, const StoreAssetStruct& storeAssetStruct,
@@ -284,13 +286,14 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// SaveActiveDocumentAsNewVersion writes the current BaseDocument as new version with asset dialog.
 	/// @param[in] activeDoc					BaseDocument to store.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @return												AssetDescription on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetDescription> SaveActiveDocumentAsNewVersion(cinema::BaseDocument* activeDoc, Bool addAssetsIfNotInThisRepository);
 
 	//----------------------------------------------------------------------------------------
 	/// CreateObjectsOnDrag helper function to create assets when d&d into a scene/viewport.
+	/// @note Once the object creation is finalized NotifyCreateObjectOnDragEnded should be called.
 	/// @param[in] doc								BaseDocument to insert the asset.
 	/// @param[in] url								Url of the d&d operation. This is typically an asset url "asset:///..."
 	/// @param[in] asset							AssetDescription of the asset.
@@ -305,9 +308,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> CreateObjectsOnDrag(cinema::BaseDocument* doc, const Url& url, const AssetDescription& asset, const String& filterString, Bool allowPreviewCube, Bool overwriteMatrix, const Matrix& overwriteMatrixMg, Float placementScale, cinema::BaseObject* parent = nullptr, cinema::BaseObject* prev = nullptr);
 
-	
 	static MAXON_METHOD Result<void> CreateObjectsOnMultiDrag(cinema::BaseDocument* doc, const BaseArray<Tuple<Url, AssetDescription, String>>& assets, Bool allowPreviewCube, Bool overwriteMatrix, const Matrix& overwriteMatrixMg, Float placementScale, cinema::BaseObject* parent = nullptr, cinema::BaseObject* prev = nullptr);
-
 
 	//----------------------------------------------------------------------------------------
 	/// CheckObjectsOnDrop helper function to add objects into the scene from the asset browser. This functions keeps a list of assets and remembers if they were added already.
@@ -341,7 +342,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// OpenSaveAssetDialog opens the save asset dialog.
-	/// @param[in] flags							see OPENSAVEASSETDIALOGFLAGS.
+	/// @param[in] flags							See OPENSAVEASSETDIALOGFLAGS.
 	/// @param[in] presetTypeName			Asset Type name to create the dialog title.
 	/// @param[in,out] id							Id of the asset.
 	/// @param[in,out] name						Asset name.
@@ -356,13 +357,13 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// RenderDocumentAsset helper function to render a BaseDocument for preview rendering.
-	/// @param[in] renderDoc				BaseDocument to render.
-	/// @param[in] progressRef			progress class.
-	/// @param[in] progressIndex		progress index to use.
-	/// @param[in] polygonCount			Number of polygons in the scene. If -1 the count will be calculated. If the count == 0 and the scene has one first object the icon of the object is used as preview.
+	/// @param[in] renderDoc					BaseDocument to render.
+	/// @param[in] progressRef				Progress class.
+	/// @param[in] progressIndex			Progress index to use.
+	/// @param[in] polygonCount				Number of polygons in the scene. If -1 the count will be calculated. If the count == 0 and the scene has one first object the icon of the object is used as preview.
 	/// @param[in] previewW						Preview width.
 	/// @param[in] previewH						Preview height.
-	/// @param[in] flags							see GENERATESCENEPREVIEWIMAGEFLAGS.
+	/// @param[in] flags							See GENERATESCENEPREVIEWIMAGEFLAGS.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Url> RenderDocumentAsset(cinema::BaseDocument* renderDoc, const ProgressRef& progressRef, Int progressIndex, Int polygonCount, Int32 previewW, Int32 previewH, GENERATESCENEPREVIEWIMAGEFLAGS flags);
@@ -370,7 +371,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// GetAddDependencyDelegate helepr function to generate the ResolveAssetDependenciesStruct::ResolveDelegate.
 	/// @param[in] documentPath				Root Path of the document.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @return												ResolveAssetDependenciesStruct::ResolveDelegate on success to be used in functions where it is required.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<ResolveAssetDependenciesStruct::ResolveDelegate> GetAddDependencyDelegate(const cinema::Filename& documentPath, Bool addAssetsIfNotInThisRepository);
@@ -386,7 +387,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// GetDefaultObject returns a new default object for the given preset type.
-	/// @param[in] id									Ids of the BaseObject. e.g. Ocube
+	/// @param[in] id									Ids of the BaseObject. e.g. Ocube.
 	/// @param[in] doc								BaseDocument to look for the scene repository.
 	/// @return												New BaseList2D on success.
 	//----------------------------------------------------------------------------------------
@@ -402,7 +403,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Creates a new defaults preset asset (AssetTypes::DefaultsPreset).
 	/// Preset will be applied to the selected object (i.e. values are already on the object, but presets drop down will reflect the new state).
-	/// @param[in] defaultsType				Identifier of the BaseList2D. e.g. Ocube
+	/// @param[in] defaultsType				Identifier of the BaseList2D. e.g. Ocube.
 	/// @param[in] partial						True to signal that this preset contains only partial settings.
 	/// @param[in] bc									BaseContainer with the settings.
 	/// @param[in] setAsDefault				True to make this preset the default when creating new objects.
@@ -414,7 +415,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// BrowseDescriptionForDefaults is a helper function to browse through Descriptions to collect all attributes to be stored in a preset.
 	/// @param[in] desc								Description to browse.
-	/// @param[in] add								delegate which is triggered for each attribute.
+	/// @param[in] add								Delegate which is triggered for each attribute.
 	/// @param[in] isPartial					True if this should be a partial preset. In that case DESC_UNIMPORTANTFORDEFAULTS will be ignored.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
@@ -437,14 +438,14 @@ public:
 	/// @param[in] presetNameA				Name of the Preset.
 	/// @param[in] showMakeDefault		True to enable the "Make as default" checkbox in the dialog.
 	/// @param[in] setAsDefault				True to make it the default.
-	/// @param[in] allowSceneRepository True to allow to store the preset into the scene repository.
+	/// @param[in] allowSceneRepository	True to allow to store the preset into the scene repository.
 	/// @return												AssetDescription of the newly created asset on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetDescription> SaveBrowserPreset(const BasePresetAssetType& assetType, const PresetSaveArgs& sourceData, const String& presetTypeName, const String& presetNameA, Bool showMakeDefault, Bool setAsDefault, Bool allowSceneRepository);
 
 	//----------------------------------------------------------------------------------------
 	/// SupportDefaultPresets helper function to find if the given type supports the preset system.
-	/// @param[in] l									Object to check
+	/// @param[in] l									Object to check.
 	/// @return												Tuple<Bool, Bool>: first - support presets, second - support set as default 
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Tuple<Bool, Bool> SupportDefaultPresets(cinema::C4DAtomGoal* l);
@@ -461,7 +462,7 @@ public:
 	/// @param[in] versionString			User readable version string.
 	/// @param[in] createPreviewBitmapDelegate	Optional delegate to generate a preview preview bitmap when saving the asset.
 	/// @param[in] copyMetaData				Optional meta data to copy from another version.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @param[in,out] resolveAssets	ResolveAssetDependenciesStruct keeps temporary data to resolve dependencies.
 	/// @return												AssetDescription of the new asset on success.
 	//----------------------------------------------------------------------------------------
@@ -476,7 +477,7 @@ public:
 	/// @param[in] assetName					Human readable name of the asset.
 	/// @param[in] assetVersion				Human readable version string.
 	/// @param[in] copyMetaData				Optional meta data to copy from another version.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @param[in,out] resolveAssets	ResolveAssetDependenciesStruct keeps temporary data to resolve dependencies.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
@@ -492,7 +493,7 @@ public:
 	/// @param[in] assetName					Human readable name of the asset.
 	/// @param[in] assetVersion				Human readable version string.
 	/// @param[in] copyMetaData				Optional meta data to copy from another version.
-	/// @param[in] addAssetsIfNotInThisRepository True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
+	/// @param[in] addAssetsIfNotInThisRepository	True to store the asset in the given saveRepository even if it's already in any other repository. False would skip the writing.
 	/// @param[in,out] resolveAssets	ResolveAssetDependenciesStruct keeps temporary data to resolve dependencies.
 	/// @return												AssetDescription on success.
 	//----------------------------------------------------------------------------------------
@@ -527,7 +528,7 @@ public:
 	/// Supports only XnodeEmulation type objects. For more custom emulation defaults preset implementation, call AssetCreationInterface::SaveBrowserPreset directly.
 	/// @see SetDefaultObject.
 	/// @param[in] defaultsType				Identifiers of the emulation object. Will serve in creation of ASSETMETADATA::SubType.
-	///																For instance AMEmulationObject identifier at [0] and node identifier at [1] for a GraphNode emulated object.
+	/// 															For instance AMEmulationObject identifier at [0] and node identifier at [1] for a GraphNode emulated object.
 	/// @param[in] assetType					This is the type of the asset to be saved, see AssetTypes (since multiple kinds of objects can be emulated).
 	/// @param[in] partial						True to signal that this preset contains only partial settings.
 	/// @param[in] baseAssetName			String that will be suggested as asset name. User can append to it or change it completely on the dialog.
@@ -550,8 +551,8 @@ public:
 	/// Supports classic object use cases and also emulated objects (nodes, capsules, etc.).
 	/// @param[in] blList							The list of selected objects.
 	/// @param[in] defaultsType				Legacy type identifier. For nodes, the identifier should be [XnodeEmulation].
-	///																For capsules, the identifier should be an object type derived from [neutron::CAPSULE_BASE_ID].
-	///																Will create the proper sub type depending on the source objects (emulated or not).
+	/// 															For capsules, the identifier should be an object type derived from [neutron::CAPSULE_BASE_ID].
+	/// 															Will create the proper sub type depending on the source objects (emulated or not).
 	/// @return												The sub type identifier on success. IllegalArgumentError if #blList are not all of corresponding type/sub type.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Id> GetJoinedDefaultsPresetSubType(const cinema::AtomArray& blList, const BaseArray<Int32>& defaultsType);
@@ -560,6 +561,48 @@ public:
 	/// @markprivate
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD void SendAssetBrowserUseEvent(const Url& url);
+
+	//----------------------------------------------------------------------------------------
+	/// @brief Needs to be called after finalizing the creation of an object with CreateObjectsOnDrag or CreateObjectOnMultiDrag.
+	/// @param[in] createdObject			The newly created object added to the document.
+	//----------------------------------------------------------------------------------------
+	static MAXON_METHOD void NotifyCreateObjectOnDragEnded(cinema::BaseObject* createdObject);
+
+	//----------------------------------------------------------------------------------------
+	/// @brief Allocates a node capsule instance.
+	/// BaseObject will be allocated and loaded with the node's graph found in the capsule asset.
+	/// Don't forget to delete #outAddedObject if object is not added to any document.
+	/// @return												True if the capsule was instantiated and setup for use.
+	//----------------------------------------------------------------------------------------
+	static MAXON_METHOD Result<Bool> AddNeutronCapsuleInstance(WeakRawPtr<cinema::BaseObject>& outAddedObject, const AssetDescription& asset, cinema::BaseDocument* doc, cinema::BaseObject* parent, cinema::BaseObject* prev, const String& filterString,
+																														 Bool addUndo, Bool setActive, Bool useInsertCreateObject, const Url& url);
+
+	//----------------------------------------------------------------------------------------
+	/// @brief Allocates a node capsule instance.
+	/// BaseObject will be allocated and loaded with the node's graph found in the capsule asset.
+	/// Don't forget to delete #outAddedObject if object is not added to any document.
+	/// No undo will be started/added, object will not be set active
+	/// @return												True if the capsule was instantiated and setup for use.
+	//----------------------------------------------------------------------------------------
+	static MAXON_METHOD Result<Bool> AddNeutronCapsuleInstance(WeakRawPtr<cinema::BaseObject>& outAddedObject, const AssetDescription& asset, cinema::BaseDocument* doc, cinema::BaseObject* parent, cinema::BaseObject* prev, const String& filterString);
+
+	struct ObservableCreateObjectAssetData
+	{
+		cinema::BaseObject* op;
+		cinema::BaseDocument* activeDoc;
+		const StoreAssetStruct& storeAssetStruct;
+		const Id& assetId;
+		const String& assetName;
+		const String& assetVersion;
+		const AssetMetaData& copyMetaData;
+		Bool addAssetsIfNotInThisRepository;
+		ResolveAssetDependenciesStruct& resolveAssets;
+
+		AssetDescription& newAsset; ///< result stored here
+	};
+
+	MAXON_OBSERVABLE_STATIC(Result<Bool>, ObservableCreateObjectAsset, (void* /* ObservableCreateObjectAssetData*/), ObservableCombinerRunAllBoolUntilTrue);
+	MAXON_OBSERVABLE_STATIC(Result<Bool>, ObservableSaveMemFileAsAssetAlone, (const Url& url, const AssetMetaData& copyMetaData, AssetDescription* resAsset, UpdatableAssetRepositoryRef* resRepo), ObservableCombinerRunAllBoolUntilTrue);
 };
 
 #include "asset_creation1.hxx"

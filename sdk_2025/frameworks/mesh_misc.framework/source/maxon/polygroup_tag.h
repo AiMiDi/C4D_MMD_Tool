@@ -1,5 +1,5 @@
-#ifndef _GOZ_POLYGROUP_TAG_H__
-#define _GOZ_POLYGROUP_TAG_H__
+#ifndef POLYGROUP_TAG_H__
+#define POLYGROUP_TAG_H__
 
 #include "maxon/lib_math.h"
 // #include "lib_customdatatag.h"
@@ -90,4 +90,4 @@ namespace CustomDataTagDisplayClasses
 } // namespace maxon
 
 
-#endif // _GOZ_POLYGROUP_TAG_H__
+#endif // POLYGROUP_TAG_H__

@@ -15,6 +15,7 @@
 #include "maxon/range.h"
 #include "maxon/uuid.h"
 #include "maxon/vector4d.h"
+#include "maxon/observablesimple.h"
 #include "c4d_basetime.h"
 #include "ge_math.h"
 #include "ge_prepass.h"
@@ -68,6 +69,9 @@ class ColorProfile;
 class ColorProfileConvert;
 class OSFontObjectRef;
 
+template<typename TYPE>
+class BezierPathTemplate;
+using BezierPath = BezierPathTemplate<Vector2d>;
 
 namespace nodes
 {
@@ -89,7 +93,7 @@ namespace cinema
 {
 
 /// @C4D API version
-#define API_VERSION	2024900
+#define API_VERSION	2025301
 
 class CINEWARE_SINGLEINHERITANCE C4DAtom;
 class C4DAtomGoal;
@@ -168,7 +172,6 @@ class EnumerateEdges;
 class PaintTexture;
 class PaintLayer;
 class CINEWARE_SINGLEINHERITANCE PaintLayerBmp;
-class SDKBrowserURL;
 class PaintLayerMask;
 class PaintLayerFolder;
 class PaintBitmap;
@@ -334,14 +337,6 @@ typedef void ListViewCallBack(Int32 &res_type, void *&result, void *userdata, vo
 //----------------------------------------------------------------------------------------
 typedef void IlluminationModel(VolumeData *sd, RayLightCache *rlc, void *dat);
 
-//----------------------------------------------------------------------------------------
-/// Callback for BrowserLibraryPopup().
-/// @param[in] userdata						The data sent to BrowserLibraryPopup().
-/// @param[in] cmd								The browser command ID.
-/// @param[in] url								The URL of the preset.
-//----------------------------------------------------------------------------------------
-typedef void (*BrowserPopupCallback)(void* userdata, Int32 cmd, SDKBrowserURL& url, const maxon::Id& assetId);
-
 /// @markPrivate
 typedef Bool (*BaseDrawMessageHook)(BaseDraw* pBaseDraw, BaseDocument* pDoc, BASEDRAW_HOOK_MESSAGE msg, void* pData);
 
@@ -355,7 +350,7 @@ typedef const Char *ThreadName(void *data);
 //----------------------------------------------------------------------------------------
 /// Callback for the progress of RenderDocument().
 /// @see	RenderJob::GetProgressHook\n
-///				NetRenderService::InitRendering
+///				NetRenderService::InitRendering.
 /// @param[in] p									The progress, between @em 0.0 and @em 1.0.
 /// @param[in] progress_type			The render progress type: @enumerateEnum{RENDERPROGRESSTYPE}
 /// @param[in] context						The context passed to RenderDocument(). @callerOwnsPointed{context}
@@ -365,7 +360,7 @@ typedef void ProgressHook(Float p, RENDERPROGRESSTYPE progress_type, void* conte
 //----------------------------------------------------------------------------------------
 /// Callback for the write progress of RenderDocument().
 /// @see	RenderJob::GetWriteProgressHook\n
-///				NetRenderService::InitRendering
+///				NetRenderService::InitRendering.
 /// @param[in] mode								The write mode.
 /// @param[in] bmp								The bitmap written to.
 /// @param[in] mainImage					@trueOtherwiseFalse{for main image}
@@ -800,7 +795,7 @@ struct IconData
 
 	//----------------------------------------------------------------------------------------
 	/// Gets a copy of the bitmap's part for the icon data.
-	/// @see BaseBitmap::GetClonePart
+	/// @see BaseBitmap::GetClonePart.
 	/// @return												The copy of the icon part.
 	//----------------------------------------------------------------------------------------
 	BaseBitmap* GetClonePart() const;
@@ -869,10 +864,11 @@ struct MultiPassChannel
 enum class OPENDIALOGFLAGS
 {
 	NONE = 0,
-	IGNORELAYOUT = (1 << 0),				 ///< set to ignore to load layout informations from the layout file
-	CLIENTCOORDINATES = (1 << 1),		 ///< defines to open the window position and size in window client coordinates, this means the given
-																	 ///< position and size will be adjusted with the window borders
-	ALIGNTOPLEFTATMOUSE = (1 << 2), ///< aligns the manager at the top/left position of the current mouse position.
+	IGNORELAYOUT = (1 << 0),				 ///< Set to ignore to load layout informations from the layout file.
+	CLIENTCOORDINATES = (1 << 1),		 ///< Defines to open the window position and size in window client coordinates, this means the given
+																	 ///< position and size will be adjusted with the window borders.
+	ALIGNTOPLEFTATMOUSE = (1 << 2),	 ///< Aligns the dialog at the top/left position of the current mouse position.
+	HIDE_RMB_POPUP_MENU = (1 << 3),	 ///< Hides the general right mouse button menu popup. @since 2025.100
 } MAXON_ENUM_FLAGS(OPENDIALOGFLAGS);
 
 /// @addtogroup VIEWPORTSELECTFLAGS
@@ -1162,6 +1158,7 @@ struct C4D_Shader
 	void						(*TransformColors64							)(Vector64* v, Int count, COLORSPACETRANSFORMATION colorSpaceTransformation);
 	void						(*TransformColors32							)(Vector32* v, Int count, COLORSPACETRANSFORMATION colorSpaceTransformation);
 	Bool						(*IsOcioConverter								)(const OcioConverter* ocioConverter);
+	maxon::Result<OcioConverter*> (*ReInitOcioConverter)(const BaseDocument* doc, OcioConverter* converter, Int32 overrideViewTransform);
 };
 
 struct C4D_HyperFile
@@ -1784,7 +1781,7 @@ struct C4D_Dialog
 
 	Bool						(*SetDragDestination		)(CDialog *cd, Int32 cursor);
 	Bool						(*AttachSubDialog				)(CDialog *parentcd, Int32 id, CDialog *cd);
-	Int32						(*GetID									)(CDialog *cu);
+	Int32						(*GetID									)(const CDialog *cu);
 	void*						(*FindCustomGui					)(CDialog *cd, Int32 id);
 	Bool						(*AddGadget							)(CDialog *cd, Int32 type, Int32 id, const maxon::String *name, Int32 par1, Int32 par2, Int32 par3, Int32 par4, const BaseContainer *customdata, void **resptr);
 	Bool						(*ReleaseLink						)(CDialog *cd);
@@ -1828,16 +1825,18 @@ struct C4D_Dialog
 	Bool 						(*SetGroupInnerBackgroundColorRGB)(CDialog *cd, Int32 r, Int32 g, Int32 b);
 	GeData 					(*CBF_GetParentBackgroundColor)(CBaseFrame *cbf);
 
-	Bool 						(*OpenPopUpMenu)(CDialog *cd, Int32 menuid, Int32 screenx, Int32 screeny, Int32 watchhotkey);
+	Bool 						(*OpenPopUpMenu					)(CDialog *cd, Int32 menuid, Int32 screenx, Int32 screeny, Int32 watchhotkey);
+	Bool						(*CBF_GetColorRGBA			)(CBaseFrame* cbf, Int32 colorid, Int32& r, Int32& g, Int32& b, Int32& a);
+	Bool						(*CBF_GetBackgroundColorRGB)(CBaseFrame *cbf, Int32 &r, Int32 &g, Int32 &b); // @since 2025.000
 };
 
 struct C4D_UserArea
 {
 	void						(*Free								)(CUserArea* cu);
 	void*						(*GetUserData					)(CUserArea *cu);
-	Int32						(*GetWidth						)(CUserArea *cu);
-	Int32						(*GetHeight						)(CUserArea *cu);
-	Int32						(*GetID								)(CUserArea *cu);
+	Int32						(*GetWidth						)(const CUserArea *cu);
+	Int32						(*GetHeight						)(const CUserArea *cu);
+	Int32						(*GetID								)(const CUserArea *cu);
 	void						(*SetMinSize					)(CUserArea *cu, Int32 w, Int32 h);
 	void						(*DrawLine						)(CUserArea *cu, Int32 x1, Int32 y1, Int32 x2, Int32 y2, Float lineWidth, LINESTYLE lineStyle);
 	void						(*DrawRectangle				)(CUserArea *cu, Int32 x1, Int32 y1, Int32 x2, Int32 y2);
@@ -1867,7 +1866,7 @@ struct C4D_UserArea
 	Bool						(*Screen2Local				)(const CBaseFrame *cu, Int32 *x, Int32 *y);
 	Bool						(*SetDragDestination	)(CUserArea *cu, Int32 cursor);
 	Bool						(*HandleMouseDrag			)(CUserArea *cu, const BaseContainer *msg, Int32 type, void *data, Int32 dragflags);
-	Bool						(*IsEnabled						)(CUserArea *cu);
+	Bool						(*IsEnabled						)(const CUserArea *cu);
 
 	void						(*GetBorderSize				)(CUserArea *cu, Int32 type, Int32 *l, Int32 *t, Int32 *r, Int32 *b);
 	void						(*DrawBorder					)(CUserArea *cu, Int32 type, Int32 x1, Int32 y1, Int32 x2, Int32 y2);
@@ -1900,7 +1899,7 @@ struct C4D_UserArea
 	Bool						(*SimpleListView_SetProperty	)(_SimpleListView *lv, Int32 id, Int32 val);
 
 	HOTKEYFLAGS			(*IsHotkeyDown								)(CUserArea *cu, Int32 id);
-	Bool						(*HasFocus										)(CUserArea *cu);
+	Bool						(*HasFocus										)(const CUserArea *cu);
 
 	void						(*MouseDragStart							)(CUserArea *cu, Int32 Button, Float mx, Float my, MOUSEDRAGFLAGS flag);
 	MOUSEDRAGRESULT	(*MouseDrag										)(CUserArea *cu, Float *mx, Float *my, BaseContainer *channels);
@@ -1933,6 +1932,11 @@ struct C4D_UserArea
 	Int32						(*DrawGetTextIndexFromPixel		)(const CUserArea *cu, const maxon::String& text, Float pixelPosition);
 	Vector					(*DrawGetPenColor							)(const CBaseFrame *cu, Int32 id);
 	const maxon::OSFontObjectRef&	(*DrawGetFontObject)(const CUserArea *cu);
+	void						(*DrawRoundedFrame						)(CUserArea *cu, Int32 x1, Int32 y1, Int32 x2, Int32 y2, const Vector2d& radius, Float lineWidth, LINESTYLE lineStyle);
+	void						(*DrawRoundedRectangle				)(CUserArea *cu, Int32 x1, Int32 y1, Int32 x2, Int32 y2, const Vector2d& radius);
+	void						(*DrawBezierLinePath					)(CUserArea *cu, const maxon::BezierPath& path, Float lineWidth, LINESTYLE lineStyle);
+	void						(*DrawBezierFillPath					)(CUserArea *cu, const maxon::BezierPath& path);
+	void						(*DrawBitmapRounded           )(CUserArea* cu, BaseBitmap* bmp, Int32 wx, Int32 wy, Int32 ww, Int32 wh, Int32 x, Int32 y, Int32 w, Int32 h, Int32 mode, Float32 radius);
 };
 
 struct C4D_Parser
@@ -2085,6 +2089,8 @@ struct C4D_Atom
 	// techtemp3
 	void            (GeListNode::*FlushChilds)();
 	void						(GeListNode::*MoveChildrenTo)(GeListNode* dest);
+	// 2025.3
+	maxon::Generic*	(BaseSceneHook::*GetObjectData)(BaseList2D* op);
 };
 
 struct C4D_BaseList
@@ -2098,7 +2104,7 @@ struct C4D_BaseList
 	Bool						(*Write								)(const C4DAtom *at, HyperFile *hf);
 	Bool						(*ReadObject					)(C4DAtom *bn, HyperFile *hf, Bool readheader);
 	Bool						(*WriteObject					)(const C4DAtom *bn, HyperFile *hf);
-	void						(*GetData							)(BaseList2D *bl, BaseContainer *ct);
+	void						(*GetData							)(const BaseList2D *bl, BaseContainer *ct);
 	void						(*SetData							)(BaseList2D *bl, const BaseContainer *ct, Bool add);
 	const BaseContainer* (*GetDataInstance)(const BaseList2D *bl);
 	BaseContainer* (*GetDataInstanceWritable)(BaseList2D* bl);
@@ -2548,7 +2554,7 @@ struct C4D_Object
 	maxon::Block<const BaseTag* const> (BaseObject::*GetTagsOfType)(Int32 type) const;
 	maxon::Block<const BaseTag* const> (BaseObject::*GetTagsWithFlags)(Int32 flags) const;
 	BaseObject*					(*GetCacheTopParent		)(const BaseObject *op);
-	Float								(*CoGetTargetDistance	)(BaseDocument* doc, BaseObject* op);
+	Float								(*CoGetTargetDistance	)(const BaseDocument* doc, BaseObject* op);
 	BaseObject*					(*GetEditObject				)(const BaseObject* op, BaseObject** psds, DISPLAYEDITSTATE state, Bool safetey);
 	Vector							(*ComputeColorTemperatureRGB)(Float temperature, Float reference, Bool normalize);
 	Bool								(*RegisterObjectTypeToCategory)(Int32 type, OBJECTCATEGORY category);
@@ -2571,6 +2577,7 @@ struct C4D_Object
 	const VariableTagDataRef<>& (*GetVariableTagData)(const BaseObject* op, Int32 type, Int32 nr);
 
 	Bool (*HasLinks)(const C4DAtomGoal* op);
+	PointObject* (*SpBooleanSplinesHH)(PointObject* initialSpline, AtomArray* booleanObjects, BaseDocument* doc, BaseDraw* bd, SPLINEBOOL_AXIS projectionAxis, SPLINEBOOL_MODE booleanMode, const HierarchyHelp*);
 };
 
 struct C4D_Document
@@ -2768,6 +2775,10 @@ struct C4D_Document
 	Bool (*HhIsProfilingEnabled)(const HierarchyHelp* hh);
 	Bool (BaseDocument::*IsBlank)();
 	const OcioConverterRef& (BaseDocument::*GetThumbnailColorConverter)() const;
+
+	// 2025.2
+	Int32 (*RdGetRealFrameRate)(const RenderData* rd, const BaseDocument* doc);
+	Int32 (*RdGetRealFrameRateS)(const BaseDocument* doc, const BaseContainer* bc);
 };
 
 struct C4D_Thread
@@ -3053,7 +3064,8 @@ struct C4D_CAnimation
 	void (CTrack::*SetLambda)(maxon::Delegate<Float(const BaseDocument* doc, BaseList2D* op, const BaseTime& tt, ANIMATEFLAGS flags, Bool* chg, void* data)>&& lambdaFn);
 	void (CTrack::*ClearLambda)();
 	Bool (CTrack::*HasLambda)() const;
-	GeData					(CTrack::*GetAnimatedGeData		)(const BaseDocument* doc, BaseList2D* op, const BaseTime& time) const;
+	GeData (CTrack::*GetAnimatedGeData)(const BaseDocument* doc, BaseList2D* op, const BaseTime& time) const;
+	GeData (CCurve::* GetGeDataCurve)(const BaseTime& time) const;
 };
 
 
@@ -3098,7 +3110,7 @@ struct C4D_BaseDraw
 	DRAWRESULT			(*DrawPObject					)(BaseDraw *bd, BaseDrawHelp *bh, BaseObject *op, DRAWOBJECT drawpolyflags, DRAWPASS drawpass, BaseObject* parent, const Vector &col);
 
 	// BaseDrawHelp
-	BaseDocument*		(*BbGetDocument				)(const BaseDrawHelp *bb);
+	BaseDocument*   (*BbGetDocument	      )(const BaseDrawHelp *bb);
 	BaseTag*				(*BbGetActiveTag			)(const BaseDrawHelp *bb);
 	const Matrix&		(*BbGetMg							)(const BaseDrawHelp *bb);
 	void						(*BbGetDisplay				)(const BaseDrawHelp *bb, BaseContainer *bc);
@@ -3108,7 +3120,7 @@ struct C4D_BaseDraw
 	BaseDrawHelp*		(*BbAlloc							)(BaseDraw *bd, BaseDocument *doc);
 	void						(*BbFree							)(BaseDrawHelp *&p);
 
-	const BaseObject*			(*GetSceneCamera			)(BaseDraw *bd, const BaseDocument *doc);
+	const BaseObject*	(*GetSceneCamera		)(const BaseDraw *bd, const BaseDocument *doc);
 	void						(*LineZOffset					)(BaseDraw *bd, Int32 offset);
 	void						(*SetMatrix_Projection)(BaseDraw *bd);
 	void						(*SetMatrix_Screen		)(BaseDraw *bd);
@@ -3128,7 +3140,7 @@ struct C4D_BaseDraw
 
 	void						(*DrawPoly						)(BaseDraw *bd, const Vector *vp, const Vector *vf, const Vector *vn, Int32 anz, Int32 flags);
 	DISPLAYFILTER		(*GetDisplayFilter		)(const BaseDraw *bd);
-	DISPLAYEDITSTATE(*GetEditState			)(BaseDraw *bd);
+	DISPLAYEDITSTATE(*GetEditState			  )(const BaseDraw *bd);
 	Bool						(*IsViewOpen					)(const BaseDraw *bd, BaseDocument *doc);
 
 	void						(*DrawCircle					)(BaseDraw *bd, const Matrix &m);
@@ -3240,8 +3252,8 @@ struct C4D_BaseDraw
 	BaseObject*			(*GetColorObject			)(const BaseDrawHelp* bb);
 	void						(*SetColorObject			)(BaseDrawHelp* bb, BaseObject* colorObject);
 	BaseObject*			(*GetPainterMesh			)(const BaseDrawHelp* bb, Bool &enabled);
-	void						(*DrawAnimationPath		 )(BaseDraw *bd, BaseDocument *doc, BaseObject *op, const Matrix &upmg, Bool showActivation, Bool global, DRAWPASS drawpass, const BaseDrawHelp *bh);
-	void						(*DrawBoxEdges				 )(BaseDraw *bd, BaseDocument *doc, BaseObject *op, const Matrix &mg, Bool inversez, Bool inherit, Int32 vis, Bool child);
+	void						(*DrawAnimationPath		)(BaseDraw *bd, const BaseDocument *doc, BaseObject *op, const Matrix &upmg, Bool showActivation, Bool global, DRAWPASS drawpass, const BaseDrawHelp *bh);
+	void						(*DrawBoxEdges				)(BaseDraw *bd, const BaseDocument *doc, BaseObject *op, const Matrix &mg, Bool inversez, Bool inherit, Int32 vis, Bool child);
 	void						(*SetDisplayFilter		)(BaseDraw *bd, DISPLAYFILTER displayFilter);
 	Bool						(*GetDrawStatistics		)(const BaseDraw* bd, maxon::DataDictionary& statistics);
 	Vector					(*GetObjectColor			)(const BaseDraw *bd, const BaseObject *op, const BaseDrawHelp *bh, Bool lines, Bool usedInBaseDraw, Int instanceIndex);
@@ -3258,12 +3270,15 @@ struct C4D_BaseDraw
 	// 2023.200
 	Bool						(*DrawsPyro)(const BaseDraw* bd);
 	Bool						(*DrawsVolume)(const BaseDraw* bd);
+	Bool						(*BbIsRenderInstanceMode)(const BaseDrawHelp *bb);
+	void						(*InitRedshiftDraw				)(BaseDraw *bd);
+	void						(*DeleteAllViewportTextures)(BaseDocument* doc, BaseMaterial* mat);
 };
 
 struct C4D_BaseView
 {
-	void						(*GetFrame						)(BaseView *bv, Int32 *cl, Int32 *ct, Int32 *cr, Int32 *cb);
-	void						(*GetSafeFrameEx			)(BaseView *bv, Int32 *from, Int32 *to, Int32 *horizontal);
+	void						(*GetFrame						)(const BaseView *bv, Int32 *cl, Int32 *ct, Int32 *cr, Int32 *cb);
+	void						(*GetSafeFrameEx			)(const BaseView *bv, Int32 *from, Int32 *to, Int32 *horizontal);
 	void						(*GetParameter				)(const BaseView *bv, Vector *offset, Vector *scale, Vector *scale_z);
 	Matrix					(*GetMg								)(const BaseView *bv);
 	Matrix					(*GetMi								)(const BaseView *bv);
@@ -3316,7 +3331,7 @@ struct C4D_BaseView
 	Float						(*PW_W								)(const BaseView *bv, const Vector &p, Bool horizontal);
 	Float						(*WP_W								)(const BaseView *bv, const Vector &p, Bool horizontal);
 
-	void						(*GetSafeFrame				)(BaseView *bv, Int32 *cl, Int32 *ct, Int32 *cr, Int32 *cb);
+	void						(*GetSafeFrame				)(const BaseView *bv, Int32 *cl, Int32 *ct, Int32 *cr, Int32 *cb);
 
 	Vector					(*ProjectPointOnLine	)(BaseView *bv, const Vector &p, const Vector &v, Float mouse_x, Float mouse_y, Float *offset, Int32 *err);
 	Vector					(*ProjectPointOnPlane	)(BaseView *bv, const Vector &p, const Vector &v, Float mouse_x, Float mouse_y, Int32 *err);
@@ -3337,6 +3352,8 @@ struct C4D_BaseView
 	Int32						(*VSGetPixelCount			)(const ViewportSelect *vs);
 	Int32						(*GetColorSpace				)(const BaseView* bv);
 	Int32						(*GetFrameScreenF			)(const BaseDraw *bv, Float* cl, Float* ct, Float* cr, Float* cb, Float* windowScale);
+
+	Bool						(*VSPickMaterial			)(BaseDraw* bd, BaseDocument* doc, Int32 x, Int32 y, Int32 radius, BaseMaterial*& pickedMaterial, BaseObject*& pickedObject);
 };
 
 struct C4D_Pool
@@ -3717,6 +3734,18 @@ struct C4D_General
 	// R2024.5
 	void (*ManageRecentDocument)(Int32 documentIndex, Int32 command);
 
+	// R2025.1
+	maxon::Range<Int32> (*SplitRenderRangesString)(const String& framesString, BaseSelect& selectedFrames);
+	void (*CalculateRenderRanges)(const BaseDocument* doc, const BaseTime& from, const BaseTime& to, const BaseContainer& rdata, BaseSelect& selectedFrames);
+
+	// R2025.2
+	maxon::Result<BaseBitmap*>(*BakeOcioViewToBitmap)(BaseBitmap* bmp, const BaseContainer& renderData, SAVEBIT flags);
+	const maxon::SimpleObservable<void(Int32 view, Bool materialpreview, Bool editorrender)>& (*ObservableStopAllThreads)();
+	Bool (*ShowBitmap3)(BaseBitmap* bm, const String& name);
+
+	// R2025.3
+	void (*UpdateIcons)(Bool onlyActive);
+	void (*ShowApplicationWindow)(Bool visible);
 };
 
 struct C4D_Link
@@ -3838,7 +3867,7 @@ struct C4D_Painter
 	void						(*PM_EnableMaterial)(PaintMaterial *, BaseDocument *doc, Bool on, Bool suppressevent, Bool domaterialundo);
 	PaintMaterial*	(*PM_GetActivePaintMaterial)(BaseDocument *doc, BaseMaterial **mat);
 	PaintMaterial*	(*PM_GetPaintMaterialFromTexture)(PaintTexture *tex, Bool onlyeditable);
-	PaintMaterial*	(*PM_GetPaintMaterial)(BaseDocument *dok, BaseMaterial *material, Int32 create);
+	PaintMaterial*	(*PM_GetPaintMaterial)(const BaseDocument *dok, BaseMaterial *material, Int32 create);
 	Bool						(*PM_UnloadPaintMaterial)(BaseDocument *doc, BaseMaterial *material, Bool forcesave);
 	Bool						(*PT_SetColorMode)(PaintTexture *tex, COLORMODE newcolormode, Bool doundo);
 

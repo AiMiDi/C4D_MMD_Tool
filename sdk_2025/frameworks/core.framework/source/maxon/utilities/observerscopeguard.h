@@ -67,7 +67,7 @@ public:
 	}
 
 
-	void operator=(ObserverScopeGuard&& other)
+	void operator =(ObserverScopeGuard&& other)
 	{
 		iferr_scope_handler
 		{

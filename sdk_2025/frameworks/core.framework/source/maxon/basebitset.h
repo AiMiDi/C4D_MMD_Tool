@@ -56,7 +56,7 @@ public:
 
 	operator Bool() const
 	{
-		return (_index != -1);
+		return _index != -1;
 	}
 
 	Int operator *() const
@@ -138,7 +138,7 @@ public:
 	BaseBitSet() = default;
 
 	//----------------------------------------------------------------------------------------
-	/// Move constructor
+	/// Move constructor.
 	/// @param[in] rhs								The bitset which is moved.
 	//----------------------------------------------------------------------------------------
 	BaseBitSet(BaseBitSet&& rhs)
@@ -147,7 +147,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Move assignment operator
+	/// Move assignment operator.
 	/// @param[in] rhs								The bitset which is moved.
 	/// @return												A reference to this bitset.
 	//----------------------------------------------------------------------------------------
@@ -240,7 +240,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Sets the bit at a given index to the specific value.
 	/// @param[in] index							Input index of the bit which should be set.
-	///	@param[in] value							The value to set the bit to (true or false).
+	/// @param[in] value							The value to set the bit to (true or false).
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	Result<void> SetValue(UInt index, Bool value)
@@ -321,7 +321,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Sets the bit at a given index. It does not check if the underlying array is big enough to contain a bit at this index.
 	/// @param[in] index							Input index of the bit which should be set.
-	/// @return												true, if the bit was already set.
+	/// @return												True, if the bit was already set.
 	//----------------------------------------------------------------------------------------
 	Bool SetAndCheckUnchecked(UInt index)
 	{
@@ -528,7 +528,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Copies the data from another bitset, using <tt>CopyFrom()</tt> of the underlying <tt>BaseArray</tt>
-	/// @param[in] src								Source from which the data is taken
+	/// @param[in] src								Source from which the data is taken.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	Result<void> CopyFrom(const BaseBitSet<ALLOCATOR, INTTYPE>& src)
@@ -679,7 +679,31 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Counts the bits in the selection
+	/// Re-Initializes the array to have at least as much space to contain a certain amount of bits.
+	/// This function can be used to clear a range of bits which was set before if the caller records 
+	/// the min/max of all bits set in this structure.
+	/// @param[in] count							Number of bits.
+	/// @param[in] clearMin						First byte to clear which contains the corresponding bit.
+	/// @param[in] clearMax						Last byte to clear which contains the corresponding bit.
+	//----------------------------------------------------------------------------------------
+	Result<void> InitClearRange(UInt count, UInt clearMin, UInt clearMax)
+	{
+		iferr_scope;
+
+		Int minSize = (Int)(count >> INT_WIDTH_EXPONENT) + 1;
+		_bits.Resize(minSize, COLLECTION_RESIZE_FLAGS::NONE) iferr_return;
+
+		UInt j = ClampValue(clearMin >> INT_WIDTH_EXPONENT, UInt(0), UInt(minSize - 1));
+		UInt k = ClampValue(clearMax >> INT_WIDTH_EXPONENT, UInt(0), UInt(minSize - 1));
+
+		for (; j <= k; ++j)
+			_bits[j] = 0;
+
+		return OK;
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Counts the bits in the selection.
 	/// @param[in] first							Index from which counting starts.
 	/// @param[in] last								Index where counting ends.
 	/// @return												Number of set bits.

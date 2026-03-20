@@ -1,0 +1,7 @@
+include_guard()
+
+set(CMAKE_CXX_STANDARD "17" CACHE STRING "C++ Standard." FORCE)
+set_property(CACHE CMAKE_CXX_STANDARD PROPERTY STRINGS "14" "17")
+set(MAXON_COMPILE_OPTIONS_MSVC /MP /permissive)
+set(MAXON_COMPILE_OPTIONS_WINDOWS_MSVC_X64_ISA /arch:AVX)
+set(MAXON_ENABLE_ALL_WARNINGS OFF CACHE BOOL "Disable /Wall during compatibility migration." FORCE)

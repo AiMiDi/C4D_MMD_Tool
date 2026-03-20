@@ -348,6 +348,66 @@ public:
 		return _ptr.Insert(position, x) == OK ? x : nullptr;
 	}
 
+	ResultPtr<T> Insert(Int position, Block<T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, Block<const T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, const Block<T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, const Block<const T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, Block<T>&& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, Block<const T>&& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, MoveBlock<T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, const MoveBlock<T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, MoveBlock<T>&& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, MoveBlock<const T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, const MoveBlock<const T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, MoveBlock<const T>&& values)
+	{
+		return InsertBlock(position, values);
+	}
+
 	//----------------------------------------------------------------------------------------
 	/// Inserts new elements at index position (the pointers to all elements from @p position on are moved by the the count of @p values).
 	/// @param[in] position						Insert index (the array size will increase and the existing elements are moved).
@@ -1003,16 +1063,10 @@ public:
 			return *this;
 		}
 
-#ifdef MAXON_COMPILER_INTEL
-	#pragma warning disable 597
-#endif
 		operator ConstIterator&()
 		{
 			return *(ConstIterator*) this;
 		}
-#ifdef MAXON_COMPILER_INTEL
-	#pragma warning enable 597
-#endif
 
 		//----------------------------------------------------------------------------------------
 		/// @return												true if the iterator points to an element.

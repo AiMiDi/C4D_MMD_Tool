@@ -1,9 +1,0 @@
-#ifndef NEUTRONCAPSULE_H__
-#define NEUTRONCAPSULE_H__
-
-enum
-{
-	NEUTRONCAPSULE_DUMMY
-};
-
-#endif // NEUTRONCAPSULE_H__

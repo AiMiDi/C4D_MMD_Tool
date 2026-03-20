@@ -133,4 +133,4 @@ struct LegacyHash : public DefaultCompare
 
 }
 
-#endif
+#endif // LEGACYHASH_H__

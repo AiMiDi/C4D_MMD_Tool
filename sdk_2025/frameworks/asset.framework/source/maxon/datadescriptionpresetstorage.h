@@ -46,12 +46,12 @@ public:
 	/// @param[in] repository					Repository to search for presets (including it's bases).
 	/// @param[in] presetIdentifier		Identifier to check.
 	/// @param[in] presetName					Name of the preset.
-	/// @return												true if the preset could be deleted. false if the repository which stores the asset is write protected.
+	/// @return												True if the preset could be deleted. false if the repository which stores the asset is write protected.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Bool> DeletePreset(const AssetRepositoryRef& repository, const Id& presetIdentifier, const Id& presetName);
 
 	//----------------------------------------------------------------------------------------
-	/// Returns all preset identifiers registered under the given scope
+	/// Returns all preset identifiers registered under the given scope.
 	/// @param[in] repository					Repository to search for presets (including it's bases).
 	/// @return												Array of Ids on success.
 	//----------------------------------------------------------------------------------------

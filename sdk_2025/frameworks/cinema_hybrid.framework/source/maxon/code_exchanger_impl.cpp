@@ -27,7 +27,7 @@ Result<void> StoreActiveCE(CodeExchangerRef ce)
 	if (activeCe.IsRunning())
 	{
 		activeCe.Stop() iferr_return;
-		iferr(ce.Start())
+		iferr (ce.Start())
 		{
 			activeCe = CodeExchangerRef::DefaultValue();
 		}
@@ -41,7 +41,7 @@ static Result<void> InitActiveCE()
 {
 	iferr_scope;
 
-	iferr(g_activeCE = WebSocketJsonCodeExchanger().Create())
+	iferr (g_activeCE = WebSocketJsonCodeExchanger().Create())
 	{
 		g_activeCE = maxon::CodeExchangerRef::DefaultValue();
 	}

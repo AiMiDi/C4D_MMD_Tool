@@ -42,7 +42,7 @@ public:
 	MAXON_METHOD Bool IsReady();
 
 	//----------------------------------------------------------------------------------------
-	/// Sets a list of points as Voronoi sites. Only these will be used, and old points will be reset
+	/// Sets a list of points as Voronoi sites. Only these will be used, and old points will be reset.
 	/// @param[in] points							Points to set for this Voronoi object.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
@@ -88,13 +88,13 @@ public:
 	MAXON_METHOD Int GetCellCount();
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the point positions
+	/// Gets the point positions.
 	/// @return												Reference to the list holding the site positions.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD const BaseArray<Vector>& GetVoronoiPointPositions() const;
 
 	//----------------------------------------------------------------------------------------
-	/// Gets the point positions
+	/// Gets the point positions.
 	/// @return												Reference to the list holding the site positions.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD const BaseArray<Vector>& GetInputPoints() const;
@@ -120,9 +120,9 @@ public:
 	MAXON_METHOD ResultRef<BaseArray<Char>> GetCellHasVolume();
 
 	//----------------------------------------------------------------------------------------
-	/// Scales one cell (cellIndex) in the Voronoi data structure
-	/// @param[in] cellIndex					The index of the cell to scale
-	/// @param[in] scaleValue					Scale amount
+	/// Scales one cell (cellIndex) in the Voronoi data structure.
+	/// @param[in] cellIndex					The index of the cell to scale.
+	/// @param[in] scaleValue					Scale amount.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> ScaleCell(Int cellIndex, Float scaleValue);

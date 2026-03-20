@@ -25,6 +25,10 @@ public:
 	{
 		return SetVariadicPort(ToSingletonBlock(port), count.IsEmpty() ? port : count);
 	}
+
+	MAXON_METHOD void SetCoreBaseArguments(const DataDictionary& args);
+
+	MAXON_METHOD Result<void> MapPortPrefix(const corenodes::PortId& prefix, const PathBlock& path, Bool defaultOpen);
 };
 
 
@@ -84,7 +88,12 @@ public:
 	static MAXON_METHOD Result<NodeTemplate> CreateGenericWrapper(const EnumDataType& topLevelChoices, const Block<const Id>& topLevelCoreNodeIds, const InternedId& topLevelSelector, const Block<const InternedId>& nestedSelectors, Bool autoOverloadResolution, WrapperFinalizer&& wfinalizer, NodeFinalizer&& nfinalizer);
 
 	static MAXON_METHOD Result<void> ConfigureDomainPort(const MutablePort& port, corenodes::MicroNode::FLAGS flags);
+
+	static MAXON_METHOD Result<void> ConfigureDomainPort(const MutablePort& port, corenodes::MicroNode::FLAGS flags, Bool fromInside);
 };
+
+/// Can be set on a core node group, then the CoreNodeWrapper will invoke the finalizer on instantiation.
+MAXON_ATTRIBUTE(CoreNodeWrapperLib::NodeFinalizer, CoreNodeFinalizer, "net.maxon.corenode.nodefinalizer");
 
 #include "corenode_wrapper2.hxx"
 

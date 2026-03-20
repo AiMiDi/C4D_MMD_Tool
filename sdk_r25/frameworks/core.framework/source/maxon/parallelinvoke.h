@@ -54,9 +54,9 @@ public:
 	}
 };
 
-template <typename T> class ParallelInvokeJob : public ParallelInvokeJobWithResult<T, typename std::result_of<typename std::remove_reference<T>::type()>::type>
+template <typename T> class ParallelInvokeJob : public ParallelInvokeJobWithResult<T, typename std::invoke_result<typename std::remove_reference<T>::type>::type>
 {
-	using Super = ParallelInvokeJobWithResult<T, typename std::result_of<typename std::remove_reference<T>::type()>::type>;
+	using Super = ParallelInvokeJobWithResult<T, typename std::invoke_result<typename std::remove_reference<T>::type>::type>;
 public:
 	explicit ParallelInvokeJob(T&& obj) : Super(std::forward<T>(obj), JobInterface::GetJumpTable<ParallelInvokeJob<T>>())
 	{

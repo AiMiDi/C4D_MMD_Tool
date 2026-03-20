@@ -132,11 +132,11 @@ Bool DescriptionToolData::Message(BaseDocument* doc, BaseContainer& data, Int32 
 
 				if (toolPlug != nullptr && toolPlug->GetDescription(desc, DESCFLAGS_DESC::NONE))
 				{
-					BaseContainer *groupData = desc->GetParameterI(ConstDescID(DescLevel(MDATA_COMMANDGROUP)), nullptr);
+					BaseContainer *groupData = desc->GetParameterI(ConstDescIDLevel(MDATA_COMMANDGROUP), nullptr);
 					if (groupData != nullptr && groupData->GetBool(DESC_HIDE))
 						return true;
 
-					BaseContainer *applyData = desc->GetParameterI(ConstDescID(DescLevel(MDATA_APPLY)), nullptr);
+					BaseContainer *applyData = desc->GetParameterI(ConstDescIDLevel(MDATA_APPLY), nullptr);
 					if (applyData != nullptr && applyData->GetBool(DESC_HIDE))
 						return true;
 				}

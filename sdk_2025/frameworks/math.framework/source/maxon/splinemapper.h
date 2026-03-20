@@ -182,8 +182,8 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Inserts a new knot at index position (0 <= position <= GetCount()).
-	/// @param[in] knotIndex							Insert index (the internal array size will increase and if (0 <= position < GetCount()), the existing elements are moved, but if (position == GetCount()), then element is appended to the end).
-	/// @param[in] knot										The knot to insert
+	/// @param[in] knotIndex					Insert index (the internal array size will increase and if (0 <= position < GetCount()), the existing elements are moved, but if (position == GetCount()), then element is appended to the end).
+	/// @param[in] knot								The knot to insert.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> InsertKnot(Int knotIndex, const SplineMapperKnot& knot);
 
@@ -193,13 +193,13 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the internal array for read-only operations.
-	/// @return 		Reference to internal array.
+	/// @return												Reference to internal array.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD const BaseArray<SplineMapperKnot>& GetKnots() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the internal array for read/write operations.
-	/// @return Pointer to internal array. It's guaranteed to be valid.
+	/// @return												Pointer to internal array. It's guaranteed to be valid.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD BaseArray<SplineMapperKnot>* GetKnotsRW();
 
@@ -210,8 +210,8 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Clamps a position to the defined range (@see GetRange(), SetRange()).
-	/// @param[in] position 							The position.
-	/// @return														The clamped position.
+	/// @param[in] position						The position.
+	/// @return												The clamped position.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Vector2d ClampPosition(const Vector2d& position) const;
 	
@@ -234,4 +234,4 @@ public:
 
 } // namespace maxon
 
-#endif	// SPLINEMAPPER_H__
+#endif // SPLINEMAPPER_H__

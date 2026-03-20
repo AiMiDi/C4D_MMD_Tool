@@ -1,5 +1,5 @@
-#ifndef MEDIASESSION_MOVIE_IMPORT_OSSPECIFIC_H__
-#define MEDIASESSION_MOVIE_IMPORT_OSSPECIFIC_H__
+#ifndef MEDIASESSION_MOVIE_IMPORT_WINMF_H__
+#define MEDIASESSION_MOVIE_IMPORT_WINMF_H__
 
 #include "maxon/mediasession_image_export.h"
 #include "maxon/mediasession_fileformats.h"
@@ -73,4 +73,4 @@ inline Vec2<Int> FpsToInt(Float fps)
 } // namespace maxon
 
 
-#endif // MEDIASESSION_MOVIE_IMPORT_OSSPECIFIC_H__
+#endif // MEDIASESSION_MOVIE_IMPORT_WINMF_H__

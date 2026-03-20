@@ -957,7 +957,7 @@ private:
 
 //----------------------------------------------------------------------------------------
 /// Calculate the total item count in a range set. RangeSet::GetCount returns the number of "ranges".
-/// @param[in] data								The RangeSet
+/// @param[in] data								The RangeSet.
 /// @return												Item count.
 //----------------------------------------------------------------------------------------
 template <typename RANGETYPE>

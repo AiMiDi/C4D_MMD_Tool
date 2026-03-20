@@ -111,7 +111,7 @@ public:
 	
 	//----------------------------------------------------------------------------------------
 	/// Get The other hand of the edge at index pos.
-	/// @param[in] pos								the edge index.
+	/// @param[in] pos								The edge index.
 	/// @return												The node pointer otherwise an error.
 	//----------------------------------------------------------------------------------------
 	Result<NodeType*> GetNeighbor(Int pos)const

@@ -47,45 +47,45 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Define a custom Name, overriding the name retrieved by default. 
 	/// This does not change the actual name of the Python element, only the displayed one.
-	/// @param[in] name		The new name. Pass an empty string if you want the default behavior for the Python element.
+	/// @param[in] name								The new name. Pass an empty string if you want the default behavior for the Python element.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void SetDisplayedName(const String name);
 
 	//----------------------------------------------------------------------------------------
 	/// Retrieve the name to use for displaying this element in the interface. 
 	/// This may not be the actual a name of the underlying Python element. 
-	/// @return The name to use in the interface.
+	/// @return												The name to use in the interface.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD String GetDisplayedName() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Retrieve the path of the current python element from the Python Element Tree.
 	/// Path is built from current Python Element, looking recursively at parents.
-	/// @param[in] stopAt		Element where the path should stop.
+	/// @param[in] stopAt							Element where the path should stop.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD String GetPath(Opt<const PythonElementBaseRef&> stopAt = {}) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Retrieve the Unique Identifier of the underlying Python Element.
-	/// @return The UUID of the Python Element.
+	/// @return												The UUID of the Python Element.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD String GetUUID() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Retrieve the python script from the underlying Python Element.
-	/// @return The python script.
+	/// @return												The python script.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<String> GetScript();
 
 	//----------------------------------------------------------------------------------------
 	/// Defines the python script of the underlying Python Element.
-	/// @param[in] newScript	The new python script.
+	/// @param[in] newScript					The new python script.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetScript(const String& newScript);
 
 	//----------------------------------------------------------------------------------------
 	/// Executes the current the underlying Python Element.
-	/// @param[in] debug	true if the execution should be done wit python debugging enabled.
+	/// @param[in] debug							True if the execution should be done wit python debugging enabled.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Execute(const Bool debug);
 };
@@ -100,13 +100,13 @@ class PythonElementEmbeddedInterface : MAXON_INTERFACE_BASES(PythonElementBaseIn
 public:
 	//----------------------------------------------------------------------------------------
 	/// Retrieves the BaseLink of the BaseList2D element represented by the current Python element.
-	/// @return BaseLink of the represented BaseList2D.
+	/// @return												BaseLink of the represented BaseList2D.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD cinema::BaseLink* GetBaseLink();
 
 	//----------------------------------------------------------------------------------------
-	/// Retrieves the parameter description of the Python script, the current element is representing
-	/// @param[out] param		The parameter description ID of the Python script.
+	/// Retrieves the parameter description of the Python script, the current element is representing.
+	/// @param[out] param							The parameter description ID of the Python script.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void GetDescID(cinema::DescID& param);
 };
@@ -147,4 +147,4 @@ MAXON_DECLARATION(PyScriptElementFactoryType, PyScriptElementFactory, "net.maxon
 
 #include "py_element2.hxx"
 }
-#endif
+#endif // PY_ELEMENT_H__

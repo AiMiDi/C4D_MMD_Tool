@@ -373,7 +373,7 @@ public:
 	/// @param[in] bt									The calling thread. Can be @formatConstant{nullptr}. @cinemaOwnsPointed{thread}
 	/// @return												The spline contour.\n
 	///																@note If the generator does not produce any output (e.g. when the user chose wrong settings) it must at least return an (empty) @ref Ospline object, otherwise @C4D will try to rebuild the cache again and again.\n
-	///																      Only return @formatConstant{nullptr} in the case of a memory error.
+	/// 															Only return @formatConstant{nullptr} in the case of a memory error.
 	//----------------------------------------------------------------------------------------
 	virtual SplineObject* GetContour(BaseObject* op, BaseDocument* doc, Float lod, BaseThread* bt);
 
@@ -387,9 +387,9 @@ public:
 	/// @calledThreadContext
 	/// @param[in] op									The BaseObject connected with the ObjectData instance. Equal to <tt>static_cast</tt><@ref BaseObject*>Get(). Provided for speed and convenience. @cinemaOwnsPointed{object}
 	/// @param[in] pp									The initial element of the Particle array. @callerOwnsPointed{array}\n
-	///																This array is used to read the particles information and should not be modified.
+	/// 															This array is used to read the particles information and should not be modified.
 	/// @param[out] ss								The initial element of the BaseParticle array.\n
-	///																Modify the elements in this array to change the velocity of the particles. @callerOwnsPointed{array}
+	/// 															Modify the elements in this array to change the velocity of the particles. @callerOwnsPointed{array}
 	/// @param[in] pcnt								The number of particles in the @formatParam{pp} and @formatParam{ss} arrays.
 	/// @param[in] diff								The time delta for the particles movement in seconds. Usually the difference in time between two frames, but this can be different for such functions as motion blur.
 	//----------------------------------------------------------------------------------------
@@ -431,7 +431,10 @@ public:
 	//----------------------------------------------------------------------------------------
 	virtual void SetHandle(BaseObject* op, Int32 i, Vector p, const HandleInfo& info);
 
-	static maxon::Result<Bool> GetAccessedObjectsDeformerBase(const BaseList2D* node, const C4D_Falloff* falloff, METHOD_ID method, AccessedObjectsCallback& access, ACCESSED_OBJECTS_MASK modifyWrite = ACCESSED_OBJECTS_MASK(0));
+	static maxon::Result<Bool> GetAccessedObjectsDeformerBase(const BaseList2D* node, const C4D_Falloff* falloff, METHOD_ID method, AccessedObjectsCallback& access,
+																														ACCESSED_OBJECTS_MASK modifyWrite = ACCESSED_OBJECTS_MASK(0),
+																														ACCESSED_OBJECTS_MASK dirtyRead = ACCESSED_OBJECTS_MASK(0),
+																														ACCESSED_OBJECTS_MASK modifyRead = ACCESSED_OBJECTS_MASK(0));
 
 	/// @}
 };
@@ -440,21 +443,21 @@ public:
 /// Registers an object plugin.
 /// @param[in] id									@uniquePluginID
 /// @param[in] str								The name of the plugin.\n
-///																To affect the order that plugins are displayed in menus add <i>"#$n"</i> as a prefix to this name, where @em n is a number.\n
-///																Lower numbers are displayed before higher numbers. If name is <i>"--"</i> it will show up as a menu separator.
+/// 															To affect the order that plugins are displayed in menus add <i>"#$n"</i> as a prefix to this name, where @em n is a number.\n
+/// 															Lower numbers are displayed before higher numbers. If name is <i>"--"</i> it will show up as a menu separator.
 /// @param[in] info								The object plugin info flags: @enumerateEnum{OBJECT} @enumerateEnum{PLUGINFLAG}
 /// @param[in] g									The allocator for the object plugin. This is a pointer to a function that creates a new instance of ObjectData with NewObj().
 /// @param[in] description				The name of the description resource file to use for the object plugin without @em .res extension, for example @em "Oobjectname".\n
-///																The name has to be unique, i.e. @em "Tdisplay" cannot be used for 2 different descriptions. See Description Resource for more information.
+/// 															The name has to be unique, i.e. @em "Tdisplay" cannot be used for 2 different descriptions. See Description Resource for more information.
 /// @param[in] icon								The icon for the object. The bitmap is copied. \n
-///																The icon should be of size @em 32x@em 32, but will be scaled if needed.\n
-///																It must also be @em 24 bits and should if possible include an alpha to support pattern backgrounds.
+/// 															The icon should be of size @em 32x@em 32, but will be scaled if needed.\n
+/// 															It must also be @em 24 bits and should if possible include an alpha to support pattern backgrounds.
 /// @param[in] disklevel					The plugin level is similar to a version number. The default level is @em 0.\n
-///																Increase this for new revisions of a plugin to allow for forward and backward compatibility.\n\n
-///																As an example you may have updated a plugin. If you now need to write additional information for new settings or changed types for old settings increase the level.\n
-///																During loading either a @em 0 is passed (if the file was written by the old plugin) or @em 1 (if the file was written by the new plugin). This allows to easily write/read new values.\n
-///																For forward and backward compatibility to work any existing read order from a given level must not be changed. @C4D skips any new settings automatically if they have not been read.\n\n
-///																@formatParam{disklevel} is only useful if variables are written/read in @ref NodeData::Write/@ref NodeData::Read.
+/// 															Increase this for new revisions of a plugin to allow for forward and backward compatibility.\n\n
+/// 															As an example you may have updated a plugin. If you now need to write additional information for new settings or changed types for old settings increase the level.\n
+/// 															During loading either a @em 0 is passed (if the file was written by the old plugin) or @em 1 (if the file was written by the new plugin). This allows to easily write/read new values.\n
+/// 															For forward and backward compatibility to work any existing read order from a given level must not be changed. @C4D skips any new settings automatically if they have not been read.\n\n
+/// 															@formatParam{disklevel} is only useful if variables are written/read in @ref NodeData::Write/@ref NodeData::Read.
 /// @return												@trueIfOtherwiseFalse{the object plugin was registered}
 //----------------------------------------------------------------------------------------
 Bool RegisterObjectPlugin(Int32 id, const maxon::String& str, Int32 info, DataAllocator* g, const maxon::String& description, BaseBitmap* icon, Int32 disklevel);
@@ -466,16 +469,16 @@ Bool RegisterObjectPlugin(Int32 id, const maxon::String& str, Int32 info, DataAl
 /// @param[in] info								The object plugin info flags: @enumerateEnum{OBJECT} @enumerateEnum{PLUGINFLAG}
 /// @param[in] g									The allocator for the object plugin. This is a pointer to a function that creates a new instance of ObjectData with NewObj().
 /// @param[in] description				The name of the description resource file to use for the object plugin without @em .res extension, for example @em "Oobjectname".\n
-///																The name has to be unique, i.e. @em "Tdisplay" cannot be used for 2 different descriptions. See Description Resource for more information.
+/// 															The name has to be unique, i.e. @em "Tdisplay" cannot be used for 2 different descriptions. See Description Resource for more information.
 /// @param[in] icon								The icon for the object. The bitmap is copied. \n
-///																The icon should be of size @em 32x@em 32, but will be scaled if needed.\n
-///																It must also be @em 24 bits and should if possible include an alpha to support pattern backgrounds.
+/// 															The icon should be of size @em 32x@em 32, but will be scaled if needed.\n
+/// 															It must also be @em 24 bits and should if possible include an alpha to support pattern backgrounds.
 /// @param[in] disklevel					The plugin level is similar to a version number. The default level is @em 0.\n
-///																Increase this for new revisions of a plugin to allow for forward and backward compatibility.\n\n
-///																As an example you may have updated a plugin. If you now need to write additional information for new settings or changed types for old settings increase the level.\n
-///																During loading either a @em 0 is passed (if the file was written by the old plugin) or @em 1 (if the file was written by the new plugin). This allows to easily write/read new values.\n
-///																For forward and backward compatibility to work any existing read order from a given level must not be changed. @C4D skips any new settings automatically if they have not been read.\n\n
-///																@formatParam{disklevel} is only useful if variables are written/read in @ref NodeData::Write/@ref NodeData::Read.
+/// 															Increase this for new revisions of a plugin to allow for forward and backward compatibility.\n\n
+/// 															As an example you may have updated a plugin. If you now need to write additional information for new settings or changed types for old settings increase the level.\n
+/// 															During loading either a @em 0 is passed (if the file was written by the old plugin) or @em 1 (if the file was written by the new plugin). This allows to easily write/read new values.\n
+/// 															For forward and backward compatibility to work any existing read order from a given level must not be changed. @C4D skips any new settings automatically if they have not been read.\n\n
+/// 															@formatParam{disklevel} is only useful if variables are written/read in @ref NodeData::Write/@ref NodeData::Read.
 /// @param[in] category						Allow to define the object's category. The object's category will affect how the object is displayed or selectable when changing the display or the selection filter.
 /// @return												@trueIfOtherwiseFalse{the object plugin was registered}
 //----------------------------------------------------------------------------------------

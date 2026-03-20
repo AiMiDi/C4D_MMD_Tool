@@ -288,6 +288,9 @@ Bool CallUVCommand(const Vector* padr, Int32 PointCount, const CPolygon* polys, 
 	#define OPTIMALMAPPING_PROGRESSBAR					1006	///< ::Bool Progress bar (Cubic, Angle, Realign).
 	#define OPTIMALMAPPING_RELAXCOUNT						1007	///< ::Int32 Relaxation Steps (Cubic, Angle).
 	#define OPTIMALMAPPING_EQUALIZEAREA					1008	///< ::Bool Equalize Island Size (Realign).
+	#define OPTIMALMAPPING_KEEP_ISLAND_SIZE			1031  ///< ::Bool Keep all islands with their initial size (Realign).
+	#define OPTIMALMAPPING_PACK_INTO_MULTIPLE_TILES 1032	///< ::Bool Pack islands into multiple tiles (Realign).
+	#define OPTIMALMAPPING_NUMBEROFORIENTATIONSALLOWED 1033	 ///< ::Int32 Number of possible orientations for packing (Realign).
 #define UVCOMMAND_RELAX												10003			///< Relax UV.
 	#define RELAXUV_KEEP_BORDER									1010	///< ::Bool Pin Border Points.
 	#define RELAXUV_KEEP_NEIGHBORS							1011	///< ::Bool Pin To Neighbors.
@@ -965,7 +968,7 @@ public:
 	/// Retrieves all paint materials from a paint texture.
 	/// @param[in] tex								The paint texture to retrieve the paint material from.
 	/// @param[out] materials					An AtomArray that receives all paint materials.
-	/// @return												true, if at least one texture was found.
+	/// @return												True, if at least one texture was found.
 	//----------------------------------------------------------------------------------------
 	static Bool GetAllPaintMaterialsFromTexture(PaintTexture* tex, AtomArray& materials) { return C4DOS_Pa->PM_GetPaintAllMaterialFromTexture(tex, materials); }
 
@@ -976,7 +979,7 @@ public:
 	/// @param[in] create							@formatConstant{true} to force a paint material.
 	/// @return												The paint material, or @formatConstant{nullptr} if there is none.
 	//----------------------------------------------------------------------------------------
-	static PaintMaterial* GetPaintMaterial(BaseDocument* doc, BaseMaterial* material, Bool create) { return C4DOS_Pa->PM_GetPaintMaterial(doc, material, create); }
+	static PaintMaterial* GetPaintMaterial(const BaseDocument* doc, BaseMaterial* material, Bool create) { return C4DOS_Pa->PM_GetPaintMaterial(doc, material, create); }
 
 	//----------------------------------------------------------------------------------------
 	/// Unloads a paint material (close all textures of the material).

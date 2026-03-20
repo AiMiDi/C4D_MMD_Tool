@@ -1,8 +1,6 @@
 #ifndef DATETIME_H__
 #define DATETIME_H__
 
-#include "maxon/datatype.h"
-#include "maxon/string.h"
 #include "maxon/timevalue.h"
 
 namespace maxon
@@ -107,12 +105,12 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Return the day of the set time.
-	/// @return												See DAYOFWEEK
+	/// @return												See DAYOFWEEK.
 	//----------------------------------------------------------------------------------------
 	DAYOFWEEK GetDayOfWeek() const;
 
 	//----------------------------------------------------------------------------------------
-	/// Converts the local time to the universal date-time
+	/// Converts the local time to the universal date-time.
 	/// @return												The normalized time.
 	//----------------------------------------------------------------------------------------
 	UniversalDateTime ConvertToUniversalDateTime() const;
@@ -175,13 +173,13 @@ public:
 	/// @param[in] lYear							Year value.
 	/// @param[in] lMonth							Month value.
 	/// @param[in] lDay								Day value.
-	/// @return												See DAYOFWEEK
+	/// @return												See DAYOFWEEK.
 	//----------------------------------------------------------------------------------------
 	static DAYOFWEEK GetDayOfWeek(Int lYear, Int lMonth, Int lDay);
 
 	//----------------------------------------------------------------------------------------
 	/// Return the current date-time object of the current time zone.
-	/// @return												See LocalDateTime
+	/// @return												See LocalDateTime.
 	//----------------------------------------------------------------------------------------
 	static LocalDateTime GetNow();
 
@@ -208,7 +206,7 @@ public:
 	/// @param[in] minute							Minute value [0-59]
 	/// @param[in] second							Second value [0-59]
 	/// @param[in] daylightSavingTime	Optional Daylight Saving Time information. See DST.
-	/// @return												date-time object.
+	/// @return												Date-time object.
 	//----------------------------------------------------------------------------------------
 	static Result<LocalDateTime> FromValues(Int32 year, UChar month, UChar day, UChar hour, UChar minute, UChar second, DST daylightSavingTime = DST::AUTOMATIC);
 
@@ -361,7 +359,7 @@ public:
 	/// @param[in] hour								Hour value [0-23]
 	/// @param[in] minute							Minute value [0-59]
 	/// @param[in] second							Second value [0-59]
-	/// @return												date-time object.
+	/// @return												Date-time object.
 	//----------------------------------------------------------------------------------------
 	static Result<UniversalDateTime> FromValues(Int32 year, UChar month, UChar day, UChar hour, UChar minute, UChar second);
 
@@ -369,7 +367,7 @@ public:
 	/// Creates a date-time object by the passed Julian day.
 	/// @param[in] variant						Julian Date Variant.
 	/// @param[in] j									The Julian day value.
-	/// @return												See LocalDateTime
+	/// @return												See LocalDateTime.
 	//----------------------------------------------------------------------------------------
 	static UniversalDateTime FromJulianDay(JULIANDATE variant, Float64 j);
 

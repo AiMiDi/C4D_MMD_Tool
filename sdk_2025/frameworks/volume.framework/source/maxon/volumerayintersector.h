@@ -103,10 +103,10 @@ public:
 	/// well as the value of the volume at the intersection point.
 	/// @param[in] ray								The ray used for the intersection test.
 	/// @param[in] hit								The structure holding the two intersection points and the value.
-	/// @param[in] accessor 					The accessor to use to sample the volume's value with.
+	/// @param[in] accessor						The accessor to use to sample the volume's value with.
 	/// @param[in] rayType						The space this ray should be cast in.
 	/// @return												True if the ray has hit the volume this intersector has been 
-	///																initialized with, false otherwise.
+	/// 															initialized with, false otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetClosestHit(const VolumeRay& ray, VolumeRayHit<TYPE>& hit, const maxon::GridAccessorRef<TYPE>& accessor, 
 		VOLUME_RAY_TYPE rayType = VOLUME_RAY_TYPE::WORLD_SPACE);
@@ -117,12 +117,12 @@ public:
 	/// @param[in] ray								The ray used for the intersection test.
 	/// @param[in] hit								The structure holding the two intersection points and the value.
 	/// @param[in] condition					The condition that needs to be fulfilled to choose an intersection point.
-	///																The algorithm works by looking at the intersection points in a closest-first
-	///																order, and stops and returns at the first point that fulfills the condition.
-	/// @param[in] accessor 					The accessor to use to sample the volume's value with.
+	/// 															The algorithm works by looking at the intersection points in a closest-first
+	/// 															order, and stops and returns at the first point that fulfills the condition.
+	/// @param[in] accessor						The accessor to use to sample the volume's value with.
 	/// @param[in] rayType						The space this ray should be cast in.
 	/// @return												True if the ray has hit the volume this intersector has been 
-	///																initialized with, false otherwise.
+	/// 															initialized with, false otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetClosestHit(const VolumeRay& ray, VolumeRayHit<TYPE>& hit, Delegate<Bool(TYPE, Bool)>&& condition,
 		const maxon::GridAccessorRef<TYPE>& accessor, VOLUME_RAY_TYPE rayType = VOLUME_RAY_TYPE::WORLD_SPACE);
@@ -133,12 +133,12 @@ public:
 	/// @param[in] ray								The ray used for the intersection test.
 	/// @param[in] hit								The structure holding the two intersection points and the value.
 	/// @param[in] condition					The condition that needs to be fulfilled to choose an intersection point.
-	///																The algorithm works by looking at the intersection points in a closest-first
-	///																order, and stops and returns at the first point that fulfills the condition.
-	/// @param[in] accessor 					The accessor to use to sample the volume's value with.
+	/// 															The algorithm works by looking at the intersection points in a closest-first
+	/// 															order, and stops and returns at the first point that fulfills the condition.
+	/// @param[in] accessor						The accessor to use to sample the volume's value with.
 	/// @param[in] rayType						The space this ray should be cast in.
 	/// @return												True if the ray has hit the volume this intersector has been 
-	///																initialized with, false otherwise.
+	/// 															initialized with, false otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetAllHits(const VolumeRay& ray, BaseArray<VolumeRayHit<TYPE>>& hit, Delegate<Bool(TYPE, Bool)>&& condition,
 		const maxon::GridAccessorRef<TYPE>& accessor, VOLUME_RAY_TYPE rayType = VOLUME_RAY_TYPE::WORLD_SPACE);

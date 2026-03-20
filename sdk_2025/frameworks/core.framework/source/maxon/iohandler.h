@@ -104,7 +104,7 @@ public:
 	/// @param[in] url								Url to convert.
 	/// @param[in] flags							See CONVERTTOUINAMEFLAGS.
 	/// @param[in] lookupRepository		AssetRespoitory to search in.
-	/// @return                       String on success.
+	/// @return												String on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<String> ConvertToUiName(const UrlInterface& url, CONVERTTOUINAMEFLAGS flags, const AssetRepositoryRef& lookupRepository) const;
 };

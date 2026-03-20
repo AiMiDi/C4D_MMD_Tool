@@ -127,13 +127,11 @@ public:
 #endif
 			&PrivateGlobalInit<INIT>, &PrivateGlobalFree, &unit)
 	{
-#ifndef MAXON_COMPILER_INTEL // Intel isn't able to compiler +init for some reason.
 		MAXON_WARNING_PUSH
 		MAXON_WARNING_DISABLE_UNUSED_VARIABLES
 		// The following line asserts that the lambda has no capture.
 		auto* unused = +init;
 		MAXON_WARNING_POP
-#endif
 	}
 
 	T& operator =(const T& src)
@@ -152,6 +150,12 @@ public:
 	/// @return												Underlying value of type T.
 	//----------------------------------------------------------------------------------------
 	T& Get()
+	{
+		return *this;
+	}
+
+	/// @copydoc Get
+	const T& Get() const
 	{
 		return *this;
 	}

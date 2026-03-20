@@ -168,9 +168,9 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Tests if this range intersects with the other range
+	/// Tests if this range intersects with the other range.
 	/// @param[in] range							Another range to test the intersect with.
-	/// @return												Return true if the ranges intersect, false otherwise
+	/// @return												Return true if the ranges intersect, false otherwise.
 	//----------------------------------------------------------------------------------------
 	Bool IsIntersecting(const Range& range) const
 	{

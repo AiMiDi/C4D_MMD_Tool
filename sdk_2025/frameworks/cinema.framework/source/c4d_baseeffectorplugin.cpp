@@ -231,7 +231,7 @@ Bool EffectorData::CalcFields(const BaseDocument* doc, const BaseObject* generat
 
 maxon::Result<Bool> EffectorData::GetAccessedObjectsEffectorBase(const BaseList2D* node, METHOD_ID method, AccessedObjectsCallback& access, ACCESSED_OBJECTS_MASK ensureReadable)
 {
-	EffectorDataLib* elib = CheckEffectorLib(LIBOFFSET(EffectorDataLib, Effector_GetFieldResult));
+	EffectorDataLib* elib = CheckEffectorLib(LIBOFFSET(EffectorDataLib, Effector_GetAccessedObjectsBase));
 	if (!elib || !elib->Effector_GetAccessedObjectsBase)
 		return access.MayAccessAnything();
 

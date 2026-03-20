@@ -1025,7 +1025,7 @@ def parseDox(doc, declref, outdir, checkOnly, errors):
         if isinstance(e, ParserError):
             line = e.sourcePosition.line - 1
             if line >= 0 and line < len(lines):
-                raise ParserError(e.sourcePosition, e.message + '\n' + lines[line], False)
+                raise ParserError(e.sourcePosition, e.originalMessage + '\n' + lines[line], False)
         sys.stderr.write(stripped)
         raise e
 

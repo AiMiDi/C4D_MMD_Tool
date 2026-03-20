@@ -21,20 +21,20 @@ class FilterImageInterface : MAXON_INTERFACE_BASES(ObjectInterface)
 	MAXON_INTERFACE(FilterImageInterface, MAXON_REFERENCE_NORMAL, "net.maxon.renderfilter.filterimage.interface");
 public:	
 	//----------------------------------------------------------------------------------------
-	/// Writes the contents out into a buffer
-	/// @param[out] buffer				The output buffer
+	/// Writes the contents out into a buffer.
+	/// @param[out] buffer						The output buffer.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD	Result<void> WriteToBuffer(BaseArray<Vector4d32>& buffer);
 	
 	//----------------------------------------------------------------------------------------
-	/// Copies contents from the CPU memory block
-	/// @param[in] data					Data to read.
+	/// Copies contents from the CPU memory block.
+	/// @param[in] data								Data to read.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD	Result<void> ReadFromCPUMemory(const BaseArray<Vector4d32>& data);
 	
 	//----------------------------------------------------------------------------------------
-	/// Writes the contents out into a file
-	/// @param[in] url 						The url to write to
+	/// Writes the contents out into a file.
+	/// @param[in] url								The url to write to.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD	Result<void> WriteToFile(const Url& url);
 };

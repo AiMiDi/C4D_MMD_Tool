@@ -201,8 +201,8 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Merges two volumes of same Type and Class.
-	/// @param[in] otherVolume									  The volume to merge into the current one.
-	/// @param[in] keepOldVolume						If false the otherVolume will be flushed/emptied.
+	/// @param[in] otherVolume				The volume to merge into the current one.
+	/// @param[in] keepOldVolume			If false the otherVolume will be flushed/emptied.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> MergeVolume(Volume& otherVolume, Bool keepOldVolume = false);
 
@@ -213,6 +213,20 @@ public:
 	/// @param[in] minMaxRange				The range including the minimum and maximum value.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetMinMaxValues(const Range<Float>& minMaxRange);
+
+	//----------------------------------------------------------------------------------------
+	/// Returns true if the voxel values are already in world space, else they are in local space (only relevant for vector grids)
+	/// @return												True or False
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD Bool IsInWorldSpace() const;
+
+	//----------------------------------------------------------------------------------------
+	/// Converts a vector-valued grid to world or local space depending on the bool input. World-space means that the actual values of the grid are in
+	/// world space and do not need to be additionally transformed when reading the data, but they need to be kept in sync with the grid's transform.
+	/// Note that no matter the underlying space, the returned values from the GridAccessor and GridIterator will be in world space.
+	/// @param[in] worldSpace				True to convert the vector grid values to world space, else local space.
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD void ConvertToSpace(Bool worldSpace);
 };
 #include "volume1.hxx"
 

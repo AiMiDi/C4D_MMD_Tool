@@ -109,7 +109,7 @@ private:
 ///			) iferr_return;
 ///	@endcode
 ///
-/// @tparam T											type that needs to be declared like: struct TexGuiThreadUpdate : public maxon::ThreadedUIUpdate<TexGuiThreadUpdate> {};
+/// @tparam T											Type that needs to be declared like: struct TexGuiThreadUpdate : public maxon::ThreadedUIUpdate<TexGuiThreadUpdate> {};
 //----------------------------------------------------------------------------------------
 template <typename T> class ThreadedUIUpdateRef
 {

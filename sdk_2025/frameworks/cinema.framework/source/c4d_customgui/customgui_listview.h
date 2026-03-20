@@ -10,6 +10,7 @@
 #include "customgui_base.h"
 #include "c4d_basecontainer.h"
 #include "customgui_base.h"
+#include "c4d_gui.h"
 
 namespace cinema
 {
@@ -45,7 +46,50 @@ namespace cinema
 #define TREEVIEW_HIDE_HIERARCHY_LINES 'hihl' 			///< ::Bool Set to @formatConstant{true} to hide the hierarchical lines. Note: only affects visibility of the lines, the indentation levels and fold/unfold symbols visibility remains unchanged.
 #define TREEVIEW_NO_ENTER_FORWARD			'noef' 			///< ::Bool If @ref TREEVIEW_NOENTERRENAME is set to @formatConstant{true}, this setting can be set to @formatConstant{true} to avoid forwarding the Enter key message to super/parent classes, for example to avoid losing the tree focus when Enter key is pressed. Note that enter forwarding might be needed in some situations, e.g. when the dialog owning the tree has Ok/Cancel buttons and Enter must do the same action as pressing the OK button. @since 2023.100
 #define TREEVIEW_DRAG_START_REQUIRES_MOVEMENT	'dsrm'	///< ::Bool Set to @formatConstant{true} if drag & drop events should happen only when mouse has really moved. @since 2023.200
-
+#define TREEVIEW_POPUP_EDIT_NOTIFY		'tvpn'			///< ::Bool Set to @formatConstant{true} to get notified when an edit popup is opened and closed in the @ref GeDialog::Message() function. Example of use:
+																									///< @code
+																									/// Int32 MyDialog::Message(const BaseContainer& msg, BaseContainer& res)
+																									/// {
+																									/// 	switch (msg.GetId())
+																									/// 	{
+																									///			// Just check for the same ID used in the treeview settings container.
+																									/// 		case TREEVIEW_POPUP_EDIT_NOTIFY:
+																									/// 		{
+																									/// 			// This dialog closes automatically when it loses focus.
+																									/// 			// To prevent it from closing inadvertently during operations such as renaming an item
+																									/// 			// with PopupEditText(), which opens a new popup dialog that shifts the focus,
+																									/// 			// the auto-close behavior is temporarily disabled while the edit popup is open.
+																									///
+																									/// 			// Set to true when treeview is going to open an edit popup.
+																									/// 			// Set to false when the treeview edit popup has been closed.
+																									/// 			const Bool editPopupOpened = msg.GetBool(0);
+																									///
+																									///				// Prevent auto-closing when edit popup opens.
+																									/// 			_autoCloseOnLostFocus = !editPopupOpened;
+																									///
+																									///				if (!editPopupOpened)
+																									/// 			{
+																									/// 				// Once treeview edit popup has been closed, activate the window so it gets the focus again.
+																									/// 				SendParentMessage(BaseContainer(BFM_ACTIVATE_WINDOW));
+																									/// 			}
+																									///
+																									/// 			break;
+																									/// 		}
+																									///
+																									/// 		case BFM_LOSTFOCUS:
+																									/// 		{
+																									/// 			// Close the dialog when focus is lost.
+																									/// 			if (_autoCloseOnLostFocus)
+																									/// 				Close();
+																									///
+																									/// 			break;
+																									/// 		}
+																									/// 	}
+																									///
+																									/// 	return GeDalog::Message(msg, res);
+																									/// }
+																									/// @endcode
+																									///< @since 2025.300
 /// @}
 
 /// @addtogroup TREEVIEW_DRAGSTART
@@ -710,8 +754,8 @@ class TreeViewFunctions
 		/// @param[in] lColID							The column index.
 		/// @param[in] lChannel						The mouse channel: @enumerateEnum{BFM_INPUT_CHANNEL}
 		/// @param[in] bDblClk						@trueOtherwiseFalse{for double-click event}
-		/// @param[in] mouseX							The mouse horizontal position local to the left hand edge of the column or NOTOK if dragging a column
-		/// @param[in] mouseY							The mouse vertical position local to the header top or NOTOK if dragging a column
+		/// @param[in] mouseX							The mouse horizontal position local to the left hand edge of the column or NOTOK if dragging a column.
+		/// @param[in] mouseY							The mouse vertical position local to the header top or NOTOK if dragging a column.
 		/// @param[in] ua									The header's userarea or nullptr if TREEVIEW_MOVE_COLUMN is set to true.
 		/// @return												@trueIfOtherwiseFalse{the tree view needs to be updated}
 		//----------------------------------------------------------------------------------------
@@ -821,12 +865,12 @@ class TreeViewFunctions
 		virtual void SetFloatValueEx(void *root, void *userdata, void *obj, Int32 lColumn, Float value);
 
 		//----------------------------------------------------------------------------------------
-		/// Requests to add a row to the treeview
+		/// Requests to add a row to the treeview.
 		///
 		/// @param[in] root								The tree root.
 		/// @param[in] userdata						The userdata.
 		///
-		/// @return												true if it succeeds, false if it fails.
+		/// @return												True if it succeeds, false if it fails.
 		//----------------------------------------------------------------------------------------
 		virtual Bool AddRow(void* root, void* userdata);
 
@@ -836,7 +880,7 @@ class TreeViewFunctions
 		/// @param[in] root								The tree root.
 		/// @param[in] userdata						The userdata.
 		///
-		/// @return												the text to display in the empty treeview area.
+		/// @return												The text to display in the empty treeview area.
 		//----------------------------------------------------------------------------------------
 		virtual String EmptyText(void* root, void* userdata);
 
@@ -894,7 +938,7 @@ class TreeViewFunctions
 		/// This functions allows to lock resources while input events are executed.
 		/// @param[in] root								The tree root.
 		/// @param[in] userdata						The userdata.
-		/// @return                       data which will be passed to FinishInput().
+		/// @return												Data which will be passed to FinishInput().
 		//----------------------------------------------------------------------------------------
 		virtual maxon::Result<maxon::Data> StartInput(void* root, void* userdata);
 
@@ -1270,7 +1314,7 @@ class TreeViewCustomGui : public BaseCustomGui<CUSTOMGUI_TREEVIEW>
 		/// @param[in] x2									The right x value.
 		/// @param[in] y2									The bottom y value.
 		///
-		/// @return												true if it succeeds, false if it fails.
+		/// @return												True if it succeeds, false if it fails.
 		//----------------------------------------------------------------------------------------
 		Bool SetVisibleScrollArea(Int32 x1, Int32 y1, Int32 x2, Int32 y2);
 

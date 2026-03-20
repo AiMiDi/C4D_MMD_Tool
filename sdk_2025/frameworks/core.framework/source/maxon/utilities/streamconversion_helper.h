@@ -78,10 +78,10 @@ template <typename SRCTYPE, typename DSTTYPE> class StreamConversionHelper
 {
 public:
 	//----------------------------------------------------------------------------------------
-	/// Adds a new part of the stream to the existing one. Has to be called each time ConvertImpl is executed
-	/// @param[in] src								input stream
-	/// @param[in] dst								output stream
-	/// @param[in] inputFinished			signal from ConvertImpl if this is the last part of the stream
+	/// Adds a new part of the stream to the existing one. Has to be called each time ConvertImpl is executed.
+	/// @param[in] src								Input stream.
+	/// @param[in] dst								Output stream.
+	/// @param[in] inputFinished			Signal from ConvertImpl if this is the last part of the stream.
 	///
 	/// Example: You put the helper object somewhere on the stack - ideally as a static variable in your main StreamConversion class
 	/// and initialize it everytime ConvertImpl is called by simply calling AppendStream. Here a LZ4 stream of Chars as input is decoded.
@@ -115,8 +115,8 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Append elements to the internal destination dst buffer specified in AppendStream.
-	/// @param[in] buf								source buffer
-	/// @param[in] count							number of elements to be copied from buf to dst
+	/// @param[in] buf								Source buffer.
+	/// @param[in] count							Number of elements to be copied from buf to dst.
 	//----------------------------------------------------------------------------------------
 	Result<void> Write(DSTTYPE* buf, Int count);
 
@@ -124,44 +124,44 @@ public:
 	/// Simply copy elements to the internal destination dst buffer specified in AppendStream.
 	/// This function is especially useful for speeding things up when the final size oft dst ist know.
 	/// Instead of enlarging dst with each Write call this i just a plain Memcopy
-	/// Note: you to have to garantue that the dest buffer is sufficiently large enough
-	/// @param[in] buf								source buffer
-	/// @param[in] count							number of elements to be copied from buf to dst
-	/// @param[in] offset							number of elements to be copied from buf to dst
+	/// Note: you to have to garantue that the dest buffer is sufficiently large enough.
+	/// @param[in] buf								Source buffer.
+	/// @param[in] count							Number of elements to be copied from buf to dst.
+	/// @param[in] offset							Number of elements to be copied from buf to dst.
 	//----------------------------------------------------------------------------------------
 	Result<void> WriteWithOffset(DSTTYPE* buf, Int count, Int offset);
 
 	//----------------------------------------------------------------------------------------
 	/// Read elements from internal src buffer specified in AppendStream to buf.
-	/// @param[in] buf								destination buffer
-	/// @param[in] count							number of elements to be copied from src to buf
+	/// @param[in] buf								Destination buffer.
+	/// @param[in] count							Number of elements to be copied from src to buf.
 	//----------------------------------------------------------------------------------------
 	Result<void> Read(SRCTYPE* buf, Int count);
 
 	//----------------------------------------------------------------------------------------
 	/// Read elements from internal src buffer specified in AppendStream to buf. Contrary to Read this routine does not read a specific
 	/// number of elements but reads untile either the end of the stream is reached of the maxCount number.
-	/// @param[in] buf								destination buffer
-	/// @param[in] maxCount						max number of elements to be read
-	/// @return												number of elements actually read
+	/// @param[in] buf								Destination buffer.
+	/// @param[in] maxCount						Max number of elements to be read.
+	/// @return												Number of elements actually read.
 	//----------------------------------------------------------------------------------------
 	Result<Int> ReadEOS(SRCTYPE* buf, Int maxCount);
 
 	//----------------------------------------------------------------------------------------
-	/// Skip elements
-	/// @param[in] count							number of elements
+	/// Skip elements.
+	/// @param[in] count							Number of elements.
 	//----------------------------------------------------------------------------------------
 	Result<void> Skip(Int count);
 
 	//----------------------------------------------------------------------------------------
 	/// Current reading position. Note that this is a relative position to the part of the stream that was initialized with AppendStream.
-	/// @return												Current reading position
+	/// @return												Current reading position.
 	//----------------------------------------------------------------------------------------
 	MAXON_WARN_UNUSED Int GetCurrentPosition();
 
 	//----------------------------------------------------------------------------------------
-	/// Direct access to the destination array
-	/// @return												pointer to destination array
+	/// Direct access to the destination array.
+	/// @return												Pointer to destination array.
 	//----------------------------------------------------------------------------------------
 	MAXON_WARN_UNUSED WritableArrayInterface<DSTTYPE>* GetDst();
 

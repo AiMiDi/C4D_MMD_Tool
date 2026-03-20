@@ -74,6 +74,16 @@ void RenderData::SetResolution(Float width, Float height, Float pixelAspect)
 }
 
 
+Int32 RenderData::GetRealFrameRate(const BaseDocument* doc) const
+{
+	return C4DOS_Bd->RdGetRealFrameRate(this, doc);
+}
+
+Int32 RenderData::GetRealFrameRate(const BaseDocument* doc, const BaseContainer* bc)
+{
+	return C4DOS_Bd->RdGetRealFrameRateS(doc, bc);
+}
+
 BaseDocument* BaseDocument::Alloc()
 {
 	return C4DOS_Bd->Alloc();
@@ -243,30 +253,30 @@ BaseObject* BaseDocument::SearchObject(const maxon::String& str)
 Bool BaseDocument::GetChanged()
 {
 	GeData dat;
-	if (!this->GetParameter(ConstDescID(DescLevel(DOCUMENT_USERCHANGE)), dat, DESCFLAGS_GET::NONE))
+	if (!this->GetParameter(ConstDescIDLevel(DOCUMENT_USERCHANGE), dat, DESCFLAGS_GET::NONE))
 		return false;
 	return dat.GetInt32() != 0;
 }
 
 void BaseDocument::SetChanged()
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_USERCHANGE)), true, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_USERCHANGE), true, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetDocumentName(const Filename& fn)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_NAME)), fn, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_NAME), fn, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetDocumentPath(const Filename& fn)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_PATH)), fn, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_PATH), fn, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 Filename BaseDocument::GetDocumentName() const
 {
 	GeData dat;
-	if (!this->GetParameter(ConstDescID(DescLevel(DOCUMENT_NAME)), dat, DESCFLAGS_GET::NONE))
+	if (!this->GetParameter(ConstDescIDLevel(DOCUMENT_NAME), dat, DESCFLAGS_GET::NONE))
 		return Filename();
 	return dat.GetFilename();
 }
@@ -274,7 +284,7 @@ Filename BaseDocument::GetDocumentName() const
 Filename BaseDocument::GetDocumentPath() const
 {
 	GeData dat;
-	if (!this->GetParameter(ConstDescID(DescLevel(DOCUMENT_PATH)), dat, DESCFLAGS_GET::NONE))
+	if (!this->GetParameter(ConstDescIDLevel(DOCUMENT_PATH), dat, DESCFLAGS_GET::NONE))
 		return Filename();
 	return dat.GetFilename();
 }
@@ -282,7 +292,7 @@ Filename BaseDocument::GetDocumentPath() const
 Float BaseDocument::GetLOD() const
 {
 	GeData dat;
-	if (!this->GetParameter(ConstDescID(DescLevel(DOCUMENT_LOD)), dat, DESCFLAGS_GET::NONE))
+	if (!this->GetParameter(ConstDescIDLevel(DOCUMENT_LOD), dat, DESCFLAGS_GET::NONE))
 		return 0.0;
 	return dat.GetFloat();
 }
@@ -290,7 +300,7 @@ Float BaseDocument::GetLOD() const
 Int32 BaseDocument::GetFps() const
 {
 	GeData dat;
-	if (!GetParameter(ConstDescID(DescLevel(DOCUMENT_FPS)), dat, DESCFLAGS_GET::NONE))
+	if (!GetParameter(ConstDescIDLevel(DOCUMENT_FPS), dat, DESCFLAGS_GET::NONE))
 		return 0;
 	return dat.GetInt32();
 }
@@ -298,7 +308,7 @@ Int32 BaseDocument::GetFps() const
 BaseTime BaseDocument::GetMinTime() const
 {
 	GeData dat;
-	if (!this->GetParameter(ConstDescID(DescLevel(DOCUMENT_MINTIME)), dat, DESCFLAGS_GET::NONE))
+	if (!this->GetParameter(ConstDescIDLevel(DOCUMENT_MINTIME), dat, DESCFLAGS_GET::NONE))
 		return BaseTime();
 	return dat.GetTime();
 }
@@ -331,7 +341,7 @@ BaseTime BaseDocument::GetUsedMaxTime(BaseList2D* check_op)
 BaseTime BaseDocument::GetMaxTime() const
 {
 	GeData dat;
-	if (!this->GetParameter(ConstDescID(DescLevel(DOCUMENT_MAXTIME)), dat, DESCFLAGS_GET::NONE))
+	if (!this->GetParameter(ConstDescIDLevel(DOCUMENT_MAXTIME), dat, DESCFLAGS_GET::NONE))
 		return BaseTime();
 	return dat.GetTime();
 }
@@ -339,7 +349,7 @@ BaseTime BaseDocument::GetMaxTime() const
 BaseTime BaseDocument::GetLoopMinTime() const
 {
 	GeData dat;
-	if (!this->GetParameter(ConstDescID(DescLevel(DOCUMENT_LOOPMINTIME)), dat, DESCFLAGS_GET::NONE))
+	if (!this->GetParameter(ConstDescIDLevel(DOCUMENT_LOOPMINTIME), dat, DESCFLAGS_GET::NONE))
 		return BaseTime();
 	return dat.GetTime();
 }
@@ -347,7 +357,7 @@ BaseTime BaseDocument::GetLoopMinTime() const
 BaseTime BaseDocument::GetLoopMaxTime() const
 {
 	GeData dat;
-	if (!this->GetParameter(ConstDescID(DescLevel(DOCUMENT_LOOPMAXTIME)), dat, DESCFLAGS_GET::NONE))
+	if (!this->GetParameter(ConstDescIDLevel(DOCUMENT_LOOPMAXTIME), dat, DESCFLAGS_GET::NONE))
 		return BaseTime();
 	return dat.GetTime();
 }
@@ -355,50 +365,50 @@ BaseTime BaseDocument::GetLoopMaxTime() const
 Bool BaseDocument::GetRenderLod() const
 {
 	GeData dat;
-	if (!this->GetParameter(ConstDescID(DescLevel(DOCUMENT_RENDERLOD)), dat, DESCFLAGS_GET::NONE))
+	if (!this->GetParameter(ConstDescIDLevel(DOCUMENT_RENDERLOD), dat, DESCFLAGS_GET::NONE))
 		return 0;
 	return dat.GetInt32() != 0;
 }
 
 void BaseDocument::SetLOD(Float lod)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_LOD)), lod, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_LOD), lod, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetFps(Int32 fps)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_FPS)), fps, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_FPS), fps, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetMinTime(const BaseTime& t)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_MINTIME)), t, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_MINTIME), t, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetMaxTime(const BaseTime& t)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_MAXTIME)), t, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_MAXTIME), t, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetLoopMinTime(const BaseTime& t)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_LOOPMINTIME)), t, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_LOOPMINTIME), t, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetLoopMaxTime(const BaseTime& t)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_LOOPMAXTIME)), t, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_LOOPMAXTIME), t, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetRenderLod(Bool lod)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_RENDERLOD)), lod, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_RENDERLOD), lod, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 Int32 BaseDocument::GetMode() const
 {
 	GeData dat;
-	if (!const_cast<BaseDocument*>(this)->GetParameter(ConstDescID(DescLevel(DOCUMENT_MODE)), dat, DESCFLAGS_GET::NONE))
+	if (!const_cast<BaseDocument*>(this)->GetParameter(ConstDescIDLevel(DOCUMENT_MODE), dat, DESCFLAGS_GET::NONE))
 		return 0;
 	return dat.GetInt32();
 }
@@ -411,7 +421,7 @@ void BaseDocument::SetMode(Int32 mode, const maxon::Id& group)
 Int32 BaseDocument::GetAction() const
 {
 	GeData dat;
-	if (!const_cast<BaseDocument*>(this)->GetParameter(ConstDescID(DescLevel(DOCUMENT_ACTION)), dat, DESCFLAGS_GET::NONE))
+	if (!const_cast<BaseDocument*>(this)->GetParameter(ConstDescIDLevel(DOCUMENT_ACTION), dat, DESCFLAGS_GET::NONE))
 		return 0;
 	return dat.GetInt32();
 }
@@ -429,17 +439,17 @@ Bool BaseDocument::IsAxisEnabled() const
 
 void BaseDocument::SetTime(const BaseTime& t)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_TIME)), t, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_TIME), t, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetMode(Int32 m)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_MODE)), m, DESCFLAGS_SET::DONTCHECKMINMAX);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_MODE), m, DESCFLAGS_SET::DONTCHECKMINMAX);
 }
 
 void BaseDocument::SetAction(Int32 a)
 {
-	this->SetParameter(ConstDescID(DescLevel(DOCUMENT_ACTION)), a, DESCFLAGS_SET::DONTCHECKMINMAX | DESCFLAGS_SET::FORCESET);
+	this->SetParameter(ConstDescIDLevel(DOCUMENT_ACTION), a, DESCFLAGS_SET::DONTCHECKMINMAX | DESCFLAGS_SET::FORCESET);
 }
 
 void InsertBaseDocument(BaseDocument* doc)
@@ -511,6 +521,11 @@ Bool SaveDocument(BaseDocument* doc, const Filename& name, SAVEDOCUMENTFLAGS sav
 RENDERRESULT RenderDocument(BaseDocument* doc, const BaseContainer& rdata, ProgressHook* prog, void* private_data, BaseBitmap* bmp, RENDERFLAGS renderflags, BaseThread* th, WriteProgressHook* wprog, void* data)
 {
 	return C4DOS_Ge->RenderDocument(doc, wprog, prog, private_data, bmp, &rdata, renderflags, th, data);
+}
+
+maxon::Result<BaseBitmap*> BakeOcioViewToBitmap(BaseBitmap* bmp, const BaseContainer& renderData, SAVEBIT flags)
+{
+	return C4DOS_Ge->BakeOcioViewToBitmap(bmp, renderData, flags);
 }
 
 Bool SaveProject(BaseDocument* doc, SAVEPROJECT flags, Filename targetPath, maxon::BaseArray<AssetEntry>* assets, maxon::BaseArray<AssetEntry>* missingAssets)
@@ -946,7 +961,7 @@ maxon::Result<void> BaseDocument::PrivateSetBaseRepository(const maxon::Updatabl
 	iferr_scope;
 
 	#define ID_ADDSCENEREPOSITORYBASE 1058913
-	SetParameter(ConstDescID(DescLevel(ID_ADDSCENEREPOSITORYBASE)), GeData((void*)&baseRepo, VOIDVALUETYPE::VOIDVALUE), DESCFLAGS_SET::DONTCHECKMINMAX | DESCFLAGS_SET::FORCESET);
+	SetParameter(ConstDescIDLevel(ID_ADDSCENEREPOSITORYBASE), GeData((void*)&baseRepo, VOIDVALUETYPE::VOIDVALUE), DESCFLAGS_SET::DONTCHECKMINMAX | DESCFLAGS_SET::FORCESET);
 
 	return maxon::OK;
 }
@@ -969,6 +984,11 @@ void BaseSceneHook::FreeDisplayControl()
 void BaseSceneHook::Draw(BaseDocument* doc, BaseDraw* bd, BaseDrawHelp* bh, BaseThread* bt, SCENEHOOKDRAW flags)
 {
 	AtCall(Draw)(doc, bd, bh, bt, flags);
+}
+
+maxon::Generic* BaseSceneHook::GetObjectData(BaseList2D* op)
+{
+	return AtCall(GetObjectData)(op);
 }
 
 maxon::DocumentModeControllerRef& BaseDocument::GetModeController()

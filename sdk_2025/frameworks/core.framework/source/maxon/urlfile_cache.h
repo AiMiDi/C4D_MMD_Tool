@@ -62,8 +62,8 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Check if the url scheme is directly accessible via fopen().
 	/// @param[in] url								Url to check.
-	/// @return												true if the url can accessed directly. false if the url needs a cached copy. in that case use
-	///																UrlFileCacheInterface::FindOrCreateUrl() to create or find the cache file.
+	/// @return												True if the url can accessed directly. false if the url needs a cached copy. in that case use
+	/// 															UrlFileCacheInterface::FindOrCreateUrl() to create or find the cache file.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool IsAccessible(const maxon::Url& url);
 
@@ -73,7 +73,7 @@ public:
 	/// @param[in] maxCacheTime				Time to wait until to delete the cache file after it's not needed anymore.
 	/// @param[in] flags							See URLFILECACHEFLAGS.
 	/// @return												A UrlFileCacheEntry which ensures the existence of the cache file as long as any reference to this
-	///																handle exists.
+	/// 															handle exists.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<UrlFileCacheEntry> FindOrCreateUrl(
 		const Url& sourceUrl, const TimeValue& maxCacheTime = Seconds(1.0), URLFILECACHEFLAGS flags = URLFILECACHEFLAGS::NONE);

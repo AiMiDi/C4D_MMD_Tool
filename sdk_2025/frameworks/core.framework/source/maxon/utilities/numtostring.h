@@ -33,4 +33,4 @@ struct NumToString<0> : maxon::FixedSizeArrayWrapperType<maxon::Char, '0', 0> {}
 
 } // namespace maxon
 
-#endif	// NUMTOSTRING_H__
+#endif // NUMTOSTRING_H__

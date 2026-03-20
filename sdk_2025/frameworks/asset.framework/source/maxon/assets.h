@@ -3,12 +3,9 @@
 
 #include "maxon/backgroundentry.h"
 #include "maxon/datadictionaryobject.h"
-#include "maxon/datetime.h"
-#include "maxon/factory.h"
 #include "maxon/idandversion.h"
-#include "maxon/observable.h"
-#include "maxon/observerobject.h"
-#include "maxon/url.h"
+#include "maxon/datatype.h"
+
 
 //----------------------------------------------------------------------------------------
 // BEGIN - auto generated code, do not edit
@@ -208,6 +205,9 @@ namespace ASSETMETADATA
 	/// 2. Int - usage count
 	//----------------------------------------------------------------------------------------
 	MAXON_ATTRIBUTE(AssetUsageType, Usage, "net.maxon.asset.usage");
+
+	/// meta data for AI search
+	MAXON_ATTRIBUTE(Array<Float32>, MXAI1, "net.maxon.asset.ai.1");
 }
 
 //----------------------------------------------------------------------------------------
@@ -229,14 +229,19 @@ public:
 	//----------------------------------------------------------------------------------------
 	enum class KIND
 	{
-		NONE = 0,											///< No flag set.
-		READ_ONLY = (1 << 0),					///< The meta data is read-only, for example the AssetTimeStamp.
-		PERSISTENT = (1 << 1),				///< The meta data is persistent.
-		VERSION = (1 << 2),						///< The meta data is tied to the version so that it isn't copied to a new version, for example the AssetVersionTag.
-		DERIVED = (1 << 3),						///< The meta data is derived from the asset and other meta data.
-		USER = (1 << 4),							///< The meta data should be stored in user folder.
-		MASK = 0xffff,								///< A mask for all regular flags.
-		IGNORE_READ_ONLY = (1 << 16)	///< This flag is only used as argument for AssetRepositoryInterface::StoreMetaData to ignore the READ_ONLY flag.
+		NONE = 0,														///< No flag set.
+		READ_ONLY = (1 << 0),								///< The meta data is read-only, for example the AssetTimeStamp.
+		PERSISTENT = (1 << 1),							///< The meta data is persistent.
+		VERSION = (1 << 2),									///< The meta data is tied to the version so that it isn't copied to a new version, for example the AssetVersionTag.
+		DERIVED = (1 << 3),									///< The meta data is derived from the asset and other meta data.
+		USER = (1 << 4),										///< The meta data should be stored in user folder.
+		MASK = 0xffff,											///< A mask for all regular flags.
+		IGNORE_READ_ONLY = (1 << 16),				///< This flag is only used as argument for AssetRepositoryInterface::StoreMetaData to ignore the READ_ONLY flag.
+		SAVEASBINARY = (1 << 17),						///< The meta data should be stored as binary data.
+		STORAGELOCATION_DB = (1 << 28),			///< Flag that the meta data is stored in the database.
+		STORAGELOCATION_USER = (1 << 29),		///< Flag that the meta data is stored in the user database.
+		STORAGELOCATION_DERIVED = (1 << 30),///< Flag that the meta data is stored in the derived database.
+		STORAGELOCATION_MASK = (STORAGELOCATION_DB | STORAGELOCATION_USER | STORAGELOCATION_DERIVED),
 	} MAXON_ENUM_FLAGS_CLASS(KIND);
 
 	//----------------------------------------------------------------------------------------
@@ -250,7 +255,7 @@ public:
 	/// Returns the current value of the meta data entry for the meta data attribute #metaId.
 	/// @param[in] metaId							The identifier of the meta data attribute.
 	/// @return												The current value for the attribute, or an empty Data if there is no entry.
-	///																An error is returned if there is an entry, but loading the entry value fails.
+	/// 															An error is returned if there is an entry, but loading the entry value fails.
 	/// @note The returned value may differ from call to call because another thread could have modified the meta data in between.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Data> Get(const InternedId& metaId) const;
@@ -260,7 +265,7 @@ public:
 	/// @param[in] metaId							The identifier of the meta data attribute.
 	/// @tparam T											The type of the meta data attribute.
 	/// @return												The current value for the attribute, or an empty Opt if there is no entry.
-	///																An error is returned if there is an entry, but loading the entry value fails.
+	/// 															An error is returned if there is an entry, but loading the entry value fails.
 	/// @note The returned value may differ from call to call because another thread could have modified the meta data in between.
 	//----------------------------------------------------------------------------------------
 	template <typename T> MAXON_FUNCTION Result<Opt<T>> Get(const InternedId& metaId) const
@@ -275,7 +280,7 @@ public:
 	/// Returns the current value of the meta data entry for the meta data attribute ATTR.
 	/// @tparam ATTR									The attribute for which the value shall be returned (has to be declared with MAXON_ATTRIBUTE).
 	/// @return												The current value for the id, or an empty Opt if there is no entry.
-	///																An error is returned if there is an entry, but loading the entry value fails.
+	/// 															An error is returned if there is an entry, but loading the entry value fails.
 	/// @note The returned value may differ from call to call because another thread could have modified the meta data in between.
 	//----------------------------------------------------------------------------------------
 	template <typename ATTR> MAXON_FUNCTION Result<Opt<typename ATTR::ValueType>> Get() const
@@ -287,7 +292,7 @@ public:
 	/// Returns the current value of the meta data entry for the meta data attribute #attr.
 	/// @param[in] attr								The attribute for which the value shall be returned (has to be declared with MAXON_ATTRIBUTE).
 	/// @return												The current value for the id, or an empty Opt if there is no entry.
-	///																An error is returned if there is an entry, but loading the entry value fails.
+	/// 															An error is returned if there is an entry, but loading the entry value fails.
 	/// @note The returned value may differ from call to call because another thread could have modified the meta data in between.
 	//----------------------------------------------------------------------------------------
 	template <typename ATTR> MAXON_FUNCTION Result<Opt<typename ATTR::ValueType>> Get(const ATTR& attr) const
@@ -300,7 +305,7 @@ public:
 	/// @param[in] attr								The attribute for which the value shall be returned (has to be declared with MAXON_ATTRIBUTE).
 	/// @param[in] defaultValue				The default value to use when there is no entry.
 	/// @return												The current value for the id, or the defaultValue if there is no entry.
-	///																An error is returned if there is an entry, but loading the entry value fails.
+	/// 															An error is returned if there is an entry, but loading the entry value fails.
 	/// @note The returned value may differ from call to call because another thread could have modified the meta data in between.
 	//----------------------------------------------------------------------------------------
 	template <typename ATTR> MAXON_FUNCTION Result<typename ATTR::ValueType> Get(const ATTR& attr, const typename ATTR::ValueType& defaultValue) const
@@ -386,8 +391,8 @@ public:
 	/// GetDefaultIcon returns the default icon of this asset type.
 	/// @param[in] repository					Repository to search for.
 	/// @param[in] asset							Asset id and version.
-	/// @param[in] meta								meta data of the asset to store.
-	/// @return                       OK on success.
+	/// @param[in] meta								Meta data of the asset to store.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Url> GetDefaultIcon(const AssetRepositoryRef& repository, const IdAndVersion& asset, const AssetMetaData& meta) const;
 
@@ -396,9 +401,9 @@ public:
 	/// @param[in] repo								The repository to which the asset belongs.
 	/// @param[in] assetDescription		The asset description.
 	/// @param[in] url								The Url from which the asset shall be loaded.
-	/// @param[in,out] updateLinks		nullptr if the asset shall be loaded as is, or a pointer to a Bool if asset links which
-	///																use ASSET_UPDATE_POLICY::IMPLICIT shall be resolved to the latest version. The Bool is set to true
-	///																by this method whenever there is a link where the resolved version differs from the original version.
+	/// @param[in,out] updateLinks		Nullptr if the asset shall be loaded as is, or a pointer to a Bool if asset links which
+	/// 															use ASSET_UPDATE_POLICY::IMPLICIT shall be resolved to the latest version. The Bool is set to true
+	/// 															by this method whenever there is a link where the resolved version differs from the original version.
 	/// @return												The loaded asset.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Asset> Load(const AssetRepositoryRef& repo, const AssetDescription& assetDescription, const Url& url, Bool* updateLinks) const;
@@ -408,8 +413,8 @@ public:
 	/// @param[in] asset							The asset to store, has to match the expected data type of this AssetType.
 	/// @param[in] url								The Url where to store the asset.
 	/// @param[in] hashStream					The stream decorator to use for each created output stream.
-	///																This can be used by the caller to compute a hash value of the asset content
-	///																which is then used as version identifier.
+	/// 															This can be used by the caller to compute a hash value of the asset content
+	/// 															which is then used as version identifier.
 	/// @return												A map for additional persistent meta data entries which the calling repository has to store for the asset.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<HashMap<InternedId, Data>> Store(const Asset& asset, const Url& url, const OutputStreamDecoratorFactory& hashStream) const;
@@ -417,19 +422,19 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// CopyWithEncryption copies the asset with encryption to the new url.
 	/// @param[in] source							Asset to copy.
-	/// @param[in] from								source url.
-	/// @param[in] to									destination url.
-	/// @return                       OK on success.
+	/// @param[in] from								Source url.
+	/// @param[in] to									Destination url.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> CopyWithEncryption(const AssetDescription& source, const Url& from, const Url& to) const;
 
 	//----------------------------------------------------------------------------------------
 	/// LoadDescriptionDefinition loads the data description of the given asset.
 	/// @param[in] asset							Asset to load.
-	/// @param[in] mode								see LOADDESCRIPTIONMODE.
-	/// @param[in] category						DATADESCRIPTION_CATEGORY_xxx
+	/// @param[in] mode								See LOADDESCRIPTIONMODE.
+	/// @param[in] category						DATADESCRIPTION_CATEGORY_xxx.
 	/// @param[in] language						Language id in case of DATADESCRIPTION_CATEGORY_STRING.
-	/// @return                       DataDescriptionDefinition on success.
+	/// @return												DataDescriptionDefinition on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<DataDescriptionDefinition> LoadDescriptionDefinition(const AssetDescription& asset,
 		LOADDESCRIPTIONMODE mode, const Id& category, const LanguageRef& language) const;
@@ -437,11 +442,11 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// StoreDescriptionDefinition description.
 	/// @param[in] asset							Asset to store.
-	/// @param[in] category						DATADESCRIPTION_CATEGORY_xxx
+	/// @param[in] category						DATADESCRIPTION_CATEGORY_xxx.
 	/// @param[in] language						Language id in case of DATADESCRIPTION_CATEGORY_STRING.
 	/// @param[in] overwrittenDescription	Additional description with overwritten parameters.
 	/// @param[in] storeRepository		Repository to store the asset.
-	/// @return                       AssetDescription with the new asset on success.
+	/// @return												AssetDescription with the new asset on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<AssetDescription> StoreDescriptionDefinition(const AssetDescription& asset, const Id& category,
 		const LanguageRef& language, const DataDescriptionDefinition& overwrittenDescription, const AssetRepositoryRef& storeRepository) const;
@@ -450,7 +455,7 @@ public:
 	/// GetRepositoryId returns the default id of the asset.
 	/// @param[in] id									Id of the asset.
 	/// @param[in] fromTo							True to add the full id. False to cut the hash code and append it.
-	/// @return                       New id on success.
+	/// @return												New id on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Id> GetRepositoryId(const Id& id, Bool fromTo) const;
 
@@ -460,7 +465,7 @@ public:
 	/// @param[in] key								Attribute id to load. e.g. OBJECT::BASE:NAME.
 	/// @param[in] languageRef				Optional language. By default the function uses the current language.
 	/// @param[in] fallback						Fallback string if the asset has no name.
-	/// @return                       String on success.
+	/// @return												String on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<String> GetMetaString(const AssetDescription& asset, const InternedId& key, const LanguageRef& languageRef, const String& fallback) const;
 
@@ -470,7 +475,7 @@ public:
 	/// @param[in] key								Attribute id to save. e.g. OBJECT::BASE:NAME.
 	/// @param[in] value							New string.
 	/// @param[in] languageRef				Optional language. By default the function uses the current language.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> StoreMetaString(const AssetDescription& asset, const InternedId& key, const String& value, const LanguageRef& languageRef) const;
 
@@ -480,7 +485,7 @@ public:
 	/// @param[in] asset							Asset id and version.
 	/// @param[in] meta								Meta data of the asset.
 	/// @param[in] metaId							MetaId to load.
-	/// @return                       Tuple<Data, Bool> on success. Data contains the data. Bool if the value should be cached.
+	/// @return												Tuple<Data, Bool> on success. Data contains the data. Bool if the value should be cached.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Tuple<Data, Bool>> ComputeMetaData(const AssetRepositoryRef& repository, const IdAndVersion& asset, const AssetMetaData& meta, const InternedId& metaId) const;
 };
@@ -728,7 +733,7 @@ public:
 	/// Yields all derived repositories of this repository to #receiver
 	/// (those which have this repository as direct base).
 	/// @param[in] receiver						The receiver for derived repositories.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetDerived(const ValueReceiver<const AssetRepositoryRef&>& receiver) const;
 
@@ -791,9 +796,9 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// PrivatePrefetchMetaData prefetches all meta data of the given type.
 	/// @param[in] metaId							MetaData id to prefetch.
-	/// @param[in] findMode						see ASSET_FIND_MODE.
-	/// @param[in] visited						temp Hashmap.
-	/// @return                       OK on success.
+	/// @param[in] findMode						See ASSET_FIND_MODE.
+	/// @param[in] visited						Temp Hashmap.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> PrivatePrefetchMetaData(const InternedId& metaId, AssetMetaDataInterface::KIND kind, ASSET_FIND_MODE findMode, HashSet<const AssetRepositoryInterface*>& visited);
 
@@ -817,7 +822,7 @@ public:
 	/// @param[in] version						The version identifier to find, use an empty identifier to find all versions.
 	/// @param[in] findMode						Flags for the lookup.
 	/// @param[in] receiver						All found assets are reported to this receiver.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_FUNCTION Result<Bool> FindAssets(const Id& type, const Id& aid, const Id& version, ASSET_FIND_MODE findMode, const ValueReceiver<const AssetDescription&>& receiver) const
 	{
@@ -847,7 +852,7 @@ public:
 	/// @param[in] version						The version identifier to find, use an empty identifier to find all versions.
 	/// @param[in] findMode						Flags for the lookup.
 	/// @param[in] receiver						All found assets are reported to this receiver.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> FindAssets(const Block<const Id>& types, const Id& aid, const Id& version, ASSET_FIND_MODE findMode, const ValueReceiver<const AssetDescription&>& receiver) const;
 
@@ -870,7 +875,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// GetDescription returns the AssetDescription of the given asset.
 	/// @param[in] asset							Asset to query.
-	/// @return                       AssetDescription on success.
+	/// @return												AssetDescription on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<AssetDescription> GetDescription(const Asset& asset) const;
 
@@ -1052,7 +1057,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// GetRepositoryName returns the name of the repository in the requested language.
 	/// @param[in] language						Language to query.
-	/// @return                       Name on success.
+	/// @return												Name on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<String> GetRepositoryName(const LanguageRef& language, Bool addDetails) const;
 
@@ -1060,7 +1065,7 @@ public:
 	/// SetRepositoryName sets the name of the repository in the given language.
 	/// @param[in] name								Name to set.
 	/// @param[in] language						Language.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetRepositoryName(const String& name, const LanguageRef& language);
 
@@ -1106,7 +1111,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Informs all observers of ObservableDownloadStateChanged and calls HandleDownloadStateChanged on all derived repositories.
 	/// @param[in] repository					The repository.
-	/// @param[in] finished						True if finished
+	/// @param[in] finished						True if finished.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void HandleDownloadStateChanged(const AssetRepositoryRef& repository, Bool finished);
 
@@ -1162,7 +1167,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Informs all observers of ObservableDownloadStateChanged and calls HandleDownloadStateChanged on all derived repositories.
 	/// @param[in] repository					The repository.
-	/// @param[in] finished						True if finished
+	/// @param[in] finished						True if finished.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void HandleDownloadStateChanged(const AssetRepositoryRef& repository, Bool finished);
 };
@@ -1210,9 +1215,9 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Loads the asset. The implementation may use caching to avoid repeated loading of the same asset.
-	/// @param[in,out] updateLinks		nullptr if the asset shall be loaded as is, or a pointer to a Bool if asset links which
-	///																use ASSET_UPDATE_POLICY::IMPLICIT shall be resolved to the latest version. The Bool is set to true
-	///																by this method whenever there is a link where the resolved version differs from the original version.
+	/// @param[in,out] updateLinks		Nullptr if the asset shall be loaded as is, or a pointer to a Bool if asset links which
+	/// 															use ASSET_UPDATE_POLICY::IMPLICIT shall be resolved to the latest version. The Bool is set to true
+	/// 															by this method whenever there is a link where the resolved version differs from the original version.
 	/// @return												The loaded asset.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Asset> Load(Bool* updateLinks) const;
@@ -1264,7 +1269,7 @@ public:
 	/// EraseMetaData removes meta data from the asset.
 	/// @param[in] attr								The meta data attribute.
 	/// @param[in] kind								The kind of the meta data.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	template <typename ATTR> MAXON_FUNCTION Result<void> EraseMetaData(const ATTR& attr, AssetMetaDataInterface::KIND kind) const
 	{
@@ -1288,7 +1293,7 @@ public:
 	/// @param[in] key								Attribute id to load. e.g. OBJECT::BASE:NAME.
 	/// @param[in] languageRef				Optional language. By default the function uses the current language.
 	/// @param[in] fallback						Fallback string if the asset has no name.
-	/// @return                       String on success.
+	/// @return												String on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<String> GetMetaString(const InternedId& key, const LanguageRef& languageRef = GetPtrSizedZeroRef<LanguageRef>(), const String& fallback = GetPtrSizedZeroRef<String>()) const;
 
@@ -1297,7 +1302,7 @@ public:
 	/// @param[in] key								Attribute id to save. e.g. OBJECT::BASE:NAME.
 	/// @param[in] value							New string.
 	/// @param[in] languageRef				Optional language. By default the function uses the current language.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> StoreMetaString(const InternedId& key, const String& value, const LanguageRef& languageRef) const;
 };
@@ -1463,28 +1468,28 @@ public:
 	/// AddRepositoryScope resolves the asset url and caching the assetdescription in the url.
 	/// @param[in] url								Url to investigate.
 	/// @param[in] repository					Repository to search.
-	/// @return                       Modified url which contains the AssetDescription on success.
+	/// @return												Modified url which contains the AssetDescription on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Url> AddRepositoryScope(const Url& url, const AssetRepositoryRef& repository);
 
 	//----------------------------------------------------------------------------------------
 	/// GetLanguageMetaDataId returns the standardized InternedId for the given languageid.
 	/// @param[in] languageId					Language id.
-	/// @return                       InternedId on success.
+	/// @return												InternedId on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<InternedId> GetLanguageMetaDataId(const Id& languageId);
 
 	//----------------------------------------------------------------------------------------
 	/// GetVersionString returns the version string for the given asset.
 	/// @param[in] asset							Asset to look at.
-	/// @return                       Version string on success.
+	/// @return												Version string on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<String> GetVersionString(const AssetDescription& asset);
 
 	//----------------------------------------------------------------------------------------
 	/// GetVersionString returns the version string for the given asset.
 	/// @param[in] asset							Asset to look at.
-	/// @return                       Version string on success.
+	/// @return												Version string on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<String> GetVersionString(const Asset& asset);
 
@@ -1508,7 +1513,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// GetDescription returns the AssetDescription of the given Asset.
-	/// @return                       AssetDescription on success.
+	/// @return												AssetDescription on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<AssetDescription> GetDescription() const;
 
@@ -1567,57 +1572,58 @@ public:
 	/// Returns the asset description from a given url with the URLSCHEME_ASSET.
 	/// @param[in] url								Url to search.
 	/// @param[in] repository					Lookup repository.
-	/// @return                       AssetDescription on success.
+	/// @return												AssetDescription on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetDescription> ResolveAsset(const Url& url, const AssetRepositoryRef& repository);
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the url to access the asset data.
 	/// e.g. asset:///file_634545662344
-	/// @param[in] asset						asset to convert.
-	/// @param[in] isLatest					True if the asset is the latest asset. In that case the version will not be added to the url.
+	/// @param[in] asset							Asset to convert.
+	/// @param[in] isLatest						True if the asset is the latest asset. In that case the version will not be added to the url.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Url> GetAssetUrl(const AssetDescription& asset, Bool isLatest);
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the asset is valid for the current license and program version.
-	/// @param[in] asset							Asset to check
-	/// @return                       @trueOtherwiseFalse{if asset is valid}
+	/// @param[in] asset							Asset to check.
+	/// @return												@trueOtherwiseFalse{if asset is valid}
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Bool> IsAssetValid(const AssetDescription& asset);
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the asset is visible for the current license and program version.
-	/// @param[in] asset							Asset to check
-	/// @return                       @trueOtherwiseFalse{if asset is visible}
+	/// @param[in] asset							Asset to check.
+	/// @return												@trueOtherwiseFalse{if asset is visible}
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Bool> IsAssetVisible(const AssetDescription& asset);
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the asset is valid for the current program version.
-	/// @param[in] asset							Asset to check
-	/// @return                       Version validity result.
+	/// @param[in] asset							Asset to check.
+	/// @return												Version validity result.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetVersionValidityData> IsAssetVersionValid(const AssetDescription& asset);
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the asset is valid for the current license.
-	/// @param[in] asset							Asset to check
-	/// @return                       License validity result.
+	/// @param[in] asset							Asset to check.
+	/// @return												License validity result.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<AssetLicenseValidityData> IsAssetLicenseValid(const AssetDescription& asset);
 
 	//----------------------------------------------------------------------------------------
-	/// Checks if the asset idVersion can be found in the given searchRepository to resolve missing assets
-	/// @param[in] searchRepository		Repository to search for the asset
-	/// @param[in] typeId							Type of the asset
-	/// @param[in] idVersion					Id and version of the asset
+	/// Checks if the asset idVersion can be found in the given searchRepository to resolve missing assets.
+	/// @param[in] searchRepository		Repository to search for the asset.
+	/// @param[in] typeId							Type of the asset.
+	/// @param[in] idVersion					Id and version of the asset.
 	/// @param[in] assetCreationDate	[optional] Argument with the creation date of the asset. Pass UniversalDateTime() when unknown.
 	/// @param[in] checked						HashSet to prevent stackoverflow.
 	/// @param[in] callbackFound			[optional] Callback that is called if the asset could be found. It might happen that the passed asset is the 
-	///																renamed/updated version of the searched one.
+	/// 															renamed/updated version of the searched one.
 	/// @param[in] callbackMissing		[optional] Callback that is called if the asset could not be found.
 	/// @return												OK on success.
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> ResolveAssetsWithMissingAssets(const AssetRepositoryRef& searchRepository, const Id& typeId, const IdAndVersion& idVersion, const UniversalDateTime& assetCreationDate, HashSet<IdAndVersion>& checked, const Delegate<Result<void>(const AssetDescription&, HashSet<IdAndVersion>& checked)>& callbackFound, const Delegate<Result<void>(Bool outdated)>& callbackMissing);
 };
 
@@ -1646,7 +1652,7 @@ public:
 	/// is incremented.
 	/// @param[in] updates						The updates to apply as a block of the references and their new targets.
 	/// @param[in] repository					The repository to which this asset belongs. @c{asset.GetRepository()}
-	///																will be nullptr during the update because the asset is in mutable state.
+	/// 															will be nullptr during the update because the asset is in mutable state.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Update(const Block<const Tuple<AssetReference, AssetBase>>& updates, const AssetRepositoryRef& repository);
 };
@@ -1671,14 +1677,14 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// GetPendingUpdates returns an array with a list of unsaved changes.
 	/// @param[in] reset							True to reset the changes.
-	/// @return                       Array on success.
+	/// @return												Array on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<BaseArray<AssetRepositoryUpdate>> GetPendingUpdates(Bool reset) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Update applies the updates to the repository.
-	/// @param[in] updates						Updates to process
-	/// @return                       OK on success.
+	/// @param[in] updates						Updates to process.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Update(const Block<const AssetRepositoryUpdate>& updates);
 };
@@ -1701,13 +1707,13 @@ class CompactableAssetRepositoryInterface : MAXON_INTERFACE_BASES(AssetRepositor
 public:
 	//----------------------------------------------------------------------------------------
 	/// Compact generates an index for a repository.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Compact();
 
 	//----------------------------------------------------------------------------------------
 	/// DeleteIndexFiles removes all index files.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> DeleteIndexFiles();
 
@@ -1715,7 +1721,7 @@ public:
 	/// Compact generates an index for a repository in a async background job.
 	/// param[in] delay								Optional delay after which time the compact should run. TimeValue() to run immediatly.
 	/// param[in] backgroundJob				Optional backgroundJob to use given job. Nullptr to create a backgroundjob internally.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> CompactInBackground(const TimeValue& delay, const BackgroundProgressRef& backgroundJob);
 
@@ -1769,7 +1775,7 @@ namespace AssetTypes
 /// @param[in] asset							The asset to receive.
 /// @param[in] meta								Built-in meta data for the asset.
 /// @param[in] metaUrl						An optional Url where additional meta data can be written to.
-/// @return												false if the receiver cancelled further evaluation, true otherwise.
+/// @return												False if the receiver cancelled further evaluation, true otherwise.
 //----------------------------------------------------------------------------------------
 using BuiltinAssetReceiver = Delegate<Result<Bool>(const Asset& asset, const DataDictionary& meta, const Url& metaUrl)>;
 
@@ -1781,7 +1787,7 @@ using BuiltinAssetReceiver = Delegate<Result<Bool>(const Asset& asset, const Dat
 /// @param[in] aid								The asset identifier to lookup, use an empty identifier to find all assets.
 /// @param[in] findMode						Flags for the lookup.
 /// @param[in] receiver						All found assets (plus their meta data and an optional Url to store persistent meta data) are reported to this receiver.
-/// @return												false if the receiver cancelled further evaluation, true otherwise.
+/// @return												False if the receiver cancelled further evaluation, true otherwise.
 //----------------------------------------------------------------------------------------
 using BuiltinAssetLoaderNew = Delegate<Result<Bool>(const Block<const Id>& types, const Id& aid, ASSET_FIND_MODE findMode,
 																								 const BuiltinAssetReceiver& receiver)>;
@@ -1851,31 +1857,31 @@ using DndAsset = Tuple<AssetDescription, Url, String /* searchString */>;
 //----------------------------------------------------------------------------------------
 /// GetAssetUrl returns the url of a DndAsset.
 /// @param[in] asset							Drag&Drop asset to check.
-/// @return                       Url on success.
+/// @return												Url on success.
 //----------------------------------------------------------------------------------------
 Url GetAssetUrl(const DndAsset& asset);
 
 //----------------------------------------------------------------------------------------
 /// Mark the asset as used and increment the usage counter.
-/// This function will update the ASSETMETADATA::Uage meta data by increasing the count and date
+/// This function will update the ASSETMETADATA::Uage meta data by increasing the count and date.
 /// @param[in] asset							Asset to mark.
 /// @param[in] incCount						True to update the count.
 /// @param[in] updateDate					True to update the usage count.
-/// @return                       OK on success.
+/// @return												OK on success.
 //----------------------------------------------------------------------------------------
 Result<void> UpdateAssetUsage(const AssetDescription& asset, Bool incCount = true, Bool updateDate = true);
 
 //----------------------------------------------------------------------------------------
 /// IdToIdAndVersion helper function to convert a compacted id back to an id and version.
 /// @param[in] id									Compacted id.
-/// @return                       Extracted Id and version on success.
+/// @return												Extracted Id and version on success.
 //----------------------------------------------------------------------------------------
 Result<IdAndVersion> IdToIdAndVersion(const Id& id);
 
 //----------------------------------------------------------------------------------------
 /// IdAndVersionToId compacts an IdAndVersion into a id.
 /// @param[in] assetId						Id to compact.
-/// @return                       Id on success.
+/// @return												Id on success.
 //----------------------------------------------------------------------------------------
 Result<Id> IdAndVersionToId(const IdAndVersion& assetId);
 
@@ -1883,7 +1889,7 @@ Result<Id> IdAndVersionToId(const IdAndVersion& assetId);
 /// IdToIdAndVersionWithRepository calls IdToIdAndVersion and adds the repository ontop.
 /// @param[in] id									Id to extract.
 /// @param[in] lookupRepository		Repository to look at.
-/// @return                       Tuple<AssetRepositoryRef, IdAndVersion, Bool> on success. Bool: limitRepository
+/// @return												Tuple<AssetRepositoryRef, IdAndVersion, Bool> on success. Bool: limitRepository.
 //----------------------------------------------------------------------------------------
 Result<Tuple<AssetRepositoryRef, IdAndVersion, Bool>> IdToIdAndVersionWithRepository(const Id& id, const AssetRepositoryRef& lookupRepository);
 
@@ -1891,7 +1897,7 @@ Result<Tuple<AssetRepositoryRef, IdAndVersion, Bool>> IdToIdAndVersionWithReposi
 /// IdAndVersionToIdWithRepository inverse of IdToIdAndVersionWithRepository.
 /// @param[in] assetId						AssetId to compact.
 /// @param[in] repository					Repository to use.
-/// @return                       OK on success.
+/// @return												OK on success.
 //----------------------------------------------------------------------------------------
 Result<Id> IdAndVersionToIdWithRepository(const IdAndVersion& assetId, const AssetRepositoryRef& repository);
 

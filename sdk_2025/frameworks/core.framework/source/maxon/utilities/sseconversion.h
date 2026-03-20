@@ -1139,6 +1139,7 @@ FORCE_INLINE __m128d _mm_shuffle_pd(__m128d a, __m128d b, int imm)
 		case _MM_SHUFFLE2(0, 1): shuf = __builtin_shufflevector(vreinterpretq_f64_m128(a), vreinterpretq_f64_m128(b), 1, 2); break;
 		case _MM_SHUFFLE2(1, 0): shuf = __builtin_shufflevector(vreinterpretq_f64_m128(a), vreinterpretq_f64_m128(b), 0, 3); break;
 		case _MM_SHUFFLE2(1, 1): shuf = __builtin_shufflevector(vreinterpretq_f64_m128(a), vreinterpretq_f64_m128(b), 1, 3); break;
+		default: __debugbreak(); shuf =  { }; break;
 	}
 	return vreinterpretq_m128_f64(shuf);
 }

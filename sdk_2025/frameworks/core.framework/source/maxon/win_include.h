@@ -3,12 +3,7 @@
 
 // this is the one and only central include file that loads windows.h with all the right macro definitions
 #ifdef MAXON_TARGET_WINDOWS
-	#if defined(__INTEL_COMPILER)
-		#pragma warning(disable:47)		// incompatible redefinition of macro "D3D11_ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD" (declared at line 49845 of "C:\Program Files (x86)\Windows Kits\8.0\Include\shared\winerror.h")
-		#pragma warning(disable:1885)	// #pragma region unclosed at end of file
-	#else
-		#pragma warning(disable:4005)	// incompatible redefinition of macro "D3D11_ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD" (declared at line 49845 of "C:\Program Files (x86)\Windows Kits\8.0\Include\shared\winerror.h")
-	#endif
+	#pragma warning(disable:4005)	// incompatible redefinition of macro "D3D11_ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD" (declared at line 49845 of "C:\Program Files (x86)\Windows Kits\8.0\Include\shared\winerror.h")
 
 	#pragma push_macro("id")
 	#undef id

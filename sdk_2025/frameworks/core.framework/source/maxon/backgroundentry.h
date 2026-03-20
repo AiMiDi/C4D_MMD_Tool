@@ -1,11 +1,8 @@
 #ifndef BACKGROUNDENTRY_H__
 #define BACKGROUNDENTRY_H__
 
-#include "maxon/array.h"
 #include "maxon/datetime.h"
 #include "maxon/progress.h"
-#include "maxon/object.h"
-#include "maxon/observable.h"
 #include "maxon/url.h"
 #include "maxon/weakref.h"
 
@@ -56,21 +53,21 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// GetStates iterates over all state entries and calls the value receiver for each.
 	/// @param[in] state							ValueReceiver which is called for every entry in the list. Return false to stop the iteration immediately.
-	/// @return                       The return value of the ValueReceiver. True if all values were iterated and the callback did not stop the iteration.
+	/// @return												The return value of the ValueReceiver. True if all values were iterated and the callback did not stop the iteration.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetStates(const ValueReceiver<STATE, const String&>& state) const;
 
 	//----------------------------------------------------------------------------------------
 	/// GetStateCount description.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int GetStateCount() const;
 
 	//----------------------------------------------------------------------------------------
 	/// AddState adds a new state message to the entry.
-	/// @param[in] state							see STATE.
+	/// @param[in] state							See STATE.
 	/// @param[in] message						Text of the message.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> AddState(STATE state, const String& message);
 };
@@ -102,7 +99,7 @@ public:
 	/// Important: The last reference to the object will remove the object from the active list.
 	/// @param[in] title							Text with the human readable name of the action.
 	/// @param[in] sendToHistory			True if the entry should be moved to the history list after it's done.
-	/// @return                       New BackgroundProgressRef entry on success.
+	/// @return												New BackgroundProgressRef entry on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<BackgroundProgressRef> AddActiveEntry(const String& title, Bool sendToHistory = true);
 
@@ -110,14 +107,14 @@ public:
 	/// RemoveActiveEntry removes the entry from the active list and moves it to the history.
 	/// You can use this before the the last reference dies.
 	/// @param[in] entry							Entry to remove from the active list.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> RemoveActiveEntry(const BackgroundProgressRef& entry);
 
 	//----------------------------------------------------------------------------------------
 	/// GetActiveEntries calls the ValueReceiver for each active entry.
 	/// @param[in] entry							Delegate which is called for every entry in the list.
-	/// @return                       Result of the delegate.
+	/// @return												Result of the delegate.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetActiveEntries(const ValueReceiver<const BackgroundProgressRef&>& entry) const;
 
@@ -129,7 +126,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// GetHistoryEntries calls the ValueReceiver for each history entry.
 	/// @param[in] entry							Delegate which is called for every entry in the list.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetHistoryEntries(const ValueReceiver<const BackgroundEntryRef&>& entry) const;
 
@@ -139,15 +136,15 @@ public:
 	MAXON_METHOD Int GetHistoryCount() const;
 
 	//----------------------------------------------------------------------------------------
-	/// RemoveHistoryEntry removes the given entry from the history
+	/// RemoveHistoryEntry removes the given entry from the history.
 	/// @param[in] entry							Entry to remove.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> RemoveHistoryEntry(const BackgroundEntryRef& entry);
 
 	//----------------------------------------------------------------------------------------
 	/// ClearHistory removes all history entries.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> ClearHistory();
 

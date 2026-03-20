@@ -74,7 +74,7 @@ struct ViewIteratorMember
 		Int extra = simd.GetExtraStride();
 		if (!ENABLE_SIMD || MAXON_LIKELY(extra == 0))
 		{
-			reinterpret_cast<const Char*&>(value) += stride * advanceCount;
+			AdvanceByByteOffset(value, stride * advanceCount);
 		}
 		else
 		{
@@ -86,7 +86,7 @@ struct ViewIteratorMember
 			// size of a complete SIMD vector, we have to divide this by the multiplicity to obtain the size of the
 			// corresponding (hypothetical) non-SIMD vector. We just shift advanceCount by multLog, this does the division
 			// and also masks out the lowest bits of advanceCount.
-			reinterpret_cast<const Char*&>(value) += (extra + simd.alignmentMask + 1) * (advanceCount >> logMult);
+			AdvanceByByteOffset(value, (extra + simd.alignmentMask + 1) * (advanceCount >> logMult));
 			// Then do the remaining steps, those may be either small or large steps.
 			for (Int i = advanceCount & ((Int(1) << logMult) - 1); i; --i)
 			{
@@ -101,8 +101,8 @@ static_assert(SIZEOF(ViewIteratorMember) == 16, "Unexpected size of ViewIterator
 
 #ifdef MAXON_COMPILER_MSVC
 // Disable MSVC warning about empty array member 'members[]'
-#pragma warning( push )
-#pragma warning( disable : 4200 )
+#pragma warning(push)
+#pragma warning(disable : 4200)
 #endif
 
 struct MemberMap
@@ -153,7 +153,7 @@ private:
 	friend class DataTypeLibImpl;
 };
 #ifdef MAXON_COMPILER_MSVC
-#pragma warning( pop )
+#pragma warning(pop)
 #endif
 
 } // namespace maxon

@@ -34,7 +34,7 @@ public:
 	/// SetFilterString stores a new smartsearch in a SmartSearchAsset.
 	/// @param[in] asset							SmartSearchAsset to modify.
 	/// @param[in] filter							Fitler string to store.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> SetFilterString(const AssetDescription& asset, const String& filter);
 };

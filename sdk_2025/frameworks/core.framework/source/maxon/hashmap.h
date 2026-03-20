@@ -23,6 +23,15 @@ enum class HASHMAP_ENTRY_LAYOUT
 
 template <typename HASHVALUE, HASHMAP_ENTRY_LAYOUT L> struct DefaultHashMapEntryHandlerBase
 {
+	static void InitialReference(void* map, const void* entry)
+	{
+	}
+
+	template <typename MAP, typename ENTRY> static void RemoveReference(MAP* map, const ENTRY* entry)
+	{
+		map->PrivateFreeEntry(entry);
+	}
+
 	using HashValueType = HASHVALUE;
 	static const HASHMAP_ENTRY_LAYOUT LAYOUT = L;
 
@@ -1000,6 +1009,111 @@ enum class HASHMAP_MODE
 	NO_NONEMPTY_BUCKET_TABLE		///< Don't maintain a table of non-empty buckets. This reduces memory consumption, but makes iterations slower.
 } MAXON_ENUM_LIST(HASHMAP_MODE);
 
+
+/// Class used for entries of the HashMap.
+/// The entries of a bucket are stored as a singly linked list, you can loop over this list via GetNextInBucket().
+template <typename K, typename V, typename ENTRY_HANDLER, typename HASH> class HashMapEntry : public HashMapEntryBase<K, V, ENTRY_HANDLER>
+{
+public:
+	using KeyType = K;
+	using ValueType = V;
+	using HashValueType = typename ENTRY_HANDLER::HashValueType;
+	using EntryBase = HashMapEntryBase<K, V, ENTRY_HANDLER>;
+	using EntryBase::EntryBase;
+
+	operator Pair<K, V>() const
+	{
+		return Pair<K, V>(this->GetKey(), this->GetValue());
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Returns the next entry with the same key. This is needed for multi-maps to iterate
+	/// over all entries for a key, see InsertMultiEntry().
+	/// @return												Next entry with the same key, or nullptr if there is no further entry with the same key.
+	//----------------------------------------------------------------------------------------
+	const HashMapEntry* GetNextWithSameKey() const
+	{
+		return const_cast<HashMapEntry*>(this)->GetNextWithSameKey();
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Returns the next entry with the same key. This is needed for multi-maps to iterate
+	/// over all entries for a key, see InsertMultiEntry().
+	/// @return												Next entry with the same key, or nullptr if there is no further entry with the same key.
+	//----------------------------------------------------------------------------------------
+	HashMapEntry* GetNextWithSameKey()
+	{
+		for (HashMapEntry* e = static_cast<HashMapEntry*>(this->_next); e; e = static_cast<HashMapEntry*>(e->_next))
+		{
+			if ((e->GetKeyHashCode() == this->GetKeyHashCode()) && HASH::IsEqual(e->GetKey(), this->GetKey()))
+			{
+				return e;
+			}
+		}
+		return nullptr;
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Returns the next entry in the same bucket.
+	/// @return												Next entry in bucket, or nullptr if this is the last entry.
+	//----------------------------------------------------------------------------------------
+	const HashMapEntry* GetNextInBucket() const
+	{
+		return static_cast<const HashMapEntry*>(this->_next);
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Returns the next entry in the same bucket.
+	/// @return												Next entry in bucket, or nullptr if this is the last entry.
+	//----------------------------------------------------------------------------------------
+	HashMapEntry* GetNextInBucket()
+	{
+		return static_cast<HashMapEntry*>(this->_next);
+	}
+
+	void PrivateInitNextInBucket(HashMapEntry* next)
+	{
+		DebugAssert(!this->_next);
+		this->_next = next;
+	}
+
+	typename SFINAEHelper<String, V>::type ToString(const FormatStatement* format = nullptr) const
+	{
+		return GlobalToString(this->GetKey(), format) + CONSTSTRING("->") + GlobalToString(this->GetValue(), format);
+	}
+
+	Int GetMemorySize() const
+	{
+		return SIZEOF(HashMapEntry) - SIZEOF(EntryBase) + EntryBase::GetMemorySize();
+	}
+
+	// stylecheck.naming=false
+
+	template <Int I> decltype(auto) get() const
+	{
+		if constexpr (I == 0)
+			return this->GetKey();
+		else
+			return this->GetValue();
+	}
+
+	template <Int I> decltype(auto) get()
+	{
+		if constexpr (I == 0)
+			return this->GetKey();
+		else
+			return this->GetValue();
+	}
+
+	// stylecheck.naming=true
+
+private:
+	MAXON_DISALLOW_COPY_AND_ASSIGN(HashMapEntry);
+
+	template <typename IK, typename IV, typename IHASH, typename IENTRY_HANDLER, typename ALLOCATOR, HASHMAP_MODE MODE, Int INITIAL_CAPACITY, Int LOAD_FACTOR, typename ENTRY_ALLOCATOR> friend class HashMap;
+};
+
+
 //----------------------------------------------------------------------------------------
 /// A HashMap maps keys to values with the help of hash codes for the keys.
 /// It expects a function static HashInt HASH::GetHashCode(const K&) in the class HASH (given as template argument) to compute a hash code for a key,
@@ -1116,9 +1230,8 @@ template <typename K, typename V, typename HASH = DefaultCompare, typename ENTRY
 public:
 	using Super = MapBase<HashMap, K, V, EmptyClass, HASH>;
 	using HashType = HASH;
-	using EntryBase = HashMapEntryBase<K, V, ENTRY_HANDLER>;
 	using HashValueType = typename ENTRY_HANDLER::HashValueType;
-	class Entry;
+	using Entry = HashMapEntry<K, V, ENTRY_HANDLER, HASH>;
 	using IsHashMap = std::true_type;
 
 	static_assert(MODE != HASHMAP_MODE::SYNCHRONIZED || (LOAD_FACTOR <= 0), "Wrong template arguments of HashMap.");
@@ -1225,10 +1338,9 @@ public:
 	//----------------------------------------------------------------------------------------
 	void Flush()
 	{
-		FlushEntriesImpl();
+		FlushEntriesImpl<true>();
 		_size = 0;
 		_nonemptyBucketCount = 0;
-		ClearMemType(_table, (Int) _tableLengthM1 + 1);
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -1421,7 +1533,8 @@ public:
 				return CreateError(MAXON_SOURCE_LOCATION, ERROR_TYPE::OUT_OF_MEMORY);
 			}
 		}
-		Entry* prev = LoadAcquire(_table[hash & (UInt) _tableLengthM1].list);
+		Bucket& bucket = _table[hash & (UInt) _tableLengthM1];
+		Entry* prev = LoadAcquire(bucket.list);
 		Entry* e = prev;
 		for (; e; e = static_cast<Entry*>(e->_next))
 		{
@@ -1442,12 +1555,11 @@ public:
 		Result<void> res = constructor.ConstructHashMapEntry(e, hash, std::forward<KEY>(key));
 		if (res == FAILED)
 		{
-			e->~Entry();
-			_allocator.FreeEntry(e);
+			PrivateFreeEntry(e);
 			created = false;
 			return res.GetErrorStorage();
 		}
-		return AddEntryImpl(e, prev, created, false, (typename std::conditional<MODE == HASHMAP_MODE::SYNCHRONIZED, Char, void>::type*) nullptr);
+		return AddEntryImpl(e, prev, bucket, created, false, (typename std::conditional<MODE == HASHMAP_MODE::SYNCHRONIZED, Char, void>::type*) nullptr);
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -1695,8 +1807,9 @@ public:
 		}
 		e = new (e) Entry(hash, std::forward<KEY>(key));
 		Bool created;
-		Entry* prev = LoadAcquire(_table[hash & (UInt) _tableLengthM1].list);
-		return AddEntryImpl(e, prev, created, true, (typename std::conditional<MODE == HASHMAP_MODE::SYNCHRONIZED, Char, void>::type*) nullptr);
+		Bucket& bucket = _table[hash & (UInt) _tableLengthM1];
+		Entry* prev = LoadAcquire(bucket.list);
+		return AddEntryImpl(e, prev, bucket, created, true, (typename std::conditional<MODE == HASHMAP_MODE::SYNCHRONIZED, Char, void>::type*) nullptr);
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -1722,8 +1835,9 @@ public:
 		}
 
 		Bool created;
-		Entry* prev = LoadAcquire(_table[hash & (UInt) _tableLengthM1].list);
-		if (AddEntryImpl(e, prev, created, true, (typename std::conditional<MODE == HASHMAP_MODE::SYNCHRONIZED, Char, void>::type*) nullptr) == nullptr)
+		Bucket& bucket = _table[hash & (UInt) _tableLengthM1];
+		Entry* prev = LoadAcquire(bucket.list);
+		if (AddEntryImpl(e, prev, bucket, created, true, (typename std::conditional<MODE == HASHMAP_MODE::SYNCHRONIZED, Char, void>::type*) nullptr) == nullptr)
 			return ResultMem(false);
 
 		return OK;
@@ -1733,7 +1847,7 @@ public:
 	/// Removes the given entry from this HashMap.
 	/// @param[in] entry							The entry to remove.
 	/// @param[in] deleteEntry				If true (the default), the entry is also deleted, i.e., destructed and freed. If false, it won't be deleted, and you have to do this afterwards using DeleteEntry().
-	/// @return												OK
+	/// @return												OK.
 	//----------------------------------------------------------------------------------------
 	ResultOk<void> Erase(const Entry* entry, Bool deleteEntry = true)
 	{
@@ -1786,7 +1900,7 @@ public:
 	/// Removes the given entry from this HashMap.
 	/// @param[in] entry							The entry to remove.
 	/// @param[in] deleteEntry				If true (the default), the entry is also deleted, i.e., destructed and freed. If false, it won't be deleted, and you have to do this afterwards using DeleteEntry().
-	/// @return												OK
+	/// @return												OK.
 	//----------------------------------------------------------------------------------------
 	ResultOk<void> Erase(const Entry& entry, Bool deleteEntry = true)
 	{
@@ -1807,8 +1921,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	void DeleteEntry(const Entry* e)
 	{
-		e->~Entry();
-		_allocator.FreeEntry(e);
+		ENTRY_HANDLER::RemoveReference(this, e);
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -1945,8 +2058,9 @@ public:
 			}
 			AssignCopy<V>(e->GetValue(), i.GetValue()) iferr_return;
 			Bool created;
-			Entry* prev = LoadAcquire(_table[hash & (UInt) _tableLengthM1].list);
-			AddEntryImpl(e, prev, created, true, (typename std::conditional<MODE == HASHMAP_MODE::SYNCHRONIZED, Char, void>::type*) nullptr);
+			Bucket& bucket = _table[hash & (UInt) _tableLengthM1];
+			Entry* prev = LoadAcquire(bucket.list);
+			AddEntryImpl(e, prev, bucket, created, true, (typename std::conditional<MODE == HASHMAP_MODE::SYNCHRONIZED, Char, void>::type*) nullptr);
 		}
 		return OK;
 	}
@@ -1978,109 +2092,6 @@ public:
 		}
 		return OK;
 	}
-
-	/// Class used for entries of the HashMap.
-	/// The entries of a bucket are stored as a singly linked list, you can loop over this list via GetNextInBucket().
-	class Entry : public EntryBase
-	{
-	public:
-		using KeyType = K;
-		using ValueType = V;
-
-#ifdef MAXON_COMPILER_INTEL
-		explicit Entry(const HashValueType& hash) : EntryBase(hash)
-		{
-		}
-
-		template <typename KEY> Entry(const HashValueType& hash, const KEY& key) : EntryBase(hash, key)
-		{
-		}
-
-		Entry(const HashValueType& hash, K&& key) : EntryBase(hash, std::move(key))
-		{
-		}
-
-		template <typename A> Entry(const HashValueType& hash, const K& key, A&& valueInit) : EntryBase(hash, key, std::forward<A>(valueInit))
-		{
-		}
-
-		template <typename A> Entry(const HashValueType& hash, K&& key, A&& valueInit) : EntryBase(hash, std::move(key), std::forward<A>(valueInit))
-		{
-		}
-#else
-		using EntryBase::EntryBase;
-#endif
-
-		operator Pair<K, V>() const
-		{
-			return Pair<K, V>(this->GetKey(), this->GetValue());
-		}
-
-		//----------------------------------------------------------------------------------------
-		/// Returns the next entry with the same key. This is needed for multi-maps to iterate
-		/// over all entries for a key, see InsertMultiEntry().
-		/// @return												Next entry with the same key, or nullptr if there is no further entry with the same key.
-		//----------------------------------------------------------------------------------------
-		const Entry* GetNextWithSameKey() const
-		{
-			return const_cast<Entry*>(this)->GetNextWithSameKey();
-		}
-
-		//----------------------------------------------------------------------------------------
-		/// Returns the next entry with the same key. This is needed for multi-maps to iterate
-		/// over all entries for a key, see InsertMultiEntry().
-		/// @return												Next entry with the same key, or nullptr if there is no further entry with the same key.
-		//----------------------------------------------------------------------------------------
-		Entry* GetNextWithSameKey()
-		{
-			for (Entry* e = static_cast<Entry*>(this->_next); e; e = static_cast<Entry*>(e->_next))
-			{
-				if ((e->GetKeyHashCode() == this->GetKeyHashCode()) && HASH::IsEqual(e->GetKey(), this->GetKey()))
-				{
-					return e;
-				}
-			}
-			return nullptr;
-		}
-
-		//----------------------------------------------------------------------------------------
-		/// Returns the next entry in the same bucket.
-		/// @return												Next entry in bucket, or nullptr if this is the last entry.
-		//----------------------------------------------------------------------------------------
-		const Entry* GetNextInBucket() const
-		{
-			return static_cast<const Entry*>(this->_next);
-		}
-
-		//----------------------------------------------------------------------------------------
-		/// Returns the next entry in the same bucket.
-		/// @return												Next entry in bucket, or nullptr if this is the last entry.
-		//----------------------------------------------------------------------------------------
-		Entry* GetNextInBucket()
-		{
-			return static_cast<Entry*>(this->_next);
-		}
-
-		void PrivateInitNextInBucket(Entry* next)
-		{
-			DebugAssert(!this->_next);
-			this->_next = next;
-		}
-
-		typename SFINAEHelper<String, V>::type ToString(const FormatStatement* format = nullptr) const
-		{
-			return GlobalToString(this->GetKey(), format) + CONSTSTRING("->") + GlobalToString(this->GetValue(), format);
-		}
-
-		Int GetMemorySize() const
-		{
-			return SIZEOF(Entry) - SIZEOF(EntryBase) + EntryBase::GetMemorySize();
-		}
-
-	private:
-		MAXON_DISALLOW_COPY_AND_ASSIGN(Entry);
-		friend class HashMap;
-	};
 
 
 	//----------------------------------------------------------------------------------------
@@ -2504,6 +2515,27 @@ public:
 		return ConstIterator(*this, 0, nullptr);
 	}
 
+	//----------------------------------------------------------------------------------------
+	/// Removes the given entry from this HashMap during iteration.
+	/// @param[in] it									The iterator of the entry to remove.
+	/// @param[in] deleteEntry				If true (the default), the entry is also deleted, i.e., destructed and freed. If false, it won't be deleted, and you have to do this afterwards using DeleteEntry().
+	/// @return												The next iterator or @formatConstant{nullptr} if end reached.
+	///
+	/// Example of use:
+	/// @code
+	/// for (auto it = myHashMap.Begin(); it;)
+	/// {
+	/// 	if (it.GetValue() == valueToErase)
+	/// 	{
+	/// 		it = myHashMap.Erase(it); // It is important to avoid using ++it when performing an erase operation.
+	/// 	}
+	/// 	else
+	/// 	{
+	/// 		++it;
+	/// 	}
+	/// }
+	/// @endcode
+	//----------------------------------------------------------------------------------------
 	template <template <Bool> class SUPER> IteratorTemplate<SUPER> Erase(const IteratorTemplate<SUPER>& it, Bool deleteEntry = true)
 	{
 		Entry* e = it._entry;
@@ -2701,6 +2733,12 @@ public:
 		return MAXON_NONCONST_COUNTERPART(template FindEntryImpl<KEY, KEYHASH>(hash, key));
 	}
 
+	void PrivateFreeEntry(const Entry* e)
+	{
+		e->~Entry();
+		_allocator.FreeEntry(e);
+	}
+
 protected:
 	union SimpleBucket
 	{
@@ -2754,23 +2792,22 @@ protected:
 		_allocator.FreeBuckets(_table);
 		_table = t;
 		_tableLengthM1 = tlM1;
-		_resizeThreshold = (LOAD_FACTOR > 0) ? (length * LOAD_FACTOR >> 4) : LIMIT<Int>::MAX;
+		_resizeThreshold = (LOAD_FACTOR > 0) ? Int(UInt(length * LOAD_FACTOR) >> 4) : LIMIT<Int>::MAX;
 		return true;
 	}
 
-	Entry* AddEntryImpl(Entry* e, Entry* prev, Bool& created, Bool multi, void*)
+	Entry* AddEntryImpl(Entry* e, Entry* prev, Bucket& bucket, Bool& created, Bool multi, void*)
 	{
 		static_assert(MODE != HASHMAP_MODE::SYNCHRONIZED, "Wrong invocation of AddEntryImpl.");
-		UInt h = e->GetKeyHashCode() & (UInt) _tableLengthM1;
 		e->_next = prev;
-		StoreRelaxed(_table[h].list, e);
+		StoreRelaxed(bucket.list, e);
 		++_size;
 		if constexpr (MODE == HASHMAP_MODE::DEFAULT)
 		{
-			if (e->_next == nullptr)
+			if (prev == nullptr)
 			{
-				_table[h].nonemptyBucketsIndex = _nonemptyBucketCount;
-				_nonemptyBuckets[_nonemptyBucketCount++] = _table + h;
+				bucket.nonemptyBucketsIndex = _nonemptyBucketCount;
+				_nonemptyBuckets[_nonemptyBucketCount++] = &bucket;
 			}
 		}
 		if (_size > _resizeThreshold)
@@ -2778,30 +2815,31 @@ protected:
 			ResizeTableImpl((_tableLengthM1 + 1) << 1);
 		}
 		created = true;
+		ENTRY_HANDLER::InitialReference(this, e);
 		return e;
 	}
 
-	Entry* AddEntryImpl(Entry* e, Entry* prev, Bool& created, Bool multi, Char*)
+	Entry* AddEntryImpl(Entry* e, Entry* prev, Bucket& bucket, Bool& created, Bool multi, Char*)
 	{
 		static_assert(MODE == HASHMAP_MODE::SYNCHRONIZED, "Wrong invocation of AddEntryImpl.");
-		UInt h = e->GetKeyHashCode() & (UInt) _tableLengthM1;
 		while (true)
 		{
 			e->_next = prev;
-			if (TryCompareAndSwap(_table[h].list, e, prev))
+			if (TryCompareAndSwap(bucket.list, e, prev))
 			{
 				AtomicInt::SwapIncrement(&_size);
 				created = true;
+				ENTRY_HANDLER::InitialReference(this, e);
 				return e;
 			}
-			Entry* p = LoadAcquire(_table[h].list);
+			Entry* p = LoadAcquire(bucket.list);
 			if (!multi)
 			{
 				for (Entry* x = p; x != prev; x = static_cast<Entry*>(x->_next))
 				{
 					if ((e->GetKeyHashCode() == x->GetKeyHashCode()) && HASH::IsEqual(e->GetKey(), x->GetKey()))
 					{
-						DeleteEntry(e);
+						PrivateFreeEntry(e);
 						created = false;
 						return x;
 					}
@@ -2813,7 +2851,7 @@ protected:
 
 	void ResetImpl(Bool destructor)
 	{
-		FlushEntriesImpl();
+		FlushEntriesImpl<false>();
 		_allocator.FreeBuckets(_table);
 		if (!destructor)
 		{
@@ -2836,36 +2874,64 @@ protected:
 #endif
 	}
 
-	// Note: This doesn't clear the bucket table!
-	void FlushEntriesImpl()
+	template <Bool CLEAR_BUCKET_TABLE> void FlushEntriesImpl()
 	{
 		if (!_table)
 		{
 			return;
 		}
+		
+		// For DEFAULT mode we have the list of non-empty buckets.
+		// Then only write null to non-null buckets (in loop below) to avoid the case of writing null to a huge table with very few used entries
+		// (can happen when a huge map is re-used for a small map).
+		constexpr Bool CLEAR_IN_LOOP = CLEAR_BUCKET_TABLE && (MODE == HASHMAP_MODE::DEFAULT);
+		// But if 1/16 or more of the map is filled, switch to the bulk ClearMem.
+		// Note that because 4 buckets fit into a cache line, already a load of 1/4 means that more or less the whole memory of the table has to be accessed.
+		const Bool clearInLoop = CLEAR_IN_LOOP && (_size * 16 < _tableLengthM1);
+
 		// See if the array allocator has a quick way to free all entries at once.
 		if (_allocator.DeleteAllEntries())
 		{
-			return;
-		}
-		Int n = MODE != HASHMAP_MODE::DEFAULT ? _tableLengthM1 + 1 : _nonemptyBucketCount;
-#ifdef MAXON_TARGET_DEBUG
-		Int removed = 0;
-#endif
-		for (Int b = 0; b < n; ++b)
-		{
-			Entry*& head = (Entry*&) (MODE != HASHMAP_MODE::DEFAULT ? _table + b : _nonemptyBuckets[b])->list;
-			Entry* e;
-			while ((e = head) != nullptr)
+			if (clearInLoop)
 			{
-				head = static_cast<Entry*>(e->_next);
-#ifdef MAXON_TARGET_DEBUG
-				++removed;
-#endif
-				DeleteEntry(e);
+				const Int n = _nonemptyBucketCount;
+				for (Int b = 0; b < n; ++b)
+				{
+					Bucket* const bucket = _nonemptyBuckets[b];
+					StoreRelaxed(bucket->list, nullptr);
+				}
 			}
 		}
-		DebugAssert(removed == _size);
+		else
+		{
+			const Int n = (MODE != HASHMAP_MODE::DEFAULT) ? _tableLengthM1 + 1 : _nonemptyBucketCount;
+	#ifdef MAXON_TARGET_DEBUG
+			Int removed = 0;
+	#endif
+			for (Int b = 0; b < n; ++b)
+			{
+				Bucket* const bucket = (MODE != HASHMAP_MODE::DEFAULT) ? _table + b : _nonemptyBuckets[b];
+				Entry* e = LoadRelaxed(bucket->list);
+				if (clearInLoop)
+				{
+					StoreRelaxed(bucket->list, nullptr);
+				}
+				while (e != nullptr)
+				{
+					Entry* const next = static_cast<Entry*>(e->_next);
+	#ifdef MAXON_TARGET_DEBUG
+					++removed;
+	#endif
+					DeleteEntry(e);
+					e = next;
+				}
+			}
+			DebugAssert(removed == _size);
+		}
+		if (CLEAR_BUCKET_TABLE && !clearInLoop)
+		{
+			ClearMemType(_table, (Int) _tableLengthM1 + 1);
+		}
 	}
 
 	static Entry* LoadRelaxed(AtomicPtr<Entry>& e)
@@ -3275,5 +3341,18 @@ template <typename TO, typename FROM, Bool SAFE> struct GenericCastMemberTrait<H
 /// @}
 
 } // namespace maxon
+
+namespace std
+{
+template <std::size_t I, typename K, typename V, typename ENTRY_HANDLER, typename HASH>
+struct tuple_element<I, maxon::HashMapEntry<K, V, ENTRY_HANDLER, HASH>> : std::conditional<I == 0, const K, V>
+{
+};
+
+template <typename K, typename V, typename ENTRY_HANDLER, typename HASH>
+struct tuple_size<maxon::HashMapEntry<K, V, ENTRY_HANDLER, HASH>> : std::integral_constant<std::size_t, 2>
+{
+};
+}
 
 #endif // HASHMAP_H__

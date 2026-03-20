@@ -4,11 +4,6 @@ Platform=Win64;OSX;Linux;iOS
 // Type of project - can be [Lib;DLL;App]
 Type=Lib
 
-// Enable unity builds for the following directories
-unity=source/maxon;
-unityExclude=cpuid.cpp;\
-			configuration.cpp;
-
 // This is provided by MAXON
 maxon=true
 

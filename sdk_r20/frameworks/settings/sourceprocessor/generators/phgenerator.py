@@ -10,7 +10,7 @@ from declarations import *
 
 def process(args, file, root):
     fdir, basename = os.path.split(file)
-    dir = os.path.join(args.directory, 'generated')
+    dir = args.generated
     dir = os.path.join(dir, 'parsed')
 
     basename, ext = os.path.splitext(basename)

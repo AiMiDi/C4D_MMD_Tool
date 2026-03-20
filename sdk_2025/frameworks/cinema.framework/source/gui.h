@@ -198,7 +198,7 @@ enum
 	BFV_BORDERGROUP_FOLD2							= 32768,			///< Foldable group, but no switch gadget.
 	BFV_GRIDGROUP_ALLOW_WEIGHTS				= 65536,			///< Allow the user to move the weights.
 	BFV_GRIDGROUP_FORBID_MIRROR				= 131072,			///< Do not mirror the layout of this group.
-	BFV_GRIDGROUP_ROUNDED_BACKGROUND	= 524288,			///< @markPrivate Background is drawn with rounded corners and in @ref COLOR_INNER_BG color. To customize the inner and outer colors use @ref GeDialog::SetGroupInnerBackgroundColor() and @ref GeDialog::SetGroupBackgroundColor() respectively.
+	BFV_GRIDGROUP_ROUNDED_BACKGROUND	= 524288,			///< @markPrivate Group background border space is drawn with rounded corners and in @ref COLOR_BG_GROUP_ROUNDED color. The raddi of the corners are defined by @ref GeDialog::SetBorderSpace.
 
 	BFV_DIALOG_REMOVEABLE						= 4,					///< Dialog is removable.
 	BFV_DIALOG_BAR_VERT							= 8,					///< Dialog has a vertical dialog bar.
@@ -367,6 +367,9 @@ enum
 	DR_COLORFIELD_RGB_HIDE_HEX						= 8388608,			///< Hides the Hexadecimal color field in the RGB Mode. @since R17.032
 	DR_COLORFIELD_POPUP										= 16777216,			///< @markPrivate @since R17.032
 	DR_COLORFIELD_AS_UI_COLOR							= 33554432,     ///< Turns the color chooser gui into a color chooser for ui colors(colors that are not color managed).
+
+	DROLDWIN_POS_W = 'posw', ///< ::Int32 Custom GUI minimum width specified by the @formatConstant{minw} parameter in @ref GeDialog::AddCustomGui, and stored in the @formatConstant{settings} BaseContainer parameter of @ref GeDialog::AddCustomGui
+	DROLDWIN_POS_H = 'posh', ///< ::Int32 Custom GUI minimum height specified by the @formatConstant{minh} parameter in @ref GeDialog::AddCustomGui, and stored in the @formatConstant{settings} BaseContainer parameter of @ref GeDialog::AddCustomGui
 
 	DROLDWIN_SDK	= 'sdk8',
 
@@ -645,9 +648,6 @@ enum
 
 	BFM_SETFOCUS											= 'bSFC',			///< @markInternal
 	BFM_SETFIRSTFOCUS									= 'bSFF',			///< @markInternal
-
-	BFM_MOVEFOCUSNEXT									= 'bFNX',			///< @markPrivate
-	BFM_MOVEFOCUSPREV									= 'bFPR',			///< @markPrivate
 
 	BFM_SETLASTFOCUS									= 'bSLF',			///< @markPrivate
 

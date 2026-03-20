@@ -162,9 +162,9 @@ enum class INITRENDERFLAG
 /// To convert along any other paths, one must retrieve an `OcioConverter` using `BaseDocument::GetBasicColorConverter` or
 /// `BaseDocument::GetColorConverterForActiveDocument`.
 /// @note Passing any other transformation symbol than the supported ones will return the unmodified input color.
-/// @param[in] input							 The color to transform.
-/// @param[in] colortransformation The transform path to transform #input along.
-/// @return												 The transformed color.
+/// @param[in] input							The color to transform.
+/// @param[in] colortransformation	The transform path to transform #input along.
+/// @return												The transformed color.
 //----------------------------------------------------------------------------------------
 extern Vector64 BasicTransformColor(const Vector64& input, COLORSPACETRANSFORMATION colortransformation);
 
@@ -174,9 +174,9 @@ extern Vector64 BasicTransformColor(const Vector64& input, COLORSPACETRANSFORMAT
 /// To convert along any other paths, one must retrieve an `OcioConverter` using `BaseDocument::GetBasicColorConverter` or
 /// `BaseDocument::GetColorConverterForActiveDocument`.
 /// @note Passing any other transformation symbol than the supported ones will return the unmodified input color.
-/// @param[in] input							 The color to transform.
-/// @param[in] colortransformation The transform path to transform #input along.
-/// @return												 The transformed color.
+/// @param[in] input							The color to transform.
+/// @param[in] colortransformation	The transform path to transform #input along.
+/// @return												The transformed color.
 //----------------------------------------------------------------------------------------
 extern Vector32 BasicTransformColor(const Vector32& input, COLORSPACETRANSFORMATION colortransformation);
 
@@ -186,9 +186,9 @@ extern Vector32 BasicTransformColor(const Vector32& input, COLORSPACETRANSFORMAT
 /// To convert along any other paths, one must retrieve an `OcioConverter` using `BaseDocument::GetBasicColorConverter` or
 /// `BaseDocument::GetColorConverterForActiveDocument`.
 /// @note Passing any other transformation symbol than the supported ones will return the unmodified input color.
-/// @param[in] input							 The color to transform.
-/// @param[in] colortransformation The transform path to transform #input along.
-/// @return												 The transformed color.
+/// @param[in] input							The color to transform.
+/// @param[in] colortransformation	The transform path to transform #input along.
+/// @return												The transformed color.
 //----------------------------------------------------------------------------------------
 extern maxon::Color64 BasicTransformColor(const maxon::Color64& input, COLORSPACETRANSFORMATION colortransformation);
 
@@ -198,9 +198,9 @@ extern maxon::Color64 BasicTransformColor(const maxon::Color64& input, COLORSPAC
 /// To convert along any other paths, one must retrieve an `OcioConverter` using `BaseDocument::GetBasicColorConverter` or
 /// `BaseDocument::GetColorConverterForActiveDocument`.
 /// @note Passing any other transformation symbol than the supported ones will return the unmodified input color.
-/// @param[in] input							 The color to transform.
-/// @param[in] colortransformation The transform path to transform #input along.
-/// @return												 The transformed color.
+/// @param[in] input							The color to transform.
+/// @param[in] colortransformation	The transform path to transform #input along.
+/// @return												The transformed color.
 //----------------------------------------------------------------------------------------
 extern maxon::Color32 BasicTransformColor(const maxon::Color32& input, COLORSPACETRANSFORMATION colortransformation);
 
@@ -210,8 +210,8 @@ extern maxon::Color32 BasicTransformColor(const maxon::Color32& input, COLORSPAC
 /// To convert along any other paths, one must retrieve an `OcioConverter` using `BaseDocument::GetBasicColorConverter` or
 /// `BaseDocument::GetColorConverterForActiveDocument`.
 /// @note Passing any other transformation symbol than the supported ones will return the unmodified input colors.
-/// @param[in] v												The color array to transform.
-/// @param[in] count										Number of elements to transform.
+/// @param[in] v									The color array to transform.
+/// @param[in] count							Number of elements to transform.
 /// @param[in] colorSpaceTransformation	The transform path to transform elements in #v along.
 //----------------------------------------------------------------------------------------
 extern void BasicTransformColors(Vector64* v, Int count, COLORSPACETRANSFORMATION colorSpaceTransformation);
@@ -222,8 +222,8 @@ extern void BasicTransformColors(Vector64* v, Int count, COLORSPACETRANSFORMATIO
 /// To convert along any other paths, one must retrieve an `OcioConverter` using `BaseDocument::GetBasicColorConverter` or
 /// `BaseDocument::GetColorConverterForActiveDocument`.
 /// @note Passing any other transformation symbol than the supported ones will return the unmodified input colors.
-/// @param[in] v												The color array to transform.
-/// @param[in] count										Number of elements to transform.
+/// @param[in] v									The color array to transform.
+/// @param[in] count							Number of elements to transform.
 /// @param[in] colorSpaceTransformation	The transform path to transform elements in #v along.
 //----------------------------------------------------------------------------------------
 extern void BasicTransformColors(Vector32* v, Int count, COLORSPACETRANSFORMATION colorSpaceTransformation);
@@ -256,6 +256,18 @@ public:
 	static maxon::Result<OcioConverter*> Init(const BaseDocument* doc, Int32 overrideViewTransform = -1)
 	{
 		return C4DOS_Sh->InitOcioConverter(doc, overrideViewTransform);
+	}
+
+	//----------------------------------------------------------------------------------------
+	/// Creates a new converter and Initializes it with the document settings. If a non-null converter is passed, it will be reinitialized and returned.
+	/// @param[in] doc								Document from which the OCIO settings are taken.
+	/// @param[in] converter					Old converter that should be reused.
+	/// @param[in] overrideViewTransform	Index within the viewtransform array to override the view transform. Ignored, if the value is not a valid index.
+	/// @return												New OCIO converter.
+	//----------------------------------------------------------------------------------------
+	static maxon::Result<OcioConverter*> Init(const BaseDocument* doc, OcioConverter* converter, Int32 overrideViewTransform = -1)
+	{
+		return C4DOS_Sh->ReInitOcioConverter(doc, converter, overrideViewTransform);
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -304,7 +316,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Transforms multiple colors. The function overwrites the input colors.
-	/// @param[in, out] v							Array of colors to convert.
+	/// @param[in,out] v							Array of colors to convert.
 	/// @param[in] count							Number of colors to convert.
 	/// @param[in] colorSpaceTransformation	Specifies source and destination color space.
 	//----------------------------------------------------------------------------------------
@@ -315,7 +327,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Transforms multiple colors. The function overwrites the input colors.
-	/// @param[in, out] v							Array of colors to convert.
+	/// @param[in,out] v							Array of colors to convert.
 	/// @param[in] count							Number of colors to convert.
 	/// @param[in] colorSpaceTransformation	Specifies source and destination color space.
 	//----------------------------------------------------------------------------------------
@@ -326,7 +338,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Transforms multiple colors. The function overwrites the input colors.
-	/// @param[in, out] v							Array of colors to convert.
+	/// @param[in,out] v							Array of colors to convert.
 	/// @param[in] count							Number of colors to convert.
 	/// @param[in] colorSpaceTransformation	Specifies source and destination color space.
 	//----------------------------------------------------------------------------------------
@@ -337,7 +349,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Transforms multiple colors. The function overwrites the input colors.
-	/// @param[in, out] v							Array of colors to convert.
+	/// @param[in,out] v							Array of colors to convert.
 	/// @param[in] count							Number of colors to convert.
 	/// @param[in] colorSpaceTransformation	Specifies source and destination color space.
 	//----------------------------------------------------------------------------------------
@@ -358,7 +370,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Checks if the converter is an OCIO converter.
-	///	@return												true if the converter is an OCIO converter, false if the converter is a legacy converter.
+	/// @return												True if the converter is an OCIO converter, false if the converter is a legacy converter.
 	//----------------------------------------------------------------------------------------
 	Bool IsOcioConverter() const
 	{

@@ -91,8 +91,15 @@ namespace NODE
 		MAXON_ATTRIBUTE(InternedId, SCENEPORTMODE, "net.maxon.node.attribute.sceneportmode");
 		MAXON_ATTRIBUTE(void, SCENEPORTMODE_ENUM_NONE, "none");
 		MAXON_ATTRIBUTE(void, SCENEPORTMODE_ENUM_OBJECT, "object");
+		MAXON_ATTRIBUTE(void, SCENEPORTMODE_ENUM_OBJECT_ARRAY, "object_array");
 		MAXON_ATTRIBUTE(void, SCENEPORTMODE_ENUM_LINK, "link");
-		MAXON_ATTRIBUTE(void, SCENEPORTMODE_ENUM_MODIFIER, "modifier");
+		MAXON_ATTRIBUTE(void, SCENEPORTMODE_ENUM_LINK_ARRAY, "link_array");
+
+		/// With a mode other than "none" the scene manager uses the port for its scene representation.
+		MAXON_ATTRIBUTE(InternedId, IMPORTSPLINEAS, "net.maxon.node.attribute.importsplineas");
+		MAXON_ATTRIBUTE(void, IMPORTSPLINEAS_ENUM_SPLINEBYPOINTS, "splinebypoints");
+		MAXON_ATTRIBUTE(void, IMPORTSPLINEAS_ENUM_SPLINEBYSHAPE, "splinebyshape");
+		MAXON_ATTRIBUTE(void, IMPORTSPLINEAS_ENUM_LINE, "line");
 
 		/// Choose the context which this port shall receive it's value from.  If the port is connected, the connected value will override any selected context.
 		MAXON_ATTRIBUTE(Id, NODECONTEXT, "net.maxon.node.attribute.nodecontext",
@@ -110,9 +117,6 @@ namespace NODE
 		/// Please use the NodesPreviewRenderDataInterface for preview rendering.
 		MAXON_ATTRIBUTE(ImageBaseRef, NODEPREVIEWIMAGE, "net.maxon.node.base.nodepreviewimage");
 
-		/// Trigger for the preview Image of the material. Please note that this is not directly available. 
-		/// Please use the NodesPreviewRenderDataInterface for preview rendering.
-		MAXON_ATTRIBUTE(ImageBaseRef, MATERIALPREVIEWIMAGE, "net.maxon.node.base.materialpreviewimage");
 
 		/// This attribute represents the name of a node. The name should be used for the
 		/// user interface instead of the identifier. 
@@ -146,6 +150,8 @@ namespace NODE
 		MAXON_ATTRIBUTE(void, CATEGORY_ENUM_FIELDS, "fields");
 		MAXON_ATTRIBUTE(void, CATEGORY_ENUM_FUNCTIONS, "functions");
 		MAXON_ATTRIBUTE(void, CATEGORY_ENUM_STRUCTURES, "structures");
+		MAXON_ATTRIBUTE(void, CATEGORY_ENUM_GEOMODIFIERS, "geomodifiers");
+		MAXON_ATTRIBUTE(void, CATEGORY_ENUM_GEOGENERATORS, "geogenerators");
 
 		/// Icon identifier to use in the UI.
 		MAXON_ATTRIBUTE(CString, ICON, "net.maxon.node.base.icon");
@@ -203,8 +209,6 @@ namespace NODE
 		MAXON_ATTRIBUTE(void, PORTINSPECTOR, "net.maxon.node.base.portinspector");
 
 		MAXON_ATTRIBUTE(void, DATAINSPECTOR, "net.maxon.node.base.datainspector");
-
-		MAXON_ATTRIBUTE(void, ADDNESTEDPORT, "net.maxon.node.base.addnestedport");
 
 		MAXON_ATTRIBUTE(void, MUTEPORT, "net.maxon.node.base.muteport");
 
@@ -390,10 +394,8 @@ namespace NODE
 		// supports MAXON::NODE::BASE::UPDATEPOLICY
 		// supports MAXON::ASSET::BASE::PROTECTED
 
-		/// This is the default template port for user inports.
 		MAXON_ATTRIBUTE(void, DEFAULTINPORT, "net.maxon.node.groupports.defaultinport");
 
-		/// This is the default template port for user outports.
 		MAXON_ATTRIBUTE(void, DEFAULTOUTPORT, "net.maxon.node.groupports.defaultoutport");
 	}
 

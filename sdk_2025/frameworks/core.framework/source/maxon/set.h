@@ -114,7 +114,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a clone of this set.
-	/// @param[in] copyContent			True if also the elements shall be cloned, false otherwise (then just a new object sharing the same SetInterface implementation is created).
+	/// @param[in] copyContent				True if also the elements shall be cloned, false otherwise (then just a new object sharing the same SetInterface implementation is created).
 	/// @return												Pointer to the new set object, nullptr if allocation or copying failed.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<SetInterface*> Clone(Bool copyContent = true) const;
@@ -185,9 +185,6 @@ public:
 		return *reinterpret_cast<const SetInterface<T>*>(this);
 	}
 
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning disable 597
-#endif
 	operator const SetInterface<typename std::conditional<STD_IS_REPLACEMENT(same, const TYPE, const Generic), DeleteReturnType01, Generic>::type>&() const
 	{
 		return *(SetInterface<typename std::conditional<STD_IS_REPLACEMENT(same, const TYPE, const Generic), DeleteReturnType01, Generic>::type>*) this;
@@ -197,9 +194,6 @@ public:
 	{
 		return *(SetInterface<typename std::conditional<STD_IS_REPLACEMENT(same, TYPE, Generic), DeleteReturnType02, Generic>::type>*) this;
 	}
-#ifdef MAXON_COMPILER_INTEL
-#pragma warning enable 597
-#endif
 
 	operator const NonConstSet<TYPE>&()
 	{
@@ -249,16 +243,10 @@ public:
 
 		MAXON_OPERATOR_MOVE_ASSIGNMENT(IteratorTemplate);
 
-	#ifdef MAXON_COMPILER_INTEL
-	#pragma warning disable 597
-	#endif
 		operator IteratorTemplate<true>&()
 		{
 			return *(IteratorTemplate<true>*) this;
 		}
-	#ifdef MAXON_COMPILER_INTEL
-	#pragma warning enable 597
-	#endif
 
 		Type& operator *() const
 		{

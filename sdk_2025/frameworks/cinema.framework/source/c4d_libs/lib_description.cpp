@@ -10,16 +10,16 @@ DescriptionLib* CheckDescriptionLib(Int32 offset)
 	return CheckLib<DescriptionLib>(LIBRARY_DESCRIPTIONLIB, offset, library_desc);
 }
 
-Bool DescLevel::operator==(const DescLevel& d) const
+Bool DescLevel::operator ==(const DescLevel& d) const
 {
 	if (d.id != id)
 		return false;
 
 	// special case!
 	if (d.dtype == 0 && d.id == 0 && d.creator == 0)
-		return (dtype == 0 && id == 0 && creator == 0);
+		return dtype == 0 && id == 0 && creator == 0;
 	else if (dtype == 0 && id == 0 && creator == 0)
-		return (d.dtype == 0 && d.id == 0 && d.creator == 0);
+		return d.dtype == 0 && d.id == 0 && d.creator == 0;
 
 	if (d.dtype && dtype && d.dtype != dtype)
 		return false;
@@ -174,7 +174,7 @@ const DescID DescID::operator<<(Int32 shift) const
 	return lib->DescID_operator2((DescID*)this, shift);
 }
 
-const DescID& DescID::operator=(const DescID& id)
+const DescID& DescID::operator =(const DescID& id)
 {
 	DescriptionLib* lib = CheckDescriptionLib(LIBOFFSET(DescriptionLib, DescID_CopyTo));
 	if (!lib || !lib->DescID_CopyTo)
@@ -183,7 +183,7 @@ const DescID& DescID::operator=(const DescID& id)
 	return *this;
 }
 
-const DescID& DescID::operator=(DescID&& id)
+const DescID& DescID::operator =(DescID&& id)
 {
 	DescriptionLib* lib = CheckDescriptionLib(LIBOFFSET(DescriptionLib, DescID_MoveTo));
 	if (!lib || !lib->DescID_MoveTo)
@@ -192,7 +192,7 @@ const DescID& DescID::operator=(DescID&& id)
 	return *this;
 }
 
-Bool DescID::operator==(const DescID& d) const
+Bool DescID::operator ==(const DescID& d) const
 {
 	DescriptionLib* lib = CheckDescriptionLib(LIBOFFSET(DescriptionLib, DescID_Compare));
 	if (!lib || !lib->DescID_Compare)
@@ -200,7 +200,7 @@ Bool DescID::operator==(const DescID& d) const
 	return lib->DescID_Compare((DescID*)&d, (DescID*)this);
 }
 
-Bool DescID::operator!=(const DescID& d) const
+Bool DescID::operator !=(const DescID& d) const
 {
 	DescriptionLib* lib = CheckDescriptionLib(LIBOFFSET(DescriptionLib, DescID_Compare));
 	if (!lib || !lib->DescID_Compare)
@@ -208,7 +208,7 @@ Bool DescID::operator!=(const DescID& d) const
 	return !lib->DescID_Compare((DescID*)&d, (DescID*)this);
 }
 
-const DescID& DescID::operator+=(const DescID& s)
+const DescID& DescID::operator +=(const DescID& s)
 {
 	DescriptionLib* lib = CheckDescriptionLib(LIBOFFSET(DescriptionLib, DescID_AddTo));
 	if (!lib || !lib->DescID_AddTo)

@@ -362,6 +362,26 @@ public:
 		return InsertBlock(position, values);
 	}
 
+	ResultPtr<T> Insert(Int position, MoveBlock<T>&& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, MoveBlock<const T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, const MoveBlock<const T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, MoveBlock<const T>&& values)
+	{
+		return InsertBlock(position, values);
+	}
+
 	//----------------------------------------------------------------------------------------
 	/// Inserts new elements at index position (all elements from position on are moved by the the count of @p values).
 	/// @param[in] position						Insert index (the array size will increase and the existing elements are moved).
@@ -1022,8 +1042,15 @@ public:
 
 	public:
 		using CollectionType = typename ConstIf<BlockArray, CONSTITERATOR>::type;
-		using Type = typename ConstIf<T, CONSTITERATOR>::type;
+		using ValueType = typename ConstIf<T, CONSTITERATOR>::type;
 		static const Bool isLinearIterator = false;
+
+		// stdlib iterator support.
+		using iterator_category = std::random_access_iterator_tag;
+		using difference_type = Int;
+		using value_type = ValueType;
+		using pointer = ValueType*;
+		using reference = ValueType&;
 
 		explicit IteratorTemplate(CollectionType& a, Int start = 0) : _array(&a), _block(nullptr)
 		{
@@ -1092,23 +1119,17 @@ public:
 			return *this;
 		}
 
-#ifdef MAXON_COMPILER_INTEL
-	#pragma warning disable 597
-#endif
 		operator ConstIterator&()
 		{
 			return *(ConstIterator*) this;
 		}
-#ifdef MAXON_COMPILER_INTEL
-	#pragma warning enable 597
-#endif
 
 		//----------------------------------------------------------------------------------------
 		/// Determines a contiguous block of array elements to which the iterator points.
 		/// @param[out] block							Block which contains the element..
 		/// @return												Start iterator of the block.
 		//----------------------------------------------------------------------------------------
-		template <Bool STRIDED> MAXON_ATTRIBUTE_FORCE_INLINE IteratorTemplate GetBlock(Block<Type, STRIDED>& block) const
+		template <Bool STRIDED> MAXON_ATTRIBUTE_FORCE_INLINE IteratorTemplate GetBlock(Block<ValueType, STRIDED>& block) const
 		{
 			block.Set(_block->GetFirst(), _block->GetCount(), sizeof(T));
 			return IteratorTemplate(_array, _block, _block->Begin(), _end);
@@ -1135,17 +1156,17 @@ public:
 			return Bool(_array != nullptr);
 		}
 
-		Type* GetPtr() const
+		ValueType* GetPtr() const
 		{
 			return _iterator.GetPtr();
 		}
 
-		Type& operator *() const
+		ValueType& operator *() const
 		{
 			return *_iterator;
 		}
 
-		Type* operator ->() const
+		ValueType* operator ->() const
 		{
 			return &(*_iterator);
 		}

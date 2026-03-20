@@ -52,7 +52,7 @@ struct FalloffControlLib : public C4DLibrary
 	Bool						(iC4D_Falloff::* SetMode								 )(Int32 type);
 	Int32						(iC4D_Falloff::* GetMode								 )() const;
 	void						(iC4D_Falloff::* SetTime								 )(BaseTime time);
-	Bool						(iC4D_Falloff::* InitFalloff						 )(BaseDocument* doc, BaseObject* op);
+	Bool						(iC4D_Falloff::* InitFalloff						 )(const BaseDocument* doc, const BaseObject* op);
 	Bool						(iC4D_Falloff::* InitFalloff2						 )(const BaseDocument* doc, const BaseObject* op, FalloffDataData& data) const;
 	Bool						(iC4D_Falloff::* Message								 )(BaseList2D* op, Int32 id, void* m_data);
 	Int32						(iC4D_Falloff::* GetHandleCount					 )() const;

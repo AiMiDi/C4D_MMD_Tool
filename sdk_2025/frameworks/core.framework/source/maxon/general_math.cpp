@@ -11,7 +11,7 @@ Bool CompareFloatTolerant(Float32 a, Float32 b)
 
 	// UInt32 is necessary because -x-x is 0x80000000 where abs(0x80000000 is illegal)
 	UInt32 diff = UInt32(Abs(*va - *vb));
-	return (diff <= 7);
+	return diff <= 7;
 }
 
 Bool CompareFloatTolerant(Float64 a, Float64 b)
@@ -21,7 +21,7 @@ Bool CompareFloatTolerant(Float64 a, Float64 b)
 
 	// UInt32 is necessary because -x-x is 0x80000000 where abs(0x80000000 is illegal)
 	UInt64 diff = UInt64(Abs(*va - *vb));
-	return (diff <= 7);
+	return diff <= 7;
 }
 
 } // namespace maxon

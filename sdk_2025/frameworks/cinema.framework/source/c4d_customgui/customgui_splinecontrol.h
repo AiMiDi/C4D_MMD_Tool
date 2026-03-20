@@ -564,9 +564,9 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @brief Sets the callback function to be called for events on the instance.
 	/// @details The callback must be setup each time a SplineData parameter is being initialized or gets a new instance assigned. See example below for details.
-	/// @snippet splinedata_use.cpp splinedata_callback
-	/// @param[in] fn	The pointer to the callback function.
-	/// @param[in] pData	The callback data. In most cases it is best, to pass in \c nullptr and let Cinema 4D fill in the data on callbacks.
+	/// @snippet splinedata_use.cpp splinedata_callback.
+	/// @param[in] fn									The pointer to the callback function.
+	/// @param[in] pData							The callback data. In most cases it is best, to pass in \c nullptr and let Cinema 4D fill in the data on callbacks.
 	//----------------------------------------------------------------------------------------
 	void SetUserCallback(SplineDataCallback fn, void* pData);
 

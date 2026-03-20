@@ -78,7 +78,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Creates a readable string from a memory size.
 	/// @param[in] mem								The memory size.
-	/// @param[in] mebibytes					defines if a value of 1343443 is either output as "1.28 MiB" (mebibytes) or "1.34 MB" (megabytes).
+	/// @param[in] mebibytes					Defines if a value of 1343443 is either output as "1.28 MiB" (mebibytes) or "1.34 MB" (megabytes).
 	/// @return												String that displays the memory size.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD String MemorySizeToString(Int64 mem, Bool mebibytes);

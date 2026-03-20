@@ -2,9 +2,11 @@
 
 [![](https://img.shields.io/github/downloads/AiMiDi/C4D_MMD_Tool/total)](https://github.com/AiMiDi/C4D_MMD_Tool/releases) [![](https://img.shields.io/github/forks/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/network/members) [![](https://img.shields.io/github/stars/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/stargazers) ![](https://img.shields.io/github/languages/top/AiMiDi/C4D_MMD_Tool) [![](https://img.shields.io/github/last-commit/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/commits/main) [![](https://img.shields.io/github/v/release/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/releases)
 
-[![MSBuild](https://github.com/AiMiDi/C4D_MMD_Tool/actions/workflows/msbuild.yml/badge.svg)](https://github.com/AiMiDi/C4D_MMD_Tool/actions/workflows/msbuild.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/facde953bcc94a0799d045ba0633222d)](https://www.codacy.com/gh/AiMiDi/C4D_MMD_Tool/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AiMiDi/C4D_MMD_Tool&amp;utm_campaign=Badge_Grade) [![](https://img.shields.io/github/license/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/blob/main/LICENSE.md)
+[![Build](https://github.com/AiMiDi/C4D_MMD_Tool/actions/workflows/build.yml/badge.svg)](https://github.com/AiMiDi/C4D_MMD_Tool/actions/workflows/build.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/facde953bcc94a0799d045ba0633222d)](https://www.codacy.com/gh/AiMiDi/C4D_MMD_Tool/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AiMiDi/C4D_MMD_Tool&amp;utm_campaign=Badge_Grade) [![](https://img.shields.io/github/license/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/blob/main/LICENSE.md)
 
 [![](https://img.shields.io/badge/ReadMe-English-green)](README.md)
+
+**开发文档：** [DEVELOPMENT_zh.md](DEVELOPMENT_zh.md) · [English DEVELOPMENT.md](DEVELOPMENT.md)
 
 ## 关于
 
@@ -19,6 +21,21 @@ Cinema 4D的mmdtool。
 插件点击 [![](https://img.shields.io/github/v/release/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/releases) 下的最新版本下载
 
 目前，主要维护版本为R20及更高版本，R19及以下版本未提供支持。
+
+### 开发者：CMake 构建（多 SDK）
+
+- **基线**：以 `sdk_2026` 根目录的 `CMakePresets.json` 为约定（如 `windows_vs2022_v143`、`linux_ninja`、`macos_universal_xcode`）。公共 Maxon 工具链位于 `sdk_2026/cmake`；各旧版 `sdk_*` 桥接通过 `MAXON_TOOLING_DIR` 指向该目录复用同一套 tooling。
+- **依赖**：Bullet3 与 libMMD 通过 `cmake/mmdtool_plugin_dependencies.cmake`（`mmdtool_plugin_dependencies_add`）以 **CMake 子目录 + 目标链接** 并入各 `sdk_*` 工程，**无需**安装到 `dependency/install`。可选根工程：`cmake --preset dev-windows` 后 `cmake --build --preset cmt-deps-build`。libMMD 测试：预设 `dev-windows-deps-test` + `cmake --build --preset cmt-deps-test`，或 `-D CMT_DEPS_ENABLE_LIBMMD_TESTS=ON`。清理：`cmake --build _build_msvc --target cmt-clean-deps`（需已配置根工程）。
+- **仅生成某 SDK 的工程文件（Windows）**：`configure_sdk.bat sdk_2026 windows_vs2022_v143`（preset 可省略，默认 `windows_vs2022_v143`）。
+- **根目录一键工作流**（需先配置根工程一次）：
+  1. `cmake -S . -B _build_msvc -G "Visual Studio 17 2022" -A x64`
+  2. `cmake --build _build_msvc --target cmt-workflow`（依赖 + 配置 + 编译插件；可通过 `-D CMT_SDK_DIR=...` 等变量指向目标 `sdk_*`）
+- **典型命令**（仅插件、在某一 `sdk_*` 内）：
+  1. `cd sdk_2026`（或目标 `sdk_r25`、`sdk_2024` 等）
+  2. `cmake --preset windows_vs2022_v143`
+  3. `cmake --build _build_msvc --config Debug`
+- **产物**：Debug 下插件一般在 `_build_msvc/bin/Debug/plugins/mmdtool/`（以实际 preset 生成目录为准）。
+- **Windows 安装包（Inno）**：`setup/Common/installer_script.iss` 直接从各 **`sdk_*\_build_msvc_*\bin\Release\plugins\mmdtool\mmdtool.xdl64`** 与 **`res\R20-S24` / `res\S24_up`** 取文件，**不再使用**根构建目录下的 `release` 收集区。打全量安装包前，请在需要的 **`sdk_r20`～`sdk_r25`、`sdk_2023`～`sdk_2026`** 中分别配置并 **Release** 编译；**不必再编 `sdk_s*`**——旧版 C4D 中 R/S 为同一大版本，S 系与配对 R 系 ABI 兼容，安装程序里 S22/S24/S26 组件复用 **sdk_r21 / sdk_r23 / sdk_r25** 的产物（与 iss 中 `XdlSdkRel` 一致）。若输出目录或配置名不同，可对 ISCC 传 `/DSdkBuildDir=...`、`/DSdkBinConfig=...`（亦可通过 `CMT_ISS_EXTRA_ARGS`）。
 
 若模型导入时勾选多部分出现问题请不要勾选。
 

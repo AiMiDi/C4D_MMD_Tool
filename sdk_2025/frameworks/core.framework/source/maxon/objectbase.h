@@ -235,7 +235,7 @@ public:
 	InterfaceReference(const Char* iidWithoutHash, const InterfaceReference* baseInterface, const Char* methodIds, const METHOD_FLAGS* methodFlags, TranslationUnit* unit, EntityBase::FLAGS refType);
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the unique identifier of the interface. This includes a hash code suffix
+	/// Returns the unique identifier of the interface. This includes a hash code suffix.
 	/// @return												Identifier of the interface.
 	//----------------------------------------------------------------------------------------
 	const Id& GetId() const
@@ -1660,10 +1660,6 @@ template <typename R, typename SRC> struct CastHelper<R, SRC, true>
 template <typename R, typename SRC, typename RESULT = typename maxon::details::CastHelper<R, SRC>::AssertCastType> inline RESULT AssertCast(SRC&& ref)
 {
 	DebugAssert(!ref.GetPointer() || ref.GetPointer()->template IsInstanceOf<typename R::ReferencedType>());
-#ifdef MAXON_COMPILER_INTEL
-	// add memory fence for intel compiler 16.0 bug which reorders refcounting operations after this call
-	CompilerOptimizationBarrier();
-#endif
 	return reinterpret_cast<RESULT&&>(ref);
 }
 
@@ -1679,10 +1675,6 @@ template <typename R, typename SRC, typename RESULT = typename maxon::details::C
 {
 	if (ref.GetPointer() && ref.GetPointer()->template IsInstanceOf<typename R::ReferencedType>())
 	{
-#ifdef MAXON_COMPILER_INTEL
-		// add memory fence for intel compiler 16.0 bug which reorders refcounting operations after this call
-		CompilerOptimizationBarrier();
-#endif
 		return reinterpret_cast<RESULT&&>(ref);
 	}
 	else
@@ -2016,8 +2008,8 @@ protected:
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the message delegate of this error.
-	/// @see SetMessageDelegate
-	/// @return												The delegate
+	/// @see SetMessageDelegate.
+	/// @return												The delegate.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD const MessageDelegate& GetMessageDelegate() const;
 
@@ -2508,7 +2500,7 @@ template <typename DEF> struct ComponentIdentifierMetaData<Id, DEF>
 /// @see MAXON_COMPONENT
 /// @see ComponentWithBase
 //----------------------------------------------------------------------------------------
-class ComponentRoot MAXON_IF_TARGET_DEBUG(: public EmptyVirtualClass,)
+class ComponentRoot MAXON_IF_TARGET_DEBUG(: public EmptyVirtualClass, )
 {
 public:
 	// The following members provide default implementations of component functions which you can override in your own component classes.

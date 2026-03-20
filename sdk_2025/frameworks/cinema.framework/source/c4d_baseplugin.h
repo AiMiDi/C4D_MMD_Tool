@@ -127,7 +127,7 @@ public:
 	/// Gets the information flags for the plugin.
 	/// @return												The info flags: @enumerateEnum{PLUGINFLAG}
 	//----------------------------------------------------------------------------------------
-	Int32 GetInfo();
+	Int32 GetInfo() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Gets the filename for the plugin file.
@@ -136,7 +136,7 @@ public:
 	Filename GetFilename();
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the dllRef of the plugin
+	/// Returns the dllRef of the plugin.
 	/// @return												The dllRef of the plugin.
 	//----------------------------------------------------------------------------------------
 	maxon::DllRef GetDllRef();

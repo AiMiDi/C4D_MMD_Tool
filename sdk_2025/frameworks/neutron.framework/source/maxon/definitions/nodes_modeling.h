@@ -374,6 +374,42 @@ namespace NEUTRON
 			MAXON_ATTRIBUTE(Array<GeometryObject>, GEOMETRIESOUT, "geometriesout");
 		}
 
+		namespace EXTRACTGEOBYTYPE
+		{
+			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.neutron.geometry.extractgeobytype");
+
+			// supports MAXON::NODE::BASE::FILTERTAGS
+			// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+			// supports MAXON::NODE::BASE::NAME
+			// supports MAXON::NODE::BASE::ASSETVERSION
+			// supports MAXON::NODE::BASE::COLOR
+			// supports MAXON::NODE::BASE::PORTDISPLAY
+			// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+			// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+			// supports MAXON::NODE::BASE::COMMENT
+			// supports MAXON::NODE::BASE::CATEGORY
+			// supports MAXON::NODE::BASE::ICON
+			// supports MAXON::NODE::BASE::UPDATEPOLICY
+			// supports MAXON::ASSET::BASE::PROTECTED
+
+			MAXON_ATTRIBUTE(GeometryObject, GEOMETRYIN, "geometryin");
+
+			MAXON_ATTRIBUTE(Int, GEOTYPEOUT, "geotypeout",
+				RESOURCE_DEFINE(ENUM_NOVALUE, 0)
+				RESOURCE_DEFINE(ENUM_ISMESH, 1)
+				RESOURCE_DEFINE(ENUM_ISSPLINE, 2)
+				RESOURCE_DEFINE(ENUM_ISLINE, 3)
+				RESOURCE_DEFINE(ENUM_ISPTCLOUD, 4));
+
+			MAXON_ATTRIBUTE(GeometryObject, MESHOUT, "meshout");
+
+			MAXON_ATTRIBUTE(GeometryObject, SPLINEOUT, "splineout");
+
+			MAXON_ATTRIBUTE(GeometryObject, LINEOUT, "lineout");
+
+			MAXON_ATTRIBUTE(GeometryObject, PTCLOUDOUT, "ptcloudout");
+		}
+
 		//----------------------------------------------------------------------------------------
 		/// Deprecated node, use the new node net.maxon.neutron.geometry.get_property
 		//----------------------------------------------------------------------------------------
@@ -551,6 +587,46 @@ namespace NEUTRON
 			MAXON_ATTRIBUTE(Array<ColorA32>, PTSCOLORASOUT, "ptscolorasout");
 
 			MAXON_ATTRIBUTE(Array<Float32>, PTSWEIGHTSOUT, "ptsweightsout");
+		}
+
+		namespace GET_INFORMATION
+		{
+			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.neutron.geometry.get_information");
+
+			// supports MAXON::NODE::BASE::FILTERTAGS
+			// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+			// supports MAXON::NODE::BASE::NAME
+			// supports MAXON::NODE::BASE::ASSETVERSION
+			// supports MAXON::NODE::BASE::COLOR
+			// supports MAXON::NODE::BASE::PORTDISPLAY
+			// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+			// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+			// supports MAXON::NODE::BASE::COMMENT
+			// supports MAXON::NODE::BASE::CATEGORY
+			// supports MAXON::NODE::BASE::ICON
+			// supports MAXON::NODE::BASE::UPDATEPOLICY
+			// supports MAXON::ASSET::BASE::PROTECTED
+
+			MAXON_ATTRIBUTE(void, GEOMETRYIN, "geometryin");
+
+			MAXON_ATTRIBUTE(Int, INTGEOMTYPEOUT, "intgeomtypeout",
+				RESOURCE_DEFINE(ENUM_NOVALUE, 0)
+				RESOURCE_DEFINE(ENUM_ISMESH, 1)
+				RESOURCE_DEFINE(ENUM_ISSPLINE, 2)
+				RESOURCE_DEFINE(ENUM_ISLINE, 3)
+				RESOURCE_DEFINE(ENUM_ISPTCLOUD, 4));
+
+			MAXON_ATTRIBUTE(Bool, HASVALUEOUT, "hasvalueout");
+
+			MAXON_ATTRIBUTE(Bool, ISMESHOUT, "ismeshout");
+
+			MAXON_ATTRIBUTE(Bool, ISSPLINEOUT, "issplineout");
+
+			MAXON_ATTRIBUTE(Bool, ISLINEOUT, "islineout");
+
+			MAXON_ATTRIBUTE(Bool, ISPTCLOUDOUT, "isptcloudout");
+
+			MAXON_ATTRIBUTE(Bool, ISSPLINELINEOUT, "issplinelineout");
 		}
 
 		namespace GET_PROPERTY
@@ -901,13 +977,15 @@ namespace NEUTRON
 
 			MAXON_ATTRIBUTE(Bool, ITERATESELECTED, "iterateselected");
 
-			MAXON_ATTRIBUTE(Vector, NORMALS, "normals");
+			MAXON_ATTRIBUTE(String, NORMALS, "normals");
 
-			MAXON_ATTRIBUTE(ColorA, COLORS, "colors");
+			MAXON_ATTRIBUTE(String, COLORS, "colors");
 
-			MAXON_ATTRIBUTE(Float, WEIGHTS, "weights");
+			MAXON_ATTRIBUTE(String, WEIGHTS, "weights");
 
 			MAXON_ATTRIBUTE(void, POINTCOUNT, "pointcount");
+
+			MAXON_ATTRIBUTE(void, INNERDOMAIN, "innerdomain");
 
 			MAXON_ATTRIBUTE(void, POINTOUT_POSITION, "pointout_position");
 
@@ -1883,6 +1961,8 @@ namespace NEUTRON
 
 			MAXON_ATTRIBUTE(String, SELECTIONSTRINGIN, "selectionstringin");
 
+			MAXON_ATTRIBUTE(Matrix, TRANSFORMIN, "transformin");
+
 			MAXON_ATTRIBUTE(Int, PIVOTIN, "pivotin",
 				RESOURCE_DEFINE(ENUM_PIVOTMATRIX, 0)
 				RESOURCE_DEFINE(ENUM_BOUNDINGBOX, 1));
@@ -1897,12 +1977,66 @@ namespace NEUTRON
 
 			MAXON_ATTRIBUTE(Float, BOUNDINGBOXZIN, "boundingboxzin");
 
-			MAXON_ATTRIBUTE(Matrix, TRANSFORMIN, "transformin");
+			MAXON_ATTRIBUTE(Group, GRP_TRANSFORM, "grp_transform");
+
+			MAXON_ATTRIBUTE(Group, GRP_PIVOT, "grp_pivot");
 		}
 	}
 
 	namespace GROUP
 	{
+		namespace GENERATORWITHMATRIX
+		{
+			namespace BASE
+			{
+				MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.neutron.group.generatorwithmatrix.base");
+
+				// supports MAXON::NODE::BASE::FILTERTAGS
+				// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+				// supports MAXON::NODE::BASE::NAME
+				// supports MAXON::NODE::BASE::ASSETVERSION
+				// supports MAXON::NODE::BASE::COLOR
+				// supports MAXON::NODE::BASE::PORTDISPLAY
+				// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+				// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+				// supports MAXON::NODE::BASE::COMMENT
+				// supports MAXON::NODE::BASE::CATEGORY
+				// supports MAXON::NODE::BASE::ICON
+				// supports MAXON::NODE::BASE::UPDATEPOLICY
+				// supports MAXON::ASSET::BASE::PROTECTED
+				// supports MAXON::NEUTRON::GROUP::PRIMITIVE::GEOMETRY::BASE::GEOMETRYOUT
+				// supports MAXON::NEUTRON::GROUP::PRIMITIVE::BASE::SORT
+				// supports MAXON::NEUTRON::MODELING::CAPSULE::MATRIXINPUTS::LOCALMATIN
+				// supports MAXON::NEUTRON::MODELING::CAPSULE::MATRIXINPUTS::GLOBALMATIN
+			}
+
+			namespace SPLINE
+			{
+				namespace BASE
+				{
+					MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.neutron.group.generatorwithmatrix.spline.base");
+
+					// supports MAXON::NODE::BASE::FILTERTAGS
+					// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+					// supports MAXON::NODE::BASE::NAME
+					// supports MAXON::NODE::BASE::ASSETVERSION
+					// supports MAXON::NODE::BASE::COLOR
+					// supports MAXON::NODE::BASE::PORTDISPLAY
+					// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+					// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+					// supports MAXON::NODE::BASE::COMMENT
+					// supports MAXON::NODE::BASE::CATEGORY
+					// supports MAXON::NODE::BASE::ICON
+					// supports MAXON::NODE::BASE::UPDATEPOLICY
+					// supports MAXON::ASSET::BASE::PROTECTED
+					// supports MAXON::NEUTRON::GROUP::PRIMITIVE::GEOMETRY::BASE::GEOMETRYOUT
+					// supports MAXON::NEUTRON::GROUP::PRIMITIVE::SPLINE::BASE::SORT
+					// supports MAXON::NEUTRON::MODELING::CAPSULE::MATRIXINPUTS::LOCALMATIN
+					// supports MAXON::NEUTRON::MODELING::CAPSULE::MATRIXINPUTS::GLOBALMATIN
+				}
+			}
+		}
+
 		namespace PRIMITIVE
 		{
 			//----------------------------------------------------------------------------------------
@@ -2044,6 +2178,18 @@ namespace NEUTRON
 			// supports MAXON::COMMAND::MODELING::UV::AUTOMATICUV::USENORMALS
 			// supports MAXON::COMMAND::MODELING::UV::AUTOMATICUV::FORCESEAMS
 			// supports MAXON::COMMAND::MODELING::UV::AUTOMATICUV::ALLOWSTRETCH
+		}
+
+		namespace CAPSULE
+		{
+			namespace MATRIXINPUTS
+			{
+				MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.neutron.modeling.capsule.matrixinputs");
+
+				MAXON_ATTRIBUTE(Matrix, LOCALMATIN, "localmatin");
+
+				MAXON_ATTRIBUTE(Matrix, GLOBALMATIN, "globalmatin");
+			}
 		}
 
 		namespace CHAMFER
@@ -2775,6 +2921,8 @@ namespace NEUTRON
 
 			MAXON_ATTRIBUTE(Matrix, MODIFIERMATRIX, "modifiermatrix");
 
+			MAXON_ATTRIBUTE(Matrix, LOCALOBJECTMATRIX, "localobjectmatrix");
+
 			MAXON_ATTRIBUTE(Matrix, OBJECTMATRIX, "objectmatrix");
 		}
 
@@ -2800,7 +2948,10 @@ namespace NEUTRON
 				// supports MAXON::NEUTRON::MODELING::MODIFIER::BASE::GEOMETRYIN
 				// supports MAXON::NEUTRON::MODELING::MODIFIER::BASE::GEOMETRYOUT
 				// supports MAXON::NEUTRON::MODELING::MODIFIERMATRIX::MODIFIERMATRIX
+				// supports MAXON::NEUTRON::MODELING::MODIFIERMATRIX::LOCALOBJECTMATRIX
 				// supports MAXON::NEUTRON::MODELING::MODIFIERMATRIX::OBJECTMATRIX
+				// supports MAXON::NEUTRON::MODELING::CAPSULE::MATRIXINPUTS::LOCALMATIN
+				// supports MAXON::NEUTRON::MODELING::CAPSULE::MATRIXINPUTS::GLOBALMATIN
 
 				MAXON_ATTRIBUTE(String, ASSET_SORT, "net.maxon.asset.sort");
 			}
@@ -3457,7 +3608,10 @@ namespace NEUTRON
 				// supports MAXON::NEUTRON::MODELING::MODIFIER::BASE::GEOMETRYIN
 				// supports MAXON::NEUTRON::MODELING::MODIFIER::BASE::GEOMETRYOUT
 				// supports MAXON::NEUTRON::MODELING::MODIFIERMATRIX::MODIFIERMATRIX
+				// supports MAXON::NEUTRON::MODELING::MODIFIERMATRIX::LOCALOBJECTMATRIX
 				// supports MAXON::NEUTRON::MODELING::MODIFIERMATRIX::OBJECTMATRIX
+				// supports MAXON::NEUTRON::MODELING::CAPSULE::MATRIXINPUTS::LOCALMATIN
+				// supports MAXON::NEUTRON::MODELING::CAPSULE::MATRIXINPUTS::GLOBALMATIN
 
 				MAXON_ATTRIBUTE(String, ASSET_SORT, "net.maxon.asset.sort");
 			}

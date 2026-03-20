@@ -34,6 +34,7 @@ struct ControlDisplayStruct;
 #define PLUGINFLAG_SCENEHOOK_NOTDRAGGABLE									(1 << 0)			///< Do not call during scrubbing (e.g. dynamics).
 #define PLUGINFLAG_SCENEHOOK_SUPPORT_DOCUMENT_DESCRIPTION	(1 << 1)			///< Show in the document's description.
 #define PLUGINFLAG_SCENEHOOK_SUPPORT_ANIMATION						(1 << 2)			///< Show in the timeline.
+#define PLUGINFLAG_SCENEHOOK_VIEWINDEPENDENT_DRAW_CALL		(1 << 3)			///< Always call Draw even if there's no view. This call is in addition to the call for an active view (if any) and receives nullptr for bd and bh.
 /// @}
 
 //----------------------------------------------------------------------------------------
@@ -111,6 +112,10 @@ public:
 	/// list->Add(node, EXECUTIONPRIORITY_GENERATOR, EXECUTIONFLAGS::NONE);
 	/// @endcode
 	/// @C4D will then call Execute() 2 times.
+	/// 
+	/// A scene hook can also add itself to @C4D's pre- and post-pass which are done right before and after scene execution.
+	/// For this, you have to set one of the PREPASS/POSTPASS flags in combination with further PASS_* flags in the EXECUTIONFLAGS passed to list->Add().
+	/// @C4D will then call Visit() according to the set bits.
 	/// @param[in] node								The BaseSceneHook connected with the SceneHookData instance. Equal to <tt>static_cast</tt><@ref BaseSceneHook*>Get(). Provided for speed and convenience. @cinemaOwnsPointed{scene hook}
 	/// @param[in] list								The priority list to add execution points to. @cinemaOwnsPointed{priority list}
 	/// @return												@trueIfOtherwiseFalse{priority was added to the execution @formatParam{list}}
@@ -210,6 +215,26 @@ public:
 	virtual void FreeDisplayControl();
 
 	/// @}
+
+	/// @name Execute
+	/// @{
+
+	//----------------------------------------------------------------------------------------
+	/// Called for the traversed objects during pre-pass and post-pass of @C4D according to the EXECUTIONFLAGS set up during AddToExecution.
+	/// You should make use of this mechanism when your scene hook has to traverse the whole object hierarchy,
+	/// because it's much faster if there's just one common traversal for all scene hooks (each object of the hierarchy
+	/// has to be loaded into CPU cache just once and can then be handled by all scene hooks).
+	/// @calledThreadContext
+	/// @param[in] node								The BaseSceneHook connected with the SceneHookData instance. Equal to <tt>static_cast</tt><@ref BaseSceneHook*>Get(). Provided for speed and convenience. @cinemaOwnsPointed{scene hook}
+	/// @param[in] doc								The active document. @cinemaOwnsPointed{document}
+	/// @param[in] bt									The calling thread. Can be @formatConstant{nullptr}. @cinemaOwnsPointed{thread}
+	/// @param[in] op									The object being visited currently. @cinemaOwnsPointed{object}
+	/// @param[in] flags							The execution flags: @enumerateEnum{EXECUTIONFLAGS}
+	/// @return												The execution result: @enumerateEnum{EXECUTIONRESULT}
+	//----------------------------------------------------------------------------------------
+	virtual EXECUTIONRESULT Visit(BaseSceneHook* node, BaseDocument* doc, BaseThread* bt, BaseObject* op, EXECUTIONFLAGS flags);
+
+	/// @}
 };
 
 //----------------------------------------------------------------------------------------
@@ -229,9 +254,13 @@ public:
 /// 															During loading either a @em 0 is passed (if the file was written by the old plugin) or @em 1 (if the file was written by the new plugin). This allows to easily write/read new values.\n
 /// 															For forward and backward compatibility to work any existing read order from a given level must not be changed. @C4D skips any new settings automatically if they have not been read.\n\n
 /// 															@formatParam{disklevel} is only useful if variables are written/read in @ref NodeData::Write/@ref NodeData::Read.
+/// @param[in] type								When a DataType is passed here, each BaseList2D object will provide memory (on demand) for the scene hook
+///																to hold an instance of the DataType. The pointer to this instance is obtained with BaseSceneHook::GetObjectData.
+///																Constructor and destructor are properly called, you don't have to do this on your own.
+///																Note that the data isn't copied as part of BaseList2D::CopyTo.
 /// @return												@trueIfOtherwiseFalse{the scene hook plugin was registered}
 //----------------------------------------------------------------------------------------
-Bool RegisterSceneHookPlugin(Int32 id, const maxon::String& str, Int32 info, DataAllocator* g, Int32 priority, Int32 disklevel);
+Bool RegisterSceneHookPlugin(Int32 id, const maxon::String& str, Int32 info, DataAllocator* g, Int32 priority, Int32 disklevel, const maxon::DataType& type = maxon::DataType::DefaultValue());
 
 
 } // namespace cinema

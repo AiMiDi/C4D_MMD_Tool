@@ -17,7 +17,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// GetUrl returns the storage url of the asset repository.
 	/// @param[in] getOrigin					True to get the original mount path of the repository. False to get the effective url (e.g. this could be a ramdisk:// in case of http connections).
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Url GetUrl(Bool getOrigin) const;
 };

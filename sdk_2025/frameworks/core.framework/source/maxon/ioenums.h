@@ -163,9 +163,9 @@ namespace URLFLAGS
 
 //----------------------------------------------------------------------------------------
 /// IoProgressDelegate is used in Url::IoCopyFile to log the progress of the file copy.
-/// @param[in]	alreadyRead						Number of bytes already read.
-/// @param[in]	totalBytes					Number of total bytes.
-/// @return									OK or error. The error could be used to cancel the read operation.
+/// @param[in] alreadyRead				Number of bytes already read.
+/// @param[in] totalBytes					Number of total bytes.
+/// @return												OK or error. The error could be used to cancel the read operation.
 //----------------------------------------------------------------------------------------
 using IoProgressDelegate = Delegate<Result<void>(Int64 alreadyRead, Int64 totalBytes)>;
 

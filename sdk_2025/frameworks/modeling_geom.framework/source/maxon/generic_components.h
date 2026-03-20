@@ -199,7 +199,7 @@ public:
 					return IllegalStateError(MAXON_SOURCE_LOCATION, "Inconsistent topology provided"_s);
 				
 				Block<const Int32> points(block.GetFirst() + offsetOutline, polygonPointCount);
-				Block<const Int32> seg(blockOutlines.GetFirst() + offsetGroup, 1 );
+				Block<const Int32> seg(blockOutlines.GetFirst() + offsetGroup, 1);
 				
 				if (points.GetCount() < 3)
 					return IllegalStateError(MAXON_SOURCE_LOCATION);
@@ -282,7 +282,8 @@ public:
 
 	HashInt GetHashCode() const
 	{
-		return *reinterpret_cast<const UInt*>(this);
+		static_assert(SIZEOF(EdgePairTemplate) == SIZEOF(UInt64), "Unexpected size.");
+		return *reinterpret_cast<const UInt64*>(this);
 	}
 
 	UniqueHash GetUniqueHashCode() const
@@ -328,8 +329,8 @@ using EdgePair = EdgePairTemplate<Int32, NOTOK>;
 //----------------------------------------------------------------------------------------
 /// A more efficient way to clamp an index in a quad using bit masking, because we know the
 ///	size of the quad is 4 = 2^2.
-/// @param[in] index	A vertex index of a quad in the range [0, 3].
-/// @return						A clamped index of a quad in the range [0, 3].
+/// @param[in] index							A vertex index of a quad in the range [0, 3].
+/// @return												A clamped index of a quad in the range [0, 3].
 //----------------------------------------------------------------------------------------
 template <typename T, typename U = T, typename = std::enable_if_t<STD_IS_REPLACEMENT(arithmetic, T)>>
 MAXON_ATTRIBUTE_FORCE_INLINE constexpr U ClampQuadIndex(const T index)
@@ -338,9 +339,9 @@ MAXON_ATTRIBUTE_FORCE_INLINE constexpr U ClampQuadIndex(const T index)
 }
 
 //----------------------------------------------------------------------------------------
-/// @param[in] polyVertices		Polygon vertices.
-/// @param[in] edgePair				An edge pair to find the start index of given the direction of vertices in the polygon.
-/// @return										The index of the start vertex in the quad.
+/// @param[in] polyVertices				Polygon vertices.
+/// @param[in] edgePair						An edge pair to find the start index of given the direction of vertices in the polygon.
+/// @return												The index of the start vertex in the quad.
 //----------------------------------------------------------------------------------------
 inline Int32 FindDirectedVertexIndexInQuad(const Block<const Int32> polyVertices, const EdgePair edgePair)
 {
@@ -357,9 +358,9 @@ inline Int32 FindDirectedVertexIndexInQuad(const Block<const Int32> polyVertices
 
 //----------------------------------------------------------------------------------------
 /// Returns the previous edge in the quad.
-/// @param[in] polyVertices		Polygon vertices.
-/// @param[in] edgePair				An input edge pair to get the previous edge pair for.
-/// @return										The previous edge pair in the quad.
+/// @param[in] polyVertices				Polygon vertices.
+/// @param[in] edgePair						An input edge pair to get the previous edge pair for.
+/// @return												The previous edge pair in the quad.
 //----------------------------------------------------------------------------------------
 inline EdgePair FindPrevEdgeInQuad(const Block<const Int32> polyVertices, const EdgePair edgePair)
 {
@@ -382,9 +383,9 @@ inline EdgePair FindPrevEdgeInQuad(const Block<const Int32> polyVertices, const 
 
 //----------------------------------------------------------------------------------------
 /// Returns the next edge in the quad.
-/// @param[in] polyVertices		Polygon vertices.
-/// @param[in] edgePair				An input edge pair to get the next edge pair for.
-/// @return										The next edge pair in the quad.
+/// @param[in] polyVertices				Polygon vertices.
+/// @param[in] edgePair						An input edge pair to get the next edge pair for.
+/// @return												The next edge pair in the quad.
 //----------------------------------------------------------------------------------------
 inline EdgePair FindNextEdgeInQuad(const Block<const Int32> polyVertices, const EdgePair edgePair)
 {
@@ -403,9 +404,9 @@ inline EdgePair FindNextEdgeInQuad(const Block<const Int32> polyVertices, const 
 }
 
 //----------------------------------------------------------------------------------------
-/// @param[in] polyVertices		Polygon vertices.
-/// @param[in] edgePair				An input edge pair to get the opposite edge pair of.
-/// @return										The opposite edge pair in the quad.
+/// @param[in] polyVertices				Polygon vertices.
+/// @param[in] edgePair						An input edge pair to get the opposite edge pair of.
+/// @return												The opposite edge pair in the quad.
 //----------------------------------------------------------------------------------------
 inline EdgePair FindOppositeDirectedEdgeInQuad(const Block<const Int32> polyVertices, const EdgePair edgePair)
 {
@@ -537,7 +538,7 @@ struct InfoStorage
 	
 	BaseArray<Info<STORAGEINDEX>> info;
 	Int pntCount = 0;
-	Int polyCount= 0;
+	Int polyCount = 0;
 	Int edgeCount = 0;
 };
 
@@ -791,6 +792,11 @@ struct EdgeNeigborPolygonsTemplate
 
 using IndexType = Int32;
 using EdgeNeigborPolygons = neighbor::EdgeNeigborPolygonsTemplate<IndexType, LIMIT<IndexType>::MAX, NOTOK>;
+
+namespace MemoizationTypes
+{
+	MAXON_DECLARATION(NO_VALUE_TYPE, NeighborStorageRef, "net.maxon.memoization.neighbor.neighborstorageref");
+}
 
 } // namespace maxon
 

@@ -131,10 +131,10 @@ enum DESC
 	DESC_MINSLIDER				= 27,					///< ::Int32/::Float/::Vector Minimum value for slider.
 	DESC_MAXSLIDER				= 28,					///< ::Int32/::Float/::Vector Maximum value for slider.
 	DESC_GROUPSCALEV			= 29,					///< ::Bool Allow the group height to be scaled.
-	DESC_SCALEH						= 30,					///< ::Bool Scale element horizontally.
+	DESC_SCALEH						= 30,					///< ::Bool Scale element horizontally. @note Both ::DESC_ALIGNLEFT and ::DESC_FITH must be @formatConstant{false} in order to work.
 	DESC_LAYOUTVERSION		= 31,					///< ::Int32 Layout version.
 	DESC_ALIGNLEFT				= 32,					///< ::Bool Align element left.
-	DESC_FITH							= 33,					///< ::Bool Fit element.
+	DESC_FITH							= 33,					///< ::Bool Fit element horizontally. @note ::DESC_ALIGNLEFT must be @formatConstant{false} in order to work.
 	DESC_NEWLINE        	= 34,					///< ::Bool Line break.
 	DESC_TITLEBAR					= 35,					///< ::Bool Main group title bar.
 	DESC_CYCLEICONS				= 36,					///< BaseContainer Icon IDs for cycle.
@@ -144,6 +144,7 @@ enum DESC
 	DESC_FORBID_SCALING		= 40,					///< ::Bool Prevents auto-scaling of the parameter with the scale tool (for ::DESC_UNIT_METER).
 	DESC_ANGULAR_XYZ			= 41,					///< ::Bool @formatConstant{true} for XYZ as angular representation, or @formatConstant{false} for HPB.
 	DESC_FORBID_COLOR_CONVERSION	= 42,	///< ::Bool Prevents the automated converter from transforming values for this Color field.
+	DESC_HELPTEXT					= 43,					///< ::String allows to display a help text for string fields
 
 	DESC_INPORT					= 50,						///< ::Bool GV in port.
 	DESC_OUTPORT				= 51,						///< ::Bool GV out port.
@@ -196,7 +197,10 @@ enum DESC
 		DESC_BUTTON_STYLE_EMPHASIZED	= 1,	///< Accentuated button style.
 		DESC_BUTTON_STYLE_DIMMED			= 2,	///< Attenuated button style.
 
-	DESC_COLOR_AS_UI_COLOR = 87, ///< Turns the color chooser gui into a color chooser for ui colors(colors that are not color managed).
+	DESC_COLOR_AS_UI_COLOR = 87, ///< ::Bool Turns the color chooser gui into a color chooser for ui colors(colors that are not color managed).
+
+	DESC_CENTERH = 88, ///< ::Bool Centers element horizontally. @note All ::DESC_ALIGNLEFT, ::DESC_FITH and ::DESC_SCALEH must be @formatConstant{false} in order to work. @since 2025.100
+	DESC_EXTRALAYOUTFLAGS = 89, ///< ::Int32 Extra layout flags e.g. @ref BFV_TOP added to current layout flags. @since 2025.100
 
 	DESC_
 };
@@ -325,14 +329,14 @@ struct DescLevel
 	/// @param[in] d									A description level to compare with.
 	/// @return												@trueIfOtherwiseFalse{description levels are equal}
 	//----------------------------------------------------------------------------------------
-	Bool operator==(const DescLevel& d) const;
+	Bool operator ==(const DescLevel& d) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Inequality operator. Checks if description levels are not equal i.e any vales is different.
 	/// @param[in] d									A description level to compare with.
 	/// @return												@trueIfOtherwiseFalse{description levels are not equal}
 	//----------------------------------------------------------------------------------------
-	Bool operator!=(const DescLevel& d) const
+	Bool operator !=(const DescLevel& d) const
 	{
 		return !(*this == d);
 	}
@@ -374,7 +378,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Creates an ID with any number of levels. Must be used only with ConstDescID or memory which is never deleted.
-	/// @param[in] ids								array with DescLevels.
+	/// @param[in] ids								Array with DescLevels.
 	//----------------------------------------------------------------------------------------
 	template <int elementCount>
 	constexpr explicit DescID(maxon::IN_PLACE_TYPE v, const DescLevel (&ids)[elementCount])
@@ -385,13 +389,13 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Creates an ID with any number of levels. Must be used only with ConstDescID or memory which is never deleted.
-	/// @param[in] ids								array with DescLevels.
+	/// @param[in] ids								Array with DescLevels.
 	//----------------------------------------------------------------------------------------
 	explicit DescID(maxon::IN_PLACE_TYPE v, const maxon::Block<const DescLevel>& ids);
 
 	//----------------------------------------------------------------------------------------
 	/// Creates an ID with any number of levels.
-	/// @param[in] ids								array with DescLevels.
+	/// @param[in] ids								Array with DescLevels.
 	//----------------------------------------------------------------------------------------
 	template <typename... T> static DescID Create(const T&... ids)
 	{
@@ -450,28 +454,28 @@ public:
 	/// @param[in] id									Right operand. Source description ID.
 	/// @return												Left operant.
 	//----------------------------------------------------------------------------------------
-	const DescID& operator=(const DescID& id);
+	const DescID& operator =(const DescID& id);
 
 	//----------------------------------------------------------------------------------------
 	/// Move Assignment operator. Assigns @formatParam{id} to the description ID.
 	/// @param[in] id									Right operand. Source description ID.
 	/// @return												Left operant.
 	//----------------------------------------------------------------------------------------
-	const DescID& operator=(DescID&& id);
+	const DescID& operator =(DescID&& id);
 
 	//----------------------------------------------------------------------------------------
 	/// Equality operator. Checks if all levels are equal.
 	/// @param[in] d									Right operand description ID.
 	/// @return												@trueIfOtherwiseFalse{description IDs are equal}
 	//----------------------------------------------------------------------------------------
-	Bool operator==(const DescID& d) const;
+	Bool operator ==(const DescID& d) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Inequality operator. Checks if any level is different.
 	/// @param[in] d									Right operand description ID.
 	/// @return												@trueIfOtherwiseFalse{description IDs are not equal}
 	//----------------------------------------------------------------------------------------
-	Bool operator!=(const DescID& d) const;
+	Bool operator !=(const DescID& d) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Get the result of popping levels from the bottom of the stack.
@@ -479,14 +483,14 @@ public:
 	/// @param[in] shift							Number of levels to pop. @em 0 <= @formatParam{shift} < GetDepth().
 	/// @return												Resulting description ID after popping level(s).
 	//----------------------------------------------------------------------------------------
-	const DescID operator<<(Int32 shift) const;
+	const DescID operator <<(Int32 shift) const;
 
 	//----------------------------------------------------------------------------------------
 	/// Add operator. Merges two description IDs.
 	/// @param[in] s									Right operand. Source description ID.
 	/// @return												Left operant.
 	//----------------------------------------------------------------------------------------
-	const DescID& operator+=(const DescID& s);
+	const DescID& operator +=(const DescID& s);
 
 	//----------------------------------------------------------------------------------------
 	/// Add operator. Merges two description IDs.
@@ -591,6 +595,8 @@ public:
 #ifndef ConstDescID
 	#define ConstDescID(...)	cinema::DescID(maxon::IN_PLACE_TYPE::VALUE, cinema::ConstDescIDMem<MAXON_MAKE_COMMA_LIST(AddDescX, , , __VA_ARGS__)>::ToArray())
 	#define CreateDescID(...) cinema::DescID::Create(__VA_ARGS__)
+
+	#define ConstDescIDLevel(...) ConstDescID(DescLevel(__VA_ARGS__))
 #endif
 
 //----------------------------------------------------------------------------------------
@@ -608,7 +614,7 @@ public:
 /// 			return String();
 /// 		if (!op->GetDescription(desc, DESCFLAGS_DESC::NONE))
 /// 			return String();
-/// 		const BaseContainer *bc = desc->GetParameterI(ConstDescID(DescLevel(DESCID_ROOT)), nullptr);
+/// 		const BaseContainer *bc = desc->GetParameterI(ConstDescIDLevel(DESCID_ROOT), nullptr);
 /// 		if (bc)
 /// 			return bc->GetString(DESC_NAME);
 /// 	}

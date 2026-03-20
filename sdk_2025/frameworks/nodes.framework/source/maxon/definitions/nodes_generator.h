@@ -1,5 +1,5 @@
-#ifndef GENERATOR_NODES_H__
-#define GENERATOR_NODES_H__
+#ifndef NODES_GENERATOR_H__
+#define NODES_GENERATOR_H__
 
 #include "maxon/fid.h"
 #include "maxon/vector.h"
@@ -94,4 +94,4 @@ namespace PATTERN
 	
 #include "nodes_generator2.hxx"
 
-#endif // GENERATOR_NODES_H__
+#endif // NODES_GENERATOR_H__

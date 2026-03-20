@@ -62,7 +62,7 @@ public:
 	/// @param[in] props							Properties to set. The DESCRIPTION::BASE::IDENTIFIER will be used as key for the hashmap.
 	/// @param[in] merge							True if the container should be merged with the existing props im the description. The given props will
 	///																have priority over the existing.
-	/// @return												true if properties has been changed.
+	/// @return												True if properties has been changed.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> SetEntry(const DataDictionary& props, Bool merge = false);
 
@@ -110,6 +110,20 @@ public:
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> DescribeIO(const DataSerializeInterface& stream);
+
+	//----------------------------------------------------------------------------------------
+	/// Searches for the occurrence of the entry.
+	/// @param[in] id									Id to search.
+	/// @return												Entry on success. Error if entry is not found.
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD Opt<const DataDictionary&> GetEntryFast(const InternedId& id) const;
+
+	//----------------------------------------------------------------------------------------
+	/// Searches for the occurrence of the entry.
+	/// @param[in] id									Id to search.
+	/// @return												Entry on success. Error if entry is not found.
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD Opt<const DataDictionary&> FindEntryFast(const InternedId& id) const;
 };
 
 #include "datadescription1.hxx"

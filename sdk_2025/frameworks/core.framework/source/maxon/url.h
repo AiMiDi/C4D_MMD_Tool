@@ -430,10 +430,10 @@ public:
 	MAXON_METHOD Result<void> SetData(ForwardingDataPtr&& key, Data&& data, Bool persistent = true);
 
 	//----------------------------------------------------------------------------------------
-	/// EraseData removes data from the data dictionary
+	/// EraseData removes data from the data dictionary.
 	/// @param[in] key								The id of the property to erase. The possible values for id depend on the scheme.
 	/// @param[in] persistent					With the default value of true the attribute value is serialized. Use false for a transient attribute (one which shall not be serialized).
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> EraseData(ForwardingDataPtr&& key, Bool persistent = true);
 
@@ -531,9 +531,9 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @brief Attempts to physically create the non-existing directories in the directory path expressed by the Url.
 	/// @details Will return an `IoError` when the full path does already exist, is the empty path, or the user lacks access rights.
-	/// @param[in] createParents 	Check if parent directory exists and if not create them recursively.
-	/// @param[out] createdDirs	 	An array that will contain all newly created subdirectories in the order in which they were created. If this parameter is nullptr it will be ignored.
-	/// @return						OK on success.
+	/// @param[in] createParents			Check if parent directory exists and if not create them recursively.
+	/// @param[out] createdDirs				An array that will contain all newly created subdirectories in the order in which they were created. If this parameter is nullptr it will be ignored.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_FUNCTION Result<void> IoCreateDirectory(Bool createParents, BaseArray<Url>* createdDirs = nullptr) const;
 
@@ -641,15 +641,15 @@ public:
 	/// e.g. Assets can build a nice human readable url string.
 	/// @param[in] flags							Flags for the conversion, see CONVERTTOUINAMEFLAGS.
 	/// @param[in] lookupRepository		AssetRespoitory to search in.
-	/// @return                       String on success.
-	//---------------------------------------------------------------------------------------
+	/// @return												String on success.
+	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<String> ConvertToUiName(CONVERTTOUINAMEFLAGS flags, const AssetRepositoryRef& lookupRepository) const;
 
 	//----------------------------------------------------------------------------------------
 	/// ConvertFromUiName converts a string into a url.
 	/// @param[in] str								String to convert.
 	/// @param[in] lookupRepository		AssetRespoitory to search in.
-	/// @return                       Url on success. Please note that the url might be translated into another scheme (e.g. assetdb:// -> asset://).
+	/// @return												Url on success. Please note that the url might be translated into another scheme (e.g. assetdb:// -> asset://).
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Url> ConvertFromUiName(const String& str, const AssetRepositoryRef& lookupRepository);
 };
@@ -996,7 +996,7 @@ public:
 	Result<typename std::conditional<STD_IS_REPLACEMENT(void, T), typename IsFidClass<KEY>::type, T>::type> Get(KEY&& key) const
 	{
 		using TT = typename std::conditional<STD_IS_REPLACEMENT(void, T), typename IsFidClass<KEY>::type, T>::type;
-		iferr (Data data = Super::GetData(ConvertKeyToDataPtr<IsDerived<URLFLAGS::RESTRICT>, true>(std::forward<KEY>(key))))
+		iferr (Data data = Super::GetData(ConvertKeyToTrivialDataPtr<IsDerived<URLFLAGS::RESTRICT>, true>(std::forward<KEY>(key))))
 			return err;
 		iferr (auto&& res = data.template Get<TT>())
 			return err;
@@ -1016,7 +1016,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	template <typename T, typename KEY> T Get(KEY&& key, const T& defaultValue) const
 	{
-		iferr (Data data = Super::GetData(ConvertKeyToDataPtr<IsDerived<URLFLAGS::RESTRICT>, true>(std::forward<KEY>(key))))
+		iferr (Data data = Super::GetData(ConvertKeyToTrivialDataPtr<IsDerived<URLFLAGS::RESTRICT>, true>(std::forward<KEY>(key))))
 			return defaultValue;
 		iferr (auto&& res = data.template Get<T>())
 			return defaultValue;
@@ -1036,7 +1036,7 @@ public:
 	template <typename T, typename KEY> Result<void> Set(KEY&& key, T&& data, Bool persistent = true)
 	{
 		static_assert(ValidKeyValuePairTrait<LiteralId>::IsValid<T, KEY>::value);
-		constexpr Bool IS_VALID_FID = IsFidClass<KEY>::value && !STD_IS_REPLACEMENT(same, typename IsFidClass<KEY>::type, Data);
+		[[maybe_unused]] constexpr Bool IS_VALID_FID = IsFidClass<KEY>::value && !STD_IS_REPLACEMENT(same, typename IsFidClass<KEY>::type, Data);
 		using TT = typename std::conditional<IS_VALID_FID, typename maxon::Substitute<T, typename IsFidClass<KEY>::type>::type, void>::type;
 		using TTT = typename std::conditional<std::is_same_v<TT, T>, void, TT>::type;
 		Data tmp;

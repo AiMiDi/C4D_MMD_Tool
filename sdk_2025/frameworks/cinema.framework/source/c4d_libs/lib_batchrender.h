@@ -154,6 +154,137 @@ class BatchRender
 		/// @markPrivate
 		//----------------------------------------------------------------------------------------
 		void SetUseNet(Int32 n, Bool on);
+
+		//----------------------------------------------------------------------------------------
+		/// Checks if there is a texture error.
+		/// @return												@trueIfOtherwiseFalse{there is a texture error}
+		//----------------------------------------------------------------------------------------
+		Bool GetTextureError();
+
+		//----------------------------------------------------------------------------------------
+		/// Sets the texture error state.
+		/// @param[in] state								@formatConstant{true} to set a texture error, @formatConstant{false} to clear it.
+		//----------------------------------------------------------------------------------------
+		void SetTextureError(Bool state);
+
+		//----------------------------------------------------------------------------------------
+		/// Checks if texture checking is enabled.
+		/// @return												@trueIfOtherwiseFalse{texture checking is enabled}
+		//----------------------------------------------------------------------------------------
+		Bool GetCheckTexture();
+
+		//----------------------------------------------------------------------------------------
+		/// Enables or disables texture checking.
+		/// @param[in] state								@formatConstant{true} to enable texture checking, @formatConstant{false} to disable it.
+		//----------------------------------------------------------------------------------------
+		void SetCheckTexture(Bool state);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the number of takes for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @return												The number of takes.
+		//----------------------------------------------------------------------------------------
+		Int32 GetTakeCount(Int32 n);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the names of all takes for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @param[out] names							An array to store the names of all takes. Indexes can be used directly with SetActiveTakeIndex.
+		//----------------------------------------------------------------------------------------
+		void GetAllTakeNames(Int32 n, maxon::BaseArray<String>& names);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the active take index for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @return												The active take index.
+		//----------------------------------------------------------------------------------------
+		Int32 GetActiveTakeIndex(Int32 n);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the active take name for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @return												The active take name.
+		//----------------------------------------------------------------------------------------
+		String GetActiveTakeName(Int32 n);
+
+		//----------------------------------------------------------------------------------------
+		/// Sets the active take index for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @param[in] index							The index of the take to set as active.
+		/// @param[in] takeOnly					@formatConstant{true} to set only the take, @formatConstant{false} to also set the take and camera and render settings.
+		//----------------------------------------------------------------------------------------
+		void SetActiveTakeIndex(Int32 n, Int32 index, Bool takeOnly);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the number of render settings for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @return												The number of render settings.
+		//----------------------------------------------------------------------------------------
+		Int32 GetRenderSettingsCount(Int32 n);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the names of all render settings for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @param[out] names							An array to store the names of all render settings. Indexes can be used directly with SetActiveRenderSettingsIndex.
+		//----------------------------------------------------------------------------------------
+		void GetAllRenderSettingsNames(Int32 n, maxon::BaseArray<String>& names);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the active render settings index for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @return												The active render settings index.
+		//----------------------------------------------------------------------------------------
+		Int32 GetActiveRenderSettingsIndex(Int32 n);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the active render settings name for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @return												The active render settings name.
+		//----------------------------------------------------------------------------------------
+		String GetActiveRenderSettingsName(Int32 n);
+
+		//----------------------------------------------------------------------------------------
+		/// Sets the active render settings index for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @param[in] index							The index of the render settings to set as active.
+		//----------------------------------------------------------------------------------------
+		void SetActiveRenderSettingsIndex(Int32 n, Int32 index);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the names of all cameras for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @param[out] names							An array to store the names of all cameras. Indexes can be used with SetActiveCameraIndex by adding 1.
+		//----------------------------------------------------------------------------------------
+		void GetAllCameraNames(Int32 n, maxon::BaseArray<String>& names);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the number of cameras for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @return												The number of cameras.
+		//----------------------------------------------------------------------------------------
+		Int32 GetCameraCount(Int32 n);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the active camera index for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @return												The active camera index.
+		//----------------------------------------------------------------------------------------
+		Int32 GetActiveCameraIndex(Int32 n);
+
+		//----------------------------------------------------------------------------------------
+		/// Retrieves the active camera name for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @param[in] filename					@formatConstant{true} to retrieve the filename, @formatConstant{false} to retrieve the camera name.
+		/// @return												The active camera name.
+		//----------------------------------------------------------------------------------------
+		String GetActiveCameraName(Int32 n, Bool filename);
+
+		//----------------------------------------------------------------------------------------
+		/// Sets the active camera index for the @C4D scene file at the index @formatParam{n}.
+		/// @param[in] n									The position within the %Render Queue: @em 0 < @formatParam{n} < GetElementCount()
+		/// @param[in] index							The index of the camera to set as active.
+		//----------------------------------------------------------------------------------------
+		void SetActiveCameraIndex(Int32 n, Int32 index);
 };
 
 //----------------------------------------------------------------------------------------
@@ -197,6 +328,29 @@ struct BatchRenderLibrary : public C4DLibrary
 	BaseBitmap*		(iBatchRender::*GetFrameBitmap)			(const C4DUuid& nodeUuid, const C4DUuid& frameUuid);
 	Bool					(iBatchRender::*SetNetError)				(const C4DUuid& uuid, const String& machineName, const String& errorString, Bool isWarning);
 	void					(iBatchRender::*SetUseNet)					(Int32 n, Bool on);
+
+	Bool					(iBatchRender::*GetTextureError)		();
+	void					(iBatchRender::*SetTextureError)		(Bool state);
+	Bool					(iBatchRender::*GetCheckTexture)		();
+	void					(iBatchRender::*SetCheckTexture)		(Bool state);
+
+	Int32					(iBatchRender::*GetTakeCount)					(Int32 n);
+	void					(iBatchRender::*GetAllTakeNames)			(Int32 n, maxon::BaseArray<String>& names);
+	Int32					(iBatchRender::*GetActiveTakeIndex)		(Int32 n);
+	String				(iBatchRender::*GetActiveTakeName)		(Int32 n);
+	void					(iBatchRender::*SetActiveTakeIndex)		(Int32 n, Int32 index, Bool takeOnly);
+	
+	Int32					(iBatchRender::*GetRenderSettingsCount)				(Int32 n);
+	void					(iBatchRender::*GetAllRenderSettingsNames)		(Int32 n, maxon::BaseArray<String>& names);
+	Int32					(iBatchRender::*GetActiveRenderSettingsIndex)	(Int32 n);
+	String				(iBatchRender::*GetActiveRenderSettingsName)	(Int32 n);
+	void					(iBatchRender::*SetActiveRenderSettingsIndex)	(Int32 n, Int32 index);
+
+	Int32					(iBatchRender::*GetCameraCount)				(Int32 n);
+	void					(iBatchRender::*GetAllCameraNames)		(Int32 n, maxon::BaseArray<String>& names);
+	Int32					(iBatchRender::*GetActiveCameraIndex)	(Int32 n);
+	String				(iBatchRender::*GetActiveCameraName)	(Int32 n, Bool filename);
+	void					(iBatchRender::*SetActiveCameraIndex)	(Int32 n, Int32 index);
 };
 
 // INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF

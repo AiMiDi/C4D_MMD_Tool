@@ -91,6 +91,33 @@ namespace NODE
 			MAXON_ATTRIBUTE(void, VALUEIN, "valuein");
 		}
 
+		namespace APPEND2
+		{
+			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.append2");
+
+			// supports MAXON::NODE::BASE::FILTERTAGS
+			// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+			// supports MAXON::NODE::BASE::NAME
+			// supports MAXON::NODE::BASE::ASSETVERSION
+			// supports MAXON::NODE::BASE::COLOR
+			// supports MAXON::NODE::BASE::PORTDISPLAY
+			// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+			// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+			// supports MAXON::NODE::BASE::COMMENT
+			// supports MAXON::NODE::BASE::CATEGORY
+			// supports MAXON::NODE::BASE::ICON
+			// supports MAXON::NODE::BASE::UPDATEPOLICY
+			// supports MAXON::ASSET::BASE::PROTECTED
+			// supports MAXON::NODE::AGGREGATION::OUTERDOMAIN
+			// supports MAXON::NODE::AGGREGATION::INNERDOMAIN
+			// supports MAXON::NODE::AGGREGATION::DOMAIN
+			// supports MAXON::NODE::ARRAY::READBASE::DATATYPE
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYIN
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYOUT
+			// supports MAXON::NODE::ARRAY::APPEND::COUNTIN
+			// supports MAXON::NODE::ARRAY::APPEND::VALUEIN
+		}
+
 		namespace ARITHMETIC
 		{
 			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.arithmetic");
@@ -408,6 +435,30 @@ namespace NODE
 			MAXON_ATTRIBUTE(Bool, VALIDOUT, "validout");
 		}
 
+		namespace GETLASTELEMENT2
+		{
+			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.getlastelement2");
+
+			// supports MAXON::NODE::BASE::FILTERTAGS
+			// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+			// supports MAXON::NODE::BASE::NAME
+			// supports MAXON::NODE::BASE::ASSETVERSION
+			// supports MAXON::NODE::BASE::COLOR
+			// supports MAXON::NODE::BASE::PORTDISPLAY
+			// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+			// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+			// supports MAXON::NODE::BASE::COMMENT
+			// supports MAXON::NODE::BASE::CATEGORY
+			// supports MAXON::NODE::BASE::ICON
+			// supports MAXON::NODE::BASE::UPDATEPOLICY
+			// supports MAXON::ASSET::BASE::PROTECTED
+			// supports MAXON::NODE::ARRAY::READBASE::DATATYPE
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYIN
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYOUT
+			// supports MAXON::NODE::ARRAY::GETLASTELEMENT::VALUEOUT
+			// supports MAXON::NODE::ARRAY::GETLASTELEMENT::VALIDOUT
+		}
+
 		namespace GETSINGLEARRAYFROMCONTAINER
 		{
 			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.getsinglearrayfromcontainer");
@@ -478,6 +529,34 @@ namespace NODE
 			MAXON_ATTRIBUTE(void, VALUEIN, "valuein");
 		}
 
+		namespace INSERT2
+		{
+			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.insert2");
+
+			// supports MAXON::NODE::BASE::FILTERTAGS
+			// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+			// supports MAXON::NODE::BASE::NAME
+			// supports MAXON::NODE::BASE::ASSETVERSION
+			// supports MAXON::NODE::BASE::COLOR
+			// supports MAXON::NODE::BASE::PORTDISPLAY
+			// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+			// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+			// supports MAXON::NODE::BASE::COMMENT
+			// supports MAXON::NODE::BASE::CATEGORY
+			// supports MAXON::NODE::BASE::ICON
+			// supports MAXON::NODE::BASE::UPDATEPOLICY
+			// supports MAXON::ASSET::BASE::PROTECTED
+			// supports MAXON::NODE::AGGREGATION::OUTERDOMAIN
+			// supports MAXON::NODE::AGGREGATION::INNERDOMAIN
+			// supports MAXON::NODE::AGGREGATION::DOMAIN
+			// supports MAXON::NODE::ARRAY::READBASE::DATATYPE
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYIN
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYOUT
+			// supports MAXON::NODE::ARRAY::INSERT::INDEXIN
+			// supports MAXON::NODE::ARRAY::INSERT::COUNTIN
+			// supports MAXON::NODE::ARRAY::INSERT::VALUEIN
+		}
+
 		namespace ISINCLUDED
 		{
 			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.isincluded");
@@ -504,6 +583,33 @@ namespace NODE
 			MAXON_ATTRIBUTE(Int, FIRSTINDEXOUT, "firstindexout");
 
 			MAXON_ATTRIBUTE(Array<Int>, INDEXOUT, "indexout");
+		}
+
+		namespace ISINCLUDED2
+		{
+			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.isincluded2");
+
+			// supports MAXON::NODE::BASE::FILTERTAGS
+			// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+			// supports MAXON::NODE::BASE::NAME
+			// supports MAXON::NODE::BASE::ASSETVERSION
+			// supports MAXON::NODE::BASE::COLOR
+			// supports MAXON::NODE::BASE::PORTDISPLAY
+			// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+			// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+			// supports MAXON::NODE::BASE::COMMENT
+			// supports MAXON::NODE::BASE::CATEGORY
+			// supports MAXON::NODE::BASE::ICON
+			// supports MAXON::NODE::BASE::UPDATEPOLICY
+			// supports MAXON::ASSET::BASE::PROTECTED
+			// supports MAXON::NODE::ARRAY::READBASE::DATATYPE
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYIN
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYOUT
+			// supports MAXON::NODE::ARRAY::ISINCLUDED::FOUNDOUT
+			// supports MAXON::NODE::ARRAY::ISINCLUDED::FIRSTINDEXOUT
+			// supports MAXON::NODE::ARRAY::ISINCLUDED::INDEXOUT
+
+			MAXON_ATTRIBUTE(void, VALUEIN, "valuein");
 		}
 
 		namespace POPELEMENT
@@ -535,6 +641,33 @@ namespace NODE
 			/// True if the output is valid (array was not empty).
 			/// False if the output is a default value.
 			MAXON_ATTRIBUTE(Bool, VALIDOUT, "validout");
+		}
+
+		namespace POPELEMENT2
+		{
+			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.popelement2");
+
+			// supports MAXON::NODE::BASE::FILTERTAGS
+			// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+			// supports MAXON::NODE::BASE::NAME
+			// supports MAXON::NODE::BASE::ASSETVERSION
+			// supports MAXON::NODE::BASE::COLOR
+			// supports MAXON::NODE::BASE::PORTDISPLAY
+			// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+			// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+			// supports MAXON::NODE::BASE::COMMENT
+			// supports MAXON::NODE::BASE::CATEGORY
+			// supports MAXON::NODE::BASE::ICON
+			// supports MAXON::NODE::BASE::UPDATEPOLICY
+			// supports MAXON::ASSET::BASE::PROTECTED
+			// supports MAXON::NODE::AGGREGATION::OUTERDOMAIN
+			// supports MAXON::NODE::AGGREGATION::INNERDOMAIN
+			// supports MAXON::NODE::AGGREGATION::DOMAIN
+			// supports MAXON::NODE::ARRAY::READBASE::DATATYPE
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYIN
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYOUT
+			// supports MAXON::NODE::ARRAY::POPELEMENT::VALUEOUT
+			// supports MAXON::NODE::ARRAY::POPELEMENT::VALIDOUT
 		}
 
 		//----------------------------------------------------------------------------------------
@@ -593,6 +726,31 @@ namespace NODE
 			MAXON_ATTRIBUTE(Bool, CYCLEIN, "cyclein");
 
 			MAXON_ATTRIBUTE(void, VALUEOUT, "valueout");
+		}
+
+		namespace READVALUEATINDEX2
+		{
+			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.readvalueatindex2");
+
+			// supports MAXON::NODE::BASE::FILTERTAGS
+			// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+			// supports MAXON::NODE::BASE::NAME
+			// supports MAXON::NODE::BASE::ASSETVERSION
+			// supports MAXON::NODE::BASE::COLOR
+			// supports MAXON::NODE::BASE::PORTDISPLAY
+			// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+			// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+			// supports MAXON::NODE::BASE::COMMENT
+			// supports MAXON::NODE::BASE::CATEGORY
+			// supports MAXON::NODE::BASE::ICON
+			// supports MAXON::NODE::BASE::UPDATEPOLICY
+			// supports MAXON::ASSET::BASE::PROTECTED
+			// supports MAXON::NODE::ARRAY::READBASE::DATATYPE
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYIN
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYOUT
+			// supports MAXON::NODE::ARRAY::READVALUEATINDEX::INDEXIN
+			// supports MAXON::NODE::ARRAY::READVALUEATINDEX::CYCLEIN
+			// supports MAXON::NODE::ARRAY::READVALUEATINDEX::VALUEOUT
 		}
 
 		namespace REVERSE
@@ -855,6 +1013,33 @@ namespace NODE
 			MAXON_ATTRIBUTE(Int, INDEXIN, "indexin");
 
 			MAXON_ATTRIBUTE(void, VALUEIN, "valuein");
+		}
+
+		namespace WRITEVALUEATINDEX2
+		{
+			MAXON_RESOURCE_DATABASE_SCOPE("net.maxon.node.array.writevalueatindex2");
+
+			// supports MAXON::NODE::BASE::FILTERTAGS
+			// supports MAXON::NODE::BASE::NODEPREVIEWIMAGE
+			// supports MAXON::NODE::BASE::NAME
+			// supports MAXON::NODE::BASE::ASSETVERSION
+			// supports MAXON::NODE::BASE::COLOR
+			// supports MAXON::NODE::BASE::PORTDISPLAY
+			// supports MAXON::NODE::BASE::DISPLAYPREVIEW
+			// supports MAXON::NODE::BASE::DISPLAYCOMMENT
+			// supports MAXON::NODE::BASE::COMMENT
+			// supports MAXON::NODE::BASE::CATEGORY
+			// supports MAXON::NODE::BASE::ICON
+			// supports MAXON::NODE::BASE::UPDATEPOLICY
+			// supports MAXON::ASSET::BASE::PROTECTED
+			// supports MAXON::NODE::AGGREGATION::OUTERDOMAIN
+			// supports MAXON::NODE::AGGREGATION::INNERDOMAIN
+			// supports MAXON::NODE::AGGREGATION::DOMAIN
+			// supports MAXON::NODE::ARRAY::READBASE::DATATYPE
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYIN
+			// supports MAXON::NODE::ARRAY::READBASE::ARRAYOUT
+			// supports MAXON::NODE::ARRAY::WRITEVALUEATINDEX::INDEXIN
+			// supports MAXON::NODE::ARRAY::WRITEVALUEATINDEX::VALUEIN
 		}
 	}
 

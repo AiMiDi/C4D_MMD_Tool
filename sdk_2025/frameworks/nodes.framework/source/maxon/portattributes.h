@@ -437,10 +437,19 @@ MAXON_ATTRIBUTE(Bool, ScopePort, "scopeport");
 //----------------------------------------------------------------------------------------
 MAXON_ATTRIBUTE(Bool, RerouterPort, "rerouterport");
 
-
 //----------------------------------------------------------------------------------------
 /// This attribute is set to true for the input and output ports of a floating node.
 MAXON_ATTRIBUTE(Bool, FloatingPort, "floatingport");
+
+//----------------------------------------------------------------------------------------
+/// 
+//----------------------------------------------------------------------------------------
+MAXON_ATTRIBUTE(Bool, PortInspector, "net.maxon.node.portinspector");
+
+//----------------------------------------------------------------------------------------
+/// 
+//----------------------------------------------------------------------------------------
+MAXON_ATTRIBUTE(Bool, DataInspector, "net.maxon.node.datainspector");
 
 //----------------------------------------------------------------------------------------
 /// This registry contains GraphAttributes which implement a special handling of the attribute

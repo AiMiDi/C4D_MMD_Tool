@@ -415,4 +415,4 @@ template <typename T> Int32 PolynomSolver<T>::SolveN(Int32 m, Complex<T>* coeff,
 #endif
 
 
-#endif	// POLYNOMSOLVER_H__
+#endif // POLYNOMSOLVER_H__

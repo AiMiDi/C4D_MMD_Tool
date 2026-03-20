@@ -328,7 +328,6 @@ typedef NodeData *DataAllocator();
 #define ID_OBJECT_PLUGIN									1001146
 #define ID_SCENEHOOK_PLUGIN								1001147
 #define ID_EXPRESSION_PLUGIN							1001148
-#define ID_EXPRESSION_TAG									1001149
 /// @}
 
 /// @addtogroup ID_PREFS
@@ -1460,7 +1459,7 @@ struct GvHook
 	GvAnimHookFunc	hook_free;								///< Animation free hook.
 	GvDrawHookFunc	draw;											///< Draw hook.
 
-	Int32		hook_id;				///< A unique hook ID. Must be obtained from http://www.plugincafe.com
+	Int32		hook_id;				///< A unique hook ID. Must be obtained from developers.maxon.net
 	Int32		owner_id;				///< Owner ID.
 	String	hook_name;			///< Hook name.
 	String	menu_name;			///< Menu hook name.

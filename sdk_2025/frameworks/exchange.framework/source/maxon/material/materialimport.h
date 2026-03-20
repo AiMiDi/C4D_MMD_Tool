@@ -72,10 +72,10 @@ public:
 	/// Creates a material based on the provided material data. Configuration and destination BaseDocument are provided for context.
 	/// The implementation is free to decide whether to insert the returned material into the document, or not.
 	///
-	/// @param[in] materialData		The material data to import from.
-	/// @param[in] baseDocument		The destination scene of the creation.
-	/// @param[in] config					The import configuration.
-	/// @return										The created material on success.
+	/// @param[in] materialData				The material data to import from.
+	/// @param[in] baseDocument				The destination scene of the creation.
+	/// @param[in] config							The import configuration.
+	/// @return												The created material on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<cinema::BaseMaterial*> CreateMaterial(const MaterialExchangeData& materialData, cinema::BaseDocument& baseDocument, const DataDictionary& config);
 };

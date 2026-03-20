@@ -78,25 +78,25 @@ public:
 	/// @{
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the core volume object represented by this volume object
+	/// Returns the core volume object represented by this volume object.
 	/// @return												The core volume object.
 	//----------------------------------------------------------------------------------------
 	const maxon::VolumeInterface* GetVolume() const;
 
 	//----------------------------------------------------------------------------------------
-	/// Set a core volume instance to this volume object
+	/// Set a core volume instance to this volume object.
 	/// @param[in] volumeObj					The core volume to be set to this volume.
 	//----------------------------------------------------------------------------------------
 	void SetVolume(const maxon::VolumeInterface* volumeObj);
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the grid type of this volume object
+	/// Returns the grid type of this volume object.
 	/// @return												The grid type of this volume object.
 	//----------------------------------------------------------------------------------------
 	GRIDTYPE GetGridType() const;
 
 	//----------------------------------------------------------------------------------------
-	///	Returns the grid class of this volume object
+	///	Returns the grid class of this volume object.
 	/// @return												The grid class of this volume object.
 	//----------------------------------------------------------------------------------------
 	GRIDCLASS GetGridClass() const;

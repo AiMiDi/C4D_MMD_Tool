@@ -8,7 +8,9 @@
 #define LIB_COLORCHOOSER_H__
 
 #include "c4d_library.h"
-#include "lib_browser.h"
+#ifndef __API_INTERN__
+	#include "c4d_string.h"
+#endif
 
 namespace cinema
 {
@@ -127,7 +129,7 @@ Vector Color16BitToFloat(Int red, Int green, Int blue);
 //----------------------------------------------------------------------------------------
 /// Converts color Kelvin temperature to RGB value.
 /// @since R18
-/// @param[in] kelvinDegrees			The Kelvin temperature value in Kelvin degrees. Useful range: [1000.0, 10000.0] &deg;K
+/// @param[in] kelvinDegrees			The Kelvin temperature value in Kelvin degrees. Useful range: [1000.0, 10000.0] &deg;K.
 /// @param[in] tint								Offsets the color temperature from green (negative value) to magenta (positive value). Set to 0.0 to disable tinting. Value will be clamped to range [-1.0, 1.0].
 /// @return												The converted RGB color value.
 //----------------------------------------------------------------------------------------
@@ -430,7 +432,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Loads color groups from the given document and/or global colors.
 	/// @param[in] doc								The given document. Can be nullptr if only global colors must be loaded.
-	/// @param[in] merge							If @formatConstant{true} the colors are merged with the stored colors. Otherwise the
+	/// @param[in] merge							If @formatConstant{true} the colors are merged with the stored colors. Otherwise the.
 	/// @param[in] loadGlobalColors		If @formatConstant{true} the global colors are loaded.existing colors are discarded.
 	/// @return												@trueIfOtherwiseFalse{success}
 	//----------------------------------------------------------------------------------------
@@ -453,14 +455,6 @@ public:
 	Bool LoadPreset(const String& name, Bool merge = true);
 
 	//----------------------------------------------------------------------------------------
-	/// Loads the document-based swatch groups of the given preset.
-	/// @param[in] url								The preset url.
-	/// @param[in] merge							Set to @formatConstant{true} to merge the preset data with current data, set to @formatConstant{false} to replace data.
-	/// @return												@trueIfOtherwiseFalse{success}
-	//----------------------------------------------------------------------------------------
-	Bool LoadPreset(const SDKBrowserURL& url, Bool merge = true);
-
-	//----------------------------------------------------------------------------------------
 	/// Saves the document-based groups as a Color Swatch preset.
 	/// @param[in] name								The preset name.
 	/// @param[in] author							The preset author.
@@ -469,24 +463,6 @@ public:
 	/// @return												@trueIfOtherwiseFalse{data was saved}
 	//----------------------------------------------------------------------------------------
 	Bool SavePreset(const String& name, const String& author = String(), const String& info = String(), Bool forceOverwrite = false);
-
-	//----------------------------------------------------------------------------------------
-	/// Saves the document-based groups as a Color Swatch preset.
-	/// @param[in] url								The url to save preset to. Must include the preset name and must point to an existing library.
-	/// @param[in] author							The preset author.
-	/// @param[in] info								Preset additional info.
-	/// @param[in] forceOverwrite			Set to @formatConstant{true} to force overwrite the preset in case it already exists.
-	/// @return												@trueIfOtherwiseFalse{data was saved}
-	//----------------------------------------------------------------------------------------
-	Bool SavePreset(const SDKBrowserURL& url, const String& author = String(), const String& info = String(), Bool forceOverwrite = false);
-
-	//----------------------------------------------------------------------------------------
-	/// Checks if any preset with given name exists at user's Color Swatch Preset directory, including subdirectories.
-	/// @param[in] name								The preset name.
-	/// @param[out] urls							Optionally set here a pointer to an array that will be filled with all urls pointing to a Color Swatch preset with the given name.
-	/// @return												@trueIfOtherwiseFalse{any preset with the given name found}
-	//----------------------------------------------------------------------------------------
-	static Bool PresetExists(const String& name, maxon::BaseArray<SDKBrowserURL>* urls = nullptr);
 
 	//----------------------------------------------------------------------------------------
 	/// Merges groups from @formatParam{data}.

@@ -14,11 +14,13 @@ namespace maxon
 
 /// @cond IGNORE
 
+//----------------------------------------------------------------------------------------
 /// @tparam IMPLEMENTATION				Type inheriting from ClosureJobTemplate.
 /// @tparam FN										Type of function/lambda, deduced by the compiler.
 /// @tparam CANCELISERROR					How to handle cancellation.
 /// @tparam RESULT								Result of the job.
 /// @tparam ARGS									Parameter types.
+//----------------------------------------------------------------------------------------
 template <typename IMPLEMENTATION, typename FN, JOBCANCELLATION CANCELISERROR, typename RESULT, typename... ARGS> class ClosureJobTemplate : public JobInterfaceTemplate<IMPLEMENTATION, RESULT>
 {
 public:
@@ -148,11 +150,13 @@ private:
 	Tuple<ARGS...> _dst;
 };
 
-/// Support for Then
+//----------------------------------------------------------------------------------------
+/// Support for Then.
 /// @tparam PREV_RESULT						Type of result of the previous job.
 /// @tparam FN										Type of function/lambda, deduced by the compiler.
 /// @tparam RESULT								Result of the job.
 /// @tparam PACK									ParameterPack of arguments.
+//----------------------------------------------------------------------------------------
 template <typename PREV_RESULT, typename FN, typename RESULT, typename PACK> class ContinuationJob : public JobInterfaceTemplate<ContinuationJob<PREV_RESULT, FN, RESULT, PACK>, RESULT>
 {
 public:

@@ -627,22 +627,22 @@ public:
 	SculptLayerSystem *GetLayerSystem();
 
 	//----------------------------------------------------------------------------------------
-	/// Checks if the SculptObject been frozen. In the UI this is shown in the SculpTag.
+	/// Checks if the SculptObject been frozen. In the UI this is shown in the SculptTag.
 	/// @return												@trueIfOtherwiseFalse{the object was frozen}
 	//----------------------------------------------------------------------------------------
 	Bool IsFrozen();
 
 	//----------------------------------------------------------------------------------------
-	/// Sets the frozen state of the SculptObject. In the UI this is shown in the SculpTag.\n
+	/// Sets the frozen state of the SculptObject. In the UI this is shown in the SculptTag.\n
 	/// When the object is frozen no changes to the SculptObject or any of its layers are allowed.
 	/// @note	If the PolygonObject has a PhongTag it will also become active when the SculptObject is Frozen.\n
-	///				When not Frozen then SculptObject uses its own internal Vertex Normals and disables the PhongTag on the PolygonObject.\n
+	///				When not Frozen then SculptObject uses its own internal Vertex Normals and disables the PhongTag on the PolygonObject.
 	/// @param[in] value							The frozen state.
 	//----------------------------------------------------------------------------------------
 	void SetFrozen(Bool value);
 
 	//----------------------------------------------------------------------------------------
-	/// Checks if the object is allowed to be deformed by any deformers. In the UI this is shown in the SculpTag.\n
+	/// Checks if the object is allowed to be deformed by any deformers. In the UI this is shown in the SculptTag.\n
 	/// @note	This option only works if the object is also Frozen.
 	///				When both these options are enabled, any deformers that are children of the PolygonObject that the SculptTag is applied to, will be able to deform the object in the viewport.
 	/// @return												@trueIfOtherwiseFalse{the object was frozen}
@@ -651,7 +651,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Sets the "Allow Deformations" checkbox thereby allowing any deformers to have an effect on the display of the SculptObject, as long as it is also frozen.\n
-	/// In the UI this is shown in the SculpTag.
+	/// In the UI this is shown in the SculptTag.
 	/// @param[in] value							The "Allow Deformations" state.
 	//----------------------------------------------------------------------------------------
 	void SetAllowDeformations(Bool value);
@@ -973,7 +973,7 @@ inline const SculptObject* GetSelectedSculptObject(const BaseDocument* doc, Bool
 /// @param[in] poly								The PolygonObject to add the SculptTag to. @callerOwnsPointed{PolygonObject}
 /// @param[in] doc								The document that the PolygonObject belongs to. @callerOwnsPointed{document}
 /// @param[in] addUndo						If @formatConstant{true} then an undo event will be added so that the addition of the SculptTag can be undone.
-/// @return												The SculptObject that the SculpTag references.
+/// @return												The SculptObject that the SculptTag references.
 //----------------------------------------------------------------------------------------
 SculptObject *MakeSculptObject(PolygonObject *poly, BaseDocument *doc, Bool addUndo = false);
 

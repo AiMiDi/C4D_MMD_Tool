@@ -252,6 +252,16 @@ public:
 	MAXON_METHOD Result<Int> AddPort(PORT_DIR direction, const Id& identifier, const DataType& type);
 
 	//----------------------------------------------------------------------------------------
+	/// Adds a port to this group.
+	/// @param[in] direction					The direction of the port (PORT_DIR::INPUT for inputs ports, PORT_DIR::OUTPUT for output ports).
+	/// @param[in] identifier					Identifier of the port, this has to be unique among all ports of the same direction.
+	/// @param[in] type								Type of the port. Usually this is a const type, only state ports have a non-const type.
+	/// @param[in] flags							Flags for the port.
+	/// @return												Index of the added port.
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD Result<Int> AddPort(PORT_DIR direction, const Id& identifier, const DataType& type, MicroNode::FLAGS flags);
+
+	//----------------------------------------------------------------------------------------
 	/// Adds a pass-through connection from an input port of this group to an output port of this group.
 	/// Pass-through connections just pass their values on without changing or using them.
 	/// @param[in] input							The input port for the pass-through.
@@ -404,7 +414,7 @@ public:
 	/// @param[in] ctx								The execution context. Will contain messages if invoked node has warnings to report.
 	/// @param[in,out] args						The arguments: At first the values for input ports,
 	/// 															afterwards storage locations where output ports write their results.
-	///																Any input conversion result will be overwritten in args.
+	/// 															Any input conversion result will be overwritten in args.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> ConvertAndInvoke(const Context& ctx, const Block<const Tuple<TrivialDataPtr, CORENODE_PORT_FLAGS>>& args) const;
 
@@ -965,10 +975,10 @@ template <typename CORENODE> inline Result<CoreNodeFactory> CreateCoreNodeFactor
 ///
 /// @param[in] CLS								The class which implements the node. It has to contain an Init function
 /// 															with either a MicroNodeGroupRef or a CoreNodeGroupRef as first parameter.
-///																If CLS is a class template, you have to specify the template arguments in ...
+/// 															If CLS is a class template, you have to specify the template arguments in ...
 /// @param[in] id									The identifier to use for the registry entry.
 /// @param[in] ...								Optional template arguments if CLS is a class template. The identifier
-///																will be extended by the arguments, see IdBuilder.
+/// 															will be extended by the arguments, see IdBuilder.
 //----------------------------------------------------------------------------------------
 #define MAXON_CORENODE_REGISTER(CLS, id, ...) PRIVATE_MAXON_REGISTER_CORE_NODE(id, CLS, , __LINE__, ##__VA_ARGS__)
 
@@ -981,14 +991,14 @@ template <typename CORENODE> inline Result<CoreNodeFactory> CreateCoreNodeFactor
 ///
 /// @param[in] CLS								The class which implements the node. It has to contain an Init function
 /// 															with either a MicroNodeGroupRef or a CoreNodeGroupRef as first parameter.
-///																If CLS is a class template, you have to specify the template arguments in ...
+/// 															If CLS is a class template, you have to specify the template arguments in ...
 /// @param[in] id									The identifier to use for the registry entry.
 /// @param[in] META								Additional code to set up meta data for the core node. Within the code
-///																you have access to the variable #meta of type DataDictionary which
-///																is used to setup the factory's meta data. The meta data can be accessed later
-///																through the factory's base interface DataDictionaryObjectInterface.
+/// 															you have access to the variable #meta of type DataDictionary which
+/// 															is used to setup the factory's meta data. The meta data can be accessed later
+/// 															through the factory's base interface DataDictionaryObjectInterface.
 /// @param[in] ...								Optional template arguments if CLS is a class template. The identifier
-///																will be extended by the arguments, see IdBuilder.
+/// 															will be extended by the arguments, see IdBuilder.
 //----------------------------------------------------------------------------------------
 #define MAXON_CORENODE_REGISTER_WITH_METADATA(CLS, id, META, ...) PRIVATE_MAXON_REGISTER_CORE_NODE(id, CLS, META, __LINE__, ##__VA_ARGS__)
 
@@ -999,10 +1009,10 @@ template <typename CORENODE> inline Result<CoreNodeFactory> CreateCoreNodeFactor
 ///
 /// @param[in] CLS								The class which implements the node. It has to contain an Init function
 /// 															with either a MicroNodeGroupRef or a CoreNodeGroupRef as first parameter.
-///																If CLS is a class template, you have to specify the template arguments in ...
+/// 															If CLS is a class template, you have to specify the template arguments in ...
 /// @param[in] id									The identifier to use for the registry entry.
 /// @param[in] ...								Optional template arguments if CLS is a class template. The identifier
-///																will be extended by the arguments, see IdBuilder.
+/// 															will be extended by the arguments, see IdBuilder.
 //----------------------------------------------------------------------------------------
 #define MAXON_CORENODE_REGISTER_PURE(CLS, id, ...) MAXON_CORENODE_REGISTER_PURE_WITH_METADATA(CLS, id, , ##__VA_ARGS__)
 
@@ -1013,14 +1023,14 @@ template <typename CORENODE> inline Result<CoreNodeFactory> CreateCoreNodeFactor
 ///
 /// @param[in] CLS								The class which implements the node. It has to contain an Init function
 /// 															with either a MicroNodeGroupRef or a CoreNodeGroupRef as first parameter.
-///																If CLS is a class template, you have to specify the template arguments in ...
+/// 															If CLS is a class template, you have to specify the template arguments in ...
 /// @param[in] id									The identifier to use for the registry entry.
 /// @param[in] META								Additional code to set up meta data for the core node. Within the code
-///																you have access to the variable #meta of type DataDictionary which
-///																is used to setup the factory's meta data. The meta data can be accessed later
-///																through the factory's base interface DataDictionaryObjectInterface.
+/// 															you have access to the variable #meta of type DataDictionary which
+/// 															is used to setup the factory's meta data. The meta data can be accessed later
+/// 															through the factory's base interface DataDictionaryObjectInterface.
 /// @param[in] ...								Optional template arguments if CLS is a class template. The identifier
-///																will be extended by the arguments, see IdBuilder.
+/// 															will be extended by the arguments, see IdBuilder.
 //----------------------------------------------------------------------------------------
 #define MAXON_CORENODE_REGISTER_PURE_WITH_METADATA(CLS, id, META, ...) MAXON_CORENODE_REGISTER_WITH_METADATA(CLS, id, meta.Set(maxon::corenodes::CoreNodeInterface::Pure, true) iferr_return; META, ##__VA_ARGS__)
 

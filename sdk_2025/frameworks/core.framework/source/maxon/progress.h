@@ -46,7 +46,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Sets the progress of the current operation.
 	/// @param[in] jobIndex						Job index returned by AddProgressJob() or 0 when running in simple mode.
-	/// @param[in] percent						Percentage between 0.0 and 1.0 of the done work. use UNKNOWNPROGRESS to set spinning mode
+	/// @param[in] percent						Percentage between 0.0 and 1.0 of the done work. use UNKNOWNPROGRESS to set spinning mode.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetProgressAndCheckBreak(Int jobIndex, Float percent);
 
@@ -99,14 +99,14 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// SetCancelJobDelegate allows to set a job cancellation delegate.
-	/// @param[in] cancelJobDelegate	Delegate which is called to cancel the job
-	/// @return                       OK on success.
+	/// @param[in] cancelJobDelegate	Delegate which is called to cancel the job.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetCancelJobDelegate(JobCancelDelegate&& cancelJobDelegate);
 
 	//----------------------------------------------------------------------------------------
 	/// CancelJob cancels the job by calling the job cancel delegate (see SetCancelJobDelegate).
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> CancelJob();
 

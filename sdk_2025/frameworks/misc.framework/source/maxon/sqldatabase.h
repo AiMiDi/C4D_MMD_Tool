@@ -24,6 +24,13 @@ namespace maxon
 // TODO: (Tilo+Ole) the error class creates a circular dependency
 using SQLDatabaseError = IllegalStateError;
 
+enum class EXECUTESQLQUERYFLAGS
+{
+	NONE = 0,
+	CACHE_QUERY			= 1 << 0, ///< if set the statement will be cached for subsequent calls with the same query
+	RAWDATA					= 1 << 0, ///< the result delegate receives a ConstDataPtr(const Char*, size) which is only valid with the delegate for the current row
+} MAXON_ENUM_FLAGS(EXECUTESQLQUERYFLAGS);
+
 //----------------------------------------------------------------------------------------
 /// This class provides SQL database functionality.
 /// With it it's possible to query sql databases.
@@ -81,7 +88,7 @@ public:
 	/// 															The outer array contains the number of lines returned by this query.
 	/// 															The inner array the fields per line returned by this query.
 	/// @param[out] columnTitles			Delegate to receive the column titles. This is called once.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> ExecuteSQLQuery(const String& query, const Block<ConstDataPtr>& arguments = {}, Int64* insertId = nullptr, const ValueReceiver<BaseArray<Data>&&>& result = {}, const ValueReceiver<const String&>& columnTitles = {});
 
@@ -101,17 +108,31 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// StartTransactions calls "BEGIN TRANSACTION" to collect the next calls. After the given time the commit is done.
-	/// @param[in] delayCommitTime		Time after which the commit should be called. Disabled if value == TIMEVALUE_INFINITE
-	/// @param[in] maxExecutes				Maximum Number of executes after commit should be called. Disabled if maxExecutes == NOTOK
-	/// @return                       OK on success.
+	/// @param[in] delayCommitTime		Time after which the commit should be called. Disabled if value == TIMEVALUE_INFINITE.
+	/// @param[in] maxExecutes				Maximum Number of executes after commit should be called. Disabled if maxExecutes == NOTOK.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> StartTransactions(const TimeValue& delayCommitTime, Int maxExecutes);
 
 	//----------------------------------------------------------------------------------------
-	/// CommitTransactions force to commit the changes since the last start of StartTransactions(). Does nothing if not in transaction mode
-	/// @return                       OK on success.
+	/// CommitTransactions force to commit the changes since the last start of StartTransactions(). Does nothing if not in transaction mode.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> CommitTransactions();
+
+	//----------------------------------------------------------------------------------------
+	/// ExecuteSQLQuery description.
+	/// @param[in] query							The sql request string. E.g. "SELECT * from mydatabase".
+	/// @param[in] flags							see EXECUTESQLQUERYFLAGS.
+	/// @param[in] arguments					If the select statement contains "?" the arguments will be populated from the arguments array. e.g. "SELECT * from table WHERE col1 = ?"
+	/// @param[out] insertId					If the query inserted data into the database, this pointer returns the insert id in the database. This parameter is optional.
+	/// @param[out] result						If the query returns data it will be filled into this array. This parameter is optional.
+	/// 															The outer array contains the number of lines returned by this query.
+	/// 															The inner array the fields per line returned by this query.
+	/// @param[out] columnTitles			Delegate to receive the column titles. This is called once.
+	/// @return												OK on success.
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD Result<void> ExecuteSQLQuery(const String& query, EXECUTESQLQUERYFLAGS flags, const Block<ConstDataPtr>& arguments = {}, Int64* insertId = nullptr, const ValueReceiver<BaseArray<Data>&&>& result = {}, const ValueReceiver<const String&>& columnTitles = {});
 };
 
 
@@ -123,9 +144,7 @@ MAXON_REGISTRY(Class<SqlDatabaseRef>, SqlDatabaseClasses, "net.maxon.registry.sq
 
 namespace SqlDatabaseClasses
 {
-#ifndef __aarch64__
 	MAXON_DECLARATION(SqlDatabaseClasses::EntryType, MySql, "net.maxon.sqldatabaseclass.mysql");
-#endif
 	MAXON_DECLARATION(SqlDatabaseClasses::EntryType, SQLite, "net.maxon.sqldatabaseclass.sqlite");
 }
 

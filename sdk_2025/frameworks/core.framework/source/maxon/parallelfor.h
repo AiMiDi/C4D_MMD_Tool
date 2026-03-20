@@ -56,10 +56,14 @@ public:
 	{
 		/// Default granularity
 		constexpr Granularity() : value(16) { }
+		//----------------------------------------------------------------------------------------
 		/// @param[in] granularity				Number of iterations a worker thread will perfom en block.
+		//----------------------------------------------------------------------------------------
 		explicit constexpr Granularity(Int granularity) : value(granularity) { }
+		//----------------------------------------------------------------------------------------
 		/// @param[in] granularity				Number of iterations a worker thread will perfom en block.
 		/// @param[in] enableThreading		True: Parallelize loop False: Single threaded loop.
+		//----------------------------------------------------------------------------------------
 		constexpr Granularity(Int granularity, Bool enableThreading) : value(enableThreading ? granularity : PARALLELFOR_DISABLETHREADING) { }
 		constexpr Granularity(const Granularity& granularity) : value(granularity.value) { }
 		constexpr Granularity(const Granularity& granularity, Bool enableThreading) : value(enableThreading ? granularity.value : PARALLELFOR_DISABLETHREADING) { }
@@ -417,7 +421,9 @@ public:
 		static MAXON_ATTRIBUTE_NO_INLINE typename CONTEXT::ResultValueType
 		Dynamic(FROMTYPE from, INDEXTYPE to, const INIT& init, const LOOP& obj, const FINALIZE& finalize, const Granularity& granularity = Granularity(), JobQueueInterface* queue = JOBQUEUE_CURRENT, Int deprecatedThrCnt = 0);
 
+	//----------------------------------------------------------------------------------------
 	/// @tparam CONTEXT								A class derived from ParallelFor::BreakContext for thread local data storage.
+	//----------------------------------------------------------------------------------------
 	template <typename CONTEXT, PARALLELFORFLAGS FLAGS, typename FROMTYPE, typename INDEXTYPE, typename LOOP, typename INIT, typename FINALIZE>
 		static MAXON_ATTRIBUTE_NO_INLINE Result<void>
 		Dynamic(FROMTYPE from, INDEXTYPE to, const INIT& init, const LOOP& obj, const FINALIZE& finalize, JobStatusInterface* observeForCancellation, const Granularity& granularity = Granularity(), JobQueueInterface* queue = JOBQUEUE_CURRENT, Int deprecatedThrCnt = 0);

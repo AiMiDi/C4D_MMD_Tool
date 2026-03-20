@@ -321,13 +321,13 @@ public:
 	/// @param[in] flags							Flags see FILESELECT.
 	/// @param[in] title							Title to be set in the window.
 	/// @param[in] startUrl						Start url to select in the file chooser.
-	/// @param[in] settingsIdentifier	Identifier to store settings for different callers (e.g. window dimensions etc). Every caller can have different settings. Keep empty for default settings
+	/// @param[in] settingsIdentifier	Identifier to store settings for different callers (e.g. window dimensions etc). Every caller can have different settings. Keep empty for default settings.
 	/// @param[in] filterStrings			Array with tuples for valid file suffixes. first: name, second: ; seperated list of suffixes. e.g.
-	///																BaseArray<Tuple<String, String>> filterStrings;
-	///																filterStrings.Append({"All files"_s, "*.*"_s}) iferr_return;
-	///																filterStrings.Append({"3D-Formats"_s, "*.c4d;*.dem;*.dxf;*.iob;*.lwo;*.lws;*.3dm;*.3dmf;*.ai;*.ps;*.wrl;*.3ds;*.obj;*.mon;*.dae;*.dwg;*.fbx;*.igs"_s}) iferr_return;
+	/// 															BaseArray<Tuple<String, String>> filterStrings;
+	/// 															filterStrings.Append({"All files"_s, "*.*"_s}) iferr_return;
+	/// 															filterStrings.Append({"3D-Formats"_s, "*.c4d;*.dem;*.dxf;*.iob;*.lwo;*.lws;*.3dm;*.3dmf;*.ai;*.ps;*.wrl;*.3ds;*.obj;*.mon;*.dae;*.dwg;*.fbx;*.igs"_s}) iferr_return;
 	/// @param[out] selectedUrls			Value receiver which is triggered for every selected url.
-	/// @return                       True on success. False if user canceled. Error otherwise.
+	/// @return												True on success. False if user canceled. Error otherwise.
 	//----------------------------------------------------------------------------------------
 	static maxon::Result<Bool> FileSelectMultiple(FILESELECT flags, const maxon::String& title, const maxon::Url& startUrl, const maxon::Id& settingsIdentifier, const maxon::Block<maxon::Tuple<maxon::String, maxon::String>>& filterStrings, const maxon::ValueReceiver<const maxon::Url&>& selectedUrls);
 

@@ -363,7 +363,7 @@ Float CameraObject::GetFocus() const
 	return C4DOS_Bo->CoGetFocus(this);
 }
 
-Float CameraObject::GetTargetDistance(BaseDocument* doc)
+Float CameraObject::GetTargetDistance(const BaseDocument* doc)
 {
 	return C4DOS_Bo->CoGetTargetDistance(doc, this);
 }
@@ -779,7 +779,7 @@ static void HandleLodCacheBits(BaseObject* op)
 
 		if (origin)
 		{
-			if (origin->GetNBit(NBIT::LOD_PRIVATECACHE))
+			if (origin->GetNBit<NBIT::LOD_PRIVATECACHE>())
 				testOp->ChangeNBit(NBIT::LOD_PRIVATECACHE, NBITCONTROL::SET);
 			else
 				testOp->ChangeNBit(NBIT::LOD_PRIVATECACHE, NBITCONTROL::CLEAR);
@@ -1031,20 +1031,14 @@ BaseSelect* PolygonObject::GetSelectedEdges(Neighbor* e, const BaseSelect* ope) 
 	if (!p)
 		return xsel;
 
-	Int32 i, j, a, b, edge;
-	for (i = 0; i < ope->GetSegments(); i++)
+	for (Int32 j : ope->GetIndexIterator(vcnt4))
 	{
-		if (!ope->GetRange(i, vcnt4, &a, &b))
+		if ((j & 3) == 2 && p[j >> 2].c == p[j >> 2].d)
 			continue;
-		for (j = a; j <= b; j++)
-		{
-			if ((j & 3) == 2 && p[j >> 2].c == p[j >> 2].d)
-				continue;
 
-			edge = e->GetPolyInfo(j >> 2)->edge[j & 3];
-			if (edge != NOTOK)
-				xsel->Select(edge);
-		}
+		Int32 edge = e->GetPolyInfo(j >> 2)->edge[j & 3];
+		if (edge != NOTOK)
+			xsel->Select(edge);
 	}
 
 	return xsel;

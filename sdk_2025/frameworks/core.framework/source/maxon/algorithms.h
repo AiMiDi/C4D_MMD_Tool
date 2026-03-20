@@ -311,7 +311,7 @@ inline auto Copy(ITERATOR first, SENTINEL sentinel, DEST_ITERATOR dest) -> Resul
 	using ValueType = typename std::iterator_traits<ITERATOR>::value_type;
 	using Impl = maxon::details::CopyImplSelector<TestForCopyFromMember<ValueType>::isSupported>;
 
-	return Impl::template Copy(first, sentinel, dest);
+	return Impl::Copy(first, sentinel, dest);
 }
 
 //----------------------------------------------------------------------------------------
@@ -344,7 +344,7 @@ inline auto CopyIf(ITERATOR first, SENTINEL sentinel, DEST_ITERATOR dest, PREDIC
 	using ValueType = typename std::iterator_traits<ITERATOR>::value_type;
 	using Impl = maxon::details::CopyImplSelector<TestForCopyFromMember<ValueType>::isSupported>;
 
-	return Impl::template CopyIf(first, sentinel, dest, pred);
+	return Impl::CopyIf(first, sentinel, dest, pred);
 }
 
 //----------------------------------------------------------------------------------------
@@ -375,7 +375,7 @@ inline auto CopyToUninitialized(ITERATOR first, SENTINEL sentinel, DEST_ITERATOR
 	using ValueType = typename std::iterator_traits<ITERATOR>::value_type;
 	using Impl = maxon::details::CopyImplSelector<TestForCopyFromMember<ValueType>::isSupported>;
 
-	return Impl::template CopyToUninitialized(first, sentinel, dest);
+	return Impl::CopyToUninitialized(first, sentinel, dest);
 }
 
 //----------------------------------------------------------------------------------------
@@ -408,7 +408,7 @@ inline auto CopyToUninitializedIf(ITERATOR first, SENTINEL sentinel, DEST_ITERAT
 	using ValueType = typename std::iterator_traits<ITERATOR>::value_type;
 	using Impl = maxon::details::CopyImplSelector<TestForCopyFromMember<ValueType>::isSupported>;
 
-	return Impl::template CopyToUninitializedIf(first, sentinel, dest, pred);
+	return Impl::CopyToUninitializedIf(first, sentinel, dest, pred);
 }
 
 //----------------------------------------------------------------------------------------
@@ -2849,9 +2849,9 @@ inline auto BySequence(const SEARCH_SEQ& searchSeq, const COMPARE& comp) -> Sequ
 /// returns them in a container of the same type as the first container.
 /// IMPORTANT: The iterators that are retrieved from the input sets needs to iterate of the containers in a sorted order for this algorithm to work.
 ///
-/// @param[in] firstSet The first container.
-/// @param[in] secondSet The second container.
-/// @return Container of the first container type that contains all the elements of set 1 that are not contained in set 2.
+/// @param[in] firstSet						The first container.
+/// @param[in] secondSet					The second container.
+/// @return												Container of the first container type that contains all the elements of set 1 that are not contained in set 2.
 //----------------------------------------------------------------------------------------
 template<typename ITERABLE1, typename ITERABLE2>
 inline auto SetDifference(const ITERABLE1& firstSet, const ITERABLE2& secondSet) -> Result<ITERABLE1>
@@ -2871,10 +2871,10 @@ inline auto SetDifference(const ITERABLE1& firstSet, const ITERABLE2& secondSet)
 /// returns them in a container of the same type as the first container.
 /// IMPORTANT: The iterators that are retrieved from the input sets needs to iterate of the containers in a sorted order for this algorithm to work.
 ///
-/// @param[in] firstSet The first container.
-/// @param[in] secondSet The second container.
-/// @param[out] outContainer The container that will contain the elements that are present in the first container but not the second.
-/// @return OK if successful.
+/// @param[in] firstSet						The first container.
+/// @param[in] secondSet					The second container.
+/// @param[out] outContainer			The container that will contain the elements that are present in the first container but not the second.
+/// @return												OK if successful.
 //----------------------------------------------------------------------------------------
 template<typename ITERABLE1, typename ITERABLE2, typename APPENDABLE>
 inline auto SetDifference(const ITERABLE1& firstSet, const ITERABLE2& secondSet, APPENDABLE& outContainer) -> Result<void>
@@ -2923,9 +2923,9 @@ inline auto SetDifference(const ITERABLE1& firstSet, const ITERABLE2& secondSet,
 /// Finds the values in the first iterable container that are not contained in the second container and
 /// returns them in a container of the same type as the first container.
 ///
-/// @param[in] firstSet The first container.
-/// @param[in] secondSet The second container, which must suppor the Contains() function.
-/// @return Container of the first container type that contains all the elements of set 1 that are not contained in set 2.
+/// @param[in] firstSet						The first container.
+/// @param[in] secondSet					The second container, which must suppor the Contains() function.
+/// @return												Container of the first container type that contains all the elements of set 1 that are not contained in set 2.
 //----------------------------------------------------------------------------------------
 template<typename ITERABLE, typename FINDABLE>
 inline auto UnorderedSetDifference(const ITERABLE& firstSet, const FINDABLE& secondSet) -> Result<ITERABLE>
@@ -2944,10 +2944,10 @@ inline auto UnorderedSetDifference(const ITERABLE& firstSet, const FINDABLE& sec
 /// Finds the values in the first iterable container that are not contained in the second container and
 /// returns them in a container of the same type as the first container.
 ///
-/// @param[in] firstSet The first container.
-/// @param[in] secondSet The second container, which must suppor the Contains() function.
-/// @param[out] outputContainer Container of the first container type that contains all the elements of set 1 that are not contained in set 2.
-/// @return OK if successful.
+/// @param[in] firstSet						The first container.
+/// @param[in] secondSet					The second container, which must suppor the Contains() function.
+/// @param[out] outputContainer		Container of the first container type that contains all the elements of set 1 that are not contained in set 2.
+/// @return												OK if successful.
 //----------------------------------------------------------------------------------------
 template<typename ITERABLE, typename FINDABLE, typename APPENDABLE>
 inline auto UnorderedSetDifference(const ITERABLE& firstSet, const FINDABLE& secondSet, APPENDABLE& outputContainer) -> Result<void>
@@ -2969,9 +2969,9 @@ inline auto UnorderedSetDifference(const ITERABLE& firstSet, const FINDABLE& sec
 //----------------------------------------------------------------------------------------
 /// Removes the values in the first iterable container that are contained in the second container and.
 ///
-/// @param[in] firstSet The first container which must support the Erase() member function.
-/// @param[in] secondSet The second container.
-/// @return Container for the first container type that contains all the elements of set 1 that are not contained in set 2.
+/// @param[in] firstSet						The first container which must support the Erase() member function.
+/// @param[in] secondSet					The second container.
+/// @return												Container for the first container type that contains all the elements of set 1 that are not contained in set 2.
 //----------------------------------------------------------------------------------------
 template<typename ERASABLE, typename ITERABLE>
 inline auto ExcludeSetFromSet(ERASABLE& firstSet, const ITERABLE& secondSet) -> Result<void>

@@ -15,7 +15,7 @@ template <Int SIZE> struct ArrayAllocatorValueType
 /// Array allocator which only allocates and frees entries of SIZE bytes.
 /// Depending on the type of array the allocation might relocate already existing items.
 /// @tparam SIZE									The size of an entry in bytes.
-/// @tparam ARRAYSELECTOR					Selector for array type to be used as allocator
+/// @tparam ARRAYSELECTOR					Selector for array type to be used as allocator.
 /// @tparam FLUSH									Use true if Flush() shall be called on the array instead of Reset() when all entries have been freed.
 //----------------------------------------------------------------------------------------
 template <Int SIZE, typename ARRAYSELECTOR, Bool FLUSH = false> class ArrayAllocator
@@ -87,7 +87,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Not supported for this allocator.
-	/// @return												nullptr
+	/// @return												Nullptr.
 	//----------------------------------------------------------------------------------------
 	void* Realloc(void*, Int64, MAXON_SOURCE_LOCATION_DECLARATION)
 	{
@@ -204,4 +204,4 @@ template <Int SIZE, Int CNT> class BufferedBaseArrayAllocator : public ArrayAllo
 
 } // namespace maxon
 
-#endif // BLOCKARRAYALLOCATOR_H__
+#endif // ARRAYALLOCATOR_H__

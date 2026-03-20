@@ -1,5 +1,5 @@
-#ifndef WBSOCK_JSON_CE_H__
-#define WBSOCK_JSON_CE_H__
+#ifndef WEBSOCKET_JSON_CODEEXCHANGER_H__
+#define WEBSOCKET_JSON_CODEEXCHANGER_H__
 
 #include "maxon/interface.h"
 #include "maxon/objectbase.h"
@@ -60,7 +60,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Retrieves a list of ongoing connections.
 	///
-	/// @return	Connection list with Cinema 4D and IDE.
+	/// @return												Connection list with Cinema 4D and IDE.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD BaseArray<WeakRef<const NetworkWebSocketConnectionRef>>* GetWebSockets();
 };
@@ -74,4 +74,4 @@ MAXON_DECLARATION(maxon::Class<WebSocketJsonCodeExchangerRef>, WebSocketJsonCode
 
 }
 
-#endif // WBSOCK_JSON_CE_H__
+#endif // WEBSOCKET_JSON_CODEEXCHANGER_H__

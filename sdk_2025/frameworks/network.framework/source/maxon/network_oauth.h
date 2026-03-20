@@ -166,7 +166,7 @@ public:
 	/// @param[in] accessToken				OAuth2.0 access token from the last session.
 	/// @param[in] appKey							Application Key from the provider.
 	/// @param[in] appSecret					Application Secret from the provider.
-	/// @param[in] verifyAccountName	Callback to verify the stored token and retrieve the account name. This callback is triggered on the
+	/// @param[in] verifyAccountName	Callback to verify the stored token and retrieve the account name. This callback is triggered on the.
 	/// first connect.
 	/// @return												Returns the account name delivered by the provider.
 	//----------------------------------------------------------------------------------------

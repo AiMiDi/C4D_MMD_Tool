@@ -522,6 +522,8 @@ struct SaveProjectStruct
 #define MSG_DOCUMENTINFO_TYPE_MODE_CHANGED				1023			///< Mode changed
 #define MSG_DOCUMENTINFO_TYPE_FLUSHCACHES					1024			///< Document caches are flushed. This message is only sent to scene hooks. @since R19.062
 #define MSG_DOCUMENTINFO_TYPE_CHECKSAVEDENIED			1025			///< @markprivate @since 2024_2 - Collects the BaseList2D objects that want to prevent saving the scene.
+#define MSG_DOCUMENTINFO_TYPE_NEWPROJECT_AFTER		1026			///< @markprivate @since 2024_3 - New Project created.
+#define MSG_DOCUMENTINFO_TYPE_OBJECT_REMOVE				1027			///< Object about to be removed from the document.
 
 /// Data for MSG_DOCUMENTINFO_TYPE_CHECKSAVEDENIED message.
 struct PreSaveValidationStruct
@@ -557,6 +559,9 @@ private:
 #define MSG_COPYDIRTYPRIVATE											440000326			///< @markPrivate
 #define MSG_DESCIDSTATE_MASK											1061352				///< Masks the DescIdState of every property in the object with a Int32 mask passed as corresponding data.
 #define MSG_DISABLEFIELDS													1061717				///< This message is send to field driven variable tags to disable the fields when they are cloned as input for generators.
+#define MSG_EDITOR_CLOSE													1065395				///< @markPrivate
+#define MSG_TOOL_ESCAPE                           1065494				///< @markPrivate
+
 /// @addtogroup MSG_MULTI
 /// @ingroup group_enumeration
 /// @{
@@ -789,7 +794,7 @@ struct DocumentImported
 /// 			BaseDocument* doc = GetDocument();
 /// 			BaseMaterial* mat = data.GetMaterialLink(MATERIAL_ID, doc);
 ///
-/// 			if (data) // Material translation, update my link if necessary
+/// 			if (msg_data) // Material translation, update my link if necessary
 /// 			{
 /// 				MarkMaterials* mm = static_cast<MarkMaterials*>(msg_data);
 /// 				if (doc && mm->omat == mat)
@@ -1076,7 +1081,7 @@ enum class SCRIPT_LANGUAGE
 ///
 ///       // Setup an info item and define the parameter ID of the Python code in your plugin.
 ///       ScriptInfoData::ScriptInfoItem item;
-///       DescID paramId = ConstDescID(DescLevel(ID_MYPLUGIN_CODE));
+///       DescID paramId = ConstDescIDLevel(ID_MYPLUGIN_CODE);
 ///       const BaseContainer& bc = blist->GetDataInstanceRef();
 ///
 ///       // Fill in the node and parameter pointers.
@@ -1126,9 +1131,11 @@ struct ScriptInfoData
 	maxon::BaseArray<ScriptInfoItem> items; ///< Stores the scripting element information provided by the queried nodes.
 };
 
+//----------------------------------------------------------------------------------------
 /// @brief Returns the default code for the requested scripting object #context.
-/// @param[in] context The script context for which to receive the default code.
-/// @returns The default code for #context.
+/// @param[in] context						The script context for which to receive the default code.
+/// @return												The default code for #context.
+//----------------------------------------------------------------------------------------
 String GetScriptDefaultCode(const SCRIPT_CONTEXT& context);
 
 /// Message struct for the @ref MSG_DOCUMENTINFO_TYPE_PASTE and @ref MSG_DOCUMENTINFO_TYPE_COPY messages. @markPrivate
@@ -1243,10 +1250,10 @@ struct AssetData
 	/// @param[in] bl									The shader reporting the missing name.
 	/// @param[in] parameterId				The ID of the parameter in the BaseContainer the asset is assigned to.
 	/// @param[in] netRequestOnDemand	NET request on demand.
-	///																@note When @ref MSG_GETALLASSETS is send around all assets will be collected from a scene. So every node in the scene will be asked if there is an external file.\n
-	///																This happens with <i>Save project</i> or when the <i>Team Render</i> asks for all assets to send it to all clients.\n
-	///																In case the message is sent from <i>Team Render</i>, AssetEntry::_netRequestOnDemand means that the file can be requested from the client to the server when needed or if the client must download this asset before it starts rendering.\n
-	///																For instance, the scene itself is set with @formatConstant{false} as it must always exist before it starts rendering and for the most standard textures it is set to @formatConstant{true}.
+	/// 															@note When @ref MSG_GETALLASSETS is send around all assets will be collected from a scene. So every node in the scene will be asked if there is an external file.\n
+	/// 															This happens with <i>Save project</i> or when the <i>Team Render</i> asks for all assets to send it to all clients.\n
+	/// 															In case the message is sent from <i>Team Render</i>, AssetEntry::_netRequestOnDemand means that the file can be requested from the client to the server when needed or if the client must download this asset before it starts rendering.\n
+	/// 															For instance, the scene itself is set with @formatConstant{false} as it must always exist before it starts rendering and for the most standard textures it is set to @formatConstant{true}.
 	/// @param[in] channelIndex				@markPrivate
 	/// @param[in] nodePath						The node path of the port in case of a node material.
 	/// @param[in] nodeSpace					The node space in case of a node material.
@@ -1721,7 +1728,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// CopyDynamicDescriptionFrom copies the dynamic description from src to this.
 	/// @param[in] src								Source object.
-	/// @return                       True on success.
+	/// @return												True on success.
 	//----------------------------------------------------------------------------------------
 	Bool CopyDynamicDescriptionFrom(const BaseList2D* src);
 
@@ -2188,6 +2195,12 @@ public:
 	//----------------------------------------------------------------------------------------
 	Bool GetNBit(NBIT bit) const { return AtCall(GetNBit)(bit); }
 
+	template <NBIT bit> constexpr Bool GetNBit() const
+	{
+		// Compile-time check
+		static_assert((UInt32)bit <= 127, "Bit index out of range.");
+		return (GetNBitMask((Int32)bit >> 5) & (1 << ((Int32)bit & 31))) != 0;
+	}
 	//-------------------------------------------------------------------------------------------------
 	/// @markPrivate
 	//-------------------------------------------------------------------------------------------------
@@ -2365,17 +2378,17 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Allows the owner (parent) to set a callback function that will be invoked via the InvokeParentCallback function.  Only the owner of the GeListHead should invoke this.
-	/// @param[in,out] callback	[in] The callback delegate to be invoked.
-	/// @return	OK on success.
+	/// @param[in,out] callback				[in] The callback delegate to be invoked.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> SetParentCallback(maxon::Delegate<maxon::Result<void>(BaseList2D& caller, Int32 type, void* message)>&& callback) { return AtCall(SetParentCallback) (std::forward<maxon::Delegate<maxon::Result<void>(BaseList2D& caller, Int32 type, void* message)> >(callback)); }
 
 	//----------------------------------------------------------------------------------------
-	/// Executes the parent callback set with SetParentCallback
-	/// @param[in] caller 	The caller.
-	/// @param[in] type			The type of message.
-	/// @param[in] message	If non-null, the message data.
-	/// @return	OK on success.
+	/// Executes the parent callback set with SetParentCallback.
+	/// @param[in] caller							The caller.
+	/// @param[in] type								The type of message.
+	/// @param[in] message						If non-null, the message data.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<void> InvokeParentCallback(BaseList2D& caller, Int32 type, void* message) const { return AtCall(InvokeParentCallback) (caller, type, message); }
 
@@ -2497,7 +2510,7 @@ public:
 	/// @see GetDataInstanceRef()
 	/// @return												The object container.
 	//----------------------------------------------------------------------------------------
-	[[deprecated("Use GetDataInstanceRef() to avoid the unnecessary BaseContainer copy")]] BaseContainer GetData() { BaseContainer bc; C4DOS_Bl->GetData(this, &bc); return bc; }
+	[[deprecated("Use GetDataInstanceRef() to avoid the unnecessary BaseContainer copy")]] BaseContainer GetData() const { BaseContainer bc; C4DOS_Bl->GetData(this, &bc); return bc; }
 
 	//----------------------------------------------------------------------------------------
 	/// Sets the object container.\n
@@ -2618,7 +2631,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Adds a unique application ID data to the object.
 	/// @note This is used for instance to identify scenes written by external applications.
-	/// @param[in] appid							A unique application ID. It has to be registered at MAXON, at least it should be obtained from http://www.plugincafe.com.
+	/// @param[in] appid							A unique application ID. It has to be registered at MAXON, at least it should be obtained from developers.maxon.net.
 	/// @param[in] mem								A pointer to a block of memory, used for instance to store the name of a software vendor.
 	/// @param[in] bytes							The length of the memory block @formatParam{mem}.
 	/// @return												@trueIfOtherwiseFalse{successful}
@@ -2628,7 +2641,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Checks for a specific unique application ID data.
 	/// @note This is used for instance to identify scenes written by external applications.
-	/// @param[in] appid							A unique application ID. It has to be registered at MAXON, at least it should be obtained from http://www.plugincafe.com.
+	/// @param[in] appid							A unique application ID. It has to be registered at MAXON, at least it should be obtained from developers.maxon.net.
 	/// @param[out] mem								Assigned a pointer to a block of memory, used for instance to read the name of a software vendor.
 	/// @param[out] bytes							Assigned the length of the memory block @formatParam{mem}.
 	/// @return												@trueIfOtherwiseFalse{the ID could be found}
@@ -2678,7 +2691,7 @@ public:
 	/// 	GeData s1, s2;
 	/// 	Float mix;
 	///
-	/// 	tag->GetAnimatedParameter(ConstDescID(DescLevel(TARGETEXPRESSIONTAG_LINK)), s1, s2, mix, DESCFLAGS_GET::NONE);
+	/// 	tag->GetAnimatedParameter(ConstDescIDLevel(TARGETEXPRESSIONTAG_LINK), s1, s2, mix, DESCFLAGS_GET::NONE);
 	///
 	/// 	BaseList2D *o1 = s1.GetLink(doc);
 	/// 	BaseList2D *o2 = s2.GetLink(doc);
@@ -2717,7 +2730,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// CopyDynamicDescriptionFrom copies the dynamic description from src to this.
 	/// @param[in] src								Source object.
-	/// @return                       True on success.
+	/// @return												True on success.
 	//----------------------------------------------------------------------------------------
 	Bool CopyDynamicDescriptionFrom(const BaseList2D* src);
 
@@ -3009,7 +3022,7 @@ public:
 	//-------------------------------------------------------------------------------------------------
 	GeListHead* GetHiddenShaderRoot(Bool create);
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Return the owning NimbusRef or NimbusBaseRef corresponding to the provided NodeSpace Id.
 	/// @code
 	/// // Retrieve the standard render NodeSpace from the selected material. In practice we should
@@ -3019,9 +3032,9 @@ public:
 	/// if (nimbusRef == nullptr)
 	///   return;
 	/// @endcode
-	/// @param[in] spaceId            The NodeSpace ID.
-	/// @return                       Returns the owner of the node graph.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The NodeSpace ID.
+	/// @return												Returns the owner of the node graph.
+	//----------------------------------------------------------------------------------------
 	maxon::NimbusForwardRef GetNimbusRef(const maxon::Id& spaceId) const { return maxon::NimbusForwardRef(reinterpret_cast<maxon::ObjectInterface*>(BlCall(GetNimbusRef)(spaceId))); }
 
 	//-------------------------------------------------------------------------------------------------
@@ -3029,13 +3042,13 @@ public:
 	//-------------------------------------------------------------------------------------------------
 	maxon::Result<maxon::NimbusForwardRef> PrivateGetOrCreateNimbusRef(const maxon::Id& spaceId);
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Remove the NimbusRef, and therefore the owned graph, that is corresponding to the provided NodeSpace Id.
-	/// @param[in] spaceId				The NodeSpace ID.
-	//-------------------------------------------------------------------------------------------------
+	/// @param[in] spaceId						The NodeSpace ID.
+	//----------------------------------------------------------------------------------------
 	void RemoveNimbusRef(const maxon::Id& spaceId);
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Retrieve a HashMap of all NodeSpace ID and NimbusRef of the current BaseList is holding.
 	/// @note The NimbusForwardRef cannot be casted directly to a maxon::NimbusBaseRef. Instead, maxon::NimbusForwardRef::GetBase should be used to retrieve the base.
 	/// @code
@@ -3051,14 +3064,14 @@ public:
 	///   ApplicationOutput("NodeSpace ID: @"_s, key);
 	/// }
 	/// @endcode
-	/// @return									Returns a hash map of NodeSpace ID with their corresponding NimbusRef.
-	//-------------------------------------------------------------------------------------------------
+	/// @return												Returns a hash map of NodeSpace ID with their corresponding NimbusRef.
+	//----------------------------------------------------------------------------------------
 	maxon::Result<maxon::HashMap<maxon::Id, maxon::NimbusForwardRef>> GetAllNimbusRefs() const { return BlCall(GetAllNimbusRefs)(); }
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Checks whether the object contains nodes.
-	/// @return										True if node-based.
-	//-------------------------------------------------------------------------------------------------
+	/// @return												True if node-based.
+	//----------------------------------------------------------------------------------------
 	Bool IsNodeBased() const { return BlCall(IsNodeBased)(); }
 
 	maxon::Result<Bool> GetAccessedObjects(METHOD_ID method, AccessedObjectsCallback& access) const;
@@ -3071,13 +3084,13 @@ public:
 
 	maxon::Result<Bool> GetAccessedObjectsOfFirstChildHierarchy(ACCESSED_OBJECTS_MASK read, ACCESSED_OBJECTS_MASK write, METHOD_ID method, AccessedObjectsCallback& access) const;
 
-	//-------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Starts to group subsequent changes to parameters of this BaseList2D. The grouping ends when the lifetime
 	/// of the returned GenericData ends (i.e., when its destructor or Reset function is called). You can call this function
 	/// when you know that you'll make several changes (e.g., calls to SetParameter) in a row, then the
 	/// BaseList2D can avoid costly updates between intermediate changes.
-	/// @return									An object to control the lifetime of the grouping.
-	//-------------------------------------------------------------------------------------------------
+	/// @return												An object to control the lifetime of the grouping.
+	//----------------------------------------------------------------------------------------
 	maxon::Result<maxon::GenericData> GroupChanges();
 
 	/// @}
@@ -3429,7 +3442,7 @@ Float CalculateTranslationScale(const BaseDocument* sdoc, const BaseDocument* dd
 /// @param[in] nbm								The nimbus class reference.
 /// @param[in] nodePath						Absolute Path to the Node.
 /// @return												BaseList2D element. The return value can be nullptr in case no element can be created for the given path, e.g. if it is invalid
-///																of refers to an inner node.
+/// 															of refers to an inner node.
 //----------------------------------------------------------------------------------------
 maxon::Result<BaseList2D*> NbmFindOrCreateCorrespondingBaseList(maxon::NimbusInterface* nbm, const maxon::CString& nodePath);
 
@@ -3446,6 +3459,111 @@ maxon::Result<void> NbmPortToDescID(maxon::NimbusInterface* nbm, const maxon::No
 /// @}
 
 #endif // __API_INTERN__
+
+enum class ITERATEBASELIST4D
+{
+	NONE							= 0,
+	DOWN							= (1 << 1), ///< add down element
+	NEXT							= (1 << 2), ///< add next element, after down (go into depth)
+	CACHE							= (1 << 3), ///< add caches
+	DEFORMCACHE				= (1 << 4), ///< add deform caches
+	UP								= (1 << 5),	///< add to parent object
+} MAXON_ENUM_FLAGS(ITERATEBASELIST4D);
+
+//----------------------------------------------------------------------------------------
+/// Iterates through all objects in the startObject without stack recursion in a linear loop.
+/// The callback is also called for the startObject.
+/// The order is first down, then next.
+/// @tparam MASK									Global mask for possible iterations.
+/// @tparam T											Type of the object.
+/// @param[in] startObject				First Object to iterate.
+/// @param[in] callback						Callback function to call for each object. Return ITERATEBASELIST4D to control which objects should be iterated from this object.
+/// @return												Maxon::OK on success.
+/// example:
+/// IterateBaseList4D<ITERATEBASELIST4D::DOWN | ITERATEBASELIST4D::NEXT>(startObject,
+///		[&](const BaseObject* testObject) -> maxon::Result<ITERATEBASELIST4D>
+///		{
+///			DiagnosticOutput("checking: '@' dirty: @", testObject->GetName(), testObject->GetDirty(DIRTYFLAGS::MATRIX | DIRTYFLAGS::DATA));
+///			return ITERATEBASELIST4D::DOWN | ITERATEBASELIST4D::NEXT;
+///		}) iferr_return;
+//----------------------------------------------------------------------------------------
+template <ITERATEBASELIST4D MASK, typename T, typename C> inline maxon::Result<void> IterateBaseList4D(T startObject, C&& callback)
+{
+	iferr_scope;
+
+	if (!startObject)
+		return maxon::OK;
+
+	maxon::BufferedBaseArray<T, 16> iterationStack;
+	iterationStack.Append(startObject) iferr_return;
+
+	T curObject = nullptr;
+	while (iterationStack.Pop(&curObject))
+	{
+		ITERATEBASELIST4D flags = callback(curObject) iferr_return;
+
+		if constexpr (MASK & ITERATEBASELIST4D::UP)
+		{
+			if ((flags & ITERATEBASELIST4D::UP))
+			{
+				T op = curObject->GetUp();
+				if (op)
+				{
+					iterationStack.Append(op) iferr_return;
+				}
+			}
+		}
+
+		if constexpr (MASK & ITERATEBASELIST4D::NEXT)
+		{
+			if ((flags & ITERATEBASELIST4D::NEXT) && curObject != startObject)
+			{
+				T op = curObject->GetNext();
+				if (op)
+				{
+					iterationStack.Append(op) iferr_return;
+				}
+			}
+		}
+
+		if constexpr (MASK & ITERATEBASELIST4D::DOWN)
+		{
+			if (flags & ITERATEBASELIST4D::DOWN)
+			{
+				T op = curObject->GetDown();
+				if (op)
+				{
+					iterationStack.Append(op) iferr_return;
+				}
+			}
+		}
+
+		if constexpr (MASK & ITERATEBASELIST4D::CACHE)
+		{
+			if (flags & ITERATEBASELIST4D::CACHE)
+			{
+				T cache = curObject->GetCache();
+				if (cache)
+				{
+					iterationStack.Append(cache) iferr_return;
+				}
+			}
+		}
+
+		if constexpr (MASK & ITERATEBASELIST4D::DEFORMCACHE)
+		{
+			if (flags & ITERATEBASELIST4D::DEFORMCACHE)
+			{
+				T cache = curObject->GetDeformCache();
+				if (cache)
+				{
+					iterationStack.Append(cache) iferr_return;
+				}
+			}
+		}
+	}
+	return maxon::OK;
+}
 
 } // namespace cinema
 

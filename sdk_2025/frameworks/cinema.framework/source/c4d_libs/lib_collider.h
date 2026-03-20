@@ -295,7 +295,7 @@ class CINEWARE_SINGLEINHERITANCE GeColliderEngine
 		/// Checks if the line segment specified by @formatParam{ray_p} to @formatParam{ray_p} + @formatParam{ray_dir}*@formatParam{ray_length} intersects the object.\n
 		/// If the function succeeds retrieve the list of intersections with GetNumPairs(), GetId1() and GetId2().
 		/// @param[in] o1									The cache for the object.
-		/// @param[in] ray_p							The start point of the ray in object coordinates
+		/// @param[in] ray_p							The start point of the ray in object coordinates.
 		/// @param[in] ray_dir						The ray direction in object coordinates.
 		/// @param[in] ray_length					The ray length.
 		/// @return												The result: @enumerateEnum{COL}

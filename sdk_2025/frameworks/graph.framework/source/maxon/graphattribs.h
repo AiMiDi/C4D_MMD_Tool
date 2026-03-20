@@ -206,7 +206,7 @@ public:
 	///
 	/// @param[in] node								A node or port at which the messages shall be obtained.
 	/// @param[in] receiver						All messages are reported to this receiver.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> GetMessages(const GraphNode& node, const ValueReceiver<const GraphMessage&>& receiver) const;
 };

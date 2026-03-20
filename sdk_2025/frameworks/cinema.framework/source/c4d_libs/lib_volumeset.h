@@ -124,7 +124,7 @@ public:
 	/// @{
 
 	//----------------------------------------------------------------------------------------
-	/// Adds a volume to this group
+	/// Adds a volume to this group.
 	/// @param[in] volumeObj					The volume object that should be added to the group.
 	//----------------------------------------------------------------------------------------
 	void AddVolume(VolumeObject* volumeObj)
@@ -133,7 +133,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Detaches a volume from this group and moves it into the object system
+	/// Detaches a volume from this group and moves it into the object system.
 	/// @param[in] volumeObj					The volume object that should be detached to the group.
 	/// @return												True if the volume was found in the group and detached.
 	//----------------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Detaches a volume from this group and moves it into the object system
+	/// Detaches a volume from this group and moves it into the object system.
 	/// @param[in] index							The index of the volume object that should be detached to the group.
 	/// @return												True if the index was whithin the bounds of the group if the volume was sucessfully  detached from the group.
 	//----------------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the volume object in this group at a specified index
+	/// Returns the volume object in this group at a specified index.
 	/// @param[in] index							The index to get the volume at.
 	/// @return												The volume object at the index. Nullptr if there is none at the index.
 	//----------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns if the volume at the specified index is active or not.
 	/// @param[in] index							The index to get the activation state at.
-	/// @return												True if the volume at that index is active. False otherwise
+	/// @return												True if the volume at that index is active. False otherwise.
 	//----------------------------------------------------------------------------------------
 	Bool GetActiveAtIndex(Int32 index) const
 	{

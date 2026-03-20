@@ -439,6 +439,7 @@ class Lexer(object):
                                             elif not(todo[p+1:].strip()):
                                                 self.warnings.append(todoPos, 'You have to add a comment to TODO.')
                                             else:
+                                                # Accept either a name starting with uppercase or email starting with lowercase followed by underscore.
                                                 prevChar = None
                                                 for char in devs:
                                                     if char.isalpha():
@@ -446,7 +447,8 @@ class Lexer(object):
                                                             if char.isupper():
                                                                 self.warnings.append(todoPos, 'Developer names in a TODO must start with uppercase, then lowercase.')
                                                         elif char.islower():
-                                                            self.warnings.append(todoPos, 'Developer names in a TODO must start with uppercase, then lowercase.')
+                                                            if len(devs) < 2 or devs[1] != '_':
+                                                                self.warnings.append(todoPos, 'Developer names in a TODO must start with uppercase, then lowercase.')
                                                     prevChar = char
                         opt = comment.find('stylecheck.')
                         if opt >= 0:

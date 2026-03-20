@@ -120,4 +120,14 @@ maxon::Data ParticleGroupObject::GetAttributeChannel(const maxon::InternedId& ch
 	ParticleGroupObjectLibCallRC(maxon::Data(), GetAttributeChannel)(channelId);
 }
 
+maxon::Result<void> ParticleGroupObject::GetSystemAttributeChannelIds(const maxon::ValueReceiver<const maxon::Tuple<maxon::InternedId, maxon::DataType, maxon::String>&>& idReceiver) const
+{
+	ParticleGroupObjectLibCallRC(maxon::OK, GetSystemAttributeChannelIds)(idReceiver);
+}
+
+Int32 ParticleGroupObject::GetParticleGroupIndex() const
+{
+	ParticleGroupObjectLibCallRC(-1, GetParticleGroupIndex)();
+}
+
 } // namespace cinema

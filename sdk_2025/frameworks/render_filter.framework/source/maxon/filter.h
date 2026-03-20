@@ -1,5 +1,5 @@
-#ifndef FILTER_INTERFACE_H__
-#define FILTER_INTERFACE_H__
+#ifndef FILTER_H__
+#define FILTER_H__
 
 #include "filter_image.h"
 #include "filter_parameter.h"
@@ -18,15 +18,15 @@ class FilterInterface : MAXON_INTERFACE_BASES(ObjectInterface)
 public:	
 	//----------------------------------------------------------------------------------------
 	/// Sets a filter parameter.
-	/// @param[in] parameter	The id of the parameter to set
-	/// @param[in] data				The data for the parameter
+	/// @param[in] parameter					The id of the parameter to set.
+	/// @param[in] data								The data for the parameter.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Set(const InternedId& parameter, const Data& data);
 	
 	//----------------------------------------------------------------------------------------
 	/// Executes the filter standalone.
-	/// @param[in] input	The input Filter Image
-	/// @param[in] output	The target Filter Image
+	/// @param[in] input							The input Filter Image.
+	/// @param[in] output							The target Filter Image.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Execute(const FilterImageRef& input, FilterImageRef output);
 
@@ -35,8 +35,8 @@ public:
 	/// There can only be one callback attached at a time. Multiple calls to SetProgressMonitor() will replace the previously attached callback.
 	/// The callback function is being called with the provided userPtr and a progress in the range [0, 1]. 
 	/// Returning false within the monitor will cancel further execution of the filter.
-	/// @param[in] progressMonitor	The progress monitor function
-	/// @param[in] userPtr					A custom user ptr that gets passed to the function pointer.
+	/// @param[in] progressMonitor		The progress monitor function.
+	/// @param[in] userPtr						A custom user ptr that gets passed to the function pointer.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetProgressMonitor(const FilterProgressMonitorFunction progressMonitor, void* userPtr);
 };
@@ -63,4 +63,4 @@ namespace FilterClasses
 
 MAXON_DEPENDENCY_WEAK("maxon/filter.h"); // This is an optional component
 
-#endif // FILTER_INTERFACE_H__
+#endif // FILTER_H__

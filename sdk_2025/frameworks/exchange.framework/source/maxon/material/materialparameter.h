@@ -402,8 +402,8 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Loads and parses the data description of material and inserts the defined default values into a DataDictionary.
 	/// This method caches once-loaded description for performance.
-	/// @param[in] materialType			The (bundle) type of the material representation.
-	/// @return											The parameter set on success.
+	/// @param[in] materialType				The (bundle) type of the material representation.
+	/// @return												The parameter set on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<DataDictionary> LoadDefaults(const Id& materialType);
 

@@ -29,7 +29,9 @@ enum class JOBQUEUEMODE
 	SPIN_ON_IDLE		= 1,												///< When there are no jobs threads will be spinning for a short moment before they go to sleep (low latency and highest performance but might unnecessary steals cycles from other threads).
 	SLEEP_ON_IDLE		= 2,												///< When there are no jobs threads will immediately go to sleep (results in higher latency).
 	DETACH_THREADS	= 3,												///< When there are no jobs the threads will immediately go to sleep and make themselves available to other queues (results in higher latency but less memory/resource usage).
-	PSEUDO_THREADS	= 4													///< The workers behave like ordinary threads (JOBQUEUE_CURRENT points to the default queue and the threads don't have a worker thread index).
+	PSEUDO_THREADS	= 4,												///< The workers behave like ordinary threads (`JOBQUEUE_CURRENT` points to the default queue and the threads don't have a worker thread index).
+	BLOCK_ON_WAIT 	= 8,												///< The workers block on wait. You must ensure that none of the jobs will ever have to wait for another job on the queue (which would deadlock).
+	BLOCK_ON_WAIT_DETACH 	= 11									///< The workers block on wait and make themselves available to other queues (results in higher latency but less memory/resource usage). You must ensure that none of the jobs will ever have to wait for another job on the queue (which would deadlock).
 } MAXON_ENUM_LIST(JOBQUEUEMODE);
 
 static const Int JOBQUEUE_USEMAXIMUMTHREADS = 0;
@@ -130,10 +132,10 @@ public:
 	MAXON_METHOD void SetIdleSpinTime(UInt ownerId, TimeValue spinTime);
 
 	//----------------------------------------------------------------------------------------
-	/// @brief Returns the queue being used when you specify JOBQUEUE_CURRENT.
+	/// @brief Returns the queue being used when you specify `JOBQUEUE_CURRENT`.
 	/// Usually the destination queue is the same as the queue of the current thread, but there
 	/// are exceptions: The main (UI) thread for example belongs to the main thread queue (returned
-	/// by GetMainThreadQueue()), but it has the default queue as target if you specify JOBQUEUE_CURRENT.
+	/// by GetMainThreadQueue()), but it has the default queue as target if you specify `JOBQUEUE_CURRENT`.
 	/// Furthermore there are rare cases (backward compatibility) where the destination queue
 	/// has been modified using SetDestinationQueue().
 	/// THREADSAFE.
@@ -142,8 +144,20 @@ public:
 	static MAXON_METHOD JobQueueInterface* GetDestinationQueue();
 
 	//----------------------------------------------------------------------------------------
+	/// @brief Sets the queue which will be used when a job on this queue is enqueing a job to `JOBQUEUE_CURRENT`.
+	/// @note Call this method directly after creation of the queue and before any jobs have been enqueued.
+	/// @param[in] queue							The queue to be used as JOBQUEUE_CURRENT.
+	/// @param[in] ownerId						Owner id of the queue.
+	/// @return												OK on success.
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD Result<void> SetDestinationQueue(JobQueueInterface* queue, UInt ownerId);
+	
+	// TODO: (Ole) Let the sourceprocessor make inherited static methods visible by default.
+	MAXON_ADD_TO_REFERENCE_CLASS(	using ConstFn<S>::SetDestinationQueue; );
+
+	//----------------------------------------------------------------------------------------
 	/// @brief Changes the queue that will be used when you enqueue a job/group from this thread and
-	/// specify JOBQUEUE_CURRENT. All threads created by the caller from now on will inherit
+	/// specify `JOBQUEUE_CURRENT`. All threads created by the caller from now on will inherit
 	/// the queue.
 	/// <B> You must own the thread to call this method. Since all child threads will own the
 	/// the queue you must make sure it'll be referenced for the whole life time of these threads.
@@ -174,16 +188,16 @@ public:
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD ServiceIOJobQueueInterface* GetServiceIOQueue();
 
-	/// @cond IGNORE
 
 	// private methods
 	//----------------------------------------------------------------------------------------
-	/// Private: Executes the jobs in the main thread queue. Returns when the queue is empty or
+	/// @brief Executes the jobs in the main thread queue or a threadless queue. Returns when the queue is empty or
 	/// the time-out duration has been exceeded.
 	/// @param[in] timeout						Maximum execution interval (or TIMEVALUE_INFINITE for no time-out).
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void ExecuteJobs(TimeValue timeout = TIMEVALUE_INFINITE);
 
+	/// @cond IGNORE
 	class Current
 	{
 	public:
@@ -203,8 +217,8 @@ public:
 			return nullptr;
 		}
 	};
-
 	/// @endcond
+
 };
 
 class ServiceIOJobQueueInterface : public JobQueueInterface
@@ -340,9 +354,9 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Creates and initializes a serial job queue.
+	/// @brief Creates and initializes a serial job queue.
 	/// @param[in] type								Queue type, by default JOBQUEUETYPE::LOWPRIORITY.
-	/// @param[in] mode								Scheduling options for the queue, the default is JOBQUEUEMODE::DEFAULT.
+	/// @param[in] mode								Scheduling options for the queue, the default is JOBQUEUEMODE::DEFAULT (which means any Wait() on the queue might execute other independent jobs). If you need stricter (potentially deadlocking) blocking on wait you might specify JOBQUEUEMODE::BLOCK_ON_WAIT.
 	/// @param[in] name								The queue name, by default "Serial Job Queue".
 	/// @param[out] ownerId						Owner id of the queue (can be used for CancelAndWait).
 	/// @return												OK on success.

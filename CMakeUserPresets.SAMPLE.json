@@ -1,0 +1,27 @@
+{
+	"version": 6,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 30,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "package-windows-local",
+			"inherits": ["package-windows"],
+			"displayName": "Local packaging (override ISCC and optional Inno macros)",
+			"cacheVariables": {
+				"CMT_INNO_SETUP_ISCC": "D:/Program Files/Inno Setup 6/ISCC.exe",
+				"CMT_ISS_EXTRA_ARGS": "/DPluginVersion=0.4.5.2 /DSdkBuildDir=_build_msvc /DSdkBinConfig=Release"
+			}
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "inno-installer-local",
+			"configurePreset": "package-windows-local",
+			"configuration": "Release",
+			"targets": ["cmt-package"]
+		}
+	]
+}

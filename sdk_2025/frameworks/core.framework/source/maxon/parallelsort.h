@@ -468,14 +468,14 @@ public:
 private:
 	template <typename ITERATOR, typename CONTENT> inline void ISort(ITERATOR start, Int count, const CONTENT& valType, JobQueueInterface* queue) const
 	{
-		MoveHelper<ITERATOR, CONTENT*, CONTENT, ((Int)FLAGS | (STD_IS_REPLACEMENT(pod, CONTENT) ? (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS : 0)) == (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS, ITERATOR::isLinearIterator> moveHelperForward;
-		MoveHelper<CONTENT*, ITERATOR, CONTENT, ((Int)FLAGS | (STD_IS_REPLACEMENT(pod, CONTENT) ? (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS : 0)) == (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS, ITERATOR::isLinearIterator> moveHelperBackward;
+		MoveHelper<ITERATOR, CONTENT*, CONTENT, ((Int)FLAGS | (STD_IS_REPLACEMENT(trivially_copyable, CONTENT) ? (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS : 0)) == (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS, ITERATOR::isLinearIterator> moveHelperForward;
+		MoveHelper<CONTENT*, ITERATOR, CONTENT, ((Int)FLAGS | (STD_IS_REPLACEMENT(trivially_copyable, CONTENT) ? (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS : 0)) == (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS, ITERATOR::isLinearIterator> moveHelperBackward;
 		ParallelSortAlgorithm(start, count, valType, queue, moveHelperForward, moveHelperBackward);
 	}
 
 	template <typename CONTENT> inline void ISort(CONTENT* start, Int count, const CONTENT& valType, JobQueueInterface* queue) const
 	{
-		MoveHelper<CONTENT*, CONTENT*, CONTENT, ((Int)FLAGS | (STD_IS_REPLACEMENT(pod, CONTENT) ? (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS : 0)) == (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS, true> moveHelper;
+		MoveHelper<CONTENT*, CONTENT*, CONTENT, ((Int)FLAGS | (STD_IS_REPLACEMENT(trivially_copyable, CONTENT) ? (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS : 0)) == (Int)BASESORTFLAGS::MOVEANDCOPYOBJECTS, true> moveHelper;
 		ParallelSortAlgorithm(start, count, valType, queue, moveHelper, moveHelper);
 	}
 
@@ -508,12 +508,12 @@ private:
 			return;
 
 		BaseArray<MergeSegment> segmentArray;
-		BaseArray<CONTENT, 1, ((FLAGS | ConditionalFlag(STD_IS_REPLACEMENT(pod, CONTENT), BASESORTFLAGS::MOVEANDCOPYOBJECTS)) == BASESORTFLAGS::MOVEANDCOPYOBJECTS) ? BASEARRAYFLAGS::MOVEANDCOPYOBJECTS : BASEARRAYFLAGS::NONE> mirrorArray;
+		BaseArray<CONTENT, 1, ((FLAGS | ConditionalFlag(STD_IS_REPLACEMENT(trivially_copyable, CONTENT), BASESORTFLAGS::MOVEANDCOPYOBJECTS)) == BASESORTFLAGS::MOVEANDCOPYOBJECTS) ? BASEARRAYFLAGS::MOVEANDCOPYOBJECTS : BASEARRAYFLAGS::NONE> mirrorArray;
 
 		Int splitRegions = ((count + 2 * chunksize - 1) / (2 * chunksize));
 
 		// POD data doesn't need to be constructed.
-		Bool dontInitialize = ((FLAGS | ConditionalFlag(STD_IS_REPLACEMENT(pod, CONTENT), BASESORTFLAGS::MOVEANDCOPYOBJECTS)) == BASESORTFLAGS::MOVEANDCOPYOBJECTS);
+		Bool dontInitialize = ((FLAGS | ConditionalFlag(STD_IS_REPLACEMENT(trivially_copyable, CONTENT), BASESORTFLAGS::MOVEANDCOPYOBJECTS)) == BASESORTFLAGS::MOVEANDCOPYOBJECTS);
 		COLLECTION_RESIZE_FLAGS resizeFlags = dontInitialize ? COLLECTION_RESIZE_FLAGS::POD_UNINITIALIZED : COLLECTION_RESIZE_FLAGS::DEFAULT;
 
 		if (mirrorArray.Resize(count, resizeFlags) == FAILED || segmentArray.Resize(MergeSegment::maximumSegmentsPerSplit * splitRegions) == FAILED)

@@ -1,4 +1,0 @@
-formatConstant{1}=<span style=\"font-weight:bold;\">\1</span>
-trueIfOtherwiseFalse{1}=@formatConstant{true} if \1, otherwise @formatConstant{false}.
-C4D=<i>Cinema&nbsp;4D</i>
-API=<strong>MAXON&nbsp;API</strong>

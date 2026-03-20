@@ -189,7 +189,7 @@ template <typename COLLECTION, typename T> inline typename std::conditional<!STD
 /// template which receives some collection via a parameter <tt>COLLECTION&& collection</tt> (with COLLECTION being a template parameter),
 /// and where blocks of values of the collection shall be forwarded to another function. If a collection is passed
 /// as r-value to the function, its blocks should passed as MoveBlocks to the other function.
-/// @see ValueForward
+/// @see ValueForward.
 /// @param[in] block							The block to forward.
 /// @tparam COLLECTION						A type to determine if x shall be forwarded as r-value (COLLECTION is a collection type, but not a reference type) or l-value (otherwise).
 /// @return												The forwarded block.
@@ -905,6 +905,77 @@ public:
 			{
 				static_cast<COLLECTION*>(this)->Append(i) iferr_return;
 			}
+		}
+		return OK;
+	}
+
+	template <typename COLLECTION2> Result<void> CopyValuesFrom(const COLLECTION2& src, Int srcStart = 0, Int start = 0, Int count = -1)
+	{
+		iferr_scope;
+		if (count < 0)
+		{
+			count = src.GetCount() - srcStart;
+		}
+		const typename COLLECTION2::ValueType* s = nullptr;
+		VALUETYPE* d = nullptr;
+		Int srcEnd = 0, dstEnd = 0;
+		Int srcStride = 0, dstStride = 0;
+		Int srcIndex = srcStart;
+		Int dstIndex = start;
+		while (count > 0)
+		{
+			if (srcIndex >= srcEnd)
+			{
+				StridedBlock<const typename COLLECTION2::ValueType> srcBlock;
+				const Int srcBlockStart = src.GetBlock(srcIndex, srcBlock);
+				srcEnd = srcBlockStart + srcBlock.GetCount();
+				s = &srcBlock[srcIndex - srcBlockStart];
+				srcStride = srcBlock.GetStride();
+			}
+			if (dstIndex >= dstEnd)
+			{
+				StridedBlock<VALUETYPE> dstBlock;
+				const Int dstBlockStart = static_cast<COLLECTION*>(this)->GetBlock(dstIndex, dstBlock);
+				dstEnd = dstBlockStart + dstBlock.GetCount();
+				d = &dstBlock[dstIndex - dstBlockStart];
+				dstStride = dstBlock.GetStride();
+			}
+			const Int n = Min(count, Min(srcEnd - srcIndex, dstEnd - dstIndex));
+			if (MAXON_UNLIKELY(n == 0))
+			{
+				return CreateError(MAXON_SOURCE_LOCATION, ERROR_TYPE::ILLEGAL_ARGUMENT);
+			}
+			if (srcStride != SIZEOF(typename COLLECTION2::ValueType) || dstStride != SIZEOF(VALUETYPE))
+			{
+				for (Int i = n; i > 0; --i)
+				{
+					AssignCopy(*d, *s) iferr_return;
+					AdvanceByByteOffset(s, srcStride);
+					AdvanceByByteOffset(d, dstStride);
+				}
+			}
+			else
+			{
+				if constexpr (std::is_same_v<const VALUETYPE, const typename COLLECTION2::ValueType> && std::is_trivially_copyable_v<VALUETYPE>)
+				{
+					::memcpy(d, s, n * SIZEOF(VALUETYPE));
+					d += n;
+					s += n;
+				}
+				else
+				{
+					for (Int i = n; i > 0; --i)
+					{
+						AssignCopy(*d, *s) iferr_return;
+						++s;
+						++d;
+					}
+				}
+			}
+
+			count -= n;
+			srcIndex += n;
+			dstIndex += n;
 		}
 		return OK;
 	}

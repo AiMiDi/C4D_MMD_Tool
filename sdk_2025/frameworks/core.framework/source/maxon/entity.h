@@ -415,12 +415,29 @@ template <TranslationUnit& UNIT, UInt64 UNIT_HASH, Bool WEAK, typename NAME> con
 //----------------------------------------------------------------------------------------
 #define MAXON_DEPENDENCY_ON_MODULE(module) PRIVATE_MAXON_DEPENDENCY_ON_MODULE_A(module, __COUNTER__)
 
+namespace details
+{
+struct ForceToBeLinked
+{
+	explicit ForceToBeLinked(const void* ptr);
+};
+}
+
+#ifdef MAXON_TARGET_WINDOWS
+	// Without this, linker of VS 17.10 toolset optimizes away s_moddep_##id and also the template instantiation
+	// of g_PrivateDependencyOnModule in PRIVATE_MAXON_DEPENDENCY_ON_MODULE_C.
+	#define PRIVATE_MAXON_FORCE_DEPENDENCY_TO_BE_LINKED(ptr, id) static maxon::details::ForceToBeLinked s_forcelink_##id{ptr}
+#else
+	#define PRIVATE_MAXON_FORCE_DEPENDENCY_TO_BE_LINKED(ptr, id)
+#endif
+
 #define PRIVATE_MAXON_DEPENDENCY_ON_MODULE_A(module, id) PRIVATE_MAXON_DEPENDENCY_ON_MODULE_B(module, id)
 #define PRIVATE_MAXON_DEPENDENCY_ON_MODULE_B(module, id) PRIVATE_MAXON_DEPENDENCY_ON_MODULE_C(module, id)
 #define PRIVATE_MAXON_DEPENDENCY_ON_MODULE_C(module, id) \
 	namespace { struct PrivateModuleDependency##id { static constexpr const maxon::Char PrivateImplementationModule[] = module; }; } \
 	inline const maxon::EntityUse* const s_moddep_##id \
-	= &maxon::g_PrivateDependencyOnModule<maxon::g_translationUnit, maxon::g_translationUnitHash, false, maxon::PrivateFixedSizeArrayBuilder<PrivateModuleDependency##id, std::make_index_sequence<SIZEOF(module)>>::type>;
+		= &maxon::g_PrivateDependencyOnModule<maxon::g_translationUnit, maxon::g_translationUnitHash, false, maxon::PrivateFixedSizeArrayBuilder<PrivateModuleDependency##id, std::make_index_sequence<SIZEOF(module)>>::type>; \
+	PRIVATE_MAXON_FORCE_DEPENDENCY_TO_BE_LINKED(s_moddep_##id, id)
 
 
 //----------------------------------------------------------------------------------------
@@ -469,6 +486,7 @@ template <TranslationUnit& UNIT, UInt64 UNIT_HASH, Bool WEAK, typename NAME> con
 /// MAXON_DATATYPE(Id, "net.maxon.datatype.id", MAXON_IMPLEMENTATION_MODULE("net.maxon.kernel"));
 /// @endcode
 
+//----------------------------------------------------------------------------------------
 /// @param[in] module							Identifier of the module which defines the entity.
 //----------------------------------------------------------------------------------------
 #define MAXON_IMPLEMENTATION_MODULE(module) public: static constexpr const maxon::Char PrivateImplementationModule[] = module; private:

@@ -45,6 +45,11 @@ Bool SceneHookData::AddToExecution(BaseSceneHook* node, PriorityList* list)
 	return false;
 }
 
+EXECUTIONRESULT SceneHookData::Visit(BaseSceneHook* node, BaseDocument* doc, BaseThread* bt, BaseObject* op, EXECUTIONFLAGS flags)
+{
+	return EXECUTIONRESULT::OK;
+}
+
 EXECUTIONRESULT SceneHookData::InitSceneHook(BaseSceneHook* node, BaseDocument* doc, BaseThread* bt)
 {
 	return EXECUTIONRESULT::OK;
@@ -59,7 +64,7 @@ EXECUTIONRESULT SceneHookData::Execute(BaseSceneHook* node, BaseDocument* doc, B
 	return EXECUTIONRESULT::OK;
 }
 
-static void FillSceneHookPlugin(SCENEHOOKPLUGIN* np, DataAllocator* npalloc, Int32 info, Int32 disklevel, Int32 priority)
+static void FillSceneHookPlugin(SCENEHOOKPLUGIN* np, DataAllocator* npalloc, Int32 info, Int32 disklevel, Int32 priority, const maxon::DataType& type)
 {
 	FillNodePlugin(np, info, npalloc, nullptr, disklevel);
 
@@ -75,13 +80,16 @@ static void FillSceneHookPlugin(SCENEHOOKPLUGIN* np, DataAllocator* npalloc, Int
 	np->DisplayControl = &SceneHookData::DisplayControl;
 	np->InitDisplayControl = &SceneHookData::InitDisplayControl;
 	np->FreeDisplayControl = &SceneHookData::FreeDisplayControl;
+	np->Visit = &SceneHookData::Visit;
+	np->data_offset = -1;
+	np->data_type = type;
 }
 
-Bool RegisterSceneHookPlugin(Int32 id, const maxon::String& str, Int32 info, DataAllocator* npalloc, Int32 priority, Int32 disklevel)
+Bool RegisterSceneHookPlugin(Int32 id, const maxon::String& str, Int32 info, DataAllocator* npalloc, Int32 priority, Int32 disklevel, const maxon::DataType& type)
 {
 	SCENEHOOKPLUGIN np;
 	ClearMem(&np, sizeof(np));
-	FillSceneHookPlugin(&np, npalloc, info, disklevel, priority);
+	FillSceneHookPlugin(&np, npalloc, info, disklevel, priority, type);
 	return GeRegisterPlugin(PLUGINTYPE::SCENEHOOK, id, str, &np, sizeof(np));
 }
 

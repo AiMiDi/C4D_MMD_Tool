@@ -1,5 +1,5 @@
-#ifndef INTFLOAT_H_
-#define INTFLOAT_H_
+#ifndef INTFLOAT_H__
+#define INTFLOAT_H__
 
 #include "maxon/apibase.h"
 

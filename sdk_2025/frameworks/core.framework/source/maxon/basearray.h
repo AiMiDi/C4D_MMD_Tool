@@ -25,9 +25,8 @@ static const Int BASEARRAY_DEFAULT_CHUNK_SIZE = 16;
 /// @cond INTERNAL
 
 //----------------------------------------------------------------------------------------
-/// Utility class that implements MoveFrom(), CopyFrom() and TryRealloc() depending on whether
-/// T can be moved or copied byte-wise (using memmove(), memcpy() or realloc()) or the
-/// move and copy constructors have to be used to do so.
+/// @brief Utility class that implements MoveFrom(), CopyFrom() and TryRealloc() depending on whether T can be moved or
+/// copied byte-wise (using memmove(), memcpy() or realloc()) or the move and copy constructors have to be used to do so.
 /// @tparam T											Type of the array elements.
 /// @tparam ZEROINITIALIZE				Should be false by default, only true for types which require zero initialization before calling the constructor.
 /// @tparam MOVE_AND_COPY_MEMORY	False in this case, T must be moved or copied using move and copy constructors.
@@ -198,7 +197,7 @@ public:
 	static MAXON_ATTRIBUTE_FORCE_INLINE void Initialize(T* dst, Int initCnt)
 	{
 		// Use memset() for POD types (optimized for larger number of elements).
-		if constexpr (STD_IS_REPLACEMENT(pod, T))
+		if constexpr (STD_IS_REPLACEMENT(trivially_constructible, T))
 		{
 			memset(dst, 0, size_t(initCnt * SIZEOF(T)));
 		}
@@ -217,7 +216,7 @@ public:
 	static MAXON_ATTRIBUTE_FORCE_INLINE void Destruct(T* dst, Int destructCnt)
 	{
 		// Call the destructor for non-POD types.
-		if constexpr (STD_IS_REPLACEMENT(pod, T) == false)
+		if constexpr (STD_IS_REPLACEMENT(trivially_destructible, T) == false)
 		{
 			for (Int i = destructCnt - 1; i >= 0; i--)
 				dst[i].~T();
@@ -281,7 +280,14 @@ public:
 template <typename T, BASEARRAYFLAGS MEMFLAGS, typename ALLOCATOR, Bool EMPTY_ALLOCATOR> class BaseArrayData
 {
 protected:
-	MAXON_ATTRIBUTE_FORCE_INLINE BaseArrayData() : _allocator(), _ptr(reinterpret_cast<T*>(this)), _cnt(0), _capacity(0) { }
+	MAXON_ATTRIBUTE_FORCE_INLINE BaseArrayData() : _allocator(), _ptr(reinterpret_cast<T*>(this)), _cnt(0), _capacity(0)
+	{
+#ifdef MAXON_TARGET_DEBUG
+		void** ptr = reinterpret_cast<void**>(&_ptr);
+		void** cnt = reinterpret_cast<void**>(&_cnt);
+		DebugAssert(cnt - ptr == 1, "Invalid BaseArray layout, it has to be compatible with Block.");
+#endif
+	}
 	MAXON_ATTRIBUTE_FORCE_INLINE explicit BaseArrayData(const ALLOCATOR& a) : _allocator(a), _ptr(reinterpret_cast<T*>(this)), _cnt(0), _capacity(0) { }
 	MAXON_ATTRIBUTE_FORCE_INLINE explicit BaseArrayData(ALLOCATOR&& a) : _allocator(std::move(a)), _ptr(reinterpret_cast<T*>(this)), _cnt(0), _capacity(0) { }
 	MAXON_ATTRIBUTE_FORCE_INLINE BaseArrayData(BaseArrayData&& src) : MAXON_MOVE_MEMBERS(_allocator, _ptr, _cnt, _capacity)
@@ -305,14 +311,21 @@ protected:
 /// Base class for BaseArray with special support for moving FixedBufferAllocators.
 /// This is not a POD.
 /// @tparam T											Type of the array elements.
-/// @tparam COUNT									Number of elements to be reserved by the FixedBufferAllocator
+/// @tparam COUNT									Number of elements to be reserved by the FixedBufferAllocator.
 /// @tparam PARENT_ALLOCATOR			Fallback allocator if the number of elements exceeds the reserved count.
 //----------------------------------------------------------------------------------------
 template <typename T, Int COUNT, BASEARRAYFLAGS MEMFLAGS, typename PARENT_ALLOCATOR, Bool SINGLE_ALLOCATION> class BaseArrayData<T, MEMFLAGS, FixedBufferAllocator<T, COUNT, PARENT_ALLOCATOR, SINGLE_ALLOCATION>, false>
 {
 protected:
 	using ALLOCATOR = FixedBufferAllocator<T, COUNT, PARENT_ALLOCATOR, SINGLE_ALLOCATION>;
-	MAXON_ATTRIBUTE_FORCE_INLINE BaseArrayData() : _allocator(), _ptr(reinterpret_cast<T*>(this)), _cnt(0), _capacity(0) { }
+	MAXON_ATTRIBUTE_FORCE_INLINE BaseArrayData() : _allocator(), _ptr(reinterpret_cast<T*>(this)), _cnt(0), _capacity(0)
+	{
+#ifdef MAXON_TARGET_DEBUG
+		void** ptr = reinterpret_cast<void**>(&_ptr);
+		void** cnt = reinterpret_cast<void**>(&_cnt);
+		DebugAssert(cnt - ptr == 1, "Invalid BaseArray layout, it has to be compatible with Block.");
+#endif
+	}
 	MAXON_ATTRIBUTE_FORCE_INLINE explicit BaseArrayData(const ALLOCATOR& a) : _allocator(a), _ptr(static_cast<T*>(this)), _cnt(0), _capacity(0) { }
 	MAXON_ATTRIBUTE_FORCE_INLINE explicit BaseArrayData(ALLOCATOR&& a) : _allocator(std::move(a)), _ptr(static_cast<T*>(this)), _cnt(0), _capacity(0) {  }
 	MAXON_ATTRIBUTE_FORCE_INLINE BaseArrayData(BaseArrayData&& src) : MAXON_MOVE_MEMBERS(_ptr, _cnt, _capacity)
@@ -324,7 +337,7 @@ protected:
 		// If the static buffer of the allocator was used the content must be moved.
 		if (src._allocator.IsCompatibleWithDefaultAllocator(src._ptr) == false)
 		{
-			using Utilities = BaseArrayUtilities<T, Bool(MEMFLAGS & BASEARRAYFLAGS::ZEROINITIALIZE), STD_IS_REPLACEMENT(trivially_copyable, T) /*|| MEMFLAGS == BASEARRAYFLAGS::MOVEANDCOPYOBJECTS*/>;
+			using Utilities = BaseArrayUtilities<T, Bool(MEMFLAGS & BASEARRAYFLAGS::ZEROINITIALIZE), STD_IS_REPLACEMENT(trivially_copyable, T) || MEMFLAGS == BASEARRAYFLAGS::MOVEANDCOPYOBJECTS>;
 
 			_ptr = (T*) _allocator.Alloc(SIZEOF(T) * _cnt, MAXON_SOURCE_LOCATION);
 			DebugAssert(_ptr != nullptr, "FixedBufferAllocator is broken.");
@@ -351,7 +364,10 @@ protected:
 template <typename T, BASEARRAYFLAGS MEMFLAGS, typename ALLOCATOR> class BaseArrayData<T, MEMFLAGS, ALLOCATOR, true>
 {
 protected:
-	MAXON_ATTRIBUTE_FORCE_INLINE BaseArrayData() : _ptr(reinterpret_cast<T*>(this)), _cnt(0), _capacity(0) { }
+	MAXON_ATTRIBUTE_FORCE_INLINE BaseArrayData() : _ptr(reinterpret_cast<T*>(this)), _cnt(0), _capacity(0)
+	{
+		static_assert(offsetof(BaseArrayData, _ptr) + SIZEOF(void*) == offsetof(BaseArrayData, _cnt), "Invalid BaseArray layout, it has to be compatible with Block.");
+	}
 	MAXON_ATTRIBUTE_FORCE_INLINE BaseArrayData(BaseArrayData&& src) : _ptr(src._ptr), _cnt(src._cnt), _capacity(src._capacity)
 	{
 		// Use dummy pointer if the array has no capacity.
@@ -467,7 +483,6 @@ public:
 	//----------------------------------------------------------------------------------------
 	const Block<const T>& ToBlock() const
 	{
-		static_assert(offsetof(BaseArray, _ptr) + SIZEOF(void*) == offsetof(BaseArray, _cnt), "Invalid BaseArray layout, it has to be compatible with Block.");
 		return reinterpret_cast<const Block<const T>&>(_ptr);
 	}
 
@@ -848,7 +863,7 @@ public:
 		return element;
 	}
 
-	ResultPtr<T> Insert(Int position, Block<typename std::remove_const<T>::type>& values)
+	ResultPtr<T> Insert(Int position, Block<T>& values)
 	{
 		return InsertBlock(position, values);
 	}
@@ -858,7 +873,7 @@ public:
 		return InsertBlock(position, values);
 	}
 
-	ResultPtr<T> Insert(Int position, const Block<typename std::remove_const<T>::type>& values)
+	ResultPtr<T> Insert(Int position, const Block<T>& values)
 	{
 		return InsertBlock(position, values);
 	}
@@ -868,7 +883,7 @@ public:
 		return InsertBlock(position, values);
 	}
 
-	ResultPtr<T> Insert(Int position, Block<typename std::remove_const<T>::type>&& values)
+	ResultPtr<T> Insert(Int position, Block<T>&& values)
 	{
 		return InsertBlock(position, values);
 	}
@@ -896,6 +911,21 @@ public:
 	}
 
 	ResultPtr<T> Insert(Int position, MoveBlock<T>&& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, MoveBlock<const T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, const MoveBlock<const T>& values)
+	{
+		return InsertBlock(position, values);
+	}
+
+	ResultPtr<T> Insert(Int position, MoveBlock<const T>&& values)
 	{
 		return InsertBlock(position, values);
 	}
@@ -988,7 +1018,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @brief Inserts a new element at iterator position and moves the content of x to it.
 	/// @param[in] position						Insert position.
-	/// @param[in] args								Values to be forwarded
+	/// @param[in] args								Values to be forwarded.
 	/// @return												Iterator for the new element or OutOfMemoryError if the allocation failed (or position is out of boundaries).
 	//----------------------------------------------------------------------------------------
 	template <typename... ARGS> MAXON_ATTRIBUTE_FORCE_INLINE ResultMemT<Iterator> Insert(Iterator position, ARGS&&... args)

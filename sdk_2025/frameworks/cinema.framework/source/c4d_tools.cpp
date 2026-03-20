@@ -946,6 +946,11 @@ PointObject* BooleanSplines(PointObject* initialSpline, AtomArray* booleanObject
 	return C4DOS_Bo->SpBooleanSplines(initialSpline, booleanObjects, doc, bd, projectionAxis, booleanMode);
 }
 
+PointObject* BooleanSplines(PointObject* initialSpline, AtomArray* booleanObjects, BaseDocument* doc, BaseDraw* bd, SPLINEBOOL_AXIS projectionAxis, SPLINEBOOL_MODE booleanMode, const HierarchyHelp* hh)
+{
+	return C4DOS_Bo->SpBooleanSplinesHH(initialSpline, booleanObjects, doc, bd, projectionAxis, booleanMode, hh);
+}
+
 Bool CalcSplineDefaultTangents(SPLINETYPE type, Bool closed, Int32 pcnt, const Vector* padr, Tangent* tadr)
 {
 	return C4DOS_Bo->SpCalcSplineDefaultTangents(type, closed, pcnt, padr, tadr);

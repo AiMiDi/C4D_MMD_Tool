@@ -135,26 +135,26 @@ protected:
 
 	//----------------------------------------------------------------------------------------
 	/// Set arguments that led to the error.
-	/// @param[in] args							Arguments to set in the error.
+	/// @param[in] args								Arguments to set in the error.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void SetArgs(const TemplateArguments& args);
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the corresponding arguments.
-	/// @return											The arguments related to this error.
+	/// @return												The arguments related to this error.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD const TemplateArguments& GetArgs() const;
 
 	//----------------------------------------------------------------------------------------
 	/// Enable flag to maintain the node in the graph for reinstantiation attempt.
-	/// @param[in] keepNode					True to keep the erroneous node.
+	/// @param[in] keepNode						True to keep the erroneous node.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void SetKeepNode(Bool keepNode);
 
 	//----------------------------------------------------------------------------------------
 	/// Read keep node flag.
 	/// @see SetKeepNode.
-	/// @return											True if keep node is active.
+	/// @return												True if keep node is active.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool GetKeepNode() const;
 
@@ -174,21 +174,21 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Set the frame range to which this error applies.
-	/// @param[in] frames						The frame index range (zero based), or just Range{-1} if it applies to all frames.
-	/// @return											OK on success.
+	/// @param[in] frames							The frame index range (zero based), or just Range{-1} if it applies to all frames.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetFrames(const Range<Int>& frames);
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Set the frame to which this error applies.
-	/// @param[in] frame						The frame index (zero based).
-	/// @return											OK on success.
+	/// @param[in] frame							The frame index (zero based).
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetFrame(Int frame);
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Reads the frames to which this error applies.
-	/// @return											The frame indexes.
+	/// @return												The frame indexes.
 	//----------------------------------------------------------------------------------------
 	// @MAXON_ANNOTATION{default=GetZeroRef<Range<Int>>()}
 	MAXON_METHOD const Range<Int>& GetFrames() const;

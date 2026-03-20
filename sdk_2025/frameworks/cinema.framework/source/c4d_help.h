@@ -24,7 +24,7 @@ class String;
 /// @param[in] baseType						The name of the base object type that @formatParam{opType} is derived from, usually the same as @formatParam{opType}.
 /// @param[in] group							The name of the group in the attribute manager, for example @em "ID_OBJECTPROPERTIES".
 /// @param[in] property						The name of the object property, for example @em "ATOMOBJECT_SINGLE".
-/// @return												@trueIfOtherwiseFalse{if the plugin can display help for this request}\n
+/// @return												@trueIfOtherwiseFalse{if the plugin can display help for this request}\n.
 //----------------------------------------------------------------------------------------
 typedef Bool (*PluginHelpDelegate)(const maxon::String& opType, const maxon::String& baseType, const maxon::String& group, const maxon::String& property);
 

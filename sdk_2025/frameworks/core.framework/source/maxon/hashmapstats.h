@@ -27,7 +27,7 @@ public:
 		if (bucketSizeFrequency.Resize(1) == FAILED)
 			return String();
 
-		Int elementCount = 0;
+		[[maybe_unused]] Int elementCount = 0;
 		for (Int i = 0; i < map.GetNonEmptyBucketCount(); ++i)
 		{
 			Int bs = 0;

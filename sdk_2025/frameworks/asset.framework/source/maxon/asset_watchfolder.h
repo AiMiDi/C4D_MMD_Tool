@@ -1,5 +1,5 @@
-#ifndef ASSETS_WATCHFOLDER_H__
-#define ASSETS_WATCHFOLDER_H__
+#ifndef ASSET_WATCHFOLDER_H__
+#define ASSET_WATCHFOLDER_H__
 
 #include "maxon/assets.h"
 #include "maxon/urlassetrepository.h"
@@ -35,4 +35,4 @@ namespace AssetRepositoryTypes
 } // namespace maxon
 
 
-#endif // ASSETS_WATCHFOLDER_H__
+#endif // ASSET_WATCHFOLDER_H__

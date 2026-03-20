@@ -51,8 +51,8 @@ template <typename T> using UnderlyingType = typename std::conditional<STD_IS_RE
 
 // For a class-scope enum we have to use an extra argument to enable argument-dependent lookup, otherwise the call in the second friend function wouldn't find the first friend function.
 #define PRIVATE_MAXON_ENUM_TYPE0(FRIEND, EXTRA, E, id) \
-	FRIEND const maxon::EnumInfo& MAXON_CONCAT(PrivateGetEnumInfo_, MAXON_CONCAT(E, __LINE__))(EXTRA(,void*)); \
-	inline FRIEND const maxon::EnumInfo& PrivateGetEnumInfo(E* e) { return MAXON_CONCAT(PrivateGetEnumInfo_, MAXON_CONCAT(E, __LINE__))(EXTRA(,e)); }
+	FRIEND const maxon::EnumInfo& MAXON_CONCAT(PrivateGetEnumInfo_, MAXON_CONCAT(E, __LINE__))(EXTRA(, void*)); \
+	inline FRIEND const maxon::EnumInfo& PrivateGetEnumInfo(E* e) { return MAXON_CONCAT(PrivateGetEnumInfo_, MAXON_CONCAT(E, __LINE__))(EXTRA(, e)); }
 
 #define PRIVATE_MAXON_ENUM_DATATYPE(FRIEND, E, N, id) \
 	MAXON_DECLARATION(maxon::DataType, DT_##N, id, static constexpr maxon::EntityBase::TYPE TYPE = maxon::EntityBase::TYPE::DATATYPE;); \
@@ -73,19 +73,10 @@ template <typename T> using UnderlyingType = typename std::conditional<STD_IS_RE
 #define PRIVATE_MAXON_ENUM_TYPE_B(nonempty, FRIEND, EXTRA, E, id) PRIVATE_MAXON_ENUM_TYPE_C(nonempty, FRIEND, EXTRA, E, id)
 #define PRIVATE_MAXON_ENUM_TYPE_A(nonempty, FRIEND, EXTRA, E, id) PRIVATE_MAXON_ENUM_TYPE_B(nonempty, FRIEND, EXTRA, E, id)
 
-#define PRIVATE_MAXON_ENUM_TYPE(FRIEND, EXTRA, E, ...) PRIVATE_MAXON_ENUM_TYPE_A(MAXON_VA_NARGS(__VA_ARGS__), FRIEND, EXTRA, E, MAXON_FIRSTARG(__VA_ARGS__))
+#define PRIVATE_MAXON_ENUM_TYPE(FRIEND, EXTRA, E, ...) PRIVATE_MAXON_ENUM_TYPE_A(MAXON_VA_NARGS(__VA_ARGS__), FRIEND, EXTRA, E, MAXON_FIRSTARG(__VA_ARGS__, ))
 
 
-#ifdef MAXON_COMPILER_INTEL
-	#define MAXON_ENUM_ORDERED_LIST(E, ...) ; \
-		_Pragma("warning disable 1419") \
-		PRIVATE_MAXON_ENUM_TYPE(, MAXON_FIRSTARG, E, __VA_ARGS__) \
-		_Pragma("warning enable 1419")
-	#define MAXON_ENUM_ORDERED_LIST_CLASS(E, ...) ; \
-		_Pragma("warning disable 1419 1624") \
-		PRIVATE_MAXON_ENUM_TYPE(friend, MAXON_ALLBUTFIRST, E, __VA_ARGS__) \
-		_Pragma("warning enable 1419 1624")
-#elif defined(MAXON_COMPILER_GCC)
+#if defined(MAXON_COMPILER_GCC)
 #define MAXON_ENUM_ORDERED_LIST(E, ...) ; \
 	PRIVATE_MAXON_ENUM_TYPE(, MAXON_FIRSTARG, E, __VA_ARGS__)
 #define MAXON_ENUM_ORDERED_LIST_CLASS(E, ...) ; \
@@ -118,12 +109,6 @@ template <typename T> using UnderlyingType = typename std::conditional<STD_IS_RE
 		FRIEND maxon::IllegalEnumAccess operator >(E s1, E s2); \
 		FRIEND maxon::IllegalEnumAccess operator >=(E s1, E s2); \
 		_Pragma("GCC diagnostic pop")
-#elif defined(MAXON_COMPILER_INTEL)
-	#define PRIVATE_MAXON_ENUM_UNORDERED_LIST(FRIEND, E) \
-		MAXON_ATTRIBUTE_FORCE_INLINE FRIEND maxon::Bool operator <(E s1, E s2) = delete; \
-		MAXON_ATTRIBUTE_FORCE_INLINE FRIEND maxon::Bool operator <=(E s1, E s2) = delete; \
-		MAXON_ATTRIBUTE_FORCE_INLINE FRIEND maxon::Bool operator >(E s1, E s2) = delete; \
-		MAXON_ATTRIBUTE_FORCE_INLINE FRIEND maxon::Bool operator >=(E s1, E s2) = delete
 #else
 	#define PRIVATE_MAXON_ENUM_UNORDERED_LIST(FRIEND, E) \
 		FRIEND maxon::Bool operator <(E s1, E s2) = delete; \
@@ -173,11 +158,6 @@ template <typename E> constexpr inline E ConditionalFlag(Bool condition, E value
 	return condition ? value : E::NONE;
 }
 
-template <typename E> inline Bool IsAllSet(E flags, E mask)
-{
-	return (flags & mask) == mask;
-}
-
 #define PRIVATE_MAXON_ENUM_FLAGS(FRIEND, E) \
 	using PrivateUT##E = maxon::UnderlyingType<E>; \
 	MAXON_ATTRIBUTE_FORCE_INLINE FRIEND constexpr E operator |(E a, E b) { return E(PrivateUT##E(a)|PrivateUT##E(b)); } \
@@ -209,9 +189,9 @@ template <typename E> inline Bool IsAllSet(E flags, E mask)
 //----------------------------------------------------------------------------------------
 /// Tests if a specific flag is set in a MAXON enum flag set.
 /// @note Helper for MAXON_ENUM_FLAGS.
-/// @param[in] flags          Given enum flag set.
-/// @param[in] flag           Specific flag.
-/// @return										True if #flag is set in #flags.
+/// @param[in] flags							Given enum flag set.
+/// @param[in] flag								Specific flag.
+/// @return												True if #flag is set in #flags.
 //----------------------------------------------------------------------------------------
 template <typename T, typename E> inline Bool TestFlag(const T flags, const E flag)
 {
@@ -221,20 +201,25 @@ template <typename T, typename E> inline Bool TestFlag(const T flags, const E fl
 //----------------------------------------------------------------------------------------
 /// Tests if all flags in test are set in a MAXON enum flag set.
 /// @note Helper for MAXON_ENUM_FLAGS.
-/// @param[in] flags          Given enum flag set.
-/// @param[in] test           Set of flags which must be set for a @c true result.
-/// @return										True if all flags of #test are set in #flags.
+/// @param[in] flags							Given enum flag set.
+/// @param[in] test								Set of flags which must be set for a @c true result.
+/// @return												True if all flags of #test are set in #flags.
 //----------------------------------------------------------------------------------------
 template <typename T, typename E> inline Bool TestAllFlags(const T flags, const E test)
 {
 	return (flags & test) == test;
 }
 
+template <typename E> [[deprecated("Use TestAllFlags.")]] inline Bool IsAllSet(E flags, E mask)
+{
+	return (flags & mask) == mask;
+}
+
 //----------------------------------------------------------------------------------------
 /// Sets a specific flag in a MAXON enum flag set.
 /// @note Helper for MAXON_ENUM_FLAGS.
-/// @param[in] flags          Given enum flag set.
-/// @param[in] flag           Specific flag.
+/// @param[in] flags							Given enum flag set.
+/// @param[in] flag								Specific flag.
 //----------------------------------------------------------------------------------------
 template <typename T, typename E> inline void SetFlag(T& flags, const E flag)
 {
@@ -244,8 +229,8 @@ template <typename T, typename E> inline void SetFlag(T& flags, const E flag)
 //----------------------------------------------------------------------------------------
 /// Deletes a specific flag in a MAXON enum flag set.
 /// @note Helper for MAXON_ENUM_FLAGS.
-/// @param[in] flags          Given enum flag set.
-/// @param[in] flag           Specific flag.
+/// @param[in] flags							Given enum flag set.
+/// @param[in] flag								Specific flag.
 //----------------------------------------------------------------------------------------
 template <typename T, typename E> inline void DeleteFlag(T& flags, const E flag)
 {
@@ -255,12 +240,27 @@ template <typename T, typename E> inline void DeleteFlag(T& flags, const E flag)
 //----------------------------------------------------------------------------------------
 /// Toggles a flag in a MAXON enum flag set
 /// @note Helper for MAXON_ENUM_FLAGS.
-/// @param[in] flags          Given enum flag set.
-/// @param[in] flag           Specific flag.
+/// @param[in] flags							Given enum flag set.
+/// @param[in] flag								Specific flag.
 //----------------------------------------------------------------------------------------
 template <typename T, typename E> inline void ToggleFlag(T& flags, const E flag)
 {
 	flags ^= flag;
+}
+
+//----------------------------------------------------------------------------------------
+/// Sets or deletes a specific flag in a MAXON enum flag set.
+/// @note Helper for MAXON_ENUM_FLAGS.
+/// @param[in] flags							Given enum flag set.
+/// @param[in] flag								Specific flag.
+/// @param[in] set								True, if the new flags should be set, false if they should be deleted.
+//----------------------------------------------------------------------------------------
+template <typename T, typename E> inline void SetFlag(T& flags, const E flag, Bool set)
+{
+	if (set)
+		flags |= flag;
+	else
+		flags &= ~flag;
 }
 
 #endif // ENUMFLAGS_H__

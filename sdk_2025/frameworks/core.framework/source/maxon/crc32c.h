@@ -1,5 +1,5 @@
-#ifndef CRC32C_H_
-#define CRC32C_H_
+#ifndef CRC32C_H__
+#define CRC32C_H__
 
 #include "maxon/intfloat.h"
 #include "maxon/sse_general.h"
@@ -223,7 +223,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Accumulates the CRC value.
 	/// @tparam FORCEALIGNMENT				Alignment hint. if default or 0 the alignof(T) is chosen.
-	/// @tparam ARRAY									Type of the block or array data. The type must provide an ::ValueType for individual objects
+	/// @tparam ARRAY									Type of the block or array data. The type must provide an ::ValueType for individual objects.
 	/// @param[in] mem								A raw memory buffer.
 	//----------------------------------------------------------------------------------------
 	template <Int FORCEALIGNMENT = 0, typename ARRAY> MAXON_ATTRIBUTE_FORCE_RELEASE_INLINE void Update(const ARRAY& mem)

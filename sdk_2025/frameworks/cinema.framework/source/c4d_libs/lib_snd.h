@@ -205,7 +205,7 @@ class CINEWARE_SINGLEINHERITANCE GePlaySnd
 		void Stop();
 
 		//----------------------------------------------------------------------------------------
-		/// Checks if the audio device is running
+		/// Checks if the audio device is running.
 		/// @return												@trueIfOtherwiseFalse{if audio is playing}
 		//----------------------------------------------------------------------------------------
 		Bool IsPlaying();

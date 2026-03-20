@@ -1,5 +1,5 @@
-#ifndef PYTHON_CHANGE_DETECTORS_H__
-#define PYTHON_CHANGE_DETECTORS_H__
+#ifndef PY_ELEMENT_DETECTOR_H__
+#define PY_ELEMENT_DETECTOR_H__
 
 #include "maxon/object.h"
 #include "maxon/factory.h"
@@ -38,26 +38,26 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Checks that the passed BaseList2D could be interpreted as a PythonElementEmbeddedRef.
 	/// @note This method is called for each object Addition/Suppression, so take performance in consideration. 
-	/// @param[in] bl2D		The BaseList2D to scan if a Python embedded element can be built upon.
-	/// @return true if the BaseList2D can be interpreted as a PythonElementEmbeddedRef, otherwise false.
+	/// @param[in] bl2D								The BaseList2D to scan if a Python embedded element can be built upon.
+	/// @return												True if the BaseList2D can be interpreted as a PythonElementEmbeddedRef, otherwise false.
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD Bool IsValid(cinema::BaseList2D * bl2D);
+	MAXON_METHOD Bool IsValid(cinema::BaseList2D * bl2D) const;
 
 	// Create one or multiple PythonElementEmbeddedInterface from a BaseList2D
 	//----------------------------------------------------------------------------------------
-	/// Create one or multiple PythonElementEmbeddedInterface from a BaseList2D
-	/// @param[in] bl2D		The BaseList2D to retrieve a Python embedded element from.
-	/// @param[out] out		A ValueReceiver, that should be notified with each embedded python element created from the BaseList2D.
+	/// Create one or multiple PythonElementEmbeddedInterface from a BaseList2D.
+	/// @param[in] bl2D								The BaseList2D to retrieve a Python embedded element from.
+	/// @param[out] out								A ValueReceiver, that should be notified with each embedded python element created from the BaseList2D.
 	//----------------------------------------------------------------------------------------
-	MAXON_METHOD Result<void> CreatePythonEmbeddedRef(cinema::BaseList2D * bl2D, ValueReceiver<PythonElementEmbeddedRef&>& out);
+	MAXON_METHOD Result<void> CreatePythonEmbeddedRef(cinema::BaseList2D * bl2D, ValueReceiver<PythonElementEmbeddedRef&>& out) const;
 };
 
 
 #include "py_element_detector1.hxx"
 
-MAXON_REGISTRY(Class<PythonBaseList2DDetectorRef>, PyBaseList2DDetectors, "net.maxon.registry.python_baselist2d_detector");
+MAXON_REGISTRY(PythonBaseList2DDetectorRef, PyBaseList2DDetectors, "net.maxon.registry.python_baselist2d_detector");
 
 #include "py_element_detector2.hxx"
 
 }
-#endif // PYTHON_CHANGE_DETECTORS_H__
+#endif // PY_ELEMENT_DETECTOR_H__

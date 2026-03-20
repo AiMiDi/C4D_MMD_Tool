@@ -228,13 +228,13 @@ public:
 
 	MAXON_OPERATOR_MOVE_ASSIGNMENT(AutoTimer);
 
-	AutoTimer& operator=(const TimerRef& timer)
+	AutoTimer& operator =(const TimerRef& timer)
 	{
 		_timerRef = timer;
 		return *this;
 	}
 
-	AutoTimer& operator=(TimerRef&& timer)
+	AutoTimer& operator =(TimerRef&& timer)
 	{
 		_timerRef = std::move(timer);
 		return *this;

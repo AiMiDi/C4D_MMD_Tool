@@ -1,4 +1,7 @@
 #include "lib_takesystem.h"
+#include "maxon/configuration.h"
+
+MAXON_CONFIGURATION_BOOL(g_enableProxySynchTakeMode, false, maxon::CONFIGURATION_CATEGORY::DEVELOPMENT, "Enable Stored Views.");
 
 namespace cinema
 {

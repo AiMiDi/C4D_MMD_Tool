@@ -835,4 +835,20 @@ AggregatedError::AggregatedError(MAXON_SOURCE_LOCATION_DECLARATION)
 	Create(MAXON_SOURCE_LOCATION_FORWARD);
 }
 
+namespace details
+{
+ForceToBeLinked::ForceToBeLinked(const void* ptr)
+{
+	// This condition will never be fulfilled, but compiler/linker can't know this.
+	// But even if it was fulfilled, it wouldn't harm.
+	if (System::MTable::_instance.System_Alloc == System::MTable::_instance.System_AllocClear
+			&& System::MTable::_instance.System_PrivateGetUniqueHashCode)
+	{
+		// Make a call which compiler/linker can't optimize away and pass the pointer to the symbol
+		// which we want to be linked.
+		System::MTable::_instance.System_PrivateGetUniqueHashCode(reinterpret_cast<const Byte*>(ptr), 0);
+	}
+}
+}
+
 } // namespace maxon

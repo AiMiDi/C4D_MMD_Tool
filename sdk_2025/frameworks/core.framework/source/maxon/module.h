@@ -118,7 +118,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the version of the core framework which was used for compilation of this binary.
-	/// @return												core framework version of this binary.
+	/// @return												Core framework version of this binary.
 	/// @see MAXON_CORE_FRAMEWORK_VERSION
 	//----------------------------------------------------------------------------------------
 	Int GetCoreFrameworkVersion() const
@@ -244,7 +244,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns true if this is a real module. Each binary has at least one real module.
-	/// @return                       Is this a real module?
+	/// @return												Is this a real module?
 	//----------------------------------------------------------------------------------------
 	Bool IsRealModule() const
 	{

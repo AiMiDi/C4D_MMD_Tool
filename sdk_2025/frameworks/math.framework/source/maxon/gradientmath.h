@@ -9,10 +9,12 @@
 namespace maxon
 {
 
+//----------------------------------------------------------------------------------------
 /// This class is a data container for gradient knots. Each knot is defined by an index and a position in a 1D range.
-/// @tparam T_Float									The type of real-valued position, recommended are Float, Float32 and Float64.
-/// @tparam T_Int										The type of index, recommended are Int, Int32 and Int64.
+/// @tparam T_Float								The type of real-valued position, recommended are Float, Float32 and Float64.
+/// @tparam T_Int									The type of index, recommended are Int, Int32 and Int64.
 /// We recommend to match the bitdepth of index and position.
+//----------------------------------------------------------------------------------------
 template <typename T_Float, typename T_Int>
 struct IndexedGradientKnot
 {
@@ -41,13 +43,15 @@ struct IndexedGradientKnot
 	T_Float _position = 0.0;
 };
 
+//----------------------------------------------------------------------------------------
 /// This class organizes a collection of gradient knots.
 /// Knots can be added in arbitrary order and are sorted as a finalization step.
 /// To avoid re-ordering data associated with the knots, e.g. colors, we maintain the original indices
 /// for data lookup.
-/// @tparam T_Float									The type of real-valued position, recommended are Float, Float32 and Float64.
-/// @tparam T_Int										The type of index, recommended are Int, Int32 and Int64.
+/// @tparam T_Float								The type of real-valued position, recommended are Float, Float32 and Float64.
+/// @tparam T_Int									The type of index, recommended are Int, Int32 and Int64.
 /// We recommend to match the bitdepth of index and position.
+//----------------------------------------------------------------------------------------
 template <typename T_Float, typename T_Int>
 class SortedGradientKnots
 {
@@ -68,8 +72,8 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Allocates the memory required for knot storage. If the amount of knots is known beforehand
 	/// we recommend to pre-allocate memory to avoid any memory allocations during knot insertion.
-	/// @param[in] numKnots							The number of knots to reserve memory for.
-	/// @return													OK on success.
+	/// @param[in] numKnots						The number of knots to reserve memory for.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	Result<void> ReserveMemory(IntType numKnots)
 	{
@@ -195,14 +199,16 @@ private:
 
 // TODO: (Maik) consider options for making error handling of GetKnotValueFunc and its siblings optional.
 
+//----------------------------------------------------------------------------------------
 /// This class implements the gradient blending operation for a series of knots with different interpolation modes.
 /// For performance reasons interpolation modes are handled as unsigned integers.
-/// @tparam T_ModeNone										The index of constant / stairstep interpolation of 1 knot.
-/// @tparam T_ModeLinearKnot							The index of linear interpolation between 2 knots.
-/// @tparam T_ModeSmoothKnot							The index of the smooth-stepped linear interpolation between 2 knots.
-/// @tparam T_ModeBlend										The index of the box-stepped linear interpolation between 2 knots.
-/// @tparam T_ModeCubicKnot								The index of the cubic interpolation between 4 knots.
-/// @tparam T_ModeCubicBias								The index of the cubic interpolation between 2 knots.
+/// @tparam T_ModeNone						The index of constant / stairstep interpolation of 1 knot.
+/// @tparam T_ModeLinearKnot			The index of linear interpolation between 2 knots.
+/// @tparam T_ModeSmoothKnot			The index of the smooth-stepped linear interpolation between 2 knots.
+/// @tparam T_ModeBlend						The index of the box-stepped linear interpolation between 2 knots.
+/// @tparam T_ModeCubicKnot				The index of the cubic interpolation between 4 knots.
+/// @tparam T_ModeCubicBias				The index of the cubic interpolation between 2 knots.
+//----------------------------------------------------------------------------------------
 template <UInt T_ModeNone = 0, UInt T_ModeLinearKnot = 1,
 	UInt T_ModeSmoothKnot = 2, UInt T_ModeBlend = 3,
 	UInt T_ModeCubicKnot = 4, UInt T_ModeCubicBias = 5>
@@ -383,17 +389,17 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Samples the gradient at the requested position.
-	/// @tparam ValueType											The type of value to sample.
-	/// @tparam SortedKnotsType								The type of sorted knot sequence.
-	/// @tparam GetKnotValueFunc							The type of value sample function.
+	/// @tparam ValueType							The type of value to sample.
+	/// @tparam SortedKnotsType				The type of sorted knot sequence.
+	/// @tparam GetKnotValueFunc			The type of value sample function.
 	/// @tparam GetKnotInterpolationModeFunc	The type of interpolation mode sample function.
-	/// @tparam GetKnotBiasFunc								The type of bias sample function.
-	/// @param[in] absolutePosition						The position to sample in the gradient.
-	/// @param[in] sortedKnots								The sorted knot sequence.
-	/// @param[in] getKnotValue								The value sample function..
-	/// @param[in] getKnotInterpolationMode		The interpolation mode sample function.
-	/// @param[in] getKnotBias								The bias sample function.
-	/// @return																The sampled value on success, error otherwise.
+	/// @tparam GetKnotBiasFunc				The type of bias sample function.
+	/// @param[in] absolutePosition		The position to sample in the gradient.
+	/// @param[in] sortedKnots				The sorted knot sequence.
+	/// @param[in] getKnotValue				The value sample function..
+	/// @param[in] getKnotInterpolationMode	The interpolation mode sample function.
+	/// @param[in] getKnotBias				The bias sample function.
+	/// @return												The sampled value on success, error otherwise.
 	//----------------------------------------------------------------------------------------
 	template <typename ValueType, typename SortedKnotsType, typename GetKnotValueFunc, typename GetKnotInterpolationModeFunc, typename GetKnotBiasFunc>
 	Result<ValueType> Sample(typename SortedKnotsType::FloatType absolutePosition, const SortedKnotsType& sortedKnots, const GetKnotValueFunc& getKnotValue, const GetKnotInterpolationModeFunc& getKnotInterpolationMode, const GetKnotBiasFunc& getKnotBias) const

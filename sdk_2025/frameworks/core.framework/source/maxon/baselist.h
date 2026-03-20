@@ -1357,16 +1357,10 @@ public:
 			return *this;
 		}
 
-#ifdef MAXON_COMPILER_INTEL
-	#pragma warning disable 597
-#endif
 		operator ConstIterator&()
 		{
 			return *(ConstIterator*) this;
 		}
-#ifdef MAXON_COMPILER_INTEL
-	#pragma warning enable 597
-#endif
 
 		Type* GetPtr() const
 		{

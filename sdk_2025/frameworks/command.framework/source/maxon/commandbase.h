@@ -84,8 +84,8 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Invokes a command on this data.
 	/// @param[in] command						The command ID.
-	/// @param[in] interactive 				If true the command execution will be prepared for interactivity. The executed command must implement CommandInteractionClassInterface.
-	/// @return 											The command result or an error.
+	/// @param[in] interactive				If true the command execution will be prepared for interactivity. The executed command must implement CommandInteractionClassInterface.
+	/// @return												The command result or an error.
 	//----------------------------------------------------------------------------------------
 	MAXON_FUNCTION Result<COMMANDRESULT> Invoke(const Id& command, Bool interactive);
 	
@@ -100,9 +100,9 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Invokes a command on this data.
 	/// @param[in] command						The command ID.
-	/// @param[in] interactive 				If true, the command execution will be prepared for interactivity. The executed command must implement CommandInteractionClassInterface.
-	/// @param[in] setParameters 			A delegate to fill the CommandData with command parameters.
-	/// @return 											The command result, or an error.
+	/// @param[in] interactive				If true, the command execution will be prepared for interactivity. The executed command must implement CommandInteractionClassInterface.
+	/// @param[in] setParameters			A delegate to fill the CommandData with command parameters.
+	/// @return												The command result, or an error.
 	//----------------------------------------------------------------------------------------
 	MAXON_FUNCTION Result<COMMANDRESULT> Invoke(const Id& command, Bool interactive, const SetParameters& setParameters);
 
@@ -110,7 +110,7 @@ public:
 	/// Invokes a command on this data.
 	/// @param[in] command						The command class.
 	/// @param[in] interactive				If true, the command execution will be prepared for interactivity. The executed command must implement CommandInteractionClassInterface.
-	/// @param[in] setParameters 			A delegate to fill the CommandData with command parameters.
+	/// @param[in] setParameters			A delegate to fill the CommandData with command parameters.
 	/// @return												The command result, or an error.
 	//----------------------------------------------------------------------------------------
 	MAXON_FUNCTION Result<COMMANDRESULT> Invoke(const CommandClass& command, Bool interactive, const SetParameters& setParameters);

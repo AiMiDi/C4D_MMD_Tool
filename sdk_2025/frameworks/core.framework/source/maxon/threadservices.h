@@ -480,7 +480,7 @@ private:
 
 	//----------------------------------------------------------------------------------------
 	/// Notifies the job system of acquiring or releasing an exclusive resource in which threaded code is executed.
-	/// @param[in] selector						internal.
+	/// @param[in] selector						Internal.
 	/// @param[in] resourcePtr				Either a new resource (acquiring a resource) or the resource to be restored (releasing a resource).
 	/// @return												Previous resource if a new resource is acquired, to be ignored otherwise.
 	//----------------------------------------------------------------------------------------

@@ -387,7 +387,7 @@ public:
 		return *this;
 	}
 
-	const GeData& operator=(GeData&& n)
+	const GeData& operator =(GeData&& n)
 	{
 		C4DOS_Gd->MoveDataFrom(this, std::move(n));
 		return *this;

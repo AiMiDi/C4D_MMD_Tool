@@ -577,26 +577,26 @@ Int32 Pgon::GetPolygonCount() const
 
 void Pgon::UpdateStates()
 {
-	Int32 i, l, id;
+	iferr_scope_handler
+	{
+		return;
+	};
 
-	for (i = 0; i < m_Count; i++)
+	for (Int32 i = 0; i < m_Count; i++)
 	{
 		m_Edge[i].edge_index &= PGONEDGE_RESET;
 	}
 
-	for (i = 0; i < m_Count; i++)
+	maxon::HashSet<Int32> set;
+	for (Int32 i = 0; i < m_Count; i++)
 	{
-		if (!(m_Edge[i].edge_index&PGONEDGE_REPEAT))
+		Int32 id = m_Edge[i].ID();
+		if (set.Contains(id))
 		{
-			id = m_Edge[i].ID();
-			for (l = i+1; l < m_Count; l++)
-			{
-				if (m_Edge[l].ID() == id)
-				{
-					m_Edge[l].edge_index |= PGONEDGE_REPEAT;
-				}
-			}
+			m_Edge[i].edge_index |= PGONEDGE_REPEAT;
+			continue;
 		}
+		set.Insert(id) iferr_return;
 	}
 }
 

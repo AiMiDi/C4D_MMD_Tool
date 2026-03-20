@@ -98,7 +98,7 @@ public:
 	/// @param[in] isLight						@formatConstant{true} if the pass is a separated light pass.
 	/// @param[in] lightNumber				The light number id.
 	/// @param[in] isMaterial					@formatConstant{true} if the pass is a separated reflectance material pass.
-	/// @param[in] nodeName						if @ref _isLight is @formatConstant{true} or @ref _isMaterial is @formatConstant{true} store here the object scene name.
+	/// @param[in] nodeName						If @ref _isLight is @formatConstant{true} or @ref _isMaterial is @formatConstant{true} store here the object scene name.
 	/// @param[in] node								An owner node for certain tokens such as MoGraph cache tokens.
 	//----------------------------------------------------------------------------------------
 	RenderPathData(const BaseDocument* doc = nullptr, const RenderData* rData = nullptr, const BaseContainer* rBc = nullptr, const BaseTake* take = nullptr, Int32 frame = NOTOK, const String& layerName = String(), const String& layerTypeName = String(), Int32 layerType = NOTOK, Bool isLight = false, Int32 lightNumber = NOTOK, Bool isMaterial = false, const String& nodeName = String(), BaseList2D* node = nullptr) : _doc(doc), _rData(rData), _rBc(rBc), _cTake(take), _frame(frame), _layerName(layerName), _layerTypeName(layerTypeName), _layerType(layerType), _isLight(isLight), _lightNumber(lightNumber), _isMaterial(isMaterial), _nodeName(nodeName), _checkUnresolved(false), _node(node) { }
@@ -223,7 +223,7 @@ Bool RegisterHiddenToken(const String& key, const String& help, const String& ex
 /// @param[in] key								The key string for the Token itself without the "$".
 /// @param[in] help								An help string used to show the Token in the menu.
 /// @param[in] example						An example string for the use of the Token.
-/// @param[in] callback								A pointer to a PyObject representing a function, that accept one parameter and return a String used to define the string to replace the Token.
+/// @param[in] callback						A pointer to a PyObject representing a function, that accept one parameter and return a String used to define the string to replace the Token.
 /// @return												@trueIfOtherwiseFalse{successful}
 //----------------------------------------------------------------------------------------
 Bool RegisterPythonToken(const String& key, const String& help, const String& example, void* callback);
@@ -236,7 +236,7 @@ Bool RegisterPythonToken(const String& key, const String& help, const String& ex
 /// @param[in] key								The key string for the Token itself without the "$".
 /// @param[in] help								An help string used to show the Token in the menu.
 /// @param[in] example						An example string for the use of the Token.
-/// @param[in] callback								A pointer to a PyObject representing a function, that accept one parameter and return a String used to define the string to replace the Token.
+/// @param[in] callback						A pointer to a PyObject representing a function, that accept one parameter and return a String used to define the string to replace the Token.
 /// @return												@trueIfOtherwiseFalse{successful}
 //----------------------------------------------------------------------------------------
 Bool RegisterPythonHiddenToken(const String& key, const String& help, const String& example, void* callback);

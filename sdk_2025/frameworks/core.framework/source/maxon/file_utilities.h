@@ -53,9 +53,9 @@ public:
 	static MAXON_METHOD Result<void> CompareFiles(UrlOrInputStream&& file1, UrlOrInputStream&& file2);
 
 	//----------------------------------------------------------------------------------------
-	/// Reads stream directly into an array
-	/// @param[in] url								path to stream
-	/// @param[out] dest							BaseArray where the data is stored
+	/// Reads stream directly into an array.
+	/// @param[in] url								Path to stream.
+	/// @param[out] dest							BaseArray where the data is stored.
 	//----------------------------------------------------------------------------------------
 	template <typename T> static Result<void> ReadToArray(UrlOrInputStream&& url, BaseArray<T>& dest);
 
@@ -155,7 +155,7 @@ template <typename T> Result<void> FileUtilities::ReadToArray(UrlOrInputStream&&
 
 //----------------------------------------------------------------------------------------
 /// Controls a source control system, e.g. Perforce.
-/// @return												true if if system is available
+/// @return												True if if system is available.
 //----------------------------------------------------------------------------------------
 inline Bool IsSourceControlAvailable()
 {

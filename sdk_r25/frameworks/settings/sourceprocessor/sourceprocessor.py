@@ -1385,15 +1385,15 @@ class Parser(object):
                                 base = type[:pos]
                                 scope = self.summary.lookup(owner.qname('.'), True)
                                 base = scope.lookup(base)
+                                tparamCount = 0
                                 if isinstance(base, Class) and base.generic:
-                                    # we have to split the template arguments into the template part and the generic part
                                     tparamCount = base.template or 0
-                                    args, dummy = splitComma(type[pos+1:])
-                                    if len(args) > tparamCount:
-                                        type = type[:pos]
-                                        if tparamCount:
-                                            type += '<' + ', '.join(args[:tparamCount]) + '>'
-                                        gen = ''.join(', ' + a for a in args[tparamCount:])
+                                args, dummy = splitComma(type[pos+1:])
+                                if len(args) > tparamCount:
+                                    type = type[:pos]
+                                    if tparamCount:
+                                        type += '<' + ', '.join(args[:tparamCount]) + '>'
+                                    gen = ''.join(', ' + a for a in args[tparamCount:])
                             cls.baseInterfaces.append((type, gen))
                             t = self.lex.getNoEof()
                             t.expect([',', ')'])

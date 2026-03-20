@@ -99,7 +99,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// PostProcessStringDescription description.
-	/// @param[in] description				Description to modify
+	/// @param[in] description				Description to modify.
 	/// @param[in] entries						String description entries to process.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
@@ -164,7 +164,7 @@ MAXON_REGISTRY(ProcessEnumListDelegate, ProcessEnumListDelegates, "net.maxon.dat
 /// @param[in] dataEntry					Optional. The description definition DATADESCRIPTION_CATEGORY_DATA entry which defines the enum or preset.
 /// @param[in] guiEntry						Optional. The description definition DATADESCRIPTION_CATEGORY_GUI entry which defines the enum or preset.
 /// @return												A resolved string, should contain no more "{}". Can be turned in an Id or replaced in original string by caller.
-///																An error if the variable could not be resolved.
+/// 															An error if the variable could not be resolved.
 //----------------------------------------------------------------------------------------
 using EnumVariableResolveDelegate = Delegate<Result<CString>(const CString& variable, const CString& fullString, const AssetRepositoryRef& repository, const GetDataCallbackType& getDataCallback, Opt<const DataDictionary&> dataEntry, Opt<const DataDictionary&> guiEntry)>;
 MAXON_DATATYPE(EnumVariableResolveDelegate, "net.maxon.datatype.delegate.enumvariableresolve", MAXON_IMPLEMENTATION_MODULE("net.maxon.kernel"));
@@ -181,7 +181,7 @@ MAXON_REGISTRY(EnumVariableResolveDelegate, EnumVariableResolveDelegates, "net.m
 /// Helper function to use with ProcessEnumListDelegate to verify if a type needs to be added to the output array.
 /// @param[in] filterData					Forward filterData from delegate.
 /// @param[in] compare						Data that would be added. check before doing more complex operations.
-/// @return                       True to process the data, false to ignore this entry.
+/// @return												True to process the data, false to ignore this entry.
 //----------------------------------------------------------------------------------------
 inline Bool UseFilterData(const Data* filterData, const Data& compare)
 {

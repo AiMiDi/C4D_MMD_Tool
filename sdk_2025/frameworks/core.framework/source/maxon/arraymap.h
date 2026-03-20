@@ -1,7 +1,6 @@
 #ifndef ARRAYMAP_H__
 #define ARRAYMAP_H__
 
-#include "maxon/basearray.h"
 #include "maxon/sortedarray.h"
 #include "maxon/bitmanipulation.h"
 #include "maxon/optional.h"

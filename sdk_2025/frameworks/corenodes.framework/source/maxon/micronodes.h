@@ -2,6 +2,12 @@
 #define MICRONODES_H__
 
 #include "maxon/micronodes_ports.h"
+#include "maxon/stackalloc.h"
+
+#ifdef MAXON_TARGET_WINDOWS
+// Required for alloca()
+#include <malloc.h>
+#endif
 
 namespace maxon
 {

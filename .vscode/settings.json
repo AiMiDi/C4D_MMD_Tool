@@ -1,5 +1,5 @@
 {
-    "cmake.sourceDirectory": "D:/code/C4D_MMD_Tool/sdk_2026",
+    "cmake.sourceDirectory": "D:/code/C4D_MMD_Tool",
     "files.associations": {
         "*.inc": "cpp"
     }

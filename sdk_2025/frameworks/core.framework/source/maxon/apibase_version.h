@@ -10,6 +10,6 @@
 //----------------------------------------------------------------------------------------
 /// The core framework version is increased at least with every major application version.
 //----------------------------------------------------------------------------------------
-#define MAXON_CORE_FRAMEWORK_VERSION 2025001
+#define MAXON_CORE_FRAMEWORK_VERSION 2025301
 
 #endif // APIBASE_VERSION_H__

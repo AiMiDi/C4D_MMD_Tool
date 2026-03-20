@@ -396,7 +396,7 @@ def extract_hashmap_items(valobj, numMaxEntries=1024):
   
       list = bucketPtr.GetChildMemberWithName("list")
       # synchronized maps store an AtomicPtr
-      if not list.GetTypeName().endswith("::Entry *"):
+      if not list.GetTypeName().endswith("> *"):
         list = list.GetChildMemberWithName("_ptr")
 
       # iterate over the linked list

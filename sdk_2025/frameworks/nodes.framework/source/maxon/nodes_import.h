@@ -144,7 +144,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @brief Sets a link to the base template's asset for this SerializationNodeData.
 	/// Note that this will override any existing origin data.
-	/// @see AssetLinkInterface
+	/// @see AssetLinkInterface.
 	/// @param[in] newLink						The new base template's asset link.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------

@@ -44,8 +44,8 @@ constexpr inline Bool ConstExprStringsAreEqual(const Char* str1, const Char* str
 #if BRANCH_RELEASE_TYPE_VALUE
 #define PRIVATE_ISBRANCH_HELPER(branch, argIndex, extraArg) MAXON_AM_IN_BRANCH(branch)
 #define MAXON_FEATURE_CONFIGURATION_BRANCHES(V, C, S, ...) \
-const maxon::Bool MAXON_CONCAT(V,DefaultValue) = MAXON_MAKE_LIST(PRIVATE_ISBRANCH_HELPER, , ||, false, __VA_ARGS__); \
-MAXON_CONFIGURATION_BOOL(V, MAXON_CONCAT(V,DefaultValue), C, S)
+const maxon::Bool MAXON_CONCAT(V, DefaultValue) = MAXON_MAKE_LIST(PRIVATE_ISBRANCH_HELPER, , ||, false, __VA_ARGS__); \
+MAXON_CONFIGURATION_BOOL(V, MAXON_CONCAT(V, DefaultValue), C, S)
 #else
 #define MAXON_FEATURE_CONFIGURATION_BRANCHES(V, C, S, ...) \
 maxon::Bool V = false
@@ -57,4 +57,4 @@ maxon::Bool V = false
 #define MAXON_FEATURE_CONFIGURATION(V, B, C, S) MAXON_FEATURE_CONFIGURATION_BRANCHES(V, C, S, B)
 
 
-#endif // BRANCH_H
+#endif // BRANCH_H__

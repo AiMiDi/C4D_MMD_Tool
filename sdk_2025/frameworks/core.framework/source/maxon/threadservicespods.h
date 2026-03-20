@@ -206,8 +206,7 @@ enum class THREADTYPE
 	MAIN = 0,									///< The main thread.
 	WORKER = 1,								///< A worker thread of a queue.
 	STANDALONE = 2,						///< A standalone thread.
-	ALIEN = 3,								///< An alien thread (only limited use of Maxon API allowed).
-	ASSIMILATED = 4						///< An assimilated alien thread (full use of the Maxon API allowed).
+	ALIEN = 3
 } MAXON_ENUM_LIST(THREADTYPE);
 
 } // namespace maxon

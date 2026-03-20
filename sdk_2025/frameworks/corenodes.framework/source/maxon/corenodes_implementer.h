@@ -188,8 +188,8 @@ public:
 ///
 /// @tparam OP										A class with a Process function which implements the operator.
 /// @tparam SIGNATURE							The signature of the node as a function type RESULT(IN...).
-///																RESULT is used for the type of the output port, IN... for the
-///																types of the input ports.
+/// 															RESULT is used for the type of the output port, IN... for the
+/// 															types of the input ports.
 //----------------------------------------------------------------------------------------
 template <typename OP, typename SIGNATURE> class OperatorNode;
 

@@ -110,7 +110,7 @@ Bool		CAPoseMorphTag::SetPSDTwistThreshold(Float radianThreshold) { CALibCallR(f
 Float		CAPoseMorphTag::GetPSDPositionThreshold() const { CALibCallR(0.0f, pmorphGetPSDPositionThreshold)(this); }
 Bool		CAPoseMorphTag::SetPSDPositionThreshold(Float distanceThreshold) { CALibCallR(false, pmorphSetPSDPositionThreshold)(this, distanceThreshold); }
 DescID	CAPoseMorphTag::GetMorphPSDID(Int32 morphIndex, Int32 psdAttributeID) { CALibCallR(DescID(), pmorphGetMorphPSDID)(this, morphIndex, psdAttributeID); }
-
+const CAMorphNode* CAPoseMorphTag::FindEditNodeFromIndex(Int32 index) const { CALibCallR(nullptr, pmorphFindEditPoseFromIndex)(this, index); }
 
 String CAMorph::GetName() { CALibCallR(String(), pmorphGetName)(this); }
 Int32 CAMorph::GetID() { CALibCallR(NOTOK, pmorphGetID)(this); }

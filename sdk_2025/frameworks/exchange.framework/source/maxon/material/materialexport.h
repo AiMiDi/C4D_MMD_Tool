@@ -39,10 +39,10 @@ namespace EXPORT
 		ALL = TEXTUREBUFFER | IMAGEREFERENCE | SUBSTANCEREFERENCE
 	} MAXON_ENUM_FLAGS(TextureSupport);
 
-	///----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Enum used to specify the scaling policy for baking or exporting textures
 	/// ALSO DEFINED IN nodespace.framework\source\maxon\previewimageprovider.h
-	///----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	enum class TextureResize
 	{
 		ALWAYS = 0,	///< Legacy behaviour. Textures should be up- and downscaled to the requested texture dimensions.

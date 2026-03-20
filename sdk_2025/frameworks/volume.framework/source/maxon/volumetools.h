@@ -307,13 +307,13 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Converts a polygon object to a SDF volume.
 	/// @param[in] vertices						The vertex positions of the polygon object.
-	/// @param[in] polygons						The polygon information. This needs to be a list of ::VolumeConversionPolygon
+	/// @param[in] polygons						The polygon information. This needs to be a list of ::VolumeConversionPolygon.
 	/// @param[in] polygonObjectMatrix	The global position, scale and rotation matrix of the polygon object.
 	/// @param[in] gridSize						The desired gridsize of the created volume.
 	/// @param[in] bandWidthInterior	The amount of exterior voxels that distance information is calculated for.
 	/// @param[in] bandWidthExterior	The amount of interior voxels that distance information is calculated for.
 	/// @param[in] checkForCancellation	A thread reference that cancellation is tested against.
-	/// @param[in] conversionSettings Optional settings for the conversion to Volume ::POLYGONCONVERSIONFLAGS.
+	/// @param[in] conversionSettings	Optional settings for the conversion to Volume ::POLYGONCONVERSIONFLAGS.
 	/// @param[in] creationTransform	An optional override to the target grid matrix. If this is used the @formatParam{gridSize} is ignored.
 	/// @return												The converted SDF volume representing the input polygon object.
 	//----------------------------------------------------------------------------------------
@@ -328,7 +328,7 @@ public:
 	/// @param[in] bandWidthInterior	The amount of exterior voxels that distance information is calculated for.
 	/// @param[in] bandWidthExterior	The amount of interior voxels that distance information is calculated for.
 	/// @param[in] checkForCancellation	A thread reference that cancellation is tested against.
-	/// @param[in] conversionSettings Optional settings for the conversion to Volume ::POLYGONCONVERSIONFLAGS.
+	/// @param[in] conversionSettings	Optional settings for the conversion to Volume ::POLYGONCONVERSIONFLAGS.
 	/// @param[in] creationTransform	An optional override to the target grid matrix. If this is used the @formatParam{gridSize} is ignored.
 	/// @return												The converted SDF volume representing the input polygon object.
 	//----------------------------------------------------------------------------------------
@@ -489,8 +489,8 @@ public:
 	static MAXON_METHOD Result<Volume> CreateSphereVolume(Float radius, const Vector& position, Float gridSize, Int32 bandWidth, const ThreadRef& checkForCancellation, const Matrix* creationTransform = nullptr);
 
 	//----------------------------------------------------------------------------------------
-	/// Creates a SDF volume of a platonic shape. If invalid Arguments are set the function returns an empty volume
-	/// @param[in] sides							The number of sides of the platonic. Define the valid Arguments in the description of the parameter
+	/// Creates a SDF volume of a platonic shape. If invalid Arguments are set the function returns an empty volume.
+	/// @param[in] sides							The number of sides of the platonic. Define the valid Arguments in the description of the parameter.
 	/// @param[in] size								The size of the created platonic.
 	/// @param[in] position						The position of the platonic.
 	/// @param[in] gridSize						The desired gridsize of the created volume.
@@ -578,7 +578,7 @@ public:
 	/// Does a linear blend operation of two volume grids. Both grids need to have the same type and this type needs to be blendable.
 	/// @param[in] volumeA						The first volume of the blend operation.
 	/// @param[in] volumeB						The second volume of the blend operation.
-	/// @param[in] blendValue					The linear blend value between A and B. 1.0 results in A, 0.0 in B
+	/// @param[in] blendValue					The linear blend value between A and B. 1.0 results in A, 0.0 in B.
 	/// @param[in] checkForCancellation	A thread reference that cancellation is tested against.
 	/// @return												A Volume that is the blend between Volume A and Volume B.
 	//----------------------------------------------------------------------------------------
@@ -595,11 +595,11 @@ public:
 	static MAXON_METHOD Result<Volume> SmoothBoolVolumes(const Volume& volumeOne, const Volume& volumeTwo, BOOLTYPE type, Float radius);
 	
 	//----------------------------------------------------------------------------------------
-	/// Scatters points inside of Fog volume
-	/// @param[in] volume							The fog volume to scatter points in
-	/// @param[in] pointCount					The number of points to scatter
-	/// @param[in] spread							The spread of the scattered points
-	/// @return												The array of scattered points
+	/// Scatters points inside of Fog volume.
+	/// @param[in] volume							The fog volume to scatter points in.
+	/// @param[in] pointCount					The number of points to scatter.
+	/// @param[in] spread							The spread of the scattered points.
+	/// @return												The array of scattered points.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Array<Vector>> ScatterPointsInVolume(const Volume& volume, UInt64 pointCount, Float spread, Int seed);
 
@@ -619,7 +619,7 @@ class	PointsToVolumeListInterface
 	MAXON_INTERFACE_NONVIRTUAL(PointsToVolumeListInterface, MAXON_REFERENCE_NORMAL, "net.maxon.volume.interface.pointstovolumelist");
 
 public:
-	static MAXON_METHOD Result<PointsToVolumeListInterface*> Alloc(MAXON_SOURCE_LOCATION_DECLARATION, Float scale, Float velicityScale);
+	static MAXON_METHOD Result<PointsToVolumeListInterface*> Alloc(MAXON_SOURCE_LOCATION_DECLARATION, Float scale, Float velocityScale);
 
 	//----------------------------------------------------------------------------------------
 	/// Adds a point to the point list that will be converted to a volume.

@@ -258,7 +258,7 @@ public:
 	/// Enables or disables a non-blocking socket for this connection. For a blocking mode, send or receive calls will wait
 	/// until they succeeded or the set timeout was reached. In the non-blocking mode a read operation would try and return
 	/// immediately if no data was available.
-	/// @param[in] nonBlockingSocket							Enabling or disabling the non-blocking socket
+	/// @param[in] nonBlockingSocket	Enabling or disabling the non-blocking socket.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetNonBlockingSocket(Bool nonBlockingSocket);
 
@@ -270,7 +270,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Enables that Nagle algorithm of RFC  896, combining a number of small number of messages into one, reducing the
 	/// overhead in transmission, but - on the flip side - increasing the latency of the transmission.
-	/// @param[in] useNagleAlgorithm							Enabling or disabling the Nagle algorithm
+	/// @param[in] useNagleAlgorithm	Enabling or disabling the Nagle algorithm.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetUseNagleAlgorithm(Bool useNagleAlgorithm);
 
@@ -281,7 +281,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Sets the timeout in case the current connection is blocked and can't send or receive. When exceeded the connection is closed.
-	/// @param[in] timeoutInSeconds								The timeout value
+	/// @param[in] timeoutInSeconds		The timeout value.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetTimeout(TimeValue timeoutInSeconds);
 
@@ -296,8 +296,8 @@ public:
 	MAXON_METHOD CONNECTIONTYPE GetConnectionType() const;
 
 	//----------------------------------------------------------------------------------------
-	/// Sets the connection type (Listener, Incomming, Outgoing) for the current connection
-	/// @param[in] type								The type of the connection
+	/// Sets the connection type (Listener, Incomming, Outgoing) for the current connection.
+	/// @param[in] type								The type of the connection.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void SetConnectionType(CONNECTIONTYPE type);
 

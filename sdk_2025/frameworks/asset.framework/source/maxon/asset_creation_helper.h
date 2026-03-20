@@ -70,4 +70,4 @@ public:
 } // namespace maxon
 
 
-#endif // #ifndef ASSET_CREATION_HELPER_H__
+#endif // ASSET_CREATION_HELPER_H__

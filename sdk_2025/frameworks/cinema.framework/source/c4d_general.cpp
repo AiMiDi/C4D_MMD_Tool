@@ -16,7 +16,8 @@ Bool HasFullFeatureSet()
 	return t == VERSIONTYPE::TEAMRENDER_CLIENT || t == VERSIONTYPE::TEAMRENDER_SERVER ||
 				 t == VERSIONTYPE::CINEMA4D || t == VERSIONTYPE::COMMANDLINE ||
 				 t == VERSIONTYPE::CPYTHON ||
-				 t == VERSIONTYPE::CINEWARE;
+				 t == VERSIONTYPE::CINEWARE ||
+				 t == VERSIONTYPE::AECVIEWER;
 }
 
 Bool CodeEditor_Open(BaseList2D* obj, const maxon::Delegate<GeData(BaseList2D* obj, const BaseContainer& msg)>& callback, const BaseContainer& bc /*= BaseContainer()*/)
@@ -277,6 +278,11 @@ Bool ShowBitmap(const Filename& fn)
 Bool ShowBitmap(BaseBitmap* bm)
 {
 	return C4DOS_Ge->ShowBitmap2(bm);
+}
+
+Bool ShowBitmap(BaseBitmap* bm, const String& name)
+{
+	return C4DOS_Ge->ShowBitmap3(bm, name);
 }
 
 void StopAllThreads()
@@ -930,6 +936,11 @@ void RestartApplication(const Utf16Char* param, Int32 exitcode, const Utf16Char*
 	(*C4DOS_Ge->RestartApplication)(param, exitcode, path);
 }
 
+void ShowApplicationWindow(Bool visible)
+{
+	(*C4DOS_Ge->ShowApplicationWindow)(visible);
+}
+
 void SetExitCode(Int32 exitCode)
 {
 	(*C4DOS_Ge->SetExitCode)(exitCode);
@@ -946,6 +957,11 @@ void GeDebugOut(const maxon::String& s)
 void GeUpdateUI()
 {
 	C4DOS_Ge->GeUpdateUI();
+}
+
+void UpdateIcons(Bool onlyActive)
+{
+	C4DOS_Ge->UpdateIcons(onlyActive);
 }
 
 VIEWPORTTYPE GeGetActiveViewportType()

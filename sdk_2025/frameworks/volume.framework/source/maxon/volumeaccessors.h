@@ -110,7 +110,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Sets a voxel value at a voxel index.
-	/// @note this will activate a voxel
+	/// @note this will activate a voxel.
 	/// @param[in] coords							The voxel index at which the value will be set.
 	/// @param[in] val								The value to set.
 	//----------------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Sets a voxel value at a voxel index.
-	/// @note same as SetValue, but this will not activate a voxel
+	/// @note same as SetValue, but this will not activate a voxel.
 	/// @param[in] coords							The voxel index at which the value will be set.
 	/// @param[in] val								The value to set.
 	//----------------------------------------------------------------------------------------

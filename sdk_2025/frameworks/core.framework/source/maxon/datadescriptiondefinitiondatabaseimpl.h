@@ -19,7 +19,7 @@ class DataDescriptionDefinitionDatabaseImplInterface : MAXON_INTERFACE_BASES(Obj
 
 public:
 	//----------------------------------------------------------------------------------------
-	/// checks if the database contains the datatype.
+	/// Checks if the database contains the datatype.
 	/// @param[in] category						Database category (e.g. DATADESCRIPTION_CATEGORY_DATA / DATADESCRIPTION_CATEGORY_UI).
 	/// @param[in] dataType						Data type id to load.
 	/// @param[in] language						Language (only valid for category DATADESCRIPTION_CATEGORY_STRING).
@@ -82,7 +82,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Renames a id in all databases to the new id.
-	/// @param[in] oldId							Old id to rename
+	/// @param[in] oldId							Old id to rename.
 	/// @param[in] newId							Id to replace.
 	/// @return												Number of values that were renamed.
 	//----------------------------------------------------------------------------------------

@@ -181,7 +181,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Get the TimerValue
+	/// Get the TimerValue.
 	/// @return												Time value in days.
 	//----------------------------------------------------------------------------------------
 	Float64 GetDays() const
@@ -190,7 +190,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Set the TimeValue
+	/// Set the TimeValue.
 	/// @param[in] days								Time value in days.
 	//----------------------------------------------------------------------------------------
 	void SetDays(Float64 days)
@@ -208,7 +208,7 @@ public:
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// @brief Sets the TimeValue in hours
+	/// @brief Sets the TimeValue in hours.
 	/// @param[in] hours							Time value in hours.
 	//----------------------------------------------------------------------------------------
 	void SetHours(Float64 hours)
@@ -350,7 +350,7 @@ public:
 	/// @brief Returns the current time stamp.
 	/// You can use this value for benchmarking/profiling. The resolution is much higher than milliseconds.
 	/// @note You must not use these values derived from a cpu clock for longer durations and compare them to the real time clock.
-	/// @see UniversalDateTime::GetNow LocalDateTime::GetNow
+	/// @see UniversalDateTime::GetNow LocalDateTime::GetNow.
 	/// @return												Current time stamp.
 	//----------------------------------------------------------------------------------------
 	static TimeValue GetTime();

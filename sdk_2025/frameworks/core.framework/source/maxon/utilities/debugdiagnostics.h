@@ -255,7 +255,7 @@ public:
 /// StrStrConstExpr implements the strstr() function as constexpr for compilers that do not support strstr as constexpr yet (e.g. clang 11.0.1)
 /// @param[in] str								String to search in.
 /// @param[in] search							String to search.
-/// @return                       True if a match was found.
+/// @return												True if a match was found.
 //----------------------------------------------------------------------------------------
 constexpr bool StrStrConstExpr(const char* str, const char* search)
 {

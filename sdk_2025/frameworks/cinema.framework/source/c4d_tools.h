@@ -349,7 +349,7 @@ inline Matrix MatrixRotZ(Float w)
 /// Calculates Euler angles from a matrix.
 /// @param[in] m									The rotation matrix.
 /// @param[in] rot_order					The rotation order.
-/// @param[in] isNormalized				True if the matrix is already normalized
+/// @param[in] isNormalized				True if the matrix is already normalized.
 /// @return												The rotation HPB.
 //----------------------------------------------------------------------------------------
 Vector MatrixToHPB(const Matrix& m, ROTATIONORDER rot_order, Bool isNormalized = false);
@@ -397,9 +397,9 @@ Matrix RebuildMatrix(const Matrix& m);
 /// Rotates a directional vector around another pivot direction to calculate the angle and rotation axis,
 /// packed into a matrix, required to perform the rotation. This is otherwise known as Rodrigues' rotation formula.
 ///
-/// @param[in] direction			Input directional vector.
-/// @param[in] pivotDirection	Vector to rotate around.
-/// @return										A new rotation matrix embedding the rotation of the vector around the pivot.
+/// @param[in] direction					Input directional vector.
+/// @param[in] pivotDirection			Vector to rotate around.
+/// @return												A new rotation matrix embedding the rotation of the vector around the pivot.
 //----------------------------------------------------------------------------------------
 Matrix DirectionVectorToRotationMatrix(const Vector& direction, const Vector& pivotDirection);
 
@@ -1104,11 +1104,13 @@ Bool CalcSplineDefaultTangents(SPLINETYPE type, Bool closed, Int32 pcnt, const V
 /// @param[in] bd									The active BaseDraw.
 /// @param[in] projectionAxis			The projection axis to use, XY, ZY, screen space etc.
 /// @param[in] booleanMode				The type of boolean to apply (Union, Subtract etc).
+/// @param[in] hh									(Optional) If non-null, (Optional) the current hierarchy help.
 /// @return												The result of the Boolean operation (a new SplineObject, called owns), @formatConstant{nullptr} if there was an error.
 //----------------------------------------------------------------------------------------
-PointObject* BooleanSplines(PointObject* initialSpline, AtomArray* booleanObjects, BaseDocument *doc, BaseDraw* bd, SPLINEBOOL_AXIS projectionAxis, SPLINEBOOL_MODE booleanMode);
+PointObject* BooleanSplines(PointObject* initialSpline, AtomArray* booleanObjects, BaseDocument* doc, BaseDraw* bd, SPLINEBOOL_AXIS projectionAxis, SPLINEBOOL_MODE booleanMode, const HierarchyHelp* hh);
+PointObject* BooleanSplines(PointObject* initialSpline, AtomArray* booleanObjects, BaseDocument* doc, BaseDraw* bd, SPLINEBOOL_AXIS projectionAxis, SPLINEBOOL_MODE booleanMode);
 
-//----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 /// A class to generate stratified 2D random numbers.
 //----------------------------------------------------------------------------------------
 class Stratified2DRandom
@@ -1470,7 +1472,7 @@ public:
 	/// @param[in] bumpn							The bump normal.
 	/// @param[in] orign							The original normal.
 	/// @param[in] raybits						The ray bits: @enumerateEnum{RAYBIT}
-	/// @param[in] ignoreLightColor		Whether to factor the light color into the result
+	/// @param[in] ignoreLightColor		Whether to factor the light color into the result.
 	/// @param[out] diffuse						Assigned the diffuse component.
 	/// @param[out] specular					Assigned the specular component.
 	//----------------------------------------------------------------------------------------
@@ -2265,12 +2267,12 @@ public:
 	/// @since R18
 	/// @param[in] op									Ray object on which the tangents are being evaluated.
 	/// @param[in] tex								The texture to initialize. @callerOwnsPointed{texture data}
-	/// @param[in] par_u							'u' triangle barycentric coordinate for uv point
-	/// @param[in] par_v							'v' triangle barycentric coordinate for uv point
+	/// @param[in] par_u							'u' triangle barycentric coordinate for uv point.
+	/// @param[in] par_v							'v' triangle barycentric coordinate for uv point.
 	/// @param[in] uv									The UV point for which to evaluate the tangents.
 	/// @param[in] p									The surface point.
-	/// @param[in] phongn							The shading normal. See CentralDisplaceGetShadingNormalFromUVPoint
-	/// @param[in] orign							The surface normal. See CentralDisplaceGetSurfaceNormalFromUVPoint
+	/// @param[in] phongn							The shading normal. See CentralDisplaceGetShadingNormalFromUVPoint.
+	/// @param[in] orign							The surface normal. See CentralDisplaceGetSurfaceNormalFromUVPoint.
 	/// @param[in] uvw								UVW polygon enclosing the 'uv' point.
 	/// @param[in] hit								The RayHitID containing the triangle info for the 'uv' point.
 	/// @param[in] forceuvw						@formatConstant{true} to force UVW calculation.
@@ -2315,10 +2317,10 @@ public:
 	/// @param[in] camera							The camera to attach. @callerOwnsPointed{camera}
 	/// @param[in] renderdata					The render data container.
 	/// @param[in] fakeCurrentThreadIdx	Before this value was stored in renderdata.RDATA_VDFAKE_CURRENTTHREAD. Now the parameter is passed directly for speedup.
-	///																	The index of the current thread returned by maxon::JobRef::GetCurrentWorkerThreadIndex.
-	/// @param[in] fakeThreadCount			Before this value was stored in renderdata.RDATA_VDFAKE_THREADCOUNT. Now the parameter is passed directly for speedup.
-	///																	The total thread count that will be used to sample the data.
-	/// @return											@trueIfOtherwiseFalse{successful}
+	/// 															The index of the current thread returned by maxon::JobRef::GetCurrentWorkerThreadIndex.
+	/// @param[in] fakeThreadCount		Before this value was stored in renderdata.RDATA_VDFAKE_THREADCOUNT. Now the parameter is passed directly for speedup.
+	/// 															The total thread count that will be used to sample the data.
+	/// @return												@trueIfOtherwiseFalse{successful}
 	//----------------------------------------------------------------------------------------
 	Bool AttachVolumeDataFake(BaseObject* camera, const BaseContainer& renderdata, Int32 fakeCurrentThreadIdx, Int32 fakeThreadCount)
 	{

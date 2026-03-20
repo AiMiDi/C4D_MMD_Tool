@@ -271,7 +271,7 @@ template <typename T, Int STRIDE = 1> struct Vec4
 
 	//----------------------------------------------------------------------------------------
 	/// Equality operator.
-	/// We repeat the function template as non-template function, this allows the usage in contexts where the parameter is not a vector itself, but something with a conversion operator to a vector
+	/// We repeat the function template as non-template function, this allows the usage in contexts where the parameter is not a vector itself, but something with a conversion operator to a vector.
 	/// @param[in] v									Comparison vector.
 	/// @return												True if this and v are equal, otherwise false.
 	//----------------------------------------------------------------------------------------
@@ -292,7 +292,7 @@ template <typename T, Int STRIDE = 1> struct Vec4
 
 	//----------------------------------------------------------------------------------------
 	/// Inequality operator.
-	/// We repeat the function template as non-template function, this allows the usage in contexts where the parameter is not a vector itself, but something with a conversion operator to a vector
+	/// We repeat the function template as non-template function, this allows the usage in contexts where the parameter is not a vector itself, but something with a conversion operator to a vector.
 	/// @param[in] v									Comparison vector.
 	/// @return												False if this and v are equal, otherwise true.
 	//----------------------------------------------------------------------------------------
@@ -379,9 +379,9 @@ template <typename T, Int STRIDE = 1> struct Vec4
 	}
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the vector with absolute value for each entry
-	/// @param[in] v1									input vector to work on
-	/// @return												component wise absolute value vector of input vector
+	/// Returns the vector with absolute value for each entry.
+	/// @param[in] v1									Input vector to work on.
+	/// @return												Component wise absolute value vector of input vector.
 	//----------------------------------------------------------------------------------------
 	friend Unstrided Abs(const Vec4& v1)
 	{

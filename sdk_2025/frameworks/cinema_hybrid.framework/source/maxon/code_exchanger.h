@@ -1,5 +1,5 @@
-#ifndef CODE_EXCHANGE_H__
-#define CODE_EXCHANGE_H__
+#ifndef CODE_EXCHANGER_H__
+#define CODE_EXCHANGER_H__
 
 #include "maxon/interface.h"
 #include "maxon/datadictionary.h"
@@ -48,13 +48,13 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Returns the Code Exchanger running state.
-	/// @return	true if the Code Exchanger is in a state that can send or receive code otherwise, false.
+	/// @return												True if the Code Exchanger is in a state that can send or receive code otherwise, false.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool IsRunning();
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Send the given Python Script to the IDE.
-	/// @param[in] script						The Python script to send.
+	/// @param[in] script							The Python script to send.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SendScriptToIDE(const PythonElementScriptRef& script);
 
@@ -65,21 +65,21 @@ public:
 	MAXON_METHOD Result<void> SendConsoleOutput(const String& content);
 
 	//----------------------------------------------------------------------------------------
-	/// @brief Defines which language the code exchanger should be used
-	/// @return The ID representing the used language, see maxon::CodeExchangerLanguageId
+	/// @brief Defines which language the code exchanger should be used.
+	/// @return												The ID representing the used language, see maxon::CodeExchangerLanguageId.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD InternedId GetLanguage() const;
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Returns the names of the Code Exchanger.
 	/// @note It is used in the Code Exchanger Settings.
-	/// @return The name of the current implementation
+	/// @return												The name of the current implementation.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD String GetName() const;
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Returns the dialog to be displayed in the Code Exchanger Settings.
-	/// @return The sub dialog that will handle settings for this code exchanger.
+	/// @return												The sub dialog that will handle settings for this code exchanger.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD cinema::SubDialog* GetSubDialogSetting() const;
 };
@@ -90,13 +90,13 @@ public:
 /// @brief Retrieves the Code Exchanger that should be used.
 /// @detail By default the WebSocket Json Code Exchanger is used but the user can define which one to use 
 /// in the Code Exchanger Settings located within the Script Manager menu.
-/// @return The Code Exchanger that the user decided to to use.
+/// @return												The Code Exchanger that the user decided to to use.
 //----------------------------------------------------------------------------------------
 Result<CodeExchangerRef> GetActiveCE();
 
 //----------------------------------------------------------------------------------------
 /// @brief Defines the Code Exchanger that should be used.
-/// @param[in] ce						The Code Exchanger that should be used.
+/// @param[in] ce									The Code Exchanger that should be used.
 //----------------------------------------------------------------------------------------
 Result<void> StoreActiveCE(CodeExchangerRef ce);
 
@@ -108,4 +108,4 @@ MAXON_REGISTRY(Class<CodeExchangerRef>, CodeExchangers, "net.maxon.registry.code
 }
 
 
-#endif // CODE_EXCHANGE_H__
+#endif // CODE_EXCHANGER_H__

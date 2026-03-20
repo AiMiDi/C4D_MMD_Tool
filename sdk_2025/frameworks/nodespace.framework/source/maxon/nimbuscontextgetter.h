@@ -35,6 +35,8 @@ namespace NIMBUSCONTEXTGETTER
 	MAXON_ATTRIBUTE(Data, ColorspaceName_Display, "net.maxon.nimbuscontextgetter.colormanagement.colorspacename.display");
 	MAXON_ATTRIBUTE(Data, ColorspaceName_ViewTransform, "net.maxon.nimbuscontextgetter.colormanagement.colorspacename.viewtransform");
 	MAXON_ATTRIBUTE(Data, ColorspaceName_ViewTransformThumbnails, "net.maxon.nimbuscontextgetter.colormanagement.colorspacename.viewtransformthumbnails");
+
+	MAXON_ATTRIBUTE(Data, DocumentUnitScaleData, "net.maxon.nimbuscontextgetter.docunitscaledata");
 }
 
 #include "nimbuscontextgetter1.hxx"

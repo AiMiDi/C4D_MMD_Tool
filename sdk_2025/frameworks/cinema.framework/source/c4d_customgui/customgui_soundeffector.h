@@ -252,13 +252,13 @@ private:
 	/// @param[in] right							The right side of the probe in Hertz @em [1...22050].
 	/// @param[in] top								The top edge of the probe in the range @em [0...1].
 	/// @param[in] bottom							The bottom edge of the probe in the range @em [0...1].
-	/// @param[in] selected						pass @formatConstant{true} to select the created probe (other probes are not deselected in the operation).
+	/// @param[in] selected						Pass @formatConstant{true} to select the created probe (other probes are not deselected in the operation).
 	/// @return												The created probe's index.
 	//----------------------------------------------------------------------------------------
 	Int CreateProbe(Float left = 1.0, Float right = 22050.0, Float top = 1.0, Float bottom = 0.0, Bool selected = false);
 
 	//----------------------------------------------------------------------------------------
-	/// Create default probe
+	/// Create default probe.
 	/// @return												@trueIfOtherwiseFalse{successful}
 	//----------------------------------------------------------------------------------------
 	Bool CreateDefaultProbe();
@@ -373,7 +373,7 @@ private:
 	/// @{
 
 	//----------------------------------------------------------------------------------------
-	/// Sets the active sound track
+	/// Sets the active sound track.
 	/// @param[in] track							Sound track.
 	/// @param[in] doc								The document.
 	/// @return												@trueIfOtherwiseFalse{successful}

@@ -25,7 +25,7 @@
 	#else
 		#include <intrin.h>
 
-		#if !defined MAXON_COMPILER_INTEL && !defined MAXON_COMPILER_CLANG
+		#if !defined MAXON_COMPILER_CLANG
 			#pragma intrinsic(_InterlockedCompareExchange)
 			#pragma intrinsic(_InterlockedExchangeAdd)
 			#pragma intrinsic(_InterlockedOr)
@@ -547,11 +547,7 @@ MAXON_ATTRIBUTE_FORCE_INLINE Bool atomic_try_cas128(Int64 volatile* dst, Int64 x
 	return __atomic_compare_exchange((__int128*) dst, (__int128*)cmp, (__int128*)xchg, false, __ATOMIC_SEQ_CST, __ATOMIC_RELAXED);
 #elif defined(MAXON_TARGET_WINDOWS) && defined(MAXON_TARGET_CPU_X86)
 	Int64	cmp[2] = { cmplo, cmphi };												// this will be overwritten with the content of dst
-#ifdef MAXON_COMPILER_INTEL																// the intel compiler uses a void pointer for the destination
-	return _InterlockedCompareExchange128((volatile __int64*) dst, xchghi, xchglo, cmp) != 0;
-#else
 	return _InterlockedCompareExchange128(dst, xchghi, xchglo, cmp) != 0;
-#endif
 #elif defined(MAXON_TARGET_CPU_X86)
 	char success;
 

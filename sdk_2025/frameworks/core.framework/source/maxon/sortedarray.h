@@ -161,7 +161,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Adds a new element at the end of the array and moves the content of x to it.
-	/// @param[in] args								Values to be forwarded
+	/// @param[in] args								Values to be forwarded.
 	/// @return												Element pointer or OutOfMemoryError if the allocation failed.
 	//----------------------------------------------------------------------------------------
 	template <typename... ARGS> MAXON_ATTRIBUTE_FORCE_INLINE ResultRef<TYPE> Append(ARGS&&... args)
@@ -206,7 +206,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Inserts a new element at iterator position and initializes it with a copy of x.
 	/// @param[in] position						Insert position.
-	/// @param[in] args								Values to be forwarded
+	/// @param[in] args								Values to be forwarded.
 	/// @return												Iterator for the new element or OutOfMemoryError if the allocation failed (or position is out of boundaries).
 	//----------------------------------------------------------------------------------------
 	template <typename... ARGS> ResultRef<TYPE> Insert(Int position, ARGS&&... args)
@@ -218,7 +218,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Inserts a new element at iterator position and initializes it with a copy of x.
 	/// @param[in] position						Insert position.
-	/// @param[in] args								Values to be forwarded
+	/// @param[in] args								Values to be forwarded.
 	/// @return												Iterator for the new element or OutOfMemoryError if the allocation failed (or position is out of boundaries).
 	//----------------------------------------------------------------------------------------
 	template <typename... ARGS> ResultMemT<Iterator> Insert(Iterator position, ARGS&&... args)

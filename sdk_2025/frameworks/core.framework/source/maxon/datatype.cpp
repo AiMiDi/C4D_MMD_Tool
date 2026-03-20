@@ -2,13 +2,7 @@
 #include "maxon/datatype_builder.h"
 #include "maxon/datatypelib.h"
 #include "maxon/errortypes.h"
-
-#ifdef MAXON_TARGET_LINUX
-	#include <alloca.h>
-#endif
-#ifdef  MAXON_TARGET_WINDOWS
-	#include <malloc.h>
-#endif
+#include "maxon/stackalloc.h"
 
 namespace maxon
 {

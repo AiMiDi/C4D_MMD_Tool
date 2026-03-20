@@ -133,6 +133,20 @@ public:
 	static MAXON_METHOD DataDescriptionDefinitionInterface* Create();
 
 	static MAXON_METHOD const DataDescriptionDefinitionInterface* DefaultValuePtr();
+
+	//----------------------------------------------------------------------------------------
+	/// Returns a specific entry with the given index.
+	/// @param[in] idx								Index to return.
+	/// @return												Entry on success.
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD Opt<const DataDescriptionEntry&> GetEntryFast(Int idx) const;
+
+	//----------------------------------------------------------------------------------------
+	/// FindEntry searches the first occurrence of the entry.
+	/// @param[in] id									Id to search.
+	/// @return												Entry on success.
+	//----------------------------------------------------------------------------------------
+	MAXON_METHOD Opt<const DataDescriptionEntry&> FindEntryFast(const InternedId& id) const;
 };
 
 

@@ -38,6 +38,7 @@ public:
   ///
   /// @endcode
 
+	//----------------------------------------------------------------------------------------
 	/// @param[in] key								Key that is searched in the database.
 	/// @param[out] result						Value of the database entry if valid or false.
 	/// @param[out] origin						Documents where the database entry was defined.
@@ -64,12 +65,13 @@ public:
   ///
   /// @endcode
 
-  /// @param[in] key                Key that is searched in the database.
-  /// @param[out] result            Value of the database entry if valid or 0.
-  /// @param[out] origin            Documents where the database entry was defined.
-  /// @param[out] state             State of the database entry.
-  /// @return                       IllegalArgumentError if there is no entry in the database or its value is invalid.
-  //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
+	/// @param[in] key								Key that is searched in the database.
+	/// @param[out] result						Value of the database entry if valid or 0.
+	/// @param[out] origin						Documents where the database entry was defined.
+	/// @param[out] state							State of the database entry.
+	/// @return												IllegalArgumentError if there is no entry in the database or its value is invalid.
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> QueryInt(const String& key, Int& result, CONFIGURATIONENTRY_ORIGIN& origin, CONFIGURATIONENTRY_STATE& state);
 
 	//----------------------------------------------------------------------------------------
@@ -90,12 +92,13 @@ public:
   ///
   /// @endcode
 
-  /// @param[in] key                Key that is searched in the database.
-  /// @param[out] result            Value of the database entry if valid or 0.0.
-  /// @param[out] origin            Documents where the database entry was defined.
-  /// @param[out] state             State of the database entry.
-  /// @return                       IllegalArgumentError if there is no entry in the database or its value is invalid.
-  //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
+	/// @param[in] key								Key that is searched in the database.
+	/// @param[out] result						Value of the database entry if valid or 0.0.
+	/// @param[out] origin						Documents where the database entry was defined.
+	/// @param[out] state							State of the database entry.
+	/// @return												IllegalArgumentError if there is no entry in the database or its value is invalid.
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> QueryFloat(const String& key, Float& result, CONFIGURATIONENTRY_ORIGIN& origin, CONFIGURATIONENTRY_STATE& state);
 
   //----------------------------------------------------------------------------------------
@@ -115,12 +118,13 @@ public:
   ///
   /// @endcode
 
-  /// @param[in] key                Key that is searched in the database.
-  /// @param[out] result            Value of the database entry or an empty string if not present.
-  /// @param[out] origin            Documents where the database entry was defined.
-  /// @param[out] state             State of the database entry.
-  /// @return                       IllegalArgumentError if there is no entry in the database.
-  //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
+	/// @param[in] key								Key that is searched in the database.
+	/// @param[out] result						Value of the database entry or an empty string if not present.
+	/// @param[out] origin						Documents where the database entry was defined.
+	/// @param[out] state							State of the database entry.
+	/// @return												IllegalArgumentError if there is no entry in the database.
+	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> QueryString(const String& key, String& result, CONFIGURATIONENTRY_ORIGIN& origin, CONFIGURATIONENTRY_STATE& state);
 
 	//----------------------------------------------------------------------------------------

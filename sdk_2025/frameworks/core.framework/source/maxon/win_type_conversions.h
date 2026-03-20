@@ -41,7 +41,7 @@ inline UInt64 FiletimeToUnixTimestamp(const FILETIME& ft)
 
 //----------------------------------------------------------------------------------------
 /// Converts a FILETIME object to an UniversaleDateTime object. A FILETIME object can be in UTC or local.
-/// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724290(v=vs.85).aspx
+/// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724290(v=vs.85).aspx.
 /// @param[in] fd									The object to convert.
 //----------------------------------------------------------------------------------------
 static inline Result<UniversalDateTime> ConvertFileTimeToUniversalDateTime(const FILETIME& fd, Bool filetimeIsUtc)

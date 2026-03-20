@@ -145,7 +145,7 @@ class LibraryInterface : MAXON_INTERFACE_BASES(ObjectInterface)
 
 public:
 	//----------------------------------------------------------------------------------------
-	/// Checks if a console is attached to the current process
+	/// Checks if a console is attached to the current process.
 	/// @return												True if a console is attached, otherwise False.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool ConsoleIsAvailable();
@@ -222,7 +222,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the name of the debugger connection.
-	/// @return												Name, e.g. PyDev
+	/// @return												Name, e.g. PyDev.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD String GetName() const;
 
@@ -253,7 +253,7 @@ public:
 	/// 		            "    raise\n"); // reraise only in case the current error should be printed to sys.stderr
 	/// }
 	/// @endcode
-	/// @return			Startup script, including \\n and 4-spaces. Can return an empty string.
+	/// @return												Startup script, including \\n and 4-spaces. Can return an empty string.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD String GetStartupScript() const;
 
@@ -268,7 +268,7 @@ public:
 	/// 		            "    mydebugger.shutdown()\n")
 	/// }
 	/// @endcode
-	/// @return			Shutdown script, including \\n and 4-spaces. Can return an empty string.
+	/// @return												Shutdown script, including \\n and 4-spaces. Can return an empty string.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD String GetShutdownScript() const;
 
@@ -316,7 +316,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Executes a callable object from the scope. Must only be called after VirtualMachineScopeInterface.Execute.
-	/// @param[in] name								Name of the callable object, e.g a function name
+	/// @param[in] name								Name of the callable object, e.g a function name.
 	/// @param[in] helperStack				A temporary helper stack for the return value.
 	/// @param[in] expected						(Optional) Datatype of the returned object, otherwise the type of the object will be chosen automatically.
 	/// @param[in] arguments					(Optional) Arguments which will be passed to the callable object.
@@ -394,7 +394,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Enters the interactive mode of the virtual machine.
-	/// @return												OK after the interactive mode was left, or FunctionNotImplementedError
+	/// @return												OK after the interactive mode was left, or FunctionNotImplementedError.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> EnterInteractiveMode();
 

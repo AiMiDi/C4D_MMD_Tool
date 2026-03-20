@@ -24,6 +24,7 @@ struct SCENEHOOKPLUGIN : public NODEPLUGIN
 {
 	public:
 		Int32 draw_priority;
+		Int32 data_offset;
 
 		Bool						(SceneHookData::*MouseInput					)(BaseSceneHook *node, BaseDocument *doc, BaseDraw *bd, EditorWindow *win, const BaseContainer &msg);
 		Bool						(SceneHookData::*GetCursorInfo			)(BaseSceneHook *node, BaseDocument *doc, BaseDraw *bd, Float x, Float y, BaseContainer &bc);
@@ -41,7 +42,14 @@ struct SCENEHOOKPLUGIN : public NODEPLUGIN
 
 		Bool						(SceneHookData::*DisplayControl			)(BaseDocument *doc, BaseObject *op, BaseObject *chainstart, BaseDraw *bd, BaseDrawHelp *bh, ControlDisplayStruct &cds) const;
 
-		void* reserved[(32-11)*C4DPL_MEMBERMULTIPLIER-1];
+		EXECUTIONRESULT	(SceneHookData::*Visit							)(BaseSceneHook *node, BaseDocument *doc, BaseThread *bt, BaseObject *op, EXECUTIONFLAGS flags);
+
+		maxon::DataType	data_type;
+#if C4DPL_MEMBERMULTIPLIER == 2
+		void* dummy;
+#endif
+
+		void* reserved[(32-13)*C4DPL_MEMBERMULTIPLIER-1];
 };
 
 // INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF -- INTERNAL STUFF

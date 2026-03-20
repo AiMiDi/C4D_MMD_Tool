@@ -232,7 +232,8 @@ EXECUTIONRESULT ObjectData::Execute(BaseObject* op, BaseDocument* doc, BaseThrea
 }
 
 #ifndef __API_INTERN__
-maxon::Result<Bool> ObjectData::GetAccessedObjectsDeformerBase(const BaseList2D* deformer, const C4D_Falloff* falloff, METHOD_ID method, AccessedObjectsCallback& access, ACCESSED_OBJECTS_MASK modifyWrite)
+maxon::Result<Bool> ObjectData::GetAccessedObjectsDeformerBase(const BaseList2D* deformer, const C4D_Falloff* falloff, METHOD_ID method, AccessedObjectsCallback& access,
+																															 ACCESSED_OBJECTS_MASK modifyWrite, ACCESSED_OBJECTS_MASK dirtyRead, ACCESSED_OBJECTS_MASK modifyRead)
 {
 	iferr_scope;
 	yield_scope;
@@ -246,13 +247,12 @@ maxon::Result<Bool> ObjectData::GetAccessedObjectsDeformerBase(const BaseList2D*
 				if (falloff->HasContent())
 				{
 					falloff->GetAccessedObjects(deformer, METHOD_ID::CHECK_DIRTY, access) yield_return;
-					return access.MayAccess(deformer,
-																	ACCESSED_OBJECTS_MASK::FALLOFF,
-																	// A typical deformer's CheckDirty marks the deformer's data as dirty and updates a timestamp member.
-																	ACCESSED_OBJECTS_MASK::DATA | ACCESSED_OBJECTS_MASK::MEMBER);
 				}
 			}
-			return true;
+			return access.MayAccess2(deformer,
+															ACCESSED_OBJECTS_MASK::FALLOFF | dirtyRead,
+															// A typical deformer's CheckDirty marks the deformer's data as dirty and updates a timestamp member.
+															ACCESSED_OBJECTS_MASK::DATA | ACCESSED_OBJECTS_MASK::MEMBER);
 		case METHOD_ID::MODIFY_OBJECT:
 			if (falloff)
 			{
@@ -264,9 +264,9 @@ maxon::Result<Bool> ObjectData::GetAccessedObjectsDeformerBase(const BaseList2D*
 				}
 			}
 			// ModifyObject checks for a RestrictionTag of the deformer.
-			return access.MayAccess(deformer,
-															ACCESSED_OBJECTS_MASK::DATA | ACCESSED_OBJECTS_MASK::NON_VARIABLE_TAG | ACCESSED_OBJECTS_MASK::GLOBAL_MATRIX
-															| maxon::ConditionalFlag(falloff != nullptr, ACCESSED_OBJECTS_MASK::FALLOFF),
+			return access.MayAccess2(deformer,
+															ACCESSED_OBJECTS_MASK::DATA | ACCESSED_OBJECTS_MASK::NON_VARIABLE_TAG | ACCESSED_OBJECTS_MASK::RELATIVE_MATRIX
+															| maxon::ConditionalFlag(falloff != nullptr, ACCESSED_OBJECTS_MASK::FALLOFF) | modifyRead,
 															modifyWrite);
 	}
 	return access.MayAccessAnything();

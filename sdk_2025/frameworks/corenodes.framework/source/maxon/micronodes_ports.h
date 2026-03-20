@@ -53,6 +53,7 @@ namespace corenodes
 //!
 //! 	...
 //! };
+//----------------------------------------------------------------------------------------
 /// @endcode
 ///
 /// @param[in] T									The type of the port or a MAXON_ATTRIBUTE.
@@ -152,6 +153,7 @@ namespace corenodes
 //!
 //! 	...
 //! };
+//----------------------------------------------------------------------------------------
 /// @endcode
 ///
 /// @param[in] T									The type of the port or a MAXON_ATTRIBUTE.
@@ -489,7 +491,7 @@ template <typename PORT, PORT_MODE MODE, typename OWNER> struct Select
 {
 	using type = std::conditional_t<(PORT::MODE & (PORT_MODE::INPUT_FLAG | PORT_MODE::REDUCTION_FLAG)) == MODE,
 																	typename PORT::template Port<OWNER>,
-																	EmptyClass>;
+																	EmptyClass >;
 };
 
 
@@ -796,7 +798,7 @@ public:
 
 	using Access = std::conditional_t<Bool(PMODE & PORTS_MODE::DIRECT),
 																		DirectVarAccess<(PMODE & PORTS_MODE::VARIADIC) ? -1 : Members::PORTCOUNT>,
-																		VarAccess>;
+																		VarAccess >;
 
 	template <Bool REF> class Iterator
 	{

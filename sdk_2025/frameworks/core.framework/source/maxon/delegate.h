@@ -486,7 +486,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Copies the function pointer.
-	/// @param[in] functionPtr				Static function pointer
+	/// @param[in] functionPtr				Static function pointer.
 	/// @return												Always true.
 	//----------------------------------------------------------------------------------------
 	ResultMem CopyFrom(RESULT (*functionPtr)(ARGS...))
@@ -720,7 +720,7 @@ public:
 	/// Returns a delegate for an object with a callable.
 	/// @note The caller retains ownership of #object and must not release it before the Delegate is destructed.
 	/// @tparam FN										The callable object type.
-	/// @param[in] fn									Callable
+	/// @param[in] fn									Callable.
 	/// @return												Always succeeds and returns a Delegate.
 	//----------------------------------------------------------------------------------------
 	template <typename FN> static Delegate CreateByReference(FN&& fn)

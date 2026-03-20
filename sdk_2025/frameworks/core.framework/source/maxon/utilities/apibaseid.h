@@ -384,9 +384,9 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Creates a new Id for the given inputId. All types for which there is an Id::Init function are supported.
-	/// @param[in] inputId			The id to use.
-	/// @tparam INPUTTYPE				The type of inputId. All types for which there is an Id::Init function are supported.
-	/// @return									The inputId converted to Id.
+	/// @param[in] inputId						The id to use.
+	/// @tparam INPUTTYPE							The type of inputId. All types for which there is an Id::Init function are supported.
+	/// @return												The inputId converted to Id.
 	//----------------------------------------------------------------------------------------
 	template <typename... INPUTTYPE>
 	static Result<Id> Create(INPUTTYPE&&... inputId);

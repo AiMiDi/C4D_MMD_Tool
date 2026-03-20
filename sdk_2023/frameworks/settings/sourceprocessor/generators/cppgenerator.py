@@ -1259,8 +1259,14 @@ class Generator(object):
                         # The compiler will find the matching overload, and decltype gives us the reference function class. The double pointer is needed
                         # to make sure that the compiler is looking for exactly matching overloads (without pointers there could be conversion operators,
                         # with a single pointer a pointer to a derived class can be passed to a pointer of base class).
+                        # declaredBases helps to avoid double declarations when there are multiple MAXON_USING declarations for the same interface.
+                        declaredBases = set()
                         for uc, un in usings:
-                            self.decls << 'using decltype(PrivateBaseClass::PrivateLookupFn((' + uc + '**) nullptr))::' + un + ';'
+                            uc2 = ''.join([c if c.isalnum() else '_' for c in uc])
+                            if uc not in declaredBases:
+                                declaredBases.add(uc)
+                                self.decls << 'using RefFnClass_' + uc2 + ' = decltype(PrivateBaseClass::PrivateLookupFn((' + uc + '**) nullptr));'
+                            self.decls << 'using RefFnClass_' + uc2 + '::' + un + ';'
                         if cls.generic:
                             for p in cls.generic.params:
                                 if isinstance(p, TypeTemplateParam):

@@ -135,7 +135,7 @@ public:
 	static MAXON_METHOD Float64 GetCustomTimer();
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the number of configuration values registered with ConfigurationRegister
+	/// Returns the number of configuration values registered with ConfigurationRegister.
 	/// @return												Number of configuration values.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Int GetConfigurationCount();
@@ -174,7 +174,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns the virtual references of a given class.
 	/// @param[in] idWithoutHash			Class ID without hash.
-	/// @return												Found interface references
+	/// @return												Found interface references.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD const InterfaceReference* GetVirtualInterfaceReference(const Id& idWithoutHash);
 
@@ -208,7 +208,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Resets a previously set error callback.
 	/// @warning This method is not thread-safe.
-	/// @see SetErrorCallback
+	/// @see SetErrorCallback.
 	/// @param[in] observer						The observer to remove.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD void ResetDebugErrorObserver(void* observer);
@@ -313,10 +313,10 @@ StrongReferenceCounter& PrivateGetReferenceCounter(const void* object)
 	return System::GetReferenceCounter(object);
 }
 
-template <typename T> void PrivateFreeWithDestructor(const T* obj)
+template <typename T> inline void PrivateFreeWithDestructor(const T* obj, OverloadRank0)
 {
 	// For types which do not require a destructor call Free directly.
-	if (STD_IS_REPLACEMENT(trivially_destructible, T))
+	if constexpr (STD_IS_REPLACEMENT(trivially_destructible, T))
 	{
 		System::Free(reinterpret_cast<void*>(MAXON_REMOVE_CONST(obj)));
 	}

@@ -1,5 +1,5 @@
-#ifndef UTILITY_NODES_H__
-#define UTILITY_NODES_H__
+#ifndef NODES_UTILITY_H__
+#define NODES_UTILITY_H__
 
 #include "maxon/fid.h"
 #include "maxon/vector.h"
@@ -160,10 +160,8 @@ namespace NODE
 		// supports MAXON::NODE::BASE::UPDATEPOLICY
 		// supports MAXON::ASSET::BASE::PROTECTED
 
-		/// This is the default template port for user inports.
 		MAXON_ATTRIBUTE(void, INPUT, "net.maxon.node.groupwithports.input");
 
-		/// This is the default template port for user outports.
 		MAXON_ATTRIBUTE(void, OUTPUT, "net.maxon.node.groupwithports.output");
 	}
 
@@ -362,4 +360,4 @@ namespace NODE
 	
 #include "nodes_utility2.hxx"
 
-#endif // UTILITY_NODES_H__
+#endif // NODES_UTILITY_H__

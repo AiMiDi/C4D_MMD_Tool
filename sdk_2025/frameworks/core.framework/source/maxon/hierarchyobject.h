@@ -87,7 +87,7 @@ public:
 	///
 	/// This object mustn't have a parent or a previous sibling.
 	/// @param[in] parent							Parent object under which the object should be inserted.
-  /// @param[in] branchId           Defines the branch the child belongs to.
+	/// @param[in] branchId						Defines the branch the child belongs to.
 	/// @return												OK on success.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ public:
 	///
 	/// This object mustn't have a parent or a previous sibling.
 	/// @param[in] parent							Parent object under which the object should be inserted.
-  /// @param[in] branchId           Defines the branch the child belongs to.
+	/// @param[in] branchId						Defines the branch the child belongs to.
 	/// @return												OK on success.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ public:
 	/// This object mustn't have a parent or a previous sibling.
 	/// @param[in] parent							Parent object under which the object should be inserted.
 	/// @param[in] position						A child of parent which shall become the next sibling of this object, or nullptr if this object shall become the last child.
-  /// @param[in] branchId           Defines the branch the child belongs to.
+	/// @param[in] branchId						Defines the branch the child belongs to.
 	/// @return												OK on success.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ public:
 	///
 	/// The child object mustn't have a parent or a previous sibling.
 	/// @param[in] child							Parent object under which the object should be inserted.
-  /// @param[in] branchId            Defines the branch the children belongs to.
+	/// @param[in] branchId						Defines the branch the children belongs to.
 	/// @return												OK on success.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ public:
 	///
 	/// The child object mustn't have a parent or a previous sibling.
 	/// @param[in] child							Parent object under which the object should be inserted.
-  /// @param[in] branchId           Defines the branch the child belongs to.
+	/// @param[in] branchId						Defines the branch the child belongs to.
 	/// @return												OK on success.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -161,7 +161,7 @@ public:
 	/// The child object mustn't have a parent or a previous sibling.
 	/// @param[in] child							Parent object under which the object should be inserted.
 	/// @param[in] position						A child of parent which shall become the next sibling of this object, or nullptr if this object shall become the last child.
-  /// @param[in] branchId           Defines the branch the child belongs to.
+	/// @param[in] branchId						Defines the branch the child belongs to.
 	/// @return												OK on success.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ public:
 	///
 	/// Each child object mustn't have a parent or a previous sibling.
 	/// @param[in] children						Block of children.
-  /// @param[in] branchId           Defines the branch the children belong to.
+	/// @param[in] branchId						Defines the branch the children belong to.
 	/// @return												OK on success.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -186,7 +186,7 @@ public:
 	///
 	/// Each child object mustn't have a parent or a previous sibling.
 	/// @param[in] children						Block of children.
-  /// @param[in] branchId           Defines the branch the children belong to.
+	/// @param[in] branchId						Defines the branch the children belong to.
 	/// @return												OK on success.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -204,7 +204,7 @@ public:
 	/// Each child object mustn't have a parent or a previous sibling.
 	/// @param[in] children						Block of children.
 	/// @param[in] position						A child of parent which shall become the next sibling of this object, or nullptr if this object shall become the last child.
-  /// @param[in] branchId           Defines the branch the children belong to.
+	/// @param[in] branchId						Defines the branch the children belong to.
 	/// @return												OK on success.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the first child of this object.
-  /// @param[in] branchId           The branch.
+	/// @param[in] branchId						The branch.
 	/// @return												Child object or nullptr if not available.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -249,7 +249,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns the last child of this object.
-  /// @param[in] branchId           The branch.
+	/// @param[in] branchId						The branch.
 	/// @return												Child object or nullptr if not available.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns the n'th child of this object.
 	/// @param[in] position						The child position.
-  /// @param[in] branchId           The branch.
+	/// @param[in] branchId						The branch.
 	/// @return												Child object or nullptr if not available.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
@@ -266,7 +266,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Returns all children of the given hierarchy.
-  /// @param[in] branchId           The branch.
+	/// @param[in] branchId						The branch.
 	/// @MAXON_ANNOTATION{interfaceParameter=Interface}
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<BaseArray<typename HIERARCHY::template Child<Interface>::type>> GetChildren(const ConstDataPtr& branchId = ConstDataPtr()) const;
@@ -287,11 +287,11 @@ public:
   //----------------------------------------------------------------------------------------
   MAXON_METHOD void SetLocking(const Bool locking);
 
-  //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
   /// Get the locking of an object.
   /// If the object is locked it cannot be removed or changed in the hierarchy.
-  /// @return                        True if locked.
-  //----------------------------------------------------------------------------------------
+	/// @return												True if locked.
+	//----------------------------------------------------------------------------------------
   MAXON_METHOD Bool IsLocked() const;
 
 	//----------------------------------------------------------------------------------------
@@ -343,7 +343,7 @@ public:
   /// <strong>Note</strong>: The children and siblings of the object are not sent as an observable!
 	/// @param[in] sender							Sender object.
 	/// @param[in] object							HierarchyObject which was added.
-  /// @param[in] branchId           The branch the object belongs to.
+	/// @param[in] branchId						The branch the object belongs to.
 	//----------------------------------------------------------------------------------------
 	MAXON_OBSERVABLE(Result<void>, ObservableHierarchyInsert, (const HierarchyObjectRef<>& sender, const HierarchyObjectRef<>& object, const ConstDataPtr& branchId), ObservableCombinerRunAllComponent);
 
@@ -352,7 +352,7 @@ public:
   /// <strong>Note</strong>: The children of the object are not sent as an observable!
 	/// @param[in] sender							Sender object.
 	/// @param[in] object							HierarchyObject which was removed.
-  /// @param[in] branchId           The branch the object belongs to.
+	/// @param[in] branchId						The branch the object belongs to.
 	//----------------------------------------------------------------------------------------
 	MAXON_OBSERVABLE(Result<void>, ObservableHierarchyRemove, (const HierarchyObjectRef<>& sender, const HierarchyObjectRef<>& object, const ConstDataPtr& branchId), ObservableCombinerRunAllComponent);
 
@@ -495,11 +495,11 @@ private:
 /// 		return true;
 /// 	}) iferr_return;
 /// @endcode
-/// @param[in] object 						Object to iterate.
-/// @param[in] function  					Function which is called for each object.
-/// @param[in] branchId           The branch.
-/// @param[in] depth              Start value for the depth level.
-/// @return												returns false if iteration should stop. otherwise true to continue.
+/// @param[in] object							Object to iterate.
+/// @param[in] function						Function which is called for each object.
+/// @param[in] branchId						The branch.
+/// @param[in] depth							Start value for the depth level.
+/// @return												Returns false if iteration should stop. otherwise true to continue.
 //----------------------------------------------------------------------------------------
 template <typename REFTYPE>
 static Result<Bool> TraverseChildren(const REFTYPE& object, const Delegate<Result<Bool>(const REFTYPE& object, const REFTYPE& parent, const ConstDataPtr& branchId, Int depth)>& function, const ConstDataPtr& branchId = ConstDataPtr(), Int depth = Int(0))
@@ -534,11 +534,11 @@ static Result<Bool> TraverseChildren(const REFTYPE& object, const Delegate<Resul
 /// 		return true;
 /// 	}) iferr_return;
 /// @endcode
-/// @param[in] object             Object to iterate.
-/// @param[in] function           Function which is called for each object.
-/// @param[in] branchId           The branch.
-/// @param[in] depth              Start value for the depth level.
-/// @return                       returns false if iteration should stop. otherwise true to continue.
+/// @param[in] object							Object to iterate.
+/// @param[in] function						Function which is called for each object.
+/// @param[in] branchId						The branch.
+/// @param[in] depth							Start value for the depth level.
+/// @return												Returns false if iteration should stop. otherwise true to continue.
 //----------------------------------------------------------------------------------------
 template <typename REFTYPE>
 static Result<Bool> TraverseMeAndChildren(const REFTYPE& object, const Delegate<Result<Bool>(const REFTYPE& object, const REFTYPE& parent, const ConstDataPtr& branchId, Int depth)>& function, const ConstDataPtr& branchId = ConstDataPtr(), Int depth = Int(0))
@@ -566,9 +566,9 @@ static Result<Bool> TraverseMeAndChildren(const REFTYPE& object, const Delegate<
 /// 		return true;
 /// 	}, 0) iferr_return;
 /// @endcode
-/// @param[in] t									object to iterate.
-/// @param[in] func								function which is called for each object.
-/// @return												returns false if iteration should stop. otherwise true to continue.
+/// @param[in] t									Object to iterate.
+/// @param[in] func								Function which is called for each object.
+/// @return												Returns false if iteration should stop. otherwise true to continue.
 //----------------------------------------------------------------------------------------
 template <typename REFTYPE>
 [[deprecated("Use the other overload")]] static Result<Bool> TraverseChildren(const REFTYPE& t, const ConstDataPtr& branch,
@@ -600,9 +600,9 @@ template <typename REFTYPE>
 /// 		return true;
 /// 	}) iferr_return;
 /// @endcode
-/// @param[in] t									object to iterate.
-/// @param[in] func								function which is called for each object.
-/// @return												returns false if iteration should stop. otherwise true to continue.
+/// @param[in] t									Object to iterate.
+/// @param[in] func								Function which is called for each object.
+/// @return												Returns false if iteration should stop. otherwise true to continue.
 //----------------------------------------------------------------------------------------
 template <typename REFTYPE>
 [[deprecated("Use the other overload")]] static Result<Bool> TraverseMeAndChildren(const REFTYPE& t, const REFTYPE& parent, const ConstDataPtr& branch,

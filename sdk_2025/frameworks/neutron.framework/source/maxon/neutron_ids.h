@@ -62,7 +62,7 @@ static constexpr Int32 MSG_GET_INSTRUMENTATION_HANDLER = 180420113;
 static constexpr Int32 MSG_GET_ASSET_SERIALIZATION_DATA = 180420115;
 
 static constexpr Int32 MSG_DESELECT_NODES = 180420116;
-static constexpr Int32 MSG_GET_STORAGE_HELPER = 180420117;
+static constexpr Int32 MSG_GET_CAPSULE = 180420117;
 static constexpr Int32 MSG_SETTINGS_NAME = 180420118;
 
 using ChangePluginTypeData = Tuple<Int32, cinema::NODEPLUGIN*>;
@@ -107,7 +107,6 @@ static constexpr Int32 MSG_REGISTER_HEATMAP_LISTENER = 180420206;
 static constexpr Int32 MSG_GET_INSPECTOR_PRESENTER = 180420207;
 static constexpr Int32 MSG_INSTRUMENTATION_MAX = 180420208;
 
-static constexpr Int32 TAG_ID = 180420300; // Please transfer all ID changes to the symbol with the matching integer in ge_prepass.h marked as @PublicExposure.
 static constexpr Int32 MSG_TAG_SET_ASSET = 180420301; // expects a pointer to an Id of a node asset which can be found in the scope of the current document's repository
 static constexpr Int32 MSG_SET_ARCHIGRASS_ASSET = 180420302; // adds a Neutron scene tag to the current object and sets its graph to the archigrass asset
 static constexpr Int32 MSG_SET_FROM_FILTERSTRING = 180420303; // expects a pointer to a Tuple<AssetDescription, String> with a filter string from which attributes of the node are set
@@ -117,7 +116,7 @@ static constexpr Int32 MSG_SET_FROM_FILTERSTRING = 180420303; // expects a point
 /// Send this message to a BaseList2D of type neutron::CAPSULE_BASE_ID to have it become an instance of the given asset.
 /// Uses message MSG_CREATE_IF_REQUIRED to find the NimbusRef.
 /// Expects a pointer to an IdAndVersion of a node asset which can be found in the scope of the current document's repository.
-/// Arguments: const IdAndVersion*
+/// Arguments: const Tuple<IdAndVersion /* Asset to set */, Bool /* Add undo */>*
 //----------------------------------------------------------------------------------------
 static constexpr Int32 MSG_SET_ASSET_WITH_VERSION = 180420304;
 
@@ -131,23 +130,24 @@ static constexpr Int32 MSG_GET_ASSET_WITH_VERSION = 1062823;
 static constexpr Int32 TAGSOFTYPE_NEUTRONGENERATEDPROXY = 180429999;
 
 static constexpr Int32 NEUTRON_BASE_ID = 190000010;													///< Base instance type for all the neutron related objects (scene hooks, tags, ...).
-static constexpr Int32 CAPSULE_BASE_ID = 180420800;													///< Base instance type for all the capsules with types below.
+static constexpr Int32 CAPSULE_BASE_ID = 180420800;													///< Base instance type for all the capsules (objects or tags) with types below.
 static constexpr Int32 DEFORMER_ID = 180420400;
 static constexpr Int32 GENERATOR_ID = 180420500;
 static constexpr Int32 DATASET_TO_TAG = 431000229;
 static constexpr Int32 PRIMITIVE_GENERATOR_ID = 180420600;
 static constexpr Int32 PRIMITIVE_SPLINE_GENERATOR_ID = 180420700;
+static constexpr Int32 DISTRIBUTION_ID = 190000011;													///< Distribution capsule type. Derives from NEUTRON_BASE_ID.
 
 static constexpr Int32 SCENE_PORT_LINK = 180420710;
 
 static constexpr Int32 IDM_CAPSULE_ASSET_TO_GROUP = 180429000;
-static constexpr Int32 IDM_HEATMAP_DUMP = 190000000;													///< No data. Will print heat map data from capsule/scene nodes to console.
-static constexpr Int32 IDM_HEATMAP_ENABLE = 190000001;												///< Expecting const Bool* data, true to enable heat map data collection on capsule/scene nodes.
-static constexpr Int32 IDM_HEATMAP_ISENABLED = 190000002;											///< Expecting Bool* data, true if heat map is enabled for the capsule/scene nodes.
-static constexpr Int32 IDM_HEATMAP_ISSUPPORTED = 190000003;										///< Expecting Bool* data, true if heat map is supported by the object.
-static constexpr Int32 IDM_HEATMAP_QUEUE_DUMP = 190000004;										///< No data. Will force a heat map update and print heat map to console afterwards.
-static constexpr Int32 IDM_CAPSULE_DUMP = 190000005;													///< No data. Will print a capsule's node data to the console.
-static constexpr Int32 IDM_CAPSULE_FORCEDIRTY = 190000006;										///< No data. Will execute command ID_NBO_FORCEDIRTY for a capsule.
+static constexpr Int32 IDM_HEATMAP_DUMP = 190000000;												///< No data. Will print heat map data from capsule/scene nodes to console.
+static constexpr Int32 IDM_HEATMAP_ENABLE = 190000001;											///< Expecting const Bool* data, true to enable heat map data collection on capsule/scene nodes.
+static constexpr Int32 IDM_HEATMAP_ISENABLED = 190000002;										///< Expecting Bool* data, true if heat map is enabled for the capsule/scene nodes.
+static constexpr Int32 IDM_HEATMAP_ISSUPPORTED = 190000003;									///< Expecting Bool* data, true if heat map is supported by the object.
+static constexpr Int32 IDM_HEATMAP_QUEUE_DUMP = 190000004;									///< No data. Will force a heat map update and print heat map to console afterwards.
+static constexpr Int32 IDM_CAPSULE_DUMP = 190000005;												///< No data. Will print a capsule's node data to the console.
+static constexpr Int32 IDM_CAPSULE_FORCEDIRTY = 190000006;									///< No data. Will execute command ID_NBO_FORCEDIRTY for a capsule.
 
 static constexpr Int32 MSG_NODESQUERY_MATERIAL = 1055560;
 static constexpr Int32 MSG_NODESQUERY_MATERIAL_CHANNEL_ON = 0;

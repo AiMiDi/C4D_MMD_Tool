@@ -83,7 +83,7 @@ public:
 	/// Sets the output texture link.
 	/// @param[in] textureRef					Target texture to load the media data into.
 	/// @param[in] pixelStorageClass	Defines the storage class how newly created layers/images should store their pixel data (e.g.
-	///																ImagePixelStorageClasses::Voxel).
+	/// 															ImagePixelStorageClasses::Voxel).
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> SetOutputTexture(const ImageTextureRef& textureRef, const Class<ImagePixelStorage>& pixelStorageClass);
 };
@@ -153,7 +153,7 @@ public:
 	/// @param[in,out] settings				Settings to be displayed and modified. After calling the function the DataDictionary contains the new settings.
 	/// @param[in] getParentwindowHandle	Callback to return the parent window handle. Windows: return the HWND for the parent.
 	/// @return												True if the user pressed OK, false if the user cancelled the action. FunctionNotImplementedError if the
-	///																output handler doesn't support a dialog.
+	/// 															output handler doesn't support a dialog.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Bool> EditSystemOptions(DataDictionary& settings, const Delegate<Result<void*>()>& getParentwindowHandle);
 
@@ -178,11 +178,13 @@ MAXON_DECLARATION(Class<MediaOutputUrlRef>, MediaOutputUrlBaseClass, "net.maxon.
 // include auto generated header file here
 #include "mediasession_output2.hxx"
 
+//----------------------------------------------------------------------------------------
 /// Delegate which is triggered if MediaSession loaders notify about some progress when loading files.
 /// @param[in] progress						ProgressRef which notifies.
-/// @param[in] percent						overall percent of the progress
-/// @param[in] duration						time since the operation started.
-/// @param[in] expectedTotalTime	rough guess how load the operatin will take in total.
+/// @param[in] percent						Overall percent of the progress.
+/// @param[in] duration						Time since the operation started.
+/// @param[in] expectedTotalTime	Rough guess how load the operatin will take in total.
+//----------------------------------------------------------------------------------------
 using MediaSessionProgressCallback = Delegate<void(const ProgressRef& progress, Float percent, const TimeValue& duration, const TimeValue& expectedTotalTime)>;
 
 //----------------------------------------------------------------------------------------

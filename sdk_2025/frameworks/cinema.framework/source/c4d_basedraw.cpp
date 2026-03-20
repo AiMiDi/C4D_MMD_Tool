@@ -17,12 +17,12 @@ void BaseDrawHelp::Free(BaseDrawHelp*& p)
 	C4DOS_Br->BbFree(p);
 }
 
-void BaseView::GetFrame(Int32* cl, Int32* ct, Int32* cr, Int32* cb)
+void BaseView::GetFrame(Int32* cl, Int32* ct, Int32* cr, Int32* cb) const
 {
 	C4DOS_Bv->GetFrame(this, cl, ct, cr, cb);
 }
 
-void BaseView::GetSafeFrame(Int32* cl, Int32* ct, Int32* cr, Int32* cb)
+void BaseView::GetSafeFrame(Int32* cl, Int32* ct, Int32* cr, Int32* cb) const
 {
 	C4DOS_Bv->GetSafeFrame(this, cl, ct, cr, cb);
 }
@@ -175,10 +175,22 @@ Bool ViewportSelect::PickObject(BaseDraw* bd, BaseDocument* doc, Int32 x1, Int32
 	return C4DOS_Bv->VSPickObject2(bd, doc, x1, y1, x2, y2, xr, yr, wr, hr, pixels, flags, ls, list, m, sampleLocation);
 }
 
-GeData BaseDraw::GetParameterData(Int32 id)
+Bool ViewportSelect::PickMaterial(BaseDraw* bd, BaseDocument* doc, Int32 x, Int32 y, Int32 radius, BaseMaterial*& pickedMaterial, BaseObject*& pickedObject)
+{
+	return C4DOS_Bv->VSPickMaterial(bd, doc, x, y, radius, pickedMaterial, pickedObject);
+}
+
+GeData BaseDraw::GetParameterData(Int32 id) const
 {
 	GeData t_data;
 	BaseList2D::GetParameter(CreateDescID(id), t_data, DESCFLAGS_GET::NONE);
+	return t_data;
+}
+
+GeData BaseDraw::GetParameterData(const DescID& id) const
+{
+	GeData t_data;
+	BaseList2D::GetParameter(id, t_data, DESCFLAGS_GET::NONE);
 	return t_data;
 }
 

@@ -69,8 +69,8 @@ namespace NODESPACE
 	/// return maxon::OK;
 	/// @endcode
 	///
-	/// @param[in,out] graph				The empty node graph for filling with a default setup.
-	/// @return											OK on success.
+	/// @param[in,out] graph					The empty node graph for filling with a default setup.
+	/// @return												OK on success.
 	///
 	/// Future consideration: we may extend the signature of this function by providing read-only access to other
 	/// node graphs that are already present in the particular material. This may fulfill the use case
@@ -86,8 +86,8 @@ namespace NODESPACE
 	/// The origin of the preview may lie in GUI components such as the Attribute Manager, Node Editor, or Material Manager.
 	///
 	/// It is mandatory to provide a valid maxon::nodes::PREVIEWIMAGEREQUEST::PROVIDER class.
-	/// @param[in,out] request			The container to be filled that is passed into PreviewImageProviderInterface::Initialize() function later.
-	/// @return											OK on success.
+	/// @param[in,out] request				The container to be filled that is passed into PreviewImageProviderInterface::Initialize() function later.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	using ConfigurePreviewImageRequestFunc = Delegate<Result<void>(DataDictionaryObjectRef request)>;
 	MAXON_ATTRIBUTE(ConfigurePreviewImageRequestFunc, CONFIGUREPREVIEWIMAGEREQUESTFUNC, "net.maxon.nodes.nodespace.configurepreviewimagerequestfunc");
@@ -160,7 +160,7 @@ namespace NODESPACE
 	/// The four ports must have the following signature:
 	///
 	/// Index in Tuple |    Port Type |    Data Type | Description
-	/// -----------------------------------------------------------
+	// -----------------------------------------------------------
 	///              0 |  Output Port | maxon::Color | The result port.
 	///              1 |   Input Port |   maxon::Url | The URL of the input image.
 	///              2 |   Input Port |   maxon::Int | The index of the starting frame.
@@ -213,16 +213,17 @@ namespace NODESPACE
 	//----------------------------------------------------------------------------------------
 	MAXON_ATTRIBUTE(ImageNodeSetupDelegate, IMAGENODESETUP, "net.maxon.nodes.nodespace.imagenodesetup");
 
+	//----------------------------------------------------------------------------------------
 	/// Is executed on every message that sent to the owning BaseMaterial. This message may be used to react and mutate the graph.
 	///
 	/// The node material comes with a default message handling behavior that can be disabled when returning true (indicating complete consume of the message).
 	/// Note that the default behavior handles the undo system and other state changes outside of the node graph.
 	///
-	/// @param[in] graph						The node graph associated with the particular space.
-	/// @param[in] messageId				The id of the message.
-	/// @param[in] messageData			The (opaque) content of the message.
-	/// @param[in] nodeMaterial			The (opaque) pointer to the BaseMaterial (of type NodeMaterial).
-	/// @return											true if message is declared consumed, false if default consume behavior should follow.
+	/// @param[in] graph							The node graph associated with the particular space.
+	/// @param[in] messageId					The id of the message.
+	/// @param[in] messageData				The (opaque) content of the message.
+	/// @param[in] nodeMaterial				The (opaque) pointer to the BaseMaterial (of type NodeMaterial).
+	/// @return												True if message is declared consumed, false if default consume behavior should follow.
 	//----------------------------------------------------------------------------------------
 	using MaterialMessageHandlerFunc = Delegate<Result<Bool>(const NodesGraphModelRef& graph, Int32 messageId, void* messageData, void* nodeMaterial)>;
 	MAXON_ATTRIBUTE(MaterialMessageHandlerFunc, MATERIALMESSAGEHANDLERFUNC, "net.maxon.nodes.nodespace.materialmessagehandlerfunc");
@@ -315,7 +316,7 @@ public:
 	/// This callback is executed if the space's data has changed, e.g. the name.
 	/// A copy-on-write state of the current data is provided.
 	///
-	/// @param[in] data				The current data container.
+	/// @param[in] data								The current data container.
 	//----------------------------------------------------------------------------------------
 	using DataChangedObserver = Delegate<void(const DataDictionary& data)>;
 
@@ -323,9 +324,9 @@ public:
 	/// This is currently unused: No functionality monitors changes to an already registered space.
 	/// 
 	/// Adds an observer to changes for the space's data container.
-	/// @param[in] observer												The delegate to be called on data change.
-	/// @param[in] notifyDuringRegistration				If true, the current data state is *immediately* dispatched to the delegate, before returning from AddDataChangedObserver.
-	/// @return																		The ticket to the observing delegate. Releasing it will auto-unsubscribe.
+	/// @param[in] observer						The delegate to be called on data change.
+	/// @param[in] notifyDuringRegistration	If true, the current data state is *immediately* dispatched to the delegate, before returning from AddDataChangedObserver.
+	/// @return												The ticket to the observing delegate. Releasing it will auto-unsubscribe.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<GenericData> AddDataChangedObserver(DataChangedObserver&& observer, Bool notifyDuringRegistration);
 
@@ -334,7 +335,7 @@ protected:
 	//----------------------------------------------------------------------------------------
 	/// Updates the space's data and notifiers all registered DataChangedObserver's.
 	///
-	/// @param[in] data				The new data container.
+	/// @param[in] data								The new data container.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD void SetData(const DataDictionary& data);
 };
@@ -349,16 +350,16 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Looks up the NodeSpaceRef within the MaterialNodeSpaces registry and returns the result of NodeSpaceInterface::GetData().
-	/// @param[in] spaceId		The id of the space.
-	/// @return								The data container of the space.
+	/// @param[in] spaceId						The id of the space.
+	/// @return												The data container of the space.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD DataDictionary GetNodeSpaceData(const Id& spaceId);
 
 	//----------------------------------------------------------------------------------------
 	/// Loads resource name under the current language for the provided Id and assigns it to the attribute maxon::nodes::NODESPACE::SPACENAME
 	/// of the returned data container.
-	/// @param[in] spaceDescriptionId				The id of the named description.
-	/// @return															The data container with the assigned maxon::nodes::NODESPACE::SPACENAME attribute.
+	/// @param[in] spaceDescriptionId	The id of the named description.
+	/// @return												The data container with the assigned maxon::nodes::NODESPACE::SPACENAME attribute.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<DataDictionary> LoadDescription(const Id& spaceDescriptionId);
 };

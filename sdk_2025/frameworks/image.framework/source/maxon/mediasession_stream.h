@@ -129,14 +129,14 @@ public:
 																							 const FinishHandler& finishHandler);
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation before loading a stream.
+	/// Called by the input media converter implementation before loading a stream.
 	/// @param[in] props							Properties of the source image stream.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> InitStream(const MediaStreamProperties& props);
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation before loading a stream.
+	/// Called by the input media converter implementation before loading a stream.
 	/// @param[in] props							Properties of the source image stream.
 	/// @param[in] srcChannelOffsets	Source channel offsets of the data that will be set using this set pixel handler.
 	/// @param[in] setPixelFlags			Flags which control the set pixel operation. See also SETPIXELHANDLERFLAGS.
@@ -145,7 +145,7 @@ public:
 	MAXON_METHOD Result<SetPixelHandlerStruct> SetPixelStream(const MediaStreamProperties& props, const ChannelOffsets& srcChannelOffsets, SETPIXELHANDLERFLAGS setPixelFlags);
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation when loading the stream is completed.
+	/// Called by the input media converter implementation when loading the stream is completed.
 	/// @param[in] props							Properties of the source image stream.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
@@ -182,14 +182,14 @@ public:
 																							 const FinishHandler& finishHandler);
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation before loading a stream.
+	/// Called by the input media converter implementation before loading a stream.
 	/// @param[in] props							Properties of the image stream.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> InitStream(MediaStreamProperties& props);
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation before loading a stream.
+	/// Called by the input media converter implementation before loading a stream.
 	/// @param[in] props							Properties of the image stream.
 	/// @param[in] dstFormat					Destination pixel format.
 	/// @param[in] channelOffsets			Channel offset that is needed in the destination.
@@ -201,7 +201,7 @@ public:
 		const ChannelOffsets& channelOffsets, const ColorProfile& dstColorProfile, GETPIXELHANDLERFLAGS flags);
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation when loading the stream is completed.
+	/// Called by the input media converter implementation when loading the stream is completed.
 	/// @param[in] props							Properties of the image stream.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
@@ -250,7 +250,7 @@ public:
 	MAXON_METHOD Result<void> SetCallbackHandler(const InitHandler& initHandler, const SetAudioDataHandler& getAudioDataHandler, const FinishHandler& finishHandler);
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation before loading a stream.
+	/// Called by the input media converter implementation before loading a stream.
 	/// @param[in] props							Properties of the image stream.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
@@ -264,7 +264,7 @@ public:
 	MAXON_METHOD Result<SetAudioDataCallbackType> SetAudioDataCallback(MediaStreamProperties& props);
 
 	//----------------------------------------------------------------------------------------
-	/// called by the input media converter implementation when loading the stream is completed.
+	/// Called by the input media converter implementation when loading the stream is completed.
 	/// @param[in] props							Properties of the audio stream.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------

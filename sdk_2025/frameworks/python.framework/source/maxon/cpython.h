@@ -478,7 +478,7 @@ public:
 	///
 	/// @param[in] fp									File pointer where to read the source from.
 	/// @param[in] filename						Path of the file.
-	/// @param[in] start							Key start like PY_FILE_INPUT
+	/// @param[in] start							Key start like PY_FILE_INPUT.
 	/// @param[in] globals						Dict object.
 	/// @param[in] locals							Any object that implements the mapping protocol.
 	/// @param[in] closeit						True if Python should close the pointer using fclose, otherwise false.
@@ -527,19 +527,19 @@ public:
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD NativePyThreadState* CPyGILState_GetThisThreadState();
 
-	//-------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Swap the current thread state with the passed one. 
 	///
-	/// @param state    Thread State to swap with.
-	/// @return         Old thread state.
-	//-------------------------------------------------
+	/// @param[in] state							Thread State to swap with.
+	/// @return												Old thread state.
+	//----------------------------------------------------------------------------------------
 	MAXON_METHOD NativePyThreadState* CPyThreadState_Swap(NativePyThreadState* state);
 	
-	//-------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Get the dictionary of the current thread state.
 	///
-	/// @return         Dict of the current thread state.
-	//-------------------------------------------------
+	/// @return												Dict of the current thread state.
+	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CPyThreadState_GetDict();
 
 	MAXON_METHOD NativePyFrameObject* CPyThreadState_GetFrame(NativePyThreadState* threadState);
@@ -599,7 +599,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Runs the garbage collector of Python. GIL must be held.
 	/// 
-	/// @return												Number of items collected
+	/// @return												Number of items collected.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int64 CPyGC_Collect();
 
@@ -616,7 +616,7 @@ public:
 	/// Returns the internal DataType capsule of a maxon.DataType object. GIL must be held.
 	/// 
 	/// @param[in] obj								Object of type maxon.DataType.
-	/// @return												DataType capsule. Can be safely casted to MPyDataType
+	/// @return												DataType capsule. Can be safely casted to MPyDataType.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef UnpackDataType(const CPyRef& obj);
 
@@ -624,7 +624,7 @@ public:
 	/// Returns the internal Data capsule of a maxon.Data object. GIL must be held.
 	/// 
 	/// @param[in] obj								Object of type maxon.Data.
-	/// @return												Data capsule. Can be safely casted to MPyData
+	/// @return												Data capsule. Can be safely casted to MPyData.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef UnpackData(const CPyRef& obj);
 
@@ -768,7 +768,7 @@ public:
 	/// @param[in] pointer						Pointer to encapsulate.
 	/// @param[in] name								Name of the capsule.
 	/// @param[in] destructor					Function pointer which gets called on destruction of the capsule.
-	/// @return												capsule object.
+	/// @return												Capsule object.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CPyCapsule_New(void *pointer, const Char* name, CPyCapsule_Destructor* destructor) const;
 
@@ -1073,12 +1073,12 @@ public:
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPySys_SetObject(const Char* name, const CPyRef& o);
 
-  //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
   /// Sets an array of paths to sys.path. GIL must be held.
   ///
-  /// @param[in] paths              Array of paths to set. None of the elements must be empty.
-  /// @return                       OK on success or error, if the exception indicator got set.
-  //----------------------------------------------------------------------------------------
+	/// @param[in] paths							Array of paths to set. None of the elements must be empty.
+	/// @return												OK on success or error, if the exception indicator got set.
+	//----------------------------------------------------------------------------------------
   MAXON_METHOD Result<void> CPy_SetPath(const BaseArray<Url>& paths);
 
 	//----------------------------------------------------------------------------------------
@@ -1212,7 +1212,7 @@ public:
 	/// @param[in] dict								Dict object.
 	/// @param[in] key								Key object.
 	/// @param[in] item								Value item.
-	/// @return               True on sucess, or false if the exception indicator got set.
+	/// @return												True on sucess, or false if the exception indicator got set.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyDict_SetItem(const CPyRef& dict, const CPyRef& key, const CPyRef& item);
 
@@ -1221,16 +1221,16 @@ public:
 	/// 
 	/// @param[in] dict								Dict object.
 	/// @param[in] key								Key object.
-	/// @return               True on sucess, or false if the item was not found and the exception indicator got set.
+	/// @return												True on sucess, or false if the item was not found and the exception indicator got set.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyDict_DelItem(const CPyRef& dict, const CPyRef& key);
 
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Determines if #dict contains the key #p.
 	/// 
-	/// @param[in] dict Dict object.
-	/// @param[in] key Key object.
-	/// @return True on sucess, or false if the item was not found and the exception indicator got set.
+	/// @param[in] dict								Dict object.
+	/// @param[in] key								Key object.
+	/// @return												True on sucess, or false if the item was not found and the exception indicator got set.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CONTAINS CPyDict_Contains(const CPyRef& dict, const CPyRef& key);
 
@@ -1248,7 +1248,7 @@ public:
 	/// @param[in,out] pos						Index start and gets incremented by one when the function leaves.
 	/// @param[in] key								Key object.
 	/// @param[in] value							Value object.
-	/// @return               True on sucess, or false if the item was not found and the exception indicator got set.
+	/// @return												True on sucess, or false if the item was not found and the exception indicator got set.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyDict_Next(const CPyRef& dict, Int& pos, CPyRef& key, CPyRef& value);
 
@@ -1321,89 +1321,89 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Checks if a list is a list. No subtype check is performed. GIL must be held.
 	/// 
-	/// @param[in] list Object to check.
-	/// @return True if the object is a list, otherwise false.
+	/// @param[in] list								Object to check.
+	/// @return												True if the object is a list, otherwise false.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyList_CheckExact(const CPyRef& list);
 	//----------------------------------------------------------------------------------------
 	/// Clears a list.
 	/// 
-	/// @param[in] list The list to clear.
-	/// @return True if the list has been cleared successfully, otherwise false.
+	/// @param[in] list								The list to clear.
+	/// @return												True if the list has been cleared successfully, otherwise false.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyList_Clear(const CPyRef& list);
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Evaluates the length of a list and is equivalent to <tt>len(list)</tt>.
 	/// 
-	/// @param[in] list The list to evaluate.
-	/// @return The length of #list.
+	/// @param[in] list								The list to evaluate.
+	/// @return												The length of #list.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int CPyList_Size(const CPyRef& list);
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Returns the object at #index in a list and is equivalent to <tt>list[index]</tt>..
 	/// 
-	/// @param[in] list The list to retrieve the object from.
-    /// @param[in] index The index of the object to retrieve.
-	/// @return The object at #index in #list.
+	/// @param[in] list								The list to retrieve the object from.
+	/// @param[in] index							The index of the object to retrieve.
+	/// @return												The object at #index in #list.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CPyList_GetItem(const CPyRef& list, UInt index);
 	MAXON_METHOD Bool CPyList_SetItem(const CPyRef& list, UInt, const CPyRef& item);
 	MAXON_METHOD Bool CPyList_Insert(const CPyRef& list, UInt, const CPyRef& item);
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Appends an object to a list and is equivalent to <tt>list.append(item).</tt>.
 	/// 
-	/// @param[in, out] list The list to append #item to.
-	/// @param[in] item The item to append.
-	/// @return True if #item has been successfully appended, otherwise false.
+	/// @param[in,out] list						The list to append #item to.
+	/// @param[in] item								The item to append.
+	/// @return												True if #item has been successfully appended, otherwise false.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyList_Append(const CPyRef& list, const CPyRef& item);
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Returns a slice of a list and is equivalent to <tt>list[from, to]</tt>.
 	/// 
-	/// @param[in] list The list to return a slice from.
-	/// @param[in] from The starting index of the slice.
-    /// @param[in] to The ending index of the slice.
-	/// @return The Python slice object.
+	/// @param[in] list								The list to return a slice from.
+	/// @param[in] from								The starting index of the slice.
+	/// @param[in] to									The ending index of the slice.
+	/// @return												The Python slice object.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CPyList_GetSlice(const CPyRef& list, UInt from, UInt to);
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Sets a slice of a list and is equivalent to <tt>list[from, to] = item</tt>.
 	/// 
-	/// @param[in] list The list to set a slice in.
-	/// @param[in] from The starting index of the slice.
-    /// @param[in] to The ending index of the slice.
-    /// @param[in] item The value of the slice, must be a list or NULL.
-	/// @return True if #item has been successfully sliced in, otherwise false.
+	/// @param[in] list								The list to set a slice in.
+	/// @param[in] from								The starting index of the slice.
+	/// @param[in] to									The ending index of the slice.
+	/// @param[in] item								The value of the slice, must be a list or NULL.
+	/// @return												True if #item has been successfully sliced in, otherwise false.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyList_SetSlice(const CPyRef& list, UInt from, UInt to, const CPyRef& item);
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Sorts a list and is equivalent to <tt>list.sort()</tt>.
 	/// 
-	/// @param[in] list The list to sort.
-	/// @return True if #list has been successfully sorted, otherwise false.
+	/// @param[in] list								The list to sort.
+	/// @return												True if #list has been successfully sorted, otherwise false.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyList_Sort(const CPyRef& list);
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Reverses a list and is equivalent to <tt>list.reverse()</tt>.
 	/// 
-	/// @param[in] list The list to reverse.
-	/// @return True if #list has been successfully reversed, otherwise false.
+	/// @param[in] list								The list to reverse.
+	/// @return												True if #list has been successfully reversed, otherwise false.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyList_Reverse(const CPyRef& list);
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Returns a new Python tuple containing the content of #list and is equivalent to <tt>tuple(list)</tt>.
 	/// 
-	/// @param[in] list The list to convert.
-	/// @return The content of #list as a Python tuple.
+	/// @param[in] list								The list to convert.
+	/// @return												The content of #list as a Python tuple.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CPyList_AsTuple(const CPyRef& list);
 
 	//----------------------------------------------------------------------------------------
 	/// Remove the entry in dictionary p which has a key specified by the string key. If key is not in the dictionary, a KeyError is raised.
 	/// 
-	/// @param[in] p Dict object.
-	/// @param[in] key Key object.
-	/// @return True on success, otherwise false.
+	/// @param[in] p									Dict object.
+	/// @param[in] key								Key object.
+	/// @return												True on success, otherwise false.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Bool CPyDict_DelItemString(const CPyRef& p, const Char* key);
 
@@ -1564,7 +1564,7 @@ public:
 	/// Creates a float object from a Float32.
 	///
 	/// @param[in] value							Float32 value.
-	/// @return												bool object.
+	/// @return												Bool object.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CPyFloat_FromFloat32(Float32 value);
 
@@ -1572,7 +1572,7 @@ public:
 	/// Creates a float object from a Float64.
 	///
 	/// @param[in] value							Float64 value.
-	/// @return												bool object.
+	/// @return												Bool object.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CPyFloat_FromFloat64(Float64 value);
 
@@ -1624,7 +1624,7 @@ public:
 	/// Creates a bool object from a Bool.
 	///
 	/// @param[in] value							Bool value.
-	/// @return												bool object.
+	/// @return												Bool object.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CPyBool_FromBool(Bool value);
 
@@ -1764,7 +1764,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CPyNumber_Long(const CPyRef& o);
 
-		//----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Converts an number object to a python float value. GIL must be held.
 	///
 	/// @param[in] o									Int, float or complex value.
@@ -1850,105 +1850,105 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a UTF8Mode. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												UTF8Mode
+	/// @return												UTF8Mode.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_UTF8Mode();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a DebugFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												DebugFlag flag
+	/// @return												DebugFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_DebugFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a VerboseFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												VerboseFlag flag
+	/// @return												VerboseFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_VerboseFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a QuietFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												QuietFlag flag
+	/// @return												QuietFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_QuietFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a InteractiveFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												InteractiveFlag flag
+	/// @return												InteractiveFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_InteractiveFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a InspectFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												InspectFlag flag
+	/// @return												InspectFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_InspectFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a OptimizeFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												OptimizeFlag flag
+	/// @return												OptimizeFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_OptimizeFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a NoSiteFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												NoSiteFlag flag
+	/// @return												NoSiteFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_NoSiteFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a BytesWarningFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												BytesWarningFlag flag
+	/// @return												BytesWarningFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_BytesWarningFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a FrozenFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												FrozenFlag flag
+	/// @return												FrozenFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_FrozenFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a IgnoreEnvironmentFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												IgnoreEnvironmentFlag flag
+	/// @return												IgnoreEnvironmentFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_IgnoreEnvironmentFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a DontWriteBytecodeFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												DontWriteBytecodeFlag flag
+	/// @return												DontWriteBytecodeFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_DontWriteBytecodeFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a NoUserSiteDirectory. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												NoUserSiteDirectory flag
+	/// @return												NoUserSiteDirectory flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_NoUserSiteDirectory();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a UnbufferedStdioFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												UnbufferedStdioFlag flag
+	/// @return												UnbufferedStdioFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_UnbufferedStdioFlag();
 
 	//----------------------------------------------------------------------------------------
 	/// Returns a mutable pointer to a IsolatedFlag. Can be nullptr if the flag is not available in this Python version.
 	///
-	/// @return												IsolatedFlag flag
+	/// @return												IsolatedFlag flag.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Int32* CPy_IsolatedFlag();
 
@@ -2473,9 +2473,9 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Creates a DataType capsule. GIL must be held.
 	/// 
-	/// @param dt         Pointer of DataType to capsule.
-	/// @return           New DataType capsule or empty object if exception indicator is set.
-	//-------------------------------------------------
+	/// @param[in] dt									Pointer of DataType to capsule.
+	/// @return												New DataType capsule or empty object if exception indicator is set.
+	//----------------------------------------------------------------------------------------
 	MAXON_METHOD MPyDataTypeRef MPyDataType_New(const DataType& dt);
 
 	//----------------------------------------------------------------------------------------
@@ -2532,11 +2532,11 @@ public:
 
 	MAXON_METHOD CPyRef CPyObject_FromGeneric(const DataType& origDt, const Generic* object, OWNERSHIP ownership, const CPyTypeRef* expected = nullptr, Int* count = nullptr);
 
-	//-------------------------------------------------
+	//----------------------------------------------------------------------------------------
 	/// Creates a scope dictionary which has all built-in modules preset.
 	/// 
-	/// @return          New dictionary object.
-	//-------------------------------------------------
+	/// @return												New dictionary object.
+	//----------------------------------------------------------------------------------------
 	MAXON_METHOD CPyRef CreateGlobalDictionary() const;
 
 	MAXON_METHOD Result<BaseArray<SourceLocation>> GetCurrentTraceback();
@@ -2945,12 +2945,12 @@ struct CPythonGil
 	PYGILSTATE _state = PYGILSTATE::UNLOCKED;
 };
 
-//-------------------------------------------------
+//----------------------------------------------------------------------------------------
 /// Casts an object to a CPyTypeRef. Reference must be of this type, or the behavior is undefined.
 /// 
-/// @param[in] o 							    Object to cast.
-/// @return                       Returns the object cast to CPyTypeRef.
-//-------------------------------------------------
+/// @param[in] o									Object to cast.
+/// @return												Returns the object cast to CPyTypeRef.
+//----------------------------------------------------------------------------------------
 template <typename T>
 typename std::enable_if<STD_IS_REPLACEMENT(same, T, py::CPyTypeRef), T>::type CPyCast(const CPyRef& o)
 {

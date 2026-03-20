@@ -6,7 +6,10 @@
 
 #pragma warning(push)
 #pragma warning(disable:4986) // warning C4986: 'std::set_new_handler': exception specification does not match previous declaration
-#include <comdef.h>
+#ifdef __clang__
+	#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+#endif
+#include<comdef.h>
 #pragma warning(pop)
 
 #include "maxon/win_include.h"

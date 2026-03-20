@@ -41,15 +41,15 @@ public:
 		return ports;
 	}
 
-	static Result<VariadicPort> Create(MicroNodeGroupInterface* node, const Block<const Member>& members, MicroNode::FLAGS flags = MicroNode::FLAGS::NONE)
+	static Result<VariadicPort> Create(MicroNodeGroupInterface* node, const CString& prefix, const Block<const Member>& members, MicroNode::FLAGS flags = MicroNode::FLAGS::NONE)
 	{
 		iferr_scope;
 		VariadicPort ports;
-		ports.Init(node, members, flags) iferr_return;
+		ports.Init(node, prefix, members, flags) iferr_return;
 		return ports;
 	}
 
-	Result<void> Init(MicroNodeGroupInterface* node, const Block<const Member>& members, MicroNode::FLAGS flags = MicroNode::FLAGS::NONE)
+	Result<void> Init(MicroNodeGroupInterface* node, const CString& prefix, const Block<const Member>& members, MicroNode::FLAGS flags = MicroNode::FLAGS::NONE)
 	{
 		iferr_scope;
 
@@ -89,14 +89,18 @@ public:
 			node->SetValue(corenodes::CoreNodeInterface::Errors, errors) iferr_return;
 		}
 
-		_prefix = "empty"_cs;
+		_prefix = prefix;
 		_template = false;
 		_ports.Resize(copyMembers.GetCount()) iferr_return;
 		for (Int i = 0; i < copyMembers.GetCount(); ++i)
 		{
 			const DataType& portType = copyMembers[i].type;
 			const Id& memberName = copyMembers[i].name;
-			const Id& name = memberName.IsPopulated() ? memberName : DataTypeLib::GetNumberedId(i);
+			Id name = memberName.IsPopulated() ? memberName : DataTypeLib::GetNumberedId(i);
+			if (prefix.IsPopulated())
+			{
+				name.Init(prefix + name.ToCString()) iferr_return;
+			}
 			MicroNodePtr<> ptr = node->PrivateCreatePort(name, PORT_TYPE, flags, portType, true) iferr_return;
 			Assign(_ports[i], ptr, node, name);
 		}
@@ -253,7 +257,10 @@ public:
 			{
 				return IllegalArgumentError(MAXON_SOURCE_LOCATION, "The PORT_MODE has to be given when OUTPUT_PORT != WRITE."_s);
 			}
-			mode |= OUTPUT_PORT ? PORT_MODE::OUTPUT : PORT_MODE::INPUT;
+			else
+			{
+				mode |= OUTPUT_PORT ? PORT_MODE::OUTPUT : PORT_MODE::INPUT;
+			}
 		}
 		else
 		{

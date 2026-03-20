@@ -78,9 +78,9 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Creates a new InternedId for the given inputId. All types for which there is an InternedId::Init function are supported.
-	/// @param[in] inputId			The id to intern.
-	/// @tparam INPUTTYPE				The type of inputId. All types for which there is an InternedId::Init function are supported.
-	/// @return									The inputId converted to InternedId.
+	/// @param[in] inputId						The id to intern.
+	/// @tparam INPUTTYPE							The type of inputId. All types for which there is an InternedId::Init function are supported.
+	/// @return												The inputId converted to InternedId.
 	//----------------------------------------------------------------------------------------
 	template <typename INPUTTYPE>
 	static Result<InternedId> Create(INPUTTYPE&& inputId)
@@ -93,8 +93,8 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Creates a new InternedId for the given numerical value.
-	/// @tparam NUMBER					The decimal number to intern as id.
-	/// @return									The value converted to InternedId.
+	/// @tparam NUMBER								The decimal number to intern as id.
+	/// @return												The value converted to InternedId.
 	//----------------------------------------------------------------------------------------
 	template <UInt NUMBER>
 	static Result<InternedId> Create()
@@ -728,11 +728,11 @@ public:
 	/// Tuple<Bool, Float64, Vector64, BaseArray<Float64>>.
 	/// @param[in] orig								Original DataType.
 	/// @param[in] replace						This delegate is called for each DataType found in orig.
-	///																It has to return the replacement for the passed DataType,
-	///																or the passed DataType itself if no immediate replacement shall be done.
-	///																In both cases, if the returned type is an instance of a parametric type,
-	///																the substitution recurses into the type parameters and
-	///																re-instantiates the parametric type for the substituted type arguments.
+	/// 															It has to return the replacement for the passed DataType,
+	/// 															or the passed DataType itself if no immediate replacement shall be done.
+	/// 															In both cases, if the returned type is an instance of a parametric type,
+	/// 															the substitution recurses into the type parameters and
+	/// 															re-instantiates the parametric type for the substituted type arguments.
 	/// @return												DataType where the substitutions given by #replace have been applied.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<DataType> Substitute(const DataType& orig, const Delegate<Result<DataType>(const DataType&)>& replace);
@@ -748,7 +748,7 @@ public:
 	/// e.g. Vector gets replaced by Vector64. Internally GetRuntimeDataType() just uses Substitute().
 	/// @param[in] orig								Original DataType.
 	/// @return												DataType where all occurrences of Int, UInt and Float have been replaced
-	///																by the corresponding runtime type.
+	/// 															by the corresponding runtime type.
 	/// @see Substitute
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<DataType> GetRuntimeDataType(const DataType& orig);

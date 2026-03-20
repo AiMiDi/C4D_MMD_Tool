@@ -105,7 +105,7 @@ public:
 		_isEnabled = true;
 	}
 
-	typename std::result_of<T()>::type operator ()()
+	typename std::invoke_result<T>::type operator ()()
 	{
 		DebugAssert(_isEnabled == true);
 		_isEnabled = false;

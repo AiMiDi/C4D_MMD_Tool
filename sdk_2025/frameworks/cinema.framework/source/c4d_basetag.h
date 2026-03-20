@@ -134,7 +134,7 @@ public:
 	/// @param[in] useDeformed				True if deform cache shall be taken into account.
 	/// @param[in] getRealTag					True if recursion shall start at the result of MSG_GETREALTAGDATA (if possible) instead of the tag itself.
 	/// @param[out] foundTags					All found tags are reported to this value receiver.
-	/// @return												false if the receiver cancelled further evaluation, true otherwise.
+	/// @return												False if the receiver cancelled further evaluation, true otherwise.
 	//----------------------------------------------------------------------------------------
 	maxon::Result<Bool> FindMatchingTagsOnPointObject(Bool useDeformed, Bool getRealTag, const maxon::ValueReceiver<const BaseTag*>& foundTags) const { return C4DOS_Tg->FindMatchingTagsOnPointObject(this, useDeformed, getRealTag, foundTags); }
 };
@@ -214,7 +214,7 @@ public:
 	/// Sets the a delegate that is called on data and count access functions.
 	/// This allows to for example lazily create or modify the data just before access.
 	/// The delegate will be called with the variable tag pointer, the variable tag access type and the raw data reference.
-	/// @param[in] validationDelegate						The delegate that will be called. A Delegate returning true indicates modified data and the data hash will be invalidated.
+	/// @param[in] validationDelegate	The delegate that will be called. A Delegate returning true indicates modified data and the data hash will be invalidated.
 	//----------------------------------------------------------------------------------------
 	void SetValidationDelegate(ValidationDelegate&& validationDelegate);
 
@@ -572,35 +572,35 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Replaces the pin point selection for this tag with the point selection specified.
-	/// @param[in] pinSelection		New pin selection to set.
-	/// @return										True on success.
+	/// @param[in] pinSelection				New pin selection to set.
+	/// @return												True on success.
 	//----------------------------------------------------------------------------------------
 	Bool SetPinSelection(const BaseSelect& pinSelection) { return C4DOS_Tg->SetPinSelection(this, pinSelection); }
 
 	//----------------------------------------------------------------------------------------
 	/// Obtains the current pin point selection for this tag.
-	/// @return										Reference to the pin selection.
+	/// @return												Reference to the pin selection.
 	//----------------------------------------------------------------------------------------
 	BaseSelect& GetPinSelection() { return C4DOS_Tg->GetPinSelection(this); }
 
 	//----------------------------------------------------------------------------------------
 	/// Obtains the current pin point selection for this tag.
-	/// @return										A non-writable reference to the pin selection.
+	/// @return												A non-writable reference to the pin selection.
 	//----------------------------------------------------------------------------------------
 	const BaseSelect& GetPinSelection() const { return C4DOS_Tg->GetPinSelectionConst(this); }
 
 	//----------------------------------------------------------------------------------------
 	/// Adds the point selection specified to the pin point selection.
-	/// @param[in] pinSelection		Pin selection to add.
-	/// @return										True on success.
+	/// @param[in] pinSelection				Pin selection to add.
+	/// @return												True on success.
 	//----------------------------------------------------------------------------------------
 	Bool AddToPinSelection(const BaseSelect& pinSelection) { return C4DOS_Tg->AddToPinSelection(this, pinSelection); }
 
 	//----------------------------------------------------------------------------------------
 	/// Removes from the pin point selection the points in the selection specified. Points in
 	/// the specified selection that are not part of the current pin point selection are simply ignored.
-	/// @param[in] pinSelection		Pin point selection to remove.
-	/// @return										True on success.
+	/// @param[in] pinSelection				Pin point selection to remove.
+	/// @return												True on success.
 	//----------------------------------------------------------------------------------------
 	Bool RemoveFromPinSelection(const BaseSelect& pinSelection) { return C4DOS_Tg->RemoveFromPinSelection(this, pinSelection); }
 

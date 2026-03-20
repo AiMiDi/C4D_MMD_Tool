@@ -97,30 +97,30 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @brief Gets the time component of the left tangent of the key.
 	/// @details See class description for details on the availability of tangents. Note that this function does not take key presets, e.g., CKEYPRESET::AUTO_CLAMP, into account, but always returns the underlying true tangent data, as if the preset was CKEYPRESET::CUSTOM. Use  CCurve::GetTangents to retrieve tangents respecting the key preset settings.
-	/// @return	The time component of the left tangent.
+	/// @return												The time component of the left tangent.
 	//----------------------------------------------------------------------------------------
 	BaseTime GetTimeLeft() const { return CaCall(GetTimeLeft) (); }
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Gets the time component of the left tangent of the key.
 	/// @details See class description for details on the availability of tangents.
-	/// @param[in] seq The curve the key belongs to.
-	/// @param[in] t The time component of the left tangent to set.
+	/// @param[in] seq								The curve the key belongs to.
+	/// @param[in] t									The time component of the left tangent to set.
 	//----------------------------------------------------------------------------------------
 	void SetTimeLeft(CCurve* seq, const BaseTime& t) { CaCall(SetTimeLeft) (seq, t); }
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Gets the time component of the right tangent of the key.
 	/// @details See class description for details on the availability of tangents. Note that this function does not take key presets, e.g., CKEYPRESET::AUTO_CLAMP, into account, but always returns the underlying true tangent data, as if the preset was CKEYPRESET::CUSTOM. Use  CCurve::GetTangents to retrieve tangents respecting the key preset settings.
-	/// @return	The time component of the right tangent.
+	/// @return												The time component of the right tangent.
 	//----------------------------------------------------------------------------------------
 	BaseTime GetTimeRight() const { return CaCall(GetTimeRight) (); }
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Gets the time component of the right tangent of the key.
 	/// @details See class description for details on the availability of tangents.
-	/// @param[in] seq The curve the key belongs to.
-	/// @param[in] t The time component of the right tangent to set.
+	/// @param[in] seq								The curve the key belongs to.
+	/// @param[in] t									The time component of the right tangent to set.
 	//----------------------------------------------------------------------------------------
 	void SetTimeRight(CCurve* seq, const BaseTime& t) { CaCall(SetTimeRight) (seq, t); }
 
@@ -178,30 +178,30 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// @brief Gets the value component of the left tangent of the key.
 	/// @details See class description for details on the availability of tangents. Note that this function does not take key presets, e.g., CKEYPRESET::AUTO_CLAMP, into account, but always returns the underlying true tangent data, as if the preset was CKEYPRESET::CUSTOM. Use  CCurve::GetTangents to retrieve tangents respecting the key preset settings.
-	/// @return	The value component of the left tangent.
+	/// @return												The value component of the left tangent.
 	//----------------------------------------------------------------------------------------
 	Float GetValueLeft() const { return CaCall(GetValueLeft) (); }
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Sets the value component of the left tangent of the key.
 	/// @details See class description for details on the availability of tangents.
-	/// @param[in] seq The curve the key belongs to.
-	/// @param[in] v The value component of the left tangent to set.
+	/// @param[in] seq								The curve the key belongs to.
+	/// @param[in] v									The value component of the left tangent to set.
 	//----------------------------------------------------------------------------------------
 	void SetValueLeft(CCurve* seq, Float v) { CaCall(SetValueLeft) (seq, v); }
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Gets the value component of the right tangent of the key.
 	/// @details See class description for details on the availability of tangents. Note that this function does not take key presets, e.g., CKEYPRESET::AUTO_CLAMP, into account, but always returns the underlying true tangent data, as if the preset was CKEYPRESET::CUSTOM. Use  CCurve::GetTangents to retrieve tangents respecting the key preset settings.
-	/// @return	The value component of the right tangent.
+	/// @return												The value component of the right tangent.
 	//----------------------------------------------------------------------------------------
 	Float GetValueRight() const { return CaCall(GetValueRight) (); }
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Sets the value component of the right tangent of the key.
 	/// @details See class description for details on the availability of tangents.
-	/// @param[in] seq The curve the key belongs to.
-	/// @param[in] v The value component of the right tangent to set.
+	/// @param[in] seq								The curve the key belongs to.
+	/// @param[in] v									The value component of the right tangent to set.
 	//----------------------------------------------------------------------------------------
 	void SetValueRight(CCurve* seq, Float v) { CaCall(SetValueRight) (seq, v); }
 
@@ -511,21 +511,21 @@ public:
 	void GetTangents(Int32 kidx, Float64* vl, Float64* vr, Float64* tl, Float64* tr) { CaCall(GetTangents) (kidx, vl, vr, tl, tr); }
 
 	//----------------------------------------------------------------------------------------
-	/// Adjusts Tangent Length to avoid curve intersection
-	/// @param[in] keyTime1								First key Time value.
-	/// @param[in] keyTime2								Second key Time value.
-	/// @param[in,out] tan1_val						First key right tangent value.
-	/// @param[in,out] tan2_val						Second key left tangent value.
-	/// @param[in,out] tan1Time						First key right tangent time.
-	/// @param[in,out] tan2Time						Second key left tangent time.
-	/// @param[in] applyHermiteFactor			Apply the Hermite factor to tangent.
+	/// Adjusts Tangent Length to avoid curve intersection.
+	/// @param[in] keyTime1						First key Time value.
+	/// @param[in] keyTime2						Second key Time value.
+	/// @param[in,out] tan1_val				First key right tangent value.
+	/// @param[in,out] tan2_val				Second key left tangent value.
+	/// @param[in,out] tan1Time				First key right tangent time.
+	/// @param[in,out] tan2Time				Second key left tangent time.
+	/// @param[in] applyHermiteFactor	Apply the Hermite factor to tangent.
 	//----------------------------------------------------------------------------------------
 	void AdjustTangentLength(Float64 keyTime1, Float64 keyTime2, Float64& tan1_val, Float64& tan2_val, Float64& tan1Time, Float64& tan2Time, Bool applyHermiteFactor) const  { CaCall(AdjustTangentLength) (keyTime1, keyTime2, tan1_val, tan2_val, tan1Time, tan2Time, applyHermiteFactor); }
 
 	//----------------------------------------------------------------------------------------
 	/// Adjusts Tangent Time and Value to reflect an auto-tangent (slope is preserved).
-	/// Consider if broken tangent is active for weighted auto-tangent
-	/// @param[in] keyIndex								The key index: @em 0 <= @formatParam{kidx} < GetKeyCount()
+	/// Consider if broken tangent is active for weighted auto-tangent.
+	/// @param[in] keyIndex						The key index: @em 0 <= @formatParam{kidx} < GetKeyCount()
 	//----------------------------------------------------------------------------------------
 	void AdjustTangentAutoWeight(Int32 keyIndex)   { CaCall(AdjustTangentAutoWeight) (keyIndex); }
 
@@ -621,6 +621,13 @@ public:
 	//----------------------------------------------------------------------------------------
 	CKey* FindPrevUnmuted(Int32 idx, Int32* ret_idx = nullptr) { return CaCall(FindPrevUnmuted1) (idx, ret_idx); }
 
+	//----------------------------------------------------------------------------------------
+	/// Gets the GeData value calculated at @formatParam{time}, taking into account things like time curves.
+	/// @param[in] time								The time to calculate the value at.
+	/// @return												The calculated value.
+	//----------------------------------------------------------------------------------------
+	GeData GetGeData(const BaseTime& time) const { return CaCall(GetGeDataCurve)(time); }
+
 /// @}
 };
 
@@ -644,7 +651,7 @@ public:
 /// if (tag)
 /// {
 /// 	// Allocate track for align to spline tag
-/// 	CTrack* track = CTrack::Alloc(tag, ConstDescID(DescLevel(ALIGNTOSPLINETAG_POSITION)));
+/// 	CTrack* track = CTrack::Alloc(tag, ConstDescIDLevel(ALIGNTOSPLINETAG_POSITION));
 /// 	if (track)
 /// 	{
 /// 		// Add track to align to spline tag
@@ -963,14 +970,14 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Gets evaluation mode.
 	/// @since R24
-	/// @return												interpolation mode.
+	/// @return												Interpolation mode.
 	//----------------------------------------------------------------------------------------
 	CURVEINTERPOLATION_MODE GetEvaluationMode() const { return CaCall(GetEvaluationMode) (); }
 
 	//----------------------------------------------------------------------------------------
 	/// Sets evaluation mode.
 	/// @since R24
-	/// @param[in] mode							curve interpolation mode.
+	/// @param[in] mode								Curve interpolation mode.
 	//----------------------------------------------------------------------------------------
 	void SetEvaluationMode(CURVEINTERPOLATION_MODE mode) { return CaCall(SetEvaluationMode) (mode); }
 

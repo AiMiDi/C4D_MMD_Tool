@@ -51,7 +51,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Copy constructor. Constructs a reference object with reference data from an existing object.
-	/// @note This constructor is for assignment from a different type of SDKReferenceObjectPtr without use of additional pointer casts
+	/// @note This constructor is for assignment from a different type of SDKReferenceObjectPtr without use of additional pointer casts.
 	/// @param[in] src								The source reference object (of a different type) containing an interface pointer.
 	//----------------------------------------------------------------------------------------
 	inline SDKReferenceObjectPtr(const SDKReferenceObjectBasePtr &src)
@@ -105,7 +105,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Removes a references.
 	/// @param[in] zero								Pass @em 0.
-	/// @return												@c *this
+	/// @return												@c *this.
 	//----------------------------------------------------------------------------------------
 	SDKReferenceObjectPtr& operator =(int zero)
 	{
@@ -123,7 +123,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Assigns a reference to an already initialized reference object.
 	/// @param[in] src								A reference object containing an interface pointer.
-	/// @return												@c *this
+	/// @return												@c *this.
 	//----------------------------------------------------------------------------------------
 	SDKReferenceObjectPtr& operator =(const SDKReferenceObjectPtr &src)
 	{
@@ -143,8 +143,8 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Assigns a reference to an already initialized reference object.
 	/// @note This operator is for assignment from a different type of SDKReferenceObjectPtr without use of additional pointer casts.
-	/// @param[in] src								A reference object (of a different type) containing an interface pointer
-	/// @return												@c *this
+	/// @param[in] src								A reference object (of a different type) containing an interface pointer.
+	/// @return												@c *this.
 	//----------------------------------------------------------------------------------------
 	SDKReferenceObjectPtr&	operator =(const SDKReferenceObjectBasePtr &src)
 	{
@@ -164,7 +164,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// Assigns a reference to an already initialized reference object.
 	/// @param[in] src_itf						An interface pointer.
-	/// @return												@c *this
+	/// @return												@c *this.
 	//----------------------------------------------------------------------------------------
 	SDKReferenceObjectPtr&	operator =(ObjectInterface *src_itf)
 	{

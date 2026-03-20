@@ -104,15 +104,15 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Move constructs a weak reference.
-	/// @param[in] dst								Destination
-	/// @param[in] src								Source
+	/// @param[in] dst								Destination.
+	/// @param[in] src								Source.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD void MoveWeakReference(WeakRefBase& dst, WeakRefBase& src);
 
 	//----------------------------------------------------------------------------------------
 	/// Copy constructs a weak reference.
-	/// @param[in] dst								Destination
-	/// @param[in] src								Source
+	/// @param[in] dst								Destination.
+	/// @param[in] src								Source.
 	/// @return												True on success, false if copying failed (due to out of memory).
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Bool CopyWeakReference(WeakRefBase& dst, const WeakRefBase& src);

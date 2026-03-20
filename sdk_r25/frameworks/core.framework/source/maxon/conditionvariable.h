@@ -98,7 +98,7 @@ private:
 
 	template <typename T> static MAXON_FUNCTION typename std::enable_if<!STD_IS_REPLACEMENT(convertible, typename std::remove_reference<T>::type, JobInterface*), Result<void>>::type AddFinishedObserver(ConditionVariableInterface* cond, T&& src, JobQueueInterface* queue = JOBQUEUE_NONE)
 	{
-		using ObserverJob = ClosureJob<T, JOBCANCELLATION::ISOK, typename std::result_of<typename std::remove_reference<T>::type()>::type>;
+		using ObserverJob = ClosureJob<T, JOBCANCELLATION::ISOK, typename std::invoke_result<typename std::remove_reference<T>::type>::type>;
 		iferr (ObserverJob* observer = NewObj(ObserverJob, std::forward<T>(src)))
 			return err;
 		return AddFinishedObserver(cond, static_cast<JobInterface*>(observer), queue);

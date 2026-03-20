@@ -1043,7 +1043,7 @@ class DeclRef(object):
                 r.merge(c, changedSet, framework)
 
     def loadSnippets(self, file):
-        f = open(file, 'rU')
+        f = open(file, 'r')
         snippetId = None
         snippet = None
         for line in f:
@@ -1309,7 +1309,7 @@ class DeclRef(object):
 
 def mergeWithParsed(tree, path, changedSet, framework):
     if path.endswith('.dox'):
-        f = open(path, 'rU')
+        f = open(path, 'r')
         doc = None
         while True:
             line = f.readline()
@@ -1350,7 +1350,7 @@ def traverseFiles(args, maindir, framework=None):
     if os.path.isfile(projDefPath):
         b = not args.publicframeworks
         if not b: 
-            projDef = open(projDefPath, 'rU')
+            projDef = open(projDefPath, 'r')
             keys, m = parseProjectDefinition(projDef)
             projDef.close()
             b = m.get('publicframework', False) 
@@ -1498,7 +1498,7 @@ class Framework(object):
         self.aliases.update(base.aliases)
 
     def parseAliases(self, aliasFile):
-        f = open(aliasFile, 'rU')
+        f = open(aliasFile, 'r')
         aliases = dict()
         for line in f:
             pos = line.find('=')

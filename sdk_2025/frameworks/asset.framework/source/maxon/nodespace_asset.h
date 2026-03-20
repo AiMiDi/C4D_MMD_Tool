@@ -23,7 +23,7 @@ class NodeSpaceAssetInterface : MAXON_INTERFACE_BASES(AssetInterface)
 public:
 	//----------------------------------------------------------------------------------------
 	/// Create creates a new nodespace asset.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<NodeSpaceAsset> Create();
 };

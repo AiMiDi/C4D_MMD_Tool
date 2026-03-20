@@ -23,4 +23,4 @@ MAXON_REGISTRY(CommandGetStateDelegate, CommandGetStateDelegates, "net.maxon.hyb
 
 } // namespace maxon
 
-#endif	// COMMANDGETSTATEDELEGATE_H__
+#endif // COMMANDGETSTATEDELEGATE_H__

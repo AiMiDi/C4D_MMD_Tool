@@ -49,51 +49,7 @@
 	#endif
 #endif
 
-#if defined(__INTEL_COMPILER)
-	#define MAXON_COMPILER_INTEL __INTEL_COMPILER
-
-	//----------------------------------------------------------------------------------------
-	/// Hints the compiler that a variable has a certain alignment.  Intel notes that a wrong hint might crash in their SSE code!
-	//----------------------------------------------------------------------------------------
-	#define MAXON_ASSUME_ALIGNED(val, alignment) DebugAssert((UInt(val) & ((alignment) - 1)) == 0); __assume_aligned(val, alignment)
-
-	#ifdef MAXON_TARGET_LINUX
-		#define override  // override specifier not yet supported by Intel compiler 13.0, use empty macro
-	#endif
-
-	#define BUILTINEXPECTEDSUPPORTED
-
-	#if MAXON_COMPILER_INTEL >= 1900 // Intel XE18 is completely unreliable, so try again with XE19...
-		#define PRIVATE_MAXON_WARN_UNUSED_CLASS	[[nodiscard]]
-		#define PRIVATE_MAXON_WARN_UNUSED [[nodiscard]]
-		#define PRIVATE_MAXON_WARN_MUTE_UNUSED (void)
-	#else
-		#define PRIVATE_MAXON_WARN_UNUSED_CLASS
-		#define PRIVATE_MAXON_WARN_UNUSED
-		#define PRIVATE_MAXON_WARN_MUTE_UNUSED
-	#endif
-
-	#define MAXON_WARNING_PUSH														_Pragma("warning(push)")
-	#define MAXON_WARNING_POP															_Pragma("warning(pop)")
-	#define MAXON_WARNING_DISABLE_VARIABLE_SHADOWING			_Pragma("warning(disable : 1599)")
-	#define MAXON_WARNING_DISABLE_UNUSED_VARIABLES				_Pragma("warning(disable : 177)")
-	#define MAXON_WARNING_DISABLE_MISSING_PROTOTYPES
-	#define MAXON_WARNING_DISABLE_DEPRECATED							_Pragma("warning(disable : 1478)") _Pragma("warning(disable : 1786)")
-	#define MAXON_WARNING_DISABLE_REDUNDANT_MOVE
-	#define MAXON_WARNING_DISABLE_UNUSED_PRIVATE_FIELD
-	#define MAXON_WARNING_DISABLE_UNUSED_LOCAL_TYPEDEF
-	#define MAXON_WARNING_ENABLE_SWITCH_CHECKALLENUMS			// add compiler warning for unused case statement
-
-	#define MAXON_WARNING(msg) __pragma(message(msg))
-
-	/// Disables the undefined behaviour sanitizer for a certain reason.
-	#define MAXON_UBSANITIZER_DISABLE(reason)
-	#define MAXON_ADDRESS_SANITIZER_DISABLE(reason)
-
-	#define _HAS_RANGE_BASED_FOR_DIFFERING_TYPES
-	#define PRIVATE_MAXON_FILE__ __FILE__
-
-#elif defined(__clang__)
+#if defined(__clang__)
 	#define MAXON_COMPILER_CLANG ((__clang_major__ * 100) + (__clang_minor__ * 10) + __clang_patchlevel__)
 
 	#define _HAS_REF_QUALIFIERS
@@ -338,7 +294,7 @@
 	#endif
 #endif
 
-#if defined(MAXON_COMPILER_INTEL) || defined(MAXON_COMPILER_GCC) || defined(MAXON_COMPILER_CLANG)
+#if defined(MAXON_COMPILER_GCC) || defined(MAXON_COMPILER_CLANG)
 	#define MAXON_ASSEMBLY_GCC
 #endif
 
@@ -472,6 +428,12 @@
 #if defined(MAXON_NEED_STD_RESULTOF) && __cplusplus >= 202002L
 
 // c++ 20 deprecated std::result_of, we add it here to keep compatibility with older compilers
+
+// This is the inverse condition that can be found in
+// /Applications/Xcode14_2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/c++/v1/type_traits
+// Only define result_of here if it is not defined in usr/include/c++/v1/type_traits.
+#if !(defined MAXON_TARGET_MACOS) || !(_LIBCPP_STD_VER <= 17 || defined(_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS))
+
 namespace std
 {
 #ifdef __cpp_lib_is_invocable
@@ -481,7 +443,8 @@ namespace std
 #endif
 }
 
-#endif
+#endif // !(_LIBCPP_STD_VER <= 17 || defined(_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS))
+#endif //defined(MAXON_NEED_STD_RESULTOF) && __cplusplus >= 202002L
 
 #ifndef PRIVATE_MAXON_FILE
 	// this code allows to extract the filename from the __FILE__ macro and storing only the name without the path.

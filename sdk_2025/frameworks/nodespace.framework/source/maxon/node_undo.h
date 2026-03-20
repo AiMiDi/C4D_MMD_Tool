@@ -51,7 +51,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Constructs the RAII-based wrapper.
-	/// @param[in] graph			The node graph that is to be modified.
+	/// @param[in] graph							The node graph that is to be modified.
 	//----------------------------------------------------------------------------------------
 	explicit GraphSetUndoMode(const GraphModelRef& graph) : _graph(graph)
 	{

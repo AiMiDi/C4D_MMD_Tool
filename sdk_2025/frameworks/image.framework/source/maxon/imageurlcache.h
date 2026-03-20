@@ -19,22 +19,24 @@ class ImageUrlCacheInterface : MAXON_INTERFACE_BASES(ObserverObjectInterface)
 	MAXON_INTERFACE(ImageUrlCacheInterface, MAXON_REFERENCE_NORMAL, "net.maxon.image.interface.imageurlcache");
 
 public:
+	//----------------------------------------------------------------------------------------
 	/// Delegate which is called if the cache was updated.
-	/// @param[in] url          url of the image
-	/// @param[in] loaded				ImageBaseRef with the loaded image.
+	/// @param[in] url								Url of the image.
+	/// @param[in] loaded							ImageBaseRef with the loaded image.
+	//----------------------------------------------------------------------------------------
 	using UpdateCacheDelegate = Delegate<Result<void>(const Url& url, const ImageBaseRef& loaded)>;
 
 	//----------------------------------------------------------------------------------------
 	/// InvalidateCache invalidates and removed the image from the cache. The next request will reload the image.
 	/// @param[in] url								Image to discard from the cache.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> InvalidateCache(const Url& url);
 
 	//----------------------------------------------------------------------------------------
 	/// FindOrCreate returns the cache for the requested image resource.
 	/// @param[in] url								Url of the image to load.
-	/// @return                       Cache on success.
+	/// @return												Cache on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<ImageUrlCacheRef> FindOrCreate(const Url& url);
 
@@ -45,7 +47,7 @@ public:
 	/// still loading. In that case the delegate is triggered once the image is loaded.
 	/// @param[in] updateDelegate			Delegate which is called once the image is loaded.
 	/// @param[in] async							Use false to force synchronous loading, by default loading is asynchronous.
-	/// @return                       Image or nullptr on success.
+	/// @return												Image or nullptr on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<Opt<ImageBaseRef>> GetImage(UpdateCacheDelegate&& updateDelegate, Bool async = true) const;
 };

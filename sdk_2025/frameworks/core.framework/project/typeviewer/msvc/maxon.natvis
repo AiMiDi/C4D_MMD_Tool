@@ -516,20 +516,25 @@
 </Type>
 
 <Type Name="maxon::Block&lt;*&gt;">
-    <DisplayString>{{ Count={(size_t) _size} Stride: {$T2}}</DisplayString>
-    <Expand>
-        <Item Name="Size">_size</Item>
-        <Item Name="Pointer">($T1*)_ptr, [_size]</Item>
-        <Item Name="Stride" Optional="true">_stride</Item>
-        <ArrayItems Condition="$T2 != 1">
-            <Size>_size</Size>
-            <ValuePointer>($T1*)_ptr</ValuePointer>
-        </ArrayItems>
-        <IndexListItems Optional="true" Condition="{$T2} == 1">
-            <Size>_size</Size>
-            <ValueNode>*($T1*)(((char*)_ptr) + $i * _stride)</ValueNode>
-        </IndexListItems>
-    </Expand>
+	<DisplayString>{{Count={(size_t) _size} Strided={$T2} Moved={$T3} First={($T1*)_ptr}}</DisplayString>
+	<Expand>
+		<Item Name="Size">_size</Item>
+		<Item Name="Stride" Optional="true">_stride</Item>
+
+		<!-- NON strided block display -->
+		<Item Name="Pointer" Condition="$T2 == 0">($T1*)_ptr, [_size]</Item>
+		<ArrayItems Condition="$T2 == 0">
+			<Size>_size</Size>
+			<ValuePointer>($T1*)_ptr</ValuePointer>
+		</ArrayItems>
+
+		<!-- Strided block display, _ptr, [_size] would display wrong data here not accounting for stride -->
+		<Item Name="First" Condition="$T2 == 1">($T1*)_ptr</Item>
+		<IndexListItems Optional="true" Condition="$T2 == 1">
+			<Size>_size</Size>
+			<ValueNode>*($T1*)(((char*)_ptr) + $i * _stride)</ValueNode>
+		</IndexListItems>
+	</Expand>
 </Type>
 
 <Type Name="maxon::ConditionVariableRef">
@@ -1275,6 +1280,7 @@ Count={(*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)this)->_path._count.co
   <Intrinsic Name="GetKind" Expression="GetCountAndKind()->kind" />
   <Intrinsic Name="IsRoot" Expression="GetPathImpl() == 0" />
   <Intrinsic Name="IsNode" Expression="GetKind() == maxon::NODE_KIND::NODE" />
+  <Intrinsic Name="IsPort" Expression="GetKind() == maxon::NODE_KIND::INPORT || GetKind() == maxon::NODE_KIND::OUTPORT" />
   <Intrinsic Name="GetNodeData" Expression="(nodes.module.xdl64!maxon::nodes::NodeData*)this" />
   <Intrinsic Name="GetPortData" Expression="(nodes.module.xdl64!maxon::nodes::PortData*)this" />
 
@@ -1289,7 +1295,7 @@ Count={(*(nodes.module.xdl64!maxon::nodes::NodePathImpl**)this)->_path._count.co
     <!-- Only true node have this. Type is NodeData in this case, with GNodeData matching layout. -->
     <Item Name="Base NodeSystemLink" Condition="IsRoot() || IsNode()">GetNodeData()->baseSystem</Item>
     <!-- Only ports have this. Type is PortData in this case, with GNodeData matching layout. -->
-    <Item Name="PortData" Condition="!IsRoot() &amp;&amp; !IsNode()">GetPortData()</Item>
+    <Item Name="PortData" Condition="!IsRoot() &amp;&amp; IsPort()">GetPortData()</Item>
   </Expand>
 </Type>
 

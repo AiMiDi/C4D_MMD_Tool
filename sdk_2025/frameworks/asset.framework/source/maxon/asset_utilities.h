@@ -39,7 +39,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	/// IncreaseAssetVersion description.
 	/// @param[in] currentVersion			Increases the version string by one. e.g. "1.0" -> "1.1" or "1.0.99" -> "1.1.00"
-	/// @return                       New Version String on success.
+	/// @return												New Version String on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<String> IncreaseAssetVersion(const String& currentVersion);
 
@@ -58,9 +58,9 @@ public:
 	static MAXON_METHOD Result<void> AssetSetMetaData(const AssetDescription& asset, const BaseAssetMetaData& data);
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the asset icon. It returns the preview stored under ASSETMETADATA::ASSET_PREVIEWIMAGEURL
+	/// Returns the asset icon. It returns the preview stored under ASSETMETADATA::ASSET_PREVIEWIMAGEURL.
 	/// @param[in] asset							Asset to use.
-	/// @return                       Url to the preview icon on success.
+	/// @return												Url to the preview icon on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<Url> GetAssetIcon(const AssetDescription& asset);
 
@@ -69,7 +69,7 @@ public:
 	/// @param[in] repo								The asset repository for the lookup.
 	/// @param[in] type								The asset type of the asset.
 	/// @param[in] assetId						The asset id to look for.
-	/// @return                       An enum type which has "latest" as first entry and all found versions of the asset as following entries.
+	/// @return												An enum type which has "latest" as first entry and all found versions of the asset as following entries.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<EnumDataType> GetEnumTypeForVersions(const AssetRepositoryRef& repo, const AssetType& type, const Id& assetId);
 
@@ -82,7 +82,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Sets the asset's creation meta data.
-	/// @see ASSETMETADATA::CreationProperties
+	/// @see ASSETMETADATA::CreationProperties.
 	/// @param[in] asset							Asset which will receive the meta data.
 	/// @param[in] data								Meta data to set.
 	/// @return												OK on success.
@@ -91,7 +91,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// @brief Sets the asset's creation meta data with current version's values.
-	/// @see ASSETMETADATA::CreationProperties
+	/// @see ASSETMETADATA::CreationProperties.
 	/// @param[in] asset							Asset which will receive the meta data.
 	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------

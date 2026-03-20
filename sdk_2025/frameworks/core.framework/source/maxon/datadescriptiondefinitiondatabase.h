@@ -158,7 +158,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Renames a id in all databases to the new id.
-	/// @param[in] oldId							Old id to rename
+	/// @param[in] oldId							Old id to rename.
 	/// @param[in] newId							Id to replace.
 	/// @return												Number of values that were renamed.
 	//----------------------------------------------------------------------------------------
@@ -308,9 +308,9 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Fixes an entry of the resource database.
-	/// @param[in] version						last converted version.
+	/// @param[in] version						Last converted version.
 	/// @param[in] entry							DataDictionary to convert.
-	/// @return                       OK on success.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<void> FixDatabaseProps(DBVERSION version, DataDictionary& entry);
 

@@ -40,8 +40,8 @@ namespace PREVIEWIMAGESUBSCRIPTION
 	/// The provided image may be null on error, cancellation or at first calculation @stage.
 	/// Is it prohibited to modify the provided image in any way. Shared ownership with other
 	/// observers must be assumed.
-	/// @param[in] stage						The state of the preview result.
-	/// @param[in] image						The preview image result, may be null.
+	/// @param[in] stage							The state of the preview result.
+	/// @param[in] image							The preview image result, may be null.
 	//----------------------------------------------------------------------------------------
 using PreviewImageSubscriptionResultFunc = Delegate<void(PREVIEW::STAGE stage, const ImageTextureRef& image)>;
 
@@ -105,7 +105,7 @@ public:
 
 	//----------------------------------------------------------------------------------------
 	/// Create a subscription.
-	/// @return											The subscription on success.
+	/// @return												The subscription on success.
 	//----------------------------------------------------------------------------------------
 	static MAXON_METHOD Result<PreviewImageSubscriptionRef> Create();
 
@@ -113,9 +113,9 @@ public:
 	/// Submit the subscription request for a chosen node. The provided @p resultFunction may be called immediately, so make
 	/// sure to not hold problematic locks.
 	/// Releasing the reference PreviewImageSubscription results in automatic unsubscription.
-	/// @param[in] node							The node for which previews should be provided.
-	/// @param[in] resultFunction		The delegate for preview image provision.
-	/// @return											OK on success.
+	/// @param[in] node								The node for which previews should be provided.
+	/// @param[in] resultFunction			The delegate for preview image provision.
+	/// @return												OK on success.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD Result<void> Activate(const GraphNode& node, PreviewImageSubscriptionResultFunc&& resultFunction);
 

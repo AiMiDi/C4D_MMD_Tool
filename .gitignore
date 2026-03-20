@@ -1,4 +1,6 @@
 release/
+
+CMakeUserPresets.json
 dependency/install/
 setup/Output/
 

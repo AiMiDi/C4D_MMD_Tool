@@ -341,7 +341,7 @@ class GeClipMap
 
 		//----------------------------------------------------------------------------------------
 		/// SupportsDrawBezierSegment returns true if the clipmap supports DrawBezierSegment().
-		/// @return												true on success.
+		/// @return												True on success.
 		//----------------------------------------------------------------------------------------
 		Bool SupportsDrawBezierSegment() const;
 
@@ -644,7 +644,7 @@ class GeClipMap
 		/// Checks if @formatParam{fontDescription} is installed in the operating system. @see GeClipMap::GetInstalledFont()
 		/// @note An empty font description is a special case: will return true because is considered as a default Cinema 4D system font.
 		/// @param[in] fontDescription		The font description to check.
-		/// @param[out] installedFontDescription		Optional. If a container is defined and result is true, then in this container is stored the font description as is fetched from the operating system. Nothing is set here with the special case of passing an empty container. If a container is defined, result is false but a matching font family has been found, then here are stored all fonts of that matching font family, so can be used as fallback fonts.
+		/// @param[out] installedFontDescription	Optional. If a container is defined and result is true, then in this container is stored the font description as is fetched from the operating system. Nothing is set here with the special case of passing an empty container. If a container is defined, result is false but a matching font family has been found, then here are stored all fonts of that matching font family, so can be used as fallback fonts.
 		/// @return												@trueIfOtherwiseFalse{font description is installed}
 		//----------------------------------------------------------------------------------------
 		static Bool IsFontInstalled(const BaseContainer& fontDescription, BaseContainer* installedFontDescription = nullptr);

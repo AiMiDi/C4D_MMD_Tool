@@ -153,7 +153,7 @@ public:
 	MAXON_METHOD const DataType& GetDataType() const;
 
 	//----------------------------------------------------------------------------------------
-	/// Returns the datatype of the underlying type if the mesh vertex allows multiple values. Returns the main type if it doesn't allow multiple values
+	/// Returns the datatype of the underlying type if the mesh vertex allows multiple values. Returns the main type if it doesn't allow multiple values.
 	/// @return												The underlying datatype.
 	//----------------------------------------------------------------------------------------
 	MAXON_METHOD const DataType& GetUnderlyingDataType() const;
@@ -295,11 +295,11 @@ public:
 	} \
 	MAXON_METHOD const DataType& GetDataType() const \
 	{ \
-		return maxon::GetDataType<attributeType>();\
+		return maxon::GetDataType<attributeType>(); \
 	} \
 	MAXON_METHOD const DataType& GetUnderlyingDataType() const \
 	{ \
-		return maxon::GetDataType<attributeType::ValueType>();\
+		return maxon::GetDataType<attributeType::ValueType>(); \
 	} \
 
 //----------------------------------------------------------------------------------------

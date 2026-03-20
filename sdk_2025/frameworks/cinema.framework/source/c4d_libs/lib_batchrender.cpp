@@ -127,4 +127,156 @@ void BatchRender::SetUseNet(Int32 n, Bool on)
 	(reinterpret_cast<iBatchRender*>(this)->*(lib->SetUseNet))(n, on);
 }
 
+Bool BatchRender::GetTextureError()
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetTextureError));
+	if (!lib || !lib->GetTextureError)
+		return false;
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetTextureError))();
+}
+
+void BatchRender::SetTextureError(Bool state)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, SetTextureError));
+	if (!lib || !lib->SetTextureError)
+		return;
+	(reinterpret_cast<iBatchRender*>(this)->*(lib->SetTextureError))(state);
+}
+
+Bool BatchRender::GetCheckTexture()
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetCheckTexture));
+	if (!lib || !lib->GetCheckTexture)
+		return false;
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetCheckTexture))();
+}
+
+void BatchRender::SetCheckTexture(Bool state)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, SetCheckTexture));
+	if (!lib || !lib->SetCheckTexture)
+		return;
+	(reinterpret_cast<iBatchRender*>(this)->*(lib->SetCheckTexture))(state);
+}
+
+Int32 BatchRender::GetRenderSettingsCount(Int32 n)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetRenderSettingsCount));
+	if (!lib || !lib->GetRenderSettingsCount)
+		return NOTOK;
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetRenderSettingsCount))(n);
+}
+
+void BatchRender::GetAllRenderSettingsNames(Int32 n, maxon::BaseArray<String>& names)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetAllRenderSettingsNames));
+	if (!lib || !lib->GetAllRenderSettingsNames)
+		return;
+	(reinterpret_cast<iBatchRender*>(this)->*(lib->GetAllRenderSettingsNames))(n, names);
+}
+
+Int32 BatchRender::GetActiveRenderSettingsIndex(Int32 n)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetActiveRenderSettingsIndex));
+	if (!lib || !lib->GetActiveRenderSettingsIndex)
+		return NOTOK;
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetActiveRenderSettingsIndex))(n);
+}
+
+String BatchRender::GetActiveRenderSettingsName(Int32 n)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetActiveRenderSettingsName));
+	if (!lib || !lib->GetActiveRenderSettingsName)
+		return {};
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetActiveRenderSettingsName))(n);
+}
+
+void BatchRender::SetActiveRenderSettingsIndex(Int32 n, Int32 index)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, SetActiveRenderSettingsIndex));
+	if (!lib || !lib->SetActiveRenderSettingsIndex)
+		return;
+	(reinterpret_cast<iBatchRender*>(this)->*(lib->SetActiveRenderSettingsIndex))(n, index);
+}
+
+Int32 BatchRender::GetTakeCount(Int32 n)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetTakeCount));
+	if (!lib || !lib->GetTakeCount)
+		return NOTOK;
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetTakeCount))(n);
+}
+
+void BatchRender::GetAllTakeNames(Int32 n, maxon::BaseArray<String>& names)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetAllTakeNames));
+	if (!lib || !lib->GetAllTakeNames)
+		return;
+	(reinterpret_cast<iBatchRender*>(this)->*(lib->GetAllTakeNames))(n, names);
+}
+
+Int32 BatchRender::GetActiveTakeIndex(Int32 n)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetActiveTakeIndex));
+	if (!lib || !lib->GetActiveTakeIndex)
+		return NOTOK;
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetActiveTakeIndex))(n);
+}
+
+String BatchRender::GetActiveTakeName(Int32 n)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetActiveTakeName));
+	if (!lib || !lib->GetActiveTakeName)
+		return {};
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetActiveTakeName))(n);
+}
+
+void BatchRender::SetActiveTakeIndex(Int32 n, Int32 index, Bool takeOnly)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, SetActiveTakeIndex));
+	if (!lib || !lib->SetActiveTakeIndex)
+		return;
+	(reinterpret_cast<iBatchRender*>(this)->*(lib->SetActiveTakeIndex))(n, index, takeOnly);
+}
+
+Int32 BatchRender::GetCameraCount(Int32 n)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetCameraCount));
+	if (!lib || !lib->GetCameraCount)
+		return NOTOK;
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetCameraCount))(n);
+}
+
+void BatchRender::GetAllCameraNames(Int32 n, maxon::BaseArray<String>& names)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetAllCameraNames));
+	if (!lib || !lib->GetAllCameraNames)
+		return;
+	(reinterpret_cast<iBatchRender*>(this)->*(lib->GetAllCameraNames))(n, names);
+}
+
+Int32 BatchRender::GetActiveCameraIndex(Int32 n)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetActiveCameraIndex));
+	if (!lib || !lib->GetActiveCameraIndex)
+		return NOTOK;
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetActiveCameraIndex))(n);
+}
+
+String BatchRender::GetActiveCameraName(Int32 n, Bool filename)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, GetActiveCameraName));
+	if (!lib || !lib->GetActiveCameraName)
+		return {};
+	return (reinterpret_cast<iBatchRender*>(this)->*(lib->GetActiveCameraName))(n, filename);
+}
+
+void BatchRender::SetActiveCameraIndex(Int32 n, Int32 index)
+{
+	BatchRenderLibrary* lib = CheckBatchRenderLib(LIBOFFSET(BatchRenderLibrary, SetActiveCameraIndex));
+	if (!lib || !lib->SetActiveCameraIndex)
+		return;
+	(reinterpret_cast<iBatchRender*>(this)->*(lib->SetActiveCameraIndex))(n, index);
+}
+
 } // namespace cinema

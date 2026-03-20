@@ -48,4 +48,4 @@ public:
 
 
 
-#endif	// ASSET_DOWNLOADS_H__
+#endif // ASSET_DOWNLOADS_H__

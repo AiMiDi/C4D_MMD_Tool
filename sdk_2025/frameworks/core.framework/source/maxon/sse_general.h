@@ -44,7 +44,7 @@
 
 			#define C4D_HAS_PCLMULQDQ_CAPABILITY
 			#define C4D_HAS_AVX2_CAPABILITY
-		#elif defined(MAXON_COMPILER_MSVC) || defined(MAXON_COMPILER_INTEL)
+		#elif defined(MAXON_COMPILER_MSVC)
 			#define C4D_HAS_SSE3_CAPABILITY
 			#define C4D_HAS_SSE3_INTRINSICS
 			#define C4D_HAS_SSE4_CAPABILITY
@@ -69,20 +69,12 @@
 //		#define C4D_HAS_AVX_INTRINSICS
 		#define C4D_HAS_AES_CAPABILITY
 		#include <immintrin.h>
-		#ifdef MAXON_COMPILER_INTEL
-			#define C4D_HAS_SSE4_INTRINSICS
-			#define C4D_HAS_AES_INTRINSICS
-		#endif
 	#elif defined MAXON_TARGET_MACOS && defined(MAXON_TARGET_CPU_X86)
 		#define C4D_HAS_SSE4_CAPABILITY
 		// #define C4D_HAS_SSE4_INTRINSICS
 		// #define C4D_HAS_AVX_CAPABILITY
 		#define C4D_HAS_AES_CAPABILITY
 		#include <immintrin.h>
-	#endif
-
-	#ifdef MAXON_COMPILER_INTEL
-		extern "C" { __m128 vmlsPow4(__m128 a, __m128 b); }
 	#endif
 
 	#ifdef __SSE3__

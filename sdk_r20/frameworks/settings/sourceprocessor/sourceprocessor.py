@@ -792,7 +792,7 @@ class Parser(object):
                                 if name in owner.methodNames:
                                     if not method:
                                         self.errors.append(name.pos, 'The function ' + name + ' has the name of method ' + str(owner.methodNames[name]) + '::' + name + ', but is not marked with MAXON_METHOD.')
-                                else:
+                                elif not owner.missingInterfaces:
                                     if method:
                                         self.errors.append(name.pos, 'The function ' + name + ' is not a method of one of the interfaces, but it is marked with MAXON_METHOD.')
                             elif method:
@@ -1247,6 +1247,7 @@ class Parser(object):
                 cls.ambiguousCalls = []
                 cls.selfCalls = []
                 cls.methodNames = dict()
+                cls.missingInterfaces = False
                 cls.anonymous = anonymous
                 if punct == ':':
                     # parse base classes
@@ -1315,9 +1316,12 @@ class Parser(object):
                                             # to avoid that a base class which is unrelated to components is considered a component base class just because its name happens to end with Component.
                                             break                                            
                                     else:
+                                        base = i
                                         i = scope.lookup(i)
                                         if isinstance(i, Class):
                                             i.addMethodNames(methods)
+                                        elif base.endswith('Interface'):
+                                            cls.missingInterfaces = True
                                 else:
                                     # We've found a component class when the for loop hasn't been terminated by break.
                                     if not basicComp:
@@ -1678,10 +1682,10 @@ class Parser(object):
             optionsCopy = args.stylecheckOptions.copy()
             try:
                 if not args.encoding:
-                    f = open(file, 'rU')
+                    f = open(file, 'r')
                     source = f.read()
                 elif sys.version_info.major >= 3:
-                    f = open(file, 'rU', encoding=args.encoding)
+                    f = open(file, 'r', encoding=args.encoding)
                     source = f.read()
                 else:
                     import codecs
@@ -1968,7 +1972,7 @@ def filterDoxygen(file):
             imgDir = os.path.join(doxDir, 'tmpimg')
             break
         doxDir = parent
-    f = open(file, 'rU')
+    f = open(file, 'r')
     parts = []
     dox = file.endswith('.dox')
     escape = ['@', '\\']
@@ -2186,7 +2190,7 @@ def recurse(args, dir):
     if os.path.isfile(projDefPath):
         b = not args.publicframeworks
         if not b: 
-            projDef = open(projDefPath, 'rU')
+            projDef = open(projDefPath, 'r')
             keys, m = parseProjectDefinition(projDef)
             projDef.close()
             b = m.get('publicframework', False) 
@@ -2213,6 +2217,8 @@ def main():
     parser.add_argument('directories', nargs='+', help='A number of root directories, all subdirectories containing "project/projectdefinition.txt" are processed.')
     parser.add_argument('--doxygen', action='store_true', help='Work as Doxygen filter. In this case a source file has to be specified instead of the directory, and the filtered file goes to stdout.')
     parser.add_argument('--publicframeworks', action='store_true', help='Process only frameworks with publicframework=true in their projectdefinition.txt.')
+    parser.add_argument('--generatedroot', action='store', help='Changes the root folder for generated files (may only be used for modules, not for frameworks).')
+    parser.add_argument('--frameworkroot', action='append', help='An additional directory which contains framework subdirectories. This option can be given multiple times.')
     args = parser.parse_args()
 
     if not args.doxygen:
@@ -2285,7 +2291,7 @@ def process(args):
 
     optionLines = []
     # read projectdefinition.txt and look for source processor options
-    projDef = open(projDefPath, 'rU')
+    projDef = open(projDefPath, 'r')
     for line in projDef:
         optionLines.append(line)
     projDef.close()
@@ -2399,7 +2405,8 @@ def process(args):
 
     args.mangledProjectId = args.projectId.replace(' ', '_').replace('.', '_').replace('-', '_')
 
-    generatedDir = os.path.join(args.directory, 'generated')
+    generatedDir = os.path.join(args.directory, args.generatedroot, os.path.basename(args.directory)) if args.generatedroot else os.path.join(args.directory, 'generated')
+    args.generated = generatedDir
     makeDir(generatedDir)
 
     # Load generator modules from the generators subdirectory.

@@ -41,4 +41,4 @@ template <GET_DATATYPE_POLICY POLICY, typename... T> inline Result<DataType> Pri
 
 } // namespace maxon
 
-#endif
+#endif // INTERSECTION_UNION_TYPE_H__
