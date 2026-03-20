@@ -97,6 +97,23 @@ inline constexpr bool kSDKHasCinemaNamespace = (API_VERSION >= 2024900);
 // 与依赖该头的 FillCustomIconSettingsFromBaseList2D / GetCustomIcon 等代码同条件使用。
 #define CMT_SDK_HAS_CUSTOMGUI_ICONCHOOSER_HEADER (API_VERSION >= 21200)
 
+// RadToDeg：R24 前由 c4d.h → ge_sys_math 提供全局 ::RadToDeg；R24+ 用 maxon/apibase.h + maxon/utilities/apibasemath.h
+// 得到 maxon::RadToDeg（勿用不存在的 maxon/apibasemath.h）。使用 CMT_RAD_TO_DEG 的 .cpp 须先包含 c4d.h。
+#if API_VERSION >= 2024000
+#ifndef CMT_MAXON_APIBASEMATH_FOR_RAD_INCLUDED
+#define CMT_MAXON_APIBASEMATH_FOR_RAD_INCLUDED
+#include <maxon/apibase.h>
+#include <maxon/utilities/apibasemath.h>
+#endif
+#ifndef CMT_RAD_TO_DEG
+#define CMT_RAD_TO_DEG(R) (maxon::RadToDeg(R))
+#endif
+#else
+#ifndef CMT_RAD_TO_DEG
+#define CMT_RAD_TO_DEG(R) (::RadToDeg(R))
+#endif
+#endif
+
 // MSVC 19.44+ 对 constexpr Vector 数组更严格，统一用 static const 避免 C2131。
 #define CMT_STATIC_BONE_REFRESH_COLORS static const
 

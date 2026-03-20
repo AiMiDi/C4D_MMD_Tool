@@ -139,15 +139,15 @@ Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>&
 		if (!set_curve_value(POSITION_Z, maxon::SafeConvert<Float>(position[2]) * setting.position_multiple))
 			return false;
 		const auto& rotation = camera_data.m_rotate;
-		if (!set_curve_value(ROTATION_X, maxon::SafeConvert<Float>(rotation[0])))
+		if (!set_curve_value(ROTATION_X, maxon::SafeConvert<Float>(rotation[1])))
 			return false;
-		if (!set_curve_value(ROTATION_Y, maxon::SafeConvert<Float>(rotation[1])))
+		if (!set_curve_value(ROTATION_Y, maxon::SafeConvert<Float>(rotation[0])))
 			return false;
 		if (!set_curve_value(ROTATION_Z, maxon::SafeConvert<Float>(rotation[2])))
 			return false;
 		if (!set_curve_value(DISTANCE, maxon::SafeConvert<Float>(camera_data.m_distance) * setting.position_multiple))
 			return false;
-		if (!set_curve_value(AOV, maxon::SafeConvert<Float>(camera_data.m_fov)))
+		if (!set_curve_value(AOV, maxon::SafeConvert<Float>(CMT_RAD_TO_DEG(maxon::SafeConvert<Float32>(camera_data.m_fov)))))
 			return false;
 	}
 	EventAdd();
@@ -234,8 +234,8 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 					Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(POSITION_X) * setting.position_multiple),
 					maxon::SafeConvert<float>(get_curve_value(POSITION_Y) * setting.position_multiple),
 					maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) ),
-					Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
-					maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
+					Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
+					maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
 					maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) ),
 					static_cast<uint32_t>(get_curve_value(AOV)));
 			}
@@ -268,9 +268,8 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 											maxon::SafeConvert<float>(get_curve_value(POSITION_Y) * setting.position_multiple),
 											maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) );
 
-				// rotation
-			camera_key_frame.m_rotate = Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
-											maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
+			camera_key_frame.m_rotate = Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
+											maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
 											maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) );
 				// distance
 				camera_key_frame.m_distance = maxon::SafeConvert<float>(get_curve_value(DISTANCE) * setting.position_multiple);

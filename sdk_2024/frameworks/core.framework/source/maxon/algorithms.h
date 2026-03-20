@@ -311,7 +311,7 @@ inline auto Copy(ITERATOR first, SENTINEL sentinel, DEST_ITERATOR dest) -> Resul
 	using ValueType = typename std::iterator_traits<ITERATOR>::value_type;
 	using Impl = maxon::details::CopyImplSelector<TestForCopyFromMember<ValueType>::isSupported>;
 
-	return Impl::template Copy(first, sentinel, dest);
+	return Impl::Copy(first, sentinel, dest);
 }
 
 //----------------------------------------------------------------------------------------
@@ -344,7 +344,7 @@ inline auto CopyIf(ITERATOR first, SENTINEL sentinel, DEST_ITERATOR dest, PREDIC
 	using ValueType = typename std::iterator_traits<ITERATOR>::value_type;
 	using Impl = maxon::details::CopyImplSelector<TestForCopyFromMember<ValueType>::isSupported>;
 
-	return Impl::template CopyIf(first, sentinel, dest, pred);
+	return Impl::CopyIf(first, sentinel, dest, pred);
 }
 
 //----------------------------------------------------------------------------------------
@@ -375,7 +375,7 @@ inline auto CopyToUninitialized(ITERATOR first, SENTINEL sentinel, DEST_ITERATOR
 	using ValueType = typename std::iterator_traits<ITERATOR>::value_type;
 	using Impl = maxon::details::CopyImplSelector<TestForCopyFromMember<ValueType>::isSupported>;
 
-	return Impl::template CopyToUninitialized(first, sentinel, dest);
+	return Impl::CopyToUninitialized(first, sentinel, dest);
 }
 
 //----------------------------------------------------------------------------------------
@@ -408,7 +408,7 @@ inline auto CopyToUninitializedIf(ITERATOR first, SENTINEL sentinel, DEST_ITERAT
 	using ValueType = typename std::iterator_traits<ITERATOR>::value_type;
 	using Impl = maxon::details::CopyImplSelector<TestForCopyFromMember<ValueType>::isSupported>;
 
-	return Impl::template CopyToUninitializedIf(first, sentinel, dest, pred);
+	return Impl::CopyToUninitializedIf(first, sentinel, dest, pred);
 }
 
 //----------------------------------------------------------------------------------------
