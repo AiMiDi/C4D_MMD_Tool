@@ -5,7 +5,7 @@ name: Build
 
 on:
   push:
-    branches: [main]
+    branches: [main, CI_test]
   workflow_dispatch:
   workflow_call:
     inputs:
@@ -48,12 +48,10 @@ jobs:
             configure_preset: dev-windows
             build_preset: workflow-release
             deps_generator: "Visual Studio 17 2022"
-            deps_generator_extra: -A x64 -T v143
           - os: macos-latest
             configure_preset: dev-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
-            deps_generator_extra: -DCMAKE_OSX_ARCHITECTURES=arm64;x86_64
 
     runs-on: ${{ matrix.os }}
 
@@ -75,9 +73,15 @@ jobs:
       - name: Build dependencies (on cache miss)
         if: steps.deps-cache.outputs.cache-hit != 'true'
         run: |
+          deps_extra=()
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            deps_extra=(-A x64 -T v143)
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            deps_extra=("-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64")
+          fi
           cmake -S dependency -B _build_msvc/cmt_deps \
             -G "${{ matrix.deps_generator }}" \
-            ${{ matrix.deps_generator_extra }} \
+            "${deps_extra[@]}" \
             "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt/lib" \
             "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt/lib"
           cmake --build _build_msvc/cmt_deps --config Release
