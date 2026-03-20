@@ -31,7 +31,7 @@ jobs:
         shell: bash
     steps:
       - name: Checkout (resources for installer)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref }}
           submodules: recursive
@@ -83,7 +83,7 @@ jobs:
             "${{ github.workspace }}/setup/Common/installer_script.iss"
 
       - name: Upload installer artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: windows-installer
           path: setup/Common/Output/*.exe
@@ -97,13 +97,13 @@ jobs:
         shell: bash
     steps:
       - name: Checkout (res/)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref }}
           submodules: recursive
 
       - name: Download macOS build artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           pattern: build-macOS-*
           path: ${{ github.workspace }}/_dl
@@ -131,7 +131,7 @@ jobs:
           done
 
       - name: Upload macOS zip artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: macos-zips
           path: dist/*.zip
@@ -142,13 +142,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download installer
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: windows-installer
           path: ${{ github.workspace }}/assets
 
       - name: Download macOS zips
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: macos-zips
           path: ${{ github.workspace }}/assets

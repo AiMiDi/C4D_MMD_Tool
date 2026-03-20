@@ -2,11 +2,6 @@
 #include <c4d_symbols.h>
 #include "module/core/cmt_marco.h"
 
-namespace
-{
-	constexpr auto ID_REDSHIFT_MATERIAL = 1036224;
-}
-
 #if API_VERSION >= 2024000
 #include "maxon/graph.h"
 #include "maxon/graph_helper.h"
@@ -14,6 +9,7 @@ namespace
 
 namespace
 {
+	constexpr auto ID_REDSHIFT_MATERIAL = 1036224;
 	constexpr maxon::LiteralId g_redshiftId("com.redshift3d.redshift4c4d.class.nodespace");
 	const maxon::Id k_standardMaterialAssetId("com.redshift3d.redshift4c4d.nodes.core.standardmaterial");
 	const maxon::Id k_textureSamplerAssetId("com.redshift3d.redshift4c4d.nodes.core.texturesampler");

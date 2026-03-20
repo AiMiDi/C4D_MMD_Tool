@@ -57,7 +57,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # workflow_call: optional ref; push/dispatch: never read inputs (undefined outside workflow_call)
           ref: ${{ github.event_name == 'workflow_call' && (inputs.ref != '' && inputs.ref || github.ref) || github.ref }}
@@ -98,7 +98,7 @@ jobs:
         run: cmake --build --preset "${{ matrix.build_preset }}"
 
       - name: Upload plugin output
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: build-${{ runner.os }}-${{ matrix.sdk }}
           path: _build_msvc/${{ matrix.sdk }}/bin/Release/plugins/mmdtool/
