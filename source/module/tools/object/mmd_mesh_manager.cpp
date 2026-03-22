@@ -553,7 +553,18 @@ Bool MMDMeshManagerObject::LoadPMX(
 			morph_skin_object->InsertUnderLast(mesh_object);
 		}
 
-		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertices, &setting, &mesh_object_points, &weight_tag, &vertex_weight_data](const decltype(vertex_count) vertex_index)
+		maxon::BaseArray<maxon::BaseArray<Float32>> joint_weight_maps;
+		if (setting.import_weights)
+		{
+			const Int32 jc = bone_list.GetCount();
+			joint_weight_maps.Resize(jc) iferr_return;
+			for (Int32 j = 0; j < jc; ++j)
+			{
+				joint_weight_maps[j].Resize(static_cast<Int32>(vertex_count)) iferr_return;
+			}
+		}
+
+		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertices, &setting, &mesh_object_points, &joint_weight_maps, &vertex_weight_data](const decltype(vertex_count) vertex_index)
 		{
 			const auto& pmx_vertex = pmx_vertices[vertex_index];
 
@@ -566,14 +577,23 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 			if (setting.import_weights)
 			{
-				// add weight data to weight tag
+				const Int32 vi = static_cast<Int32>(vertex_index);
 				for (const auto& [joint_index, weight] : vertex_weight_data[vertex_index])
 				{
-					// clamp weight at 0.0 to 1.0
-					weight_tag->SetWeight(joint_index, static_cast<Int32>(vertex_index), Clamp01(weight));
+					joint_weight_maps[joint_index][vi] = Clamp01(weight);
 				}
 			}
 		});
+
+		if (setting.import_weights && weight_tag)
+		{
+			const Int32 jc = bone_list.GetCount();
+			for (Int32 j = 0; j < jc; ++j)
+			{
+				if (!weight_tag->SetWeightMap(j, joint_weight_maps[j].GetFirst(), static_cast<Int32>(vertex_count)))
+					return false;
+			}
+		}
 
 		// if import_normal is true, create normal tag
 		NormalHandle normal_handle{};
@@ -1115,7 +1135,18 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 				const auto mesh_object_points = ToPoint(mesh_object)->GetPointW();
 
-				maxon::ParallelFor::Dynamic(0, part_vertex_count, [&setting, &pmx_vertices, &mesh_object_points, &weight_tag, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
+				maxon::BaseArray<maxon::BaseArray<Float32>> joint_weight_maps;
+				if (setting.import_weights)
+				{
+					const Int32 jc = bone_list.GetCount();
+					joint_weight_maps.Resize(jc) iferr_return;
+					for (Int32 j = 0; j < jc; ++j)
+					{
+						joint_weight_maps[j].Resize(part_vertex_count) iferr_return;
+					}
+				}
+
+				maxon::ParallelFor::Dynamic(0, part_vertex_count, [&setting, &pmx_vertices, &mesh_object_points, &joint_weight_maps, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
 				{
 					iferr_scope_handler
 					{
@@ -1133,7 +1164,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 				if (setting.import_expression)
 					{
-						vertex_info_map.Write([&pmx_vertex_index, &c4d_vertex_index, &mesh_object, &setting, &morph_tag_infos](maxon::HashMap<uint64_t, vertex_info>& map)->maxon::Result<void>
+						vertex_info_map.Write([&pmx_vertex_index, &c4d_vertex_index, &mesh_object, &morph_tag_infos](maxon::HashMap<uint64_t, vertex_info>& map)->maxon::Result<void>
 						{
 							iferr_scope;
 							auto& entry = map.InsertMultiEntry(pmx_vertex_index)iferr_return;
@@ -1147,14 +1178,22 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 					if (setting.import_weights)
 					{
-						// add weight data to weight tag
 						for (const auto& [joint_index, weight] : vertex_weight_data[pmx_vertex_index])
 						{
-							// clamp weight at 0.0 to 1.0
-							weight_tag->SetWeight(joint_index, c4d_vertex_index, Clamp01(weight));
+							joint_weight_maps[joint_index][c4d_vertex_index] = Clamp01(weight);
 						}
 					}
 				});
+
+				if (setting.import_weights && weight_tag)
+				{
+					const Int32 jc = bone_list.GetCount();
+					for (Int32 j = 0; j < jc; ++j)
+					{
+						if (!weight_tag->SetWeightMap(j, joint_weight_maps[j].GetFirst(), part_vertex_count))
+							return false;
+					}
+				}
 			}
 
 			// if import_normal is true, create normal tag
