@@ -14,11 +14,11 @@
     },
     {
       "name": "macos_universal_xcode",
-      "displayName": "Xcode macOS Universal",
+      "displayName": "Xcode macOS x86_64",
       "generator": "Xcode",
       "binaryDir": "${sourceDir}/../_build_xcode/sdk_r20",
       "cacheVariables": {
-        "CMAKE_OSX_ARCHITECTURES": "arm64;x86_64"
+        "CMAKE_OSX_ARCHITECTURES": "x86_64"
       }
     },
     {

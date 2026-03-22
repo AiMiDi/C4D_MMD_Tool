@@ -915,7 +915,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			{
 				if (maxon::String material_name_universal(pmx_material.m_englishName.c_str()); material_name_universal.IsEmpty())
 				{
-					material_name = "Mesh_" + String::UIntToString(material_index);
+					material_name = "Mesh_" + String::UIntToString(static_cast<UInt32>(material_index));
 				}
 				else
 				{
@@ -990,7 +990,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			{
 				if (maxon::String material_name_universal(pmx_material.m_englishName.c_str()); material_name_universal.IsEmpty())
 				{
-					material_name = "Mesh_" + String::UIntToString(material_index);
+					material_name = "Mesh_" + String::UIntToString(static_cast<UInt32>(material_index));
 				}
 				else
 				{

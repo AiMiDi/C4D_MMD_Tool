@@ -66,9 +66,10 @@ if(NOT CMT_SDK_SKIP_VS_A_AND_T)
     list(APPEND _CMT_SDK_CONFIGURE_ARGS -T "${CMT_SDK_TOOLSET}")
   endif()
 endif()
-# Universal binary for Xcode SDK configure (matches sdk_*/CMakePresets macos_universal_xcode)
+# macOS architecture for SDK configure; override with x86_64 for older SDKs (R20–R23) that lack ARM support
+set(CMT_SDK_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "macOS architectures for SDK build (e.g. x86_64 for pre-S24 SDKs)")
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin" AND CMT_SDK_GENERATOR STREQUAL "Xcode")
-  list(APPEND _CMT_SDK_CONFIGURE_ARGS "-D" "CMAKE_OSX_ARCHITECTURES=arm64;x86_64")
+  list(APPEND _CMT_SDK_CONFIGURE_ARGS "-D" "CMAKE_OSX_ARCHITECTURES=${CMT_SDK_OSX_ARCHITECTURES}")
 endif()
 # Forward pre-built dependency dir to SDK configure so it skips add_subdirectory for deps
 if(NOT CMT_DEPS_PREBUILT_DIR STREQUAL "")

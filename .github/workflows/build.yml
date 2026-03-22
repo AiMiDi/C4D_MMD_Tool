@@ -88,11 +88,20 @@ jobs:
 
       - name: Configure root (preset + prebuilt deps)
         run: |
+          extra_args=()
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            case "${{ matrix.sdk }}" in
+              sdk_r20|sdk_r21|sdk_r23)
+                extra_args+=(-D CMT_SDK_OSX_ARCHITECTURES=x86_64)
+                ;;
+            esac
+          fi
           cmake --preset "${{ matrix.configure_preset }}" \
             -D "CMT_SDK_DIR=${{ github.workspace }}/${{ matrix.sdk }}" \
             -D CMT_SDK_BUILD_CONFIG=Release \
             -D CMT_WITH_DEPENDENCY_SUBDIR=OFF \
-            -D "CMT_DEPS_PREBUILT_DIR=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt"
+            -D "CMT_DEPS_PREBUILT_DIR=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt" \
+            "${extra_args[@]}"
 
       - name: Build cmt-workflow (Release)
         run: cmake --build --preset "${{ matrix.build_preset }}"

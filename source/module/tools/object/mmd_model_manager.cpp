@@ -511,7 +511,7 @@ SDK2024_Write(MMDModelManagerObject) {
 	{
 		if (!const_cast<DescID&>(p.first).Write(hf))
 			return false;
-		if (!hf->WriteInt32(p.second))
+		if (!hf->WriteInt32(static_cast<Int32>(p.second)))
 			return false;
 	}
 
@@ -1514,7 +1514,7 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 			if (const auto mmd = mesh_mgr->GetNodeData<MMDMeshManagerObject>(); mmd && !mmd->SavePMX(pmx_file, setting))
 				return false;
 
-	const Int32 mat_count = material_list_.GetCount();
+	const Int32 mat_count = static_cast<Int32>(material_list_.GetCount());
 	if (mat_count > 0)
 	{
 		pmx_file.m_materials.resize(static_cast<size_t>(mat_count));
@@ -1522,7 +1522,7 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 			material_list_[i].ToPMX(pmx_file.m_materials[static_cast<size_t>(i)]);
 	}
 
-	const Int32 df_count = display_frame_list_.GetCount();
+	const Int32 df_count = static_cast<Int32>(display_frame_list_.GetCount());
 	if (df_count > 0)
 	{
 		pmx_file.m_displayFrames.resize(static_cast<size_t>(df_count));
