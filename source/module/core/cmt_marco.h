@@ -82,6 +82,8 @@ using HashInt = UInt;
 inline constexpr int kSDKVersion = API_VERSION;
 inline constexpr bool kSDK2024 = (API_VERSION >= 2024000);
 inline constexpr bool kSDK2026 = (API_VERSION >= 2026000);
+/// maxon::ParallelFor::Granularity 与 Dynamic(..., const Granularity&, queue)（约 2024+）；R20–2023 为 (threadCnt, Int granularity)。
+#define CMT_SDK_HAS_PARALLELFOR_GRANULARITY_STRUCT (API_VERSION >= 2024000)
 /// ID_BASELIST_ICON_COLORIZE* 等（S21 / API 21000 起）；预处理器与运行时常量共用同一阈值。
 #define CMT_SDK_HAS_ICON_COLORIZE (API_VERSION >= 21000)
 inline constexpr bool kSDKHasIconColorize = bool(CMT_SDK_HAS_ICON_COLORIZE);

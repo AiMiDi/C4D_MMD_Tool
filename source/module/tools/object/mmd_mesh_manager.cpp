@@ -27,6 +27,16 @@ Description:	MMD mesh root object
 
 namespace
 {
+	template <typename FROM, typename TO, typename LOOP>
+	static void ParallelForDynamic(FROM from, TO to, const LOOP& loop, Int grain, Bool enableParallel)
+	{
+#if CMT_SDK_HAS_PARALLELFOR_GRANULARITY_STRUCT
+		maxon::ParallelFor::Dynamic(from, to, loop, maxon::ParallelFor::Granularity(grain, enableParallel));
+#else
+		maxon::ParallelFor::Dynamic(from, to, loop, enableParallel ? maxon::PARALLELFOR_USEMAXIMUMTHREADS : 1, grain);
+#endif
+	}
+
 	/// Pose morph slider used by MorphUIData comes from tag GetMorphID; CAMorph::SetStrength alone may not
 	/// persist that parameter, so SyncMorphSlidersFromTags still read the default 1.0.
 	static void ZeroPoseMorphSlider(CAPoseMorphTag* morph_tag, CAMorph* morph)
@@ -424,7 +434,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 	{
 		// statistics vertex weight data
 		vertex_weight_data.resize(vertex_count);
-		maxon::ParallelFor::Dynamic(Int(0), Int(vertex_count), [&pmx_vertices, &vertex_weight_data](const Int vertex_index)
+		ParallelForDynamic(Int(0), Int(vertex_count), [&pmx_vertices, &vertex_weight_data](const Int vertex_index)
 		{
 			auto& weight_data = vertex_weight_data[vertex_index];
 			switch (const auto& pmx_vertex = pmx_vertices[vertex_index]; pmx_vertex.m_weightType)
@@ -509,7 +519,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				break;
 			}
 			}
-		}, maxon::ParallelFor::Granularity(64, vertex_count > 1024));
+		}, 64, vertex_count > 1024);
 	}
 
 	// create mesh
@@ -564,7 +574,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			}
 		}
 
-		maxon::ParallelFor::Dynamic(Int(0), Int(vertex_count), [&pmx_vertices, &setting, &mesh_object_points, &joint_weight_maps, &vertex_weight_data](const Int vertex_index)
+		ParallelForDynamic(Int(0), Int(vertex_count), [&pmx_vertices, &setting, &mesh_object_points, &joint_weight_maps, &vertex_weight_data](const Int vertex_index)
 		{
 			const auto& pmx_vertex = pmx_vertices[vertex_index];
 
@@ -583,7 +593,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					joint_weight_maps[joint_index][vi] = Clamp01(weight);
 				}
 			}
-		}, maxon::ParallelFor::Granularity(64, vertex_count > 1024));
+		}, 64, vertex_count > 1024);
 
 		if (setting.import_weights && weight_tag)
 		{
@@ -621,7 +631,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			mesh_object->InsertTag(uvw_tag);
 		}
 		// vertex index -> surface index
-		maxon::ParallelFor::Dynamic(Int(0), Int(faces_count), [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const Int surface_index)
+		ParallelForDynamic(Int(0), Int(faces_count), [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const Int surface_index)
 		{
 			iferr_scope_handler
 			{
@@ -669,7 +679,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					Vector(pmx_vertex_uv_c[0], pmx_vertex_uv_c[1], 0.),
 					Vector{}));
 			}
-		}, maxon::ParallelFor::Granularity(128, faces_count > 1024));
+		}, 128, faces_count > 1024);
 
 		// set weight tag
 		if (setting.import_weights)
@@ -1143,7 +1153,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					}
 				}
 
-				maxon::ParallelFor::Dynamic(Int(0), Int(part_vertex_count), [&setting, &pmx_vertices, &mesh_object_points, &joint_weight_maps, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map](const Int32 vertex_index)
+				ParallelForDynamic(Int(0), Int(part_vertex_count), [&setting, &pmx_vertices, &mesh_object_points, &joint_weight_maps, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map](const Int32 vertex_index)
 				{
 					iferr_scope_handler
 					{
@@ -1166,7 +1176,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 							joint_weight_maps[joint_index][c4d_vertex_index] = Clamp01(weight);
 						}
 					}
-				}, maxon::ParallelFor::Granularity(64, part_vertex_count > 1024));
+				}, 64, part_vertex_count > 1024);
 
 				if (setting.import_expression)
 				{
@@ -1224,7 +1234,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 			// vertex index -> surface index
 			const auto mesh_object_polygons = ToPoly(mesh_object)->GetPolygonW();
-			maxon::ParallelFor::Dynamic(static_cast<Int>(surface_begin_index), static_cast<Int>(surface_begin_index + part_face_num), [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_index_map](const Int surface_index)
+			ParallelForDynamic(static_cast<Int>(surface_begin_index), static_cast<Int>(surface_begin_index + part_face_num), [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_index_map](const Int surface_index)
 			{
 				iferr_scope_handler
 				{
@@ -1283,7 +1293,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 						Vector(pmx_vertex_uv_c[0], pmx_vertex_uv_c[1], 0.),
 						Vector{}));
 				}
-			}, maxon::ParallelFor::Granularity(128, part_face_num > 1024));
+			}, 128, part_face_num > 1024);
 
 			// set weight tag
 			if (setting.import_weights)
