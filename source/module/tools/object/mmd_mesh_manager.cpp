@@ -1153,7 +1153,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					}
 				}
 
-				ParallelForDynamic(Int(0), Int(part_vertex_count), [&setting, &pmx_vertices, &mesh_object_points, &joint_weight_maps, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map](const Int32 vertex_index)
+				ParallelForDynamic(Int(0), Int(part_vertex_count), [&setting, &pmx_vertices, &mesh_object_points, &joint_weight_maps, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map](const Int vertex_index)
 				{
 					iferr_scope_handler
 					{
