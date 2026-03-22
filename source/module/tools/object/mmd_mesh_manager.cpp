@@ -424,7 +424,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 	{
 		// statistics vertex weight data
 		vertex_weight_data.resize(vertex_count);
-		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertices, &vertex_weight_data](const Int vertex_index)
+		maxon::ParallelFor::Dynamic(0i64, Int(vertex_count), [&pmx_vertices, &vertex_weight_data](const Int vertex_index)
 		{
 			auto& weight_data = vertex_weight_data[vertex_index];
 			switch (const auto& pmx_vertex = pmx_vertices[vertex_index]; pmx_vertex.m_weightType)
@@ -564,7 +564,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			}
 		}
 
-		maxon::ParallelFor::Dynamic(decltype(vertex_count){}, vertex_count, [&pmx_vertices, &setting, &mesh_object_points, &joint_weight_maps, &vertex_weight_data](const decltype(vertex_count) vertex_index)
+		maxon::ParallelFor::Dynamic(0i64, Int(vertex_count), [&pmx_vertices, &setting, &mesh_object_points, &joint_weight_maps, &vertex_weight_data](const Int vertex_index)
 		{
 			const auto& pmx_vertex = pmx_vertices[vertex_index];
 
@@ -621,7 +621,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			mesh_object->InsertTag(uvw_tag);
 		}
 		// vertex index -> surface index
-		maxon::ParallelFor::Dynamic(decltype(faces_count){}, faces_count, [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const uint64_t surface_index)
+		maxon::ParallelFor::Dynamic(0i64, Int(faces_count), [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const Int surface_index)
 		{
 			iferr_scope_handler
 			{
@@ -871,7 +871,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					}
 
 					// add morph uv
-					maxon::ParallelFor::Dynamic(decltype(faces_count){}, faces_count, [&pmx_faces, &morph_node, &morph_uv_map](const uint64_t surface_index)
+					maxon::ParallelFor::Dynamic(0i64, Int(faces_count), [&pmx_faces, &morph_node, &morph_uv_map](const Int surface_index)
 					{
 						iferr_scope_handler{
 							return;
@@ -1146,7 +1146,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					}
 				}
 
-				maxon::ParallelFor::Dynamic(0, part_vertex_count, [&setting, &pmx_vertices, &mesh_object_points, &joint_weight_maps, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
+				maxon::ParallelFor::Dynamic(0i64, Int(part_vertex_count), [&setting, &pmx_vertices, &mesh_object_points, &joint_weight_maps, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
 				{
 					iferr_scope_handler
 					{
@@ -1225,7 +1225,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 			// vertex index -> surface index
 			const auto mesh_object_polygons = ToPoly(mesh_object)->GetPolygonW();
-			maxon::ParallelFor::Dynamic(surface_begin_index, surface_begin_index + part_face_num, [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_index_map](const uint64_t surface_index)
+			maxon::ParallelFor::Dynamic(static_cast<Int>(surface_begin_index), static_cast<Int>(surface_begin_index + part_face_num), [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle, &surface_begin_index, &vertex_index_map](const Int surface_index)
 			{
 				iferr_scope_handler
 				{
@@ -1238,7 +1238,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				const auto & pmx_surface_vertex_c = pmx_surface.m_vertices[2];
 
 				// add index
-				const auto object_surface_index = surface_index - surface_begin_index;
+				const Int object_surface_index = surface_index - static_cast<Int>(surface_begin_index);
 				auto & mesh_object_polygon = mesh_object_polygons[object_surface_index];
 
 				if (const auto vertex_index_a_ptr = vertex_index_map.Find(pmx_surface_vertex_a); vertex_index_a_ptr)
@@ -1450,7 +1450,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					}
 
 					// add morph uv
-					maxon::ParallelFor::Dynamic(decltype(faces_count){}, faces_count, [&pmx_faces, &morph_uv_map](const uint64_t surface_index)
+					maxon::ParallelFor::Dynamic(0i64, Int(faces_count), [&pmx_faces, &morph_uv_map](const Int surface_index)
 					{
 						const auto& pmx_surface = pmx_faces[surface_index];
 						const auto& pmx_surface_vertex_a = pmx_surface.m_vertices[0];
