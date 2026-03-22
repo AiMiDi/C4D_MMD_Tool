@@ -6,13 +6,7 @@
 #endif
 
 #if defined(MAXON_TARGET_MACOS) || defined(MAXON_TARGET_IOS)
-	#if defined(MAXON_TARGET_CPU_INTEL)
-		#define __debugbreak()	__asm__("int $3\n" : :);
-	#elif defined MAXON_TARGET_64BIT
-		#define __debugbreak()	__asm("svc 0");
-	#else
-		#define __debugbreak()	__asm("trap");
-	#endif
+	#define __debugbreak()	__builtin_debugtrap();
 #elif defined MAXON_TARGET_LINUX || defined MAXON_TARGET_ANDROID
 	#include <signal.h> // for raise(SIGTRAP)
 	#define __debugbreak()	raise(SIGTRAP);
