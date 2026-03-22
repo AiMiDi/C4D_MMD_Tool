@@ -139,6 +139,8 @@ class MMDModelManagerObject final : public ObjectData
 	mutable BaseContainer display_frame_items_;
 
 	maxon::HashMap<String, Bool> ik_solver_enable_states_;
+	/// Parallel to IK dynamic checkboxes: reliable DescID -> libMMD solver index (HashMap<DescID> can collapse keys).
+	maxon::BaseArray<maxon::Pair<DescID, Int>> ik_solver_dynamic_params_;
 
 	MMDModelPtr mmd_model_;
 	Int32 model_mode_ = MODEL_MODE_ANIM;
@@ -235,7 +237,10 @@ private:
 	Bool RebuildRuntime();
 	void BuildIKSolverUI();
 	void ApplyIKSolverStates();
+	void ApplyIKSolverFromParameters(BaseObject* op);
 	void ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting);
+	void StripIKSolverDynamicUI();
+	void SyncIKSolverDynamicParamsFromDescMap();
 	void SyncSubManagerScale(Float pm);
 	void SyncMaterialsList();
 	void PruneDeletedMaterialEntries(BaseDocument* doc);

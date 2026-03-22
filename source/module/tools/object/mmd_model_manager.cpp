@@ -395,6 +395,30 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	}
 
 	*is_morph_initialized_.Write() = true;
+
+	// Level 1: IK dynamic DescID list (parallel to desc_id_map_; level 0 files rebuild from map).
+	if (level >= 1)
+	{
+		Int64 ik_cnt = 0;
+		if (!hf->ReadInt64(&ik_cnt) || ik_cnt < 0 || ik_cnt > 10000)
+			return false;
+		iferr(ik_solver_dynamic_params_.Resize(0)) {}
+		for (Int64 i = 0; i < ik_cnt; ++i)
+		{
+			DescID did;
+			if (!did.Read(hf))
+				return false;
+			Int32 idx = 0;
+			if (!hf->ReadInt32(&idx))
+				return false;
+			iferr(ik_solver_dynamic_params_.Append(maxon::Pair<DescID, Int>(std::move(did), idx))) {}
+		}
+	}
+	else
+	{
+		SyncIKSolverDynamicParamsFromDescMap();
+	}
+
 	return true;
 }
 SDK2024_Write(MMDModelManagerObject) {
@@ -480,6 +504,17 @@ SDK2024_Write(MMDModelManagerObject) {
 			return false;
 	}
 
+	// Level 1 IK block; Read when @p level >= 1 (matches RegisterObjectPlugin disklevel 1).
+	if (!hf->WriteInt64(static_cast<Int64>(ik_solver_dynamic_params_.GetCount())))
+		return false;
+	for (const auto& p : ik_solver_dynamic_params_)
+	{
+		if (!const_cast<DescID&>(p.first).Write(hf))
+			return false;
+		if (!hf->WriteInt32(p.second))
+			return false;
+	}
+
 	return true;
 }
 SDK2024_CopyTo(MMDModelManagerObject)
@@ -495,6 +530,8 @@ SDK2024_CopyTo(MMDModelManagerObject)
 	if (mesh_manager_)
 		mesh_manager_->CopyTo(destObject->mesh_manager_, flags, trn);
 	iferr(destObject->desc_id_map_.CopyFrom(desc_id_map_))
+		return false;
+	iferr(destObject->ik_solver_dynamic_params_.CopyFrom(ik_solver_dynamic_params_))
 		return false;
 	iferr(destObject->morph_name_.CopyFrom(morph_name_))
 		return false;
@@ -869,32 +906,13 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				const auto& [_, animation]  = animations_[animation_index_];
 				constexpr Float32 vmd_fps = 30.0f;
 				const auto vmd_frame = static_cast<Float32>(now_time.Get() * vmd_fps);
-				if (!animation->GetApplyIKEnable())
-				{
-					auto* ik_manager = mmd_model_->GetIKManager();
-					if (ik_manager)
-					{
-						for (const auto& entry : desc_id_map_)
-						{
-							const auto& pair = entry.GetValue();
-							if (pair.first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
-							{
-								GeData value;
-								if (op->GetParameter(entry.GetKey(), value, DESCFLAGS_GET::NONE))
-								{
-									if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(pair.second)))
-										solver->Enable(value.GetBool());
-								}
-							}
-						}
-					}
-				}
 				if (needs_physics_reset)
 				{
 					mmd_model_->InitializeAnimation();
 					animation->SyncPhysics(vmd_frame, 10, 1.f / fps_);
 					is_animation_initialized_ = true;
 				}
+				ApplyIKSolverFromParameters(op);
 				mmd_model_->BeginAnimation();
 				mmd_model_->UpdateAllAnimation(animation.get(), vmd_frame, 1.f / fps_);
 				mmd_model_->EndAnimation();
@@ -906,6 +924,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 					mmd_model_->InitializeAnimation();
 					is_animation_initialized_ = true;
 				}
+				ApplyIKSolverFromParameters(op);
 				mmd_model_->BeginAnimation();
 				mmd_model_->UpdateNodeAnimation(false);
 				mmd_model_->UpdatePhysicsAnimation(1.f / fps_);
@@ -971,6 +990,37 @@ void MMDModelManagerObject::DeleteDynamicDescription(const DescID& id)
 	std::ignore = desc_id_map_.Erase(id);
 }
 
+void MMDModelManagerObject::StripIKSolverDynamicUI()
+{
+	DynamicDescription* const dd = Get()->GetDynamicDescriptionWritable();
+	if (!dd)
+		return;
+	for (auto it = desc_id_map_.Begin(); it != desc_id_map_.End(); )
+	{
+		if (it->GetValue().first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+		{
+			dd->Remove(it->GetKey());
+			it = desc_id_map_.Erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+	iferr(ik_solver_dynamic_params_.Resize(0)) {}
+}
+
+void MMDModelManagerObject::SyncIKSolverDynamicParamsFromDescMap()
+{
+	iferr(ik_solver_dynamic_params_.Resize(0)) {}
+	for (const auto& entry : desc_id_map_)
+	{
+		if (entry.GetValue().first != MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+			continue;
+		iferr(ik_solver_dynamic_params_.Append(maxon::Pair<DescID, Int>(entry.GetKey(), entry.GetValue().second))) {}
+	}
+}
+
 void MMDModelManagerObject::BuildIKSolverUI()
 {
 	if (!mmd_model_)
@@ -978,6 +1028,7 @@ void MMDModelManagerObject::BuildIKSolverUI()
 	auto* ik_manager = mmd_model_->GetIKManager();
 	if (!ik_manager)
 		return;
+	StripIKSolverDynamicUI();
 	const auto solver_count = ik_manager->GetIKSolverCount();
 	for (size_t i = 0; i < solver_count; ++i)
 	{
@@ -988,7 +1039,8 @@ void MMDModelManagerObject::BuildIKSolverUI()
 		BaseContainer bc = GetCustomDataTypeDefault(DTYPE_BOOL);
 		bc.SetString(DESC_NAME, solver_name);
 		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_IK_GRP))));
-		auto id = AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE, static_cast<Int>(i));
+		const DescID id = AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE, static_cast<Int>(i));
+		iferr(ik_solver_dynamic_params_.Append(maxon::Pair<DescID, Int>(id, static_cast<Int>(i)))) {}
 		Get()->SetParameter(id, GeData(true), DESCFLAGS_SET::NONE);
 	}
 	ApplyIKSolverStates();
@@ -1002,12 +1054,9 @@ void MMDModelManagerObject::ApplyIKSolverStates()
 	if (!ik_manager)
 		return;
 	auto* node = Get();
-	for (const auto& entry : desc_id_map_)
+	for (const auto& p : ik_solver_dynamic_params_)
 	{
-		const auto& pair = entry.GetValue();
-		if (pair.first != MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
-			continue;
-		auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(pair.second));
+		auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(p.second));
 		if (!solver)
 			continue;
 		const auto* state_entry = ik_solver_enable_states_.Find(String(solver->GetName().c_str()));
@@ -1016,7 +1065,25 @@ void MMDModelManagerObject::ApplyIKSolverStates()
 		const Bool enabled = state_entry->GetValue();
 		solver->Enable(enabled);
 		if (node)
-			node->SetParameter(entry.GetKey(), GeData(enabled), DESCFLAGS_SET::NONE);
+			node->SetParameter(p.first, GeData(enabled), DESCFLAGS_SET::NONE);
+	}
+}
+
+void MMDModelManagerObject::ApplyIKSolverFromParameters(BaseObject* op)
+{
+	if (!mmd_model_ || !op)
+		return;
+	auto* ik_manager = mmd_model_->GetIKManager();
+	if (!ik_manager)
+		return;
+	for (const auto& p : ik_solver_dynamic_params_)
+	{
+		GeData value;
+		if (op->GetParameter(p.first, value, DESCFLAGS_GET::NONE))
+		{
+			if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(p.second)))
+				solver->Enable(value.GetBool());
+		}
 	}
 }
 
@@ -1032,15 +1099,11 @@ void MMDModelManagerObject::ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file
 		return;
 
 	maxon::HashMap<String, DescID> ik_name_to_desc_id;
-	for (const auto& entry : desc_id_map_)
+	for (const auto& p : ik_solver_dynamic_params_)
 	{
-		const auto& pair = entry.GetValue();
-		if (pair.first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+		if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(p.second)))
 		{
-			if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(pair.second)))
-			{
-				iferr(ik_name_to_desc_id.Insert(String(solver->GetName().c_str()), entry.GetKey())) {}
-			}
+			iferr(ik_name_to_desc_id.Insert(String(solver->GetName().c_str()), p.first)) {}
 		}
 	}
 
@@ -2754,22 +2817,21 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		{
 			if (id[0].id == ID_USERDATA)
 			{
-				if (const auto* entry = desc_id_map_.Find(id))
+				for (const auto& p : ik_solver_dynamic_params_)
 				{
-					const auto& [type, solver_index] = entry->GetValue();
-					if (type == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+					if (p.first != id)
+						continue;
+					const Bool enabled = t_data.GetBool();
+					if (mmd_model_)
 					{
-						const Bool enabled = t_data.GetBool();
-						if (mmd_model_)
+						if (auto* solver = mmd_model_->GetIKManager()->GetMMDIKSolver(static_cast<size_t>(p.second)))
 						{
-							if (auto* solver = mmd_model_->GetIKManager()->GetMMDIKSolver(static_cast<size_t>(solver_index)))
-							{
-								solver->Enable(enabled);
-								iferr(ik_solver_enable_states_.Insert(String(solver->GetName().c_str()), enabled)) {}
-							}
+							solver->Enable(enabled);
+							iferr(ik_solver_enable_states_.Insert(String(solver->GetName().c_str()), enabled)) {}
 						}
-						return SUPER::SetDParameter(node, id, t_data, flags);
 					}
+					prev_time_ = BaseTime(-1.);
+					return SUPER::SetDParameter(node, id, t_data, flags);
 				}
 			}
 
@@ -2891,9 +2953,9 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 {
 	if (id[0].id == ID_USERDATA)
 	{
-		if (const auto* entry = desc_id_map_.Find(id))
+		for (const auto& p : ik_solver_dynamic_params_)
 		{
-			if (entry->GetValue().first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
+			if (p.first == id)
 				return true;
 		}
 	}
@@ -3074,11 +3136,21 @@ bool MMDModelManagerObject::DeleteMorphImpl(IMorph& morph, const Int morph_index
 {
 	iferr_scope_handler{ return false; };
 	morph.DeleteMorphUI(*this);
-	for (auto& i : desc_id_map_.GetKeys())
+	for (auto it = desc_id_map_.Begin(); it != desc_id_map_.End(); ++it)
 	{
-		if (auto* index = &desc_id_map_.FindValue(i)->second; *index > morph_index)
+		auto& val = it->GetValue();
+		switch (val.first)
 		{
-			(*index)--;
+		case MMDModelRootDynamicDescriptionType::MORPH_GRP:
+		case MMDModelRootDynamicDescriptionType::MORPH_STRENGTH:
+		case MMDModelRootDynamicDescriptionType::MORPH_EDITOR_BUTTON:
+		case MMDModelRootDynamicDescriptionType::MORPH_DELETE_BUTTON:
+		case MMDModelRootDynamicDescriptionType::MORPH_RENAME_BUTTON:
+			if (val.second > morph_index)
+				val.second--;
+			break;
+		default:
+			break;
 		}
 	}
 	morph_name_.Erase(morph.GetName())iferr_return;

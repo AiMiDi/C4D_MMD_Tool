@@ -176,6 +176,7 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
   set(_CMT_PACKAGE_COMMANDS
     COMMAND ${CMAKE_COMMAND} ${_cmt_deps_cfg}
     COMMAND ${CMAKE_COMMAND} --build "${_cmt_deps_bin}" --config Release
+    COMMAND ${CMAKE_COMMAND} --build "${_cmt_deps_bin}" --config Debug
   )
 
   foreach(_sdk IN LISTS _CMT_PACKAGE_SDKS)

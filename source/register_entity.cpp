@@ -1,4 +1,5 @@
 #include "register_entity.h"
+#include "plugin_resource.h"
 #include "CMTSceneManager.h"
 #include "module/ui/cmt_tools_dialog.h"
 #include "module/tools/loader/vmd_loader.h"
@@ -46,7 +47,7 @@ namespace
 
 	Bool RegisterMMDModelManager()
 	{
-		return RegisterObjectPlugin(g_mmd_model_manager_object_id, GeLoadString(IDS_O_MMD_MODEL_MANAGER), OBJECT_CALL_ADDEXECUTION, MMDModelManagerObject::Alloc, "OMMDModelManager"_s, AutoBitmap(1021433), 0);
+		return RegisterObjectPlugin(g_mmd_model_manager_object_id, GeLoadString(IDS_O_MMD_MODEL_MANAGER), OBJECT_CALL_ADDEXECUTION, MMDModelManagerObject::Alloc, "OMMDModelManager"_s, AutoBitmap(1021433), 1);
 	}
 
 	Bool RegisterMMDBoneManager()

@@ -12,10 +12,7 @@ namespace
 	constexpr auto OCT_MAT_USE_OPACITY = 1261;
 	constexpr auto OCT_MATERIAL_DIFFUSE_LINK = 1110;
 	constexpr auto OCT_MATERIAL_DIFFUSE_COLOR = 1111;
-	constexpr auto OCT_MATERIAL_DIFFUSE_FLOAT = 1112;
 	constexpr auto OCT_MATERIAL_OPACITY_LINK = 1260;
-	constexpr auto OCT_MATERIAL_OPACITY_COLOR = 1261;
-	constexpr auto OCT_MATERIAL_OPACITY_FLOAT = 1262;
 
 	constexpr auto RGBSPECTRUMSHADER_COLOR = 1000;
 	constexpr auto FLOATTEXTURE_VALUE = 1000;

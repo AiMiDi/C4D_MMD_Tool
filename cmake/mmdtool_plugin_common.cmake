@@ -407,7 +407,11 @@ macro(cmt_setup_mmdtool_plugin)
 
   MaxonTargets_ProcessCinemaTargetVars()
 
-
+  if(CMAKE_GENERATOR MATCHES "Visual Studio")
+    set_target_properties(${maxon_targetName} PROPERTIES
+      VS_DEBUGGER_COMMAND_ARGUMENTS "$<$<CONFIG:Debug>:g_additionalModulePath=$(OutDir)..>"
+    )
+  endif()
 
   if(CMT_DEPENDENCY_MODE STREQUAL "SUBDIR")
 
