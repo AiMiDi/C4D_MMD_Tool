@@ -424,7 +424,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 	{
 		// statistics vertex weight data
 		vertex_weight_data.resize(vertex_count);
-		maxon::ParallelFor::Dynamic(0i64, Int(vertex_count), [&pmx_vertices, &vertex_weight_data](const Int vertex_index)
+		maxon::ParallelFor::Dynamic(Int(0), Int(vertex_count), [&pmx_vertices, &vertex_weight_data](const Int vertex_index)
 		{
 			auto& weight_data = vertex_weight_data[vertex_index];
 			switch (const auto& pmx_vertex = pmx_vertices[vertex_index]; pmx_vertex.m_weightType)
@@ -509,7 +509,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 				break;
 			}
 			}
-		});
+		}, maxon::ParallelFor::Granularity(64, vertex_count > 1024));
 	}
 
 	// create mesh
@@ -564,7 +564,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			}
 		}
 
-		maxon::ParallelFor::Dynamic(0i64, Int(vertex_count), [&pmx_vertices, &setting, &mesh_object_points, &joint_weight_maps, &vertex_weight_data](const Int vertex_index)
+		maxon::ParallelFor::Dynamic(Int(0), Int(vertex_count), [&pmx_vertices, &setting, &mesh_object_points, &joint_weight_maps, &vertex_weight_data](const Int vertex_index)
 		{
 			const auto& pmx_vertex = pmx_vertices[vertex_index];
 
@@ -583,7 +583,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					joint_weight_maps[joint_index][vi] = Clamp01(weight);
 				}
 			}
-		});
+		}, maxon::ParallelFor::Granularity(64, vertex_count > 1024));
 
 		if (setting.import_weights && weight_tag)
 		{
@@ -621,7 +621,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 			mesh_object->InsertTag(uvw_tag);
 		}
 		// vertex index -> surface index
-		maxon::ParallelFor::Dynamic(0i64, Int(faces_count), [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const Int surface_index)
+		maxon::ParallelFor::Dynamic(Int(0), Int(faces_count), [&pmx_faces, &pmx_vertices, &setting, &mesh_object_polygons, &normal_handle, &uvw_handle](const Int surface_index)
 		{
 			iferr_scope_handler
 			{
@@ -669,7 +669,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					Vector(pmx_vertex_uv_c[0], pmx_vertex_uv_c[1], 0.),
 					Vector{}));
 			}
-		});
+		}, maxon::ParallelFor::Granularity(128, faces_count > 1024));
 
 		// set weight tag
 		if (setting.import_weights)
@@ -870,12 +870,9 @@ Bool MMDMeshManagerObject::LoadPMX(
 						morph_uv_map.Insert(vertex_index, Vector(uv[0], uv[1], 0.))iferr_return;
 					}
 
-					// add morph uv
-					maxon::ParallelFor::Dynamic(0i64, Int(faces_count), [&pmx_faces, &morph_node, &morph_uv_map](const Int surface_index)
+					// add morph uv (single-threaded: CAMorphNode::SetUV is not safe for concurrent calls on the same node)
+					for (Int surface_index = 0; surface_index < Int(faces_count); ++surface_index)
 					{
-						iferr_scope_handler{
-							return;
-						};
 						const auto& pmx_surface = pmx_faces[surface_index];
 						const auto& pmx_surface_vertex_a = pmx_surface.m_vertices[0];
 						const auto& pmx_surface_vertex_b = pmx_surface.m_vertices[1];
@@ -901,7 +898,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 						{
 							morph_node->SetUV(0, static_cast<Int32>(surface_index), uvw);
 						}
-					});
+					}
 
 					morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
 					morph_tag->UpdateMorphs();
@@ -1146,7 +1143,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					}
 				}
 
-				maxon::ParallelFor::Dynamic(0i64, Int(part_vertex_count), [&setting, &pmx_vertices, &mesh_object_points, &joint_weight_maps, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map, &vertex_info_map, &mesh_object, &morph_tag_infos](const Int32 vertex_index)
+				maxon::ParallelFor::Dynamic(Int(0), Int(part_vertex_count), [&setting, &pmx_vertices, &mesh_object_points, &joint_weight_maps, &vertex_weight_data, &pmx_vertex_index_array, &vertex_index_map](const Int32 vertex_index)
 				{
 					iferr_scope_handler
 					{
@@ -1158,23 +1155,9 @@ Bool MMDMeshManagerObject::LoadPMX(
 					const auto & c4d_vertex_index = vertex_index_map.Find(pmx_vertex_index)->GetValue();
 					auto & mesh_object_point = mesh_object_points[c4d_vertex_index];
 					const auto & pmx_vertex_position = pmx_vertex.m_position;
-				mesh_object_point.x = pmx_vertex_position[0];
-				mesh_object_point.y = pmx_vertex_position[1];
-				mesh_object_point.z = pmx_vertex_position[2];
-
-				if (setting.import_expression)
-					{
-						vertex_info_map.Write([&pmx_vertex_index, &c4d_vertex_index, &mesh_object, &morph_tag_infos](maxon::HashMap<uint64_t, vertex_info>& map)->maxon::Result<void>
-						{
-							iferr_scope;
-							auto& entry = map.InsertMultiEntry(pmx_vertex_index)iferr_return;
-							auto& vertex_info = entry.GetValue();
-							vertex_info.vertex_index = c4d_vertex_index;
-							vertex_info.mesh_object = mesh_object;
-							vertex_info.morph_tag_index = morph_tag_infos.GetCount() - 1;
-							return maxon::OK;
-						})iferr_return;
-					}
+					mesh_object_point.x = pmx_vertex_position[0];
+					mesh_object_point.y = pmx_vertex_position[1];
+					mesh_object_point.z = pmx_vertex_position[2];
 
 					if (setting.import_weights)
 					{
@@ -1183,7 +1166,23 @@ Bool MMDMeshManagerObject::LoadPMX(
 							joint_weight_maps[joint_index][c4d_vertex_index] = Clamp01(weight);
 						}
 					}
-				});
+				}, maxon::ParallelFor::Granularity(64, part_vertex_count > 1024));
+
+				if (setting.import_expression)
+				{
+					auto vertex_info_write = vertex_info_map.Write();
+					maxon::HashMap<uint64_t, vertex_info>& vertex_info_hash = *vertex_info_write;
+					for (Int32 vi = 0; vi < part_vertex_count; ++vi)
+					{
+						const auto pmx_vi = pmx_vertex_index_array[vi];
+						const auto c4d_vi = vertex_index_map.Find(pmx_vi)->GetValue();
+						auto& entry = vertex_info_hash.InsertMultiEntry(pmx_vi)iferr_return;
+						auto& vertex_info = entry.GetValue();
+						vertex_info.vertex_index = c4d_vi;
+						vertex_info.mesh_object = mesh_object;
+						vertex_info.morph_tag_index = morph_tag_infos.GetCount() - 1;
+					}
+				}
 
 				if (setting.import_weights && weight_tag)
 				{
@@ -1284,7 +1283,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 						Vector(pmx_vertex_uv_c[0], pmx_vertex_uv_c[1], 0.),
 						Vector{}));
 				}
-			});
+			}, maxon::ParallelFor::Granularity(128, part_face_num > 1024));
 
 			// set weight tag
 			if (setting.import_weights)
@@ -1449,8 +1448,8 @@ Bool MMDMeshManagerObject::LoadPMX(
 						}
 					}
 
-					// add morph uv
-					maxon::ParallelFor::Dynamic(0i64, Int(faces_count), [&pmx_faces, &morph_uv_map](const Int surface_index)
+					// add morph uv (single-threaded: CAMorphNode::SetUV is not safe for concurrent calls on the same node)
+					for (Int surface_index = 0; surface_index < Int(faces_count); ++surface_index)
 					{
 						const auto& pmx_surface = pmx_faces[surface_index];
 						const auto& pmx_surface_vertex_a = pmx_surface.m_vertices[0];
@@ -1480,7 +1479,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 						{
 							morph_node->SetUV(0, static_cast<Int32>(surface_index), uvw);
 						}
-					});
+					}
 					break;
 				}
 				case libmmd::PMXMorphType::Flip:
