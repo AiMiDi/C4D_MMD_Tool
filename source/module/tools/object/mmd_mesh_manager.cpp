@@ -556,11 +556,11 @@ Bool MMDMeshManagerObject::LoadPMX(
 		maxon::BaseArray<maxon::BaseArray<Float32>> joint_weight_maps;
 		if (setting.import_weights)
 		{
-			const Int32 jc = bone_list.GetCount();
+			const Int jc = bone_list.GetCount();
 			joint_weight_maps.Resize(jc) iferr_return;
-			for (Int32 j = 0; j < jc; ++j)
+			for (Int j = 0; j < jc; ++j)
 			{
-				joint_weight_maps[j].Resize(static_cast<Int32>(vertex_count)) iferr_return;
+				joint_weight_maps[j].Resize(static_cast<Int>(vertex_count)) iferr_return;
 			}
 		}
 
@@ -587,10 +587,10 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 		if (setting.import_weights && weight_tag)
 		{
-			const Int32 jc = bone_list.GetCount();
-			for (Int32 j = 0; j < jc; ++j)
+			const Int jc = bone_list.GetCount();
+			for (Int j = 0; j < jc; ++j)
 			{
-				if (!weight_tag->SetWeightMap(j, joint_weight_maps[j].GetFirst(), static_cast<Int32>(vertex_count)))
+				if (!weight_tag->SetWeightMap(static_cast<Int32>(j), joint_weight_maps[j].GetFirst(), static_cast<Int32>(vertex_count)))
 					return false;
 			}
 		}
@@ -1138,9 +1138,9 @@ Bool MMDMeshManagerObject::LoadPMX(
 				maxon::BaseArray<maxon::BaseArray<Float32>> joint_weight_maps;
 				if (setting.import_weights)
 				{
-					const Int32 jc = bone_list.GetCount();
+					const Int jc = bone_list.GetCount();
 					joint_weight_maps.Resize(jc) iferr_return;
-					for (Int32 j = 0; j < jc; ++j)
+					for (Int j = 0; j < jc; ++j)
 					{
 						joint_weight_maps[j].Resize(part_vertex_count) iferr_return;
 					}
@@ -1187,10 +1187,10 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 				if (setting.import_weights && weight_tag)
 				{
-					const Int32 jc = bone_list.GetCount();
-					for (Int32 j = 0; j < jc; ++j)
+					const Int jc = bone_list.GetCount();
+					for (Int j = 0; j < jc; ++j)
 					{
-						if (!weight_tag->SetWeightMap(j, joint_weight_maps[j].GetFirst(), part_vertex_count))
+						if (!weight_tag->SetWeightMap(static_cast<Int32>(j), joint_weight_maps[j].GetFirst(), part_vertex_count))
 							return false;
 					}
 				}
