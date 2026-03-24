@@ -51,7 +51,7 @@ Cinema 4D plugin for importing and managing MMD (MikuMikuDance) model/animation 
 
 Works the same for any supported SDK — replace `sdk_2026` with the target SDK directory (e.g. `sdk_r20`, `sdk_2024`).
 
-CMake: `cmake/mmdtool_plugin_dependencies.cmake` exposes `mmdtool_plugin_dependencies_add(<repo root>)` for Bullet3 + libMMD via `add_subdirectory`. `cmake/mmdtool_plugin_common.cmake` provides `cmt_setup_mmdtool_plugin()` shared by all SDK plugin CMakeLists. To clean legacy `dependency/*/build`, `dependency/install`, and root `_build_msvc/cmt_deps`, configure the repo root CMake project with `-B _build_msvc`, then `cmake --build _build_msvc --target cmt-clean-deps`.
+CMake: `cmake/mmdtool_plugin_dependencies.cmake` exposes `mmdtool_plugin_dependencies_add(<repo root>)` for Bullet3 + libMMD via `add_subdirectory` into `${CMAKE_BINARY_DIR}/cmt_deps/...` (SDK builds → e.g. `_build_msvc/sdk_2026/cmt_deps`). `cmake/mmdtool_plugin_common.cmake` provides `cmt_setup_mmdtool_plugin()` shared by all SDK plugin CMakeLists. `cmt-clean-deps` removes legacy `dependency/*/build`, `dependency/install`, root `_build_msvc/cmt_deps`, and globbed `_build_*/*/cmt_deps` (per-SDK trees). Configure the repo root CMake project with `-B _build_msvc`, then `cmake --build _build_msvc --target cmt-clean-deps`. For a full wipe including all SDK outputs, use `cmt-clean`.
 
 CMakeLists.txt automatically creates Junctions during configure via `MaxonTargets_CreateDirectoryLink`:
 - `sdk_*/plugins/mmdtool/source` → `source/`

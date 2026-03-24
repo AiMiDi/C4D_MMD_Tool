@@ -70,37 +70,31 @@ endfunction()
 
 
 
-# SUBDIR mode: link library order matches BULLET_LIBRARIES in libMMD/CMakeLists.txt (BulletConfig.cmake)
+# SUBDIR mode: Bullet + libMMD target order matches libMMD/CMakeLists.txt (BULLET_LIBRARIES).
+# MaxonTargets_ProcessCinemaTargetVars() uses a single PUBLIC target_link_libraries() with a generator
+# expression; passing multiple CMake targets through maxon_linkLibraries.* can fail to link on MSVC.
+# Always append third-party libs with PRIVATE target_link_libraries() after ProcessCinemaTargetVars().
 
+# SUBDIR mode: link Bullet + libMMD CMake targets. Must run after MaxonTargets_ProcessCinemaTargetVars.
+# Use TARGET libMMD — not CMT_DEPENDENCY_MODE — because cache CMT_DEPS_PREBUILT_DIR can flip the mode
+# without the user noticing, and VS/CMake may not propagate target_link_libraries from a macro the same
+# way; linking here is the reliable path.
 macro(_cmt_link_subdir_third_party_to_plugin)
-
-  set(_cmt_subdir_libs
-
-    libMMD
-
-    LinearMath
-
-    Bullet3Common
-
-    BulletInverseDynamics
-
-    BulletCollision
-
-    BulletDynamics
-
-    BulletSoftBody
-
-  )
-
-  if(g_maxonTargetOS STREQUAL "WINDOWS" OR g_maxonTargetOS STREQUAL "MACOS")
-
-    target_link_libraries(${maxon_targetName} PRIVATE ${_cmt_subdir_libs})
-
+  if(TARGET libMMD)
+    set(_cmt_subdir_libs
+      libMMD
+      LinearMath
+      Bullet3Common
+      BulletInverseDynamics
+      BulletCollision
+      BulletDynamics
+      BulletSoftBody
+    )
+    if(WIN32 OR APPLE)
+      target_link_libraries(${maxon_targetName} PRIVATE ${_cmt_subdir_libs})
+    endif()
   endif()
-
 endmacro()
-
-
 
 macro(cmt_setup_mmdtool_plugin)
 
@@ -413,11 +407,7 @@ macro(cmt_setup_mmdtool_plugin)
     )
   endif()
 
-  if(CMT_DEPENDENCY_MODE STREQUAL "SUBDIR")
-
-    _cmt_link_subdir_third_party_to_plugin()
-
-  endif()
+  _cmt_link_subdir_third_party_to_plugin()
 
 endmacro()
 

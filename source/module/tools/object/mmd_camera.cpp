@@ -211,7 +211,7 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 	}
 
 	auto& vmd_camera_key_frame_array = vmd_data.m_cameras;
-	auto not_bake_func = [this, &sorted_key, &vmd_camera_key_frame_array, &setting, &curves]()
+	auto not_bake_func = [&sorted_key, &vmd_camera_key_frame_array, &setting, &curves]()
 		{
 			const auto frame_count = sorted_key.GetCount();
 			vmd_camera_key_frame_array.reserve(frame_count);
@@ -242,7 +242,7 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 			return true;
 		};
 
-	auto bake_func = [this, &vmd_camera_key_frame_array, &setting, &curves]()
+	auto bake_func = [&vmd_camera_key_frame_array, &setting, &curves]()
 		{
 			std::vector<BaseTime> time_list{ track_count };
 			std::transform(curves.begin(), curves.end(), time_list.begin(), [](const CCurve* curve) { return curve->GetEndTime(); });

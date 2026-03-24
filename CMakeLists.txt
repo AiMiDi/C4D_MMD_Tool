@@ -75,6 +75,10 @@ endif()
 if(NOT CMT_DEPS_PREBUILT_DIR STREQUAL "")
   cmake_path(ABSOLUTE_PATH CMT_DEPS_PREBUILT_DIR NORMALIZE OUTPUT_VARIABLE _CMT_DEPS_PREBUILT_ABS)
   list(APPEND _CMT_SDK_CONFIGURE_ARGS "-D" "CMT_DEPS_PREBUILT_DIR:PATH=${_CMT_DEPS_PREBUILT_ABS}")
+else()
+  # SDK CMakeCache may still hold CMT_DEPS_PREBUILT_DIR from a previous cmt-package / manual run.
+  # That skips add_subdirectory(libMMD) and breaks mmdtool linking (LNK2019) when prebuilt/lib is empty.
+  list(APPEND _CMT_SDK_CONFIGURE_ARGS "-U" "CMT_DEPS_PREBUILT_DIR")
 endif()
 
 # --- Packaging (Inno Setup, optional) ---
@@ -234,12 +238,31 @@ add_custom_target(cmt-clean
 )
 
 # -----------------------------------------------------------------------------
-# cmt-clean-deps — Remove legacy third-party dirs and cmt_deps under the root build tree
+# cmt-clean-deps — Remove legacy third-party dirs and all cmt_deps trees
+#
+# Plugin builds (sdk_* with mmdtool_plugin_dependencies_add) place Bullet/libMMD under
+#   <repo>/_build_msvc/sdk_2026/cmt_deps  (CMAKE_BINARY_DIR of the SDK project)
+# Root "dependency/" workflow uses <repo>/_build_msvc/cmt_deps
+# The old target only removed ${CMAKE_BINARY_DIR}/cmt_deps (root configure), so SDK
+# builds were never cleaned — we glob common _build_*/*/cmt_deps patterns below.
 # -----------------------------------------------------------------------------
+set(_CMT_CLEAN_DEPS_EXTRA_COMMANDS "")
+file(GLOB _CMT_CMT_DEPS_SDK_GLOB
+  "${CMAKE_SOURCE_DIR}/_build_msvc/*/cmt_deps"
+  "${CMAKE_SOURCE_DIR}/_build_ninja/*/cmt_deps"
+  "${CMAKE_SOURCE_DIR}/_build_clangcl/*/cmt_deps"
+  "${CMAKE_SOURCE_DIR}/_build_xcode/*/cmt_deps"
+)
+foreach(_d IN LISTS _CMT_CMT_DEPS_SDK_GLOB)
+  list(APPEND _CMT_CLEAN_DEPS_EXTRA_COMMANDS COMMAND ${CMAKE_COMMAND} -E rm -rf "${_d}")
+endforeach()
+
 add_custom_target(cmt-clean-deps
   COMMAND ${CMAKE_COMMAND} -E rm -rf "${CMAKE_SOURCE_DIR}/dependency/bullet3/build"
   COMMAND ${CMAKE_COMMAND} -E rm -rf "${CMAKE_SOURCE_DIR}/dependency/libMMD/build"
   COMMAND ${CMAKE_COMMAND} -E rm -rf "${CMAKE_SOURCE_DIR}/dependency/install"
   COMMAND ${CMAKE_COMMAND} -E rm -rf "${CMAKE_BINARY_DIR}/cmt_deps"
-  COMMENT "Remove legacy dependency/*build, dependency/install, and ${CMAKE_BINARY_DIR}/cmt_deps"
+  COMMAND ${CMAKE_COMMAND} -E rm -rf "${CMAKE_SOURCE_DIR}/_build_msvc/cmt_deps"
+  ${_CMT_CLEAN_DEPS_EXTRA_COMMANDS}
+  COMMENT "Remove legacy dependency/*build, dependency/install, root cmt_deps, and sdk_* cmt_deps under _build_*"
 )
