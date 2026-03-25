@@ -223,10 +223,12 @@ inline void GroupMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	GeListNode* node = model.Get();
 	auto& morph_arr = model.GetMorphData();
+	const Float self = GetStrength(node);
 	for (auto& data : m_data)
 	{
 		auto& morph = morph_arr[data.GetKey()];
-		morph.SetStrength(node, GetStrength(node) * data.GetValue());
+		const Float base = morph.GetStrength(node);
+		morph.SetStrength(node, base + self * data.GetValue());
 	}
 }
 
@@ -253,10 +255,12 @@ inline void FlipMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	GeListNode* node = model.Get();
 	auto& morph_arr = model.GetMorphData();
-	for (auto& data : m_data) {
-		auto& morph_id = data.GetKey();
-		auto& morph = morph_arr[morph_id];
-		morph.SetStrength(node, GetStrength(node) >= 0.5 ? data.GetValue() : 0.0);
+	const Float add = GetStrength(node) >= 0.5 ? 1.0 : 0.0;
+	for (auto& data : m_data)
+	{
+		auto& morph = morph_arr[data.GetKey()];
+		const Float base = morph.GetStrength(node);
+		morph.SetStrength(node, base + add * data.GetValue());
 	}
 }
 

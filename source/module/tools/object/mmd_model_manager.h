@@ -231,8 +231,7 @@ private:
 	Bool WriteMorph(HyperFile* hf) const;
 #endif
 	Bool CopyMorph(MMDModelManagerObject* dst) const;
-	//Bool SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data, const CMTToolsSetting::MotionImport& setting);
-	//Bool SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data, const CMTToolsSetting::MotionImport& setting);
+	Bool AddMorphStrengthKeyframe(const String& morph_name, const BaseTime& key_time, Float weight);
 	Bool DeleteVMDAnimation();
 	Bool RebuildRuntime();
 	void BuildIKSolverUI();

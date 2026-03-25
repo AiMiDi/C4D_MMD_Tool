@@ -46,10 +46,8 @@ class MMDMeshManagerObject final : public MMDManagerObject
 	AutoAlloc<BaseLink> model_manager_;
 	maxon::HashMap<BaseTag*, Int32> mesh_morph_mode_;
 
-	libmmd::MMDMorphManager* mmd_morph_manager_;
 	maxon::HashMap<String, Int32> mesh_morph_name_;
 	maxon::HashSet<String> uv_morph_names_;
-	maxon::BaseArray<Int32> morph_manager_index_;
 	maxon::BaseArray<maxon::PointerArray<MorphUIData>> mesh_morph_data_;
 
 	maxon::Synchronized<Bool> needs_morph_data_refresh_;

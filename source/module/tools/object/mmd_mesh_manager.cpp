@@ -23,8 +23,6 @@ Description:	MMD mesh root object
 #include "maxon/parallelfor.h"
 #include "maxon/queue.h"
 #include "module/tools/material/mmd_material.h"
-#include "utils/string_util.hpp"
-
 namespace
 {
 	template <typename FROM, typename TO, typename LOOP>
@@ -95,8 +93,11 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	if (!io_util::ReadHashMap(hf, mesh_morph_name_))
 		return false;
 
-	if (!io_util::ReadLinearContainer(hf, morph_manager_index_))
-		return false;
+	{
+		maxon::BaseArray<Int32> legacy_morph_manager_index;
+		if (!io_util::ReadLinearContainer(hf, legacy_morph_manager_index))
+			return false;
+	}
 
 	if (!io_util::ReadLinearContainer(hf, mesh_morph_data_))
 		return false;
@@ -128,8 +129,11 @@ SDK2024_Write(MMDMeshManagerObject)
 	if (!io_util::WriteHashMap(hf, mesh_morph_name_))
 		return false;
 
-	if (!io_util::WriteLinearContainer(hf, morph_manager_index_))
-		return false;
+	{
+		const maxon::BaseArray<Int32> empty_morph_manager_index;
+		if (!io_util::WriteLinearContainer(hf, empty_morph_manager_index))
+			return false;
+	}
 
 	if (!io_util::WriteLinearContainer(hf, mesh_morph_data_))
 		return false;
@@ -275,30 +279,8 @@ EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		mesh_morph_mode_.Reset();
 		mesh_morph_name_.Reset();
 		mesh_morph_data_.Reset();
-		morph_manager_index_.Reset();
 		RefreshMeshMorphData(op, true);
 		*needs_morph_data_refresh_.Write() = false;
-	}
-
-	if (mesh_mode_ == MESH_MODE_VMD && mmd_morph_manager_)
-	{
-		const auto morph_manager_count = morph_manager_index_.GetCount();
-		const auto mmd_morph_manager_count = mmd_morph_manager_->GetMorphCount();
-		for (int i = 0; i < morph_manager_count; ++i)
-		{
-			if(i >= mmd_morph_manager_count)
-				continue;
-			const auto strength = mmd_morph_manager_->GetMorph(i)->GetWeight();
-			if (const auto mesh_morph_data_index = morph_manager_index_[i];
-				mesh_morph_data_index != -1 && mesh_morph_data_index < mesh_morph_data_.GetCount())
-			{
-				const auto& sub_morphs = mesh_morph_data_[mesh_morph_data_index];
-				for (const auto& sub_morph : sub_morphs)
-				{
-					sub_morph.SetStrength(strength);
-				}
-			}
-		}
 	}
 
 	return SUPER::Execute(op, doc, bt, priority, flags);
@@ -364,7 +346,6 @@ void MMDMeshManagerObject::ForceRefreshMorphData(BaseObject* op)
 	mesh_morph_mode_.Reset();
 	mesh_morph_name_.Reset();
 	mesh_morph_data_.Reset();
-	morph_manager_index_.Reset();
 	RefreshMeshMorphData(op, true);
 	*needs_morph_data_refresh_.Write() = false;
 }
@@ -1620,19 +1601,6 @@ void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op, bool suppress_ch
 		}
 	}
 	if (need_update_morph) {
-		if (mmd_morph_manager_)
-		{
-			const auto morph_count = static_cast<Int>(mmd_morph_manager_->GetMorphCount());
-			morph_manager_index_.SetCapacityHint(morph_count)iferr_return;
-			for (Int32 index = 0; index < morph_count; index++)
-			{
-				morph_manager_index_.Append(-1)iferr_return;
-			}
-			for (const auto &entry : mesh_morph_name_.Begin())
-			{
-				morph_manager_index_[static_cast<Int32>(mmd_morph_manager_->FindMorphIndex(string_util::GetStdString(entry.GetKey())))] = entry.GetValue();
-			}
-		}
 		if (!suppress_change_message)
 		{
 			if (auto* model_mgr = io_util::ResolveObjectLink(model_manager_))

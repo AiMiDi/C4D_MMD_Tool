@@ -25,6 +25,8 @@ Description:	MMD model object
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 
+#include <set>
+
 #define COL_NAME 'name'
 
 Bool EditorSubMorphDialog::CreateLayout()
@@ -886,7 +888,15 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	{
 		for (auto& morph : morph_data_)
 		{
-			UpdateMorph(morph);
+			const auto t = morph.GetType();
+			if (t == MMDMorphType::GROUP || t == MMDMorphType::FLIP)
+				UpdateMorph(morph);
+		}
+		for (auto& morph : morph_data_)
+		{
+			const auto t = morph.GetType();
+			if (t != MMDMorphType::GROUP && t != MMDMorphType::FLIP)
+				UpdateMorph(morph);
 		}
 	}
 
@@ -1098,6 +1108,8 @@ void MMDModelManagerObject::ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file
 	if (!op)
 		return;
 
+	SyncIKSolverDynamicParamsFromDescMap();
+
 	maxon::HashMap<String, DescID> ik_name_to_desc_id;
 	for (const auto& p : ik_solver_dynamic_params_)
 	{
@@ -1106,6 +1118,8 @@ void MMDModelManagerObject::ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file
 			iferr(ik_name_to_desc_id.Insert(String(solver->GetName().c_str()), p.first)) {}
 		}
 	}
+
+	BaseDocument* const doc = op->GetDocument();
 
 	for (const auto& ik : vmd_file.m_iks)
 	{
@@ -1125,16 +1139,20 @@ void MMDModelManagerObject::ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file
 					continue;
 				op->InsertTrackSorted(track);
 			}
-			CCurve* curve = track->GetCurve();
+			CCurve* curve = track->GetCurve(CCURVE::CURVE, true);
 			if (!curve)
 				continue;
 
 			const BaseTime frame_time(static_cast<Float>(ik.m_frame) + setting.time_offset, 30.0);
-			CKey* key = curve->AddKey(frame_time);
+			CKey* key = curve->FindKey(frame_time);
+			if (!key)
+				key = curve->AddKey(frame_time);
 			if (!key)
 				continue;
 			key->SetValue(curve, ik_info.m_enable ? 1.0 : 0.0);
 			key->SetInterpolation(curve, CINTERPOLATION::STEP);
+			if (doc)
+				track->FillKey(doc, op, key);
 		}
 	}
 }
@@ -1161,11 +1179,6 @@ void MMDModelManagerObject::SetMMDModel(const MMDModelPtr& model)
 	{
 		bone_manager_data_->mmd_node_manager_ = mmd_model_->GetNodeManager();
 		bone_manager_data_->mmd_morph_manager_ = mmd_model_->GetMorphManager();
-	}
-
-	if (mesh_manager_data_)
-	{
-		mesh_manager_data_->mmd_morph_manager_ = mmd_model_->GetMorphManager();
 	}
 
 	if (rigid_manager_data_)
@@ -1532,12 +1545,44 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 	return true;
 }
 
+Bool MMDModelManagerObject::AddMorphStrengthKeyframe(const String& morph_name, const BaseTime& key_time, Float weight)
+{
+	const auto* name_entry = morph_name_.Find(morph_name);
+	if (!name_entry)
+		return false;
+	const Int morph_index = name_entry->GetValue();
+	if (morph_index < 0 || morph_index >= morph_data_.GetCount())
+		return false;
+	auto* object = reinterpret_cast<BaseObject*>(Get());
+	if (!object)
+		return false;
+	const DescID& track_id = morph_data_[morph_index].GetStrengthDescID();
+	CTrack* track = object->FindCTrack(track_id);
+	if (!track)
+	{
+		track = CTrack::Alloc(object, track_id);
+		if (!track)
+			return false;
+		object->InsertTrackSorted(track);
+	}
+	CCurve* curve = track->GetCurve();
+	if (!curve)
+		return false;
+	CKey* key = curve->AddKey(key_time);
+	if (!key)
+		return false;
+	key->SetValue(curve, weight);
+	key->SetInterpolation(curve, CINTERPOLATION::LINEAR);
+	return true;
+}
+
 Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log, const Bool merge)
 {
 	iferr_scope_handler
 	{
 		return false;
 	};
+	log.not_find_morph_name_list.Reset();
 	const auto animation_name = setting.fn.GetFileString();
 	libmmd::VMDAnimation* vmd_animation;
 	if (!merge)
@@ -1578,6 +1623,23 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 		vmd_animation->SetApplyIKEnable(false);
 	}
 
+	if (setting.import_morph)
+	{
+		std::set<std::string> unmatched_morph_utf8;
+		for (const auto& morph : vmd_file.m_morphs)
+		{
+			const String morph_name(morph.m_blendShapeName.ToUtf8String().c_str());
+			const BaseTime key_time(static_cast<Float>(morph.m_frame) + setting.time_offset, 30.0);
+			if (!AddMorphStrengthKeyframe(morph_name, key_time, morph.m_weight))
+				unmatched_morph_utf8.insert(morph.m_blendShapeName.ToUtf8String());
+		}
+		for (const auto& utf8 : unmatched_morph_utf8)
+		{
+			log.not_find_morph_name_list.Append(String(utf8.c_str())) iferr_return;
+		}
+		vmd_animation->SetApplyMorphEnable(false);
+	}
+
 	log.imported_bone_count = vmd_file.m_motions.size();
 	log.imported_morph_count = vmd_file.m_morphs.size();
 	log.imported_motion_count = vmd_file.m_iks.size();
@@ -1608,142 +1670,7 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 	return animation->Save(vmd_motion);
 }
 
-//Bool MMDModelManagerObject::SetMeshMorphAnimation(const libmmd::vmd_morph_key_frame& data,
-//	const CMTToolsSetting::MotionImport& setting)
-//{
-//	const auto object = reinterpret_cast<BaseObject*>(Get());
-//	const auto& morph_name = String(data.get_morph_name().c_str());
-//	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
-//	const auto morph_ptr = morph_map_.Find(morph_name);
-//	if (!morph_ptr)
-//	{
-//		return false;
-//	}
-//	const auto& morph_id = morph_ptr->GetValue();
-//	const auto& track_id = m_morph_arr[morph_id].GetStrengthDescID();
-//	CTrack* track = object->FindCTrack(track_id);
-//	if (!track)
-//	{
-//		track = CTrack::Alloc(object, track_id);
-//		if (!track)
-//		{
-//			return false;
-//		}
-//		object->InsertTrackSorted(track);
-//	}
-//
-//	const auto curve = track->GetCurve();
-//	if (!curve)
-//	{
-//		return false;
-//	}
-//
-//	CKey* key = curve->AddKey(frame_at_time);
-//	if (!key)
-//	{
-//		return false;
-//	}
-//	key->SetValue(curve, data.get_weight());
-//
-//	return true;
-//}
-//
-//bool MMDModelManagerObject::SetModelControllerAnimation(const libmmd::vmd_model_controller_key_frame& data,
-//                                                     const CMTToolsSetting::MotionImport& setting)
-//{
-//	const auto frame_at_time = BaseTime{ data.get_frame_at() + setting.time_offset, 30.0 };
-//	const auto object = reinterpret_cast<BaseObject*>(Get());
-//
-//	// set model visibility
-//	const DescID track_desc_ids[] = { ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_EDITOR)),
-//									  ConstDescID(DescLevel(ID_BASEOBJECT_VISIBILITY_RENDER)) };
-//
-//	for (auto track_index = int{}; track_index < 2; ++track_index)
-//	{
-//		auto& track_id = track_desc_ids[track_index];
-//		CTrack* track = object->FindCTrack(track_id);
-//		if (!track)
-//		{
-//			track = CTrack::Alloc(object, track_id);
-//			if (!track)
-//			{
-//				return false;
-//			}
-//			object->InsertTrackSorted(track);
-//		}
-//
-//		CCurve* curve = track->GetCurve();
-//		if (!curve)
-//		{
-//			return false;
-//		}
-//
-//		CKey* key = curve->AddKey(frame_at_time);
-//		if (!key)
-//		{
-//			return false;
-//		}
-//
-//		key->SetValue(curve, data.is_mode_show());
-//	}
-//
-//	// set IK enable
-//	const auto& ik_controller_data = data.get_vmd_IK_controller_array();
-//	const auto ik_controller_data_count = ik_controller_data.size();
-//	for (auto ik_controller_data_index = decltype(ik_controller_data_count){}; ik_controller_data_index < ik_controller_data_count; ++ik_controller_data_index)
-//	{
-//		const auto& ik_controller = ik_controller_data[ik_controller_data_index];
-//		const auto& ik_bone_name = String(ik_controller.get_bone_name().c_str());
-//		const auto& ik_enable = ik_controller.is_IK_enable();
-//		auto add_key_func = [&frame_at_time, &ik_enable](BaseTag* ik_tag)
-//			{
-//				const auto track_id = ConstDescID(DescLevel(ID_CA_IK_TAG_ENABLE));
-//				CTrack* track = ik_tag->FindCTrack(track_id);
-//				if (!track)
-//				{
-//					track = CTrack::Alloc(ik_tag, track_id);
-//					if (!track)
-//					{
-//						return false;
-//					}
-//					ik_tag->InsertTrackSorted(track);
-//				}
-//
-//				CCurve* curve = track->GetCurve();
-//				if (!curve)
-//				{
-//					return false;
-//				}
-//
-//				CKey* key = curve->AddKey(frame_at_time);
-//				if (!key)
-//				{
-//					return false;
-//				}
-//				key->SetValue(curve, ik_enable);
-//				return true;
-//			};
-//		if (setting.import_by_local_name)
-//		{
-//			if (const auto ik_entry = ik_map_.Find(ik_bone_name); ik_entry)
-//			{
-//				if (const auto& ik_tag = ik_entry->GetValue(); !add_key_func(ik_tag))
-//					return false;
-//
-//			}
-//		}
-//		else
-//		{
-//			for (const auto& ik_tag : ik_map_.GetValues())
-//			{
-//				if (ik_tag->GetName().IsEqual(ik_bone_name) && !add_key_func(ik_tag))
-//					return false;
-//			}
-//		}
-//	}
-//
-//	return true;
-//}
+// TODO: VMD model-info / visibility / per-frame IK controller → CTrack (see removed SetModelControllerAnimation draft).
 
 Bool MMDModelManagerObject::DeleteVMDAnimation()
 {
@@ -1860,6 +1787,19 @@ Bool MMDModelManagerObject::RebuildRuntime()
 			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: VMDAnimation::Add FAILED for '@'", name);
 			continue;
 		}
+
+		if (!vmd_file.m_iks.empty())
+		{
+			if (BaseDocument* doc = Get()->GetDocument())
+			{
+				CMTToolsSetting::MotionImport motion_import(doc);
+				ImportVMDIKKeyframes(vmd_file, motion_import);
+			}
+			vmd_animation->SetApplyIKEnable(false);
+		}
+
+		if (!vmd_file.m_morphs.empty())
+			vmd_animation->SetApplyMorphEnable(false);
 
 		animations_.Append(std::make_pair(name, std::move(vmd_animation)))iferr_return;
 	}
@@ -2055,12 +1995,7 @@ SDK2024_GetDDescription(MMDModelManagerObject)
 		add_target_settings->SetContainer(DESC_CYCLE, target_cycle);
 	}
 
-	if (model_mode_ == MODEL_MODE_VMD)
-	{
-		if (BaseContainer* settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_MORPH_GRP)), nullptr))
-			settings->SetBool(DESC_HIDE, true);
-	}
-	else if (model_mode_ != MODEL_MODE_EDIT)
+	if (model_mode_ != MODEL_MODE_EDIT)
 	{
 		constexpr Int32 morph_add_ids[] = {
 			MODEL_MORPH_GROUP_ADD_NAME, MODEL_MORPH_GROUP_ADD_BUTTON,
