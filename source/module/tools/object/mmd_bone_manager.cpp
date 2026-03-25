@@ -807,7 +807,7 @@ const BaseContainer& MMDBoneManagerObject::GetBoneItems() const
 				if (tag)
 				{
 					if (const BaseObject* obj = const_cast<BaseTag*>(tag)->GetObject())
-						bone_items_.SetString(entry.GetKey(), obj->GetName());
+						bone_items_.SetString(static_cast<Int32>(entry.GetKey()), obj->GetName());
 				}
 			}
 		}
