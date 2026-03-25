@@ -285,7 +285,7 @@ macro(cmt_setup_mmdtool_plugin)
 
   # Shared dependency feature flags for all SDK plugin builds.
 
-  set(maxon_additionalDefinitions BT_THREADSAFE=1 BT_USE_DOUBLE_PRECISION LIBMMD_STATIC=1)
+  set(maxon_additionalDefinitions BT_THREADSAFE=1 LIBMMD_STATIC=1)
 
   set(maxon_enableRTTI OFF)
 

@@ -27,6 +27,12 @@ function(mmdtool_plugin_dependencies_add PROJECT_ROOT_DIR)
   set(_lm_bin "${CMAKE_BINARY_DIR}/cmt_deps/libMMD")
 
   # Bullet: static libs, no demos (aligned with historical standalone build options)
+  # Single precision (float) — must match plugin BT_USE_DOUBLE_PRECISION (off) and libMMD Bullet ABI.
+  set(USE_DOUBLE_PRECISION OFF CACHE BOOL "" FORCE)
+  if(MSVC)
+    # Bullet CMake: add_definitions(/arch:AVX) for LinearMath/Collision/Dynamics (MSVC x64 only path).
+    set(USE_MSVC_AVX ON CACHE BOOL "" FORCE)
+  endif()
   set(USE_MSVC_RUNTIME_LIBRARY_DLL ON CACHE BOOL "" FORCE)
   set(BUILD_CPU_DEMOS OFF CACHE BOOL "" FORCE)
   set(BUILD_OPENGL3_DEMOS OFF CACHE BOOL "" FORCE)
