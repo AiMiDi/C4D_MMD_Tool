@@ -354,11 +354,8 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	{
 		if (!bone_object_)
 			return;
-		if (!protection_tag_)
-		{
-			if (!CreateBoneLockTag())
-				break;
-		}
+		if (!FindOrCreateBoneLockTag())
+			break;
 		SetRotationLock(!bc->GetBool(id));
 		RefreshColor(node);
 		break;
@@ -367,11 +364,8 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	{
 		if (!bone_object_)
 			return;
-		if (!protection_tag_)
-		{
-			if (!CreateBoneLockTag())
-				break;
-		}
+		if (!FindOrCreateBoneLockTag())
+			break;
 		SetPositionLock(!bc->GetBool(id));
 		RefreshColor(node);
 		break;
@@ -600,10 +594,19 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 	if (bone_mode_ == bone_mode)
 		return;
 
+	if (!bone_object_)
+		if (BaseTag* tag = static_cast<BaseTag*>(Get()); tag)
+			bone_object_ = tag->GetObject();
+
 	if (bone_mode == BONE_MODE_EDIT)
 	{
 		if (bone_object_)
 			bone_object_->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
+		if (FindOrCreateBoneLockTag())
+		{
+			SetRotationLock(false);
+			SetPositionLock(false);
+		}
 	}
 	else
 	{
@@ -612,6 +615,15 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 
 		if (bone_object_)
 			bone_object_->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
+		if (FindOrCreateBoneLockTag())
+		{
+			if (const BaseTag* tag = static_cast<BaseTag*>(Get()))
+				if (const BaseContainer* bc = tag->GetDataInstance())
+				{
+					SetRotationLock(!bc->GetBool(PMX_BONE_ROTATABLE));
+					SetPositionLock(!bc->GetBool(PMX_BONE_TRANSLATABLE));
+				}
+		}
 	}
 
 	bone_mode_ = bone_mode;
@@ -880,11 +892,8 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	{
 		if (!bone_object_)
 			break;
-		if (!protection_tag_)
-		{
-			if (!CreateBoneLockTag())
-				break;
-		}
+		if (!FindOrCreateBoneLockTag())
+			break;
 		SetRotationLock(!t_data.GetBool());
 		RefreshColor(node);
 		break;
@@ -893,11 +902,8 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	{
 		if (!bone_object_)
 			break;
-		if (!protection_tag_)
-		{
-			if (!CreateBoneLockTag())
-				break;
-		}
+		if (!FindOrCreateBoneLockTag())
+			break;
 		SetPositionLock(!t_data.GetBool());
 		RefreshColor(node);
 		break;
@@ -1134,36 +1140,82 @@ SDK2024_GetDEnabling(MMDBoneTag)
 	return true;
 }
 
+BaseTag* MMDBoneTag::GetBoneLockProtectionTag() const
+{
+	if (!bone_object_ || !bone_lock_protection_link_)
+		return nullptr;
+	BaseDocument* doc = nullptr;
+	if (GeListNode* self = const_cast<MMDBoneTag*>(this)->Get())
+		doc = static_cast<BaseList2D*>(self)->GetDocument();
+	BaseTag* linked = nullptr;
+	if (doc)
+		linked = static_cast<BaseTag*>(bone_lock_protection_link_->GetLink(doc));
+	else
+		linked = static_cast<BaseTag*>(bone_lock_protection_link_->ForceGetLink());
+	if (linked && linked->IsInstanceOf(Tprotection) && linked->GetObject() == bone_object_)
+		return linked;
+	return nullptr;
+}
+
+bool MMDBoneTag::FindOrCreateBoneLockTag()
+{
+	if (GetBoneLockProtectionTag())
+		return true;
+
+	if (bone_lock_protection_link_)
+		bone_lock_protection_link_->SetLink(nullptr);
+
+	if (!bone_object_)
+		return false;
+
+	// Legacy / multi-Protection: adopt last hidden Tprotection (MakeTag appends; matches plugin-created tag).
+	BaseTag* legacy_hidden = nullptr;
+	for (BaseTag* tag = bone_object_->GetFirstTag(); tag; tag = tag->GetNext())
+	{
+		if (tag->IsInstanceOf(Tprotection) && tag->GetNBit(NBIT::OHIDE))
+			legacy_hidden = tag;
+	}
+	if (legacy_hidden)
+	{
+		bone_lock_protection_link_->SetLink(legacy_hidden);
+		return true;
+	}
+
+	return CreateBoneLockTag();
+}
+
 bool MMDBoneTag::CreateBoneLockTag()
 {
-	if(!bone_object_)
+	if (!bone_object_ || !bone_lock_protection_link_)
 		return false;
-	protection_tag_ = bone_object_->MakeTag(Tprotection);
-	if (!protection_tag_)
-	{
-		// TODO: Log
-		// GePrint(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
-		// MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
+	BaseTag* new_tag = bone_object_->MakeTag(Tprotection);
+	if (!new_tag)
 		return false;
-	}
-	protection_tag_->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
-	protection_tag_->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
-	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
+	new_tag->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
+	new_tag->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
+	new_tag->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
+	bone_lock_protection_link_->SetLink(new_tag);
 	return true;
 }
 
 void MMDBoneTag::SetRotationLock(const bool flag) const
 {
-	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
-	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
-	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
+	if (BaseTag* pt = GetBoneLockProtectionTag())
+	{
+		pt->SetParameter(ConstDescID(DescLevel(PROTECTION_R_X)), flag, DESCFLAGS_SET::NONE);
+		pt->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Y)), flag, DESCFLAGS_SET::NONE);
+		pt->SetParameter(ConstDescID(DescLevel(PROTECTION_R_Z)), flag, DESCFLAGS_SET::NONE);
+	}
 }
 
 void MMDBoneTag::SetPositionLock(const bool flag) const
 {
-	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
-	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
-	protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
+	if (BaseTag* pt = GetBoneLockProtectionTag())
+	{
+		pt->SetParameter(ConstDescID(DescLevel(PROTECTION_P_X)), flag, DESCFLAGS_SET::NONE);
+		pt->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Y)), flag, DESCFLAGS_SET::NONE);
+		pt->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), flag, DESCFLAGS_SET::NONE);
+	}
 }
 
 EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
@@ -1238,6 +1290,8 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		bone_morph_button_id_map_.Insert(std::move(del_id), i)iferr_return;
 		bone_morph_button_id_map_.Insert(std::move(ren_id), i)iferr_return;
 	}
+	if (level >= 1)
+		IOReadField(bone_lock_protection_link_);
 	return SUPER::Read(node, hf, level);
 }
 
@@ -1248,6 +1302,7 @@ SDK2024_Write(MMDBoneTag)
 	const auto& morph_arr_ref = bone_morph_data_arr_;
 	if (!io_util::WriteLinearContainer(hf, morph_arr_ref))
 		return false;
+	IOWriteField(bone_lock_protection_link_);
 	return SUPER::Write(node, hf);
 }
 

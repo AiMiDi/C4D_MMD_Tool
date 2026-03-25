@@ -95,8 +95,8 @@ class MMDBoneTag final : public TagData
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
 	// Corresponding bone object
 	BaseObject* bone_object_ = nullptr;
-	// Protection tag for limiting bone movement
-	BaseTag* protection_tag_ = nullptr;
+	// Serialized link to the Protection tag used for PMX lock (distinct from user-added Tprotection).
+	AutoAlloc<BaseLink> bone_lock_protection_link_;
 	// Bone mode
 	Int32 bone_mode_ = BONE_MODE_ANIM;
 	// Is IK
@@ -224,6 +224,17 @@ private:
 	 * @return true if the bone lock tag is created successfully, false otherwise.
 	 */
 	bool CreateBoneLockTag();
+
+	/**
+	 * @brief Resolves bone_lock_protection_link_ to a Tprotection on bone_object_; clears stale link in non-const paths via FindOrCreateBoneLockTag.
+	 */
+	BaseTag* GetBoneLockProtectionTag() const;
+
+	/**
+	 * @brief Ensures a linked Protection tag exists (deserialize, legacy hidden tag, or create).
+	 * @return true if a usable Tprotection is available, false otherwise.
+	 */
+	bool FindOrCreateBoneLockTag();
 
 	/**
 	 * @brief Handles description updates for the MMDBoneTag.

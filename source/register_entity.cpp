@@ -72,7 +72,7 @@ namespace
 
 	Bool RegisterMMDBoneTag()
 	{
-		return RegisterTagPlugin(g_mmd_bone_tag_id, GeLoadString(IDS_T_MMD_BONE), TAG_VISIBLE | TAG_EXPRESSION, MMDBoneTag::Alloc, "TMMDBone"_s, AutoBitmap("TMMDBone.png"_s), 0);
+		return RegisterTagPlugin(g_mmd_bone_tag_id, GeLoadString(IDS_T_MMD_BONE), TAG_VISIBLE | TAG_EXPRESSION, MMDBoneTag::Alloc, "TMMDBone"_s, AutoBitmap("TMMDBone.png"_s), 1);
 	}
 }
 
