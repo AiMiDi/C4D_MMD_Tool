@@ -1,5 +1,8 @@
 {
-    "cmake.sourceDirectory": "D:/code/C4D_MMD_Tool",
+    "cmake.useCMakePresets": "always",
+    "cmake.configurePreset": "win-dev",
+    "cmake.buildPreset": "workflow-win-dev",
+    "cmake.sourceDirectory": "${workspaceFolder}",
     "files.associations": {
         "*.inc": "cpp"
     }

@@ -50,6 +50,9 @@ option(CMT_SDK_SKIP_VS_A_AND_T "Do not pass -A/-T when configuring the SDK (use 
 set(CMT_SDK_BUILD_CONFIG "Debug" CACHE STRING "Build configuration: Debug | Release | RelWithDebInfo | MinSizeRel")
 set(CMT_SDK_BUILD_TARGET "mmdtool" CACHE STRING "Build only this target; empty = default/all targets")
 
+# All sdk_* trees for cmt-package / cmt-sdk-configure-all (matches installer XdlSdkRel, deduplicated)
+set(_CMT_ALL_SDK_TREES sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026)
+
 cmake_path(ABSOLUTE_PATH CMT_SDK_DIR NORMALIZE OUTPUT_VARIABLE CMT_SDK_DIR_ABS)
 if(CMT_SDK_BINARY_DIR STREQUAL "")
   cmake_path(GET CMT_SDK_DIR_ABS FILENAME _CMT_SDK_DIRNAME)
@@ -93,6 +96,42 @@ add_custom_target(cmt-sdk-configure
   COMMAND ${CMAKE_COMMAND} ${_CMT_SDK_CONFIGURE_ARGS}
   USES_TERMINAL
   COMMENT "Configure SDK: -S ${CMT_SDK_DIR_ABS} -B ${CMT_SDK_BINARY_DIR_ABS}"
+)
+
+# -----------------------------------------------------------------------------
+# cmt-sdk-configure-all — Configure every sdk_* (same -G/-A/-T as single-SDK path)
+# SDK build dirs: <repo>/<root-build-dir-name>/<sdk> (e.g. _build_msvc/sdk_2026)
+# -----------------------------------------------------------------------------
+cmake_path(GET CMAKE_BINARY_DIR FILENAME _CMT_ROOT_BUILDDIR_NAME)
+set(_CMT_SDK_CONFIGURE_ALL_COMMANDS "")
+foreach(_sdk_dir IN LISTS _CMT_ALL_SDK_TREES)
+  set(_sdk_src "${CMAKE_SOURCE_DIR}/${_sdk_dir}")
+  set(_sdk_bin "${CMAKE_SOURCE_DIR}/${_CMT_ROOT_BUILDDIR_NAME}/${_sdk_dir}")
+  set(_sdk_cfg -S "${_sdk_src}" -B "${_sdk_bin}" -G "${CMT_SDK_GENERATOR}")
+  if(NOT CMT_SDK_SKIP_VS_A_AND_T)
+    if(NOT CMT_SDK_MSVC_ARCH STREQUAL "")
+      list(APPEND _sdk_cfg -A "${CMT_SDK_MSVC_ARCH}")
+    endif()
+    if(NOT CMT_SDK_TOOLSET STREQUAL "")
+      list(APPEND _sdk_cfg -T "${CMT_SDK_TOOLSET}")
+    endif()
+  endif()
+  if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin" AND CMT_SDK_GENERATOR STREQUAL "Xcode")
+    list(APPEND _sdk_cfg "-D" "CMAKE_OSX_ARCHITECTURES=${CMT_SDK_OSX_ARCHITECTURES}")
+  endif()
+  if(NOT CMT_DEPS_PREBUILT_DIR STREQUAL "")
+    cmake_path(ABSOLUTE_PATH CMT_DEPS_PREBUILT_DIR NORMALIZE OUTPUT_VARIABLE _CMT_DEPS_PREBUILT_ABS)
+    list(APPEND _sdk_cfg "-D" "CMT_DEPS_PREBUILT_DIR:PATH=${_CMT_DEPS_PREBUILT_ABS}")
+  else()
+    list(APPEND _sdk_cfg "-U" "CMT_DEPS_PREBUILT_DIR")
+  endif()
+  list(APPEND _CMT_SDK_CONFIGURE_ALL_COMMANDS COMMAND ${CMAKE_COMMAND} ${_sdk_cfg})
+endforeach()
+add_custom_target(cmt-sdk-configure-all
+  ${_CMT_SDK_CONFIGURE_ALL_COMMANDS}
+  USES_TERMINAL
+  VERBATIM
+  COMMENT "Configure all sdk_* under ${CMAKE_SOURCE_DIR}/${_CMT_ROOT_BUILDDIR_NAME}/<sdk>"
 )
 
 # -----------------------------------------------------------------------------
@@ -157,8 +196,6 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
     separate_arguments(_CMT_ISS_EXTRA NATIVE_COMMAND "${CMT_ISS_EXTRA_ARGS}")
   endif()
 
-  set(_CMT_PACKAGE_SDKS sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026)
-
   # Build shared deps (bullet3 + libMMD) once; all SDKs link pre-built .libs.
   set(_cmt_deps_prebuilt "${CMAKE_SOURCE_DIR}/_build_msvc/cmt_deps_prebuilt")
   set(_cmt_deps_bin "${CMAKE_SOURCE_DIR}/_build_msvc/cmt_deps")
@@ -184,7 +221,7 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
     COMMAND ${CMAKE_COMMAND} --build "${_cmt_deps_bin}" --config Debug
   )
 
-  foreach(_sdk IN LISTS _CMT_PACKAGE_SDKS)
+  foreach(_sdk IN LISTS _CMT_ALL_SDK_TREES)
     set(_sdk_src "${CMAKE_SOURCE_DIR}/${_sdk}")
     set(_sdk_bin "${CMAKE_SOURCE_DIR}/_build_msvc/${_sdk}")
     set(_sdk_cfg -S "${_sdk_src}" -B "${_sdk_bin}" -G "${CMT_SDK_GENERATOR}"

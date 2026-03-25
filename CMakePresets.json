@@ -44,7 +44,7 @@
 		{
 			"name": "dev-windows",
 			"inherits": ["windows_vs2022_v143"],
-			"displayName": "CMT root — dev (Debug / sdk_2026 / no Inno)",
+			"displayName": "Dev (Debug / no Inno)",
 			"binaryDir": "${sourceDir}/_build_msvc",
 			"cacheVariables": {
 				"CMT_SDK_DIR": "${sourceDir}/sdk_2026",
@@ -55,7 +55,7 @@
 		{
 			"name": "package-windows",
 			"inherits": ["windows_vs2022_v143"],
-			"displayName": "CMT root — Release + Inno (override ISCC path or use CMakeUserPresets)",
+			"displayName": "Release + Inno (override ISCC path or use CMakeUserPresets)",
 			"binaryDir": "${sourceDir}/_build_msvc",
 			"cacheVariables": {
 				"CMT_SDK_DIR": "${sourceDir}/sdk_2026",
@@ -68,7 +68,7 @@
 		{
 			"name": "dev-linux",
 			"inherits": ["linux_ninja"],
-			"displayName": "CMT root — Linux dev (Ninja Multi-Config)",
+			"displayName": "Linux dev (Ninja Multi-Config)",
 			"binaryDir": "${sourceDir}/_build_ninja",
 			"cacheVariables": {
 				"CMT_SDK_DIR": "${sourceDir}/sdk_2026",
@@ -81,7 +81,7 @@
 		{
 			"name": "dev-macos",
 			"inherits": ["macos_universal_xcode"],
-			"displayName": "CMT root — macOS dev (Xcode Universal)",
+			"displayName": "macOS dev (Xcode Universal)",
 			"binaryDir": "${sourceDir}/_build_xcode",
 			"cacheVariables": {
 				"CMT_SDK_DIR": "${sourceDir}/sdk_2026",
@@ -94,7 +94,7 @@
 		{
 			"name": "dev-windows-deps-test",
 			"inherits": ["dev-windows"],
-			"displayName": "CMT root — dependency/ + libMMD CTest (CMT_DEPS_ENABLE_LIBMMD_TESTS)",
+			"displayName": "dependency/ + libMMD CTest (CMT_DEPS_ENABLE_LIBMMD_TESTS)",
 			"cacheVariables": {
 				"CMT_DEPS_ENABLE_LIBMMD_TESTS": "ON"
 			}
@@ -118,6 +118,12 @@
 			"configurePreset": "dev-windows",
 			"configuration": "Debug",
 			"targets": ["cmt-workflow"]
+		},
+		{
+			"name": "workflow-configure-all-sdks",
+			"configurePreset": "dev-windows",
+			"configuration": "Debug",
+			"targets": ["cmt-sdk-configure-all"]
 		},
 		{
 			"name": "workflow-package",
