@@ -13,6 +13,8 @@ Description:	C4D MMD joint object
 #include "mmd_joint_manager.h"
 #include "description/OMMDJointManager.h"
 
+namespace libmmd { class MMDJoint; }
+
 class MMDJointObject final : public ObjectData
 {
 	Int32	display_type_ = JOINT_DISPLAY_TYPE_OFF;

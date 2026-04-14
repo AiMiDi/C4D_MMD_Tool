@@ -116,29 +116,18 @@ void SaveVmdMotionLog::LogNoAnimationError()
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_MOT_NO_ANIM));
 }
 
-void LoadModelLog::Set(const MMDModelPtr& model, const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting)
+void LoadModelLog::Set(const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting)
 {
-	model_name_local = model->GetModelName().c_str();
-	comments_local = model->GetComment().c_str();
-	model_name_universal = model->GetEnglishModelName().c_str();
-	comments_universal = model->GetEnglishComment().c_str();
-
+	model_name_local = file.m_info.m_modelName.c_str();
+	comments_local = file.m_info.m_comment.c_str();
+	model_name_universal = file.m_info.m_englishModelName.c_str();
+	comments_universal = file.m_info.m_englishComment.c_str();
 	vertex_data_count = setting.import_polygon ? file.m_vertices.size() : 0;
-	surface_data_count = setting.import_polygon ? model->GetSubMeshCount() : 0;
-	texture_data_count = setting.import_material ? model->GetMaterialCount() : 0;
-	material_data_count = setting.import_material ? model->GetMaterialCount() : 0;
-	bone_data_count = setting.import_bone ? model->GetNodeManager()->GetNodeCount() : 0;
-	morph_data_count = setting.import_expression ? model->GetMorphManager()->GetMorphCount() : 0;
-}
-
-void LoadModelLog::LogMMDDataPathErr()
-{
-	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_MMD_DATA_ERR));
-}
-
-void LoadModelLog::LogLoadModelErr()
-{
-	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_IMPORT_LOAD_MODEL_ERR));
+	surface_data_count = setting.import_polygon ? file.m_faces.size() : 0;
+	texture_data_count = setting.import_material ? file.m_textures.size() : 0;
+	material_data_count = setting.import_material ? file.m_materials.size() : 0;
+	bone_data_count = setting.import_bone ? file.m_bones.size() : 0;
+	morph_data_count = setting.import_expression ? file.m_morphs.size() : 0;
 }
 
 void LoadModelLog::LogOK()
@@ -302,7 +291,7 @@ Bool CMTSceneManager::SaveVMDMotion(const CMTToolsSetting::MotionExport& setting
 	return true;
 }
 
-BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
+BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting)
 {
 	BaseObject* object = BaseObject::Alloc(g_mmd_model_manager_object_id);
 	if (!object)
@@ -319,7 +308,7 @@ BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const
 	for (BaseMaterial* m = setting.doc->GetFirstMaterial(); m; m = static_cast<BaseMaterial*>(m->GetNext()))
 		last_mat_before = m;
 
-	if (!pmx_model_data->LoadPMX(pmx_file, pmx_model, setting))
+	if (!pmx_model_data->LoadPMX(pmx_file, setting))
 	{
 		BaseMaterial* mat = last_mat_before
 			? static_cast<BaseMaterial*>(last_mat_before->GetNext())

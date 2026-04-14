@@ -15,11 +15,19 @@ Description:	MMD rigid root object
 #include "cmt_tools_setting.h"
 #include "description/OMMDRigidManager.h"
 #include "module/core/cmt_marco.h"
-#include "libMMD/Model/MMD/PMXModel.h"
+
+#include <functional>
 
 class MMDRigidObject;
 class MMDModelManagerObject;
 class MMDBoneManagerObject;
+namespace libmmd
+{
+	class MMDPhysicsManager;
+	class MMDRigidBody;
+	class IMMDNode;
+	struct PMXFile;
+}
 
 enum class MMDRigidRootObjectMsgType : uint8_t
 {
@@ -71,7 +79,7 @@ public:
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 
-	Bool RebuildRigidBodies(libmmd::MMDModel* model);
+	Bool BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager* physics_manager, const std::function<libmmd::IMMDNode*(Int32)>& get_node);
 	void ReconnectRigidBodyPointers(libmmd::MMDPhysicsManager* physics_manager);
 };
 

@@ -12,5 +12,4 @@ STRINGTABLE OMMDRigidManager
 
 	RIGID_MODE_EDIT "Edit mode";
 	RIGID_MODE_ANIM "Animation mode";
-	RIGID_MODE_VMD "VMD mode";
 }

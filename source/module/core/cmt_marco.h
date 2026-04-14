@@ -304,16 +304,3 @@ inline Bool GetAtomParameter(const T* atom, const DescID& id, GeData& data, DESC
 }
 
 
-// ============================================================================
-// Model type aliases
-// ============================================================================
-
-#include "libMMD/Model/MMD/PMXModel.h"
-#include "libMMD/Model/MMD/PMDModel.h"
-using MMDModel = libmmd::MMDModel;
-using PMXModel = libmmd::PMXModel;
-using PMDModel = libmmd::PMDModel;
-#include <memory>
-using MMDModelPtr = std::shared_ptr<MMDModel>;
-using PMXModelPtr = std::shared_ptr<PMXModel>;
-using PMDModelPtr = std::shared_ptr<PMDModel>;

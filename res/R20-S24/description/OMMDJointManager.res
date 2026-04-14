@@ -26,7 +26,6 @@ CONTAINER OMMDJointManager {
 			CYCLE {
 				JOINT_MODE_EDIT;
 				JOINT_MODE_ANIM;
-				JOINT_MODE_VMD;
 			}
 		}
 

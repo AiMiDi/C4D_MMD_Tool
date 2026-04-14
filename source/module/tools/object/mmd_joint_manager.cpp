@@ -19,6 +19,15 @@ Description:	MMD joint root object
 #include "description/OMMDJoint.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 
+namespace
+{
+	Int32 NormalizeJointMode(const Int32 mode)
+	{
+		constexpr Int32 kLegacyJointModeVmd = 2;
+		return mode == kLegacyJointModeVmd ? JOINT_MODE_ANIM : mode;
+	}
+}
+
 NodeData* MMDJointManagerObject::Alloc()
 {
 	return NewObjClear(MMDJointManagerObject);
@@ -27,7 +36,11 @@ NodeData* MMDJointManagerObject::Alloc()
 Bool MMDJointManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	IOReadField(joint_name_index_);
-	return SUPER::Read(node, hf, level);
+	if (!SUPER::Read(node, hf, level))
+		return false;
+	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
+		bc->SetInt32(JOINT_MODE, NormalizeJointMode(bc->GetInt32(JOINT_MODE)));
+	return true;
 }
 
 SDK2024_Write(MMDJointManagerObject)
@@ -64,7 +77,7 @@ BaseObject* MMDJointManagerObject::AddJoint(const String& name, libmmd::MMDJoint
 				new_joint->Message(g_mmd_joint_manager_object_id, &msg);
 			}
 			{
-				MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, bc->GetInt32(JOINT_MODE));
+				MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, NormalizeJointMode(bc->GetInt32(JOINT_MODE)));
 				new_joint->Message(g_mmd_joint_manager_object_id, &msg);
 			}
 			return new_joint;
@@ -86,7 +99,12 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		}
 		if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_JOINT_BUTTON)
 		{
-			AddJoint({}, mmd_physics_manager_->AddJoint(), node);
+			AddJoint({}, nullptr, node);
+			if (BaseObject* const parent = reinterpret_cast<BaseObject*>(node)->GetUp(); parent && parent->IsInstanceOf(g_mmd_model_manager_object_id))
+			{
+				if (auto* const model = parent->GetNodeData<MMDModelManagerObject>())
+					model->InvalidateStandaloneRuntime();
+			}
 		}
 		break;
 	}
@@ -116,9 +134,10 @@ Bool MMDJointManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	}
 	case JOINT_MODE:
 	{
-		MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, t_data.GetInt32());
+		const GeData normalized_mode(NormalizeJointMode(t_data.GetInt32()));
+		MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, normalized_mode.GetInt32());
 		node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_joint_manager_object_id, &msg);
-		break;
+		return SUPER::SetDParameter(node, id, normalized_mode, flags);
 	}
 	default:
 		break;
@@ -157,19 +176,12 @@ namespace
 Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file,
                                     const CMTToolsSetting::ModelImport& setting)
 {
-	if (!mmd_physics_manager_)
-		return false;
-
-	const auto pmx_joints = mmd_physics_manager_->GetJoints();
-	if (!pmx_joints)
-		return false;
-
 	const auto joint_count = pmx_file.m_joints.size();
 	for (size_t joint_index = 0; joint_index < joint_count; ++joint_index)
 	{
 		const auto& pmx_joint = pmx_file.m_joints[joint_index];
 		const maxon::String name_local{ pmx_joint.m_name.c_str() };
-		const auto joint_object = AddJoint(name_local, (*pmx_joints)[joint_index].get());
+		const auto joint_object = AddJoint(name_local, nullptr);
 		if (!joint_object)
 			return false;
 
@@ -239,7 +251,7 @@ MMDBoneManagerObject* MMDJointManagerObject::GetBoneManager()
 	return bone_manager_data_;
 }
 
-Bool MMDJointManagerObject::RebuildJoints(libmmd::MMDPhysicsManager* physics_manager)
+Bool MMDJointManagerObject::BuildStandaloneJoints(libmmd::MMDPhysicsManager* physics_manager)
 {
 	if (!physics_manager)
 		return false;
@@ -292,7 +304,7 @@ Bool MMDJointManagerObject::RebuildJoints(libmmd::MMDPhysicsManager* physics_man
 		if (rigidBIndex >= 0 && static_cast<size_t>(rigidBIndex) < rigid_bodies->size())
 			rbB = (*rigid_bodies)[rigidBIndex].get();
 
-		if (!rbA || !rbB)
+		if (!rbA || !rbB || rbA->GetRigidBody() == nullptr || rbB->GetRigidBody() == nullptr)
 		{
 			physics_manager->AddJoint();
 			++skipped_invalid;
@@ -356,7 +368,7 @@ Bool MMDJointManagerObject::RebuildJoints(libmmd::MMDPhysicsManager* physics_man
 			rbA, rbB))
 		{
 			++failed;
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildJoints[@]: CreateJoint FAILED, name='@' rbA=@ rbB=@",
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] BuildStandaloneJoints[@]: CreateJoint FAILED, name='@' rbA=@ rbB=@",
 				joint_index, child->GetName(), rigidAIndex, rigidBIndex);
 		}
 		else
@@ -365,7 +377,7 @@ Bool MMDJointManagerObject::RebuildJoints(libmmd::MMDPhysicsManager* physics_man
 		}
 	}
 
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildJoints: total=@ created=@ skipped_invalid=@ skipped_self=@ failed=@",
+	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] BuildStandaloneJoints: total=@ created=@ skipped_invalid=@ skipped_self=@ failed=@",
 		sorted_children.size(), created, skipped_invalid, skipped_self, failed);
 	return failed == 0;
 }

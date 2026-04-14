@@ -75,16 +75,25 @@ Target **`cmt-package`** (built by **`inno-installer`**) **depends on** **`cmt-w
 
 ### Step 2: Configure and build the SDK project
 
+`sdk_*` 的 `CMakePresets.json` 将 `binaryDir` 设为**仓库根目录**下的 `_build_msvc/<sdk名>/`（例如 `_build_msvc/sdk_2026`），而不是 `sdk_2026/_build_msvc`。
+
 ```bat
 cd sdk_2026
 
 cmake --preset windows_vs2022_v143
 
-cmake --build _build_msvc --config Debug
-cmake --build _build_msvc --config Release
+cmake --build ..\_build_msvc\sdk_2026 --config Debug
+cmake --build ..\_build_msvc\sdk_2026 --config Release
 ```
 
-Or open `sdk_2026/_build_msvc/c4d-sdk.sln` in Visual Studio.
+在仓库根目录执行时等价于：
+
+```bat
+cmake --preset windows_vs2022_v143 -S sdk_2026 -B _build_msvc/sdk_2026
+cmake --build _build_msvc/sdk_2026 --config Debug
+```
+
+Or open `_build_msvc/sdk_2026/c4d-sdk.sln` in Visual Studio (路径相对仓库根目录).
 
 > No manual symlinks are required. The custom `CMakeLists.txt` uses `maxon_targetSourceDirectories` to reference `source/` and `res/S24_up/`; the build system handles scanning and include paths.
 
@@ -96,9 +105,9 @@ cd C4D_MMDTool
 
 cd sdk_2026
 cmake --preset windows_vs2022_v143
-cmake --build _build_msvc --config Debug
+cmake --build ..\_build_msvc\sdk_2026 --config Debug
 
-start _build_msvc\c4d-sdk.sln
+start ..\_build_msvc\sdk_2026\c4d-sdk.sln
 ```
 
 > Junctions/symlinks for sources are created during CMake configure—no manual link step.
@@ -221,7 +230,7 @@ Relevant only for **Mode B**. In Mode A, set the corresponding CMake variables d
 
 ### Output
 
-- Windows: `sdk_2026/_build_msvc/bin/{Debug|Release}/plugins/mmdtool/*.xdl64`
+- Windows: `_build_msvc/sdk_2026/bin/{Debug|Release}/plugins/mmdtool/*.xdl64`（相对仓库根；其他 SDK 将 `sdk_2026` 换成对应目录名）
 - macOS: `.xlib` under the equivalent path
 - `res/` is mirrored next to the plugin output via links
 

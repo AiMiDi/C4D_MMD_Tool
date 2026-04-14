@@ -17,7 +17,6 @@ Description:	DESC
 #include "utils/morph_ui_data_util.hpp"
 
 class MMDModelManagerObject;
-namespace libmmd { class PMXModel; }
 
 namespace CMTToolsSetting
 {
@@ -62,13 +61,24 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Int32 bone_name_index_ = 0;
 	AutoAlloc<BaseLink> model_manager_;
 
-	libmmd::MMDMorphManager* mmd_morph_manager_ = nullptr;
-	libmmd::MMDNodeManager* mmd_node_manager_ = nullptr;
-
 	maxon::HashMap<String, maxon::PointerArray<MorphUIData>> bone_morph_map_;
+
+	struct BoneHierarchySyncEntry
+	{
+		BaseObject* object = nullptr;
+		BaseTag* tag = nullptr;
+		Int32 bone_index = -1;
+		Int32 parent_index = -1;
+		String parent_name;
+	};
 
 	mutable BaseContainer bone_items_;
 	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> bone_list_;
+	maxon::HashMap<BaseObject*, Int32> bone_index_lookup_;
+	Bool is_syncing_bone_hierarchy_ = false;
+	Bool has_pending_bone_hierarchy_sync_ = false;
+	Bool append_execution_order_dirty_ = true;
+	Bool is_refreshing_append_execution_order_ = false;
 	friend MMDModelManagerObject;
 	MMDBoneManagerObject() = default;
 	~MMDBoneManagerObject() override = default;
@@ -86,18 +96,25 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	[[nodiscard]] BaseTag* FindBone(Int32 index) const;
 	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
 	const BaseContainer& GetBoneItems() const;
+	MMDModelManagerObject* GetModelManagerData();
 	maxon::HashMap<String, maxon::PointerArray<MorphUIData>>& GetBoneMorphMap() { return bone_morph_map_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
 
-	Bool RebuildNodes(libmmd::PMXModel* model);
-	void ReconnectNodePointers(libmmd::MMDNodeManager* node_manager, libmmd::MMDIKManager* ik_manager);
 	void SetAllBoneMode(Int32 mode);
+	Bool EnsureAllAnimationSlotCount(Int32 slot_count);
+	void SetAllActiveAnimationSlot(Int32 slot_index);
+	void MarkAppendExecutionOrderDirty();
+	void EnsureAppendExecutionOrder();
 
 private:
 	void CreateDisplayTag(GeListNode* node) override;
 	void HandleDescriptionCommandMessage(GeListNode* node, void* data);
 	bool HandleMMDBoneTagMessage(GeListNode* node, void* data);
 	bool HandleBoneIndexChangeMessage(GeListNode* node);
+	bool SynchronizeBoneHierarchy(BaseObject* bone_manager_object, Bool update_ui = true);
+	bool CollectBoneHierarchyDFS(BaseObject* object, maxon::BaseArray<BoneHierarchySyncEntry>& entries) const;
+	void RefreshBoneHierarchyUI(BaseObject* bone_manager_object) const;
+	Int32 ComputeAppendRecursionDepth(Int32 bone_index, maxon::BaseArray<Int32>& depth_cache, maxon::BaseArray<UChar>& visit_state) const;
 };

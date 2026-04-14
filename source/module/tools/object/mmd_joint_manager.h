@@ -14,6 +14,12 @@ Description:	MMD joint root object
 #include "description/OMMDJointManager.h"
 
 class MMDModelManagerObject;
+namespace libmmd
+{
+	class MMDPhysicsManager;
+	class MMDJoint;
+	struct PMXFile;
+}
 
 namespace CMTToolsSetting
 {
@@ -72,6 +78,6 @@ public:
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 
-	Bool RebuildJoints(libmmd::MMDPhysicsManager* physics_manager);
+	Bool BuildStandaloneJoints(libmmd::MMDPhysicsManager* physics_manager);
 	void ReconnectJointPointers(libmmd::MMDPhysicsManager* physics_manager);
 };

@@ -25,6 +25,12 @@ Description:	MMD mesh root object
 #include "module/tools/material/mmd_material.h"
 namespace
 {
+	Int32 NormalizeMeshMode(const Int32 mode)
+	{
+		constexpr Int32 kLegacyMeshModeVmd = 2;
+		return mode == kLegacyMeshModeVmd ? MESH_MODE_ANIM : mode;
+	}
+
 	template <typename FROM, typename TO, typename LOOP>
 	static void ParallelForDynamic(FROM from, TO to, const LOOP& loop, Int grain, Bool enableParallel)
 	{
@@ -104,7 +110,14 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 
 	Int64 uv_count = 0;
 	if (!hf->ReadInt64(&uv_count))
-		return SUPER::Read(node, hf, level);
+	{
+		mesh_mode_ = NormalizeMeshMode(mesh_mode_);
+		if (!SUPER::Read(node, hf, level))
+			return false;
+		if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
+			bc->SetInt32(MESH_MODE, NormalizeMeshMode(bc->GetInt32(MESH_MODE)));
+		return true;
+	}
 	uv_morph_names_.Reset();
 	for (Int64 i = 0; i < uv_count; ++i)
 	{
@@ -115,7 +128,12 @@ Bool MMDMeshManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	}
 
 	*needs_morph_data_refresh_.Write() = true;
-	return SUPER::Read(node, hf, level);
+	mesh_mode_ = NormalizeMeshMode(mesh_mode_);
+	if (!SUPER::Read(node, hf, level))
+		return false;
+	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
+		bc->SetInt32(MESH_MODE, NormalizeMeshMode(bc->GetInt32(MESH_MODE)));
+	return true;
 }
 
 SDK2024_Write(MMDMeshManagerObject)
@@ -236,8 +254,11 @@ Bool MMDMeshManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 		}
 		break;
 	case MESH_MODE:
-		mesh_mode_ = t_data.GetInt32();
-		break;
+	{
+		const GeData normalized_mode(NormalizeMeshMode(t_data.GetInt32()));
+		mesh_mode_ = normalized_mode.GetInt32();
+		return SUPER::SetDParameter(node, id, normalized_mode, flags);
+	}
 	default:
 		break;
 	}

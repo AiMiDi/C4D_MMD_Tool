@@ -31,7 +31,6 @@ CONTAINER OMMDMeshManager {
 			CYCLE {
 				MESH_MODE_EDIT;
 				MESH_MODE_ANIM;
-				MESH_MODE_VMD;
 			}
 		}
 	}

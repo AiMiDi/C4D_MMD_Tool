@@ -14,6 +14,16 @@ Description:	MMD rigid root object
 #include "mmd_bone_manager.h"
 #include "mmd_rigid.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
+#include "utils/string_util.hpp"
+
+namespace
+{
+	Int32 NormalizeRigidMode(const Int32 mode)
+	{
+		constexpr Int32 kLegacyRigidModeVmd = 2;
+		return mode == kLegacyRigidModeVmd ? RIGID_MODE_ANIM : mode;
+	}
+}
 
 Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
@@ -23,7 +33,11 @@ Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(m_rigid_name_index_);
 	if (!io_util::ReadHashMap(hf, rigid_list_))
 		return false;
-	return SUPER::Read(node, hf, level);
+	if (!SUPER::Read(node, hf, level))
+		return false;
+	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
+		bc->SetInt32(RIGID_MODE, NormalizeRigidMode(bc->GetInt32(RIGID_MODE)));
+	return true;
 }
 
 SDK2024_Write(MMDRigidManagerObject)
@@ -74,7 +88,7 @@ BaseObject* MMDRigidManagerObject::AddRigid(const String& name, libmmd::MMDRigid
 				new_rigid->Message(g_mmd_rigid_manager_object_id, &msg);
 			}
 			{
-				MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF,bc->GetInt32(RIGID_MODE));
+				MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, NormalizeRigidMode(bc->GetInt32(RIGID_MODE)));
 				new_rigid->Message(g_mmd_rigid_manager_object_id, &msg);
 			}
 			return new_rigid;
@@ -94,7 +108,13 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_RIGID_BUTTON)
 		{
-			AddRigid({}, mmd_physics_manager_->AddRigidBody(), node);
+			if (AddRigid({}, nullptr, node))
+				UpdateRigidList();
+			if (BaseObject* const parent = reinterpret_cast<BaseObject*>(node)->GetUp(); parent && parent->IsInstanceOf(g_mmd_model_manager_object_id))
+			{
+				if (auto* const model = parent->GetNodeData<MMDModelManagerObject>())
+					model->InvalidateStandaloneRuntime();
+			}
 		}
 		break;
 	}
@@ -149,9 +169,10 @@ Bool MMDRigidManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 	}
 	case RIGID_MODE:
 	{
-			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, t_data.GetInt32());
+			const GeData normalized_mode(NormalizeRigidMode(t_data.GetInt32()));
+			MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, normalized_mode.GetInt32());
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_rigid_manager_object_id, &msg);
-			break;
+			return SUPER::SetDParameter(node, id, normalized_mode, flags);
 	}
 	default:
 		break;
@@ -247,13 +268,6 @@ namespace
 
 Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting)
 {
-	if (!mmd_physics_manager_)
-		return false;
-
-	const auto pmx_rigidbodies = mmd_physics_manager_->GetRigidBodys();
-	if (!pmx_rigidbodies)
-		return false;
-
 	rigid_items_.FlushAll();
 	rigid_items_.SetString(-1, "-"_s);
 
@@ -262,7 +276,7 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 	{
 		const auto& pmx_rigidbody = pmx_file.m_rigidbodies[rigid_index];
 		const maxon::String name_local{ pmx_rigidbody.m_name.c_str() };
-		const auto rigid_object = AddRigid(name_local, (*pmx_rigidbodies)[rigid_index].get());
+		const auto rigid_object = AddRigid(name_local, nullptr);
 
 		if (!rigid_object)
 			return false;
@@ -330,17 +344,15 @@ namespace
 	}
 }
 
-Bool MMDRigidManagerObject::RebuildRigidBodies(libmmd::MMDModel* model)
+Bool MMDRigidManagerObject::BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager* physics_manager, const std::function<libmmd::IMMDNode*(Int32)>& get_node)
 {
-	if (!model)
-		return false;
-
-	auto* physics_manager = model->GetPhysicsManager();
-	auto* node_manager = model->GetNodeManager();
-	if (!physics_manager || !node_manager)
+	if (!physics_manager)
 		return false;
 
 	const auto op = reinterpret_cast<BaseObject*>(Get());
+	Int32 created = 0;
+	Int32 skipped_unbound = 0;
+	Int32 failed = 0;
 
 	std::vector<std::pair<Int32, BaseObject*>> sorted_children;
 	for (BaseObject* child = op->GetDown(); child; child = child->GetNext())
@@ -361,8 +373,6 @@ Bool MMDRigidManagerObject::RebuildRigidBodies(libmmd::MMDModel* model)
 		const BaseContainer* bc = child->GetDataInstance();
 		if (!bc)
 			return false;
-
-		auto* rb = physics_manager->AddRigidBody();
 
 		const auto shape = static_cast<libmmd::PMXRigidbody::Shape>(bc->GetInt32(RIGID_SHAPE_TYPE));
 		const Eigen::Vector3f shapeSize(
@@ -391,24 +401,51 @@ Bool MMDRigidManagerObject::RebuildRigidBodies(libmmd::MMDModel* model)
 		const auto group = static_cast<uint8_t>(bc->GetInt32(RIGID_GROUP_ID));
 		const auto collisionGroup = ReadCollisionGroupMask(bc);
 
-		const auto boneIndex = bc->GetInt32(RIGID_RELATED_BONE_INDEX);
-		libmmd::MMDNode* node = nullptr;
-		if (boneIndex >= 0 && static_cast<size_t>(boneIndex) < node_manager->GetNodeCount())
+		libmmd::PMXRigidbody pmx_rigidbody;
+		pmx_rigidbody.m_shape = shape;
+		pmx_rigidbody.m_shapeSize = shapeSize;
+		pmx_rigidbody.m_translate = translate;
+		pmx_rigidbody.m_rotate = rotate;
+		pmx_rigidbody.m_mass = mass;
+		pmx_rigidbody.m_translateDimmer = linearDamping;
+		pmx_rigidbody.m_rotateDimmer = angularDamping;
+		pmx_rigidbody.m_repulsion = repulsion;
+		pmx_rigidbody.m_friction = friction;
+		pmx_rigidbody.m_op = op_mode;
+		pmx_rigidbody.m_group = group;
+		pmx_rigidbody.m_collisionGroup = collisionGroup;
+		pmx_rigidbody.m_boneIndex = bc->GetInt32(RIGID_RELATED_BONE_INDEX);
+		pmx_rigidbody.m_name = string_util::GetStdString(child->GetName());
+
+		auto* rb = physics_manager->AddRigidBody();
+		libmmd::IMMDNode* const node = get_node ? get_node(pmx_rigidbody.m_boneIndex) : nullptr;
+		if (node == nullptr)
 		{
-			node = node_manager->GetMMDNode(static_cast<size_t>(boneIndex));
+			++skipped_unbound;
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+				"[CMT] BuildStandaloneRigidBodies[@]: skipped unbound rigid body, name='@' boneIndex=@",
+				rigid_index, child->GetName(), pmx_rigidbody.m_boneIndex);
+			continue;
 		}
 
-		if (!rb->Create(shape, shapeSize, translate, rotate,
-			mass, linearDamping, angularDamping, repulsion, friction,
-			op_mode, group, collisionGroup, model, node))
+		if (!rb->Create(pmx_rigidbody, node))
 		{
-			return false;
+			++failed;
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+				"[CMT] BuildStandaloneRigidBodies[@]: Create FAILED, name='@' boneIndex=@",
+				rigid_index, child->GetName(), pmx_rigidbody.m_boneIndex);
+			continue;
 		}
+
+		++created;
 	}
 
 	if (!UpdateRigidList())
 		return false;
 
+	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+		"[CMT] BuildStandaloneRigidBodies: total=@ created=@ skipped_unbound=@ failed=@",
+		sorted_children.size(), created, skipped_unbound, failed);
 	return true;
 }
 

@@ -21,6 +21,15 @@ Description:	C4D MMD joint object
 #include "module/tools/object/mmd_rigid_manager.h"
 #include <libMMD/Model/MMD/MMDPhysics.h>
 
+namespace
+{
+	Int32 NormalizeJointMode(const Int32 mode)
+	{
+		constexpr Int32 kLegacyJointModeVmd = 2;
+		return mode == kLegacyJointModeVmd ? JOINT_MODE_ANIM : mode;
+	}
+}
+
 SDK2024_ConstExpr Vector g_pmx_joint_colors[6] =
 {
 		Vector(255, 255, 70) / 255,
@@ -135,10 +144,11 @@ SDK2024_GetDEnabling(MMDJointObject)
 
 void MMDJointObject::HandleJointModeChange(const Int32 mode)
 {
-	if (joint_mode_ == mode)
+	const Int32 normalized_mode = NormalizeJointMode(mode);
+	if (joint_mode_ == normalized_mode)
 		return;
 
-	if (mode == JOINT_MODE_EDIT)
+	if (normalized_mode == JOINT_MODE_EDIT)
 	{
 		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
 	}
@@ -148,7 +158,7 @@ void MMDJointObject::HandleJointModeChange(const Int32 mode)
 		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	}
 
-	joint_mode_ = mode;
+	joint_mode_ = normalized_mode;
 }
 
 Bool MMDJointObject::Message(GeListNode* node, Int32 type, void* data)
@@ -371,7 +381,7 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	{
 		HandleJointIndexUpdate(op);
 	}
-	else if (joint_mode_ == JOINT_MODE_VMD && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
+	else if (joint_mode_ == JOINT_MODE_ANIM && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
 	{
 		const auto transform = mmd_joint_->GetTransform();
 		op->SetRelMl(Matrix{
@@ -412,6 +422,9 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(joint_manager_link_);
 	IOReadField(link_rigid_a_);
 	IOReadField(link_rigid_b_);
+	joint_mode_ = NormalizeJointMode(joint_mode_);
+	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
+		bc->SetInt32(JOINT_MODE, NormalizeJointMode(bc->GetInt32(JOINT_MODE)));
 	return true;
 }
 

@@ -16,6 +16,7 @@ Description:	C4D MMD rigid object
 #include "description/OMMDRigidManager.h"
 
 class MMDRigidManagerObject;
+namespace libmmd { class MMDRigidBody; }
 
 class MMDRigidObject final : public ObjectData
 {

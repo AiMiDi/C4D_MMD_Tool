@@ -15,5 +15,4 @@ STRINGTABLE OMMDMeshManager
 
 	MESH_MODE_EDIT "Edit mode";
     MESH_MODE_ANIM "Animation mode";
-    MESH_MODE_VMD "VMD mode";
 }

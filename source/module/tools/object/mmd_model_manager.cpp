@@ -16,18 +16,343 @@ Description:	MMD model object
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
 #include "module/tools/material/mmd_material.h"
+#include "module/tools/tag/mmd_bone.h"
 #include "mmd_bone_manager.h"
 #include "mmd_joint_manager.h"
 #include "mmd_mesh_manager.h"
 #include "mmd_rigid_manager.h"
+#include "customgui_priority.h"
+#include "description/OMMDRigid.h"
+#include "description/TMMDBone.h"
 #include "maxon/queue.h"
 #include "utils/filename_util.hpp"
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/MMDPhysics.h"
+#include "libMMD/Model/MMD/SjisToUnicode.h"
 
+#include <algorithm>
+#include <codecvt>
+#include <locale>
+#include <map>
 #include <set>
+#include <unordered_map>
 
 #define COL_NAME 'name'
+
+namespace
+{
+	constexpr Float32 kModelAnimationFps = 30.0f;
+
+	Int32 NormalizeModelMode(const Int32 mode)
+	{
+		constexpr Int32 kLegacyModelModeVmd = 2;
+		return mode == kLegacyModelModeVmd ? MODEL_MODE_ANIM : mode;
+	}
+
+	void ConfigureModelManagerExecutionPriority(GeListNode* node)
+	{
+		if (!node)
+			return;
+
+		BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+		if (!bc)
+			return;
+
+		if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
+		{
+			if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
+			{
+				pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
+				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 5000);
+				bc->SetData(EXPRESSION_PRIORITY, priority);
+			}
+		}
+	}
+
+	Int32 ToAnimationFrame(const UInt32 frame, const Float time_offset)
+	{
+		return static_cast<Int32>(frame) + static_cast<Int32>(time_offset);
+	}
+
+	String GetBoneTagName(const BaseTag* tag, const Bool use_local_name)
+	{
+		if (!tag)
+			return ""_s;
+
+		GeData data;
+		const Int32 param_id = use_local_name ? PMX_BONE_NAME_LOCAL : PMX_BONE_NAME_UNIVERSAL;
+		if (tag->GetParameter(CreateDescID(DescLevel(param_id)), data, DESCFLAGS_GET::NONE))
+		{
+			const String name = data.GetString();
+			if (!name.IsEmpty())
+				return name;
+		}
+
+		if (const BaseObject* object = tag->GetObject())
+			return object->GetName();
+
+		return ""_s;
+	}
+
+	String GetModelManagerName(const BaseObject* object)
+	{
+		if (!object)
+			return ""_s;
+
+		if (const BaseContainer* const bc = object->GetDataInstance())
+		{
+			const String local_name = bc->GetString(MODEL_NAME_LOCAL);
+			if (!local_name.IsEmpty())
+				return local_name;
+
+			const String universal_name = bc->GetString(MODEL_NAME_UNIVERSAL);
+			if (!universal_name.IsEmpty())
+				return universal_name;
+		}
+
+		return object->GetName();
+	}
+
+	std::string ConvertUtf8ToSjis(const std::string& utf8)
+	{
+		if (utf8.empty())
+			return {};
+
+		try
+		{
+			std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> converter;
+			return libmmd::ConvertU16ToSjisString(converter.from_bytes(utf8));
+		}
+		catch (...)
+		{
+			return utf8;
+		}
+	}
+
+	std::string ConvertStringToSjis(const String& value)
+	{
+		return ConvertUtf8ToSjis(string_util::GetStdString(value));
+	}
+
+	BoneAnimationBezierData ReadInterpolationChannel(const std::array<uint8_t, 64>& interpolation, const Int32 channel)
+	{
+		const Int32 offset = std::clamp(channel, 0, 3);
+		BoneAnimationBezierData bezier;
+		bezier.ax = interpolation[offset];
+		bezier.ay = interpolation[offset + 4];
+		bezier.bx = interpolation[offset + 8];
+		bezier.by = interpolation[offset + 12];
+		return bezier;
+	}
+
+	void WriteInterpolationChannel(std::array<uint8_t, 64>& interpolation, const Int32 channel, const BoneAnimationBezierData& bezier)
+	{
+		const Int32 offset = std::clamp(channel, 0, 3);
+		interpolation[offset] = bezier.ax;
+		interpolation[offset + 4] = bezier.ay;
+		interpolation[offset + 8] = bezier.bx;
+		interpolation[offset + 12] = bezier.by;
+	}
+
+	BoneAnimationKeyframeData ConvertMotionToBoneKeyframe(const libmmd::VMDMotion& motion, const CMTToolsSetting::MotionImport& setting)
+	{
+		BoneAnimationKeyframeData keyframe;
+		keyframe.frame = ToAnimationFrame(motion.m_frame, setting.time_offset);
+		keyframe.translation = Vector32(
+			motion.m_translate.x(),
+			motion.m_translate.y(),
+			motion.m_translate.z());
+		const Eigen::Quaternionf rotation = motion.m_quaternion.normalized();
+		keyframe.rotation_x = rotation.x();
+		keyframe.rotation_y = rotation.y();
+		keyframe.rotation_z = rotation.z();
+		keyframe.rotation_w = rotation.w();
+		keyframe.translate_x = ReadInterpolationChannel(motion.m_interpolation, 0);
+		keyframe.translate_y = ReadInterpolationChannel(motion.m_interpolation, 1);
+		keyframe.translate_z = ReadInterpolationChannel(motion.m_interpolation, 2);
+		keyframe.rotation = ReadInterpolationChannel(motion.m_interpolation, 3);
+		return keyframe;
+	}
+
+	libmmd::VMDMotion ConvertBoneKeyframeToMotion(const String& bone_name, const BoneAnimationKeyframeData& keyframe, const CMTToolsSetting::MotionExport& setting)
+	{
+		libmmd::VMDMotion motion;
+		const std::string sjis_name = ConvertStringToSjis(bone_name);
+		motion.m_boneName.Set(sjis_name.c_str());
+		motion.m_frame = static_cast<UInt32>(std::max(0, keyframe.frame + static_cast<Int32>(setting.time_offset)));
+		motion.m_translate = Eigen::Vector3f(
+			keyframe.translation.x,
+			keyframe.translation.y,
+			keyframe.translation.z);
+		motion.m_quaternion = Eigen::Quaternionf(
+			keyframe.rotation_w,
+			keyframe.rotation_x,
+			keyframe.rotation_y,
+			keyframe.rotation_z).normalized();
+		motion.m_interpolation.fill(0);
+		WriteInterpolationChannel(motion.m_interpolation, 0, keyframe.translate_x);
+		WriteInterpolationChannel(motion.m_interpolation, 1, keyframe.translate_y);
+		WriteInterpolationChannel(motion.m_interpolation, 2, keyframe.translate_z);
+		WriteInterpolationChannel(motion.m_interpolation, 3, keyframe.rotation);
+		return motion;
+	}
+
+	Int32 GetVmdFileMaxFrame(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting)
+	{
+		Int32 max_frame = 0;
+		if (setting.import_motion)
+		{
+			for (const auto& motion : vmd_file.m_motions)
+				max_frame = std::max(max_frame, ToAnimationFrame(motion.m_frame, setting.time_offset));
+		}
+		if (setting.import_morph)
+		{
+			for (const auto& morph : vmd_file.m_morphs)
+				max_frame = std::max(max_frame, ToAnimationFrame(morph.m_frame, setting.time_offset));
+		}
+		for (const auto& ik : vmd_file.m_iks)
+			max_frame = std::max(max_frame, ToAnimationFrame(ik.m_frame, setting.time_offset));
+		return max_frame;
+	}
+
+	Bool IsBoneDrivenByDynamicPhysics(const BaseObject* rigid_manager_object, const Int32 bone_index)
+	{
+		if (!rigid_manager_object || bone_index < 0)
+			return false;
+
+		for (const BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
+		{
+			if (!child->IsInstanceOf(g_mmd_rigid_object_id))
+				continue;
+
+			const BaseContainer* const bc = child->GetDataInstance();
+			if (!bc)
+				continue;
+
+			if (bc->GetInt32(RIGID_RELATED_BONE_INDEX) != bone_index)
+				continue;
+
+			const auto op_mode = static_cast<libmmd::PMXRigidbody::Operation>(bc->GetInt32(RIGID_PHYSICS_MODE));
+			if (op_mode == libmmd::PMXRigidbody::Operation::Dynamic)
+				return true;
+		}
+
+		return false;
+	}
+
+	void AppendMorphTracksToVmd(BaseObject* object, const maxon::PointerArray<IMorph>& morphs, const CMTToolsSetting::MotionExport& setting, libmmd::VMDFile& vmd_motion)
+	{
+		if (!object || !setting.export_morph)
+		{
+			vmd_motion.m_morphs.clear();
+			return;
+		}
+
+		for (Int32 i = 0; i < morphs.GetCount(); ++i)
+		{
+			auto& morph = const_cast<IMorph&>(morphs[i]);
+			CTrack* const track = object->FindCTrack(morph.GetStrengthDescID());
+			if (!track)
+				continue;
+
+			CCurve* const curve = track->GetCurve();
+			if (!curve)
+				continue;
+
+			const std::string sjis_name = ConvertStringToSjis(morph.GetName());
+			const Int32 key_count = curve->GetKeyCount();
+			for (Int32 key_index = 0; key_index < key_count; ++key_index)
+			{
+				const CKey* const key = curve->GetKey(key_index);
+				if (!key)
+					continue;
+
+				libmmd::VMDMorph morph_key;
+				morph_key.m_blendShapeName.Set(sjis_name.c_str());
+				morph_key.m_frame = static_cast<UInt32>(std::max(0, key->GetTime().GetFrame(kModelAnimationFps) + static_cast<Int32>(setting.time_offset)));
+				morph_key.m_weight = static_cast<float>(key->GetValue());
+				vmd_motion.m_morphs.push_back(std::move(morph_key));
+			}
+		}
+
+		std::sort(vmd_motion.m_morphs.begin(), vmd_motion.m_morphs.end(), [](const libmmd::VMDMorph& lhs, const libmmd::VMDMorph& rhs)
+		{
+			if (lhs.m_blendShapeName.ToString() == rhs.m_blendShapeName.ToString())
+				return lhs.m_frame < rhs.m_frame;
+			return lhs.m_blendShapeName.ToString() < rhs.m_blendShapeName.ToString();
+		});
+	}
+
+	void AppendIKTracksToVmd(BaseObject* object, const StandaloneIKManager* ik_manager, const maxon::BaseArray<maxon::Pair<DescID, Int>>& dynamic_params, const CMTToolsSetting::MotionExport& setting, libmmd::VMDFile& vmd_motion)
+	{
+		if (!object || !ik_manager)
+		{
+			vmd_motion.m_iks.clear();
+			return;
+		}
+
+		std::map<UInt32, std::map<std::string, uint8_t>> ik_frames;
+		for (const auto& param : dynamic_params)
+		{
+			const auto solver_index = static_cast<size_t>(param.second);
+			libmmd::MMDIkSolver* const solver = ik_manager->GetMMDIKSolver(solver_index);
+			if (!solver)
+				continue;
+
+			CTrack* const track = object->FindCTrack(param.first);
+			if (!track)
+				continue;
+
+			CCurve* const curve = track->GetCurve(CCURVE::CURVE, false);
+			if (!curve)
+				continue;
+
+			const Int32 key_count = curve->GetKeyCount();
+			for (Int32 key_index = 0; key_index < key_count; ++key_index)
+			{
+				const CKey* const key = curve->GetKey(key_index);
+				if (!key)
+					continue;
+
+				const UInt32 frame = static_cast<UInt32>(std::max(0, key->GetTime().GetFrame(kModelAnimationFps) + static_cast<Int32>(setting.time_offset)));
+				ik_frames[frame][ConvertUtf8ToSjis(solver->GetName())] = key->GetValue() >= 0.5 ? 1 : 0;
+			}
+		}
+
+		vmd_motion.m_iks.clear();
+		for (const auto& [frame, infos] : ik_frames)
+		{
+			libmmd::VMDIk ik;
+			ik.m_frame = frame;
+			ik.m_show = 1;
+			for (const auto& [name, enabled] : infos)
+			{
+				libmmd::VMDIkInfo info;
+				info.m_name.Set(name.c_str());
+				info.m_enable = enabled;
+				ik.m_ikInfos.push_back(std::move(info));
+			}
+			vmd_motion.m_iks.push_back(std::move(ik));
+		}
+	}
+}
+
+Bool AnimationSlotMetadata::Read(HyperFile* hf)
+{
+	return hf->ReadString(&name) && hf->ReadInt32(&max_frame);
+}
+
+Bool AnimationSlotMetadata::Write(HyperFile* hf) const
+{
+	return hf->WriteString(name) && hf->WriteInt32(max_frame);
+}
+
+Bool AnimationSlotMetadata::CopyTo(AnimationSlotMetadata& dest) const
+{
+	dest.name = name;
+	dest.max_frame = max_frame;
+	return true;
+}
 
 Bool EditorSubMorphDialog::CreateLayout()
 {
@@ -234,7 +559,10 @@ SDK2024_Init(MMDModelManagerObject)
 	bc->SetFloat(MODEL_POSITION_MULTIPLE, 8.5);
 	bc->SetInt32(MODEL_ANIM_LIST, -1);
 	bc->SetInt32(MODEL_MATERIAL_LIST, MODEL_MATERIAL_NONE);
-	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
+	iferr(animation_slot_metadata_.Resize(0))
+		return false;
+	RefreshAnimationSlotItems();
+	ConfigureModelManagerExecutionPriority(node);
 	return true;
 }
 
@@ -345,15 +673,17 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	animation_items_.FlushAll();
 	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
 	animation_index_ = -1;
-	iferr(pending_vmd_data_.Resize(0))
+	iferr(animation_slot_metadata_.Resize(0))
 		return false;
 
 	Int32 anim_idx = -1;
 	if (hf->ReadInt32(&anim_idx))
 	{
 		Int64 anim_count = 0;
-		if (hf->ReadInt64(&anim_count) && anim_count > 0 && anim_count <= 10000)
+		if (hf->ReadInt64(&anim_count) && anim_count >= 0 && anim_count <= 10000)
 		{
+			if (!EnsureAnimationSlotCount(static_cast<Int32>(anim_count)))
+				return false;
 			if (anim_idx >= static_cast<Int32>(anim_count))
 				anim_idx = -1;
 			animation_index_ = anim_idx;
@@ -374,7 +704,6 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 					break;
 				}
 
-				std::vector<uint8_t> data;
 				if (size > 0)
 				{
 					void* mem = nullptr;
@@ -384,14 +713,11 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 						DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: failed to read memory at index @, expected size=@", i, size);
 						break;
 					}
-					data.resize(static_cast<size_t>(mem_size));
-					CopyMem(mem, data.data(), mem_size);
 					DeleteMem(mem);
 				}
 
-			iferr(pending_vmd_data_.Append(std::make_pair(name, std::move(data))))
-					break;
-				animation_items_.SetString(static_cast<Int32>(i), name);
+				animation_slot_metadata_[static_cast<Int32>(i)].name = name;
+				animation_slot_metadata_[static_cast<Int32>(i)].max_frame = 0;
 			}
 		}
 	}
@@ -420,6 +746,40 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	{
 		SyncIKSolverDynamicParamsFromDescMap();
 	}
+
+	if (level >= 2)
+	{
+		Int64 slot_count = 0;
+		if (!hf->ReadInt64(&slot_count) || slot_count < 0 || slot_count > 10000)
+			return false;
+		if (!EnsureAnimationSlotCount(static_cast<Int32>(slot_count)))
+			return false;
+		for (Int64 i = 0; i < slot_count; ++i)
+		{
+			AnimationSlotMetadata metadata;
+			if (!metadata.Read(hf))
+				return false;
+			animation_slot_metadata_[static_cast<Int32>(i)] = std::move(metadata);
+		}
+	}
+
+	if (animation_slot_metadata_.IsEmpty())
+		animation_index_ = -1;
+	else if (animation_index_ < -1)
+		animation_index_ = -1;
+	else if (animation_index_ >= animation_slot_metadata_.GetCount())
+		animation_index_ = static_cast<Int32>(animation_slot_metadata_.GetCount() - 1);
+	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
+	{
+		model_mode_ = NormalizeModelMode(bc->GetInt32(MODEL_MODE));
+		bc->SetInt32(MODEL_MODE, model_mode_);
+	}
+	else
+	{
+		model_mode_ = NormalizeModelMode(model_mode_);
+	}
+	RefreshAnimationSlotItems();
+	ConfigureModelManagerExecutionPriority(node);
 
 	return true;
 }
@@ -455,53 +815,15 @@ SDK2024_Write(MMDModelManagerObject) {
 
 	if (!hf->WriteInt32(animation_index_))
 		return false;
+	const auto anim_count = static_cast<Int64>(animation_slot_metadata_.GetCount());
+	if (!hf->WriteInt64(anim_count))
+		return false;
+	for (Int32 i = 0; i < animation_slot_metadata_.GetCount(); ++i)
+	{
+		const String name = animation_slot_metadata_[i].name;
+		if (!hf->WriteString(name))
+			return false;
 
-	if (animations_.GetCount() > 0)
-	{
-		const auto anim_count = static_cast<Int64>(animations_.GetCount());
-		if (!hf->WriteInt64(anim_count))
-			return false;
-		for (Int64 i = 0; i < anim_count; ++i)
-		{
-			const auto& [name, animation] = animations_[i];
-			if (!hf->WriteString(name))
-				return false;
-			libmmd::VMDFile vmd_file;
-			std::vector<uint8_t> vmd_data;
-			if (animation && animation->Save(vmd_file) && libmmd::WriteVMDFile(&vmd_file, vmd_data))
-			{
-				if (!hf->WriteInt64(static_cast<Int64>(vmd_data.size())))
-					return false;
-				if (!hf->WriteMemory(vmd_data.data(), static_cast<Int>(vmd_data.size())))
-					return false;
-			}
-			else
-			{
-				DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Write: anim[@] name='@' SERIALIZE FAILED, writing size=0", i, name);
-				if (!hf->WriteInt64(0))
-					return false;
-			}
-		}
-	}
-	else if (pending_vmd_data_.GetCount() > 0)
-	{
-		if (!hf->WriteInt64(static_cast<Int64>(pending_vmd_data_.GetCount())))
-			return false;
-		for (const auto& [name, vmd_data] : pending_vmd_data_)
-		{
-			if (!hf->WriteString(name))
-				return false;
-			if (!hf->WriteInt64(static_cast<Int64>(vmd_data.size())))
-				return false;
-			if (!vmd_data.empty())
-			{
-				if (!hf->WriteMemory(vmd_data.data(), static_cast<Int>(vmd_data.size())))
-					return false;
-			}
-		}
-	}
-	else
-	{
 		if (!hf->WriteInt64(0))
 			return false;
 	}
@@ -514,6 +836,14 @@ SDK2024_Write(MMDModelManagerObject) {
 		if (!const_cast<DescID&>(p.first).Write(hf))
 			return false;
 		if (!hf->WriteInt32(static_cast<Int32>(p.second)))
+			return false;
+	}
+
+	if (!hf->WriteInt64(static_cast<Int64>(animation_slot_metadata_.GetCount())))
+		return false;
+	for (const auto& slot : animation_slot_metadata_)
+	{
+		if (!slot.Write(hf))
 			return false;
 	}
 
@@ -567,33 +897,14 @@ SDK2024_CopyTo(MMDModelManagerObject)
 
 	destObject->animation_index_ = animation_index_;
 	destObject->animation_items_ = animation_items_;
-	iferr(destObject->pending_vmd_data_.Resize(0))
+	if (!destObject->EnsureAnimationSlotCount(static_cast<Int32>(animation_slot_metadata_.GetCount())))
 		return false;
-	if (animations_.GetCount() > 0)
+	for (Int32 i = 0; i < animation_slot_metadata_.GetCount(); ++i)
 	{
-		for (Int32 i = 0; i < animations_.GetCount(); ++i)
-		{
-			const auto& [name, animation] = animations_[i];
-			std::vector<uint8_t> vmd_data;
-			if (animation)
-			{
-				libmmd::VMDFile vmd_file;
-				if (animation->Save(vmd_file))
-					libmmd::WriteVMDFile(&vmd_file, vmd_data);
-			}
-		iferr(destObject->pending_vmd_data_.Append(std::make_pair(name, std::move(vmd_data))))
-				return false;
-		}
+		if (!animation_slot_metadata_[i].CopyTo(destObject->animation_slot_metadata_[i]))
+			return false;
 	}
-	else if (pending_vmd_data_.GetCount() > 0)
-	{
-		for (const auto& [name, vmd_data] : pending_vmd_data_)
-		{
-			std::vector<uint8_t> data_copy(vmd_data);
-			iferr(destObject->pending_vmd_data_.Append(std::make_pair(name, std::move(data_copy))))
-				return false;
-		}
-	}
+	destObject->InvalidateStandaloneRuntime();
 	return true;
 }
 Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
@@ -673,6 +984,108 @@ MMDModelManagerObject::AddMorphHelper MMDModelManagerObject::BeginMorphChange()
 
 MMDModelManagerObject::MMDModelManagerObject() : update_morph_(true), is_morph_initialized_(false), is_manager_read_(false), is_runtime_initialized_(false)
 {
+}
+
+Bool MMDModelManagerObject::EnsureAnimationSlotCount(const Int32 slot_count)
+{
+	iferr_scope_handler
+	{
+		return false;
+	};
+
+	if (slot_count <= 0)
+	{
+		iferr(animation_slot_metadata_.Resize(0))
+			return false;
+		animation_index_ = -1;
+		RefreshAnimationSlotItems();
+		return true;
+	}
+
+	iferr(animation_slot_metadata_.Resize(slot_count))
+		return false;
+
+	if (animation_index_ >= slot_count)
+		animation_index_ = slot_count - 1;
+	return true;
+}
+
+Bool MMDModelManagerObject::SetAnimationSlotMetadata(const Int32 slot_index, const String& name, const Int32 max_frame)
+{
+	if (slot_index < 0)
+		return false;
+	if (!EnsureAnimationSlotCount(slot_index + 1))
+		return false;
+
+	animation_slot_metadata_[slot_index].name = name;
+	animation_slot_metadata_[slot_index].max_frame = std::max(0, max_frame);
+	RefreshAnimationSlotItems();
+	return true;
+}
+
+void MMDModelManagerObject::RefreshAnimationSlotItems()
+{
+	animation_items_.FlushAll();
+	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
+	for (Int32 i = 0; i < animation_slot_metadata_.GetCount(); ++i)
+	{
+		const String label = animation_slot_metadata_[i].name.IsEmpty()
+			? FormatString("Animation @", i)
+			: animation_slot_metadata_[i].name;
+		animation_items_.SetString(i, label);
+	}
+}
+
+Int32 MMDModelManagerObject::GetAnimationSlotMaxFrame(const Int32 slot_index) const
+{
+	if (slot_index < 0 || slot_index >= animation_slot_metadata_.GetCount())
+		return 0;
+	return std::max(0, animation_slot_metadata_[slot_index].max_frame);
+}
+
+void MMDModelManagerObject::ApplyAnimationSlotSelection(BaseDocument* doc)
+{
+	if (animation_slot_metadata_.IsEmpty())
+	{
+		animation_index_ = -1;
+	}
+	else if (animation_index_ < -1)
+	{
+		animation_index_ = -1;
+	}
+	else if (animation_index_ >= animation_slot_metadata_.GetCount())
+	{
+		animation_index_ = static_cast<Int32>(animation_slot_metadata_.GetCount() - 1);
+	}
+
+	if (GeListNode* const node = Get())
+	{
+		MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::ACTIVE_ANIMATION_SLOT_CHANGE, nullptr, model_mode_, animation_index_);
+		node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_model_manager_object_id, &msg);
+	}
+	else if (bone_manager_data_)
+	{
+		bone_manager_data_->SetAllActiveAnimationSlot(animation_index_);
+	}
+
+	if (doc)
+	{
+		doc->SetTime(BaseTime());
+		if (animation_index_ >= 0)
+		{
+			const BaseTime max_time(static_cast<Float>(GetAnimationSlotMaxFrame(animation_index_)), kModelAnimationFps);
+			doc->SetMaxTime(max_time);
+			doc->SetLoopMaxTime(max_time);
+		}
+		else
+		{
+			doc->SetMaxTime(BaseTime());
+			doc->SetLoopMaxTime(BaseTime());
+		}
+	}
+
+	if (GeListNode* const node = Get())
+		node->SetDirty(DIRTYFLAGS::DESCRIPTION);
 }
 
 void MMDModelManagerObject::RefreshMorph()
@@ -849,21 +1262,21 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	if (!UpdateManagers(op))
 		return EXECUTIONRESULT::OK;
 
-	if (!*is_runtime_initialized_.Read() && !mmd_model_)
+	if (!*is_runtime_initialized_.Read())
 	{
-		if (!RebuildRuntime())
+		if (bone_manager_data_)
+			bone_manager_data_->HandleBoneIndexChangeMessage(io_util::ResolveObjectLink(bone_manager_));
+
+		const Bool runtime_ready = EnsureStandaloneRuntimeManagers();
+		if (!runtime_ready)
 		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Execute: RebuildRuntime FAILED");
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Execute: EnsureStandaloneRuntimeManagers FAILED");
 			StatusSetText(GeLoadString(IDS_CMT_VMD_REBUILD_FAILED));
 		}
-		*is_runtime_initialized_.Write() = true;
+		*is_runtime_initialized_.Write() = runtime_ready;
 
 		if (manager_read)
-		{
-			if (bone_manager_data_)
-				bone_manager_data_->HandleBoneIndexChangeMessage(io_util::ResolveObjectLink(bone_manager_));
 			*is_manager_read_.Write() = false;
-		}
 	}
 	else if(manager_read)
 	{
@@ -900,7 +1313,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		}
 	}
 
-	if (model_mode_ == MODEL_MODE_VMD && mmd_model_)
+	if (model_mode_ == MODEL_MODE_ANIM)
 	{
 		if (const auto now_time = doc->GetTime(); prev_time_ != now_time)
 		{
@@ -911,36 +1324,16 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			const Bool needs_physics_reset = !is_animation_initialized_ || now_time == doc->GetMinTime()
 				|| (time_diff < frame_time * 0.5 || time_diff > frame_time * 1.5);
 
-			if (animation_index_ != -1 && animation_index_ < animations_.GetCount())
-			{
-				const auto& [_, animation]  = animations_[animation_index_];
-				constexpr Float32 vmd_fps = 30.0f;
-				const auto vmd_frame = static_cast<Float32>(now_time.Get() * vmd_fps);
-				if (needs_physics_reset)
-				{
-					mmd_model_->InitializeAnimation();
-					animation->SyncPhysics(vmd_frame, 10, 1.f / fps_);
-					is_animation_initialized_ = true;
-				}
-				ApplyIKSolverFromParameters(op);
-				mmd_model_->BeginAnimation();
-				mmd_model_->UpdateAllAnimation(animation.get(), vmd_frame, 1.f / fps_);
-				mmd_model_->EndAnimation();
-			}
+			if (!EnsureStandaloneRuntimeManagers())
+				return EXECUTIONRESULT::OK;
+
+			ApplyIKSolverFromParameters(op);
+			if (needs_physics_reset)
+				ResetStandalonePhysics();
 			else
-			{
-				if (needs_physics_reset)
-				{
-					mmd_model_->InitializeAnimation();
-					is_animation_initialized_ = true;
-				}
-				ApplyIKSolverFromParameters(op);
-				mmd_model_->BeginAnimation();
-				mmd_model_->UpdateNodeAnimation(false);
-				mmd_model_->UpdatePhysicsAnimation(1.f / fps_);
-				mmd_model_->UpdateNodeAnimation(true);
-				mmd_model_->EndAnimation();
-			}
+				StepStandalonePhysics(1.f / fps_);
+
+			is_animation_initialized_ = true;
 			prev_time_ = now_time;
 		}
 	}
@@ -1033,9 +1426,9 @@ void MMDModelManagerObject::SyncIKSolverDynamicParamsFromDescMap()
 
 void MMDModelManagerObject::BuildIKSolverUI()
 {
-	if (!mmd_model_)
+	if (!ik_manager_own_)
 		return;
-	auto* ik_manager = mmd_model_->GetIKManager();
+	auto* ik_manager = ik_manager_own_.get();
 	if (!ik_manager)
 		return;
 	StripIKSolverDynamicUI();
@@ -1058,9 +1451,9 @@ void MMDModelManagerObject::BuildIKSolverUI()
 
 void MMDModelManagerObject::ApplyIKSolverStates()
 {
-	if (!mmd_model_)
+	if (!ik_manager_own_)
 		return;
-	auto* ik_manager = mmd_model_->GetIKManager();
+	auto* ik_manager = ik_manager_own_.get();
 	if (!ik_manager)
 		return;
 	auto* node = Get();
@@ -1081,9 +1474,9 @@ void MMDModelManagerObject::ApplyIKSolverStates()
 
 void MMDModelManagerObject::ApplyIKSolverFromParameters(BaseObject* op)
 {
-	if (!mmd_model_ || !op)
+	if (!ik_manager_own_ || !op)
 		return;
-	auto* ik_manager = mmd_model_->GetIKManager();
+	auto* ik_manager = ik_manager_own_.get();
 	if (!ik_manager)
 		return;
 	for (const auto& p : ik_solver_dynamic_params_)
@@ -1099,9 +1492,9 @@ void MMDModelManagerObject::ApplyIKSolverFromParameters(BaseObject* op)
 
 void MMDModelManagerObject::ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting)
 {
-	if (!mmd_model_ || vmd_file.m_iks.empty())
+	if (!ik_manager_own_ || vmd_file.m_iks.empty())
 		return;
-	auto* ik_manager = mmd_model_->GetIKManager();
+	auto* ik_manager = ik_manager_own_.get();
 	if (!ik_manager)
 		return;
 	auto* op = static_cast<BaseObject*>(Get());
@@ -1172,24 +1565,356 @@ const maxon::HashMap<String, Int>& MMDModelManagerObject::GetMorphNameMap()
 	return morph_name_;
 }
 
-void MMDModelManagerObject::SetMMDModel(const MMDModelPtr& model)
+libmmd::MMDIkSolver* MMDModelManagerObject::GetStandaloneIKSolver(const Int32 bone_index) const
 {
-	mmd_model_ = model;
-	if (bone_manager_data_)
+	if (!ik_manager_own_ || bone_index < 0)
+		return nullptr;
+
+	auto* bone_manager = const_cast<MMDModelManagerObject*>(this)->GetBoneManagerData();
+	if (!bone_manager)
+		return nullptr;
+
+	BaseTag* const bone_tag = bone_manager->FindBone(bone_index);
+	if (!bone_tag)
+		return nullptr;
+
+	String solver_name = GetBoneTagName(bone_tag, true);
+	if (solver_name.IsEmpty())
+		solver_name = GetBoneTagName(bone_tag, false);
+	if (solver_name.IsEmpty())
+		return nullptr;
+
+	const size_t solver_index = ik_manager_own_->FindIKSolverIndex(string_util::GetStdString(solver_name));
+	if (solver_index == static_cast<size_t>(-1))
+		return nullptr;
+	return ik_manager_own_->GetMMDIKSolver(solver_index);
+}
+
+C4DIKChainNodeAdapter* MMDModelManagerObject::GetBoneAdapter(const Int32 bone_index) const
+{
+	if (const auto* const entry = physics_bone_adapters_.Find(bone_index))
+		return entry->GetValue();
+	return nullptr;
+}
+
+void MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene(const Bool reset_ik_rotation)
+{
+	for (const auto& adapter : physics_bone_pool_)
 	{
-		bone_manager_data_->mmd_node_manager_ = mmd_model_->GetNodeManager();
-		bone_manager_data_->mmd_morph_manager_ = mmd_model_->GetMorphManager();
+		if (adapter)
+			adapter->SyncCurrentTransformsFromBoneObject(reset_ik_rotation);
 	}
+}
+
+void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene() const
+{
+	for (const auto& adapter : physics_bone_pool_)
+	{
+		if (adapter)
+			adapter->ApplyLocalToBoneObject();
+	}
+}
+
+void MMDModelManagerObject::InvalidateStandaloneRuntime()
+{
+	ik_manager_own_.reset();
+	physics_manager_own_.reset();
+	physics_bone_pool_.clear();
+	physics_bone_adapters_.Reset();
+	iferr(physics_dynamic_bone_indices_.Resize(0)) {}
+	*is_runtime_initialized_.Write() = false;
+	is_animation_initialized_ = false;
+	prev_time_ = BaseTime(-1.);
+}
+
+Bool MMDModelManagerObject::BuildStandaloneBoneAdapters()
+{
+	iferr_scope_handler{ return false; };
+
+	bone_manager_data_ = GetBoneManagerData();
+	if (!bone_manager_data_)
+		return true;
+
+	if (BaseObject* const bone_manager_object = io_util::ResolveObjectLink(bone_manager_))
+		bone_manager_data_->HandleBoneIndexChangeMessage(bone_manager_object);
+
+	physics_bone_pool_.clear();
+	physics_bone_adapters_.Reset();
+
+	std::vector<Int32> sorted_indices;
+	for (const auto& entry : bone_manager_data_->bone_list_)
+		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
+	std::sort(sorted_indices.begin(), sorted_indices.end());
+
+	physics_bone_pool_.reserve(sorted_indices.size());
+	for (const Int32 bone_index : sorted_indices)
+	{
+		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
+		if (!bone_tag || !bone_tag->GetObject())
+			continue;
+
+		auto* const bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
+		if (!bone_tag_node)
+			continue;
+
+		String bone_name = GetBoneTagName(bone_tag, true);
+		if (bone_name.IsEmpty())
+			bone_name = GetBoneTagName(bone_tag, false);
+
+		auto adapter = std::make_unique<C4DIKChainNodeAdapter>();
+		adapter->SetupFromBone(bone_tag->GetObject(), bone_tag_node, string_util::GetStdString(bone_name));
+		adapter->SyncCurrentTransformsFromBoneObject(true);
+		adapter->UpdateInitialGlobalTransform();
+
+		C4DIKChainNodeAdapter* const adapter_ptr = adapter.get();
+		physics_bone_pool_.push_back(std::move(adapter));
+		physics_bone_adapters_.Insert(bone_index, adapter_ptr)iferr_return;
+	}
+
+	for (const Int32 bone_index : sorted_indices)
+	{
+		C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index);
+		if (!adapter)
+			continue;
+
+		adapter->ClearChildren();
+		adapter->SetParentAdapter(nullptr);
+
+		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
+		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
+		if (!bone_object)
+			continue;
+
+		if (BaseObject* const parent_object = bone_object->GetUp())
+		{
+			if (BaseTag* const parent_tag = parent_object->GetTag(g_mmd_bone_tag_id))
+			{
+				const Int32 parent_index = bone_manager_data_->FindBoneIndex(parent_tag);
+				if (C4DIKChainNodeAdapter* const parent_adapter = GetBoneAdapter(parent_index))
+				{
+					adapter->SetParentAdapter(parent_adapter);
+					parent_adapter->AddChildAdapter(adapter);
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+Bool MMDModelManagerObject::BuildStandaloneIKManager()
+{
+	iferr_scope_handler{ return false; };
+
+	ik_manager_own_ = std::make_unique<StandaloneIKManager>();
+	if (!ik_manager_own_)
+		return false;
+
+	bone_manager_data_ = GetBoneManagerData();
+	if (!bone_manager_data_)
+		return true;
+
+	std::vector<Int32> sorted_indices;
+	for (const auto& entry : bone_manager_data_->bone_list_)
+		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
+	std::sort(sorted_indices.begin(), sorted_indices.end());
+
+	for (const Int32 bone_index : sorted_indices)
+	{
+		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
+		if (!bone_tag)
+			continue;
+
+		const BaseContainer* const bc = bone_tag->GetDataInstance();
+		if (!bc || !bc->GetBool(PMX_BONE_IS_IK))
+			continue;
+
+		C4DIKChainNodeAdapter* const ik_node = GetBoneAdapter(bone_index);
+		if (!ik_node)
+			continue;
+
+		auto* const solver = ik_manager_own_->AddIKSolver();
+		solver->SetIKNode(ik_node);
+		if (C4DIKChainNodeAdapter* const target_node = GetBoneAdapter(bc->GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX)))
+			solver->SetTargetNode(target_node);
+		solver->SetIterateCount(static_cast<uint32_t>(bc->GetInt32(PMX_BONE_IK_ITERATION)));
+		solver->SetLimitAngle(static_cast<float>(bc->GetFloat(PMX_BONE_IK_UNIT_ANGLE)));
+
+		const String solver_name(ik_node->GetName().c_str());
+		const auto* const enabled_state = ik_solver_enable_states_.Find(solver_name);
+		solver->Enable(enabled_state ? enabled_state->GetValue() : bc->GetBool(PMX_BONE_IS_IK));
+	}
+
+	return true;
+}
+
+Bool MMDModelManagerObject::BuildStandalonePhysics()
+{
+	iferr_scope_handler{ return false; };
+
+	physics_manager_own_ = std::make_unique<libmmd::MMDPhysicsManager>();
+	if (!physics_manager_own_ || !physics_manager_own_->Create())
+		return false;
+
+	iferr(physics_dynamic_bone_indices_.Resize(0))
+		return false;
 
 	if (rigid_manager_data_)
 	{
-		rigid_manager_data_->mmd_physics_manager_ = mmd_model_->GetPhysicsManager();
+		rigid_manager_data_->mmd_physics_manager_ = physics_manager_own_.get();
+		if (!rigid_manager_data_->BuildStandaloneRigidBodies(physics_manager_own_.get(), [this](const Int32 bone_index) -> libmmd::IMMDNode*
+		{
+			return GetBoneAdapter(bone_index);
+		}))
+		{
+			return false;
+		}
+
+		auto* const physics = physics_manager_own_->GetMMDPhysics();
+		auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
+		if (physics && rigid_bodies)
+		{
+			for (const auto& rigid_body : *rigid_bodies)
+				physics->AddRigidBody(rigid_body.get());
+		}
+
+		if (BaseObject* const rigid_manager_object = io_util::ResolveObjectLink(rigid_manager_))
+		{
+			for (BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
+			{
+				if (!child->IsInstanceOf(g_mmd_rigid_object_id))
+					continue;
+
+				const BaseContainer* const bc = child->GetDataInstance();
+				if (!bc)
+					continue;
+
+				const auto op_mode = static_cast<libmmd::PMXRigidbody::Operation>(bc->GetInt32(RIGID_PHYSICS_MODE));
+				if (op_mode == libmmd::PMXRigidbody::Operation::Static)
+					continue;
+
+				const Int32 bone_index = bc->GetInt32(RIGID_RELATED_BONE_INDEX);
+				if (bone_index < 0)
+					continue;
+
+				iferr(physics_dynamic_bone_indices_.Append(bone_index)) {}
+			}
+		}
 	}
 
 	if (joint_manager_data_)
 	{
-		joint_manager_data_->mmd_physics_manager_ = mmd_model_->GetPhysicsManager();
+		joint_manager_data_->mmd_physics_manager_ = physics_manager_own_.get();
+		if (!joint_manager_data_->BuildStandaloneJoints(physics_manager_own_.get()))
+			return false;
+
+		auto* const physics = physics_manager_own_->GetMMDPhysics();
+		auto* const joints = physics_manager_own_->GetJoints();
+		if (physics && joints)
+		{
+			for (const auto& joint : *joints)
+				physics->AddJoint(joint.get());
+		}
 	}
+
+	if (rigid_manager_data_)
+		rigid_manager_data_->ReconnectRigidBodyPointers(physics_manager_own_.get());
+	if (joint_manager_data_)
+		joint_manager_data_->ReconnectJointPointers(physics_manager_own_.get());
+
+	return true;
+}
+
+Bool MMDModelManagerObject::EnsureStandaloneRuntimeManagers()
+{
+	iferr_scope_handler{ return false; };
+
+	if (*is_runtime_initialized_.Read() && ik_manager_own_ && physics_manager_own_)
+		return true;
+
+	if (BaseObject* const op = reinterpret_cast<BaseObject*>(Get()))
+	{
+		if (!UpdateManagers(op))
+			return false;
+	}
+
+	if (!BuildStandaloneBoneAdapters())
+		return false;
+	if (!BuildStandaloneIKManager())
+		return false;
+	if (!BuildStandalonePhysics())
+		return false;
+
+	BuildIKSolverUI();
+	ApplyIKSolverStates();
+	if (bone_manager_data_)
+	{
+		if (animation_slot_metadata_.GetCount() > 0)
+			bone_manager_data_->EnsureAllAnimationSlotCount(static_cast<Int32>(animation_slot_metadata_.GetCount()));
+		if (animation_index_ >= 0 && animation_index_ < animation_slot_metadata_.GetCount())
+		{
+			bone_manager_data_->SetAllActiveAnimationSlot(animation_index_);
+			bone_manager_data_->SetAllBoneMode(BONE_MODE_ANIM);
+		}
+	}
+	ResetStandalonePhysics();
+	*is_runtime_initialized_.Write() = true;
+	return true;
+}
+
+void MMDModelManagerObject::ResetStandalonePhysics()
+{
+	if (!physics_manager_own_)
+		return;
+
+	SyncStandaloneBoneAdaptersFromScene(true);
+	auto* const physics = physics_manager_own_->GetMMDPhysics();
+	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
+	if (!physics || !rigid_bodies)
+		return;
+
+	for (const auto& rigid_body : *rigid_bodies)
+	{
+		rigid_body->SetActivation(false);
+		rigid_body->ResetTransform();
+	}
+
+	physics->Update(1.0f / 60.0f);
+
+	for (const auto& rigid_body : *rigid_bodies)
+		rigid_body->ReflectGlobalTransform();
+
+	ApplyPhysicsResultsToBoneObjects();
+
+	for (const auto& rigid_body : *rigid_bodies)
+		rigid_body->Reset(physics);
+}
+
+void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
+{
+	if (!physics_manager_own_)
+		return;
+
+	SyncStandaloneBoneAdaptersFromScene(true);
+	auto* const physics = physics_manager_own_->GetMMDPhysics();
+	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
+	if (!physics || !rigid_bodies)
+		return;
+
+	for (const auto& rigid_body : *rigid_bodies)
+		rigid_body->SyncBonePositionToPhysics(elapsed);
+
+	physics->Update(elapsed);
+
+	for (const auto& rigid_body : *rigid_bodies)
+		rigid_body->ReflectGlobalTransform();
+
+	ApplyPhysicsResultsToBoneObjects();
+}
+
+void MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects() const
+{
+	ApplyStandaloneBoneAdaptersToScene();
 }
 
 void MMDModelManagerObject::SyncSubManagerScale(const Float pm)
@@ -1257,10 +1982,10 @@ void MMDModelManagerObject::ImportDisplayFrames(const libmmd::PMXFile& pmx_file)
 		iferr(display_frame_list_.Append(std::move(df))) return;
 	}
 	display_frame_selection_index_ = display_frame_list_.GetCount() > 0 ? 0 : -1;
-	RebuildDisplayFrameUI();
+	RefreshDisplayFrameUI();
 }
 
-void MMDModelManagerObject::RebuildDisplayFrameUI()
+void MMDModelManagerObject::RefreshDisplayFrameUI()
 {
 	DynamicDescription* const dd = Get()->GetDynamicDescriptionWritable();
 	if (!dd) return;
@@ -1401,9 +2126,9 @@ void MMDModelManagerObject::RebuildDisplayFrameUI()
 		::EventAdd();
 }
 
-Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting)
+Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting)
 {
-	SetMMDModel(pmx_model);
+	InvalidateStandaloneRuntime();
 	iferr(material_list_.Resize(0))
 		return false;
 	material_selection_index_ = -1;
@@ -1438,7 +2163,8 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const MMDMo
 	if(!joint_manager_data_ || !joint_manager_data_->LoadPMX(pmx_file, setting))
 		return false;
 
-	BuildIKSolverUI();
+	if (!EnsureStandaloneRuntimeManagers())
+		return false;
 
 	ImportDisplayFrames(pmx_file);
 
@@ -1582,46 +2308,26 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	{
 		return false;
 	};
+	log.not_find_bone_name_list.Reset();
 	log.not_find_morph_name_list.Reset();
 	const auto animation_name = setting.fn.GetFileString();
-	libmmd::VMDAnimation* vmd_animation;
-	if (!merge)
-	{
-		auto new_vmd_animation = std::make_unique<libmmd::VMDAnimation>();
-		if (!new_vmd_animation)
-		{
-			LoadVmdMotionLog::LogOutMem();
-			return false;
-		}
-		if (!new_vmd_animation->Create(mmd_model_))
-		{
-			LoadVmdMotionLog::LogOutMem();
-			return false;
-		}
-		vmd_animation = new_vmd_animation.get();
-		animations_.Append(std::make_pair(animation_name, std::move(new_vmd_animation)))iferr_return;
-	}else
-	{
-		vmd_animation = animations_[animation_index_].second.get();
-	}
+	bone_manager_data_ = GetBoneManagerData();
+	rigid_manager_data_ = GetRigidManagerData();
+	BaseObject* const rigid_manager_object = io_util::ResolveObjectLink(rigid_manager_);
 
-	if (!vmd_animation)
-	{
-		LoadVmdMotionLog::LogOutMem();
+	const Bool merge_into_existing = merge
+		&& animation_index_ >= 0
+		&& animation_index_ < animation_slot_metadata_.GetCount();
+	const Int32 target_slot = merge_into_existing
+		? animation_index_
+		: static_cast<Int32>(animation_slot_metadata_.GetCount());
+	if (!EnsureAnimationSlotCount(target_slot + 1))
 		return false;
-	}
-
-	if (!vmd_animation->Add(vmd_file))
-	{
-		LoadVmdMotionLog::LogReadFileErr();
+	if (bone_manager_data_ && !bone_manager_data_->EnsureAllAnimationSlotCount(target_slot + 1))
 		return false;
-	}
 
 	if (!vmd_file.m_iks.empty())
-	{
 		ImportVMDIKKeyframes(vmd_file, setting);
-		vmd_animation->SetApplyIKEnable(false);
-	}
 
 	if (setting.import_morph)
 	{
@@ -1629,7 +2335,7 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 		for (const auto& morph : vmd_file.m_morphs)
 		{
 			const String morph_name(morph.m_blendShapeName.ToUtf8String().c_str());
-			const BaseTime key_time(static_cast<Float>(morph.m_frame) + setting.time_offset, 30.0);
+			const BaseTime key_time(static_cast<Float>(morph.m_frame) + setting.time_offset, kModelAnimationFps);
 			if (!AddMorphStrengthKeyframe(morph_name, key_time, morph.m_weight))
 				unmatched_morph_utf8.insert(morph.m_blendShapeName.ToUtf8String());
 		}
@@ -1637,24 +2343,106 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 		{
 			log.not_find_morph_name_list.Append(String(utf8.c_str())) iferr_return;
 		}
-		vmd_animation->SetApplyMorphEnable(false);
+	}
+
+	if (setting.import_motion && bone_manager_data_)
+	{
+		struct BoneImportTarget
+		{
+			BaseTag* tag = nullptr;
+			Int32 bone_index = -1;
+		};
+
+		std::unordered_map<std::string, BoneImportTarget> bone_lookup;
+		for (const auto& entry : bone_manager_data_->bone_list_)
+		{
+			BaseTag* bone_tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+			if (!bone_tag)
+				continue;
+
+			const String bone_name = GetBoneTagName(bone_tag, setting.import_by_local_name);
+			const std::string utf8_name = string_util::GetStdString(bone_name);
+			if (!utf8_name.empty())
+				bone_lookup.emplace(utf8_name, BoneImportTarget{ bone_tag, static_cast<Int32>(entry.GetKey()) });
+		}
+
+		std::unordered_map<BaseTag*, std::vector<BoneAnimationKeyframeData>> imported_motion_map;
+		std::set<std::string> unmatched_bone_utf8;
+		for (const auto& motion : vmd_file.m_motions)
+		{
+			const std::string bone_name_utf8 = motion.m_boneName.ToUtf8String();
+			const auto bone_it = bone_lookup.find(bone_name_utf8);
+			if (bone_it == bone_lookup.end())
+			{
+				unmatched_bone_utf8.insert(bone_name_utf8);
+				continue;
+			}
+
+			BaseTag* const target_tag = bone_it->second.tag;
+			const BaseContainer* const target_bc = target_tag ? target_tag->GetDataInstance() : nullptr;
+			const Bool is_inherit = target_bc && (target_bc->GetBool(PMX_BONE_INHERIT_TRANSLATION) || target_bc->GetBool(PMX_BONE_INHERIT_ROTATION));
+			const Bool is_dynamic_physics_bone = setting.ignore_physical
+				&& IsBoneDrivenByDynamicPhysics(rigid_manager_object, bone_it->second.bone_index);
+			if (is_inherit || is_dynamic_physics_bone)
+				continue;
+
+			imported_motion_map[target_tag].push_back(ConvertMotionToBoneKeyframe(motion, setting));
+		}
+
+		for (const auto& utf8 : unmatched_bone_utf8)
+		{
+			log.not_find_bone_name_list.Append(String(utf8.c_str())) iferr_return;
+		}
+
+		for (const auto& imported_entry : imported_motion_map)
+		{
+			auto* bone_tag = imported_entry.first->GetNodeData<MMDBoneTag>();
+			if (!bone_tag)
+				continue;
+
+			std::map<Int32, BoneAnimationKeyframeData> merged_by_frame;
+			if (merge_into_existing)
+			{
+				maxon::BaseArray<BoneAnimationKeyframeData> existing_keys;
+				if (!bone_tag->CopyAnimationSlot(target_slot, existing_keys))
+					return false;
+				for (const auto& keyframe : existing_keys)
+					merged_by_frame[keyframe.frame] = keyframe;
+			}
+			for (const auto& keyframe : imported_entry.second)
+				merged_by_frame[keyframe.frame] = keyframe;
+
+			maxon::BaseArray<BoneAnimationKeyframeData> merged_keys;
+			for (const auto& [_, keyframe] : merged_by_frame)
+			{
+				iferr(merged_keys.Append(keyframe))
+					return false;
+			}
+			if (!bone_tag->ReplaceAnimationSlot(target_slot, merged_keys))
+				return false;
+		}
 	}
 
 	log.imported_bone_count = vmd_file.m_motions.size();
 	log.imported_morph_count = vmd_file.m_morphs.size();
 	log.imported_motion_count = vmd_file.m_iks.size();
 
-	const BaseTime max_time(vmd_animation->GetMaxKeyTime() ,30.);
+	const String slot_name = merge_into_existing && !animation_slot_metadata_[target_slot].name.IsEmpty()
+		? animation_slot_metadata_[target_slot].name
+		: animation_name;
+	const Int32 max_frame = merge_into_existing
+		? std::max(GetAnimationSlotMaxFrame(target_slot), GetVmdFileMaxFrame(vmd_file, setting))
+		: GetVmdFileMaxFrame(vmd_file, setting);
+	if (!SetAnimationSlotMetadata(target_slot, slot_name, max_frame))
+		return false;
 
-	animation_index_ = static_cast<Int32>(animations_.GetCount()) - 1;
-	animation_items_.SetString(animation_index_, animation_name);
+	animation_index_ = target_slot;
+	ApplyAnimationSlotSelection(setting.doc);
+	InvalidateStandaloneRuntime();
 	const auto node = Get();
 	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index_, DESCFLAGS_SET::NONE);
-	node->SetParameter(ConstDescID(DescLevel(MODEL_MODE)), MODEL_MODE_VMD, DESCFLAGS_SET::NONE);
+	node->SetParameter(ConstDescID(DescLevel(MODEL_MODE)), MODEL_MODE_ANIM, DESCFLAGS_SET::NONE);
 	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
-
-	setting.doc->SetMaxTime(max_time);
-	setting.doc->SetLoopMaxTime(max_time);
 
 	EventAdd();
 	return true;
@@ -1662,12 +2450,61 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 
 Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
 {
-	if (animation_index_ < 0 || animation_index_ >= animations_.GetCount())
+	if (animation_index_ < 0 || animation_index_ >= animation_slot_metadata_.GetCount())
 		return false;
-	const auto& [_, animation] = animations_[animation_index_];
-	if (!animation)
-		return false;
-	return animation->Save(vmd_motion);
+
+	auto* const self = const_cast<MMDModelManagerObject*>(this);
+	BaseObject* const object = reinterpret_cast<BaseObject*>(self->Get());
+
+	vmd_motion = libmmd::VMDFile();
+	vmd_motion.m_header.m_header.Set("Vocaloid Motion Data 0002");
+	vmd_motion.m_header.m_modelName.Set(ConvertStringToSjis(GetModelManagerName(object)).c_str());
+
+	if (self->EnsureStandaloneRuntimeManagers())
+		AppendIKTracksToVmd(object, self->ik_manager_own_.get(), ik_solver_dynamic_params_, setting, vmd_motion);
+	else
+		vmd_motion.m_iks.clear();
+	AppendMorphTracksToVmd(object, morph_data_, setting, vmd_motion);
+
+	if (!setting.export_motion)
+	{
+		vmd_motion.m_motions.clear();
+		return true;
+	}
+
+	vmd_motion.m_motions.clear();
+	const auto* bone_manager = const_cast<MMDModelManagerObject*>(this)->GetBoneManagerData();
+	if (!bone_manager)
+		return true;
+
+	for (const auto& entry : bone_manager->bone_list_)
+	{
+		BaseTag* bone_tag_base = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+		if (!bone_tag_base)
+			continue;
+
+		auto* bone_tag = bone_tag_base->GetNodeData<MMDBoneTag>();
+		if (!bone_tag)
+			continue;
+
+		maxon::BaseArray<BoneAnimationKeyframeData> keyframes;
+		if (!bone_tag->CopyAnimationSlot(animation_index_, keyframes))
+			return false;
+
+		String bone_name = GetBoneTagName(bone_tag_base, true);
+		if (bone_name.IsEmpty())
+			bone_name = GetBoneTagName(bone_tag_base, false);
+		for (const auto& keyframe : keyframes)
+			vmd_motion.m_motions.push_back(ConvertBoneKeyframeToMotion(bone_name, keyframe, setting));
+	}
+
+	std::sort(vmd_motion.m_motions.begin(), vmd_motion.m_motions.end(), [](const libmmd::VMDMotion& lhs, const libmmd::VMDMotion& rhs)
+	{
+		if (lhs.m_boneName.ToString() == rhs.m_boneName.ToString())
+			return lhs.m_frame < rhs.m_frame;
+		return lhs.m_boneName.ToString() < rhs.m_boneName.ToString();
+	});
+	return true;
 }
 
 // TODO: VMD model-info / visibility / per-frame IK controller → CTrack (see removed SetModelControllerAnimation draft).
@@ -1675,173 +2512,65 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 Bool MMDModelManagerObject::DeleteVMDAnimation()
 {
 	iferr_scope_handler{ return false; };
-	animation_items_.FlushAll();
-	animation_items_.SetString(-1, GeLoadString(IDS_CMT_VMD_ANIM_NONE));
-	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> new_animations;
-	const auto animation_count = animations_.GetCount();
-	for (int i = 0, j = 0; i < animation_count; ++i)
+	if (animation_index_ < 0 || animation_index_ >= animation_slot_metadata_.GetCount())
+		return false;
+
+	bone_manager_data_ = GetBoneManagerData();
+	if (bone_manager_data_)
 	{
-		if (i != animation_index_)
+		for (const auto& entry : bone_manager_data_->bone_list_)
 		{
-			const auto& [animation_name, _] = new_animations.Append(std::move(animations_[i]))iferr_return;
-			animation_items_.SetString(j++, animation_name);
+			BaseTag* bone_tag_base = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+			if (!bone_tag_base)
+				continue;
+
+			auto* bone_tag = bone_tag_base->GetNodeData<MMDBoneTag>();
+			if (!bone_tag)
+				continue;
+
+			std::vector<maxon::BaseArray<BoneAnimationKeyframeData>> remaining_slots;
+			for (Int32 slot_index = 0; slot_index < animation_slot_metadata_.GetCount(); ++slot_index)
+			{
+				if (slot_index == animation_index_)
+					continue;
+				maxon::BaseArray<BoneAnimationKeyframeData> slot_keys;
+				if (!bone_tag->CopyAnimationSlot(slot_index, slot_keys))
+					return false;
+				remaining_slots.push_back(std::move(slot_keys));
+			}
+
+			bone_tag->ClearAllAnimationSlots();
+			if (!bone_tag->EnsureAnimationSlotCount(static_cast<Int32>(remaining_slots.size())))
+				return false;
+			for (Int32 slot_index = 0; slot_index < static_cast<Int32>(remaining_slots.size()); ++slot_index)
+			{
+				if (!bone_tag->ReplaceAnimationSlot(slot_index, remaining_slots[static_cast<size_t>(slot_index)]))
+					return false;
+			}
 		}
 	}
-	std::swap(new_animations, animations_);
-	animation_index_ = -1;
+
+	maxon::BaseArray<AnimationSlotMetadata> new_slot_metadata;
+	for (Int32 i = 0; i < animation_slot_metadata_.GetCount(); ++i)
+	{
+		if (i == animation_index_)
+			continue;
+		AnimationSlotMetadata metadata;
+		if (!animation_slot_metadata_[i].CopyTo(metadata))
+			return false;
+		iferr(new_slot_metadata.Append(std::move(metadata)))
+			return false;
+	}
+	std::swap(animation_slot_metadata_, new_slot_metadata);
+	if (animation_slot_metadata_.IsEmpty())
+		animation_index_ = -1;
+	else
+		animation_index_ = std::min(animation_index_, static_cast<Int32>(animation_slot_metadata_.GetCount() - 1));
+	RefreshAnimationSlotItems();
+	ApplyAnimationSlotSelection(Get() ? Get()->GetDocument() : nullptr);
 	const auto node = Get();
 	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
 	node->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), animation_index_, DESCFLAGS_SET::NONE);
-	return true;
-}
-
-Bool MMDModelManagerObject::RebuildRuntime()
-{
-	iferr_scope_handler{ return false; };
-
-	auto pmx_model = std::make_shared<PMXModel>();
-
-	if (bone_manager_data_)
-	{
-		if (!bone_manager_data_->RebuildNodes(pmx_model.get()))
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: RebuildNodes FAILED");
-			return false;
-		}
-	}
-
-	auto* physics_manager = pmx_model->GetPhysicsManager();
-	if (!physics_manager->Create())
-	{
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: PhysicsManager::Create FAILED");
-		return false;
-	}
-
-	{
-		const auto* bc = reinterpret_cast<BaseList2D*>(Get())->GetDataInstance();
-		const Float pm = bc ? bc->GetFloat(MODEL_POSITION_MULTIPLE, 8.5) : 8.5;
-		SyncSubManagerScale(pm);
-	}
-
-	if (rigid_manager_data_)
-	{
-		if (!rigid_manager_data_->RebuildRigidBodies(pmx_model.get()))
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: RebuildRigidBodies FAILED");
-			return false;
-		}
-
-		auto* physics = physics_manager->GetMMDPhysics();
-		auto* rigid_bodies = physics_manager->GetRigidBodys();
-		if (physics && rigid_bodies)
-		{
-			for (const auto& rb : *rigid_bodies)
-				physics->AddRigidBody(rb.get());
-		}
-	}
-
-	if (joint_manager_data_)
-	{
-		if (!joint_manager_data_->RebuildJoints(physics_manager))
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: RebuildJoints FAILED");
-			return false;
-		}
-
-		auto* physics = physics_manager->GetMMDPhysics();
-		auto* joints = physics_manager->GetJoints();
-		if (physics && joints)
-		{
-			for (const auto& jt : *joints)
-				physics->AddJoint(jt.get());
-		}
-	}
-
-	for (const auto& morph : morph_data_)
-	{
-		auto* pmx_morph = pmx_model->AddMorph();
-		pmx_morph->SetName(string_util::GetStdString(morph.GetName()));
-	}
-
-	SetMMDModel(pmx_model);
-	for (const auto& [name, vmd_data] : pending_vmd_data_)
-	{
-		if (vmd_data.empty())
-			continue;
-
-		libmmd::VMDFile vmd_file;
-		if (!libmmd::ReadVMDFile(&vmd_file, vmd_data.data(), vmd_data.size()))
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: ReadVMDFile FAILED for '@' (size=@)", name, vmd_data.size());
-			continue;
-		}
-
-		auto vmd_animation = std::make_unique<libmmd::VMDAnimation>();
-		if (!vmd_animation->Create(pmx_model))
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: VMDAnimation::Create FAILED for '@'", name);
-			continue;
-		}
-		if (!vmd_animation->Add(vmd_file))
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: VMDAnimation::Add FAILED for '@'", name);
-			continue;
-		}
-
-		if (!vmd_file.m_iks.empty())
-		{
-			if (BaseDocument* doc = Get()->GetDocument())
-			{
-				CMTToolsSetting::MotionImport motion_import(doc);
-				ImportVMDIKKeyframes(vmd_file, motion_import);
-			}
-			vmd_animation->SetApplyIKEnable(false);
-		}
-
-		if (!vmd_file.m_morphs.empty())
-			vmd_animation->SetApplyMorphEnable(false);
-
-		animations_.Append(std::make_pair(name, std::move(vmd_animation)))iferr_return;
-	}
-	iferr(pending_vmd_data_.Resize(0)) {}
-
-	for (Int32 i = 0; i < animations_.GetCount(); ++i)
-		animation_items_.SetString(i, animations_[i].first);
-
-	if (animation_index_ >= 0 && animation_index_ < animations_.GetCount())
-	{
-		const auto& animation = animations_[animation_index_].second;
-		if (animation)
-		{
-			if (auto* doc = Get()->GetDocument())
-			{
-				const BaseTime max_time(animation->GetMaxKeyTime(), 30.);
-				doc->SetMaxTime(max_time);
-				doc->SetLoopMaxTime(max_time);
-			}
-		}
-
-		Get()->SetParameter(ConstDescID(DescLevel(MODEL_MODE)), MODEL_MODE_VMD, DESCFLAGS_SET::NONE);
-	}
-
-	ApplyIKSolverStates();
-
-	if (bone_manager_data_)
-	{
-		bone_manager_data_->ReconnectNodePointers(pmx_model->GetNodeManager(), pmx_model->GetIKManager());
-		if (animation_index_ >= 0 && animation_index_ < animations_.GetCount())
-			bone_manager_data_->SetAllBoneMode(BONE_MODE_VMD);
-	}
-	if (rigid_manager_data_)
-		rigid_manager_data_->ReconnectRigidBodyPointers(physics_manager);
-	if (joint_manager_data_)
-		joint_manager_data_->ReconnectJointPointers(physics_manager);
-
-	pmx_model->ResetPhysics();
-	*is_runtime_initialized_.Write() = true;
-	is_animation_initialized_ = false;
-
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] RebuildRuntime: complete. animations=@, mmd_model=@", animations_.GetCount(), mmd_model_ != nullptr);
 	return true;
 }
 
@@ -1893,7 +2622,7 @@ Bool MMDModelManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 	{
 		return true;
 	}
-	list->Add(op, EXECUTIONPRIORITY_EXPRESSION - 1, EXECUTIONFLAGS::EXPRESSION);
+	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::EXPRESSION);
 	return true;
 }
 SDK2024_GetDDescription(MMDModelManagerObject)
@@ -2089,7 +2818,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 						if (entry_index >= 0 && entry_index < static_cast<Int>(targets.GetCount()))
 						{
 							targets.Erase(entry_index)iferr_ignore("erase failed");
-							RebuildDisplayFrameUI();
+							RefreshDisplayFrameUI();
 						}
 					}
 					break;
@@ -2103,7 +2832,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 						if (entry_index > 0 && entry_index < static_cast<Int>(targets.GetCount()))
 						{
 							std::swap(targets[entry_index], targets[entry_index - 1]);
-							RebuildDisplayFrameUI();
+							RefreshDisplayFrameUI();
 						}
 					}
 					break;
@@ -2117,7 +2846,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 						if (entry_index >= 0 && entry_index < static_cast<Int>(targets.GetCount()) - 1)
 						{
 							std::swap(targets[entry_index], targets[entry_index + 1]);
-							RebuildDisplayFrameUI();
+							RefreshDisplayFrameUI();
 						}
 					}
 					break;
@@ -2166,7 +2895,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					? DisplayFrameTargetType::Bone : DisplayFrameTargetType::Morph;
 				td.index = display_frame_add_target_;
 				iferr(display_frame_list_[display_frame_selection_index_].targets.Append(td)) break;
-					RebuildDisplayFrameUI();
+					RefreshDisplayFrameUI();
 				}
 				break;
 			}
@@ -2180,7 +2909,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					df.name = FormatString("Frame @", display_frame_list_.GetCount());
 				iferr(display_frame_list_.Append(std::move(df))) break;
 				display_frame_selection_index_ = static_cast<Int32>(display_frame_list_.GetCount()) - 1;
-				RebuildDisplayFrameUI();
+				RefreshDisplayFrameUI();
 				break;
 			}
 			case MODEL_DISPLAY_FRAME_DELETE_BUTTON:
@@ -2190,7 +2919,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					display_frame_list_.Erase(display_frame_selection_index_)iferr_ignore("erase failed");
 					if (display_frame_selection_index_ >= display_frame_list_.GetCount())
 						display_frame_selection_index_ = static_cast<Int32>(display_frame_list_.GetCount()) - 1;
-					RebuildDisplayFrameUI();
+					RefreshDisplayFrameUI();
 				}
 				break;
 			}
@@ -2552,7 +3281,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	case MSG_MENUPREPARE:
 	{
 		CreateManagers();
-		SetMMDModel(std::make_shared<PMXModel>());
+		InvalidateStandaloneRuntime();
 		break;
 	}
 	default:
@@ -2693,12 +3422,14 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		}
 		case MODEL_MODE:
 		{
-			model_mode_ = t_data.GetInt32();
+			const GeData normalized_mode(NormalizeModelMode(t_data.GetInt32()));
+			model_mode_ = normalized_mode.GetInt32();
 			is_animation_initialized_ = false;
 			prev_time_ = BaseTime(-1.);
+			InvalidateStandaloneRuntime();
 			MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE, nullptr, model_mode_);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_model_manager_object_id, &msg);
-			break;
+			return SUPER::SetDParameter(node, id, normalized_mode, flags);
 		}
 		case MODEL_ANIM_LIST:
 		{
@@ -2706,14 +3437,8 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			is_animation_initialized_ = false;
 			prev_time_ = BaseTime(-1.);
 			const auto doc = node->GetDocument();
-			doc->SetTime({});
-			if (animation_index_ != -1 && animation_index_ < animations_.GetCount())
-			{
-				const auto& animation = animations_[animation_index_].second;
-				const BaseTime max_time(animation->GetMaxKeyTime() ,30.);
-				doc->SetMaxTime(max_time);
-				doc->SetLoopMaxTime(max_time);
-			}
+			ApplyAnimationSlotSelection(doc);
+			InvalidateStandaloneRuntime();
 			break;
 		}
 		case MODEL_MATERIAL_LIST:
@@ -2721,7 +3446,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			break;
 		case MODEL_DISPLAY_FRAME_LIST:
 			display_frame_selection_index_ = t_data.GetInt32();
-			RebuildDisplayFrameUI();
+			RefreshDisplayFrameUI();
 			break;
 		case MODEL_DISPLAY_FRAME_NAME_LOCAL:
 			if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount())
@@ -2757,9 +3482,9 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 					if (p.first != id)
 						continue;
 					const Bool enabled = t_data.GetBool();
-					if (mmd_model_)
+					if (ik_manager_own_)
 					{
-						if (auto* solver = mmd_model_->GetIKManager()->GetMMDIKSolver(static_cast<size_t>(p.second)))
+						if (auto* solver = ik_manager_own_->GetMMDIKSolver(static_cast<size_t>(p.second)))
 						{
 							solver->Enable(enabled);
 							iferr(ik_solver_enable_states_.Insert(String(solver->GetName().c_str()), enabled)) {}

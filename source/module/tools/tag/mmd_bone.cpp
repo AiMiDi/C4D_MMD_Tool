@@ -10,6 +10,9 @@ Description:	DESC
 
 #include <c4d.h>
 #include <c4d_symbols.h>
+#include <algorithm>
+#include <cmath>
+#include <limits>
 #include "plugin_resource.h"
 #include "module/core/cmt_marco.h"
 #include "mmd_bone.h"
@@ -20,7 +23,419 @@ Description:	DESC
 #include "maxon/quaternion.h"
 #include "description/TMMDBone.h"
 #include "module/tools/object/mmd_bone_manager.h"
+#include "module/tools/object/mmd_model_manager.h"
 #include "libMMD/Model/MMD/MMDIkSolver.h"
+#include "libMMD/Model/MMD/VMDInterpolation.h"
+#include "utils/math_util.hpp"
+
+namespace
+{
+	constexpr Float32 kBoneAnimationFps = 30.F;
+	constexpr Float32 kBoneAnimationSplineMax = 127.F;
+
+	Int32 NormalizeBoneMode(const Int32 mode)
+	{
+		constexpr Int32 kLegacyBoneModeVmd = 2;
+		return mode == kLegacyBoneModeVmd ? BONE_MODE_ANIM : mode;
+	}
+
+	BaseObject* ResolveBoneManagerObjectFromHierarchy(BaseObject* bone_object)
+	{
+		for (BaseObject* current = bone_object; current != nullptr; current = current->GetUp())
+		{
+			if (current->IsInstanceOf(g_mmd_bone_manager_object_id))
+				return current;
+		}
+		return nullptr;
+	}
+
+	SplineData* GetSplineDataWritable(GeData& data)
+	{
+#if API_VERSION < 2024000
+		return static_cast<SplineData*>(data.GetCustomDataType(CUSTOMDATATYPE_SPLINE));
+#else
+		return data.GetCustomDataTypeWritable<SplineData>();
+#endif
+	}
+
+	const SplineData* GetSplineData(const GeData& data)
+	{
+#if API_VERSION < 2024000
+		return static_cast<const SplineData*>(const_cast<GeData&>(data).GetCustomDataType(CUSTOMDATATYPE_SPLINE));
+#else
+		return data.GetCustomDataType<SplineData>();
+#endif
+	}
+
+	Float32 ClampSplineCoordinate(const Float value)
+	{
+		return maxon::SafeConvert<Float32>(std::clamp(value, 0.0, static_cast<double>(kBoneAnimationSplineMax)));
+	}
+
+	std::array<Float32, 4> NormalizeQuaternion(std::array<Float32, 4> rotation)
+	{
+		const Float64 length = std::sqrt(
+			static_cast<Float64>(rotation[0]) * rotation[0] +
+			static_cast<Float64>(rotation[1]) * rotation[1] +
+			static_cast<Float64>(rotation[2]) * rotation[2] +
+			static_cast<Float64>(rotation[3]) * rotation[3]);
+		if (length <= std::numeric_limits<Float64>::epsilon())
+			return { 0.F, 0.F, 0.F, 1.F };
+
+		for (Float32& component : rotation)
+			component = maxon::SafeConvert<Float32>(component / length);
+		return rotation;
+	}
+
+	std::array<Float32, 4> EulerToQuaternionArray(const Vector& euler)
+	{
+		const auto quaternion = math_util::EulerToQuaternion(euler);
+		return NormalizeQuaternion({
+			maxon::SafeConvert<Float32>(quaternion.x),
+			maxon::SafeConvert<Float32>(quaternion.y),
+			maxon::SafeConvert<Float32>(quaternion.z),
+			maxon::SafeConvert<Float32>(quaternion.w)
+		});
+	}
+
+	Vector QuaternionToEulerVector(const std::array<Float32, 4>& rotation)
+	{
+		const auto euler = math_util::QuaternionToEuler(rotation);
+		return Vector(euler.x, euler.y, euler.z);
+	}
+
+	Eigen::Quaternionf ToEigenQuaternion(const std::array<Float32, 4>& rotation)
+	{
+		return Eigen::Quaternionf(rotation[3], rotation[0], rotation[1], rotation[2]).normalized();
+	}
+
+	std::array<Float32, 4> ToQuaternionArray(const Eigen::Quaternionf& rotation)
+	{
+		const Eigen::Quaternionf normalized = rotation.normalized();
+		return NormalizeQuaternion({
+			maxon::SafeConvert<Float32>(normalized.x()),
+			maxon::SafeConvert<Float32>(normalized.y()),
+			maxon::SafeConvert<Float32>(normalized.z()),
+			maxon::SafeConvert<Float32>(normalized.w())
+		});
+	}
+
+	BaseObject* ResolveBoneObjectFromLinkData(const GeData& link_data, const BaseDocument* doc)
+	{
+		const BaseLink* const link = link_data.GetBaseLink();
+		if (!link)
+			return nullptr;
+
+		const BaseList2D* linked = nullptr;
+		if (doc)
+			linked = link->GetLink(doc);
+		else
+			linked = link->ForceGetLink();
+		if (!linked)
+			return nullptr;
+
+		BaseList2D* const linked_mutable = const_cast<BaseList2D*>(linked);
+		if (linked_mutable->IsInstanceOf(Ojoint))
+			return static_cast<BaseObject*>(linked_mutable);
+		if (linked_mutable->IsInstanceOf(g_mmd_bone_tag_id))
+			return static_cast<BaseTag*>(linked_mutable)->GetObject();
+		return nullptr;
+	}
+
+	Int32 ComputeBoneExecutionPriorityValue(const BaseContainer* bc, const Int32 append_depth)
+	{
+		const Int32 layer = bc ? std::max(0, bc->GetInt32(PMX_BONE_LAYER)) : 0;
+		const Int32 depth = std::max(0, append_depth);
+		const Bool deform_after_physics = bc ? bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) : false;
+		return (deform_after_physics ? 6000 : 0) + layer * 100 + depth;
+	}
+
+	GeData CreateDefaultAnimationSplineData()
+	{
+		GeData data(CUSTOMDATATYPE_SPLINE, DEFAULTVALUE);
+		if (SplineData* const spline = GetSplineDataWritable(data))
+		{
+			spline->AdaptRange(0.0, kBoneAnimationSplineMax, kBoneAnimationSplineMax, 0.0, kBoneAnimationSplineMax, kBoneAnimationSplineMax);
+			spline->InsertKnot(0.0, 0.0, FLAG_KNOT_LOCK_X | FLAG_KNOT_LOCK_Y);
+			spline->InsertKnot(kBoneAnimationSplineMax, kBoneAnimationSplineMax, FLAG_KNOT_LOCK_X | FLAG_KNOT_LOCK_Y);
+			spline->SetUserCallback(MMDBoneTag::SplineDataCallBack, nullptr);
+			if (CustomSplineKnot* const a = spline->GetKnot(0))
+			{
+				a->interpol = CustomSplineKnotInterpolation::CustomSplineKnotInterpolationBezier;
+				a->vTangentRight = Vector(20., 20., 0.);
+			}
+			if (CustomSplineKnot* const b = spline->GetKnot(spline->GetKnotCount() - 1))
+			{
+				b->interpol = CustomSplineKnotInterpolation::CustomSplineKnotInterpolationBezier;
+				b->vTangentLeft = Vector(-20., -20., 0.);
+			}
+		}
+		return data;
+	}
+
+	BoneAnimationBezierData ReadBezierFromSpline(const SplineData* spline)
+	{
+		BoneAnimationBezierData bezier;
+		if (!spline || spline->GetKnotCount() < 2)
+			return bezier;
+
+		const CustomSplineKnot* const first = spline->GetKnot(0);
+		const CustomSplineKnot* const last = spline->GetKnot(spline->GetKnotCount() - 1);
+		if (!first || !last)
+			return bezier;
+
+		const Vector first_right = first->vPos + first->vTangentRight;
+		const Vector last_left = last->vPos + last->vTangentLeft;
+		bezier.ax = maxon::SafeConvert<UChar>(ClampSplineCoordinate(first_right.x));
+		bezier.ay = maxon::SafeConvert<UChar>(ClampSplineCoordinate(first_right.y));
+		bezier.bx = maxon::SafeConvert<UChar>(ClampSplineCoordinate(last_left.x));
+		bezier.by = maxon::SafeConvert<UChar>(ClampSplineCoordinate(last_left.y));
+		return bezier;
+	}
+
+	void WriteBezierToSpline(const BoneAnimationBezierData& bezier, SplineData* spline)
+	{
+		if (!spline || spline->GetKnotCount() < 2)
+			return;
+
+		CustomSplineKnot* const first = spline->GetKnot(0);
+		CustomSplineKnot* const last = spline->GetKnot(spline->GetKnotCount() - 1);
+		if (!first || !last)
+			return;
+
+		first->vPos = Vector(0.);
+		last->vPos = Vector(kBoneAnimationSplineMax, kBoneAnimationSplineMax, 0.);
+		first->interpol = CustomSplineKnotInterpolation::CustomSplineKnotInterpolationBezier;
+		last->interpol = CustomSplineKnotInterpolation::CustomSplineKnotInterpolationBezier;
+		first->vTangentLeft = Vector();
+		first->vTangentRight = Vector(bezier.ax, bezier.ay, 0.);
+		last->vTangentRight = Vector();
+		last->vTangentLeft = Vector(
+			static_cast<Float>(bezier.bx) - kBoneAnimationSplineMax,
+			static_cast<Float>(bezier.by) - kBoneAnimationSplineMax,
+			0.);
+	}
+
+	const BoneAnimationBezierData& SelectBezierChannel(const BoneAnimationKeyframeData& keyframe, const Int32 curve_type)
+	{
+		switch (curve_type)
+		{
+		case PMX_BONE_ANIM_CURVE_Y:
+			return keyframe.translate_y;
+		case PMX_BONE_ANIM_CURVE_Z:
+			return keyframe.translate_z;
+		case PMX_BONE_ANIM_CURVE_R:
+			return keyframe.rotation;
+		case PMX_BONE_ANIM_CURVE_A:
+		case PMX_BONE_ANIM_CURVE_X:
+		default:
+			return keyframe.translate_x;
+		}
+	}
+
+	void AssignBezierChannel(BoneAnimationKeyframeData& keyframe, const Int32 curve_type, const BoneAnimationBezierData& bezier)
+	{
+		switch (curve_type)
+		{
+		case PMX_BONE_ANIM_CURVE_Y:
+			keyframe.translate_y = bezier;
+			break;
+		case PMX_BONE_ANIM_CURVE_Z:
+			keyframe.translate_z = bezier;
+			break;
+		case PMX_BONE_ANIM_CURVE_R:
+			keyframe.rotation = bezier;
+			break;
+		case PMX_BONE_ANIM_CURVE_A:
+			keyframe.translate_x = bezier;
+			keyframe.translate_y = bezier;
+			keyframe.translate_z = bezier;
+			keyframe.rotation = bezier;
+			break;
+		case PMX_BONE_ANIM_CURVE_X:
+		default:
+			keyframe.translate_x = bezier;
+			break;
+		}
+	}
+
+	libmmd::VMDBezier ToLibMMDBezier(const BoneAnimationBezierData& bezier)
+	{
+		std::array<uint8_t, 4> cp { bezier.ax, bezier.ay, bezier.bx, bezier.by };
+		libmmd::VMDBezier result;
+		libmmd::SetVMDBezier(result, cp.data());
+		return result;
+	}
+
+	libmmd::VMDBoneKeyframe ToLibMMDKeyframe(const BoneAnimationKeyframeData& keyframe)
+	{
+		libmmd::VMDBoneKeyframe result;
+		result.frame = keyframe.frame;
+		result.translate = Eigen::Vector3f(keyframe.translation.x, keyframe.translation.y, keyframe.translation.z);
+		result.rotate = Eigen::Quaternionf(keyframe.rotation_w, keyframe.rotation_x, keyframe.rotation_y, keyframe.rotation_z).normalized();
+		result.txBezier = ToLibMMDBezier(keyframe.translate_x);
+		result.tyBezier = ToLibMMDBezier(keyframe.translate_y);
+		result.tzBezier = ToLibMMDBezier(keyframe.translate_z);
+		result.rotBezier = ToLibMMDBezier(keyframe.rotation);
+		return result;
+	}
+
+	Matrix BuildAnimationMatrix(const Vector& translation, const std::array<Float32, 4>& rotation)
+	{
+		const Eigen::Matrix3f rot = Eigen::Quaternionf(rotation[3], rotation[0], rotation[1], rotation[2]).normalized().toRotationMatrix();
+		return Matrix{
+			translation,
+			Vector(rot(0, 0), rot(1, 0), rot(2, 0)),
+			Vector(rot(0, 1), rot(1, 1), rot(2, 1)),
+			Vector(rot(0, 2), rot(1, 2), rot(2, 2))
+		};
+	}
+
+	Int32 GetAnimationFrameFromDocument(BaseDocument* doc)
+	{
+		return doc ? doc->GetTime().GetFrame(kBoneAnimationFps) : 0;
+	}
+
+	BaseTime GetAnimationFrameTime(const Int32 frame)
+	{
+		return BaseTime(static_cast<Float>(frame), kBoneAnimationFps);
+	}
+
+	Eigen::Matrix4f MatrixToEigen(const Matrix& matrix)
+	{
+		Eigen::Matrix4f eigen = Eigen::Matrix4f::Identity();
+		eigen(0, 0) = static_cast<float>(matrix.sqmat.v1.x);
+		eigen(1, 0) = static_cast<float>(matrix.sqmat.v1.y);
+		eigen(2, 0) = static_cast<float>(matrix.sqmat.v1.z);
+		eigen(0, 1) = static_cast<float>(matrix.sqmat.v2.x);
+		eigen(1, 1) = static_cast<float>(matrix.sqmat.v2.y);
+		eigen(2, 1) = static_cast<float>(matrix.sqmat.v2.z);
+		eigen(0, 2) = static_cast<float>(matrix.sqmat.v3.x);
+		eigen(1, 2) = static_cast<float>(matrix.sqmat.v3.y);
+		eigen(2, 2) = static_cast<float>(matrix.sqmat.v3.z);
+		eigen(0, 3) = static_cast<float>(matrix.off.x);
+		eigen(1, 3) = static_cast<float>(matrix.off.y);
+		eigen(2, 3) = static_cast<float>(matrix.off.z);
+		return eigen;
+	}
+
+	Matrix EigenToMatrix(const Eigen::Matrix4f& matrix)
+	{
+		return Matrix{
+			Vector(matrix(0, 3), matrix(1, 3), matrix(2, 3)),
+			Vector(matrix(0, 0), matrix(1, 0), matrix(2, 0)),
+			Vector(matrix(0, 1), matrix(1, 1), matrix(2, 1)),
+			Vector(matrix(0, 2), matrix(1, 2), matrix(2, 2))
+		};
+	}
+
+	Eigen::Quaternionf ExtractRotation(const Eigen::Matrix4f& matrix)
+	{
+		return Eigen::Quaternionf(matrix.block<3, 3>(0, 0)).normalized();
+	}
+}
+
+void C4DIKChainNodeAdapter::SetupFromBone(BaseObject* bone_object, MMDBoneTag* bone_tag, std::string name)
+{
+	bone_object_ = bone_object;
+	bone_tag_ = bone_tag;
+	name_ = std::move(name);
+	parent_ = nullptr;
+	children_.clear();
+	global_transform_ = Eigen::Matrix4f::Identity();
+	local_transform_ = Eigen::Matrix4f::Identity();
+	animate_translation_ = Eigen::Vector3f::Zero();
+	animate_rotation_ = Eigen::Quaternionf::Identity();
+	ik_rotation_ = Eigen::Quaternionf::Identity();
+}
+
+void C4DIKChainNodeAdapter::SetParentAdapter(C4DIKChainNodeAdapter* parent)
+{
+	parent_ = parent;
+}
+
+void C4DIKChainNodeAdapter::ClearChildren()
+{
+	children_.clear();
+}
+
+void C4DIKChainNodeAdapter::AddChildAdapter(C4DIKChainNodeAdapter* child)
+{
+	if (child)
+		children_.push_back(child);
+}
+
+void C4DIKChainNodeAdapter::UpdateInitialGlobalTransform()
+{
+	initial_global_transform_ = global_transform_;
+}
+
+void C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject(const Bool reset_ik_rotation)
+{
+	if (!bone_object_)
+		return;
+
+	const Matrix local_matrix = bone_object_->GetMl();
+	const Matrix global_matrix = bone_object_->GetMg();
+	local_transform_ = MatrixToEigen(local_matrix);
+	global_transform_ = MatrixToEigen(global_matrix);
+	animate_translation_ = local_transform_.block<3, 1>(0, 3);
+	animate_rotation_ = ExtractRotation(local_transform_);
+	if (reset_ik_rotation)
+		ik_rotation_ = Eigen::Quaternionf::Identity();
+}
+
+void C4DIKChainNodeAdapter::ApplyLocalToBoneObject() const
+{
+	if (!bone_object_)
+		return;
+
+	bone_object_->SetMl(EigenToMatrix(local_transform_));
+	if (bone_tag_)
+		bone_tag_->evaluated_ik_rotation_ = ToQuaternionArray(ik_rotation_);
+}
+
+Int32 C4DIKChainNodeAdapter::GetBoneIndex() const
+{
+	return bone_tag_ ? bone_tag_->GetBoneIndex() : -1;
+}
+
+void C4DIKChainNodeAdapter::SetGlobalTransform(const Eigen::Matrix4f& m)
+{
+	global_transform_ = m;
+	if (parent_ != nullptr)
+		local_transform_ = parent_->GetGlobalTransform().inverse() * global_transform_;
+	else
+		local_transform_ = global_transform_;
+}
+
+void C4DIKChainNodeAdapter::UpdateLocalTransform()
+{
+	local_transform_.setIdentity();
+	local_transform_.block<3, 3>(0, 0) = (ik_rotation_ * animate_rotation_).normalized().toRotationMatrix();
+	local_transform_.block<3, 1>(0, 3) = animate_translation_;
+}
+
+void C4DIKChainNodeAdapter::UpdateGlobalTransform()
+{
+	std::vector<C4DIKChainNodeAdapter*> stack;
+	stack.push_back(this);
+	while (!stack.empty())
+	{
+		C4DIKChainNodeAdapter* current = stack.back();
+		stack.pop_back();
+		if (!current)
+			continue;
+
+		if (current->parent_ != nullptr)
+			current->global_transform_ = current->parent_->global_transform_ * current->local_transform_;
+		else
+			current->global_transform_ = current->local_transform_;
+
+		for (auto it = current->children_.rbegin(); it != current->children_.rend(); ++it)
+			stack.push_back(*it);
+	}
+}
 
 Bool BoneMorphTagData::Write(HyperFile* hf) SDK2024_Const
 {
@@ -46,6 +461,81 @@ Bool BoneMorphTagData::Read(HyperFile* hf)
 	IOReadField(button_rename_id);
 	IOReadField(name);
 	return true;
+}
+
+Bool BoneAnimationBezierData::Write(HyperFile* hf) SDK2024_Const
+{
+	IOWriteField(ax);
+	IOWriteField(ay);
+	IOWriteField(bx);
+	IOWriteField(by);
+	return true;
+}
+
+Bool BoneAnimationBezierData::Read(HyperFile* hf)
+{
+	IOReadField(ax);
+	IOReadField(ay);
+	IOReadField(bx);
+	IOReadField(by);
+	return true;
+}
+
+Bool BoneAnimationKeyframeData::Write(HyperFile* hf) SDK2024_Const
+{
+	IOWriteField(frame);
+	IOWriteField(translation);
+	IOWriteField(rotation_x);
+	IOWriteField(rotation_y);
+	IOWriteField(rotation_z);
+	IOWriteField(rotation_w);
+	IOWriteField(translate_x);
+	IOWriteField(translate_y);
+	IOWriteField(translate_z);
+	IOWriteField(rotation);
+	return true;
+}
+
+Bool BoneAnimationKeyframeData::Read(HyperFile* hf)
+{
+	IOReadField(frame);
+	IOReadField(translation);
+	IOReadField(rotation_x);
+	IOReadField(rotation_y);
+	IOReadField(rotation_z);
+	IOReadField(rotation_w);
+	IOReadField(translate_x);
+	IOReadField(translate_y);
+	IOReadField(translate_z);
+	IOReadField(rotation);
+	return true;
+}
+
+Bool BoneAnimationSlotData::Write(HyperFile* hf) SDK2024_Const
+{
+	return io_util::WriteLinearContainer(hf, keyframes);
+}
+
+Bool BoneAnimationSlotData::Read(HyperFile* hf)
+{
+	return io_util::ReadLinearContainer(hf, keyframes);
+}
+
+BoneAnimationSlotData::BoneAnimationSlotData(const BoneAnimationSlotData& other)
+{
+	iferr(keyframes.CopyFrom(other.keyframes)) {}
+}
+
+BoneAnimationSlotData& BoneAnimationSlotData::operator=(const BoneAnimationSlotData& other)
+{
+	if (this == &other)
+		return *this;
+
+	iferr(keyframes.CopyFrom(other.keyframes))
+	{
+		iferr(keyframes.Resize(0)) {}
+	}
+	return *this;
 }
 
 Int32 MMDBoneTag::AddBoneMorph(String morph_name)
@@ -144,6 +634,346 @@ Bool MMDBoneTag::SetBoneMorphRotationNoCheck(const Int32 id, const Vector rotati
 	return Get()->SetParameter(bone_morph_data_arr_[id].rotation_id, rotation, DESCFLAGS_SET::NONE);
 }
 
+Bool MMDBoneTag::EnsureAnimationSlotCount(const Int32 slot_count)
+{
+	iferr_scope_handler{
+		return false;
+	};
+
+	if (slot_count < 0)
+		return false;
+
+	if (slot_count == 0)
+	{
+		bone_animation_slots_.Resize(0)iferr_return;
+		active_animation_slot_ = -1;
+		return true;
+	}
+
+	if (bone_animation_slots_.GetCount() < slot_count)
+	{
+		bone_animation_slots_.Resize(slot_count)iferr_return;
+	}
+
+	if (active_animation_slot_ >= slot_count)
+		active_animation_slot_ = slot_count - 1;
+	return true;
+}
+
+BoneAnimationSlotData* MMDBoneTag::EnsureAnimationSlot(const Int32 slot_index)
+{
+	if (slot_index < 0)
+		return nullptr;
+	if (!EnsureAnimationSlotCount(slot_index + 1))
+		return nullptr;
+	return &bone_animation_slots_[slot_index];
+}
+
+BoneAnimationSlotData* MMDBoneTag::GetAnimationSlot(const Int32 slot_index)
+{
+	if (slot_index < 0 || slot_index >= bone_animation_slots_.GetCount())
+		return nullptr;
+	return &bone_animation_slots_[slot_index];
+}
+
+const BoneAnimationSlotData* MMDBoneTag::GetAnimationSlot(const Int32 slot_index) const
+{
+	if (slot_index < 0 || slot_index >= bone_animation_slots_.GetCount())
+		return nullptr;
+	return &bone_animation_slots_[slot_index];
+}
+
+BoneAnimationSlotData* MMDBoneTag::GetActiveAnimationSlotData()
+{
+	return GetAnimationSlot(active_animation_slot_);
+}
+
+const BoneAnimationSlotData* MMDBoneTag::GetActiveAnimationSlotData() const
+{
+	return GetAnimationSlot(active_animation_slot_);
+}
+
+Int32 MMDBoneTag::FindAnimationKeyframeIndex(const BoneAnimationSlotData& slot, const Int32 frame) const
+{
+	const Int key_count = slot.keyframes.GetCount();
+	for (Int index = 0; index < key_count; ++index)
+	{
+		if (slot.keyframes[index].frame == frame)
+			return static_cast<Int32>(index);
+	}
+	return NOTOK;
+}
+
+BoneAnimationKeyframeData* MMDBoneTag::FindAnimationKeyframe(BoneAnimationSlotData& slot, const Int32 frame)
+{
+	const Int32 index = FindAnimationKeyframeIndex(slot, frame);
+	return index == NOTOK ? nullptr : &slot.keyframes[index];
+}
+
+const BoneAnimationKeyframeData* MMDBoneTag::FindAnimationKeyframe(const BoneAnimationSlotData& slot, const Int32 frame) const
+{
+	const Int32 index = FindAnimationKeyframeIndex(slot, frame);
+	return index == NOTOK ? nullptr : &slot.keyframes[index];
+}
+
+void MMDBoneTag::ResetEvaluatedAnimationState()
+{
+	evaluated_animation_translation_ = Vector();
+	evaluated_animation_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+	evaluated_append_animation_translation_ = Vector();
+	evaluated_append_animation_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+	evaluated_ik_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+}
+
+void MMDBoneTag::InvalidateAnimationUICache()
+{
+	ui_animation_frame_cache_ = NOTOK;
+	ui_animation_curve_type_cache_ = NOTOK;
+}
+
+void MMDBoneTag::SetEvaluatedAnimationState(const Vector& translation, const std::array<Float32, 4>& rotation)
+{
+	evaluated_animation_translation_ = translation;
+	evaluated_animation_rotation_ = NormalizeQuaternion(rotation);
+}
+
+void MMDBoneTag::SetAppendRecursionDepth(const Int32 depth)
+{
+	append_recursion_depth_ = std::max(0, depth);
+}
+
+void MMDBoneTag::RefreshExecutionPriority(GeListNode* node)
+{
+	if (!node)
+		node = Get();
+	if (!node)
+		return;
+
+	BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	if (!bc)
+		return;
+
+	if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
+	{
+		if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
+		{
+			pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
+			pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, ComputeBoneExecutionPriorityValue(bc, append_recursion_depth_));
+			bc->SetData(EXPRESSION_PRIORITY, priority);
+		}
+	}
+}
+
+BaseTag* MMDBoneTag::ResolveInheritSourceBoneTag() const
+{
+	const auto* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+	const BaseContainer* const bc = self_tag ? self_tag->GetDataInstance() : nullptr;
+	if (!bc)
+		return nullptr;
+
+	const BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
+	GeData link_data;
+	if (self_tag && self_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link_data, DESCFLAGS_GET::NONE))
+	{
+		if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, doc))
+		{
+			if (BaseTag* const linked_tag = linked_object->GetTag(g_mmd_bone_tag_id))
+			{
+				if (linked_tag != self_tag)
+					return linked_tag;
+			}
+		}
+	}
+
+	const Int32 source_index = bc->GetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX);
+	if (source_index < 0)
+		return nullptr;
+
+	if (MMDBoneManagerObject* const mgr = bone_manager_data_ ? bone_manager_data_ : const_cast<MMDBoneTag*>(this)->GetBoneManager())
+	{
+		if (BaseTag* const source_tag = mgr->FindBone(source_index))
+		{
+			if (source_tag != self_tag)
+				return source_tag;
+		}
+	}
+
+	return nullptr;
+}
+
+void MMDBoneTag::SyncInheritSourceIndexFromLink(GeListNode* node, const GeData& link_data)
+{
+	if (!node || is_syncing_inherit_source_)
+		return;
+
+	BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	if (!bc)
+		return;
+
+	Int32 source_index = -1;
+	if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, reinterpret_cast<BaseList2D*>(node)->GetDocument()))
+	{
+		if (BaseTag* const linked_tag = linked_object->GetTag(g_mmd_bone_tag_id))
+		{
+			if (const auto* linked_node = linked_tag->GetNodeData<MMDBoneTag>())
+				source_index = linked_node->GetBoneIndex();
+			else if (MMDBoneManagerObject* const mgr = GetBoneManager())
+				source_index = mgr->FindBoneIndex(linked_tag);
+		}
+	}
+
+	bc->SetInt32(PMX_BONE_INHERIT_BONE_PARENT_INDEX, source_index);
+}
+
+void MMDBoneTag::SyncInheritSourceLinkFromIndex(GeListNode* node, const Int32 bone_index)
+{
+	if (!node || is_syncing_inherit_source_)
+		return;
+
+	BaseLink* const link = BaseLink::Alloc();
+	if (!link)
+		return;
+
+	if (bone_index >= 0)
+	{
+		if (MMDBoneManagerObject* const mgr = GetBoneManager())
+		{
+			if (BaseTag* const source_tag = mgr->FindBone(bone_index))
+				link->SetLink(source_tag->GetObject());
+			else
+				link->SetLink(nullptr);
+		}
+		else
+		{
+			link->SetLink(nullptr);
+		}
+	}
+	else
+	{
+		link->SetLink(nullptr);
+	}
+
+	is_syncing_inherit_source_ = true;
+	node->SetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), GeData(link), DESCFLAGS_SET::NONE);
+	is_syncing_inherit_source_ = false;
+}
+
+void MMDBoneTag::RequestAppendExecutionOrderRefresh(GeListNode* node)
+{
+	if (MMDBoneManagerObject* const mgr = GetBoneManager())
+	{
+		mgr->MarkAppendExecutionOrderDirty();
+		mgr->EnsureAppendExecutionOrder();
+	}
+	else
+	{
+		RefreshExecutionPriority(node);
+	}
+}
+
+Bool MMDBoneTag::ReplaceAnimationSlot(const Int32 slot_index, const maxon::BaseArray<BoneAnimationKeyframeData>& keyframes)
+{
+	iferr_scope_handler{
+		return false;
+	};
+
+	BoneAnimationSlotData* const slot = EnsureAnimationSlot(slot_index);
+	if (!slot)
+		return false;
+
+	slot->keyframes.Resize(0)iferr_return;
+	for (const auto& keyframe : keyframes)
+	{
+		slot->keyframes.Append(keyframe)iferr_return;
+	}
+
+	std::sort(slot->keyframes.Begin(), slot->keyframes.End(), [](const BoneAnimationKeyframeData& lhs, const BoneAnimationKeyframeData& rhs)
+	{
+		return lhs.frame < rhs.frame;
+	});
+
+	if (slot_index == active_animation_slot_)
+	{
+		InvalidateAnimationUICache();
+		RefreshAnimationMarkerTracks(Get());
+		SyncSplineFromSelection(Get());
+	}
+	return true;
+}
+
+void MMDBoneTag::ClearAnimationSlot(const Int32 slot_index)
+{
+	if (BoneAnimationSlotData* const slot = GetAnimationSlot(slot_index))
+	{
+		iferr(slot->keyframes.Resize(0)) {}
+		if (slot_index == active_animation_slot_ && Get())
+		{
+			InvalidateAnimationUICache();
+			RefreshAnimationMarkerTracks(Get());
+			InitAnimationSpline(Get());
+		}
+	}
+}
+
+void MMDBoneTag::ClearAllAnimationSlots()
+{
+	iferr(bone_animation_slots_.Resize(0)) {}
+	active_animation_slot_ = -1;
+	if (Get())
+	{
+		InvalidateAnimationUICache();
+		RefreshAnimationMarkerTracks(Get());
+		InitAnimationSpline(Get());
+	}
+}
+
+Bool MMDBoneTag::CopyAnimationSlot(const Int32 slot_index, maxon::BaseArray<BoneAnimationKeyframeData>& keyframes) const
+{
+	const BoneAnimationSlotData* const slot = GetAnimationSlot(slot_index);
+	if (!slot)
+	{
+		iferr(keyframes.Resize(0))
+			return false;
+		return true;
+	}
+
+	iferr(keyframes.CopyFrom(slot->keyframes))
+		return false;
+	return true;
+}
+
+void MMDBoneTag::SetActiveAnimationSlot(const Int32 slot_index)
+{
+	if (slot_index < 0)
+	{
+		active_animation_slot_ = -1;
+		if (GeListNode* const node = Get())
+		{
+			InvalidateAnimationUICache();
+			RefreshAnimationMarkerTracks(node);
+			InitAnimationSpline(node);
+		}
+		return;
+	}
+	if (!EnsureAnimationSlotCount(slot_index + 1))
+		return;
+	active_animation_slot_ = slot_index;
+	if (GeListNode* const node = Get())
+	{
+		InvalidateAnimationUICache();
+		RefreshAnimationMarkerTracks(node);
+		SyncSplineFromSelection(node);
+	}
+}
+
+Int32 MMDBoneTag::GetMaxAnimationFrame(const Int32 slot_index) const
+{
+	const BoneAnimationSlotData* const slot = GetAnimationSlot(slot_index);
+	if (!slot || slot->keyframes.IsEmpty())
+		return 0;
+	return slot->keyframes[slot->keyframes.GetCount() - 1].frame;
+}
+
 void MMDBoneTag::HandleBoneMorphButtonCommand(const DescID& desc_id)
 {
 	iferr_scope_handler{ return; };
@@ -225,6 +1055,318 @@ void MMDBoneTag::HandleBoneMorphButtonCommand(const DescID& desc_id)
 	}
 }
 
+Bool MMDBoneTag::SplineDataCallBack(const Int32 cid, const void* data)
+{
+	if (cid != SPLINE_CALLBACK_CORE_MESSAGE || data == nullptr)
+		return true;
+
+	SplineData* const spline_data = static_cast<const SplineDataCallbackCoreMessage*>(data)->pGUI->GetSplineData();
+	if (!spline_data)
+		return true;
+
+	for (Int32 i = 0; i < spline_data->GetKnotCount(); ++i)
+	{
+		if (CustomSplineKnot* const knot = spline_data->GetKnot(i))
+		{
+			Vector global_left = knot->vPos + knot->vTangentLeft;
+			global_left.ClampMax(Vector(kBoneAnimationSplineMax, kBoneAnimationSplineMax, 0.));
+			global_left.ClampMin(Vector(0.));
+			Vector global_right = knot->vPos + knot->vTangentRight;
+			global_right.ClampMax(Vector(kBoneAnimationSplineMax, kBoneAnimationSplineMax, 0.));
+			global_right.ClampMin(Vector(0.));
+			knot->vTangentLeft = global_left - knot->vPos;
+			knot->vTangentRight = global_right - knot->vPos;
+		}
+	}
+	return true;
+}
+
+Bool MMDBoneTag::InitAnimationSpline(GeListNode* node)
+{
+	if (!node)
+		node = Get();
+	if (!node)
+		return false;
+
+	if (BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance())
+	{
+		InvalidateAnimationUICache();
+		bc->SetData(PMX_BONE_ANIM_SPLINE, CreateDefaultAnimationSplineData());
+		return true;
+	}
+	return false;
+}
+
+Bool MMDBoneTag::SyncSplineFromSelection(GeListNode* node)
+{
+	if (!node)
+		node = Get();
+	if (!node)
+		return false;
+
+	BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	if (!bc)
+		return false;
+
+	GeData spline_data = CreateDefaultAnimationSplineData();
+	SplineData* const spline = GetSplineDataWritable(spline_data);
+	if (!spline)
+		return false;
+
+	if (const BoneAnimationSlotData* const slot = GetActiveAnimationSlotData(); slot && !slot->keyframes.IsEmpty())
+	{
+		const Int32 selected_frame = bc->GetInt32(PMX_BONE_ANIM_FRAME_ON);
+		if (const BoneAnimationKeyframeData* const keyframe = FindAnimationKeyframe(*slot, selected_frame))
+			WriteBezierToSpline(SelectBezierChannel(*keyframe, bc->GetInt32(PMX_BONE_ANIM_CURVE_TYPE)), spline);
+	}
+	bc->SetData(PMX_BONE_ANIM_SPLINE, spline_data);
+	ui_animation_frame_cache_ = bc->GetInt32(PMX_BONE_ANIM_FRAME_ON);
+	ui_animation_curve_type_cache_ = bc->GetInt32(PMX_BONE_ANIM_CURVE_TYPE);
+	return true;
+}
+
+Bool MMDBoneTag::SyncSplineFromCurrentParametersIfNeeded(GeListNode* node)
+{
+	if (!node)
+		node = Get();
+	if (!node)
+		return false;
+
+	BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	if (!bc)
+		return false;
+
+	const Int32 frame = bc->GetInt32(PMX_BONE_ANIM_FRAME_ON);
+	const Int32 curve_type = bc->GetInt32(PMX_BONE_ANIM_CURVE_TYPE);
+	if (frame == ui_animation_frame_cache_ && curve_type == ui_animation_curve_type_cache_)
+		return true;
+
+	return SyncSplineFromSelection(node);
+}
+
+Bool MMDBoneTag::StoreSplineToSelection(GeListNode* node)
+{
+	if (!node)
+		node = Get();
+	if (!node)
+		return false;
+
+	BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	if (!bc)
+		return false;
+
+	BoneAnimationSlotData* const slot = GetActiveAnimationSlotData();
+	if (!slot || slot->keyframes.IsEmpty())
+		return true;
+
+	const Int32 selected_frame = bc->GetInt32(PMX_BONE_ANIM_FRAME_ON);
+	BoneAnimationKeyframeData* const keyframe = FindAnimationKeyframe(*slot, selected_frame);
+	if (!keyframe)
+		return true;
+
+	GeData spline_data;
+	if (!node->GetParameter(ConstDescID(DescLevel(PMX_BONE_ANIM_SPLINE)), spline_data, DESCFLAGS_GET::NONE))
+		return false;
+
+	const SplineData* const spline = GetSplineData(spline_data);
+	if (!spline)
+		return false;
+
+	AssignBezierChannel(*keyframe, bc->GetInt32(PMX_BONE_ANIM_CURVE_TYPE), ReadBezierFromSpline(spline));
+	return true;
+}
+
+Bool MMDBoneTag::NavigateAnimationKeyframe(GeListNode* node, BaseDocument* doc, const Bool forward)
+{
+	if (!node)
+		node = Get();
+	if (!node)
+		return false;
+
+	const BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	const BoneAnimationSlotData* const slot = GetActiveAnimationSlotData();
+	if (!bc || !slot || slot->keyframes.IsEmpty())
+		return false;
+
+	const Int32 selected_frame = bc->GetInt32(PMX_BONE_ANIM_FRAME_ON);
+	Int32 target_frame = selected_frame;
+
+	if (forward)
+	{
+		for (const auto& keyframe : slot->keyframes)
+		{
+			if (keyframe.frame > selected_frame)
+			{
+				target_frame = keyframe.frame;
+				break;
+			}
+		}
+	}
+	else
+	{
+		for (Int index = slot->keyframes.GetCount() - 1; index >= 0; --index)
+		{
+			if (slot->keyframes[index].frame < selected_frame)
+			{
+				target_frame = slot->keyframes[index].frame;
+				break;
+			}
+		}
+	}
+
+	if (target_frame == selected_frame)
+		return true;
+
+	node->SetParameter(ConstDescID(DescLevel(PMX_BONE_ANIM_FRAME_ON)), target_frame, DESCFLAGS_SET::NONE);
+	if (doc)
+		doc->SetTime(GetAnimationFrameTime(target_frame));
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (GeIsMainThread())
+		EventAdd();
+	return true;
+}
+
+void MMDBoneTag::RefreshAnimationMarkerTracks(GeListNode* node)
+{
+	if (!node)
+		node = Get();
+	BaseTag* const tag = static_cast<BaseTag*>(node);
+	if (!tag)
+		return;
+
+	const BoneAnimationSlotData* const slot = GetActiveAnimationSlotData();
+	CTrack* frame_track = tag->FindCTrack(ConstDescID(DescLevel(PMX_BONE_ANIM_FRAME_ON)));
+	if (!frame_track && slot && !slot->keyframes.IsEmpty())
+	{
+		frame_track = CTrack::Alloc(tag, ConstDescID(DescLevel(PMX_BONE_ANIM_FRAME_ON)));
+		if (frame_track)
+			tag->InsertTrackSorted(frame_track);
+	}
+
+	if (!frame_track)
+		return;
+
+	if (CCurve* const frame_curve = frame_track->GetCurve())
+	{
+		for (Int32 index = frame_curve->GetKeyCount() - 1; index >= 0; --index)
+		{
+			if (!frame_curve->DelKey(index))
+				break;
+		}
+
+		if (slot && !slot->keyframes.IsEmpty())
+		{
+			for (const auto& keyframe : slot->keyframes)
+			{
+				if (CKey* const key = frame_curve->AddKey(GetAnimationFrameTime(keyframe.frame)))
+				{
+					key->SetInterpolation(frame_curve, CINTERPOLATION::STEP);
+					key->SetValue(frame_curve, static_cast<Float>(keyframe.frame));
+					key->ChangeNBit(NBIT::CKEY_LOCK_T, NBITCONTROL::SET);
+					key->ChangeNBit(NBIT::CKEY_LOCK_V, NBITCONTROL::SET);
+				}
+			}
+		}
+	}
+}
+
+Bool MMDBoneTag::AddAnimationKeyframeFromCurrentPose(GeListNode* node, BaseDocument* doc)
+{
+	iferr_scope_handler{
+		return false;
+	};
+
+	if (!node)
+		node = Get();
+	if (!node)
+		return false;
+
+	if (!bone_object_)
+		bone_object_ = static_cast<BaseTag*>(node)->GetObject();
+	if (!bone_object_)
+		return false;
+
+	BoneAnimationSlotData* const slot = EnsureAnimationSlot(active_animation_slot_);
+	if (!slot)
+		return false;
+
+	const Int32 frame = GetAnimationFrameFromDocument(doc);
+	Int32 keyframe_index = FindAnimationKeyframeIndex(*slot, frame);
+	if (keyframe_index == NOTOK)
+	{
+		auto& keyframe = slot->keyframes.Append()iferr_return;
+		keyframe.frame = frame;
+		keyframe_index = static_cast<Int32>(slot->keyframes.GetCount() - 1);
+	}
+
+	BoneAnimationKeyframeData& keyframe = slot->keyframes[keyframe_index];
+	const Vector rel_pos = bone_object_->GetRelPos();
+	const std::array<Float32, 4> rotation = EulerToQuaternionArray(bone_object_->GetRelRot());
+	keyframe.translation = Vector32(
+		maxon::SafeConvert<Float32>(rel_pos.x),
+		maxon::SafeConvert<Float32>(rel_pos.y),
+		maxon::SafeConvert<Float32>(rel_pos.z));
+	keyframe.rotation_x = rotation[0];
+	keyframe.rotation_y = rotation[1];
+	keyframe.rotation_z = rotation[2];
+	keyframe.rotation_w = rotation[3];
+
+	std::sort(slot->keyframes.Begin(), slot->keyframes.End(), [](const BoneAnimationKeyframeData& lhs, const BoneAnimationKeyframeData& rhs)
+	{
+		return lhs.frame < rhs.frame;
+	});
+
+	node->SetParameter(ConstDescID(DescLevel(PMX_BONE_ANIM_FRAME_ON)), frame, DESCFLAGS_SET::NONE);
+	StoreSplineToSelection(node);
+	InvalidateAnimationUICache();
+	RefreshAnimationMarkerTracks(node);
+	SyncSplineFromSelection(node);
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (GeIsMainThread())
+		EventAdd();
+	return true;
+}
+
+Bool MMDBoneTag::DeleteAnimationKeyframeAtCurrentFrame(GeListNode* node, BaseDocument* doc)
+{
+	iferr_scope_handler{
+		return false;
+	};
+
+	if (!node)
+		node = Get();
+	if (!node)
+		return false;
+
+	BoneAnimationSlotData* const slot = GetActiveAnimationSlotData();
+	if (!slot || slot->keyframes.IsEmpty())
+		return false;
+
+	const Int32 frame = GetAnimationFrameFromDocument(doc);
+	const Int32 keyframe_index = FindAnimationKeyframeIndex(*slot, frame);
+	if (keyframe_index == NOTOK)
+		return false;
+
+	slot->keyframes.Erase(keyframe_index)iferr_return;
+	InvalidateAnimationUICache();
+	RefreshAnimationMarkerTracks(node);
+	if (!slot->keyframes.IsEmpty())
+	{
+		node->SetParameter(ConstDescID(DescLevel(PMX_BONE_ANIM_FRAME_ON)), slot->keyframes[std::min<Int>(keyframe_index, slot->keyframes.GetCount() - 1)].frame, DESCFLAGS_SET::NONE);
+		SyncSplineFromSelection(node);
+	}
+	else
+	{
+		node->SetParameter(ConstDescID(DescLevel(PMX_BONE_ANIM_FRAME_ON)), frame, DESCFLAGS_SET::NONE);
+		InitAnimationSpline(node);
+	}
+
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (GeIsMainThread())
+		EventAdd();
+	return true;
+}
+
 Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 {
 	if (!op)
@@ -285,28 +1427,160 @@ Bool MMDBoneTag::RefreshColor(GeListNode* node, BaseObject* op)
 
 MMDBoneManagerObject* MMDBoneTag::GetBoneManager()
 {
-	if (!bone_manager_data_)
-		if (auto* obj = io_util::ResolveObjectLink(bone_manager_link_))
-			bone_manager_data_ = obj->GetNodeData<MMDBoneManagerObject>();
-	if (!bone_manager_data_)
-	{
+	if (!bone_object_)
 		if (auto* tag = static_cast<BaseTag*>(Get()))
-			if (auto* host = tag->GetObject())
-				if (auto* parent = host->GetUp())
-					if (parent->IsInstanceOf(g_mmd_bone_manager_object_id))
-					{
-						bone_manager_data_ = parent->GetNodeData<MMDBoneManagerObject>();
-						if (bone_manager_data_)
-							bone_manager_link_->SetLink(parent);
-					}
+			bone_object_ = tag->GetObject();
+
+	BaseObject* manager_object = bone_object_
+		? ResolveBoneManagerObjectFromHierarchy(bone_object_)
+		: io_util::ResolveObjectLink(bone_manager_link_);
+
+	if (manager_object)
+	{
+		bone_manager_data_ = manager_object->GetNodeData<MMDBoneManagerObject>();
+		if (bone_manager_data_)
+		{
+			bone_manager_link_->SetLink(manager_object);
+			hierarchy_manager_cache_ = manager_object;
+		}
+	}
+	else
+	{
+		bone_manager_data_ = nullptr;
+		hierarchy_manager_cache_ = nullptr;
+		if (bone_manager_link_)
+			bone_manager_link_->SetLink(nullptr);
 	}
 	return bone_manager_data_;
+}
+
+MMDModelManagerObject* MMDBoneTag::GetModelManager()
+{
+	if (MMDBoneManagerObject* const bone_manager = GetBoneManager())
+		return bone_manager->GetModelManagerData();
+	return nullptr;
+}
+
+bool MMDBoneTag::UpdateHierarchyTopologyCache(BaseObject* bone_object, const Bool notify_managers)
+{
+	if (!bone_object)
+		return false;
+
+	bone_object_ = bone_object;
+
+	BaseObject* current_parent = bone_object->GetUp();
+	BaseObject* current_pred = bone_object->GetPred();
+	BaseObject* current_manager_object = ResolveBoneManagerObjectFromHierarchy(bone_object);
+	BaseObject* previous_manager_object = hierarchy_manager_cache_;
+
+	const Bool changed = current_parent != hierarchy_parent_cache_
+		|| current_pred != hierarchy_pred_cache_
+		|| current_manager_object != hierarchy_manager_cache_;
+
+	hierarchy_parent_cache_ = current_parent;
+	hierarchy_pred_cache_ = current_pred;
+	hierarchy_manager_cache_ = current_manager_object;
+
+	if (current_manager_object)
+	{
+		bone_manager_data_ = current_manager_object->GetNodeData<MMDBoneManagerObject>();
+		if (bone_manager_link_)
+			bone_manager_link_->SetLink(current_manager_object);
+	}
+	else
+	{
+		bone_manager_data_ = nullptr;
+		if (bone_manager_link_)
+			bone_manager_link_->SetLink(nullptr);
+	}
+
+	if (changed && notify_managers)
+		NotifyHierarchyDirty(previous_manager_object, current_manager_object);
+
+	return changed;
+}
+
+void MMDBoneTag::NotifyHierarchyDirty(BaseObject* previous_manager_object, BaseObject* current_manager_object) const
+{
+	auto send_dirty = [&](BaseObject* manager_object)
+	{
+		if (!manager_object || !manager_object->IsInstanceOf(g_mmd_bone_manager_object_id))
+			return;
+
+		MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_HIERARCHY_DIRTY);
+		msg.bone_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+		manager_object->Message(g_mmd_bone_tag_id, &msg);
+	};
+
+	if (previous_manager_object && previous_manager_object != current_manager_object)
+		send_dirty(previous_manager_object);
+
+	send_dirty(current_manager_object);
 }
 
 NodeData* MMDBoneTag::Alloc()
 {
 	return NewObj(MMDBoneTag).GetValue();
 }
+
+SDK2024_CopyTo(MMDBoneTag)
+{
+	iferr_scope_handler{
+		return false;
+	};
+
+	auto* const dest_tag = reinterpret_cast<MMDBoneTag*>(dest);
+	if (!dest_tag)
+		return false;
+
+	if (bone_manager_link_)
+		bone_manager_link_->CopyTo(dest_tag->bone_manager_link_, flags, trn);
+	if (bone_lock_protection_link_)
+		bone_lock_protection_link_->CopyTo(dest_tag->bone_lock_protection_link_, flags, trn);
+
+	dest_tag->bone_manager_data_ = nullptr;
+	dest_tag->bone_object_ = nullptr;
+	dest_tag->hierarchy_parent_cache_ = nullptr;
+	dest_tag->hierarchy_pred_cache_ = nullptr;
+	dest_tag->hierarchy_manager_cache_ = nullptr;
+	dest_tag->bone_mode_ = bone_mode_;
+	dest_tag->is_IK = is_IK;
+	dest_tag->is_syncing_inherit_source_ = false;
+	dest_tag->bone_morph_name_index_ = bone_morph_name_index_;
+	dest_tag->prev_position_ = prev_position_;
+	dest_tag->prev_rotation_ = prev_rotation_;
+	dest_tag->active_animation_slot_ = active_animation_slot_;
+	dest_tag->evaluated_animation_translation_ = evaluated_animation_translation_;
+	dest_tag->evaluated_animation_rotation_ = evaluated_animation_rotation_;
+	dest_tag->evaluated_append_animation_translation_ = evaluated_append_animation_translation_;
+	dest_tag->evaluated_append_animation_rotation_ = evaluated_append_animation_rotation_;
+	dest_tag->evaluated_ik_rotation_ = evaluated_ik_rotation_;
+	dest_tag->append_recursion_depth_ = append_recursion_depth_;
+
+	iferr(dest_tag->bone_animation_slots_.CopyFrom(bone_animation_slots_))
+		return false;
+
+	dest_tag->bone_morph_data_arr_.Reset();
+	dest_tag->bone_morph_button_id_map_.Reset();
+	for (const auto& morph : bone_morph_data_arr_)
+	{
+		auto& copied = dest_tag->bone_morph_data_arr_.Append()iferr_return;
+		copied.grp_id = morph.grp_id;
+		copied.strength_id = morph.strength_id;
+		copied.translation_id = morph.translation_id;
+		copied.rotation_id = morph.rotation_id;
+		copied.button_grp_id = morph.button_grp_id;
+		copied.button_delete_id = morph.button_delete_id;
+		copied.button_rename_id = morph.button_rename_id;
+		copied.name = morph.name;
+		const Int32 index = static_cast<Int32>(dest_tag->bone_morph_data_arr_.GetCount() - 1);
+		dest_tag->bone_morph_button_id_map_.Insert(copied.button_delete_id, index)iferr_return;
+		dest_tag->bone_morph_button_id_map_.Insert(copied.button_rename_id, index)iferr_return;
+	}
+
+	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
+}
+
 SDK2024_Init(MMDBoneTag)
 {
 	if (!node)
@@ -332,16 +1606,17 @@ SDK2024_Init(MMDBoneTag)
 	bc->SetBool(PMX_BONE_INHERIT_LOCAL, false);
 	bc->SetBool(PMX_BONE_OUTER_PARENT, false);
 	bc->SetInt32(PMX_BONE_OUTER_PARENT_KEY, 0);
+	bc->SetInt32(PMX_BONE_ANIM_FRAME_ON, 0);
+	bc->SetInt32(PMX_BONE_ANIM_CURVE_TYPE, PMX_BONE_ANIM_CURVE_X);
 
-	if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
-	{
-		if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
-		{
-			pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_ANIMATION);
-			pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 2);
-			bc->SetData(EXPRESSION_PRIORITY, priority);
-		}
-	}
+	iferr(bone_animation_slots_.Resize(0))
+		return false;
+	active_animation_slot_ = -1;
+	append_recursion_depth_ = 0;
+	ResetEvaluatedAnimationState();
+	RefreshExecutionPriority(node);
+	if (!InitAnimationSpline(node))
+		return false;
 
 	return SDK2024_SuperInit;
 }
@@ -487,6 +1762,27 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	case PMX_BONE_INHERIT_TRANSLATION:
 		{
 			RefreshColor(node);
+			RequestAppendExecutionOrderRefresh(node);
+			break;
+		}
+	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
+	{
+		SyncInheritSourceLinkFromIndex(node, bc->GetInt32(id));
+		RequestAppendExecutionOrderRefresh(node);
+		break;
+	}
+	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
+	{
+		GeData link_data;
+		if (node->GetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link_data, DESCFLAGS_GET::NONE))
+			SyncInheritSourceIndexFromLink(node, link_data);
+		RequestAppendExecutionOrderRefresh(node);
+		break;
+	}
+	case PMX_BONE_LAYER:
+	case PMX_BONE_PHYSICS_AFTER_DEFORM:
+		{
+			RequestAppendExecutionOrderRefresh(node);
 			break;
 		}
 	default:
@@ -494,9 +1790,17 @@ void MMDBoneTag::HandleDescriptionUpdate(GeListNode* node, BaseContainer* const 
 	}
 }
 
-void MMDBoneTag::RebuildIKChains()
+void MMDBoneTag::BuildStandaloneIKChains()
 {
-	if (!ik_solver_ || !GetBoneManager())
+	if (!is_IK || !GetBoneManager())
+		return;
+
+	MMDModelManagerObject* const model_manager = GetModelManager();
+	if (!model_manager || !model_manager->EnsureStandaloneRuntimeManagers())
+		return;
+
+	libmmd::MMDIkSolver* const ik_solver = model_manager->GetStandaloneIKSolver(GetBoneIndex());
+	if (!ik_solver)
 		return;
 
 	auto* tag = static_cast<BaseTag*>(Get());
@@ -563,42 +1867,70 @@ void MMDBoneTag::RebuildIKChains()
 	dyn_desc->BrowseFree(browse_handle);
 
 	if (entries.IsEmpty())
+	{
+		ik_solver->ClearIKChains();
+		ik_solver->BuildChainPath();
 		return;
+	}
 
-	ik_solver_->ClearIKChains();
+	ik_solver->ClearIKChains();
 	for (const auto& entry : entries)
 	{
 		if (const BaseTag* chain_tag = GetBoneManager()->FindBone(entry.bone_index))
 		{
-			if (auto* chain_node = chain_tag->GetNodeData<MMDBoneTag>(); chain_node && chain_node->mmd_node_)
+			if (auto* chain_node = chain_tag->GetNodeData<MMDBoneTag>(); chain_node)
 			{
+				C4DIKChainNodeAdapter* const chain_adapter = model_manager->GetBoneAdapter(entry.bone_index);
+				if (!chain_adapter)
+					continue;
+
 				if (entry.enable_limit)
 				{
 					const Eigen::Vector3f lmin(static_cast<float>(entry.limit_min.x), static_cast<float>(entry.limit_min.y), static_cast<float>(entry.limit_min.z));
 					const Eigen::Vector3f lmax(static_cast<float>(entry.limit_max.x), static_cast<float>(entry.limit_max.y), static_cast<float>(entry.limit_max.z));
-					ik_solver_->AddIKChain(chain_node->mmd_node_, true, lmin, lmax);
+					ik_solver->AddIKChain(chain_adapter, true, lmin, lmax);
 				}
 				else
 				{
-					ik_solver_->AddIKChain(chain_node->mmd_node_);
+					ik_solver->AddIKChain(chain_adapter);
 				}
-				chain_node->mmd_node_->EnableIK(true);
 			}
 		}
 	}
-	ik_solver_->BuildChainPath();
+	ik_solver->BuildChainPath();
+}
+
+Bool MMDBoneTag::RunIKSolveAnimMode(BaseObject* op)
+{
+	if (!op || bone_mode_ != BONE_MODE_ANIM || !is_IK)
+		return false;
+
+	MMDModelManagerObject* const model_manager = GetModelManager();
+	if (!model_manager || !model_manager->EnsureStandaloneRuntimeManagers())
+		return false;
+
+	libmmd::MMDIkSolver* const ik_solver = model_manager->GetStandaloneIKSolver(GetBoneIndex());
+	if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
+		return false;
+
+	model_manager->SyncStandaloneBoneAdaptersFromScene(true);
+	BuildStandaloneIKChains();
+	ik_solver->Solve();
+	model_manager->ApplyStandaloneBoneAdaptersToScene();
+	return true;
 }
 
 void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 {
-	if (bone_mode_ == bone_mode)
+	const Int32 normalized_mode = NormalizeBoneMode(bone_mode);
+	if (bone_mode_ == normalized_mode)
 		return;
 
 	if (!bone_object_)
 		if (BaseTag* tag = static_cast<BaseTag*>(Get()); tag)
 			bone_object_ = tag->GetObject();
 
-	if (bone_mode == BONE_MODE_EDIT)
+	if (normalized_mode == BONE_MODE_EDIT)
 	{
 		if (bone_object_)
 			bone_object_->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
@@ -611,7 +1943,7 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 	else
 	{
 		if (bone_mode_ == BONE_MODE_EDIT && is_IK)
-			RebuildIKChains();
+			BuildStandaloneIKChains();
 
 		if (bone_object_)
 			bone_object_->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
@@ -626,7 +1958,9 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 		}
 	}
 
-	bone_mode_ = bone_mode;
+	bone_mode_ = normalized_mode;
+	if (bone_mode_ == BONE_MODE_ANIM)
+		SyncSplineFromSelection(Get());
 }
 
 void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, const MMDBoneManagerObjectMsg* msg) const
@@ -705,84 +2039,6 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 	}
 }
 
-static Int32 GetTagBoneIndex(const BaseTag* tag)
-{
-	GeData data;
-	GetAtomParameter(tag, ConstDescID(DescLevel(PMX_BONE_INDEX)), data, DESCFLAGS_GET::NONE);
-	return data.GetString().ToInt32(nullptr);
-}
-
-void MMDBoneTag::HandleBoneIndexUpdate(BaseContainer* const bc, BaseObject* bone_manager_object) const
-{
-	if (!bone_object_)
-		return;
-
-	BaseObject* up_obj = bone_object_->GetUp();
-	BaseObject* prev_obj = bone_object_->GetPred();
-	const Int32 prev_index = bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
-
-	if (!up_obj)
-	{
-		bc->SetString(PMX_BONE_INDEX, "0"_s);
-		if (prev_index != 0 && bone_manager_object != nullptr)
-		{
-			MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_INDEX_CHANGE);
-			bone_manager_object->Message(g_mmd_bone_tag_id, &msg);
-		}
-		return;
-	}
-
-	Int32 new_bone_index = -1;
-
-	if (up_obj->IsInstanceOf(g_mmd_bone_manager_object_id))
-	{
-		if (prev_obj)
-		{
-			if (SDK2024_Const BaseTag* prev_tag = prev_obj->GetTag(g_mmd_bone_tag_id); prev_tag)
-				new_bone_index = GetTagBoneIndex(prev_tag) + 1;
-		}
-		else
-		{
-			new_bone_index = 0;
-			bc->SetString(PMX_BONE_PARENT_BONE_INDEX, "-1"_s);
-		}
-	}
-	else
-	{
-		SDK2024_Const BaseTag* up_tag = up_obj->GetTag(g_mmd_bone_tag_id);
-		if (up_tag)
-		{
-			GeData data;
-			up_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), data, DESCFLAGS_GET::NONE);
-			bc->SetData(PMX_BONE_PARENT_BONE_INDEX, data);
-		}
-
-		if (prev_obj)
-		{
-			BaseObject* last_obj = prev_obj;
-			while (last_obj->GetDownLast())
-				last_obj = last_obj->GetDownLast();
-
-			if (SDK2024_Const BaseTag* last_tag = last_obj->GetTag(g_mmd_bone_tag_id); last_tag)
-				new_bone_index = GetTagBoneIndex(last_tag) + 1;
-		}
-		else if (up_tag)
-		{
-			new_bone_index = GetTagBoneIndex(up_tag) + 1;
-		}
-	}
-
-	if (prev_index != new_bone_index)
-	{
-		bc->SetString(PMX_BONE_INDEX, String::IntToString(new_bone_index));
-		if (bone_manager_object != nullptr)
-		{
-			MMDBoneTagMsg msg(MMDBoneTagMsgType::BONE_INDEX_CHANGE);
-			bone_manager_object->Message(g_mmd_bone_tag_id, &msg);
-		}
-	}
-}
-
 Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 {
 	iferr_scope_handler{
@@ -793,12 +2049,32 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 	{
 		return true;
 	}
+	if (!bone_object_)
+		bone_object_ = static_cast<BaseTag*>(node)->GetObject();
 	switch (type)
 	{
 	case MSG_DESCRIPTION_COMMAND:
 	{
 		const auto dc = static_cast<DescriptionCommand*>(data);
-		if (dc->_descId[0].id == PMX_BONE_MORPH_ADD_BUTTON)
+		const Int32 command_id = dc ? dc->_descId[0].id : NOTOK;
+		BaseDocument* const doc = reinterpret_cast<BaseList2D*>(node)->GetDocument();
+		if (command_id == PMX_BONE_ANIM_PREV_BTN)
+		{
+			NavigateAnimationKeyframe(node, doc, false);
+		}
+		else if (command_id == PMX_BONE_ANIM_NEXT_BTN)
+		{
+			NavigateAnimationKeyframe(node, doc, true);
+		}
+		else if (command_id == PMX_BONE_ANIM_ADD_BTN)
+		{
+			AddAnimationKeyframeFromCurrentPose(node, doc);
+		}
+		else if (command_id == PMX_BONE_ANIM_DEL_BTN)
+		{
+			DeleteAnimationKeyframeAtCurrentFrame(node, doc);
+		}
+		else if (command_id == PMX_BONE_MORPH_ADD_BUTTON)
 		{
 			GeData ge_data;
 			node->GetParameter(ConstDescID(DescLevel(PMX_BONE_MORPH_ADD_NAME)), ge_data, DESCFLAGS_GET::NONE);
@@ -813,6 +2089,19 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 	case MSG_DESCRIPTION_CHECKUPDATE:
 		HandleDescriptionUpdate(node, bc, static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id);
 		break;
+	case MSG_DOCUMENTINFO:
+		if (const auto* doc_info = static_cast<DocumentInfoData*>(data);
+			doc_info && doc_info->type == MSG_DOCUMENTINFO_TYPE_OBJECT_REMOVE && doc_info->bl == bone_object_)
+		{
+			NotifyHierarchyDirty(hierarchy_manager_cache_, nullptr);
+			hierarchy_parent_cache_ = nullptr;
+			hierarchy_pred_cache_ = nullptr;
+			hierarchy_manager_cache_ = nullptr;
+			bone_manager_data_ = nullptr;
+			if (bone_manager_link_)
+				bone_manager_link_->SetLink(nullptr);
+		}
+		break;
 	case MSG_MENUPREPARE:
 		if (const auto doc = static_cast<BaseDocument*>(data); doc)
 		{
@@ -821,8 +2110,12 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 				const String name = op->GetName();
 				node->SetParameter(ConstDescID(DescLevel(PMX_BONE_NAME_LOCAL)), name, DESCFLAGS_SET::NONE);
 				RefreshColor(node, op);
+				SyncSplineFromSelection(node);
 			}
 		}
+		break;
+	case MSG_ANIMATE:
+		SyncSplineFromCurrentParametersIfNeeded(node);
 		break;
 	case  g_mmd_bone_manager_object_id:
 		if (const auto* msg = static_cast<MMDBoneManagerObjectMsg*>(data); msg)
@@ -833,7 +2126,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 				SetBoneDisplay(bc, msg);
 				break;
 			case MMDBoneManagerObjectMsgType::BONE_HIERARCHY_UPDATE:
-				HandleBoneIndexUpdate(bc, msg->bone_manager_object);
+				UpdateHierarchyTopologyCache(bone_object_ ? bone_object_ : static_cast<BaseTag*>(node)->GetObject(), false);
 				break;
 			case MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE:
 				HandleBoneModeChange(msg->bone_mode);
@@ -857,31 +2150,80 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	{
 		return false;
 	}
+
+	const auto get_ik_solver = [this]() -> libmmd::MMDIkSolver*
+	{
+		if (MMDModelManagerObject* const model_manager = GetModelManager())
+		{
+			model_manager->EnsureStandaloneRuntimeManagers();
+			return model_manager->GetStandaloneIKSolver(GetBoneIndex());
+		}
+		return nullptr;
+	};
+	const auto invalidate_runtime = [this]()
+	{
+		if (MMDModelManagerObject* const model_manager = GetModelManager())
+			model_manager->InvalidateStandaloneRuntime();
+	};
+
 	switch (id[0].id)
 	{
+	case PMX_BONE_PHYSICS_AFTER_DEFORM:
+	{
+		const Bool result = SUPER::SetDParameter(node, id, t_data, flags);
+		RequestAppendExecutionOrderRefresh(node);
+		return result;
+	}
+	case PMX_BONE_INHERIT_BONE_PARENT_INDEX:
+	{
+		const Bool result = SUPER::SetDParameter(node, id, t_data, flags);
+		SyncInheritSourceLinkFromIndex(node, t_data.GetInt32());
+		RequestAppendExecutionOrderRefresh(node);
+		return result;
+	}
+	case PMX_BONE_INHERIT_BONE_PARENT_LINK:
+	{
+		const Bool result = SUPER::SetDParameter(node, id, t_data, flags);
+		SyncInheritSourceIndexFromLink(node, t_data);
+		RequestAppendExecutionOrderRefresh(node);
+		return result;
+	}
+	case PMX_BONE_ANIM_FRAME_ON:
+	{
+		const Bool result = SUPER::SetDParameter(node, id, t_data, flags);
+		SyncSplineFromSelection(node);
+		return result;
+	}
+	case PMX_BONE_ANIM_CURVE_TYPE:
+	{
+		const Bool result = SUPER::SetDParameter(node, id, t_data, flags);
+		SyncSplineFromSelection(node);
+		return result;
+	}
+	case PMX_BONE_ANIM_SPLINE:
+	{
+		GeData spline_data = t_data;
+		if (SplineData* const spline = GetSplineDataWritable(spline_data))
+			spline->SetUserCallback(MMDBoneTag::SplineDataCallBack, nullptr);
+		const Bool result = SUPER::SetDParameter(node, id, spline_data, flags);
+		StoreSplineToSelection(node);
+		return result;
+	}
 	case PMX_BONE_IK_GRP:
 		if (id.GetDepth() >= 2)
 		{
 			switch (id[1].id)
 			{
 			case PMX_BONE_IK_ITERATION:
-				if (ik_solver_)
-					ik_solver_->SetIterateCount(static_cast<uint32_t>(t_data.GetInt32()));
+				if (auto* const ik_solver = get_ik_solver())
+					ik_solver->SetIterateCount(static_cast<uint32_t>(t_data.GetInt32()));
 				return SUPER::SetDParameter(node, id, t_data, flags);
 			case PMX_BONE_IK_UNIT_ANGLE:
-				if (ik_solver_)
-					ik_solver_->SetLimitAngle(static_cast<float>(t_data.GetFloat()));
+				if (auto* const ik_solver = get_ik_solver())
+					ik_solver->SetLimitAngle(static_cast<float>(t_data.GetFloat()));
 				return SUPER::SetDParameter(node, id, t_data, flags);
 			case PMX_BONE_IK_TARGET_BONE_INDEX:
-				if (ik_solver_)
-				if (auto* mgr = GetBoneManager())
-				{
-					if (const BaseTag* target_tag = mgr->FindBone(t_data.GetInt32()))
-					{
-						if (auto* target_tag_node = target_tag->GetNodeData<MMDBoneTag>(); target_tag_node && target_tag_node->mmd_node_)
-							ik_solver_->SetTargetNode(target_tag_node->mmd_node_);
-					}
-				}
+				invalidate_runtime();
 				return SUPER::SetDParameter(node, id, t_data, flags);
 			default:
 				break;
@@ -1021,47 +2363,33 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	}
 case PMX_BONE_LAYER:
 	{
-		if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
-		{
-		if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
-		{
-			pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, t_data);
-			pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
-			bc->SetData(EXPRESSION_PRIORITY, priority);
-		}
-		}
-		break;
+		const Bool result = SUPER::SetDParameter(node, id, t_data, flags);
+		RequestAppendExecutionOrderRefresh(node);
+		return result;
 	}
 	case PMX_BONE_IK_ITERATION:
 	{
-		if (ik_solver_)
-			ik_solver_->SetIterateCount(static_cast<uint32_t>(t_data.GetInt32()));
+		if (auto* const ik_solver = get_ik_solver())
+			ik_solver->SetIterateCount(static_cast<uint32_t>(t_data.GetInt32()));
 		break;
 	}
 	case PMX_BONE_IK_UNIT_ANGLE:
 	{
-		if (ik_solver_)
-			ik_solver_->SetLimitAngle(static_cast<float>(t_data.GetFloat()));
+		if (auto* const ik_solver = get_ik_solver())
+			ik_solver->SetLimitAngle(static_cast<float>(t_data.GetFloat()));
 		break;
 	}
 	case PMX_BONE_IK_TARGET_BONE_INDEX:
 	{
-		if (ik_solver_)
-		if (auto* mgr = GetBoneManager())
-		{
-			if (const BaseTag* target_tag = mgr->FindBone(t_data.GetInt32()))
-			{
-				if (auto* target_tag_node = target_tag->GetNodeData<MMDBoneTag>(); target_tag_node && target_tag_node->mmd_node_)
-					ik_solver_->SetTargetNode(target_tag_node->mmd_node_);
-			}
-		}
+		invalidate_runtime();
 		break;
 	}
 	case PMX_BONE_IS_IK:
 	{
 		is_IK = t_data.GetBool();
-		if (ik_solver_)
-			ik_solver_->Enable(is_IK);
+		if (auto* const ik_solver = get_ik_solver())
+			ik_solver->Enable(is_IK);
+		invalidate_runtime();
 		const auto state = reinterpret_cast<BaseList2D*>(Get())->GetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), true);
 		if (is_IK)
 			reinterpret_cast<BaseList2D*>(Get())->SetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), ~DESCIDSTATE::HIDDEN & state);
@@ -1074,6 +2402,7 @@ case PMX_BONE_LAYER:
 	case PMX_BONE_INHERIT_TRANSLATION:
 	{
 		RefreshColor(node);
+		RequestAppendExecutionOrderRefresh(node);
 		break;
 	}
 	default:
@@ -1084,6 +2413,21 @@ case PMX_BONE_LAYER:
 
 SDK2024_GetDEnabling(MMDBoneTag)
 {
+	switch (id[0].id)
+	{
+	case PMX_BONE_ANIM_GRP:
+	case PMX_BONE_ANIM_FRAME_ON:
+	case PMX_BONE_ANIM_PREV_BTN:
+	case PMX_BONE_ANIM_NEXT_BTN:
+	case PMX_BONE_ANIM_ADD_BTN:
+	case PMX_BONE_ANIM_DEL_BTN:
+	case PMX_BONE_ANIM_CURVE_TYPE:
+	case PMX_BONE_ANIM_SPLINE:
+		return bone_mode_ == BONE_MODE_ANIM;
+	default:
+		break;
+	}
+
 	if (bone_mode_ != BONE_MODE_EDIT)
 		return false;
 
@@ -1137,6 +2481,107 @@ SDK2024_GetDEnabling(MMDBoneTag)
 		return true;
 	default:;
 	}
+	return true;
+}
+
+Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc)
+{
+	if (!op)
+		return false;
+
+	if (MMDBoneManagerObject* const mgr = GetBoneManager())
+		mgr->EnsureAppendExecutionOrder();
+
+	const auto* const self_tag = static_cast<BaseTag*>(Get());
+	const BaseContainer* const bc = self_tag ? self_tag->GetDataInstance() : nullptr;
+
+	const BoneAnimationSlotData* const slot = GetActiveAnimationSlotData();
+	Vector translation;
+	std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
+
+	if (slot && !slot->keyframes.IsEmpty())
+	{
+		const Float current_frame = static_cast<Float>(GetAnimationFrameFromDocument(doc));
+		if (slot->keyframes.GetCount() == 1 || current_frame <= slot->keyframes[0].frame)
+		{
+			const auto& key = slot->keyframes[0];
+			translation = Vector(key.translation.x, key.translation.y, key.translation.z);
+			rotation = NormalizeQuaternion({ key.rotation_x, key.rotation_y, key.rotation_z, key.rotation_w });
+		}
+		else if (current_frame >= slot->keyframes[slot->keyframes.GetCount() - 1].frame)
+		{
+			const auto& key = slot->keyframes[slot->keyframes.GetCount() - 1];
+			translation = Vector(key.translation.x, key.translation.y, key.translation.z);
+			rotation = NormalizeQuaternion({ key.rotation_x, key.rotation_y, key.rotation_z, key.rotation_w });
+		}
+		else
+		{
+			Int upper_index = 1;
+			while (upper_index < slot->keyframes.GetCount() && slot->keyframes[upper_index].frame <= current_frame)
+				++upper_index;
+
+			const auto interpolated = libmmd::InterpolateBoneKeys(
+				ToLibMMDKeyframe(slot->keyframes[upper_index - 1]),
+				ToLibMMDKeyframe(slot->keyframes[upper_index]),
+				current_frame);
+			translation = Vector(interpolated.translate.x(), interpolated.translate.y(), interpolated.translate.z());
+			rotation = NormalizeQuaternion({
+				interpolated.rotate.x(),
+				interpolated.rotate.y(),
+				interpolated.rotate.z(),
+				interpolated.rotate.w()
+			});
+		}
+	}
+
+	if (bc)
+	{
+		if (!bc->GetBool(PMX_BONE_TRANSLATABLE))
+			translation = Vector();
+		if (!bc->GetBool(PMX_BONE_ROTATABLE))
+			rotation = { 0.F, 0.F, 0.F, 1.F };
+	}
+
+	SetEvaluatedAnimationState(translation, rotation);
+	evaluated_append_animation_translation_ = Vector();
+	evaluated_append_animation_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+	evaluated_ik_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+
+	if (bc && (bc->GetBool(PMX_BONE_INHERIT_ROTATION) || bc->GetBool(PMX_BONE_INHERIT_TRANSLATION)))
+	{
+		const Float32 inherit_weight = maxon::SafeConvert<Float32>(bc->GetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE));
+		const Bool inherit_local = bc->GetBool(PMX_BONE_INHERIT_LOCAL);
+		if (BaseTag* const source_tag = ResolveInheritSourceBoneTag())
+		{
+			if (auto* const source_tag_node = source_tag->GetNodeData<MMDBoneTag>())
+			{
+				const Bool source_has_append_source = source_tag_node->ResolveInheritSourceBoneTag() != nullptr;
+
+				if (bc->GetBool(PMX_BONE_INHERIT_TRANSLATION))
+				{
+					const Vector source_translation = (inherit_local || !source_has_append_source)
+						? source_tag_node->evaluated_animation_translation_
+						: source_tag_node->evaluated_append_animation_translation_;
+					evaluated_append_animation_translation_ = source_translation * inherit_weight;
+				}
+
+				if (bc->GetBool(PMX_BONE_INHERIT_ROTATION))
+				{
+					const std::array<Float32, 4>& source_rotation = (inherit_local || !source_has_append_source)
+						? source_tag_node->evaluated_animation_rotation_
+						: source_tag_node->evaluated_append_animation_rotation_;
+					Eigen::Quaternionf append_rotation = ToEigenQuaternion(source_rotation);
+					append_rotation = ToEigenQuaternion(source_tag_node->evaluated_ik_rotation_) * append_rotation;
+					evaluated_append_animation_rotation_ = ToQuaternionArray(Eigen::Quaternionf::Identity().slerp(inherit_weight, append_rotation));
+				}
+			}
+		}
+	}
+
+	const Vector final_translation = evaluated_animation_translation_ + evaluated_append_animation_translation_;
+	const std::array<Float32, 4> final_rotation = ToQuaternionArray(
+		ToEigenQuaternion(evaluated_animation_rotation_) * ToEigenQuaternion(evaluated_append_animation_rotation_));
+	op->SetRelMl(BuildAnimationMatrix(final_translation, final_rotation));
 	return true;
 }
 
@@ -1226,26 +2671,20 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	if(!bone_object_)
 		bone_object_ = op;
 
-	if (bone_mode_ == BONE_MODE_EDIT)
-	{
-		const auto bc = tag->GetDataInstance();
-		if (!bc)
-			return EXECUTIONRESULT::OK;
+	UpdateHierarchyTopologyCache(op, true);
 
-		if (auto* mgr = GetBoneManager())
-			HandleBoneIndexUpdate(bc, reinterpret_cast<BaseObject*>(mgr->Get()));
-	}
-	else if (bone_mode_ == BONE_MODE_VMD && mmd_node_)
+	if (bone_mode_ == BONE_MODE_ANIM)
 	{
-		const auto& local = mmd_node_->GetLocalTransform();
-		const Eigen::Vector3f translate = local.col(3).head<3>() - mmd_node_->GetInitialTranslate();
-
-		bone_object_->SetRelMl(Matrix{Vector(translate.x(), translate.y(), translate.z()),
-		   Vector(local(0,0), local(1,0), local(2,0)),
-		   Vector(local(0,1), local(1,1), local(2,1)),
-		   Vector(local(0,2), local(1,2), local(2,2)) });
+		SyncSplineFromCurrentParametersIfNeeded(tag);
+		ApplyActiveAnimation(op, doc);
+		RunIKSolveAnimMode(op);
 	}
-	else if (bone_mode_ == BONE_MODE_ANIM && !bone_morph_data_arr_.IsEmpty())
+	else
+	{
+		ResetEvaluatedAnimationState();
+	}
+
+	if (bone_mode_ == BONE_MODE_ANIM && !bone_morph_data_arr_.IsEmpty())
 	{
 		GeData ge_data;
 		op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), ge_data, DESCFLAGS_GET::NONE);
@@ -1292,6 +2731,30 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	}
 	if (level >= 1)
 		IOReadField(bone_lock_protection_link_);
+	if (level >= 2)
+	{
+		IOReadField(active_animation_slot_);
+		if (!io_util::ReadLinearContainer(hf, bone_animation_slots_))
+			return false;
+	}
+	else
+	{
+		iferr(bone_animation_slots_.Resize(0))
+			return false;
+		active_animation_slot_ = -1;
+	}
+	if (!bone_animation_slots_.IsEmpty())
+		active_animation_slot_ = std::clamp(active_animation_slot_, -1, static_cast<Int32>(bone_animation_slots_.GetCount() - 1));
+	else
+		active_animation_slot_ = -1;
+	bone_manager_data_ = nullptr;
+	bone_object_ = nullptr;
+	hierarchy_parent_cache_ = nullptr;
+	hierarchy_pred_cache_ = nullptr;
+	hierarchy_manager_cache_ = nullptr;
+	is_syncing_inherit_source_ = false;
+	append_recursion_depth_ = 0;
+	ResetEvaluatedAnimationState();
 	return SUPER::Read(node, hf, level);
 }
 
@@ -1303,10 +2766,26 @@ SDK2024_Write(MMDBoneTag)
 	if (!io_util::WriteLinearContainer(hf, morph_arr_ref))
 		return false;
 	IOWriteField(bone_lock_protection_link_);
+	IOWriteField(active_animation_slot_);
+	const auto& animation_slots_ref = bone_animation_slots_;
+	if (!io_util::WriteLinearContainer(hf, animation_slots_ref))
+		return false;
 	return SUPER::Write(node, hf);
 }
 
 Int32 MMDBoneTag::GetBoneIndex() const
 {
-	return !mmd_node_ ? -1 : static_cast<Int32>(mmd_node_->GetIndex());
+	if (const auto* mgr = bone_manager_data_ ? bone_manager_data_ : const_cast<MMDBoneTag*>(this)->GetBoneManager())
+	{
+		if (const BaseTag* const tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get()))
+			return mgr->FindBoneIndex(tag);
+	}
+
+	if (const BaseTag* const tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get()))
+	{
+		if (const BaseContainer* const bc = tag->GetDataInstance())
+			return bc->GetString(PMX_BONE_INDEX).ToInt32(nullptr);
+	}
+
+	return -1;
 }

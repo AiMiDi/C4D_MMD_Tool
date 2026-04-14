@@ -152,27 +152,9 @@ namespace CMTToolsManager
 	{
 		LoadModelLog logger;
 
-		PMXModelPtr pmx_model;
-		if(setting.fn.CheckSuffix("pmx"_s))
-		{
-			pmx_model = std::make_shared<PMXModel>();
-		}
-		else
+		if (!setting.fn.CheckSuffix("pmx"_s))
 		{
 			LoadModelLog::LogReadFileErr();
-			return false;
-		}
-
-		if (!pmx_model)
-		{
-			LoadModelLog::LogOutMem();
-			return false;
-		}
-
-		static auto mmd_data_filepath = GeGetPluginResourcePath() + Filename("mikumikudance_data");
-		if (!GeFExist(mmd_data_filepath, true))
-		{
-			LoadModelLog::LogMMDDataPathErr();
 			return false;
 		}
 
@@ -193,17 +175,8 @@ namespace CMTToolsManager
 			return false;
 		}
 
-		static std::string mmd_data_path = string_util::GetStdString(mmd_data_filepath.GetString());
-		const std::string model_dir = string_util::GetStdString(setting.fn.GetDirectory().GetString());
-		if (!pmx_model->LoadPMX(pmx_file, model_dir, mmd_data_path))
-		{
-			GePrint(FormatString("LoadPMX failed for: @", setting.fn.GetString()));
-			LoadModelLog::LogLoadModelErr();
-			return false;
-		}
-
-		logger.Set(pmx_model, pmx_file, setting);
-		if (!CMTSceneManager::LoadPMXModel(pmx_file, pmx_model, setting))
+		logger.Set(pmx_file, setting);
+		if (!CMTSceneManager::LoadPMXModel(pmx_file, setting))
 		{
 			return false;
 		}

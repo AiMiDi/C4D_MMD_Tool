@@ -55,7 +55,6 @@ CONTAINER OMMDModelManager {
 			CYCLE {
 				MODEL_MODE_EDIT;
 				MODEL_MODE_ANIM;
-				MODEL_MODE_VMD;
 			}
 		}
 	}

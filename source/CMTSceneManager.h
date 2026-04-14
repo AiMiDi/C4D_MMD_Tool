@@ -88,10 +88,8 @@ struct LoadModelLog : IOLog
 	UInt bone_data_count = 0;
 	UInt morph_data_count = 0;
 
-	void Set(const MMDModelPtr& model, const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting);
+	void Set(const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting);
 	void LogOK();
-	static void LogMMDDataPathErr();
-	static void LogLoadModelErr();
 };
 
 struct SavePmxModelLog : IOLog
@@ -124,7 +122,7 @@ public:
 	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log, BaseObject* select_object = nullptr);
 	static Bool SaveVMDMotion(const CMTToolsSetting::MotionExport& setting,  libmmd::VMDFile&  data, SaveVmdMotionLog& log);
 
-	static BaseObject* LoadPMXModel(const libmmd::PMXFile& pmx_file, const PMXModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
+	static BaseObject* LoadPMXModel(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 	static BaseObject* SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::PMXFile& data);
 
 	void AddMMDCamera(SDK2024_Const BaseObject* camera);

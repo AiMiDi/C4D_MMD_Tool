@@ -10,11 +10,18 @@ Description:	MMD model object
 
 #pragma once
 
+#include <algorithm>
+#include <memory>
+#include <vector>
+
 #include <c4d.h>
 #include "module/core/cmt_marco.h"
 #include "CMTSceneManager.h"
 #include "description/OMMDModelManager.h"
 #include "module/tools/material/mmd_material.h"
+#include "libMMD/Model/MMD/MMDIkSolver.h"
+#include "libMMD/Model/MMD/MMDModel.h"
+#include "libMMD/Model/MMD/PMXFile.h"
 #include "maxon/pointerarray.h"
 #include "utils/images_user_area_util.hpp"
 
@@ -24,7 +31,39 @@ class MMDMeshManagerObject;
 class MMDRigidManagerObject;
 class MMDJointManagerObject;
 class MMDModelManagerObject;
+class C4DIKChainNodeAdapter;
 enum class MMDMorphType : uint8_t;
+
+class StandaloneIKManager
+{
+public:
+	using SolverPtr = std::unique_ptr<libmmd::MMDIkSolver>;
+
+	size_t GetIKSolverCount() const { return ik_solvers_.size(); }
+
+	size_t FindIKSolverIndex(const std::string& name) const
+	{
+		const auto it = std::find_if(ik_solvers_.begin(), ik_solvers_.end(), [&name](const SolverPtr& solver)
+		{
+			return solver && solver->GetName() == name;
+		});
+		return it == ik_solvers_.end() ? static_cast<size_t>(-1) : static_cast<size_t>(it - ik_solvers_.begin());
+	}
+
+	libmmd::MMDIkSolver* GetMMDIKSolver(const size_t index) const
+	{
+		return index < ik_solvers_.size() ? ik_solvers_[index].get() : nullptr;
+	}
+
+	libmmd::MMDIkSolver* AddIKSolver()
+	{
+		ik_solvers_.push_back(std::make_unique<libmmd::MMDIkSolver>());
+		return ik_solvers_.back().get();
+	}
+
+private:
+	std::vector<SolverPtr> ik_solvers_;
+};
 
 class EditorSubMorphDialog final : public GeDialog
 {
@@ -51,7 +90,8 @@ enum class MMDModelManagerObjectMsgType : uint8_t
 {
 	DEFAULT,
 	MANAGER_OBJECT_UPDATE,
-	MODEL_MODE_CHANGE
+	MODEL_MODE_CHANGE,
+	ACTIVE_ANIMATION_SLOT_CHANGE
 };
 
 struct MMDModelManagerObjectMsg
@@ -59,9 +99,10 @@ struct MMDModelManagerObjectMsg
 	MMDModelManagerObjectMsgType msg_type;
 	BaseObject* object;
 	Int32	model_mode;
+	Int32 active_animation_slot;
 
-	explicit MMDModelManagerObjectMsg(const MMDModelManagerObjectMsgType msg_type_ = MMDModelManagerObjectMsgType::DEFAULT, BaseObject* object_ = nullptr, const Int32 model_mode_ = MODEL_MODE_ANIM)
-		:msg_type(msg_type_), object(object_), model_mode(model_mode_) {}
+	explicit MMDModelManagerObjectMsg(const MMDModelManagerObjectMsgType msg_type_ = MMDModelManagerObjectMsgType::DEFAULT, BaseObject* object_ = nullptr, const Int32 model_mode_ = MODEL_MODE_ANIM, const Int32 active_animation_slot_ = -1)
+		:msg_type(msg_type_), object(object_), model_mode(model_mode_), active_animation_slot(active_animation_slot_) {}
 };
 
 enum class DisplayFrameTargetType : uint8_t
@@ -88,6 +129,16 @@ struct DisplayFrameData
 	Bool Read(HyperFile* hf);
 	Bool Write(HyperFile* hf) const;
 	Bool CopyTo(DisplayFrameData& dest) const;
+};
+
+struct AnimationSlotMetadata
+{
+	String name;
+	Int32 max_frame = 0;
+
+	Bool Read(HyperFile* hf);
+	Bool Write(HyperFile* hf) const;
+	Bool CopyTo(AnimationSlotMetadata& dest) const;
 };
 
 enum class MMDModelRootDynamicDescriptionType : uint8_t
@@ -124,8 +175,7 @@ class MMDModelManagerObject final : public ObjectData
 
 	Int32 animation_index_ = -1;
 	BaseContainer animation_items_;
-	maxon::BaseArray<std::pair<String, std::unique_ptr<libmmd::VMDAnimation>>> animations_;
-	maxon::BaseArray<std::pair<String, std::vector<uint8_t>>> pending_vmd_data_;
+	maxon::BaseArray<AnimationSlotMetadata> animation_slot_metadata_;
 
 	maxon::BaseArray<MMDMaterialData> material_list_;
 	Int32 material_selection_index_ = -1;
@@ -142,7 +192,11 @@ class MMDModelManagerObject final : public ObjectData
 	/// Parallel to IK dynamic checkboxes: reliable DescID -> libMMD solver index (HashMap<DescID> can collapse keys).
 	maxon::BaseArray<maxon::Pair<DescID, Int>> ik_solver_dynamic_params_;
 
-	MMDModelPtr mmd_model_;
+	std::unique_ptr<StandaloneIKManager> ik_manager_own_;
+	std::unique_ptr<libmmd::MMDPhysicsManager> physics_manager_own_;
+	std::vector<std::unique_ptr<C4DIKChainNodeAdapter>> physics_bone_pool_;
+	maxon::HashMap<Int32, C4DIKChainNodeAdapter*> physics_bone_adapters_;
+	maxon::BaseArray<Int32> physics_dynamic_bone_indices_;
 	Int32 model_mode_ = MODEL_MODE_ANIM;
 	BaseTime prev_time_{-1};
 	Float32 fps_{ 30.f };
@@ -191,7 +245,6 @@ public:
 	const maxon::PointerArray<IMorph>& GetMorphData();
 	const maxon::HashMap<String, Int>& GetMorphNameMap();
 
-	void SetMMDModel(const MMDModelPtr& model);
 	Bool CreateManagers();
 	Bool UpdateManagers(BaseObject* op = nullptr);
 	BaseObject* GetMeshManagerObject() const { return mesh_manager_ ? static_cast<BaseObject*>(mesh_manager_->ForceGetLink()) : nullptr; }
@@ -201,10 +254,16 @@ public:
 	MMDMeshManagerObject* GetMeshManagerData();
 	MMDRigidManagerObject* GetRigidManagerData();
 	MMDJointManagerObject* GetJointManagerData();
+	libmmd::MMDIkSolver* GetStandaloneIKSolver(Int32 bone_index) const;
+	C4DIKChainNodeAdapter* GetBoneAdapter(Int32 bone_index) const;
+	void SyncStandaloneBoneAdaptersFromScene(Bool reset_ik_rotation = true);
+	void ApplyStandaloneBoneAdaptersToScene() const;
+	void InvalidateStandaloneRuntime();
+	Bool EnsureStandaloneRuntimeManagers();
 
-	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const MMDModelPtr& pmx_model, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 	void ImportDisplayFrames(const libmmd::PMXFile& pmx_file);
-	void RebuildDisplayFrameUI();
+	void RefreshDisplayFrameUI();
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;
 
 	Bool AddMaterial(const libmmd::PMXMaterial& pmx_material, BaseMaterial* c4d_material,
@@ -233,11 +292,21 @@ private:
 	Bool CopyMorph(MMDModelManagerObject* dst) const;
 	Bool AddMorphStrengthKeyframe(const String& morph_name, const BaseTime& key_time, Float weight);
 	Bool DeleteVMDAnimation();
-	Bool RebuildRuntime();
+	Bool BuildStandaloneIKManager();
+	Bool BuildStandalonePhysics();
+	Bool BuildStandaloneBoneAdapters();
+	void ResetStandalonePhysics();
+	void StepStandalonePhysics(Float elapsed);
+	void ApplyPhysicsResultsToBoneObjects() const;
 	void BuildIKSolverUI();
 	void ApplyIKSolverStates();
 	void ApplyIKSolverFromParameters(BaseObject* op);
 	void ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting);
+	Bool EnsureAnimationSlotCount(Int32 slot_count);
+	Bool SetAnimationSlotMetadata(Int32 slot_index, const String& name, Int32 max_frame);
+	void RefreshAnimationSlotItems();
+	Int32 GetAnimationSlotMaxFrame(Int32 slot_index) const;
+	void ApplyAnimationSlotSelection(BaseDocument* doc);
 	void StripIKSolverDynamicUI();
 	void SyncIKSolverDynamicParamsFromDescMap();
 	void SyncSubManagerScale(Float pm);

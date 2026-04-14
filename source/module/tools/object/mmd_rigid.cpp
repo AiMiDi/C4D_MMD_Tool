@@ -19,6 +19,15 @@ Description:	C4D MMD rigid object
 #endif
 #include "libMMD/Model/MMD/MMDPhysics.h"
 
+namespace
+{
+	Int32 NormalizeRigidMode(const Int32 mode)
+	{
+		constexpr Int32 kLegacyRigidModeVmd = 2;
+		return mode == kLegacyRigidModeVmd ? RIGID_MODE_ANIM : mode;
+	}
+}
+
 MMDRigidManagerObject* MMDRigidObject::GetRigidManager() const
 {
 	if (!rigid_manager_data_)
@@ -252,7 +261,7 @@ Bool MMDRigidObject::SetDParameter(GeListNode* node, const DescID& id, const GeD
 	if (!SUPER::SetDParameter(node, id, t_data, flags))
 		return false;
 
-	const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
 	if(!bc)
 		return true;
 	switch (id[0].id)
@@ -557,7 +566,7 @@ Bool MMDRigidObject::AddToExecution(BaseObject* op, PriorityList* list)
 
 Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
-	const BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+	BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
 	if (!bc)
 	{
 		return false;
@@ -569,6 +578,8 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(m_rigid_shape_type);
 	IOReadField(m_rigid_group_id);
 	IOReadField(rigid_manager_link_);
+	m_rigid_mode = NormalizeRigidMode(m_rigid_mode);
+	bc->SetInt32(RIGID_MODE, NormalizeRigidMode(bc->GetInt32(RIGID_MODE)));
 
 	UpdateRigidPhysics(m_physics_mode);
 	UpdateRigidShape(bc, m_rigid_shape_type);
@@ -614,6 +625,7 @@ NodeData* MMDRigidObject::Alloc()
 
 void MMDRigidObject::HandleRigidModeChange(Int32 mode)
 {
+	mode = NormalizeRigidMode(mode);
 	if (m_rigid_mode == mode)
 		return;
 

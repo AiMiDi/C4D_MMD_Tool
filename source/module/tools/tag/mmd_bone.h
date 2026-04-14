@@ -10,15 +10,23 @@ Description:	DESC
 
 #pragma once
 
+#include <array>
+#include <string>
+#include <vector>
+
 #include <c4d.h>
 #include "module/core/cmt_marco.h"
 #include "description/OMMDBoneManager.h"
+#include "libMMD/Model/MMD/IMMDNode.h"
+#include "maxon/basearray.h"
 #include "maxon/pointerarray.h"
 
 namespace libmmd { class MMDIkSolver; }
 
 class MMDBoneManagerObject;
+class MMDModelManagerObject;
 struct MMDBoneManagerObjectMsg;
+class MMDBoneTag;
 
 namespace CMTToolsSetting
 {
@@ -47,10 +55,52 @@ struct BoneMorphTagData
 	Bool Read(HyperFile* hf);
 };
 
+struct BoneAnimationBezierData
+{
+	UChar ax = 20;
+	UChar ay = 20;
+	UChar bx = 107;
+	UChar by = 107;
+
+	Bool Write(HyperFile* hf) SDK2024_Const;
+	Bool Read(HyperFile* hf);
+};
+
+struct BoneAnimationKeyframeData
+{
+	Int32 frame = 0;
+	Vector32 translation = Vector32(0.F, 0.F, 0.F);
+	Float32 rotation_x = 0.F;
+	Float32 rotation_y = 0.F;
+	Float32 rotation_z = 0.F;
+	Float32 rotation_w = 1.F;
+	BoneAnimationBezierData translate_x;
+	BoneAnimationBezierData translate_y;
+	BoneAnimationBezierData translate_z;
+	BoneAnimationBezierData rotation;
+
+	Bool Write(HyperFile* hf) SDK2024_Const;
+	Bool Read(HyperFile* hf);
+};
+
+struct BoneAnimationSlotData
+{
+	maxon::BaseArray<BoneAnimationKeyframeData> keyframes;
+
+	BoneAnimationSlotData() = default;
+	BoneAnimationSlotData(const BoneAnimationSlotData& other);
+	BoneAnimationSlotData& operator=(const BoneAnimationSlotData& other);
+	BoneAnimationSlotData(BoneAnimationSlotData&&) noexcept = default;
+	BoneAnimationSlotData& operator=(BoneAnimationSlotData&&) noexcept = default;
+
+	Bool Write(HyperFile* hf) SDK2024_Const;
+	Bool Read(HyperFile* hf);
+};
+
 enum class MMDBoneTagMsgType : int8_t
 {
 	DEFAULT = -1,
-	BONE_INDEX_CHANGE,
+	BONE_HIERARCHY_DIRTY,
 	BONE_MORPH_ADD,
 	BONE_MORPH_DELETE,
 	BONE_MORPH_RENAME
@@ -75,6 +125,46 @@ public:
 	MMDBoneTagMsg(MMDBoneTagMsg&&) = delete; void operator =(MMDBoneTagMsg&&) = delete;
 };
 
+class C4DIKChainNodeAdapter final : public libmmd::IMMDNode
+{
+public:
+	C4DIKChainNodeAdapter() = default;
+
+	void SetupFromBone(BaseObject* bone_object, MMDBoneTag* bone_tag, std::string name);
+	void SetParentAdapter(C4DIKChainNodeAdapter* parent);
+	void ClearChildren();
+	void AddChildAdapter(C4DIKChainNodeAdapter* child);
+	void UpdateInitialGlobalTransform();
+	void SyncCurrentTransformsFromBoneObject(Bool reset_ik_rotation = true);
+	void ApplyLocalToBoneObject() const;
+	Int32 GetBoneIndex() const;
+
+	const std::string& GetName() const override { return name_; }
+	void SetGlobalTransform(const Eigen::Matrix4f& m) override;
+	const Eigen::Matrix4f& GetGlobalTransform() const override { return global_transform_; }
+	const Eigen::Matrix4f& GetInitialGlobalTransform() const override { return initial_global_transform_; }
+	const Eigen::Matrix4f& GetLocalTransform() const override { return local_transform_; }
+	void SetIKRotate(const Eigen::Quaternionf& ikr) override { ik_rotation_ = ikr; }
+	const Eigen::Quaternionf& GetIKRotate() const override { return ik_rotation_; }
+	Eigen::Quaternionf AnimateRotate() const override { return animate_rotation_; }
+	void UpdateLocalTransform() override;
+	void UpdateGlobalTransform() override;
+	C4DIKChainNodeAdapter* GetParent() const override { return parent_; }
+
+private:
+	std::string name_;
+	BaseObject* bone_object_ = nullptr;
+	MMDBoneTag* bone_tag_ = nullptr;
+	C4DIKChainNodeAdapter* parent_ = nullptr;
+	std::vector<C4DIKChainNodeAdapter*> children_;
+	Eigen::Matrix4f initial_global_transform_ = Eigen::Matrix4f::Identity();
+	Eigen::Matrix4f global_transform_ = Eigen::Matrix4f::Identity();
+	Eigen::Matrix4f local_transform_ = Eigen::Matrix4f::Identity();
+	Eigen::Vector3f animate_translation_ = Eigen::Vector3f::Zero();
+	Eigen::Quaternionf animate_rotation_ = Eigen::Quaternionf::Identity();
+	Eigen::Quaternionf ik_rotation_ = Eigen::Quaternionf::Identity();
+};
+
 /**
  * @class MMDBoneTag
  * @brief This class represents a bone tag used in the MMDTool module.
@@ -85,22 +175,24 @@ public:
  */
 class MMDBoneTag final : public TagData
 {
-	// Bone MMD node
-	libmmd::MMDNode* mmd_node_ = nullptr;
-	// IK solver (non-null only for IK bones)
-	libmmd::MMDIkSolver* ik_solver_ = nullptr;
 	// Bone manager link (persistent cache)
 	AutoAlloc<BaseLink> bone_manager_link_;
 	// Bone manager ObjectData (runtime cache)
 	MMDBoneManagerObject* bone_manager_data_ = nullptr;
 	// Corresponding bone object
 	BaseObject* bone_object_ = nullptr;
+	// Runtime topology cache for hierarchy dirty detection.
+	BaseObject* hierarchy_parent_cache_ = nullptr;
+	BaseObject* hierarchy_pred_cache_ = nullptr;
+	BaseObject* hierarchy_manager_cache_ = nullptr;
 	// Serialized link to the Protection tag used for PMX lock (distinct from user-added Tprotection).
 	AutoAlloc<BaseLink> bone_lock_protection_link_;
 	// Bone mode
 	Int32 bone_mode_ = BONE_MODE_ANIM;
 	// Is IK
 	Bool is_IK = false;
+	// Guards inherit source parameter synchronization between index/link fields.
+	Bool is_syncing_inherit_source_ = false;
 
 	// Bone morph data
 	Int32 bone_morph_name_index_ = 0;
@@ -109,7 +201,20 @@ class MMDBoneTag final : public TagData
 	Vector prev_position_;
 	Vector prev_rotation_;
 
+	// Bone animation data, stored per animation slot.
+	maxon::BaseArray<BoneAnimationSlotData> bone_animation_slots_;
+	Int32 active_animation_slot_ = -1;
+	Vector evaluated_animation_translation_ = Vector();
+	std::array<Float32, 4> evaluated_animation_rotation_ { 0.F, 0.F, 0.F, 1.F };
+	Vector evaluated_append_animation_translation_ = Vector();
+	std::array<Float32, 4> evaluated_append_animation_rotation_ { 0.F, 0.F, 0.F, 1.F };
+	std::array<Float32, 4> evaluated_ik_rotation_ { 0.F, 0.F, 0.F, 1.F };
+	Int32 append_recursion_depth_ = 0;
+	Int32 ui_animation_frame_cache_ = NOTOK;
+	Int32 ui_animation_curve_type_cache_ = NOTOK;
+
 	friend class MMDBoneManagerObject;
+	friend class C4DIKChainNodeAdapter;
 
 public:
 	MMDBoneTag(const MMDBoneTag&) = delete; void operator =(const MMDBoneTag&) = delete;
@@ -139,6 +244,7 @@ public:
 	 * @return true if initialization is successful, false otherwise.
 	 */
 	SDK2024_InitOverride;
+	SDK2024_CopyToOverride;
 
 	/**
 	 * @brief Handles messages sent to the MMDBoneTag.
@@ -216,9 +322,46 @@ public:
 	Int32 AddBoneMorph(String morph_name = {});
 	Bool SetBoneMorphTranslationNoCheck(Int32 id, Vector translation);
 	Bool SetBoneMorphRotationNoCheck(Int32 id, Vector rotation);
+	static Bool SplineDataCallBack(Int32 cid, const void* data);
+	Bool EnsureAnimationSlotCount(Int32 slot_count);
+	Bool ReplaceAnimationSlot(Int32 slot_index, const maxon::BaseArray<BoneAnimationKeyframeData>& keyframes);
+	void ClearAnimationSlot(Int32 slot_index);
+	void ClearAllAnimationSlots();
+	Bool CopyAnimationSlot(Int32 slot_index, maxon::BaseArray<BoneAnimationKeyframeData>& keyframes) const;
+	void SetActiveAnimationSlot(Int32 slot_index);
+	Int32 GetActiveAnimationSlot() const { return active_animation_slot_; }
+	Int32 GetAnimationSlotCount() const { return static_cast<Int32>(bone_animation_slots_.GetCount()); }
+	Int32 GetMaxAnimationFrame(Int32 slot_index) const;
 
 private:
 	void HandleBoneMorphButtonCommand(const DescID& desc_id);
+	Bool InitAnimationSpline(GeListNode* node = nullptr);
+	Bool SyncSplineFromSelection(GeListNode* node);
+	Bool SyncSplineFromCurrentParametersIfNeeded(GeListNode* node = nullptr);
+	Bool StoreSplineToSelection(GeListNode* node);
+	Bool NavigateAnimationKeyframe(GeListNode* node, BaseDocument* doc, Bool forward);
+	Bool AddAnimationKeyframeFromCurrentPose(GeListNode* node, BaseDocument* doc);
+	Bool DeleteAnimationKeyframeAtCurrentFrame(GeListNode* node, BaseDocument* doc);
+	void RefreshAnimationMarkerTracks(GeListNode* node);
+	void InvalidateAnimationUICache();
+	BoneAnimationSlotData* EnsureAnimationSlot(Int32 slot_index);
+	BoneAnimationSlotData* GetAnimationSlot(Int32 slot_index);
+	const BoneAnimationSlotData* GetAnimationSlot(Int32 slot_index) const;
+	BoneAnimationSlotData* GetActiveAnimationSlotData();
+	const BoneAnimationSlotData* GetActiveAnimationSlotData() const;
+	BoneAnimationKeyframeData* FindAnimationKeyframe(BoneAnimationSlotData& slot, Int32 frame);
+	const BoneAnimationKeyframeData* FindAnimationKeyframe(const BoneAnimationSlotData& slot, Int32 frame) const;
+	Int32 FindAnimationKeyframeIndex(const BoneAnimationSlotData& slot, Int32 frame) const;
+	void ResetEvaluatedAnimationState();
+	void SetEvaluatedAnimationState(const Vector& translation, const std::array<Float32, 4>& rotation);
+	void SetAppendRecursionDepth(Int32 depth);
+	void RefreshExecutionPriority(GeListNode* node = nullptr);
+	Bool ApplyActiveAnimation(BaseObject* op, BaseDocument* doc);
+	Bool RunIKSolveAnimMode(BaseObject* op);
+	BaseTag* ResolveInheritSourceBoneTag() const;
+	void SyncInheritSourceIndexFromLink(GeListNode* node, const GeData& link_data);
+	void SyncInheritSourceLinkFromIndex(GeListNode* node, Int32 bone_index);
+	void RequestAppendExecutionOrderRefresh(GeListNode* node = nullptr);
 	/**
 	 * @brief Creates a bone lock tag for the MMDBoneTag.
 	 * @return true if the bone lock tag is created successfully, false otherwise.
@@ -245,10 +388,13 @@ private:
 	void HandleDescriptionUpdate(GeListNode* node, BaseContainer* bc, Int32 id);
 
 	MMDBoneManagerObject* GetBoneManager();
+	MMDModelManagerObject* GetModelManager();
+	bool UpdateHierarchyTopologyCache(BaseObject* bone_object, Bool notify_managers);
+	void NotifyHierarchyDirty(BaseObject* previous_manager_object, BaseObject* current_manager_object) const;
 
 	void HandleBoneModeChange(Int32 bone_mode);
 
-	void RebuildIKChains();
+	void BuildStandaloneIKChains();
 
 	/**
 	 * @brief Sets the rotation lock for the MMDBoneTag.
@@ -272,15 +418,4 @@ private:
 	 * @param[in] msg The MMDBoneRootObjectMsg containing the root object message.
 	 */
 	void SetBoneDisplay(const BaseContainer* data_instance_bc, const MMDBoneManagerObjectMsg* msg) const;
-
-	/**
-	 * @brief Updates the bone root for the MMDBoneTag.
-	 *
-	 * This function is responsible for updating the bone root properties based on
-	 * the provided data instance and root object message.
-	 *
-	 * @param[in] bc The BaseContainer containing the data instance.
-	 * @param[in] bone_manager_object The MMDBoneRootObjectMsg containing the root object message.
-	 */
-	void HandleBoneIndexUpdate(BaseContainer* bc, BaseObject* bone_manager_object) const;
 };
