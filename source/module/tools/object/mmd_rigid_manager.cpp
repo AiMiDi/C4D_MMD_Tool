@@ -9,6 +9,7 @@ Description:	MMD rigid root object
 **************************************************************************/
 
 #include "plugin_resource.h"
+#include "mmd_bone.h"
 #include "mmd_model_manager.h"
 #include "mmd_rigid_manager.h"
 #include "mmd_bone_manager.h"
@@ -22,6 +23,22 @@ namespace
 	{
 		constexpr Int32 kLegacyRigidModeVmd = 2;
 		return mode == kLegacyRigidModeVmd ? RIGID_MODE_ANIM : mode;
+	}
+
+	Int32 ResolveImportedBoneIndex(const maxon::BaseArray<BaseObject*>& bone_list, MMDBoneManagerObject* bone_manager, const Int32 imported_index)
+	{
+		if (imported_index < 0)
+			return imported_index;
+		if (imported_index >= bone_list.GetCount())
+			return imported_index;
+
+		BaseObject* const imported_bone_object = bone_list[imported_index];
+		BaseTag* const imported_bone_tag = imported_bone_object ? imported_bone_object->GetTag(g_mmd_bone_tag_id) : nullptr;
+		if (!imported_bone_tag || !bone_manager)
+			return imported_index;
+
+		const Int32 current_index = bone_manager->FindBoneIndex(imported_bone_tag);
+		return current_index >= 0 ? current_index : imported_index;
 	}
 }
 
@@ -266,10 +283,11 @@ namespace
 	}
 }
 
-Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting)
+Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting)
 {
 	rigid_items_.FlushAll();
 	rigid_items_.SetString(-1, "-"_s);
+	MMDBoneManagerObject* const bone_manager = GetBoneManagerData();
 
 	const auto rigid_count = pmx_file.m_rigidbodies.size();
 	for (size_t rigid_index = 0; rigid_index < rigid_count; ++rigid_index)
@@ -291,7 +309,8 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 		SetRigidParameter<RIGID_NAME_IS>(rigid_object, setting.import_english);
 
 		SetRigidParameter<RIGID_GROUP_ID>(rigid_object, pmx_rigidbody.m_group);
-		SetRigidParameter<RIGID_RELATED_BONE_INDEX>(rigid_object, pmx_rigidbody.m_boneIndex);
+		SetRigidParameter<RIGID_RELATED_BONE_INDEX>(rigid_object,
+			ResolveImportedBoneIndex(bone_list, bone_manager, pmx_rigidbody.m_boneIndex));
 		SetRigidParameter<RIGID_PHYSICS_MODE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_op));
 		SetRigidParameter<RIGID_SHAPE_TYPE>(rigid_object, static_cast<uint8_t>(pmx_rigidbody.m_shape));
 
@@ -304,6 +323,7 @@ Bool MMDRigidManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 		SetRigidParameter<RIGID_SHAPE_POSITION_X>(rigid_object, translate.x());
 		SetRigidParameter<RIGID_SHAPE_POSITION_Y>(rigid_object, translate.y());
 		SetRigidParameter<RIGID_SHAPE_POSITION_Z>(rigid_object, translate.z());
+		rigid_object->SetRelPos(Vector(translate.x(), translate.y(), translate.z()));
 
 		SetRigidParameter<RIGID_SHAPE_ROTATION_X>(rigid_object, pmx_rigidbody.m_rotate.x());
 		SetRigidParameter<RIGID_SHAPE_ROTATION_Y>(rigid_object, pmx_rigidbody.m_rotate.y());
@@ -351,7 +371,7 @@ Bool MMDRigidManagerObject::BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager
 
 	const auto op = reinterpret_cast<BaseObject*>(Get());
 	Int32 created = 0;
-	Int32 skipped_unbound = 0;
+	Int32 unbound = 0;
 	Int32 failed = 0;
 
 	std::vector<std::pair<Int32, BaseObject*>> sorted_children;
@@ -420,13 +440,7 @@ Bool MMDRigidManagerObject::BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager
 		auto* rb = physics_manager->AddRigidBody();
 		libmmd::IMMDNode* const node = get_node ? get_node(pmx_rigidbody.m_boneIndex) : nullptr;
 		if (node == nullptr)
-		{
-			++skipped_unbound;
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT] BuildStandaloneRigidBodies[@]: skipped unbound rigid body, name='@' boneIndex=@",
-				rigid_index, child->GetName(), pmx_rigidbody.m_boneIndex);
-			continue;
-		}
+			++unbound;
 
 		if (!rb->Create(pmx_rigidbody, node))
 		{
@@ -438,14 +452,23 @@ Bool MMDRigidManagerObject::BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager
 		}
 
 		++created;
+		if (created <= 3)
+		{
+			const auto transform = rb->GetTransform();
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+				"[CMT] BuildStandaloneRigidBodies[@]: name='@' boneIndex=@ bodyOff=(@,@,@) shapeOff=(@,@,@)",
+				rigid_index, child->GetName(), pmx_rigidbody.m_boneIndex,
+				transform(0, 3), transform(1, 3), transform(2, 3),
+				pmx_rigidbody.m_translate.x(), pmx_rigidbody.m_translate.y(), pmx_rigidbody.m_translate.z());
+		}
 	}
 
 	if (!UpdateRigidList())
 		return false;
 
 	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT] BuildStandaloneRigidBodies: total=@ created=@ skipped_unbound=@ failed=@",
-		sorted_children.size(), created, skipped_unbound, failed);
+		"[CMT] BuildStandaloneRigidBodies: total=@ created=@ unbound=@ failed=@",
+		sorted_children.size(), created, unbound, failed);
 	return true;
 }
 

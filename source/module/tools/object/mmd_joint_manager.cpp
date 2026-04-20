@@ -201,10 +201,12 @@ Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file,
 		SetJointParameter<JOINT_ATTITUDE_POSITION_X>(joint_object, pmx_joint.m_translate.x());
 		SetJointParameter<JOINT_ATTITUDE_POSITION_Y>(joint_object, pmx_joint.m_translate.y());
 		SetJointParameter<JOINT_ATTITUDE_POSITION_Z>(joint_object, pmx_joint.m_translate.z());
+		joint_object->SetRelPos(Vector(pmx_joint.m_translate.x(), pmx_joint.m_translate.y(), pmx_joint.m_translate.z()));
 
 		SetJointParameter<JOINT_ATTITUDE_ROTATION_X>(joint_object, pmx_joint.m_rotate.x());
 		SetJointParameter<JOINT_ATTITUDE_ROTATION_Y>(joint_object, pmx_joint.m_rotate.y());
 		SetJointParameter<JOINT_ATTITUDE_ROTATION_Z>(joint_object, pmx_joint.m_rotate.z());
+		joint_object->SetRelRot(Vector(pmx_joint.m_rotate.x(), pmx_joint.m_rotate.y(), pmx_joint.m_rotate.z()));
 
 		SetJointParameter<JOINT_PARAMETER_POSITION_X_MIN>(joint_object, pmx_joint.m_translateLowerLimit.x());
 		SetJointParameter<JOINT_PARAMETER_POSITION_Y_MIN>(joint_object, pmx_joint.m_translateLowerLimit.y());
@@ -374,6 +376,19 @@ Bool MMDJointManagerObject::BuildStandaloneJoints(libmmd::MMDPhysicsManager* phy
 		else
 		{
 			++created;
+			if (created <= 3)
+			{
+				const auto joint_transform = jt->GetTransform();
+				const auto body_transform_a = rbA->GetTransform();
+				const auto body_transform_b = rbB->GetTransform();
+				DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+					"[CMT] BuildStandaloneJoints[@]: name='@' jointOff=(@,@,@) rigidAOff=(@,@,@) rigidBOff=(@,@,@) paramOff=(@,@,@)",
+					joint_index, child->GetName(),
+					joint_transform(0, 3), joint_transform(1, 3), joint_transform(2, 3),
+					body_transform_a(0, 3), body_transform_a(1, 3), body_transform_a(2, 3),
+					body_transform_b(0, 3), body_transform_b(1, 3), body_transform_b(2, 3),
+					translate.x(), translate.y(), translate.z());
+			}
 		}
 	}
 

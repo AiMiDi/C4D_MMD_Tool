@@ -136,11 +136,13 @@ public:
 	void AddChildAdapter(C4DIKChainNodeAdapter* child);
 	void UpdateInitialGlobalTransform();
 	void SyncCurrentTransformsFromBoneObject(Bool reset_ik_rotation = true);
+	void GetCurrentRelativeState(Vector& translation, std::array<Float32, 4>& rotation) const;
 	void ApplyLocalToBoneObject() const;
 	Int32 GetBoneIndex() const;
 
 	const std::string& GetName() const override { return name_; }
 	void SetGlobalTransform(const Eigen::Matrix4f& m) override;
+	void SyncLocalTransformFromGlobal();
 	const Eigen::Matrix4f& GetGlobalTransform() const override { return global_transform_; }
 	const Eigen::Matrix4f& GetInitialGlobalTransform() const override { return initial_global_transform_; }
 	const Eigen::Matrix4f& GetLocalTransform() const override { return local_transform_; }
@@ -157,6 +159,7 @@ private:
 	MMDBoneTag* bone_tag_ = nullptr;
 	C4DIKChainNodeAdapter* parent_ = nullptr;
 	std::vector<C4DIKChainNodeAdapter*> children_;
+	Eigen::Matrix4f initial_local_transform_ = Eigen::Matrix4f::Identity();
 	Eigen::Matrix4f initial_global_transform_ = Eigen::Matrix4f::Identity();
 	Eigen::Matrix4f global_transform_ = Eigen::Matrix4f::Identity();
 	Eigen::Matrix4f local_transform_ = Eigen::Matrix4f::Identity();
@@ -209,12 +212,22 @@ class MMDBoneTag final : public TagData
 	Vector evaluated_append_animation_translation_ = Vector();
 	std::array<Float32, 4> evaluated_append_animation_rotation_ { 0.F, 0.F, 0.F, 1.F };
 	std::array<Float32, 4> evaluated_ik_rotation_ { 0.F, 0.F, 0.F, 1.F };
+	Vector runtime_playback_override_translation_ = Vector();
+	std::array<Float32, 4> runtime_playback_override_rotation_ { 0.F, 0.F, 0.F, 1.F };
+	Bool has_runtime_playback_override_ = false;
+	Int32 runtime_playback_override_frame_ = NOTOK;
+	Int32 last_prephysics_frame_ = NOTOK;
+	Int32 last_ik_solve_frame_ = NOTOK;
+	Bool skip_prephysics_scene_write_ = false;
+	Bool ik_overridden_this_frame_ = false;
 	Int32 append_recursion_depth_ = 0;
 	Int32 ui_animation_frame_cache_ = NOTOK;
 	Int32 ui_animation_curve_type_cache_ = NOTOK;
 
 	friend class MMDBoneManagerObject;
 	friend class C4DIKChainNodeAdapter;
+	friend class MMDRigidObject;
+	friend class MMDModelManagerObject;
 
 public:
 	MMDBoneTag(const MMDBoneTag&) = delete; void operator =(const MMDBoneTag&) = delete;
@@ -354,14 +367,23 @@ private:
 	Int32 FindAnimationKeyframeIndex(const BoneAnimationSlotData& slot, Int32 frame) const;
 	void ResetEvaluatedAnimationState();
 	void SetEvaluatedAnimationState(const Vector& translation, const std::array<Float32, 4>& rotation);
+	void GetEvaluatedAnimatedLocalState(Vector& translation, std::array<Float32, 4>& rotation) const;
+	void BeginPrephysicsFrame(Int32 frame);
+	void MarkPrephysicsSceneWriteSkipped(Int32 frame);
+	Bool ShouldSkipPrephysicsSceneWrite(Int32 frame) const;
+	Bool HasRecentPlaybackRuntimeOverride(Int32 frame) const;
+	void ClearPlaybackRuntimeOverride();
+	void SetPlaybackRuntimeOverride(Int32 frame, const Vector& translation, const std::array<Float32, 4>& rotation);
+	Bool GetPlaybackRuntimeOverride(Vector& translation, std::array<Float32, 4>& rotation) const;
 	void SetAppendRecursionDepth(Int32 depth);
 	void RefreshExecutionPriority(GeListNode* node = nullptr);
-	Bool ApplyActiveAnimation(BaseObject* op, BaseDocument* doc);
-	Bool RunIKSolveAnimMode(BaseObject* op);
+	Bool ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, Bool apply_to_scene = true);
+	Bool RunIKSolveAnimMode(BaseObject* op, Bool mark_prephysics_chain = true);
 	BaseTag* ResolveInheritSourceBoneTag() const;
 	void SyncInheritSourceIndexFromLink(GeListNode* node, const GeData& link_data);
 	void SyncInheritSourceLinkFromIndex(GeListNode* node, Int32 bone_index);
 	void RequestAppendExecutionOrderRefresh(GeListNode* node = nullptr);
+	void MarkPrephysicsIKChainUpdated(Int32 frame);
 	/**
 	 * @brief Creates a bone lock tag for the MMDBoneTag.
 	 * @return true if the bone lock tag is created successfully, false otherwise.

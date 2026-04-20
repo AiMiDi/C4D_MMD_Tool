@@ -16,6 +16,7 @@ Description:	C4D MMD joint object
 #include "c4d_customgui/customgui_iconchooser.h"
 #endif
 #include "description/OMMDJoint.h"
+#include "customgui_priority.h"
 #include "module/tools/object/mmd_bone_manager.h"
 #include "module/tools/object/mmd_joint_manager.h"
 #include "module/tools/object/mmd_rigid_manager.h"
@@ -27,6 +28,48 @@ namespace
 	{
 		constexpr Int32 kLegacyJointModeVmd = 2;
 		return mode == kLegacyJointModeVmd ? JOINT_MODE_ANIM : mode;
+	}
+
+	void MarkSceneTransformDirty(BaseObject* object)
+	{
+		if (!object)
+			return;
+
+		object->Touch();
+		object->SetDirty(DIRTYFLAGS::MATRIX | DIRTYFLAGS::DATA);
+		object->Message(MSG_UPDATE);
+	}
+
+	Matrix BuildJointMatrix(const Eigen::Matrix4f& transform)
+	{
+		Matrix matrix{
+			Vector(transform(0, 3), transform(1, 3), transform(2, 3)),
+			Vector(transform(0, 0), transform(1, 0), transform(2, 0)),
+			Vector(transform(0, 1), transform(1, 1), transform(2, 1)),
+			Vector(transform(0, 2), transform(1, 2), transform(2, 2))
+		};
+		matrix.sqmat = matrix.sqmat.GetNormalized();
+		return matrix;
+	}
+
+	void ConfigureJointExecutionPriority(GeListNode* node)
+	{
+		if (!node)
+			return;
+
+		BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
+		if (!bc)
+			return;
+
+		if (GeData priority; node->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
+		{
+			if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
+			{
+				pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
+				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 5300);
+				bc->SetData(EXPRESSION_PRIORITY, priority);
+			}
+		}
 	}
 }
 
@@ -69,6 +112,7 @@ SDK2024_Init(MMDJointObject)
 	bc->SetInt32(JOINT_LINK_RIGID_A_INDEX, -1);
 	bc->SetInt32(JOINT_LINK_RIGID_B_INDEX, -1);
 	bc->SetInt32(JOINT_ATTITUDE_USE_BONE_INDEX, -1);
+	ConfigureJointExecutionPriority(node);
 
 	return SDK2024_SuperInit;
 }
@@ -328,7 +372,7 @@ DRAWRESULT MMDJointObject::Draw(BaseObject* op, const DRAWPASS drawpass, BaseDra
 		}
 		if (const BaseContainer* bc = op->GetDataInstance(); bc)
 		{
-			auto m = op->GetMg();
+			Matrix m = op->GetMg();
 			m.sqmat = m.sqmat.GetNormalized();
 			bd->SetMatrix_Matrix(nullptr, m);
 			switch (display_type_)
@@ -381,14 +425,10 @@ EXECUTIONRESULT MMDJointObject::Execute(BaseObject* op, BaseDocument* doc, BaseT
 	{
 		HandleJointIndexUpdate(op);
 	}
-	else if (joint_mode_ == JOINT_MODE_ANIM && display_type_ != JOINT_DISPLAY_TYPE_OFF && mmd_joint_)
+	else if (joint_mode_ == JOINT_MODE_ANIM && mmd_joint_)
 	{
-		const auto transform = mmd_joint_->GetTransform();
-		op->SetRelMl(Matrix{
-			Vector(transform(0,3),transform(1,3),transform(2,3)),
-			Vector(transform(0,0),transform(1,0),transform(2,0)),
-			Vector(transform(0,1),transform(1,1),transform(2,1)),
-			Vector(transform(0,2),transform(1,2),transform(2,2)) });
+		op->SetRelMl(BuildJointMatrix(mmd_joint_->GetTransform()));
+		MarkSceneTransformDirty(op);
 	}
 
 	return EXECUTIONRESULT::OK;
@@ -425,6 +465,7 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	joint_mode_ = NormalizeJointMode(joint_mode_);
 	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
 		bc->SetInt32(JOINT_MODE, NormalizeJointMode(bc->GetInt32(JOINT_MODE)));
+	ConfigureJointExecutionPriority(node);
 	return true;
 }
 

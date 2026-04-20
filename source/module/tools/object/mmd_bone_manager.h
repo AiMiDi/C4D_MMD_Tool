@@ -10,6 +10,8 @@ Description:	DESC
 
 #pragma once
 
+#include <array>
+
 #include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
 #include "description/OMMDBoneManager.h"
@@ -79,17 +81,27 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Bool has_pending_bone_hierarchy_sync_ = false;
 	Bool append_execution_order_dirty_ = true;
 	Bool is_refreshing_append_execution_order_ = false;
+	struct PhysicsOverrideState
+	{
+		Int32 frame = NOTOK;
+		Vector translation = Vector();
+		std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
+	};
+	maxon::HashMap<Int32, PhysicsOverrideState> physics_overrides_;
 	friend MMDModelManagerObject;
 	MMDBoneManagerObject() = default;
 	~MMDBoneManagerObject() override = default;
 	public:
 	typedef MMDManagerObject SUPER;
 	static NodeData* Alloc();
+	SDK2024_InitOverride;
 	MMDBoneManagerObject(const MMDBoneManagerObject&) = delete; void operator =(const MMDBoneManagerObject&) = delete;
 	MMDBoneManagerObject(MMDBoneManagerObject&& other) noexcept : MMDManagerObject(std::forward<MMDBoneManagerObject>(other)) {} MMDBoneManagerObject& operator =(MMDBoneManagerObject&&) noexcept = default;
 	SDK2024_CopyToOverride;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 	SDK2024_WriteOverride;
+	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
+	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 
@@ -107,6 +119,8 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	void SetAllActiveAnimationSlot(Int32 slot_index);
 	void MarkAppendExecutionOrderDirty();
 	void EnsureAppendExecutionOrder();
+	void PrepareSceneForPhysicsPlayback(BaseDocument* doc);
+	void SetPhysicsOverride(Int32 bone_index, Int32 frame, const Vector& translation, const std::array<Float32, 4>& rotation);
 
 private:
 	void CreateDisplayTag(GeListNode* node) override;
@@ -117,4 +131,5 @@ private:
 	bool CollectBoneHierarchyDFS(BaseObject* object, maxon::BaseArray<BoneHierarchySyncEntry>& entries) const;
 	void RefreshBoneHierarchyUI(BaseObject* bone_manager_object) const;
 	Int32 ComputeAppendRecursionDepth(Int32 bone_index, maxon::BaseArray<Int32>& depth_cache, maxon::BaseArray<UChar>& visit_state) const;
+	const PhysicsOverrideState* FindPhysicsOverride(Int32 bone_index, Int32 frame) const;
 };

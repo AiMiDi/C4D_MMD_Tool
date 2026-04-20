@@ -295,9 +295,14 @@ private:
 	Bool BuildStandaloneIKManager();
 	Bool BuildStandalonePhysics();
 	Bool BuildStandaloneBoneAdapters();
+	void SolveStandaloneIKBeforePhysics();
 	void ResetStandalonePhysics();
 	void StepStandalonePhysics(Float elapsed);
 	void ApplyPhysicsResultsToBoneObjects() const;
+	Bool IsPhysicsEnabled(const BaseObject* op) const;
+	Bool ShouldResetPhysicsOnSeek(const BaseObject* op) const;
+	Vector GetPhysicsGravity(const BaseObject* op) const;
+	void ApplyPhysicsConfigToRuntime(const BaseObject* op);
 	void BuildIKSolverUI();
 	void ApplyIKSolverStates();
 	void ApplyIKSolverFromParameters(BaseObject* op);
@@ -312,4 +317,6 @@ private:
 	void SyncSubManagerScale(Float pm);
 	void SyncMaterialsList();
 	void PruneDeletedMaterialEntries(BaseDocument* doc);
+	void ResetInitialStateDebugLog() const;
+	void LogInitialStateSnapshot(const char* stage) const;
 };

@@ -27,6 +27,8 @@ Description:	DESC
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/VMDInterpolation.h"
 #include "utils/math_util.hpp"
+#include "module/core/cmt_debug_log.h"
+#include <sstream>
 
 namespace
 {
@@ -120,6 +122,16 @@ namespace
 		});
 	}
 
+	void MarkBoneTransformDirty(BaseObject* object)
+	{
+		if (!object)
+			return;
+
+		object->Touch();
+		object->SetDirty(DIRTYFLAGS::MATRIX | DIRTYFLAGS::DATA);
+		object->Message(MSG_UPDATE);
+	}
+
 	BaseObject* ResolveBoneObjectFromLinkData(const GeData& link_data, const BaseDocument* doc)
 	{
 		const BaseLink* const link = link_data.GetBaseLink();
@@ -146,8 +158,7 @@ namespace
 	{
 		const Int32 layer = bc ? std::max(0, bc->GetInt32(PMX_BONE_LAYER)) : 0;
 		const Int32 depth = std::max(0, append_depth);
-		const Bool deform_after_physics = bc ? bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) : false;
-		return (deform_after_physics ? 6000 : 0) + layer * 100 + depth;
+		return layer * 100 + depth;
 	}
 
 	GeData CreateDefaultAnimationSplineData()
@@ -319,6 +330,13 @@ namespace
 		return eigen;
 	}
 
+	Matrix NormalizeMatrixBasis(const Matrix& matrix)
+	{
+		Matrix normalized = matrix;
+		normalized.sqmat = normalized.sqmat.GetNormalized();
+		return normalized;
+	}
+
 	Matrix EigenToMatrix(const Eigen::Matrix4f& matrix)
 	{
 		return Matrix{
@@ -326,6 +344,17 @@ namespace
 			Vector(matrix(0, 0), matrix(1, 0), matrix(2, 0)),
 			Vector(matrix(0, 1), matrix(1, 1), matrix(2, 1)),
 			Vector(matrix(0, 2), matrix(1, 2), matrix(2, 2))
+		};
+	}
+
+	Matrix RelativeMatrixFromTranslationRotation(const Eigen::Vector3f& translation, const Eigen::Quaternionf& rotation)
+	{
+		const Eigen::Matrix3f basis = rotation.normalized().toRotationMatrix();
+		return Matrix{
+			Vector(translation.x(), translation.y(), translation.z()),
+			Vector(basis(0, 0), basis(1, 0), basis(2, 0)),
+			Vector(basis(0, 1), basis(1, 1), basis(2, 1)),
+			Vector(basis(0, 2), basis(1, 2), basis(2, 2))
 		};
 	}
 
@@ -342,6 +371,8 @@ void C4DIKChainNodeAdapter::SetupFromBone(BaseObject* bone_object, MMDBoneTag* b
 	name_ = std::move(name);
 	parent_ = nullptr;
 	children_.clear();
+	initial_local_transform_ = Eigen::Matrix4f::Identity();
+	initial_global_transform_ = Eigen::Matrix4f::Identity();
 	global_transform_ = Eigen::Matrix4f::Identity();
 	local_transform_ = Eigen::Matrix4f::Identity();
 	animate_translation_ = Eigen::Vector3f::Zero();
@@ -367,7 +398,28 @@ void C4DIKChainNodeAdapter::AddChildAdapter(C4DIKChainNodeAdapter* child)
 
 void C4DIKChainNodeAdapter::UpdateInitialGlobalTransform()
 {
-	initial_global_transform_ = global_transform_;
+	std::vector<C4DIKChainNodeAdapter*> stack;
+	stack.push_back(this);
+	while (!stack.empty())
+	{
+		C4DIKChainNodeAdapter* const current = stack.back();
+		stack.pop_back();
+		if (!current)
+			continue;
+
+		if (current->bone_object_)
+			current->initial_local_transform_ = MatrixToEigen(NormalizeMatrixBasis(current->bone_object_->GetFrozenMln()));
+		else
+			current->initial_local_transform_ = Eigen::Matrix4f::Identity();
+
+		if (current->parent_ != nullptr)
+			current->initial_global_transform_ = current->parent_->initial_global_transform_ * current->initial_local_transform_;
+		else
+			current->initial_global_transform_ = current->initial_local_transform_;
+
+		for (auto it = current->children_.rbegin(); it != current->children_.rend(); ++it)
+			stack.push_back(*it);
+	}
 }
 
 void C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject(const Bool reset_ik_rotation)
@@ -375,14 +427,24 @@ void C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject(const Bool reset
 	if (!bone_object_)
 		return;
 
-	const Matrix local_matrix = bone_object_->GetMl();
-	const Matrix global_matrix = bone_object_->GetMg();
+	// C4D scene globals inherit the model root scale, but libMMD physics expects
+	// raw PMX-space bone transforms. Keep the runtime adapter in local/raw space
+	// and let the hierarchy rebuild globals explicitly.
+	const Matrix local_matrix = NormalizeMatrixBasis(bone_object_->GetMl());
 	local_transform_ = MatrixToEigen(local_matrix);
-	global_transform_ = MatrixToEigen(global_matrix);
+	global_transform_ = local_transform_;
 	animate_translation_ = local_transform_.block<3, 1>(0, 3);
 	animate_rotation_ = ExtractRotation(local_transform_);
 	if (reset_ik_rotation)
 		ik_rotation_ = Eigen::Quaternionf::Identity();
+}
+
+void C4DIKChainNodeAdapter::GetCurrentRelativeState(Vector& translation, std::array<Float32, 4>& rotation) const
+{
+	const Eigen::Matrix4f relative_local = initial_local_transform_.inverse() * local_transform_;
+	const Eigen::Vector3f relative_translation = relative_local.block<3, 1>(0, 3);
+	translation = Vector(relative_translation.x(), relative_translation.y(), relative_translation.z());
+	rotation = ToQuaternionArray(ExtractRotation(relative_local));
 }
 
 void C4DIKChainNodeAdapter::ApplyLocalToBoneObject() const
@@ -390,7 +452,10 @@ void C4DIKChainNodeAdapter::ApplyLocalToBoneObject() const
 	if (!bone_object_)
 		return;
 
-	bone_object_->SetMl(EigenToMatrix(local_transform_));
+	const Eigen::Matrix4f relative_local = initial_local_transform_.inverse() * local_transform_;
+	const Eigen::Vector3f relative_translation = relative_local.block<3, 1>(0, 3);
+	bone_object_->SetRelMl(RelativeMatrixFromTranslationRotation(relative_translation, ExtractRotation(relative_local)));
+	MarkBoneTransformDirty(bone_object_);
 	if (bone_tag_)
 		bone_tag_->evaluated_ik_rotation_ = ToQuaternionArray(ik_rotation_);
 }
@@ -403,6 +468,14 @@ Int32 C4DIKChainNodeAdapter::GetBoneIndex() const
 void C4DIKChainNodeAdapter::SetGlobalTransform(const Eigen::Matrix4f& m)
 {
 	global_transform_ = m;
+	if (parent_ != nullptr)
+		local_transform_ = parent_->GetGlobalTransform().inverse() * global_transform_;
+	else
+		local_transform_ = global_transform_;
+}
+
+void C4DIKChainNodeAdapter::SyncLocalTransformFromGlobal()
+{
 	if (parent_ != nullptr)
 		local_transform_ = parent_->GetGlobalTransform().inverse() * global_transform_;
 	else
@@ -735,6 +808,75 @@ void MMDBoneTag::SetEvaluatedAnimationState(const Vector& translation, const std
 {
 	evaluated_animation_translation_ = translation;
 	evaluated_animation_rotation_ = NormalizeQuaternion(rotation);
+}
+
+void MMDBoneTag::GetEvaluatedAnimatedLocalState(Vector& translation, std::array<Float32, 4>& rotation) const
+{
+	translation = evaluated_animation_translation_ + evaluated_append_animation_translation_;
+	rotation = ToQuaternionArray(
+		ToEigenQuaternion(evaluated_animation_rotation_) * ToEigenQuaternion(evaluated_append_animation_rotation_));
+}
+
+void MMDBoneTag::BeginPrephysicsFrame(const Int32 frame)
+{
+	if (last_prephysics_frame_ == frame)
+		return;
+
+	last_prephysics_frame_ = frame;
+	skip_prephysics_scene_write_ = false;
+	ik_overridden_this_frame_ = false;
+}
+
+void MMDBoneTag::MarkPrephysicsSceneWriteSkipped(const Int32 frame)
+{
+	last_prephysics_frame_ = frame;
+	skip_prephysics_scene_write_ = true;
+	ik_overridden_this_frame_ = true;
+}
+
+Bool MMDBoneTag::ShouldSkipPrephysicsSceneWrite(const Int32 frame) const
+{
+	return last_prephysics_frame_ == frame && skip_prephysics_scene_write_;
+}
+
+Bool MMDBoneTag::HasRecentPlaybackRuntimeOverride(const Int32 frame) const
+{
+	if (!has_runtime_playback_override_)
+		return false;
+
+	return runtime_playback_override_frame_ == frame
+		|| runtime_playback_override_frame_ == frame - 1;
+}
+
+void MMDBoneTag::ClearPlaybackRuntimeOverride()
+{
+	has_runtime_playback_override_ = false;
+	runtime_playback_override_frame_ = NOTOK;
+	runtime_playback_override_translation_ = Vector();
+	runtime_playback_override_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+}
+
+void MMDBoneTag::SetPlaybackRuntimeOverride(const Int32 frame, const Vector& translation, const std::array<Float32, 4>& rotation)
+{
+	runtime_playback_override_frame_ = frame;
+	runtime_playback_override_translation_ = translation;
+	runtime_playback_override_rotation_ = NormalizeQuaternion(rotation);
+	has_runtime_playback_override_ = true;
+}
+
+Bool MMDBoneTag::GetPlaybackRuntimeOverride(Vector& translation, std::array<Float32, 4>& rotation) const
+{
+	if (!has_runtime_playback_override_)
+		return false;
+
+	const BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+	const BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
+	if (runtime_playback_override_frame_ != GetAnimationFrameFromDocument(const_cast<BaseDocument*>(doc)))
+		return false;
+
+	translation = runtime_playback_override_translation_;
+	rotation = runtime_playback_override_rotation_;
+	return true;
 }
 
 void MMDBoneTag::SetAppendRecursionDepth(const Int32 depth)
@@ -1555,6 +1697,14 @@ SDK2024_CopyTo(MMDBoneTag)
 	dest_tag->evaluated_append_animation_translation_ = evaluated_append_animation_translation_;
 	dest_tag->evaluated_append_animation_rotation_ = evaluated_append_animation_rotation_;
 	dest_tag->evaluated_ik_rotation_ = evaluated_ik_rotation_;
+	dest_tag->runtime_playback_override_translation_ = Vector();
+	dest_tag->runtime_playback_override_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+	dest_tag->has_runtime_playback_override_ = false;
+	dest_tag->runtime_playback_override_frame_ = NOTOK;
+	dest_tag->last_prephysics_frame_ = NOTOK;
+	dest_tag->last_ik_solve_frame_ = NOTOK;
+	dest_tag->skip_prephysics_scene_write_ = false;
+	dest_tag->ik_overridden_this_frame_ = false;
 	dest_tag->append_recursion_depth_ = append_recursion_depth_;
 
 	iferr(dest_tag->bone_animation_slots_.CopyFrom(bone_animation_slots_))
@@ -1796,7 +1946,7 @@ void MMDBoneTag::BuildStandaloneIKChains()
 		return;
 
 	MMDModelManagerObject* const model_manager = GetModelManager();
-	if (!model_manager || !model_manager->EnsureStandaloneRuntimeManagers())
+	if (!model_manager)
 		return;
 
 	libmmd::MMDIkSolver* const ik_solver = model_manager->GetStandaloneIKSolver(GetBoneIndex());
@@ -1900,23 +2050,92 @@ void MMDBoneTag::BuildStandaloneIKChains()
 	ik_solver->BuildChainPath();
 }
 
-Bool MMDBoneTag::RunIKSolveAnimMode(BaseObject* op)
+void MMDBoneTag::MarkPrephysicsIKChainUpdated(const Int32 frame)
+{
+	if (!is_IK)
+		return;
+
+	BaseTag* const tag = static_cast<BaseTag*>(Get());
+	if (!tag)
+		return;
+
+	DynamicDescription* dyn_desc = tag->GetDynamicDescriptionWritable();
+	if (!dyn_desc)
+		return;
+
+	const String name_ik_bone = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE);
+	maxon::BaseArray<Int32> affected_indices;
+	iferr(affected_indices.Append(GetBoneIndex())) {}
+
+	void* browse_handle = dyn_desc->BrowseInit();
+	DescID dyn_id;
+	const BaseContainer* dyn_bc = nullptr;
+	while (dyn_desc->BrowseGetNext(browse_handle, &dyn_id, &dyn_bc))
+	{
+		if (!dyn_bc || dyn_bc->GetString(DESC_NAME) != name_ik_bone)
+			continue;
+
+		GeData value;
+		if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
+			affected_indices.Append(value.GetInt32())iferr_ignore("append ik affected bone"_s);
+	}
+	dyn_desc->BrowseFree(browse_handle);
+
+	MMDBoneManagerObject* const bone_manager = GetBoneManager();
+	if (!bone_manager)
+		return;
+
+	for (const Int32 bone_index : affected_indices)
+	{
+		BaseTag* const affected_tag = bone_manager->FindBone(bone_index);
+		if (!affected_tag)
+			continue;
+		if (auto* const affected_node = affected_tag->GetNodeData<MMDBoneTag>())
+			affected_node->MarkPrephysicsSceneWriteSkipped(frame);
+	}
+}
+
+Bool MMDBoneTag::RunIKSolveAnimMode(BaseObject* op, const Bool mark_prephysics_chain)
 {
 	if (!op || bone_mode_ != BONE_MODE_ANIM || !is_IK)
 		return false;
 
+	const Int32 current_frame = GetAnimationFrameFromDocument(op->GetDocument());
+	if (last_ik_solve_frame_ == current_frame)
+		return false;
+
 	MMDModelManagerObject* const model_manager = GetModelManager();
 	if (!model_manager || !model_manager->EnsureStandaloneRuntimeManagers())
+	{
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+			"[CMT][Frame @] IKSolve skipped bone='@' reason=model_manager",
+			current_frame, op->GetName());
 		return false;
+	}
 
 	libmmd::MMDIkSolver* const ik_solver = model_manager->GetStandaloneIKSolver(GetBoneIndex());
 	if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
+	{
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+			"[CMT][Frame @] IKSolve skipped bone='@' solver=@ enabled=@ ikNode=@ targetNode=@",
+			current_frame, op->GetName(), ik_solver != nullptr, ik_solver ? ik_solver->Enabled() : false,
+			ik_solver && ik_solver->GetIKNode(), ik_solver && ik_solver->GetTargetNode());
 		return false;
+	}
 
 	model_manager->SyncStandaloneBoneAdaptersFromScene(true);
 	BuildStandaloneIKChains();
 	ik_solver->Solve();
+	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+		"[CMT][Frame @] IKSolve success bone='@'",
+		current_frame, op->GetName());
+	last_ik_solve_frame_ = current_frame;
 	model_manager->ApplyStandaloneBoneAdaptersToScene();
+	if (mark_prephysics_chain)
+	{
+		BaseDocument* const doc = op->GetDocument();
+		MarkPrephysicsIKChainUpdated(GetAnimationFrameFromDocument(doc));
+	}
 	return true;
 }
 
@@ -2154,10 +2373,7 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 	const auto get_ik_solver = [this]() -> libmmd::MMDIkSolver*
 	{
 		if (MMDModelManagerObject* const model_manager = GetModelManager())
-		{
-			model_manager->EnsureStandaloneRuntimeManagers();
 			return model_manager->GetStandaloneIKSolver(GetBoneIndex());
-		}
 		return nullptr;
 	};
 	const auto invalidate_runtime = [this]()
@@ -2484,7 +2700,7 @@ SDK2024_GetDEnabling(MMDBoneTag)
 	return true;
 }
 
-Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc)
+Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const Bool apply_to_scene)
 {
 	if (!op)
 		return false;
@@ -2550,28 +2766,48 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc)
 	if (bc && (bc->GetBool(PMX_BONE_INHERIT_ROTATION) || bc->GetBool(PMX_BONE_INHERIT_TRANSLATION)))
 	{
 		const Float32 inherit_weight = maxon::SafeConvert<Float32>(bc->GetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE));
-		const Bool inherit_local = bc->GetBool(PMX_BONE_INHERIT_LOCAL);
 		if (BaseTag* const source_tag = ResolveInheritSourceBoneTag())
 		{
 			if (auto* const source_tag_node = source_tag->GetNodeData<MMDBoneTag>())
 			{
-				const Bool source_has_append_source = source_tag_node->ResolveInheritSourceBoneTag() != nullptr;
-
 				if (bc->GetBool(PMX_BONE_INHERIT_TRANSLATION))
 				{
-					const Vector source_translation = (inherit_local || !source_has_append_source)
-						? source_tag_node->evaluated_animation_translation_
-						: source_tag_node->evaluated_append_animation_translation_;
-					evaluated_append_animation_translation_ = source_translation * inherit_weight;
+					Vector source_translation;
+					std::array<Float32, 4> source_rotation { 0.F, 0.F, 0.F, 1.F };
+					if (source_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation))
+					{
+						evaluated_append_animation_translation_ = source_translation * inherit_weight;
+					}
+					else
+					{
+						const Bool inherit_local = bc->GetBool(PMX_BONE_INHERIT_LOCAL);
+						const Bool source_has_append_source = source_tag_node->ResolveInheritSourceBoneTag() != nullptr;
+						source_translation = (inherit_local || !source_has_append_source)
+							? source_tag_node->evaluated_animation_translation_
+							: source_tag_node->evaluated_append_animation_translation_;
+						evaluated_append_animation_translation_ = source_translation * inherit_weight;
+					}
 				}
 
 				if (bc->GetBool(PMX_BONE_INHERIT_ROTATION))
 				{
-					const std::array<Float32, 4>& source_rotation = (inherit_local || !source_has_append_source)
-						? source_tag_node->evaluated_animation_rotation_
-						: source_tag_node->evaluated_append_animation_rotation_;
-					Eigen::Quaternionf append_rotation = ToEigenQuaternion(source_rotation);
-					append_rotation = ToEigenQuaternion(source_tag_node->evaluated_ik_rotation_) * append_rotation;
+					Vector source_translation;
+					std::array<Float32, 4> source_rotation { 0.F, 0.F, 0.F, 1.F };
+					Eigen::Quaternionf append_rotation = Eigen::Quaternionf::Identity();
+					if (source_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation))
+					{
+						append_rotation = ToEigenQuaternion(source_rotation);
+					}
+					else
+					{
+						const Bool inherit_local = bc->GetBool(PMX_BONE_INHERIT_LOCAL);
+						const Bool source_has_append_source = source_tag_node->ResolveInheritSourceBoneTag() != nullptr;
+						source_rotation = (inherit_local || !source_has_append_source)
+							? source_tag_node->evaluated_animation_rotation_
+							: source_tag_node->evaluated_append_animation_rotation_;
+						append_rotation = ToEigenQuaternion(source_rotation);
+						append_rotation = ToEigenQuaternion(source_tag_node->evaluated_ik_rotation_) * append_rotation;
+					}
 					evaluated_append_animation_rotation_ = ToQuaternionArray(Eigen::Quaternionf::Identity().slerp(inherit_weight, append_rotation));
 				}
 			}
@@ -2581,7 +2817,11 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc)
 	const Vector final_translation = evaluated_animation_translation_ + evaluated_append_animation_translation_;
 	const std::array<Float32, 4> final_rotation = ToQuaternionArray(
 		ToEigenQuaternion(evaluated_animation_rotation_) * ToEigenQuaternion(evaluated_append_animation_rotation_));
-	op->SetRelMl(BuildAnimationMatrix(final_translation, final_rotation));
+	if (apply_to_scene)
+	{
+		op->SetRelMl(BuildAnimationMatrix(final_translation, final_rotation));
+		MarkBoneTransformDirty(op);
+	}
 	return true;
 }
 
@@ -2675,13 +2915,48 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 	if (bone_mode_ == BONE_MODE_ANIM)
 	{
+		const Int32 current_frame = GetAnimationFrameFromDocument(doc);
+		BeginPrephysicsFrame(current_frame);
 		SyncSplineFromCurrentParametersIfNeeded(tag);
-		ApplyActiveAnimation(op, doc);
-		RunIKSolveAnimMode(op);
+		const BaseContainer* const bc = tag ? tag->GetDataInstance() : nullptr;
+		const Bool deform_after_physics = bc ? bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) : false;
+		const Bool apply_to_scene = !deform_after_physics
+			&& !ShouldSkipPrephysicsSceneWrite(current_frame)
+			&& !HasRecentPlaybackRuntimeOverride(current_frame);
+		// #region agent log H4 - capture bone tag execute behavior for first 5 bone indices over first 30 frames
+		const Int32 dbg_bone_idx = GetBoneIndex();
+		const Bool dbg_should_log = (current_frame >= 0 && current_frame < 30 && dbg_bone_idx >= 0 && dbg_bone_idx < 5);
+		Vector dbg_rel_before;
+		if (dbg_should_log) dbg_rel_before = op->GetRelMl().off;
+		// #endregion
+		ApplyActiveAnimation(op, doc, apply_to_scene);
+		if (!deform_after_physics && is_IK && GetModelManager() == nullptr)
+			RunIKSolveAnimMode(op, true);
+		// #region agent log H4
+		if (dbg_should_log)
+		{
+			const Vector dbg_rel_after = op->GetRelMl().off;
+			std::ostringstream s;
+			s << "{\"frame\":" << current_frame
+				<< ",\"boneIndex\":" << dbg_bone_idx
+				<< ",\"priority\":" << priority
+				<< ",\"applyToScene\":" << (apply_to_scene ? 1 : 0)
+				<< ",\"deformAfterPhys\":" << (deform_after_physics ? 1 : 0)
+				<< ",\"hasOverride\":" << (has_runtime_playback_override_ ? 1 : 0)
+				<< ",\"overrideFrame\":" << runtime_playback_override_frame_
+				<< ",\"evalT\":[" << evaluated_animation_translation_.x << "," << evaluated_animation_translation_.y << "," << evaluated_animation_translation_.z << "]"
+				<< ",\"relOffBefore\":[" << dbg_rel_before.x << "," << dbg_rel_before.y << "," << dbg_rel_before.z << "]"
+				<< ",\"relOffAfter\":[" << dbg_rel_after.x << "," << dbg_rel_after.y << "," << dbg_rel_after.z << "]"
+				<< "}";
+			cmt_dbg::Log("H4", "mmd_bone.cpp:MMDBoneTag::Execute",
+				"bone tag execute applied", s.str());
+		}
+		// #endregion
 	}
 	else
 	{
 		ResetEvaluatedAnimationState();
+		ClearPlaybackRuntimeOverride();
 	}
 
 	if (bone_mode_ == BONE_MODE_ANIM && !bone_morph_data_arr_.IsEmpty())
@@ -2754,6 +3029,11 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	hierarchy_manager_cache_ = nullptr;
 	is_syncing_inherit_source_ = false;
 	append_recursion_depth_ = 0;
+	last_prephysics_frame_ = NOTOK;
+	last_ik_solve_frame_ = NOTOK;
+	skip_prephysics_scene_write_ = false;
+	ik_overridden_this_frame_ = false;
+	ClearPlaybackRuntimeOverride();
 	ResetEvaluatedAnimationState();
 	return SUPER::Read(node, hf, level);
 }

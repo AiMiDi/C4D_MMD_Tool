@@ -77,7 +77,7 @@ public:
 	const BaseContainer& GetBoneItems();
 	MMDBoneManagerObject* GetBoneManagerData();
 
-	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
+	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 
 	Bool BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager* physics_manager, const std::function<libmmd::IMMDNode*(Int32)>& get_node);
 	void ReconnectRigidBodyPointers(libmmd::MMDPhysicsManager* physics_manager);

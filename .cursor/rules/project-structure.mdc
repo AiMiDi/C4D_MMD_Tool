@@ -46,10 +46,10 @@ Cinema 4D plugin for importing and managing MMD (MikuMikuDance) model/animation 
 ## Build Process
 
 1. Optional: from repo root, `cmake --preset dev-windows` and `cmake --build --preset cmt-deps-build` to smoke-test `dependency/`; plugin builds compile deps inside each `sdk_*` configure without this step
-2. `cd sdk_2026 && cmake --preset windows_vs2022_v143`
-3. `cmake --build _build_msvc --config Debug`
+2. From repo root: `cmake --preset windows_vs2022_v143 -S sdk_2026 -B _build_msvc/sdk_2026`, or `cd sdk_2026` then `cmake --preset windows_vs2022_v143` (each `sdk_*` preset sets `binaryDir` to `${sourceDir}/../_build_msvc/<sdk>` → **repo root** `_build_msvc/<sdk>/`)
+3. From repo root: `cmake --build _build_msvc/sdk_2026 --config Debug` (from `sdk_2026` after step 2: `cmake --build ../_build_msvc/sdk_2026 --config Debug`)
 
-Works the same for any supported SDK — replace `sdk_2026` with the target SDK directory (e.g. `sdk_r20`, `sdk_2024`).
+Works the same for any supported SDK — replace `sdk_2026` in `-S`/`-B` and build path with the target SDK directory (e.g. `sdk_r20`, `sdk_2024`).
 
 CMake: `cmake/mmdtool_plugin_dependencies.cmake` exposes `mmdtool_plugin_dependencies_add(<repo root>)` for Bullet3 + libMMD via `add_subdirectory` into `${CMAKE_BINARY_DIR}/cmt_deps/...` (SDK builds → e.g. `_build_msvc/sdk_2026/cmt_deps`). `cmake/mmdtool_plugin_common.cmake` provides `cmt_setup_mmdtool_plugin()` shared by all SDK plugin CMakeLists. `cmt-clean-deps` removes legacy `dependency/*/build`, `dependency/install`, root `_build_msvc/cmt_deps`, and globbed `_build_*/*/cmt_deps` (per-SDK trees). Configure the repo root CMake project with `-B _build_msvc`, then `cmake --build _build_msvc --target cmt-clean-deps`. For a full wipe including all SDK outputs, use `cmt-clean`.
 
