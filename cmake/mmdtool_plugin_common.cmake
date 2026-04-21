@@ -34,23 +34,23 @@ function(cmt_collect_dependency_libs DEPENDENCY_INSTALL_DIR OUT_DEBUG_LIBS OUT_R
 
   file(GLOB _ALL_MACOS_LIBS "${DEPENDENCY_INSTALL_DIR}/lib/*.a")
 
-  set(_MACOS_DEBUG_LIBS "-L${DEPENDENCY_INSTALL_DIR}/lib")
+  set(_MACOS_DEBUG_LIBS "")
 
-  set(_MACOS_RELEASE_LIBS "-L${DEPENDENCY_INSTALL_DIR}/lib")
+  set(_MACOS_RELEASE_LIBS "")
+
+  list(SORT _ALL_MACOS_LIBS)
 
   foreach(_lib IN LISTS _ALL_MACOS_LIBS)
 
     get_filename_component(_name "${_lib}" NAME_WE)
 
-    string(REGEX REPLACE "^lib" "" _link_name "${_name}")
-
     if(_name MATCHES "_Debug$")
 
-      list(APPEND _MACOS_DEBUG_LIBS "-l${_link_name}")
+      list(APPEND _MACOS_DEBUG_LIBS "${_lib}")
 
     else()
 
-      list(APPEND _MACOS_RELEASE_LIBS "-l${_link_name}")
+      list(APPEND _MACOS_RELEASE_LIBS "${_lib}")
 
     endif()
 
