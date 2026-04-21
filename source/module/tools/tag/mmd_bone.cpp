@@ -869,9 +869,9 @@ Bool MMDBoneTag::GetPlaybackRuntimeOverride(Vector& translation, std::array<Floa
 	if (!has_runtime_playback_override_)
 		return false;
 
-	const BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
-	const BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
-	if (runtime_playback_override_frame_ != GetAnimationFrameFromDocument(const_cast<BaseDocument*>(doc)))
+	BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+	BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
+	if (runtime_playback_override_frame_ != GetAnimationFrameFromDocument(doc))
 		return false;
 
 	translation = runtime_playback_override_translation_;
@@ -908,14 +908,14 @@ void MMDBoneTag::RefreshExecutionPriority(GeListNode* node)
 
 BaseTag* MMDBoneTag::ResolveInheritSourceBoneTag() const
 {
-	const auto* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+	BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
 	const BaseContainer* const bc = self_tag ? self_tag->GetDataInstance() : nullptr;
 	if (!bc)
 		return nullptr;
 
 	const BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
 	GeData link_data;
-	if (self_tag && self_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link_data, DESCFLAGS_GET::NONE))
+	if (self_tag && GetAtomParameter(self_tag, ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link_data, DESCFLAGS_GET::NONE))
 	{
 		if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, doc))
 		{
@@ -2309,6 +2309,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 		HandleDescriptionUpdate(node, bc, static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id);
 		break;
 	case MSG_DOCUMENTINFO:
+#ifdef MSG_DOCUMENTINFO_TYPE_OBJECT_REMOVE
 		if (const auto* doc_info = static_cast<DocumentInfoData*>(data);
 			doc_info && doc_info->type == MSG_DOCUMENTINFO_TYPE_OBJECT_REMOVE && doc_info->bl == bone_object_)
 		{
@@ -2320,6 +2321,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 			if (bone_manager_link_)
 				bone_manager_link_->SetLink(nullptr);
 		}
+#endif
 		break;
 	case MSG_MENUPREPARE:
 		if (const auto doc = static_cast<BaseDocument*>(data); doc)
