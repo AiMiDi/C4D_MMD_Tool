@@ -29,8 +29,6 @@ Description:	MMD model object
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 #include "libMMD/Model/MMD/SjisToUnicode.h"
-#include "module/core/cmt_debug_log.h"
-
 #include <btBulletDynamicsCommon.h>
 
 #include <algorithm>
