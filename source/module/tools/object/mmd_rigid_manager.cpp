@@ -454,11 +454,9 @@ Bool MMDRigidManagerObject::BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager
 		++created;
 		if (created <= 3)
 		{
-			const auto transform = rb->GetTransform();
 			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT] BuildStandaloneRigidBodies[@]: name='@' boneIndex=@ bodyOff=(@,@,@) shapeOff=(@,@,@)",
+				"[CMT] BuildStandaloneRigidBodies[@]: name='@' boneIndex=@ shapeOff=(@,@,@)",
 				rigid_index, child->GetName(), pmx_rigidbody.m_boneIndex,
-				transform(0, 3), transform(1, 3), transform(2, 3),
 				pmx_rigidbody.m_translate.x(), pmx_rigidbody.m_translate.y(), pmx_rigidbody.m_translate.z());
 		}
 	}
