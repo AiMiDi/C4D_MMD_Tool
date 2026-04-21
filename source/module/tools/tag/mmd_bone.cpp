@@ -69,6 +69,17 @@ namespace
 #endif
 	}
 
+	const CustomSplineKnot* GetSplineKnot(const SplineData* spline, const Int32 index)
+	{
+		if (!spline)
+			return nullptr;
+#if API_VERSION < 23000
+		return const_cast<SplineData*>(spline)->GetKnot(index);
+#else
+		return spline->GetKnot(index);
+#endif
+	}
+
 	Float32 ClampSplineCoordinate(const Float value)
 	{
 		return maxon::SafeConvert<Float32>(std::clamp(value, 0.0, static_cast<double>(kBoneAnimationSplineMax)));
@@ -190,8 +201,8 @@ namespace
 		if (!spline || spline->GetKnotCount() < 2)
 			return bezier;
 
-		const CustomSplineKnot* const first = spline->GetKnot(0);
-		const CustomSplineKnot* const last = spline->GetKnot(spline->GetKnotCount() - 1);
+		const CustomSplineKnot* const first = GetSplineKnot(spline, 0);
+		const CustomSplineKnot* const last = GetSplineKnot(spline, spline->GetKnotCount() - 1);
 		if (!first || !last)
 			return bezier;
 
