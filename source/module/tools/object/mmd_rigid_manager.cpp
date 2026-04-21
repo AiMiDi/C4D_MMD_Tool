@@ -8,6 +8,7 @@ Description:	MMD rigid root object
 
 **************************************************************************/
 
+#include "module/core/cmt_old_sdk_stl_preload.h"
 #include "plugin_resource.h"
 #include "mmd_bone.h"
 #include "mmd_model_manager.h"

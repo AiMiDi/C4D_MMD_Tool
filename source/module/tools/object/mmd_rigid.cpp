@@ -8,15 +8,16 @@ Description:	C4D MMD rigid object
 
 **************************************************************************/
 
+#include "module/core/cmt_old_sdk_stl_preload.h"
+#include "mmd_model_manager.h"
+#include "mmd_rigid_manager.h"
+#include "mmd_bone_manager.h"
+#include "module/tools/tag/mmd_bone.h"
 #include <c4d.h>
 #include <c4d_symbols.h>
 #include "plugin_resource.h"
 #include "module/core/cmt_marco.h"
 #include "mmd_rigid.h"
-#include "mmd_rigid_manager.h"
-#include "mmd_bone_manager.h"
-#include "mmd_model_manager.h"
-#include "module/tools/tag/mmd_bone.h"
 #include "customgui_priority.h"
 #if CMT_SDK_HAS_CUSTOMGUI_ICONCHOOSER_HEADER
 #include "c4d_customgui/customgui_iconchooser.h"

@@ -13,15 +13,15 @@ Description:	MMD model object
 #include <algorithm>
 #include <memory>
 #include <vector>
+#include "libMMD/Model/MMD/MMDIkSolver.h"
+#include "libMMD/Model/MMD/MMDModel.h"
+#include "libMMD/Model/MMD/PMXFile.h"
 
 #include <c4d.h>
 #include "module/core/cmt_marco.h"
 #include "CMTSceneManager.h"
 #include "description/OMMDModelManager.h"
 #include "module/tools/material/mmd_material.h"
-#include "libMMD/Model/MMD/MMDIkSolver.h"
-#include "libMMD/Model/MMD/MMDModel.h"
-#include "libMMD/Model/MMD/PMXFile.h"
 #include "maxon/pointerarray.h"
 #include "utils/images_user_area_util.hpp"
 

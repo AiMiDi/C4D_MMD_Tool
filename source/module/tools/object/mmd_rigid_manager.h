@@ -10,13 +10,12 @@ Description:	MMD rigid root object
 
 #pragma once
 
+#include <functional>
 #include <c4d.h>
 #include "mmd_manager.hpp"
 #include "cmt_tools_setting.h"
 #include "description/OMMDRigidManager.h"
 #include "module/core/cmt_marco.h"
-
-#include <functional>
 
 class MMDRigidObject;
 class MMDModelManagerObject;

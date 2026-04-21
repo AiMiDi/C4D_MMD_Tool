@@ -1,3 +1,4 @@
+#include "module/core/cmt_old_sdk_stl_preload.h"
 #include "mmd_redshift_material.h"
 #include <c4d_symbols.h>
 #include "module/core/cmt_marco.h"

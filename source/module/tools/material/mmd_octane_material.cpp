@@ -1,3 +1,4 @@
+#include "module/core/cmt_old_sdk_stl_preload.h"
 #include "mmd_octane_material.h"
 #include <c4d_symbols.h>
 

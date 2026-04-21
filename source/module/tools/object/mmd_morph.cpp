@@ -1,8 +1,9 @@
+#include "module/core/cmt_old_sdk_stl_preload.h"
+#include "mmd_model_manager.h"
 #include <c4d.h>
 #include <c4d_symbols.h>
 #include "module/core/cmt_marco.h"
 #include "mmd_morph.h"
-#include "mmd_model_manager.h"
 #include "mmd_mesh_manager.h"
 #include "mmd_bone_manager.h"
 #include "description/OMMDModelManager.h"

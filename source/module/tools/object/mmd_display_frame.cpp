@@ -8,6 +8,7 @@ Description:	Display frame data (PMX display frame conversion, serialization)
 
 **************************************************************************/
 
+#include "module/core/cmt_old_sdk_stl_preload.h"
 #include "mmd_model_manager.h"
 #include "utils/io_util.hpp"
 #include "utils/string_util.hpp"

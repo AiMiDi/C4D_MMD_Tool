@@ -1,3 +1,4 @@
+#include "module/core/cmt_old_sdk_stl_preload.h"
 #include "mmd_material.h"
 #include "mmd_standard_material.h"
 #include "mmd_redshift_material.h"

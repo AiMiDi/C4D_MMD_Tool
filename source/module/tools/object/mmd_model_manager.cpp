@@ -8,11 +8,12 @@ Description:	MMD model object
 
 **************************************************************************/
 
+#include "module/core/cmt_old_sdk_stl_preload.h"
+#include "mmd_model_manager.h"
 #include <c4d.h>
 #include <c4d_symbols.h>
 #include "plugin_resource.h"
 #include "module/core/cmt_marco.h"
-#include "mmd_model_manager.h"
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
 #include "module/tools/material/mmd_material.h"

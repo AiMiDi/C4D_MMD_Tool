@@ -10,15 +10,16 @@ Description:	scene manager
 
 #pragma once
 
+#include <memory>
+#include "libMMD/Model/MMD/PMXFile.h"
+#include "libMMD/Model/MMD/VMDFile.h"
+#include "libMMD/Model/MMD/VMDAnimation.h"
+#include "libMMD/Model/MMD/VMDCameraAnimation.h"
 #include <c4d.h>
 #include "maxon/baselist.h"
 #include "c4d_baselinkarray.h"
 #include "cmt_tools_setting.h"
 #include "module/core/cmt_marco.h"
-#include "libMMD/Model/MMD/PMXFile.h"
-#include "libMMD/Model/MMD/VMDFile.h"
-#include "libMMD/Model/MMD/VMDAnimation.h"
-#include "libMMD/Model/MMD/VMDCameraAnimation.h"
 
 struct IOLog
 {

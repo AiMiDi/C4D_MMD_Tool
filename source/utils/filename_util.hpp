@@ -10,9 +10,9 @@ Description:	Filename utils
 
 #pragma once
 
+#include <vector>
 #include <c4d.h>
 #include <c4d_symbols.h>
-#include <vector>
 
 namespace filename_util
 {

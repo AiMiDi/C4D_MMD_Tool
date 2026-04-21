@@ -1,6 +1,5 @@
 #pragma once
 
-#include <c4d.h>
 #include "module/tools/material/mmd_material.h"
 
 /** RedShift 材质适配器：使用像素采样检测 alpha，与基类 suffix 检测不同。 */

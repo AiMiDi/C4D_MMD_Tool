@@ -12,13 +12,13 @@ Description:	Lightweight JSON reader/writer (header-only).
 
 #pragma once
 
-#include <c4d.h>
 #include <string>
 #include <unordered_map>
 #include <variant>
 #include <sstream>
 #include <stdexcept>
 #include <iomanip>
+#include <c4d.h>
 #include <cstdlib>
 #include <cerrno>
 #include <climits>

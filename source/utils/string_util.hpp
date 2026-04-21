@@ -10,8 +10,8 @@ Description:	std string util
 
 #pragma once
 
-#include <c4d.h>
 #include <string>
+#include <c4d.h>
 #include "module/core/cmt_marco.h"
 
 namespace string_util
