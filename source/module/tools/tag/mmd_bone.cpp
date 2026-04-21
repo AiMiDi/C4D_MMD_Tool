@@ -27,6 +27,7 @@ Description:	DESC
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/VMDInterpolation.h"
 #include "utils/math_util.hpp"
+#include "module/core/cmt_debug_log.h"
 #include <sstream>
 
 namespace

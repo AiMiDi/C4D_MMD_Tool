@@ -22,6 +22,7 @@ Description:	MMD model object
 #include "mmd_mesh_manager.h"
 #include "mmd_rigid_manager.h"
 #include "customgui_priority.h"
+#include "description/OMMDModelManager.h"
 #include "description/OMMDRigid.h"
 #include "description/TMMDBone.h"
 #include "maxon/queue.h"
@@ -29,6 +30,7 @@ Description:	MMD model object
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 #include "libMMD/Model/MMD/SjisToUnicode.h"
+#include "module/core/cmt_debug_log.h"
 #include <btBulletDynamicsCommon.h>
 
 #include <algorithm>
@@ -88,14 +90,14 @@ namespace
 
 		GeData data;
 		const Int32 param_id = use_local_name ? PMX_BONE_NAME_LOCAL : PMX_BONE_NAME_UNIVERSAL;
-		if (tag->GetParameter(CreateDescID(DescLevel(param_id)), data, DESCFLAGS_GET::NONE))
+		if (GetAtomParameter(tag, CreateDescID(DescLevel(param_id)), data, DESCFLAGS_GET::NONE))
 		{
 			const String name = data.GetString();
 			if (!name.IsEmpty())
 				return name;
 		}
 
-		if (const BaseObject* object = tag->GetObject())
+		if (BaseObject* object = const_cast<BaseTag*>(tag)->GetObject())
 			return object->GetName();
 
 		return ""_s;
@@ -326,7 +328,7 @@ namespace
 		if (!rigid_manager_object || bone_index < 0)
 			return false;
 
-		for (const BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
+		for (BaseObject* child = const_cast<BaseObject*>(rigid_manager_object)->GetDown(); child; child = child->GetNext())
 		{
 			if (!child->IsInstanceOf(g_mmd_rigid_object_id))
 				continue;
@@ -1935,7 +1937,7 @@ Bool MMDModelManagerObject::BuildStandaloneBoneAdapters()
 		Int32 priority = 0;
 		if (GeData priority_data; bone_tag->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority_data, DESCFLAGS_GET::NONE))
 		{
-			if (const auto* const pd = priority_data.GetCustomDataType<PriorityData>())
+			if (const auto* const pd = GetCustomDataTypeWritable<PriorityData>(priority_data, CUSTOMGUI_PRIORITY_DATA))
 				priority = pd->GetPriorityValue(PRIORITYVALUE_PRIORITY).GetInt32();
 		}
 		max_bone_priority = std::max(max_bone_priority, priority);

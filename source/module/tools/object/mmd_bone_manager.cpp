@@ -23,6 +23,7 @@ Description:	DESC
 #include "module/tools/tag/mmd_bone.h"
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/PMXModel.h"
+#include "module/core/cmt_debug_log.h"
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
