@@ -2496,8 +2496,8 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 		{
 			if (BaseObject* const bone_object = bone_tag->GetObject())
 			{
-				const Matrix rel = bone_object->GetRelMl();
-				const Matrix mg = bone_object->GetMg();
+				[[maybe_unused]] const Matrix rel = bone_object->GetRelMl();
+				[[maybe_unused]] const Matrix mg = bone_object->GetMg();
 				DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
 					"[CMT][Frame @] SceneBoneSample bone=@ relOff=(@,@,@) mgOff=(@,@,@)",
 					doc ? doc->GetTime().GetFrame(30) : -1, sample_bone_index,
@@ -2509,10 +2509,10 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 
 	if (BaseObject* const mesh_object = FindFirstMeshObject(GetMeshManagerObject()))
 	{
-		const Vector base_point = ToPoint(mesh_object)->GetPointCount() > 0 ? ToPoint(mesh_object)->GetPointR()[0] : Vector();
+		[[maybe_unused]] const Vector base_point = ToPoint(mesh_object)->GetPointCount() > 0 ? ToPoint(mesh_object)->GetPointR()[0] : Vector();
 		BaseObject* const deform_cache = GetMeshDeformedCache(mesh_object);
 		const Bool has_deform_cache = deform_cache && deform_cache->IsInstanceOf(Opolygon);
-		const Vector deform_point = has_deform_cache && ToPoint(deform_cache)->GetPointCount() > 0
+		[[maybe_unused]] const Vector deform_point = has_deform_cache && ToPoint(deform_cache)->GetPointCount() > 0
 			? ToPoint(deform_cache)->GetPointR()[0]
 			: Vector();
 		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
@@ -2546,8 +2546,8 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 			if (rigid_index < 0 || static_cast<size_t>(rigid_index) >= rigid_bodies->size())
 				continue;
 
-			const auto& body_transform = (*rigid_bodies)[rigid_index]->GetTransform();
-			const Matrix scene_rigid_mg = child->GetMg();
+			[[maybe_unused]] const auto& body_transform = (*rigid_bodies)[rigid_index]->GetTransform();
+			[[maybe_unused]] const Matrix scene_rigid_mg = child->GetMg();
 			Vector bone_mg_off;
 			if (bone_manager_data_)
 			{
