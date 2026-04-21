@@ -83,7 +83,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Bool is_refreshing_append_execution_order_ = false;
 	struct PhysicsOverrideState
 	{
-		Int32 frame = NOTOK;
+		BaseTime time = BaseTime(-1.);
 		Vector translation = Vector();
 		std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
 	};
@@ -120,7 +120,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	void MarkAppendExecutionOrderDirty();
 	void EnsureAppendExecutionOrder();
 	void PrepareSceneForPhysicsPlayback(BaseDocument* doc);
-	void SetPhysicsOverride(Int32 bone_index, Int32 frame, const Vector& translation, const std::array<Float32, 4>& rotation);
+	void SetPhysicsOverride(Int32 bone_index, const BaseDocument* doc, const Vector& translation, const std::array<Float32, 4>& rotation);
 
 private:
 	void CreateDisplayTag(GeListNode* node) override;
@@ -131,5 +131,5 @@ private:
 	bool CollectBoneHierarchyDFS(BaseObject* object, maxon::BaseArray<BoneHierarchySyncEntry>& entries) const;
 	void RefreshBoneHierarchyUI(BaseObject* bone_manager_object) const;
 	Int32 ComputeAppendRecursionDepth(Int32 bone_index, maxon::BaseArray<Int32>& depth_cache, maxon::BaseArray<UChar>& visit_state) const;
-	const PhysicsOverrideState* FindPhysicsOverride(Int32 bone_index, Int32 frame) const;
+	const PhysicsOverrideState* FindPhysicsOverride(Int32 bone_index, const BaseDocument* doc) const;
 };

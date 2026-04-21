@@ -295,7 +295,7 @@ private:
 	Bool BuildStandaloneIKManager();
 	Bool BuildStandalonePhysics();
 	Bool BuildStandaloneBoneAdapters();
-	void SolveStandaloneIKBeforePhysics();
+	Bool SolveStandaloneIKBeforePhysics(Bool include_after_physics_bones = false);
 	void ResetStandalonePhysics();
 	void StepStandalonePhysics(Float elapsed);
 	void ApplyPhysicsResultsToBoneObjects() const;

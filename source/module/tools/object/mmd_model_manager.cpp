@@ -29,11 +29,12 @@ Description:	MMD model object
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 #include "libMMD/Model/MMD/SjisToUnicode.h"
-#include "module/core/cmt_debug_log.h"
 
 #include <btBulletDynamicsCommon.h>
 
 #include <algorithm>
+#include <cstdarg>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <codecvt>
@@ -129,12 +130,62 @@ namespace
 		return "cmt_initial_state_debug.log";
 	}
 
+	std::string GetIKTraceLogPath()
+	{
+		if (const char* const temp = std::getenv("TEMP"); temp && *temp)
+			return std::string(temp) + "\\cmt_ik_trace.log";
+		return "cmt_ik_trace.log";
+	}
+
 	bool IsInitialStateDebugLoggingEnabled()
 	{
 		const char* const value = std::getenv("CMT_INITIAL_STATE_DEBUG");
 		if (!value || !*value)
 			return false;
 		return std::strcmp(value, "0") != 0 && std::strcmp(value, "false") != 0 && std::strcmp(value, "FALSE") != 0;
+	}
+
+	bool IsIKTraceLoggingEnabled()
+	{
+#if defined(_DEBUG)
+		return true;
+#else
+		const char* const value = std::getenv("CMT_IK_TRACE");
+		if (!value || !*value)
+			return false;
+		return std::strcmp(value, "0") != 0 && std::strcmp(value, "false") != 0 && std::strcmp(value, "FALSE") != 0;
+#endif
+	}
+
+	void EmitIKTraceLine(const char* prefix, const char* message)
+	{
+		std::fputs(prefix, stderr);
+		std::fputs(message, stderr);
+		std::fputc('\n', stderr);
+		std::fflush(stderr);
+
+		if (FILE* const file = std::fopen(GetIKTraceLogPath().c_str(), "ab"))
+		{
+			std::fputs(prefix, file);
+			std::fputs(message, file);
+			std::fputc('\n', file);
+			std::fflush(file);
+			std::fclose(file);
+		}
+	}
+
+	void IKTracePrintf(const char* format, ...)
+	{
+		if (!IsIKTraceLoggingEnabled())
+			return;
+
+		char buffer[4096];
+		va_list args;
+		va_start(args, format);
+		std::vsnprintf(buffer, sizeof(buffer), format, args);
+		va_end(args);
+		buffer[sizeof(buffer) - 1] = '\0';
+		EmitIKTraceLine("[CMT][IKTrace] ", buffer);
 	}
 
 	std::string FormatVectorForLog(const Vector& value)
@@ -1759,14 +1810,14 @@ void MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene(const Bool reset
 	}
 }
 
-void MMDModelManagerObject::SolveStandaloneIKBeforePhysics()
+Bool MMDModelManagerObject::SolveStandaloneIKBeforePhysics(const Bool include_after_physics_bones)
 {
 	if (!ik_manager_own_)
-		return;
+		return false;
 
 	bone_manager_data_ = GetBoneManagerData();
 	if (!bone_manager_data_)
-		return;
+		return false;
 
 	SyncStandaloneBoneAdaptersFromScene(true);
 
@@ -1782,8 +1833,11 @@ void MMDModelManagerObject::SolveStandaloneIKBeforePhysics()
 	{
 		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
 		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
+		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
 		const BaseContainer* const bc = bone_tag ? bone_tag->GetDataInstance() : nullptr;
-		if (!bone_tag_node || !bc || !bc->GetBool(PMX_BONE_IS_IK) || bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM))
+		if (!bone_tag_node || !bone_object || !bc || !bc->GetBool(PMX_BONE_IS_IK))
+			continue;
+		if (!include_after_physics_bones && bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM))
 			continue;
 
 		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
@@ -1792,6 +1846,12 @@ void MMDModelManagerObject::SolveStandaloneIKBeforePhysics()
 
 		bone_tag_node->BuildStandaloneIKChains();
 		ik_solver->Solve();
+		if (BaseDocument* const doc = bone_object->GetDocument())
+		{
+			bone_tag_node->last_ik_solve_time_ = doc->GetTime();
+			bone_tag_node->CacheIKSolveRuntimeOverrides(doc);
+			bone_tag_node->MarkPrephysicsIKChainUpdated(doc);
+		}
 		++solved_count;
 		if (IsInitialStateDebugLoggingEnabled())
 		{
@@ -1830,61 +1890,16 @@ void MMDModelManagerObject::SolveStandaloneIKBeforePhysics()
 			}
 		}
 	}
+
+	return solved_count > 0;
 }
 
 void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene() const
 {
-	// #region agent log H5 - record per-dynamic-bone RelMl right before/after Apply
-	Int32 dbg_logged = 0;
-	auto* const dbg_self_mut = const_cast<MMDModelManagerObject*>(this);
-	BaseObject* const dbg_model = reinterpret_cast<BaseObject*>(dbg_self_mut->Get());
-	BaseDocument* const dbg_doc = dbg_model ? dbg_model->GetDocument() : nullptr;
-	const Int32 dbg_frame = dbg_doc ? dbg_doc->GetTime().GetFrame(30) : -1;
-	const Bool dbg_enabled = (dbg_frame >= 0 && dbg_frame < 30 && bone_manager_data_ != nullptr);
-	// #endregion
 	for (const auto& adapter : physics_bone_pool_)
 	{
 		if (adapter)
-		{
-			// #region agent log H5
-			Vector dbg_before_off;
-			Bool dbg_is_dyn = false;
-			BaseObject* dbg_bone_obj = nullptr;
-			Int32 dbg_bone_index = -1;
-			if (dbg_enabled && dbg_logged < 5)
-			{
-				dbg_bone_index = adapter->GetBoneIndex();
-				for (const Int32 idx : physics_dynamic_bone_indices_)
-				{
-					if (idx == dbg_bone_index) { dbg_is_dyn = true; break; }
-				}
-				if (dbg_is_dyn)
-				{
-					if (BaseTag* const tg = bone_manager_data_->FindBone(dbg_bone_index))
-					{
-						dbg_bone_obj = tg->GetObject();
-						if (dbg_bone_obj) dbg_before_off = dbg_bone_obj->GetRelMl().off;
-					}
-				}
-			}
-			// #endregion
 			adapter->ApplyLocalToBoneObject();
-			// #region agent log H5
-			if (dbg_is_dyn && dbg_bone_obj)
-			{
-				const Vector after_off = dbg_bone_obj->GetRelMl().off;
-				std::ostringstream s;
-				s << "{\"frame\":" << dbg_frame
-					<< ",\"boneIndex\":" << dbg_bone_index
-					<< ",\"relOffBefore\":[" << dbg_before_off.x << "," << dbg_before_off.y << "," << dbg_before_off.z << "]"
-					<< ",\"relOffAfter\":[" << after_off.x << "," << after_off.y << "," << after_off.z << "]"
-					<< "}";
-				cmt_dbg::Log("H5", "mmd_model_manager.cpp:ApplyStandaloneBoneAdaptersToScene",
-					"per-dynamic-bone Apply", s.str());
-				++dbg_logged;
-			}
-			// #endregion
-		}
 	}
 }
 
@@ -2039,23 +2054,90 @@ Bool MMDModelManagerObject::BuildStandaloneIKManager()
 		if (!bc || !bc->GetBool(PMX_BONE_IS_IK))
 			continue;
 
-		C4DIKChainNodeAdapter* const ik_node = GetBoneAdapter(bone_index);
-		if (!ik_node)
+		C4DIKChainNodeAdapter* const control_adapter = GetBoneAdapter(bone_index);
+		if (!control_adapter)
 			continue;
 
 		auto* const solver = ik_manager_own_->AddIKSolver();
-		solver->SetIKNode(ik_node);
-		if (C4DIKChainNodeAdapter* const target_node = GetBoneAdapter(bc->GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX)))
-			solver->SetTargetNode(target_node);
+		String solver_name = GetBoneTagName(bone_tag, true);
+		if (solver_name.IsEmpty())
+			solver_name = GetBoneTagName(bone_tag, false);
+		solver->SetName(string_util::GetStdString(solver_name));
+		solver->SetTargetNode(control_adapter);
+
+		// libMMD expects:
+		//   - IK node    = the effector being pulled by the chain
+		//   - target node = the control/goal bone position
+		// PMX_BONE_IK_TARGET_BONE_* stores the effector bone, not the control IK
+		// bone itself. Resolve that effector via the stable BaseLink instead of
+		// the stale PMX-file index.
+		Int32 effector_index = -1;
+		C4DIKChainNodeAdapter* effector_adapter = nullptr;
+		BaseDocument* const tag_doc = bone_tag->GetDocument();
+		if (GeData link_data; bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_IK_TARGET_BONE_LINK)), link_data, DESCFLAGS_GET::NONE))
+		{
+			BaseList2D* linked = nullptr;
+			if (tag_doc)
+				linked = const_cast<BaseList2D*>(link_data.GetLink(tag_doc));
+			if (!linked)
+			{
+				if (const BaseLink* const raw_link = link_data.GetBaseLink())
+					linked = static_cast<BaseList2D*>(raw_link->ForceGetLink());
+			}
+			if (linked && linked->IsInstanceOf(Obase))
+			{
+				if (BaseTag* const target_tag = static_cast<BaseObject*>(linked)->GetTag(g_mmd_bone_tag_id))
+				{
+					const Int32 resolved = bone_manager_data_->FindBoneIndex(target_tag);
+					if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(resolved))
+					{
+						effector_index = resolved;
+						effector_adapter = adapter;
+					}
+				}
+			}
+		}
+		// Legacy fallback: older scenes/cases without the link may still carry
+		// a usable DFS index in the container.
+		if (!effector_adapter)
+		{
+			const Int32 legacy = bc->GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX);
+			if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(legacy))
+			{
+				effector_index = legacy;
+				effector_adapter = adapter;
+			}
+		}
+
+		if (effector_adapter)
+			solver->SetIKNode(effector_adapter);
 		else
 			++missing_target_count;
-		solver->SetIterateCount(static_cast<uint32_t>(bc->GetInt32(PMX_BONE_IK_ITERATION)));
-		solver->SetLimitAngle(static_cast<float>(bc->GetFloat(PMX_BONE_IK_UNIT_ANGLE)));
+		const Int32 iter_count = bc->GetInt32(PMX_BONE_IK_ITERATION);
+		const Float unit_angle = bc->GetFloat(PMX_BONE_IK_UNIT_ANGLE);
+		solver->SetIterateCount(static_cast<uint32_t>(iter_count));
+		solver->SetLimitAngle(static_cast<float>(unit_angle));
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+			"[CMT][IKSolverCfg] controlIdx=@ controlName='@' effectorIdx=@ effectorName='@' iteration=@ unitAngle=@",
+			bone_index, String(control_adapter->GetName().c_str()), effector_index,
+			effector_adapter ? String(effector_adapter->GetName().c_str()) : String("<null>"),
+			iter_count, unit_angle);
 
-		const String solver_name(ik_node->GetName().c_str());
 		const auto* const enabled_state = ik_solver_enable_states_.Find(solver_name);
 		const Bool enabled = enabled_state ? enabled_state->GetValue() : bc->GetBool(PMX_BONE_IS_IK);
 		solver->Enable(enabled);
+		IKTracePrintf(
+			"BuildStandaloneIKManager solver='%s' controlIdx=%d controlName='%s' setTargetNode='%s' effectorIdx=%d setIKNode='%s' enabled=%d iter=%d unitAngle=%.6f legacyTargetIdx=%d",
+			string_util::GetStdString(solver_name).c_str(),
+			bone_index,
+			control_adapter->GetName().c_str(),
+			control_adapter->GetName().c_str(),
+			effector_index,
+			effector_adapter ? effector_adapter->GetName().c_str() : "<null>",
+			enabled ? 1 : 0,
+			iter_count,
+			static_cast<double>(unit_angle),
+			bc->GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX));
 		++solver_count;
 		if (enabled)
 			++enabled_count;
@@ -2121,21 +2203,6 @@ Bool MMDModelManagerObject::BuildStandalonePhysics()
 			}
 		}
 
-		// #region agent log H1 - capture which bones are detected as physics-dynamic
-		{
-			std::ostringstream s;
-			s << "{\"dynBoneCount\":" << physics_dynamic_bone_indices_.GetCount()
-				<< ",\"indices\":[";
-			for (Int i = 0; i < physics_dynamic_bone_indices_.GetCount(); ++i)
-			{
-				if (i > 0) s << ",";
-				s << physics_dynamic_bone_indices_[i];
-			}
-			s << "]}";
-			cmt_dbg::Log("H1", "mmd_model_manager.cpp:BuildStandalonePhysics",
-				"physics_dynamic_bone_indices populated", s.str());
-		}
-		// #endregion
 	}
 
 	if (joint_manager_data_)
@@ -2366,7 +2433,6 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 
 	if (bone_manager_data_)
 	{
-		const Int32 current_frame = doc ? doc->GetTime().GetFrame(30) : 0;
 		for (const Int32 bone_index : physics_dynamic_bone_indices_)
 		{
 			if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
@@ -2374,7 +2440,7 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 				Vector translation;
 				std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
 				adapter->GetCurrentRelativeState(translation, rotation);
-				bone_manager_data_->SetPhysicsOverride(bone_index, current_frame, translation, rotation);
+				bone_manager_data_->SetPhysicsOverride(bone_index, doc, translation, rotation);
 			}
 		}
 	}
@@ -2434,8 +2500,6 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 
 	if (bone_manager_data_)
 	{
-		const Int32 current_frame = doc ? doc->GetTime().GetFrame(30) : 0;
-		Int32 dbg_logged = 0;
 		for (const Int32 bone_index : physics_dynamic_bone_indices_)
 		{
 			if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
@@ -2443,27 +2507,7 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 				Vector translation;
 				std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
 				adapter->GetCurrentRelativeState(translation, rotation);
-				bone_manager_data_->SetPhysicsOverride(bone_index, current_frame, translation, rotation);
-				// #region agent log H2/H3 - first 5 dynamic bones per step
-				if (dbg_logged < 5 && current_frame < 30)
-				{
-					BaseTag* const dbg_tag = bone_manager_data_->FindBone(bone_index);
-					BaseObject* const dbg_obj = dbg_tag ? dbg_tag->GetObject() : nullptr;
-					const Vector mg = dbg_obj ? dbg_obj->GetMg().off : Vector();
-					const Vector rel = dbg_obj ? dbg_obj->GetRelMl().off : Vector();
-					std::ostringstream s;
-					s << "{\"frame\":" << current_frame
-						<< ",\"boneIndex\":" << bone_index
-						<< ",\"physRelT\":[" << translation.x << "," << translation.y << "," << translation.z << "]"
-						<< ",\"physRot\":[" << rotation[0] << "," << rotation[1] << "," << rotation[2] << "," << rotation[3] << "]"
-						<< ",\"sceneRelOffBeforeApply\":[" << rel.x << "," << rel.y << "," << rel.z << "]"
-						<< ",\"sceneMgOffBeforeApply\":[" << mg.x << "," << mg.y << "," << mg.z << "]"
-						<< "}";
-					cmt_dbg::Log("H2", "mmd_model_manager.cpp:StepStandalonePhysics",
-						"SetPhysicsOverride for dynamic bone", s.str());
-					++dbg_logged;
-				}
-				// #endregion
+				bone_manager_data_->SetPhysicsOverride(bone_index, doc, translation, rotation);
 			}
 		}
 	}

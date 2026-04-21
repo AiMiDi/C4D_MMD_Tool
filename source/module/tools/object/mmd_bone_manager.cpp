@@ -23,7 +23,6 @@ Description:	DESC
 #include "module/tools/tag/mmd_bone.h"
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/PMXModel.h"
-#include "module/core/cmt_debug_log.h"
 
 #include <cstdlib>
 #include <cstring>
@@ -1355,15 +1354,16 @@ MMDModelManagerObject* MMDBoneManagerObject::GetModelManagerData()
 	return model_manager_object ? model_manager_object->GetNodeData<MMDModelManagerObject>() : nullptr;
 }
 
-const MMDBoneManagerObject::PhysicsOverrideState* MMDBoneManagerObject::FindPhysicsOverride(const Int32 bone_index, const Int32 frame) const
+const MMDBoneManagerObject::PhysicsOverrideState* MMDBoneManagerObject::FindPhysicsOverride(const Int32 bone_index, const BaseDocument* doc) const
 {
 	const auto* const entry = physics_overrides_.Find(bone_index);
 	if (!entry)
 		return nullptr;
-	return entry->GetValue().frame == frame ? &entry->GetValue() : nullptr;
+	const BaseTime current_time = doc ? doc->GetTime() : BaseTime(-1.);
+	return entry->GetValue().time == current_time ? &entry->GetValue() : nullptr;
 }
 
-void MMDBoneManagerObject::SetPhysicsOverride(const Int32 bone_index, const Int32 frame, const Vector& translation, const std::array<Float32, 4>& rotation)
+void MMDBoneManagerObject::SetPhysicsOverride(const Int32 bone_index, const BaseDocument* doc, const Vector& translation, const std::array<Float32, 4>& rotation)
 {
 	if (bone_index < 0)
 		return;
@@ -1371,11 +1371,11 @@ void MMDBoneManagerObject::SetPhysicsOverride(const Int32 bone_index, const Int3
 	if (auto* const bone_tag = FindBone(bone_index))
 	{
 		if (auto* const bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>())
-			bone_tag_node->SetPlaybackRuntimeOverride(frame, translation, rotation);
+			bone_tag_node->SetPlaybackRuntimeOverride(doc, translation, rotation);
 	}
 
 	PhysicsOverrideState state;
-	state.frame = frame;
+	state.time = doc ? doc->GetTime() : BaseTime(-1.);
 	state.translation = translation;
 	state.rotation = rotation;
 	iferr(physics_overrides_.Insert(bone_index, state))
@@ -1409,6 +1409,7 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 	Int32 applied_animation_bones = 0;
 	Int32 post_physics_ik_candidates = 0;
 	Int32 post_physics_ik_solved = 0;
+	Int32 post_physics_ik_skipped_same_time = 0;
 	std::vector<std::string> inherit_override_labels;
 	std::vector<std::string> applied_animation_labels;
 	std::vector<std::string> post_physics_ik_labels;
@@ -1448,10 +1449,13 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		++processed_bones;
 
 		const Bool deform_after_physics = bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM);
+		// Standalone runtime keeps IK as a single pre-physics solve. Any same-frame
+		// persistence should come from cached runtime overrides, not a second IK
+		// pass from the bone manager.
+		const Bool should_run_post_physics_ik = false;
 		Vector source_translation;
 		std::array<Float32, 4> source_rotation { 0.F, 0.F, 0.F, 1.F };
-		const Bool has_self_override = FindPhysicsOverride(bone_index, current_frame) != nullptr
-			&& bone_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation);
+		const Bool has_self_override = bone_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation);
 		if (has_self_override)
 			++self_override_bones;
 
@@ -1468,32 +1472,14 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 				inherit_override_labels.emplace_back(BuildBoneDebugLabel(bone_tag, bone_index));
 		}
 
-		if (!has_self_override && !deform_after_physics && !inherit_source_has_override)
+		if (!has_self_override && !deform_after_physics && !inherit_source_has_override && !should_run_post_physics_ik)
 			continue;
 
 		if (has_self_override)
 		{
-			// #region agent log H3/H4
-			const Vector dbg_rel_before = bone_object->GetRelMl().off;
-			// #endregion
 			bone_object->SetRelMl(BuildBoneRelativeMatrix(source_translation, source_rotation));
 			MarkBoneTransformDirty(bone_object);
-			// #region agent log H3/H4
-			if (current_frame < 30)
-			{
-				const Vector dbg_rel_after = bone_object->GetRelMl().off;
-				std::ostringstream s;
-				s << "{\"frame\":" << current_frame
-					<< ",\"boneIndex\":" << bone_index
-					<< ",\"overrideT\":[" << source_translation.x << "," << source_translation.y << "," << source_translation.z << "]"
-					<< ",\"relOffBefore\":[" << dbg_rel_before.x << "," << dbg_rel_before.y << "," << dbg_rel_before.z << "]"
-					<< ",\"relOffAfter\":[" << dbg_rel_after.x << "," << dbg_rel_after.y << "," << dbg_rel_after.z << "]"
-					<< "}";
-				cmt_dbg::Log("H3", "mmd_bone_manager.cpp:Execute",
-					"applied physics override to bone", s.str());
-			}
-			// #endregion
-			if (!(deform_after_physics && bone_tag_node->is_IK))
+			if (!should_run_post_physics_ik)
 				continue;
 		}
 
@@ -1506,11 +1492,17 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 				applied_animation_labels.emplace_back(BuildBoneDebugLabel(bone_tag, bone_index));
 		}
 
-		if (deform_after_physics && bone_tag_node->is_IK)
+		if (should_run_post_physics_ik)
 		{
 			++post_physics_ik_candidates;
-			if (bone_tag_node->RunIKSolveAnimMode(bone_object, false))
+			if (bone_tag_node->HasPostPhysicsIKSolveAtTime(doc))
 			{
+				++post_physics_ik_skipped_same_time;
+				continue;
+			}
+			if (bone_tag_node->RunIKSolveAnimMode(bone_object, false, true))
+			{
+				bone_tag_node->MarkPostPhysicsIKSolvedAtTime(doc);
 				++post_physics_ik_solved;
 				if (debug_logging)
 					post_physics_ik_labels.emplace_back(BuildBoneDebugLabel(bone_tag, bone_index));
@@ -1519,9 +1511,9 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 	}
 
 	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT][Frame @] BoneManagerExecute bones=@ processed=@ selfOverride=@ inheritOverride=@ animApplied=@ postIK=@ solved=@",
+		"[CMT][Frame @] BoneManagerExecute bones=@ processed=@ selfOverride=@ inheritOverride=@ animApplied=@ postIK=@ solved=@ skippedSameTime=@",
 		current_frame, bone_list_.GetCount(), processed_bones, self_override_bones, inherit_override_bones,
-		applied_animation_bones, post_physics_ik_candidates, post_physics_ik_solved);
+		applied_animation_bones, post_physics_ik_candidates, post_physics_ik_solved, post_physics_ik_skipped_same_time);
 	if (debug_logging)
 	{
 		if (!inherit_override_labels.empty())
@@ -1607,10 +1599,15 @@ void MMDBoneManagerObject::PrepareSceneForPhysicsPlayback(BaseDocument* doc)
 		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
 		if (!bone_object || !bone_tag_node || bone_tag_node->bone_mode_ != BONE_MODE_ANIM)
 			continue;
-		if (!BoneNeedsPrephysicsPlayback(this, bone_tag, prepare_memo, prepare_visiting))
-			continue;
 
-		bone_tag_node->BeginPrephysicsFrame(current_frame);
+		// The standalone physics / IK runtime executes before bone tags have
+		// necessarily refreshed the current document time. Preparing only the
+		// after-physics subset leaves most adapters one frame behind, which
+		// produces visible jitter across animated, IK, and physics-driven bones.
+		// Refresh every animated bone here so the runtime always steps from the
+		// current animation pose.
+
+		bone_tag_node->BeginPrephysicsFrame(doc);
 		if (bone_tag_node->ApplyActiveAnimation(bone_object, doc, true))
 		{
 			++prepared_bones;
