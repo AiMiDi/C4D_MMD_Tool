@@ -48,7 +48,7 @@ libMMD 中 `VMDBezier`（贝塞尔插值）、`MMDIkSolver`（IK 求解）、`MM
 
 - 骨骼 Tag 使用 VMD 原生贝塞尔插值算法自行评估动画，保证与 MMD 精确一致；位移与四元数旋转数据存于 Tag 内部结构，不在骨骼对象 PRS 上打关键帧
 
-- 付与和 IK 求解在骨骼 Tag 中完成，不依赖 libMMD 的 PMXModel 流水线
+- 付与规则和骨骼动画评估仍由骨骼 Tag 持有，但播放时的 `动画 -> 付与 -> IK -> 物理 -> 回写` 统一由模型管理器调度，不依赖 libMMD 的 PMXModel 流水线
 
 - 物理模拟通过回调函数读写 C4D 骨骼变换，不再依赖 MMDNode
 
@@ -86,7 +86,7 @@ libMMD 中 `VMDBezier`（贝塞尔插值）、`MMDIkSolver`（IK 求解）、`MM
 
 - **时间线与 F-Curve 标记**：在 Tag 的 **SplineData** 参数与 **「下一个关键帧」Int** 参数上创建 CTrack/CKey，用于在时间线显示关键帧、在 F-Curve 中显示标记；用户在该 SplineData 控件中编辑 0–127 范围的 VMD 贝塞尔控制点。**不在骨骼对象的 position/rotation CTrack 上写入关键帧**；**不在 Tag 上增加独立的位移 XYZ / 四元数 WXYZ 可动画参数**。
 
-- **播放**：`MMDBoneTag::Execute`（在 **动画模式** `BONE_MODE_ANIM` 下，见 D9）从上述内部结构读取当前帧两侧关键帧，调用独立模块 `InterpolateBoneKeys`（VMD Bezier + 四元数 slerp），并将结果写入 **骨骼对象相对绑定姿态的局部动画结果**（`SetRelMl()` 或等价的局部矩阵/PRS 写回路径）。导入 PMX 时建立的 frozen bind pose 继续表示静态骨架初始姿态，不作为每帧动画输出的目标。
+- **播放**：`MMDBoneTag` 提供“当前活动槽 -> 当前帧局部动画结果”的评估 helper，播放主循环改由 `MMDModelManagerObject::Execute` 统一调度。在 **动画模式** `BONE_MODE_ANIM` 下，模型管理器按稳定顺序调用骨骼 Tag helper，使用独立模块 `InterpolateBoneKeys`（VMD Bezier + 四元数 slerp）计算局部动画结果，写入 `C4DIKChainNodeAdapter`/standalone runtime，并在整帧末尾统一回写骨骼对象。导入 PMX 时建立的 frozen bind pose 继续表示静态骨架初始姿态，不作为每帧动画输出的目标。
 
 
 
@@ -98,15 +98,15 @@ libMMD 中 `VMDBezier`（贝塞尔插值）、`MMDIkSolver`（IK 求解）、`MM
 
 
 
-### D2: 付与（Append Transform）在骨骼 Tag 中实现
+### D2: 付与（Append Transform）由模型管理器调用骨骼 Tag helper 实现
 
 
 
-**选择**：在 `MMDBoneTag::Execute` 中实现付与逻辑。每根有付与属性的骨骼读取其付与源骨骼的 Tag，获取已评估的动画旋转/位移，按权重叠加到自身。
+**选择**：付与逻辑保留在 `MMDBoneTag` 的评估 helper 中，但不再由各 tag 自己的 `Execute` 直接驱动。模型管理器在统一播放管线中按骨骼顺序调用这些 helper；每根有付与属性的骨骼读取其付与源骨骼的 Tag runtime state，获取已评估的动画/IK/物理后有效旋转与位移，并按权重叠加到自身。
 
 
 
-**理由**：付与需在骨骼动画评估之后、与物理阶段协调；通过 `bone_manager_data_->FindBone(index)` 查找源骨骼 Tag。旧代码（`old/TMMDBone.cpp`）有参考。
+**理由**：付与需在骨骼动画评估之后、与 IK / 物理阶段协调；如果仍由各 tag 分散在 `Execute` 中写回骨骼，后续 tag 很容易覆盖同帧前面求出的 IK / physics 结果。通过模型管理器统一调度，可以在保持 bone tag 数据权威的同时，确保同帧只提交一次最终骨骼状态。
 
 
 
@@ -194,7 +194,7 @@ libMMD 中 `VMDBezier`（贝塞尔插值）、`MMDIkSolver`（IK 求解）、`MM
 
 
 
-**选择**：骨骼 Tag 与模型管理器上驱动骨骼变换/物理的 Execute **均使用 `EXECUTIONPRIORITY_EXPRESSION`**，仅用 **优先级数值** 区分：物理前骨骼 → 物理步进（模型管理器）→ 物理后骨骼。
+**选择**：骨骼 Tag 与模型管理器上驱动骨骼变换/物理的 Execute **均使用 `EXECUTIONPRIORITY_EXPRESSION`**，仅用 **优先级数值** 区分：物理前骨骼 → 物理步进（模型管理器）→ 物理后骨骼。骨骼 Tag 在动画模式下仍参与表达式调度与 UI 同步，但**不再在 Execute 中直接写最终骨骼矩阵**；最终提交由模型管理器统一完成。
 
 
 
@@ -238,6 +238,13 @@ libMMD 中 `VMDBezier`（贝塞尔插值）、`MMDIkSolver`（IK 求解）、`MM
 
 8. 不再重建 `VMDAnimation`；骨骼动画数据在 **骨骼 Tag 内部结构** + **SplineData /「下一个关键帧」CTrack** 中持久化
 
+9. 每帧播放时采用统一调度：
+   - 按 `deform_layer + append_recursion_depth + bone_index` 的稳定顺序遍历 **物理前** 骨骼，调用 bone tag helper 评估动画/付与并写入 adapter；遇到 IK 骨骼时由模型管理器统一触发 solver，并同步 IK runtime state
+   - 执行 standalone physics step，但不立即把结果写回 C4D 场景对象
+   - 将 physics 驱动骨骼的 local state 作为 runtime override 回填到 source bone tag，供 **物理后** 骨骼继续读取
+   - 再按同样顺序遍历 **物理后** 骨骼，跳过 physics 驱动骨骼自身的动画覆盖，只评估非 physics-driven 骨骼及其 IK
+   - 整帧最后统一 `ApplyStandaloneBoneAdaptersToScene()`，避免同帧中间结果被后续 tag 覆盖
+
 **补充说明（与当前代码结构对齐）**：
 
 - 这不只是“场景重开后的恢复路径”变化。当前代码在 **初次 PMX 导入** 时也会通过 `MMDBoneManagerObject::LoadPMX` / `SetMMDModel` 把 `mmd_node_`、`ik_solver_` 等 libMMD 运行时对象塞回骨骼 Tag。该提案落地时，这条初始绑定路径也必须同步拆掉，否则会出现“新播放路径已去 `mmd_node_`，但导入期仍偷偷建立依赖”的半迁移状态。
@@ -279,13 +286,13 @@ libMMD 中 `VMDBezier`（贝塞尔插值）、`MMDIkSolver`（IK 求解）、`MM
 **数据放置（推荐）**：在 **`MMDBoneTag` 内为每根骨骼按槽存储** 多套关键帧块（每槽：`sorted keyframes` + 该槽对应的 SplineData /「下一个关键帧」标记策略）；模型管理器侧仅保留一份 **槽级元数据**（至少包含显示名、最大帧），用于列表 UI、删除和文档时间范围。切换 **`MODEL_ANIM_LIST`** 时：
 
 1. 更新 `animation_index_`，向骨骼管理器/骨骼 Tag **广播当前活动槽**（`MultiMessage` 或已有消息扩展）；
-2. 各 **`MMDBoneTag::Execute`** 仅对 **活动槽** 的数据做 `InterpolateBoneKeys`；
+2. 各 **`MMDBoneTag`** 的活动槽数据由模型管理器在统一播放管线中调用 helper 做 `InterpolateBoneKeys`，而不是由各 tag 自己的 `Execute` 分散驱动；
 3. **`doc->SetMaxTime` / `SetLoopMaxTime`** 根据当前槽内关键帧时间并集（或槽元数据中记录的最大帧）计算，**不再**调用 `VMDAnimation::GetMaxKeyTime()`。
 
 **与当前代码强相关的澄清**：
 
 - 当前 `DeleteVMDAnimation()`、`SaveVMDMotion()`、`MODEL_ANIM_LIST` 文案和列表项都直接依赖 `animations_`。本提案的决策是：**原始 VMD 来源数据彻底删除**，这些行为都要改为依赖 bone tag 数据和模型管理器槽元数据。
-- **播放权威** 完全迁移到骨骼 Tag；模型管理器不再保留任何可回放的原始 VMD 来源对象。
+- **播放权威** 迁移为“bone tag 数据 + model manager 播放调度”组合：bone tag 仍是骨骼动画真值持有者，模型管理器不再保留任何可回放的原始 VMD 来源对象，但承担统一调度与最终提交职责。
 - 当前 morph / IK 关键帧仍位于模型管理器 CTrack 上。本提案定义的是 **骨骼通道** 的槽切换语义；若希望 morph / IK 也做严格的按槽隔离，需要后续单独定义模型管理器侧多槽轨道策略。
 
 **备选**：槽数据仅存在模型管理器 HyperFile、切换时整块写入骨骼 Tag（内存换简单序列化）；文档中可记为实现选项。

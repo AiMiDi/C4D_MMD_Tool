@@ -14,17 +14,17 @@
 
 - **VMD 导入写入骨骼 Tag 数据**：在 `LoadVMDMotion` 中遍历 `VMDFile::m_motions`，按骨骼名匹配后，将关键帧的位移、四元数旋转与 `m_interpolation` 解码结果写入 **骨骼 Tag 内部有序结构**；同时在 Tag 的 **SplineData** 与 **「下一个关键帧」** 参数上创建 CTrack/CKey，用于时间线与 F-Curve 标记。**不在骨骼对象 position/rotation CTrack 上写入关键帧**。
 
-- **骨骼 Tag 自行评估 VMD 动画**：`MMDBoneTag::Execute` 在 **`BONE_MODE_ANIM`**（合并后的动画模式，见 D9）下不再从 `mmd_node_` 读取变换，而是从内部关键帧数据（当前活动槽，见 D10）与 libmmd 插值算法计算当前帧位移与旋转，并写入 **骨骼对象相对绑定姿态的局部动画结果**。导入 PMX 时建立的 bind pose / frozen pose 继续作为静态骨架基准，不应被骨骼动画求值每帧覆写。
+- **分层播放执行**：`MMDBoneTag` 负责预物理动画/付与评估，并在动画应用后立刻执行预物理 IK；`MMDModelManagerObject` 保留 physics runtime、physics UI 与 physics step；`MMDRigidObject` / `MMDJointObject` 负责从物理世界回读结果；`MMDBoneManagerObject` 负责后物理 final phase 并统一提交骨骼最终姿态。
 
-- **付与逻辑移入骨骼 Tag**：`MMDBoneTag::Execute` 中实现 PMX 付与（append transform）计算，从付与源骨骼的 Tag 读取动画旋转/位移，按权重叠加。
+- **付与逻辑保留在骨骼 Tag**：PMX append transform 仍以 `MMDBoneTag` 为数据与规则承载；预物理时由 tag 自己评估，后物理阶段由 `MMDBoneManagerObject` 基于 physics override 重新评估依赖链。
 
-- **IK 求解集成到骨骼 Tag**：IK 骨骼的 `MMDBoneTag` 持有 `MMDIkSolver`，在 Execute 中运行 IK 求解。`MMDIkSolver` 改为通过 **`IMMDNode`** 抽象接口操作节点；`MMDNode` 实现该接口，C4D 侧提供 **`C4DIKChainNodeAdapter`** 适配器（含临时全局变换缓存）。
+- **IK 求解回到骨骼 Tag / BoneManager 分层执行**：预物理 IK 在对应 `MMDBoneTag::Execute` 中、紧跟动画与付与之后执行；若 `PMX_BONE_PHYSICS_AFTER_DEFORM` 需要后物理 IK，则由 `MMDBoneManagerObject` 在 final phase 触发。`MMDIkSolver` 继续通过 **`IMMDNode`** 抽象接口操作节点。
 
 - **物理模块独立化**：`MMDRigidBody::Create` 新增不依赖 `MMDModel*`/`MMDNode*` 的重载 `Create(const PMXRigidbody&, IMMDNode*)`，MotionState 通过 `IMMDNode`（与 IK 一致、`GetInitialGlobalTransform` 用于 offset）获取和写入骨骼全局变换，使物理模拟可以直接读写 C4D 骨骼矩阵。
 
 - **VMD 插值算法独立模块**：将 `VMDBezier`、`SetVMDBezier`/`GetVMDBezier`、骨骼关键帧插值逻辑从 `VMDAnimation` 中提取为独立的纯函数算法模块，供 C4D 侧直接调用。
 
-- **执行顺序保证**：骨骼 Tag 与模型管理器在 **`EXECUTIONPRIORITY_EXPRESSION`** 下，用数值区间区分物理前骨骼、物理模拟（固定 5000）、物理后骨骼（见 design D6）。
+- **执行顺序保证**：骨骼 Tag 与模型管理器在 **`EXECUTIONPRIORITY_EXPRESSION`** 下，用数值区间区分物理前骨骼、物理模拟（固定 5000）、物理后骨骼（见 design D6）；其中骨骼 Tag 在动画模式下不再作为最终写回者，最终骨骼提交由模型管理器统一完成。
 
 - **模式枚举合并**：各管理器上的 **`*_MODE_ANIM` 与 `*_MODE_VMD` 合并为单一 `*_MODE_ANIM`**（保留 `*_MODE_EDIT`）。原「VMD 播放」与「动画播放」统一为同一套骨骼 Tag 内部数据管线；更新 `OMMD*.res` / `*.h` / 字符串表，旧文件中的 `*_MODE_VMD` 读入时映射到 `*_MODE_ANIM`（见 design D9）。
 
@@ -64,7 +64,7 @@
 
 - `object-physics`：物理模拟流程改为通过 `IMMDNode` 读写 C4D 骨骼变换，不再依赖内建 `MMDNode`；执行顺序在 EXPRESSION 内用数值区分
 
-- `object-ik-solver-control`：IK 求解从 PMXModel 内部移到骨骼 Tag Execute 中执行；IK 开关控制改为经模型管理器持有的 standalone `MMDIKManager` 和持久化状态驱动
+- `object-ik-solver-control`：IK 求解从 PMXModel 内部移到 C4D 侧统一播放管线中执行；骨骼 Tag 提供链配置与动画评估 helper，模型管理器持有 standalone `MMDIKManager`、统一触发求解并持久化 IK 开关状态
 
 
 
