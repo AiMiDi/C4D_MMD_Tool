@@ -8,11 +8,12 @@ Description:	MMD model object
 
 **************************************************************************/
 
+#include "module/core/cmt_old_sdk_stl_preload.h"
+#include "mmd_model_manager.h"
 #include <c4d.h>
 #include <c4d_symbols.h>
 #include "plugin_resource.h"
 #include "module/core/cmt_marco.h"
-#include "mmd_model_manager.h"
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
 #include "module/tools/material/mmd_material.h"
@@ -22,6 +23,7 @@ Description:	MMD model object
 #include "mmd_mesh_manager.h"
 #include "mmd_rigid_manager.h"
 #include "customgui_priority.h"
+#include "description/OMMDModelManager.h"
 #include "description/OMMDRigid.h"
 #include "description/TMMDBone.h"
 #include "maxon/queue.h"
@@ -29,6 +31,7 @@ Description:	MMD model object
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 #include "libMMD/Model/MMD/SjisToUnicode.h"
+
 
 #include <btBulletDynamicsCommon.h>
 
@@ -89,14 +92,14 @@ namespace
 
 		GeData data;
 		const Int32 param_id = use_local_name ? PMX_BONE_NAME_LOCAL : PMX_BONE_NAME_UNIVERSAL;
-		if (tag->GetParameter(CreateDescID(DescLevel(param_id)), data, DESCFLAGS_GET::NONE))
+		if (GetAtomParameter(tag, CreateDescID(DescLevel(param_id)), data, DESCFLAGS_GET::NONE))
 		{
 			const String name = data.GetString();
 			if (!name.IsEmpty())
 				return name;
 		}
 
-		if (const BaseObject* object = tag->GetObject())
+		if (BaseObject* object = const_cast<BaseTag*>(tag)->GetObject())
 			return object->GetName();
 
 		return ""_s;
@@ -327,7 +330,7 @@ namespace
 		if (!rigid_manager_object || bone_index < 0)
 			return false;
 
-		for (const BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
+		for (BaseObject* child = const_cast<BaseObject*>(rigid_manager_object)->GetDown(); child; child = child->GetNext())
 		{
 			if (!child->IsInstanceOf(g_mmd_rigid_object_id))
 				continue;
@@ -1900,7 +1903,7 @@ Bool MMDModelManagerObject::BuildStandaloneBoneAdapters()
 		Int32 priority = 0;
 		if (GeData priority_data; bone_tag->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority_data, DESCFLAGS_GET::NONE))
 		{
-			if (const auto* const pd = priority_data.GetCustomDataType<PriorityData>())
+			if (const auto* const pd = GetCustomDataTypeWritable<PriorityData>(priority_data, CUSTOMGUI_PRIORITY_DATA))
 				priority = pd->GetPriorityValue(PRIORITYVALUE_PRIORITY).GetInt32();
 		}
 		max_bone_priority = std::max(max_bone_priority, priority);
@@ -2462,8 +2465,8 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 		{
 			if (BaseObject* const bone_object = bone_tag->GetObject())
 			{
-				const Matrix rel = bone_object->GetRelMl();
-				const Matrix mg = bone_object->GetMg();
+				[[maybe_unused]] const Matrix rel = bone_object->GetRelMl();
+				[[maybe_unused]] const Matrix mg = bone_object->GetMg();
 				DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
 					"[CMT][Frame @] SceneBoneSample bone=@ relOff=(@,@,@) mgOff=(@,@,@)",
 					doc ? doc->GetTime().GetFrame(30) : -1, sample_bone_index,
@@ -2475,10 +2478,10 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 
 	if (BaseObject* const mesh_object = FindFirstMeshObject(GetMeshManagerObject()))
 	{
-		const Vector base_point = ToPoint(mesh_object)->GetPointCount() > 0 ? ToPoint(mesh_object)->GetPointR()[0] : Vector();
+		[[maybe_unused]] const Vector base_point = ToPoint(mesh_object)->GetPointCount() > 0 ? ToPoint(mesh_object)->GetPointR()[0] : Vector();
 		BaseObject* const deform_cache = GetMeshDeformedCache(mesh_object);
 		const Bool has_deform_cache = deform_cache && deform_cache->IsInstanceOf(Opolygon);
-		const Vector deform_point = has_deform_cache && ToPoint(deform_cache)->GetPointCount() > 0
+		[[maybe_unused]] const Vector deform_point = has_deform_cache && ToPoint(deform_cache)->GetPointCount() > 0
 			? ToPoint(deform_cache)->GetPointR()[0]
 			: Vector();
 		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
@@ -2512,8 +2515,8 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 			if (rigid_index < 0 || static_cast<size_t>(rigid_index) >= rigid_bodies->size())
 				continue;
 
-			const auto& body_transform = (*rigid_bodies)[rigid_index]->GetTransform();
-			const Matrix scene_rigid_mg = child->GetMg();
+			[[maybe_unused]] const auto& body_transform = (*rigid_bodies)[rigid_index]->GetTransform();
+			[[maybe_unused]] const Matrix scene_rigid_mg = child->GetMg();
 			Vector bone_mg_off;
 			if (bone_manager_data_)
 			{

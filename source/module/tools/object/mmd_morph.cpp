@@ -1,34 +1,35 @@
+#include "module/core/cmt_old_sdk_stl_preload.h"
+#include "mmd_model_manager.h"
 #include <c4d.h>
 #include <c4d_symbols.h>
 #include "module/core/cmt_marco.h"
 #include "mmd_morph.h"
-#include "mmd_model_manager.h"
 #include "mmd_mesh_manager.h"
 #include "mmd_bone_manager.h"
 #include "description/OMMDModelManager.h"
 
-inline Bool IMorph::Read(HyperFile* hf)
+Bool IMorph::Read(HyperFile* hf)
 {
 	IOReadField(m_strength_id);
 	IOReadField(m_name);
 	return true;
 }
 
-inline Bool IMorph::Write(HyperFile* hf) SDK2024_Const
+Bool IMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	IOWriteField(m_strength_id);
 	IOWriteField(m_name);
 	return true;
 }
 
-inline Bool IMorph::CopyTo(IMorph* dest) const
+Bool IMorph::CopyTo(IMorph* dest) const
 {
 	dest->m_strength_id = m_strength_id;
 	dest->m_name = m_name;
 	return true;
 }
 
-inline Bool GroupMorph::Read(HyperFile* hf)
+Bool GroupMorph::Read(HyperFile* hf)
 {
 	if (!IMorph::Read(hf))
 		return false;
@@ -44,7 +45,7 @@ inline Bool GroupMorph::Read(HyperFile* hf)
 	return true;
 }
 
-inline Bool GroupMorph::Write(HyperFile* hf) SDK2024_Const
+Bool GroupMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	if (IMorph::Write(hf) == false)
 		return false;
@@ -58,7 +59,7 @@ inline Bool GroupMorph::Write(HyperFile* hf) SDK2024_Const
 	return true;
 }
 
-inline Bool GroupMorph::CopyTo(IMorph* dest) const
+Bool GroupMorph::CopyTo(IMorph* dest) const
 {
 	if (IMorph::CopyTo(dest) == false)
 		return false;
@@ -70,7 +71,7 @@ inline Bool GroupMorph::CopyTo(IMorph* dest) const
 	return true;
 }
 
-inline Bool FlipMorph::Read(HyperFile* hf)
+Bool FlipMorph::Read(HyperFile* hf)
 {
 	if (IMorph::Read(hf) == false)
 		return false;
@@ -85,7 +86,7 @@ inline Bool FlipMorph::Read(HyperFile* hf)
 	return true;
 }
 
-inline Bool FlipMorph::Write(HyperFile* hf) SDK2024_Const
+Bool FlipMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	if (IMorph::Write(hf) == false)
 		return false;
@@ -99,7 +100,7 @@ inline Bool FlipMorph::Write(HyperFile* hf) SDK2024_Const
 	return true;
 }
 
-inline Bool FlipMorph::CopyTo(IMorph* dest) const
+Bool FlipMorph::CopyTo(IMorph* dest) const
 {
 	if (IMorph::CopyTo(dest) == false)
 		return false;
@@ -150,7 +151,7 @@ void IMorph::DeletePanelUI(MMDModelManagerObject& model)
 		model.DeleteDynamicDescription(m_panel_id);
 }
 
-inline Float IMorph::GetStrength(SDK2024_Const GeListNode* node) const
+Float IMorph::GetStrength(SDK2024_Const GeListNode* node) const
 {
 	GeData ge_data;
 	if (!node->GetParameter(m_strength_id, ge_data, DESCFLAGS_GET::NONE))
@@ -180,7 +181,7 @@ void IMorph::RenameMorph(const String& name)
 	m_name = name;
 }
 
-inline void GroupMorph::RenameSubMorph(const Int old_id, const Int new_id)
+void GroupMorph::RenameSubMorph(const Int old_id, const Int new_id)
 {
 	if (auto* data_ptr = m_data.Find(old_id); data_ptr)
 	{
@@ -190,7 +191,7 @@ inline void GroupMorph::RenameSubMorph(const Int old_id, const Int new_id)
 	}
 }
 
-inline void FlipMorph::RenameSubMorph(const Int old_id, const Int new_id)
+void FlipMorph::RenameSubMorph(const Int old_id, const Int new_id)
 {
 	if (auto* data_ptr = m_data.Find(old_id); data_ptr)
 	{
@@ -219,7 +220,7 @@ GroupMorph::GroupMorph(GroupMorph&& other) noexcept:
 	m_data(std::move(other.m_data))
 {}
 
-inline void GroupMorph::UpdateMorph(MMDModelManagerObject& model)
+void GroupMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	GeListNode* node = model.Get();
 	auto& morph_arr = model.GetMorphData();
@@ -251,7 +252,7 @@ FlipMorph::FlipMorph(FlipMorph&& other) noexcept:
 	m_data(std::move(other.m_data))
 {}
 
-inline void FlipMorph::UpdateMorph(MMDModelManagerObject& model)
+void FlipMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	GeListNode* node = model.Get();
 	auto& morph_arr = model.GetMorphData();
@@ -264,7 +265,7 @@ inline void FlipMorph::UpdateMorph(MMDModelManagerObject& model)
 	}
 }
 
-inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
+void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	if (BaseObject* mesh_manager = model.GetMeshManagerObject())
 	{
@@ -273,7 +274,7 @@ inline void MeshMorph::UpdateMorph(MMDModelManagerObject& model)
 
 }
 
-inline void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
+void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	if (BaseObject* bone_manager = model.GetBoneManagerObject())
 	{
@@ -288,7 +289,7 @@ inline void BoneMorph::UpdateMorph(MMDModelManagerObject& model)
 	}
 }
 
-inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetString(DESC_NAME, m_name);
@@ -328,7 +329,7 @@ inline void GroupMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
-inline void FlipMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+void FlipMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_GROUP);
 	bc.SetString(DESC_NAME, m_name);
@@ -368,7 +369,7 @@ inline void FlipMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
-inline void MeshMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+void MeshMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, m_name);
@@ -391,7 +392,7 @@ UVMorph::UVMorph(String name, DescID strength_id) : IMorph(std::move(name), std:
 UVMorph::UVMorph(UVMorph&& other) noexcept : IMorph(std::move(other))
 {}
 
-inline void UVMorph::UpdateMorph(MMDModelManagerObject& model)
+void UVMorph::UpdateMorph(MMDModelManagerObject& model)
 {
 	if (BaseObject* mesh_manager = model.GetMeshManagerObject())
 	{
@@ -399,7 +400,7 @@ inline void UVMorph::UpdateMorph(MMDModelManagerObject& model)
 	}
 }
 
-inline void UVMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+void UVMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, m_name);
@@ -416,7 +417,7 @@ inline void UVMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
-inline void UVMorph::DeleteMorphUI(MMDModelManagerObject& model)
+void UVMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);
@@ -428,7 +429,7 @@ inline void UVMorph::DeleteMorphUI(MMDModelManagerObject& model)
 	}
 }
 
-inline void BoneMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+void BoneMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, m_name);
@@ -445,7 +446,7 @@ inline void BoneMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
-inline void GroupMorph::DeleteMorphUI(MMDModelManagerObject& model)
+void GroupMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	model.DeleteDynamicDescription(m_button_editor_id);
 	model.DeleteDynamicDescription(m_button_delete_id);
@@ -462,7 +463,7 @@ inline void GroupMorph::DeleteMorphUI(MMDModelManagerObject& model)
 	}
 }
 
-inline void FlipMorph::DeleteMorphUI(MMDModelManagerObject& model)
+void FlipMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	model.DeleteDynamicDescription(m_button_editor_id);
 	model.DeleteDynamicDescription(m_button_delete_id);
@@ -479,7 +480,7 @@ inline void FlipMorph::DeleteMorphUI(MMDModelManagerObject& model)
 	}
 }
 
-inline void MeshMorph::DeleteMorphUI(MMDModelManagerObject& model)
+void MeshMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);
@@ -497,7 +498,7 @@ BoneMorph::BoneMorph(String name, DescID strength_id): IMorph(std::move(name), s
 BoneMorph::BoneMorph(BoneMorph&& other) noexcept: IMorph(std::move(other))
 {}
 
-inline void BoneMorph::DeleteMorphUI(MMDModelManagerObject& model)
+void BoneMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);
@@ -509,7 +510,7 @@ inline void BoneMorph::DeleteMorphUI(MMDModelManagerObject& model)
 	}
 }
 
-inline void GroupMorph::AddSubMorph(MMDModelManagerObject* model, Int id, const Float weight)
+void GroupMorph::AddSubMorph(MMDModelManagerObject* model, Int id, const Float weight)
 {
 	if (model->GetMorphNum() > id)
 	{
@@ -517,19 +518,19 @@ inline void GroupMorph::AddSubMorph(MMDModelManagerObject* model, Int id, const 
 	}
 }
 
-inline void FlipMorph::AddSubMorph(MMDModelManagerObject* model, Int id, const Float weight)
+void FlipMorph::AddSubMorph(MMDModelManagerObject* model, Int id, const Float weight)
 {
 	if (model->GetMorphNum() > id) {
 		std::ignore = m_data.Insert(id, weight);
 	}
 }
 
-inline void GroupMorph::AddSubMorphNoCheck(Int id, const Float weight)
+void GroupMorph::AddSubMorphNoCheck(Int id, const Float weight)
 {
 	std::ignore = m_data.Insert(id, weight);
 }
 
-inline auto FlipMorph::AddSubMorphNoCheck(Int id, const Float weight) -> void
+auto FlipMorph::AddSubMorphNoCheck(Int id, const Float weight) -> void
 {
 	std::ignore = m_data.Insert(id, weight);
 }
@@ -540,10 +541,10 @@ MaterialMorph::MaterialMorph(String name, DescID strength_id) : IMorph(std::move
 MaterialMorph::MaterialMorph(MaterialMorph&& other) noexcept : IMorph(std::move(other))
 {}
 
-inline void MaterialMorph::UpdateMorph(MMDModelManagerObject& model)
+void MaterialMorph::UpdateMorph(MMDModelManagerObject& model)
 {}
 
-inline void MaterialMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+void MaterialMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, m_name);
@@ -560,7 +561,7 @@ inline void MaterialMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
-inline void MaterialMorph::DeleteMorphUI(MMDModelManagerObject& model)
+void MaterialMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);
@@ -577,10 +578,10 @@ ImpulseMorph::ImpulseMorph(String name, DescID strength_id) : IMorph(std::move(n
 ImpulseMorph::ImpulseMorph(ImpulseMorph&& other) noexcept : IMorph(std::move(other))
 {}
 
-inline void ImpulseMorph::UpdateMorph(MMDModelManagerObject& model)
+void ImpulseMorph::UpdateMorph(MMDModelManagerObject& model)
 {}
 
-inline void ImpulseMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
+void ImpulseMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 {
 	BaseContainer bc = GetCustomDataTypeDefault(DTYPE_REAL);
 	bc.SetString(DESC_NAME, m_name);
@@ -597,7 +598,7 @@ inline void ImpulseMorph::AddMorphUI(MMDModelManagerObject& model, Int morph_id)
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 }
 
-inline void ImpulseMorph::DeleteMorphUI(MMDModelManagerObject& model)
+void ImpulseMorph::DeleteMorphUI(MMDModelManagerObject& model)
 {
 	DeletePanelUI(model);
 	model.DeleteDynamicDescription(m_strength_id);

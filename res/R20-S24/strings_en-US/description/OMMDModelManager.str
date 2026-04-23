@@ -14,6 +14,11 @@ STRINGTABLE OMMDModelManager
 		MODEL_ANIM_MERGE_VMD_BUTTON "Merge VMD to selected VMD animation";
 		MODEL_ANIM_LOAD_VMD_BUTTON "Load VMD to animation list";
 		MODEL_ANIM_DElETE_BUTTON "Delete selected VMD animation";
+	MODEL_PHYSICS_GRP "Physics";
+		MODEL_PHYSICS_ENABLED "Enable physics";
+		MODEL_PHYSICS_GRAVITY_STRENGTH "Gravity strength";
+		MODEL_PHYSICS_GRAVITY_DIRECTION "Gravity direction";
+		MODEL_PHYSICS_RESET_ON_SEEK "Reset on seek";
 	MODEL_IK_GRP "IK";
 	MODEL_MORPH_GRP "Morph";
 		MODEL_MORPH_GROUP_GRP "Group morph";

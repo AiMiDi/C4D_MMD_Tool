@@ -1,6 +1,5 @@
 #pragma once
 
-#include <c4d.h>
 #include "module/tools/material/mmd_material.h"
 
 /** Octane 材质适配器：使用基类共享的 DetectTextureFromPMX/DetectTextureFromData。 */

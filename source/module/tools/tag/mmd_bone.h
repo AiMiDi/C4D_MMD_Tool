@@ -13,11 +13,11 @@ Description:	DESC
 #include <array>
 #include <string>
 #include <vector>
+#include "libMMD/Model/MMD/IMMDNode.h"
 
 #include <c4d.h>
 #include "module/core/cmt_marco.h"
 #include "description/OMMDBoneManager.h"
-#include "libMMD/Model/MMD/IMMDNode.h"
 #include "maxon/basearray.h"
 #include "maxon/pointerarray.h"
 

@@ -10,11 +10,11 @@ Description:	Manager of plugin configuration
 
 #pragma once
 
-#include <c4d.h>
-#include <c4d_symbols.h>
 #include <cassert>
 #include <string>
 #include <variant>
+#include <c4d.h>
+#include <c4d_symbols.h>
 #include "module/core/cmt_marco.h"
 #include "utils/json_util.hpp"
 

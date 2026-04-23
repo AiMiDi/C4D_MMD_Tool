@@ -69,6 +69,17 @@ namespace
 #endif
 	}
 
+	const CustomSplineKnot* GetSplineKnot(const SplineData* spline, const Int32 index)
+	{
+		if (!spline)
+			return nullptr;
+#if API_VERSION < 23000
+		return const_cast<SplineData*>(spline)->GetKnot(index);
+#else
+		return spline->GetKnot(index);
+#endif
+	}
+
 	Float32 ClampSplineCoordinate(const Float value)
 	{
 		return maxon::SafeConvert<Float32>(std::clamp(value, 0.0, static_cast<double>(kBoneAnimationSplineMax)));
@@ -417,8 +428,8 @@ namespace
 		if (!spline || spline->GetKnotCount() < 2)
 			return bezier;
 
-		const CustomSplineKnot* const first = spline->GetKnot(0);
-		const CustomSplineKnot* const last = spline->GetKnot(spline->GetKnotCount() - 1);
+		const CustomSplineKnot* const first = GetSplineKnot(spline, 0);
+		const CustomSplineKnot* const last = GetSplineKnot(spline, spline->GetKnotCount() - 1);
 		if (!first || !last)
 			return bezier;
 
@@ -1175,14 +1186,14 @@ void MMDBoneTag::RefreshExecutionPriority(GeListNode* node)
 
 BaseTag* MMDBoneTag::ResolveInheritSourceBoneTag() const
 {
-	const auto* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+	BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
 	const BaseContainer* const bc = self_tag ? self_tag->GetDataInstance() : nullptr;
 	if (!bc)
 		return nullptr;
 
 	const BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
 	GeData link_data;
-	if (self_tag && self_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link_data, DESCFLAGS_GET::NONE))
+	if (self_tag && GetAtomParameter(self_tag, ConstDescID(DescLevel(PMX_BONE_INHERIT_BONE_PARENT_LINK)), link_data, DESCFLAGS_GET::NONE))
 	{
 		if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, doc))
 		{
@@ -2634,6 +2645,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 		HandleDescriptionUpdate(node, bc, static_cast<DescriptionCheckUpdate*>(data)->descid->operator[](0).id);
 		break;
 	case MSG_DOCUMENTINFO:
+#ifdef MSG_DOCUMENTINFO_TYPE_OBJECT_REMOVE
 		if (const auto* doc_info = static_cast<DocumentInfoData*>(data);
 			doc_info && doc_info->type == MSG_DOCUMENTINFO_TYPE_OBJECT_REMOVE && doc_info->bl == bone_object_)
 		{
@@ -2645,6 +2657,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 			if (bone_manager_link_)
 				bone_manager_link_->SetLink(nullptr);
 		}
+#endif
 		break;
 	case MSG_MENUPREPARE:
 		if (const auto doc = static_cast<BaseDocument*>(data); doc)

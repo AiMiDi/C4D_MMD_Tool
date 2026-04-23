@@ -24,6 +24,7 @@ Description:	DESC
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/PMXModel.h"
 
+
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
@@ -55,14 +56,14 @@ namespace
 
 		GeData data;
 		const Int32 param_id = use_local_name ? PMX_BONE_NAME_LOCAL : PMX_BONE_NAME_UNIVERSAL;
-		if (tag->GetParameter(CreateDescID(DescLevel(param_id)), data, DESCFLAGS_GET::NONE))
+		if (GetAtomParameter(tag, CreateDescID(DescLevel(param_id)), data, DESCFLAGS_GET::NONE))
 		{
 			const String name = data.GetString();
 			if (!name.IsEmpty())
 				return name;
 		}
 
-		if (const BaseObject* const object = tag->GetObject())
+		if (BaseObject* const object = const_cast<BaseTag*>(tag)->GetObject())
 			return object->GetName();
 
 		return String();
@@ -147,7 +148,7 @@ namespace
 			return NOTOK;
 
 		GeData data;
-		if (!bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_INDEX)), data, DESCFLAGS_GET::NONE))
+		if (!GetAtomParameter(bone_tag, ConstDescID(DescLevel(PMX_BONE_INDEX)), data, DESCFLAGS_GET::NONE))
 			return NOTOK;
 		return data.GetString().ToInt32(nullptr);
 	}
@@ -927,7 +928,7 @@ Int32 MMDBoneManagerObject::FindBoneIndex(const BaseTag* bone_tag) const
 		return -1;
 	}
 
-	const BaseObject* bone_object = bone_tag->GetObject();
+	BaseObject* const bone_object = const_cast<BaseTag*>(bone_tag)->GetObject();
 	if (!bone_object)
 	{
 		return -1;

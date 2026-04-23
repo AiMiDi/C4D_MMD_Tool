@@ -378,9 +378,9 @@ Bool MMDJointManagerObject::BuildStandaloneJoints(libmmd::MMDPhysicsManager* phy
 			++created;
 			if (created <= 3)
 			{
-				const auto joint_transform = jt->GetTransform();
-				const auto body_transform_a = rbA->GetTransform();
-				const auto body_transform_b = rbB->GetTransform();
+				[[maybe_unused]] const auto joint_transform = jt->GetTransform();
+				[[maybe_unused]] const auto body_transform_a = rbA->GetTransform();
+				[[maybe_unused]] const auto body_transform_b = rbB->GetTransform();
 				DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
 					"[CMT] BuildStandaloneJoints[@]: name='@' jointOff=(@,@,@) rigidAOff=(@,@,@) rigidBOff=(@,@,@) paramOff=(@,@,@)",
 					joint_index, child->GetName(),
