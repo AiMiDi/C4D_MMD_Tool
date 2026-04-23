@@ -219,6 +219,8 @@ class MMDBoneTag final : public TagData
 	BaseTime last_prephysics_time_ = BaseTime(-1.);
 	BaseTime last_ik_solve_time_ = BaseTime(-1.);
 	BaseTime last_postphysics_ik_solve_time_ = BaseTime(-1.);
+	Bool standalone_ik_chain_dirty_ = true;
+	const libmmd::MMDIkSolver* standalone_ik_chain_solver_ = nullptr;
 	Bool skip_prephysics_scene_write_ = false;
 	Bool ik_overridden_this_frame_ = false;
 	Int32 append_recursion_depth_ = 0;
@@ -389,6 +391,7 @@ private:
 	void CollectIKAffectedBoneIndices(maxon::BaseArray<Int32>& affected_indices) const;
 	void CacheIKSolveRuntimeOverrides(const BaseDocument* doc);
 	void MarkPrephysicsIKChainUpdated(const BaseDocument* doc);
+	void InvalidateStandaloneIKChainCache();
 	/**
 	 * @brief Creates a bone lock tag for the MMDBoneTag.
 	 * @return true if the bone lock tag is created successfully, false otherwise.

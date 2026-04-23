@@ -11,10 +11,6 @@ Description:	DESC
 #include <c4d.h>
 #include <c4d_symbols.h>
 #include <algorithm>
-#include <cstdarg>
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
 #include <cmath>
 #include <limits>
 #include <unordered_map>
@@ -38,56 +34,6 @@ namespace
 {
 	constexpr Float32 kBoneAnimationFps = 30.F;
 	constexpr Float32 kBoneAnimationSplineMax = 127.F;
-
-	std::string GetIKTraceLogPath()
-	{
-		if (const char* const temp = std::getenv("TEMP"); temp && *temp)
-			return std::string(temp) + "\\cmt_ik_trace.log";
-		return "cmt_ik_trace.log";
-	}
-
-	bool IsIKTraceLoggingEnabled()
-	{
-#if defined(_DEBUG)
-		return true;
-#else
-		const char* const value = std::getenv("CMT_IK_TRACE");
-		if (!value || !*value)
-			return false;
-		return std::strcmp(value, "0") != 0 && std::strcmp(value, "false") != 0 && std::strcmp(value, "FALSE") != 0;
-#endif
-	}
-
-	void EmitIKTraceLine(const char* prefix, const char* message)
-	{
-		std::fputs(prefix, stderr);
-		std::fputs(message, stderr);
-		std::fputc('\n', stderr);
-		std::fflush(stderr);
-
-		if (FILE* const file = std::fopen(GetIKTraceLogPath().c_str(), "ab"))
-		{
-			std::fputs(prefix, file);
-			std::fputs(message, file);
-			std::fputc('\n', file);
-			std::fflush(file);
-			std::fclose(file);
-		}
-	}
-
-	void IKTracePrintf(const char* format, ...)
-	{
-		if (!IsIKTraceLoggingEnabled())
-			return;
-
-		char buffer[4096];
-		va_list args;
-		va_start(args, format);
-		std::vsnprintf(buffer, sizeof(buffer), format, args);
-		va_end(args);
-		buffer[sizeof(buffer) - 1] = '\0';
-		EmitIKTraceLine("[CMT][IKTrace] ", buffer);
-	}
 
 	Int32 NormalizeBoneMode(const Int32 mode)
 	{
@@ -206,6 +152,233 @@ namespace
 		if (linked_mutable->IsInstanceOf(g_mmd_bone_tag_id))
 			return static_cast<BaseTag*>(linked_mutable)->GetObject();
 		return nullptr;
+	}
+
+	struct StandaloneIKChainEntry
+	{
+		Int32 bone_index = -1;
+		BaseObject* linked_object = nullptr;
+		Bool enable_limit = false;
+		Vector limit_min;
+		Vector limit_max;
+	};
+
+	bool DescItemHasParent(const BaseContainer& bc, const DescID& parent_id)
+	{
+		const DescID* const parent_id_ptr = GetContainerCustomDataType<DescID>(bc, DESC_PARENTGROUP, CUSTOMDATATYPE_DESCID);
+		return parent_id_ptr != nullptr && *parent_id_ptr == parent_id;
+	}
+
+	bool CollectStandaloneIKChainEntries(BaseTag* tag, maxon::BaseArray<StandaloneIKChainEntry>& entries)
+	{
+		iferr_scope_handler{
+			return false;
+		};
+
+		entries.Reset();
+		if (!tag)
+			return false;
+
+		DynamicDescription* const dyn_desc = tag->GetDynamicDescriptionWritable();
+		if (!dyn_desc)
+			return false;
+
+		BaseDocument* const tag_doc = tag->GetDocument();
+		const DescID ik_links_root = ConstDescID(DescLevel(PMX_BONE_IK_LINKS_GRP));
+
+		struct EntryFieldIds
+		{
+			DescID entry_group_id;
+			DescID index_group_id;
+			DescID bone_index_id;
+			DescID bone_link_id;
+			DescID enable_limit_id;
+			DescID limit_min_id;
+			DescID limit_max_id;
+			Bool has_index_group = false;
+			Bool has_bone_index = false;
+			Bool has_bone_link = false;
+			Bool has_enable_limit = false;
+			Bool has_limit_min = false;
+			Bool has_limit_max = false;
+		};
+
+		maxon::BaseArray<EntryFieldIds> entry_fields;
+		void* browse_handle = dyn_desc->BrowseInit();
+		DescID browse_id;
+		const BaseContainer* browse_bc = nullptr;
+
+		while (dyn_desc->BrowseGetNext(browse_handle, &browse_id, &browse_bc))
+		{
+			if (!browse_bc || !DescItemHasParent(*browse_bc, ik_links_root))
+				continue;
+			if (browse_id.GetDepth() < 1 || browse_id[0].dtype != DTYPE_GROUP)
+				continue;
+
+			auto& field_ids = entry_fields.Append()iferr_return;
+			field_ids.entry_group_id = browse_id;
+		}
+		dyn_desc->BrowseFree(browse_handle);
+
+		for (auto& field_ids : entry_fields)
+		{
+			browse_handle = dyn_desc->BrowseInit();
+			while (dyn_desc->BrowseGetNext(browse_handle, &browse_id, &browse_bc))
+			{
+				if (!browse_bc || !DescItemHasParent(*browse_bc, field_ids.entry_group_id) || browse_id.GetDepth() < 1)
+					continue;
+
+				switch (browse_id[0].dtype)
+				{
+				case DTYPE_GROUP:
+					field_ids.index_group_id = browse_id;
+					field_ids.has_index_group = true;
+					break;
+				case DTYPE_BOOL:
+					field_ids.enable_limit_id = browse_id;
+					field_ids.has_enable_limit = true;
+					break;
+				case DTYPE_VECTOR:
+					if (!field_ids.has_limit_min)
+					{
+						field_ids.limit_min_id = browse_id;
+						field_ids.has_limit_min = true;
+					}
+					else if (!field_ids.has_limit_max)
+					{
+						field_ids.limit_max_id = browse_id;
+						field_ids.has_limit_max = true;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			dyn_desc->BrowseFree(browse_handle);
+
+			if (field_ids.has_index_group)
+			{
+				browse_handle = dyn_desc->BrowseInit();
+				while (dyn_desc->BrowseGetNext(browse_handle, &browse_id, &browse_bc))
+				{
+					if (!browse_bc || !DescItemHasParent(*browse_bc, field_ids.index_group_id) || browse_id.GetDepth() < 1)
+						continue;
+
+					switch (browse_id[0].dtype)
+					{
+					case DTYPE_LONG:
+						field_ids.bone_index_id = browse_id;
+						field_ids.has_bone_index = true;
+						break;
+					case DTYPE_BASELISTLINK:
+						field_ids.bone_link_id = browse_id;
+						field_ids.has_bone_link = true;
+						break;
+					default:
+						break;
+					}
+				}
+				dyn_desc->BrowseFree(browse_handle);
+			}
+
+			auto& entry = entries.Append()iferr_return;
+			if (field_ids.has_bone_index)
+			{
+				GeData value;
+				if (tag->GetParameter(field_ids.bone_index_id, value, DESCFLAGS_GET::NONE))
+					entry.bone_index = value.GetInt32();
+			}
+			if (field_ids.has_bone_link)
+			{
+				GeData link_data;
+				if (tag->GetParameter(field_ids.bone_link_id, link_data, DESCFLAGS_GET::NONE))
+				{
+					if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, tag_doc))
+						entry.linked_object = linked_object;
+				}
+			}
+			if (field_ids.has_enable_limit)
+			{
+				GeData value;
+				if (tag->GetParameter(field_ids.enable_limit_id, value, DESCFLAGS_GET::NONE))
+					entry.enable_limit = value.GetBool();
+			}
+			if (field_ids.has_limit_min)
+			{
+				GeData value;
+				if (tag->GetParameter(field_ids.limit_min_id, value, DESCFLAGS_GET::NONE))
+					entry.limit_min = value.GetVector();
+			}
+			if (field_ids.has_limit_max)
+			{
+				GeData value;
+				if (tag->GetParameter(field_ids.limit_max_id, value, DESCFLAGS_GET::NONE))
+					entry.limit_max = value.GetVector();
+			}
+		}
+
+		if (!entries.IsEmpty())
+			return true;
+
+		// Fallback to the legacy browse-order parser. It is less robust to
+		// description layout drift, but it preserves working IK behavior for
+		// existing scenes if the structured parent-group walk cannot see the
+		// dynamic link entries.
+		const String name_ik_bone = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE);
+		const String name_enable_limit = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT);
+		const String name_limit_min = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN);
+		const String name_limit_max = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX);
+
+		void* legacy_handle = dyn_desc->BrowseInit();
+		DescID legacy_id;
+		const BaseContainer* legacy_bc = nullptr;
+
+		while (dyn_desc->BrowseGetNext(legacy_handle, &legacy_id, &legacy_bc))
+		{
+			if (!legacy_bc)
+				continue;
+
+			const String name = legacy_bc->GetString(DESC_NAME);
+			GeData value;
+
+			if (name == name_ik_bone)
+			{
+				auto& entry = entries.Append()iferr_return;
+				if (tag->GetParameter(legacy_id, value, DESCFLAGS_GET::NONE))
+					entry.bone_index = value.GetInt32();
+			}
+			else if (!entries.IsEmpty())
+			{
+				auto& current = entries[entries.GetCount() - 1];
+				if (name == name_enable_limit)
+				{
+					if (tag->GetParameter(legacy_id, value, DESCFLAGS_GET::NONE))
+						current.enable_limit = value.GetBool();
+				}
+				else if (name == name_limit_min)
+				{
+					if (tag->GetParameter(legacy_id, value, DESCFLAGS_GET::NONE))
+						current.limit_min = value.GetVector();
+				}
+				else if (name == name_limit_max)
+				{
+					if (tag->GetParameter(legacy_id, value, DESCFLAGS_GET::NONE))
+						current.limit_max = value.GetVector();
+				}
+				else if (current.linked_object == nullptr && name.IsEmpty())
+				{
+					GeData link_data;
+					if (tag->GetParameter(legacy_id, link_data, DESCFLAGS_GET::NONE))
+					{
+						if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, tag_doc))
+							current.linked_object = linked_object;
+					}
+				}
+			}
+		}
+		dyn_desc->BrowseFree(legacy_handle);
+
+		return true;
 	}
 
 	Int32 ComputeBoneExecutionPriorityValue(const BaseContainer* bc, const Int32 append_depth)
@@ -1107,6 +1280,12 @@ void MMDBoneTag::RequestAppendExecutionOrderRefresh(GeListNode* node)
 	}
 }
 
+void MMDBoneTag::InvalidateStandaloneIKChainCache()
+{
+	standalone_ik_chain_dirty_ = true;
+	standalone_ik_chain_solver_ = nullptr;
+}
+
 Bool MMDBoneTag::ReplaceAnimationSlot(const Int32 slot_index, const maxon::BaseArray<BoneAnimationKeyframeData>& keyframes)
 {
 	iferr_scope_handler{
@@ -1794,10 +1973,12 @@ SDK2024_CopyTo(MMDBoneTag)
 	dest_tag->runtime_playback_override_translation_ = Vector();
 	dest_tag->runtime_playback_override_rotation_ = { 0.F, 0.F, 0.F, 1.F };
 	dest_tag->has_runtime_playback_override_ = false;
-		dest_tag->runtime_playback_override_time_ = BaseTime(-1.);
-		dest_tag->last_prephysics_time_ = BaseTime(-1.);
-		dest_tag->last_ik_solve_time_ = BaseTime(-1.);
-		dest_tag->last_postphysics_ik_solve_time_ = BaseTime(-1.);
+	dest_tag->runtime_playback_override_time_ = BaseTime(-1.);
+	dest_tag->last_prephysics_time_ = BaseTime(-1.);
+	dest_tag->last_ik_solve_time_ = BaseTime(-1.);
+	dest_tag->last_postphysics_ik_solve_time_ = BaseTime(-1.);
+	dest_tag->standalone_ik_chain_dirty_ = true;
+	dest_tag->standalone_ik_chain_solver_ = nullptr;
 	dest_tag->skip_prephysics_scene_write_ = false;
 	dest_tag->ik_overridden_this_frame_ = false;
 	dest_tag->append_recursion_depth_ = append_recursion_depth_;
@@ -2048,121 +2229,37 @@ void MMDBoneTag::BuildStandaloneIKChains()
 	if (!ik_solver)
 		return;
 
+	if (standalone_ik_chain_solver_ != ik_solver)
+		standalone_ik_chain_dirty_ = true;
+
 	auto* tag = static_cast<BaseTag*>(Get());
 	if (!tag)
 		return;
 
-	DynamicDescription* dyn_desc = tag->GetDynamicDescriptionWritable();
-	if (!dyn_desc)
+	if (!standalone_ik_chain_dirty_)
 		return;
 
-	const String name_ik_bone = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE);
-	const String name_enable_limit = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT);
-	const String name_limit_min = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN);
-	const String name_limit_max = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX);
+	maxon::BaseArray<StandaloneIKChainEntry> entries;
+	if (!CollectStandaloneIKChainEntries(tag, entries))
+		return;
 
-	struct ChainEntry
-	{
-		Int32 bone_index = -1;           // Legacy PMX-file index; unreliable because
-		                                 // physics_bone_adapters_ is keyed by DFS index.
-		BaseObject* linked_object = nullptr; // Stable reference via BaseLink, preferred.
-		Bool enable_limit = false;
-		Vector limit_min;
-		Vector limit_max;
-	};
-	maxon::BaseArray<ChainEntry> entries;
-
-	void* browse_handle = dyn_desc->BrowseInit();
-	DescID dyn_id;
-	const BaseContainer* dyn_bc = nullptr;
 	BaseDocument* const tag_doc = tag->GetDocument();
-
-	while (dyn_desc->BrowseGetNext(browse_handle, &dyn_id, &dyn_bc))
-	{
-		if (!dyn_bc)
-			continue;
-
-		const String name = dyn_bc->GetString(DESC_NAME);
-		GeData value;
-
-		if (name == name_ik_bone)
-		{
-			ChainEntry entry;
-			if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-				entry.bone_index = value.GetInt32();
-			entries.Append(std::move(entry)) iferr_ignore("IK chain rebuild"_s);
-		}
-		else if (!entries.IsEmpty())
-		{
-			auto& cur = entries[entries.GetCount() - 1];
-			if (name == name_enable_limit)
-			{
-				if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-					cur.enable_limit = value.GetBool();
-			}
-			else if (name == name_limit_min)
-			{
-				if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-					cur.limit_min = value.GetVector();
-			}
-			else if (name == name_limit_max)
-			{
-				if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-					cur.limit_max = value.GetVector();
-			}
-			else if (cur.linked_object == nullptr && name.IsEmpty())
-			{
-				// The chain link BaseLink field immediately follows the ik_bone
-				// index field in LoadPMX, has no DESC_NAME, and is DTYPE_BASELISTLINK.
-				GeData link_data;
-				if (tag->GetParameter(dyn_id, link_data, DESCFLAGS_GET::NONE))
-				{
-					if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, tag_doc))
-						cur.linked_object = linked_object;
-				}
-			}
-		}
-	}
-	dyn_desc->BrowseFree(browse_handle);
 
 	if (entries.IsEmpty())
 	{
 		ik_solver->ClearIKChains();
 		ik_solver->BuildChainPath();
-		// #region agent log IKChain - chain empty (entries empty)
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][IKChain] bone='@' entries=0 added=0 reason=entries_empty",
-			tag->GetName());
-		// #endregion
+		standalone_ik_chain_dirty_ = false;
+		standalone_ik_chain_solver_ = ik_solver;
 		return;
 	}
 
 	ik_solver->ClearIKChains();
-	std::vector<ChainEntry> ordered_entries;
+	std::vector<StandaloneIKChainEntry> ordered_entries;
 	ordered_entries.reserve(entries.GetCount());
 	for (const auto& entry : entries)
 		ordered_entries.push_back(entry);
 
-	if (GeData target_link_data; tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_IK_TARGET_BONE_LINK)), target_link_data, DESCFLAGS_GET::NONE))
-	{
-		if (BaseObject* const target_object = ResolveBoneObjectFromLinkData(target_link_data, tag_doc))
-		{
-			IKTracePrintf(
-				"BuildStandaloneIKChains solverBone='%s' targetLinkBone='%s' targetLegacyIdx=%d entryCount=%d",
-				string_util::GetStdString(tag->GetName()).c_str(),
-				string_util::GetStdString(target_object->GetName()).c_str(),
-				tag->GetDataInstanceRef().GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX),
-				static_cast<int>(ordered_entries.size()));
-		}
-	}
-
-	// #region agent log IKChain
-	Int32 dbg_added = 0;
-	Int32 dbg_first_idx = -1;
-	Int32 dbg_last_idx = -1;
-	String dbg_first_name;
-	String dbg_last_name;
-	// #endregion
 	for (const auto& entry : ordered_entries)
 	{
 		// Prefer the stable BaseLink reference over the PMX-order bone index.
@@ -2199,21 +2296,6 @@ void MMDBoneTag::BuildStandaloneIKChains()
 			if (!chain_adapter)
 				continue;
 
-			IKTracePrintf(
-				"BuildStandaloneIKChains solverBone='%s' order=%d chainIdx=%d chainBone='%s' viaLink=%d enableLimit=%d limitMin=(%.6f,%.6f,%.6f) limitMax=(%.6f,%.6f,%.6f)",
-				string_util::GetStdString(tag->GetName()).c_str(),
-				dbg_added,
-				resolved_index,
-				chain_adapter->GetName().c_str(),
-				entry.linked_object ? 1 : 0,
-				entry.enable_limit ? 1 : 0,
-				static_cast<double>(entry.limit_min.x),
-				static_cast<double>(entry.limit_min.y),
-				static_cast<double>(entry.limit_min.z),
-				static_cast<double>(entry.limit_max.x),
-				static_cast<double>(entry.limit_max.y),
-				static_cast<double>(entry.limit_max.z));
-
 			if (entry.enable_limit)
 			{
 				const Eigen::Vector3f lmin(static_cast<float>(entry.limit_min.x), static_cast<float>(entry.limit_min.y), static_cast<float>(entry.limit_min.z));
@@ -2224,25 +2306,11 @@ void MMDBoneTag::BuildStandaloneIKChains()
 			{
 				ik_solver->AddIKChain(chain_adapter);
 			}
-			// #region agent log IKChain
-			if (dbg_added == 0)
-			{
-				dbg_first_idx = resolved_index;
-				dbg_first_name = chain_tag->GetName();
-			}
-			dbg_last_idx = resolved_index;
-			dbg_last_name = chain_tag->GetName();
-			++dbg_added;
-			// #endregion
 		}
 	}
 	ik_solver->BuildChainPath();
-	// #region agent log IKChain
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT][IKChain] bone='@' entries=@ added=@ first=[@:@] last=[@:@]",
-		tag->GetName(), entries.GetCount(), dbg_added,
-		dbg_first_idx, dbg_first_name, dbg_last_idx, dbg_last_name);
-	// #endregion
+	standalone_ik_chain_dirty_ = false;
+	standalone_ik_chain_solver_ = ik_solver;
 }
 
 void MMDBoneTag::MarkPrephysicsIKChainUpdated(const BaseDocument* doc)
@@ -2316,50 +2384,9 @@ void MMDBoneTag::CollectIKAffectedBoneIndices(maxon::BaseArray<Int32>& affected_
 	}
 	append_unique_index(effector_index);
 
-	DynamicDescription* dyn_desc = tag->GetDynamicDescriptionWritable();
-	if (!dyn_desc)
+	maxon::BaseArray<StandaloneIKChainEntry> entries;
+	if (!CollectStandaloneIKChainEntries(tag, entries))
 		return;
-
-	const String name_ik_bone = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE);
-	struct AffectedEntry
-	{
-		Int32 bone_index = -1;
-		BaseObject* linked_object = nullptr;
-	};
-	maxon::BaseArray<AffectedEntry> entries;
-
-	void* browse_handle = dyn_desc->BrowseInit();
-	DescID dyn_id;
-	const BaseContainer* dyn_bc = nullptr;
-	while (dyn_desc->BrowseGetNext(browse_handle, &dyn_id, &dyn_bc))
-	{
-		if (!dyn_bc || dyn_bc->GetString(DESC_NAME) != name_ik_bone)
-		{
-			if (!dyn_bc || entries.IsEmpty())
-				continue;
-
-			auto& current_entry = entries[entries.GetCount() - 1];
-			if (current_entry.linked_object != nullptr || !dyn_bc->GetString(DESC_NAME).IsEmpty())
-				continue;
-
-			GeData link_data;
-			if (tag->GetParameter(dyn_id, link_data, DESCFLAGS_GET::NONE))
-			{
-				if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, tag_doc))
-					current_entry.linked_object = linked_object;
-			}
-			continue;
-		}
-
-		GeData value;
-		if (!tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-			continue;
-
-		AffectedEntry entry;
-		entry.bone_index = value.GetInt32();
-		entries.Append(std::move(entry))iferr_ignore("append ik affected entry"_s);
-	}
-	dyn_desc->BrowseFree(browse_handle);
 
 	for (const auto& entry : entries)
 	{
@@ -2420,116 +2447,17 @@ Bool MMDBoneTag::RunIKSolveAnimMode(BaseObject* op, const Bool mark_prephysics_c
 
 	MMDModelManagerObject* const model_manager = GetModelManager();
 	if (!model_manager || !model_manager->EnsureStandaloneRuntimeManagers())
-	{
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][Frame @] IKSolve skipped bone='@' reason=model_manager",
-			current_frame, op->GetName());
 		return false;
-	}
 
 	libmmd::MMDIkSolver* const ik_solver = model_manager->GetStandaloneIKSolver(GetBoneIndex());
 	if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
-	{
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][Frame @] IKSolve skipped bone='@' solver=@ enabled=@ ikNode=@ targetNode=@",
-			current_frame, op->GetName(), ik_solver != nullptr, ik_solver ? ik_solver->Enabled() : false,
-			ik_solver && ik_solver->GetIKNode(), ik_solver && ik_solver->GetTargetNode());
 		return false;
-	}
 
 	model_manager->SyncStandaloneBoneAdaptersFromScene(true);
 	BuildStandaloneIKChains();
-	IKTracePrintf(
-		"RunIKSolveAnimMode bone='%s' solverIkNode='%s' solverTargetNode='%s' markPrephysics=%d allowSameFrame=%d",
-		string_util::GetStdString(op->GetName()).c_str(),
-		ik_solver->GetIKNode() ? ik_solver->GetIKNode()->GetName().c_str() : "<null>",
-		ik_solver->GetTargetNode() ? ik_solver->GetTargetNode()->GetName().c_str() : "<null>",
-		mark_prephysics_chain ? 1 : 0,
-		allow_same_frame_resolve ? 1 : 0);
-	// #region agent log IKResid - pre-Solve residual + target identity
-	{
-		const auto* const ik_node_pre = ik_solver->GetIKNode();
-		const auto* const tg_node_pre = ik_solver->GetTargetNode();
-		if (ik_node_pre && tg_node_pre)
-		{
-			const Eigen::Vector3f ik_g_pre = ik_node_pre->GetGlobalTransform().col(3).head<3>();
-			const Eigen::Vector3f tg_g_pre = tg_node_pre->GetGlobalTransform().col(3).head<3>();
-			const float dist_pre = (ik_g_pre - tg_g_pre).norm();
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT][IKPre] frame=@ bone='@' targetName='@' dist=@ ikG=(@,@,@) tgG=(@,@,@)",
-				current_frame, op->GetName(), String(tg_node_pre->GetName().c_str()), dist_pre,
-				ik_g_pre.x(), ik_g_pre.y(), ik_g_pre.z(),
-				tg_g_pre.x(), tg_g_pre.y(), tg_g_pre.z());
-		}
-	}
-	// #endregion
 	ik_solver->Solve();
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT][Frame @] IKSolve success bone='@'",
-		current_frame, op->GetName());
-	// #region agent log IKResid - residual after Solve
-	{
-		const auto* const ik_node = ik_solver->GetIKNode();
-		const auto* const tg_node = ik_solver->GetTargetNode();
-		if (ik_node && tg_node)
-		{
-			const Eigen::Vector3f ik_g = ik_node->GetGlobalTransform().col(3).head<3>();
-			const Eigen::Vector3f tg_g = tg_node->GetGlobalTransform().col(3).head<3>();
-			const float dist = (ik_g - tg_g).norm();
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT][IKResid] frame=@ bone='@' targetName='@' dist=@ ikG=(@,@,@) tgG=(@,@,@)",
-				current_frame, op->GetName(), String(tg_node->GetName().c_str()), dist,
-				ik_g.x(), ik_g.y(), ik_g.z(),
-				tg_g.x(), tg_g.y(), tg_g.z());
-		}
-	}
-	// #endregion
 	last_ik_solve_time_ = current_time;
-	// #region agent log IKApply - record one chain child bone before/after Apply
-	maxon::BaseArray<Int32> dbg_chain_indices;
-	CollectIKAffectedBoneIndices(dbg_chain_indices);
-	struct DbgApplySnap { Int32 bone_index; Vector before_off; Bool before_frozen_identity; };
-	std::vector<DbgApplySnap> dbg_snaps;
-	for (Int i = 0; i < dbg_chain_indices.GetCount() && (Int)dbg_snaps.size() < 4; ++i)
-	{
-		const Int32 ci = dbg_chain_indices[i];
-		if (ci == GetBoneIndex())
-			continue;
-		if (BaseTag* const ctag = GetBoneManager()->FindBone(ci))
-		{
-			if (BaseObject* const cobj = ctag->GetObject())
-			{
-				const Matrix frozen = cobj->GetFrozenMln();
-				const Bool frozen_id = (frozen.off.GetSquaredLength() < 1e-6
-					&& (frozen.sqmat.v1 - Vector(1, 0, 0)).GetSquaredLength() < 1e-6
-					&& (frozen.sqmat.v2 - Vector(0, 1, 0)).GetSquaredLength() < 1e-6
-					&& (frozen.sqmat.v3 - Vector(0, 0, 1)).GetSquaredLength() < 1e-6);
-				dbg_snaps.push_back({ ci, cobj->GetRelMl().off, frozen_id });
-			}
-		}
-	}
-	// #endregion
 	model_manager->ApplyStandaloneBoneAdaptersToScene();
-	// #region agent log IKApply
-	for (const auto& s : dbg_snaps)
-	{
-		if (BaseTag* const ctag = GetBoneManager()->FindBone(s.bone_index))
-		{
-			if (BaseObject* const cobj = ctag->GetObject())
-			{
-				const Vector after_off = cobj->GetRelMl().off;
-				const Vector delta = after_off - s.before_off;
-				DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-					"[CMT][IKApply] frame=@ ikBone='@' chainBone='@' idx=@ frozenId=@ before=(@,@,@) after=(@,@,@) delta=@",
-					current_frame, op->GetName(), ctag->GetName(), s.bone_index,
-					s.before_frozen_identity ? 1 : 0,
-					s.before_off.x, s.before_off.y, s.before_off.z,
-					after_off.x, after_off.y, after_off.z,
-					delta.GetLength());
-			}
-		}
-	}
-	// #endregion
 	CacheIKSolveRuntimeOverrides(doc);
 	if (mark_prephysics_chain)
 		MarkPrephysicsIKChainUpdated(doc);
@@ -2778,6 +2706,10 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 		if (MMDModelManagerObject* const model_manager = GetModelManager())
 			model_manager->InvalidateStandaloneRuntime();
 	};
+	const auto invalidate_ik_chain_cache = [this]()
+	{
+		InvalidateStandaloneIKChainCache();
+	};
 
 	switch (id[0].id)
 	{
@@ -2836,11 +2768,17 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 					ik_solver->SetLimitAngle(static_cast<float>(t_data.GetFloat()));
 				return SUPER::SetDParameter(node, id, t_data, flags);
 			case PMX_BONE_IK_TARGET_BONE_INDEX:
+				invalidate_ik_chain_cache();
 				invalidate_runtime();
 				return SUPER::SetDParameter(node, id, t_data, flags);
 			default:
+				invalidate_ik_chain_cache();
 				break;
 			}
+		}
+		else
+		{
+			invalidate_ik_chain_cache();
 		}
 		break;
 	case PMX_BONE_ROTATABLE:
@@ -2994,6 +2932,13 @@ case PMX_BONE_LAYER:
 	}
 	case PMX_BONE_IK_TARGET_BONE_INDEX:
 	{
+		invalidate_ik_chain_cache();
+		invalidate_runtime();
+		break;
+	}
+	case PMX_BONE_IK_TARGET_BONE_LINK:
+	{
+		invalidate_ik_chain_cache();
 		invalidate_runtime();
 		break;
 	}
@@ -3002,6 +2947,7 @@ case PMX_BONE_LAYER:
 		is_IK = t_data.GetBool();
 		if (auto* const ik_solver = get_ik_solver())
 			ik_solver->Enable(is_IK);
+		invalidate_ik_chain_cache();
 		invalidate_runtime();
 		const auto state = reinterpret_cast<BaseList2D*>(Get())->GetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), true);
 		if (is_IK)
@@ -3402,6 +3348,8 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	last_prephysics_time_ = BaseTime(-1.);
 	last_ik_solve_time_ = BaseTime(-1.);
 	last_postphysics_ik_solve_time_ = BaseTime(-1.);
+	standalone_ik_chain_dirty_ = true;
+	standalone_ik_chain_solver_ = nullptr;
 	skip_prephysics_scene_write_ = false;
 	ik_overridden_this_frame_ = false;
 	ClearPlaybackRuntimeOverride();

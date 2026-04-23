@@ -33,8 +33,6 @@ Description:	MMD model object
 #include <btBulletDynamicsCommon.h>
 
 #include <algorithm>
-#include <cstdarg>
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <codecvt>
@@ -130,62 +128,12 @@ namespace
 		return "cmt_initial_state_debug.log";
 	}
 
-	std::string GetIKTraceLogPath()
-	{
-		if (const char* const temp = std::getenv("TEMP"); temp && *temp)
-			return std::string(temp) + "\\cmt_ik_trace.log";
-		return "cmt_ik_trace.log";
-	}
-
 	bool IsInitialStateDebugLoggingEnabled()
 	{
 		const char* const value = std::getenv("CMT_INITIAL_STATE_DEBUG");
 		if (!value || !*value)
 			return false;
 		return std::strcmp(value, "0") != 0 && std::strcmp(value, "false") != 0 && std::strcmp(value, "FALSE") != 0;
-	}
-
-	bool IsIKTraceLoggingEnabled()
-	{
-#if defined(_DEBUG)
-		return true;
-#else
-		const char* const value = std::getenv("CMT_IK_TRACE");
-		if (!value || !*value)
-			return false;
-		return std::strcmp(value, "0") != 0 && std::strcmp(value, "false") != 0 && std::strcmp(value, "FALSE") != 0;
-#endif
-	}
-
-	void EmitIKTraceLine(const char* prefix, const char* message)
-	{
-		std::fputs(prefix, stderr);
-		std::fputs(message, stderr);
-		std::fputc('\n', stderr);
-		std::fflush(stderr);
-
-		if (FILE* const file = std::fopen(GetIKTraceLogPath().c_str(), "ab"))
-		{
-			std::fputs(prefix, file);
-			std::fputs(message, file);
-			std::fputc('\n', file);
-			std::fflush(file);
-			std::fclose(file);
-		}
-	}
-
-	void IKTracePrintf(const char* format, ...)
-	{
-		if (!IsIKTraceLoggingEnabled())
-			return;
-
-		char buffer[4096];
-		va_list args;
-		va_start(args, format);
-		std::vsnprintf(buffer, sizeof(buffer), format, args);
-		va_end(args);
-		buffer[sizeof(buffer) - 1] = '\0';
-		EmitIKTraceLine("[CMT][IKTrace] ", buffer);
 	}
 
 	std::string FormatVectorForLog(const Vector& value)
@@ -2040,9 +1988,6 @@ Bool MMDModelManagerObject::BuildStandaloneIKManager()
 	for (const auto& entry : bone_manager_data_->bone_list_)
 		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
 	std::sort(sorted_indices.begin(), sorted_indices.end());
-	Int32 solver_count = 0;
-	Int32 enabled_count = 0;
-	Int32 missing_target_count = 0;
 
 	for (const Int32 bone_index : sorted_indices)
 	{
@@ -2063,11 +2008,14 @@ Bool MMDModelManagerObject::BuildStandaloneIKManager()
 		if (solver_name.IsEmpty())
 			solver_name = GetBoneTagName(bone_tag, false);
 		solver->SetName(string_util::GetStdString(solver_name));
-		solver->SetTargetNode(control_adapter);
+		solver->SetIKNode(control_adapter);
 
-		// libMMD expects:
-		//   - IK node    = the effector being pulled by the chain
-		//   - target node = the control/goal bone position
+		// PMX convention (matches libMMD PMXModel loader):
+		//   - IK node    = the control/goal bone (external, position stays fixed)
+		//   - target node = the effector bone at the end of the chain (descendant)
+		// SolveCore reads m_ikNode position once (must be stable); m_ikTarget
+		// is re-read per chain (moves with rotation).  BuildChainPath walks
+		// from m_ikTarget upward to find chain nodes.
 		// PMX_BONE_IK_TARGET_BONE_* stores the effector bone, not the control IK
 		// bone itself. Resolve that effector via the stable BaseLink instead of
 		// the stale PMX-file index.
@@ -2110,42 +2058,16 @@ Bool MMDModelManagerObject::BuildStandaloneIKManager()
 		}
 
 		if (effector_adapter)
-			solver->SetIKNode(effector_adapter);
-		else
-			++missing_target_count;
+			solver->SetTargetNode(effector_adapter);
 		const Int32 iter_count = bc->GetInt32(PMX_BONE_IK_ITERATION);
 		const Float unit_angle = bc->GetFloat(PMX_BONE_IK_UNIT_ANGLE);
 		solver->SetIterateCount(static_cast<uint32_t>(iter_count));
 		solver->SetLimitAngle(static_cast<float>(unit_angle));
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][IKSolverCfg] controlIdx=@ controlName='@' effectorIdx=@ effectorName='@' iteration=@ unitAngle=@",
-			bone_index, String(control_adapter->GetName().c_str()), effector_index,
-			effector_adapter ? String(effector_adapter->GetName().c_str()) : String("<null>"),
-			iter_count, unit_angle);
 
 		const auto* const enabled_state = ik_solver_enable_states_.Find(solver_name);
 		const Bool enabled = enabled_state ? enabled_state->GetValue() : bc->GetBool(PMX_BONE_IS_IK);
 		solver->Enable(enabled);
-		IKTracePrintf(
-			"BuildStandaloneIKManager solver='%s' controlIdx=%d controlName='%s' setTargetNode='%s' effectorIdx=%d setIKNode='%s' enabled=%d iter=%d unitAngle=%.6f legacyTargetIdx=%d",
-			string_util::GetStdString(solver_name).c_str(),
-			bone_index,
-			control_adapter->GetName().c_str(),
-			control_adapter->GetName().c_str(),
-			effector_index,
-			effector_adapter ? effector_adapter->GetName().c_str() : "<null>",
-			enabled ? 1 : 0,
-			iter_count,
-			static_cast<double>(unit_angle),
-			bc->GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX));
-		++solver_count;
-		if (enabled)
-			++enabled_count;
 	}
-
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT] BuildStandaloneIKManager solvers=@ enabled=@ missingTarget=@",
-		solver_count, enabled_count, missing_target_count);
 
 	return true;
 }
