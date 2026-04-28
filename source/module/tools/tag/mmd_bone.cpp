@@ -511,9 +511,9 @@ namespace
 
 	libmmd::VMDBezier ToLibMMDBezier(const BoneAnimationBezierData& bezier)
 	{
-		std::array<uint8_t, 4> cp { bezier.ax, bezier.ay, bezier.bx, bezier.by };
 		libmmd::VMDBezier result;
-		libmmd::SetVMDBezier(result, cp.data());
+		result.m_cp1 = Eigen::Vector2f(static_cast<float>(bezier.ax) / 127.0f, static_cast<float>(bezier.ay) / 127.0f);
+		result.m_cp2 = Eigen::Vector2f(static_cast<float>(bezier.bx) / 127.0f, static_cast<float>(bezier.by) / 127.0f);
 		return result;
 	}
 
