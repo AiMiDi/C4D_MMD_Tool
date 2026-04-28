@@ -27,8 +27,10 @@ Description:	MMD model object
 #include "description/OMMDRigid.h"
 #include "description/TMMDBone.h"
 #include "maxon/queue.h"
+#include "utils/cmt_anim_flow_debug.hpp"
 #include "utils/filename_util.hpp"
 #include "utils/string_util.hpp"
+#include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 #include "libMMD/Model/MMD/SjisToUnicode.h"
 
@@ -53,6 +55,7 @@ Description:	MMD model object
 namespace
 {
 	constexpr Float32 kModelAnimationFps = 30.0f;
+	constexpr Int32 kModelManagerPriorityOffset = 5000;
 
 	Int32 NormalizeModelMode(const Int32 mode)
 	{
@@ -74,7 +77,7 @@ namespace
 			if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
 			{
 				pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
-				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 5000);
+				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, kModelManagerPriorityOffset);
 				bc->SetData(EXPRESSION_PRIORITY, priority);
 			}
 		}
@@ -1471,13 +1474,17 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 			ApplyIKSolverFromParameters(op);
 			ApplyPhysicsConfigToRuntime(op);
-			if (IsPhysicsEnabled(op))
+			RunLayeredBonePass(doc, false);
+
+			const Bool physics_enabled = IsPhysicsEnabled(op);
+			if (physics_enabled)
 			{
 				if (needs_physics_reset)
 					ResetStandalonePhysics();
 				else
 					StepStandalonePhysics(1.f / fps_);
 				is_animation_initialized_ = true;
+				RunLayeredBonePass(doc, true);
 			}
 			else
 			{
@@ -1761,16 +1768,46 @@ void MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene(const Bool reset
 	}
 }
 
+void MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal(const maxon::BaseArray<Int32>& bone_indices) const
+{
+	for (const Int32 bone_index : bone_indices)
+	{
+		if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
+			adapter->SyncLocalTransformFromGlobal();
+	}
+
+	for (const auto& adapter : physics_bone_pool_)
+	{
+		if (adapter && adapter->GetParent() == nullptr)
+			adapter->UpdateGlobalTransform();
+	}
+}
+
 Bool MMDModelManagerObject::SolveStandaloneIKBeforePhysics(const Bool include_after_physics_bones)
 {
-	if (!ik_manager_own_)
-		return false;
-
 	bone_manager_data_ = GetBoneManagerData();
 	if (!bone_manager_data_)
 		return false;
 
-	SyncStandaloneBoneAdaptersFromScene(true);
+	Bool solved = false;
+	const Int32 max_layer = bone_manager_data_->GetMaxBoneLayer();
+	for (Int32 layer = 0; layer <= max_layer; ++layer)
+	{
+		solved = SolveStandaloneIKForLayer(layer, false) > 0 || solved;
+		if (include_after_physics_bones)
+			solved = SolveStandaloneIKForLayer(layer, true) > 0 || solved;
+	}
+	return solved;
+}
+
+Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const Bool after_physics, const Bool sync_from_scene)
+{
+	if (!ik_manager_own_)
+		return 0;
+
+	bone_manager_data_ = GetBoneManagerData();
+	if (!bone_manager_data_)
+		return 0;
 
 	std::vector<Int32> sorted_indices;
 	sorted_indices.reserve(bone_manager_data_->bone_list_.GetCount());
@@ -1778,8 +1815,8 @@ Bool MMDModelManagerObject::SolveStandaloneIKBeforePhysics(const Bool include_af
 		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
 	std::sort(sorted_indices.begin(), sorted_indices.end());
 
-	Int32 solved_count = 0;
-	std::vector<std::string> solved_bone_labels;
+	std::vector<Int32> ik_indices;
+	ik_indices.reserve(sorted_indices.size());
 	for (const Int32 bone_index : sorted_indices)
 	{
 		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
@@ -1788,7 +1825,29 @@ Bool MMDModelManagerObject::SolveStandaloneIKBeforePhysics(const Bool include_af
 		const BaseContainer* const bc = bone_tag ? bone_tag->GetDataInstance() : nullptr;
 		if (!bone_tag_node || !bone_object || !bc || !bc->GetBool(PMX_BONE_IS_IK))
 			continue;
-		if (!include_after_physics_bones && bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM))
+		if (std::max(0, bc->GetInt32(PMX_BONE_LAYER)) != layer)
+			continue;
+		if (bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) != after_physics)
+			continue;
+
+		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
+		if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
+			continue;
+		ik_indices.emplace_back(bone_index);
+	}
+	if (ik_indices.empty())
+		return 0;
+
+	if (sync_from_scene)
+		SyncStandaloneBoneAdaptersFromScene(true);
+
+	Int32 solved_count = 0;
+	for (const Int32 bone_index : ik_indices)
+	{
+		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
+		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
+		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
+		if (!bone_tag_node || !bone_object)
 			continue;
 
 		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
@@ -1796,7 +1855,27 @@ Bool MMDModelManagerObject::SolveStandaloneIKBeforePhysics(const Bool include_af
 			continue;
 
 		bone_tag_node->BuildStandaloneIKChains();
+
+		const Bool log_this_bone = cmt::debug::ShouldLogAnimationFlowForBone(bone_index);
+		const Eigen::Vector3f goal_pos = ik_solver->GetIKNode()->GetGlobalTransform().block<3, 1>(0, 3);
+		Eigen::Vector3f pre_effector_pos{};
+		float pre_dist = 0.f;
+		float adapter_vs_scene_ik = 0.f;
+		if (log_this_bone)
+		{
+			pre_effector_pos = ik_solver->GetTargetNode()->GetGlobalTransform().block<3, 1>(0, 3);
+			pre_dist = (pre_effector_pos - goal_pos).norm();
+			const Vector ik_scene_off = bone_object->GetMg().off;
+			const Eigen::Vector3f ik_scene_e(ik_scene_off.x, ik_scene_off.y, ik_scene_off.z);
+			adapter_vs_scene_ik = (goal_pos - ik_scene_e).norm();
+		}
+
 		ik_solver->Solve();
+
+		maxon::BaseArray<Int32> affected_indices;
+		bone_tag_node->CollectIKAffectedBoneIndices(affected_indices);
+		ApplyStandaloneBoneAdaptersToScene(affected_indices);
+
 		if (BaseDocument* const doc = bone_object->GetDocument())
 		{
 			bone_tag_node->last_ik_solve_time_ = doc->GetTime();
@@ -1804,45 +1883,54 @@ Bool MMDModelManagerObject::SolveStandaloneIKBeforePhysics(const Bool include_af
 			bone_tag_node->MarkPrephysicsIKChainUpdated(doc);
 		}
 		++solved_count;
-		if (IsInitialStateDebugLoggingEnabled())
+
+		if (log_this_bone)
 		{
-			const String bone_name = GetBoneTagName(bone_tag, true);
-			std::ostringstream stream;
-			stream << bone_index;
-			if (!bone_name.IsEmpty())
-				stream << ":" << string_util::GetStdString(bone_name);
-			solved_bone_labels.emplace_back(stream.str());
+			const Eigen::Vector3f post_effector = ik_solver->GetTargetNode()->GetGlobalTransform().block<3, 1>(0, 3);
+			const float residual = (post_effector - goal_pos).norm();
+			BaseDocument* const log_doc = bone_object->GetDocument();
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+				"[CMT][AnimFlow][Frame @][Bone @] IK preDist=@ residual=@ adapterVsSceneIk=@ goal=(@,@,@) effector=(@,@,@)",
+				log_doc ? log_doc->GetTime().GetFrame(30) : -1, bone_index,
+				pre_dist, residual, adapter_vs_scene_ik,
+				goal_pos.x(), goal_pos.y(), goal_pos.z(),
+				post_effector.x(), post_effector.y(), post_effector.z());
 		}
 	}
 
-	if (solved_count > 0)
+	return solved_count;
+}
+
+Bool MMDModelManagerObject::RunLayeredBonePass(BaseDocument* doc, const Bool after_physics)
+{
+	if (!doc)
+		return false;
+
+	bone_manager_data_ = GetBoneManagerData();
+	if (!bone_manager_data_)
+		return false;
+
+	Bool touched = false;
+	const Int32 max_layer = bone_manager_data_->GetMaxBoneLayer();
+	for (Int32 layer = 0; layer <= max_layer; ++layer)
 	{
-		ApplyStandaloneBoneAdaptersToScene();
-		if (BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get()))
+		const Int32 anim_count = bone_manager_data_->PrepareSceneForPhysicsPlaybackLayer(doc, layer, after_physics);
+		if (BaseTag* const tracked_bone_tag = bone_manager_data_->FindBone(2))
 		{
-			if (BaseDocument* const doc = model_object->GetDocument())
+			if (BaseObject* const tracked_bone_object = tracked_bone_tag->GetObject())
 			{
-				DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-					"[CMT][Frame @] PrePhysicsIK solved=@",
-					doc->GetTime().GetFrame(30), solved_count);
-				if (IsInitialStateDebugLoggingEnabled() && !solved_bone_labels.empty())
-				{
-					std::ostringstream stream;
-					for (size_t index = 0; index < solved_bone_labels.size(); ++index)
-					{
-						if (index > 0)
-							stream << ", ";
-						stream << solved_bone_labels[index];
-					}
-					DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-						"[CMT][Frame @] PrePhysicsIK bones=@",
-						doc->GetTime().GetFrame(30), String(stream.str().c_str()));
-				}
+				const Vector off = tracked_bone_object->GetMg().off;
+				CMT_ANIM_FLOW_LOG_BONE(2,
+					"[CMT][AnimFlow][Frame @][ModelManager AFTER PrepareSceneForPhysicsPlaybackLayer] layer=@ after_phys=@ anim_count=@ bone2 mg.off=(@,@,@)",
+					doc->GetTime().GetFrame(30), layer, after_physics ? 1 : 0, anim_count,
+					off.x, off.y, off.z);
 			}
 		}
+		SyncStandaloneBoneAdaptersFromScene(true);
+		const Int32 ik_count = SolveStandaloneIKForLayer(layer, after_physics, false);
+		touched = touched || anim_count > 0 || ik_count > 0;
 	}
-
-	return solved_count > 0;
+	return touched;
 }
 
 void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene() const
@@ -1850,6 +1938,15 @@ void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene() const
 	for (const auto& adapter : physics_bone_pool_)
 	{
 		if (adapter)
+			adapter->ApplyLocalToBoneObject();
+	}
+}
+
+void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene(const maxon::BaseArray<Int32>& bone_indices) const
+{
+	for (const Int32 bone_index : bone_indices)
+	{
+		if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
 			adapter->ApplyLocalToBoneObject();
 	}
 }
@@ -2064,7 +2161,7 @@ Bool MMDModelManagerObject::BuildStandaloneIKManager()
 			solver->SetTargetNode(effector_adapter);
 		const Int32 iter_count = bc->GetInt32(PMX_BONE_IK_ITERATION);
 		const Float unit_angle = bc->GetFloat(PMX_BONE_IK_UNIT_ANGLE);
-		solver->SetIterateCount(static_cast<uint32_t>(iter_count));
+		solver->SetIterateCount(static_cast<uint32_t>(iter_count <= 0 ? 4 : iter_count));
 		solver->SetLimitAngle(static_cast<float>(unit_angle));
 
 		const auto* const enabled_state = ik_solver_enable_states_.Find(solver_name);
@@ -2314,15 +2411,6 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 
 	LogInitialStateSnapshot("before_reset_physics");
 	bone_manager_data_ = GetBoneManagerData();
-	if (BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get()))
-	{
-		if (bone_manager_data_)
-			bone_manager_data_->PrepareSceneForPhysicsPlayback(model_object->GetDocument());
-	}
-	LogInitialStateSnapshot("after_prepare_scene_for_physics");
-
-	SolveStandaloneIKBeforePhysics();
-	LogInitialStateSnapshot("after_sync_adapters_from_scene");
 	auto* const physics = physics_manager_own_->GetMMDPhysics();
 	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
 	if (!physics || !rigid_bodies)
@@ -2345,16 +2433,7 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 	for (const auto& rigid_body : *rigid_bodies)
 		rigid_body->ReflectGlobalTransform();
 
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter)
-			adapter->SyncLocalTransformFromGlobal();
-	}
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter && adapter->GetParent() == nullptr)
-			adapter->UpdateGlobalTransform();
-	}
+	SyncStandaloneBoneAdaptersLocalFromGlobal(physics_dynamic_bone_indices_);
 
 	if (bone_manager_data_)
 	{
@@ -2386,13 +2465,6 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 		return;
 
 	bone_manager_data_ = GetBoneManagerData();
-	if (BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get()))
-	{
-		if (bone_manager_data_)
-			bone_manager_data_->PrepareSceneForPhysicsPlayback(model_object->GetDocument());
-	}
-
-	SolveStandaloneIKBeforePhysics();
 	auto* const physics = physics_manager_own_->GetMMDPhysics();
 	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
 	if (!physics || !rigid_bodies)
@@ -2412,16 +2484,7 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 	for (const auto& rigid_body : *rigid_bodies)
 		rigid_body->ReflectGlobalTransform();
 
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter)
-			adapter->SyncLocalTransformFromGlobal();
-	}
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter && adapter->GetParent() == nullptr)
-			adapter->UpdateGlobalTransform();
-	}
+	SyncStandaloneBoneAdaptersLocalFromGlobal(physics_dynamic_bone_indices_);
 
 	if (bone_manager_data_)
 	{
@@ -2541,7 +2604,7 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 
 void MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects() const
 {
-	ApplyStandaloneBoneAdaptersToScene();
+	ApplyStandaloneBoneAdaptersToScene(physics_dynamic_bone_indices_);
 	MarkMeshHierarchyDirty(GetMeshManagerObject());
 }
 

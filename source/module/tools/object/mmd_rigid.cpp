@@ -28,6 +28,8 @@ Description:	C4D MMD rigid object
 
 namespace
 {
+	constexpr Int32 kRigidPriorityOffset = 5200;
+
 	Int32 NormalizeRigidMode(const Int32 mode)
 	{
 		constexpr Int32 kLegacyRigidModeVmd = 2;
@@ -156,11 +158,12 @@ namespace
 			if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
 			{
 				pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
-				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 5200);
+				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, kRigidPriorityOffset);
 				bc->SetData(EXPRESSION_PRIORITY, priority);
 			}
 		}
 	}
+
 }
 
 MMDRigidManagerObject* MMDRigidObject::GetRigidManager() const

@@ -257,7 +257,9 @@ public:
 	libmmd::MMDIkSolver* GetStandaloneIKSolver(Int32 bone_index) const;
 	C4DIKChainNodeAdapter* GetBoneAdapter(Int32 bone_index) const;
 	void SyncStandaloneBoneAdaptersFromScene(Bool reset_ik_rotation = true);
+	void SyncStandaloneBoneAdaptersLocalFromGlobal(const maxon::BaseArray<Int32>& bone_indices) const;
 	void ApplyStandaloneBoneAdaptersToScene() const;
+	void ApplyStandaloneBoneAdaptersToScene(const maxon::BaseArray<Int32>& bone_indices) const;
 	void InvalidateStandaloneRuntime();
 	Bool EnsureStandaloneRuntimeManagers();
 
@@ -296,6 +298,8 @@ private:
 	Bool BuildStandalonePhysics();
 	Bool BuildStandaloneBoneAdapters();
 	Bool SolveStandaloneIKBeforePhysics(Bool include_after_physics_bones = false);
+	Int32 SolveStandaloneIKForLayer(Int32 layer, Bool after_physics, Bool sync_from_scene = true);
+	Bool RunLayeredBonePass(BaseDocument* doc, Bool after_physics);
 	void ResetStandalonePhysics();
 	void StepStandalonePhysics(Float elapsed);
 	void ApplyPhysicsResultsToBoneObjects() const;

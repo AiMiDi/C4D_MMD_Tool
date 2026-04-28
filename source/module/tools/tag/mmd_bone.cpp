@@ -27,6 +27,7 @@ Description:	DESC
 #include "module/tools/object/mmd_model_manager.h"
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/VMDInterpolation.h"
+#include "utils/cmt_anim_flow_debug.hpp"
 #include "utils/math_util.hpp"
 #include "utils/string_util.hpp"
 
@@ -1110,9 +1111,6 @@ Bool MMDBoneTag::HasRecentPlaybackRuntimeOverride(const BaseDocument* doc) const
 	if (!has_runtime_playback_override_)
 		return false;
 
-	// Keep same-frame physics/IK overrides from being clobbered by later tag
-	// executions, but allow the next frame to restore the freshly sampled
-	// animation before pre-physics / post-physics evaluation runs again.
 	return runtime_playback_override_time_ == GetDocumentTimeOrInvalid(doc);
 }
 
@@ -3275,12 +3273,20 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 		SyncSplineFromCurrentParametersIfNeeded(tag);
 		const BaseContainer* const bc = tag ? tag->GetDataInstance() : nullptr;
 		const Bool deform_after_physics = bc ? bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) : false;
-		const Bool apply_to_scene = !deform_after_physics
-			&& !ShouldSkipPrephysicsSceneWrite(doc)
-			&& !HasRecentPlaybackRuntimeOverride(doc);
-		ApplyActiveAnimation(op, doc, apply_to_scene);
-		if (!deform_after_physics && is_IK && GetModelManager() == nullptr)
-			RunIKSolveAnimMode(op, true);
+		const Bool model_manager_active = GetModelManager() != nullptr;
+		if (model_manager_active)
+		{
+			ApplyActiveAnimation(op, doc, false);
+		}
+		else
+		{
+			const Bool apply_to_scene = !deform_after_physics
+				&& !ShouldSkipPrephysicsSceneWrite(doc)
+				&& !HasRecentPlaybackRuntimeOverride(doc);
+			ApplyActiveAnimation(op, doc, apply_to_scene);
+			if (!deform_after_physics && is_IK)
+				RunIKSolveAnimMode(op, true);
+		}
 	}
 	else
 	{

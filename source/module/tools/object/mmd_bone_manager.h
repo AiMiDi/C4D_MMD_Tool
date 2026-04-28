@@ -119,7 +119,9 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	void SetAllActiveAnimationSlot(Int32 slot_index);
 	void MarkAppendExecutionOrderDirty();
 	void EnsureAppendExecutionOrder();
+	Int32 GetMaxBoneLayer() const;
 	void PrepareSceneForPhysicsPlayback(BaseDocument* doc);
+	Int32 PrepareSceneForPhysicsPlaybackLayer(BaseDocument* doc, Int32 layer, Bool after_physics);
 	void SetPhysicsOverride(Int32 bone_index, const BaseDocument* doc, const Vector& translation, const std::array<Float32, 4>& rotation);
 
 private:
