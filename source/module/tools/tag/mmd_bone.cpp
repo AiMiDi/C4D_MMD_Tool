@@ -547,7 +547,9 @@ namespace
 
 	BaseTime GetDocumentTimeOrInvalid(const BaseDocument* doc)
 	{
-		return doc ? doc->GetTime() : BaseTime(-1.);
+		// Older Cinema 4D SDKs expose BaseDocument::GetTime() as non-const.
+		BaseDocument* const mutable_doc = const_cast<BaseDocument*>(doc);
+		return mutable_doc ? mutable_doc->GetTime() : BaseTime(-1.);
 	}
 
 	Float GetAnimationFrameFromDocumentContinuous(BaseDocument* doc)
@@ -1156,7 +1158,7 @@ Bool MMDBoneTag::GetPlaybackRuntimeOverride(Vector& translation, std::array<Floa
 	if (!has_runtime_playback_override_)
 		return false;
 
-	const BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+	BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
 	const BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
 	if (runtime_playback_override_time_ != GetDocumentTimeOrInvalid(doc))
 		return false;
@@ -1168,12 +1170,12 @@ Bool MMDBoneTag::GetPlaybackRuntimeOverride(Vector& translation, std::array<Floa
 
 Bool MMDBoneTag::HasPostPhysicsIKSolveAtTime(const BaseDocument* doc) const
 {
-	return doc != nullptr && last_postphysics_ik_solve_time_ == doc->GetTime();
+	return last_postphysics_ik_solve_time_ == GetDocumentTimeOrInvalid(doc);
 }
 
 void MMDBoneTag::MarkPostPhysicsIKSolvedAtTime(const BaseDocument* doc)
 {
-	last_postphysics_ik_solve_time_ = doc ? doc->GetTime() : BaseTime(-1.);
+	last_postphysics_ik_solve_time_ = GetDocumentTimeOrInvalid(doc);
 }
 
 void MMDBoneTag::SetAppendRecursionDepth(const Int32 depth)
@@ -2273,8 +2275,6 @@ void MMDBoneTag::BuildStandaloneIKChains()
 	if (!CollectStandaloneIKChainEntries(tag, entries))
 		return;
 
-	BaseDocument* const tag_doc = tag->GetDocument();
-
 	if (entries.IsEmpty())
 	{
 		ik_solver->ClearIKChains();
@@ -2470,7 +2470,6 @@ Bool MMDBoneTag::RunIKSolveAnimMode(BaseObject* op, const Bool mark_prephysics_c
 		return false;
 
 	BaseDocument* const doc = op->GetDocument();
-	const Int32 current_frame = GetAnimationFrameFromDocument(doc);
 	const BaseTime current_time = GetDocumentTimeOrInvalid(doc);
 	if (!allow_same_frame_resolve && last_ik_solve_time_ == current_time)
 		return false;
