@@ -467,7 +467,7 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(link_rigid_b_);
 	joint_mode_ = NormalizeJointMode(joint_mode_);
 	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
-		bc->SetInt32(JOINT_MODE, NormalizeJointMode(bc->GetInt32(JOINT_MODE)));
+		bc->SetInt32(JOINT_MODE, joint_mode_);
 	ConfigureJointExecutionPriority(node);
 	return true;
 }

@@ -27,7 +27,6 @@ Description:	DESC
 #include "module/tools/object/mmd_model_manager.h"
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/VMDInterpolation.h"
-#include "utils/cmt_anim_flow_debug.hpp"
 #include "utils/math_util.hpp"
 #include "utils/string_util.hpp"
 
@@ -668,6 +667,28 @@ void C4DIKChainNodeAdapter::UpdateInitialGlobalTransform()
 			current->initial_global_transform_ = current->parent_->initial_global_transform_ * current->initial_local_transform_;
 		else
 			current->initial_global_transform_ = current->initial_local_transform_;
+
+		for (auto it = current->children_.rbegin(); it != current->children_.rend(); ++it)
+			stack.push_back(*it);
+	}
+}
+
+void C4DIKChainNodeAdapter::ResetCurrentTransformToInitial()
+{
+	std::vector<C4DIKChainNodeAdapter*> stack;
+	stack.push_back(this);
+	while (!stack.empty())
+	{
+		C4DIKChainNodeAdapter* const current = stack.back();
+		stack.pop_back();
+		if (!current)
+			continue;
+
+		current->local_transform_ = current->initial_local_transform_;
+		current->global_transform_ = current->initial_global_transform_;
+		current->animate_translation_ = Eigen::Vector3f::Zero();
+		current->animate_rotation_ = Eigen::Quaternionf::Identity();
+		current->ik_rotation_ = Eigen::Quaternionf::Identity();
 
 		for (auto it = current->children_.rbegin(); it != current->children_.rend(); ++it)
 			stack.push_back(*it);
@@ -3373,7 +3394,11 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	ik_overridden_this_frame_ = false;
 	ClearPlaybackRuntimeOverride();
 	ResetEvaluatedAnimationState();
-	return SUPER::Read(node, hf, level);
+	if (!SUPER::Read(node, hf, level))
+		return false;
+	if (const BaseContainer* const bc = node ? static_cast<BaseTag*>(node)->GetDataInstance() : nullptr)
+		is_IK = bc->GetBool(PMX_BONE_IS_IK);
+	return true;
 }
 
 SDK2024_Write(MMDBoneTag)

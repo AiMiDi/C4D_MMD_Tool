@@ -422,11 +422,22 @@ void MMDJointManagerObject::ReconnectJointPointers(libmmd::MMDPhysicsManager* ph
 	std::stable_sort(sorted_children.begin(), sorted_children.end(),
 		[](const auto& a, const auto& b) { return a.first < b.first; });
 
+	MMDRigidManagerObject* const rigid_mgr = GetRigidManager();
 	for (size_t i = 0; i < sorted_children.size() && i < joints->size(); ++i)
 	{
-		auto* joint_data = sorted_children[i].second->GetNodeData<MMDJointObject>();
+		BaseObject* const joint_object = sorted_children[i].second;
+		auto* joint_data = joint_object ? joint_object->GetNodeData<MMDJointObject>() : nullptr;
+		if (!joint_data)
+			continue;
 		joint_data->mmd_joint_ = (*joints)[i].get();
 		joint_data->joint_manager_data_ = this;
 		joint_data->joint_manager_link_->SetLink(reinterpret_cast<BaseObject*>(Get()));
+		const BaseContainer* const bc = joint_object->GetDataInstance();
+		const Int32 rigid_a_index = bc ? bc->GetInt32(JOINT_LINK_RIGID_A_INDEX) : -1;
+		const Int32 rigid_b_index = bc ? bc->GetInt32(JOINT_LINK_RIGID_B_INDEX) : -1;
+		BaseObject* const rigid_a = rigid_mgr ? rigid_mgr->FindRigid(rigid_a_index) : nullptr;
+		BaseObject* const rigid_b = rigid_mgr ? rigid_mgr->FindRigid(rigid_b_index) : nullptr;
+		joint_data->link_rigid_a_->SetLink(rigid_a);
+		joint_data->link_rigid_b_->SetLink(rigid_b);
 	}
 }

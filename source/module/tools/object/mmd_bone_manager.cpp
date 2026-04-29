@@ -21,14 +21,10 @@ Description:	DESC
 #include "description/TMMDBone.h"
 #include "maxon/queue.h"
 #include "module/tools/tag/mmd_bone.h"
-#include "utils/cmt_anim_flow_debug.hpp"
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/PMXModel.h"
 
 
-#include <cstdlib>
-#include <cstring>
-#include <sstream>
 #include <tuple>
 #include <unordered_map>
 #include <unordered_set>
@@ -42,14 +38,6 @@ namespace
 	{
 		constexpr Int32 kLegacyBoneModeVmd = 2;
 		return mode == kLegacyBoneModeVmd ? BONE_MODE_ANIM : mode;
-	}
-
-	bool IsPhysicsDebugLoggingEnabled()
-	{
-		const char* const value = std::getenv("CMT_INITIAL_STATE_DEBUG");
-		if (!value || !*value)
-			return false;
-		return std::strcmp(value, "0") != 0 && std::strcmp(value, "false") != 0 && std::strcmp(value, "FALSE") != 0;
 	}
 
 	String GetBoneTagName(const BaseTag* tag, const Bool use_local_name)
@@ -70,31 +58,6 @@ namespace
 			return object->GetName();
 
 		return String();
-	}
-
-	std::string BuildBoneDebugLabel(const BaseTag* tag, const Int32 bone_index)
-	{
-		String bone_name = GetBoneTagName(tag, true);
-		if (bone_name.IsEmpty())
-			bone_name = GetBoneTagName(tag, false);
-
-		std::ostringstream stream;
-		stream << bone_index;
-		if (!bone_name.IsEmpty())
-			stream << ":" << string_util::GetStdString(bone_name);
-		return stream.str();
-	}
-
-	String JoinBoneDebugLabels(const std::vector<std::string>& labels)
-	{
-		std::ostringstream stream;
-		for (size_t index = 0; index < labels.size(); ++index)
-		{
-			if (index > 0)
-				stream << ", ";
-			stream << labels[index];
-		}
-		return String(stream.str().c_str());
 	}
 
 	BaseTag* ResolveInheritSourceBoneTag(MMDBoneManagerObject* bone_manager, BaseTag* self_tag)
@@ -379,7 +342,8 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	physics_overrides_.Reset();
 	if (!SUPER::Read(node, hf, level))
 		return false;
-	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
+	BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr;
+	if (bc)
 		bc->SetInt32(BONE_MODE, NormalizeBoneMode(bc->GetInt32(BONE_MODE)));
 	ConfigureBoneManagerExecutionPriority(node);
 	return true;
@@ -742,13 +706,7 @@ bool MMDBoneManagerObject::SynchronizeBoneHierarchy(BaseObject* bone_manager_obj
 			if (MMDRigidManagerObject* const rigid_manager = model_manager->GetRigidManagerData())
 			{
 				BaseObject* const rigid_manager_object = reinterpret_cast<BaseObject*>(rigid_manager->Get());
-				const Int32 remapped_rigids = RemapRigidRelatedBoneIndices(rigid_manager_object, previous_to_current_index);
-				if (remapped_rigids > 0 && IsPhysicsDebugLoggingEnabled())
-				{
-					DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-						"[CMT] SynchronizeBoneHierarchy remappedRigidBones=@",
-						remapped_rigids);
-				}
+				RemapRigidRelatedBoneIndices(rigid_manager_object, previous_to_current_index);
 			}
 		}
 	}
@@ -1405,19 +1363,10 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		return EXECUTIONRESULT::OK;
 
 	EnsureAppendExecutionOrder();
-	const Bool debug_logging = IsPhysicsDebugLoggingEnabled();
-	const Int32 current_frame = doc->GetTime().GetFrame(30);
-	CMT_ANIM_FLOW_LOG("[CMT][ExecOrder][Frame @] BoneManager priority=@", current_frame, priority);
-	Int32 processed_bones = 0;
 	Int32 self_override_bones = 0;
 	Int32 inherit_override_bones = 0;
 	Int32 applied_animation_bones = 0;
-	Int32 post_physics_ik_candidates = 0;
 	Int32 post_physics_ik_solved = 0;
-	Int32 post_physics_ik_skipped_same_time = 0;
-	std::vector<std::string> inherit_override_labels;
-	std::vector<std::string> applied_animation_labels;
-	std::vector<std::string> post_physics_ik_labels;
 
 	std::vector<Int32> sorted_indices;
 	sorted_indices.reserve(bone_list_.GetCount());
@@ -1451,8 +1400,6 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		if (!bone_tag_node || !bone_object || !bc || bone_tag_node->bone_mode_ != BONE_MODE_ANIM)
 			continue;
 
-		++processed_bones;
-
 		// Standalone runtime keeps IK as a single pre-physics solve. Any same-frame
 		// persistence should come from cached runtime overrides, not a second IK
 		// pass from the bone manager.
@@ -1460,9 +1407,6 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		Vector source_translation;
 		std::array<Float32, 4> source_rotation { 0.F, 0.F, 0.F, 1.F };
 		const Bool has_self_override = bone_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation);
-		CMT_ANIM_FLOW_LOG_BONE(bone_index,
-			"[CMT][AnimFlow][Frame @][BoneManager] has_self_override=@",
-			current_frame, has_self_override ? 1 : 0);
 		if (has_self_override)
 			++self_override_bones;
 
@@ -1473,29 +1417,15 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 				inherit_source_has_override = source_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation);
 		}
 		if (inherit_source_has_override)
-		{
 			++inherit_override_bones;
-			if (debug_logging)
-				inherit_override_labels.emplace_back(BuildBoneDebugLabel(bone_tag, bone_index));
-		}
 
 		if (!has_self_override && !inherit_source_has_override && !should_run_post_physics_ik)
 			continue;
 
 		if (has_self_override)
 		{
-			const Vector mg_before_self_override = bone_object->GetMg().off;
-			CMT_ANIM_FLOW_LOG_BONE(bone_index,
-				"[CMT][AnimFlow][Frame @][BoneManager BEFORE self override] mg.off=(@,@,@)",
-				current_frame,
-				mg_before_self_override.x, mg_before_self_override.y, mg_before_self_override.z);
 			bone_object->SetRelMl(BuildBoneRelativeMatrix(source_translation, source_rotation));
 			MarkBoneTransformDirty(bone_object);
-			const Vector mg_after_self_override = bone_object->GetMg().off;
-			CMT_ANIM_FLOW_LOG_BONE(bone_index,
-				"[CMT][AnimFlow][Frame @][BoneManager AFTER self override] mg.off=(@,@,@)",
-				current_frame,
-				mg_after_self_override.x, mg_after_self_override.y, mg_after_self_override.z);
 			if (!should_run_post_physics_ik)
 				continue;
 		}
@@ -1503,53 +1433,17 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		if (!has_self_override && !bone_tag_node->ApplyActiveAnimation(bone_object, doc, true))
 			continue;
 		if (!has_self_override)
-		{
 			++applied_animation_bones;
-			if (debug_logging)
-				applied_animation_labels.emplace_back(BuildBoneDebugLabel(bone_tag, bone_index));
-		}
 
 		if (should_run_post_physics_ik)
 		{
-			++post_physics_ik_candidates;
 			if (bone_tag_node->HasPostPhysicsIKSolveAtTime(doc))
-			{
-				++post_physics_ik_skipped_same_time;
 				continue;
-			}
 			if (bone_tag_node->RunIKSolveAnimMode(bone_object, false, true))
 			{
 				bone_tag_node->MarkPostPhysicsIKSolvedAtTime(doc);
 				++post_physics_ik_solved;
-				if (debug_logging)
-					post_physics_ik_labels.emplace_back(BuildBoneDebugLabel(bone_tag, bone_index));
 			}
-		}
-	}
-
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT][Frame @] BoneManagerExecute bones=@ processed=@ selfOverride=@ inheritOverride=@ animApplied=@ postIK=@ solved=@ skippedSameTime=@",
-		current_frame, bone_list_.GetCount(), processed_bones, self_override_bones, inherit_override_bones,
-		applied_animation_bones, post_physics_ik_candidates, post_physics_ik_solved, post_physics_ik_skipped_same_time);
-	if (debug_logging)
-	{
-		if (!inherit_override_labels.empty())
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT][Frame @] BoneManager inheritOverrideBones=@",
-				current_frame, JoinBoneDebugLabels(inherit_override_labels));
-		}
-		if (!applied_animation_labels.empty())
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT][Frame @] BoneManager animAppliedBones=@",
-				current_frame, JoinBoneDebugLabels(applied_animation_labels));
-		}
-		if (!post_physics_ik_labels.empty())
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT][Frame @] BoneManager postPhysicsIKBones=@",
-				current_frame, JoinBoneDebugLabels(post_physics_ik_labels));
 		}
 	}
 
@@ -1606,10 +1500,7 @@ Int32 MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer(BaseDocument* do
 		return 0;
 
 	EnsureAppendExecutionOrder();
-	const Bool debug_logging = IsPhysicsDebugLoggingEnabled();
-	const Int32 current_frame = doc->GetTime().GetFrame(30);
 	Int32 prepared_bones = 0;
-	std::vector<std::string> prepared_bone_labels;
 
 	std::vector<Int32> sorted_indices;
 	sorted_indices.reserve(bone_list_.GetCount());
@@ -1659,22 +1550,9 @@ Int32 MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer(BaseDocument* do
 
 		bone_tag_node->BeginPrephysicsFrame(doc);
 		if (bone_tag_node->ApplyActiveAnimation(bone_object, doc, true))
-		{
 			++prepared_bones;
-			if (debug_logging)
-				prepared_bone_labels.emplace_back(BuildBoneDebugLabel(bone_tag, bone_index));
-		}
 	}
 
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT][Frame @] PrepareSceneForPhysicsPlaybackLayer layer=@ afterPhysics=@ bones=@ prepared=@",
-		current_frame, layer, after_physics, bone_list_.GetCount(), prepared_bones);
-	if (debug_logging && !prepared_bone_labels.empty())
-	{
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][Frame @] PrepareSceneForPhysicsPlaybackLayer layer=@ afterPhysics=@ bones=@",
-			current_frame, layer, after_physics, JoinBoneDebugLabels(prepared_bone_labels));
-	}
 	return prepared_bones;
 }
 

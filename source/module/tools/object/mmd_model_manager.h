@@ -321,6 +321,4 @@ private:
 	void SyncSubManagerScale(Float pm);
 	void SyncMaterialsList();
 	void PruneDeletedMaterialEntries(BaseDocument* doc);
-	void ResetInitialStateDebugLog() const;
-	void LogInitialStateSnapshot(const char* stage) const;
 };

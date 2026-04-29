@@ -135,6 +135,7 @@ public:
 	void ClearChildren();
 	void AddChildAdapter(C4DIKChainNodeAdapter* child);
 	void UpdateInitialGlobalTransform();
+	void ResetCurrentTransformToInitial();
 	void SyncCurrentTransformsFromBoneObject(Bool reset_ik_rotation = true);
 	void GetCurrentRelativeState(Vector& translation, std::array<Float32, 4>& rotation) const;
 	void ApplyLocalToBoneObject() const;
