@@ -70,20 +70,34 @@ jobs:
       - name: Run ISCC
         shell: pwsh
         run: |
-          $isccCandidates = @(
-            "${env:ProgramFiles}\Inno Setup 6\ISCC.exe",
-            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-          ) | Where-Object { $_ -and (Test-Path -LiteralPath $_) }
+          $isccCandidates = @()
+          $isccCommand = Get-Command ISCC.exe -ErrorAction SilentlyContinue
+          if ($isccCommand) {
+            $isccCandidates += $isccCommand.Source
+          }
+          if ($env:ProgramFiles) {
+            $isccCandidates += (Join-Path $env:ProgramFiles 'Inno Setup 6\ISCC.exe')
+          }
+          if (${env:ProgramFiles(x86)}) {
+            $isccCandidates += (Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe')
+          }
+          $isccCandidates = $isccCandidates | Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -Unique
           if (-not $isccCandidates) {
             throw "ISCC.exe not found"
           }
 
           $iscc = $isccCandidates[0]
-          & $iscc `
-            "/DPluginVersion=${{ steps.ver.outputs.version }}" `
-            "/DSdkBuildDir=_build_msvc" `
-            "/DSdkBinConfig=Release" `
-            "${{ github.workspace }}\setup\Common\installer_script.iss"
+          $arguments = @(
+            "/DPluginVersion=${{ steps.ver.outputs.version }}",
+            "/DSdkBuildDir=_build_msvc",
+            "/DSdkBinConfig=Release",
+            "$env:GITHUB_WORKSPACE\setup\Common\installer_script.iss"
+          )
+          Write-Host "Using ISCC: $iscc"
+          $process = Start-Process -FilePath $iscc -ArgumentList $arguments -Wait -NoNewWindow -PassThru
+          if ($process.ExitCode -ne 0) {
+            throw "ISCC failed with exit code $($process.ExitCode)"
+          }
 
       - name: Upload installer artifact
         uses: actions/upload-artifact@v7
