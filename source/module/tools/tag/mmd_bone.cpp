@@ -547,9 +547,7 @@ namespace
 
 	BaseTime GetDocumentTimeOrInvalid(const BaseDocument* doc)
 	{
-		// Older Cinema 4D SDKs expose BaseDocument::GetTime() as non-const.
-		BaseDocument* const mutable_doc = const_cast<BaseDocument*>(doc);
-		return mutable_doc ? mutable_doc->GetTime() : BaseTime(-1.);
+		return doc ? GetDocumentTime(doc) : BaseTime(-1.);
 	}
 
 	Float GetAnimationFrameFromDocumentContinuous(BaseDocument* doc)
@@ -1158,8 +1156,8 @@ Bool MMDBoneTag::GetPlaybackRuntimeOverride(Vector& translation, std::array<Floa
 	if (!has_runtime_playback_override_)
 		return false;
 
-	BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
-	const BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
+	const BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+	const BaseDocument* const doc = self_tag ? GetNodeDocument(self_tag) : nullptr;
 	if (runtime_playback_override_time_ != GetDocumentTimeOrInvalid(doc))
 		return false;
 
@@ -1170,12 +1168,12 @@ Bool MMDBoneTag::GetPlaybackRuntimeOverride(Vector& translation, std::array<Floa
 
 Bool MMDBoneTag::HasPostPhysicsIKSolveAtTime(const BaseDocument* doc) const
 {
-	return last_postphysics_ik_solve_time_ == GetDocumentTimeOrInvalid(doc);
+	return doc != nullptr && last_postphysics_ik_solve_time_ == GetDocumentTime(doc);
 }
 
 void MMDBoneTag::MarkPostPhysicsIKSolvedAtTime(const BaseDocument* doc)
 {
-	last_postphysics_ik_solve_time_ = GetDocumentTimeOrInvalid(doc);
+	last_postphysics_ik_solve_time_ = doc ? GetDocumentTime(doc) : BaseTime(-1.);
 }
 
 void MMDBoneTag::SetAppendRecursionDepth(const Int32 depth)

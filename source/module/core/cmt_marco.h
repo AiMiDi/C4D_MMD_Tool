@@ -303,4 +303,29 @@ inline Bool GetAtomParameter(const T* atom, const DescID& id, GeData& data, DESC
 #endif
 }
 
+/// R20–R23: BaseDocument::GetTime() is non-const; 2024+ it is const.
+inline BaseTime GetDocumentTime(const BaseDocument* doc)
+{
+	if (!doc)
+		return BaseTime();
+#if API_VERSION < 2024000
+	return const_cast<BaseDocument*>(doc)->GetTime();
+#else
+	return doc->GetTime();
+#endif
+}
+
+/// R20–R23: GeListNode::GetDocument() is non-const; 2024+ it is const.
+template<typename T>
+inline const BaseDocument* GetNodeDocument(const T* node)
+{
+	if (!node)
+		return nullptr;
+#if API_VERSION < 2024000
+	return const_cast<T*>(node)->GetDocument();
+#else
+	return node->GetDocument();
+#endif
+}
+
 
