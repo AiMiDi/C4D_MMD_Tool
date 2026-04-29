@@ -13,6 +13,7 @@ Description:	DESC
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <unordered_map>
 #include "plugin_resource.h"
 #include "module/core/cmt_marco.h"
 #include "mmd_bone.h"
@@ -27,8 +28,7 @@ Description:	DESC
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/VMDInterpolation.h"
 #include "utils/math_util.hpp"
-#include "module/core/cmt_debug_log.h"
-#include <sstream>
+#include "utils/string_util.hpp"
 
 namespace
 {
@@ -165,6 +165,233 @@ namespace
 		return nullptr;
 	}
 
+	struct StandaloneIKChainEntry
+	{
+		Int32 bone_index = -1;
+		BaseObject* linked_object = nullptr;
+		Bool enable_limit = false;
+		Vector limit_min;
+		Vector limit_max;
+	};
+
+	bool DescItemHasParent(const BaseContainer& bc, const DescID& parent_id)
+	{
+		const DescID* const parent_id_ptr = GetContainerCustomDataType<DescID>(bc, DESC_PARENTGROUP, CUSTOMDATATYPE_DESCID);
+		return parent_id_ptr != nullptr && *parent_id_ptr == parent_id;
+	}
+
+	bool CollectStandaloneIKChainEntries(BaseTag* tag, maxon::BaseArray<StandaloneIKChainEntry>& entries)
+	{
+		iferr_scope_handler{
+			return false;
+		};
+
+		entries.Reset();
+		if (!tag)
+			return false;
+
+		DynamicDescription* const dyn_desc = tag->GetDynamicDescriptionWritable();
+		if (!dyn_desc)
+			return false;
+
+		BaseDocument* const tag_doc = tag->GetDocument();
+		const DescID ik_links_root = ConstDescID(DescLevel(PMX_BONE_IK_LINKS_GRP));
+
+		struct EntryFieldIds
+		{
+			DescID entry_group_id;
+			DescID index_group_id;
+			DescID bone_index_id;
+			DescID bone_link_id;
+			DescID enable_limit_id;
+			DescID limit_min_id;
+			DescID limit_max_id;
+			Bool has_index_group = false;
+			Bool has_bone_index = false;
+			Bool has_bone_link = false;
+			Bool has_enable_limit = false;
+			Bool has_limit_min = false;
+			Bool has_limit_max = false;
+		};
+
+		maxon::BaseArray<EntryFieldIds> entry_fields;
+		void* browse_handle = dyn_desc->BrowseInit();
+		DescID browse_id;
+		const BaseContainer* browse_bc = nullptr;
+
+		while (dyn_desc->BrowseGetNext(browse_handle, &browse_id, &browse_bc))
+		{
+			if (!browse_bc || !DescItemHasParent(*browse_bc, ik_links_root))
+				continue;
+			if (browse_id.GetDepth() < 1 || browse_id[0].dtype != DTYPE_GROUP)
+				continue;
+
+			auto& field_ids = entry_fields.Append()iferr_return;
+			field_ids.entry_group_id = browse_id;
+		}
+		dyn_desc->BrowseFree(browse_handle);
+
+		for (auto& field_ids : entry_fields)
+		{
+			browse_handle = dyn_desc->BrowseInit();
+			while (dyn_desc->BrowseGetNext(browse_handle, &browse_id, &browse_bc))
+			{
+				if (!browse_bc || !DescItemHasParent(*browse_bc, field_ids.entry_group_id) || browse_id.GetDepth() < 1)
+					continue;
+
+				switch (browse_id[0].dtype)
+				{
+				case DTYPE_GROUP:
+					field_ids.index_group_id = browse_id;
+					field_ids.has_index_group = true;
+					break;
+				case DTYPE_BOOL:
+					field_ids.enable_limit_id = browse_id;
+					field_ids.has_enable_limit = true;
+					break;
+				case DTYPE_VECTOR:
+					if (!field_ids.has_limit_min)
+					{
+						field_ids.limit_min_id = browse_id;
+						field_ids.has_limit_min = true;
+					}
+					else if (!field_ids.has_limit_max)
+					{
+						field_ids.limit_max_id = browse_id;
+						field_ids.has_limit_max = true;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			dyn_desc->BrowseFree(browse_handle);
+
+			if (field_ids.has_index_group)
+			{
+				browse_handle = dyn_desc->BrowseInit();
+				while (dyn_desc->BrowseGetNext(browse_handle, &browse_id, &browse_bc))
+				{
+					if (!browse_bc || !DescItemHasParent(*browse_bc, field_ids.index_group_id) || browse_id.GetDepth() < 1)
+						continue;
+
+					switch (browse_id[0].dtype)
+					{
+					case DTYPE_LONG:
+						field_ids.bone_index_id = browse_id;
+						field_ids.has_bone_index = true;
+						break;
+					case DTYPE_BASELISTLINK:
+						field_ids.bone_link_id = browse_id;
+						field_ids.has_bone_link = true;
+						break;
+					default:
+						break;
+					}
+				}
+				dyn_desc->BrowseFree(browse_handle);
+			}
+
+			auto& entry = entries.Append()iferr_return;
+			if (field_ids.has_bone_index)
+			{
+				GeData value;
+				if (tag->GetParameter(field_ids.bone_index_id, value, DESCFLAGS_GET::NONE))
+					entry.bone_index = value.GetInt32();
+			}
+			if (field_ids.has_bone_link)
+			{
+				GeData link_data;
+				if (tag->GetParameter(field_ids.bone_link_id, link_data, DESCFLAGS_GET::NONE))
+				{
+					if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, tag_doc))
+						entry.linked_object = linked_object;
+				}
+			}
+			if (field_ids.has_enable_limit)
+			{
+				GeData value;
+				if (tag->GetParameter(field_ids.enable_limit_id, value, DESCFLAGS_GET::NONE))
+					entry.enable_limit = value.GetBool();
+			}
+			if (field_ids.has_limit_min)
+			{
+				GeData value;
+				if (tag->GetParameter(field_ids.limit_min_id, value, DESCFLAGS_GET::NONE))
+					entry.limit_min = value.GetVector();
+			}
+			if (field_ids.has_limit_max)
+			{
+				GeData value;
+				if (tag->GetParameter(field_ids.limit_max_id, value, DESCFLAGS_GET::NONE))
+					entry.limit_max = value.GetVector();
+			}
+		}
+
+		if (!entries.IsEmpty())
+			return true;
+
+		// Fallback to the legacy browse-order parser. It is less robust to
+		// description layout drift, but it preserves working IK behavior for
+		// existing scenes if the structured parent-group walk cannot see the
+		// dynamic link entries.
+		const String name_ik_bone = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE);
+		const String name_enable_limit = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT);
+		const String name_limit_min = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN);
+		const String name_limit_max = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX);
+
+		void* legacy_handle = dyn_desc->BrowseInit();
+		DescID legacy_id;
+		const BaseContainer* legacy_bc = nullptr;
+
+		while (dyn_desc->BrowseGetNext(legacy_handle, &legacy_id, &legacy_bc))
+		{
+			if (!legacy_bc)
+				continue;
+
+			const String name = legacy_bc->GetString(DESC_NAME);
+			GeData value;
+
+			if (name == name_ik_bone)
+			{
+				auto& entry = entries.Append()iferr_return;
+				if (tag->GetParameter(legacy_id, value, DESCFLAGS_GET::NONE))
+					entry.bone_index = value.GetInt32();
+			}
+			else if (!entries.IsEmpty())
+			{
+				auto& current = entries[entries.GetCount() - 1];
+				if (name == name_enable_limit)
+				{
+					if (tag->GetParameter(legacy_id, value, DESCFLAGS_GET::NONE))
+						current.enable_limit = value.GetBool();
+				}
+				else if (name == name_limit_min)
+				{
+					if (tag->GetParameter(legacy_id, value, DESCFLAGS_GET::NONE))
+						current.limit_min = value.GetVector();
+				}
+				else if (name == name_limit_max)
+				{
+					if (tag->GetParameter(legacy_id, value, DESCFLAGS_GET::NONE))
+						current.limit_max = value.GetVector();
+				}
+				else if (current.linked_object == nullptr && name.IsEmpty())
+				{
+					GeData link_data;
+					if (tag->GetParameter(legacy_id, link_data, DESCFLAGS_GET::NONE))
+					{
+						if (BaseObject* const linked_object = ResolveBoneObjectFromLinkData(link_data, tag_doc))
+							current.linked_object = linked_object;
+					}
+				}
+			}
+		}
+		dyn_desc->BrowseFree(legacy_handle);
+
+		return true;
+	}
+
 	Int32 ComputeBoneExecutionPriorityValue(const BaseContainer* bc, const Int32 append_depth)
 	{
 		const Int32 layer = bc ? std::max(0, bc->GetInt32(PMX_BONE_LAYER)) : 0;
@@ -283,9 +510,9 @@ namespace
 
 	libmmd::VMDBezier ToLibMMDBezier(const BoneAnimationBezierData& bezier)
 	{
-		std::array<uint8_t, 4> cp { bezier.ax, bezier.ay, bezier.bx, bezier.by };
 		libmmd::VMDBezier result;
-		libmmd::SetVMDBezier(result, cp.data());
+		result.m_cp1 = Eigen::Vector2f(static_cast<float>(bezier.ax) / 127.0f, static_cast<float>(bezier.ay) / 127.0f);
+		result.m_cp2 = Eigen::Vector2f(static_cast<float>(bezier.bx) / 127.0f, static_cast<float>(bezier.by) / 127.0f);
 		return result;
 	}
 
@@ -316,6 +543,19 @@ namespace
 	Int32 GetAnimationFrameFromDocument(BaseDocument* doc)
 	{
 		return doc ? doc->GetTime().GetFrame(kBoneAnimationFps) : 0;
+	}
+
+	BaseTime GetDocumentTimeOrInvalid(const BaseDocument* doc)
+	{
+		return doc ? doc->GetTime() : BaseTime(-1.);
+	}
+
+	Float GetAnimationFrameFromDocumentContinuous(BaseDocument* doc)
+	{
+		if (!doc)
+			return 0.0f;
+
+		return maxon::SafeConvert<Float>(doc->GetTime().Get() * static_cast<Float64>(kBoneAnimationFps));
 	}
 
 	BaseTime GetAnimationFrameTime(const Int32 frame)
@@ -433,19 +673,50 @@ void C4DIKChainNodeAdapter::UpdateInitialGlobalTransform()
 	}
 }
 
+void C4DIKChainNodeAdapter::ResetCurrentTransformToInitial()
+{
+	std::vector<C4DIKChainNodeAdapter*> stack;
+	stack.push_back(this);
+	while (!stack.empty())
+	{
+		C4DIKChainNodeAdapter* const current = stack.back();
+		stack.pop_back();
+		if (!current)
+			continue;
+
+		current->local_transform_ = current->initial_local_transform_;
+		current->global_transform_ = current->initial_global_transform_;
+		current->animate_translation_ = Eigen::Vector3f::Zero();
+		current->animate_rotation_ = Eigen::Quaternionf::Identity();
+		current->ik_rotation_ = Eigen::Quaternionf::Identity();
+
+		for (auto it = current->children_.rbegin(); it != current->children_.rend(); ++it)
+			stack.push_back(*it);
+	}
+}
+
 void C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject(const Bool reset_ik_rotation)
 {
 	if (!bone_object_)
 		return;
 
-	// C4D scene globals inherit the model root scale, but libMMD physics expects
-	// raw PMX-space bone transforms. Keep the runtime adapter in local/raw space
-	// and let the hierarchy rebuild globals explicitly.
+	// local_transform_ must always reflect the full GetMl() = frozen * relative,
+	// because this function is called both during initial build (when
+	// initial_local_transform_ is still Identity) and at runtime.
 	const Matrix local_matrix = NormalizeMatrixBasis(bone_object_->GetMl());
 	local_transform_ = MatrixToEigen(local_matrix);
 	global_transform_ = local_transform_;
-	animate_translation_ = local_transform_.block<3, 1>(0, 3);
-	animate_rotation_ = ExtractRotation(local_transform_);
+
+	// Extract the PURE animation rotation/translation from RelMl (excludes the
+	// frozen rest-pose). The CCD solver's axis-limit check decomposes
+	// (ik_rotation * animate_rotation) into Euler angles and clamps against PMX
+	// limits that are defined relative to the rest pose. Mixing the frozen
+	// rotation into animate_rotation_ would corrupt those angles.
+	const Matrix relative_matrix = bone_object_->GetRelMl();
+	const Eigen::Matrix4f relative_eigen = MatrixToEigen(relative_matrix);
+	animate_rotation_ = ExtractRotation(relative_eigen);
+	animate_translation_ = relative_eigen.block<3, 1>(0, 3);
+
 	if (reset_ik_rotation)
 		ik_rotation_ = Eigen::Quaternionf::Identity();
 }
@@ -495,9 +766,14 @@ void C4DIKChainNodeAdapter::SyncLocalTransformFromGlobal()
 
 void C4DIKChainNodeAdapter::UpdateLocalTransform()
 {
-	local_transform_.setIdentity();
-	local_transform_.block<3, 3>(0, 0) = (ik_rotation_ * animate_rotation_).normalized().toRotationMatrix();
-	local_transform_.block<3, 1>(0, 3) = animate_translation_;
+	// animate_rotation_ and animate_translation_ are the pure animation
+	// components (from GetRelMl), so the relative rotation is ik * anim and
+	// the full local = initial (frozen) * relative.
+	const Eigen::Matrix3f relative_rotation = (ik_rotation_ * animate_rotation_).normalized().toRotationMatrix();
+	local_transform_ = initial_local_transform_;
+	local_transform_.block<3, 3>(0, 0) = initial_local_transform_.block<3, 3>(0, 0) * relative_rotation;
+	local_transform_.block<3, 1>(0, 3) = initial_local_transform_.block<3, 1>(0, 3)
+		+ initial_local_transform_.block<3, 3>(0, 0) * animate_translation_;
 }
 
 void C4DIKChainNodeAdapter::UpdateGlobalTransform()
@@ -828,48 +1104,48 @@ void MMDBoneTag::GetEvaluatedAnimatedLocalState(Vector& translation, std::array<
 		ToEigenQuaternion(evaluated_animation_rotation_) * ToEigenQuaternion(evaluated_append_animation_rotation_));
 }
 
-void MMDBoneTag::BeginPrephysicsFrame(const Int32 frame)
+void MMDBoneTag::BeginPrephysicsFrame(const BaseDocument* doc)
 {
-	if (last_prephysics_frame_ == frame)
+	const BaseTime current_time = GetDocumentTimeOrInvalid(doc);
+	if (last_prephysics_time_ == current_time)
 		return;
 
-	last_prephysics_frame_ = frame;
+	last_prephysics_time_ = current_time;
 	skip_prephysics_scene_write_ = false;
 	ik_overridden_this_frame_ = false;
 }
 
-void MMDBoneTag::MarkPrephysicsSceneWriteSkipped(const Int32 frame)
+void MMDBoneTag::MarkPrephysicsSceneWriteSkipped(const BaseDocument* doc)
 {
-	last_prephysics_frame_ = frame;
+	last_prephysics_time_ = GetDocumentTimeOrInvalid(doc);
 	skip_prephysics_scene_write_ = true;
 	ik_overridden_this_frame_ = true;
 }
 
-Bool MMDBoneTag::ShouldSkipPrephysicsSceneWrite(const Int32 frame) const
+Bool MMDBoneTag::ShouldSkipPrephysicsSceneWrite(const BaseDocument* doc) const
 {
-	return last_prephysics_frame_ == frame && skip_prephysics_scene_write_;
+	return last_prephysics_time_ == GetDocumentTimeOrInvalid(doc) && skip_prephysics_scene_write_;
 }
 
-Bool MMDBoneTag::HasRecentPlaybackRuntimeOverride(const Int32 frame) const
+Bool MMDBoneTag::HasRecentPlaybackRuntimeOverride(const BaseDocument* doc) const
 {
 	if (!has_runtime_playback_override_)
 		return false;
 
-	return runtime_playback_override_frame_ == frame
-		|| runtime_playback_override_frame_ == frame - 1;
+	return runtime_playback_override_time_ == GetDocumentTimeOrInvalid(doc);
 }
 
 void MMDBoneTag::ClearPlaybackRuntimeOverride()
 {
 	has_runtime_playback_override_ = false;
-	runtime_playback_override_frame_ = NOTOK;
+	runtime_playback_override_time_ = BaseTime(-1.);
 	runtime_playback_override_translation_ = Vector();
 	runtime_playback_override_rotation_ = { 0.F, 0.F, 0.F, 1.F };
 }
 
-void MMDBoneTag::SetPlaybackRuntimeOverride(const Int32 frame, const Vector& translation, const std::array<Float32, 4>& rotation)
+void MMDBoneTag::SetPlaybackRuntimeOverride(const BaseDocument* doc, const Vector& translation, const std::array<Float32, 4>& rotation)
 {
-	runtime_playback_override_frame_ = frame;
+	runtime_playback_override_time_ = GetDocumentTimeOrInvalid(doc);
 	runtime_playback_override_translation_ = translation;
 	runtime_playback_override_rotation_ = NormalizeQuaternion(rotation);
 	has_runtime_playback_override_ = true;
@@ -880,14 +1156,24 @@ Bool MMDBoneTag::GetPlaybackRuntimeOverride(Vector& translation, std::array<Floa
 	if (!has_runtime_playback_override_)
 		return false;
 
-	BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
-	BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
-	if (runtime_playback_override_frame_ != GetAnimationFrameFromDocument(doc))
+	const BaseTag* const self_tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+	const BaseDocument* const doc = self_tag ? self_tag->GetDocument() : nullptr;
+	if (runtime_playback_override_time_ != GetDocumentTimeOrInvalid(doc))
 		return false;
 
 	translation = runtime_playback_override_translation_;
 	rotation = runtime_playback_override_rotation_;
 	return true;
+}
+
+Bool MMDBoneTag::HasPostPhysicsIKSolveAtTime(const BaseDocument* doc) const
+{
+	return doc != nullptr && last_postphysics_ik_solve_time_ == doc->GetTime();
+}
+
+void MMDBoneTag::MarkPostPhysicsIKSolvedAtTime(const BaseDocument* doc)
+{
+	last_postphysics_ik_solve_time_ = doc ? doc->GetTime() : BaseTime(-1.);
 }
 
 void MMDBoneTag::SetAppendRecursionDepth(const Int32 depth)
@@ -1022,6 +1308,12 @@ void MMDBoneTag::RequestAppendExecutionOrderRefresh(GeListNode* node)
 	{
 		RefreshExecutionPriority(node);
 	}
+}
+
+void MMDBoneTag::InvalidateStandaloneIKChainCache()
+{
+	standalone_ik_chain_dirty_ = true;
+	standalone_ik_chain_solver_ = nullptr;
 }
 
 Bool MMDBoneTag::ReplaceAnimationSlot(const Int32 slot_index, const maxon::BaseArray<BoneAnimationKeyframeData>& keyframes)
@@ -1711,9 +2003,12 @@ SDK2024_CopyTo(MMDBoneTag)
 	dest_tag->runtime_playback_override_translation_ = Vector();
 	dest_tag->runtime_playback_override_rotation_ = { 0.F, 0.F, 0.F, 1.F };
 	dest_tag->has_runtime_playback_override_ = false;
-	dest_tag->runtime_playback_override_frame_ = NOTOK;
-	dest_tag->last_prephysics_frame_ = NOTOK;
-	dest_tag->last_ik_solve_frame_ = NOTOK;
+	dest_tag->runtime_playback_override_time_ = BaseTime(-1.);
+	dest_tag->last_prephysics_time_ = BaseTime(-1.);
+	dest_tag->last_ik_solve_time_ = BaseTime(-1.);
+	dest_tag->last_postphysics_ik_solve_time_ = BaseTime(-1.);
+	dest_tag->standalone_ik_chain_dirty_ = true;
+	dest_tag->standalone_ik_chain_solver_ = nullptr;
 	dest_tag->skip_prephysics_scene_write_ = false;
 	dest_tag->ik_overridden_this_frame_ = false;
 	dest_tag->append_recursion_depth_ = append_recursion_depth_;
@@ -1964,133 +2259,94 @@ void MMDBoneTag::BuildStandaloneIKChains()
 	if (!ik_solver)
 		return;
 
+	if (standalone_ik_chain_solver_ != ik_solver)
+		standalone_ik_chain_dirty_ = true;
+
 	auto* tag = static_cast<BaseTag*>(Get());
 	if (!tag)
 		return;
 
-	DynamicDescription* dyn_desc = tag->GetDynamicDescriptionWritable();
-	if (!dyn_desc)
+	if (!standalone_ik_chain_dirty_)
 		return;
 
-	const String name_ik_bone = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE);
-	const String name_enable_limit = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_ENABLE_LIMIT);
-	const String name_limit_min = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MIN);
-	const String name_limit_max = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_LIMIT_MAX);
+	maxon::BaseArray<StandaloneIKChainEntry> entries;
+	if (!CollectStandaloneIKChainEntries(tag, entries))
+		return;
 
-	struct ChainEntry
-	{
-		Int32 bone_index = -1;
-		Bool enable_limit = false;
-		Vector limit_min;
-		Vector limit_max;
-	};
-	maxon::BaseArray<ChainEntry> entries;
-
-	void* browse_handle = dyn_desc->BrowseInit();
-	DescID dyn_id;
-	const BaseContainer* dyn_bc = nullptr;
-
-	while (dyn_desc->BrowseGetNext(browse_handle, &dyn_id, &dyn_bc))
-	{
-		if (!dyn_bc)
-			continue;
-
-		const String name = dyn_bc->GetString(DESC_NAME);
-		GeData value;
-
-		if (name == name_ik_bone)
-		{
-			ChainEntry entry;
-			if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-				entry.bone_index = value.GetInt32();
-			entries.Append(std::move(entry)) iferr_ignore("IK chain rebuild"_s);
-		}
-		else if (!entries.IsEmpty())
-		{
-			auto& cur = entries[entries.GetCount() - 1];
-			if (name == name_enable_limit)
-			{
-				if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-					cur.enable_limit = value.GetBool();
-			}
-			else if (name == name_limit_min)
-			{
-				if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-					cur.limit_min = value.GetVector();
-			}
-			else if (name == name_limit_max)
-			{
-				if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-					cur.limit_max = value.GetVector();
-			}
-		}
-	}
-	dyn_desc->BrowseFree(browse_handle);
+	BaseDocument* const tag_doc = tag->GetDocument();
 
 	if (entries.IsEmpty())
 	{
 		ik_solver->ClearIKChains();
 		ik_solver->BuildChainPath();
+		standalone_ik_chain_dirty_ = false;
+		standalone_ik_chain_solver_ = ik_solver;
 		return;
 	}
 
 	ik_solver->ClearIKChains();
+	std::vector<StandaloneIKChainEntry> ordered_entries;
+	ordered_entries.reserve(entries.GetCount());
 	for (const auto& entry : entries)
-	{
-		if (const BaseTag* chain_tag = GetBoneManager()->FindBone(entry.bone_index))
-		{
-			if (auto* chain_node = chain_tag->GetNodeData<MMDBoneTag>(); chain_node)
-			{
-				C4DIKChainNodeAdapter* const chain_adapter = model_manager->GetBoneAdapter(entry.bone_index);
-				if (!chain_adapter)
-					continue;
+		ordered_entries.push_back(entry);
 
-				if (entry.enable_limit)
+	for (const auto& entry : ordered_entries)
+	{
+		// Prefer the stable BaseLink reference over the PMX-order bone index.
+		Int32 resolved_index = -1;
+		BaseTag* chain_tag = nullptr;
+		if (entry.linked_object)
+		{
+			if (BaseTag* const tag_via_link = entry.linked_object->GetTag(g_mmd_bone_tag_id))
+			{
+				const Int32 idx = GetBoneManager()->FindBoneIndex(tag_via_link);
+				if (idx >= 0 && model_manager->GetBoneAdapter(idx))
 				{
-					const Eigen::Vector3f lmin(static_cast<float>(entry.limit_min.x), static_cast<float>(entry.limit_min.y), static_cast<float>(entry.limit_min.z));
-					const Eigen::Vector3f lmax(static_cast<float>(entry.limit_max.x), static_cast<float>(entry.limit_max.y), static_cast<float>(entry.limit_max.z));
-					ik_solver->AddIKChain(chain_adapter, true, lmin, lmax);
+					resolved_index = idx;
+					chain_tag = tag_via_link;
 				}
-				else
+			}
+		}
+		if (!chain_tag)
+		{
+			// Legacy fallback for scenes without the link resolvable (e.g. older files).
+			if (BaseTag* const legacy_tag = GetBoneManager()->FindBone(entry.bone_index))
+			{
+				if (model_manager->GetBoneAdapter(entry.bone_index))
 				{
-					ik_solver->AddIKChain(chain_adapter);
+					resolved_index = entry.bone_index;
+					chain_tag = legacy_tag;
 				}
+			}
+		}
+
+		if (chain_tag && chain_tag->GetNodeData<MMDBoneTag>())
+		{
+			C4DIKChainNodeAdapter* const chain_adapter = model_manager->GetBoneAdapter(resolved_index);
+			if (!chain_adapter)
+				continue;
+
+			if (entry.enable_limit)
+			{
+				const Eigen::Vector3f lmin(static_cast<float>(entry.limit_min.x), static_cast<float>(entry.limit_min.y), static_cast<float>(entry.limit_min.z));
+				const Eigen::Vector3f lmax(static_cast<float>(entry.limit_max.x), static_cast<float>(entry.limit_max.y), static_cast<float>(entry.limit_max.z));
+				ik_solver->AddIKChain(chain_adapter, true, lmin, lmax);
+			}
+			else
+			{
+				ik_solver->AddIKChain(chain_adapter);
 			}
 		}
 	}
 	ik_solver->BuildChainPath();
+	standalone_ik_chain_dirty_ = false;
+	standalone_ik_chain_solver_ = ik_solver;
 }
 
-void MMDBoneTag::MarkPrephysicsIKChainUpdated(const Int32 frame)
+void MMDBoneTag::MarkPrephysicsIKChainUpdated(const BaseDocument* doc)
 {
-	if (!is_IK)
-		return;
-
-	BaseTag* const tag = static_cast<BaseTag*>(Get());
-	if (!tag)
-		return;
-
-	DynamicDescription* dyn_desc = tag->GetDynamicDescriptionWritable();
-	if (!dyn_desc)
-		return;
-
-	const String name_ik_bone = GeLoadString(IDS_CMT_MODEL_MANAGER_IK_BONE);
 	maxon::BaseArray<Int32> affected_indices;
-	iferr(affected_indices.Append(GetBoneIndex())) {}
-
-	void* browse_handle = dyn_desc->BrowseInit();
-	DescID dyn_id;
-	const BaseContainer* dyn_bc = nullptr;
-	while (dyn_desc->BrowseGetNext(browse_handle, &dyn_id, &dyn_bc))
-	{
-		if (!dyn_bc || dyn_bc->GetString(DESC_NAME) != name_ik_bone)
-			continue;
-
-		GeData value;
-		if (tag->GetParameter(dyn_id, value, DESCFLAGS_GET::NONE))
-			affected_indices.Append(value.GetInt32())iferr_ignore("append ik affected bone"_s);
-	}
-	dyn_desc->BrowseFree(browse_handle);
+	CollectIKAffectedBoneIndices(affected_indices);
 
 	MMDBoneManagerObject* const bone_manager = GetBoneManager();
 	if (!bone_manager)
@@ -2102,51 +2358,139 @@ void MMDBoneTag::MarkPrephysicsIKChainUpdated(const Int32 frame)
 		if (!affected_tag)
 			continue;
 		if (auto* const affected_node = affected_tag->GetNodeData<MMDBoneTag>())
-			affected_node->MarkPrephysicsSceneWriteSkipped(frame);
+			affected_node->MarkPrephysicsSceneWriteSkipped(doc);
 	}
 }
 
-Bool MMDBoneTag::RunIKSolveAnimMode(BaseObject* op, const Bool mark_prephysics_chain)
+void MMDBoneTag::CollectIKAffectedBoneIndices(maxon::BaseArray<Int32>& affected_indices) const
+{
+	affected_indices.Reset();
+	if (!is_IK)
+		return;
+
+	MMDBoneManagerObject* const bone_manager = const_cast<MMDBoneTag*>(this)->GetBoneManager();
+	if (!bone_manager)
+		return;
+
+	const auto append_unique_index = [&affected_indices](const Int32 bone_index)
+	{
+		if (bone_index < 0)
+			return;
+
+		for (const Int32 existing_index : affected_indices)
+		{
+			if (existing_index == bone_index)
+				return;
+		}
+		affected_indices.Append(bone_index)iferr_ignore("append ik affected bone"_s);
+	};
+
+	append_unique_index(GetBoneIndex());
+
+	BaseTag* const tag = static_cast<BaseTag*>(const_cast<MMDBoneTag*>(this)->Get());
+	if (!tag)
+		return;
+
+	BaseDocument* const tag_doc = tag->GetDocument();
+
+	// The IK effector bone is not part of the editable IK-chain entry list, but
+	// it still needs to be treated as affected by the solve. Otherwise
+	// post-physics re-solve detection can miss physics-driven effectors, and the
+	// effector itself may be overwritten later in the same evaluation pass.
+	Int32 effector_index = NOTOK;
+	if (GeData target_link_data; tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_IK_TARGET_BONE_LINK)), target_link_data, DESCFLAGS_GET::NONE))
+	{
+		if (BaseObject* const target_object = ResolveBoneObjectFromLinkData(target_link_data, tag_doc))
+		{
+			if (BaseTag* const target_tag = target_object->GetTag(g_mmd_bone_tag_id))
+				effector_index = bone_manager->FindBoneIndex(target_tag);
+		}
+	}
+	if (effector_index == NOTOK)
+	{
+		const Int32 legacy_effector_index = tag->GetDataInstanceRef().GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX);
+		if (bone_manager->FindBone(legacy_effector_index) != nullptr)
+			effector_index = legacy_effector_index;
+	}
+	append_unique_index(effector_index);
+
+	maxon::BaseArray<StandaloneIKChainEntry> entries;
+	if (!CollectStandaloneIKChainEntries(tag, entries))
+		return;
+
+	for (const auto& entry : entries)
+	{
+		Int32 resolved_index = NOTOK;
+		if (entry.linked_object)
+		{
+			if (BaseTag* const linked_tag = entry.linked_object->GetTag(g_mmd_bone_tag_id))
+				resolved_index = bone_manager->FindBoneIndex(linked_tag);
+		}
+		if (resolved_index == NOTOK && entry.bone_index >= 0)
+		{
+			if (bone_manager->FindBone(entry.bone_index) != nullptr)
+				resolved_index = entry.bone_index;
+		}
+
+		append_unique_index(resolved_index);
+	}
+}
+
+void MMDBoneTag::CacheIKSolveRuntimeOverrides(const BaseDocument* doc)
+{
+	if (!doc)
+		return;
+
+	MMDModelManagerObject* const model_manager = GetModelManager();
+	MMDBoneManagerObject* const bone_manager = GetBoneManager();
+	if (!model_manager || !bone_manager)
+		return;
+
+	maxon::BaseArray<Int32> affected_indices;
+	CollectIKAffectedBoneIndices(affected_indices);
+	for (const Int32 bone_index : affected_indices)
+	{
+		if (bone_index < 0)
+			continue;
+
+		C4DIKChainNodeAdapter* const adapter = model_manager->GetBoneAdapter(bone_index);
+		if (!adapter)
+			continue;
+
+		Vector translation;
+		std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
+		adapter->GetCurrentRelativeState(translation, rotation);
+		bone_manager->SetPhysicsOverride(bone_index, doc, translation, rotation);
+	}
+}
+
+Bool MMDBoneTag::RunIKSolveAnimMode(BaseObject* op, const Bool mark_prephysics_chain, const Bool allow_same_frame_resolve)
 {
 	if (!op || bone_mode_ != BONE_MODE_ANIM || !is_IK)
 		return false;
 
-	const Int32 current_frame = GetAnimationFrameFromDocument(op->GetDocument());
-	if (last_ik_solve_frame_ == current_frame)
+	BaseDocument* const doc = op->GetDocument();
+	const Int32 current_frame = GetAnimationFrameFromDocument(doc);
+	const BaseTime current_time = GetDocumentTimeOrInvalid(doc);
+	if (!allow_same_frame_resolve && last_ik_solve_time_ == current_time)
 		return false;
 
 	MMDModelManagerObject* const model_manager = GetModelManager();
 	if (!model_manager || !model_manager->EnsureStandaloneRuntimeManagers())
-	{
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][Frame @] IKSolve skipped bone='@' reason=model_manager",
-			current_frame, op->GetName());
 		return false;
-	}
 
 	libmmd::MMDIkSolver* const ik_solver = model_manager->GetStandaloneIKSolver(GetBoneIndex());
 	if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
-	{
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][Frame @] IKSolve skipped bone='@' solver=@ enabled=@ ikNode=@ targetNode=@",
-			current_frame, op->GetName(), ik_solver != nullptr, ik_solver ? ik_solver->Enabled() : false,
-			ik_solver && ik_solver->GetIKNode(), ik_solver && ik_solver->GetTargetNode());
 		return false;
-	}
 
 	model_manager->SyncStandaloneBoneAdaptersFromScene(true);
 	BuildStandaloneIKChains();
 	ik_solver->Solve();
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT][Frame @] IKSolve success bone='@'",
-		current_frame, op->GetName());
-	last_ik_solve_frame_ = current_frame;
+	last_ik_solve_time_ = current_time;
 	model_manager->ApplyStandaloneBoneAdaptersToScene();
+	CacheIKSolveRuntimeOverrides(doc);
 	if (mark_prephysics_chain)
-	{
-		BaseDocument* const doc = op->GetDocument();
-		MarkPrephysicsIKChainUpdated(GetAnimationFrameFromDocument(doc));
-	}
+		MarkPrephysicsIKChainUpdated(doc);
 	return true;
 }
 
@@ -2394,6 +2738,10 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 		if (MMDModelManagerObject* const model_manager = GetModelManager())
 			model_manager->InvalidateStandaloneRuntime();
 	};
+	const auto invalidate_ik_chain_cache = [this]()
+	{
+		InvalidateStandaloneIKChainCache();
+	};
 
 	switch (id[0].id)
 	{
@@ -2452,11 +2800,17 @@ Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData&
 					ik_solver->SetLimitAngle(static_cast<float>(t_data.GetFloat()));
 				return SUPER::SetDParameter(node, id, t_data, flags);
 			case PMX_BONE_IK_TARGET_BONE_INDEX:
+				invalidate_ik_chain_cache();
 				invalidate_runtime();
 				return SUPER::SetDParameter(node, id, t_data, flags);
 			default:
+				invalidate_ik_chain_cache();
 				break;
 			}
+		}
+		else
+		{
+			invalidate_ik_chain_cache();
 		}
 		break;
 	case PMX_BONE_ROTATABLE:
@@ -2610,6 +2964,13 @@ case PMX_BONE_LAYER:
 	}
 	case PMX_BONE_IK_TARGET_BONE_INDEX:
 	{
+		invalidate_ik_chain_cache();
+		invalidate_runtime();
+		break;
+	}
+	case PMX_BONE_IK_TARGET_BONE_LINK:
+	{
+		invalidate_ik_chain_cache();
 		invalidate_runtime();
 		break;
 	}
@@ -2618,6 +2979,7 @@ case PMX_BONE_LAYER:
 		is_IK = t_data.GetBool();
 		if (auto* const ik_solver = get_ik_solver())
 			ik_solver->Enable(is_IK);
+		invalidate_ik_chain_cache();
 		invalidate_runtime();
 		const auto state = reinterpret_cast<BaseList2D*>(Get())->GetDescIDState(ConstDescID(DescLevel(PMX_BONE_IK_GRP)), true);
 		if (is_IK)
@@ -2730,7 +3092,7 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 
 	if (slot && !slot->keyframes.IsEmpty())
 	{
-		const Float current_frame = static_cast<Float>(GetAnimationFrameFromDocument(doc));
+		const Float current_frame = GetAnimationFrameFromDocumentContinuous(doc);
 		if (slot->keyframes.GetCount() == 1 || current_frame <= slot->keyframes[0].frame)
 		{
 			const auto& key = slot->keyframes[0];
@@ -2928,43 +3290,24 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 
 	if (bone_mode_ == BONE_MODE_ANIM)
 	{
-		const Int32 current_frame = GetAnimationFrameFromDocument(doc);
-		BeginPrephysicsFrame(current_frame);
+		BeginPrephysicsFrame(doc);
 		SyncSplineFromCurrentParametersIfNeeded(tag);
 		const BaseContainer* const bc = tag ? tag->GetDataInstance() : nullptr;
 		const Bool deform_after_physics = bc ? bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) : false;
-		const Bool apply_to_scene = !deform_after_physics
-			&& !ShouldSkipPrephysicsSceneWrite(current_frame)
-			&& !HasRecentPlaybackRuntimeOverride(current_frame);
-		// #region agent log H4 - capture bone tag execute behavior for first 5 bone indices over first 30 frames
-		const Int32 dbg_bone_idx = GetBoneIndex();
-		const Bool dbg_should_log = (current_frame >= 0 && current_frame < 30 && dbg_bone_idx >= 0 && dbg_bone_idx < 5);
-		Vector dbg_rel_before;
-		if (dbg_should_log) dbg_rel_before = op->GetRelMl().off;
-		// #endregion
-		ApplyActiveAnimation(op, doc, apply_to_scene);
-		if (!deform_after_physics && is_IK && GetModelManager() == nullptr)
-			RunIKSolveAnimMode(op, true);
-		// #region agent log H4
-		if (dbg_should_log)
+		const Bool model_manager_active = GetModelManager() != nullptr;
+		if (model_manager_active)
 		{
-			const Vector dbg_rel_after = op->GetRelMl().off;
-			std::ostringstream s;
-			s << "{\"frame\":" << current_frame
-				<< ",\"boneIndex\":" << dbg_bone_idx
-				<< ",\"priority\":" << priority
-				<< ",\"applyToScene\":" << (apply_to_scene ? 1 : 0)
-				<< ",\"deformAfterPhys\":" << (deform_after_physics ? 1 : 0)
-				<< ",\"hasOverride\":" << (has_runtime_playback_override_ ? 1 : 0)
-				<< ",\"overrideFrame\":" << runtime_playback_override_frame_
-				<< ",\"evalT\":[" << evaluated_animation_translation_.x << "," << evaluated_animation_translation_.y << "," << evaluated_animation_translation_.z << "]"
-				<< ",\"relOffBefore\":[" << dbg_rel_before.x << "," << dbg_rel_before.y << "," << dbg_rel_before.z << "]"
-				<< ",\"relOffAfter\":[" << dbg_rel_after.x << "," << dbg_rel_after.y << "," << dbg_rel_after.z << "]"
-				<< "}";
-			cmt_dbg::Log("H4", "mmd_bone.cpp:MMDBoneTag::Execute",
-				"bone tag execute applied", s.str());
+			ApplyActiveAnimation(op, doc, false);
 		}
-		// #endregion
+		else
+		{
+			const Bool apply_to_scene = !deform_after_physics
+				&& !ShouldSkipPrephysicsSceneWrite(doc)
+				&& !HasRecentPlaybackRuntimeOverride(doc);
+			ApplyActiveAnimation(op, doc, apply_to_scene);
+			if (!deform_after_physics && is_IK)
+				RunIKSolveAnimMode(op, true);
+		}
 	}
 	else
 	{
@@ -3042,13 +3385,20 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	hierarchy_manager_cache_ = nullptr;
 	is_syncing_inherit_source_ = false;
 	append_recursion_depth_ = 0;
-	last_prephysics_frame_ = NOTOK;
-	last_ik_solve_frame_ = NOTOK;
+	last_prephysics_time_ = BaseTime(-1.);
+	last_ik_solve_time_ = BaseTime(-1.);
+	last_postphysics_ik_solve_time_ = BaseTime(-1.);
+	standalone_ik_chain_dirty_ = true;
+	standalone_ik_chain_solver_ = nullptr;
 	skip_prephysics_scene_write_ = false;
 	ik_overridden_this_frame_ = false;
 	ClearPlaybackRuntimeOverride();
 	ResetEvaluatedAnimationState();
-	return SUPER::Read(node, hf, level);
+	if (!SUPER::Read(node, hf, level))
+		return false;
+	if (const BaseContainer* const bc = node ? static_cast<BaseTag*>(node)->GetDataInstance() : nullptr)
+		is_IK = bc->GetBool(PMX_BONE_IS_IK);
+	return true;
 }
 
 SDK2024_Write(MMDBoneTag)

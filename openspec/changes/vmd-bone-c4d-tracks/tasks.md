@@ -119,7 +119,7 @@
 
 - [x] 7.3 实现 `PMX_BONE_INHERIT_LOCAL` 标志：本地模式使用源骨骼的 `AnimateRotate()`，非本地模式使用源骨骼的 append rotation（若有）
 
-- [ ] 7.4 处理付与链递归：确保通过 IK rotate + animate rotate 的组合正确传递（按 PMXNode `UpdateAppendTransform`：付与亲 L / 非 L、`GetAppendRotate`/VMD、`GetIKRotate` 前缀；依赖 `append_recursion_depth` 执行顺序）
+- [x] 7.4 处理付与链递归：确保通过 IK rotate + animate rotate 的组合正确传递（按 PMXNode `UpdateAppendTransform`：付与亲 L / 非 L、`GetAppendRotate`/VMD、`GetIKRotate` 前缀；依赖 `append_recursion_depth` 执行顺序）
 
 - [x] 7.5 PMX 导入或初始化时计算每根骨骼的 `append_recursion_depth`（全局付与深度，同深度可共享优先级数值）
 
@@ -137,9 +137,9 @@
 
 - [x] 8.4 `C4DIKChainNodeAdapter::SetIKRotate`/`GetIKRotate`/`AnimateRotate`：通过骨骼 tag / 适配器状态与 libMMD 求解器对接
 
-- [x] 8.5 在 `BONE_MODE_ANIM` 下 `RunIKSolveAnimMode`：`RebuildIKChains` 跳过预建链 → 每帧 `ClearIKChains` → `AddIKChain` → `Solve` → `ApplyLocalToBoneObject`
+- [x] 8.5 在 `BONE_MODE_ANIM` 下恢复预物理 IK 到 `MMDBoneTag::Execute`：动画/付与应用后立即执行 `RunIKSolveAnimMode()`，并通过 frame-local skip 标记避免后续 tag 覆盖 IK 链结果；后物理 IK 由 `MMDBoneManagerObject` final phase 触发
 
-- [x] 8.6 IK 开关：`RebuildIKChains` / `RunIKSolveAnimMode` 受 `is_IK` 与 `ik_solver_` 等条件约束（与既有 IK 描述一致）
+- [x] 8.6 IK 开关：tag/BoneManager 触发的 IK 调度受 `is_IK`、solver enable 状态与 target/node 完整性约束（与既有 IK 描述一致）
 
 
 
@@ -149,7 +149,7 @@
 
 - [x] 9.1 骨骼 Tag 与模型管理器 physics Execute 均使用 **`EXECUTIONPRIORITY_EXPRESSION`**（不再使用 ANIMATION/DYNAMICS 类别区分骨骼 Tag）
 
-- [x] 9.2 骨骼 Tag 数值优先级：物理前 `deform_layer * 100 + append_depth`；物理后 `6000 + deform_layer * 100 + append_depth`；模型管理器物理步固定 `5000`
+- [x] 9.2 骨骼 Tag 数值优先级只保留预物理 `deform_layer * 100 + append_depth`；模型管理器 physics step 固定 `5000`；刚体/关节回读分别固定在 `5200/5300`；骨骼管理器 final phase 固定 `6000`
 
 - [ ] 9.3 验证同一 `EXECUTIONPRIORITY_EXPRESSION` 下不同数值是否按递增顺序执行（概念验证样例：付与链 + 物理前/后各一骨）
   - **验证结论**: C4D 的 `EXPRESSION_PRIORITY` 按 `PRIORITYVALUE_PRIORITY` 数值递增全局排序执行，与对象层级无关。`RefreshExecutionPriority` 已正确设置：物理前骨骼 `layer*100+append_depth`（递增顺序保证 append 源先执行）→ ModelManager 物理步 5000 → 物理后骨骼 `6000+layer*100+append_depth`
@@ -180,7 +180,7 @@
 
 - [x] 11.1 `MMDModelManagerObject::Execute` 的 `MODEL_MODE_ANIM` 分支：移除 `VMDAnimation::Evaluate`/`UpdateAllAnimation` 调用
 
-- [x] 11.2 替换为：读取 standalone IK manager 中的求解器状态与模型管理器 IK 开关状态 → 运行物理模拟（`SyncBonePositionToPhysics` → `MMDPhysics::Update` → `ReflectGlobalTransform`），使用 `EXECUTIONPRIORITY_EXPRESSION` 且优先级数值为 `5000`
+- [x] 11.2 替换为：在 `MODEL_MODE_ANIM` 下由模型管理器仅执行 physics runtime 初始化、physics UI 参数应用与 physics step，使用 `EXECUTIONPRIORITY_EXPRESSION` 且优先级数值为 `5000`
 
 - [x] 11.3 移除 `mmd_model_` 成员和 `SetMMDModel()`；`MMDModelManagerObject` 改为直接持有 standalone `MMDIKManagerT<MMDIkSolver>`（或等价封装）与 `MMDPhysicsManager`
 
@@ -192,11 +192,11 @@
   - `MMDRigidManagerObject::RebuildRigidBodies` 签名改为 `(MMDPhysicsManager*, std::function<IMMDNode*(Int32)>)`
   - 从 C4D 对象数据构造 `PMXRigidbody` 并调用 `Create(pmx_rb, node)`
 
-- [x] 11.7 `Execute` 物理步进改用独立 `MMDPhysicsManager`（不再依赖 `MMDBoneTag::mmd_node_`）
+- [x] 11.7 `Execute` 物理步进改用独立 `MMDPhysicsManager`，physics 结果不再直接写回骨骼，而是等待 `MMDRigidObject` / `MMDJointObject` 回读并由 `MMDBoneManagerObject` 在后物理 final phase 统一提交
   - 新增 `physics_manager_own_` / `physics_bone_pool_` / `physics_bone_adapters_` / `physics_dynamic_bone_indices_` 成员
   - 新增 `BuildPhysicsBoneAdapters` / `SyncPhysicsAdaptersFromTags` / `ResetStandalonePhysics` / `StepStandalonePhysics` / `ApplyPhysicsResultsToBoneObjects` 方法
-  - `Execute` 中不再调用 `mmd_model_->InitializeAnimation()` / `UpdatePhysicsAnimation()`，改为 `ResetStandalonePhysics()` → `StepStandalonePhysics()` + `ApplyPhysicsResultsToBoneObjects()`
-  - 物理结果：动态刚体骨通过适配器 `ApplyLocalToBoneObject` 写回 C4D 骨骼与 Tag 姿态
+  - `Execute` 中不再调用 `mmd_model_->InitializeAnimation()` / `UpdatePhysicsAnimation()`，改为统一 phase 调度后执行 `ResetStandalonePhysics()` / `StepStandalonePhysics()`，并在帧末统一提交骨骼结果
+  - 物理结果：动态刚体骨先通过适配器更新 runtime state，再由模型管理器在统一提交点写回 C4D 骨骼与 Tag 姿态
 
 - [x] 11.8 `BuildIKSolverUI` / `ApplyIKSolverStates` / `ImportVMDIKKeyframes` / `SetDParameter(ID_USERDATA)` 全部改为访问 standalone IK manager，而不是 `mmd_model_->GetIKManager()`
 

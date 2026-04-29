@@ -24,6 +24,8 @@ Description:	C4D MMD joint object
 
 namespace
 {
+	constexpr Int32 kJointPriorityOffset = 5300;
+
 	Int32 NormalizeJointMode(const Int32 mode)
 	{
 		constexpr Int32 kLegacyJointModeVmd = 2;
@@ -66,11 +68,12 @@ namespace
 			if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
 			{
 				pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
-				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 5300);
+				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, kJointPriorityOffset);
 				bc->SetData(EXPRESSION_PRIORITY, priority);
 			}
 		}
 	}
+
 }
 
 SDK2024_ConstExpr Vector g_pmx_joint_colors[6] =
@@ -464,7 +467,7 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(link_rigid_b_);
 	joint_mode_ = NormalizeJointMode(joint_mode_);
 	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
-		bc->SetInt32(JOINT_MODE, NormalizeJointMode(bc->GetInt32(JOINT_MODE)));
+		bc->SetInt32(JOINT_MODE, joint_mode_);
 	ConfigureJointExecutionPriority(node);
 	return true;
 }

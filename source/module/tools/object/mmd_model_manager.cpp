@@ -29,21 +29,18 @@ Description:	MMD model object
 #include "maxon/queue.h"
 #include "utils/filename_util.hpp"
 #include "utils/string_util.hpp"
+#include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 #include "libMMD/Model/MMD/SjisToUnicode.h"
-#include "module/core/cmt_debug_log.h"
+
+
 #include <btBulletDynamicsCommon.h>
 
 #include <algorithm>
-#include <cstdlib>
-#include <cstring>
 #include <codecvt>
-#include <fstream>
-#include <iomanip>
 #include <locale>
 #include <map>
 #include <limits>
-#include <sstream>
 #include <set>
 #include <unordered_map>
 
@@ -52,6 +49,7 @@ Description:	MMD model object
 namespace
 {
 	constexpr Float32 kModelAnimationFps = 30.0f;
+	constexpr Int32 kModelManagerPriorityOffset = 5000;
 
 	Int32 NormalizeModelMode(const Int32 mode)
 	{
@@ -73,7 +71,7 @@ namespace
 			if (auto* pd = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA))
 			{
 				pd->SetPriorityValue(PRIORITYVALUE_MODE, CYCLE_EXPRESSION);
-				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, 5000);
+				pd->SetPriorityValue(PRIORITYVALUE_PRIORITY, kModelManagerPriorityOffset);
 				bc->SetData(EXPRESSION_PRIORITY, priority);
 			}
 		}
@@ -121,48 +119,6 @@ namespace
 		}
 
 		return object->GetName();
-	}
-
-	std::string GetInitialStateDebugLogPath()
-	{
-		if (const char* const temp = std::getenv("TEMP"); temp && *temp)
-			return std::string(temp) + "\\cmt_initial_state_debug.log";
-		return "cmt_initial_state_debug.log";
-	}
-
-	bool IsInitialStateDebugLoggingEnabled()
-	{
-		const char* const value = std::getenv("CMT_INITIAL_STATE_DEBUG");
-		if (!value || !*value)
-			return false;
-		return std::strcmp(value, "0") != 0 && std::strcmp(value, "false") != 0 && std::strcmp(value, "FALSE") != 0;
-	}
-
-	std::string FormatVectorForLog(const Vector& value)
-	{
-		std::ostringstream stream;
-		stream << std::fixed << std::setprecision(4)
-			<< value.x << "," << value.y << "," << value.z;
-		return stream.str();
-	}
-
-	std::string FormatMatrixForLog(const Matrix& matrix)
-	{
-		const Vector hpb = MatrixToHPB(matrix, ROTATIONORDER::DEFAULT);
-		std::ostringstream stream;
-		stream << "pos(" << FormatVectorForLog(matrix.off) << ") "
-			<< "rot(" << FormatVectorForLog(hpb) << ")";
-		return stream.str();
-	}
-
-	Matrix EigenToC4DMatrixForLog(const Eigen::Matrix4f& matrix)
-	{
-		return Matrix{
-			Vector(matrix(0, 3), matrix(1, 3), matrix(2, 3)),
-			Vector(matrix(0, 0), matrix(1, 0), matrix(2, 0)),
-			Vector(matrix(0, 1), matrix(1, 1), matrix(2, 1)),
-			Vector(matrix(0, 2), matrix(1, 2), matrix(2, 2))
-		};
 	}
 
 	void MarkSceneNodeDirty(BaseList2D* node)
@@ -895,6 +851,8 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	RefreshAnimationSlotItems();
 	ConfigureModelManagerExecutionPriority(node);
 
+	InvalidateStandaloneRuntime();
+
 	return true;
 }
 SDK2024_Write(MMDModelManagerObject) {
@@ -1392,6 +1350,9 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		return EXECUTIONRESULT::OK;
 	}
 
+	if (BaseContainer* const bc = op->GetDataInstance())
+		model_mode_ = NormalizeModelMode(bc->GetInt32(MODEL_MODE));
+
 	const auto manager_read = *is_manager_read_.Read();
 
 	if (!UpdateManagers(op))
@@ -1463,20 +1424,19 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			if (!EnsureStandaloneRuntimeManagers())
 				return EXECUTIONRESULT::OK;
 
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT][Frame @] ModelExecute mode=@ runtime=@ physics=@ reset=@ dynBones=@ fps=@ prevTime=@ nowTime=@",
-				now_time.GetFrame(30), model_mode_, *is_runtime_initialized_.Read(), IsPhysicsEnabled(op), needs_physics_reset,
-				physics_dynamic_bone_indices_.GetCount(), fps_, prev_time_.Get(), now_time.Get());
-
 			ApplyIKSolverFromParameters(op);
 			ApplyPhysicsConfigToRuntime(op);
-			if (IsPhysicsEnabled(op))
+			RunLayeredBonePass(doc, false);
+
+			const Bool physics_enabled = IsPhysicsEnabled(op);
+			if (physics_enabled)
 			{
 				if (needs_physics_reset)
 					ResetStandalonePhysics();
 				else
 					StepStandalonePhysics(1.f / fps_);
 				is_animation_initialized_ = true;
+				RunLayeredBonePass(doc, true);
 			}
 			else
 			{
@@ -1760,16 +1720,46 @@ void MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene(const Bool reset
 	}
 }
 
-void MMDModelManagerObject::SolveStandaloneIKBeforePhysics()
+void MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal(const maxon::BaseArray<Int32>& bone_indices) const
+{
+	for (const Int32 bone_index : bone_indices)
+	{
+		if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
+			adapter->SyncLocalTransformFromGlobal();
+	}
+
+	for (const auto& adapter : physics_bone_pool_)
+	{
+		if (adapter && adapter->GetParent() == nullptr)
+			adapter->UpdateGlobalTransform();
+	}
+}
+
+Bool MMDModelManagerObject::SolveStandaloneIKBeforePhysics(const Bool include_after_physics_bones)
+{
+	bone_manager_data_ = GetBoneManagerData();
+	if (!bone_manager_data_)
+		return false;
+
+	Bool solved = false;
+	const Int32 max_layer = bone_manager_data_->GetMaxBoneLayer();
+	for (Int32 layer = 0; layer <= max_layer; ++layer)
+	{
+		solved = SolveStandaloneIKForLayer(layer, false) > 0 || solved;
+		if (include_after_physics_bones)
+			solved = SolveStandaloneIKForLayer(layer, true) > 0 || solved;
+	}
+	return solved;
+}
+
+Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const Bool after_physics, const Bool sync_from_scene)
 {
 	if (!ik_manager_own_)
-		return;
+		return 0;
 
 	bone_manager_data_ = GetBoneManagerData();
 	if (!bone_manager_data_)
-		return;
-
-	SyncStandaloneBoneAdaptersFromScene(true);
+		return 0;
 
 	std::vector<Int32> sorted_indices;
 	sorted_indices.reserve(bone_manager_data_->bone_list_.GetCount());
@@ -1777,14 +1767,39 @@ void MMDModelManagerObject::SolveStandaloneIKBeforePhysics()
 		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
 	std::sort(sorted_indices.begin(), sorted_indices.end());
 
-	Int32 solved_count = 0;
-	std::vector<std::string> solved_bone_labels;
+	std::vector<Int32> ik_indices;
+	ik_indices.reserve(sorted_indices.size());
 	for (const Int32 bone_index : sorted_indices)
 	{
 		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
 		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
+		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
 		const BaseContainer* const bc = bone_tag ? bone_tag->GetDataInstance() : nullptr;
-		if (!bone_tag_node || !bc || !bc->GetBool(PMX_BONE_IS_IK) || bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM))
+		if (!bone_tag_node || !bone_object || !bc || !bc->GetBool(PMX_BONE_IS_IK))
+			continue;
+		if (std::max(0, bc->GetInt32(PMX_BONE_LAYER)) != layer)
+			continue;
+		if (bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) != after_physics)
+			continue;
+
+		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
+		if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
+			continue;
+		ik_indices.emplace_back(bone_index);
+	}
+	if (ik_indices.empty())
+		return 0;
+
+	if (sync_from_scene)
+		SyncStandaloneBoneAdaptersFromScene(true);
+
+	Int32 solved_count = 0;
+	for (const Int32 bone_index : ik_indices)
+	{
+		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
+		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
+		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
+		if (!bone_tag_node || !bone_object)
 			continue;
 
 		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
@@ -1792,100 +1807,61 @@ void MMDModelManagerObject::SolveStandaloneIKBeforePhysics()
 			continue;
 
 		bone_tag_node->BuildStandaloneIKChains();
+
 		ik_solver->Solve();
-		++solved_count;
-		if (IsInitialStateDebugLoggingEnabled())
+
+		maxon::BaseArray<Int32> affected_indices;
+		bone_tag_node->CollectIKAffectedBoneIndices(affected_indices);
+		ApplyStandaloneBoneAdaptersToScene(affected_indices);
+
+		if (BaseDocument* const doc = bone_object->GetDocument())
 		{
-			const String bone_name = GetBoneTagName(bone_tag, true);
-			std::ostringstream stream;
-			stream << bone_index;
-			if (!bone_name.IsEmpty())
-				stream << ":" << string_util::GetStdString(bone_name);
-			solved_bone_labels.emplace_back(stream.str());
+			bone_tag_node->last_ik_solve_time_ = doc->GetTime();
+			bone_tag_node->CacheIKSolveRuntimeOverrides(doc);
+			bone_tag_node->MarkPrephysicsIKChainUpdated(doc);
 		}
+		++solved_count;
 	}
 
-	if (solved_count > 0)
+	return solved_count;
+}
+
+Bool MMDModelManagerObject::RunLayeredBonePass(BaseDocument* doc, const Bool after_physics)
+{
+	if (!doc)
+		return false;
+
+	bone_manager_data_ = GetBoneManagerData();
+	if (!bone_manager_data_)
+		return false;
+
+	Bool touched = false;
+	const Int32 max_layer = bone_manager_data_->GetMaxBoneLayer();
+	for (Int32 layer = 0; layer <= max_layer; ++layer)
 	{
-		ApplyStandaloneBoneAdaptersToScene();
-		if (BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get()))
-		{
-			if (BaseDocument* const doc = model_object->GetDocument())
-			{
-				DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-					"[CMT][Frame @] PrePhysicsIK solved=@",
-					doc->GetTime().GetFrame(30), solved_count);
-				if (IsInitialStateDebugLoggingEnabled() && !solved_bone_labels.empty())
-				{
-					std::ostringstream stream;
-					for (size_t index = 0; index < solved_bone_labels.size(); ++index)
-					{
-						if (index > 0)
-							stream << ", ";
-						stream << solved_bone_labels[index];
-					}
-					DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-						"[CMT][Frame @] PrePhysicsIK bones=@",
-						doc->GetTime().GetFrame(30), String(stream.str().c_str()));
-				}
-			}
-		}
+		const Int32 anim_count = bone_manager_data_->PrepareSceneForPhysicsPlaybackLayer(doc, layer, after_physics);
+		SyncStandaloneBoneAdaptersFromScene(true);
+		const Int32 ik_count = SolveStandaloneIKForLayer(layer, after_physics, false);
+		touched = touched || anim_count > 0 || ik_count > 0;
 	}
+	return touched;
 }
 
 void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene() const
 {
-	// #region agent log H5 - record per-dynamic-bone RelMl right before/after Apply
-	Int32 dbg_logged = 0;
-	auto* const dbg_self_mut = const_cast<MMDModelManagerObject*>(this);
-	BaseObject* const dbg_model = reinterpret_cast<BaseObject*>(dbg_self_mut->Get());
-	BaseDocument* const dbg_doc = dbg_model ? dbg_model->GetDocument() : nullptr;
-	const Int32 dbg_frame = dbg_doc ? dbg_doc->GetTime().GetFrame(30) : -1;
-	const Bool dbg_enabled = (dbg_frame >= 0 && dbg_frame < 30 && bone_manager_data_ != nullptr);
-	// #endregion
 	for (const auto& adapter : physics_bone_pool_)
 	{
 		if (adapter)
-		{
-			// #region agent log H5
-			Vector dbg_before_off;
-			Bool dbg_is_dyn = false;
-			BaseObject* dbg_bone_obj = nullptr;
-			Int32 dbg_bone_index = -1;
-			if (dbg_enabled && dbg_logged < 5)
-			{
-				dbg_bone_index = adapter->GetBoneIndex();
-				for (const Int32 idx : physics_dynamic_bone_indices_)
-				{
-					if (idx == dbg_bone_index) { dbg_is_dyn = true; break; }
-				}
-				if (dbg_is_dyn)
-				{
-					if (BaseTag* const tg = bone_manager_data_->FindBone(dbg_bone_index))
-					{
-						dbg_bone_obj = tg->GetObject();
-						if (dbg_bone_obj) dbg_before_off = dbg_bone_obj->GetRelMl().off;
-					}
-				}
-			}
-			// #endregion
 			adapter->ApplyLocalToBoneObject();
-			// #region agent log H5
-			if (dbg_is_dyn && dbg_bone_obj)
-			{
-				const Vector after_off = dbg_bone_obj->GetRelMl().off;
-				std::ostringstream s;
-				s << "{\"frame\":" << dbg_frame
-					<< ",\"boneIndex\":" << dbg_bone_index
-					<< ",\"relOffBefore\":[" << dbg_before_off.x << "," << dbg_before_off.y << "," << dbg_before_off.z << "]"
-					<< ",\"relOffAfter\":[" << after_off.x << "," << after_off.y << "," << after_off.z << "]"
-					<< "}";
-				cmt_dbg::Log("H5", "mmd_model_manager.cpp:ApplyStandaloneBoneAdaptersToScene",
-					"per-dynamic-bone Apply", s.str());
-				++dbg_logged;
-			}
-			// #endregion
-		}
+	}
+}
+
+void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene(const maxon::BaseArray<Int32>& bone_indices) const
+{
+	for (const Int32 bone_index : bone_indices)
+	{
+		if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
+			adapter->ApplyLocalToBoneObject();
 	}
 }
 
@@ -1919,10 +1895,6 @@ Bool MMDModelManagerObject::BuildStandaloneBoneAdapters()
 	for (const auto& entry : bone_manager_data_->bone_list_)
 		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
 	std::sort(sorted_indices.begin(), sorted_indices.end());
-	Int32 max_bone_priority = std::numeric_limits<Int32>::min();
-	Int32 ge_model_manager_priority = 0;
-	Int32 ge_rigid_priority = 0;
-	Int32 ge_bone_manager_priority = 0;
 
 	physics_bone_pool_.reserve(sorted_indices.size());
 	for (const Int32 bone_index : sorted_indices)
@@ -1935,27 +1907,12 @@ Bool MMDModelManagerObject::BuildStandaloneBoneAdapters()
 		if (!bone_tag_node)
 			continue;
 
-		Int32 priority = 0;
-		if (GeData priority_data; bone_tag->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority_data, DESCFLAGS_GET::NONE))
-		{
-			if (const auto* const pd = GetCustomDataTypeWritable<PriorityData>(priority_data, CUSTOMGUI_PRIORITY_DATA))
-				priority = pd->GetPriorityValue(PRIORITYVALUE_PRIORITY).GetInt32();
-		}
-		max_bone_priority = std::max(max_bone_priority, priority);
-		if (priority >= 5000)
-			++ge_model_manager_priority;
-		if (priority >= 5200)
-			++ge_rigid_priority;
-		if (priority >= 6000)
-			++ge_bone_manager_priority;
-
 		String bone_name = GetBoneTagName(bone_tag, true);
 		if (bone_name.IsEmpty())
 			bone_name = GetBoneTagName(bone_tag, false);
 
 		auto adapter = std::make_unique<C4DIKChainNodeAdapter>();
 		adapter->SetupFromBone(bone_tag->GetObject(), bone_tag_node, string_util::GetStdString(bone_name));
-		adapter->SyncCurrentTransformsFromBoneObject(true);
 
 		C4DIKChainNodeAdapter* const adapter_ptr = adapter.get();
 		physics_bone_pool_.push_back(std::move(adapter));
@@ -1996,16 +1953,9 @@ Bool MMDModelManagerObject::BuildStandaloneBoneAdapters()
 		if (adapter && adapter->GetParent() == nullptr)
 		{
 			adapter->UpdateInitialGlobalTransform();
-			adapter->UpdateGlobalTransform();
+			adapter->ResetCurrentTransformToInitial();
 		}
 	}
-
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT] BonePrioritySummary max=@ geModel5000=@ geRigid5200=@ geBoneMgr6000=@ total=@",
-		max_bone_priority == std::numeric_limits<Int32>::min() ? -1 : max_bone_priority,
-		ge_model_manager_priority, ge_rigid_priority, ge_bone_manager_priority, static_cast<Int32>(sorted_indices.size()));
-
-	LogInitialStateSnapshot("after_build_bone_adapters");
 
 	return true;
 }
@@ -2026,9 +1976,6 @@ Bool MMDModelManagerObject::BuildStandaloneIKManager()
 	for (const auto& entry : bone_manager_data_->bone_list_)
 		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
 	std::sort(sorted_indices.begin(), sorted_indices.end());
-	Int32 solver_count = 0;
-	Int32 enabled_count = 0;
-	Int32 missing_target_count = 0;
 
 	for (const Int32 bone_index : sorted_indices)
 	{
@@ -2040,31 +1987,75 @@ Bool MMDModelManagerObject::BuildStandaloneIKManager()
 		if (!bc || !bc->GetBool(PMX_BONE_IS_IK))
 			continue;
 
-		C4DIKChainNodeAdapter* const ik_node = GetBoneAdapter(bone_index);
-		if (!ik_node)
+		C4DIKChainNodeAdapter* const control_adapter = GetBoneAdapter(bone_index);
+		if (!control_adapter)
 			continue;
 
 		auto* const solver = ik_manager_own_->AddIKSolver();
-		solver->SetIKNode(ik_node);
-		if (C4DIKChainNodeAdapter* const target_node = GetBoneAdapter(bc->GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX)))
-			solver->SetTargetNode(target_node);
-		else
-			++missing_target_count;
-		solver->SetIterateCount(static_cast<uint32_t>(bc->GetInt32(PMX_BONE_IK_ITERATION)));
-		solver->SetLimitAngle(static_cast<float>(bc->GetFloat(PMX_BONE_IK_UNIT_ANGLE)));
+		String solver_name = GetBoneTagName(bone_tag, true);
+		if (solver_name.IsEmpty())
+			solver_name = GetBoneTagName(bone_tag, false);
+		solver->SetName(string_util::GetStdString(solver_name));
+		solver->SetIKNode(control_adapter);
 
-		const String solver_name(ik_node->GetName().c_str());
+		// PMX convention (matches libMMD PMXModel loader):
+		//   - IK node    = the control/goal bone (external, position stays fixed)
+		//   - target node = the effector bone at the end of the chain (descendant)
+		// SolveCore reads m_ikNode position once (must be stable); m_ikTarget
+		// is re-read per chain (moves with rotation).  BuildChainPath walks
+		// from m_ikTarget upward to find chain nodes.
+		// PMX_BONE_IK_TARGET_BONE_* stores the effector bone, not the control IK
+		// bone itself. Resolve that effector via the stable BaseLink instead of
+		// the stale PMX-file index.
+		Int32 effector_index = -1;
+		C4DIKChainNodeAdapter* effector_adapter = nullptr;
+		BaseDocument* const tag_doc = bone_tag->GetDocument();
+		if (GeData link_data; bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_IK_TARGET_BONE_LINK)), link_data, DESCFLAGS_GET::NONE))
+		{
+			BaseList2D* linked = nullptr;
+			if (tag_doc)
+				linked = const_cast<BaseList2D*>(link_data.GetLink(tag_doc));
+			if (!linked)
+			{
+				if (const BaseLink* const raw_link = link_data.GetBaseLink())
+					linked = static_cast<BaseList2D*>(raw_link->ForceGetLink());
+			}
+			if (linked && linked->IsInstanceOf(Obase))
+			{
+				if (BaseTag* const target_tag = static_cast<BaseObject*>(linked)->GetTag(g_mmd_bone_tag_id))
+				{
+					const Int32 resolved = bone_manager_data_->FindBoneIndex(target_tag);
+					if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(resolved))
+					{
+						effector_index = resolved;
+						effector_adapter = adapter;
+					}
+				}
+			}
+		}
+		// Legacy fallback: older scenes/cases without the link may still carry
+		// a usable DFS index in the container.
+		if (!effector_adapter)
+		{
+			const Int32 legacy = bc->GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX);
+			if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(legacy))
+			{
+				effector_index = legacy;
+				effector_adapter = adapter;
+			}
+		}
+
+		if (effector_adapter)
+			solver->SetTargetNode(effector_adapter);
+		const Int32 iter_count = bc->GetInt32(PMX_BONE_IK_ITERATION);
+		const Float unit_angle = bc->GetFloat(PMX_BONE_IK_UNIT_ANGLE);
+		solver->SetIterateCount(static_cast<uint32_t>(iter_count <= 0 ? 4 : iter_count));
+		solver->SetLimitAngle(static_cast<float>(unit_angle));
+
 		const auto* const enabled_state = ik_solver_enable_states_.Find(solver_name);
 		const Bool enabled = enabled_state ? enabled_state->GetValue() : bc->GetBool(PMX_BONE_IS_IK);
 		solver->Enable(enabled);
-		++solver_count;
-		if (enabled)
-			++enabled_count;
 	}
-
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT] BuildStandaloneIKManager solvers=@ enabled=@ missingTarget=@",
-		solver_count, enabled_count, missing_target_count);
 
 	return true;
 }
@@ -2122,21 +2113,6 @@ Bool MMDModelManagerObject::BuildStandalonePhysics()
 			}
 		}
 
-		// #region agent log H1 - capture which bones are detected as physics-dynamic
-		{
-			std::ostringstream s;
-			s << "{\"dynBoneCount\":" << physics_dynamic_bone_indices_.GetCount()
-				<< ",\"indices\":[";
-			for (Int i = 0; i < physics_dynamic_bone_indices_.GetCount(); ++i)
-			{
-				if (i > 0) s << ",";
-				s << physics_dynamic_bone_indices_[i];
-			}
-			s << "]}";
-			cmt_dbg::Log("H1", "mmd_model_manager.cpp:BuildStandalonePhysics",
-				"physics_dynamic_bone_indices populated", s.str());
-		}
-		// #endregion
 	}
 
 	if (joint_manager_data_)
@@ -2158,8 +2134,6 @@ Bool MMDModelManagerObject::BuildStandalonePhysics()
 		rigid_manager_data_->ReconnectRigidBodyPointers(physics_manager_own_.get());
 	if (joint_manager_data_)
 		joint_manager_data_->ReconnectJointPointers(physics_manager_own_.get());
-
-	LogInitialStateSnapshot("after_build_physics");
 
 	return true;
 }
@@ -2196,124 +2170,11 @@ Bool MMDModelManagerObject::EnsureStandaloneRuntimeManagers()
 			bone_manager_data_->SetAllBoneMode(BONE_MODE_ANIM);
 		}
 	}
+
 	ApplyPhysicsConfigToRuntime(reinterpret_cast<BaseObject*>(Get()));
 	ResetStandalonePhysics();
 	*is_runtime_initialized_.Write() = true;
 	return true;
-}
-
-void MMDModelManagerObject::ResetInitialStateDebugLog() const
-{
-	if (!IsInitialStateDebugLoggingEnabled())
-		return;
-
-	const std::string log_path = GetInitialStateDebugLogPath();
-	std::ofstream stream(log_path, std::ios::out | std::ios::trunc);
-	if (!stream)
-		return;
-
-	BaseObject* const model_object = reinterpret_cast<BaseObject*>(const_cast<MMDModelManagerObject*>(this)->Get());
-	stream << "[CMT] initial-state debug log\n";
-	stream << "log_path=" << log_path << "\n";
-	stream << "model=" << (model_object ? string_util::GetStdString(model_object->GetName()) : "<null>") << "\n";
-	stream.close();
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] initial-state debug log reset: @", String(log_path.c_str()));
-}
-
-void MMDModelManagerObject::LogInitialStateSnapshot(const char* stage) const
-{
-	if (!IsInitialStateDebugLoggingEnabled())
-		return;
-
-	const std::string log_path = GetInitialStateDebugLogPath();
-	std::ofstream stream(log_path, std::ios::out | std::ios::app);
-	if (!stream)
-		return;
-
-	auto* const self = const_cast<MMDModelManagerObject*>(this);
-	BaseObject* const model_object = reinterpret_cast<BaseObject*>(self->Get());
-	BaseDocument* const doc = model_object ? model_object->GetDocument() : nullptr;
-	MMDBoneManagerObject* const bone_manager = self->GetBoneManagerData();
-	BaseObject* const rigid_manager_object = io_util::ResolveObjectLink(rigid_manager_);
-
-	std::set<Int32> tracked_bone_indices;
-	if (rigid_manager_object)
-	{
-		for (BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
-		{
-			if (!child->IsInstanceOf(g_mmd_rigid_object_id))
-				continue;
-
-			const BaseContainer* const rigid_bc = child->GetDataInstance();
-			if (!rigid_bc)
-				continue;
-
-			if (const Int32 related_bone_index = rigid_bc->GetInt32(RIGID_RELATED_BONE_INDEX); related_bone_index >= 0)
-				tracked_bone_indices.insert(related_bone_index);
-		}
-	}
-
-	stream << "\n=== stage=" << (stage ? stage : "<null>")
-		<< " frame=" << (doc ? doc->GetTime().GetFrame(30) : -1)
-		<< " time=" << std::fixed << std::setprecision(6) << (doc ? doc->GetTime().Get() : -1.0)
-		<< " model_mode=" << model_mode_
-		<< " tracked_bones=" << tracked_bone_indices.size()
-		<< "\n";
-
-	if (!bone_manager)
-	{
-		stream << "bone_manager=<null>\n";
-		return;
-	}
-
-	for (const Int32 bone_index : tracked_bone_indices)
-	{
-		BaseTag* const bone_tag = bone_manager->FindBone(bone_index);
-		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
-		const BaseContainer* const bone_bc = bone_tag ? bone_tag->GetDataInstance() : nullptr;
-		const String bone_name = GetBoneTagName(bone_tag, true);
-		stream << "bone[" << bone_index << "] name=" << string_util::GetStdString(bone_name)
-			<< " after_physics=" << (bone_bc ? bone_bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) : false)
-			<< " rel=" << (bone_object ? FormatMatrixForLog(bone_object->GetRelMl()) : "<null>")
-			<< " frozen=" << (bone_object ? FormatMatrixForLog(bone_object->GetFrozenMln()) : "<null>")
-			<< " ml=" << (bone_object ? FormatMatrixForLog(bone_object->GetMl()) : "<null>")
-			<< " mg=" << (bone_object ? FormatMatrixForLog(bone_object->GetMg()) : "<null>");
-
-		if (C4DIKChainNodeAdapter* const adapter = self->GetBoneAdapter(bone_index))
-		{
-			stream << " adapter_local=" << FormatMatrixForLog(EigenToC4DMatrixForLog(adapter->GetLocalTransform()))
-				<< " adapter_global=" << FormatMatrixForLog(EigenToC4DMatrixForLog(adapter->GetGlobalTransform()))
-				<< " adapter_initial_global=" << FormatMatrixForLog(EigenToC4DMatrixForLog(adapter->GetInitialGlobalTransform()));
-		}
-		else
-		{
-			stream << " adapter=<null>";
-		}
-		stream << "\n";
-	}
-
-	if (!rigid_manager_object)
-	{
-		stream << "rigid_manager=<null>\n";
-		return;
-	}
-
-	for (BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
-	{
-		if (!child->IsInstanceOf(g_mmd_rigid_object_id))
-			continue;
-
-		const BaseContainer* const rigid_bc = child->GetDataInstance();
-		if (!rigid_bc)
-			continue;
-
-		stream << "rigid name=" << string_util::GetStdString(child->GetName())
-			<< " bone=" << rigid_bc->GetInt32(RIGID_RELATED_BONE_INDEX)
-			<< " mode=" << rigid_bc->GetInt32(RIGID_PHYSICS_MODE)
-			<< " rel=" << FormatMatrixForLog(child->GetRelMl())
-			<< " mg=" << FormatMatrixForLog(child->GetMg())
-			<< "\n";
-	}
 }
 
 void MMDModelManagerObject::ResetStandalonePhysics()
@@ -2321,17 +2182,7 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 	if (!physics_manager_own_)
 		return;
 
-	LogInitialStateSnapshot("before_reset_physics");
 	bone_manager_data_ = GetBoneManagerData();
-	if (BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get()))
-	{
-		if (bone_manager_data_)
-			bone_manager_data_->PrepareSceneForPhysicsPlayback(model_object->GetDocument());
-	}
-	LogInitialStateSnapshot("after_prepare_scene_for_physics");
-
-	SolveStandaloneIKBeforePhysics();
-	LogInitialStateSnapshot("after_sync_adapters_from_scene");
 	auto* const physics = physics_manager_own_->GetMMDPhysics();
 	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
 	if (!physics || !rigid_bodies)
@@ -2339,9 +2190,6 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 
 	BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get());
 	BaseDocument* const doc = model_object ? model_object->GetDocument() : nullptr;
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT][Frame @] ResetStandalonePhysics rigids=@ dynBones=@",
-		doc ? doc->GetTime().GetFrame(30) : -1, static_cast<Int32>(rigid_bodies->size()), physics_dynamic_bone_indices_.GetCount());
 
 	for (const auto& rigid_body : *rigid_bodies)
 	{
@@ -2354,20 +2202,10 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 	for (const auto& rigid_body : *rigid_bodies)
 		rigid_body->ReflectGlobalTransform();
 
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter)
-			adapter->SyncLocalTransformFromGlobal();
-	}
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter && adapter->GetParent() == nullptr)
-			adapter->UpdateGlobalTransform();
-	}
+	SyncStandaloneBoneAdaptersLocalFromGlobal(physics_dynamic_bone_indices_);
 
 	if (bone_manager_data_)
 	{
-		const Int32 current_frame = doc ? doc->GetTime().GetFrame(30) : 0;
 		for (const Int32 bone_index : physics_dynamic_bone_indices_)
 		{
 			if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
@@ -2375,13 +2213,12 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 				Vector translation;
 				std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
 				adapter->GetCurrentRelativeState(translation, rotation);
-				bone_manager_data_->SetPhysicsOverride(bone_index, current_frame, translation, rotation);
+				bone_manager_data_->SetPhysicsOverride(bone_index, doc, translation, rotation);
 			}
 		}
 	}
 
 	ApplyPhysicsResultsToBoneObjects();
-	LogInitialStateSnapshot("after_reset_reflect_apply");
 
 	for (const auto& rigid_body : *rigid_bodies)
 		rigid_body->Reset(physics);
@@ -2396,13 +2233,6 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 		return;
 
 	bone_manager_data_ = GetBoneManagerData();
-	if (BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get()))
-	{
-		if (bone_manager_data_)
-			bone_manager_data_->PrepareSceneForPhysicsPlayback(model_object->GetDocument());
-	}
-
-	SolveStandaloneIKBeforePhysics();
 	auto* const physics = physics_manager_own_->GetMMDPhysics();
 	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
 	if (!physics || !rigid_bodies)
@@ -2410,9 +2240,6 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 
 	BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get());
 	BaseDocument* const doc = model_object ? model_object->GetDocument() : nullptr;
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT][Frame @] StepStandalonePhysics elapsed=@ rigids=@ dynBones=@",
-		doc ? doc->GetTime().GetFrame(30) : -1, elapsed, static_cast<Int32>(rigid_bodies->size()), physics_dynamic_bone_indices_.GetCount());
 
 	for (const auto& rigid_body : *rigid_bodies)
 		rigid_body->SyncBonePositionToPhysics(elapsed);
@@ -2422,21 +2249,10 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 	for (const auto& rigid_body : *rigid_bodies)
 		rigid_body->ReflectGlobalTransform();
 
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter)
-			adapter->SyncLocalTransformFromGlobal();
-	}
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter && adapter->GetParent() == nullptr)
-			adapter->UpdateGlobalTransform();
-	}
+	SyncStandaloneBoneAdaptersLocalFromGlobal(physics_dynamic_bone_indices_);
 
 	if (bone_manager_data_)
 	{
-		const Int32 current_frame = doc ? doc->GetTime().GetFrame(30) : 0;
-		Int32 dbg_logged = 0;
 		for (const Int32 bone_index : physics_dynamic_bone_indices_)
 		{
 			if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
@@ -2444,136 +2260,17 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 				Vector translation;
 				std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
 				adapter->GetCurrentRelativeState(translation, rotation);
-				bone_manager_data_->SetPhysicsOverride(bone_index, current_frame, translation, rotation);
-				// #region agent log H2/H3 - first 5 dynamic bones per step
-				if (dbg_logged < 5 && current_frame < 30)
-				{
-					BaseTag* const dbg_tag = bone_manager_data_->FindBone(bone_index);
-					BaseObject* const dbg_obj = dbg_tag ? dbg_tag->GetObject() : nullptr;
-					const Vector mg = dbg_obj ? dbg_obj->GetMg().off : Vector();
-					const Vector rel = dbg_obj ? dbg_obj->GetRelMl().off : Vector();
-					std::ostringstream s;
-					s << "{\"frame\":" << current_frame
-						<< ",\"boneIndex\":" << bone_index
-						<< ",\"physRelT\":[" << translation.x << "," << translation.y << "," << translation.z << "]"
-						<< ",\"physRot\":[" << rotation[0] << "," << rotation[1] << "," << rotation[2] << "," << rotation[3] << "]"
-						<< ",\"sceneRelOffBeforeApply\":[" << rel.x << "," << rel.y << "," << rel.z << "]"
-						<< ",\"sceneMgOffBeforeApply\":[" << mg.x << "," << mg.y << "," << mg.z << "]"
-						<< "}";
-					cmt_dbg::Log("H2", "mmd_model_manager.cpp:StepStandalonePhysics",
-						"SetPhysicsOverride for dynamic bone", s.str());
-					++dbg_logged;
-				}
-				// #endregion
+				bone_manager_data_->SetPhysicsOverride(bone_index, doc, translation, rotation);
 			}
 		}
-	}
-
-	Int32 sample_bone_index = -1;
-	Vector sample_translation;
-	std::array<Float32, 4> sample_rotation { 0.F, 0.F, 0.F, 1.F };
-	for (const Int32 bone_index : physics_dynamic_bone_indices_)
-	{
-		if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
-		{
-			adapter->GetCurrentRelativeState(sample_translation, sample_rotation);
-			sample_bone_index = bone_index;
-			break;
-		}
-	}
-	if (sample_bone_index >= 0)
-	{
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][Frame @] PhysicsSample bone=@ relT=(@,@,@)",
-			doc ? doc->GetTime().GetFrame(30) : -1, sample_bone_index,
-			sample_translation.x, sample_translation.y, sample_translation.z);
 	}
 
 	ApplyPhysicsResultsToBoneObjects();
-
-	if (sample_bone_index >= 0 && bone_manager_data_)
-	{
-		if (BaseTag* const bone_tag = bone_manager_data_->FindBone(sample_bone_index))
-		{
-			if (BaseObject* const bone_object = bone_tag->GetObject())
-			{
-				[[maybe_unused]] const Matrix rel = bone_object->GetRelMl();
-				[[maybe_unused]] const Matrix mg = bone_object->GetMg();
-				DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-					"[CMT][Frame @] SceneBoneSample bone=@ relOff=(@,@,@) mgOff=(@,@,@)",
-					doc ? doc->GetTime().GetFrame(30) : -1, sample_bone_index,
-					rel.off.x, rel.off.y, rel.off.z,
-					mg.off.x, mg.off.y, mg.off.z);
-			}
-		}
-	}
-
-	if (BaseObject* const mesh_object = FindFirstMeshObject(GetMeshManagerObject()))
-	{
-		[[maybe_unused]] const Vector base_point = ToPoint(mesh_object)->GetPointCount() > 0 ? ToPoint(mesh_object)->GetPointR()[0] : Vector();
-		BaseObject* const deform_cache = GetMeshDeformedCache(mesh_object);
-		const Bool has_deform_cache = deform_cache && deform_cache->IsInstanceOf(Opolygon);
-		[[maybe_unused]] const Vector deform_point = has_deform_cache && ToPoint(deform_cache)->GetPointCount() > 0
-			? ToPoint(deform_cache)->GetPointR()[0]
-			: Vector();
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][Frame @] MeshSample mesh='@' cache=@ baseP0=(@,@,@) deformP0=(@,@,@)",
-			doc ? doc->GetTime().GetFrame(30) : -1, mesh_object->GetName(), has_deform_cache,
-			base_point.x, base_point.y, base_point.z,
-			deform_point.x, deform_point.y, deform_point.z);
-	}
-
-	if (BaseObject* const rigid_manager_object = io_util::ResolveObjectLink(rigid_manager_))
-	{
-		for (BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
-		{
-			if (!child->IsInstanceOf(g_mmd_rigid_object_id))
-				continue;
-
-			const BaseContainer* const rigid_bc = child->GetDataInstance();
-			if (!rigid_bc)
-				continue;
-
-			const Int32 bone_index = rigid_bc->GetInt32(RIGID_RELATED_BONE_INDEX);
-			const Int32 physics_mode = rigid_bc->GetInt32(RIGID_PHYSICS_MODE);
-			if (bone_index < 0 || physics_mode == TRACK_BONES)
-				continue;
-
-			GeData rigid_index_data;
-			if (!child->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), rigid_index_data, DESCFLAGS_GET::NONE))
-				continue;
-
-			const Int32 rigid_index = rigid_index_data.GetString().ToInt32(nullptr);
-			if (rigid_index < 0 || static_cast<size_t>(rigid_index) >= rigid_bodies->size())
-				continue;
-
-			[[maybe_unused]] const auto& body_transform = (*rigid_bodies)[rigid_index]->GetTransform();
-			[[maybe_unused]] const Matrix scene_rigid_mg = child->GetMg();
-			Vector bone_mg_off;
-			if (bone_manager_data_)
-			{
-				if (BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index))
-				{
-					if (BaseObject* const bone_object = bone_tag->GetObject())
-						bone_mg_off = bone_object->GetMg().off;
-				}
-			}
-
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT][Frame @] RigidSample name='@' rigid=@ bone=@ mode=@ sceneOff=(@,@,@) bodyOff=(@,@,@) boneOff=(@,@,@) shapeOff=(@,@,@)",
-				doc ? doc->GetTime().GetFrame(30) : -1, child->GetName(), rigid_index, bone_index, physics_mode,
-				scene_rigid_mg.off.x, scene_rigid_mg.off.y, scene_rigid_mg.off.z,
-				body_transform(0, 3), body_transform(1, 3), body_transform(2, 3),
-				bone_mg_off.x, bone_mg_off.y, bone_mg_off.z,
-				rigid_bc->GetFloat(RIGID_SHAPE_POSITION_X), rigid_bc->GetFloat(RIGID_SHAPE_POSITION_Y), rigid_bc->GetFloat(RIGID_SHAPE_POSITION_Z));
-			break;
-		}
-	}
 }
 
 void MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects() const
 {
-	ApplyStandaloneBoneAdaptersToScene();
+	ApplyStandaloneBoneAdaptersToScene(physics_dynamic_bone_indices_);
 	MarkMeshHierarchyDirty(GetMeshManagerObject());
 }
 
@@ -2835,7 +2532,6 @@ void MMDModelManagerObject::RefreshDisplayFrameUI()
 Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting)
 {
 	InvalidateStandaloneRuntime();
-	ResetInitialStateDebugLog();
 	iferr(material_list_.Resize(0))
 		return false;
 	material_selection_index_ = -1;
@@ -2870,12 +2566,8 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 	if(!joint_manager_data_ || !joint_manager_data_->LoadPMX(pmx_file, setting))
 		return false;
 
-	LogInitialStateSnapshot("after_load_pmx_before_runtime");
-
 	if (!EnsureStandaloneRuntimeManagers())
 		return false;
-
-	LogInitialStateSnapshot("after_load_pmx_runtime_ready");
 
 	ImportDisplayFrames(pmx_file);
 
