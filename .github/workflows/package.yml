@@ -68,19 +68,22 @@ jobs:
           echo "version=$V" >> "$GITHUB_OUTPUT"
 
       - name: Run ISCC
-        shell: bash
+        shell: pwsh
         run: |
-          set -euo pipefail
-          ISCC=""
-          for p in "/c/Program Files/Inno Setup 6/ISCC.exe" "/c/Program Files (x86)/Inno Setup 6/ISCC.exe"; do
-            if [ -f "$p" ]; then ISCC="$p"; break; fi
-          done
-          if [ -z "$ISCC" ]; then echo "ISCC.exe not found" >&2; exit 1; fi
-          "$ISCC" \
-            /DPluginVersion="${{ steps.ver.outputs.version }}" \
-            /DSdkBuildDir=_build_msvc \
-            /DSdkBinConfig=Release \
-            "${{ github.workspace }}/setup/Common/installer_script.iss"
+          $isccCandidates = @(
+            "${env:ProgramFiles}\Inno Setup 6\ISCC.exe",
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          ) | Where-Object { $_ -and (Test-Path -LiteralPath $_) }
+          if (-not $isccCandidates) {
+            throw "ISCC.exe not found"
+          }
+
+          $iscc = $isccCandidates[0]
+          & $iscc `
+            "/DPluginVersion=${{ steps.ver.outputs.version }}" `
+            "/DSdkBuildDir=_build_msvc" `
+            "/DSdkBinConfig=Release" `
+            "${{ github.workspace }}\setup\Common\installer_script.iss"
 
       - name: Upload installer artifact
         uses: actions/upload-artifact@v7
