@@ -60,6 +60,13 @@ namespace
 		return String();
 	}
 
+	BaseTime GetDocumentTimeOrInvalid(const BaseDocument* doc)
+	{
+		// Older Cinema 4D SDKs expose BaseDocument::GetTime() as non-const.
+		BaseDocument* const mutable_doc = const_cast<BaseDocument*>(doc);
+		return mutable_doc ? mutable_doc->GetTime() : BaseTime(-1.);
+	}
+
 	BaseTag* ResolveInheritSourceBoneTag(MMDBoneManagerObject* bone_manager, BaseTag* self_tag)
 	{
 		if (!bone_manager || !self_tag)
@@ -1321,7 +1328,7 @@ const MMDBoneManagerObject::PhysicsOverrideState* MMDBoneManagerObject::FindPhys
 	const auto* const entry = physics_overrides_.Find(bone_index);
 	if (!entry)
 		return nullptr;
-	const BaseTime current_time = doc ? doc->GetTime() : BaseTime(-1.);
+	const BaseTime current_time = GetDocumentTimeOrInvalid(doc);
 	return entry->GetValue().time == current_time ? &entry->GetValue() : nullptr;
 }
 
@@ -1337,7 +1344,7 @@ void MMDBoneManagerObject::SetPhysicsOverride(const Int32 bone_index, const Base
 	}
 
 	PhysicsOverrideState state;
-	state.time = doc ? doc->GetTime() : BaseTime(-1.);
+	state.time = GetDocumentTimeOrInvalid(doc);
 	state.translation = translation;
 	state.rotation = rotation;
 	iferr(physics_overrides_.Insert(bone_index, state))
