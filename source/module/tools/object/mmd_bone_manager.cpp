@@ -1328,7 +1328,7 @@ const MMDBoneManagerObject::PhysicsOverrideState* MMDBoneManagerObject::FindPhys
 	const auto* const entry = physics_overrides_.Find(bone_index);
 	if (!entry)
 		return nullptr;
-	const BaseTime current_time = GetDocumentTimeOrInvalid(doc);
+	const BaseTime current_time = doc ? GetDocumentTime(doc) : BaseTime(-1.);
 	return entry->GetValue().time == current_time ? &entry->GetValue() : nullptr;
 }
 
@@ -1344,7 +1344,7 @@ void MMDBoneManagerObject::SetPhysicsOverride(const Int32 bone_index, const Base
 	}
 
 	PhysicsOverrideState state;
-	state.time = GetDocumentTimeOrInvalid(doc);
+	state.time = doc ? GetDocumentTime(doc) : BaseTime(-1.);
 	state.translation = translation;
 	state.rotation = rotation;
 	iferr(physics_overrides_.Insert(bone_index, state))
