@@ -376,24 +376,12 @@ Bool MMDJointManagerObject::BuildStandaloneJoints(libmmd::MMDPhysicsManager* phy
 		else
 		{
 			++created;
-			if (created <= 3)
-			{
-				[[maybe_unused]] const auto joint_transform = jt->GetTransform();
-				[[maybe_unused]] const auto body_transform_a = rbA->GetTransform();
-				[[maybe_unused]] const auto body_transform_b = rbB->GetTransform();
-				DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-					"[CMT] BuildStandaloneJoints[@]: name='@' jointOff=(@,@,@) rigidAOff=(@,@,@) rigidBOff=(@,@,@) paramOff=(@,@,@)",
-					joint_index, child->GetName(),
-					joint_transform(0, 3), joint_transform(1, 3), joint_transform(2, 3),
-					body_transform_a(0, 3), body_transform_a(1, 3), body_transform_a(2, 3),
-					body_transform_b(0, 3), body_transform_b(1, 3), body_transform_b(2, 3),
-					translate.x(), translate.y(), translate.z());
-			}
 		}
 	}
 
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] BuildStandaloneJoints: total=@ created=@ skipped_invalid=@ skipped_self=@ failed=@",
-		sorted_children.size(), created, skipped_invalid, skipped_self, failed);
+	if (failed != 0)
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] BuildStandaloneJoints: total=@ created=@ skipped_invalid=@ skipped_self=@ failed=@",
+			sorted_children.size(), created, skipped_invalid, skipped_self, failed);
 	return failed == 0;
 }
 
