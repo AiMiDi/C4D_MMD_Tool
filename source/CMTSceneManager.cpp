@@ -167,8 +167,12 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 
 	// set document with vmd length
 	if(animation->GetKeyCount() > 0)
-		setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(), BaseTime(animation->GetMaxKeyTime(), 30.0)));
-	setting.doc->SetTime(BaseTime{ 1.0 });
+	{
+		const BaseTime max_time(static_cast<Float>(animation->GetMaxKeyTime()) + setting.time_offset, 30.0);
+		setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(), max_time));
+		setting.doc->SetLoopMaxTime(maxon::Max(setting.doc->GetLoopMaxTime(), max_time));
+	}
+	setting.doc->SetTime(BaseTime(1, 30.0));
 	setting.doc->SetTime(BaseTime{});
 
 	// set camera with vmd data
