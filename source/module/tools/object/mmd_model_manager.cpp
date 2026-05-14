@@ -2182,43 +2182,13 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 	if (!physics_manager_own_)
 		return;
 
-	bone_manager_data_ = GetBoneManagerData();
 	auto* const physics = physics_manager_own_->GetMMDPhysics();
 	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
 	if (!physics || !rigid_bodies)
 		return;
 
-	BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get());
-	BaseDocument* const doc = model_object ? model_object->GetDocument() : nullptr;
-
 	for (const auto& rigid_body : *rigid_bodies)
-	{
-		rigid_body->SetActivation(false);
 		rigid_body->ResetTransform();
-	}
-
-	physics->Update(1.0f / 60.0f);
-
-	for (const auto& rigid_body : *rigid_bodies)
-		rigid_body->ReflectGlobalTransform();
-
-	SyncStandaloneBoneAdaptersLocalFromGlobal(physics_dynamic_bone_indices_);
-
-	if (bone_manager_data_)
-	{
-		for (const Int32 bone_index : physics_dynamic_bone_indices_)
-		{
-			if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
-			{
-				Vector translation;
-				std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
-				adapter->GetCurrentRelativeState(translation, rotation);
-				bone_manager_data_->SetPhysicsOverride(bone_index, doc, translation, rotation);
-			}
-		}
-	}
-
-	ApplyPhysicsResultsToBoneObjects();
 
 	for (const auto& rigid_body : *rigid_bodies)
 		rigid_body->Reset(physics);

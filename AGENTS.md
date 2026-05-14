@@ -33,6 +33,10 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 - Dependency smoke tests require the dedicated preset:
   - `cmake --preset dev-windows-deps-test`
   - `cmake --build --preset cmt-deps-test`
+- For VMD interpolation or camera interpolation changes, use the focused libMMD test before a full plugin run:
+  - `cmake --build _build_msvc\cmt_deps\libMMD\tests --config Debug --target vmd_interpolation_test`
+  - `ctest --test-dir _build_msvc\cmt_deps\libMMD\tests -C Debug -R vmd_interpolation_test --output-on-failure`
+  `VMDCameraAnimation::Evaluate(float)` expects VMD frame numbers, not C4D seconds.
 - Windows packaging is driven by Inno through the root preset:
   - `cmake --preset package-windows`
   - `cmake --build --preset inno-installer`

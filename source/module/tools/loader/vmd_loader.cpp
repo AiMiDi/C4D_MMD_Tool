@@ -19,6 +19,12 @@ Description:	vmd data loader
 
 Bool VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, UChar* probe, Int32 size)
 {
+	m_is_camera = FALSE;
+	if (!probe || size < 50)
+	{
+		return FALSE;
+	}
+
 	Char VMDVersion[30]{ 0 };
 	Char VMDModelName[20]{ 0 };
 	CopyMem(probe, VMDVersion, 30);
@@ -27,11 +33,11 @@ Bool VMDLoaderData::Identify(BaseSceneLoader* node, const Filename& name, UChar*
 	{
 		return FALSE;
 	}
-	if (strncmp(VMDVersion, "Vocaloid Motion Data file", 25) != 0 || strncmp(VMDVersion, "Vocaloid Motion Data 0002", 25)!= 0)
+	if (strncmp(VMDVersion, "Vocaloid Motion Data file", 25) == 0 || strncmp(VMDVersion, "Vocaloid Motion Data 0002", 25) == 0)
 	{
 		// カメラ照明
 		if (const auto u16_vmd_model_name = libmmd::ConvertSjisToU16String(VMDModelName);
-			u16_vmd_model_name.find_first_of(u"\u30ab\u30e1\u30e9\u30fb\u7167\u660e") == 0)
+			u16_vmd_model_name.find(u"\u30ab\u30e1\u30e9\u30fb\u7167\u660e") == 0)
 		{
 			m_is_camera = TRUE;
 		}

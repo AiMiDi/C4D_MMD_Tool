@@ -20,6 +20,11 @@ Description:	C4D MMD camera object
 #include "utils/time_util.hpp"
 #include <functional>
 
+namespace
+{
+	constexpr Float32 kVmdCameraFps = 30.0f;
+}
+
 MMDCamera::MMDCamera(MMDCamera&& other) noexcept
 	: ObjectData()
 	, camera_(other.camera_)
@@ -84,12 +89,15 @@ Bool MMDCamera::InitCamera(GeListNode* node)
 
 Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>& animation, const CMTToolsSetting::CameraImport& setting)
 {
+	if (!animation || !setting.doc)
+		return false;
+
 	const auto object = reinterpret_cast<BaseObject*>(Get());
-	const auto fps = setting.doc->GetFps();
-	const auto max_time = BaseTime(animation->GetMaxKeyTime(), fps);
-	for (BaseTime time{}; time < max_time; time = time + BaseTime(1, fps))
+	const Int32 max_vmd_frame = animation->GetMaxKeyTime();
+	for (Int32 vmd_frame = 0; vmd_frame <= max_vmd_frame; ++vmd_frame)
 	{
-		animation->Evaluate(static_cast<float>(time.Get()));
+		const BaseTime time(static_cast<Float>(vmd_frame) + setting.time_offset, kVmdCameraFps);
+		animation->Evaluate(static_cast<float>(vmd_frame));
 		const auto& camera_data = animation->GetCamera();
 
 		std::array<CCurve*, track_count> curves{ nullptr };
@@ -126,6 +134,7 @@ Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>&
 			if (CKey* key = curve->AddKey(time); key)
 			{
 				key->SetValue(curve, value);
+				key->SetInterpolation(curve, CINTERPOLATION::LINEAR);
 				return true;
 			}
 			return false;

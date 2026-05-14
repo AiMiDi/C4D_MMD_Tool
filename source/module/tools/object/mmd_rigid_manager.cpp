@@ -453,21 +453,15 @@ Bool MMDRigidManagerObject::BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager
 		}
 
 		++created;
-		if (created <= 3)
-		{
-			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-				"[CMT] BuildStandaloneRigidBodies[@]: name='@' boneIndex=@ shapeOff=(@,@,@)",
-				rigid_index, child->GetName(), pmx_rigidbody.m_boneIndex,
-				pmx_rigidbody.m_translate.x(), pmx_rigidbody.m_translate.y(), pmx_rigidbody.m_translate.z());
-		}
 	}
 
 	if (!UpdateRigidList())
 		return false;
 
-	DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-		"[CMT] BuildStandaloneRigidBodies: total=@ created=@ unbound=@ failed=@",
-		sorted_children.size(), created, unbound, failed);
+	if (failed != 0)
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+			"[CMT] BuildStandaloneRigidBodies: total=@ created=@ unbound=@ failed=@",
+			sorted_children.size(), created, unbound, failed);
 	return true;
 }
 
