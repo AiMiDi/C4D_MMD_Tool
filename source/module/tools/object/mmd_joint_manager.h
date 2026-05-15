@@ -80,4 +80,7 @@ public:
 
 	Bool BuildStandaloneJoints(libmmd::MMDPhysicsManager* physics_manager);
 	void ReconnectJointPointers(libmmd::MMDPhysicsManager* physics_manager);
+	void SetAllJointMode(Int32 mode, BaseObject* joint_manager_object = nullptr);
+	void CommitEditorTransforms(BaseObject* joint_manager_object);
+	void RestoreEditorTransforms(BaseObject* joint_manager_object);
 };

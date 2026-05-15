@@ -52,7 +52,6 @@ STRINGTABLE OMMDModelManager
 	MODEL_ANIM_NONE "-- No animation --";
 	MODEL_MODE_EDIT "Edit mode";
 	MODEL_MODE_ANIM "Animation mode";
-	MODEL_MODE_VMD "VMD mode";
 	MODEL_MATERIAL_GRP "Material";
 		MODEL_MATERIAL_LIST "Material list";
 		MODEL_MATERIAL_C4D_GRP "C4D Material";

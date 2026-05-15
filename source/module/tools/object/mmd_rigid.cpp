@@ -729,7 +729,8 @@ Bool MMDRigidObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	IOReadField(m_rigid_group_id);
 	IOReadField(rigid_manager_link_);
 	m_rigid_mode = NormalizeRigidMode(m_rigid_mode);
-	bc->SetInt32(RIGID_MODE, NormalizeRigidMode(bc->GetInt32(RIGID_MODE)));
+	bc->SetInt32(RIGID_MODE, m_rigid_mode);
+	HandleRigidModeChange(m_rigid_mode);
 
 	UpdateRigidPhysics(m_physics_mode);
 	UpdateRigidShape(bc, m_rigid_shape_type);
@@ -777,20 +778,13 @@ NodeData* MMDRigidObject::Alloc()
 void MMDRigidObject::HandleRigidModeChange(Int32 mode)
 {
 	mode = NormalizeRigidMode(mode);
-	if (m_rigid_mode == mode)
+	BaseObject* const object = static_cast<BaseObject*>(Get());
+	if (!object)
+	{
+		m_rigid_mode = mode;
 		return;
-
-	if (mode == RIGID_MODE_EDIT)
-	{
-		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
-
-	}
-	else
-	{
-		// TODO: Save to mmd_rigid_body
-		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
-
 	}
 
+	object->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	m_rigid_mode = mode;
 }

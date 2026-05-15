@@ -55,6 +55,15 @@ namespace
 			morph_tag->SetParameter(slider_id, GeData(0.0), DESCFLAGS_SET::NONE);
 		}
 	}
+
+	void MarkSceneNodeDirty(BaseList2D* node)
+	{
+		if (!node)
+			return;
+
+		node->SetDirty(DIRTYFLAGS::MATRIX | DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+		node->Message(MSG_UPDATE);
+	}
 }
 
 namespace cinema
@@ -357,6 +366,15 @@ Bool MMDMeshManagerObject::GetMorphStrength(const String& morph_name, Float& out
 	return true;
 }
 
+void MMDMeshManagerObject::ResetMorphStrengths(BaseObject* op)
+{
+	if (op)
+		ForceRefreshMorphData(op);
+
+	for (const auto& entry : mesh_morph_name_)
+		SetMorphStrength(entry.GetKey(), 0.0);
+}
+
 void MMDMeshManagerObject::RequestMorphDataRefresh()
 {
 	*needs_morph_data_refresh_.Write() = true;
@@ -369,6 +387,44 @@ void MMDMeshManagerObject::ForceRefreshMorphData(BaseObject* op)
 	mesh_morph_data_.Reset();
 	RefreshMeshMorphData(op, true);
 	*needs_morph_data_refresh_.Write() = false;
+}
+
+void MMDMeshManagerObject::RefreshWeightBindPoses(BaseObject* op, BaseDocument* doc)
+{
+	if (!op || !doc)
+		return;
+
+	std::vector<BaseObject*> stack;
+	stack.push_back(op->GetDown());
+	while (!stack.empty())
+	{
+		BaseObject* const object = stack.back();
+		stack.pop_back();
+		if (!object)
+			continue;
+
+		if (object->GetNext())
+			stack.push_back(object->GetNext());
+		if (object->GetDown())
+			stack.push_back(object->GetDown());
+
+		for (BaseTag* tag = object->GetFirstTag(); tag; tag = tag->GetNext())
+		{
+			if (!tag->IsInstanceOf(Tweights))
+				continue;
+
+			auto* const weight_tag = static_cast<CAWeightTag*>(tag);
+			weight_tag->WeightDirty();
+#if CMT_SDK_HAS_WEIGHT_TAG_SETBINDPOSE
+			weight_tag->SetBindPose(doc, false);
+#else
+			DescriptionCommand dc;
+			dc._descId = DescID(ID_CA_WEIGHT_TAG_SET);
+			weight_tag->Message(MSG_DESCRIPTION_COMMAND, &dc);
+#endif
+			MarkSceneNodeDirty(object);
+		}
+	}
 }
 
 struct morph_tag_info

@@ -27,7 +27,6 @@ CONTAINER OMMDRigidManager {
 			CYCLE {
 				RIGID_MODE_EDIT;
 				RIGID_MODE_ANIM;
-				RIGID_MODE_VMD;
 			}
 		}
 

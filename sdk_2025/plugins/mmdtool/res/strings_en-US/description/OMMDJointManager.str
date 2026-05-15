@@ -12,5 +12,4 @@ STRINGTABLE OMMDJointManager
 
 	JOINT_MODE_ANIM "Animation mode";
 	JOINT_MODE_EDIT "Edit mode";
-	JOINT_MODE_VMD "VMD mode";
 }

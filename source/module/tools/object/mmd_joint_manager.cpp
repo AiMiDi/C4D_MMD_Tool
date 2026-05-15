@@ -26,6 +26,50 @@ namespace
 		constexpr Int32 kLegacyJointModeVmd = 2;
 		return mode == kLegacyJointModeVmd ? JOINT_MODE_ANIM : mode;
 	}
+
+	Matrix NormalizeMatrixBasis(const Matrix& matrix)
+	{
+		Matrix normalized = matrix;
+		normalized.sqmat = normalized.sqmat.GetNormalized();
+		return normalized;
+	}
+
+	ROTATIONORDER GetObjectRotationOrder(BaseObject* object)
+	{
+		GeData rotation_order;
+		if (object && object->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_ROTATION_ORDER)), rotation_order, DESCFLAGS_GET::NONE))
+			return static_cast<ROTATIONORDER>(rotation_order.GetInt32());
+		return ROTATIONORDER::DEFAULT;
+	}
+
+	void MarkSceneNodeDirty(BaseList2D* node)
+	{
+		if (!node)
+			return;
+
+		node->SetDirty(DIRTYFLAGS::MATRIX | DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+		node->Message(MSG_UPDATE);
+	}
+
+	void SetFloatParameter(BaseObject* object, const Int32 id, const Float value)
+	{
+		if (object)
+			object->SetParameter(CreateDescID(DescLevel(id)), value, DESCFLAGS_SET::NONE);
+	}
+
+	void SetVectorXYZParameters(BaseObject* object, const Int32 x_id, const Int32 y_id, const Int32 z_id, const Vector& value)
+	{
+		SetFloatParameter(object, x_id, value.x);
+		SetFloatParameter(object, y_id, value.y);
+		SetFloatParameter(object, z_id, value.z);
+	}
+
+	Matrix BuildPRSMatrix(const Vector& position, const Vector& rotation, const ROTATIONORDER order)
+	{
+		Matrix matrix = HPBToMatrix(rotation, order);
+		matrix.off = position;
+		return matrix;
+	}
 }
 
 NodeData* MMDJointManagerObject::Alloc()
@@ -112,7 +156,7 @@ Bool MMDJointManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data); msg && msg->msg_type == MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE)
 		{
-			node->SetParameter(ConstDescID(DescLevel(JOINT_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
+			SetAllJointMode(msg->model_mode, reinterpret_cast<BaseObject*>(node));
 		}
 		break;
 	}
@@ -143,6 +187,78 @@ Bool MMDJointManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		break;
 	}
 	return SUPER::SetDParameter(node, id, t_data, flags);
+}
+
+void MMDJointManagerObject::SetAllJointMode(const Int32 mode, BaseObject* joint_manager_object)
+{
+	const Int32 normalized_mode = NormalizeJointMode(mode);
+	if (!joint_manager_object)
+		joint_manager_object = reinterpret_cast<BaseObject*>(Get());
+	if (!joint_manager_object)
+		return;
+
+	joint_manager_object->SetParameter(ConstDescID(DescLevel(JOINT_MODE)), normalized_mode, DESCFLAGS_SET::NONE);
+	MMDJointRootObjectMsg msg(MMDJointRootObjectMsgType::JOINT_MODE_CHANGE, 0, normalized_mode);
+	joint_manager_object->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_joint_manager_object_id, &msg);
+
+	for (BaseObject* child = joint_manager_object->GetDown(); child; child = child->GetNext())
+	{
+		if (!child->IsInstanceOf(g_mmd_joint_object_id))
+			continue;
+		if (auto* const joint = child->GetNodeData<MMDJointObject>())
+			joint->HandleJointModeChange(normalized_mode);
+		child->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA);
+	}
+
+	joint_manager_object->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA);
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (GeIsMainThread())
+		EventAdd();
+}
+
+void MMDJointManagerObject::CommitEditorTransforms(BaseObject* joint_manager_object)
+{
+	if (!joint_manager_object)
+		return;
+
+	for (BaseObject* child = joint_manager_object->GetDown(); child; child = child->GetNext())
+	{
+		if (!child->IsInstanceOf(g_mmd_joint_object_id))
+			continue;
+
+		const Matrix rel = NormalizeMatrixBasis(child->GetRelMl());
+		const Vector rotation = MatrixToHPB(rel, GetObjectRotationOrder(child));
+		SetVectorXYZParameters(child, JOINT_ATTITUDE_POSITION_X, JOINT_ATTITUDE_POSITION_Y, JOINT_ATTITUDE_POSITION_Z, rel.off);
+		SetVectorXYZParameters(child, JOINT_ATTITUDE_ROTATION_X, JOINT_ATTITUDE_ROTATION_Y, JOINT_ATTITUDE_ROTATION_Z, rotation);
+		MarkSceneNodeDirty(child);
+	}
+}
+
+void MMDJointManagerObject::RestoreEditorTransforms(BaseObject* joint_manager_object)
+{
+	if (!joint_manager_object)
+		return;
+
+	for (BaseObject* child = joint_manager_object->GetDown(); child; child = child->GetNext())
+	{
+		if (!child->IsInstanceOf(g_mmd_joint_object_id))
+			continue;
+
+		const BaseContainer* const bc = child->GetDataInstance();
+		if (!bc)
+			continue;
+
+		const Vector position(
+			bc->GetFloat(JOINT_ATTITUDE_POSITION_X),
+			bc->GetFloat(JOINT_ATTITUDE_POSITION_Y),
+			bc->GetFloat(JOINT_ATTITUDE_POSITION_Z));
+		const Vector rotation(
+			bc->GetFloat(JOINT_ATTITUDE_ROTATION_X),
+			bc->GetFloat(JOINT_ATTITUDE_ROTATION_Y),
+			bc->GetFloat(JOINT_ATTITUDE_ROTATION_Z));
+		child->SetRelMl(BuildPRSMatrix(position, rotation, GetObjectRotationOrder(child)));
+		MarkSceneNodeDirty(child);
+	}
 }
 
 MMDRigidManagerObject* MMDJointManagerObject::GetRigidManager()

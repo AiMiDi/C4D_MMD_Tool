@@ -192,19 +192,14 @@ SDK2024_GetDEnabling(MMDJointObject)
 void MMDJointObject::HandleJointModeChange(const Int32 mode)
 {
 	const Int32 normalized_mode = NormalizeJointMode(mode);
-	if (joint_mode_ == normalized_mode)
+	BaseObject* const object = static_cast<BaseObject*>(Get());
+	if (!object)
+	{
+		joint_mode_ = normalized_mode;
 		return;
-
-	if (normalized_mode == JOINT_MODE_EDIT)
-	{
-		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::CLEAR);
-	}
-	else
-	{
-		// TODO: Save to mmd_joint
-		Get()->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	}
 
+	object->ChangeNBit(NBIT::NO_DD, NBITCONTROL::SET);
 	joint_mode_ = normalized_mode;
 }
 
@@ -468,6 +463,7 @@ Bool MMDJointObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	joint_mode_ = NormalizeJointMode(joint_mode_);
 	if (BaseContainer* const bc = node ? reinterpret_cast<BaseList2D*>(node)->GetDataInstance() : nullptr)
 		bc->SetInt32(JOINT_MODE, joint_mode_);
+	HandleJointModeChange(joint_mode_);
 	ConfigureJointExecutionPriority(node);
 	return true;
 }

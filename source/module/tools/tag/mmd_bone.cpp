@@ -2494,8 +2494,7 @@ Bool MMDBoneTag::RunIKSolveAnimMode(BaseObject* op, const Bool mark_prephysics_c
 void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 {
 	const Int32 normalized_mode = NormalizeBoneMode(bone_mode);
-	if (bone_mode_ == normalized_mode)
-		return;
+	const Int32 previous_mode = bone_mode_;
 
 	if (!bone_object_)
 		if (BaseTag* tag = static_cast<BaseTag*>(Get()); tag)
@@ -2513,7 +2512,7 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 	}
 	else
 	{
-		if (bone_mode_ == BONE_MODE_EDIT && is_IK)
+		if (previous_mode == BONE_MODE_EDIT && previous_mode != normalized_mode && is_IK)
 			BuildStandaloneIKChains();
 
 		if (bone_object_)
@@ -2530,7 +2529,7 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 	}
 
 	bone_mode_ = normalized_mode;
-	if (bone_mode_ == BONE_MODE_ANIM)
+	if (bone_mode_ == BONE_MODE_ANIM && previous_mode != normalized_mode)
 		SyncSplineFromSelection(Get());
 }
 
