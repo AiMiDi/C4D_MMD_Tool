@@ -41,6 +41,50 @@ namespace
 		const Int32 current_index = bone_manager->FindBoneIndex(imported_bone_tag);
 		return current_index >= 0 ? current_index : imported_index;
 	}
+
+	Matrix NormalizeMatrixBasis(const Matrix& matrix)
+	{
+		Matrix normalized = matrix;
+		normalized.sqmat = normalized.sqmat.GetNormalized();
+		return normalized;
+	}
+
+	ROTATIONORDER GetObjectRotationOrder(BaseObject* object)
+	{
+		GeData rotation_order;
+		if (object && object->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_ROTATION_ORDER)), rotation_order, DESCFLAGS_GET::NONE))
+			return static_cast<ROTATIONORDER>(rotation_order.GetInt32());
+		return ROTATIONORDER::DEFAULT;
+	}
+
+	void MarkSceneNodeDirty(BaseList2D* node)
+	{
+		if (!node)
+			return;
+
+		node->SetDirty(DIRTYFLAGS::MATRIX | DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+		node->Message(MSG_UPDATE);
+	}
+
+	void SetFloatParameter(BaseObject* object, const Int32 id, const Float value)
+	{
+		if (object)
+			object->SetParameter(CreateDescID(DescLevel(id)), value, DESCFLAGS_SET::NONE);
+	}
+
+	void SetVectorXYZParameters(BaseObject* object, const Int32 x_id, const Int32 y_id, const Int32 z_id, const Vector& value)
+	{
+		SetFloatParameter(object, x_id, value.x);
+		SetFloatParameter(object, y_id, value.y);
+		SetFloatParameter(object, z_id, value.z);
+	}
+
+	Matrix BuildPRSMatrix(const Vector& position, const Vector& rotation, const ROTATIONORDER order)
+	{
+		Matrix matrix = HPBToMatrix(rotation, order);
+		matrix.off = position;
+		return matrix;
+	}
 }
 
 Bool MMDRigidManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
@@ -140,7 +184,7 @@ Bool MMDRigidManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	{
 		if (const auto msg = static_cast<MMDModelManagerObjectMsg*>(data); msg && msg->msg_type == MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE)
 		{
-			node->SetParameter(ConstDescID(DescLevel(RIGID_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
+			SetAllRigidMode(msg->model_mode, reinterpret_cast<BaseObject*>(node));
 		}
 		break;
 	}
@@ -196,6 +240,78 @@ Bool MMDRigidManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		break;
 	}
 	return SUPER::SetDParameter(node, id, t_data, flags);
+}
+
+void MMDRigidManagerObject::SetAllRigidMode(const Int32 mode, BaseObject* rigid_manager_object)
+{
+	const Int32 normalized_mode = NormalizeRigidMode(mode);
+	if (!rigid_manager_object)
+		rigid_manager_object = reinterpret_cast<BaseObject*>(Get());
+	if (!rigid_manager_object)
+		return;
+
+	rigid_manager_object->SetParameter(ConstDescID(DescLevel(RIGID_MODE)), normalized_mode, DESCFLAGS_SET::NONE);
+	MMDRigidRootObjectMsg msg(MMDRigidRootObjectMsgType::RIGID_MODE_CHANGE, RIGID_DISPLAY_TYPE_OFF, normalized_mode);
+	rigid_manager_object->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_rigid_manager_object_id, &msg);
+
+	for (BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
+	{
+		if (!child->IsInstanceOf(g_mmd_rigid_object_id))
+			continue;
+		if (auto* const rigid = child->GetNodeData<MMDRigidObject>())
+			rigid->HandleRigidModeChange(normalized_mode);
+		child->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA);
+	}
+
+	rigid_manager_object->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA);
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (GeIsMainThread())
+		EventAdd();
+}
+
+void MMDRigidManagerObject::CommitEditorTransforms(BaseObject* rigid_manager_object)
+{
+	if (!rigid_manager_object)
+		return;
+
+	for (BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
+	{
+		if (!child->IsInstanceOf(g_mmd_rigid_object_id))
+			continue;
+
+		const Matrix rel = NormalizeMatrixBasis(child->GetRelMl());
+		const Vector rotation = MatrixToHPB(rel, GetObjectRotationOrder(child));
+		SetVectorXYZParameters(child, RIGID_SHAPE_POSITION_X, RIGID_SHAPE_POSITION_Y, RIGID_SHAPE_POSITION_Z, rel.off);
+		SetVectorXYZParameters(child, RIGID_SHAPE_ROTATION_X, RIGID_SHAPE_ROTATION_Y, RIGID_SHAPE_ROTATION_Z, rotation);
+		MarkSceneNodeDirty(child);
+	}
+}
+
+void MMDRigidManagerObject::RestoreEditorTransforms(BaseObject* rigid_manager_object)
+{
+	if (!rigid_manager_object)
+		return;
+
+	for (BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
+	{
+		if (!child->IsInstanceOf(g_mmd_rigid_object_id))
+			continue;
+
+		const BaseContainer* const bc = child->GetDataInstance();
+		if (!bc)
+			continue;
+
+		const Vector position(
+			bc->GetFloat(RIGID_SHAPE_POSITION_X),
+			bc->GetFloat(RIGID_SHAPE_POSITION_Y),
+			bc->GetFloat(RIGID_SHAPE_POSITION_Z));
+		const Vector rotation(
+			bc->GetFloat(RIGID_SHAPE_ROTATION_X),
+			bc->GetFloat(RIGID_SHAPE_ROTATION_Y),
+			bc->GetFloat(RIGID_SHAPE_ROTATION_Z));
+		child->SetRelMl(BuildPRSMatrix(position, rotation, GetObjectRotationOrder(child)));
+		MarkSceneNodeDirty(child);
+	}
 }
 
 NodeData* MMDRigidManagerObject::Alloc()

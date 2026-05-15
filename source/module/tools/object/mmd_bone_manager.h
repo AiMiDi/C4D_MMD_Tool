@@ -114,7 +114,10 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
 
-	void SetAllBoneMode(Int32 mode);
+	void SetAllBoneMode(Int32 mode, BaseObject* bone_manager_object = nullptr);
+	void CommitEditModeBindState(BaseObject* bone_manager_object);
+	void RestoreBindStateForEdit(BaseObject* bone_manager_object);
+	void ResetMorphStrengths();
 	Bool EnsureAllAnimationSlotCount(Int32 slot_count);
 	void SetAllActiveAnimationSlot(Int32 slot_index);
 	void MarkAppendExecutionOrderDirty();

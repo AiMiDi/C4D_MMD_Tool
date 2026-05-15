@@ -275,6 +275,73 @@ namespace
 		}
 	}
 
+	Matrix MakeIdentityMatrix()
+	{
+		return Matrix{
+			Vector(0.0),
+			Vector(1.0, 0.0, 0.0),
+			Vector(0.0, 1.0, 0.0),
+			Vector(0.0, 0.0, 1.0)
+		};
+	}
+
+	Matrix NormalizeMatrixBasis(const Matrix& matrix)
+	{
+		Matrix normalized = matrix;
+		normalized.sqmat = normalized.sqmat.GetNormalized();
+		return normalized;
+	}
+
+	Vector GetMatrixScale(const Matrix& matrix)
+	{
+		const auto sanitize = [](const Float value)
+		{
+			return value > 0.0 ? value : 1.0;
+		};
+		return Vector(
+			sanitize(matrix.sqmat.v1.GetLength()),
+			sanitize(matrix.sqmat.v2.GetLength()),
+			sanitize(matrix.sqmat.v3.GetLength()));
+	}
+
+	ROTATIONORDER GetObjectRotationOrder(BaseObject* object)
+	{
+		GeData rotation_order;
+		if (object && object->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_ROTATION_ORDER)), rotation_order, DESCFLAGS_GET::NONE))
+			return static_cast<ROTATIONORDER>(rotation_order.GetInt32());
+		return ROTATIONORDER::DEFAULT;
+	}
+
+	Matrix BuildFrozenBoneGlobalMatrix(BaseObject* bone_object)
+	{
+		Matrix global = MakeIdentityMatrix();
+		std::vector<BaseObject*> chain;
+		for (BaseObject* current = bone_object; current != nullptr; current = current->GetUp())
+		{
+			if (!current->GetTag(g_mmd_bone_tag_id))
+				break;
+			chain.push_back(current);
+		}
+
+		for (auto it = chain.rbegin(); it != chain.rend(); ++it)
+			global = global * (*it)->GetFrozenMln();
+		return NormalizeMatrixBasis(global);
+	}
+
+	void CommitObjectLocalToFrozen(BaseObject* object)
+	{
+		if (!object)
+			return;
+
+		const Matrix current_local = object->GetMl();
+		const Matrix normalized_local = NormalizeMatrixBasis(current_local);
+		object->SetFrozenPos(current_local.off);
+		object->SetFrozenScale(GetMatrixScale(current_local));
+		object->SetFrozenRot(MatrixToHPB(normalized_local, GetObjectRotationOrder(object)));
+		object->SetRelMl(MakeIdentityMatrix());
+		MarkSceneNodeDirty(object);
+	}
+
 	struct BoolResetGuard
 	{
 		explicit BoolResetGuard(Bool* value) : value_(value) {}
@@ -304,7 +371,10 @@ SDK2024_Init(MMDBoneManagerObject)
 		return false;
 
 	if (BaseContainer* const bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance())
-		bc->SetInt32(BONE_MODE, BONE_MODE_ANIM);
+	{
+		bc->SetInt32(BONE_MODE, BONE_MODE_EDIT);
+		bc->SetInt32(BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF);
+	}
 
 	ConfigureBoneManagerExecutionPriority(node);
 	return true;
@@ -862,8 +932,12 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					model_manager_->SetLink(msg->object);
 					break;
 				case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
-					node->SetParameter(ConstDescID(DescLevel(BONE_MODE)), msg->model_mode, DESCFLAGS_SET::NONE);
+				{
+					const Int32 normalized_mode = NormalizeBoneMode(msg->model_mode);
+					node->SetParameter(ConstDescID(DescLevel(BONE_MODE)), normalized_mode, DESCFLAGS_SET::NONE);
+					SetAllBoneMode(normalized_mode, reinterpret_cast<BaseObject*>(node));
 					break;
+				}
 				case MMDModelManagerObjectMsgType::ACTIVE_ANIMATION_SLOT_CHANGE:
 					SetAllActiveAnimationSlot(msg->active_animation_slot);
 					break;
@@ -1563,8 +1637,18 @@ Int32 MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer(BaseDocument* do
 	return prepared_bones;
 }
 
-void MMDBoneManagerObject::SetAllBoneMode(const Int32 mode)
+void MMDBoneManagerObject::SetAllBoneMode(const Int32 mode, BaseObject* bone_manager_object)
 {
+	const Int32 normalized_mode = NormalizeBoneMode(mode);
+	if (!bone_manager_object)
+		bone_manager_object = reinterpret_cast<BaseObject*>(Get());
+	if (bone_manager_object)
+	{
+		MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, normalized_mode);
+		bone_manager_object->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
+		bone_manager_object->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA);
+	}
+
 	for (const auto& entry : bone_list_)
 	{
 		BaseTag* tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
@@ -1573,12 +1657,133 @@ void MMDBoneManagerObject::SetAllBoneMode(const Int32 mode)
 		auto* bone_tag = tag->GetNodeData<MMDBoneTag>();
 		if (!bone_tag) continue;
 
-		bone_tag->HandleBoneModeChange(mode);
+		bone_tag->HandleBoneModeChange(normalized_mode);
 	}
 
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 	if (GeIsMainThread())
 		EventAdd();
+}
+
+void MMDBoneManagerObject::CommitEditModeBindState(BaseObject* bone_manager_object)
+{
+	if (bone_manager_object)
+		HandleBoneIndexChangeMessage(bone_manager_object);
+
+	for (const auto& entry : bone_list_)
+	{
+		BaseTag* const bone_tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
+		if (!bone_object)
+			continue;
+
+		CommitObjectLocalToFrozen(bone_object);
+	}
+
+	for (const auto& entry : bone_list_)
+	{
+		BaseTag* const bone_tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
+		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
+		if (!bone_object || !bone_tag_node)
+			continue;
+
+		const Matrix bind_global = BuildFrozenBoneGlobalMatrix(bone_object);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), bind_global.off, DESCFLAGS_SET::NONE);
+		bone_tag_node->ResetEvaluatedAnimationState();
+		bone_tag_node->ClearPlaybackRuntimeOverride();
+		bone_tag_node->last_prephysics_time_ = BaseTime(-1.);
+		bone_tag_node->last_ik_solve_time_ = BaseTime(-1.);
+		bone_tag_node->last_postphysics_ik_solve_time_ = BaseTime(-1.);
+		bone_tag_node->skip_prephysics_scene_write_ = false;
+		bone_tag_node->ik_overridden_this_frame_ = false;
+		bone_tag_node->standalone_ik_chain_dirty_ = true;
+		bone_tag_node->prev_position_ = Vector();
+		bone_tag_node->prev_rotation_ = Vector();
+		bone_tag->SetDirty(DIRTYFLAGS::DATA);
+	}
+
+	physics_overrides_.Reset();
+}
+
+void MMDBoneManagerObject::RestoreBindStateForEdit(BaseObject* bone_manager_object)
+{
+	if (bone_manager_object)
+		HandleBoneIndexChangeMessage(bone_manager_object);
+
+	for (const auto& entry : bone_list_)
+	{
+		BaseTag* const bone_tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
+		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
+		if (!bone_object || !bone_tag_node)
+			continue;
+
+		bone_tag_node->HandleBoneModeChange(BONE_MODE_EDIT);
+
+		Vector current_morph_position;
+		Vector current_morph_rotation;
+		for (const auto& morph : bone_tag_node->bone_morph_data_arr_)
+		{
+			GeData morph_data;
+			Float strength = 0.0;
+			if (bone_tag->GetParameter(morph.strength_id, morph_data, DESCFLAGS_GET::NONE))
+				strength = morph_data.GetFloat();
+
+			if (bone_tag->GetParameter(morph.translation_id, morph_data, DESCFLAGS_GET::NONE))
+				current_morph_position += morph_data.GetVector() * strength;
+
+			if (bone_tag->GetParameter(morph.rotation_id, morph_data, DESCFLAGS_GET::NONE))
+				current_morph_rotation += morph_data.GetVector() * strength;
+		}
+
+		const Vector applied_morph_position = bone_tag_node->prev_position_.IsZero()
+			? current_morph_position
+			: bone_tag_node->prev_position_;
+		const Vector applied_morph_rotation = bone_tag_node->prev_rotation_.IsZero()
+			? current_morph_rotation
+			: bone_tag_node->prev_rotation_;
+
+		GeData frozen_position;
+		if (bone_object->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), frozen_position, DESCFLAGS_GET::NONE))
+		{
+			bone_object->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)),
+				frozen_position.GetVector() - applied_morph_position, DESCFLAGS_SET::NONE);
+		}
+		bone_tag_node->prev_position_ = Vector();
+
+		GeData frozen_rotation;
+		if (bone_object->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), frozen_rotation, DESCFLAGS_GET::NONE))
+		{
+			bone_object->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)),
+				frozen_rotation.GetVector() - applied_morph_rotation, DESCFLAGS_SET::NONE);
+		}
+		bone_tag_node->prev_rotation_ = Vector();
+
+		bone_object->SetRelMl(MakeIdentityMatrix());
+		MarkSceneNodeDirty(bone_object);
+		bone_tag_node->ResetEvaluatedAnimationState();
+		bone_tag_node->ClearPlaybackRuntimeOverride();
+		bone_tag_node->last_prephysics_time_ = BaseTime(-1.);
+		bone_tag_node->last_ik_solve_time_ = BaseTime(-1.);
+		bone_tag_node->last_postphysics_ik_solve_time_ = BaseTime(-1.);
+		bone_tag_node->skip_prephysics_scene_write_ = false;
+		bone_tag_node->ik_overridden_this_frame_ = false;
+		bone_tag_node->standalone_ik_chain_dirty_ = true;
+		bone_tag->SetDirty(DIRTYFLAGS::DATA);
+	}
+
+	physics_overrides_.Reset();
+	ResetMorphStrengths();
+}
+
+void MMDBoneManagerObject::ResetMorphStrengths()
+{
+	for (auto& entry : bone_morph_map_)
+	{
+		for (const auto& morph : entry.GetValue())
+			morph.SetStrength(0.0);
+	}
 }
 
 Bool MMDBoneManagerObject::EnsureAllAnimationSlotCount(const Int32 slot_count)

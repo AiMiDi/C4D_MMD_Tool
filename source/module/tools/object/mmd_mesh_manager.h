@@ -73,8 +73,10 @@ public:
 	[[nodiscard]] const maxon::HashSet<String>& GetUVMorphNames() const;
 	Bool SetMorphStrength(const String& morph_name, const Float& strength);
 	Bool GetMorphStrength(const String& morph_name, Float& out_strength) const;
+	void ResetMorphStrengths(BaseObject* op);
 	void RequestMorphDataRefresh();
 	void ForceRefreshMorphData(BaseObject* op);
+	void RefreshWeightBindPoses(BaseObject* op, BaseDocument* doc);
 	Bool LoadPMX(
 		const libmmd::PMXFile& pmx_file,
 		const maxon::BaseArray<BaseObject*>& bone_list,

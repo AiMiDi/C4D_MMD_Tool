@@ -16,5 +16,4 @@ STRINGTABLE OMMDBoneManager
 
 	BONE_MODE_EDIT "Edit mode";
     BONE_MODE_ANIM "Animation mode";
-    BONE_MODE_VMD "VMD mode";
 }

@@ -141,6 +141,30 @@ struct AnimationSlotMetadata
 	Bool CopyTo(AnimationSlotMetadata& dest) const;
 };
 
+struct MorphAnimationKeyframeData
+{
+	String morph_name;
+	Int32 frame = 0;
+	Float32 weight = 0.F;
+
+	Bool Read(HyperFile* hf);
+	Bool Write(HyperFile* hf) SDK2024_Const;
+};
+
+struct MorphAnimationSlotData
+{
+	maxon::BaseArray<MorphAnimationKeyframeData> keyframes;
+
+	MorphAnimationSlotData() = default;
+	MorphAnimationSlotData(const MorphAnimationSlotData& other);
+	MorphAnimationSlotData& operator=(const MorphAnimationSlotData& other);
+	MorphAnimationSlotData(MorphAnimationSlotData&&) noexcept = default;
+	MorphAnimationSlotData& operator=(MorphAnimationSlotData&&) noexcept = default;
+
+	Bool Read(HyperFile* hf);
+	Bool Write(HyperFile* hf) SDK2024_Const;
+};
+
 enum class MMDModelRootDynamicDescriptionType : uint8_t
 {
 	MORPH_GRP,
@@ -176,6 +200,7 @@ class MMDModelManagerObject final : public ObjectData
 	Int32 animation_index_ = -1;
 	BaseContainer animation_items_;
 	maxon::BaseArray<AnimationSlotMetadata> animation_slot_metadata_;
+	maxon::BaseArray<MorphAnimationSlotData> morph_animation_slots_;
 
 	maxon::BaseArray<MMDMaterialData> material_list_;
 	Int32 material_selection_index_ = -1;
@@ -285,6 +310,7 @@ private:
 	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it);
 	void RefreshMorph();
 	void SyncMorphSlidersFromTags();
+	void ClearMorphRuntimeForEdit();
 	Bool ReadMorph(HyperFile* hf);
 #if API_VERSION < 2024000
 	Bool WriteMorph(HyperFile* hf);
@@ -293,6 +319,10 @@ private:
 #endif
 	Bool CopyMorph(MMDModelManagerObject* dst) const;
 	Bool AddMorphStrengthKeyframe(const String& morph_name, const BaseTime& key_time, Float weight);
+	Bool CaptureMorphAnimationSlotFromTracks(Int32 slot_index);
+	Bool RebuildMorphTracksFromAnimationSlot(Int32 slot_index);
+	Bool EnsureMorphAnimationSlotCount(Int32 slot_count);
+	void ClearMorphAnimationSlots();
 	Bool DeleteVMDAnimation();
 	Bool BuildStandaloneIKManager();
 	Bool BuildStandalonePhysics();
@@ -303,6 +333,8 @@ private:
 	void ResetStandalonePhysics();
 	void StepStandalonePhysics(Float elapsed);
 	void ApplyPhysicsResultsToBoneObjects() const;
+	void CommitEditModeBindState(BaseDocument* doc);
+	void RestoreBindStateForEdit(BaseDocument* doc);
 	Bool IsPhysicsEnabled(const BaseObject* op) const;
 	Bool ShouldResetPhysicsOnSeek(const BaseObject* op) const;
 	Vector GetPhysicsGravity(const BaseObject* op) const;

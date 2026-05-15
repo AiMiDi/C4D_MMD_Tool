@@ -47,7 +47,7 @@ namespace
 
 	Bool RegisterMMDModelManager()
 	{
-		return RegisterObjectPlugin(g_mmd_model_manager_object_id, GeLoadString(IDS_O_MMD_MODEL_MANAGER), OBJECT_CALL_ADDEXECUTION, MMDModelManagerObject::Alloc, "OMMDModelManager"_s, AutoBitmap(1021433), 2);
+		return RegisterObjectPlugin(g_mmd_model_manager_object_id, GeLoadString(IDS_O_MMD_MODEL_MANAGER), OBJECT_CALL_ADDEXECUTION, MMDModelManagerObject::Alloc, "OMMDModelManager"_s, AutoBitmap(1021433), 3);
 	}
 
 	Bool RegisterMMDBoneManager()

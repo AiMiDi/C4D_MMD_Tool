@@ -80,5 +80,8 @@ public:
 
 	Bool BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager* physics_manager, const std::function<libmmd::IMMDNode*(Int32)>& get_node);
 	void ReconnectRigidBodyPointers(libmmd::MMDPhysicsManager* physics_manager);
+	void SetAllRigidMode(Int32 mode, BaseObject* rigid_manager_object = nullptr);
+	void CommitEditorTransforms(BaseObject* rigid_manager_object);
+	void RestoreEditorTransforms(BaseObject* rigid_manager_object);
 };
 
