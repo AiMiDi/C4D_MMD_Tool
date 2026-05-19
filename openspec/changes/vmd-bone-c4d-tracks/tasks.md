@@ -261,3 +261,30 @@
 - [ ] 14.8 验证多槽切换：两段 VMD 导入 → 列表切换 → 骨骼姿态与时间与预期一致
 
 
+
+## 15. C4D 插件 — MMD 骨骼控制层
+
+- [x] 15.1 新增 `utils/mmd_bone_control_util.*`，集中实现控制器创建/刷新、控制器姿态同步、控制器 delta 到骨骼空间转换、控制器归零。
+
+- [x] 15.2 在骨骼管理器描述中新增 `BONE_CONTROLS_CREATE_BUTTON` 和 `BONE_DISPLAY_TYPE_CONTROLS`；在骨骼 tag 描述中新增 `PMX_BONE_CONTROL_LINK`。
+
+- [x] 15.3 `Create/Refresh Controls` 仅为 `PMX_BONE_LOCAL_IS_COORDINATE` 或 `PMX_BONE_IS_FIXED_AXIS` 骨骼创建控制器；移除通用骨架白名单 / `GetCommonControlBones()` 创建逻辑。
+
+- [x] 15.4 控制器按被驱动骨骼的同级层级放置，不创建旧实验性的平铺 `MMD Controls` 控制器树；刷新只补缺、重连、重命名和更新形状，不删除用户已有控制器 CTrack。
+
+- [x] 15.5 控制器命名跟随骨骼显示语言：优先使用当前语言名，fallback 到另一语言名，再 fallback 到 `bone_<index>_ctrl`。
+
+- [x] 15.6 控制器平面垂直于 fixed axis / PMX local X / 骨骼尾点方向，local-coordinate 骨骼用 PMX local Z 作为参考方向；圆形控制器使用 48 个点并按层级缩放直径，fixed-axis 控制器使用菱形。
+
+- [x] 15.7 控制器 Protection tag 锁定 scale；按 `PMX_BONE_TRANSLATABLE` / `PMX_BONE_ROTATABLE` 锁定平移和旋转；fixed-axis 旋转在运行时投影到固定轴。
+
+- [x] 15.8 `MMDModelManagerObject::Execute` 在动画模式下监听控制器相对矩阵 checksum / active delta，使同一帧控制器调整能驱动骨骼重新评估。
+
+- [x] 15.9 `MMDBoneTag::ApplyActiveAnimation` 在骨骼动画值之后、付与/IK/物理之前叠加控制器 delta；平移/旋转分别受 PMX 可移动/可旋转标志约束。
+
+- [x] 15.10 原骨骼「+」关键帧写入控制器调整后的动画值；同帧覆盖关键帧；写入成功后重置控制器 relative PRS 并刷新当前姿态，避免二次叠加。
+
+- [x] 15.11 VMD 导入完成后自动把骨骼管理器显示模式切到“不显示”；切到编辑模式自动“全部”；从编辑切回动画模式恢复“不显示”；`Controls` 显示模式只显示控制器。
+
+- [x] 15.12 构建验证：`cmake --build --preset workflow-dev`。
+

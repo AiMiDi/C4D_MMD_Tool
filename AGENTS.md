@@ -8,6 +8,7 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 
 - `source/` is the active plugin source tree. `old/` is a legacy archive; do not modify it for normal work.
 - `res/S24_up/` is the current plugin resource tree. Older SDK resource layouts may mirror or adapt these files.
+- `docs/dev/import-flow.md`, `docs/dev/runtime-flow.md`, and `docs/dev/anim-flow-debug.md` are the current deep dives for PMX/VMD import, runtime execution, and animation/IK/physics diagnostics.
 - All `sdk_*` trees share the same maintained `source/` and `res/` content. `sdk_2026/` is the primary SDK project; `sdk_r20` through `sdk_2025` are compatibility SDK projects.
 - Each `sdk_*/plugins/mmdtool/project/CMakeLists.txt` should stay a thin SDK wrapper over the common CMake layer in `cmake/`.
 - `projectdefinition.txt` is reference metadata when a custom project `CMakeLists.txt` exists; do not treat it as the active build source.
@@ -19,7 +20,7 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
   - `source/module/tools/loader/vmd_loader.*` for VMD loading.
   - `source/module/tools/material/` for standard and renderer-specific material handling.
   - `source/module/ui/` for dialogs and UI flows.
-  - `source/utils/` for header-only helpers.
+  - `source/utils/` for shared helpers; most are header-only, but runtime utilities can have `.cpp` implementations.
 
 ## Build And Validation
 
@@ -93,7 +94,8 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 ## Capturing Plugin Diagnostic Logs
 
 - Plugin code uses `DebugOutput(maxon::OUTPUT::DIAGNOSTIC, ...)` and the `CMT_ANIM_FLOW_LOG` / `CMT_ANIM_FLOW_LOG_BONE` macros from `source/utils/cmt_anim_flow_debug.hpp`. These write to C4D's console, which is only visible when `g_console=true` is passed as a launch argument.
-- Directly launching C4D via `Start-Process` does not capture console output. Use LLDB to launch C4D so that stdout/stderr (including `g_console=true` output) streams into the terminal and can be read back.
+- Use `docs/dev/anim-flow-debug.md` as the reference for animation/IK/physics diagnostics. It documents `CMT_ANIM_FLOW_DEBUG`, `CMT_ANIM_FLOW_BONE`, `CMT_INITIAL_STATE_DEBUG`, and the expected `[CMT][AnimFlow]` log fields.
+- For quick interactive checks, launch Cinema 4D normally with `g_console=true` and the diagnostic environment variables set. Directly launching C4D via `Start-Process` does not capture console output; for terminal log capture, use the LLDB command script below so stdout/stderr can be read back.
 - The repo keeps a reusable LLDB command script at `_lldb_c4d_run.txt`. Launch with:
   ```
   lldb -s D:\code\C4D_MMD_Tool\_lldb_c4d_run.txt -- "D:\Program Files\Maxon Cinema 4D 2026\Cinema 4D.exe" 2>&1
@@ -105,5 +107,7 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 
 ## Working Notes
 
+- For import/runtime questions, start from `docs/dev/import-flow.md` or `docs/dev/runtime-flow.md` before broad code searches. For EDIT/ANIM mode regressions, `MODEL_MODE` changes are explicit state boundaries: EDIT -> ANIM commits bind state, and ANIM -> EDIT restores bind state for editing.
 - `rg.exe` can fail with `Access is denied` in some PowerShell sessions on this machine. Fall back to `Select-String`, `Get-ChildItem`, or `git grep` quickly.
+- If Git reports dubious ownership under the Codex sandbox user, use per-command inspection such as `git -c safe.directory=D:/code/C4D_MMD_Tool status --short`; do not change global Git config unless the user asks.
 - The worktree may contain unrelated local edits. Inspect `git status --short` before changing files and do not revert user changes unless explicitly asked.

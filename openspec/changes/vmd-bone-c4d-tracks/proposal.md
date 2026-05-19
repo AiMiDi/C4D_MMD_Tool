@@ -30,6 +30,8 @@
 
 - **`MODEL_ANIM_LIST` 与多段动画**：`MODEL_ANIM_LIST` 表示 **活动动画槽**；每槽对应一次（或合并后的）VMD 导入。骨骼关键帧真值按槽存于各骨骼 Tag，上层仅保留 **槽级元数据**（至少包含显示名、最大帧范围）供列表 UI、删除和文档时间范围使用。切换列表时广播活动槽索引，骨骼 Tag 仅对当前槽做插值；文档时间范围由当前槽关键帧范围或槽元数据计算，不再依赖 `VMDAnimation::GetMaxKeyTime()`（见 design D10）。
 
+- **MMD 骨骼控制层**：在骨骼管理器上提供 `Create/Refresh Controls`，为带 PMX local coordinate 或 fixed axis 的骨骼创建可视化 spline 控制器。控制器与被驱动骨骼同级放置，通过骨骼 Tag 的 `PMX_BONE_CONTROL_LINK` 与骨骼绑定；不使用 C4D Character Builder，不保留旧实验性的平铺 `MMD Controls` 控制器树，也不再按通用骨架白名单创建控制器。控制器只作为编辑/预览/写关键帧工具，VMD 导出仍读取骨骼动画槽数据。
+
 - **模型管理器重构**：`MMDModelManagerObject` 不再持有 `mmd_model_` / `PMXModel`，也不再保留旧的 `RebuildRuntime` 系列路径；改为直接拥有独立的 `MMDIKManager` 与 `MMDPhysicsManager`。`VMDAnimation` 的骨骼求值使用、`MMDNodeManager`、`PMXNode`、`SetMMDModel` 及其相关绑定路径全部移除；`LoadPMX` 和场景恢复都只重建 standalone IK/Physics 运行时。
 
 - **骨骼管理器重构**：`MMDBoneManagerObject` 移除 `mmd_node_manager_` 依赖和 `ReconnectNodePointers`，骨骼查找纯用 `bone_list_`。与此配套，骨骼索引的权威来源也需要从 `mmd_node_->GetIndex()` 切换到 Tag 持久化的 `PMX_BONE_INDEX` / 索引缓存，避免去掉 `mmd_node_` 后 `GetBoneIndex()` 退化为 `-1`。
@@ -45,6 +47,8 @@
 ### New Capabilities
 
 - `bone-c4d-track-animation`：VMD 导入将骨骼关键帧与插值数据写入骨骼 Tag 内部结构，并在 SplineData /「下一个关键帧」上建 CTrack；骨骼 Tag 用 VMD 贝塞尔插值自行评估动画，支持时间线与曲线编辑
+
+- `mmd-bone-controls`：骨骼管理器创建/刷新 PMX local/fixed-axis 骨骼的 spline 控制器，控制器 delta 在骨骼动画评估后、付与/IK/物理前叠加；用户按原骨骼关键帧按钮写入调整后的骨骼动画值并自动归零控制器
 
 - `libmmd-vmd-interpolation-module`：从 VMDAnimation 中独立出的 VMD 贝塞尔插值算法模块，包含 VMDBezier、字节编解码、骨骼/morph 插值纯函数
 
@@ -74,9 +78,9 @@
 
 - **libMMD 源文件**：`MMDPhysics.h/cpp`（外部 MotionState、`Create(..., IMMDNode*)`、`IMMDNode::GetInitialGlobalTransform`）、`MMDIkSolver.h/cpp`（`IMMDNode`）、`MMDNode.h`（实现接口）、`IMMDNode.h`、`VMDAnimation.h/cpp`（插值算法提取）、新增 `VMDInterpolation.h/cpp`
 
-- **插件源文件**：`mmd_bone.h/cpp`（动画 UI、内部关键帧数据、VMD 评估、付与、IK）、`mmd_bone_manager.h/cpp`（移除节点管理器依赖）、`mmd_model_manager.h/cpp`（移除 `mmd_model_`、改为 standalone IK/Physics 管理器、VMD 导入/Execute/运行时初始化重构）、`CMTSceneManager.cpp`（日志适配）
+- **插件源文件**：`mmd_bone.h/cpp`（动画 UI、内部关键帧数据、VMD 评估、付与、IK、控制器 delta 写关键帧）、`mmd_bone_manager.h/cpp`（移除节点管理器依赖，控制器创建/显示模式同步）、`mmd_model_manager.h/cpp`（移除 `mmd_model_`、改为 standalone IK/Physics 管理器、VMD 导入/Execute/运行时初始化重构、控制器同帧刷新）、`utils/mmd_bone_control_util.*`（控制器生成、同步、delta 计算）、`CMTSceneManager.cpp`（日志适配）
 
-- **资源文件**：`TMMDBone.res`/`TMMDBone.h`（新增动画组 UI 描述）；`OMMDModelManager` / `OMMDBoneManager` / `OMMDMeshManager` / `OMMDJointManager` / `OMMDRigidManager` 的 `.res`/`.h`/`.str`（模式枚举合并，去掉 `*_MODE_VMD`）
+- **资源文件**：`TMMDBone.res`/`TMMDBone.h`（新增动画组 UI 描述与 `PMX_BONE_CONTROL_LINK`）；`OMMDBoneManager.res`/`.h`/`.str`（新增 `Create/Refresh Controls` 与 `Controls` 显示模式）；`OMMDModelManager` / `OMMDBoneManager` / `OMMDMeshManager` / `OMMDJointManager` / `OMMDRigidManager` 的 `.res`/`.h`/`.str`（模式枚举合并，去掉 `*_MODE_VMD`）
 
 - **依赖**：libMMD 接口变更，bullet3 无变更
 

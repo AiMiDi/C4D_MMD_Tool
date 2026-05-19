@@ -156,6 +156,106 @@ Description resources SHALL NOT expose a separate `*_MODE_VMD` value alongside `
 
 
 
+### Requirement: MMD bone controls creation and persistence
+
+The system SHALL provide a bone-manager-owned MMD control layer for authoring and previewing bone animation deltas. Controls SHALL be created only for bones whose `MMDBoneTag` has `PMX_BONE_LOCAL_IS_COORDINATE` or `PMX_BONE_IS_FIXED_AXIS` enabled. The system SHALL NOT create controls from a common MMD skeleton whitelist or alias table. Each control SHALL be linked from the driven bone tag through `PMX_BONE_CONTROL_LINK`, and the link SHALL be persisted by Cinema 4D's parameter storage.
+
+#### Scenario: Refresh creates only eligible controls
+
+- **WHEN** the user clicks `Create/Refresh Controls`
+
+- **THEN** the system SHALL create or reconnect controls for bones with PMX local coordinates or fixed axes
+
+- **THEN** the system SHALL NOT create controls for ordinary bones that only match common MMD bone names
+
+- **THEN** ineligible bones SHALL have stale `PMX_BONE_CONTROL_LINK` values cleared
+
+#### Scenario: Control placement follows bone hierarchy
+
+- **WHEN** a control is created for a bone with a parent object
+
+- **THEN** the control SHALL be inserted as a sibling under the driven bone's parent, not as a child of the driven bone
+
+- **THEN** refreshing controls SHALL NOT delete existing user animation tracks on managed control objects
+
+
+
+### Requirement: MMD bone controls orientation, constraints, and visual display
+
+Control splines SHALL be oriented so their plane is perpendicular to the PMX fixed axis, PMX local X axis, or a stable fallback bone/tail direction. Local-coordinate bones SHALL use PMX local Z as the control plane reference direction. Control scale SHALL be ignored at runtime. Fixed-axis control rotation SHALL be projected to the bone's fixed axis.
+
+#### Scenario: Control axis and shape are derived from bone data
+
+- **WHEN** a bone has `PMX_BONE_IS_FIXED_AXIS`
+
+- **THEN** its control SHALL use the fixed axis as the effective rotation axis
+
+- **THEN** its visual control shape SHOULD distinguish it from a regular local-coordinate control
+
+- **WHEN** a bone has `PMX_BONE_LOCAL_IS_COORDINATE`
+
+- **THEN** its control SHALL use PMX local X as the plane normal and PMX local Z as the reference direction
+
+#### Scenario: Bone manager control-only display mode
+
+- **WHEN** the user selects the bone manager `Controls` display type
+
+- **THEN** bone/joint visual display SHALL be hidden
+
+- **THEN** linked control objects SHALL remain visible
+
+
+
+### Requirement: MMD bone controls runtime delta and keyframe writeback
+
+In animation mode, a control object's relative PRS SHALL be interpreted as an additive delta on top of the active bone animation value. The delta SHALL be applied before append/inherit, IK, and physics processing. Translation SHALL only affect bones with `PMX_BONE_TRANSLATABLE`; rotation SHALL only affect bones with `PMX_BONE_ROTATABLE`; scale SHALL always be ignored.
+
+#### Scenario: Control delta drives animation in the same frame
+
+- **WHEN** the model is in `MODEL_MODE_ANIM` and a user moves or rotates an eligible bone control
+
+- **THEN** `MMDModelManagerObject::Execute` SHALL re-evaluate the bone pipeline even if the document time has not changed
+
+- **THEN** the driven bone animation value SHALL include the control delta before append/inherit, IK, and physics are evaluated
+
+#### Scenario: Add keyframe writes adjusted animation value
+
+- **WHEN** the user adjusts a bone control and clicks the bone animation add-key button
+
+- **THEN** the target bone's keyframe SHALL store the current animation value plus the control delta
+
+- **THEN** an existing keyframe at the same VMD frame SHALL be overwritten
+
+- **THEN** the control relative PRS SHALL be reset to identity after the keyframe is written
+
+- **THEN** the current pose SHALL remain stable after the reset
+
+
+
+### Requirement: Bone manager display mode auto-switching
+
+After VMD motion import or when switching from edit mode back to animation mode, the bone manager display type SHALL automatically switch to `BONE_DISPLAY_TYPE_OFF`. When switching to edit mode, it SHALL automatically switch to `BONE_DISPLAY_TYPE_ON`.
+
+#### Scenario: VMD import hides bone manager display
+
+- **WHEN** VMD motion import completes
+
+- **THEN** the model SHALL be in animation mode
+
+- **THEN** the linked bone manager display type SHALL be `BONE_DISPLAY_TYPE_OFF`
+
+#### Scenario: Mode switch updates bone manager display
+
+- **WHEN** the user switches the model to edit mode
+
+- **THEN** the linked bone manager display type SHALL be `BONE_DISPLAY_TYPE_ON`
+
+- **WHEN** the user switches the model back to animation mode
+
+- **THEN** the linked bone manager display type SHALL be `BONE_DISPLAY_TYPE_OFF`
+
+
+
 ## REMOVED Requirements
 
 

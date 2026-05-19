@@ -299,6 +299,62 @@ libMMD 中 `VMDBezier`（贝塞尔插值）、`MMDIkSolver`（IK 求解）、`MM
 
 
 
+### D11: MMD 骨骼控制层
+
+**选择**：控制层由骨骼管理器直接管理，不接入 C4D Character Builder。控制器是 C4D spline 对象，作为被驱动骨骼的同级对象插入到骨骼层级中；若骨骼没有父对象，则回退挂到 bone manager 下。旧实验方案中的独立平铺 `MMD Controls` 根节点不再作为控制层结构。
+
+**创建条件**：
+
+- 仅当骨骼 tag 的 `PMX_BONE_LOCAL_IS_COORDINATE` 或 `PMX_BONE_IS_FIXED_AXIS` 为 true 时创建控制器。
+- 不再使用通用 MMD 骨架白名单，也不按日文名/alias 强制为普通骨骼创建控制器。
+- `Create/Refresh Controls` 只补缺、重连链接、重命名插件管理的控制器和刷新形状，不删除已有用户控制器动画轨道；不符合创建条件的骨骼会清空其 `PMX_BONE_CONTROL_LINK`。
+
+**参数与持久化**：
+
+- 骨骼 tag 暴露 `PMX_BONE_CONTROL_LINK`，由 C4D 参数系统保存链接。
+- bone manager 内部保存 `controls_root_link_`，当前指向 bone manager 对象本身，用于同步控制器归属和过滤插件管理对象；这需要提升 bone manager object data level。
+- 控制器不是 VMD 导出层；VMD 导出仍只读取骨骼动画槽、morph CTrack 和 IK 状态，不直接读取控制器 CTrack。
+
+**命名**：
+
+- 控制器名称跟随骨骼当前显示名设置：`PMX_BONE_NAME_IS_LOCAL` 时优先用 `PMX_BONE_NAME_LOCAL + "_ctrl"`；英文显示时优先用 `PMX_BONE_NAME_UNIVERSAL + "_ctrl"`。
+- 所选语言名为空时 fallback 到另一语言名；两者均为空时使用 `bone_<index>_ctrl`。
+- 不再维护通用骨架 alias 映射，因此不会因为“センター -> pelvis”之类表自动改名。
+
+**位置、轴与形状**：
+
+- 控制器基准矩阵取被驱动骨骼当前全局位置，平面法线优先使用 fixed axis，其次使用 PMX local X；两者都没有时使用骨骼尾点/子骨骼方向作为 fallback。
+- local coordinate 骨骼使用 PMX local Z 作为控制器平面参考方向；其他骨骼使用骨骼当前 basis 的稳定参考轴。
+- fixed-axis 控制器使用菱形 spline，local-coordinate 控制器使用圆形 spline；控制器半径按骨骼层级轻微缩放，并按左右骨骼名称着色。
+- spline 采样点数应足够平滑但保持轻量；当前圆形控制器使用 48 个点，避免低采样环在视口中显得破碎。
+
+**约束**：
+
+- 控制器自动附加 Protection tag。
+- 非可移动骨骼锁定 P；非可旋转骨骼锁定 R；所有控制器锁定 S。
+- fixed-axis 骨骼只允许围绕控制器局部法线的 twist 作为有效旋转，运行时还会将控制器旋转投影到 `PMX_BONE_FIXED_AXIS`。
+
+**运行时叠加**：
+
+- `MMDModelManagerObject::Execute` 在动画模式下除时间变化外，还监听控制器相对矩阵 checksum 和 active control delta；同一帧用户移动/旋转控制器也会触发骨骼重新评估。
+- `MMDBoneTag::ApplyActiveAnimation` 先求当前活动动画槽的骨骼动画值，再把控制器相对 rest 的平移/旋转 delta 转换到骨骼空间叠加，然后继续付与、IK、物理流程。
+- 平移仅在 `PMX_BONE_TRANSLATABLE` 为 true 时叠加；旋转仅在 `PMX_BONE_ROTATABLE` 为 true 时叠加；scale 永远忽略。
+- 当控制器相对矩阵为 identity 时，控制器跟随当前骨骼动画姿态同步，以便 VMD 导入或播放后控制环贴合骨骼位置。
+
+**关键帧写入**：
+
+- 原骨骼动画组的「+」仍是唯一写关键帧入口。
+- 写入前先应用一次当前动画 + 控制器 delta，写入 `evaluated_animation_translation_` / `evaluated_animation_rotation_`，即“当前骨骼动画值 + 控制器调整值”，不写 post-IK/post-physics 结果。
+- 同帧已有关键帧时覆盖；写入成功后重置该骨骼控制器 relative PRS 为 identity，并立即重新评估当前骨骼，避免同一调整被二次叠加。
+
+**显示模式联动**：
+
+- 骨骼管理器新增 `BONE_DISPLAY_TYPE_CONTROLS`，该模式隐藏 joint/bone 可视化，只显示控制器。
+- VMD 导入完成后模型切入动画模式，并自动把骨骼管理器显示模式设为 `BONE_DISPLAY_TYPE_OFF`。
+- 切到编辑模式时自动恢复 `BONE_DISPLAY_TYPE_ON`；从编辑模式切回动画模式时恢复 `BONE_DISPLAY_TYPE_OFF`。
+
+
+
 ## Risks / Trade-offs
 
 
@@ -320,5 +376,7 @@ libMMD 中 `VMDBezier`（贝塞尔插值）、`MMDIkSolver`（IK 求解）、`MM
 - **[权衡] libMMD 接口变更**：`IMMDNode` 增加 `GetInitialGlobalTransform` 与物理 `Create` 重载。→ 缓解：保留 `MMDNode*` 旧重载/原有 `MMDIkSolver` 用法；外部绑定通过 `IMMDNode*` 与 IK 共用适配器。
 
 - **[风险] 物理回调线程安全**：C4D 执行管线可能多线程。→ 缓解：物理在模型管理器单一 Execute 中串行；回调仅在文档执行线程访问场景（遵循 SDK 约束）。
+
+- **[风险] 控制器与骨骼层级互相影响**：控制器作为骨骼同级对象参与对象树，刷新时必须避免把控制器移动到自身后代、避免删除用户动画，并在骨骼层级变化后重新同步链接。→ 缓解：仅移动插件管理的控制器，使用 `PMX_BONE_CONTROL_LINK` 和 root descendant 检查确定管理边界。
 
 
