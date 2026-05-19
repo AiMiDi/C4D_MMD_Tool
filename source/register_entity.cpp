@@ -52,7 +52,7 @@ namespace
 
 	Bool RegisterMMDBoneManager()
 	{
-		return RegisterObjectPlugin(g_mmd_bone_manager_object_id, GeLoadString(IDS_O_MMD_BONE_MANAGER), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, MMDBoneManagerObject::Alloc, "OMMDBoneManager"_s, AutoBitmap("OMMDBoneManager.png"_s), 0);
+		return RegisterObjectPlugin(g_mmd_bone_manager_object_id, GeLoadString(IDS_O_MMD_BONE_MANAGER), OBJECT_CALL_ADDEXECUTION | PLUGINFLAG_HIDEPLUGINMENU, MMDBoneManagerObject::Alloc, "OMMDBoneManager"_s, AutoBitmap("OMMDBoneManager.png"_s), 1);
 	}
 
 	Bool RegisterMMDMeshManager()

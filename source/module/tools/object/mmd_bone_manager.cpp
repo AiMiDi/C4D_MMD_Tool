@@ -21,11 +21,13 @@ Description:	DESC
 #include "description/TMMDBone.h"
 #include "maxon/queue.h"
 #include "module/tools/tag/mmd_bone.h"
+#include "utils/mmd_bone_control_util.hpp"
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/PMXModel.h"
 
 
 #include <tuple>
+#include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -387,6 +389,8 @@ SDK2024_CopyTo(MMDBoneManagerObject)
 	};
 	auto const dest_object = reinterpret_cast<MMDBoneManagerObject*>(dest);
 	dest_object->bone_name_index_ = bone_name_index_;
+	if (controls_root_link_)
+		controls_root_link_->CopyTo(dest_object->controls_root_link_, flags, trn);
 	dest_object->append_execution_order_dirty_ = true;
 	dest_object->is_refreshing_append_execution_order_ = false;
 	for (const auto& entry : bone_list_)
@@ -404,6 +408,8 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		return false;
 	};
 	IOReadField(bone_name_index_);
+	if (level >= 1)
+		IOReadField(controls_root_link_);
 	if (!io_util::ReadHashMap(hf, bone_list_))
 	{
 		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] BoneManager::Read: FAILED at bone_list_");
@@ -429,6 +435,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 SDK2024_Write(MMDBoneManagerObject)
 {
 	IOWriteField(bone_name_index_);
+	IOWriteField(controls_root_link_);
 	if (!io_util::WriteHashMap(hf, bone_list_))
 		return false;
 	return SUPER::Write(node, hf);
@@ -499,6 +506,14 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 			break;
 		}
+		case BONE_DISPLAY_TYPE_CONTROLS:
+		{
+			op->SetEditorMode(MODE_UNDEF);
+			op->SetRenderMode(MODE_UNDEF);
+			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_CONTROLS };
+			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
+			break;
+		}
 		default:
 			break;
 		}
@@ -506,6 +521,10 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 	case BONE_MODE:
 	{
 		const GeData normalized_mode(NormalizeBoneMode(t_data.GetInt32()));
+		if (normalized_mode.GetInt32() == BONE_MODE_EDIT)
+			SetBoneDisplayType(BONE_DISPLAY_TYPE_ON, op);
+		else if (normalized_mode.GetInt32() == BONE_MODE_ANIM)
+			SetBoneDisplayType(BONE_DISPLAY_TYPE_OFF, op);
 		MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, normalized_mode.GetInt32());
 		node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 		return SUPER::SetDParameter(node, id, normalized_mode, flags);
@@ -518,7 +537,13 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 
 void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, void* data)
 {
-	if (const auto description_command = static_cast<DescriptionCommand*>(data); description_command->_descId[0].id == ADD_BONE_BUTTON)
+	const auto description_command = static_cast<DescriptionCommand*>(data);
+	if (!description_command)
+		return;
+
+	switch (description_command->_descId[0].id)
+	{
+	case ADD_BONE_BUTTON:
 	{
 		BaseObject* new_bone = BaseObject::Alloc(Ojoint);
 		if (!new_bone)
@@ -542,7 +567,21 @@ void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, voi
 		new_bone_node->RefreshColor();
 		new_bone->InsertUnder(node);
 		SynchronizeBoneHierarchy(reinterpret_cast<BaseObject*>(node));
+		break;
 	}
+	case BONE_CONTROLS_CREATE_BUTTON:
+	{
+		CreateOrRefreshControls(reinterpret_cast<BaseObject*>(node));
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+Bool MMDBoneManagerObject::CreateOrRefreshControls(BaseObject* bone_manager_object)
+{
+	return mmd_bone_control_util::CreateOrRefreshControls(*this, bone_manager_object);
 }
 
 bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
@@ -1102,7 +1141,8 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 
 		// set tail use index
 		const bool is_tail_use_index = static_cast<uint16_t>(mmd_bone.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::TargetShowMode);
-		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_IS_INDEX)), is_tail_use_index, DESCFLAGS_SET::NONE);
+		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_INDEXED_TAIL_POSITION)),
+			is_tail_use_index ? PMX_BONE_TAIL_IS_INDEX : PMX_BONE_TAIL_IS_POSITION, DESCFLAGS_SET::NONE);
 
 		if(is_tail_use_index)
 		{
@@ -1660,6 +1700,20 @@ void MMDBoneManagerObject::SetAllBoneMode(const Int32 mode, BaseObject* bone_man
 		bone_tag->HandleBoneModeChange(normalized_mode);
 	}
 
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (GeIsMainThread())
+		EventAdd();
+}
+
+void MMDBoneManagerObject::SetBoneDisplayType(const Int32 display_type, BaseObject* bone_manager_object)
+{
+	if (!bone_manager_object)
+		bone_manager_object = reinterpret_cast<BaseObject*>(Get());
+	if (!bone_manager_object)
+		return;
+
+	bone_manager_object->SetParameter(ConstDescID(DescLevel(BONE_DISPLAY_TYPE)), display_type, DESCFLAGS_SET::NONE);
+	bone_manager_object->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA);
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 	if (GeIsMainThread())
 		EventAdd();

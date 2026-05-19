@@ -226,6 +226,7 @@ class MMDModelManagerObject final : public ObjectData
 	BaseTime prev_time_{-1};
 	Float32 fps_{ 30.f };
 	Bool is_animation_initialized_{ false };
+	UInt32 control_state_checksum_{ 0 };
 	maxon::Synchronized<Bool> is_runtime_initialized_;
 
 	MMDModelManagerObject();

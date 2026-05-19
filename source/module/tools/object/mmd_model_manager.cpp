@@ -28,6 +28,7 @@ Description:	MMD model object
 #include "description/TMMDBone.h"
 #include "maxon/queue.h"
 #include "utils/filename_util.hpp"
+#include "utils/mmd_bone_control_util.hpp"
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
@@ -1596,7 +1597,13 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 	if (model_mode_ == MODEL_MODE_ANIM)
 	{
-		if (const auto now_time = doc->GetTime(); prev_time_ != now_time)
+		const auto now_time = doc->GetTime();
+		bone_manager_data_ = GetBoneManagerData();
+		const Bool time_changed = prev_time_ != now_time;
+		const UInt32 control_state_checksum = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_) : 0;
+		const Bool control_state_changed = control_state_checksum != control_state_checksum_;
+		const Bool control_delta_active = bone_manager_data_ && mmd_bone_control_util::HasActiveControlDelta(*bone_manager_data_);
+		if (time_changed || control_state_changed || control_delta_active)
 		{
 			fps_ = static_cast<Float32>(doc->GetFps());
 
@@ -1616,18 +1623,25 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			const Bool physics_enabled = IsPhysicsEnabled(op);
 			if (physics_enabled)
 			{
-				if (needs_physics_reset)
-					ResetStandalonePhysics();
-				else
-					StepStandalonePhysics(1.f / fps_);
-				is_animation_initialized_ = true;
+				if (time_changed || !is_animation_initialized_)
+				{
+					if (needs_physics_reset)
+						ResetStandalonePhysics();
+					else
+						StepStandalonePhysics(1.f / fps_);
+					is_animation_initialized_ = true;
+				}
 				RunLayeredBonePass(doc, true);
 			}
 			else
 			{
 				is_animation_initialized_ = false;
 			}
-			prev_time_ = now_time;
+			if (bone_manager_data_)
+				mmd_bone_control_util::SyncControlsToCurrentPose(*bone_manager_data_);
+			control_state_checksum_ = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_) : 0;
+			if (time_changed)
+				prev_time_ = now_time;
 		}
 	}
 	return EXECUTIONRESULT::OK;
@@ -2775,6 +2789,9 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 	if (!EnsureStandaloneRuntimeManagers())
 		return false;
 
+	if (setting.import_bone && bone_manager_data_)
+		bone_manager_data_->CreateOrRefreshControls(io_util::ResolveObjectLink(bone_manager_));
+
 	ImportDisplayFrames(pmx_file);
 
 	if (setting.import_expression)
@@ -3128,8 +3145,10 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	node->SetParameter(ConstDescID(DescLevel(MODEL_MODE)), MODEL_MODE_ANIM, DESCFLAGS_SET::NONE);
 	if (bone_manager_data_)
 	{
+		BaseObject* const bone_manager_object = io_util::ResolveObjectLink(bone_manager_);
 		bone_manager_data_->SetAllActiveAnimationSlot(animation_index_);
-		bone_manager_data_->SetAllBoneMode(BONE_MODE_ANIM);
+		bone_manager_data_->SetAllBoneMode(BONE_MODE_ANIM, bone_manager_object);
+		bone_manager_data_->SetBoneDisplayType(BONE_DISPLAY_TYPE_OFF, bone_manager_object);
 	}
 	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
 
@@ -4142,7 +4161,14 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			MMDModelManagerObjectMsg msg(MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE, nullptr, model_mode_);
 			node->MultiMessage(MULTIMSG_ROUTE::DOWN, g_mmd_model_manager_object_id, &msg);
 			if (bone_manager_data_)
-				bone_manager_data_->SetAllBoneMode(model_mode_, io_util::ResolveObjectLink(bone_manager_));
+			{
+				BaseObject* const bone_manager_object = io_util::ResolveObjectLink(bone_manager_);
+				bone_manager_data_->SetAllBoneMode(model_mode_, bone_manager_object);
+				if (model_mode_ == MODEL_MODE_EDIT)
+					bone_manager_data_->SetBoneDisplayType(BONE_DISPLAY_TYPE_ON, bone_manager_object);
+				else if (model_mode_ == MODEL_MODE_ANIM)
+					bone_manager_data_->SetBoneDisplayType(BONE_DISPLAY_TYPE_OFF, bone_manager_object);
+			}
 			if (rigid_manager_data_ || GetRigidManagerData())
 				rigid_manager_data_->SetAllRigidMode(model_mode_, io_util::ResolveObjectLink(rigid_manager_));
 			if (joint_manager_data_ || GetJointManagerData())

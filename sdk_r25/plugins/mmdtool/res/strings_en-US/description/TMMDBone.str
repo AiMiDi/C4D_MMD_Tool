@@ -49,6 +49,7 @@ STRINGTABLE TMMDBone
 	PMX_BONE_LOCAL_IS_COORDINATE "Enable local coordinate";
 	PMX_BONE_LOCAL_X "Bone local X";
 	PMX_BONE_LOCAL_Z "Bone local Z";
+	PMX_BONE_CONTROL_LINK "Control";
 
 	PMX_BONE_IK_GRP "IK";
 	PMX_BONE_IK_TARGET_BONE_INDEX "Target";

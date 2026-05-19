@@ -194,6 +194,10 @@ CONTAINER TMMDBone {
 				ANIM OFF;
 			}
 		}
+
+		LINK PMX_BONE_CONTROL_LINK {
+			ANIM OFF;
+		}
 	}
 
 	GROUP PMX_BONE_IK_GRP {

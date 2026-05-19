@@ -19,6 +19,15 @@ Description:	DESC
 #include "utils/morph_ui_data_util.hpp"
 
 class MMDModelManagerObject;
+class MMDBoneManagerObject;
+
+namespace mmd_bone_control_util
+{
+	Bool CreateOrRefreshControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
+	Bool HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
+	UInt32 GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
+	void SyncControlsToCurrentPose(MMDBoneManagerObject& bone_manager);
+}
 
 namespace CMTToolsSetting
 {
@@ -62,6 +71,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 {
 	Int32 bone_name_index_ = 0;
 	AutoAlloc<BaseLink> model_manager_;
+	AutoAlloc<BaseLink> controls_root_link_;
 
 	maxon::HashMap<String, maxon::PointerArray<MorphUIData>> bone_morph_map_;
 
@@ -89,6 +99,10 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	};
 	maxon::HashMap<Int32, PhysicsOverrideState> physics_overrides_;
 	friend MMDModelManagerObject;
+	friend Bool mmd_bone_control_util::CreateOrRefreshControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
+	friend Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
+	friend UInt32 mmd_bone_control_util::GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
+	friend void mmd_bone_control_util::SyncControlsToCurrentPose(MMDBoneManagerObject& bone_manager);
 	MMDBoneManagerObject() = default;
 	~MMDBoneManagerObject() override = default;
 	public:
@@ -115,11 +129,13 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
 
 	void SetAllBoneMode(Int32 mode, BaseObject* bone_manager_object = nullptr);
+	void SetBoneDisplayType(Int32 display_type, BaseObject* bone_manager_object = nullptr);
 	void CommitEditModeBindState(BaseObject* bone_manager_object);
 	void RestoreBindStateForEdit(BaseObject* bone_manager_object);
 	void ResetMorphStrengths();
 	Bool EnsureAllAnimationSlotCount(Int32 slot_count);
 	void SetAllActiveAnimationSlot(Int32 slot_index);
+	Bool CreateOrRefreshControls(BaseObject* bone_manager_object);
 	void MarkAppendExecutionOrderDirty();
 	void EnsureAppendExecutionOrder();
 	Int32 GetMaxBoneLayer() const;

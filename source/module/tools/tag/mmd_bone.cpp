@@ -28,6 +28,7 @@ Description:	DESC
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/VMDInterpolation.h"
 #include "utils/math_util.hpp"
+#include "utils/mmd_bone_control_util.hpp"
 #include "utils/string_util.hpp"
 
 namespace
@@ -163,6 +164,51 @@ namespace
 		if (linked_mutable->IsInstanceOf(g_mmd_bone_tag_id))
 			return static_cast<BaseTag*>(linked_mutable)->GetObject();
 		return nullptr;
+	}
+
+	BaseObject* ResolveObjectFromLinkParameter(BaseList2D* owner, const Int32 parameter_id)
+	{
+		if (!owner)
+			return nullptr;
+
+		GeData link_data;
+		if (!owner->GetParameter(CreateDescID(DescLevel(parameter_id)), link_data, DESCFLAGS_GET::NONE))
+			return nullptr;
+
+		const BaseLink* const link = link_data.GetBaseLink();
+		if (!link)
+			return nullptr;
+
+		const BaseDocument* const doc = owner->GetDocument();
+		const BaseList2D* linked = doc ? link->GetLink(doc) : link->ForceGetLink();
+		BaseList2D* const mutable_linked = const_cast<BaseList2D*>(linked);
+		return mutable_linked && mutable_linked->IsInstanceOf(Obase) ? static_cast<BaseObject*>(mutable_linked) : nullptr;
+	}
+
+	void SetObjectDisplay(BaseObject* object, const Int32 mode)
+	{
+		if (!object)
+			return;
+
+		object->SetEditorMode(mode);
+		object->SetRenderMode(mode);
+		MarkBoneTransformDirty(object);
+	}
+
+	void SetJointVisualDisplay(BaseObject* bone_object, const BaseContainer* bc, const Bool visible)
+	{
+		if (!bone_object)
+			return;
+
+		const Bool show_joint = visible && (!bc || bc->GetBool(PMX_BONE_VISIBLE));
+		bone_object->SetParameter(
+			ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_JOINT_DISPLAY)),
+			show_joint ? ID_CA_JOINT_OBJECT_JOINT_DISPLAY_AXIS : ID_CA_JOINT_OBJECT_JOINT_DISPLAY_NONE,
+			DESCFLAGS_SET::NONE);
+		bone_object->SetParameter(
+			ConstDescID(DescLevel(ID_CA_JOINT_OBJECT_BONE_DISPLAY)),
+			show_joint ? ID_CA_JOINT_OBJECT_BONE_DISPLAY_STANDARD : ID_CA_JOINT_OBJECT_BONE_DISPLAY_NONE,
+			DESCFLAGS_SET::NONE);
 	}
 
 	struct StandaloneIKChainEntry
@@ -613,6 +659,7 @@ namespace
 	{
 		return Eigen::Quaternionf(matrix.block<3, 3>(0, 0)).normalized();
 	}
+
 }
 
 void C4DIKChainNodeAdapter::SetupFromBone(BaseObject* bone_object, MMDBoneTag* bone_tag, std::string name)
@@ -1731,6 +1778,8 @@ Bool MMDBoneTag::AddAnimationKeyframeFromCurrentPose(GeListNode* node, BaseDocum
 	if (!bone_object_)
 		return false;
 
+	ApplyActiveAnimation(bone_object_, doc, true);
+
 	BoneAnimationSlotData* const slot = EnsureAnimationSlot(active_animation_slot_);
 	if (!slot)
 		return false;
@@ -1745,8 +1794,8 @@ Bool MMDBoneTag::AddAnimationKeyframeFromCurrentPose(GeListNode* node, BaseDocum
 	}
 
 	BoneAnimationKeyframeData& keyframe = slot->keyframes[keyframe_index];
-	const Vector rel_pos = bone_object_->GetRelPos();
-	const std::array<Float32, 4> rotation = EulerToQuaternionArray(bone_object_->GetRelRot());
+	const Vector rel_pos = evaluated_animation_translation_;
+	const std::array<Float32, 4> rotation = NormalizeQuaternion(evaluated_animation_rotation_);
 	keyframe.translation = Vector32(
 		maxon::SafeConvert<Float32>(rel_pos.x),
 		maxon::SafeConvert<Float32>(rel_pos.y),
@@ -1766,6 +1815,8 @@ Bool MMDBoneTag::AddAnimationKeyframeFromCurrentPose(GeListNode* node, BaseDocum
 	InvalidateAnimationUICache();
 	RefreshAnimationMarkerTracks(node);
 	SyncSplineFromSelection(node);
+	mmd_bone_control_util::ResetControlRelativeTransform(static_cast<BaseTag*>(node));
+	ApplyActiveAnimation(bone_object_, doc, true);
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 	if (GeIsMainThread())
 		EventAdd();
@@ -2535,6 +2586,21 @@ void MMDBoneTag::HandleBoneModeChange(const Int32 bone_mode)
 
 void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, const MMDBoneManagerObjectMsg* msg) const
 {
+	BaseTag* const owner_tag = const_cast<BaseTag*>(static_cast<const BaseTag*>(Get()));
+	BaseObject* const control = ResolveObjectFromLinkParameter(owner_tag, PMX_BONE_CONTROL_LINK);
+	const Bool controls_visible = msg->display_type != BONE_DISPLAY_TYPE_OFF;
+	SetObjectDisplay(control, controls_visible ? MODE_ON : MODE_OFF);
+
+	if (msg->display_type == BONE_DISPLAY_TYPE_CONTROLS)
+	{
+		SetJointVisualDisplay(bone_object_, data_instance_bc, false);
+		bone_object_->SetEditorMode(MODE_UNDEF);
+		bone_object_->SetRenderMode(MODE_UNDEF);
+		return;
+	}
+
+	SetJointVisualDisplay(bone_object_, data_instance_bc, true);
+
 	switch (msg->display_type)
 	{
 	case BONE_DISPLAY_TYPE_MOVABLE:
@@ -3127,6 +3193,16 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 			translation = Vector();
 		if (!bc->GetBool(PMX_BONE_ROTATABLE))
 			rotation = { 0.F, 0.F, 0.F, 1.F };
+	}
+
+	Vector control_translation;
+	std::array<Float32, 4> control_rotation { 0.F, 0.F, 0.F, 1.F };
+	if (mmd_bone_control_util::GetControlDeltaInBoneSpace(static_cast<BaseTag*>(Get()), op, control_translation, control_rotation))
+	{
+		if (!bc || bc->GetBool(PMX_BONE_TRANSLATABLE))
+			translation += control_translation;
+		if (!bc || bc->GetBool(PMX_BONE_ROTATABLE))
+			rotation = ToQuaternionArray(ToEigenQuaternion(rotation) * ToEigenQuaternion(control_rotation));
 	}
 
 	SetEvaluatedAnimationState(translation, rotation);
