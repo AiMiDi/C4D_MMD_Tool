@@ -187,6 +187,21 @@ namespace CMTToolsManager
 
 	bool ExportPMXModel(const CMTToolsSetting::ModelExport& setting)
 	{
+		SavePmxModelLog logger;
+
+		libmmd::PMXFile pmx_file;
+		if (CMTSceneManager::SavePMXModel(setting, pmx_file) == nullptr)
+			return false;
+
+		logger.Set(pmx_file, setting);
+		const auto pmx_path = string_util::GetStdString(setting.fn.GetString());
+		if (!WritePMXFile(&pmx_file, pmx_path.c_str()))
+		{
+			IOLog::LogWriteFileErr();
+			return false;
+		}
+
+		logger.LogOK();
 		return true;
 	}
 }

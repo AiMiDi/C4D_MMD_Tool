@@ -1,7 +1,8 @@
 # 导入流程
 
 本文整理当前 PMX 模型、VMD 动作、VMD 相机导入链路。运行时重建、每帧动画/IK/物理执行见
-[`runtime-flow.md`](runtime-flow.md)。
+[`runtime-flow.md`](runtime-flow.md)。PMX 模型导出（重建式回写、导出前同步、v1 限制）见
+[`export-flow.md`](export-flow.md)。
 
 ## 关键代码地图
 

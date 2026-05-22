@@ -82,6 +82,9 @@ public:
 		const maxon::BaseArray<BaseObject*>& bone_list,
 		const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting);
+	Bool ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
+	                           const maxon::HashMap<UInt64, uint32_t>& vertex_map,
+	                           const maxon::HashMap<String, Int32>& morph_name_to_index) const;
 private:
 	void RefreshMeshMorphData(BaseObject* op, bool suppress_change_message = false);
 };

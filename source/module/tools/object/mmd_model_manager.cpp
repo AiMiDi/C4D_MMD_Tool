@@ -78,6 +78,266 @@ namespace
 		}
 	}
 
+	uint8_t PmxIndexSizeForCount(const int count)
+	{
+		const int max_index = count > 0 ? count - 1 : 0;
+		if (max_index <= 0xFF)
+			return 1;
+		if (max_index <= 0xFFFF)
+			return 2;
+		return 4;
+	}
+
+	void WritePmxHeaderAndInfo(libmmd::PMXFile& pmx_file, const BaseContainer& bc)
+	{
+		libmmd::PMXHeader& header = pmx_file.m_header;
+		header.m_magic.Set("PMX ");
+		header.m_version = bc.GetFloat(PMX_VERSION, 2.0f);
+		header.m_dataSize = 8;
+		header.m_encode = 1;
+		header.m_addUVNum = 0;
+
+		libmmd::PMXInfo& info = pmx_file.m_info;
+		info.m_modelName = string_util::GetStdString(bc.GetString(MODEL_NAME_LOCAL));
+		info.m_englishModelName = string_util::GetStdString(bc.GetString(MODEL_NAME_UNIVERSAL));
+		info.m_comment = string_util::GetStdString(bc.GetString(COMMENTS_LOCAL));
+		info.m_englishComment = string_util::GetStdString(bc.GetString(COMMENTS_UNIVERSAL));
+	}
+
+	void FinalizePmxHeaderIndexSizes(libmmd::PMXFile& pmx_file)
+	{
+		libmmd::PMXHeader& header = pmx_file.m_header;
+		header.m_vertexIndexSize = PmxIndexSizeForCount(static_cast<int>(pmx_file.m_vertices.size()));
+		header.m_textureIndexSize = PmxIndexSizeForCount(static_cast<int>(pmx_file.m_textures.size()));
+		header.m_materialIndexSize = PmxIndexSizeForCount(static_cast<int>(pmx_file.m_materials.size()));
+		header.m_boneIndexSize = PmxIndexSizeForCount(static_cast<int>(pmx_file.m_bones.size()));
+		header.m_morphIndexSize = PmxIndexSizeForCount(static_cast<int>(pmx_file.m_morphs.size()));
+		header.m_rigidbodyIndexSize = PmxIndexSizeForCount(static_cast<int>(pmx_file.m_rigidbodies.size()));
+	}
+
+	libmmd::PMXMorphType MorphTypeToPmx(const MMDMorphType type)
+	{
+		switch (type)
+		{
+		case MMDMorphType::GROUP: return libmmd::PMXMorphType::Group;
+		case MMDMorphType::FLIP: return libmmd::PMXMorphType::Flip;
+		case MMDMorphType::MESH: return libmmd::PMXMorphType::Position;
+		case MMDMorphType::UV: return libmmd::PMXMorphType::UV;
+		case MMDMorphType::BONE: return libmmd::PMXMorphType::Bone;
+		case MMDMorphType::MATERIAL: return libmmd::PMXMorphType::Material;
+		case MMDMorphType::IMPULSE: return libmmd::PMXMorphType::Impluse;
+		default: return libmmd::PMXMorphType::Position;
+		}
+	}
+
+	Bool ExportMorphStubs(const maxon::PointerArray<IMorph>& morph_data, libmmd::PMXFile& pmx_file)
+	{
+		pmx_file.m_morphs.clear();
+		if (morph_data.IsEmpty())
+			return true;
+
+		pmx_file.m_morphs.resize(static_cast<size_t>(morph_data.GetCount()));
+		for (Int32 morph_index = 0; morph_index < morph_data.GetCount(); ++morph_index)
+		{
+			IMorph& morph = const_cast<IMorph&>(morph_data[morph_index]);
+			libmmd::PMXFileMorph& pmx_morph = pmx_file.m_morphs[static_cast<size_t>(morph_index)];
+			pmx_morph.m_name = string_util::GetStdString(morph.GetName());
+			pmx_morph.m_englishName = pmx_morph.m_name;
+			pmx_morph.m_controlPanel = static_cast<uint8_t>(morph.GetPanel());
+			pmx_morph.m_morphType = MorphTypeToPmx(morph.GetType());
+
+			maxon::HashMap<Int, Float>* const sub_morphs = morph.GetSubMorphDataWritable();
+			if (!sub_morphs)
+				continue;
+
+			if (morph.GetType() == MMDMorphType::GROUP)
+			{
+				for (const auto& entry : *sub_morphs)
+				{
+					libmmd::PMXFileMorph::GroupMorph group_morph;
+					group_morph.m_morphIndex = entry.GetKey();
+					group_morph.m_weight = entry.GetValue();
+					pmx_morph.m_groupMorph.push_back(group_morph);
+				}
+			}
+			else if (morph.GetType() == MMDMorphType::FLIP)
+			{
+				for (const auto& entry : *sub_morphs)
+				{
+					libmmd::PMXFileMorph::FlipMorph flip_morph;
+					flip_morph.m_morphIndex = entry.GetKey();
+					flip_morph.m_weight = entry.GetValue();
+					pmx_morph.m_flipMorph.push_back(flip_morph);
+				}
+			}
+		}
+		return true;
+	}
+
+	void BuildPmxTextureTable(const maxon::BaseArray<MMDMaterialData>& materials,
+	                          std::vector<libmmd::PMXTexture>& textures,
+	                          std::unordered_map<std::string, Int32>& path_to_index)
+	{
+		textures.clear();
+		path_to_index.clear();
+
+		const auto add_path = [&](const String& path)
+		{
+			if (path.IsEmpty())
+				return;
+			const std::string key = string_util::GetStdString(path);
+			if (path_to_index.contains(key))
+				return;
+			const Int32 index = static_cast<Int32>(textures.size());
+			libmmd::PMXTexture texture;
+			texture.m_textureName = key;
+			textures.push_back(std::move(texture));
+			path_to_index.emplace(key, index);
+		};
+
+		for (const auto& material : materials)
+		{
+			add_path(material.texture_path);
+			add_path(material.sphere_texture_path);
+			// Common toon (toon_mode == 1) uses PMX slot 0..9, not the texture table.
+			if (material.toon_mode == static_cast<Int32>(libmmd::PMXToonMode::Separate))
+				add_path(material.toon_texture_path);
+		}
+	}
+
+	Int32 ResolveTextureIndex(const std::unordered_map<std::string, Int32>& path_to_index, const String& path)
+	{
+		if (path.IsEmpty())
+			return -1;
+		const auto it = path_to_index.find(string_util::GetStdString(path));
+		return it != path_to_index.end() ? it->second : -1;
+	}
+
+	Int32 ResolveToonTextureIndex(const MMDMaterialData& material,
+	                                const std::unordered_map<std::string, Int32>& path_to_index)
+	{
+		if (material.toon_mode == static_cast<Int32>(libmmd::PMXToonMode::Common))
+			return material.toon_texture_index;
+		return ResolveTextureIndex(path_to_index, material.toon_texture_path);
+	}
+
+	void AppendDefaultPmxMaterialForMesh(libmmd::PMXFile& pmx_file)
+	{
+		if (pmx_file.m_faces.empty() || !pmx_file.m_materials.empty())
+			return;
+
+		libmmd::PMXMaterial mat{};
+		mat.m_name = "default";
+		mat.m_englishName = "default";
+		mat.m_diffuse = Eigen::Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.m_specularPower = 1.0f;
+		mat.m_ambient = Eigen::Vector3f(0.2f, 0.2f, 0.2f);
+		mat.m_textureIndex = -1;
+		mat.m_sphereTextureIndex = -1;
+		mat.m_sphereMode = libmmd::PMXSphereMode::None;
+		mat.m_toonMode = libmmd::PMXToonMode::Common;
+		mat.m_toonTextureIndex = 0;
+		mat.m_numFaceVertices = static_cast<int32_t>(pmx_file.m_faces.size() * 3);
+		pmx_file.m_materials.push_back(std::move(mat));
+	}
+
+	class MaterialExportStateGuard
+	{
+	public:
+		explicit MaterialExportStateGuard(maxon::BaseArray<MMDMaterialData>& materials)
+			: materials_(materials), original_count_(static_cast<Int32>(materials.GetCount()))
+		{
+			face_counts_.reserve(static_cast<size_t>(original_count_));
+			for (Int32 i = 0; i < original_count_; ++i)
+				face_counts_.push_back(materials_[i].num_face_vertices);
+		}
+
+		~MaterialExportStateGuard()
+		{
+			iferr(materials_.Resize(original_count_)) {}
+			const Int32 restore_count = std::min(original_count_, static_cast<Int32>(materials_.GetCount()));
+			for (Int32 i = 0; i < restore_count; ++i)
+				materials_[i].num_face_vertices = face_counts_[static_cast<size_t>(i)];
+		}
+
+	private:
+		maxon::BaseArray<MMDMaterialData>& materials_;
+		Int32 original_count_;
+		std::vector<Int32> face_counts_;
+	};
+
+	void RemoveEmptyBoneMorphStubs(libmmd::PMXFile& pmx_file)
+	{
+		auto& morphs = pmx_file.m_morphs;
+		const size_t original_size = morphs.size();
+		std::vector<int32_t> remap(original_size, -1);
+		size_t write = 0;
+		for (size_t read = 0; read < original_size; ++read)
+		{
+			if (morphs[read].m_morphType == libmmd::PMXMorphType::Bone && morphs[read].m_boneMorph.empty())
+				continue;
+			remap[read] = static_cast<int32_t>(write);
+			if (write != read)
+				morphs[write] = std::move(morphs[read]);
+			++write;
+		}
+		if (write == original_size)
+			return;
+		morphs.resize(write);
+
+		for (auto& morph : morphs)
+		{
+			for (auto& gm : morph.m_groupMorph)
+				if (gm.m_morphIndex >= 0 && static_cast<size_t>(gm.m_morphIndex) < original_size)
+					gm.m_morphIndex = remap[static_cast<size_t>(gm.m_morphIndex)];
+			for (auto& fm : morph.m_flipMorph)
+				if (fm.m_morphIndex >= 0 && static_cast<size_t>(fm.m_morphIndex) < original_size)
+					fm.m_morphIndex = remap[static_cast<size_t>(fm.m_morphIndex)];
+		}
+	}
+
+	void ExportDisplayFrames(const maxon::BaseArray<DisplayFrameData>& display_frames,
+	                         libmmd::PMXFile& pmx_file, const Int32 bone_count, const Int32 morph_count)
+	{
+		pmx_file.m_displayFrames.clear();
+		for (const auto& frame : display_frames)
+		{
+			libmmd::PMXDisplayFrame pmx_frame;
+			pmx_frame.m_name = string_util::GetStdString(frame.name);
+			pmx_frame.m_englishName = string_util::GetStdString(frame.name_universal);
+			pmx_frame.m_flag = frame.is_special
+				? libmmd::PMXDisplayFrame::FrameType::SpecialFrame
+				: libmmd::PMXDisplayFrame::FrameType::DefaultFrame;
+
+			for (const auto& target : frame.targets)
+			{
+				if (target.type == DisplayFrameTargetType::Bone)
+				{
+					if (target.index < 0 || target.index >= bone_count)
+						continue;
+				}
+				else if (target.index < 0 || target.index >= morph_count)
+				{
+					continue;
+				}
+
+				libmmd::PMXDisplayFrame::Target pmx_target;
+				pmx_target.m_type = (target.type == DisplayFrameTargetType::Bone)
+					? libmmd::PMXDisplayFrame::TargetType::BoneIndex
+					: libmmd::PMXDisplayFrame::TargetType::MorphIndex;
+				pmx_target.m_index = target.index;
+				pmx_frame.m_targets.push_back(pmx_target);
+			}
+			pmx_file.m_displayFrames.push_back(std::move(pmx_frame));
+		}
+	}
+
+	void ClearUnsupportedPmxSections(libmmd::PMXFile& pmx_file)
+	{
+		// v1 export does not reconstruct PMX softbodies or unknown extension blobs.
+		pmx_file.m_softbodies.clear();
+	}
+
 	Int32 ToAnimationFrame(const UInt32 frame, const Float time_offset)
 	{
 		return static_cast<Int32>(frame) + static_cast<Int32>(time_offset);
@@ -1366,6 +1626,65 @@ void MMDModelManagerObject::SyncMorphSlidersFromTags()
 		if (mesh_manager_data_->GetMorphStrength(morph.GetName(), tag_strength))
 			morph.SetStrength(node, tag_strength);
 	}
+}
+
+void MMDModelManagerObject::CaptureAndClearPMXExportMorphState(BaseDocument* doc)
+{
+	BaseObject* const self = reinterpret_cast<BaseObject*>(Get());
+	if (!self)
+		return;
+
+	pmx_export_morph_strength_snapshot_.clear();
+	pmx_export_morph_strength_snapshot_.reserve(static_cast<size_t>(morph_data_.GetCount()));
+	for (auto& morph : morph_data_)
+		pmx_export_morph_strength_snapshot_.push_back(morph.GetStrength(self));
+	pmx_export_has_morph_state_snapshot_ = true;
+
+	for (auto& morph : morph_data_)
+		morph.SetStrength(self, 0.0);
+
+	if (mesh_manager_data_ || GetMeshManagerData())
+		mesh_manager_data_->ResetMorphStrengths(io_util::ResolveObjectLink(mesh_manager_));
+	if (bone_manager_data_ || GetBoneManagerData())
+		bone_manager_data_->ResetMorphStrengths();
+
+	for (auto& morph : morph_data_)
+		UpdateMorph(morph);
+
+	*update_morph_.Write() = true;
+	MarkMeshHierarchyDirty(GetMeshManagerObject());
+	self->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+	self->Message(MSG_UPDATE);
+	(void)doc;
+}
+
+void MMDModelManagerObject::RestorePMXExportMorphState(BaseDocument* doc)
+{
+	BaseObject* const self = reinterpret_cast<BaseObject*>(Get());
+	if (!self || !pmx_export_has_morph_state_snapshot_)
+		return;
+
+	if (mesh_manager_data_ || GetMeshManagerData())
+		mesh_manager_data_->ResetMorphStrengths(io_util::ResolveObjectLink(mesh_manager_));
+	if (bone_manager_data_ || GetBoneManagerData())
+		bone_manager_data_->ResetMorphStrengths();
+
+	const Int32 restore_count = std::min<Int32>(
+		static_cast<Int32>(pmx_export_morph_strength_snapshot_.size()),
+		static_cast<Int32>(morph_data_.GetCount()));
+	for (Int32 i = 0; i < restore_count; ++i)
+		morph_data_[i].SetStrength(self, pmx_export_morph_strength_snapshot_[static_cast<size_t>(i)]);
+
+	for (auto& morph : morph_data_)
+		UpdateMorph(morph);
+
+	pmx_export_morph_strength_snapshot_.clear();
+	pmx_export_has_morph_state_snapshot_ = false;
+	*update_morph_.Write() = true;
+	MarkMeshHierarchyDirty(GetMeshManagerObject());
+	self->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+	self->Message(MSG_UPDATE);
+	(void)doc;
 }
 
 void MMDModelManagerObject::ClearMorphRuntimeForEdit()
@@ -2867,33 +3186,141 @@ Bool MMDModelManagerObject::AddMaterial(const libmmd::PMXMaterial& pmx_material,
 	return true;
 }
 
-Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const
+Bool MMDModelManagerObject::PreparePMXExportState(BaseDocument* doc)
 {
-	if (setting.export_bone)
-		if (auto* bone_mgr = io_util::ResolveObjectLink(bone_manager_))
-			if (const auto bmd = bone_mgr->GetNodeData<MMDBoneManagerObject>(); bmd && !bmd->SavePMX(pmx_file, setting))
-				return false;
+	if (!doc)
+		return false;
 
-	if (setting.export_polygon)
-		if (auto* mesh_mgr = io_util::ResolveObjectLink(mesh_manager_))
-			if (const auto mmd = mesh_mgr->GetNodeData<MMDMeshManagerObject>(); mmd && !mmd->SavePMX(pmx_file, setting))
-				return false;
+	if (BaseObject* const op = reinterpret_cast<BaseObject*>(Get()))
+		std::ignore = UpdateManagers(op);
 
-	const Int32 mat_count = static_cast<Int32>(material_list_.GetCount());
-	if (mat_count > 0)
+	Bool restore_edit_mode = false;
+	if (model_mode_ == MODEL_MODE_EDIT)
 	{
+		CommitEditModeBindState(doc);
+		restore_edit_mode = true;
+	}
+	else
+	{
+		bone_manager_data_ = GetBoneManagerData();
+		if (bone_manager_data_)
+			bone_manager_data_->SynchronizeBoneHierarchy(io_util::ResolveObjectLink(bone_manager_), false);
+
+		if (rigid_manager_data_ || GetRigidManagerData())
+			rigid_manager_data_->CommitEditorTransforms(io_util::ResolveObjectLink(rigid_manager_));
+		if (joint_manager_data_ || GetJointManagerData())
+			joint_manager_data_->CommitEditorTransforms(io_util::ResolveObjectLink(joint_manager_));
+	}
+
+	CaptureAndClearPMXExportMorphState(doc);
+	return restore_edit_mode;
+}
+
+void MMDModelManagerObject::FinishPMXExportState(BaseDocument* doc, const Bool restore_edit_mode)
+{
+	if (restore_edit_mode && doc)
+		RestoreBindStateForEdit(doc);
+	RestorePMXExportMorphState(doc);
+}
+
+Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting)
+{
+	const BaseContainer* const bc = reinterpret_cast<const BaseList2D*>(Get())->GetDataInstance();
+	if (!bc)
+		return false;
+
+	WritePmxHeaderAndInfo(pmx_file, *bc);
+
+	MMDBoneManagerObject* bone_manager = nullptr;
+	if (auto* bone_mgr = io_util::ResolveObjectLink(bone_manager_))
+		bone_manager = bone_mgr->GetNodeData<MMDBoneManagerObject>();
+
+	if (setting.export_bone && bone_manager && !bone_manager->SavePMX(pmx_file, setting))
+		return false;
+
+	if (!setting.export_bone && setting.export_polygon && pmx_file.m_bones.empty())
+	{
+		libmmd::PMXBone dummy;
+		dummy.m_name = "root";
+		dummy.m_englishName = "root";
+		dummy.m_position = Eigen::Vector3f::Zero();
+		dummy.m_parentBoneIndex = -1;
+		dummy.m_deformDepth = 0;
+		dummy.m_boneFlag = libmmd::PMXBoneFlags{};
+		pmx_file.m_bones.push_back(std::move(dummy));
+	}
+
+	if (setting.export_expression)
+	{
+		if (!ExportMorphStubs(morph_data_, pmx_file))
+			return false;
+		if (setting.export_bone && bone_manager && !bone_manager->ExportBoneMorphsToPMX(pmx_file, morph_name_))
+			return false;
+	}
+	else
+	{
+		pmx_file.m_morphs.clear();
+	}
+
+	MaterialExportStateGuard material_export_guard(material_list_);
+
+	if (!setting.export_polygon)
+	{
+		pmx_file.m_vertices.clear();
+		pmx_file.m_faces.clear();
+	}
+	else if (auto* mesh_mgr = io_util::ResolveObjectLink(mesh_manager_))
+	{
+		if (const auto mmd = mesh_mgr->GetNodeData<MMDMeshManagerObject>(); mmd && !mmd->SavePMX(pmx_file, setting))
+			return false;
+	}
+
+	std::unordered_map<std::string, Int32> texture_path_to_index;
+	if (setting.export_material)
+	{
+		BuildPmxTextureTable(material_list_, pmx_file.m_textures, texture_path_to_index);
+
+		const Int32 mat_count = static_cast<Int32>(material_list_.GetCount());
 		pmx_file.m_materials.resize(static_cast<size_t>(mat_count));
 		for (Int32 i = 0; i < mat_count; ++i)
-			material_list_[i].ToPMX(pmx_file.m_materials[static_cast<size_t>(i)]);
+		{
+			const auto& material = material_list_[i];
+			material.ToPMX(
+				pmx_file.m_materials[static_cast<size_t>(i)],
+				ResolveTextureIndex(texture_path_to_index, material.texture_path),
+				ResolveTextureIndex(texture_path_to_index, material.sphere_texture_path),
+				ResolveToonTextureIndex(material, texture_path_to_index));
+			if (!setting.export_polygon)
+				pmx_file.m_materials[static_cast<size_t>(i)].m_numFaceVertices = 0;
+		}
+	}
+	else
+	{
+		pmx_file.m_textures.clear();
+		pmx_file.m_materials.clear();
+		if (setting.export_polygon)
+			AppendDefaultPmxMaterialForMesh(pmx_file);
 	}
 
-	const Int32 df_count = static_cast<Int32>(display_frame_list_.GetCount());
-	if (df_count > 0)
-	{
-		pmx_file.m_displayFrames.resize(static_cast<size_t>(df_count));
-		for (Int32 i = 0; i < df_count; ++i)
-			display_frame_list_[i].ToPMX(pmx_file.m_displayFrames[static_cast<size_t>(i)]);
-	}
+	if (!setting.export_bone && setting.export_expression)
+		RemoveEmptyBoneMorphStubs(pmx_file);
+
+	const Int32 bone_count = static_cast<Int32>(pmx_file.m_bones.size());
+	const Int32 morph_count = static_cast<Int32>(pmx_file.m_morphs.size());
+	const Int32 exported_reference_bone_count = setting.export_bone ? bone_count : 0;
+	ExportDisplayFrames(display_frame_list_, pmx_file, exported_reference_bone_count, morph_count);
+
+	std::unordered_map<Int32, Int32> rigid_index_remap;
+	if (auto* rigid_mgr = io_util::ResolveObjectLink(rigid_manager_))
+		if (const auto rmd = rigid_mgr->GetNodeData<MMDRigidManagerObject>(); rmd && !rmd->SavePMX(pmx_file, &rigid_index_remap, exported_reference_bone_count))
+			return false;
+
+	if (auto* joint_mgr = io_util::ResolveObjectLink(joint_manager_))
+		if (const auto jmd = joint_mgr->GetNodeData<MMDJointManagerObject>(); jmd && !jmd->SavePMX(pmx_file, &rigid_index_remap))
+			return false;
+
+	ClearUnsupportedPmxSections(pmx_file);
+	FinalizePmxHeaderIndexSizes(pmx_file);
 	return true;
 }
 

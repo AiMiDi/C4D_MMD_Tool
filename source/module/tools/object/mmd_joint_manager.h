@@ -10,6 +10,7 @@ Description:	MMD joint root object
 
 #pragma once
 
+#include <unordered_map>
 #include "mmd_manager.hpp"
 #include "description/OMMDJointManager.h"
 
@@ -77,6 +78,7 @@ public:
 	BaseObject* AddJoint(const String& name, libmmd::MMDJoint* mmd_joint, GeListNode* node = nullptr);
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
+	Bool SavePMX(libmmd::PMXFile& pmx_file, const std::unordered_map<Int32, Int32>* rigid_index_remap = nullptr) const;
 
 	Bool BuildStandaloneJoints(libmmd::MMDPhysicsManager* physics_manager);
 	void ReconnectJointPointers(libmmd::MMDPhysicsManager* physics_manager);

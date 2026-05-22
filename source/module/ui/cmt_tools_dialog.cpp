@@ -270,6 +270,85 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 		}
 		break;
 	}
+	case DLG_CMT_TOOL_MODEL_EXPORT_BONE:
+	{
+		Bool export_bone = false;
+		GetBool(DLG_CMT_TOOL_MODEL_EXPORT_BONE, export_bone);
+		if (!export_bone)
+		{
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_IK, false);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_INHERIT, false);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS, false);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_IK, false);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_INHERIT, false);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS, false);
+		}
+		else
+		{
+			Bool export_polygon = false;
+			GetBool(DLG_CMT_TOOL_MODEL_EXPORT_POLYGON, export_polygon);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_IK, true);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_INHERIT, true);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_IK, true);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_INHERIT, true);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS, export_polygon);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS, export_polygon);
+		}
+		break;
+	}
+	case DLG_CMT_TOOL_MODEL_EXPORT_POLYGON:
+	{
+		Bool export_polygon = false;
+		GetBool(DLG_CMT_TOOL_MODEL_EXPORT_POLYGON, export_polygon);
+		if (!export_polygon)
+		{
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_NORMAL, false);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_UV, false);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS, false);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_EXPRESSION, false);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_NORMAL, false);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_UV, false);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS, false);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_EXPRESSION, false);
+		}
+		else
+		{
+			Bool export_bone = false;
+			GetBool(DLG_CMT_TOOL_MODEL_EXPORT_BONE, export_bone);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_NORMAL, true);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_UV, true);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_EXPRESSION, true);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_NORMAL, true);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_UV, true);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_EXPRESSION, true);
+			Enable(DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS, export_bone);
+			SetBool(DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS, export_bone);
+		}
+		break;
+	}
+	case DLG_CMT_TOOL_MODEL_EXPORT_BUTTON:
+	{
+		CMTToolsSetting::ModelExport setting(GetActiveDocument());
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_SIZE, setting.position_multiple);
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_POLYGON, setting.export_polygon);
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_NORMAL, setting.export_normal);
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_UV, setting.export_uv);
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_MATERIAL, setting.export_material);
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_BONE, setting.export_bone);
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS, setting.export_weights);
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_IK, setting.export_ik);
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_INHERIT, setting.export_inherit);
+		GetItem(DLG_CMT_TOOL_MODEL_EXPORT_EXPRESSION, setting.export_expression);
+		if (!filename_util::SelectSuffixExportFile(setting.fn, "pmx"_s))
+		{
+			return false;
+		}
+		if (!CMTToolsManager::ExportPMXModel(setting))
+		{
+			return false;
+		}
+		break;
+	}
 	default:
 		break;
 	}

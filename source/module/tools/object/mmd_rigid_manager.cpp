@@ -79,6 +79,38 @@ namespace
 		SetFloatParameter(object, z_id, value.z);
 	}
 
+	String ReadObjectStoredString(const BaseObject* object, const Int32 id, const String& fallback)
+	{
+		const BaseContainer* const bc = object ? object->GetDataInstance() : nullptr;
+		if (!bc)
+			return fallback;
+
+		const GeData* const data = bc->GetDataPointer(id);
+		if (!data || data->GetType() != DA_STRING)
+			return fallback;
+
+		const String value = data->GetString();
+		return value.IsEmpty() ? fallback : value;
+	}
+
+	Int32 ReadObjectStoredIndex(const BaseObject* object, const Int32 id, const Int32 fallback = 0)
+	{
+		const BaseContainer* const bc = object ? object->GetDataInstance() : nullptr;
+		if (!bc)
+			return fallback;
+
+		const GeData* const data = bc->GetDataPointer(id);
+		if (!data)
+			return fallback;
+		if (data->GetType() == DA_LONG)
+			return data->GetInt32();
+		if (data->GetType() != DA_STRING)
+			return fallback;
+
+		const String value = data->GetString();
+		return value.IsEmpty() ? fallback : value.ToInt32(nullptr);
+	}
+
 	Matrix BuildPRSMatrix(const Vector& position, const Vector& rotation, const ROTATIONORDER order)
 	{
 		Matrix matrix = HPBToMatrix(rotation, order);
@@ -338,14 +370,12 @@ Bool MMDRigidManagerObject::UpdateRigidList()
 	rigid_items_.FlushAll();
 	rigid_items_.SetString(-1, "-"_s);
 	rigid_list_.Reset();
-	GeData ge_data;
 	BaseObject* node_ = op->GetDown();
 	while (node_)
 	{
 		if (node_->GetType() == g_mmd_rigid_object_id)
 		{
-			node_->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), ge_data, DESCFLAGS_GET::NONE);
-			Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
+			Int32 rigid_index = ReadObjectStoredIndex(node_, RIGID_INDEX);
 			this->rigid_items_.SetString(rigid_index, node_->GetName());
 			auto& link = rigid_list_.InsertKey(rigid_index)iferr_return;
 			link = maxon::BaseRef<AutoAlloc<BaseLink>, maxon::StrongRefHandler>::Create()iferr_return;
@@ -481,6 +511,71 @@ namespace
 	}
 }
 
+Bool MMDRigidManagerObject::SavePMX(libmmd::PMXFile& pmx_file, std::unordered_map<Int32, Int32>* rigid_index_remap, const Int32 exported_bone_count) const
+{
+	if (rigid_index_remap)
+		rigid_index_remap->clear();
+
+	const auto op = reinterpret_cast<const BaseObject*>(Get());
+	std::vector<std::pair<Int32, const BaseObject*>> sorted_children;
+	for (const BaseObject* child = op->GetDown(); child; child = child->GetNext())
+	{
+		if (child->GetType() != g_mmd_rigid_object_id)
+			continue;
+		const Int32 rigid_index = ReadObjectStoredIndex(child, RIGID_INDEX);
+		sorted_children.emplace_back(rigid_index, child);
+	}
+	std::stable_sort(sorted_children.begin(), sorted_children.end(),
+		[](const auto& a, const auto& b) { return a.first < b.first; });
+
+	pmx_file.m_rigidbodies.clear();
+	pmx_file.m_rigidbodies.reserve(sorted_children.size());
+
+	Int32 exported_index = 0;
+	for (const auto& [rigid_index, child] : sorted_children)
+	{
+		if (rigid_index_remap)
+			rigid_index_remap->emplace(rigid_index, exported_index++);
+		const BaseContainer* bc = child->GetDataInstance();
+		if (!bc)
+			return false;
+
+		libmmd::PMXRigidbody pmx_rigidbody;
+		const String name_local = ReadObjectStoredString(child, RIGID_NAME_LOCAL, child->GetName());
+		const String name_universal = ReadObjectStoredString(child, RIGID_NAME_UNIVERSAL, name_local);
+		pmx_rigidbody.m_name = string_util::GetStdString(name_local);
+		pmx_rigidbody.m_englishName = string_util::GetStdString(name_universal);
+		if (pmx_rigidbody.m_englishName.empty())
+			pmx_rigidbody.m_englishName = pmx_rigidbody.m_name;
+
+		const Int32 raw_bone_index = bc->GetInt32(RIGID_RELATED_BONE_INDEX);
+		pmx_rigidbody.m_boneIndex = (exported_bone_count >= 0 && raw_bone_index >= exported_bone_count) ? -1 : raw_bone_index;
+		pmx_rigidbody.m_group = static_cast<uint8_t>(bc->GetInt32(RIGID_GROUP_ID));
+		pmx_rigidbody.m_collisionGroup = ReadCollisionGroupMask(bc);
+		pmx_rigidbody.m_shape = static_cast<libmmd::PMXRigidbody::Shape>(bc->GetInt32(RIGID_SHAPE_TYPE));
+		pmx_rigidbody.m_shapeSize = Eigen::Vector3f(
+			GetRigidFloat<RIGID_SHAPE_SIZE_X>(bc),
+			GetRigidFloat<RIGID_SHAPE_SIZE_Y>(bc),
+			GetRigidFloat<RIGID_SHAPE_SIZE_Z>(bc));
+		pmx_rigidbody.m_translate = Eigen::Vector3f(
+			GetRigidFloat<RIGID_SHAPE_POSITION_X>(bc),
+			GetRigidFloat<RIGID_SHAPE_POSITION_Y>(bc),
+			GetRigidFloat<RIGID_SHAPE_POSITION_Z>(bc));
+		pmx_rigidbody.m_rotate = Eigen::Vector3f(
+			GetRigidFloat<RIGID_SHAPE_ROTATION_X>(bc),
+			GetRigidFloat<RIGID_SHAPE_ROTATION_Y>(bc),
+			GetRigidFloat<RIGID_SHAPE_ROTATION_Z>(bc));
+		pmx_rigidbody.m_mass = GetRigidFloat<RIGID_MASS>(bc);
+		pmx_rigidbody.m_translateDimmer = GetRigidFloat<RIGID_MOVE_ATTENUATION>(bc);
+		pmx_rigidbody.m_rotateDimmer = GetRigidFloat<RIGID_ROTATION_DAMPING>(bc);
+		pmx_rigidbody.m_repulsion = GetRigidFloat<RIGID_REPULSION>(bc);
+		pmx_rigidbody.m_friction = GetRigidFloat<RIGID_FRICTION_FORCE>(bc);
+		pmx_rigidbody.m_op = static_cast<libmmd::PMXRigidbody::Operation>(bc->GetInt32(RIGID_PHYSICS_MODE));
+		pmx_file.m_rigidbodies.push_back(std::move(pmx_rigidbody));
+	}
+	return true;
+}
+
 Bool MMDRigidManagerObject::BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager* physics_manager, const std::function<libmmd::IMMDNode*(Int32)>& get_node)
 {
 	if (!physics_manager)
@@ -496,9 +591,7 @@ Bool MMDRigidManagerObject::BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager
 	{
 		if (child->GetType() == g_mmd_rigid_object_id)
 		{
-			GeData ge_data;
-			child->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), ge_data, DESCFLAGS_GET::NONE);
-			const Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
+			const Int32 rigid_index = ReadObjectStoredIndex(child, RIGID_INDEX);
 			sorted_children.emplace_back(rigid_index, child);
 		}
 	}
@@ -597,9 +690,7 @@ void MMDRigidManagerObject::ReconnectRigidBodyPointers(libmmd::MMDPhysicsManager
 	{
 		if (child->GetType() == g_mmd_rigid_object_id)
 		{
-			GeData ge_data;
-			child->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), ge_data, DESCFLAGS_GET::NONE);
-			const Int32 rigid_index = ge_data.GetString().ToInt32(nullptr);
+			const Int32 rigid_index = ReadObjectStoredIndex(child, RIGID_INDEX);
 			sorted_children.emplace_back(rigid_index, child);
 		}
 	}

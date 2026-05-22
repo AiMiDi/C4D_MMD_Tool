@@ -99,6 +99,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	};
 	maxon::HashMap<Int32, PhysicsOverrideState> physics_overrides_;
 	friend MMDModelManagerObject;
+	friend class MMDMeshManagerObject;
 	friend Bool mmd_bone_control_util::CreateOrRefreshControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
 	friend Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
 	friend UInt32 mmd_bone_control_util::GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
@@ -121,12 +122,14 @@ class MMDBoneManagerObject final : public MMDManagerObject
 
 	[[nodiscard]] BaseTag* FindBone(Int32 index) const;
 	Int32 FindBoneIndex(const BaseTag* bone_tag) const;
+	void BuildOrderedBoneObjectList(maxon::BaseArray<BaseObject*>& out) const;
 	const BaseContainer& GetBoneItems() const;
 	MMDModelManagerObject* GetModelManagerData();
 	maxon::HashMap<String, maxon::PointerArray<MorphUIData>>& GetBoneMorphMap() { return bone_morph_map_; }
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
+	Bool ExportBoneMorphsToPMX(libmmd::PMXFile& pmx_file, const maxon::HashMap<String, Int>& morph_name_to_index) const;
 
 	void SetAllBoneMode(Int32 mode, BaseObject* bone_manager_object = nullptr);
 	void SetBoneDisplayType(Int32 display_type, BaseObject* bone_manager_object = nullptr);

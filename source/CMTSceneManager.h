@@ -95,7 +95,20 @@ struct LoadModelLog : IOLog
 
 struct SavePmxModelLog : IOLog
 {
+	String model_name_local;
+	String comments_local;
+	String model_name_universal;
+	String comments_universal;
 
+	UInt vertex_data_count = 0;
+	UInt surface_data_count = 0;
+	UInt texture_data_count = 0;
+	UInt material_data_count = 0;
+	UInt bone_data_count = 0;
+	UInt morph_data_count = 0;
+
+	void Set(const libmmd::PMXFile& file, const CMTToolsSetting::ModelExport& setting);
+	void LogOK();
 };
 
 class CMTSceneManager final : public SceneHookData

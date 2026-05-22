@@ -1041,6 +1041,32 @@ Bool MMDBoneTag::SetBoneMorphRotationNoCheck(const Int32 id, const Vector rotati
 	return Get()->SetParameter(bone_morph_data_arr_[id].rotation_id, rotation, DESCFLAGS_SET::NONE);
 }
 
+void MMDBoneTag::CollectBoneMorphPmxExportEntries(maxon::BaseArray<BoneMorphPmxExportEntry>& out) const
+{
+	iferr_scope_handler { return; };
+
+	const BaseTag* const tag = static_cast<const BaseTag*>(Get());
+	if (!tag)
+		return;
+
+	for (const auto& morph_data : bone_morph_data_arr_)
+	{
+		if (morph_data.name.IsEmpty())
+			continue;
+
+		GeData ge_data;
+		BoneMorphPmxExportEntry entry;
+		entry.morph_name = morph_data.name;
+		entry.translation = Vector();
+		entry.rotation_hpb = Vector();
+		if (tag->GetParameter(morph_data.translation_id, ge_data, DESCFLAGS_GET::NONE))
+			entry.translation = ge_data.GetVector();
+		if (tag->GetParameter(morph_data.rotation_id, ge_data, DESCFLAGS_GET::NONE))
+			entry.rotation_hpb = ge_data.GetVector();
+		out.Append(std::move(entry)) iferr_return;
+	}
+}
+
 Bool MMDBoneTag::EnsureAnimationSlotCount(const Int32 slot_count)
 {
 	iferr_scope_handler{
