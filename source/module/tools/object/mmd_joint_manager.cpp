@@ -18,6 +18,7 @@ Description:	MMD joint root object
 #include "mmd_model_manager.h"
 #include "description/OMMDJoint.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
+#include "utils/string_util.hpp"
 
 namespace
 {
@@ -62,6 +63,38 @@ namespace
 		SetFloatParameter(object, x_id, value.x);
 		SetFloatParameter(object, y_id, value.y);
 		SetFloatParameter(object, z_id, value.z);
+	}
+
+	String ReadObjectStoredString(const BaseObject* object, const Int32 id, const String& fallback)
+	{
+		const BaseContainer* const bc = object ? object->GetDataInstance() : nullptr;
+		if (!bc)
+			return fallback;
+
+		const GeData* const data = bc->GetDataPointer(id);
+		if (!data || data->GetType() != DA_STRING)
+			return fallback;
+
+		const String value = data->GetString();
+		return value.IsEmpty() ? fallback : value;
+	}
+
+	Int32 ReadObjectStoredIndex(const BaseObject* object, const Int32 id, const Int32 fallback = 0)
+	{
+		const BaseContainer* const bc = object ? object->GetDataInstance() : nullptr;
+		if (!bc)
+			return fallback;
+
+		const GeData* const data = bc->GetDataPointer(id);
+		if (!data)
+			return fallback;
+		if (data->GetType() == DA_LONG)
+			return data->GetInt32();
+		if (data->GetType() != DA_STRING)
+			return fallback;
+
+		const String value = data->GetString();
+		return value.IsEmpty() ? fallback : value.ToInt32(nullptr);
 	}
 
 	Matrix BuildPRSMatrix(const Vector& position, const Vector& rotation, const ROTATIONORDER order)
@@ -350,6 +383,100 @@ Bool MMDJointManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file,
 	return true;
 }
 
+namespace
+{
+	template <Int32 ID>
+	Float32 GetJointFloat(const BaseContainer* bc)
+	{
+		return static_cast<Float32>(bc->GetFloat(ID));
+	}
+}
+
+namespace
+{
+	Int32 RemapRigidIndex(const Int32 rigid_index, const std::unordered_map<Int32, Int32>* rigid_index_remap)
+	{
+		if (rigid_index < 0)
+			return -1;
+		if (!rigid_index_remap)
+			return rigid_index;
+		const auto it = rigid_index_remap->find(rigid_index);
+		return it != rigid_index_remap->end() ? it->second : -1;
+	}
+}
+
+Bool MMDJointManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const std::unordered_map<Int32, Int32>* rigid_index_remap) const
+{
+	const auto op = reinterpret_cast<const BaseObject*>(Get());
+	std::vector<std::pair<Int32, const BaseObject*>> sorted_children;
+	for (const BaseObject* child = op->GetDown(); child; child = child->GetNext())
+	{
+		if (child->GetType() != g_mmd_joint_object_id)
+			continue;
+		const Int32 joint_index = ReadObjectStoredIndex(child, JOINT_INDEX);
+		sorted_children.emplace_back(joint_index, child);
+	}
+	std::stable_sort(sorted_children.begin(), sorted_children.end(),
+		[](const auto& a, const auto& b) { return a.first < b.first; });
+
+	pmx_file.m_joints.clear();
+	pmx_file.m_joints.reserve(sorted_children.size());
+
+	for (const auto& [joint_index, child] : sorted_children)
+	{
+		(void)joint_index;
+		const BaseContainer* bc = child->GetDataInstance();
+		if (!bc)
+			return false;
+
+		libmmd::PMXJoint pmx_joint;
+		const String name_local = ReadObjectStoredString(child, JOINT_NAME_LOCAL, child->GetName());
+		const String name_universal = ReadObjectStoredString(child, JOINT_NAME_UNIVERSAL, name_local);
+		pmx_joint.m_name = string_util::GetStdString(name_local);
+		pmx_joint.m_englishName = string_util::GetStdString(name_universal);
+		if (pmx_joint.m_englishName.empty())
+			pmx_joint.m_englishName = pmx_joint.m_name;
+
+		pmx_joint.m_type = static_cast<libmmd::PMXJoint::JointType>(bc->GetInt32(JOINT_TYPE));
+		pmx_joint.m_rigidbodyAIndex = RemapRigidIndex(bc->GetInt32(JOINT_LINK_RIGID_A_INDEX), rigid_index_remap);
+		pmx_joint.m_rigidbodyBIndex = RemapRigidIndex(bc->GetInt32(JOINT_LINK_RIGID_B_INDEX), rigid_index_remap);
+		pmx_joint.m_translate = Eigen::Vector3f(
+			GetJointFloat<JOINT_ATTITUDE_POSITION_X>(bc),
+			GetJointFloat<JOINT_ATTITUDE_POSITION_Y>(bc),
+			GetJointFloat<JOINT_ATTITUDE_POSITION_Z>(bc));
+		pmx_joint.m_rotate = Eigen::Vector3f(
+			GetJointFloat<JOINT_ATTITUDE_ROTATION_X>(bc),
+			GetJointFloat<JOINT_ATTITUDE_ROTATION_Y>(bc),
+			GetJointFloat<JOINT_ATTITUDE_ROTATION_Z>(bc));
+		pmx_joint.m_translateLowerLimit = Eigen::Vector3f(
+			GetJointFloat<JOINT_PARAMETER_POSITION_X_MIN>(bc),
+			GetJointFloat<JOINT_PARAMETER_POSITION_Y_MIN>(bc),
+			GetJointFloat<JOINT_PARAMETER_POSITION_Z_MIN>(bc));
+		pmx_joint.m_translateUpperLimit = Eigen::Vector3f(
+			GetJointFloat<JOINT_PARAMETER_POSITION_X_MAX>(bc),
+			GetJointFloat<JOINT_PARAMETER_POSITION_Y_MAX>(bc),
+			GetJointFloat<JOINT_PARAMETER_POSITION_Z_MAX>(bc));
+		pmx_joint.m_rotateLowerLimit = Eigen::Vector3f(
+			GetJointFloat<JOINT_PARAMETER_ROTATION_X_MIN>(bc),
+			GetJointFloat<JOINT_PARAMETER_ROTATION_Y_MIN>(bc),
+			GetJointFloat<JOINT_PARAMETER_ROTATION_Z_MIN>(bc));
+		pmx_joint.m_rotateUpperLimit = Eigen::Vector3f(
+			GetJointFloat<JOINT_PARAMETER_ROTATION_X_MAX>(bc),
+			GetJointFloat<JOINT_PARAMETER_ROTATION_Y_MAX>(bc),
+			GetJointFloat<JOINT_PARAMETER_ROTATION_Z_MAX>(bc));
+		pmx_joint.m_springTranslateFactor = Eigen::Vector3f(
+			GetJointFloat<JOINT_SPRING_POSITION_X>(bc),
+			GetJointFloat<JOINT_SPRING_POSITION_Y>(bc),
+			GetJointFloat<JOINT_SPRING_POSITION_Z>(bc));
+		pmx_joint.m_springRotateFactor = Eigen::Vector3f(
+			GetJointFloat<JOINT_SPRING_ROTATION_X>(bc),
+			GetJointFloat<JOINT_SPRING_ROTATION_Y>(bc),
+			GetJointFloat<JOINT_SPRING_ROTATION_Z>(bc));
+		pmx_file.m_joints.push_back(std::move(pmx_joint));
+	}
+	return true;
+}
+
 MMDBoneManagerObject* MMDJointManagerObject::GetBoneManager()
 {
 	if (!bone_manager_data_)
@@ -385,9 +512,7 @@ Bool MMDJointManagerObject::BuildStandaloneJoints(libmmd::MMDPhysicsManager* phy
 	{
 		if (child->GetType() == g_mmd_joint_object_id)
 		{
-			GeData ge_data;
-			child->GetParameter(ConstDescID(DescLevel(JOINT_INDEX)), ge_data, DESCFLAGS_GET::NONE);
-			const Int32 joint_index = ge_data.GetString().ToInt32(nullptr);
+			const Int32 joint_index = ReadObjectStoredIndex(child, JOINT_INDEX);
 			sorted_children.emplace_back(joint_index, child);
 		}
 	}
@@ -517,9 +642,7 @@ void MMDJointManagerObject::ReconnectJointPointers(libmmd::MMDPhysicsManager* ph
 	{
 		if (child->GetType() == g_mmd_joint_object_id)
 		{
-			GeData ge_data;
-			child->GetParameter(ConstDescID(DescLevel(JOINT_INDEX)), ge_data, DESCFLAGS_GET::NONE);
-			const Int32 joint_index = ge_data.GetString().ToInt32(nullptr);
+			const Int32 joint_index = ReadObjectStoredIndex(child, JOINT_INDEX);
 			sorted_children.emplace_back(joint_index, child);
 		}
 	}

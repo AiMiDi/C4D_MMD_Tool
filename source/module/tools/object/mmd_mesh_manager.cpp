@@ -23,6 +23,12 @@ Description:	MMD mesh root object
 #include "maxon/parallelfor.h"
 #include "maxon/queue.h"
 #include "module/tools/material/mmd_material.h"
+#include "utils/string_util.hpp"
+
+#include <algorithm>
+#include <cmath>
+#include <vector>
+
 namespace
 {
 	Int32 NormalizeMeshMode(const Int32 mode)
@@ -1584,9 +1590,628 @@ Bool MMDMeshManagerObject::LoadPMX(
 	return true;
 }
 
+namespace
+{
+	static UInt64 MakeMeshCornerKey(const BaseObject* mesh_object, const Int32 face_index, const Int32 corner)
+	{
+		return (static_cast<UInt64>(reinterpret_cast<uintptr_t>(mesh_object)) << 32)
+			| (static_cast<UInt64>(face_index) << 2)
+			| static_cast<UInt64>(corner & 3);
+	}
+
+	static UInt64 HashVertexKeyValue(UInt64 seed, const UInt64 value)
+	{
+		seed ^= value + 0x9e3779b97f4a7c15ULL + (seed << 6) + (seed >> 2);
+		return seed;
+	}
+
+	static UInt64 HashVertexKeyFloat(UInt64 seed, const Float value)
+	{
+		const Int64 quantized = static_cast<Int64>(std::llround(value * 1000000.0));
+		return HashVertexKeyValue(seed, static_cast<UInt64>(quantized));
+	}
+
+	static UInt64 MakePmxVertexKey(const libmmd::PMXVertex& vertex)
+	{
+		UInt64 seed = 1469598103934665603ULL;
+		for (Int32 i = 0; i < 3; ++i)
+		{
+			seed = HashVertexKeyFloat(seed, vertex.m_position[i]);
+			seed = HashVertexKeyFloat(seed, vertex.m_normal[i]);
+		}
+		for (Int32 i = 0; i < 2; ++i)
+			seed = HashVertexKeyFloat(seed, vertex.m_uv[i]);
+		seed = HashVertexKeyFloat(seed, vertex.m_edgeMag);
+		seed = HashVertexKeyValue(seed, static_cast<UInt64>(vertex.m_weightType));
+		for (Int32 i = 0; i < 4; ++i)
+		{
+			seed = HashVertexKeyValue(seed, static_cast<UInt64>(vertex.m_boneIndices[i]));
+			seed = HashVertexKeyFloat(seed, vertex.m_boneWeights[i]);
+		}
+		if (vertex.m_weightType == libmmd::PMXVertexWeight::SDEF)
+		{
+			for (Int32 i = 0; i < 3; ++i)
+			{
+				seed = HashVertexKeyFloat(seed, vertex.m_sdefC[i]);
+				seed = HashVertexKeyFloat(seed, vertex.m_sdefR0[i]);
+				seed = HashVertexKeyFloat(seed, vertex.m_sdefR1[i]);
+			}
+		}
+		return seed;
+	}
+
+	static const CAMorphNode* FindBasePoseMorphPointNode(const PolygonObject* mesh_object)
+	{
+		if (!mesh_object)
+			return nullptr;
+
+		const auto* morph_tag = static_cast<const CAPoseMorphTag*>(const_cast<PolygonObject*>(mesh_object)->GetTag(Tposemorph));
+		if (!morph_tag || morph_tag->GetMorphCount() <= 0)
+			return nullptr;
+
+		CAPoseMorphTag* const writable_tag = const_cast<CAPoseMorphTag*>(morph_tag);
+		CAMorph* const base_morph = writable_tag->GetMorph(0);
+		if (!base_morph)
+			return nullptr;
+
+		CAMorphNode* node = base_morph->Find(writable_tag, const_cast<PolygonObject*>(mesh_object));
+		if (node && (node->GetInfo() & CAMORPH_DATA_FLAGS::POINTS) && node->GetPointCount() >= mesh_object->GetPointCount())
+			return node;
+
+		for (node = base_morph->GetFirst(); node; node = node->GetNext())
+		{
+			if ((node->GetInfo() & CAMORPH_DATA_FLAGS::POINTS) && node->GetPointCount() >= mesh_object->GetPointCount())
+				return node;
+		}
+		return nullptr;
+	}
+
+	static Int32 GetPolygonCornerPointIndex(const CPolygon& poly, const Int32 corner)
+	{
+		switch (corner)
+		{
+		case 0: return poly.a;
+		case 1: return poly.b;
+		case 2: return poly.c;
+		default: return poly.d;
+		}
+	}
+
+	static Float32 Clamp01(const Float32 value)
+	{
+		if (value < 0.F)
+			return 0.F;
+		if (value > 1.F)
+			return 1.F;
+		return value;
+	}
+
+	static SelectionTag* FindSelectionTag(const PolygonObject* mesh_object, const String& selection_name)
+	{
+		if (!mesh_object)
+			return nullptr;
+		for (BaseTag* tag = const_cast<PolygonObject*>(mesh_object)->GetFirstTag(); tag; tag = tag->GetNext())
+		{
+			if (tag->IsInstanceOf(Tpolygonselection) && tag->GetName() == selection_name)
+				return static_cast<SelectionTag*>(tag);
+		}
+		return nullptr;
+	}
+
+	static VertexMapTag* FindEdgeScaleTag(const PolygonObject* mesh_object)
+	{
+		if (!mesh_object)
+			return nullptr;
+		for (BaseTag* tag = const_cast<PolygonObject*>(mesh_object)->GetFirstTag(); tag; tag = tag->GetNext())
+		{
+			if (tag->IsInstanceOf(Tvertexmap) && tag->GetName() == "\u8F6E\u5ED3\u500D\u7387"_s)
+				return static_cast<VertexMapTag*>(tag);
+		}
+		return nullptr;
+	}
+
+	static void ReadSdefData(const PolygonObject* mesh_object, const Int32 vertex_index,
+	                       Eigen::Vector3f& out_c, Eigen::Vector3f& out_r0, Eigen::Vector3f& out_r1, Bool& out_has_sdef)
+	{
+		out_has_sdef = false;
+		if (!mesh_object)
+			return;
+		const VertexColorTag* tag_c = nullptr;
+		const VertexColorTag* tag_r0 = nullptr;
+		const VertexColorTag* tag_r1 = nullptr;
+		for (BaseTag* tag = const_cast<PolygonObject*>(mesh_object)->GetFirstTag(); tag; tag = tag->GetNext())
+		{
+			if (!tag->IsInstanceOf(Tvertexcolor))
+				continue;
+			const String name = tag->GetName();
+			if (name == "SDEF_C"_s)
+				tag_c = static_cast<const VertexColorTag*>(tag);
+			else if (name == "SDEF_R0"_s)
+				tag_r0 = static_cast<const VertexColorTag*>(tag);
+			else if (name == "SDEF_R1"_s)
+				tag_r1 = static_cast<const VertexColorTag*>(tag);
+		}
+		if (!tag_c || !tag_r0 || !tag_r1)
+			return;
+		const ConstVertexColorHandle handle_c = tag_c->GetDataAddressR();
+		const ConstVertexColorHandle handle_r0 = tag_r0->GetDataAddressR();
+		const ConstVertexColorHandle handle_r1 = tag_r1->GetDataAddressR();
+		const maxon::ColorA32 col_c = VertexColorTag::Get(handle_c, nullptr, nullptr, vertex_index);
+		const maxon::ColorA32 col_r0 = VertexColorTag::Get(handle_r0, nullptr, nullptr, vertex_index);
+		const maxon::ColorA32 col_r1 = VertexColorTag::Get(handle_r1, nullptr, nullptr, vertex_index);
+		out_c = Eigen::Vector3f(col_c.r, col_c.g, col_c.b);
+		out_r0 = Eigen::Vector3f(col_r0.r, col_r0.g, col_r0.b);
+		out_r1 = Eigen::Vector3f(col_r1.r, col_r1.g, col_r1.b);
+		out_has_sdef = out_c.squaredNorm() > 0.F || out_r0.squaredNorm() > 0.F || out_r1.squaredNorm() > 0.F;
+	}
+
+	// QDEF is not reconstructed from C4D weights; SDEF is exported only when SDEF_* vertex color tags exist.
+	static void AssignVertexWeights(libmmd::PMXVertex& pmx_vertex, const CAWeightTag* weight_tag,
+	                                const Int32 vertex_index, const Int32 joint_count, const Bool allow_sdef,
+	                                const PolygonObject* mesh_object,
+	                                const std::vector<Int32>& joint_to_bone_index)
+	{
+		struct WeightEntry { Int32 bone_index = -1; Float32 weight = 0.F; };
+		std::vector<WeightEntry> entries;
+		entries.reserve(static_cast<size_t>(joint_count));
+		for (Int32 joint_index = 0; joint_index < joint_count; ++joint_index)
+		{
+			const Float32 weight = weight_tag->GetWeight(joint_index, vertex_index);
+			if (weight <= 0.F)
+				continue;
+			const Int32 bone_idx = (static_cast<size_t>(joint_index) < joint_to_bone_index.size())
+				? joint_to_bone_index[static_cast<size_t>(joint_index)] : joint_index;
+			if (bone_idx < 0)
+				continue;
+			entries.push_back({ bone_idx, Clamp01(weight) });
+		}
+		if (entries.empty())
+		{
+			pmx_vertex.m_weightType = libmmd::PMXVertexWeight::BDEF1;
+			pmx_vertex.m_boneIndices[0] = 0;
+			pmx_vertex.m_boneWeights[0] = 1.F;
+			return;
+		}
+
+		std::stable_sort(entries.begin(), entries.end(), [](const WeightEntry& lhs, const WeightEntry& rhs)
+		{
+			return lhs.weight > rhs.weight;
+		});
+		if (entries.size() > 4)
+			entries.resize(4);
+
+		const Int32 count = static_cast<Int32>(entries.size());
+
+		Eigen::Vector3f sdef_c, sdef_r0, sdef_r1;
+		Bool has_sdef = false;
+		if (allow_sdef && count == 2)
+			ReadSdefData(mesh_object, vertex_index, sdef_c, sdef_r0, sdef_r1, has_sdef);
+
+		if (has_sdef)
+		{
+			pmx_vertex.m_weightType = libmmd::PMXVertexWeight::SDEF;
+			pmx_vertex.m_boneIndices[0] = entries[0].bone_index;
+			pmx_vertex.m_boneIndices[1] = entries[1].bone_index;
+			pmx_vertex.m_boneWeights[0] = entries[0].weight;
+			pmx_vertex.m_sdefC = sdef_c;
+			pmx_vertex.m_sdefR0 = sdef_r0;
+			pmx_vertex.m_sdefR1 = sdef_r1;
+			return;
+		}
+
+		if (count == 1)
+		{
+			pmx_vertex.m_weightType = libmmd::PMXVertexWeight::BDEF1;
+			pmx_vertex.m_boneIndices[0] = entries[0].bone_index;
+			pmx_vertex.m_boneWeights[0] = 1.F;
+			return;
+		}
+		if (count == 2)
+		{
+			const Float32 sum = entries[0].weight + entries[1].weight;
+			const Float32 w0 = sum > 0.F ? entries[0].weight / sum : 0.5F;
+			pmx_vertex.m_weightType = libmmd::PMXVertexWeight::BDEF2;
+			pmx_vertex.m_boneIndices[0] = entries[0].bone_index;
+			pmx_vertex.m_boneIndices[1] = entries[1].bone_index;
+			pmx_vertex.m_boneWeights[0] = w0;
+			return;
+		}
+
+		Float32 sum = 0.F;
+		for (Int32 i = 0; i < count; ++i)
+			sum += entries[i].weight;
+		pmx_vertex.m_weightType = libmmd::PMXVertexWeight::BDEF4;
+		for (Int32 i = 0; i < 4; ++i)
+		{
+			if (i < count)
+			{
+				pmx_vertex.m_boneIndices[i] = entries[i].bone_index;
+				pmx_vertex.m_boneWeights[i] = sum > 0.F ? entries[i].weight / sum : (i == 0 ? 1.F : 0.F);
+			}
+			else
+			{
+				pmx_vertex.m_boneIndices[i] = entries[0].bone_index;
+				pmx_vertex.m_boneWeights[i] = 0.F;
+			}
+		}
+	}
+
+}
+
+Bool MMDMeshManagerObject::ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
+	const maxon::HashMap<UInt64, uint32_t>& vertex_map,
+	const maxon::HashMap<String, Int32>& morph_name_to_index) const
+{
+	iferr_scope_handler { return false; };
+
+	const BaseObject* const mesh_root = static_cast<const BaseObject*>(Get());
+	for (const auto& morph_entry : mesh_morph_name_)
+	{
+		const String& morph_name = morph_entry.GetKey();
+		if (!morph_name_to_index.Contains(morph_name))
+			continue;
+
+		libmmd::PMXFileMorph pmx_morph;
+		pmx_morph.m_name = string_util::GetStdString(morph_name);
+		pmx_morph.m_englishName = pmx_morph.m_name;
+		const Bool is_uv = GetUVMorphNames().Contains(morph_name);
+		pmx_morph.m_morphType = is_uv ? libmmd::PMXMorphType::UV : libmmd::PMXMorphType::Position;
+		maxon::HashSet<Int32> emitted_pmx_vertices;
+
+		for (const BaseObject* child = mesh_root->GetDown(); child; child = child->GetNext())
+		{
+			if (!child->IsInstanceOf(Opolygon))
+				continue;
+			const auto* morph_tag = reinterpret_cast<const CAPoseMorphTag*>(child->GetTag(Tposemorph));
+			if (!morph_tag)
+				continue;
+
+			const Int32 morph_count = morph_tag->GetMorphCount();
+			Int32 morph_index = 1;
+			for (; morph_index < morph_count; ++morph_index)
+			{
+				CAMorph* candidate = const_cast<CAPoseMorphTag*>(morph_tag)->GetMorph(morph_index);
+				if (candidate && candidate->GetName() == morph_name)
+					break;
+			}
+			if (morph_index >= morph_count)
+				continue;
+
+			CAMorph* morph = const_cast<CAPoseMorphTag*>(morph_tag)->GetMorph(morph_index);
+			if (!morph)
+				continue;
+
+			BaseObject* morph_mesh = const_cast<CAPoseMorphTag*>(morph_tag)->GetObject();
+			if (!morph_mesh || !morph_mesh->IsInstanceOf(Opolygon))
+				continue;
+			const PolygonObject* base_mesh = static_cast<const PolygonObject*>(morph_mesh);
+
+			CAMorphNode* morph_node = morph->GetFirst();
+			while (morph_node && !(morph_node->GetInfo() & (is_uv ? CAMORPH_DATA_FLAGS::UV : CAMORPH_DATA_FLAGS::POINTS)))
+				morph_node = morph_node->GetNext();
+			if (!morph_node)
+				continue;
+
+			if (is_uv)
+			{
+				const Int32 face_count = base_mesh->GetPolygonCount();
+				const CPolygon* const polygons = base_mesh->GetPolygonR();
+				for (Int32 face_index = 0; face_index < face_count; ++face_index)
+				{
+					UVWStruct delta;
+					morph_node->GetUV(0, face_index, delta);
+					const CPolygon& poly = polygons[face_index];
+					const Int32 corner_count = (poly.c == poly.d) ? 3 : 4;
+					const Vector deltas[4] = { delta.a, delta.b, delta.c, delta.d };
+					for (Int32 corner = 0; corner < corner_count; ++corner)
+					{
+						if (deltas[corner].GetLength() < 1e-6f)
+							continue;
+						const UInt64 key = MakeMeshCornerKey(morph_mesh, face_index, corner);
+						if (const auto* pmx_index = vertex_map.Find(key))
+						{
+							const Int32 target_index = static_cast<Int32>(pmx_index->GetValue());
+							if (emitted_pmx_vertices.Contains(target_index))
+								continue;
+							emitted_pmx_vertices.Insert(target_index) iferr_return;
+
+							libmmd::PMXFileMorph::UVMorph uv_morph;
+							uv_morph.m_vertexIndex = static_cast<int32_t>(target_index);
+							uv_morph.m_uv = Eigen::Vector4f(
+								static_cast<float>(deltas[corner].x),
+								static_cast<float>(deltas[corner].y),
+								0.F,
+								0.F);
+							pmx_morph.m_uvMorph.push_back(uv_morph);
+						}
+					}
+				}
+			}
+			else
+			{
+				const Int32 face_count = base_mesh->GetPolygonCount();
+				const CPolygon* const polygons = base_mesh->GetPolygonR();
+				for (Int32 face_index = 0; face_index < face_count; ++face_index)
+				{
+					const CPolygon& poly = polygons[face_index];
+					const Int32 corner_count = (poly.c == poly.d) ? 3 : 4;
+					for (Int32 corner = 0; corner < corner_count; ++corner)
+					{
+						const Int32 point_index = GetPolygonCornerPointIndex(poly, corner);
+						const Vector offset = morph_node->GetPoint(point_index);
+						if (offset.GetLength() < 1e-6f)
+							continue;
+						const UInt64 key = MakeMeshCornerKey(morph_mesh, face_index, corner);
+						if (const auto* pmx_index = vertex_map.Find(key))
+						{
+							const Int32 target_index = static_cast<Int32>(pmx_index->GetValue());
+							if (emitted_pmx_vertices.Contains(target_index))
+								continue;
+							emitted_pmx_vertices.Insert(target_index) iferr_return;
+
+							libmmd::PMXFileMorph::PositionMorph position_morph;
+							position_morph.m_vertexIndex = static_cast<int32_t>(target_index);
+							position_morph.m_position = Eigen::Vector3f(
+								static_cast<float>(offset.x),
+								static_cast<float>(offset.y),
+								static_cast<float>(offset.z));
+							pmx_morph.m_positionMorph.push_back(position_morph);
+						}
+					}
+				}
+			}
+		}
+
+		if (!pmx_morph.m_positionMorph.empty() || !pmx_morph.m_uvMorph.empty())
+		{
+			const Int32 morph_index = morph_name_to_index.Find(morph_name)->GetValue();
+			if (morph_index >= 0 && static_cast<size_t>(morph_index) < pmx_file.m_morphs.size())
+			{
+				const auto& stub = pmx_file.m_morphs[static_cast<size_t>(morph_index)];
+				pmx_morph.m_controlPanel = stub.m_controlPanel;
+				if (!stub.m_englishName.empty())
+					pmx_morph.m_englishName = stub.m_englishName;
+				pmx_file.m_morphs[static_cast<size_t>(morph_index)] = std::move(pmx_morph);
+			}
+		}
+	}
+	return true;
+}
+
 Bool MMDMeshManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting)
 {
-	return false;
+	iferr_scope_handler { return false; };
+
+	BaseObject* const mesh_root = static_cast<BaseObject*>(Get());
+	BaseObject* const model_object = mesh_root ? mesh_root->GetUp() : nullptr;
+	auto* const model_data = model_object ? model_object->GetNodeData<MMDModelManagerObject>() : nullptr;
+	if (!model_data)
+		return false;
+	BaseDocument* const doc = mesh_root ? mesh_root->GetDocument() : nullptr;
+
+	MMDBoneManagerObject* bone_manager = model_data->GetBoneManagerData();
+	maxon::BaseArray<BaseObject*> bone_list;
+	if (bone_manager)
+		bone_manager->BuildOrderedBoneObjectList(bone_list);
+
+	pmx_file.m_vertices.clear();
+	pmx_file.m_faces.clear();
+
+	maxon::HashMap<UInt64, uint32_t> vertex_map;
+	maxon::HashMap<UInt64, uint32_t> exported_vertex_map;
+	maxon::HashMap<String, Int32> morph_name_to_index;
+
+	const Int32 material_count = static_cast<Int32>(model_data->material_list_.GetCount());
+	if (material_count == 0)
+	{
+		for (BaseObject* child = static_cast<BaseObject*>(Get())->GetDown(); child; child = child->GetNext())
+		{
+			if (!child->IsInstanceOf(Opolygon))
+				continue;
+			MMDMaterialData fallback_mat;
+			fallback_mat.name_local = child->GetName();
+			fallback_mat.mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create().GetValue();
+			if (fallback_mat.mesh_link && *fallback_mat.mesh_link)
+				(*fallback_mat.mesh_link)->SetLink(child);
+			iferr(model_data->material_list_.Append(std::move(fallback_mat))) return false;
+		}
+	}
+
+	for (Int32 material_index = 0; material_index < static_cast<Int32>(model_data->material_list_.GetCount()); ++material_index)
+	{
+		auto& mat = model_data->material_list_[material_index];
+		BaseObject* mesh_object = mat.mesh_link && *mat.mesh_link
+			? static_cast<BaseObject*>(doc ? (*mat.mesh_link)->GetLink(doc) : (*mat.mesh_link)->ForceGetLink())
+			: nullptr;
+		if (!mesh_object || !mesh_object->IsInstanceOf(Opolygon))
+			continue;
+
+		auto* const poly_mesh = static_cast<PolygonObject*>(mesh_object);
+		const Vector* const points = poly_mesh->GetPointR();
+		const CAMorphNode* const base_point_node = FindBasePoseMorphPointNode(poly_mesh);
+		const CPolygon* const polygons = poly_mesh->GetPolygonR();
+		const Int32 polygon_count = poly_mesh->GetPolygonCount();
+
+		NormalTag* normal_tag = nullptr;
+		UVWTag* uvw_tag = nullptr;
+		for (BaseTag* tag = poly_mesh->GetFirstTag(); tag; tag = tag->GetNext())
+		{
+			if (setting.export_normal && tag->IsInstanceOf(Tnormal))
+				normal_tag = static_cast<NormalTag*>(tag);
+			if (setting.export_uv && tag->IsInstanceOf(Tuvw))
+				uvw_tag = static_cast<UVWTag*>(tag);
+		}
+		const ConstNormalHandle normal_handle = normal_tag ? normal_tag->GetDataAddressR() : ConstNormalHandle{};
+		const ConstUVWHandle uvw_handle = uvw_tag ? uvw_tag->GetDataAddressR() : ConstUVWHandle{};
+		const CAWeightTag* weight_tag = setting.export_weights
+			? static_cast<const CAWeightTag*>(poly_mesh->GetTag(Tweights))
+			: nullptr;
+		const Int32 joint_count = weight_tag ? weight_tag->GetJointCount() : 0;
+
+		std::vector<Int32> joint_to_bone_index(static_cast<size_t>(joint_count));
+		if (weight_tag && bone_manager)
+		{
+			for (Int32 ji = 0; ji < joint_count; ++ji)
+			{
+				joint_to_bone_index[static_cast<size_t>(ji)] = ji;
+				BaseObject* const joint_obj = const_cast<CAWeightTag*>(weight_tag)->GetJoint(ji, doc);
+				if (!joint_obj)
+					continue;
+				BaseTag* const bone_tag = joint_obj->GetTag(g_mmd_bone_tag_id);
+				if (!bone_tag)
+					continue;
+				const Int32 pmx_idx = bone_manager->FindBoneIndex(bone_tag);
+				if (pmx_idx >= 0)
+					joint_to_bone_index[static_cast<size_t>(ji)] = pmx_idx;
+			}
+		}
+
+		const VertexMapTag* edge_map_tag = FindEdgeScaleTag(poly_mesh);
+		const Float32* edge_data = edge_map_tag ? edge_map_tag->GetDataAddressR() : nullptr;
+
+		Int32 part_face_vertices = 0;
+
+		auto resolve_corner_vertex = [&](const Int32 face_index, const Int32 corner, uint32_t& out_index) -> Bool
+		{
+			const CPolygon& poly = polygons[face_index];
+			const UInt64 corner_key = MakeMeshCornerKey(mesh_object, face_index, corner);
+
+			const Int32 point_index = GetPolygonCornerPointIndex(poly, corner);
+			Vector normal;
+			const Vector* normal_key = nullptr;
+			if (setting.export_normal && normal_tag)
+			{
+				NormalStruct normal_struct;
+				NormalTag::Get(normal_handle, face_index, normal_struct);
+				normal = corner == 0 ? normal_struct.a
+					: (corner == 1 ? normal_struct.b : (corner == 2 ? normal_struct.c : normal_struct.d));
+				normal_key = &normal;
+			}
+
+			Vector uv;
+			const Vector* uv_key = nullptr;
+			if (setting.export_uv && uvw_tag)
+			{
+				UVWStruct uvw_struct;
+				UVWTag::Get(uvw_handle, face_index, uvw_struct);
+				uv = corner == 0 ? uvw_struct.a
+					: (corner == 1 ? uvw_struct.b : (corner == 2 ? uvw_struct.c : uvw_struct.d));
+				uv_key = &uv;
+			}
+
+			const Float32 edge_mag = edge_data ? edge_data[point_index] : 1.F;
+			libmmd::PMXVertex pmx_vertex;
+			const Vector point = base_point_node ? base_point_node->GetPoint(point_index) : points[point_index];
+			pmx_vertex.m_position = Eigen::Vector3f(
+				static_cast<float>(point.x),
+				static_cast<float>(point.y),
+				static_cast<float>(point.z));
+
+			if (normal_key)
+			{
+				pmx_vertex.m_normal = Eigen::Vector3f(
+					static_cast<float>(normal.x),
+					static_cast<float>(normal.y),
+					static_cast<float>(normal.z));
+			}
+
+			if (uv_key)
+			{
+				pmx_vertex.m_uv = Eigen::Vector2f(
+					static_cast<float>(uv.x),
+					static_cast<float>(uv.y));
+			}
+
+			pmx_vertex.m_edgeMag = edge_mag;
+
+			if (weight_tag && setting.export_weights && setting.export_bone)
+				AssignVertexWeights(pmx_vertex, weight_tag, point_index, joint_count, true, poly_mesh, joint_to_bone_index);
+			else
+			{
+				pmx_vertex.m_weightType = libmmd::PMXVertexWeight::BDEF1;
+				pmx_vertex.m_boneIndices[0] = 0;
+				pmx_vertex.m_boneWeights[0] = 1.F;
+			}
+
+			const UInt64 vertex_key = MakePmxVertexKey(pmx_vertex);
+			if (const auto* existing = exported_vertex_map.Find(vertex_key))
+			{
+				out_index = existing->GetValue();
+				vertex_map.Insert(corner_key, out_index) iferr_return;
+				return true;
+			}
+
+			out_index = static_cast<uint32_t>(pmx_file.m_vertices.size());
+			pmx_file.m_vertices.push_back(pmx_vertex);
+			exported_vertex_map.Insert(vertex_key, out_index) iferr_return;
+			vertex_map.Insert(corner_key, out_index) iferr_return;
+			return true;
+		};
+
+		auto emit_triangle = [&](const Int32 face_index, const Int32 c0, const Int32 c1, const Int32 c2) -> Bool
+		{
+			uint32_t i0 = 0;
+			uint32_t i1 = 0;
+			uint32_t i2 = 0;
+			if (!resolve_corner_vertex(face_index, c0, i0))
+				return false;
+			if (!resolve_corner_vertex(face_index, c1, i1))
+				return false;
+			if (!resolve_corner_vertex(face_index, c2, i2))
+				return false;
+
+			libmmd::PMXFace face;
+			face.m_vertices[0] = i0;
+			face.m_vertices[1] = i1;
+			face.m_vertices[2] = i2;
+			pmx_file.m_faces.push_back(face);
+			part_face_vertices += 3;
+			return true;
+		};
+
+		auto emit_face = [&](const Int32 face_index) -> Bool
+		{
+			const CPolygon& poly = polygons[face_index];
+			if (poly.c == poly.d)
+				return emit_triangle(face_index, 0, 1, 2);
+			return emit_triangle(face_index, 0, 1, 2) && emit_triangle(face_index, 0, 2, 3);
+		};
+
+		if (!mat.selection_name.IsEmpty())
+		{
+			if (const SelectionTag* selection_tag = FindSelectionTag(poly_mesh, mat.selection_name))
+			{
+				const BaseSelect* selection = selection_tag->GetBaseSelect();
+				for (Int32 face_index = 0; face_index < polygon_count; ++face_index)
+				{
+					if (selection->IsSelected(face_index) && !emit_face(face_index))
+						return false;
+				}
+			}
+		}
+		else
+		{
+			for (Int32 face_index = 0; face_index < polygon_count; ++face_index)
+			{
+				if (!emit_face(face_index))
+					return false;
+			}
+		}
+
+		mat.num_face_vertices = part_face_vertices;
+	}
+
+	if (setting.export_expression)
+	{
+		for (const auto& morph_entry : model_data->morph_name_)
+		{
+			morph_name_to_index.Insert(morph_entry.GetKey(), morph_entry.GetValue()) iferr_return;
+		}
+		if (!ExportMeshMorphsToPMX(pmx_file, vertex_map, morph_name_to_index))
+			return false;
+	}
+
+	return true;
 }
 
 void MMDMeshManagerObject::RefreshMeshMorphData(BaseObject* op, bool suppress_change_message)

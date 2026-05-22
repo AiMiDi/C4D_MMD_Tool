@@ -231,6 +231,7 @@ class MMDModelManagerObject final : public ObjectData
 
 	MMDModelManagerObject();
 	friend MMDModelManagerObject;
+	friend class MMDMeshManagerObject;
 
 public:
 	MMDModelManagerObject(const MMDModelManagerObject&) = delete; void operator =(const MMDModelManagerObject&) = delete;
@@ -292,7 +293,9 @@ public:
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 	void ImportDisplayFrames(const libmmd::PMXFile& pmx_file);
 	void RefreshDisplayFrameUI();
-	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting) const;
+	Bool PreparePMXExportState(BaseDocument* doc);
+	void FinishPMXExportState(BaseDocument* doc, Bool restore_edit_mode);
+	Bool SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelExport& setting);
 
 	Bool AddMaterial(const libmmd::PMXMaterial& pmx_material, BaseMaterial* c4d_material,
 	                 BaseObject* mesh_object, const String& selection_name,
@@ -311,6 +314,8 @@ private:
 	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it);
 	void RefreshMorph();
 	void SyncMorphSlidersFromTags();
+	void CaptureAndClearPMXExportMorphState(BaseDocument* doc);
+	void RestorePMXExportMorphState(BaseDocument* doc);
 	void ClearMorphRuntimeForEdit();
 	Bool ReadMorph(HyperFile* hf);
 #if API_VERSION < 2024000
@@ -354,4 +359,7 @@ private:
 	void SyncSubManagerScale(Float pm);
 	void SyncMaterialsList();
 	void PruneDeletedMaterialEntries(BaseDocument* doc);
+
+	std::vector<Float> pmx_export_morph_strength_snapshot_;
+	Bool pmx_export_has_morph_state_snapshot_ = false;
 };

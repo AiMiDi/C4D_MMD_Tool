@@ -339,6 +339,13 @@ public:
 	Int32 AddBoneMorph(String morph_name = {});
 	Bool SetBoneMorphTranslationNoCheck(Int32 id, Vector translation);
 	Bool SetBoneMorphRotationNoCheck(Int32 id, Vector rotation);
+	struct BoneMorphPmxExportEntry
+	{
+		String morph_name;
+		Vector translation;
+		Vector rotation_hpb;
+	};
+	void CollectBoneMorphPmxExportEntries(maxon::BaseArray<BoneMorphPmxExportEntry>& out) const;
 	static Bool SplineDataCallBack(Int32 cid, const void* data);
 	Bool EnsureAnimationSlotCount(Int32 slot_count);
 	Bool ReplaceAnimationSlot(Int32 slot_index, const maxon::BaseArray<BoneAnimationKeyframeData>& keyframes);

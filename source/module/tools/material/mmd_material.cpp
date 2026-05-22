@@ -162,7 +162,8 @@ void MMDMaterialData::FromPMX(const libmmd::PMXMaterial& pmx_material)
 	material_link = maxon::StrongRef<AutoAlloc<BaseLink>>();
 }
 
-void MMDMaterialData::ToPMX(libmmd::PMXMaterial& pmx_material) const
+void MMDMaterialData::ToPMX(libmmd::PMXMaterial& pmx_material, const Int32 texture_index,
+                            const Int32 sphere_texture_index, const Int32 toon_texture_index) const
 {
 	pmx_material.m_name = string_util::GetStdString(name_local);
 	pmx_material.m_englishName = string_util::GetStdString(name_universal);
@@ -190,8 +191,8 @@ void MMDMaterialData::ToPMX(libmmd::PMXMaterial& pmx_material) const
 	pmx_material.m_edgeColor[2] = edge_color_rgb.z;
 	pmx_material.m_edgeColor[3] = edge_color_alpha;
 	pmx_material.m_edgeSize = edge_size;
-	pmx_material.m_textureIndex = -1; // TODO: path to index conversion
-	pmx_material.m_sphereTextureIndex = -1; // TODO: path to index conversion
+	pmx_material.m_textureIndex = texture_index;
+	pmx_material.m_sphereTextureIndex = sphere_texture_index;
 	pmx_material.m_sphereMode = static_cast<libmmd::PMXSphereMode>(sphere_mode);
 	pmx_material.m_toonMode = static_cast<libmmd::PMXToonMode>(toon_mode);
 	pmx_material.m_toonTextureIndex = toon_texture_index;

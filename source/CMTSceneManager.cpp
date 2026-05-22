@@ -43,7 +43,27 @@ void LoadVmdCameraLog::LogNotCameraError()
 void SaveVmdCameraLog::LogOK()
 {
 	timing.Stop();
-	MessageDialog(GeLoadString(IDS_MES_EXPORT_OK, String::FloatToString(timing.GetMilliseconds())));
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_TIME_ONLY_OK, String::FloatToString(timing.GetMilliseconds())));
+}
+
+void SavePmxModelLog::LogOK()
+{
+	timing.Stop();
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_MOD_OK,
+	                    model_name_local + "\n",
+	                    "\n" + comments_local + "\n",
+	                    model_name_universal + "\n",
+	                    "\n" + comments_universal + "\n") +
+		GeLoadString(IDS_MES_IMPORT_MOD_INFO_A,
+		             String::UIntToString(vertex_data_count) + "\n",
+		             String::UIntToString(surface_data_count) + "\n",
+		             String::UIntToString(texture_data_count) + "\n",
+		             String::UIntToString(material_data_count) + "\n"
+		) +
+		GeLoadString(IDS_MES_IMPORT_MOD_INFO_B,
+		             String::UIntToString(bone_data_count) + "\n",
+		             String::UIntToString(morph_data_count) + "\n",
+		             String::FloatToString(timing.GetMilliseconds())));
 }
 
 void ConversionVmdCameraLog::LogOK()
@@ -128,6 +148,20 @@ void LoadModelLog::Set(const libmmd::PMXFile& file, const CMTToolsSetting::Model
 	material_data_count = setting.import_material ? file.m_materials.size() : 0;
 	bone_data_count = setting.import_bone ? file.m_bones.size() : 0;
 	morph_data_count = setting.import_expression ? file.m_morphs.size() : 0;
+}
+
+void SavePmxModelLog::Set(const libmmd::PMXFile& file, const CMTToolsSetting::ModelExport& setting)
+{
+	model_name_local = file.m_info.m_modelName.c_str();
+	comments_local = file.m_info.m_comment.c_str();
+	model_name_universal = file.m_info.m_englishModelName.c_str();
+	comments_universal = file.m_info.m_englishComment.c_str();
+	vertex_data_count = setting.export_polygon ? file.m_vertices.size() : 0;
+	surface_data_count = setting.export_polygon ? file.m_faces.size() : 0;
+	texture_data_count = setting.export_material ? file.m_textures.size() : 0;
+	material_data_count = setting.export_material ? file.m_materials.size() : 0;
+	bone_data_count = setting.export_bone ? file.m_bones.size() : 0;
+	morph_data_count = setting.export_expression ? file.m_morphs.size() : 0;
 }
 
 void LoadModelLog::LogOK()
@@ -349,21 +383,24 @@ BaseObject* CMTSceneManager::SavePMXModel(const CMTToolsSetting::ModelExport& se
 		return nullptr;
 	}
 
-	if (select_object->IsInstanceOf(g_mmd_model_manager_object_id))
-	{
-		if(auto* pmx_model_data = select_object->GetNodeData<MMDModelManagerObject>(); !pmx_model_data->SavePMX(data, setting))
-		{
-			return nullptr;
-		}
-	}
-	else
+	if (!select_object->IsInstanceOf(g_mmd_model_manager_object_id))
 	{
 		GePrint(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TYPE_ERR));
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TYPE_ERR));
 		return nullptr;
 	}
 
-	return nullptr;
+	auto* pmx_model_data = select_object->GetNodeData<MMDModelManagerObject>();
+	if (!pmx_model_data)
+		return nullptr;
+
+	const Bool restore_edit_mode = pmx_model_data->PreparePMXExportState(setting.doc);
+	const Bool saved = pmx_model_data->SavePMX(data, setting);
+	pmx_model_data->FinishPMXExportState(setting.doc, restore_edit_mode);
+	if (!saved)
+		return nullptr;
+
+	return select_object;
 }
 
 void CMTSceneManager::AddMMDCamera(SDK2024_Const BaseObject* camera)

@@ -11,6 +11,7 @@ Description:	MMD rigid root object
 #pragma once
 
 #include <functional>
+#include <unordered_map>
 #include <c4d.h>
 #include "mmd_manager.hpp"
 #include "cmt_tools_setting.h"
@@ -77,6 +78,7 @@ public:
 	MMDBoneManagerObject* GetBoneManagerData();
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
+	Bool SavePMX(libmmd::PMXFile& pmx_file, std::unordered_map<Int32, Int32>* rigid_index_remap = nullptr, Int32 exported_bone_count = -1) const;
 
 	Bool BuildStandaloneRigidBodies(libmmd::MMDPhysicsManager* physics_manager, const std::function<libmmd::IMMDNode*(Int32)>& get_node);
 	void ReconnectRigidBodyPointers(libmmd::MMDPhysicsManager* physics_manager);
