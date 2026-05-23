@@ -1646,10 +1646,10 @@ namespace
 			return nullptr;
 
 		const auto* morph_tag = static_cast<const CAPoseMorphTag*>(const_cast<PolygonObject*>(mesh_object)->GetTag(Tposemorph));
-		if (!morph_tag || morph_tag->GetMorphCount() <= 0)
+		CAPoseMorphTag* const writable_tag = const_cast<CAPoseMorphTag*>(morph_tag);
+		if (!writable_tag || writable_tag->GetMorphCount() <= 0)
 			return nullptr;
 
-		CAPoseMorphTag* const writable_tag = const_cast<CAPoseMorphTag*>(morph_tag);
 		CAMorph* const base_morph = writable_tag->GetMorph(0);
 		if (!base_morph)
 			return nullptr;
@@ -1756,7 +1756,7 @@ namespace
 		entries.reserve(static_cast<size_t>(joint_count));
 		for (Int32 joint_index = 0; joint_index < joint_count; ++joint_index)
 		{
-			const Float32 weight = weight_tag->GetWeight(joint_index, vertex_index);
+			const Float32 weight = const_cast<CAWeightTag*>(weight_tag)->GetWeight(joint_index, vertex_index);
 			if (weight <= 0.F)
 				continue;
 			const Int32 bone_idx = (static_cast<size_t>(joint_index) < joint_to_bone_index.size())
@@ -1858,11 +1858,11 @@ Bool MMDMeshManagerObject::ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
 		pmx_morph.m_morphType = is_uv ? libmmd::PMXMorphType::UV : libmmd::PMXMorphType::Position;
 		maxon::HashSet<Int32> emitted_pmx_vertices;
 
-		for (const BaseObject* child = mesh_root->GetDown(); child; child = child->GetNext())
+		for (BaseObject* child = const_cast<BaseObject*>(mesh_root)->GetDown(); child; child = child->GetNext())
 		{
 			if (!child->IsInstanceOf(Opolygon))
 				continue;
-			const auto* morph_tag = reinterpret_cast<const CAPoseMorphTag*>(child->GetTag(Tposemorph));
+			auto* morph_tag = reinterpret_cast<CAPoseMorphTag*>(child->GetTag(Tposemorph));
 			if (!morph_tag)
 				continue;
 
@@ -1870,7 +1870,7 @@ Bool MMDMeshManagerObject::ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
 			Int32 morph_index = 1;
 			for (; morph_index < morph_count; ++morph_index)
 			{
-				CAMorph* candidate = const_cast<CAPoseMorphTag*>(morph_tag)->GetMorph(morph_index);
+				CAMorph* candidate = morph_tag->GetMorph(morph_index);
 				if (candidate && candidate->GetName() == morph_name)
 					break;
 			}
@@ -2046,7 +2046,7 @@ Bool MMDMeshManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSett
 		const CAWeightTag* weight_tag = setting.export_weights
 			? static_cast<const CAWeightTag*>(poly_mesh->GetTag(Tweights))
 			: nullptr;
-		const Int32 joint_count = weight_tag ? weight_tag->GetJointCount() : 0;
+		const Int32 joint_count = weight_tag ? const_cast<CAWeightTag*>(weight_tag)->GetJointCount() : 0;
 
 		std::vector<Int32> joint_to_bone_index(static_cast<size_t>(joint_count));
 		if (weight_tag && bone_manager)
@@ -2101,7 +2101,7 @@ Bool MMDMeshManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSett
 
 			const Float32 edge_mag = edge_data ? edge_data[point_index] : 1.F;
 			libmmd::PMXVertex pmx_vertex;
-			const Vector point = base_point_node ? base_point_node->GetPoint(point_index) : points[point_index];
+			const Vector point = base_point_node ? const_cast<CAMorphNode*>(base_point_node)->GetPoint(point_index) : points[point_index];
 			pmx_vertex.m_position = Eigen::Vector3f(
 				static_cast<float>(point.x),
 				static_cast<float>(point.y),
@@ -2181,7 +2181,7 @@ Bool MMDMeshManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSett
 		{
 			if (const SelectionTag* selection_tag = FindSelectionTag(poly_mesh, mat.selection_name))
 			{
-				const BaseSelect* selection = selection_tag->GetBaseSelect();
+				const BaseSelect* selection = const_cast<SelectionTag*>(selection_tag)->GetBaseSelect();
 				for (Int32 face_index = 0; face_index < polygon_count; ++face_index)
 				{
 					if (selection->IsSelected(face_index) && !emit_face(face_index))

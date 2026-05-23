@@ -1045,7 +1045,7 @@ void MMDBoneTag::CollectBoneMorphPmxExportEntries(maxon::BaseArray<BoneMorphPmxE
 {
 	iferr_scope_handler { return; };
 
-	const BaseTag* const tag = static_cast<const BaseTag*>(Get());
+	BaseTag* const tag = const_cast<BaseTag*>(static_cast<const BaseTag*>(Get()));
 	if (!tag)
 		return;
 

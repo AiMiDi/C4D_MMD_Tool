@@ -515,7 +515,7 @@ DIALOG DLG_CMT_TOOL {
                     SIZE 350, 0;
                     CENTER_H;
                     COLUMNS 1;
-                    ROWS 1;
+                    ROWS 2;
                     BORDERSIZE 0, 0, 0, 0;
                     SPACE 0, 0;
                     BORDERSTYLE BORDER_NONE;
@@ -657,6 +657,105 @@ DIALOG DLG_CMT_TOOL {
 
                         BUTTON DLG_CMT_TOOL_MODEL_IMPORT_BUTTON {
                             NAME IDS_CMT_TOOL_IMPORT_BUTTON;
+                            SIZE 300, 30;
+                            CENTER_H;
+                        }
+                    }
+
+                    GROUP DLG_CMT_TOOL_MODEL_EXPORT_GRP {
+                        NAME IDS_CMT_TOOL_MODEL_EXPORT_GRP;
+                        SIZE 0, 0;
+                        CENTER_H;
+                        COLUMNS 1;
+                        ROWS 2;
+                        BORDERSIZE 10, 5, 10, 10;
+                        SPACE 2, 5;
+                        BORDERSTYLE BORDER_IN;
+
+                        GROUP DLG_CMT_TOOL_MODEL_EXPORT_SIZE_GRP {
+                            SIZE 350, 10;
+                            CENTER_H;
+                            COLUMNS 2;
+                            ROWS 1;
+
+                            STATICTEXT DLG_CMT_TOOL_MODEL_EXPORT_SIZE_NAME {
+                                NAME IDS_CMT_TOOL_SIZE;
+                                SIZE 100, 10;
+                                ALIGN_LEFT;
+                            }
+
+                            EDITNUMBERARROWS DLG_CMT_TOOL_MODEL_EXPORT_SIZE {
+                                SIZE 250, 10;
+                                ALIGN_LEFT;
+                            }
+                        }
+
+                        GROUP DLG_CMT_TOOL_MODEL_EXPORT_SETTING_GRP {
+                            NAME IDS_CMT_TOOL_EXPORT_SETTING_GRP;
+                            SIZE 350, 0;
+                            CENTER_H;
+                            COLUMNS 2;
+                            ROWS 5;
+                            BORDERSIZE 10, 5, 10, 10;
+                            BORDERSTYLE BORDER_IN;
+
+                            CHECKBOX DLG_CMT_TOOL_MODEL_EXPORT_POLYGON {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_POLYGON;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
+
+                            CHECKBOX DLG_CMT_TOOL_MODEL_EXPORT_NORMAL {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_NORMAL;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
+
+                            CHECKBOX DLG_CMT_TOOL_MODEL_EXPORT_UV {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_UV;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
+
+                            CHECKBOX DLG_CMT_TOOL_MODEL_EXPORT_MATERIAL {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_MATERIAL;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
+
+                            CHECKBOX DLG_CMT_TOOL_MODEL_EXPORT_BONE {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_BONE;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
+
+                            CHECKBOX DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_WEIGHTS;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
+
+                            CHECKBOX DLG_CMT_TOOL_MODEL_EXPORT_IK {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_IK;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
+
+                            CHECKBOX DLG_CMT_TOOL_MODEL_EXPORT_INHERIT {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_INHERIT;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
+
+                            CHECKBOX DLG_CMT_TOOL_MODEL_EXPORT_EXPRESSION {
+                                NAME IDS_CMT_TOOL_MODEL_IMPORT_EXPRESSION;
+                                SIZE 180, 13;
+                                ALIGN_LEFT;
+                            }
+                        }
+
+                        BUTTON DLG_CMT_TOOL_MODEL_EXPORT_BUTTON {
+                            NAME IDS_CMT_TOOL_EXPORT_BUTTON;
                             SIZE 300, 30;
                             CENTER_H;
                         }

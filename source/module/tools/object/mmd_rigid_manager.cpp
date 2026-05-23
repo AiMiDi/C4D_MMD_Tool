@@ -517,8 +517,9 @@ Bool MMDRigidManagerObject::SavePMX(libmmd::PMXFile& pmx_file, std::unordered_ma
 		rigid_index_remap->clear();
 
 	const auto op = reinterpret_cast<const BaseObject*>(Get());
+	BaseObject* const op_mutable = const_cast<BaseObject*>(op);
 	std::vector<std::pair<Int32, const BaseObject*>> sorted_children;
-	for (const BaseObject* child = op->GetDown(); child; child = child->GetNext())
+	for (BaseObject* child = op_mutable ? op_mutable->GetDown() : nullptr; child; child = child->GetNext())
 	{
 		if (child->GetType() != g_mmd_rigid_object_id)
 			continue;

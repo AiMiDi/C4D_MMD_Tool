@@ -408,8 +408,9 @@ namespace
 Bool MMDJointManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const std::unordered_map<Int32, Int32>* rigid_index_remap) const
 {
 	const auto op = reinterpret_cast<const BaseObject*>(Get());
+	BaseObject* const op_mutable = const_cast<BaseObject*>(op);
 	std::vector<std::pair<Int32, const BaseObject*>> sorted_children;
-	for (const BaseObject* child = op->GetDown(); child; child = child->GetNext())
+	for (BaseObject* child = op_mutable ? op_mutable->GetDown() : nullptr; child; child = child->GetNext())
 	{
 		if (child->GetType() != g_mmd_joint_object_id)
 			continue;

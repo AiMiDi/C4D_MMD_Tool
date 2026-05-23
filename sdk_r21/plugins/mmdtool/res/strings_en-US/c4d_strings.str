@@ -53,6 +53,8 @@ STRINGTABLE
 
 	IDS_MES_RENDERER_NOT_INSTALLED "# renderer is not installed, cannot create material!";
 	IDS_MES_MATERIAL_DELETE_CONFIRM "This will delete the corresponding mesh or polygon selection. Continue?";
+	IDS_MES_EXPORT_TIME_ONLY_OK "Export successful, took # ms!";
+	IDS_MES_EXPORT_MOD_OK "Successfully exported model:Name: #Comment:#English name: #English comment:#";
 
 	IDS_MORPH_BONE_TRANSLATION "Bone translation";
 	IDS_MORPH_BONE_ROTATION "Bone rotation";

@@ -147,7 +147,7 @@ namespace
 		if (!link)
 			return -1;
 
-		const BaseDocument* const doc = owner_tag ? owner_tag->GetDocument() : nullptr;
+		BaseDocument* const doc = owner_tag ? const_cast<BaseTag*>(owner_tag)->GetDocument() : nullptr;
 		const BaseList2D* const linked = doc ? link->GetLink(doc) : link->ForceGetLink();
 		if (!linked)
 			return -1;
