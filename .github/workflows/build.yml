@@ -30,6 +30,7 @@ jobs:
         shell: bash
     strategy:
       fail-fast: false
+      max-parallel: 4
       matrix:
         os: [windows-latest, macos-latest]
         sdk:
@@ -59,6 +60,9 @@ jobs:
         with:
           # workflow_call: optional ref; push/dispatch: never read inputs (undefined outside workflow_call)
           ref: ${{ github.event_name == 'workflow_call' && (inputs.ref != '' && inputs.ref || github.ref) || github.ref }}
+          # Nested dependency tags/commits are not always reachable from a depth=1
+          # submodule clone, which forces fragile direct SHA fetches.
+          fetch-depth: 0
           submodules: recursive
 
       - name: Cache prebuilt dependencies
