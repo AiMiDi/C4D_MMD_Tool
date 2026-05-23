@@ -8,7 +8,12 @@
 #include <cstdint>
 #include <exception>
 #include <functional>
+#include <ios>
+#include <iosfwd>
+#include <istream>
 #include <memory>
+#include <ostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <system_error>

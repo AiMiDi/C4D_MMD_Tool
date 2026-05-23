@@ -155,7 +155,7 @@ namespace
 				for (const auto& entry : *sub_morphs)
 				{
 					libmmd::PMXFileMorph::GroupMorph group_morph;
-					group_morph.m_morphIndex = entry.GetKey();
+					group_morph.m_morphIndex = static_cast<int32_t>(entry.GetKey());
 					group_morph.m_weight = entry.GetValue();
 					pmx_morph.m_groupMorph.push_back(group_morph);
 				}
@@ -165,7 +165,7 @@ namespace
 				for (const auto& entry : *sub_morphs)
 				{
 					libmmd::PMXFileMorph::FlipMorph flip_morph;
-					flip_morph.m_morphIndex = entry.GetKey();
+					flip_morph.m_morphIndex = static_cast<int32_t>(entry.GetKey());
 					flip_morph.m_weight = entry.GetValue();
 					pmx_morph.m_flipMorph.push_back(flip_morph);
 				}
@@ -186,7 +186,7 @@ namespace
 			if (path.IsEmpty())
 				return;
 			const std::string key = string_util::GetStdString(path);
-			if (path_to_index.contains(key))
+			if (path_to_index.find(key) != path_to_index.end())
 				return;
 			const Int32 index = static_cast<Int32>(textures.size());
 			libmmd::PMXTexture texture;
@@ -4219,7 +4219,8 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 									SelectionTag* sel_tag = nullptr;
 									for (BaseTag* tag = mesh_obj->GetFirstTag(); tag; tag = tag->GetNext())
 									{
-										if (tag->GetType() == Tpolygonselection && tag->GetName() == mat.selection_name)
+										if (tag->GetType() == Tpolygonselection
+											&& tag->GetName().Compare(mat.selection_name) == maxon::COMPARERESULT::EQUAL)
 										{
 											sel_tag = static_cast<SelectionTag*>(tag);
 											break;
@@ -4262,7 +4263,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 										{
 											GeData sel_data;
 											tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), sel_data, DESCFLAGS_GET::NONE);
-											if (sel_data.GetString() == mat.selection_name)
+											if (sel_data.GetString().Compare(mat.selection_name) == maxon::COMPARERESULT::EQUAL)
 											{
 												doc->AddUndo(UNDOTYPE::DELETEOBJ, tag);
 												tag->Remove();
@@ -5078,7 +5079,8 @@ void MMDModelManagerObject::SyncMaterialsList()
 		Bool found = false;
 		for (const auto& ref : active_refs)
 		{
-			if (ref.mat == linked_mat && ref.mesh == linked_mesh && ref.selection == mmd_mat.selection_name)
+			if (ref.mat == linked_mat && ref.mesh == linked_mesh
+				&& ref.selection.Compare(mmd_mat.selection_name) == maxon::COMPARERESULT::EQUAL)
 			{
 				found = true;
 				break;
@@ -5102,7 +5104,8 @@ void MMDModelManagerObject::SyncMaterialsList()
 			BaseMaterial* linked_mat = (mmd_mat.material_link && *mmd_mat.material_link) ? static_cast<BaseMaterial*>((*mmd_mat.material_link)->GetLink(doc)) : nullptr;
 			BaseObject* linked_mesh = (mmd_mat.mesh_link && *mmd_mat.mesh_link) ? static_cast<BaseObject*>((*mmd_mat.mesh_link)->GetLink(doc)) : nullptr;
 			
-			if (ref.mat == linked_mat && ref.mesh == linked_mesh && ref.selection == mmd_mat.selection_name)
+			if (ref.mat == linked_mat && ref.mesh == linked_mesh
+				&& ref.selection.Compare(mmd_mat.selection_name) == maxon::COMPARERESULT::EQUAL)
 			{
 				found = true;
 				break;

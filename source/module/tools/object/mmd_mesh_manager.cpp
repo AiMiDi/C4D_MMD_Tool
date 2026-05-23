@@ -941,7 +941,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 					// mapping uv morph from vertex_index to surface_index
 					for (const auto& [vertex_index, uv] : uv_morphs)
 					{
-						morph_uv_map.Insert(vertex_index, Vector(uv[0], uv[1], 0.))iferr_return;
+						morph_uv_map.Insert(static_cast<Int32>(vertex_index), Vector(uv[0], uv[1], 0.))iferr_return;
 					}
 
 					// add morph uv (single-threaded: CAMorphNode::SetUV is not safe for concurrent calls on the same node)
@@ -953,17 +953,17 @@ Bool MMDMeshManagerObject::LoadPMX(
 						const auto& pmx_surface_vertex_c = pmx_surface.m_vertices[2];
 						UVWStruct uvw;
 						bool is_has_uv_morph = false;
-						if (const auto vertex_a_ptr = morph_uv_map.Find(pmx_surface_vertex_a); vertex_a_ptr)
+						if (const auto vertex_a_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_a)); vertex_a_ptr)
 						{
 							uvw[0] = vertex_a_ptr->GetValue();
 							is_has_uv_morph = true;
 						}
-						else if (const auto vertex_b_ptr = morph_uv_map.Find(pmx_surface_vertex_b); vertex_b_ptr)
+						else if (const auto vertex_b_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_b)); vertex_b_ptr)
 						{
 							uvw[1] = vertex_b_ptr->GetValue();
 							is_has_uv_morph = true;
 						}
-						else if (const auto vertex_c_ptr = morph_uv_map.Find(pmx_surface_vertex_c); vertex_c_ptr)
+						else if (const auto vertex_c_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_c)); vertex_c_ptr)
 						{
 							uvw[2] = vertex_c_ptr->GetValue();
 							is_has_uv_morph = true;
@@ -1518,7 +1518,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 								morph_node = morph_node->GetNext();
 							}
 
-							morph_uv_map.Insert(src_vertex_index, std::make_tuple(morph_node, Vector(uv[0], uv[1], 0.)))iferr_return;
+							morph_uv_map.Insert(static_cast<Int32>(src_vertex_index), std::make_tuple(morph_node, Vector(uv[0], uv[1], 0.)))iferr_return;
 						}
 					}
 
@@ -1531,19 +1531,19 @@ Bool MMDMeshManagerObject::LoadPMX(
 						const auto& pmx_surface_vertex_c = pmx_surface.m_vertices[2];
 						UVWStruct uvw{};
 						CAMorphNode* morph_node = nullptr;
-						if (const auto vertex_a_ptr = morph_uv_map.Find(pmx_surface_vertex_a); vertex_a_ptr)
+						if (const auto vertex_a_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_a)); vertex_a_ptr)
 						{
 							const auto& [morph_node_, offset] = vertex_a_ptr->GetValue();
 							uvw[0] = offset;
 							morph_node = morph_node_;
 						}
-						else if (const auto vertex_b_ptr = morph_uv_map.Find(pmx_surface_vertex_b); vertex_b_ptr)
+						else if (const auto vertex_b_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_b)); vertex_b_ptr)
 						{
 							const auto& [morph_node_, offset] = vertex_b_ptr->GetValue();
 							uvw[1] = offset;
 							morph_node = morph_node_;
 						}
-						else if (const auto vertex_c_ptr = morph_uv_map.Find(pmx_surface_vertex_c); vertex_c_ptr)
+						else if (const auto vertex_c_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_c)); vertex_c_ptr)
 						{
 							const auto& [morph_node_, offset] = vertex_c_ptr->GetValue();
 							uvw[2] = offset;
@@ -1692,7 +1692,8 @@ namespace
 			return nullptr;
 		for (BaseTag* tag = const_cast<PolygonObject*>(mesh_object)->GetFirstTag(); tag; tag = tag->GetNext())
 		{
-			if (tag->IsInstanceOf(Tpolygonselection) && tag->GetName() == selection_name)
+			if (tag->IsInstanceOf(Tpolygonselection)
+				&& tag->GetName().Compare(selection_name) == maxon::COMPARERESULT::EQUAL)
 				return static_cast<SelectionTag*>(tag);
 		}
 		return nullptr;
@@ -1704,7 +1705,8 @@ namespace
 			return nullptr;
 		for (BaseTag* tag = const_cast<PolygonObject*>(mesh_object)->GetFirstTag(); tag; tag = tag->GetNext())
 		{
-			if (tag->IsInstanceOf(Tvertexmap) && tag->GetName() == "\u8F6E\u5ED3\u500D\u7387"_s)
+			if (tag->IsInstanceOf(Tvertexmap)
+				&& tag->GetName().Compare("\u8F6E\u5ED3\u500D\u7387"_s) == maxon::COMPARERESULT::EQUAL)
 				return static_cast<VertexMapTag*>(tag);
 		}
 		return nullptr;
@@ -1724,11 +1726,11 @@ namespace
 			if (!tag->IsInstanceOf(Tvertexcolor))
 				continue;
 			const String name = tag->GetName();
-			if (name == "SDEF_C"_s)
+			if (name.Compare("SDEF_C"_s) == maxon::COMPARERESULT::EQUAL)
 				tag_c = static_cast<const VertexColorTag*>(tag);
-			else if (name == "SDEF_R0"_s)
+			else if (name.Compare("SDEF_R0"_s) == maxon::COMPARERESULT::EQUAL)
 				tag_r0 = static_cast<const VertexColorTag*>(tag);
-			else if (name == "SDEF_R1"_s)
+			else if (name.Compare("SDEF_R1"_s) == maxon::COMPARERESULT::EQUAL)
 				tag_r1 = static_cast<const VertexColorTag*>(tag);
 		}
 		if (!tag_c || !tag_r0 || !tag_r1)
@@ -1871,7 +1873,7 @@ Bool MMDMeshManagerObject::ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
 			for (; morph_index < morph_count; ++morph_index)
 			{
 				CAMorph* candidate = morph_tag->GetMorph(morph_index);
-				if (candidate && candidate->GetName() == morph_name)
+				if (candidate && candidate->GetName().Compare(morph_name) == maxon::COMPARERESULT::EQUAL)
 					break;
 			}
 			if (morph_index >= morph_count)
@@ -1885,6 +1887,7 @@ Bool MMDMeshManagerObject::ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
 			if (!morph_mesh || !morph_mesh->IsInstanceOf(Opolygon))
 				continue;
 			const PolygonObject* base_mesh = static_cast<const PolygonObject*>(morph_mesh);
+			PolygonObject* const writable_base_mesh = const_cast<PolygonObject*>(base_mesh);
 
 			CAMorphNode* morph_node = morph->GetFirst();
 			while (morph_node && !(morph_node->GetInfo() & (is_uv ? CAMORPH_DATA_FLAGS::UV : CAMORPH_DATA_FLAGS::POINTS)))
@@ -1894,8 +1897,8 @@ Bool MMDMeshManagerObject::ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
 
 			if (is_uv)
 			{
-				const Int32 face_count = base_mesh->GetPolygonCount();
-				const CPolygon* const polygons = base_mesh->GetPolygonR();
+				const Int32 face_count = writable_base_mesh->GetPolygonCount();
+				const CPolygon* const polygons = writable_base_mesh->GetPolygonR();
 				for (Int32 face_index = 0; face_index < face_count; ++face_index)
 				{
 					UVWStruct delta;
@@ -1929,8 +1932,8 @@ Bool MMDMeshManagerObject::ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
 			}
 			else
 			{
-				const Int32 face_count = base_mesh->GetPolygonCount();
-				const CPolygon* const polygons = base_mesh->GetPolygonR();
+				const Int32 face_count = writable_base_mesh->GetPolygonCount();
+				const CPolygon* const polygons = writable_base_mesh->GetPolygonR();
 				for (Int32 face_index = 0; face_index < face_count; ++face_index)
 				{
 					const CPolygon& poly = polygons[face_index];
@@ -2205,7 +2208,7 @@ Bool MMDMeshManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSett
 	{
 		for (const auto& morph_entry : model_data->morph_name_)
 		{
-			morph_name_to_index.Insert(morph_entry.GetKey(), morph_entry.GetValue()) iferr_return;
+			morph_name_to_index.Insert(morph_entry.GetKey(), static_cast<Int32>(morph_entry.GetValue())) iferr_return;
 		}
 		if (!ExportMeshMorphsToPMX(pmx_file, vertex_map, morph_name_to_index))
 			return false;

@@ -8,6 +8,7 @@ Description:	MMD bone control utilities
 
 **************************************************************************/
 
+#include "module/core/cmt_old_sdk_stl_preload.h"
 #include "utils/mmd_bone_control_util.hpp"
 
 #include <algorithm>

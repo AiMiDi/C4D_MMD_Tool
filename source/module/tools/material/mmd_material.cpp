@@ -163,7 +163,7 @@ void MMDMaterialData::FromPMX(const libmmd::PMXMaterial& pmx_material)
 }
 
 void MMDMaterialData::ToPMX(libmmd::PMXMaterial& pmx_material, const Int32 texture_index,
-                            const Int32 sphere_texture_index, const Int32 toon_texture_index) const
+                            const Int32 sphere_texture_index, const Int32 resolved_toon_texture_index) const
 {
 	pmx_material.m_name = string_util::GetStdString(name_local);
 	pmx_material.m_englishName = string_util::GetStdString(name_universal);
@@ -195,7 +195,7 @@ void MMDMaterialData::ToPMX(libmmd::PMXMaterial& pmx_material, const Int32 textu
 	pmx_material.m_sphereTextureIndex = sphere_texture_index;
 	pmx_material.m_sphereMode = static_cast<libmmd::PMXSphereMode>(sphere_mode);
 	pmx_material.m_toonMode = static_cast<libmmd::PMXToonMode>(toon_mode);
-	pmx_material.m_toonTextureIndex = toon_texture_index;
+	pmx_material.m_toonTextureIndex = resolved_toon_texture_index;
 	pmx_material.m_memo = string_util::GetStdString(memo);
 	pmx_material.m_numFaceVertices = num_face_vertices;
 }

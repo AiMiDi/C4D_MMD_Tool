@@ -43,7 +43,7 @@ struct MMDMaterialData
 
 	void FromPMX(const libmmd::PMXMaterial& pmx_material);
 	void ToPMX(libmmd::PMXMaterial& pmx_material, Int32 texture_index = -1, Int32 sphere_texture_index = -1,
-	           Int32 toon_texture_index = -1) const;
+	           Int32 resolved_toon_texture_index = -1) const;
 	Bool Read(HyperFile* hf);
 	Bool Write(HyperFile* hf) const;
 	Bool CopyTo(MMDMaterialData& dest) const;

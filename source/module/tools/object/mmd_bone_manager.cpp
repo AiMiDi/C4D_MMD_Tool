@@ -167,7 +167,7 @@ namespace
 	Int32 ReadIndexFromStringParameter(const BaseContainer& bc, const Int32 param_id)
 	{
 		const String text = bc.GetString(param_id);
-		if (text.IsEmpty() || text == "-"_s)
+		if (text.IsEmpty() || text.Compare("-"_s) == maxon::COMPARERESULT::EQUAL)
 			return -1;
 
 		Bool error = false;
