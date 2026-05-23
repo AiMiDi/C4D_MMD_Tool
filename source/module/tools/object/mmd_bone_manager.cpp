@@ -1780,7 +1780,7 @@ Bool MMDBoneManagerObject::SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSet
 
 	for (const auto& bone_entry : bone_list_)
 	{
-		const Int32 bone_index = bone_entry.GetFirst();
+		const Int32 bone_index = static_cast<Int32>(bone_entry.GetFirst());
 		if (bone_index < 0 || bone_index >= bone_count)
 			continue;
 
@@ -1911,7 +1911,7 @@ Bool MMDBoneManagerObject::ExportBoneMorphsToPMX(libmmd::PMXFile& pmx_file,
 			if (!morph_index_entry)
 				continue;
 
-			const Int32 morph_index = morph_index_entry->GetValue();
+			const Int32 morph_index = static_cast<Int32>(morph_index_entry->GetValue());
 			if (morph_index < 0 || static_cast<size_t>(morph_index) >= pmx_file.m_morphs.size())
 				continue;
 
