@@ -75,7 +75,7 @@ jobs:
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             deps_extra=(-A x64 -T v143)
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            deps_extra=("-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64")
+            deps_extra=("-DCMAKE_OSX_ARCHITECTURES=x86_64")
           fi
           cmake -S dependency -B _build_msvc/cmt_deps \
             -G "${{ matrix.deps_generator }}" \
@@ -88,12 +88,10 @@ jobs:
         run: |
           extra_args=()
           if [[ "$RUNNER_OS" == "macOS" ]]; then
-            case "${{ matrix.sdk }}" in
-              sdk_r20|sdk_r21|sdk_r23)
-                # Single -D so the cache var is always parsed correctly (Rosetta/x86-only SDKs)
-                extra_args+=("-DCMT_SDK_OSX_ARCHITECTURES=x86_64")
-                ;;
-            esac
+            # Hosted macOS arm64 runners currently hit Apple clang 17 frontend
+            # crashes in C4D SDK plugin translation units. Build release CI as
+            # x86_64 until the toolchain path is stable again.
+            extra_args+=("-DCMT_SDK_OSX_ARCHITECTURES=x86_64")
           fi
           cmake --preset "${{ matrix.configure_preset }}" \
             -D "CMT_SDK_DIR=${{ github.workspace }}/${{ matrix.sdk }}" \
