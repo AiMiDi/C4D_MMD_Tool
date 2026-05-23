@@ -14,9 +14,8 @@ Description:	MMD bone control utilities
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <limits>
 #include <vector>
-
-#include <Eigen/Geometry>
 
 #include "module/core/cmt_marco.h"
 #include "module/tools/object/mmd_bone_manager.h"
@@ -48,6 +47,14 @@ namespace
 		Float aspect = 1.0;
 	};
 
+	struct SimpleQuaternion
+	{
+		Float64 x = 0.0;
+		Float64 y = 0.0;
+		Float64 z = 0.0;
+		Float64 w = 1.0;
+	};
+
 	Matrix MakeIdentityMatrix()
 	{
 		return Matrix{
@@ -65,43 +72,113 @@ namespace
 		return normalized;
 	}
 
-	Eigen::Matrix4f MatrixToEigen(const Matrix& matrix)
+	Vector TransformDirection(const Matrix& basis, const Vector& direction)
 	{
-		Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
-		result(0, 0) = static_cast<float>(matrix.sqmat.v1.x);
-		result(1, 0) = static_cast<float>(matrix.sqmat.v1.y);
-		result(2, 0) = static_cast<float>(matrix.sqmat.v1.z);
-		result(0, 1) = static_cast<float>(matrix.sqmat.v2.x);
-		result(1, 1) = static_cast<float>(matrix.sqmat.v2.y);
-		result(2, 1) = static_cast<float>(matrix.sqmat.v2.z);
-		result(0, 2) = static_cast<float>(matrix.sqmat.v3.x);
-		result(1, 2) = static_cast<float>(matrix.sqmat.v3.y);
-		result(2, 2) = static_cast<float>(matrix.sqmat.v3.z);
-		result(0, 3) = static_cast<float>(matrix.off.x);
-		result(1, 3) = static_cast<float>(matrix.off.y);
-		result(2, 3) = static_cast<float>(matrix.off.z);
-		return result;
+		return basis.sqmat.v1 * direction.x + basis.sqmat.v2 * direction.y + basis.sqmat.v3 * direction.z;
 	}
 
-	Matrix EigenToMatrix(const Eigen::Matrix4f& matrix)
+	Vector InverseTransformDirection(const Matrix& basis, const Vector& direction)
 	{
-		Matrix result;
-		result.sqmat.v1 = Vector(matrix(0, 0), matrix(1, 0), matrix(2, 0));
-		result.sqmat.v2 = Vector(matrix(0, 1), matrix(1, 1), matrix(2, 1));
-		result.sqmat.v3 = Vector(matrix(0, 2), matrix(1, 2), matrix(2, 2));
-		result.off = Vector(matrix(0, 3), matrix(1, 3), matrix(2, 3));
-		return NormalizeMatrixBasis(result);
+		return Vector(Dot(direction, basis.sqmat.v1), Dot(direction, basis.sqmat.v2), Dot(direction, basis.sqmat.v3));
 	}
 
-	std::array<Float32, 4> ToQuaternionArray(const Eigen::Quaternionf& rotation)
+	Matrix MakeBasisMatrix(const Vector& v1, const Vector& v2, const Vector& v3)
 	{
-		const Eigen::Quaternionf normalized = rotation.normalized();
-		return { normalized.x(), normalized.y(), normalized.z(), normalized.w() };
+		return Matrix{ Vector(0.0), v1, v2, v3 };
 	}
 
-	Eigen::Quaternionf ExtractRotation(const Eigen::Matrix4f& matrix)
+	Matrix TransposeBasis(const Matrix& basis)
 	{
-		return Eigen::Quaternionf(matrix.block<3, 3>(0, 0)).normalized();
+		return MakeBasisMatrix(
+			Vector(basis.sqmat.v1.x, basis.sqmat.v2.x, basis.sqmat.v3.x),
+			Vector(basis.sqmat.v1.y, basis.sqmat.v2.y, basis.sqmat.v3.y),
+			Vector(basis.sqmat.v1.z, basis.sqmat.v2.z, basis.sqmat.v3.z));
+	}
+
+	Matrix MultiplyBasis(const Matrix& lhs, const Matrix& rhs)
+	{
+		return MakeBasisMatrix(
+			TransformDirection(lhs, rhs.sqmat.v1),
+			TransformDirection(lhs, rhs.sqmat.v2),
+			TransformDirection(lhs, rhs.sqmat.v3));
+	}
+
+	SimpleQuaternion NormalizeQuaternion(SimpleQuaternion rotation)
+	{
+		const Float64 length = std::sqrt(
+			rotation.x * rotation.x +
+			rotation.y * rotation.y +
+			rotation.z * rotation.z +
+			rotation.w * rotation.w);
+		if (length <= std::numeric_limits<Float64>::epsilon())
+			return {};
+
+		rotation.x /= length;
+		rotation.y /= length;
+		rotation.z /= length;
+		rotation.w /= length;
+		return rotation;
+	}
+
+	std::array<Float32, 4> ToQuaternionArray(const SimpleQuaternion& rotation)
+	{
+		const SimpleQuaternion normalized = NormalizeQuaternion(rotation);
+		return {
+			static_cast<Float32>(normalized.x),
+			static_cast<Float32>(normalized.y),
+			static_cast<Float32>(normalized.z),
+			static_cast<Float32>(normalized.w)
+		};
+	}
+
+	SimpleQuaternion ExtractRotation(const Matrix& matrix)
+	{
+		const Matrix basis = NormalizeMatrixBasis(matrix);
+		const Float64 m00 = basis.sqmat.v1.x;
+		const Float64 m01 = basis.sqmat.v2.x;
+		const Float64 m02 = basis.sqmat.v3.x;
+		const Float64 m10 = basis.sqmat.v1.y;
+		const Float64 m11 = basis.sqmat.v2.y;
+		const Float64 m12 = basis.sqmat.v3.y;
+		const Float64 m20 = basis.sqmat.v1.z;
+		const Float64 m21 = basis.sqmat.v2.z;
+		const Float64 m22 = basis.sqmat.v3.z;
+
+		SimpleQuaternion result;
+		const Float64 trace = m00 + m11 + m22;
+		if (trace > 0.0)
+		{
+			const Float64 s = std::sqrt(trace + 1.0) * 2.0;
+			result.w = 0.25 * s;
+			result.x = (m21 - m12) / s;
+			result.y = (m02 - m20) / s;
+			result.z = (m10 - m01) / s;
+		}
+		else if (m00 > m11 && m00 > m22)
+		{
+			const Float64 s = std::sqrt(1.0 + m00 - m11 - m22) * 2.0;
+			result.w = (m21 - m12) / s;
+			result.x = 0.25 * s;
+			result.y = (m01 + m10) / s;
+			result.z = (m02 + m20) / s;
+		}
+		else if (m11 > m22)
+		{
+			const Float64 s = std::sqrt(1.0 + m11 - m00 - m22) * 2.0;
+			result.w = (m02 - m20) / s;
+			result.x = (m01 + m10) / s;
+			result.y = 0.25 * s;
+			result.z = (m12 + m21) / s;
+		}
+		else
+		{
+			const Float64 s = std::sqrt(1.0 + m22 - m00 - m11) * 2.0;
+			result.w = (m10 - m01) / s;
+			result.x = (m02 + m20) / s;
+			result.y = (m12 + m21) / s;
+			result.z = 0.25 * s;
+		}
+		return NormalizeQuaternion(result);
 	}
 
 	ROTATIONORDER GetObjectRotationOrder(BaseObject* object)
@@ -158,14 +235,9 @@ namespace
 			return direction;
 		normalized_direction.Normalize();
 
-		const Eigen::Matrix3f rest_basis = MatrixToEigen(NormalizeMatrixBasis(rest_matrix)).block<3, 3>(0, 0);
-		const Eigen::Matrix3f current_basis = MatrixToEigen(NormalizeMatrixBasis(current_matrix)).block<3, 3>(0, 0);
-		const Eigen::Vector3f rest_direction(
-			static_cast<float>(normalized_direction.x),
-			static_cast<float>(normalized_direction.y),
-			static_cast<float>(normalized_direction.z));
-		const Eigen::Vector3f current_direction = current_basis * rest_basis.transpose() * rest_direction;
-		Vector result(current_direction.x(), current_direction.y(), current_direction.z());
+		const Matrix rest_basis = NormalizeMatrixBasis(rest_matrix);
+		const Matrix current_basis = NormalizeMatrixBasis(current_matrix);
+		Vector result = TransformDirection(current_basis, InverseTransformDirection(rest_basis, normalized_direction));
 		if (result.GetLength() <= EPSILON)
 			return normalized_direction;
 		result.Normalize();
@@ -696,22 +768,23 @@ namespace
 		protection->SetParameter(ConstDescID(DescLevel(PROTECTION_ALLOW_EXPRESSIONS)), true, DESCFLAGS_SET::NONE);
 	}
 
-	Eigen::Quaternionf ProjectRotationToAxis(const Eigen::Quaternionf& rotation, Vector fixed_axis)
+	SimpleQuaternion ProjectRotationToAxis(const SimpleQuaternion& rotation, Vector fixed_axis)
 	{
 		if (!TryNormalize(fixed_axis))
-			return rotation.normalized();
+			return NormalizeQuaternion(rotation);
 
-		const Eigen::Vector3f axis(
-			static_cast<float>(fixed_axis.x),
-			static_cast<float>(fixed_axis.y),
-			static_cast<float>(fixed_axis.z));
-		const Eigen::Quaternionf normalized = rotation.normalized();
-		const Eigen::Vector3f vector_part(normalized.x(), normalized.y(), normalized.z());
-		const Eigen::Vector3f projected = axis * vector_part.dot(axis);
-		Eigen::Quaternionf twist(normalized.w(), projected.x(), projected.y(), projected.z());
-		if (twist.norm() <= 1.0e-6f)
-			return Eigen::Quaternionf::Identity();
-		return twist.normalized();
+		const SimpleQuaternion normalized = NormalizeQuaternion(rotation);
+		const Vector vector_part(normalized.x, normalized.y, normalized.z);
+		const Vector projected = fixed_axis * Dot(vector_part, fixed_axis);
+		SimpleQuaternion twist;
+		twist.x = projected.x;
+		twist.y = projected.y;
+		twist.z = projected.z;
+		twist.w = normalized.w;
+		const Float64 twist_length = std::sqrt(twist.x * twist.x + twist.y * twist.y + twist.z * twist.z + twist.w * twist.w);
+		if (twist_length <= 1.0e-6)
+			return {};
+		return NormalizeQuaternion(twist);
 	}
 }
 
@@ -947,21 +1020,17 @@ Bool mmd_bone_control_util::GetControlDeltaInBoneSpace(BaseTag* bone_tag, BaseOb
 	if (!control || !bone_object)
 		return false;
 
-	const Eigen::Matrix4f control_rest = MatrixToEigen(BuildControlBaseGlobalMatrix(control));
-	const Eigen::Matrix4f bone_rest = MatrixToEigen(BuildCurrentBoneGlobalMatrix(bone_object));
-	const Eigen::Matrix4f control_delta = MatrixToEigen(NormalizeMatrixBasis(control->GetRelMl()));
+	const Matrix control_rest = NormalizeMatrixBasis(BuildControlBaseGlobalMatrix(control));
+	const Matrix bone_rest = NormalizeMatrixBasis(BuildCurrentBoneGlobalMatrix(bone_object));
+	const Matrix control_delta = NormalizeMatrixBasis(control->GetRelMl());
 
-	const Eigen::Matrix3f control_basis = control_rest.block<3, 3>(0, 0);
-	const Eigen::Matrix3f bone_basis = bone_rest.block<3, 3>(0, 0);
-	const Eigen::Vector3f control_translation = control_delta.block<3, 1>(0, 3);
-	const Eigen::Vector3f bone_translation = bone_basis.transpose() * control_basis * control_translation;
+	translation = InverseTransformDirection(bone_rest, TransformDirection(control_rest, control_delta.off));
 
-	const Eigen::Quaternionf control_rotation = ExtractRotation(control_delta);
-	const Eigen::Matrix3f parent_rotation = control_basis * control_rotation.toRotationMatrix() * control_basis.transpose();
-	const Eigen::Matrix3f bone_rotation = bone_basis.transpose() * parent_rotation * bone_basis;
+	const Matrix control_rotation = MakeBasisMatrix(control_delta.sqmat.v1, control_delta.sqmat.v2, control_delta.sqmat.v3);
+	const Matrix parent_rotation = MultiplyBasis(MultiplyBasis(control_rest, control_rotation), TransposeBasis(control_rest));
+	const Matrix bone_rotation = MultiplyBasis(MultiplyBasis(TransposeBasis(bone_rest), parent_rotation), bone_rest);
 
-	translation = Vector(bone_translation.x(), bone_translation.y(), bone_translation.z());
-	Eigen::Quaternionf projected_rotation = Eigen::Quaternionf(bone_rotation).normalized();
+	SimpleQuaternion projected_rotation = ExtractRotation(bone_rotation);
 	if (bc->GetBool(PMX_BONE_IS_FIXED_AXIS))
 		projected_rotation = ProjectRotationToAxis(projected_rotation, bc->GetVector(PMX_BONE_FIXED_AXIS));
 	rotation = ToQuaternionArray(projected_rotation);
