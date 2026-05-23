@@ -74,6 +74,14 @@ set(CMT_SDK_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "macOS architectures f
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin" AND CMT_SDK_GENERATOR STREQUAL "Xcode")
   list(APPEND _CMT_SDK_CONFIGURE_ARGS "-DCMAKE_OSX_ARCHITECTURES=${CMT_SDK_OSX_ARCHITECTURES}")
 endif()
+set(_CMT_SDK_NATIVE_BUILD_ARGS "")
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin" AND CMT_SDK_GENERATOR STREQUAL "Xcode")
+  # Maxon SDK Xcode targets set ARCHS/ONLY_ACTIVE_ARCH themselves, so pass the
+  # native xcodebuild override at build time as well as CMAKE_OSX_ARCHITECTURES.
+  set(_CMT_SDK_XCODE_ARCHS "${CMT_SDK_OSX_ARCHITECTURES}")
+  string(REPLACE ";" " " _CMT_SDK_XCODE_ARCHS "${_CMT_SDK_XCODE_ARCHS}")
+  list(APPEND _CMT_SDK_NATIVE_BUILD_ARGS -- "ARCHS=${_CMT_SDK_XCODE_ARCHS}" "ONLY_ACTIVE_ARCH=NO")
+endif()
 # Forward pre-built dependency dir to SDK configure so it skips add_subdirectory for deps
 if(NOT CMT_DEPS_PREBUILT_DIR STREQUAL "")
   cmake_path(ABSOLUTE_PATH CMT_DEPS_PREBUILT_DIR NORMALIZE OUTPUT_VARIABLE _CMT_DEPS_PREBUILT_ABS)
@@ -139,13 +147,13 @@ add_custom_target(cmt-sdk-configure-all
 # -----------------------------------------------------------------------------
 if(NOT CMT_SDK_BUILD_TARGET STREQUAL "")
   add_custom_target(cmt-sdk-build
-    COMMAND ${CMAKE_COMMAND} --build "${CMT_SDK_BINARY_DIR_ABS}" --config "${CMT_SDK_BUILD_CONFIG}" --target "${CMT_SDK_BUILD_TARGET}"
+    COMMAND ${CMAKE_COMMAND} --build "${CMT_SDK_BINARY_DIR_ABS}" --config "${CMT_SDK_BUILD_CONFIG}" --target "${CMT_SDK_BUILD_TARGET}" ${_CMT_SDK_NATIVE_BUILD_ARGS}
     USES_TERMINAL
     COMMENT "Build plugin (${CMT_SDK_BUILD_CONFIG}, target=${CMT_SDK_BUILD_TARGET})"
   )
 else()
   add_custom_target(cmt-sdk-build
-    COMMAND ${CMAKE_COMMAND} --build "${CMT_SDK_BINARY_DIR_ABS}" --config "${CMT_SDK_BUILD_CONFIG}"
+    COMMAND ${CMAKE_COMMAND} --build "${CMT_SDK_BINARY_DIR_ABS}" --config "${CMT_SDK_BUILD_CONFIG}" ${_CMT_SDK_NATIVE_BUILD_ARGS}
     USES_TERMINAL
     COMMENT "Build SDK default targets (${CMT_SDK_BUILD_CONFIG})"
   )
@@ -157,14 +165,14 @@ endif()
 if(CMT_SDK_BUILD_TARGET STREQUAL "")
   add_custom_target(cmt-workflow
     COMMAND ${CMAKE_COMMAND} ${_CMT_SDK_CONFIGURE_ARGS}
-    COMMAND ${CMAKE_COMMAND} --build "${CMT_SDK_BINARY_DIR_ABS}" --config "${CMT_SDK_BUILD_CONFIG}"
+    COMMAND ${CMAKE_COMMAND} --build "${CMT_SDK_BINARY_DIR_ABS}" --config "${CMT_SDK_BUILD_CONFIG}" ${_CMT_SDK_NATIVE_BUILD_ARGS}
     USES_TERMINAL
     COMMENT "configure + build SDK (${CMT_SDK_BUILD_CONFIG})"
   )
 else()
   add_custom_target(cmt-workflow
     COMMAND ${CMAKE_COMMAND} ${_CMT_SDK_CONFIGURE_ARGS}
-    COMMAND ${CMAKE_COMMAND} --build "${CMT_SDK_BINARY_DIR_ABS}" --config "${CMT_SDK_BUILD_CONFIG}" --target "${CMT_SDK_BUILD_TARGET}"
+    COMMAND ${CMAKE_COMMAND} --build "${CMT_SDK_BINARY_DIR_ABS}" --config "${CMT_SDK_BUILD_CONFIG}" --target "${CMT_SDK_BUILD_TARGET}" ${_CMT_SDK_NATIVE_BUILD_ARGS}
     USES_TERMINAL
     COMMENT "configure + build target ${CMT_SDK_BUILD_TARGET} (${CMT_SDK_BUILD_CONFIG})"
   )

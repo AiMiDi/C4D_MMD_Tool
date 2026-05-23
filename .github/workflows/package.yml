@@ -34,7 +34,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref }}
-          submodules: recursive
+          submodules: false
+
+      - name: Checkout installer setup submodule
+        run: |
+          git submodule sync -- setup
+          git submodule update --init --force setup
 
       - name: Download Windows build artifacts
         uses: actions/download-artifact@v5
@@ -117,7 +122,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref }}
-          submodules: recursive
+          submodules: false
 
       - name: Download macOS build artifacts
         uses: actions/download-artifact@v8

@@ -63,7 +63,12 @@ jobs:
           # Nested dependency tags/commits are not always reachable from a depth=1
           # submodule clone, which forces fragile direct SHA fetches.
           fetch-depth: 0
-          submodules: recursive
+          submodules: false
+
+      - name: Checkout build submodules
+        run: |
+          git submodule sync -- dependency/bullet3 dependency/libMMD
+          git submodule update --init --force --recursive dependency/bullet3 dependency/libMMD
 
       - name: Cache prebuilt dependencies
         id: deps-cache
@@ -76,17 +81,19 @@ jobs:
         if: steps.deps-cache.outputs.cache-hit != 'true'
         run: |
           deps_extra=()
+          deps_build_extra=()
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             deps_extra=(-A x64 -T v143)
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
             deps_extra=("-DCMAKE_OSX_ARCHITECTURES=x86_64")
+            deps_build_extra=(-- ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO)
           fi
           cmake -S dependency -B _build_msvc/cmt_deps \
             -G "${{ matrix.deps_generator }}" \
             "${deps_extra[@]}" \
             "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt/lib" \
             "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt/lib"
-          cmake --build _build_msvc/cmt_deps --config Release
+          cmake --build _build_msvc/cmt_deps --config Release "${deps_build_extra[@]}"
 
       - name: Configure root (preset + prebuilt deps)
         run: |

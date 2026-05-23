@@ -3,7 +3,7 @@
 	url = https://github.com/bulletphysics/bullet3.git
 [submodule "setup"]
 	path = setup
-	url = https://github.com/AiMiDi/C4D_Plugin_Setup.git
+	url = https://github.com/AiMiDi/C4D_MMD_Tool_Setup.git
 [submodule "dependency/libMMD"]
 	path = dependency/libMMD
 	url = https://github.com/AiMiDi/libMMD.git
