@@ -309,7 +309,8 @@ private:
 	bool DeleteMorphImpl(IMorph& morph, const Int morph_index);
 	Int AddMorph(const MMDMorphType& morph_type, String morph_name = {}, bool is_add_morph_ui = true, Int32 panel = 0);
 	void RenameMorph(const String& name);
-	void UpdateMorph(IMorph& morph);
+	void ApplyMorphRuntimeStrengths();
+	void ApplyMorphRuntimeStrength(IMorph& morph, Float strength);
 	void DeleteMorph(Int morph_index);
 	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it);
 	void RefreshMorph();

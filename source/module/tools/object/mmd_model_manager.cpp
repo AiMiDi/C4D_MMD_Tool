@@ -1648,8 +1648,7 @@ void MMDModelManagerObject::CaptureAndClearPMXExportMorphState(BaseDocument* doc
 	if (bone_manager_data_ || GetBoneManagerData())
 		bone_manager_data_->ResetMorphStrengths();
 
-	for (auto& morph : morph_data_)
-		UpdateMorph(morph);
+	ApplyMorphRuntimeStrengths();
 
 	*update_morph_.Write() = true;
 	MarkMeshHierarchyDirty(GetMeshManagerObject());
@@ -1675,8 +1674,7 @@ void MMDModelManagerObject::RestorePMXExportMorphState(BaseDocument* doc)
 	for (Int32 i = 0; i < restore_count; ++i)
 		morph_data_[i].SetStrength(self, pmx_export_morph_strength_snapshot_[static_cast<size_t>(i)]);
 
-	for (auto& morph : morph_data_)
-		UpdateMorph(morph);
+	ApplyMorphRuntimeStrengths();
 
 	pmx_export_morph_strength_snapshot_.clear();
 	pmx_export_has_morph_state_snapshot_ = false;
@@ -1708,8 +1706,7 @@ void MMDModelManagerObject::ClearMorphRuntimeForEdit()
 		RemoveParameterTrack(self, morph.GetStrengthDescID());
 	}
 
-	for (auto& morph : morph_data_)
-		UpdateMorph(morph);
+	ApplyMorphRuntimeStrengths();
 
 	if (mesh_manager_data_)
 	{
@@ -1900,18 +1897,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 	if (*update_morph_.Read())
 	{
-		for (auto& morph : morph_data_)
-		{
-			const auto t = morph.GetType();
-			if (t == MMDMorphType::GROUP || t == MMDMorphType::FLIP)
-				UpdateMorph(morph);
-		}
-		for (auto& morph : morph_data_)
-		{
-			const auto t = morph.GetType();
-			if (t != MMDMorphType::GROUP && t != MMDMorphType::FLIP)
-				UpdateMorph(morph);
-		}
+		ApplyMorphRuntimeStrengths();
 	}
 
 	if (model_mode_ == MODEL_MODE_ANIM)
@@ -4971,9 +4957,106 @@ void MMDModelManagerObject::RenameMorph(const String& name)
 	}
 }
 
-void MMDModelManagerObject::UpdateMorph(IMorph& morph)
+void MMDModelManagerObject::ApplyMorphRuntimeStrengths()
 {
-	morph.UpdateMorph(*this);
+	GeListNode* const node = Get();
+	const Int morph_count = morph_data_.GetCount();
+	if (!node || morph_count <= 0)
+		return;
+
+	std::vector<Float> strengths(static_cast<size_t>(morph_count), 0.0);
+	for (Int i = 0; i < morph_count; ++i)
+		strengths[static_cast<size_t>(i)] = morph_data_[i].GetStrength(node);
+
+	struct MorphStackEntry
+	{
+		Int index = -1;
+		Float strength = 0.0;
+		Int depth = 0;
+	};
+
+	std::vector<MorphStackEntry> stack;
+	stack.reserve(static_cast<size_t>(morph_count));
+	for (Int i = 0; i < morph_count; ++i)
+	{
+		const MMDMorphType type = morph_data_[i].GetType();
+		if ((type == MMDMorphType::GROUP || type == MMDMorphType::FLIP) && strengths[static_cast<size_t>(i)] != 0.0)
+			stack.push_back({ i, strengths[static_cast<size_t>(i)], 0 });
+	}
+
+	while (!stack.empty())
+	{
+		const MorphStackEntry entry = stack.back();
+		stack.pop_back();
+		if (entry.index < 0 || entry.index >= morph_count || entry.depth > morph_count)
+			continue;
+
+		IMorph& morph = morph_data_[entry.index];
+		const MMDMorphType type = morph.GetType();
+		if (type != MMDMorphType::GROUP && type != MMDMorphType::FLIP)
+			continue;
+
+		maxon::HashMap<Int, Float>* const sub_morphs = morph.GetSubMorphDataWritable();
+		if (!sub_morphs)
+			continue;
+
+		const Float source_strength = (type == MMDMorphType::FLIP)
+			? (entry.strength >= 0.5 ? 1.0 : 0.0)
+			: entry.strength;
+		if (source_strength == 0.0)
+			continue;
+
+		for (const auto& sub_morph : *sub_morphs)
+		{
+			const Int sub_index = sub_morph.GetKey();
+			if (sub_index < 0 || sub_index >= morph_count || sub_index == entry.index)
+				continue;
+
+			const Float contribution = source_strength * sub_morph.GetValue();
+			if (contribution == 0.0)
+				continue;
+
+			const MMDMorphType sub_type = morph_data_[sub_index].GetType();
+			if (sub_type == MMDMorphType::GROUP || sub_type == MMDMorphType::FLIP)
+				stack.push_back({ sub_index, contribution, entry.depth + 1 });
+			else
+				strengths[static_cast<size_t>(sub_index)] += contribution;
+		}
+	}
+
+	for (Int i = 0; i < morph_count; ++i)
+	{
+		const MMDMorphType type = morph_data_[i].GetType();
+		if (type == MMDMorphType::GROUP || type == MMDMorphType::FLIP)
+			continue;
+		ApplyMorphRuntimeStrength(morph_data_[i], strengths[static_cast<size_t>(i)]);
+	}
+}
+
+void MMDModelManagerObject::ApplyMorphRuntimeStrength(IMorph& morph, const Float strength)
+{
+	switch (morph.GetType())
+	{
+	case MMDMorphType::MESH:
+	case MMDMorphType::UV:
+		if (mesh_manager_data_ || GetMeshManagerData())
+			mesh_manager_data_->SetMorphStrength(morph.GetName(), strength);
+		break;
+	case MMDMorphType::BONE:
+	{
+		if (!(bone_manager_data_ || GetBoneManagerData()))
+			break;
+		auto& bone_morph_map = bone_manager_data_->GetBoneMorphMap();
+		if (auto* entry = bone_morph_map.Find(morph.GetName()))
+		{
+			for (const auto& hub : entry->GetValue())
+				hub.SetStrength(strength);
+		}
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void MMDModelManagerObject::DeleteMorph(const Int morph_index)
