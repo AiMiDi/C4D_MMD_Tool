@@ -1,6 +1,6 @@
 # Multi-SDK CMake Build
 
-## Overview
+## Purpose
 
 Unified CMake-based build system for compiling the mmdtool plugin across all supported Cinema 4D SDK versions (R20 through 2026). A project-level common CMake layer (`cmake/mmdtool_plugin_common.cmake`, `cmake/mmdtool_plugin_dependencies.cmake`) is shared by all SDK plugin projects, with each `sdk_*/plugins/mmdtool/project/CMakeLists.txt` acting as a thin SDK-specific wrapper.
 

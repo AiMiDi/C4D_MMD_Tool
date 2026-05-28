@@ -1,8 +1,10 @@
 # PMX Parameter Mapping
 
+## Purpose
+
 Naming Convention: All parameter UI display names align with PMXEditor, and Japanese/Traditional Chinese characters are unified to Simplified Chinese.
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Align Existing Parameter Names with PMXEditor
 

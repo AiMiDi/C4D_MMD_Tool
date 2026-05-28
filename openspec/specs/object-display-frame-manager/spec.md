@@ -1,4 +1,9 @@
-## ADDED Requirements
+# Display Frame Manager
+
+## Purpose
+Preserve and edit PMX display frame data on the model manager so imported frame groups, bone targets, morph targets, and export ordering survive Cinema 4D scene workflows.
+
+## Requirements
 
 ### Requirement: Display Frame Data Model
 

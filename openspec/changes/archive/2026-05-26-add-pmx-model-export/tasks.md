@@ -34,8 +34,8 @@
 
 ## 5. 手动验收与收尾
 
-- [ ] 5.1 在 Cinema 4D 中导入一个 PMX，选择 ModelManager 导出 PMX，并确认导出的文件可重新导入
-- [ ] 5.2 手动编辑骨骼、刚体或关节后导出，确认导出 PMX 反映编辑态而不是旧导入态
-- [ ] 5.3 检查中英文 UI 文案、默认配置和资源同步后的运行时资源输出
+- [x] 5.1 在 Cinema 4D 中导入一个 PMX，选择 ModelManager 导出 PMX，并确认导出的文件可重新导入
+- [x] 5.2 手动编辑骨骼、刚体或关节后导出，确认导出 PMX 反映编辑态而不是旧导入态
+- [x] 5.3 检查中英文 UI 文案、默认配置和资源同步后的运行时资源输出
 - [x] 5.4 更新开发文档或导入/导出流程说明，记录 v1 不支持任意 C4D 转 PMX 和不保证 softbody/SDEF/QDEF 无损
 - [x] 5.5 运行 `openspec status --change add-pmx-model-export` 并确认 artifacts 和任务清单可被 OpenSpec 识别

@@ -1,8 +1,38 @@
 # Materials
 
-## Overview
+## Purpose
 
 Creates and manages Cinema 4D materials from PMX material definitions. Supports Standard, RedShift, Octane, and Corona renderers. Material data is stored on `MMDModelManagerObject` as `MMDMaterialData` structs with bidirectional sync to C4D materials.
+
+## Requirements
+
+### Requirement: PMX material data storage
+The system SHALL store PMX material fields and related Cinema 4D links in `MMDMaterialData` entries owned by `MMDModelManagerObject`.
+
+#### Scenario: PMX material is imported
+- **WHEN** a PMX material is read during model import
+- **THEN** its names, colors, draw flags, edge settings, texture paths, memo, face count, and C4D links SHALL be represented in `MMDMaterialData`
+
+### Requirement: Renderer-specific material adapters
+The material system SHALL use renderer-specific adapters to create, sync, and read Standard, RedShift, Octane, and Corona materials.
+
+#### Scenario: Create material for selected renderer
+- **WHEN** a material is created from PMX data for a selected material type
+- **THEN** the matching material adapter SHALL create a Cinema 4D material and preserve sync paths for that renderer
+
+### Requirement: Material management UI
+The model manager attribute UI SHALL expose material list management and editable PMX material fields.
+
+#### Scenario: User edits a material entry
+- **WHEN** the user selects a material in the model manager material list
+- **THEN** the UI SHALL expose controls for linking, creating, syncing, reverse-syncing, reordering, deleting, and editing PMX material properties
+
+### Requirement: Texture path resolution
+The material importer SHALL resolve texture references relative to the PMX model directory and reuse shared texture resources when possible.
+
+#### Scenario: Multiple materials reference one texture
+- **WHEN** imported PMX materials reference the same texture path
+- **THEN** the material system SHALL avoid redundant texture loading for that shared resource
 
 ## MMDMaterialData
 

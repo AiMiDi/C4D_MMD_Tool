@@ -1,6 +1,6 @@
 # Plugin Infrastructure
 
-## Overview
+## Purpose
 
 Plugin entry point, registration, configuration persistence, and scene hook management.
 
@@ -78,7 +78,39 @@ Typed setting structs under `CMTToolsSetting` namespace:
 - Namespace compatibility: `CINEMA_NAMESPACE`, `using namespace cinema`
 - Type aliases: `MMDModel`, `PMXModel`, `PMDModel`, `MMDModelPtr`, `PMXModelPtr`, `PMDModelPtr`
 
-## Source Directory Convention
+## Requirements
+
+### Requirement: Plugin lifecycle initialization
+The plugin SHALL initialize shared resources, plugin registrations, name conversion, and persisted configuration through its Cinema 4D entry points.
+
+#### Scenario: Plugin starts
+- **WHEN** Cinema 4D loads the plugin
+- **THEN** `PluginStart()` SHALL register plugin entities and initialize name conversion and tool configuration state
+
+#### Scenario: Plugin ends
+- **WHEN** Cinema 4D unloads the plugin
+- **THEN** `PluginEnd()` SHALL persist tool configuration before shutdown
+
+### Requirement: Plugin entity registration
+The plugin SHALL register the command, scene hook, loader, object, camera, and tag entities needed by the MMD tool workflow.
+
+#### Scenario: Registration completes
+- **WHEN** plugin registration runs
+- **THEN** the registered plugin IDs SHALL include the MMD tool command, scene manager, VMD loader, model managers, rigid and joint objects, MMD camera, and MMD bone tag
+
+### Requirement: Scene hook coordination
+The scene hook SHALL coordinate PMX/VMD import, export, camera conversion, and scene-level camera tracking.
+
+#### Scenario: Import or export operation is requested
+- **WHEN** a tool manager operation delegates to `CMTSceneManager`
+- **THEN** the scene hook SHALL perform the scene object creation, animation conversion, or export operation and return a structured log where applicable
+
+### Requirement: Tool configuration persistence
+The tools configuration manager SHALL store dialog settings in `cmt_config.json` and expose typed get/set access by tool parameter ID.
+
+#### Scenario: Dialog settings are saved
+- **WHEN** a tool dialog updates a persisted setting
+- **THEN** the configuration manager SHALL write the setting to the JSON configuration during save
 
 ### Requirement: Canonical source directory naming
 The project SHALL promote the maintained plugin implementation tree to `source/`, and all active plugin build configurations, source discovery rules, and developer documentation MUST treat that directory as the canonical plugin source root.

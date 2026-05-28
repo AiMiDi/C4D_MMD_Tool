@@ -1,8 +1,39 @@
 # Name Conversion
 
-## Overview
+## Purpose
 
 Maps Japanese MMD bone names to English equivalents (or other conventions like UE5). Used during model import and motion import to match bones by name.
+
+## Requirements
+
+### Requirement: Name conversion configurations
+The system SHALL load name conversion tables from JSON files stored in the plugin resource `name_conversion/` directory.
+
+#### Scenario: Load a conversion table
+- **WHEN** a user selects a name conversion JSON file
+- **THEN** the system SHALL load its Japanese-to-target-name mappings for later lookup
+
+#### Scenario: Enumerate available conversion files
+- **WHEN** the name conversion dialog is opened
+- **THEN** the system SHALL list `.json` files from the configured `name_conversion/` resource directory
+
+### Requirement: Name conversion lookup
+The system SHALL provide lookup functions that convert PMX or VMD bone names using the active conversion table.
+
+#### Scenario: Convert a known bone name
+- **WHEN** a source bone name exists in the active conversion table
+- **THEN** `NameConversion::Conver()` SHALL return the mapped target name
+
+#### Scenario: Use conversion during import
+- **WHEN** model import requests English bone names or motion import requires converted matching
+- **THEN** the import flow SHALL consult the loaded conversion table before creating or matching C4D bone names
+
+### Requirement: Name conversion editing
+The system SHALL allow users to manage JSON name conversion mappings through the update dialog.
+
+#### Scenario: Save edited mappings
+- **WHEN** the user edits a conversion mapping and saves it
+- **THEN** the mapping SHALL be written back as a JSON object that can be loaded by the conversion system
 
 ## Architecture
 

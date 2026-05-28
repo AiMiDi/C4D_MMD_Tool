@@ -1,8 +1,38 @@
 # Object Hierarchy
 
-## Overview
+## Purpose
 
 MMD data is represented in Cinema 4D as a tree of custom ObjectData plugins. Each Manager object owns a category of MMD data and creates child objects during import.
+
+## Requirements
+
+### Requirement: MMD model manager hierarchy
+The system SHALL represent imported MMD model data as an `MMDModelManagerObject` root with bone, mesh, rigid body, and joint manager children.
+
+#### Scenario: Import creates manager hierarchy
+- **WHEN** a PMX model is imported
+- **THEN** the created model root SHALL own bone, mesh, rigid, and joint manager objects that contain their respective imported data
+
+### Requirement: Manager-owned object data
+Each MMD manager SHALL own the Cinema 4D objects and runtime links for its category of PMX data.
+
+#### Scenario: Managers load PMX categories
+- **WHEN** `MMDModelManagerObject::LoadPMX()` delegates to child managers
+- **THEN** bone data SHALL create joint objects with bone tags, mesh data SHALL create polygon objects and material links, rigid data SHALL create rigid objects, and joint data SHALL create joint objects
+
+### Requirement: Runtime rebuild after scene load
+The model manager SHALL rebuild libMMD runtime objects from serialized Cinema 4D object data when a scene is reopened.
+
+#### Scenario: Scene opens without runtime pointers
+- **WHEN** an MMD scene is loaded and runtime pointers are not initialized
+- **THEN** the model manager SHALL rebuild the PMX model runtime, reconnect child manager pointers, and restore staged animation data
+
+### Requirement: Inter-manager messaging
+Managers SHALL communicate through explicit message structs rather than relying on implicit scene traversal for cross-manager state updates.
+
+#### Scenario: Manager state is requested
+- **WHEN** one manager needs state owned by another manager
+- **THEN** the request SHALL use the documented model, bone, or mesh manager message structure
 
 ## Hierarchy Structure
 

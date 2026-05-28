@@ -1,8 +1,31 @@
 # Model Import (PMX)
 
-## Overview
+## Purpose
 
 Imports PMX (Polygon Model eXtended) model files into Cinema 4D, creating a complete MMD model hierarchy with bones, mesh, materials, rigid bodies, joints, and morphs.
+
+## Requirements
+
+### Requirement: PMX model import entry point
+The system SHALL import PMX model files through the tool manager, parse the PMX data with libMMD, and delegate scene creation to `CMTSceneManager`.
+
+#### Scenario: Import a PMX file
+- **WHEN** the user selects a PMX model file through the import model command
+- **THEN** the system SHALL read the file, parse it as a PMX model, and create a corresponding `MMDModelManagerObject` hierarchy in the active Cinema 4D document
+
+### Requirement: Import option handling
+The PMX import flow SHALL honor `ModelImport` settings for scale, model components, name conversion, and material renderer type.
+
+#### Scenario: Import options are applied
+- **WHEN** a PMX import runs with specific `ModelImport` flags
+- **THEN** the importer SHALL enable or skip polygon, normal, UV, material, bone, weight, IK, inherit, expression, multipart, and English-name handling according to those flags
+
+### Requirement: PMX data mapping
+The import flow SHALL map PMX model data into the plugin's C4D objects, tags, materials, morphs, physics objects, and display frame data.
+
+#### Scenario: PMX contains extended model data
+- **WHEN** a PMX file contains bones, materials, morphs, physics, vertex attributes, and display frames
+- **THEN** the imported scene SHALL preserve those fields in the corresponding MMD manager objects, tags, material data, morph containers, rigid bodies, joints, and display frame structures
 
 ## Import Pipeline
 

@@ -1,49 +1,50 @@
-## ADDED Requirements
+## Purpose
 
+Persist VMD animation data across Cinema 4D scene save/reload while defining which animation channels remain authoritative after reload.
+## Requirements
 ### Requirement: Serialize VMD Animation Data to Scene File
 
-The system SHALL serialize all VMD animation data from the `animations_` array to the HyperFile in `MMDModelManagerObject::Write()`, ensuring it persists when the scene is saved.
+The system SHALL serialize bone animation data as: (1) keyframe records and interpolation payload via `MMDBoneTag::Write()` / HyperFile, and (2) CTrack/CKey on the bone tag for SplineData and the frame-on Int parameter where used for markers. VMD binary blobs in `MMDModelManagerObject::Write()` SHALL NOT be used as the persisted source for bone playback, and new imports SHALL NOT retain any raw VMD source payload for bone animation. IK enable keyframes (already on CTrack) and morph keyframes (already on CTrack) SHALL continue to use their existing CTrack persistence.
 
-#### Scenario: Save Scene with VMD Animations
-- **WHEN** a user saves a scene that has VMD animations loaded
-- **THEN** the `Write()` method writes the size of the `animations_` array to the HyperFile
-- **THEN** for each animation entry, it writes the animation name (String) and the VMD binary data (converted to a byte array via `VMDAnimation::Save(VMDFile&)` + `WriteVMDFile()`)
-- **THEN** the HyperFile level is incremented to identify the new data format
+#### Scenario: Save Scene with VMD Bone Animation
+
+- **WHEN** a user saves a scene that has VMD bone animation imported
+
+- **THEN** bone keyframe data (position, quaternion, bezier curves) SHALL be persisted via `MMDBoneTag::Write()`
+
+- **THEN** CTrack/CKey on the bone tag for SplineData and frame-on parameters SHALL be persisted by C4D's native scene file mechanism
+
+- **THEN** no persisted VMD binary blob SHALL be required for bone playback after reload
 
 #### Scenario: Save Scene without Animations
-- **WHEN** a user saves a scene without VMD animations (`animations_` is empty)
-- **THEN** the `Write()` method writes the animation count as 0
-- **THEN** no additional animation data is written
+
+- **WHEN** a user saves a scene without VMD animations
+
+- **THEN** no animation-related data SHALL be written beyond what C4D persists natively and what bone tags serialize
 
 ### Requirement: Deserialize VMD Animation Data from Scene File
 
-The system SHALL read VMD animation data from the HyperFile in `MMDModelManagerObject::Read()` and temporarily stage it to be restored during the runtime reconstruction phase.
+The system SHALL read bone animation data from `MMDBoneTag::Read()` and from CTrack/CKey on the bone tag (SplineData, frame-on). The system SHALL still support reading legacy VMD binary blob data from older scene files for backward compatibility, but SHALL NOT use that blob as the playback authority once tag keyframe data exists.
 
-#### Scenario: Load Scene with VMD Animation Data
-- **WHEN** a user opens a scene file containing serialized VMD animation data
-- **THEN** the `Read()` method reads the animation count, followed by each animation's name and VMD binary data from the HyperFile
-- **THEN** the VMD binary data is staged in a temporary buffer, waiting for restoration during the runtime reconstruction phase
+#### Scenario: Load Scene with New Format Bone Animation
+
+- **WHEN** a user opens a scene file saved with the new format
+
+- **THEN** bone tag internal keyframe data SHALL be loaded via `MMDBoneTag::Read()`
+
+- **THEN** bone tag marker CTracks SHALL be loaded by C4D natively
+
+- **THEN** bone animation SHALL play correctly without re-importing VMD
 
 #### Scenario: Backward Compatibility with Older Scene Files
-- **WHEN** a user opens a scene file saved by an older version of the plugin (without the level for VMD animation data)
-- **THEN** the `Read()` method skips reading VMD animation data
-- **THEN** `animations_` remains empty, and the plugin operates normally but without VMD animations
 
-### Requirement: Restore VMD Animations During Runtime Reconstruction Phase
+- **WHEN** a user opens a scene file saved by an older version containing VMD binary blobs
 
-The system SHALL use the staged VMD binary data to restore `VMDAnimation` objects after the `PMXModel` runtime reconstruction is complete.
+- **THEN** the `Read()` method SHALL read the VMD binary data without error
 
-#### Scenario: Animation Restoration Successful
-- **WHEN** `PMXModel` reconstruction is complete and staged VMD binary data exists
-- **THEN** the system calls `VMDAnimation::Create(mmd_model_)` and `VMDAnimation::Add(vmd_file)` for each staged VMD data to restore the animation
-- **THEN** the size of the restored `animations_` array and animation names match those from when it was saved
-- **THEN** `animation_index_` and `animation_items_` are correctly restored
-- **THEN** animations can be played normally
+- **THEN** the old VMD blob data SHALL NOT be used for bone animation playback
 
-#### Scenario: `animation_index_` Persistence upon Animation Restoration
-- **WHEN** a user selected an animation (`animation_index_` >= 0) when saving the scene
-- **THEN** after the scene is reloaded, `animation_index_` is restored to its saved value
-- **THEN** the animation list dropdown menu in the Attribute Manager displays the correct selected item
+- **THEN** the user SHALL need to re-import the VMD file to restore bone keyframe data on bone tags
 
 ### Requirement: CopyTo Support for VMD Animation Data
 
@@ -53,3 +54,4 @@ The system SHALL correctly copy the `animations_` array in `MMDModelManagerObjec
 - **WHEN** a user duplicates an `MMDModelManagerObject` containing VMD animations
 - **THEN** the duplicated object contains the same `animations_` data
 - **THEN** the duplicated object can play animations independently
+

@@ -1,3 +1,9 @@
+## Purpose
+
+Control IK solver visibility, enablement, persistence, and runtime ownership for model-manager animation playback.
+
+## Requirements
+
 ### Requirement: IK Solver List Display
 The system SHALL display a BOOL checkbox for each IK solver from the imported PMX model in the `MODEL_IK_GRP` group of `MMDModelManagerObject`. The label of the checkbox SHALL use the solver name (i.e., IK bone name).
 
@@ -10,15 +16,16 @@ The system SHALL display a BOOL checkbox for each IK solver from the imported PM
 - **THEN** MODEL_IK_GRP SHALL be empty and display no checkboxes
 
 ### Requirement: IK Solver Enable/Disable Control
-The user SHALL be able to enable or disable the corresponding IK solver via the BOOL checkbox in MODEL_IK_GRP. The operation SHALL directly call `MMDIkSolver::Enable()`, and SHALL NOT modify the `PMX_BONE_IS_IK` property of the bone tag.
+The user SHALL be able to enable or disable the corresponding IK solver via the BOOL checkbox in MODEL_IK_GRP. In animation mode (`MODEL_MODE_ANIM`, after the `*_MODE_VMD` merge), the IK solver enable state SHALL be read by the IK bone's `MMDBoneTag::Execute` to determine whether to run `MMDIkSolver::Solve()`. The operation SHALL target the standalone `MMDIKManager` owned by `MMDModelManagerObject`, not a `PMXModel`-owned IK manager.
 
 #### Scenario: Disabling an IK Solver
 - **WHEN** a user unchecks the "Right Leg IK" checkbox
-- **THEN** the corresponding `MMDIkSolver` SHALL be disabled (`Enabled()` returns false), and the `PMX_BONE_IS_IK` property of the bone tag SHALL remain unchanged
+- **THEN** the corresponding IK bone's `MMDBoneTag::Execute` SHALL skip calling `MMDIkSolver::Solve()`
+- **THEN** the `PMX_BONE_IS_IK` property of the bone tag SHALL remain unchanged
 
 #### Scenario: Re-enabling an IK Solver
 - **WHEN** a user re-checks the previously disabled "Right Leg IK" checkbox
-- **THEN** the corresponding `MMDIkSolver` SHALL be enabled (`Enabled()` returns true)
+- **THEN** the corresponding IK bone's `MMDBoneTag::Execute` SHALL resume calling `MMDIkSolver::Solve()`
 
 ### Requirement: Operable Across All Modes
 The IK solver checkboxes SHALL be operable in all modes (Edit/Anim/VMD), unrestricted by `model_mode_`.
@@ -32,19 +39,25 @@ The IK solver checkboxes SHALL be operable in all modes (Edit/Anim/VMD), unrestr
 - **THEN** the operation SHALL successfully execute, and the solver state takes effect instantly
 
 ### Requirement: IK Solver State Persistence
-The system SHALL persist the enablement state of IK solvers by solver name into the C4D scene file, using a `HashMap<String, Bool>` format. The serialization position is after `display_frame_list_` and before animations.
+The system SHALL persist the enablement state of IK solvers by solver name into the C4D scene file, using a `HashMap<String, Bool>` format. The IK solver state SHALL be applied to the standalone `MMDIKManager` owned by the model manager and communicated to bone tags during execution.
 
 #### Scenario: Saving and Loading a Scene
 - **WHEN** a user disables "Right Leg IK", saves the scene, and reopens the scene
 - **THEN** the "Right Leg IK" checkbox SHALL appear unchecked
 
-#### Scenario: Restoring State Upon Re-importing PMX
-- **WHEN** the scene already contains persisted IK disabled states, and the user re-imports the same PMX model
-- **THEN** the system SHALL restore the previous enable/disable states to the corresponding solvers by name matching
+#### Scenario: IK state communicated to bone tag
+- **WHEN** a scene is loaded and IK states are restored
+- **THEN** the model manager SHALL provide IK enable states to bone tags during execution
+- **THEN** IK bone tags SHALL query the model manager's IK state to determine whether to solve
 
-#### Scenario: Fallback When Solver Is Unavailable
-- **WHEN** a scene is reopened but `mmd_model_` has not been created yet (solvers don't exist)
-- **THEN** GetDParameter SHALL return the last saved state from the persisted `ik_solver_enable_states_`
+### Requirement: Model manager owns standalone IK manager
+
+`MMDModelManagerObject` SHALL construct and own the standalone `MMDIKManager` used by animation-mode execution. Bone tags SHALL not look up IK solvers through `mmd_model_` or `PMXModel`.
+
+#### Scenario: IK manager available without PMXModel
+- **WHEN** the model enters animation mode after PMX import or scene reload
+- **THEN** `MMDModelManagerObject` SHALL provide a standalone `MMDIKManager` populated from bone-tag IK data
+- **THEN** bone tags and model-manager UI SHALL query this standalone manager rather than `mmd_model_->GetIKManager()`
 
 ### Requirement: Automatic State Restoration After RebuildRuntime
 The system SHALL apply the persisted states from `ik_solver_enable_states_` to the newly created IK solvers by name matching after `RebuildRuntime` is completed (after `SetMMDModel`).
@@ -85,3 +98,8 @@ During VMD animation import, the system SHALL convert the IK enable keyframes fr
 
 ### Requirement: Dynamic Description Type Registration
 The system SHALL append the `IK_SOLVER_ENABLE` value (value 9) to the end of the `MMDModelRootDynamicDescriptionType` enum, without altering the numerical values of existing enum entries.
+
+#### Scenario: Preserve Existing Dynamic Description Values
+- **WHEN** dynamic description types are registered
+- **THEN** `IK_SOLVER_ENABLE` SHALL be appended as value 9
+- **THEN** existing enum numerical values SHALL remain unchanged

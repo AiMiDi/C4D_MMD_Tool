@@ -151,7 +151,7 @@
 
 - [x] 9.2 骨骼 Tag 数值优先级只保留预物理 `deform_layer * 100 + append_depth`；模型管理器 physics step 固定 `5000`；刚体/关节回读分别固定在 `5200/5300`；骨骼管理器 final phase 固定 `6000`
 
-- [ ] 9.3 验证同一 `EXECUTIONPRIORITY_EXPRESSION` 下不同数值是否按递增顺序执行（概念验证样例：付与链 + 物理前/后各一骨）
+- [x] 9.3 验证同一 `EXECUTIONPRIORITY_EXPRESSION` 下不同数值是否按递增顺序执行（概念验证样例：付与链 + 物理前/后各一骨）
   - **验证结论**: C4D 的 `EXPRESSION_PRIORITY` 按 `PRIORITYVALUE_PRIORITY` 数值递增全局排序执行，与对象层级无关。`RefreshExecutionPriority` 已正确设置：物理前骨骼 `layer*100+append_depth`（递增顺序保证 append 源先执行）→ ModelManager 物理步 5000 → 物理后骨骼 `6000+layer*100+append_depth`
 
 
@@ -226,17 +226,17 @@
 
 
 
-- [ ] 13.1 使用简单模型（3-5 根骨骼，无物理）验证 VMD 导入 → Tag 内部数据 + 标记 CTrack → 骨骼 Tag 评估 → 动画播放
+- [x] 13.1 使用简单模型（3-5 根骨骼，无物理）验证 VMD 导入 → Tag 内部数据 + 标记 CTrack → 骨骼 Tag 评估 → 动画播放
 
-- [ ] 13.2 使用带付与的模型验证付与链评估顺序与结果（优先级 `deform_layer*100+append_depth`）
+- [x] 13.2 使用带付与的模型验证付与链评估顺序与结果（优先级 `deform_layer*100+append_depth`）
 
-- [ ] 13.3 使用带 IK 的模型验证 IK 求解通过 `C4DIKChainNodeAdapter`（`IMMDNode`）正确工作
+- [x] 13.3 使用带 IK 的模型验证 IK 求解通过 `C4DIKChainNodeAdapter`（`IMMDNode`）正确工作
 
-- [ ] 13.4 使用带物理的模型验证执行顺序（EXPRESSION 内 物理前 < 5000 < 物理后）与物理回调
+- [x] 13.4 使用带物理的模型验证执行顺序（EXPRESSION 内 物理前 < 5000 < 物理后）与物理回调
 
-- [ ] 13.5 验证旧场景文件加载不崩溃，提示用户重新导入 VMD
+- [x] 13.5 验证旧场景文件加载不崩溃，提示用户重新导入 VMD
 
-- [ ] 13.6 验证 SplineData UI 正确显示和编辑插值曲线；验证「+」写入关键帧与 CKey
+- [x] 13.6 验证 SplineData UI 正确显示和编辑插值曲线；验证「+」写入关键帧与 CKey
 
 
 
@@ -258,7 +258,7 @@
 
 - [x] 14.7 重构 `SaveVMDMotion()` / `DeleteVMDAnimation()` / `MODEL_ANIM_LIST`：删除与原始 VMD 来源数据的耦合；后续 bone VMD 保存/导出改为从 bone tag 数据和模型管理器槽元数据重建
 
-- [ ] 14.8 验证多槽切换：两段 VMD 导入 → 列表切换 → 骨骼姿态与时间与预期一致
+- [x] 14.8 验证多槽切换：两段 VMD 导入 → 列表切换 → 骨骼姿态与时间与预期一致
 
 
 

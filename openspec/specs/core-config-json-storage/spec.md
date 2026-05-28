@@ -1,4 +1,9 @@
-## ADDED Requirements
+# Config JSON Storage
+
+## Purpose
+Persist tool and name-conversion configuration as repository-managed JSON resources with SDK-compatible parsing and writing.
+
+## Requirements
 
 ### Requirement: 轻量 JSON 读写器
 系统 SHALL 在 `refactoring/utils/json_util.hpp` 中提供一个 header-only 的轻量 JSON 读写器，支持解析与序列化 JSON 对象。读写器 SHALL 不依赖 C4D SDK JSON API，以保证 R20–2026 全版本兼容。
