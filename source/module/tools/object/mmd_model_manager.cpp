@@ -33,11 +33,15 @@ Description:	MMD model object
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 #include "libMMD/Model/MMD/SjisToUnicode.h"
+#include "libMMD/Model/MMD/VMDInterpolation.h"
 
 
 #include <btBulletDynamicsCommon.h>
 
+#include <Eigen/Geometry>
+
 #include <algorithm>
+#include <cmath>
 #include <codecvt>
 #include <locale>
 #include <map>
@@ -535,6 +539,209 @@ namespace
 		WriteInterpolationChannel(motion.m_interpolation, 2, keyframe.translate_z);
 		WriteInterpolationChannel(motion.m_interpolation, 3, keyframe.rotation);
 		return motion;
+	}
+
+	Eigen::Vector3f ToVpdVector(const Vector& value)
+	{
+		return Eigen::Vector3f(
+			maxon::SafeConvert<float>(value.x),
+			maxon::SafeConvert<float>(value.y),
+			maxon::SafeConvert<float>(value.z));
+	}
+
+	Eigen::Quaternionf ToVpdQuaternion(const std::array<Float32, 4>& rotation)
+	{
+		return Eigen::Quaternionf(rotation[3], rotation[0], rotation[1], rotation[2]).normalized();
+	}
+
+	Eigen::Quaternionf ExtractVpdQuaternion(const Matrix& matrix)
+	{
+		Matrix normalized = matrix;
+		normalized.sqmat = normalized.sqmat.GetNormalized();
+
+		Eigen::Matrix3f basis = Eigen::Matrix3f::Identity();
+		basis(0, 0) = maxon::SafeConvert<float>(normalized.sqmat.v1.x);
+		basis(1, 0) = maxon::SafeConvert<float>(normalized.sqmat.v1.y);
+		basis(2, 0) = maxon::SafeConvert<float>(normalized.sqmat.v1.z);
+		basis(0, 1) = maxon::SafeConvert<float>(normalized.sqmat.v2.x);
+		basis(1, 1) = maxon::SafeConvert<float>(normalized.sqmat.v2.y);
+		basis(2, 1) = maxon::SafeConvert<float>(normalized.sqmat.v2.z);
+		basis(0, 2) = maxon::SafeConvert<float>(normalized.sqmat.v3.x);
+		basis(1, 2) = maxon::SafeConvert<float>(normalized.sqmat.v3.y);
+		basis(2, 2) = maxon::SafeConvert<float>(normalized.sqmat.v3.z);
+		return Eigen::Quaternionf(basis).normalized();
+	}
+
+	std::array<Float32, 4> ToBoneRotationArray(const Eigen::Quaternionf& rotation)
+	{
+		const Eigen::Quaternionf normalized = rotation.normalized();
+		return {
+			maxon::SafeConvert<Float32>(normalized.x()),
+			maxon::SafeConvert<Float32>(normalized.y()),
+			maxon::SafeConvert<Float32>(normalized.z()),
+			maxon::SafeConvert<Float32>(normalized.w())
+		};
+	}
+
+	constexpr Float kPoseRegisterEpsilon = 1.0e-5;
+
+	Bool IsTranslationDifferent(const Vector& lhs, const Vector& rhs)
+	{
+		return (lhs - rhs).GetLength() > kPoseRegisterEpsilon;
+	}
+
+	Bool IsQuaternionDifferent(const std::array<Float32, 4>& lhs, const std::array<Float32, 4>& rhs)
+	{
+		const Eigen::Quaternionf left(lhs[3], lhs[0], lhs[1], lhs[2]);
+		const Eigen::Quaternionf right(rhs[3], rhs[0], rhs[1], rhs[2]);
+		const Float32 dot = std::abs(left.normalized().dot(right.normalized()));
+		return 1.0F - dot > maxon::SafeConvert<Float32>(kPoseRegisterEpsilon);
+	}
+
+	Bool IsPoseDifferent(
+		const Vector& lhs_translation,
+		const std::array<Float32, 4>& lhs_rotation,
+		const Vector& rhs_translation,
+		const std::array<Float32, 4>& rhs_rotation)
+	{
+		return IsTranslationDifferent(lhs_translation, rhs_translation) || IsQuaternionDifferent(lhs_rotation, rhs_rotation);
+	}
+
+	libmmd::VMDBezier ToLibMMDBezierForSampling(const BoneAnimationBezierData& bezier)
+	{
+		libmmd::VMDBezier result;
+		result.m_cp1 = Eigen::Vector2f(static_cast<float>(bezier.ax) / 127.0f, static_cast<float>(bezier.ay) / 127.0f);
+		result.m_cp2 = Eigen::Vector2f(static_cast<float>(bezier.bx) / 127.0f, static_cast<float>(bezier.by) / 127.0f);
+		return result;
+	}
+
+	libmmd::VMDBoneKeyframe ToLibMMDKeyframeForSampling(const BoneAnimationKeyframeData& keyframe)
+	{
+		libmmd::VMDBoneKeyframe result;
+		result.frame = keyframe.frame;
+		result.translate = Eigen::Vector3f(keyframe.translation.x, keyframe.translation.y, keyframe.translation.z);
+		result.rotate = Eigen::Quaternionf(keyframe.rotation_w, keyframe.rotation_x, keyframe.rotation_y, keyframe.rotation_z).normalized();
+		result.txBezier = ToLibMMDBezierForSampling(keyframe.translate_x);
+		result.tyBezier = ToLibMMDBezierForSampling(keyframe.translate_y);
+		result.tzBezier = ToLibMMDBezierForSampling(keyframe.translate_z);
+		result.rotBezier = ToLibMMDBezierForSampling(keyframe.rotation);
+		return result;
+	}
+
+	void EvaluateBoneAnimationKeyframes(
+		const maxon::BaseArray<BoneAnimationKeyframeData>& keyframes,
+		const Float current_frame,
+		Vector& translation,
+		std::array<Float32, 4>& rotation)
+	{
+		translation = Vector();
+		rotation = { 0.F, 0.F, 0.F, 1.F };
+		if (keyframes.IsEmpty())
+			return;
+
+		if (keyframes.GetCount() == 1 || current_frame <= keyframes[0].frame)
+		{
+			const auto& key = keyframes[0];
+			translation = Vector(key.translation.x, key.translation.y, key.translation.z);
+			rotation = { key.rotation_x, key.rotation_y, key.rotation_z, key.rotation_w };
+			return;
+		}
+
+		if (current_frame >= keyframes[keyframes.GetCount() - 1].frame)
+		{
+			const auto& key = keyframes[keyframes.GetCount() - 1];
+			translation = Vector(key.translation.x, key.translation.y, key.translation.z);
+			rotation = { key.rotation_x, key.rotation_y, key.rotation_z, key.rotation_w };
+			return;
+		}
+
+		Int upper_index = 1;
+		while (upper_index < keyframes.GetCount() && keyframes[upper_index].frame <= current_frame)
+			++upper_index;
+
+		const auto interpolated = libmmd::InterpolateBoneKeys(
+			ToLibMMDKeyframeForSampling(keyframes[upper_index - 1]),
+			ToLibMMDKeyframeForSampling(keyframes[upper_index]),
+			current_frame);
+		translation = Vector(interpolated.translate.x(), interpolated.translate.y(), interpolated.translate.z());
+		rotation = ToBoneRotationArray(interpolated.rotate);
+	}
+
+	Bool ContainsBoneIndex(const std::vector<Int32>& indices, const Int32 bone_index)
+	{
+		return std::find(indices.begin(), indices.end(), bone_index) != indices.end();
+	}
+
+	Bool ContainsMorphName(const std::vector<String>& names, const String& morph_name)
+	{
+		return std::find(names.begin(), names.end(), morph_name) != names.end();
+	}
+
+	void AppendUniqueBoneIndex(std::vector<Int32>& indices, const Int32 bone_index)
+	{
+		if (!ContainsBoneIndex(indices, bone_index))
+			indices.push_back(bone_index);
+	}
+
+	void AppendUniqueMorphName(std::vector<String>& names, const String& morph_name)
+	{
+		if (!ContainsMorphName(names, morph_name))
+			names.push_back(morph_name);
+	}
+
+	Int32 FindKeyframeIndex(const maxon::BaseArray<BoneAnimationKeyframeData>& keyframes, const Int32 frame)
+	{
+		for (Int32 index = 0; index < keyframes.GetCount(); ++index)
+		{
+			if (keyframes[index].frame == frame)
+				return index;
+		}
+		return NOTOK;
+	}
+
+	BoneAnimationKeyframeData MakeBoneKeyframe(
+		const Int32 frame,
+		const Vector& translation,
+		const std::array<Float32, 4>& rotation,
+		const Bool static_pose = false)
+	{
+		BoneAnimationKeyframeData keyframe;
+		keyframe.frame = frame;
+		keyframe.translation = Vector32(
+			maxon::SafeConvert<Float32>(translation.x),
+			maxon::SafeConvert<Float32>(translation.y),
+			maxon::SafeConvert<Float32>(translation.z));
+		keyframe.rotation_x = rotation[0];
+		keyframe.rotation_y = rotation[1];
+		keyframe.rotation_z = rotation[2];
+		keyframe.rotation_w = rotation[3];
+		keyframe.static_pose = static_pose;
+		return keyframe;
+	}
+
+	libmmd::VPDBone ConvertCurrentBoneToVpd(
+		const BaseTag* bone_tag,
+		BaseObject* bone_object,
+		const Vector* runtime_translation,
+		const std::array<Float32, 4>* runtime_rotation)
+	{
+		libmmd::VPDBone vpd_bone;
+		String bone_name = GetBoneTagName(bone_tag, true);
+		if (bone_name.IsEmpty())
+			bone_name = GetBoneTagName(bone_tag, false);
+		vpd_bone.m_boneName = string_util::GetStdString(bone_name);
+
+		if (runtime_translation && runtime_rotation)
+		{
+			vpd_bone.m_translate = ToVpdVector(*runtime_translation);
+			vpd_bone.m_quaternion = ToVpdQuaternion(*runtime_rotation);
+			return vpd_bone;
+		}
+
+		const Matrix rel_matrix = bone_object ? bone_object->GetRelMl() : Matrix();
+		vpd_bone.m_translate = ToVpdVector(rel_matrix.off);
+		vpd_bone.m_quaternion = ExtractVpdQuaternion(rel_matrix);
+		return vpd_bone;
 	}
 
 	Int32 GetVmdFileMaxFrame(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting)
@@ -1904,6 +2111,8 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	{
 		const auto now_time = doc->GetTime();
 		bone_manager_data_ = GetBoneManagerData();
+		if (has_transient_vpd_pose_ && now_time != transient_vpd_pose_time_)
+			ClearTransientVPDPoseState(doc);
 		const Bool time_changed = prev_time_ != now_time;
 		const UInt32 control_state_checksum = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_) : 0;
 		const Bool control_state_changed = control_state_checksum != control_state_checksum_;
@@ -2265,6 +2474,28 @@ Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const 
 	if (!bone_manager_data_)
 		return 0;
 
+	auto has_static_pose_keyframe_at_time = [](MMDBoneTag* bone_tag, const BaseDocument* doc) -> Bool
+	{
+		return bone_tag && bone_tag->HasStaticPoseAnimationSegmentAtTime(doc);
+	};
+
+	auto ik_chain_has_static_pose_override = [this, &has_static_pose_keyframe_at_time](MMDBoneTag* ik_bone_tag, const BaseDocument* doc) -> Bool
+	{
+		if (!ik_bone_tag || !doc)
+			return false;
+
+		maxon::BaseArray<Int32> affected_indices;
+		ik_bone_tag->CollectIKAffectedBoneIndices(affected_indices);
+		for (const Int32 affected_index : affected_indices)
+		{
+			BaseTag* const affected_tag = bone_manager_data_ ? bone_manager_data_->FindBone(affected_index) : nullptr;
+			auto* const affected_tag_node = affected_tag ? affected_tag->GetNodeData<MMDBoneTag>() : nullptr;
+			if (affected_tag_node && (affected_tag_node->HasStaticPoseRuntimeOverride(doc) || has_static_pose_keyframe_at_time(affected_tag_node, doc)))
+				return true;
+		}
+		return false;
+	};
+
 	std::vector<Int32> sorted_indices;
 	sorted_indices.reserve(bone_manager_data_->bone_list_.GetCount());
 	for (const auto& entry : bone_manager_data_->bone_list_)
@@ -2289,6 +2520,8 @@ Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const 
 		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
 		if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
 			continue;
+		if (ik_chain_has_static_pose_override(bone_tag_node, bone_object->GetDocument()))
+			continue;
 		ik_indices.emplace_back(bone_index);
 	}
 	if (ik_indices.empty())
@@ -2308,6 +2541,8 @@ Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const 
 
 		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
 		if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
+			continue;
+		if (ik_chain_has_static_pose_override(bone_tag_node, bone_object->GetDocument()))
 			continue;
 
 		bone_tag_node->BuildStandaloneIKChains();
@@ -3569,6 +3804,357 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	return true;
 }
 
+Bool MMDModelManagerObject::IsTransientVPDBone(const Int32 bone_index) const
+{
+	return has_transient_vpd_pose_ && ContainsBoneIndex(transient_vpd_bone_indices_, bone_index);
+}
+
+Float MMDModelManagerObject::EvaluateMorphAnimationStrength(
+	const String& morph_name,
+	BaseObject* object,
+	const BaseTime& time)
+{
+	if (!object)
+		return 0.0;
+
+	const auto* name_entry = morph_name_.Find(morph_name);
+	if (!name_entry)
+		return 0.0;
+	const Int morph_index = name_entry->GetValue();
+	if (morph_index < 0 || morph_index >= morph_data_.GetCount())
+		return 0.0;
+
+	CTrack* const track = object->FindCTrack(morph_data_[morph_index].GetStrengthDescID());
+	CCurve* const curve = track ? track->GetCurve() : nullptr;
+	return curve ? curve->GetValue(time) : 0.0;
+}
+
+void MMDModelManagerObject::ClearTransientVPDPoseState(BaseDocument* doc)
+{
+	if (!has_transient_vpd_pose_ && transient_vpd_bone_indices_.empty() && transient_vpd_morph_names_.empty())
+		return;
+
+	BaseObject* const node = reinterpret_cast<BaseObject*>(Get());
+	if (!doc && node)
+		doc = node->GetDocument();
+
+	Bool changed = false;
+	bone_manager_data_ = GetBoneManagerData();
+	if (bone_manager_data_)
+	{
+		for (const Int32 bone_index : transient_vpd_bone_indices_)
+		{
+			BaseTag* const bone_tag_base = bone_manager_data_->FindBone(bone_index);
+			auto* const bone_tag = bone_tag_base ? bone_tag_base->GetNodeData<MMDBoneTag>() : nullptr;
+			if (!bone_tag)
+				continue;
+
+			bone_tag->ClearPlaybackRuntimeOverride();
+			MarkSceneNodeDirty(bone_tag_base);
+			if (BaseObject* const bone_object = bone_tag_base->GetObject())
+				MarkSceneNodeDirty(bone_object);
+			changed = true;
+		}
+	}
+
+	if (node)
+	{
+		const BaseTime time = doc ? doc->GetTime() : BaseTime(-1.);
+		for (const String& morph_name : transient_vpd_morph_names_)
+		{
+			const auto* name_entry = morph_name_.Find(morph_name);
+			if (!name_entry)
+				continue;
+			const Int morph_index = name_entry->GetValue();
+			if (morph_index < 0 || morph_index >= morph_data_.GetCount())
+				continue;
+
+			const Float strength = EvaluateMorphAnimationStrength(morph_name, node, time);
+			if (std::abs(morph_data_[morph_index].GetStrength(node) - strength) > kPoseRegisterEpsilon)
+			{
+				morph_data_[morph_index].SetStrength(node, strength);
+				changed = true;
+			}
+		}
+	}
+
+	transient_vpd_bone_indices_.clear();
+	transient_vpd_morph_names_.clear();
+	has_transient_vpd_pose_ = false;
+	transient_vpd_pose_time_ = BaseTime(-1.);
+
+	if (!changed)
+		return;
+
+	ApplyMorphRuntimeStrengths();
+	*update_morph_.Write() = true;
+	*is_morph_initialized_.Write() = true;
+	is_animation_initialized_ = false;
+	prev_time_ = BaseTime(-1.);
+	InvalidateStandaloneRuntime();
+	if (bone_manager_data_)
+		bone_manager_data_->MarkAppendExecutionOrderDirty();
+	MarkMeshHierarchyDirty(GetMeshManagerObject());
+	if (node)
+	{
+		node->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+		node->Message(MSG_UPDATE);
+	}
+}
+
+Bool MMDModelManagerObject::LoadVPDPose(const libmmd::VPDFile& vpd_file, const CMTToolsSetting::PoseImport& setting, LoadVpdPoseLog& log)
+{
+	iferr_scope_handler
+	{
+		return false;
+	};
+
+	BaseObject* const self = reinterpret_cast<BaseObject*>(Get());
+	if (!self)
+		return false;
+
+	log.imported_bone_count = vpd_file.m_bones.size();
+	log.imported_morph_count = vpd_file.m_morphs.size();
+	log.matched_bone_count = 0;
+	log.matched_morph_count = 0;
+	log.not_find_bone_name_list.Reset();
+	log.not_find_morph_name_list.Reset();
+
+	if (!UpdateManagers(self))
+		return false;
+
+	bone_manager_data_ = GetBoneManagerData();
+	mesh_manager_data_ = GetMeshManagerData();
+	ClearTransientVPDPoseState(setting.doc);
+
+	struct VpdBoneTarget
+	{
+		BaseTag* tag = nullptr;
+		BaseObject* object = nullptr;
+		Int32 bone_index = -1;
+		Vector translation;
+		std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
+	};
+
+	std::unordered_map<std::string, VpdBoneTarget> bone_lookup;
+	if (bone_manager_data_)
+	{
+		for (const auto& entry : bone_manager_data_->bone_list_)
+		{
+			BaseTag* bone_tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+			if (!bone_tag)
+				continue;
+
+			const String bone_name = GetBoneTagName(bone_tag, true);
+			const std::string utf8_name = string_util::GetStdString(bone_name);
+			if (utf8_name.empty())
+				continue;
+
+			bone_lookup.emplace(utf8_name, VpdBoneTarget{
+				bone_tag,
+				bone_tag->GetObject(),
+				static_cast<Int32>(entry.GetKey()),
+				Vector(),
+				{ 0.F, 0.F, 0.F, 1.F }
+			});
+		}
+	}
+
+	std::vector<VpdBoneTarget> matched_bones;
+	matched_bones.reserve(vpd_file.m_bones.size());
+	std::set<std::string> unmatched_bone_utf8;
+	for (const auto& bone : vpd_file.m_bones)
+	{
+		const auto target_it = bone_lookup.find(bone.m_boneName);
+		if (target_it == bone_lookup.end())
+		{
+			unmatched_bone_utf8.insert(bone.m_boneName);
+			continue;
+		}
+
+		VpdBoneTarget target = target_it->second;
+		target.translation = Vector(bone.m_translate.x(), bone.m_translate.y(), bone.m_translate.z());
+		target.rotation = {
+			bone.m_quaternion.x(),
+			bone.m_quaternion.y(),
+			bone.m_quaternion.z(),
+			bone.m_quaternion.w()
+		};
+		matched_bones.push_back(target);
+	}
+
+	std::sort(matched_bones.begin(), matched_bones.end(), [](const VpdBoneTarget& lhs, const VpdBoneTarget& rhs)
+	{
+		return lhs.bone_index < rhs.bone_index;
+	});
+
+	for (const VpdBoneTarget& target : matched_bones)
+	{
+		auto* const bone_tag = target.tag ? target.tag->GetNodeData<MMDBoneTag>() : nullptr;
+		if (!bone_tag || !target.object)
+			continue;
+		if (bone_tag->ApplyStaticPose(target.object, target.translation, target.rotation))
+		{
+			if (model_mode_ == MODEL_MODE_ANIM)
+			{
+				bone_tag->SetPlaybackRuntimeOverride(setting.doc, target.translation, target.rotation, true);
+				AppendUniqueBoneIndex(transient_vpd_bone_indices_, target.bone_index);
+			}
+			++log.matched_bone_count;
+		}
+	}
+
+	for (const auto& utf8 : unmatched_bone_utf8)
+	{
+		log.not_find_bone_name_list.Append(String(utf8.c_str())) iferr_return;
+	}
+
+	std::set<std::string> unmatched_morph_utf8;
+	for (const auto& morph : vpd_file.m_morphs)
+	{
+		const String morph_name(morph.m_morphName.c_str());
+		const auto* name_entry = morph_name_.Find(morph_name);
+		if (!name_entry)
+		{
+			unmatched_morph_utf8.insert(morph.m_morphName);
+			continue;
+		}
+
+		const Int morph_index = name_entry->GetValue();
+		if (morph_index < 0 || morph_index >= morph_data_.GetCount())
+		{
+			unmatched_morph_utf8.insert(morph.m_morphName);
+			continue;
+		}
+
+		if (morph_data_[morph_index].SetStrength(self, morph.m_weight))
+		{
+			if (model_mode_ == MODEL_MODE_ANIM)
+				AppendUniqueMorphName(transient_vpd_morph_names_, morph_name);
+			++log.matched_morph_count;
+		}
+		else
+			unmatched_morph_utf8.insert(morph.m_morphName);
+	}
+
+	for (const auto& utf8 : unmatched_morph_utf8)
+	{
+		log.not_find_morph_name_list.Append(String(utf8.c_str())) iferr_return;
+	}
+
+	ApplyMorphRuntimeStrengths();
+	*update_morph_.Write() = true;
+	*is_morph_initialized_.Write() = true;
+	is_animation_initialized_ = false;
+	prev_time_ = BaseTime(-1.);
+	has_transient_vpd_pose_ = model_mode_ == MODEL_MODE_ANIM
+		&& (!transient_vpd_bone_indices_.empty() || !transient_vpd_morph_names_.empty());
+	transient_vpd_pose_time_ = has_transient_vpd_pose_ && setting.doc ? setting.doc->GetTime() : BaseTime(-1.);
+	InvalidateStandaloneRuntime();
+
+	if (bone_manager_data_)
+	{
+		if (model_mode_ != MODEL_MODE_ANIM)
+			mmd_bone_control_util::SyncControlsToCurrentPose(*bone_manager_data_);
+		bone_manager_data_->MarkAppendExecutionOrderDirty();
+		if (BaseObject* const bone_manager_object = io_util::ResolveObjectLink(bone_manager_))
+			MarkSceneNodeDirty(bone_manager_object);
+	}
+
+	MarkMeshHierarchyDirty(GetMeshManagerObject());
+	self->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+	self->Message(MSG_UPDATE);
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (GeIsMainThread())
+		EventAdd();
+	return true;
+}
+
+Bool MMDModelManagerObject::SaveVPDPose(libmmd::VPDFile& vpd_pose, const CMTToolsSetting::PoseExport& setting) const
+{
+	(void)setting;
+	iferr_scope_handler
+	{
+		return false;
+	};
+
+	auto* const self = const_cast<MMDModelManagerObject*>(this);
+	BaseObject* const object = reinterpret_cast<BaseObject*>(self->Get());
+	if (!object)
+		return false;
+
+	vpd_pose = libmmd::VPDFile();
+
+	const auto* const bone_manager = self->GetBoneManagerData();
+	if (bone_manager)
+	{
+		struct BoneExportEntry
+		{
+			Int32 index = -1;
+			BaseTag* tag = nullptr;
+			BaseObject* object = nullptr;
+		};
+
+		std::vector<BoneExportEntry> bones;
+		bones.reserve(static_cast<size_t>(bone_manager->bone_list_.GetCount()));
+		for (const auto& entry : bone_manager->bone_list_)
+		{
+			BaseTag* const bone_tag = entry.GetValue() && *entry.GetValue()
+				? static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink())
+				: nullptr;
+			if (!bone_tag)
+				continue;
+			BaseObject* const bone_object = bone_tag->GetObject();
+			if (!bone_object)
+				continue;
+			bones.push_back(BoneExportEntry{
+				static_cast<Int32>(entry.GetKey()),
+				bone_tag,
+				bone_object
+			});
+		}
+
+		std::sort(bones.begin(), bones.end(), [](const BoneExportEntry& lhs, const BoneExportEntry& rhs)
+		{
+			return lhs.index < rhs.index;
+		});
+
+		vpd_pose.m_bones.reserve(bones.size());
+		for (const BoneExportEntry& bone : bones)
+		{
+			Vector runtime_translation;
+			std::array<Float32, 4> runtime_rotation { 0.F, 0.F, 0.F, 1.F };
+			const Vector* runtime_translation_ptr = nullptr;
+			const std::array<Float32, 4>* runtime_rotation_ptr = nullptr;
+			if (model_mode_ == MODEL_MODE_ANIM)
+			{
+				auto* const bone_tag_data = bone.tag->GetNodeData<MMDBoneTag>();
+				if (bone_tag_data && bone_tag_data->GetPlaybackRuntimeOverride(runtime_translation, runtime_rotation))
+				{
+					runtime_translation_ptr = &runtime_translation;
+					runtime_rotation_ptr = &runtime_rotation;
+				}
+			}
+			vpd_pose.m_bones.push_back(ConvertCurrentBoneToVpd(
+				bone.tag,
+				bone.object,
+				runtime_translation_ptr,
+				runtime_rotation_ptr));
+		}
+	}
+
+	vpd_pose.m_morphs.reserve(static_cast<size_t>(morph_data_.GetCount()));
+	for (const auto& morph : morph_data_)
+	{
+		libmmd::VPDMorph vpd_morph;
+		vpd_morph.m_morphName = string_util::GetStdString(morph.GetName());
+		vpd_morph.m_weight = maxon::SafeConvert<float>(morph.GetStrength(object));
+		vpd_pose.m_morphs.push_back(std::move(vpd_morph));
+	}
+
+	return true;
+}
+
 Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
 {
 	if (animation_index_ < 0 || animation_index_ >= animation_slot_metadata_.GetCount())
@@ -3632,6 +4218,348 @@ Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMT
 }
 
 // TODO: VMD model-info / visibility / per-frame IK controller → CTrack (see removed SetModelControllerAnimation draft).
+
+Bool MMDModelManagerObject::EnsureCurrentAnimationSlot(BaseDocument* doc, const Int32 frame)
+{
+	iferr_scope_handler{ return false; };
+
+	BaseObject* const node = reinterpret_cast<BaseObject*>(Get());
+	if (!node)
+		return false;
+
+	if (!UpdateManagers(node))
+		return false;
+
+	Int32 target_slot = animation_index_;
+	if (target_slot < 0 || target_slot >= animation_slot_metadata_.GetCount())
+	{
+		target_slot = static_cast<Int32>(animation_slot_metadata_.GetCount());
+		if (!SetAnimationSlotMetadata(target_slot, FormatString("Animation @", target_slot), frame))
+			return false;
+		animation_index_ = target_slot;
+	}
+	else if (frame > animation_slot_metadata_[target_slot].max_frame)
+	{
+		animation_slot_metadata_[target_slot].max_frame = frame;
+		RefreshAnimationSlotItems();
+	}
+
+	const Int32 slot_count = static_cast<Int32>(animation_slot_metadata_.GetCount());
+	if (!EnsureMorphAnimationSlotCount(slot_count))
+		return false;
+
+	bone_manager_data_ = GetBoneManagerData();
+	if (bone_manager_data_)
+	{
+		if (!bone_manager_data_->EnsureAllAnimationSlotCount(slot_count))
+			return false;
+		bone_manager_data_->SetAllActiveAnimationSlot(animation_index_);
+	}
+
+	if (BaseContainer* const bc = node->GetDataInstance())
+		bc->SetInt32(MODEL_ANIM_LIST, animation_index_);
+
+	if (doc && animation_index_ >= 0)
+	{
+		const BaseTime max_time(static_cast<Float>(GetAnimationSlotMaxFrame(animation_index_)), kModelAnimationFps);
+		if (doc->GetMaxTime() < max_time)
+			doc->SetMaxTime(max_time);
+		if (doc->GetLoopMaxTime() < max_time)
+			doc->SetLoopMaxTime(max_time);
+	}
+
+	node->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA);
+	return true;
+}
+
+Bool MMDModelManagerObject::RegisterCurrentStateKeyframe(BaseDocument* doc)
+{
+	iferr_scope_handler{ return false; };
+
+	BaseObject* const node = reinterpret_cast<BaseObject*>(Get());
+	if (!node)
+		return false;
+	if (!doc)
+		doc = node->GetDocument();
+
+	const Int32 frame = doc ? doc->GetTime().GetFrame(kModelAnimationFps) : 0;
+	const Float current_frame = doc
+		? maxon::SafeConvert<Float>(doc->GetTime().Get() * static_cast<Float64>(kModelAnimationFps))
+		: static_cast<Float>(frame);
+	const BaseTime key_time(static_cast<Float>(frame), kModelAnimationFps);
+
+	struct PendingBoneState
+	{
+		Int32 bone_index = NOTOK;
+		BaseTag* tag_base = nullptr;
+		MMDBoneTag* tag = nullptr;
+		Vector translation;
+		std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
+		Bool reset_control = false;
+		Bool static_pose = false;
+	};
+
+	struct PendingMorphState
+	{
+		String name;
+		Float strength = 0.0;
+	};
+
+	std::vector<PendingBoneState> pending_bones;
+	std::vector<PendingMorphState> pending_morphs;
+
+	bone_manager_data_ = GetBoneManagerData();
+	if (bone_manager_data_)
+	{
+		for (const auto& entry : bone_manager_data_->bone_list_)
+		{
+			const Int32 bone_index = static_cast<Int32>(entry.GetKey());
+			BaseTag* const bone_tag_base = entry.GetValue() && *entry.GetValue()
+				? static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink())
+				: nullptr;
+			auto* const bone_tag = bone_tag_base ? bone_tag_base->GetNodeData<MMDBoneTag>() : nullptr;
+			BaseObject* const bone_object = bone_tag_base ? bone_tag_base->GetObject() : nullptr;
+			if (!bone_tag || !bone_object)
+				continue;
+
+			maxon::BaseArray<BoneAnimationKeyframeData> keyframes;
+			if (!bone_tag->CopyAnimationSlot(animation_index_, keyframes))
+				return false;
+
+			Vector base_translation;
+			std::array<Float32, 4> base_rotation { 0.F, 0.F, 0.F, 1.F };
+			EvaluateBoneAnimationKeyframes(keyframes, current_frame, base_translation, base_rotation);
+
+			Vector translation = base_translation;
+			std::array<Float32, 4> rotation = base_rotation;
+			Bool should_register = false;
+			Bool reset_control = false;
+			Bool from_transient_vpd_pose = false;
+			if (model_mode_ == MODEL_MODE_ANIM && IsTransientVPDBone(bone_index))
+			{
+				from_transient_vpd_pose = true;
+				should_register = bone_tag->GetPlaybackRuntimeOverride(translation, rotation);
+			}
+			else if (model_mode_ == MODEL_MODE_ANIM)
+			{
+				Vector control_translation;
+				std::array<Float32, 4> control_rotation { 0.F, 0.F, 0.F, 1.F };
+				if (mmd_bone_control_util::GetControlDeltaInBoneSpace(bone_tag_base, bone_object, control_translation, control_rotation))
+				{
+					const BaseContainer* const bc = bone_tag_base->GetDataInstance();
+					if (!bc || bc->GetBool(PMX_BONE_TRANSLATABLE))
+						translation += control_translation;
+					if (!bc || bc->GetBool(PMX_BONE_ROTATABLE))
+					{
+						const Eigen::Quaternionf base_quat(rotation[3], rotation[0], rotation[1], rotation[2]);
+						const Eigen::Quaternionf control_quat(control_rotation[3], control_rotation[0], control_rotation[1], control_rotation[2]);
+						rotation = ToBoneRotationArray(base_quat.normalized() * control_quat.normalized());
+					}
+					should_register = IsPoseDifferent(translation, rotation, base_translation, base_rotation);
+					reset_control = should_register;
+				}
+			}
+			else
+			{
+				const Matrix rel_matrix = bone_object->GetRelMl();
+				translation = rel_matrix.off;
+				rotation = ToBoneRotationArray(ExtractVpdQuaternion(rel_matrix));
+				should_register = IsPoseDifferent(translation, rotation, base_translation, base_rotation);
+			}
+
+			if (!should_register || !IsPoseDifferent(translation, rotation, base_translation, base_rotation))
+				continue;
+
+			pending_bones.push_back(PendingBoneState{
+				bone_index,
+				bone_tag_base,
+				bone_tag,
+				translation,
+				rotation,
+				reset_control,
+				from_transient_vpd_pose
+			});
+		}
+	}
+
+	for (auto& morph : morph_data_)
+	{
+		const String morph_name = morph.GetName();
+		const Float current_strength = morph.GetStrength(node);
+		const Float animated_strength = EvaluateMorphAnimationStrength(morph_name, node, key_time);
+		if (std::abs(current_strength - animated_strength) <= kPoseRegisterEpsilon)
+			continue;
+
+		pending_morphs.push_back(PendingMorphState{
+			morph_name,
+			current_strength
+		});
+	}
+
+	if (pending_bones.empty() && pending_morphs.empty())
+	{
+		return true;
+	}
+
+	if (!EnsureCurrentAnimationSlot(doc, frame))
+		return false;
+
+	for (const PendingBoneState& pending : pending_bones)
+	{
+		if (!pending.tag)
+			continue;
+
+		maxon::BaseArray<BoneAnimationKeyframeData> keyframes;
+		if (!pending.tag->CopyAnimationSlot(animation_index_, keyframes))
+			return false;
+
+		BoneAnimationKeyframeData keyframe = MakeBoneKeyframe(frame, pending.translation, pending.rotation, pending.static_pose);
+		const Int32 existing_index = FindKeyframeIndex(keyframes, frame);
+		if (existing_index == NOTOK)
+		{
+			keyframes.Append(std::move(keyframe)) iferr_return;
+		}
+		else
+		{
+			keyframes[existing_index] = keyframe;
+		}
+
+		if (!pending.tag->ReplaceAnimationSlot(animation_index_, keyframes))
+			return false;
+
+		if (pending.reset_control)
+			mmd_bone_control_util::ResetControlRelativeTransform(pending.tag_base);
+		if (model_mode_ == MODEL_MODE_ANIM)
+		{
+			pending.tag->SetPlaybackRuntimeOverride(doc, pending.translation, pending.rotation, true);
+			AppendUniqueBoneIndex(transient_vpd_bone_indices_, pending.bone_index);
+		}
+	}
+
+	for (const PendingMorphState& pending : pending_morphs)
+	{
+		if (!AddMorphStrengthKeyframe(pending.name, key_time, pending.strength))
+			return false;
+		if (model_mode_ == MODEL_MODE_ANIM)
+			AppendUniqueMorphName(transient_vpd_morph_names_, pending.name);
+	}
+	if (animation_index_ >= 0)
+	{
+		if (!CaptureMorphAnimationSlotFromTracks(animation_index_))
+			return false;
+	}
+
+	has_transient_vpd_pose_ = model_mode_ == MODEL_MODE_ANIM
+		&& (!transient_vpd_bone_indices_.empty() || !transient_vpd_morph_names_.empty());
+	transient_vpd_pose_time_ = has_transient_vpd_pose_ && doc ? doc->GetTime() : BaseTime(-1.);
+	is_animation_initialized_ = false;
+	prev_time_ = BaseTime(-1.);
+	InvalidateStandaloneRuntime();
+	node->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+	node->Message(MSG_UPDATE);
+	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+	if (GeIsMainThread())
+		EventAdd();
+	return true;
+}
+
+Bool MMDModelManagerObject::DeleteCurrentFrameKeyframes(BaseDocument* doc)
+{
+	iferr_scope_handler{ return false; };
+
+	BaseObject* const node = reinterpret_cast<BaseObject*>(Get());
+	if (!node)
+		return false;
+	if (!doc)
+		doc = node->GetDocument();
+	if (animation_index_ < 0 || animation_index_ >= animation_slot_metadata_.GetCount())
+		return false;
+
+	const Int32 frame = doc ? doc->GetTime().GetFrame(kModelAnimationFps) : 0;
+	Bool changed = false;
+
+	bone_manager_data_ = GetBoneManagerData();
+	if (bone_manager_data_)
+	{
+		for (const auto& entry : bone_manager_data_->bone_list_)
+		{
+			BaseTag* const bone_tag_base = entry.GetValue() && *entry.GetValue()
+				? static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink())
+				: nullptr;
+			auto* const bone_tag = bone_tag_base ? bone_tag_base->GetNodeData<MMDBoneTag>() : nullptr;
+			if (!bone_tag)
+				continue;
+
+			maxon::BaseArray<BoneAnimationKeyframeData> keyframes;
+			if (!bone_tag->CopyAnimationSlot(animation_index_, keyframes))
+				return false;
+
+			const Int32 keyframe_index = FindKeyframeIndex(keyframes, frame);
+			if (keyframe_index == NOTOK)
+				continue;
+
+			keyframes.Erase(keyframe_index) iferr_return;
+			if (!bone_tag->ReplaceAnimationSlot(animation_index_, keyframes))
+				return false;
+			changed = true;
+		}
+	}
+
+	const BaseTime key_time(static_cast<Float>(frame), kModelAnimationFps);
+	for (auto& morph : morph_data_)
+	{
+		const DescID track_id = morph.GetStrengthDescID();
+		CTrack* const track = node->FindCTrack(track_id);
+		CCurve* const curve = track ? track->GetCurve() : nullptr;
+		if (!curve)
+			continue;
+
+		Int32 key_index = NOTOK;
+		if (!curve->FindKey(key_time, &key_index) || key_index == NOTOK)
+			continue;
+
+		if (!curve->DelKey(key_index))
+			return false;
+		if (curve->GetKeyCount() == 0)
+			RemoveParameterTrack(node, track_id);
+		changed = true;
+	}
+
+	SyncIKSolverDynamicParamsFromDescMap();
+	for (const auto& param : ik_solver_dynamic_params_)
+	{
+		CTrack* const track = node->FindCTrack(param.first);
+		CCurve* const curve = track ? track->GetCurve() : nullptr;
+		if (!curve)
+			continue;
+
+		Int32 key_index = NOTOK;
+		if (!curve->FindKey(key_time, &key_index) || key_index == NOTOK)
+			continue;
+
+		if (!curve->DelKey(key_index))
+			return false;
+		if (curve->GetKeyCount() == 0)
+			RemoveParameterTrack(node, param.first);
+		changed = true;
+	}
+
+	if (animation_index_ >= 0 && !CaptureMorphAnimationSlotFromTracks(animation_index_))
+		return false;
+
+	if (changed)
+	{
+		is_animation_initialized_ = false;
+		prev_time_ = BaseTime(-1.);
+		InvalidateStandaloneRuntime();
+		node->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+		node->Message(MSG_UPDATE);
+		SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+		if (GeIsMainThread())
+			EventAdd();
+	}
+	return true;
+}
 
 Bool MMDModelManagerObject::DeleteVMDAnimation()
 {
@@ -4099,6 +5027,34 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				DeleteVMDAnimation();
 				break;
 			}
+			case MODEL_ANIM_IMPORT_VPD_BUTTON:
+			{
+				CMTToolsSetting::PoseImport setting(GetActiveDocument());
+				if (!filename_util::SelectSuffixImportFile(setting.fn, "vpd"_s))
+					break;
+
+				CMTToolsManager::ImportVPDPose(setting, reinterpret_cast<BaseObject*>(node));
+				break;
+			}
+			case MODEL_ANIM_EXPORT_VPD_BUTTON:
+			{
+				CMTToolsSetting::PoseExport setting(GetActiveDocument());
+				if (!filename_util::SelectSuffixExportFile(setting.fn, "vpd"_s))
+					break;
+
+				CMTToolsManager::ExportVPDPose(setting, reinterpret_cast<BaseObject*>(node));
+				break;
+			}
+			case MODEL_ANIM_REGISTER_CURRENT_BUTTON:
+			{
+				RegisterCurrentStateKeyframe(GetActiveDocument());
+				break;
+			}
+			case MODEL_ANIM_DELETE_CURRENT_FRAME_BUTTON:
+			{
+				DeleteCurrentFrameKeyframes(GetActiveDocument());
+				break;
+			}
 			case MODEL_MATERIAL_CREATE_BUTTON:
 			{
 				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
@@ -4562,6 +5518,8 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			const Int32 previous_mode = model_mode_;
 			const Int32 next_mode = normalized_mode.GetInt32();
 			BaseDocument* const doc = reinterpret_cast<BaseList2D*>(node)->GetDocument();
+			if (previous_mode != next_mode)
+				ClearTransientVPDPoseState(doc);
 			if (previous_mode == MODEL_MODE_EDIT && next_mode == MODEL_MODE_ANIM)
 				CommitEditModeBindState(doc);
 			else if (previous_mode == MODEL_MODE_ANIM && next_mode == MODEL_MODE_EDIT)

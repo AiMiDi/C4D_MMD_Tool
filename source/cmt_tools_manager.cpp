@@ -117,6 +117,50 @@ namespace CMTToolsManager
 		return true;
 	}
 
+	bool ImportVPDPose(const CMTToolsSetting::PoseImport& setting, BaseObject* select_object)
+	{
+		LoadVpdPoseLog logger;
+
+		const auto vpd_path = string_util::GetStdString(setting.fn.GetString());
+		libmmd::VPDFile vpd_file;
+		if (!libmmd::ReadVPDFile(&vpd_file, vpd_path.c_str()))
+		{
+			LoadVpdPoseLog::LogReadFileErr();
+			return false;
+		}
+
+		if (!CMTSceneManager::LoadVPDPose(setting, vpd_file, logger, select_object))
+		{
+			return false;
+		}
+
+		logger.LogOK();
+		return true;
+	}
+
+	bool ExportVPDPose(const CMTToolsSetting::PoseExport& setting, BaseObject* select_object)
+	{
+		SaveVpdPoseLog logger;
+
+		libmmd::VPDFile vpd_file;
+		if (!CMTSceneManager::SaveVPDPose(setting, vpd_file, logger, select_object))
+		{
+			return false;
+		}
+
+		const auto vpd_path = string_util::GetStdString(setting.fn.GetString());
+		if (!libmmd::WriteVPDFile(&vpd_file, vpd_path.c_str()))
+		{
+			SaveVpdPoseLog::LogWriteFileErr();
+			return false;
+		}
+
+		logger.exported_bone_count = vpd_file.m_bones.size();
+		logger.exported_morph_count = vpd_file.m_morphs.size();
+		logger.LogOK();
+		return true;
+	}
+
 	bool ExportVMDMotion(const CMTToolsSetting::MotionExport& setting)
 	{
 		SaveVmdMotionLog logger;

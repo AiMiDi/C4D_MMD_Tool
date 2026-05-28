@@ -14,6 +14,20 @@ Description:	scene manager
 #include "module/tools/object/mmd_camera.h"
 #include "module/tools/object/mmd_model_manager.h"
 
+namespace
+{
+	void AppendVpdUnmatchedNames(String& report, const String& label, const maxon::BaseList<String>& names)
+	{
+		if (names.GetCount() <= 0)
+			return;
+
+		report += FormatString("\n@ (@):\n", label, String::IntToString(names.GetCount()));
+		for (const String& name : names)
+			report += FormatString("@ ,", name);
+		report += "\n"_s;
+	}
+}
+
 void IOLog::LogOutMem()
 {
 	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_MEM_ERR));
@@ -134,6 +148,51 @@ void SaveVmdMotionLog::LogSelectError()
 void SaveVmdMotionLog::LogNoAnimationError()
 {
 	MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_MOT_NO_ANIM));
+}
+
+void LoadVpdPoseLog::LogOK()
+{
+	timing.Stop();
+	String report = "VPD pose import OK\n"_s;
+	report += FormatString("Bones: @/@\n",
+	                       String::UIntToString(matched_bone_count),
+	                       String::UIntToString(imported_bone_count));
+	report += FormatString("Morphs: @/@\n",
+	                       String::UIntToString(matched_morph_count),
+	                       String::UIntToString(imported_morph_count));
+	report += FormatString("Time: @ ms\n", String::FloatToString(timing.GetMilliseconds()));
+	AppendVpdUnmatchedNames(report, "Unmatched bones"_s, not_find_bone_name_list);
+	AppendVpdUnmatchedNames(report, "Unmatched morphs"_s, not_find_morph_name_list);
+	MessageDialog(report);
+}
+
+void LoadVpdPoseLog::LogNotMMDModelError()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + "Not MMD model.");
+}
+
+void LoadVpdPoseLog::LogSelectError()
+{
+	MessageDialog(GeLoadString(IDS_MES_IMPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
+}
+
+void SaveVpdPoseLog::LogOK()
+{
+	timing.Stop();
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_POSE_OK,
+		String::UIntToString(exported_bone_count),
+		String::UIntToString(exported_morph_count),
+		String::FloatToString(timing.GetMilliseconds())));
+}
+
+void SaveVpdPoseLog::LogNotMMDModelError()
+{
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_MOT_TYPE_ERR));
+}
+
+void SaveVpdPoseLog::LogSelectError()
+{
+	MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 }
 
 void LoadModelLog::Set(const libmmd::PMXFile& file, const CMTToolsSetting::ModelImport& setting)
@@ -301,6 +360,61 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 	setting.doc->SetTime(BaseTime(0, 30.));
 	EventAdd();
 
+	return true;
+}
+
+Bool CMTSceneManager::LoadVPDPose(const CMTToolsSetting::PoseImport& setting, const libmmd::VPDFile& vpd_file, LoadVpdPoseLog& log, BaseObject*
+                                  select_object)
+{
+	if (select_object == nullptr)
+		select_object = setting.doc->GetActiveObject();
+
+	if (select_object == nullptr)
+	{
+		LoadVpdPoseLog::LogSelectError();
+		return false;
+	}
+
+	if (!select_object->IsInstanceOf(g_mmd_model_manager_object_id))
+	{
+		LoadVpdPoseLog::LogNotMMDModelError();
+		return false;
+	}
+
+	if (!select_object->GetNodeData<MMDModelManagerObject>()->LoadVPDPose(vpd_file, setting, log))
+	{
+		return false;
+	}
+
+	EventAdd();
+	return true;
+}
+
+Bool CMTSceneManager::SaveVPDPose(const CMTToolsSetting::PoseExport& setting, libmmd::VPDFile& data, SaveVpdPoseLog& log,
+                                  BaseObject* select_object)
+{
+	if (select_object == nullptr)
+		select_object = setting.doc->GetActiveObject();
+	if (select_object == nullptr)
+	{
+		SaveVpdPoseLog::LogSelectError();
+		return false;
+	}
+
+	if (!select_object->IsInstanceOf(g_mmd_model_manager_object_id))
+	{
+		SaveVpdPoseLog::LogNotMMDModelError();
+		return false;
+	}
+
+	auto* const model_manager = select_object->GetNodeData<MMDModelManagerObject>();
+	if (!model_manager || !model_manager->SaveVPDPose(data, setting))
+	{
+		return false;
+	}
+
+	log.exported_bone_count = data.m_bones.size();
+	log.exported_morph_count = data.m_morphs.size();
 	return true;
 }
 

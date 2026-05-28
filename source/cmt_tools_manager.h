@@ -19,7 +19,8 @@ namespace CMTToolsManager
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting);
 	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting, BaseObject* select_object = nullptr);
 	bool ExportVMDMotion(const CMTToolsSetting::MotionExport& setting);
+	bool ImportVPDPose(const CMTToolsSetting::PoseImport& setting, BaseObject* select_object = nullptr);
+	bool ExportVPDPose(const CMTToolsSetting::PoseExport& setting, BaseObject* select_object = nullptr);
 	bool ImportPMXModel (const CMTToolsSetting::ModelImport&  setting);
 	bool ExportPMXModel (const CMTToolsSetting::ModelExport&  setting);
 }
-

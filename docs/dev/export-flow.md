@@ -1,15 +1,15 @@
 # 导出流程
 
-本文整理当前 **PMX 模型导出** 链路。PMX 导出是「从插件管理的 MMD 模型重建 `libmmd::PMXFile` 并写出」，不是任意 C4D 场景转 PMX。导入侧见 [`import-flow.md`](import-flow.md)；运行时重建、动画/IK/物理执行见 [`runtime-flow.md`](runtime-flow.md)。
+本文整理当前 **PMX 模型导出** 与 **VPD 姿势导出** 链路。PMX 导出是「从插件管理的 MMD 模型重建 `libmmd::PMXFile` 并写出」，不是任意 C4D 场景转 PMX；VPD 导出是「把选中 MMD 模型当前时间点的骨骼/表情姿势快照写成 `libmmd::VPDFile`」。导入侧见 [`import-flow.md`](import-flow.md)；运行时重建、动画/IK/物理执行见 [`runtime-flow.md`](runtime-flow.md)。
 
 ## 关键代码地图
 
 | 区域 | 主要职责 |
 |---|---|
-| `source/module/ui/cmt_tools_dialog.cpp` | 模型工具页 UI：读取 `ModelExport` 选项，调用 `SelectSuffixExportFile(..., "pmx")` 与 `CMTToolsManager::ExportPMXModel` |
-| `source/cmt_tools_manager.cpp` | `CMTToolsManager::ExportPMXModel`：分配 `libmmd::PMXFile`，调用场景保存，再 `WritePMXFile` 写盘 |
-| `source/CMTSceneManager.cpp` | `CMTSceneManager::SavePMXModel`：校验当前选择为 `MMDModelManagerObject`，触发导出前同步并调用 `SavePMX` |
-| `source/module/tools/object/mmd_model_manager.cpp` | `MMDModelManagerObject::PreparePMXExportState` / `SavePMX`：编排 section 顺序、材质/贴图/display frame/morph，并调度子 manager |
+| `source/module/ui/cmt_tools_dialog.cpp` | 模型工具页 UI：读取 `ModelExport` / `PoseExport` 选项，调用 `SelectSuffixExportFile(..., "pmx" / "vpd")` 与 tools manager |
+| `source/cmt_tools_manager.cpp` | `CMTToolsManager::ExportPMXModel` / `ExportVPDPose`：分配 libMMD 文件对象，调用场景保存，再写盘 |
+| `source/CMTSceneManager.cpp` | `CMTSceneManager::SavePMXModel` / `SaveVPDPose`：校验当前选择为 `MMDModelManagerObject` 并调用模型管理对象 |
+| `source/module/tools/object/mmd_model_manager.cpp` | `MMDModelManagerObject::PreparePMXExportState` / `SavePMX` 编排 PMX section；`SaveVPDPose` 采样当前骨骼和 morph 快照 |
 | `source/module/tools/object/mmd_bone_manager.cpp` | `MMDBoneManagerObject::SavePMX`：骨骼 flags、tail、append、axis、IK target/link/limit、层级；动态 IK link 解析会先检查 `GeData` 类型 |
 | `source/module/tools/object/mmd_mesh_manager.cpp` | `MMDMeshManagerObject::SavePMX`：顶点、面、法线、UV、权重、材质面范围；优先从 PoseMorph base 采样未动画形变的基准点位 |
 | `source/module/tools/object/mmd_rigid_manager.cpp` | `MMDRigidManagerObject::SavePMX`：刚体绑定骨骼、形状与物理参数 |
@@ -114,6 +114,54 @@ libmmd::PMXFile（新建）
   m_softbodies     ← v1 始终为空
 ```
 
+## VPD 姿势导出
+
+VPD 导出入口有两处：工具窗口动作页的 **姿势(VPD)** 分组，以及 `OMMDModelManager` 的动画分组 `导出VPD` 按钮。工具窗口入口使用当前选中的 `MMDModelManagerObject`；模型管理器入口直接作用于该对象本身。它不重建 PMX section，也不导出 VMD 动画曲线；它只保存目标模型在当前文档时间点的静态姿势：
+
+- 骨骼：按 PMX 骨骼 index 排序写入所有已链接骨骼，使用 PMX 本地骨骼名；零平移/单位旋转骨骼也保留。
+- 表情：写入所有 morph 控制器当前强度，包含 0 权重；group / flip morph 只保存控制器强度，不展开成运行时贡献。
+- EDIT 模式：导出当前可编辑对象相对矩阵中的姿势，不切换模式，不提交 animation slot。
+- ANIM 模式：优先使用当前播放求值后的 runtime override；若骨骼没有 override，则回退到对象当前相对矩阵。
+- 导出过程只读当前对象状态，不修改 animation slot、CTrack、关键帧或 PMX bind 数据。
+
+```mermaid
+sequenceDiagram
+    participant UI as CMTToolDialog
+    participant TM as CMTToolsManager::ExportVPDPose
+    participant SM as CMTSceneManager::SaveVPDPose
+    participant MM as MMDModelManagerObject::SaveVPDPose
+    participant IO as libmmd::WriteVPDFile
+
+    UI->>UI: SelectSuffixExportFile(fn, "vpd")
+    alt 用户取消文件对话框
+        UI-->>UI: return false，不调用 ExportVPDPose
+    end
+    UI->>TM: ExportVPDPose(setting)
+    TM->>SM: SaveVPDPose(setting, vpd_file, log)
+    SM->>SM: 校验 GetActiveObject() 为 ModelManager
+    SM->>MM: SaveVPDPose(vpd_file, setting)
+    MM->>MM: 遍历 bone_list_，按 PMX index 写 VPDBone
+    MM->>MM: 遍历 morph_data_，写 VPDMorph 当前强度
+    SM-->>TM: 写出骨骼/morph 计数
+    TM->>IO: WriteVPDFile(&vpd_file, path)
+    alt 写盘失败
+        IO-->>TM: false
+        TM->>TM: IOLog::LogWriteFileErr()
+    else 写盘成功
+        IO-->>TM: true
+        TM->>TM: SaveVpdPoseLog::LogOK()
+    end
+```
+
+模型管理器动画分组还提供两个当前帧辅助按钮：
+
+- `注册当前状态`：只把当前文档帧相对当前动画求值发生变化的骨骼姿势和 morph 强度写入当前 animation slot；没有动画槽且确实存在变化时会创建一个。VPD 导入形成的当前帧临时姿势、手动控制器偏移和手动调整过的 morph 值会被视为变化；未变化的骨骼/表情不会被补零或补单位旋转 key。ANIM 模式注册后会继续保持当前帧的临时 pose override，直到播放/跳帧清理，避免同一帧立刻被普通动画/IK 求值改写可见姿势。
+- `删除当前帧关键帧`：从当前 animation slot 删除当前帧骨骼 key，并删除当前帧 morph CTrack key；不影响其他帧和其他 animation slot。
+
+与 VMD 导出的区别：VMD 导出遍历已存在的动画轨道并写出多帧曲线；VPD 导出只取当前时间点的姿势快照，不要求模型存在动画轨道，也不会生成帧号、插值或 camera/light/self-shadow 数据。与 PMX 导出的区别：VPD 不写 mesh、材质、刚体、关节、display frame 或 IK 结构，只依赖当前模型树已有骨骼/morph 控制器。
+
+VPD 写入前在 `source/module/tools/object/mmd_model_manager.cpp` 内把 C4D `Vector` / `Matrix` 转成 libMMD `Eigen::Vector3f` / `Eigen::Quaternionf`。该转换与 VPD 导入使用的 translation/quaternion 口径保持一致。
+
 ## v1 范围与限制
 
 | 限制 | 说明 |
@@ -207,5 +255,7 @@ libmmd::PMXFile（新建）
 | 重新导入后 IK 失效 | 检查 `PMX_BONE_IK_TARGET_BONE_LINK`、IK link dynamic description 和 `CollectPmxIkLinks` fallback；非 link 类型参数不能直接调用 `GetBaseLink()` |
 | 刚体/关节与编辑不一致 | 导出前是否执行 `PreparePMXExportState` / `CommitEditorTransforms`；是否仍在 EDIT 且未触发提交 |
 | softbody 丢失 | v1 设计：`m_softbodies` 被清空，非回归 |
+| VPD 文件中没有动画曲线 | VPD 只保存当前姿势快照；需要多帧骨骼/morph 动画时应使用 VMD 导出 |
+| VPD 表情没有展开 group/flip | 设计为保存控制器当前强度，不展开运行时贡献；检查 `MMDModelManagerObject::SaveVPDPose` 的 morph 遍历 |
 
 本页使用 Mermaid 作为流程图格式，与 [`import-flow.md`](import-flow.md) 保持一致，便于 diff 与审查。

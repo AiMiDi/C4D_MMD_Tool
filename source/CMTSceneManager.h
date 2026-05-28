@@ -13,6 +13,7 @@ Description:	scene manager
 #include <memory>
 #include "libMMD/Model/MMD/PMXFile.h"
 #include "libMMD/Model/MMD/VMDFile.h"
+#include "libMMD/Model/MMD/VPDFile.h"
 #include "libMMD/Model/MMD/VMDAnimation.h"
 #include "libMMD/Model/MMD/VMDCameraAnimation.h"
 #include <c4d.h>
@@ -75,6 +76,31 @@ struct SaveVmdMotionLog : IOLog
 	static void LogNoAnimationError();
 };
 
+struct LoadVpdPoseLog : IOLog
+{
+	UInt64 imported_bone_count = 0;
+	UInt64 matched_bone_count = 0;
+	UInt64 imported_morph_count = 0;
+	UInt64 matched_morph_count = 0;
+
+	maxon::BaseList<String> not_find_bone_name_list;
+	maxon::BaseList<String> not_find_morph_name_list;
+
+	void LogOK();
+	static void LogNotMMDModelError();
+	static void LogSelectError();
+};
+
+struct SaveVpdPoseLog : IOLog
+{
+	UInt64 exported_bone_count = 0;
+	UInt64 exported_morph_count = 0;
+
+	void LogOK();
+	static void LogNotMMDModelError();
+	static void LogSelectError();
+};
+
 struct LoadModelLog : IOLog
 {
 	String model_name_local;
@@ -135,6 +161,8 @@ public:
 
 	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log, BaseObject* select_object = nullptr);
 	static Bool SaveVMDMotion(const CMTToolsSetting::MotionExport& setting,  libmmd::VMDFile&  data, SaveVmdMotionLog& log);
+	static Bool LoadVPDPose(const CMTToolsSetting::PoseImport& setting, const libmmd::VPDFile& vpd_file, LoadVpdPoseLog& log, BaseObject* select_object = nullptr);
+	static Bool SaveVPDPose(const CMTToolsSetting::PoseExport& setting, libmmd::VPDFile& data, SaveVpdPoseLog& log, BaseObject* select_object = nullptr);
 
 	static BaseObject* LoadPMXModel(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 	static BaseObject* SavePMXModel(const CMTToolsSetting::ModelExport& setting, libmmd::PMXFile& data);

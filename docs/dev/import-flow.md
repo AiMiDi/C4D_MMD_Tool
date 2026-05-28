@@ -1,6 +1,6 @@
 # 导入流程
 
-本文整理当前 PMX 模型、VMD 动作、VMD 相机导入链路。运行时重建、每帧动画/IK/物理执行见
+本文整理当前 PMX 模型、VMD 动作、VPD 姿势、VMD 相机导入链路。运行时重建、每帧动画/IK/物理执行见
 [`runtime-flow.md`](runtime-flow.md)。PMX 模型导出（重建式回写、导出前同步、v1 限制）见
 [`export-flow.md`](export-flow.md)。
 
@@ -8,7 +8,7 @@
 
 | 区域 | 主要职责 |
 |---|---|
-| `source/cmt_tools_manager.cpp` | 工具层入口：读 PMX/VMD 文件，调用场景管理器 |
+| `source/cmt_tools_manager.cpp` | 工具层入口：读 PMX/VMD/VPD 文件，调用场景管理器 |
 | `source/CMTSceneManager.cpp` | 场景层入口：创建 ModelManager / Camera 对象并派发导入 |
 | `source/module/tools/object/mmd_model_manager.cpp` | 模型根对象：创建子 manager、导入模型元数据、动画槽和 morph UI |
 | `source/module/tools/object/mmd_bone_manager.cpp` | 骨骼导入：创建 `Ojoint` 和 `MMDBoneTag`，维护骨骼索引 |
@@ -23,7 +23,7 @@
 
 ```mermaid
 flowchart TD
-    A["PMX / VMD 文件"] --> B["CMTToolsManager<br/>读文件 + libMMD 解析"]
+    A["PMX / VMD / VPD 文件"] --> B["CMTToolsManager<br/>读文件 + libMMD 解析"]
     B --> C["CMTSceneManager<br/>创建 C4D 对象"]
 
     C --> D["MMDModelManagerObject<br/>模型根对象"]
@@ -164,6 +164,55 @@ slot 重建 CTrack。morph 定义和动态 UI 不因模式切换删除。
 - 将 BoneManager 下所有骨骼切到 `BONE_MODE_ANIM`。
 - `InvalidateStandaloneRuntime()`，让下一次运行时从新动画槽、IK 状态和物理设置重建。
 
+## VPD 姿势导入
+
+VPD 姿势导入可以从工具窗口 `Pose Import (VPD)` 按钮进入，也可以从 `OMMDModelManager` 的动画分组
+`导入VPD` 按钮进入。工具窗口入口要求当前选择对象是 `MMDModelManagerObject`；模型管理器入口直接作用于
+当前模型管理器对象。VPD 是单帧静态姿势格式，不会创建 VMD animation slot，也不会写 CTrack/CKey。
+
+```mermaid
+flowchart TD
+    A["CMTToolDialog<br/>DLG_CMT_TOOL_POSE_IMPORT_BUTTON"] --> B["SelectSuffixImportFile(.vpd)"]
+    B --> C["CMTToolsManager::ImportVPDPose"]
+    C --> D["libmmd::ReadVPDFile"]
+    D --> E["CMTSceneManager::LoadVPDPose"]
+    E --> F{"当前选择是否<br/>MMDModelManagerObject"}
+    F -- 否 --> G["报错：select error / Not MMD model"]
+    F -- 是 --> H["MMDModelManagerObject::LoadVPDPose"]
+    H --> I["保持当前 MODEL_MODE"]
+    I --> J["按 PMX 本地骨骼名匹配 VPD bone"]
+    I --> K["按 morph 名称匹配 VPD morph"]
+    J --> L["MMDBoneTag::ApplyStaticPose<br/>translation + quaternion"]
+    K --> M["IMorph::SetStrength<br/>ApplyMorphRuntimeStrengths"]
+    L --> N["记录 matched/unmatched<br/>dirty + runtime invalidate"]
+    M --> N
+```
+
+骨骼匹配只使用 PMX 本地骨骼名：`MMDModelManagerObject::LoadVPDPose()` 从
+`MMDBoneManagerObject::bone_list_` 取每个 `MMDBoneTag` 的 `PMX_BONE_NAME_LOCAL`，用 UTF-8 名称匹配
+`VPDFile::m_bones`。匹配成功后，`MMDBoneTag::ApplyStaticPose()` 使用当前 bone pose 矩阵构造逻辑写
+`Ojoint` 相对矩阵，并尊重 `PMX_BONE_TRANSLATABLE` / `PMX_BONE_ROTATABLE`。VPD translation 跟现有 VMD
+bone keyframe 一样使用当前模型姿势空间，不额外乘 `MODEL_POSITION_MULTIPLE`；模型尺寸仍由 ModelManager
+根对象缩放承担。
+
+如果导入时模型处于 `MODEL_MODE_ANIM`，实现保持动画模式，不切到 `MODEL_MODE_EDIT`，也不删除或替换已有
+VMD animation slot。匹配的骨骼会通过当前时间点 static pose override 保持为导入状态；匹配的 morph 会作为当前
+morph strength 暂时显示。这个状态是“当前帧临时姿势”：如果用户没有点击 `注册当前状态`，下一次播放推进、
+跳到其他时间或切换模式时会清理这次 VPD 临时记录，并回到当前动画槽/轨道在新时间点的求值结果。
+需要把这个姿势写进动画时，由模型管理器动画分组的 `注册当前状态` 按钮显式写入当前帧关键帧。
+
+Morph 匹配使用 `MMDModelManagerObject::morph_name_`。匹配成功后直接写当前 morph strength，再调用
+`ApplyMorphRuntimeStrengths()` 复用现有 mesh、bone、group、flip、material、impulse morph 分发路径。VPD
+morph 不创建动画 track，也不改变已有动画槽数据。
+
+导入完成后会：
+
+- 在报告里显示 VPD bone/morph 总数、匹配数和未匹配名称。
+- 对匹配的骨骼、morph、ModelManager、BoneManager 和 mesh 层级标 dirty。
+- 调用 `InvalidateStandaloneRuntime()`，重置 `prev_time_` / `is_animation_initialized_`。
+- EDIT 模式同步控制器到当前 pose；ANIM 模式不把 VPD 临时姿势写进控制器偏移。
+- 触发 `EventAdd()` / AM 刷新。
+
 ## VMD 相机导入
 
 拖入 VMD 时走 C4D scene loader，只支持识别 camera VMD：
@@ -200,6 +249,8 @@ flowchart TD
 | 权重或材质缺失 | `MMDMeshManagerObject::LoadPMX()` 是否拿到完整 `bone_list`，材质导入选项和贴图路径是否有效 |
 | 刚体/关节导入后运行时无效 | C4D 对象参数是否导入完整；runtime 侧见 `runtime-flow.md` 的 `BuildStandalonePhysics()` |
 | VMD 动作导入无效 | 当前选中对象是否是 ModelManager；骨骼名匹配方式；是否被 inherit 或 dynamic physics 过滤 |
+| VPD 姿势导入没变化 | 当前选中对象是否是 ModelManager；或是否从模型管理器按钮进入；VPD bone 是否匹配 PMX 本地骨骼名；导入报告的 unmatched 列表 |
+| VPD morph 没变化 | VPD morph 名是否存在于 `morph_name_`；`ApplyMorphRuntimeStrengths()` 后 mesh/bone morph 目标是否存在 |
 | VMD 相机轨迹不对 | `MMDCamera::LoadVMDCamera()` 是否用 VMD frame 调 `Evaluate()`；key 是否为 linear；`time_offset` 是否同时影响轨道和文档长度 |
 
 本页使用 Mermaid 作为流程图格式，因为函数名、箭头和运行顺序需要可 diff、可维护、可审查。

@@ -227,6 +227,10 @@ class MMDModelManagerObject final : public ObjectData
 	Float32 fps_{ 30.f };
 	Bool is_animation_initialized_{ false };
 	UInt32 control_state_checksum_{ 0 };
+	Bool has_transient_vpd_pose_ = false;
+	BaseTime transient_vpd_pose_time_{ -1 };
+	std::vector<Int32> transient_vpd_bone_indices_;
+	std::vector<String> transient_vpd_morph_names_;
 	maxon::Synchronized<Bool> is_runtime_initialized_;
 
 	MMDModelManagerObject();
@@ -302,7 +306,9 @@ public:
 	                 const maxon::BaseArray<Filename>& texture_paths);
 
 	Bool LoadVMDMotion(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log, const Bool merge = false);
+	Bool LoadVPDPose(const libmmd::VPDFile& vpd_file, const CMTToolsSetting::PoseImport& setting, LoadVpdPoseLog& log);
 	Bool SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const;
+	Bool SaveVPDPose(libmmd::VPDFile& vpd_pose, const CMTToolsSetting::PoseExport& setting) const;
 
 private:
 	Int32 GetMorphNamedNumber();
@@ -318,6 +324,9 @@ private:
 	void CaptureAndClearPMXExportMorphState(BaseDocument* doc);
 	void RestorePMXExportMorphState(BaseDocument* doc);
 	void ClearMorphRuntimeForEdit();
+	void ClearTransientVPDPoseState(BaseDocument* doc);
+	Bool IsTransientVPDBone(Int32 bone_index) const;
+	Float EvaluateMorphAnimationStrength(const String& morph_name, BaseObject* object, const BaseTime& time);
 	Bool ReadMorph(HyperFile* hf);
 #if API_VERSION < 2024000
 	Bool WriteMorph(HyperFile* hf);
@@ -331,6 +340,9 @@ private:
 	Bool EnsureMorphAnimationSlotCount(Int32 slot_count);
 	void ClearMorphAnimationSlots();
 	Bool DeleteVMDAnimation();
+	Bool EnsureCurrentAnimationSlot(BaseDocument* doc, Int32 frame);
+	Bool RegisterCurrentStateKeyframe(BaseDocument* doc);
+	Bool DeleteCurrentFrameKeyframes(BaseDocument* doc);
 	Bool BuildStandaloneIKManager();
 	Bool BuildStandalonePhysics();
 	Bool BuildStandaloneBoneAdapters();

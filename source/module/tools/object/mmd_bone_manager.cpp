@@ -2171,6 +2171,8 @@ Int32 MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer(BaseDocument* do
 			continue;
 		if (bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) != after_physics)
 			continue;
+		if (!after_physics && bone_tag_node->HasStaticPoseRuntimeOverride(doc))
+			continue;
 		if (after_physics && bone_tag_node->HasRecentPlaybackRuntimeOverride(doc))
 			continue;
 

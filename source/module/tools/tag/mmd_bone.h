@@ -78,6 +78,7 @@ struct BoneAnimationKeyframeData
 	BoneAnimationBezierData translate_y;
 	BoneAnimationBezierData translate_z;
 	BoneAnimationBezierData rotation;
+	Bool static_pose = false;
 
 	Bool Write(HyperFile* hf) SDK2024_Const;
 	Bool Read(HyperFile* hf);
@@ -216,6 +217,7 @@ class MMDBoneTag final : public TagData
 	Vector runtime_playback_override_translation_ = Vector();
 	std::array<Float32, 4> runtime_playback_override_rotation_ { 0.F, 0.F, 0.F, 1.F };
 	Bool has_runtime_playback_override_ = false;
+	Bool runtime_playback_override_static_pose_ = false;
 	BaseTime runtime_playback_override_time_ = BaseTime(-1.);
 	BaseTime last_prephysics_time_ = BaseTime(-1.);
 	BaseTime last_ik_solve_time_ = BaseTime(-1.);
@@ -356,6 +358,7 @@ public:
 	Int32 GetActiveAnimationSlot() const { return active_animation_slot_; }
 	Int32 GetAnimationSlotCount() const { return static_cast<Int32>(bone_animation_slots_.GetCount()); }
 	Int32 GetMaxAnimationFrame(Int32 slot_index) const;
+	Bool ApplyStaticPose(BaseObject* op, const Vector& translation, const std::array<Float32, 4>& rotation);
 
 private:
 	void HandleBoneMorphButtonCommand(const DescID& desc_id);
@@ -382,9 +385,11 @@ private:
 	void BeginPrephysicsFrame(const BaseDocument* doc);
 	void MarkPrephysicsSceneWriteSkipped(const BaseDocument* doc);
 	Bool ShouldSkipPrephysicsSceneWrite(const BaseDocument* doc) const;
+	Bool HasStaticPoseAnimationSegmentAtTime(const BaseDocument* doc) const;
 	Bool HasRecentPlaybackRuntimeOverride(const BaseDocument* doc) const;
+	Bool HasStaticPoseRuntimeOverride(const BaseDocument* doc) const;
 	void ClearPlaybackRuntimeOverride();
-	void SetPlaybackRuntimeOverride(const BaseDocument* doc, const Vector& translation, const std::array<Float32, 4>& rotation);
+	void SetPlaybackRuntimeOverride(const BaseDocument* doc, const Vector& translation, const std::array<Float32, 4>& rotation, Bool static_pose = false);
 	Bool GetPlaybackRuntimeOverride(Vector& translation, std::array<Float32, 4>& rotation) const;
 	Bool HasPostPhysicsIKSolveAtTime(const BaseDocument* doc) const;
 	void MarkPostPhysicsIKSolvedAtTime(const BaseDocument* doc);

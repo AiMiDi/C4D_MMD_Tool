@@ -75,6 +75,14 @@ namespace CMTToolsSetting
 
 		explicit MotionExport(BaseDocument* document) : BaseSetting(document) {}
 	};
+	struct PoseImport : BaseSetting
+	{
+		explicit PoseImport(BaseDocument* document) : BaseSetting(document) {}
+	};
+	struct PoseExport : BaseSetting
+	{
+		explicit PoseExport(BaseDocument* document) : BaseSetting(document) {}
+	};
 	struct ModelImport : BaseSetting
 	{
 		enum class material_type : uint8_t

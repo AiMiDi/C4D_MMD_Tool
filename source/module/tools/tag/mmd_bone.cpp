@@ -915,6 +915,60 @@ Bool BoneAnimationKeyframeData::Read(HyperFile* hf)
 	IOReadField(translate_y);
 	IOReadField(translate_z);
 	IOReadField(rotation);
+	static_pose = false;
+	return true;
+}
+
+Bool WriteStaticPoseAnimationFrames(HyperFile* hf, const maxon::BaseArray<BoneAnimationSlotData>& slots)
+{
+	Int32 slot_count = static_cast<Int32>(slots.GetCount());
+	IOWriteField(slot_count);
+	for (Int32 slot_index = 0; slot_index < slot_count; ++slot_index)
+	{
+		const auto& slot = slots[slot_index];
+		Int32 static_key_count = 0;
+		for (const auto& keyframe : slot.keyframes)
+		{
+			if (keyframe.static_pose)
+				++static_key_count;
+		}
+
+		IOWriteField(static_key_count);
+		for (const auto& keyframe : slot.keyframes)
+		{
+			if (!keyframe.static_pose)
+				continue;
+			Int32 frame = keyframe.frame;
+			IOWriteField(frame);
+		}
+	}
+	return true;
+}
+
+Bool ReadStaticPoseAnimationFrames(HyperFile* hf, maxon::BaseArray<BoneAnimationSlotData>& slots)
+{
+	Int32 slot_count = 0;
+	IOReadField(slot_count);
+	for (Int32 slot_index = 0; slot_index < slot_count; ++slot_index)
+	{
+		Int32 static_key_count = 0;
+		IOReadField(static_key_count);
+		for (Int32 key_index = 0; key_index < static_key_count; ++key_index)
+		{
+			Int32 frame = 0;
+			IOReadField(frame);
+			if (slot_index < 0 || slot_index >= slots.GetCount())
+				continue;
+			for (auto& keyframe : slots[slot_index].keyframes)
+			{
+				if (keyframe.frame == frame)
+				{
+					keyframe.static_pose = true;
+					break;
+				}
+			}
+		}
+	}
 	return true;
 }
 
@@ -1200,6 +1254,35 @@ Bool MMDBoneTag::ShouldSkipPrephysicsSceneWrite(const BaseDocument* doc) const
 	return last_prephysics_time_ == GetDocumentTimeOrInvalid(doc) && skip_prephysics_scene_write_;
 }
 
+Bool MMDBoneTag::HasStaticPoseAnimationSegmentAtTime(const BaseDocument* doc) const
+{
+	if (!doc)
+		return false;
+
+	const BoneAnimationSlotData* const slot = GetActiveAnimationSlotData();
+	if (!slot || slot->keyframes.IsEmpty())
+		return false;
+
+	const Float current_frame = maxon::SafeConvert<Float>(doc->GetTime().Get() * static_cast<Float64>(kBoneAnimationFps));
+	if (slot->keyframes.GetCount() == 1)
+		return slot->keyframes[0].static_pose;
+
+	if (current_frame <= slot->keyframes[0].frame)
+		return slot->keyframes[0].static_pose;
+
+	const Int last_index = slot->keyframes.GetCount() - 1;
+	if (current_frame >= slot->keyframes[last_index].frame)
+		return slot->keyframes[last_index].static_pose;
+
+	Int upper_index = 1;
+	while (upper_index < slot->keyframes.GetCount() && slot->keyframes[upper_index].frame <= current_frame)
+		++upper_index;
+
+	const auto& lower_key = slot->keyframes[upper_index - 1];
+	const auto& upper_key = slot->keyframes[upper_index];
+	return lower_key.static_pose || upper_key.static_pose;
+}
+
 Bool MMDBoneTag::HasRecentPlaybackRuntimeOverride(const BaseDocument* doc) const
 {
 	if (!has_runtime_playback_override_)
@@ -1208,20 +1291,28 @@ Bool MMDBoneTag::HasRecentPlaybackRuntimeOverride(const BaseDocument* doc) const
 	return runtime_playback_override_time_ == GetDocumentTimeOrInvalid(doc);
 }
 
+Bool MMDBoneTag::HasStaticPoseRuntimeOverride(const BaseDocument* doc) const
+{
+	return runtime_playback_override_static_pose_ && HasRecentPlaybackRuntimeOverride(doc);
+}
+
 void MMDBoneTag::ClearPlaybackRuntimeOverride()
 {
 	has_runtime_playback_override_ = false;
+	runtime_playback_override_static_pose_ = false;
 	runtime_playback_override_time_ = BaseTime(-1.);
 	runtime_playback_override_translation_ = Vector();
 	runtime_playback_override_rotation_ = { 0.F, 0.F, 0.F, 1.F };
 }
 
-void MMDBoneTag::SetPlaybackRuntimeOverride(const BaseDocument* doc, const Vector& translation, const std::array<Float32, 4>& rotation)
+void MMDBoneTag::SetPlaybackRuntimeOverride(const BaseDocument* doc, const Vector& translation,
+                                            const std::array<Float32, 4>& rotation, const Bool static_pose)
 {
 	runtime_playback_override_time_ = GetDocumentTimeOrInvalid(doc);
 	runtime_playback_override_translation_ = translation;
 	runtime_playback_override_rotation_ = NormalizeQuaternion(rotation);
 	has_runtime_playback_override_ = true;
+	runtime_playback_override_static_pose_ = static_pose;
 }
 
 Bool MMDBoneTag::GetPlaybackRuntimeOverride(Vector& translation, std::array<Float32, 4>& rotation) const
@@ -3163,6 +3254,97 @@ SDK2024_GetDEnabling(MMDBoneTag)
 	return true;
 }
 
+Bool MMDBoneTag::ApplyStaticPose(BaseObject* op, const Vector& input_translation, const std::array<Float32, 4>& input_rotation)
+{
+	if (!op)
+		return false;
+
+	BaseTag* const self_tag = static_cast<BaseTag*>(Get());
+	const BaseContainer* const bc = self_tag ? self_tag->GetDataInstance() : nullptr;
+
+	Vector translation = input_translation;
+	std::array<Float32, 4> rotation = NormalizeQuaternion(input_rotation);
+	if (bc)
+	{
+		if (!bc->GetBool(PMX_BONE_TRANSLATABLE))
+			translation = Vector();
+		if (!bc->GetBool(PMX_BONE_ROTATABLE))
+			rotation = { 0.F, 0.F, 0.F, 1.F };
+	}
+
+	SetEvaluatedAnimationState(translation, rotation);
+	evaluated_append_animation_translation_ = Vector();
+	evaluated_append_animation_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+	evaluated_ik_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+	ClearPlaybackRuntimeOverride();
+	last_prephysics_time_ = BaseTime(-1.);
+	last_ik_solve_time_ = BaseTime(-1.);
+	last_postphysics_ik_solve_time_ = BaseTime(-1.);
+	skip_prephysics_scene_write_ = false;
+	ik_overridden_this_frame_ = false;
+	standalone_ik_chain_dirty_ = true;
+
+	if (bc && (bc->GetBool(PMX_BONE_INHERIT_ROTATION) || bc->GetBool(PMX_BONE_INHERIT_TRANSLATION)))
+	{
+		const Float32 inherit_weight = maxon::SafeConvert<Float32>(bc->GetFloat(PMX_BONE_INHERIT_BONE_PARENT_INFLUENCE));
+		if (BaseTag* const source_tag = ResolveInheritSourceBoneTag())
+		{
+			if (auto* const source_tag_node = source_tag->GetNodeData<MMDBoneTag>())
+			{
+				if (bc->GetBool(PMX_BONE_INHERIT_TRANSLATION))
+				{
+					Vector source_translation;
+					std::array<Float32, 4> source_rotation { 0.F, 0.F, 0.F, 1.F };
+					if (source_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation))
+					{
+						evaluated_append_animation_translation_ = source_translation * inherit_weight;
+					}
+					else
+					{
+						const Bool inherit_local = bc->GetBool(PMX_BONE_INHERIT_LOCAL);
+						const Bool source_has_append_source = source_tag_node->ResolveInheritSourceBoneTag() != nullptr;
+						source_translation = (inherit_local || !source_has_append_source)
+							? source_tag_node->evaluated_animation_translation_
+							: source_tag_node->evaluated_append_animation_translation_;
+						evaluated_append_animation_translation_ = source_translation * inherit_weight;
+					}
+				}
+
+				if (bc->GetBool(PMX_BONE_INHERIT_ROTATION))
+				{
+					Vector source_translation;
+					std::array<Float32, 4> source_rotation { 0.F, 0.F, 0.F, 1.F };
+					Eigen::Quaternionf append_rotation = Eigen::Quaternionf::Identity();
+					if (source_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation))
+					{
+						append_rotation = ToEigenQuaternion(source_rotation);
+					}
+					else
+					{
+						const Bool inherit_local = bc->GetBool(PMX_BONE_INHERIT_LOCAL);
+						const Bool source_has_append_source = source_tag_node->ResolveInheritSourceBoneTag() != nullptr;
+						source_rotation = (inherit_local || !source_has_append_source)
+							? source_tag_node->evaluated_animation_rotation_
+							: source_tag_node->evaluated_append_animation_rotation_;
+						append_rotation = ToEigenQuaternion(source_rotation);
+						append_rotation = ToEigenQuaternion(source_tag_node->evaluated_ik_rotation_) * append_rotation;
+					}
+					evaluated_append_animation_rotation_ = ToQuaternionArray(Eigen::Quaternionf::Identity().slerp(inherit_weight, append_rotation));
+				}
+			}
+		}
+	}
+
+	const Vector final_translation = evaluated_animation_translation_ + evaluated_append_animation_translation_;
+	const std::array<Float32, 4> final_rotation = ToQuaternionArray(
+		ToEigenQuaternion(evaluated_animation_rotation_) * ToEigenQuaternion(evaluated_append_animation_rotation_));
+	op->SetRelMl(BuildAnimationMatrix(final_translation, final_rotation));
+	MarkBoneTransformDirty(op);
+	if (self_tag)
+		self_tag->SetDirty(DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
+	return true;
+}
+
 Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const Bool apply_to_scene)
 {
 	if (!op)
@@ -3177,6 +3359,7 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 	const BoneAnimationSlotData* const slot = GetActiveAnimationSlotData();
 	Vector translation;
 	std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
+	const Bool static_pose_segment = HasStaticPoseAnimationSegmentAtTime(doc);
 
 	if (slot && !slot->keyframes.IsEmpty())
 	{
@@ -3223,7 +3406,7 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 
 	Vector control_translation;
 	std::array<Float32, 4> control_rotation { 0.F, 0.F, 0.F, 1.F };
-	if (mmd_bone_control_util::GetControlDeltaInBoneSpace(static_cast<BaseTag*>(Get()), op, control_translation, control_rotation))
+	if (!static_pose_segment && mmd_bone_control_util::GetControlDeltaInBoneSpace(static_cast<BaseTag*>(Get()), op, control_translation, control_rotation))
 	{
 		if (!bc || bc->GetBool(PMX_BONE_TRANSLATABLE))
 			translation += control_translation;
@@ -3295,6 +3478,8 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 		op->SetRelMl(BuildAnimationMatrix(final_translation, final_rotation));
 		MarkBoneTransformDirty(op);
 	}
+	if (static_pose_segment)
+		SetPlaybackRuntimeOverride(doc, translation, rotation, true);
 	return true;
 }
 
@@ -3465,6 +3650,8 @@ Bool MMDBoneTag::Read(GeListNode* node, HyperFile* hf, Int32 level)
 		IOReadField(active_animation_slot_);
 		if (!io_util::ReadLinearContainer(hf, bone_animation_slots_))
 			return false;
+		if (level >= 3 && !ReadStaticPoseAnimationFrames(hf, bone_animation_slots_))
+			return false;
 	}
 	else
 	{
@@ -3510,6 +3697,8 @@ SDK2024_Write(MMDBoneTag)
 	IOWriteField(active_animation_slot_);
 	const auto& animation_slots_ref = bone_animation_slots_;
 	if (!io_util::WriteLinearContainer(hf, animation_slots_ref))
+		return false;
+	if (!WriteStaticPoseAnimationFrames(hf, animation_slots_ref))
 		return false;
 	return SUPER::Write(node, hf);
 }

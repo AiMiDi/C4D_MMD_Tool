@@ -174,6 +174,28 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	}
 	case DLG_CMT_TOOL_POSE_IMPORT_BUTTON:
 	{
+		CMTToolsSetting::PoseImport setting(GetActiveDocument());
+		if (!filename_util::SelectSuffixImportFile(setting.fn, "vpd"_s))
+		{
+			return false;
+		}
+		if (!CMTToolsManager::ImportVPDPose(setting))
+		{
+			return false;
+		}
+		break;
+	}
+	case DLG_CMT_TOOL_POSE_EXPORT_BUTTON:
+	{
+		CMTToolsSetting::PoseExport setting(GetActiveDocument());
+		if (!filename_util::SelectSuffixExportFile(setting.fn, "vpd"_s))
+		{
+			return false;
+		}
+		if (!CMTToolsManager::ExportVPDPose(setting))
+		{
+			return false;
+		}
 		break;
 	}
 	case DLG_CMT_TOOL_MODEL_IMPORT_BUTTON:

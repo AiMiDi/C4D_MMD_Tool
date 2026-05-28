@@ -14,6 +14,10 @@ STRINGTABLE OMMDModelManager
 		MODEL_ANIM_MERGE_VMD_BUTTON "Merge VMD to selected VMD animation";
 		MODEL_ANIM_LOAD_VMD_BUTTON "Load VMD to animation list";
 		MODEL_ANIM_DElETE_BUTTON "Delete selected VMD animation";
+		MODEL_ANIM_IMPORT_VPD_BUTTON "Import VPD";
+		MODEL_ANIM_EXPORT_VPD_BUTTON "Export VPD";
+		MODEL_ANIM_REGISTER_CURRENT_BUTTON "Register current state";
+		MODEL_ANIM_DELETE_CURRENT_FRAME_BUTTON "Delete current-frame key";
 	MODEL_PHYSICS_GRP "Physics";
 		MODEL_PHYSICS_ENABLED "Enable physics";
 		MODEL_PHYSICS_GRAVITY_STRENGTH "Gravity strength";
