@@ -182,7 +182,7 @@ MaxonCompilerHelper_GetCompilerId(TARGET ${target} ID compilerId FRONTEND compil
 			elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 				target_compile_options(${target} ${visibility} ${MAXON_COMPILE_OPTIONS_WINDOWS_CLANGCL_X64_ISA})
 			elseif(APPLE)
-				target_compile_options(${target} ${visibility} "-Xarch_x86_64 ${MAXON_COMPILE_OPTIONS_MACOS_X64_ISA}")
+				target_compile_options(${target} ${visibility} -Xarch_x86_64 ${MAXON_COMPILE_OPTIONS_MACOS_X64_ISA})
 			else()
 				message(ERROR " Unsupported platform: ${CMAKE_SYSTEM_NAME}")
 			endif()
@@ -193,7 +193,9 @@ MaxonCompilerHelper_GetCompilerId(TARGET ${target} ID compilerId FRONTEND compil
 			elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 				target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${MAXON_COMPILE_OPTIONS_WINDOWS_CLANGCL_X64_ISA}>)
 			elseif(APPLE)
-				target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:"-Xarch_x86_64 ${MAXON_COMPILE_OPTIONS_MACOS_X64_ISA}">)
+				target_compile_options(${target} PRIVATE
+					$<$<COMPILE_LANGUAGE:CXX>:-Xarch_x86_64>
+					$<$<COMPILE_LANGUAGE:CXX>:${MAXON_COMPILE_OPTIONS_MACOS_X64_ISA}>)
 			else()
 				message(ERROR " Unsupported platform: ${CMAKE_SYSTEM_NAME}")
 			endif()

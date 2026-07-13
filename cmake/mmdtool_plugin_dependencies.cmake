@@ -1,21 +1,33 @@
 # mmdtool_plugin_dependencies.cmake — Add Bullet3 + libMMD as subdirectories (no dependency/install).
 # Call after project() and before defining the mmdtool plugin: mmdtool_plugin_dependencies_add(<repo root>)
 #
-# When CMT_DEPS_PREBUILT_DIR is set (absolute path to a directory containing lib/*.lib),
+# When CMT_DEPS_PREBUILT_DIR is set (absolute path to a directory containing lib/*.lib or lib/*.a),
 # add_subdirectory is skipped and cmt_setup_mmdtool_plugin() links pre-built libs instead.
 #
 include_guard(GLOBAL)
 
 set(CMT_DEPS_PREBUILT_DIR "" CACHE PATH
-  "Pre-built dependency lib directory (contains lib/*.lib). When set, skip add_subdirectory for bullet3/libMMD.")
+  "Pre-built dependency lib directory (contains lib/*.lib or lib/*.a). When set, skip add_subdirectory for bullet3/libMMD.")
+set(CMT_BULLET_SOURCE_DIR "" CACHE PATH
+  "Optional override for the Bullet source root. Empty uses dependency/bullet3.")
+set(CMT_LIBMMD_SOURCE_DIR "" CACHE PATH
+  "Optional override for the libMMD source root. Empty uses dependency/libMMD.")
 
 function(mmdtool_plugin_dependencies_add PROJECT_ROOT_DIR)
   if(NOT CMT_DEPS_PREBUILT_DIR STREQUAL "")
     return()
   endif()
   cmake_path(ABSOLUTE_PATH PROJECT_ROOT_DIR NORMALIZE OUTPUT_VARIABLE _root)
-  set(_bullet "${_root}/dependency/bullet3")
-  set(_libmmd "${_root}/dependency/libMMD")
+  if(CMT_BULLET_SOURCE_DIR STREQUAL "")
+    set(_bullet "${_root}/dependency/bullet3")
+  else()
+    cmake_path(ABSOLUTE_PATH CMT_BULLET_SOURCE_DIR NORMALIZE OUTPUT_VARIABLE _bullet)
+  endif()
+  if(CMT_LIBMMD_SOURCE_DIR STREQUAL "")
+    set(_libmmd "${_root}/dependency/libMMD")
+  else()
+    cmake_path(ABSOLUTE_PATH CMT_LIBMMD_SOURCE_DIR NORMALIZE OUTPUT_VARIABLE _libmmd)
+  endif()
   if(NOT EXISTS "${_bullet}/CMakeLists.txt")
     message(FATAL_ERROR "mmdtool_plugin_dependencies: bullet3 not found at ${_bullet}")
   endif()
