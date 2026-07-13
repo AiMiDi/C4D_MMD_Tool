@@ -137,6 +137,7 @@ set(MUTED_WARNINGS_CLANG_16
 set(MUTED_WARNINGS_CLANG_17
 -Wno-switch-default
 -Wno-invalid-offsetof
+-Wno-invalid-specialization
 -Wno-missing-include-dirs
 -Wno-documentation-deprecated-sync
 )

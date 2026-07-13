@@ -122,6 +122,16 @@ macro(cmt_setup_mmdtool_plugin)
   set(_CMT_INCLUDE_DIRS ${CMT_EXTRA_INCLUDE_DIRS})
 
   cmake_path(ABSOLUTE_PATH CMT_PROJECT_ROOT_DIR NORMALIZE OUTPUT_VARIABLE _cmt_root)
+  if(DEFINED CMT_BULLET_SOURCE_DIR AND NOT CMT_BULLET_SOURCE_DIR STREQUAL "")
+    cmake_path(ABSOLUTE_PATH CMT_BULLET_SOURCE_DIR NORMALIZE OUTPUT_VARIABLE _cmt_bullet_root)
+  else()
+    set(_cmt_bullet_root "${_cmt_root}/dependency/bullet3")
+  endif()
+  if(DEFINED CMT_LIBMMD_SOURCE_DIR AND NOT CMT_LIBMMD_SOURCE_DIR STREQUAL "")
+    cmake_path(ABSOLUTE_PATH CMT_LIBMMD_SOURCE_DIR NORMALIZE OUTPUT_VARIABLE _cmt_libmmd_root)
+  else()
+    set(_cmt_libmmd_root "${_cmt_root}/dependency/libMMD")
+  endif()
 
   if(CMT_DEPENDENCY_MODE STREQUAL "PREBUILT")
 
@@ -143,11 +153,11 @@ macro(cmt_setup_mmdtool_plugin)
 
     set(_CMT_WIN_INCLUDES
 
-      "${_cmt_root}/dependency/bullet3/src"
+      "${_cmt_bullet_root}/src"
 
-      "${_cmt_root}/dependency/libMMD/src"
+      "${_cmt_libmmd_root}/src"
 
-      "${_cmt_root}/dependency/libMMD/external/eigen"
+      "${_cmt_libmmd_root}/external/eigen"
 
     )
 
@@ -203,11 +213,11 @@ macro(cmt_setup_mmdtool_plugin)
 
     set(_CMT_WIN_INCLUDES
 
-      "${_cmt_root}/dependency/bullet3/src"
+      "${_cmt_bullet_root}/src"
 
-      "${_cmt_root}/dependency/libMMD/src"
+      "${_cmt_libmmd_root}/src"
 
-      "${_cmt_root}/dependency/libMMD/external/eigen"
+      "${_cmt_libmmd_root}/external/eigen"
 
     )
 
@@ -409,5 +419,9 @@ macro(cmt_setup_mmdtool_plugin)
 
   _cmt_link_subdir_third_party_to_plugin()
 
-endmacro()
+  if(APPLE)
+    find_library(_CMT_COREFOUNDATION_FRAMEWORK CoreFoundation REQUIRED)
+    target_link_libraries(${maxon_targetName} PRIVATE "${_CMT_COREFOUNDATION_FRAMEWORK}")
+  endif()
 
+endmacro()

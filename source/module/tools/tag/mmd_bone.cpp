@@ -919,7 +919,7 @@ Bool BoneAnimationKeyframeData::Read(HyperFile* hf)
 	return true;
 }
 
-Bool WriteStaticPoseAnimationFrames(HyperFile* hf, const maxon::BaseArray<BoneAnimationSlotData>& slots)
+static Bool WriteStaticPoseAnimationFrames(HyperFile* hf, const maxon::BaseArray<BoneAnimationSlotData>& slots)
 {
 	Int32 slot_count = static_cast<Int32>(slots.GetCount());
 	IOWriteField(slot_count);
@@ -945,7 +945,7 @@ Bool WriteStaticPoseAnimationFrames(HyperFile* hf, const maxon::BaseArray<BoneAn
 	return true;
 }
 
-Bool ReadStaticPoseAnimationFrames(HyperFile* hf, maxon::BaseArray<BoneAnimationSlotData>& slots)
+static Bool ReadStaticPoseAnimationFrames(HyperFile* hf, maxon::BaseArray<BoneAnimationSlotData>& slots)
 {
 	Int32 slot_count = 0;
 	IOReadField(slot_count);
@@ -1263,7 +1263,7 @@ Bool MMDBoneTag::HasStaticPoseAnimationSegmentAtTime(const BaseDocument* doc) co
 	if (!slot || slot->keyframes.IsEmpty())
 		return false;
 
-	const Float current_frame = maxon::SafeConvert<Float>(doc->GetTime().Get() * static_cast<Float64>(kBoneAnimationFps));
+	const Float current_frame = maxon::SafeConvert<Float>(GetDocumentTime(doc).Get() * static_cast<Float64>(kBoneAnimationFps));
 	if (slot->keyframes.GetCount() == 1)
 		return slot->keyframes[0].static_pose;
 

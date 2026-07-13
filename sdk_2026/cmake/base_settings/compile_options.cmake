@@ -63,6 +63,7 @@ set(MAXON_MSVC_DEBUG_FORMAT "ProgramDatabase") # other option is "Embedded"
 set(MAXON_COMPILE_OPTIONS_CLANG
 	-fms-compatibility-version=19
 	-faligned-allocation
+	-Wno-invalid-specialization
 )
 
 set(MAXON_COMPILE_OPTIONS_OBJECTIVE_C

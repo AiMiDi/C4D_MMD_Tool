@@ -65,6 +65,14 @@ import locale
 import subprocess
 import argparse
 import traceback
+import multiprocessing
+
+if sys.platform == "darwin":
+    try:
+        multiprocessing.set_start_method("fork")
+    except RuntimeError:
+        pass
+
 from multiprocessing import Process, Queue, cpu_count  # @UnresolvedImport
 
 dir, fn = os.path.split(__file__)

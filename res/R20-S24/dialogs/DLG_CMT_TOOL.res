@@ -42,8 +42,8 @@ DIALOG DLG_CMT_TOOL {
                         NAME IDS_CMT_TOOL_CAMERA_IMPORT_GRP;
                         SIZE 0, 0;
                         CENTER_H;
-                        COLUMNS 1;
-                        ROWS 2;
+                        COLUMNS 2;
+                        ROWS 1;
                         BORDERSIZE 10, 5, 10, 10;
                         SPACE 2, 5;
                         BORDERSTYLE BORDER_IN;
@@ -488,7 +488,13 @@ DIALOG DLG_CMT_TOOL {
 
                         BUTTON DLG_CMT_TOOL_POSE_IMPORT_BUTTON {
                             NAME IDS_CMT_TOOL_IMPORT_BUTTON;
-                            SIZE 300, 30;
+                            SIZE 145, 30;
+                            CENTER_H;
+                        }
+
+                        BUTTON DLG_CMT_TOOL_POSE_EXPORT_BUTTON {
+                            NAME IDS_CMT_TOOL_EXPORT_BUTTON;
+                            SIZE 145, 30;
                             CENTER_H;
                         }
                     }
