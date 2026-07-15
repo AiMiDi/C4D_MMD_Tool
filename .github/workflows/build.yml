@@ -34,8 +34,8 @@ jobs:
       matrix:
         # Keep Visual Studio 2022 available for the v143 dependency build.
         # `windows-latest` now resolves to a VS 2026 image.
-        # Keep the released Intel build on a fixed image.
-        os: [windows-2022, macos-15-intel]
+        # Keep the released Intel build on the latest fixed Intel image.
+        os: [windows-2022, macos-26-intel]
         sdk:
           - sdk_r20
           - sdk_r21
@@ -52,7 +52,7 @@ jobs:
             deps_generator: "Visual Studio 17 2022"
             upload_artifact: true
           # Intel output is packaged for the current release workflow.
-          - os: macos-15-intel
+          - os: macos-26-intel
             configure_preset: dev-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
