@@ -32,10 +32,14 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        # Keep Visual Studio 2022 available for the v143 dependency build.
-        # `windows-latest` now resolves to a VS 2026 image.
-        # Keep the released Intel build on the latest fixed Intel image.
-        os: [windows-2022, macos-26-intel]
+        # Base matrix: build every supported SDK on these release platforms.
+        # ARM64 macOS validation is added separately below because R20-R23 SDKs
+        # do not support ARM.
+        os:
+          # x64 Windows with Visual Studio 2022 and the v143 toolset.
+          - windows-2022
+          # x86_64 Intel macOS 26; its output is packaged for releases.
+          - macos-26-intel
         sdk:
           - sdk_r20
           - sdk_r21
