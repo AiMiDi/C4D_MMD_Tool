@@ -88,6 +88,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	maxon::HashMap<Int, maxon::StrongRef<AutoAlloc<BaseLink>>> bone_list_;
 	maxon::HashMap<BaseObject*, Int32> bone_index_lookup_;
 	Bool is_syncing_bone_hierarchy_ = false;
+	Bool is_model_mode_sync_ = false;
 	Bool has_pending_bone_hierarchy_sync_ = false;
 	Bool append_execution_order_dirty_ = true;
 	Bool is_refreshing_append_execution_order_ = false;
@@ -135,6 +136,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	void SetBoneDisplayType(Int32 display_type, BaseObject* bone_manager_object = nullptr);
 	void CommitEditModeBindState(BaseObject* bone_manager_object);
 	void RestoreBindStateForEdit(BaseObject* bone_manager_object);
+	void InvalidatePlaybackRuntimeState();
 	void ResetMorphStrengths();
 	Bool EnsureAllAnimationSlotCount(Int32 slot_count);
 	void SetAllActiveAnimationSlot(Int32 slot_index);

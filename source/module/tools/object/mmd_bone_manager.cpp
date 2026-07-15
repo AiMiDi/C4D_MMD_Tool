@@ -15,6 +15,7 @@ Description:	DESC
 #include "mmd_bone_manager.h"
 #include "cmt_tools_setting.h"
 #include "mmd_model_manager.h"
+#include "mmd_mesh_manager.h"
 #include "mmd_rigid.h"
 #include "mmd_rigid_manager.h"
 #include "customgui_priority.h"
@@ -755,6 +756,7 @@ SDK2024_CopyTo(MMDBoneManagerObject)
 	dest_object->bone_name_index_ = bone_name_index_;
 	if (controls_root_link_)
 		controls_root_link_->CopyTo(dest_object->controls_root_link_, flags, trn);
+	dest_object->is_model_mode_sync_ = false;
 	dest_object->append_execution_order_dirty_ = true;
 	dest_object->is_refreshing_append_execution_order_ = false;
 	for (const auto& entry : bone_list_)
@@ -783,6 +785,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	bone_items_.SetString(-1, "-"_s);
 	bone_index_lookup_.Reset();
 	is_syncing_bone_hierarchy_ = false;
+	is_model_mode_sync_ = false;
 	has_pending_bone_hierarchy_sync_ = false;
 	append_execution_order_dirty_ = true;
 	is_refreshing_append_execution_order_ = false;
@@ -885,11 +888,33 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 	case BONE_MODE:
 	{
 		const GeData normalized_mode(NormalizeBoneMode(t_data.GetInt32()));
-		if (normalized_mode.GetInt32() == BONE_MODE_EDIT)
+		const Int32 next_mode = normalized_mode.GetInt32();
+		const BaseContainer* const bc = op ? op->GetDataInstance() : nullptr;
+		const Int32 previous_mode = NormalizeBoneMode(bc ? bc->GetInt32(BONE_MODE) : BONE_MODE_EDIT);
+		if (next_mode == BONE_MODE_EDIT)
 			SetBoneDisplayType(BONE_DISPLAY_TYPE_ON, op);
-		else if (normalized_mode.GetInt32() == BONE_MODE_ANIM)
+		else if (next_mode == BONE_MODE_ANIM)
 			SetBoneDisplayType(BONE_DISPLAY_TYPE_OFF, op);
-		MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, normalized_mode.GetInt32());
+
+		if (!is_model_mode_sync_ && previous_mode != next_mode)
+		{
+			if (previous_mode == BONE_MODE_EDIT && next_mode == BONE_MODE_ANIM)
+				CommitEditModeBindState(op);
+			else if (previous_mode == BONE_MODE_ANIM && next_mode == BONE_MODE_EDIT)
+				RestoreBindStateForEdit(op);
+
+			if (MMDModelManagerObject* const model_manager = GetModelManagerData())
+			{
+				if (previous_mode == BONE_MODE_EDIT && next_mode == BONE_MODE_ANIM)
+				{
+					if (MMDMeshManagerObject* const mesh_manager = model_manager->GetMeshManagerData())
+						mesh_manager->RefreshWeightBindPoses(model_manager->GetMeshManagerObject(), op ? op->GetDocument() : nullptr);
+				}
+				model_manager->InvalidateStandaloneRuntime();
+			}
+		}
+
+		MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, next_mode);
 		node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 		return SUPER::SetDParameter(node, id, normalized_mode, flags);
 	}
@@ -1337,7 +1362,9 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				case MMDModelManagerObjectMsgType::MODEL_MODE_CHANGE:
 				{
 					const Int32 normalized_mode = NormalizeBoneMode(msg->model_mode);
+					is_model_mode_sync_ = true;
 					node->SetParameter(ConstDescID(DescLevel(BONE_MODE)), normalized_mode, DESCFLAGS_SET::NONE);
+					is_model_mode_sync_ = false;
 					SetAllBoneMode(normalized_mode, reinterpret_cast<BaseObject*>(node));
 					break;
 				}
@@ -2037,17 +2064,19 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		// persistence should come from cached runtime overrides, not a second IK
 		// pass from the bone manager.
 		const Bool should_run_post_physics_ik = false;
-		Vector source_translation;
-		std::array<Float32, 4> source_rotation { 0.F, 0.F, 0.F, 1.F };
-		const Bool has_self_override = bone_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation);
+		Vector self_translation;
+		std::array<Float32, 4> self_rotation { 0.F, 0.F, 0.F, 1.F };
+		const Bool has_self_override = bone_tag_node->GetPlaybackRuntimeOverride(self_translation, self_rotation);
 		if (has_self_override)
 			++self_override_bones;
 
 		Bool inherit_source_has_override = false;
+		Vector inherit_source_translation;
+		std::array<Float32, 4> inherit_source_rotation { 0.F, 0.F, 0.F, 1.F };
 		if (BaseTag* const source_tag = bone_tag_node->ResolveInheritSourceBoneTag())
 		{
 			if (auto* const source_tag_node = source_tag->GetNodeData<MMDBoneTag>())
-				inherit_source_has_override = source_tag_node->GetPlaybackRuntimeOverride(source_translation, source_rotation);
+				inherit_source_has_override = source_tag_node->GetPlaybackRuntimeOverride(inherit_source_translation, inherit_source_rotation);
 		}
 		if (inherit_source_has_override)
 			++inherit_override_bones;
@@ -2057,7 +2086,7 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 
 		if (has_self_override)
 		{
-			bone_object->SetRelMl(BuildBoneRelativeMatrix(source_translation, source_rotation));
+			bone_object->SetRelMl(BuildBoneRelativeMatrix(self_translation, self_rotation));
 			MarkBoneTransformDirty(bone_object);
 			if (!should_run_post_physics_ik)
 				continue;
@@ -2198,6 +2227,8 @@ void MMDBoneManagerObject::SetAllBoneMode(const Int32 mode, BaseObject* bone_man
 		bone_manager_object = reinterpret_cast<BaseObject*>(Get());
 	if (bone_manager_object)
 	{
+		if (BaseContainer* const bc = bone_manager_object->GetDataInstance())
+			bc->SetInt32(BONE_MODE, normalized_mode);
 		MMDBoneManagerObjectMsg msg(MMDBoneManagerObjectMsgType::BONE_MODE_CHANGE, BONE_DISPLAY_TYPE_OFF, nullptr, normalized_mode);
 		bone_manager_object->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
 		bone_manager_object->SetDirty(DIRTYFLAGS::DESCRIPTION | DIRTYFLAGS::DATA);
@@ -2217,6 +2248,27 @@ void MMDBoneManagerObject::SetAllBoneMode(const Int32 mode, BaseObject* bone_man
 	SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 	if (GeIsMainThread())
 		EventAdd();
+}
+
+void MMDBoneManagerObject::InvalidatePlaybackRuntimeState()
+{
+	physics_overrides_.Reset();
+	for (const auto& entry : bone_list_)
+	{
+		BaseTag* const bone_tag = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
+		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
+		if (!bone_tag_node)
+			continue;
+
+		bone_tag_node->ResetEvaluatedAnimationState();
+		bone_tag_node->ClearPlaybackRuntimeOverride();
+		bone_tag_node->last_prephysics_time_ = BaseTime(-1.);
+		bone_tag_node->last_ik_solve_time_ = BaseTime(-1.);
+		bone_tag_node->last_postphysics_ik_solve_time_ = BaseTime(-1.);
+		bone_tag_node->skip_prephysics_scene_write_ = false;
+		bone_tag_node->ik_overridden_this_frame_ = false;
+		bone_tag_node->InvalidateStandaloneIKChainCache();
+	}
 }
 
 void MMDBoneManagerObject::SetBoneDisplayType(const Int32 display_type, BaseObject* bone_manager_object)
@@ -2258,20 +2310,10 @@ void MMDBoneManagerObject::CommitEditModeBindState(BaseObject* bone_manager_obje
 
 		const Matrix bind_global = BuildFrozenBoneGlobalMatrix(bone_object);
 		bone_tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_POSITION)), bind_global.off, DESCFLAGS_SET::NONE);
-		bone_tag_node->ResetEvaluatedAnimationState();
-		bone_tag_node->ClearPlaybackRuntimeOverride();
-		bone_tag_node->last_prephysics_time_ = BaseTime(-1.);
-		bone_tag_node->last_ik_solve_time_ = BaseTime(-1.);
-		bone_tag_node->last_postphysics_ik_solve_time_ = BaseTime(-1.);
-		bone_tag_node->skip_prephysics_scene_write_ = false;
-		bone_tag_node->ik_overridden_this_frame_ = false;
-		bone_tag_node->standalone_ik_chain_dirty_ = true;
-		bone_tag_node->prev_position_ = Vector();
-		bone_tag_node->prev_rotation_ = Vector();
 		bone_tag->SetDirty(DIRTYFLAGS::DATA);
 	}
 
-	physics_overrides_.Reset();
+	InvalidatePlaybackRuntimeState();
 }
 
 void MMDBoneManagerObject::RestoreBindStateForEdit(BaseObject* bone_manager_object)
@@ -2289,59 +2331,12 @@ void MMDBoneManagerObject::RestoreBindStateForEdit(BaseObject* bone_manager_obje
 
 		bone_tag_node->HandleBoneModeChange(BONE_MODE_EDIT);
 
-		Vector current_morph_position;
-		Vector current_morph_rotation;
-		for (const auto& morph : bone_tag_node->bone_morph_data_arr_)
-		{
-			GeData morph_data;
-			Float strength = 0.0;
-			if (bone_tag->GetParameter(morph.strength_id, morph_data, DESCFLAGS_GET::NONE))
-				strength = morph_data.GetFloat();
-
-			if (bone_tag->GetParameter(morph.translation_id, morph_data, DESCFLAGS_GET::NONE))
-				current_morph_position += morph_data.GetVector() * strength;
-
-			if (bone_tag->GetParameter(morph.rotation_id, morph_data, DESCFLAGS_GET::NONE))
-				current_morph_rotation += morph_data.GetVector() * strength;
-		}
-
-		const Vector applied_morph_position = bone_tag_node->prev_position_.IsZero()
-			? current_morph_position
-			: bone_tag_node->prev_position_;
-		const Vector applied_morph_rotation = bone_tag_node->prev_rotation_.IsZero()
-			? current_morph_rotation
-			: bone_tag_node->prev_rotation_;
-
-		GeData frozen_position;
-		if (bone_object->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), frozen_position, DESCFLAGS_GET::NONE))
-		{
-			bone_object->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)),
-				frozen_position.GetVector() - applied_morph_position, DESCFLAGS_SET::NONE);
-		}
-		bone_tag_node->prev_position_ = Vector();
-
-		GeData frozen_rotation;
-		if (bone_object->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), frozen_rotation, DESCFLAGS_GET::NONE))
-		{
-			bone_object->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)),
-				frozen_rotation.GetVector() - applied_morph_rotation, DESCFLAGS_SET::NONE);
-		}
-		bone_tag_node->prev_rotation_ = Vector();
-
 		bone_object->SetRelMl(MakeIdentityMatrix());
 		MarkSceneNodeDirty(bone_object);
-		bone_tag_node->ResetEvaluatedAnimationState();
-		bone_tag_node->ClearPlaybackRuntimeOverride();
-		bone_tag_node->last_prephysics_time_ = BaseTime(-1.);
-		bone_tag_node->last_ik_solve_time_ = BaseTime(-1.);
-		bone_tag_node->last_postphysics_ik_solve_time_ = BaseTime(-1.);
-		bone_tag_node->skip_prephysics_scene_write_ = false;
-		bone_tag_node->ik_overridden_this_frame_ = false;
-		bone_tag_node->standalone_ik_chain_dirty_ = true;
 		bone_tag->SetDirty(DIRTYFLAGS::DATA);
 	}
 
-	physics_overrides_.Reset();
+	InvalidatePlaybackRuntimeState();
 	ResetMorphStrengths();
 }
 

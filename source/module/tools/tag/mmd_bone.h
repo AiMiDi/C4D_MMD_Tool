@@ -193,7 +193,7 @@ class MMDBoneTag final : public TagData
 	// Serialized link to the Protection tag used for PMX lock (distinct from user-added Tprotection).
 	AutoAlloc<BaseLink> bone_lock_protection_link_;
 	// Bone mode
-	Int32 bone_mode_ = BONE_MODE_ANIM;
+	Int32 bone_mode_ = BONE_MODE_EDIT;
 	// Is IK
 	Bool is_IK = false;
 	// Guards inherit source parameter synchronization between index/link fields.
@@ -203,9 +203,6 @@ class MMDBoneTag final : public TagData
 	Int32 bone_morph_name_index_ = 0;
 	maxon::PointerArray<BoneMorphTagData> bone_morph_data_arr_;
 	maxon::HashMap<DescID, Int32> bone_morph_button_id_map_;
-	Vector prev_position_;
-	Vector prev_rotation_;
-
 	// Bone animation data, stored per animation slot.
 	maxon::BaseArray<BoneAnimationSlotData> bone_animation_slots_;
 	Int32 active_animation_slot_ = -1;

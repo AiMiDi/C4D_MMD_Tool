@@ -222,7 +222,7 @@ class MMDModelManagerObject final : public ObjectData
 	std::vector<std::unique_ptr<C4DIKChainNodeAdapter>> physics_bone_pool_;
 	maxon::HashMap<Int32, C4DIKChainNodeAdapter*> physics_bone_adapters_;
 	maxon::BaseArray<Int32> physics_dynamic_bone_indices_;
-	Int32 model_mode_ = MODEL_MODE_ANIM;
+	Int32 model_mode_ = MODEL_MODE_EDIT;
 	BaseTime prev_time_{-1};
 	Float32 fps_{ 30.f };
 	Bool is_animation_initialized_{ false };

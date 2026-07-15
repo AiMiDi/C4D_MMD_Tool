@@ -2160,8 +2160,6 @@ SDK2024_CopyTo(MMDBoneTag)
 	dest_tag->is_IK = is_IK;
 	dest_tag->is_syncing_inherit_source_ = false;
 	dest_tag->bone_morph_name_index_ = bone_morph_name_index_;
-	dest_tag->prev_position_ = prev_position_;
-	dest_tag->prev_rotation_ = prev_rotation_;
 	dest_tag->active_animation_slot_ = active_animation_slot_;
 	dest_tag->evaluated_animation_translation_ = evaluated_animation_translation_;
 	dest_tag->evaluated_animation_rotation_ = evaluated_animation_rotation_;
@@ -3353,7 +3351,7 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 	if (MMDBoneManagerObject* const mgr = GetBoneManager())
 		mgr->EnsureAppendExecutionOrder();
 
-	const auto* const self_tag = static_cast<BaseTag*>(Get());
+	BaseTag* const self_tag = static_cast<BaseTag*>(Get());
 	const BaseContainer* const bc = self_tag ? self_tag->GetDataInstance() : nullptr;
 
 	const BoneAnimationSlotData* const slot = GetActiveAnimationSlotData();
@@ -3412,6 +3410,34 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 			translation += control_translation;
 		if (!bc || bc->GetBool(PMX_BONE_ROTATABLE))
 			rotation = ToQuaternionArray(ToEigenQuaternion(rotation) * ToEigenQuaternion(control_rotation));
+	}
+
+	// Bone morphs are animation-space offsets. Frozen transforms are the bind
+	// state and must stay immutable, otherwise EDIT/ANIM toggles progressively
+	// bake the current morph into the skeleton. Compose each weighted PMX
+	// quaternion before append/inherit and IK/physics evaluation.
+	if (self_tag && !bone_morph_data_arr_.IsEmpty())
+	{
+		Eigen::Quaternionf morph_rotation = Eigen::Quaternionf::Identity();
+		for (const auto& morph : bone_morph_data_arr_)
+		{
+			GeData morph_data;
+			Float strength = 0.0;
+			if (self_tag->GetParameter(morph.strength_id, morph_data, DESCFLAGS_GET::NONE))
+				strength = morph_data.GetFloat();
+			if (std::abs(strength) <= std::numeric_limits<Float>::epsilon())
+				continue;
+
+			if (self_tag->GetParameter(morph.translation_id, morph_data, DESCFLAGS_GET::NONE))
+				translation += morph_data.GetVector() * strength;
+
+			if (self_tag->GetParameter(morph.rotation_id, morph_data, DESCFLAGS_GET::NONE))
+			{
+				const Eigen::Quaternionf offset = ToEigenQuaternion(EulerToQuaternionArray(morph_data.GetVector()));
+				morph_rotation *= Eigen::Quaternionf::Identity().slerp(maxon::SafeConvert<Float32>(strength), offset);
+			}
+		}
+		rotation = ToQuaternionArray(ToEigenQuaternion(rotation) * morph_rotation);
 	}
 
 	SetEvaluatedAnimationState(translation, rotation);
@@ -3596,33 +3622,6 @@ EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject*
 	{
 		ResetEvaluatedAnimationState();
 		ClearPlaybackRuntimeOverride();
-	}
-
-	if (bone_mode_ == BONE_MODE_ANIM && !bone_morph_data_arr_.IsEmpty())
-	{
-		GeData ge_data;
-		op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), ge_data, DESCFLAGS_GET::NONE);
-		Vector op_position = ge_data.GetVector() - prev_position_;
-		prev_position_ = Vector();
-		op->GetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), ge_data, DESCFLAGS_GET::NONE);
-		Vector op_rotation = ge_data.GetVector() - prev_rotation_;
-		prev_rotation_ = Vector();
-
-		for (const auto& morph : bone_morph_data_arr_)
-		{
-			Float strength = 0;
-			if (tag->GetParameter(morph.strength_id, ge_data, DESCFLAGS_GET::NONE))
-				strength = ge_data.GetFloat();
-
-			if (tag->GetParameter(morph.translation_id, ge_data, DESCFLAGS_GET::NONE))
-				prev_position_ += ge_data.GetVector() * strength;
-
-			if (tag->GetParameter(morph.rotation_id, ge_data, DESCFLAGS_GET::NONE))
-				prev_rotation_ += ge_data.GetVector() * strength;
-		}
-
-		op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_POSITION)), op_position + prev_position_, DESCFLAGS_SET::NONE);
-		op->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_FROZEN_ROTATION)), op_rotation + prev_rotation_, DESCFLAGS_SET::NONE);
 	}
 
 	return EXECUTIONRESULT::OK;

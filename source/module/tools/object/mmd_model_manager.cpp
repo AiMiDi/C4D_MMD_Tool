@@ -2145,12 +2145,14 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 						StepStandalonePhysics(1.f / fps_);
 					is_animation_initialized_ = true;
 				}
-				RunLayeredBonePass(doc, true);
 			}
 			else
 			{
 				is_animation_initialized_ = false;
 			}
+			// PMX after-deform is an evaluation phase, not a physics-only phase.
+			// Keep these bones and their IK chains active when Bullet is disabled.
+			RunLayeredBonePass(doc, true);
 			if (bone_manager_data_)
 				mmd_bone_control_util::SyncControlsToCurrentPose(*bone_manager_data_);
 			control_state_checksum_ = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_) : 0;
@@ -2606,6 +2608,14 @@ void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene(const maxon::Base
 
 void MMDModelManagerObject::InvalidateStandaloneRuntime()
 {
+	// Bone tags cache raw solver pointers and same-frame runtime overrides. Clear
+	// those before destroying the standalone managers so a rebuilt solver cannot
+	// be mistaken for the old one when the allocator reuses an address.
+	if (BaseObject* const bone_manager_object = io_util::ResolveObjectLink(bone_manager_))
+	{
+		if (auto* const bone_manager = bone_manager_object->GetNodeData<MMDBoneManagerObject>())
+			bone_manager->InvalidatePlaybackRuntimeState();
+	}
 	ik_manager_own_.reset();
 	physics_manager_own_.reset();
 	physics_bone_pool_.clear();
@@ -2904,10 +2914,21 @@ Bool MMDModelManagerObject::EnsureStandaloneRuntimeManagers()
 		if (animation_slot_metadata_.GetCount() > 0)
 			bone_manager_data_->EnsureAllAnimationSlotCount(static_cast<Int32>(animation_slot_metadata_.GetCount()));
 		if (animation_index_ >= 0 && animation_index_ < animation_slot_metadata_.GetCount())
-		{
 			bone_manager_data_->SetAllActiveAnimationSlot(animation_index_);
-			if (model_mode_ == MODEL_MODE_ANIM)
-				bone_manager_data_->SetAllBoneMode(BONE_MODE_ANIM);
+
+		// The manager container is the persistent source of truth for its
+		// independently editable mode. Hydrate every tag on every runtime rebuild,
+		// including edit mode and scenes without an animation slot.
+		Int32 bone_mode = model_mode_ == MODEL_MODE_ANIM ? BONE_MODE_ANIM : BONE_MODE_EDIT;
+		if (BaseObject* const bone_manager_object = io_util::ResolveObjectLink(bone_manager_))
+		{
+			if (const BaseContainer* const bone_bc = bone_manager_object->GetDataInstance())
+				bone_mode = NormalizeModelMode(bone_bc->GetInt32(BONE_MODE));
+			bone_manager_data_->SetAllBoneMode(bone_mode, bone_manager_object);
+		}
+		else
+		{
+			bone_manager_data_->SetAllBoneMode(bone_mode);
 		}
 	}
 
