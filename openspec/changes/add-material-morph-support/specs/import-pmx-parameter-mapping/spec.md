@@ -1,16 +1,16 @@
 ## MODIFIED Requirements
 
 ### Requirement: "Material Morph" Parameter
-The system SHALL expose a "Material Morph" group and child item list in the Attribute Manager of MMDMeshManagerObject, linked to the model morph list used by MMDModelManagerObject. During PMX import, it SHALL import and store all morph data of type PMXMorphType::Material, including every material offset field required for PMX export and runtime material morph evaluation.
+The system SHALL expose a "Material Morph" group and child item list in the Attribute Manager of MMDModelManagerObject. During PMX import, it SHALL import and store all morph data of type PMXMorphType::Material, including every material offset field required for PMX export and runtime material morph evaluation.
 
 #### Scenario: Import PMX with Material Morphs
 - **WHEN** the imported PMX file contains PMXMorphType::Material type morphs
-- **THEN** the "Material Morph" group in the MeshManager Attribute Manager SHALL list each material morph
+- **THEN** the "Material Morph" group in the ModelManager Attribute Manager SHALL list each material morph
 - **AND** each material morph SHALL preserve its name, English name, panel, and material offset list
 
 #### Scenario: Import PMX without Material Morphs
 - **WHEN** the imported PMX file does not contain material morphs
-- **THEN** the "Material Morph" group in the MeshManager Attribute Manager SHALL be empty
+- **THEN** the "Material Morph" group in the ModelManager Attribute Manager SHALL be empty
 
 #### Scenario: Import PMX material morph offset fields
 - **WHEN** a PMX material morph offset contains target material index, operation type, diffuse, specular, specular power, ambient, edge color, edge size, texture factor, sphere texture factor, and toon texture factor values

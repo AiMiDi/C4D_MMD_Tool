@@ -69,3 +69,32 @@ Material morph fields that cannot be represented by Standard ShaderData channels
 - **THEN** the material adapter SHALL apply only supported precomputed simple color and float fields through renderer-specific parameters
 - **AND** texture factor, sphere texture factor, toon texture factor, edge color, edge size, and other unsupported renderer-specific visual fields SHALL remain preserved in MMD material runtime and PMX export data
 - **AND** the adapter SHALL NOT be required to create classic ShaderData wrappers or edit renderer-specific node graphs for this change
+
+### Requirement: Standard textured materials apply complete material morph factors
+The Standard material adapter SHALL apply effective diffuse and alpha values together with PMX texture factors to texture-backed channels. It SHALL preserve the original channel shader as a child of the material morph wrapper and SHALL keep pure-color `Xcolor` channels on the direct parameter update path.
+
+#### Scenario: Textured diffuse and alpha respond to a material morph
+- **WHEN** a Standard material has texture-backed color and alpha channels
+- **AND** an active Material morph changes diffuse, alpha, or texture factor values
+- **THEN** the color wrapper SHALL apply effective diffuse RGB multiplied by effective texture factor RGB
+- **AND** the alpha wrapper SHALL apply effective diffuse alpha multiplied by effective texture factor alpha
+
+#### Scenario: Pure-color material does not receive a texture wrapper
+- **WHEN** a Standard material color or alpha channel is backed only by `Xcolor`
+- **AND** a Material morph changes diffuse or alpha
+- **THEN** the adapter SHALL update the `Xcolor` parameters directly
+- **AND** it SHALL NOT wrap that channel merely to apply a texture factor
+
+### Requirement: Standard sphere and toon factors are applied to their texture channels
+The Standard material adapter SHALL map sphere textures to the Environment channel and toon textures to the Luminance channel. Effective sphere and toon RGB and alpha factors SHALL be applied by the material morph wrapper for their respective channels.
+
+#### Scenario: Sphere and toon texture factors update wrapper parameters
+- **WHEN** a Standard material has sphere and toon texture channels
+- **AND** an active Material morph changes sphere texture factor or toon texture factor
+- **THEN** the Environment wrapper SHALL receive the effective sphere RGB and alpha factors
+- **AND** the Luminance wrapper SHALL receive the effective toon RGB and alpha factors
+
+#### Scenario: Shared PMX toon texture is resolved during import
+- **WHEN** a PMX material uses common toon slot 0 through 9
+- **THEN** the Standard material SHALL resolve the corresponding bundled `toon01.bmp` through `toon10.bmp`
+- **AND** the resolved texture SHALL be assigned to the Luminance channel

@@ -11,5 +11,6 @@ public:
 	BaseMaterial* CreateFromData(const MMDMaterialData& data) override;
 	void SyncTo(const MMDMaterialData& data, BaseMaterial* material) override;
 	void ReadFrom(const BaseMaterial* material, MMDMaterialData& data) override;
+	void SyncRuntimeState(const MMDMaterialRuntimeState& state, BaseMaterial* material) override;
 };
 

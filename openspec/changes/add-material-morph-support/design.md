@@ -38,13 +38,15 @@ Cinema 4D `ShaderData` 适合放在材质通道里被采样，不能承担 morph
 
 备选方案是直接把 morph offset 写进 `MaterialMorph` 类内部，但这会让 UI 持久化、PMX 导出和 MeshManager 页面编辑都依赖动态 morph 对象生命周期。独立数据模型更适合 HyperFile、CopyTo、导出和 UI 列表同步。
 
-### D2: MeshManager 完整编辑和持久化材质表情，ModelManager 仍负责 morph strength 调度
+### D2: ModelManager 完整编辑和持久化材质表情，并继续负责 morph strength 调度
 
-按需求在 MeshManager 属性管理器新增“材质表情”栏，负责展示和完整编辑 material morph offset 明细。每个 offset 字段都需要在页面上可见、可编辑、可保存，包括 target material index、运算模式和所有 PMX material morph 字段。ModelManager 继续拥有通用 morph 列表、strength UI、group/flip 展开和 VMD strength 动画，因为这些行为已经服务所有 morph 类型。
+在 ModelManager 属性管理器新增“材质表情”栏，负责展示和完整编辑 material morph offset 明细。每个 offset 字段都需要在页面上可见、可编辑、可保存，包括 target material index、运算模式和所有 PMX material morph 字段。ModelManager 同时继续拥有通用 morph 列表、strength UI、group/flip 展开和 VMD strength 动画，因为这些行为已经服务所有 morph 类型。
 
-target material index 为 `-1` 时，UI 显示为“全部材质”，并禁用具体 material link / material index 选择控件，避免用户同时表达“全部材质”和“某个材质”。切回非 `-1` 目标时再启用具体材质选择。
+把材质表情编辑面板放在 ModelManager 的好处是：material morph 数据本身存放在 ModelManager 的 `morph_data_`（`MaterialMorph::m_offsets`），现有材质列表（`material_list_`）和 morph strength UI 也都在 ModelManager。面板、数据、运行时调度同处一个对象，避免跨对象（MeshManager↔ModelManager）双写与 link 解析的额外复杂度。
 
-实现上 MeshManager 可以通过 model manager link 读取/更新 material morph 数据，或把 material morph 数据放在 MeshManager 后由 ModelManager 查询。推荐由 ModelManager 保留运行时权威索引，由 MeshManager 提供属性页编辑视图，避免打散现有 `ApplyMorphRuntimeStrengths()` 的调度入口。
+target material index 为 `-1` 时，UI 显示为“全部材质”，并禁用具体材质选择控件，避免用户同时表达“全部材质”和“某个材质”。实现上目标材质用单个动态 CYCLE：首项固定为“全部材质”（映射 `-1`），其后为各材质名（映射对应索引）；该单控件天然保证二选一。切回非 `-1` 目标时即落在某个材质项。
+
+材质表情栏采用两级列表 + 选中项字段的范式（与现有材质列表一致）：材质表情列表（动态 CYCLE 列出所有 `MaterialMorph` 名）→ 偏移项列表（动态 CYCLE 列出当前表情的 offset）→ 选中 offset 的全部字段控件 + 添加/删除 offset 按钮；编辑即写回 `MaterialMorph::m_offsets` 并触发 dirty 刷新。
 
 ### D3: 运行时从基础材质重新合成，不原地累积
 
@@ -117,7 +119,7 @@ PMX 导入时遍历 `PMXFileMorph::m_materialMorph`，构造 material morph 数�
 
 1. 新增 material morph 数据结构、HyperFile `Read/Write`、`CopyTo`，旧场景没有该段时读取为空列表。
 2. PMX 导入开始填充完整 material morph offsets，同时继续创建普通 morph strength 条目，保证 VMD strength 路径可复用。
-3. MeshManager 属性页新增材质表情栏和动态字段，读取旧文件时没有数据则显示空列表；`-1` target 显示“全部材质”并禁用具体材质选择。
+3. ModelManager 属性页新增材质表情栏和动态字段，读取旧文件时没有数据则显示空列表；`-1` target 显示“全部材质”并禁用具体材质选择。
 4. 接入 runtime evaluator 和 Standard 通用 shader；已有贴图材质在首次同步时安装 wrapper shader 并把原 shader 迁移为 child shader。
 5. PMX 导出从持久化 material morph 数据写回 `PMXFileMorph::m_materialMorph`。
 6. 如需回滚，删除 runtime 应用和 shader 注册后，持久化 material morph 数据仍可作为无害未使用数据读取。

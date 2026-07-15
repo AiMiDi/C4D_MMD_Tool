@@ -1,15 +1,15 @@
 ## ADDED Requirements
 
 ### Requirement: Material morph definitions are persisted as editable morph data
-The system SHALL persist material morph definitions with their morph name, English name, panel, target material offsets, operation type, and all PMX material morph fields. The MeshManager Attribute Manager SHALL expose a Material Morph group that can display and fully edit the persisted material morph data without relying on transient runtime material state.
+The system SHALL persist material morph definitions with their morph name, English name, panel, target material offsets, operation type, and all PMX material morph fields. The ModelManager Attribute Manager SHALL expose a Material Morph group that can display and fully edit the persisted material morph data without relying on transient runtime material state.
 
-#### Scenario: Imported material morph appears in MeshManager
+#### Scenario: Imported material morph appears in ModelManager
 - **WHEN** a PMX file contains a material morph with two material offsets
-- **THEN** the MeshManager Attribute Manager SHALL show the material morph in the Material Morph group
+- **THEN** the ModelManager Attribute Manager SHALL show the material morph in the Material Morph group
 - **AND** the selected material morph SHALL show both offsets with target material index, operation type, diffuse, specular, specular power, ambient, edge color, edge size, texture factor, sphere texture factor, and toon texture factor fields
 
 #### Scenario: Edit all material morph offset fields
-- **WHEN** a user selects a material morph offset in the MeshManager Material Morph group
+- **WHEN** a user selects a material morph offset in the ModelManager Material Morph group
 - **THEN** the user SHALL be able to edit target material index, operation type, diffuse, specular, specular power, ambient, edge color, edge size, texture factor, sphere texture factor, and toon texture factor fields
 - **AND** each edited field SHALL be persisted in the material morph data model
 
@@ -44,6 +44,12 @@ The system SHALL compute material morph results from base material data for each
 - **AND** the Material morph strength later becomes 0.0
 - **THEN** the target material runtime state SHALL match the base material alpha
 
+#### Scenario: Removing the final material morph definition restores base material
+- **WHEN** a Material morph currently affects one or more linked C4D materials
+- **AND** the user removes its final offset or deletes the final Material morph
+- **THEN** the linked C4D materials SHALL be synchronized once more from base `MMDMaterialData`
+- **AND** no value from the previously active Material morph SHALL remain visible
+
 ### Requirement: Material morph target index supports all-material offsets
 The system SHALL support PMX material morph target index `-1` as an all-material target and SHALL apply that offset to every material in the current model material list.
 
@@ -54,8 +60,8 @@ The system SHALL support PMX material morph target index `-1` as an all-material
 
 #### Scenario: All-material target is shown in UI
 - **WHEN** a Material morph offset target material index is `-1`
-- **THEN** the MeshManager Material Morph group SHALL display the target as "全部材质"
-- **AND** specific material link or material selection controls for that offset SHALL be disabled
+- **THEN** the ModelManager Material Morph group SHALL display the target as "全部材质"
+- **AND** specific material selection controls for that offset SHALL be disabled
 
 #### Scenario: Invalid material index is safe
 - **WHEN** a Material morph offset targets a material index that is outside the current material list

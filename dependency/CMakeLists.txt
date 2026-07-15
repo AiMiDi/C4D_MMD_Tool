@@ -18,11 +18,27 @@ add_custom_target(cmt-deps-build ALL DEPENDS libMMD
   COMMENT "Bullet3+libMMD via add_subdirectory (no dependency/install); SDK mmdtool build uses the same targets"
 )
 
-if(CMT_DEPS_ENABLE_LIBMMD_TESTS)
-  add_custom_target(cmt-deps-test
-    COMMAND ${CMAKE_CTEST_COMMAND} --test-dir "${CMAKE_BINARY_DIR}/cmt_deps/libMMD" -C Debug --output-on-failure
-    DEPENDS libMMD
-    USES_TERMINAL
-    COMMENT "Run libMMD CTest (Debug); enable with -D CMT_DEPS_ENABLE_LIBMMD_TESTS=ON or preset dev-windows-deps-test"
-  )
-endif()
+if(CMT_DEPS_ENABLE_LIBMMD_TESTS)
+  set(_cmt_libmmd_test_targets
+    mmd_model_test
+    mmd_model_io_test
+    mmd_model_animation_test
+    mmd_model_regression_test
+    mmd_model_benchmark_test
+    file_base_test
+    path_util_test
+    file_roundtrip_test
+    vpd_file_test
+    pmx_export_invariants_test
+    pmx_material_morph_test
+    mmd_physics_test
+    mmd_ik_solver_test
+    vmd_interpolation_test
+  )
+  add_custom_target(cmt-deps-test
+    COMMAND ${CMAKE_CTEST_COMMAND} --test-dir "${CMAKE_BINARY_DIR}/cmt_deps/libMMD" -C Debug --output-on-failure
+    DEPENDS ${_cmt_libmmd_test_targets}
+    USES_TERMINAL
+    COMMENT "Run libMMD CTest (Debug); enable with -D CMT_DEPS_ENABLE_LIBMMD_TESTS=ON or preset dev-windows-deps-test"
+  )
+endif()

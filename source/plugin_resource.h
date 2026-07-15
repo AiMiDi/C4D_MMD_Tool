@@ -32,3 +32,6 @@ constexpr auto g_cmt_scene_manager_scene_hook_id = 1057017;
 constexpr auto g_mmd_vmd_loader_id             = 1057489;
 constexpr auto g_mmd_vmd_export_id             = 1057490;
 
+//	Shader
+constexpr auto g_mmd_material_texture_morph_shader_id = 1068715;
+

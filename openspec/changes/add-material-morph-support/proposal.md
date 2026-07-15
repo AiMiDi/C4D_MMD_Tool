@@ -4,7 +4,7 @@
 
 ## What Changes
 
-- 在 MeshManager 属性管理器中新增材质表情栏，用可持久化的 UI 数据记录并完整编辑材质表情项、目标材质索引、运算模式和各 PMX 材质偏移字段；目标索引为 `-1` 时显示“全部材质”并禁用具体材质选择。
+- 在 ModelManager 属性管理器中新增材质表情栏，用可持久化的 UI 数据记录并完整编辑材质表情项、目标材质索引、运算模式和各 PMX 材质偏移字段；目标索引为 `-1` 时显示“全部材质”并禁用具体材质选择。
 - PMX 导入时完整读取 `PMXMorphType::Material` 数据，保留每个 material morph 的 display/panel 信息、offset 列表、目标材质引用、加算/乘算模式和所有受支持字段。
 - PMX 导出时从插件持久化数据重建 material morph section，确保导入后未修改、修改后保存、重新打开后导出都能保持材质表情语义。
 - 运行时将 material morph 接入现有 morph strength 评估链路，复用 group/flip 展开后的有效强度，不再在 morph 对象中直接累积或漂移。
@@ -27,8 +27,8 @@
 
 ## Impact
 
-- **代码**：`source/module/tools/object/mmd_mesh_manager.*`、`source/module/tools/object/mmd_model_manager.*`、`source/module/tools/object/mmd_morph.*`、`source/module/tools/material/*`、`source/CMTSceneManager.*`、PMX 导入导出相关路径。
-- **资源**：MeshManager/ModelManager 相关 `.res`、`.h`、`.str` 描述文件，新增材质表情栏、字段控件、列表/按钮文案和持久化 DescID。
+- **代码**：`source/module/tools/object/mmd_model_manager.*`、`source/module/tools/object/mmd_morph.*`、`source/module/tools/material/*`、`source/CMTSceneManager.*`、PMX 导入导出相关路径。
+- **资源**：ModelManager 相关 `.res`、`.h`、`.str` 描述文件（`res/S24_up`、`res/R20-S24`、`sdk_2024` 三套真实资源树），新增材质表情栏、字段控件、列表/按钮文案和 UI DescID。
 - **SDK/插件注册**：新增少量 `ShaderData` plugin 注册和描述资源；所有 SDK 差异通过既有兼容层处理。
 - **PMX round-trip**：Material morph section 从导入、场景保存恢复到导出需要保持字段完整性和索引关系。
 - **测试**：需要增加 PMX material morph 解析/导出 round-trip 校验，以及运行时 material morph 应用的 focused 验证。

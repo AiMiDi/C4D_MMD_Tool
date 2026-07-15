@@ -127,6 +127,13 @@ BaseMaterial* CreateMaterialFromData(const MMDMaterialData& data, MMDRendererMat
 	return adapter ? adapter->CreateFromData(data) : nullptr;
 }
 
+void SyncRuntimeStateToMaterial(const MMDMaterialRuntimeState& state, BaseMaterial* material)
+{
+	auto adapter = MMDMaterialAdapter::CreateFor(material);
+	if (adapter)
+		adapter->SyncRuntimeState(state, material);
+}
+
 void MMDMaterialData::FromPMX(const libmmd::PMXMaterial& pmx_material)
 {
 	name_local = String(pmx_material.m_name.c_str());
@@ -335,6 +342,59 @@ Bool MMDMaterialData::CopyTo(MMDMaterialData& dest) const
 		dest.mesh_link = maxon::StrongRef<AutoAlloc<BaseLink>>();
 	dest.selection_name = selection_name;
 	return true;
+}
+
+MMDMaterialRuntimeState MMDMaterialRuntimeState::FromBase(const MMDMaterialData& base)
+{
+	MMDMaterialRuntimeState state;
+	state.diffuse_rgb = base.diffuse_rgb;
+	state.diffuse_alpha = base.diffuse_alpha;
+	state.specular = base.specular;
+	state.specular_power = base.specular_power;
+	state.ambient = base.ambient;
+	state.edge_color_rgb = base.edge_color_rgb;
+	state.edge_color_alpha = base.edge_color_alpha;
+	state.edge_size = base.edge_size;
+	// texture/sphere/toon factor 默认 1.0（无表情时贴图采样不变）。
+	return state;
+}
+
+void MMDMaterialRuntimeState::WriteSupportedFieldsTo(MMDMaterialData& data) const
+{
+	data.diffuse_rgb = diffuse_rgb;
+	data.diffuse_alpha = diffuse_alpha;
+	data.specular = specular;
+	data.specular_power = specular_power;
+	data.ambient = ambient;
+	data.edge_color_rgb = edge_color_rgb;
+	data.edge_color_alpha = edge_color_alpha;
+	data.edge_size = edge_size;
+}
+
+UInt64 MMDMaterialRuntimeState::Checksum() const
+{
+	// 量化后做 FNV-1a 哈希，避免浮点抖动导致不必要的同步。
+	UInt64 hash = 1469598103934665603ULL;
+	const auto mix = [&hash](const Float value)
+	{
+		const auto quantized = static_cast<Int64>(value * 100000.0);
+		auto bits = static_cast<UInt64>(quantized);
+		for (int i = 0; i < 8; ++i)
+		{
+			hash ^= (bits & 0xFF);
+			hash *= 1099511628211ULL;
+			bits >>= 8;
+		}
+	};
+	const auto mix_vec = [&mix](const Vector& v) { mix(v.x); mix(v.y); mix(v.z); };
+	mix_vec(diffuse_rgb); mix(diffuse_alpha);
+	mix_vec(specular); mix(specular_power);
+	mix_vec(ambient);
+	mix_vec(edge_color_rgb); mix(edge_color_alpha); mix(edge_size);
+	mix_vec(texture_factor_rgb); mix(texture_factor_alpha);
+	mix_vec(sphere_texture_factor_rgb); mix(sphere_texture_factor_alpha);
+	mix_vec(toon_texture_factor_rgb); mix(toon_texture_factor_alpha);
+	return hash;
 }
 
 void MMDMaterialManager::SetTextureRelativePath(const Filename& texture_relative_path)

@@ -150,6 +150,21 @@ namespace
 			pmx_morph.m_controlPanel = static_cast<uint8_t>(morph.GetPanel());
 			pmx_morph.m_morphType = MorphTypeToPmx(morph.GetType());
 
+			if (morph.GetType() == MMDMorphType::MATERIAL)
+			{
+				const auto& material_morph = static_cast<const MaterialMorph&>(morph);
+				pmx_morph.m_materialMorph.clear();
+				pmx_morph.m_materialMorph.reserve(static_cast<size_t>(material_morph.GetOffsetCount()));
+				for (const auto& offset : material_morph.GetOffsets())
+				{
+					libmmd::PMXFileMorph::MaterialMorph pmx_offset;
+					offset.ToPMX(pmx_offset);
+					// 目标索引 -1（全部材质）按原值保留，保证 round-trip。
+					pmx_morph.m_materialMorph.push_back(pmx_offset);
+				}
+				continue;
+			}
+
 			maxon::HashMap<Int, Float>* const sub_morphs = morph.GetSubMorphDataWritable();
 			if (!sub_morphs)
 				continue;
@@ -1238,7 +1253,7 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		return false;
 	}
 
-	if (!ReadMorph(hf))
+	if (!ReadMorph(hf, level))
 	{
 		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] Read: FAILED at ReadMorph");
 		return false;
@@ -1574,7 +1589,7 @@ SDK2024_CopyTo(MMDModelManagerObject)
 	destObject->InvalidateStandaloneRuntime();
 	return true;
 }
-Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
+Bool MMDModelManagerObject::ReadMorph(HyperFile* hf, Int32 level)
 {
 	iferr_scope_handler{ return false; };
 	auto morph_change_helper = BeginMorphChange();
@@ -1600,7 +1615,7 @@ Bool MMDModelManagerObject::ReadMorph(HyperFile* hf)
 		default: return false;
 		}
 		morph_data_.AppendPtr(morph) iferr_return;
-		morph->Read(hf);
+		morph->Read(hf, level);
 	}
 
 	return true;
@@ -1797,6 +1812,9 @@ void MMDModelManagerObject::RefreshMorph()
 	{
 		DeleteMorph(it);
 	}
+	// Refresh may remove the final material morph. Restore linked materials before
+	// rebuilding mesh/bone-only morph entries, including early-return paths below.
+	ApplyMorphRuntimeStrengths();
 	auto* mesh_mgr = io_util::ResolveObjectLink(mesh_manager_);
 	if (!mesh_mgr) return;
 	auto* mesh_manager_data = mesh_mgr->GetNodeData<MMDMeshManagerObject>();
@@ -3370,7 +3388,25 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 			}
 			else if (morph_offset_type == libmmd::PMXMorphType::Material)
 			{
-				AddMorph(MMDMorphType::MATERIAL, String(pmx_morph.m_name.c_str()), true, panel);
+				const Int material_morph_id = AddMorph(MMDMorphType::MATERIAL, String(pmx_morph.m_name.c_str()), true, panel);
+				if (material_morph_id >= 0 && material_morph_id < morph_data_.GetCount())
+				{
+					if (auto* const material_morph = static_cast<MaterialMorph*>(&morph_data_[material_morph_id]);
+						material_morph->GetType() == MMDMorphType::MATERIAL)
+					{
+						auto& offsets = material_morph->GetOffsetsWritable();
+						offsets.Reset();
+						iferr(offsets.EnsureCapacity(static_cast<Int>(pmx_morph.m_materialMorph.size())))
+						{ /* 容量预留失败时继续逐项 Append */ }
+						for (const auto& pmx_offset : pmx_morph.m_materialMorph)
+						{
+							MMDMaterialMorphOffset offset;
+							offset.FromPMX(pmx_offset);
+							iferr(offsets.Append(offset))
+								break;
+						}
+					}
+				}
 			}
 			else if (morph_offset_type == libmmd::PMXMorphType::Impluse)
 			{
@@ -3426,6 +3462,106 @@ Bool MMDModelManagerObject::AddMaterial(const libmmd::PMXMaterial& pmx_material,
 	mat.selection_name = selection_name;
 	material_list_.Append(std::move(mat)) iferr_return;
 	return true;
+}
+
+void MMDModelManagerObject::AdjustMaterialMorphIndicesAfterMaterialRemoval(const Int32 removed_index)
+{
+	if (removed_index < 0)
+		return;
+	for (auto& morph : morph_data_)
+	{
+		if (morph.GetType() != MMDMorphType::MATERIAL)
+			continue;
+		auto& material_morph = static_cast<MaterialMorph&>(morph);
+		auto& offsets = material_morph.GetOffsetsWritable();
+		for (Int i = offsets.GetCount() - 1; i >= 0; --i)
+		{
+			Int32& index = offsets[i].material_index;
+			if (index == -1)
+				continue; // 全部材质，不受单材质删除影响
+			if (index == removed_index)
+				offsets.Erase(i) iferr_ignore("erase dangling material morph offset failed"_s);
+			else if (index > removed_index)
+				--index;
+		}
+	}
+}
+
+void MMDModelManagerObject::AdjustMaterialMorphIndicesAfterMaterialSwap(const Int32 first_index, const Int32 second_index)
+{
+	if (first_index < 0 || second_index < 0 || first_index == second_index)
+		return;
+	for (auto& morph : morph_data_)
+	{
+		if (morph.GetType() != MMDMorphType::MATERIAL)
+			continue;
+		auto& material_morph = static_cast<MaterialMorph&>(morph);
+		for (auto& offset : material_morph.GetOffsetsWritable())
+		{
+			Int32& index = offset.material_index;
+			if (index == first_index)
+				index = second_index;
+			else if (index == second_index)
+				index = first_index;
+		}
+	}
+}
+
+Bool MMDModelManagerObject::ValidateMaterialMorphIndices(const Bool drop_invalid)
+{
+	const Int material_count = material_list_.GetCount();
+	Bool has_invalid = false;
+	for (auto& morph : morph_data_)
+	{
+		if (morph.GetType() != MMDMorphType::MATERIAL)
+			continue;
+		auto& material_morph = static_cast<MaterialMorph&>(morph);
+		if (material_morph.ValidateMaterialIndices(material_count, drop_invalid))
+			has_invalid = true;
+	}
+	return has_invalid;
+}
+
+MaterialMorph* MMDModelManagerObject::GetSelectedMaterialMorph()
+{
+	if (material_morph_selection_index_ < 0 || material_morph_selection_index_ >= morph_data_.GetCount())
+		return nullptr;
+	IMorph& morph = morph_data_[material_morph_selection_index_];
+	if (morph.GetType() != MMDMorphType::MATERIAL)
+		return nullptr;
+	return static_cast<MaterialMorph*>(&morph);
+}
+
+const MaterialMorph* MMDModelManagerObject::GetSelectedMaterialMorph() const
+{
+	if (material_morph_selection_index_ < 0 || material_morph_selection_index_ >= morph_data_.GetCount())
+		return nullptr;
+	const IMorph& morph = morph_data_[material_morph_selection_index_];
+	if (morph.GetType() != MMDMorphType::MATERIAL)
+		return nullptr;
+	return static_cast<const MaterialMorph*>(&morph);
+}
+
+MMDMaterialMorphOffset* MMDModelManagerObject::GetSelectedMaterialMorphOffset()
+{
+	MaterialMorph* const morph = GetSelectedMaterialMorph();
+	if (!morph)
+		return nullptr;
+	auto& offsets = morph->GetOffsetsWritable();
+	if (material_morph_offset_selection_index_ < 0 || material_morph_offset_selection_index_ >= offsets.GetCount())
+		return nullptr;
+	return &offsets[material_morph_offset_selection_index_];
+}
+
+const MMDMaterialMorphOffset* MMDModelManagerObject::GetSelectedMaterialMorphOffset() const
+{
+	const MaterialMorph* const morph = GetSelectedMaterialMorph();
+	if (!morph)
+		return nullptr;
+	const auto& offsets = morph->GetOffsets();
+	if (material_morph_offset_selection_index_ < 0 || material_morph_offset_selection_index_ >= offsets.GetCount())
+		return nullptr;
+	return &offsets[material_morph_offset_selection_index_];
 }
 
 Bool MMDModelManagerObject::PreparePMXExportState(BaseDocument* doc)
@@ -4722,6 +4858,84 @@ SDK2024_GetDDescription(MMDModelManagerObject)
 	if (BaseContainer* mat_settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_MATERIAL_LIST)), nullptr))
 		mat_settings->SetContainer(DESC_CYCLE, material_list_items_);
 
+	// 材质表情：动态填充表情列表 / 偏移项列表 / 目标材质列表。
+	{
+		// 校正选中的材质表情索引；无效时尝试定位首个材质表情。
+		Bool selection_valid = material_morph_selection_index_ >= 0
+			&& material_morph_selection_index_ < morph_data_.GetCount()
+			&& morph_data_[material_morph_selection_index_].GetType() == MMDMorphType::MATERIAL;
+		if (!selection_valid)
+		{
+			material_morph_selection_index_ = -1;
+			for (Int32 i = 0; i < morph_data_.GetCount(); ++i)
+			{
+				if (morph_data_[i].GetType() == MMDMorphType::MATERIAL)
+				{
+					material_morph_selection_index_ = i;
+					break;
+				}
+			}
+			material_morph_offset_selection_index_ = -1;
+		}
+
+		// 材质表情列表：有条目时重建（动态名），无条目时保留静态占位（NONE）。
+		matmorph_list_items_.FlushAll();
+		Bool has_material_morph = false;
+		for (Int32 i = 0; i < morph_data_.GetCount(); ++i)
+		{
+			if (morph_data_[i].GetType() != MMDMorphType::MATERIAL)
+				continue;
+			matmorph_list_items_.SetString(i, FormatString("@: @", i, morph_data_[i].GetName()));
+			has_material_morph = true;
+		}
+		if (has_material_morph)
+		{
+			if (BaseContainer* s = description->GetParameterI(ConstDescID(DescLevel(MODEL_MATMORPH_LIST)), nullptr))
+				s->SetContainer(DESC_CYCLE, matmorph_list_items_);
+		}
+
+		// 目标材质列表：保留静态 "全部材质"(id 0) 的本地化标签，追加各材质名(id = index+1)。
+		String all_materials_label = "All Materials"_s;
+		if (BaseContainer* s = description->GetParameterI(ConstDescID(DescLevel(MODEL_MATMORPH_TARGET)), nullptr))
+		{
+			const BaseContainer src_cycle = s->GetContainer(DESC_CYCLE);
+			all_materials_label = src_cycle.GetString(MODEL_MATMORPH_TARGET_ALL, all_materials_label);
+			matmorph_target_items_.FlushAll();
+			matmorph_target_items_.SetString(MODEL_MATMORPH_TARGET_ALL, all_materials_label);
+			for (Int32 i = 0; i < material_list_.GetCount(); ++i)
+				matmorph_target_items_.SetString(i + 1, FormatString("@: @", i, material_list_[i].name_local));
+			s->SetContainer(DESC_CYCLE, matmorph_target_items_);
+		}
+
+		// 偏移项列表：有 offset 时重建（目标材质名 / 全部材质 / 无效提示）。
+		matmorph_offset_items_.FlushAll();
+		const MaterialMorph* const sel_morph = GetSelectedMaterialMorph();
+		if (sel_morph && sel_morph->GetOffsetCount() > 0)
+		{
+			const auto& offsets = sel_morph->GetOffsets();
+			for (Int32 i = 0; i < offsets.GetCount(); ++i)
+			{
+				const Int32 mi = offsets[i].material_index;
+				String label;
+				if (mi == -1)
+					label = all_materials_label;
+				else if (mi >= 0 && mi < material_list_.GetCount())
+					label = material_list_[mi].name_local;
+				else
+					label = FormatString("(invalid @)", mi);
+				matmorph_offset_items_.SetString(i, FormatString("@: @", i, label));
+			}
+			if (!(material_morph_offset_selection_index_ >= 0 && material_morph_offset_selection_index_ < offsets.GetCount()))
+				material_morph_offset_selection_index_ = 0;
+			if (BaseContainer* s = description->GetParameterI(ConstDescID(DescLevel(MODEL_MATMORPH_OFFSET_LIST)), nullptr))
+				s->SetContainer(DESC_CYCLE, matmorph_offset_items_);
+		}
+		else
+		{
+			material_morph_offset_selection_index_ = -1;
+		}
+	}
+
 	display_frame_items_.FlushAll();
 	display_frame_items_.SetString(MODEL_DISPLAY_FRAME_NONE, GeLoadString(IDS_MODEL_DISPLAY_FRAME_NONE));
 	for (Int32 i = 0; i < display_frame_list_.GetCount(); ++i)
@@ -4969,6 +5183,36 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				AddMorph(MMDMorphType::IMPULSE, ge_data.GetString());
 				break;
 			}
+			case MODEL_MATMORPH_OFFSET_ADD_BUTTON:
+			{
+				if (MaterialMorph* mm = GetSelectedMaterialMorph())
+				{
+					iferr(mm->GetOffsetsWritable().Append(MMDMaterialMorphOffset()))
+						break;
+					material_morph_offset_selection_index_ = static_cast<Int32>(mm->GetOffsetCount()) - 1;
+					ApplyMorphRuntimeStrengths();
+					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+					EventAdd();
+				}
+				break;
+			}
+			case MODEL_MATMORPH_OFFSET_DELETE_BUTTON:
+			{
+				if (MaterialMorph* mm = GetSelectedMaterialMorph())
+				{
+					auto& offs = mm->GetOffsetsWritable();
+					if (material_morph_offset_selection_index_ >= 0 && material_morph_offset_selection_index_ < offs.GetCount())
+					{
+						offs.Erase(material_morph_offset_selection_index_) iferr_ignore("erase material morph offset failed"_s);
+						if (material_morph_offset_selection_index_ >= offs.GetCount())
+							material_morph_offset_selection_index_ = static_cast<Int32>(offs.GetCount()) - 1;
+						ApplyMorphRuntimeStrengths();
+						::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+						EventAdd();
+					}
+				}
+				break;
+			}
 			case MODEL_DISPLAY_FRAME_ADD_BUTTON:
 			{
 				if (display_frame_selection_index_ >= 0 && display_frame_selection_index_ < display_frame_list_.GetCount()
@@ -5142,7 +5386,11 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			{
 				if (material_selection_index_ > 0 && material_selection_index_ < material_list_.GetCount())
 				{
-					std::swap(material_list_[material_selection_index_], material_list_[material_selection_index_ - 1]);
+					const Int32 old_index = material_selection_index_;
+					const Int32 new_index = material_selection_index_ - 1;
+					std::swap(material_list_[old_index], material_list_[new_index]);
+					AdjustMaterialMorphIndicesAfterMaterialSwap(old_index, new_index);
+					material_runtime_checksum_.Reset();
 					material_selection_index_--;
 					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 					EventAdd();
@@ -5153,7 +5401,11 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			{
 				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount() - 1)
 				{
-					std::swap(material_list_[material_selection_index_], material_list_[material_selection_index_ + 1]);
+					const Int32 old_index = material_selection_index_;
+					const Int32 new_index = material_selection_index_ + 1;
+					std::swap(material_list_[old_index], material_list_[new_index]);
+					AdjustMaterialMorphIndicesAfterMaterialSwap(old_index, new_index);
+					material_runtime_checksum_.Reset();
 					material_selection_index_++;
 					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 					EventAdd();
@@ -5245,7 +5497,10 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 							}
 						}
 					}
+					const Int32 removed_material_index = material_selection_index_;
 					material_list_.Erase(material_selection_index_) iferr_ignore("erase failed"_s);
+					AdjustMaterialMorphIndicesAfterMaterialRemoval(removed_material_index);
+					material_runtime_checksum_.Reset();
 					if (material_selection_index_ >= material_list_.GetCount())
 						material_selection_index_ = static_cast<Int32>(material_list_.GetCount()) - 1;
 					if (mesh_manager_data_)
@@ -5425,6 +5680,14 @@ SDK2024_GetDParameter(MMDModelManagerObject)
 		t_data.SetInt32(material_selection_index_);
 		flags |= DESCFLAGS_GET::PARAM_GET;
 		return true;
+	case MODEL_MATMORPH_LIST:
+		t_data.SetInt32(material_morph_selection_index_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
+	case MODEL_MATMORPH_OFFSET_LIST:
+		t_data.SetInt32(material_morph_offset_selection_index_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
 	case MODEL_DISPLAY_FRAME_LIST:
 		t_data.SetInt32(display_frame_selection_index_);
 		flags |= DESCFLAGS_GET::PARAM_GET;
@@ -5453,6 +5716,37 @@ SDK2024_GetDParameter(MMDModelManagerObject)
 		return true;
 	default:
 		break;
+	}
+
+	// 材质表情 offset 字段读取。
+	if (const MMDMaterialMorphOffset* off = GetSelectedMaterialMorphOffset())
+	{
+		switch (id[0].id)
+		{
+		case MODEL_MATMORPH_TARGET:
+			t_data.SetInt32(off->material_index == -1 ? MODEL_MATMORPH_TARGET_ALL : off->material_index + 1);
+			flags |= DESCFLAGS_GET::PARAM_GET;
+			return true;
+		case MODEL_MATMORPH_OP_TYPE:
+			t_data.SetInt32(off->op_type);
+			flags |= DESCFLAGS_GET::PARAM_GET;
+			return true;
+		case MODEL_MATMORPH_DIFFUSE_COLOR: HandleDescGetVector(id, off->diffuse_rgb, t_data, flags); return true;
+		case MODEL_MATMORPH_DIFFUSE_ALPHA: t_data.SetFloat(off->diffuse_alpha); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+		case MODEL_MATMORPH_SPECULAR_COLOR: HandleDescGetVector(id, off->specular, t_data, flags); return true;
+		case MODEL_MATMORPH_SPECULAR_POWER: t_data.SetFloat(off->specular_power); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+		case MODEL_MATMORPH_AMBIENT_COLOR: HandleDescGetVector(id, off->ambient, t_data, flags); return true;
+		case MODEL_MATMORPH_EDGE_COLOR: HandleDescGetVector(id, off->edge_color_rgb, t_data, flags); return true;
+		case MODEL_MATMORPH_EDGE_ALPHA: t_data.SetFloat(off->edge_color_alpha); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+		case MODEL_MATMORPH_EDGE_SIZE: t_data.SetFloat(off->edge_size); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+		case MODEL_MATMORPH_TEXTURE_FACTOR_COLOR: HandleDescGetVector(id, off->texture_factor_rgb, t_data, flags); return true;
+		case MODEL_MATMORPH_TEXTURE_FACTOR_ALPHA: t_data.SetFloat(off->texture_factor_alpha); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+		case MODEL_MATMORPH_SPHERE_FACTOR_COLOR: HandleDescGetVector(id, off->sphere_texture_factor_rgb, t_data, flags); return true;
+		case MODEL_MATMORPH_SPHERE_FACTOR_ALPHA: t_data.SetFloat(off->sphere_texture_factor_alpha); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+		case MODEL_MATMORPH_TOON_FACTOR_COLOR: HandleDescGetVector(id, off->toon_texture_factor_rgb, t_data, flags); return true;
+		case MODEL_MATMORPH_TOON_FACTOR_ALPHA: t_data.SetFloat(off->toon_texture_factor_alpha); flags |= DESCFLAGS_GET::PARAM_GET; return true;
+		default: break;
+		}
 	}
 
 	const Int32 sel = material_selection_index_;
@@ -5600,6 +5894,78 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case MODEL_MATERIAL_LIST:
 			material_selection_index_ = t_data.GetInt32();
 			break;
+		case MODEL_MATMORPH_LIST:
+			material_morph_selection_index_ = t_data.GetInt32();
+			material_morph_offset_selection_index_ = -1;
+			node->SetDirty(DIRTYFLAGS::DESCRIPTION);
+			::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+			EventAdd();
+			break;
+		case MODEL_MATMORPH_OFFSET_LIST:
+			material_morph_offset_selection_index_ = t_data.GetInt32();
+			node->SetDirty(DIRTYFLAGS::DESCRIPTION);
+			::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+			EventAdd();
+			break;
+		case MODEL_MATMORPH_TARGET:
+		case MODEL_MATMORPH_OP_TYPE:
+		case MODEL_MATMORPH_DIFFUSE_COLOR:
+		case MODEL_MATMORPH_DIFFUSE_ALPHA:
+		case MODEL_MATMORPH_SPECULAR_COLOR:
+		case MODEL_MATMORPH_SPECULAR_POWER:
+		case MODEL_MATMORPH_AMBIENT_COLOR:
+		case MODEL_MATMORPH_EDGE_COLOR:
+		case MODEL_MATMORPH_EDGE_ALPHA:
+		case MODEL_MATMORPH_EDGE_SIZE:
+		case MODEL_MATMORPH_TEXTURE_FACTOR_COLOR:
+		case MODEL_MATMORPH_TEXTURE_FACTOR_ALPHA:
+		case MODEL_MATMORPH_SPHERE_FACTOR_COLOR:
+		case MODEL_MATMORPH_SPHERE_FACTOR_ALPHA:
+		case MODEL_MATMORPH_TOON_FACTOR_COLOR:
+		case MODEL_MATMORPH_TOON_FACTOR_ALPHA:
+		{
+			MMDMaterialMorphOffset* const off = GetSelectedMaterialMorphOffset();
+			if (!off)
+				break;
+			Bool target_changed = false;
+			switch (id[0].id)
+			{
+			case MODEL_MATMORPH_TARGET:
+			{
+				const Int32 v = t_data.GetInt32();
+				off->material_index = (v <= MODEL_MATMORPH_TARGET_ALL) ? -1 : v - 1;
+				target_changed = true;
+				break;
+			}
+			case MODEL_MATMORPH_OP_TYPE: off->op_type = t_data.GetInt32(); break;
+			case MODEL_MATMORPH_DIFFUSE_COLOR: off->diffuse_rgb = t_data.GetVector(); break;
+			case MODEL_MATMORPH_DIFFUSE_ALPHA: off->diffuse_alpha = t_data.GetFloat(); break;
+			case MODEL_MATMORPH_SPECULAR_COLOR: off->specular = t_data.GetVector(); break;
+			case MODEL_MATMORPH_SPECULAR_POWER: off->specular_power = t_data.GetFloat(); break;
+			case MODEL_MATMORPH_AMBIENT_COLOR: off->ambient = t_data.GetVector(); break;
+			case MODEL_MATMORPH_EDGE_COLOR: off->edge_color_rgb = t_data.GetVector(); break;
+			case MODEL_MATMORPH_EDGE_ALPHA: off->edge_color_alpha = t_data.GetFloat(); break;
+			case MODEL_MATMORPH_EDGE_SIZE: off->edge_size = t_data.GetFloat(); break;
+			case MODEL_MATMORPH_TEXTURE_FACTOR_COLOR: off->texture_factor_rgb = t_data.GetVector(); break;
+			case MODEL_MATMORPH_TEXTURE_FACTOR_ALPHA: off->texture_factor_alpha = t_data.GetFloat(); break;
+			case MODEL_MATMORPH_SPHERE_FACTOR_COLOR: off->sphere_texture_factor_rgb = t_data.GetVector(); break;
+			case MODEL_MATMORPH_SPHERE_FACTOR_ALPHA: off->sphere_texture_factor_alpha = t_data.GetFloat(); break;
+			case MODEL_MATMORPH_TOON_FACTOR_COLOR: off->toon_texture_factor_rgb = t_data.GetVector(); break;
+			case MODEL_MATMORPH_TOON_FACTOR_ALPHA: off->toon_texture_factor_alpha = t_data.GetFloat(); break;
+			default: break;
+			}
+			// 改变目标会影响偏移项列表的显示标签，需要刷新属性页。
+			if (target_changed)
+			{
+				node->SetDirty(DIRTYFLAGS::DESCRIPTION);
+				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
+			}
+			// 触发视口刷新，使下一次 Execute 重新合成材质表情运行时状态。
+			ApplyMorphRuntimeStrengths();
+			EventAdd();
+			flags |= DESCFLAGS_SET::PARAM_SET;
+			return true;
+		}
 		case MODEL_DISPLAY_FRAME_LIST:
 			display_frame_selection_index_ = t_data.GetInt32();
 			RefreshDisplayFrameUI();
@@ -5781,6 +6147,27 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 	}
 	switch (id[0].id)
 	{
+	case MODEL_MATMORPH_OFFSET_LIST:
+	case MODEL_MATMORPH_OFFSET_ADD_BUTTON:
+		return GetSelectedMaterialMorph() != nullptr;
+	case MODEL_MATMORPH_OFFSET_DELETE_BUTTON:
+	case MODEL_MATMORPH_TARGET:
+	case MODEL_MATMORPH_OP_TYPE:
+	case MODEL_MATMORPH_DIFFUSE_COLOR:
+	case MODEL_MATMORPH_DIFFUSE_ALPHA:
+	case MODEL_MATMORPH_SPECULAR_COLOR:
+	case MODEL_MATMORPH_SPECULAR_POWER:
+	case MODEL_MATMORPH_AMBIENT_COLOR:
+	case MODEL_MATMORPH_EDGE_COLOR:
+	case MODEL_MATMORPH_EDGE_ALPHA:
+	case MODEL_MATMORPH_EDGE_SIZE:
+	case MODEL_MATMORPH_TEXTURE_FACTOR_COLOR:
+	case MODEL_MATMORPH_TEXTURE_FACTOR_ALPHA:
+	case MODEL_MATMORPH_SPHERE_FACTOR_COLOR:
+	case MODEL_MATMORPH_SPHERE_FACTOR_ALPHA:
+	case MODEL_MATMORPH_TOON_FACTOR_COLOR:
+	case MODEL_MATMORPH_TOON_FACTOR_ALPHA:
+		return GetSelectedMaterialMorphOffset() != nullptr;
 	case MODEL_DISPLAY_FRAME_NAME_LOCAL:
 	case MODEL_DISPLAY_FRAME_NAME_UNIVERSAL:
 	case MODEL_DISPLAY_FRAME_ADD_TYPE:
@@ -5940,8 +6327,13 @@ void MMDModelManagerObject::ApplyMorphRuntimeStrengths()
 {
 	GeListNode* const node = Get();
 	const Int morph_count = morph_data_.GetCount();
-	if (!node || morph_count <= 0)
+	if (!node)
 		return;
+	if (morph_count <= 0)
+	{
+		EvaluateMaterialMorphRuntime({});
+		return;
+	}
 
 	std::vector<Float> strengths(static_cast<size_t>(morph_count), 0.0);
 	for (Int i = 0; i < morph_count; ++i)
@@ -6010,6 +6402,183 @@ void MMDModelManagerObject::ApplyMorphRuntimeStrengths()
 			continue;
 		ApplyMorphRuntimeStrength(morph_data_[i], strengths[static_cast<size_t>(i)]);
 	}
+
+	EvaluateMaterialMorphRuntime(strengths);
+}
+
+void MMDModelManagerObject::EvaluateMaterialMorphRuntime(const std::vector<Float>& strengths)
+{
+	const Int material_count = material_list_.GetCount();
+	if (material_count <= 0)
+	{
+		material_runtime_checksum_.Reset();
+		material_morph_runtime_active_ = false;
+		return;
+	}
+
+	const Int morph_count = morph_data_.GetCount();
+
+	// 仅当存在材质表情时才接管链接材质，避免在未使用该特性时覆盖用户材质。
+	Bool has_material_morph = false;
+	for (Int i = 0; i < morph_count && i < static_cast<Int>(strengths.size()); ++i)
+	{
+		if (morph_data_[i].GetType() == MMDMorphType::MATERIAL
+			&& static_cast<const MaterialMorph&>(morph_data_[i]).GetOffsetCount() > 0)
+		{
+			has_material_morph = true;
+			break;
+		}
+	}
+	if (!has_material_morph && !material_morph_runtime_active_)
+		return;
+	if (has_material_morph)
+		material_morph_runtime_active_ = true;
+
+	// 乘算/加算累加器：mul 初始为 1（恒等），add 初始为 0。
+	struct MaterialMorphAccumulator
+	{
+		Vector mul_diffuse = Vector(1.0); Float mul_diffuse_alpha = 1.0;
+		Vector mul_specular = Vector(1.0); Float mul_specular_power = 1.0;
+		Vector mul_ambient = Vector(1.0);
+		Vector mul_edge_color = Vector(1.0); Float mul_edge_alpha = 1.0; Float mul_edge_size = 1.0;
+		Vector mul_texture = Vector(1.0); Float mul_texture_alpha = 1.0;
+		Vector mul_sphere = Vector(1.0); Float mul_sphere_alpha = 1.0;
+		Vector mul_toon = Vector(1.0); Float mul_toon_alpha = 1.0;
+
+		Vector add_diffuse = Vector(0.0); Float add_diffuse_alpha = 0.0;
+		Vector add_specular = Vector(0.0); Float add_specular_power = 0.0;
+		Vector add_ambient = Vector(0.0);
+		Vector add_edge_color = Vector(0.0); Float add_edge_alpha = 0.0; Float add_edge_size = 0.0;
+		Vector add_texture = Vector(0.0); Float add_texture_alpha = 0.0;
+		Vector add_sphere = Vector(0.0); Float add_sphere_alpha = 0.0;
+		Vector add_toon = Vector(0.0); Float add_toon_alpha = 0.0;
+	};
+	std::vector<MaterialMorphAccumulator> acc(static_cast<size_t>(material_count));
+
+	// lerp(1, offset, w) = 1 + (offset-1)*w，用于乘算模式的强度插值。
+	const auto lerp_to_one = [](const Float offset, const Float w) { return 1.0 + (offset - 1.0) * w; };
+	const auto vec_lerp_to_one = [&lerp_to_one](const Vector& offset, const Float w)
+	{
+		return Vector(lerp_to_one(offset.x, w), lerp_to_one(offset.y, w), lerp_to_one(offset.z, w));
+	};
+	const auto comp_mul = [](const Vector& a, const Vector& b) { return Vector(a.x * b.x, a.y * b.y, a.z * b.z); };
+
+	const auto apply_offset = [&](MaterialMorphAccumulator& a, const MMDMaterialMorphOffset& off, const Float w)
+	{
+		if (off.op_type == static_cast<Int32>(MMDMaterialMorphOpType::Add))
+		{
+			a.add_diffuse += off.diffuse_rgb * w; a.add_diffuse_alpha += off.diffuse_alpha * w;
+			a.add_specular += off.specular * w; a.add_specular_power += off.specular_power * w;
+			a.add_ambient += off.ambient * w;
+			a.add_edge_color += off.edge_color_rgb * w; a.add_edge_alpha += off.edge_color_alpha * w; a.add_edge_size += off.edge_size * w;
+			a.add_texture += off.texture_factor_rgb * w; a.add_texture_alpha += off.texture_factor_alpha * w;
+			a.add_sphere += off.sphere_texture_factor_rgb * w; a.add_sphere_alpha += off.sphere_texture_factor_alpha * w;
+			a.add_toon += off.toon_texture_factor_rgb * w; a.add_toon_alpha += off.toon_texture_factor_alpha * w;
+		}
+		else
+		{
+			a.mul_diffuse = comp_mul(a.mul_diffuse, vec_lerp_to_one(off.diffuse_rgb, w)); a.mul_diffuse_alpha *= lerp_to_one(off.diffuse_alpha, w);
+			a.mul_specular = comp_mul(a.mul_specular, vec_lerp_to_one(off.specular, w)); a.mul_specular_power *= lerp_to_one(off.specular_power, w);
+			a.mul_ambient = comp_mul(a.mul_ambient, vec_lerp_to_one(off.ambient, w));
+			a.mul_edge_color = comp_mul(a.mul_edge_color, vec_lerp_to_one(off.edge_color_rgb, w)); a.mul_edge_alpha *= lerp_to_one(off.edge_color_alpha, w); a.mul_edge_size *= lerp_to_one(off.edge_size, w);
+			a.mul_texture = comp_mul(a.mul_texture, vec_lerp_to_one(off.texture_factor_rgb, w)); a.mul_texture_alpha *= lerp_to_one(off.texture_factor_alpha, w);
+			a.mul_sphere = comp_mul(a.mul_sphere, vec_lerp_to_one(off.sphere_texture_factor_rgb, w)); a.mul_sphere_alpha *= lerp_to_one(off.sphere_texture_factor_alpha, w);
+			a.mul_toon = comp_mul(a.mul_toon, vec_lerp_to_one(off.toon_texture_factor_rgb, w)); a.mul_toon_alpha *= lerp_to_one(off.toon_texture_factor_alpha, w);
+		}
+	};
+
+	for (Int i = 0; i < morph_count && i < static_cast<Int>(strengths.size()); ++i)
+	{
+		if (morph_data_[i].GetType() != MMDMorphType::MATERIAL)
+			continue;
+		const Float w = strengths[static_cast<size_t>(i)];
+		if (w == 0.0)
+			continue;
+		const auto& material_morph = static_cast<const MaterialMorph&>(morph_data_[i]);
+		for (const auto& off : material_morph.GetOffsets())
+		{
+			if (off.material_index == -1)
+			{
+				for (Int t = 0; t < material_count; ++t)
+					apply_offset(acc[static_cast<size_t>(t)], off, w);
+			}
+			else if (off.material_index >= 0 && off.material_index < material_count)
+			{
+				apply_offset(acc[static_cast<size_t>(off.material_index)], off, w);
+			}
+			// 越界索引（非 -1）直接跳过，避免悬空索引崩溃。
+		}
+	}
+
+	if (material_runtime_checksum_.GetCount() != material_count)
+	{
+		iferr(material_runtime_checksum_.Resize(material_count))
+			return;
+		for (auto& cs : material_runtime_checksum_)
+			cs = 0;
+	}
+
+	GeListNode* const node = Get();
+	BaseDocument* const doc = node ? node->GetDocument() : nullptr;
+	// Keep the active marker/checksums intact when links cannot be resolved yet so
+	// scene-load ordering can retry the synchronization on a later Execute pass.
+	if (!doc)
+		return;
+	Bool runtime_sync_complete = true;
+
+	for (Int t = 0; t < material_count; ++t)
+	{
+		const MMDMaterialData& base = material_list_[t];
+		const MaterialMorphAccumulator& a = acc[static_cast<size_t>(t)];
+
+		MMDMaterialRuntimeState state = MMDMaterialRuntimeState::FromBase(base);
+		state.diffuse_rgb = comp_mul(base.diffuse_rgb, a.mul_diffuse) + a.add_diffuse;
+		state.diffuse_alpha = base.diffuse_alpha * a.mul_diffuse_alpha + a.add_diffuse_alpha;
+		state.specular = comp_mul(base.specular, a.mul_specular) + a.add_specular;
+		state.specular_power = base.specular_power * a.mul_specular_power + a.add_specular_power;
+		state.ambient = comp_mul(base.ambient, a.mul_ambient) + a.add_ambient;
+		state.edge_color_rgb = comp_mul(base.edge_color_rgb, a.mul_edge_color) + a.add_edge_color;
+		state.edge_color_alpha = base.edge_color_alpha * a.mul_edge_alpha + a.add_edge_alpha;
+		state.edge_size = base.edge_size * a.mul_edge_size + a.add_edge_size;
+		// texture/sphere/toon factor 基准 1.0，供后续 shader 应用。
+		state.texture_factor_rgb = comp_mul(Vector(1.0), a.mul_texture) + a.add_texture;
+		state.texture_factor_alpha = 1.0 * a.mul_texture_alpha + a.add_texture_alpha;
+		state.sphere_texture_factor_rgb = comp_mul(Vector(1.0), a.mul_sphere) + a.add_sphere;
+		state.sphere_texture_factor_alpha = 1.0 * a.mul_sphere_alpha + a.add_sphere_alpha;
+		state.toon_texture_factor_rgb = comp_mul(Vector(1.0), a.mul_toon) + a.add_toon;
+		state.toon_texture_factor_alpha = 1.0 * a.mul_toon_alpha + a.add_toon_alpha;
+
+		const maxon::UInt64 checksum = state.Checksum();
+		if (material_runtime_checksum_[t] == checksum)
+			continue;
+
+		if (!base.material_link || !*base.material_link)
+		{
+			material_runtime_checksum_[t] = checksum;
+			continue;
+		}
+		BaseMaterial* const c4d_material = static_cast<BaseMaterial*>((*base.material_link)->GetLink(doc));
+		if (!c4d_material)
+		{
+			runtime_sync_complete = false;
+			continue;
+		}
+
+		MMDMaterialData synced;
+		if (!base.CopyTo(synced))
+		{
+			runtime_sync_complete = false;
+			continue;
+		}
+		state.WriteSupportedFieldsTo(synced);
+		SyncToMaterial(synced, c4d_material);
+		// 贴图系数等无法由 SyncTo 表达的字段：经 adapter 安装/更新 wrapper shader。
+		SyncRuntimeStateToMaterial(state, c4d_material);
+		material_runtime_checksum_[t] = checksum;
+	}
+
+	if (!has_material_morph && runtime_sync_complete)
+		material_morph_runtime_active_ = false;
 }
 
 void MMDModelManagerObject::ApplyMorphRuntimeStrength(IMorph& morph, const Float strength)
@@ -6043,6 +6612,9 @@ void MMDModelManagerObject::DeleteMorph(const Int morph_index)
 	if (auto& morph = morph_data_[morph_index]; !DeleteMorphImpl(morph, morph_index))
 		return;
 	std::ignore = morph_data_.Erase(morph_index);
+	// The erased entry may have been the final material morph. Re-evaluate even
+	// when the collection is now empty so linked materials return to base state.
+	ApplyMorphRuntimeStrengths();
 }
 
 bool MMDModelManagerObject::DeleteMorphImpl(IMorph& morph, const Int morph_index)
@@ -6152,6 +6724,8 @@ void MMDModelManagerObject::SyncMaterialsList()
 		if (!found)
 		{
 			material_list_.Erase(i) iferr_ignore("erase failed");
+			AdjustMaterialMorphIndicesAfterMaterialRemoval(i);
+			material_runtime_checksum_.Reset();
 			changed = true;
 		}
 	}
@@ -6205,6 +6779,7 @@ void MMDModelManagerObject::SyncMaterialsList()
 			new_mat.specular_power = 5.0;
 
 			material_list_.Append(std::move(new_mat)) iferr_ignore("append failed");
+			material_runtime_checksum_.Reset();
 			changed = true;
 		}
 	}

@@ -26,6 +26,8 @@ Description:	MMD model object
 #include "utils/images_user_area_util.hpp"
 
 class IMorph;
+class MaterialMorph;
+struct MMDMaterialMorphOffset;
 class MMDBoneManagerObject;
 class MMDMeshManagerObject;
 class MMDRigidManagerObject;
@@ -206,6 +208,20 @@ class MMDModelManagerObject final : public ObjectData
 	Int32 material_selection_index_ = -1;
 	mutable BaseContainer material_list_items_;
 
+	// 材质表情运行时同步的 dirty 校验和（与 material_list_ 一一对应）；
+	// 仅在有效材质状态变化时才同步到 C4D 材质。
+	maxon::BaseArray<maxon::UInt64> material_runtime_checksum_;
+	// 曾经接管过材质运行时状态；最后一个 offset/morph 被删除时据此执行一次基础状态恢复。
+	Bool material_morph_runtime_active_ = false;
+
+	// 材质表情属性页（UI-only，不持久化）：选中的材质表情（morph_data_ 下标）与 offset 下标。
+	// mutable：GetDDescription（const）会在校正选中索引时写入。
+	mutable Int32 material_morph_selection_index_ = -1;
+	mutable Int32 material_morph_offset_selection_index_ = -1;
+	mutable BaseContainer matmorph_list_items_;
+	mutable BaseContainer matmorph_offset_items_;
+	mutable BaseContainer matmorph_target_items_;
+
 	maxon::BaseArray<DisplayFrameData> display_frame_list_;
 	Int32 display_frame_selection_index_ = -1;
 	Int32 display_frame_add_type_ = 0;
@@ -305,6 +321,34 @@ public:
 	                 BaseObject* mesh_object, const String& selection_name,
 	                 const maxon::BaseArray<Filename>& texture_paths);
 
+	/**
+	 * @brief 材质被删除后，修正所有材质表情 offset 的目标索引。
+	 *
+	 * 目标索引等于被删除索引的 offset 会被移除；大于被删除索引的统一减一；-1（全部材质）保持不变。
+	 * @param removed_index 被删除材质在 material_list_ 中的原索引。
+	 */
+	void AdjustMaterialMorphIndicesAfterMaterialRemoval(Int32 removed_index);
+
+	/**
+	 * @brief 材质列表重排时同步交换所有材质表情 offset 的目标索引。
+	 *
+	 * -1（全部材质）保持不变。
+	 */
+	void AdjustMaterialMorphIndicesAfterMaterialSwap(Int32 first_index, Int32 second_index);
+
+	/** 返回当前属性页选中的材质表情（无效时返回 nullptr）。 */
+	MaterialMorph* GetSelectedMaterialMorph();
+	const MaterialMorph* GetSelectedMaterialMorph() const;
+	/** 返回当前属性页选中材质表情的选中 offset（无效时返回 nullptr）。 */
+	MMDMaterialMorphOffset* GetSelectedMaterialMorphOffset();
+	const MMDMaterialMorphOffset* GetSelectedMaterialMorphOffset() const;
+
+	/**
+	 * @brief 校验所有材质表情 offset 的目标索引，移除越界项以避免运行时/导出悬空索引。
+	 * @return 是否检测到并移除了非法索引。
+	 */
+	Bool ValidateMaterialMorphIndices(Bool drop_invalid = false);
+
 	Bool LoadVMDMotion(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting, LoadVmdMotionLog& log, const Bool merge = false);
 	Bool LoadVPDPose(const libmmd::VPDFile& vpd_file, const CMTToolsSetting::PoseImport& setting, LoadVpdPoseLog& log);
 	Bool SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const;
@@ -317,6 +361,14 @@ private:
 	void RenameMorph(const String& name);
 	void ApplyMorphRuntimeStrengths();
 	void ApplyMorphRuntimeStrength(IMorph& morph, Float strength);
+
+	/**
+	 * @brief 从基础 `material_list_` 重新合成所有材质表情的有效运行时状态并同步到 C4D 材质。
+	 *
+	 * 复用 group/flip 展开后的有效强度（@p strengths，下标对齐 morph_data_）。
+	 * 按 PMX Mul/Add 规则非累积地合成，仅在有效状态变化时通过材质 adapter 同步。
+	 */
+	void EvaluateMaterialMorphRuntime(const std::vector<Float>& strengths);
 	void DeleteMorph(Int morph_index);
 	void DeleteMorph(maxon::EraseIterator<maxon::PointerArray<IMorph>, false>& it);
 	void RefreshMorph();
@@ -327,7 +379,7 @@ private:
 	void ClearTransientVPDPoseState(BaseDocument* doc);
 	Bool IsTransientVPDBone(Int32 bone_index) const;
 	Float EvaluateMorphAnimationStrength(const String& morph_name, BaseObject* object, const BaseTime& time);
-	Bool ReadMorph(HyperFile* hf);
+	Bool ReadMorph(HyperFile* hf, Int32 level = 0);
 #if API_VERSION < 2024000
 	Bool WriteMorph(HyperFile* hf);
 #else

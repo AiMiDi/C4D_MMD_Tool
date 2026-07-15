@@ -127,6 +127,78 @@ frozen/bind 状态读取。
 这些对象导入后仍只是 C4D 侧持久化参数；runtime rigid body 和 runtime joint 在
 `MMDModelManagerObject::BuildStandalonePhysics()` 中按 index 排序重建。
 
+## 材质表情（Material Morph）
+
+PMX 材质表情（`PMXMorphType::Material`）的完整链路：持久化数据、PMX round-trip、运行时材质合成、
+ShaderData 贴图系数和材质 adapter 同步。
+
+### 数据模型与持久化
+
+- `MMDMaterialMorphOffset`（`source/module/tools/object/mmd_morph.h`）保存单条 PMX 材质偏移的全部字段：
+  目标材质索引（`-1` 表示全部材质）、运算模式（Mul/Add）、diffuse、specular、specularPower、ambient、
+  edgeColor、edgeSize、texture/sphere/toon factor。提供 `FromPMX` / `ToPMX` / `Read` / `Write`。
+- `MaterialMorph` 内嵌 `maxon::BaseArray<MMDMaterialMorphOffset> m_offsets`，随现有
+  `ReadMorph` / `WriteMorph` / `CopyMorph` 路径持久化，offset 与 strength 条目（`m_name` / `m_strength_id`）
+  天然关联。
+- **版本兼容**：`OMMDModelManager` 注册磁盘等级从 3 升到 4；`MaterialMorph::Read(hf, level)` 仅在
+  `level >= 4` 读取 offset，旧场景（level < 4）读取为空列表。
+
+### 导入 / 导出 round-trip
+
+- 导入：`MMDModelManagerObject::LoadPMX()` 的 Material 分支从 `pmx_morph.m_materialMorph` 逐条
+  `FromPMX` 填充 `MaterialMorph::m_offsets`，同时保留通用 morph strength UI。
+- 导出：`ExportMorphStubs()` 的 Material 分支从持久化 offset `ToPMX` 重建 `m_materialMorph`，`-1` 原样保留。
+- 材质删除时 `AdjustMaterialMorphIndicesAfterMaterialRemoval()` 修正/移除悬空索引；
+  `ValidateMaterialMorphIndices()` 提供越界校验。libMMD 层 round-trip 由
+  `dependency/libMMD/tests/PmxMaterialMorph.test.cpp` 覆盖。
+
+### 运行时合成（非累积）
+
+`ApplyMorphRuntimeStrengths()` 在 group/flip 展开得到有效强度后调用
+`EvaluateMaterialMorphRuntime(strengths)`：
+
+- 仅当存在带 offset 的材质表情时才接管链接材质，避免未使用该特性时覆盖用户材质。
+- 每次从基础 `material_list_` 重新合成，**不回写基础数据**：按 PMX 规则用 mul/add 累加器
+  （mul 初始 1、按 `lerp(1, offset, w)` 连乘；add 初始 0、按 `offset * w` 累加），最终
+  `value = base * mulProduct + addSum`。`-1` 作用于全部材质，越界索引跳过。
+- `material_runtime_checksum_` 做 dirty 判定，仅在有效状态变化时同步 C4D 材质。
+- `material_morph_runtime_active_` 记录是否接管过运行时材质；删除最后一个 offset 或 material morph 后仍会
+  执行一次基础状态合成，避免上一帧效果残留。
+- **模式分离**：动画模式应用材质表情；EDIT 模式经 `ClearMorphRuntimeForEdit()` 把强度归零后再
+  `ApplyMorphRuntimeStrengths()`，使运行时状态回到基础材质；runtime 效果只进入临时材质副本，不污染
+  基础 `MMDMaterialData`。
+
+### ShaderData 与 BaseShader 嵌套
+
+- `MMDMaterialTextureMorphShader`（插件 ID `1068715`，`source/module/tools/material/mmd_material_morph_shader.*`）
+  包装一个原始贴图 child shader：child 经 `InsertUnder` 挂在 wrapper 之下（`GetDown()` 取得），
+  `Output()` 采样 child 后乘以预计算的有效系数；颜色通道使用 `diffuse RGB * texture factor RGB`，
+  Alpha 通道使用 `diffuse alpha * texture factor alpha`，sphere/toon 通道使用各自 RGBA factor。
+- **ShaderData 边界**：`Output()` 只读取 shader 自身参数（render-time 快照）和 child 采样结果，不读取或
+  修改任何可变场景状态（不碰 `MMDModelManagerObject` / `MMDMaterialData` / `BaseMaterial`）。有效系数由
+  运行时 evaluator 预计算后写入 shader 参数。
+
+### 材质 adapter 同步
+
+- 简单颜色/浮点字段（diffuse、alpha、specular、specularPower、ambient）经预计算后由 `SyncToMaterial()`
+  → 各 adapter `SyncTo()` 更新。Standard 纯色通道直接更新 `Xcolor`；带贴图的 color/alpha 通道则把有效
+  diffuse/alpha 与 texture factor 合并写入 wrapper，避免贴图材质漏掉 diffuse morph。
+- 贴图系数经 `SyncRuntimeStateToMaterial()` → `MMDMaterialAdapter::SyncRuntimeState()`：Standard adapter
+  按需安装/更新 wrapper shader（复用现有 shader 或从通道贴图路径新建 Bitmap 作为 child）。Standard
+  通道映射为：base texture → `CHANNEL_COLOR` / `CHANNEL_ALPHA`，sphere texture → `CHANNEL_ENVIRONMENT`，
+  toon texture → `CHANNEL_LUMINANCE`。sphere/toon 的 RGB 与 alpha factor 都写入各自 wrapper。
+- Redshift/Octane/Corona 首版只同步预计算简单字段（经各自 `SyncTo()`），不做贴图 factor、classic
+  ShaderData wrapper 或 renderer-specific node graph。
+- `edgeColor` / `edgeSize` 等当前材质系统未承载的字段仅保留数据用于 UI 编辑、场景持久化和 PMX 导出。
+
+### UI 位置
+
+材质表情编辑栏在 **ModelManager** 属性管理器（`MODEL_MATMORPH_GRP`）：材质表情列表（动态 CYCLE）→
+偏移项列表（动态 CYCLE）→ 选中 offset 全部字段控件 + 添加/删除 offset 按钮。目标材质用单个动态 CYCLE，
+首项「全部材质」映射 `-1`，其后为各材质名。运行时/着色相关的 focused 验证（强度归零和最后定义删除恢复、
+重复求值不漂移、EDIT/ANIM 分离、贴图 wrapper child 保留、toon/sphere factor）依赖 C4D 运行时，
+按既有约定走手动验证。
+
 ## VMD 动作导入
 
 VMD 动作导入要求当前选择对象是 `MMDModelManagerObject`：

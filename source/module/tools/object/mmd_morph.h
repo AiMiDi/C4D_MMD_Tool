@@ -1,6 +1,7 @@
 #pragma once
 
 #include <c4d.h>
+#include "libMMD/Model/MMD/PMXFile.h"
 #include "module/core/cmt_marco.h"
 
 class MMDModelManagerObject;
@@ -15,6 +16,44 @@ enum class MMDMorphType : uint8_t
 	UV = 1 << 4,
 	MATERIAL = 1 << 5,
 	IMPULSE = 1 << 6
+};
+
+/** PMX 材质表情运算模式：乘算 / 加算。 */
+enum class MMDMaterialMorphOpType : Int32
+{
+	Multiply = 0,
+	Add = 1,
+};
+
+/**
+ * @brief 单条 PMX 材质表情偏移数据。
+ *
+ * 完整保存 PMX material morph 的全部字段，用于场景持久化、PMX round-trip 和运行时求值。
+ * `material_index == -1` 表示作用于全部材质。
+ */
+struct MMDMaterialMorphOffset
+{
+	Int32 material_index = -1; ///< 目标材质索引（-1 表示全部材质）
+	Int32 op_type = static_cast<Int32>(MMDMaterialMorphOpType::Multiply); ///< 运算模式
+	Vector diffuse_rgb = Vector(1.0);
+	Float diffuse_alpha = 1.0;
+	Vector specular = Vector(1.0);
+	Float specular_power = 1.0;
+	Vector ambient = Vector(1.0);
+	Vector edge_color_rgb = Vector(1.0);
+	Float edge_color_alpha = 1.0;
+	Float edge_size = 1.0;
+	Vector texture_factor_rgb = Vector(1.0);
+	Float texture_factor_alpha = 1.0;
+	Vector sphere_texture_factor_rgb = Vector(1.0);
+	Float sphere_texture_factor_alpha = 1.0;
+	Vector toon_texture_factor_rgb = Vector(1.0);
+	Float toon_texture_factor_alpha = 1.0;
+
+	void FromPMX(const libmmd::PMXFileMorph::MaterialMorph& src);
+	void ToPMX(libmmd::PMXFileMorph::MaterialMorph& dst) const;
+	Bool Read(HyperFile* hf);
+	Bool Write(HyperFile* hf) const;
 };
 
 class IMorph
@@ -49,7 +88,7 @@ public:
 	virtual void DeleteSubMorph(const Int id) {}
 	virtual void RenameSubMorph(const Int old_id, const Int new_id) {}
 	virtual maxon::HashMap<Int, Float>* GetSubMorphDataWritable() { return nullptr; }
-	virtual Bool Read(HyperFile* hf);
+	virtual Bool Read(HyperFile* hf, Int32 level = 0);
 	virtual Bool Write(HyperFile* hf) SDK2024_Const;
 	virtual Bool CopyTo(IMorph* dest) const;
 
@@ -90,7 +129,7 @@ public:
 	void AddSubMorphNoCheck(Int id, Float weight) override;
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
 	void RenameSubMorph(const Int old_id, const Int new_id) override;
-	Bool Read(HyperFile* hf) override;
+	Bool Read(HyperFile* hf, Int32 level = 0) override;
 	Bool Write(HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(IMorph* dest) const override;
 	maxon::HashMap<Int, Float>* GetSubMorphDataWritable() override { return &m_data; }
@@ -127,7 +166,7 @@ public:
 	void AddSubMorphNoCheck(Int id, Float weight) override;
 	void DeleteSubMorph(const Int id) override { m_data.Erase(id); }
 	void RenameSubMorph(const Int old_id, const Int new_id) override;
-	Bool Read(HyperFile* hf) override;
+	Bool Read(HyperFile* hf, Int32 level = 0) override;
 	Bool Write(HyperFile* hf) SDK2024_Const override;
 	Bool CopyTo(IMorph* dest) const override;
 	maxon::HashMap<Int, Float>* GetSubMorphDataWritable() override { return &m_data; }
@@ -187,6 +226,7 @@ public:
 
 class MaterialMorph final : public IMorph
 {
+	maxon::BaseArray<MMDMaterialMorphOffset> m_offsets;
 public:
 	explicit MaterialMorph(String name = {}, DescID strength_id = {});
 	MaterialMorph(const MaterialMorph&) = delete;
@@ -199,7 +239,24 @@ public:
 	void UpdateMorph(MMDModelManagerObject& model) override;
 	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
 	void DeleteMorphUI(MMDModelManagerObject& model) override;
+	Bool Read(HyperFile* hf, Int32 level = 0) override;
+	Bool Write(HyperFile* hf) SDK2024_Const override;
+	Bool CopyTo(IMorph* dest) const override;
 	MMDMorphType GetType() const override { return MMDMorphType::MATERIAL; }
+
+	/** 偏移数据访问（供 UI 编辑、PMX 导入导出、运行时求值使用）。 */
+	[[nodiscard]] const maxon::BaseArray<MMDMaterialMorphOffset>& GetOffsets() const { return m_offsets; }
+	[[nodiscard]] maxon::BaseArray<MMDMaterialMorphOffset>& GetOffsetsWritable() { return m_offsets; }
+	void ClearOffsets() { m_offsets.Reset(); }
+	[[nodiscard]] Int GetOffsetCount() const { return m_offsets.GetCount(); }
+
+	/**
+	 * @brief 校验并修正所有 offset 的目标材质索引。
+	 * @param material_count 当前材质列表长度。
+	 * @param drop_invalid 为 true 时移除越界（非 -1）的 offset，否则仅返回是否存在非法项。
+	 * @return 是否检测到非法索引。
+	 */
+	Bool ValidateMaterialIndices(Int material_count, Bool drop_invalid = false);
 };
 
 class ImpulseMorph final : public IMorph

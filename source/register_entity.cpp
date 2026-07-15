@@ -12,6 +12,7 @@
 #include "module/tools/object/mmd_joint_manager.h"
 #include "module/tools/object/mmd_mesh_manager.h"
 #include "module/tools/object/mmd_rigid_manager.h"
+#include "module/tools/material/mmd_material_morph_shader.h"
 
 namespace
 {
@@ -47,7 +48,7 @@ namespace
 
 	Bool RegisterMMDModelManager()
 	{
-		return RegisterObjectPlugin(g_mmd_model_manager_object_id, GeLoadString(IDS_O_MMD_MODEL_MANAGER), OBJECT_CALL_ADDEXECUTION, MMDModelManagerObject::Alloc, "OMMDModelManager"_s, AutoBitmap(1021433), 3);
+		return RegisterObjectPlugin(g_mmd_model_manager_object_id, GeLoadString(IDS_O_MMD_MODEL_MANAGER), OBJECT_CALL_ADDEXECUTION, MMDModelManagerObject::Alloc, "OMMDModelManager"_s, AutoBitmap(1021433), 4);
 	}
 
 	Bool RegisterMMDBoneManager()
@@ -101,6 +102,8 @@ Bool cmt_register::RegisterPlugin()
 	if (!RegisterMMDJointManager())
 		return false;
 	if (!RegisterMMDBoneTag())
+		return false;
+	if (!RegisterMMDMaterialTextureMorphShader())
 		return false;
 
 	return true;
