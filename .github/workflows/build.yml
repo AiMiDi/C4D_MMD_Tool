@@ -58,38 +58,38 @@ jobs:
             deps_generator: Xcode
             macos_arch: x86_64
             upload_artifact: true
-          # Native Apple Silicon compilation is validation-only for now; it
-          # intentionally does not collide with the packaged Intel artifacts.
+          # Validate native Apple Silicon against the latest supported macOS
+          # toolchain without colliding with the packaged Intel artifacts.
           # R20-R23 do not have ARM-capable SDKs, so only add S24/R25 and newer.
-          - os: macos-15
+          - os: macos-26
             sdk: sdk_r25
             configure_preset: dev-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: arm64
             upload_artifact: false
-          - os: macos-15
+          - os: macos-26
             sdk: sdk_2023
             configure_preset: dev-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: arm64
             upload_artifact: false
-          - os: macos-15
+          - os: macos-26
             sdk: sdk_2024
             configure_preset: dev-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: arm64
             upload_artifact: false
-          - os: macos-15
+          - os: macos-26
             sdk: sdk_2025
             configure_preset: dev-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: arm64
             upload_artifact: false
-          - os: macos-15
+          - os: macos-26
             sdk: sdk_2026
             configure_preset: dev-macos
             build_preset: workflow-release-macos
