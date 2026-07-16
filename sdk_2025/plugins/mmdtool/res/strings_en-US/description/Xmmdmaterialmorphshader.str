@@ -1,6 +1,0 @@
-STRINGTABLE Xmmdmaterialmorphshader
-{
-	Xmmdmaterialmorphshader "MMD Material Texture Morph";
-	MMDMATERIALMORPHSHADER_FACTOR_COLOR "Texture Factor";
-	MMDMATERIALMORPHSHADER_FACTOR_ALPHA "Texture Factor Alpha";
-}

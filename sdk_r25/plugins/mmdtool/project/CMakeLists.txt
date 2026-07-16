@@ -15,10 +15,6 @@ include(${PROJECT_ROOT_DIR}/cmake/mmdtool_plugin_common.cmake)
 
 file(GLOB _FRAMEWORK_SOURCE_DIRS "${MAXON_SDK_ROOT_DIR}/frameworks/*.framework/source")
 
-if(EXISTS "${MODULE_ROOT_DIR}/res" AND NOT IS_SYMLINK "${MODULE_ROOT_DIR}/res")
-  file(REMOVE_RECURSE "${MODULE_ROOT_DIR}/res")
-endif()
-
 cmt_setup_mmdtool_plugin(
   PROJECT_ROOT_DIR ${PROJECT_ROOT_DIR}
   MODULE_ROOT_DIR ${MODULE_ROOT_DIR}

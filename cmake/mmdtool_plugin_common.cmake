@@ -239,6 +239,13 @@ macro(cmt_setup_mmdtool_plugin)
 
   MaxonTargets_CreateDirectoryLink(PATH "${CMT_MODULE_ROOT_DIR}/source" TARGET "${CMT_SOURCE_ROOT}")
 
+  # Plugin resources are maintained once at the repository root. SDK module
+  # directories must not retain copied resource trees, because the C4D SDK
+  # resource processor prefers the local directory over RESOURCE_ROOT.
+  if(EXISTS "${CMT_MODULE_ROOT_DIR}/res" AND NOT IS_SYMLINK "${CMT_MODULE_ROOT_DIR}/res")
+    file(REMOVE_RECURSE "${CMT_MODULE_ROOT_DIR}/res")
+  endif()
+
   MaxonTargets_CreateDirectoryLink(PATH "${CMT_MODULE_ROOT_DIR}/res" TARGET "${CMT_RESOURCE_ROOT}")
 
 
